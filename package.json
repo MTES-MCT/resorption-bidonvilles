@@ -10,6 +10,8 @@
   "license": "AGPL-3.0-or-later",
   "private": true,
   "devDependencies": {
+    "husky": "^1.2.1",
+    "lint-staged": "^8.1.0",
     "parcel-bundler": "^1.10.3",
     "sass": "^1.15.2"
   },
@@ -17,5 +19,18 @@
     "dev": "parcel serve ./src/index.html --open --no-autoinstall",
     "build": "parcel build ./src/index.html",
     "release": "release() { git reset HEAD .; yarn build; git add dist; git commit -m \"📦 Release v$1\"; } && release"
+  },
+  "dependencies": {
+    "eslint": "^5.10.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.js": [ "eslint --fix" ]
   }
 }
