@@ -8,5 +8,11 @@
   },
   "main": "./dist/index.html",
   "license": "AGPL-3.0-or-later",
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "parcel-bundler": "^1.10.3"
+  },
+  "scripts": {
+    "build": "parcel build ./src/index.html"
+  }
 }
