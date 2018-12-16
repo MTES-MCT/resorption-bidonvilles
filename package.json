@@ -14,6 +14,7 @@
   },
   "scripts": {
     "dev": "parcel serve ./src/index.html --open --no-autoinstall",
-    "build": "parcel build ./src/index.html"
+    "build": "parcel build ./src/index.html",
+    "release": "release() { git reset HEAD .; yarn build; git add dist; git commit -m \"📦 Release v$1\"; } && release"
   }
 }
