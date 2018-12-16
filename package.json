@@ -1,0 +1,12 @@
+{
+  "name": "action-bidonvilles-frontend",
+  "version": "0.0.1",
+  "description": "Frontend d'Action Bidonvilles",
+  "author": {
+    "name": "Anis Safine Laget",
+    "email": "anis@users.noreply.github.com"
+  },
+  "main": "./dist/index.html",
+  "license": "AGPL-3.0-or-later",
+  "private": true
+}
