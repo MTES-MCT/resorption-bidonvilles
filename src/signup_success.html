@@ -17,10 +17,10 @@
         
                 <nav>
                     <ul class="nav__links">
-                        <li class="nav__item"><a href="./index.html">Connexion</a></li>
+                        <li class="nav__item"><a href="index.html">Connexion</a></li>
                     </ul>
                     <ul class="nav__links">
-                        <li class="nav__item"><a href="./signup.html" class="active">Demander un accès</a></li>
+                        <li class="nav__item"><a href="signup.html" class="active">Demander un accès</a></li>
                     </ul>
                 </nav>
             </div>
@@ -28,24 +28,10 @@
 
         <section class="section section-white" id="form">
             <div class="container">
-                <form action="./signup_success.html" method="get" name="form" target="_blank">
+                <form method="get">
                     <h1>Demande d'accès</h1>
-                    <div class="notification error">Formulaire incomplet.</div>
-                    <p>Pour accéder aux données de la plateforme action-bidonvilles.beta.gouv.fr, merci de nous faire parvenir votre demande d'identifiants via le formulaire ci-dessous.</p>
-                    <div class="form__group">
-                        <label for="email">Votre email :</label>
-                        <input type="email" value="" name="email" id="email">
-                    </div>
-
-                    <div class="form__group">
-                        <label for="textarea" class="error">Présentation de l'organisation que vous représentez :</label>
-                        <label class="error message">Ce champ est obligatoire.</label>
-                        <textarea name="description" id="description"></textarea>
-                    </div>
-
-                    <div class="form__group">
-                        <button class="button" type="submit" id="submit">Demander un accès</button>
-                    </div>
+                    <div class="notification success">Votre demande a bien été prise en compte.</div>
+                    <p>Nous vous recontacterons bientôt pour vous communiquer vos identifiants.</p>
                 </form>
             </div>
         </section>
