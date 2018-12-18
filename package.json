@@ -13,11 +13,11 @@
     "eslint": "^5.10.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
-    "template.data.gouv.fr": "^1.1.8",
     "husky": "^1.2.1",
     "lint-staged": "^8.1.0",
     "parcel-bundler": "^1.10.3",
-    "sass": "^1.15.2"
+    "sass": "^1.15.2",
+    "template.data.gouv.fr": "^1.1.8"
   },
   "scripts": {
     "dev": "parcel serve ./src/index.html --open --no-autoinstall",
