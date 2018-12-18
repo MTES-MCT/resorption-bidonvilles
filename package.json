@@ -10,6 +10,10 @@
   "license": "AGPL-3.0-or-later",
   "private": true,
   "devDependencies": {
+    "eslint": "^5.10.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "template.data.gouv.fr": "^1.1.8",
     "husky": "^1.2.1",
     "lint-staged": "^8.1.0",
     "parcel-bundler": "^1.10.3",
@@ -20,17 +24,14 @@
     "build": "parcel build ./src/index.html",
     "release": "release() { git reset HEAD .; yarn build; git add dist; git commit -m \"📦 Release v$1\"; } && release"
   },
-  "dependencies": {
-    "eslint": "^5.10.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.14.0"
-  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
-    "src/**/*.js": [ "eslint --fix" ]
+    "src/**/*.js": [
+      "eslint --fix"
+    ]
   }
 }

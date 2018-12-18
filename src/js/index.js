@@ -1,3 +1,1 @@
-window.addEventListener('load', () => {
-    document.body.appendChild(document.createTextNode('Hello World!'));
-});
+import 'template.data.gouv.fr/dist/style/main.css';
