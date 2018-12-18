@@ -1,4 +1,5 @@
 import NavBar from '../navbar/index.vue';
+import { login } from '../../helpers/userHelper';
 
 export default {
     components: {
@@ -13,13 +14,20 @@ export default {
     },
     methods: {
         submit() {
-            if (this.email !== 'anis@beta.gouv.fr' || this.password !== 'test') {
-                this.errors = {
-                    user_message: 'Identifiants incorrects.',
-                };
-            } else {
-                this.$router.push({ path: '/liste-des-sites ' });
-            }
+            login(this.email, this.password)
+                .then(() => {
+                    this.$router.push({ path: '/liste-des-sites' });
+                })
+                .catch((response) => {
+                    if (response) {
+                        this.errors = response;
+                        return;
+                    }
+
+                    this.errors = {
+                        user_message: 'Identification échouée',
+                    };
+                });
         },
     },
 };

@@ -5,11 +5,15 @@ import '../css/index.scss';
 // import polyfills
 import '@babel/polyfill';
 
+// import helpers
+
 // import vue
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import { checkLogin, isLoggedIn } from './helpers/userHelper';
 import SignIn from './components/signin/index.vue';
 import SignUp from './components/signup/index.vue';
+import TownsMap from './components/towns/map/index.vue';
 
 Vue.use(VueRouter);
 
@@ -19,7 +23,7 @@ const router = new VueRouter({
         {
             path: '/',
             redirect: () => {
-                if (window.signedin === true) {
+                if (isLoggedIn() === true) {
                     return '/liste-des-sites';
                 }
 
@@ -28,6 +32,7 @@ const router = new VueRouter({
         },
         { path: '/connexion', component: SignIn },
         { path: '/demande-d-acces', component: SignUp },
+        { path: '/liste-des-sites', component: TownsMap, beforeEnter: checkLogin },
     ],
 });
 

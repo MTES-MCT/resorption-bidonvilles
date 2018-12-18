@@ -2,7 +2,8 @@
     "extends": "airbnb-base",
     "rules": {
         "indent": [ "error", 4 ],
-        "import/no-extraneous-dependencies": false
+        "import/no-extraneous-dependencies": false,
+        "prefer-promise-reject-errors": 0
     },
     "env": {
         "browser": true
