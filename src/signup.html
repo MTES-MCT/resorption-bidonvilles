@@ -30,6 +30,7 @@
             <div class="container">
                 <form action="#" method="post" name="form" target="_blank">
                     <h1>Demande d'accès</h1>
+                    <div class="notification error">Formulaire incomplet.</div>
                     <p>Pour accéder aux données de la plateforme action-bidonvilles.beta.gouv.fr, merci de nous faire parvenir votre demande d'identifiants via le formulaire ci-dessous.</p>
                     <div class="form__group">
                         <label for="email">Votre email :</label>
@@ -37,7 +38,8 @@
                     </div>
 
                     <div class="form__group">
-                        <label for="textarea">Présentation de l'organisation que vous représentez :</label>
+                        <label for="textarea" class="error">Présentation de l'organisation que vous représentez :</label>
+                        <label class="error message">Ce champ est obligatoire.</label>
                         <textarea name="description" id="description"></textarea>
                     </div>
 

@@ -1,3 +1,13 @@
 span.navbar__domain {
     white-space: nowrap;
 }
+
+label.error {
+    color: #d63626;
+    font-weight: bold;
+}
+
+label.error.message {
+    font-weight: normal;
+    font-style: italic;
+}
