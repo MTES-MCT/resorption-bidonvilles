@@ -1,0 +1,27 @@
+<div>
+    <NavBar></NavBar>
+
+    <section class="section section-white" id="form">
+        <div class="container">
+            <form action="javascript:void(0)" method="post" name="form">
+                <h1>Connexion à la plateforme</h1>
+
+                <div class="notification error" v-if="errors">{{ errors.user_message }}</div>
+
+                <div class="form__group">
+                    <label for="email">Votre email :</label>
+                    <input type="email" name="email" id="email" v-model.lazy.trim="email">
+                </div>
+
+                <div class="form__group">
+                    <label for="password">Votre mot de passe :</label>
+                    <input type="password" name="password" id="password" v-model.lazy="password">
+                </div>
+
+                <div class="form__group">
+                    <button class="button" type="submit" id="submit" @click="submit">Connexion</button>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>

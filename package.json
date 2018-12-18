@@ -10,19 +10,31 @@
   "license": "AGPL-3.0-or-later",
   "private": true,
   "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/polyfill": "^7.0.0",
+    "@babel/preset-env": "^7.2.0",
+    "@vue/component-compiler-utils": "^2.3.1",
     "eslint": "^5.10.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
     "husky": "^1.2.1",
     "lint-staged": "^8.1.0",
     "parcel-bundler": "^1.10.3",
+    "pug": "^2.0.3",
     "sass": "^1.15.2",
-    "template.data.gouv.fr": "^1.1.8"
+    "template.data.gouv.fr": "^1.1.8",
+    "vue": "^2.5.21",
+    "vue-hot-reload-api": "^2.3.1",
+    "vue-router": "^3.0.2",
+    "vue-template-compiler": "^2.5.21"
   },
   "scripts": {
     "dev": "parcel serve ./src/index.html --open --no-autoinstall",
     "build": "parcel build ./src/index.html",
     "release": "release() { git reset HEAD .; yarn build; git add dist; git commit -m \"📦 Release v$1\"; } && release"
+  },
+  "alias": {
+    "vue": "./node_modules/vue/dist/vue.common.js"
   },
   "husky": {
     "hooks": {

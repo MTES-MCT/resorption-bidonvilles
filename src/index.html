@@ -3,53 +3,14 @@
     <head>
         <meta charset="UTF-8">
         <title>Action Bidonvilles</title>
-        <link rel="icon" href="img/favicon.ico" sizes="16x16">
-        <link rel="stylesheet" href="css/index.scss">
+        <link rel="icon" href="/img/favicon.ico" sizes="16x16">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     </head>
     
     <body>
-        <header class="navbar" role="navigation">
-            <div class="navbar__container">
-                <a class="navbar__home" href="index.html">
-                    <img src="img/logo-marianne.svg" class="navbar__logo" alt="template.data.gouv.fr" id="logo" /><span class="navbar__domain" >action-bidonvilles.</span><img src="img/betagouvfr.svg" class="navbar__gouvfr" alt="beta.gouv.fr" id="betagouv" />
-                </a>
-        
-                <nav>
-                    <ul class="nav__links">
-                        <li class="nav__item"><a href="./index.html" class="active">Connexion</a></li>
-                    </ul>
-                    <ul class="nav__links">
-                        <li class="nav__item"><a href="./signup.html">Demander un accès</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </header>
-
-        <section class="section section-white" id="form">
-            <div class="container">
-                <form action="#" method="post" name="form" target="_blank">
-                    <h1>Connexion à la plateforme</h1>
-
-                    <div class="notification error">Identifiants incorrects.</div>
-
-                    <div class="form__group">
-                        <label for="email">Votre email :</label>
-                        <input type="email" value="" name="email" id="email">
-                    </div>
-
-                    <div class="form__group">
-                        <label for="password">Votre mot de passe :</label>
-                        <input type="password" value="" name="password" id="password">
-                    </div>
-
-                    <div class="form__group">
-                        <button class="button" type="submit" id="submit">Connexion</button>
-                    </div>
-                </form>
-            </div>
-        </section>
-
+        <div id="app">
+            <router-view></router-view>
+        </div>
         <script src="js/index.js"></script>
     </body>
 </html>
