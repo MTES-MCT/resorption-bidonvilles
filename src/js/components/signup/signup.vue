@@ -1,8 +1,8 @@
 <template lang="pug">
-    include template.pug
+    include signup.pug
 </template>
 
 <script>
-import Component from './script.js';
+import Component from './signup.js';
 export default Component;
 </script>

@@ -1,8 +1,8 @@
 <template lang="pug">
-    include template.pug
+    include navbar.pug
 </template>
 
 <script>
-import Component from './script.js';
+import Component from './navbar.js';
 export default Component;
 </script>

@@ -1,8 +1,8 @@
 <template lang="pug">
-    include template.pug
+    include map.pug
 </template>
 
 <script>
-import Component from './script.js';
+import Component from './map.js';
 export default Component;
 </script>

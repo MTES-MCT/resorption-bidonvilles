@@ -11,9 +11,9 @@ import '@babel/polyfill';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import { checkLogin, isLoggedIn } from './helpers/userHelper';
-import SignIn from './components/signin/index.vue';
-import SignUp from './components/signup/index.vue';
-import TownsMap from './components/towns/map/index.vue';
+import SignIn from './components/signin/signin.vue';
+import SignUp from './components/signup/signup.vue';
+import TownsMap from './components/towns/map/map.vue';
 
 Vue.use(VueRouter);
 
