@@ -31,7 +31,8 @@
   "scripts": {
     "dev": "parcel serve ./src/index.html --open --no-autoinstall",
     "build": "parcel build ./src/index.html",
-    "release": "release() { git reset HEAD .; yarn build; git add dist; git commit -m \"📦 Release v$1\"; } && release"
+    "release": "release() { git reset HEAD .; yarn build; git add dist; git commit -m \"📦 Release v$1\"; } && release",
+    "deploy": "deploy() { git fetch origin \"refs/tags/$1:refs/tags/$1\"; git checkout $1; } && deploy"
   },
   "alias": {
     "vue": "./node_modules/vue/dist/vue.common.js"

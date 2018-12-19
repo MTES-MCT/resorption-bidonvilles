@@ -33,8 +33,7 @@ Depuis l'onglet "Releases" de GitHub, déclarer la nouvelle release :
 ## Déploiement en production
 Le bundle final étant déjà versionné, il n'y a rien de plus à faire que de `git checkout` le tag désiré :
 ```
-$ git fetch origin v0.1.2
-$ git checkout v0.1.2
+$ yarn deploy v0.1.2
 ```
 
 Bien entendu, il est nécessaire d'avoir un serveur HTTP configuré pour rediriger vers le dossier `/dist`, mais cela sort du cadre de ce dépôt.
