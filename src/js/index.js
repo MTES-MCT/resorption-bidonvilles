@@ -5,8 +5,6 @@ import '../css/index.scss';
 // import polyfills
 import '@babel/polyfill';
 
-// import helpers
-
 // import vue
 import Vue from 'vue';
 import VueRouter from 'vue-router';
