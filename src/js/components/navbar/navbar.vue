@@ -6,3 +6,7 @@
 import Component from './navbar.js';
 export default Component;
 </script>
+
+<style lang="scss" scoped>
+@import './navbar.scss';
+</style>
