@@ -1,4 +1,4 @@
-import { logout, isLoggedIn } from '../../helpers/userHelper';
+import { logout, isLoggedIn } from '#src/helpers/userHelper';
 
 export default {
     data() {

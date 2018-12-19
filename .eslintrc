@@ -3,7 +3,11 @@
     "rules": {
         "indent": [ "error", 4 ],
         "import/no-extraneous-dependencies": false,
-        "prefer-promise-reject-errors": 0
+        "prefer-promise-reject-errors": 0,
+        "import/no-unresolved": [
+            "error",
+            { "ignore": ["#"] }
+        ]
     },
     "env": {
         "browser": true

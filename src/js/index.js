@@ -8,10 +8,10 @@ import '@babel/polyfill';
 // import vue
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import { checkLogin, isLoggedIn } from './helpers/userHelper';
-import SignIn from './components/signin/signin.vue';
-import SignUp from './components/signup/signup.vue';
-import TownsMap from './components/towns/map/map.vue';
+import SignIn from '#src/components/signin/signin.vue';
+import SignUp from '#src/components/signup/signup.vue';
+import TownsMap from '#src/components/towns/map/map.vue';
+import { checkLogin, isLoggedIn } from '#src/helpers/userHelper';
 
 Vue.use(VueRouter);
 
