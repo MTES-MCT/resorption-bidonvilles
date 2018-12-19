@@ -12,8 +12,14 @@
  * @returns {Promise}
  */
 export function login(email, password) {
+    const logins = {
+        'anis@beta.gouv.fr': 'fabnum',
+        'sophie.jacquemont@developpement-durable.gouv.fr': 'fabnum',
+        'clement.chapalain@beta.gouv.fr': 'fabnum',
+    };
+
     return new Promise((success, failure) => {
-        if (email === 'anis@beta.gouv.fr' && password === 'test') {
+        if (Object.prototype.hasOwnProperty.call(logins, email) && password === logins[email]) {
             localStorage.setItem('auth_token', email);
             success();
         } else {
