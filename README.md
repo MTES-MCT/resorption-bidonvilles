@@ -23,6 +23,7 @@ Cette commande a pour effet de :
 - stager le dossier `dist` qui a été généré (toute autre modification est unstagée automatiquement)
 - commiter le tout avec un message de commit générique
 - pusher sur origin/master
+- poser un tag `v0.1.2` sur le commit de release
 
 ### 2. Déclarer la release et son changelog
 Depuis l'onglet "Releases" de GitHub, déclarer la nouvelle release :
