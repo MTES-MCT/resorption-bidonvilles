@@ -1,0 +1,6 @@
+<fieldset>
+    <legend>{{ label }}</legend>
+    <div v-for="(option, index) in options">
+        <input v-model="option.checked" type="checkbox" :id="id + '-' + (option.id || index)" :value="option.value" checked @change="$emit('change', $event)"><label :for="id + '-' + (option.id || index)" class="label-inline">{{ option.label }}</label><br/>
+    </div>
+</fieldset>

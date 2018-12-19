@@ -1,3 +1,5 @@
+$MAX_CONTAINER_WIDTH: 1400px;
+
 label.error {
     color: #d63626;
     font-weight: bold;
@@ -6,4 +8,31 @@ label.error {
 label.error.message {
     font-weight: normal;
     font-style: italic;
+}
+
+.container {
+    max-width: $MAX_CONTAINER_WIDTH;
+}
+
+@media (min-width: 550px) {
+    .container {
+        width: 100%;
+    }
+}
+
+@media (min-width: 400px) {
+    .container {
+        width: 100%;
+    }
+}
+
+@media (max-width: $MAX_CONTAINER_WIDTH) {
+    .container {
+        padding-left: 2em;
+        padding-right: 2em;
+    }
+}
+
+.section:first-of-type {
+    padding-top: 2em;
 }

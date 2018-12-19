@@ -1,0 +1,36 @@
+<div>
+    <NavBar></NavBar>
+
+    <section class="section section-white">
+        <div class="container">
+            <h1>Liste des sites</h1>
+
+            <div class="explorer" v-if="loading">Chargement des données en cours...</div>
+
+            <div class="explorer" v-else>
+                <aside class="side-pane">
+                    <h4>Filtres</h4>
+
+                    <FilterGroup v-for="filterGroup in filters" :id="filterGroup.id" :label="filterGroup.label" :options="filterGroup.options" @change="onFilterChange"></FilterGroup>
+                </aside>
+
+                <div class="main-pane">
+                    <header class="explorer-header">
+                        <div>
+                            <h4>Résultats ({{ visibleTowns.length }} sites)</h4>
+                        </div>
+                        <div>
+                            <h6>Visualiser les résultats sous forme de :</h6>
+                            <button class="primary" v-bind:class="{ 'button-outline': currentTab !== 'map', button: currentTab === 'map' }" @click="setTab('map')">Carte</button>
+                            <button class="primary" v-bind:class="{ 'button-outline': currentTab !== 'table', button: currentTab === 'table' }" @click="setTab('table')">Tableau</button>
+                        </div>
+                    </header>
+
+                    <keep-alive>
+                        <component :is="currentTabComponent" :towns="visibleTowns"></component>
+                    </keep-alive>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

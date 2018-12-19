@@ -19,17 +19,17 @@
                     <div class="form__group">
                         <label for="email" v-bind:class="{ error: errors && errors.details.email }">Votre email :</label>
                         <label class="error message" v-if="errors && errors.details.email">{{ errors.details.email }}</label>
-                        <input type="email" v-model.lazy.trim="email" name="email" id="email">
+                        <input type="email" v-model.lazy.trim="email" id="email">
                     </div>
 
                     <div class="form__group">
                         <label for="textarea" v-bind:class="{ error: errors && errors.details.description }">Présentation de l'organisation que vous représentez :</label>
                         <label class="error message" v-if="errors && errors.details.description">{{ errors.details.description }}</label>
-                        <textarea v-model.lazy.trim="description" name="description" id="description"></textarea>
+                        <textarea v-model.lazy.trim="description" id="description"></textarea>
                     </div>
 
                     <div class="form__group">
-                        <button class="button" type="submit" id="submit" @click="submit">Demander un accès</button>
+                        <button class="button" type="submit" @click="submit">Demander un accès</button>
                     </div>
                 </div>
             </form>

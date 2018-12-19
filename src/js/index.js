@@ -10,7 +10,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import SignIn from '#src/components/signin/signin.vue';
 import SignUp from '#src/components/signup/signup.vue';
-import TownsMap from '#src/components/towns/map/map.vue';
+import TownsExplorer from '#src/components/towns/explorer/explorer.vue';
 import { checkLogin, isLoggedIn } from '#src/helpers/userHelper';
 
 Vue.use(VueRouter);
@@ -30,7 +30,7 @@ const router = new VueRouter({
         },
         { path: '/connexion', component: SignIn },
         { path: '/demande-d-acces', component: SignUp },
-        { path: '/liste-des-sites', component: TownsMap, beforeEnter: checkLogin },
+        { path: '/liste-des-sites', component: TownsExplorer, beforeEnter: checkLogin },
     ],
 });
 

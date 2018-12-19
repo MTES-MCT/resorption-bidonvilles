@@ -7,14 +7,13 @@
         <nav v-if="!loggedIn">
             <ul class="nav__links">
                 <li class="nav__item"><router-link to="/connexion">Connexion</a></li>
-            </ul>
-            <ul class="nav__links">
                 <li class="nav__item"><router-link to="/demande-d-acces">Demander un accès</a></li>
             </ul>
         </nav>
 
         <nav v-else>
             <ul class="nav__links">
+                <li class="nav__item"><router-link to="/liste-des-sites">Liste des sites</a></li>
                 <li class="nav__item"><a href="#" @click="logout">Déconnexion</a></li>
             </ul>
         </nav>

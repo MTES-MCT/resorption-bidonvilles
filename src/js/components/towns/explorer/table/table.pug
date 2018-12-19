@@ -1,0 +1,26 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th>Commune</th>
+            <th>Adresse</th>
+            <th>Type de site</th>
+            <th>Personnes</th>
+            <th>Ménages</th>
+            <th>Mineurs</th>
+            <th>Date d'installation</th>
+            <th>Type de propriétaire</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr v-for="town in towns">
+            <td>{{ town.city }}</td>
+            <td>{{ town.address }}</td>
+            <td>{{ town.field_type || 'inconnu' }}</td>
+            <td>{{ town.population_total || 'inconnu' }}</td>
+            <td>{{ town.population_couples || 'inconnu' }}</td>
+            <td>{{ town.population_minors || 'inconnu' }}</td>
+            <td>{{ town.built_at }}</td>
+            <td>{{ town.owner_type }}</td>
+        </tr>
+    </tbody>
+</table>

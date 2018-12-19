@@ -10,16 +10,16 @@
 
                 <div class="form__group">
                     <label for="email">Votre email :</label>
-                    <input type="email" name="email" id="email" v-model.lazy.trim="email">
+                    <input type="email" id="email" v-model.lazy.trim="email">
                 </div>
 
                 <div class="form__group">
                     <label for="password">Votre mot de passe :</label>
-                    <input type="password" name="password" id="password" v-model.lazy="password">
+                    <input type="password" id="password" v-model.lazy="password">
                 </div>
 
                 <div class="form__group">
-                    <button class="button" type="submit" id="submit" @click="submit">Connexion</button>
+                    <button class="button" type="submit" @click="submit">Connexion</button>
                 </div>
             </form>
         </div>

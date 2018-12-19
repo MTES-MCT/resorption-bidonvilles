@@ -26,10 +26,7 @@ Cette commande a pour effet de :
 - poser un tag `v0.1.2` sur le commit de release
 
 ### 2. Déclarer la release et son changelog
-Depuis l'onglet "Releases" de GitHub, déclarer la nouvelle release :
-- le tag de release doit pointer sur le commit qui a été généré à l'étape précédente
-- le tag de release doit respecter la nomenclature suivante : `v0.1.2`
-- ne pas oublier de mentionner le changelog de la release
+Depuis l'onglet "Releases" de GitHub, déclarer le changelog de cette nouvelle release
 
 ## Déploiement en production
 Le bundle final étant déjà versionné, il n'y a rien de plus à faire que de `git checkout` le tag désiré :

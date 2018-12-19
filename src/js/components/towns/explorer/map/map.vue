@@ -6,3 +6,7 @@
 import Component from './map.js';
 export default Component;
 </script>
+
+<style lang="scss" scoped>
+@import './map.scss';
+</style>
