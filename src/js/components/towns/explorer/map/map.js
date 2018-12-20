@@ -1,4 +1,5 @@
 import L from 'leaflet';
+import 'leaflet-providers';
 
 export default {
     props: {
@@ -22,35 +23,17 @@ export default {
     },
     methods: {
         createMap() {
-            const map = L.map(
-                'map',
-                {
-                    layers: this.getMapLayers(),
-                },
-            );
+            const layers = this.getMapLayers();
+            const map = L.map('map', { layers: Object.values(layers) });
+            L.control.layers(layers).addTo(map);
             map.setView(this.center, 8);
             return map;
         },
         getMapLayers() {
-            return [
-                // Satellite view:
-                // L.tileLayer(
-                //     viz.leaflet.tiles.OpenStreetMap.satellite,
-                //     {
-                //         attribution: viz.leaflet.tiles.OpenStreetMap.attribution,
-                //     },
-                // ),
-
-                // Street view:
-                L.tileLayer(
-                    'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic2FmaW5lYW4iLCJhIjoiY2pwODY2azc0MTh5aTNwbzM3ODRsbnNoNCJ9.9QOOO9zRHbrSAsYdh5DBNQ',
-                    {
-                        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-                        maxZoom: 18,
-                        id: 'mapbox.streets',
-                    },
-                ),
-            ];
+            return {
+                Satellite: L.tileLayer.provider('Esri.WorldImagery'),
+                Dessin: L.tileLayer.provider('OpenStreetMap.Mapnik'),
+            };
         },
         removeAllMarkers() {
             this.markers.forEach(marker => marker.remove());
