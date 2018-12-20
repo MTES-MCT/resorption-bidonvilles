@@ -2,6 +2,7 @@ import NavBar from '#src/components/navbar/navbar.vue';
 import FilterGroup from './filterGroup/filterGroup.vue';
 import Map from './map/map.vue';
 import Table from './table/table.vue';
+import { all } from '#src/helpers/towns';
 
 export default {
     components: {
@@ -12,9 +13,10 @@ export default {
     },
     data() {
         return {
-            center: [43.3050621, 0.684586],
+            error: undefined,
             recompute: 0,
-            loading: true,
+            loading: false,
+            center: [43.3050621, 0.684586],
             towns: [],
             filters: [
                 {
@@ -150,57 +152,48 @@ export default {
     },
     methods: {
         onFilterChange() {
-            this.recompute += 1;
+            this.recompute += 0.0001;
         },
         setTab(name) {
             this.currentTab = name;
         },
         fetchData() {
+            if (this.loading === true) {
+                return;
+            }
+
             this.loading = true;
 
-            setTimeout(() => {
-                const response = {
-                    towns: [
-                        {
-                            latitude: 43.641668,
-                            longitude: 1.467486,
-                            city: 'Toulouse',
-                            address: 'Gramont : avenue d\'Atlanta',
-                            field_type: 'Terrain',
-                            field_type_id: 1,
-                            population_total: 40,
-                            population_couples: null,
-                            population_minors: null,
-                            built_at: '01/08/2013',
-                            owner_type: 'public',
-                            justice_status: false,
-                            actions: [],
-                        },
-                    ],
-                    fieldTypes: [
+            all()
+                .then((towns) => {
+                    const fieldTypes = [
                         { id: 1, name: 'Terrain' },
                         { id: 2, name: 'Immeuble bâti' },
-                    ],
-                };
+                    ];
 
-                // build the field-type filter
-                const fieldTypeFilter = this.filters.filter(({ id }) => id === 'fieldType')[0];
-                fieldTypeFilter.options = [
-                    // special option 'unknown'
-                    { id: -1, value: -1, label: 'Inconnu' },
+                    this.loading = false;
 
-                    // options based on field-types returned by the api
-                    ...response.fieldTypes.map(fieldType => ({
-                        id: fieldType.id,
-                        value: fieldType.id,
-                        label: fieldType.name,
-                    })),
-                ];
+                    // build the field-type filter
+                    const fieldTypeFilter = this.filters.filter(({ id }) => id === 'fieldType')[0];
+                    fieldTypeFilter.options = [
+                        // special option 'unknown'
+                        { id: -1, value: -1, label: 'Inconnu' },
 
-                this.towns = response.towns;
-                this.checkAllFilters();
-                this.loading = false;
-            }, 10);
+                        // options based on field-types returned by the api
+                        ...fieldTypes.map(fieldType => ({
+                            id: fieldType.id,
+                            value: fieldType.id,
+                            label: fieldType.name,
+                        })),
+                    ];
+
+                    this.towns = towns;
+                    this.checkAllFilters();
+                })
+                .catch((errors) => {
+                    this.error = errors.user_message;
+                    this.loading = false;
+                });
         },
         checkAllFilters() {
             this.filters.forEach((filter) => {
