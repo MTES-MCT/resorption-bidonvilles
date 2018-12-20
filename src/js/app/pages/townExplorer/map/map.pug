@@ -1,10 +1,4 @@
 <section>
-    <div class="search__group">
-        <input type="text" placeholder="Centrez la carte sur un point précis en tapant ici le nom d'une commune, département, région, ...">
-        <button class="overlay-button" aria-label="Recherche">
-            <svg class="icon icon-search"><use xlink:href="#magnifier"></use></svg>
-        </button>
-    </div>
-
+    <Address placeholder="Centrez la carte sur un point précis en tapant ici le nom d'une commune, département, région, ..." @selected="onNewAddress" autofocus="true"></Address>
     <div id="map"></div>
 </section>

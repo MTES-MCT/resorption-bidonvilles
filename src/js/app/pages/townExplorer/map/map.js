@@ -1,7 +1,11 @@
+import Address from '#app/components/address/address.vue';
 import L from 'leaflet';
 import 'leaflet-providers';
 
 export default {
+    components: {
+        Address,
+    },
     props: {
         towns: Array,
         center: Array,
@@ -52,6 +56,9 @@ export default {
         },
         handleMarkerClick(town, event) {
             this.$emit('marker-click', town, event);
+        },
+        onNewAddress(coordinates) {
+            this.map.setView([coordinates[1], coordinates[0]], 13);
         },
     },
 };
