@@ -12,6 +12,7 @@ export default {
     },
     data() {
         return {
+            center: [43.3050621, 0.684586],
             recompute: 0,
             loading: true,
             towns: [],
