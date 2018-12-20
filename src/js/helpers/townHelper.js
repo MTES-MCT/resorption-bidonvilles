@@ -21,6 +21,9 @@ export function all() {
                     owner_type: 'public',
                     justice_status: false,
                     actions: [],
+                    access_to_electricity: null,
+                    access_to_water: null,
+                    trash_evacuation: null,
                 },
             ];
 

@@ -1,0 +1,44 @@
+<div class="quickview">
+    <header class="quickview-header">
+        <div class="quickview-close">
+            <a href="#" @click="$emit('outside-click')"><svg class="icon icon-cross"><use xlink:href="#round-cross"></use></svg></a>
+        </div>
+        <h1 class="quickview-title">Site de {{ town.city }}</h1>
+        <h2 class="quickview-subtitle">{{ town.address }}</h2>
+    </header>
+
+    <footer class="quickview-footer">
+        <button class="button secondary">Voir le détail</button>
+    </footer>
+
+    <section>
+        <header class="notification full-width">Démographie</header>
+        <p><strong>Nombre de personnes :</strong> {{ town.population_total || 'inconnu' }}</p>
+        <p><strong>Nombre de ménages :</strong> {{ town.population_couples || 'inconnu' }}</p>
+        <p><strong>Nombre de mineurs :</strong> {{ town.population_minors || 'inconnu' }}</p>
+        <p><strong>Origines :</strong> {{ town.origins || 'inconnu' }}</p>
+    </section>
+
+    <section>
+        <header class="notification full-width">Conditions de vie</header>
+        <p><strong>Accès à l'eau :</strong> {{ town.access_to_water || 'inconnu' }}</p>
+        <p><strong>Accès à l'électricité :</strong> {{ town.access_to_electricity || 'inconnu' }}</p>
+        <p><strong>Évacuation des déchets :</strong> {{ town.trash_evacuation || 'inconnu' }}</p>
+    </section>
+
+    <section>
+        <header class="notification full-width">Actions menées sur le site</header>
+        <table class="table" v-if="town.actions.length">
+            <thead>
+                <tr>
+                    <th>Type d'action</th>
+                    <th>Action débutée</th>
+                    <th>Opérateur</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <p v-else>Aucune action déclarée pour le moment</p>
+    </section>
+</div>

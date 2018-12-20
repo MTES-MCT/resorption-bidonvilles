@@ -2,6 +2,7 @@ import NavBar from '#app/layouts/navbar/navbar.vue';
 import FilterGroup from './filterGroup/filterGroup.vue';
 import Map from './map/map.vue';
 import Table from './table/table.vue';
+import Quickview from '#app/components/quickview/quickview.vue';
 import { all as fetchAll } from '#helpers/townHelper';
 import { get as getConfig } from '#helpers/configHelper';
 
@@ -11,6 +12,7 @@ export default {
         FilterGroup,
         Map,
         Table,
+        Quickview,
     },
     data() {
         return {
@@ -18,6 +20,10 @@ export default {
             loading: false,
             center: [43.3050621, 0.684586],
             towns: [],
+            quickview: {
+                town: null,
+                originEvent: null,
+            },
             filters: [
                 {
                     label: 'Types de site',
@@ -150,6 +156,18 @@ export default {
         this.fetchData();
     },
     methods: {
+        showQuickview(town, event) {
+            this.quickview = {
+                town,
+                originEvent: event.originalEvent,
+            };
+        },
+        hideQuickview() {
+            this.quickview = {
+                town: null,
+                originEvent: null,
+            };
+        },
         setTab(name) {
             this.currentTab = name;
         },

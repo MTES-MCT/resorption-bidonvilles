@@ -1,4 +1,5 @@
 <div>
+    <Quickview v-if="quickview.town" :town="quickview.town" :origin="quickview.originEvent" @outside-click="hideQuickview"></Quickview>
     <NavBar></NavBar>
 
     <section class="section section-white">
@@ -41,7 +42,7 @@
                     </header>
 
                     <keep-alive>
-                        <component :is="currentTabComponent" :towns="visibleTowns" :center="center"></component>
+                        <component :is="currentTabComponent" :towns="visibleTowns" :center="center" @marker-click="showQuickview"></component>
                     </keep-alive>
                 </div>
             </div>

@@ -1,0 +1,57 @@
+.quickview {
+    z-index: 1100;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 500px;
+    height: 100%;
+    border-left: 1px solid #c9d3df;
+    background: #ffffff;
+
+    > section {
+        > header {
+            font-weight: bold;
+        }
+
+        > p {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+    }
+}
+
+.quickview-header {
+    padding: 15px 0 20px 20px;
+    color: #ffffff;
+    background: #003b80;
+}
+
+.quickview-footer {
+    position: absolute;
+    bottom: 0;
+    padding: 0 0 50px;
+    width: 100%;
+    text-align: center;
+}
+
+.quickview-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    .icon {
+        width: 40px;
+        height: 40px;
+        color: rgba(255,255,255,0.7);
+    }
+}
+
+.quickview-title {
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+.quickview-subtitle {
+    margin: 0;
+    font-size: 1.3rem;
+}

@@ -43,10 +43,15 @@ export default {
             this.removeAllMarkers();
             this.towns.forEach(this.addMarker);
         },
-        addMarker({ latitude, longitude }) {
+        addMarker(town) {
+            const { latitude, longitude } = town;
             const marker = L.marker([latitude, longitude]);
             marker.addTo(this.map);
+            marker.on('click', this.handleMarkerClick.bind(this, town));
             this.markers.push(marker);
+        },
+        handleMarkerClick(town, event) {
+            this.$emit('marker-click', town, event);
         },
     },
 };
