@@ -8,12 +8,13 @@ import '@babel/polyfill';
 // import vue
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import SignIn from '#src/components/signin/signin.vue';
-import SignUp from '#src/components/signup/signup.vue';
-import TownsExplorer from '#src/components/towns/explorer/explorer.vue';
-import Landing from '#src/components/landing/landing.vue';
-import { isLoggedIn } from '#src/helpers/userHelper';
-import { isLoaded as isConfigLoaded } from '#src/helpers/configHelper';
+import SignIn from '#app/pages/signin/signin.vue';
+import SignUp from '#app/pages/signup/signup.vue';
+import TownsExplorer from '#app/pages/townExplorer/explorer.vue';
+import Landing from '#app/pages/landing/landing.vue';
+
+import { isLoggedIn } from '#helpers/userHelper';
+import { isLoaded as isConfigLoaded } from '#helpers/configHelper';
 
 Vue.use(VueRouter);
 

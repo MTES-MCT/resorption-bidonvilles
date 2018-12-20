@@ -1,5 +1,5 @@
-import NavBar from '#src/components/navbar/navbar.vue';
-import { isLoaded as isConfigLoaded, load } from '#src/helpers/configHelper';
+import NavBar from '#app/layouts/navbar/navbar.vue';
+import { isLoaded as isConfigLoaded, load } from '#helpers/configHelper';
 
 export default {
     props: {

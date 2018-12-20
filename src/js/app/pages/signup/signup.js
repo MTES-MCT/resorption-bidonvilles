@@ -1,5 +1,5 @@
-import NavBar from '#src/components/navbar/navbar.vue';
-import { login } from '#src/helpers/userHelper';
+import NavBar from '#app/layouts/navbar/navbar.vue';
+import { signup } from '#helpers/userHelper';
 
 export default {
     components: {
@@ -9,7 +9,8 @@ export default {
         return {
             loading: false,
             email: '',
-            password: '',
+            description: '',
+            success: false,
             errors: undefined,
         };
     },
@@ -20,20 +21,20 @@ export default {
                 return;
             }
 
-            // request signin
+            // request signup
             this.loading = true;
 
-            login(this.email, this.password)
+            signup(this.email, this.description)
                 .then(() => {
                     this.loading = false;
-                    this.email = '';
-                    this.password = '';
+                    this.success = true;
                     this.errors = undefined;
-
-                    this.$router.push({ path: '/' });
+                    this.email = '';
+                    this.description = '';
                 })
                 .catch((errors) => {
                     this.loading = false;
+                    this.success = false;
                     this.errors = errors;
                 });
         },

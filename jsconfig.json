@@ -2,7 +2,8 @@
     "compilerOptions": {
         "baseUrl": ".",
         "paths": {
-            "#src/*": [ "./src/js/*" ]
+            "#helpers/*": [ "./src/js/helpers/*" ],
+            "#app/*": [ "./src/js/app/*" ]
         }
     },
     "exclude": [

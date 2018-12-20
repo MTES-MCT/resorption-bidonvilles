@@ -1,4 +1,4 @@
-import { isLoggedIn } from '#src/helpers/userHelper';
+import { isLoggedIn } from '#helpers/userHelper';
 
 /**
  * Loaded configuration

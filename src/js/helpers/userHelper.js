@@ -1,4 +1,4 @@
-import { unload as unloadConfig } from '#src/helpers/configHelper';
+import { unload as unloadConfig } from '#helpers/configHelper';
 
 /**
  * Sends a login request for the given user

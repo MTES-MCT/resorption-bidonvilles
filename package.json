@@ -37,7 +37,8 @@
     "deploy": "deploy() { git fetch origin \"refs/tags/$1:refs/tags/$1\"; git checkout $1; } && deploy"
   },
   "alias": {
-    "#src": "./src/js",
+    "#helpers": "./src/js/helpers",
+    "#app": "./src/js/app",
     "vue": "./node_modules/vue/dist/vue.common.js"
   },
   "husky": {

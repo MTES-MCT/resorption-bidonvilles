@@ -1,9 +1,9 @@
-import NavBar from '#src/components/navbar/navbar.vue';
+import NavBar from '#app/layouts/navbar/navbar.vue';
 import FilterGroup from './filterGroup/filterGroup.vue';
 import Map from './map/map.vue';
 import Table from './table/table.vue';
-import { all as fetchAll } from '#src/helpers/townHelper';
-import { get as getConfig } from '#src/helpers/configHelper';
+import { all as fetchAll } from '#helpers/townHelper';
+import { get as getConfig } from '#helpers/configHelper';
 
 export default {
     components: {
