@@ -19,14 +19,16 @@ export function login(email, password) {
     };
 
     return new Promise((success, failure) => {
-        if (Object.prototype.hasOwnProperty.call(logins, email) && password === logins[email]) {
-            localStorage.setItem('auth_token', email);
-            success();
-        } else {
-            failure({
-                user_message: 'Identifiants incorrects',
-            });
-        }
+        setTimeout(() => {
+            if (Object.prototype.hasOwnProperty.call(logins, email) && password === logins[email]) {
+                localStorage.setItem('auth_token', email);
+                success();
+            } else {
+                failure({
+                    user_message: 'Identification échouée',
+                });
+            }
+        }, 1000);
     });
 }
 

@@ -10,16 +10,19 @@
 
                 <div class="form__group">
                     <label for="email">Votre email :</label>
-                    <input type="email" id="email" v-model.lazy.trim="email">
+                    <input type="email" id="email" v-model.lazy.trim="email" :readonly="loading">
                 </div>
 
                 <div class="form__group">
                     <label for="password">Votre mot de passe :</label>
-                    <input type="password" id="password" v-model.lazy="password">
+                    <input type="password" id="password" v-model.lazy="password" :readonly="loading">
                 </div>
 
                 <div class="form__group">
-                    <button class="button" type="submit" @click="submit">Connexion</button>
+                    <button class="button" type="submit" @click="submit">
+                        <img src="/img/spinner_light.svg" width="20" v-if="loading" />
+                        <span v-else>Connexion</span>
+                    </button>
                 </div>
             </form>
         </div>
