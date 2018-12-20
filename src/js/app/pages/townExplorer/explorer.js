@@ -15,7 +15,6 @@ export default {
     data() {
         return {
             error: undefined,
-            recompute: 0,
             loading: false,
             center: [43.3050621, 0.684586],
             towns: [],
@@ -29,26 +28,26 @@ export default {
                     label: 'Nombre de personnes',
                     id: 'population',
                     options: [
-                        { value: null, label: 'Inconnu' },
-                        { value: '-9', label: 'Moins de 10 personnes' },
-                        { value: '10-99', label: 'Entre 10 et 99 personnes' },
-                        { value: '100-', label: '100 personnes et plus' },
+                        { value: null, label: 'Inconnu', checked: true },
+                        { value: '-9', label: 'Moins de 10 personnes', checked: true },
+                        { value: '10-99', label: 'Entre 10 et 99 personnes', checked: true },
+                        { value: '100-', label: '100 personnes et plus', checked: true },
                     ],
                 },
                 {
                     label: 'Procédure judiciaire en cours',
                     id: 'justice',
                     options: [
-                        { value: 'no', label: 'Non' },
-                        { value: 'yes', label: 'Oui' },
+                        { value: 'no', label: 'Non', checked: true },
+                        { value: 'yes', label: 'Oui', checked: true },
                     ],
                 },
                 {
                     label: 'Actions en cours',
                     id: 'action',
                     options: [
-                        { value: 'no', label: 'Non' },
-                        { value: 'yes', label: 'Oui' },
+                        { value: 'no', label: 'Non', checked: true },
+                        { value: 'yes', label: 'Oui', checked: true },
                     ],
                 },
             ],
@@ -57,7 +56,6 @@ export default {
     },
     computed: {
         visibleTowns() {
-            this.recompute += 1;
             let visibleTowns = this.towns;
 
             this.filters.forEach((filterGroup) => {
@@ -152,9 +150,6 @@ export default {
         this.fetchData();
     },
     methods: {
-        onFilterChange() {
-            this.recompute += 0.0001;
-        },
         setTab(name) {
             this.currentTab = name;
         },
@@ -175,30 +170,25 @@ export default {
                     const fieldTypeFilter = this.filters.filter(({ id }) => id === 'fieldType')[0];
                     fieldTypeFilter.options = [
                         // special option 'unknown'
-                        { id: -1, value: -1, label: 'Inconnu' },
+                        {
+                            id: -1, value: -1, label: 'Inconnu', checked: true,
+                        },
 
                         // options based on field-types returned by the api
                         ...fieldTypes.map(fieldType => ({
                             id: fieldType.id,
                             value: fieldType.id,
                             label: fieldType.name,
+                            checked: true,
                         })),
                     ];
 
                     this.towns = towns;
-                    this.checkAllFilters();
                 })
                 .catch((errors) => {
                     this.error = errors.user_message;
                     this.loading = false;
                 });
-        },
-        checkAllFilters() {
-            this.filters.forEach((filter) => {
-                filter.options.forEach((option) => {
-                    option.checked = true;
-                });
-            });
         },
     },
 };
