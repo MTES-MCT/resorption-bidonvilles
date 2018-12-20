@@ -52,7 +52,7 @@ const router = new VueRouter({
                     return '/landing';
                 }
 
-                return '/liste-des-sites;';
+                return '/liste-des-sites';
             },
         },
         { path: '/connexion', component: SignIn },
