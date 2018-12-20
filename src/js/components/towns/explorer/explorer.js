@@ -3,6 +3,7 @@ import FilterGroup from './filterGroup/filterGroup.vue';
 import Map from './map/map.vue';
 import Table from './table/table.vue';
 import { all as fetchAll } from '#src/helpers/townHelper';
+import { get as getConfig } from '#src/helpers/configHelper';
 
 export default {
     components: {
@@ -166,10 +167,7 @@ export default {
 
             fetchAll()
                 .then((towns) => {
-                    const fieldTypes = [
-                        { id: 1, name: 'Terrain' },
-                        { id: 2, name: 'Immeuble bâti' },
-                    ];
+                    const { field_types: fieldTypes } = getConfig();
 
                     this.loading = false;
 

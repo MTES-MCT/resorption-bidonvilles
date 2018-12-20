@@ -25,7 +25,7 @@ export function all() {
             ];
 
             success(towns);
-        }, 1000);
+        }, 10);
     });
 }
 
