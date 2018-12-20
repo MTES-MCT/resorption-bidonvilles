@@ -1,3 +1,5 @@
+import { unload as unloadConfig } from '#src/helpers/configHelper';
+
 /**
  * Sends a login request for the given user
  *
@@ -38,6 +40,7 @@ export function login(email, password) {
  * Basically, all we have to do is remove the token from local storage.
  */
 export function logout() {
+    unloadConfig();
     localStorage.removeItem('auth_token');
 }
 
@@ -53,27 +56,6 @@ export function logout() {
  */
 export function isLoggedIn() {
     return localStorage.getItem('auth_token') !== null;
-}
-
-/**
- * This a navigation before-enter guard that ensures the current user is logged-in
- *
- * If the user is logged-in, perform the routing as requested.
- * Redirect to the home, otherwise.
- *
- * Please @see https://router.vuejs.org/guide/advanced/navigation-guards.html#per-route-guard
- * for more information about VueJS navigation guards.
- *
- * @param {Route}    to   The target Route Object being navigated to
- * @param {Route}    from The current route being navigated away from
- * @param {Function} next Resolver
- */
-export function checkLogin(to, from, next) {
-    if (isLoggedIn() === true) {
-        next();
-    } else {
-        next('/');
-    }
 }
 
 /**

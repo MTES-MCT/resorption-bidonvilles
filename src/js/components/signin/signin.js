@@ -30,7 +30,7 @@ export default {
                     this.password = '';
                     this.errors = undefined;
 
-                    this.$router.push({ path: '/liste-des-sites' });
+                    this.$router.push({ path: '/' });
                 })
                 .catch((errors) => {
                     this.loading = false;

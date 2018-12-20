@@ -36,3 +36,8 @@ label.error.message {
 .section:first-of-type {
     padding-top: 2em;
 }
+
+.notification > .spinner {
+    vertical-align: middle;
+    margin-right: 10px;
+}

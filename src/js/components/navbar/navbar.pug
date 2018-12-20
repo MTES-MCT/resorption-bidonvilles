@@ -11,6 +11,12 @@
             </ul>
         </nav>
 
+        <nav v-else-if="!configLoaded">
+            <ul class="nav__links">
+                <li class="nav__item"><a href="#" @click="logout">Déconnexion</a></li>
+            </ul>
+        </nav>
+
         <nav v-else>
             <ul class="nav__links">
                 <li class="nav__item"><router-link to="/liste-des-sites">Liste des sites</a></li>
