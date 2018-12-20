@@ -2,7 +2,7 @@ import NavBar from '#src/components/navbar/navbar.vue';
 import FilterGroup from './filterGroup/filterGroup.vue';
 import Map from './map/map.vue';
 import Table from './table/table.vue';
-import { all } from '#src/helpers/towns';
+import { all as fetchAll } from '#src/helpers/townHelper';
 
 export default {
     components: {
@@ -164,7 +164,7 @@ export default {
 
             this.loading = true;
 
-            all()
+            fetchAll()
                 .then((towns) => {
                     const fieldTypes = [
                         { id: 1, name: 'Terrain' },
