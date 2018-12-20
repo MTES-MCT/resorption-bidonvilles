@@ -1,3 +1,8 @@
+/**
+ * Fetches all towns from the database
+ *
+ * @returns {Promise}
+ */
 export function all() {
     return new Promise((success) => {
         setTimeout(() => {
