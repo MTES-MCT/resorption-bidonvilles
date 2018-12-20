@@ -19,8 +19,8 @@
             <td>{{ town.population_total || 'inconnu' }}</td>
             <td>{{ town.population_couples || 'inconnu' }}</td>
             <td>{{ town.population_minors || 'inconnu' }}</td>
-            <td>{{ town.built_at }}</td>
-            <td>{{ town.owner_type }}</td>
+            <td>{{ town.built_at || 'inconnu' }}</td>
+            <td>{{ town.owner_type || 'inconnu' }}</td>
         </tr>
     </tbody>
 </table>
