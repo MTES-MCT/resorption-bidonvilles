@@ -73,3 +73,29 @@ export function checkLogin(to, from, next) {
         next('/');
     }
 }
+
+/**
+ * Sends a sign-up request with the given credentials
+ *
+ * @param {string} email
+ * @param {string} description
+ *
+ * @returns {Promise}
+ */
+export function signup(email, description) {
+    return new Promise((success, failure) => {
+        setTimeout(() => {
+            if (email !== '' && description !== '') {
+                success();
+            } else {
+                failure({
+                    user_message: 'Données incorrectes !',
+                    details: {
+                        email: 'Ce champ est obligatoire',
+                        description: 'Ce champ est obligatoire',
+                    },
+                });
+            }
+        }, 1000);
+    });
+}

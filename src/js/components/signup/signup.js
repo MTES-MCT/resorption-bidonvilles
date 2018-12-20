@@ -1,4 +1,5 @@
 import NavBar from '#src/components/navbar/navbar.vue';
+import { signup } from '#src/helpers/userHelper';
 
 export default {
     components: {
@@ -6,6 +7,7 @@ export default {
     },
     data() {
         return {
+            loading: false,
             email: '',
             description: '',
             success: false,
@@ -14,17 +16,27 @@ export default {
     },
     methods: {
         submit() {
-            if (this.email !== '' && this.description !== '') {
-                this.success = true;
-            } else {
-                this.errors = {
-                    user_message: 'Données incorrectes !',
-                    details: {
-                        email: 'Ce champ est obligatoire',
-                        description: 'Ce champ est obligatoire',
-                    },
-                };
+            // avoid submitting a request twice at the same time
+            if (this.loading === true) {
+                return;
             }
+
+            // request signup
+            this.loading = true;
+
+            signup(this.email, this.description)
+                .then(() => {
+                    this.loading = false;
+                    this.success = true;
+                    this.errors = undefined;
+                    this.email = '';
+                    this.description = '';
+                })
+                .catch((errors) => {
+                    this.loading = false;
+                    this.success = false;
+                    this.errors = errors;
+                });
         },
     },
 };
