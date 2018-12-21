@@ -1,10 +1,8 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import { isLoaded as isConfigLoaded, load } from '#helpers/configHelper';
+import { getEntryPoint } from '#app/router';
 
 export default {
-    props: {
-        target: String,
-    },
     data() {
         return {
             error: null,
@@ -31,7 +29,7 @@ export default {
                 });
         },
         redirect() {
-            this.$router.push(this.target || '/liste-des-sites');
+            this.$router.push(getEntryPoint());
         },
     },
 };
