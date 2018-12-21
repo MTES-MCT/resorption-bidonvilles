@@ -41,6 +41,7 @@ export function load() {
             configuration = Object.freeze({
                 user: {
                     email: localStorage.getItem('auth_token'),
+                    map_center: [43.3050621, 0.684586],
                 },
                 field_types: [
                     { id: 1, name: 'Terrain' },

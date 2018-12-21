@@ -18,7 +18,7 @@ export default {
         return {
             error: undefined,
             loading: false,
-            center: [43.3050621, 0.684586],
+            center: getConfig().user.map_center,
             towns: [],
             quickview: {
                 town: null,
