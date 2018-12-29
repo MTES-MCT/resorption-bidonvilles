@@ -1,7 +1,7 @@
 /**
  * Computes the unique identifier of the given feature
  *
- * @param {Object} feature
+ * @param {Feature} feature
  *
  * @returns {string}
  */
@@ -12,9 +12,9 @@ function computeUid(feature) {
 /**
  * Removes duplicate features from the given array of features
  *
- * @param {Array.<Object>} features
+ * @param {Array.<Feature>} features
  *
- * @returns {Array.<Object>}
+ * @returns {Array.<Feature>}
  */
 function removeDuplicates(features) {
     const usedUids = [];
@@ -87,5 +87,28 @@ export function autocomplete(strSearch, limit = 5) {
 
     return promise;
 }
+
+/**
+ * @typedef {Object} Feature
+ * @property {Feature_Properties} properties
+ * @property {Feature_Geometry}   geometry
+ */
+
+/**
+ * @typedef {Object} Feature_Properties
+ * @property {string} label
+ * @property {string} context
+ */
+
+/**
+ * @typedef {Object} Feature_Geometry
+ * @property {Array.<number>} coordinates An array of two double numbers, ie. the latitude and longitude
+ */
+
+/**
+ * @typedef {Suggestion}
+ * @property {string}         label
+ * @property {Array.<number>} coordinates
+ */
 
 export default autocomplete;

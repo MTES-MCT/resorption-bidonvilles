@@ -1,0 +1,140 @@
+<div>
+    <NavBar></NavBar>
+
+    <section class="section section-white">
+        <div class="container">
+            <h1>Déclarer un site</h1>
+
+            //- <section class="breadcrumbs">
+            //-     <ul>
+            //-         <li v-for="(step, index) in steps" class="breadcrumbs-step" :class="{ done: currentStep > index, active: currentStep === index }" @click="onStepClick(index)"><span>{{ index + 1 }}</span> {{ step.label }}</li>
+            //-     </ul>
+            //- </section>
+
+            <div class="panel">
+                <div class="panel__header">
+                    <h3>1. Caractéristiques</h3>
+                </div>
+                <div class="form__group">
+                    <label>Localisation géographique</label>
+                    <p>Saisissez ici l'adresse du site, puis précisez sa position en déplaçant le point sur la carte.</p>
+                    <Map placeholder="Saisissez ici l'adresse du site" :track-position="true" v-model="address"></Map>
+                </div>
+
+                <div class="form__group">
+                    <label>Informations d'accès :</label>
+                    <p>Saisissez ici toutes les informations qui, en plus de l'adresse, peuvent être utiles pour l'accès au site :</p>
+                    <div class="input__group">
+                        <input type="text" v-model="detailedAddress">
+                    </div>
+                </div>
+
+                <div class="form__group">
+                    <label>Date d'installation du site :</label>
+                    <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="builtAt" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
+                </div>
+
+                <div class="form__group">
+                    <fieldset>
+                        <legend>Type de site :</legend>
+                        <div v-for="(type, index) in fieldTypes">
+                            <input type="radio" :id="'fieldType' + index" :value="type.field_type_id" v-model="fieldType">
+                            <label :for="'fieldType' + index" class="label-inline">{{ type.name }}</label>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div class="form__group">
+                    <fieldset>
+                        <legend>Type de propriétaire :</legend>
+                        <div v-for="(type, index) in ownerTypes">
+                            <input type="radio" :id="'ownerType' + index" :value="type.owner_type_id" v-model="ownerType">
+                            <label :for="'ownerType' + index" class="label-inline">{{ type.name }}</label>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel__header">
+                    <h3>2. Démographie</h3>
+                </div>
+
+                <div class="form__group">
+                    <label>Nombre de personnes :</label>
+                    <p>Laissez ce champ vide si l'information est inconnue</p>
+                    <div class="input__group">
+                        <input type="number" v-model="populationTotal">
+                    </div>
+                </div>
+
+                <div class="form__group">
+                    <label>Nombre de couples :</label>
+                    <p>Laissez ce champ vide si l'information est inconnue</p>
+                    <div class="input__group">
+                        <input type="number" v-model="populationCouples">
+                    </div>
+                </div>
+
+                <div class="form__group">
+                    <label>Nombre de mineurs :</label>
+                    <p>Laissez ce champ vide si l'information est inconnue</p>
+                    <div class="input__group">
+                        <input type="number" v-model="populationMinors">
+                    </div>
+                </div>
+
+                <div class="form__group">
+                    <fieldset>
+                        <legend>Origines :</legend>
+                        <p>Ne rien cocher si l'information est inconnue</p>
+                        <div v-for="(origin, index) in socialOrigins">
+                            <input type="checkbox" :id="'socialOrigins' + index" :value="origin.social_origins_id" v-model="origins">
+                            <label :for="'socialOrigins' + index" class="label-inline">{{ origin.name }}</label>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel__header">
+                    <h3>3. Conditions de vie</h3>
+                </div>
+
+                <div class="form__group">
+                    <fieldset>
+                        <legend>Accès à l'électricité :</legend>
+                        <div v-for="(value, index) in yesnoValues">
+                            <input type="radio" name="accessToElectricity" :id="'accessToElectricity' + index" :value="value.value" v-model="accessToElectricity">
+                            <label :for="'accessToElectricity' + index" class="label-inline">{{ value.label }}</label>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div class="form__group">
+                    <fieldset>
+                        <legend>Accès à l'eau :</legend>
+                        <div v-for="(value, index) in yesnoValues">
+                            <input type="radio" name="accessToWater" :id="'accessToWater' + index" :value="value.value" v-model="accessToWater">
+                            <label :for="'accessToWater' + index" class="label-inline">{{ value.label }}</label>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div class="form__group">
+                    <fieldset>
+                        <legend>Évacuation des déchets :</legend>
+                        <div v-for="(value, index) in yesnoValues">
+                            <input type="radio" name="trashEvacuation" :id="'trashEvacuation' + index" :value="value.value" v-model="trashEvacuation">
+                            <label :for="'trashEvacuation' + index" class="label-inline">{{ value.label }}</label>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="form__group">
+                <button class="button large" @click="submit">Ajouter le site</button>
+            </div>
+        </div>
+    </section>
+</div>

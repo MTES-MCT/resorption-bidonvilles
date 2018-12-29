@@ -44,8 +44,19 @@ export function load() {
                     map_center: [43.3050621, 0.684586],
                 },
                 field_types: [
-                    { id: 1, name: 'Terrain' },
-                    { id: 2, name: 'Immeuble bâti' },
+                    { field_type_id: -1, name: 'Inconnu' },
+                    { field_type_id: 1, name: 'Terrain' },
+                    { field_type_id: 2, name: 'Immeuble bâti' },
+                ],
+                owner_types: [
+                    { owner_type_id: -1, name: 'Inconnu' },
+                    { owner_type_id: 1, name: 'Public' },
+                    { owner_type_id: 2, name: 'Privé' },
+                ],
+                social_origins: [
+                    { social_origins_id: 1, name: 'Ressortissants Français' },
+                    { social_origins_id: 2, name: 'Ressortissants de l\'Union Européenne' },
+                    { social_origins_id: 3, name: 'Ressortissants extracommunautaires' },
                 ],
             });
 

@@ -16,7 +16,8 @@ const TYPING_MIN = 5;
 
 export default {
     props: {
-        autofocus: String,
+        value: Object,
+        autofocus: Boolean,
         placeholder: String,
     },
     data() {
@@ -24,7 +25,8 @@ export default {
             pendingRequest: null,
             typingTimeout: null,
             suggestions: [],
-            query: '',
+            coordinates: (this.value !== null && this.value.coordinates) || null,
+            query: (this.value !== null && this.value.label) || '',
             previousQuery: '',
             focused: false,
             indexOfHighlightedSuggestion: null,
@@ -54,6 +56,8 @@ export default {
                 clearTimeout(this.typingTimeout);
             }
 
+            this.coordinates = null;
+            this.$emit('input', null);
             this.setSuggestions([]);
             this.indexOfHighlightedSuggestion = null;
             this.typingTimeout = setTimeout(this.autocomplete, TYPING_TIMEOUT);
@@ -96,9 +100,11 @@ export default {
         onSuggestionClick(suggestion) {
             this.onSelect(suggestion);
         },
-        onSelect({ label, coordinates }) {
-            this.$emit('selected', coordinates);
+        onSelect(value) {
+            const { label, coordinates } = value;
+            this.$emit('input', value);
             this.setSuggestions([]);
+            this.coordinates = coordinates;
             this.query = label;
             this.previousQuery = label;
         },

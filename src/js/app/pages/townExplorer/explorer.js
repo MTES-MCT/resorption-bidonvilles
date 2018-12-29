@@ -18,7 +18,10 @@ export default {
         return {
             error: undefined,
             loading: false,
-            center: getConfig().user.map_center,
+            defaultMapView: {
+                center: getConfig().user.map_center,
+                zoom: 8,
+            },
             towns: [],
             quickview: {
                 town: null,
@@ -61,6 +64,18 @@ export default {
         };
     },
     computed: {
+        rendererProps() {
+            if (this.currentTab === 'map') {
+                return {
+                    towns: this.visibleTowns,
+                    defaultView: this.defaultMapView,
+                };
+            }
+
+            return {
+                towns: this.visibleTowns,
+            };
+        },
         visibleTowns() {
             let visibleTowns = this.towns;
 
@@ -187,15 +202,10 @@ export default {
                     // build the field-type filter
                     const fieldTypeFilter = this.filters.filter(({ id }) => id === 'fieldType')[0];
                     fieldTypeFilter.options = [
-                        // special option 'unknown'
-                        {
-                            id: -1, value: -1, label: 'Inconnu', checked: true,
-                        },
-
                         // options based on field-types returned by the api
                         ...fieldTypes.map(fieldType => ({
-                            id: fieldType.id,
-                            value: fieldType.id,
+                            id: fieldType.field_type_id,
+                            value: fieldType.field_type_id,
                             label: fieldType.name,
                             checked: true,
                         })),

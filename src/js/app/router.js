@@ -4,6 +4,7 @@ import SignIn from '#app/pages/signin/signin.vue';
 import SignUp from '#app/pages/signup/signup.vue';
 import TownsExplorer from '#app/pages/townExplorer/explorer.vue';
 import Landing from '#app/pages/landing/landing.vue';
+import AddTown from '#app/pages/addTown/addTown.vue';
 
 import { isLoggedIn } from '#helpers/userHelper';
 import { isLoaded as isConfigLoaded } from '#helpers/configHelper';
@@ -112,6 +113,11 @@ const router = new VueRouter({
         {
             path: '/liste-des-sites',
             component: TownsExplorer,
+            beforeEnter: guardians.loaded,
+        },
+        {
+            path: '/nouveau-site',
+            component: AddTown,
             beforeEnter: guardians.loaded,
         },
     ],

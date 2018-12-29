@@ -1,4 +1,4 @@
 <section>
-    <Address placeholder="Centrez la carte sur un point précis en tapant ici le nom d'une commune, département, région, ..." @selected="onNewAddress" autofocus="true"></Address>
+    <Address :placeholder="placeholder" :autofocus="autofocus" v-model="address"></Address>
     <div id="map"></div>
 </section>

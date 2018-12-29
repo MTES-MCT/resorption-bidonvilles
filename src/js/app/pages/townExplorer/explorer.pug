@@ -42,7 +42,7 @@
                     </header>
 
                     <keep-alive>
-                        <component :is="currentTabComponent" :towns="visibleTowns" :center="center" @marker-click="showQuickview"></component>
+                        <component :is="currentTabComponent" v-bind="rendererProps" @town-click="showQuickview"></component>
                     </keep-alive>
                 </div>
             </div>
