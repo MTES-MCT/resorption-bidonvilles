@@ -72,6 +72,11 @@ export default {
                 this.pendingRequest.abort();
             }
 
+            if (this.coordinates === null) {
+                this.query = '';
+                this.previousQuery = '';
+            }
+
             this.setSuggestions([]);
         },
         onNavigation(event) {
