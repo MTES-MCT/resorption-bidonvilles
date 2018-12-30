@@ -1,5 +1,3 @@
-import { isLoggedIn } from '#helpers/userHelper';
-
 /**
  * Loaded configuration
  *
@@ -25,6 +23,34 @@ export function isLoaded() {
 }
 
 /**
+ * Handles the response from the API
+ *
+ * @param {Function} success
+ * @param {Function} failure
+ */
+function onLoad(success, failure) {
+    let response = null;
+    try {
+        response = JSON.parse(this.responseText);
+    } catch (error) {
+        failure({
+            user_message: 'Erreur inconnue',
+        });
+        return;
+    }
+
+    if (this.status !== 200) {
+        failure((response && response.error) || {
+            user_message: 'Erreur inconnue',
+        });
+        return;
+    }
+
+    configuration = response;
+    success(response);
+}
+
+/**
  * Loads the configuration for the current user
  *
  * If there is no user currently logged in, this request will fail.
@@ -33,35 +59,10 @@ export function isLoaded() {
  */
 export function load() {
     return new Promise((success, failure) => {
-        setTimeout(() => {
-            if (isLoggedIn() === false) {
-                failure();
-            }
-
-            configuration = Object.freeze({
-                user: {
-                    email: localStorage.getItem('auth_token'),
-                    map_center: [43.3050621, 0.684586],
-                },
-                field_types: [
-                    { field_type_id: -1, name: 'Inconnu' },
-                    { field_type_id: 1, name: 'Terrain' },
-                    { field_type_id: 2, name: 'Immeuble bâti' },
-                ],
-                owner_types: [
-                    { owner_type_id: -1, name: 'Inconnu' },
-                    { owner_type_id: 1, name: 'Public' },
-                    { owner_type_id: 2, name: 'Privé' },
-                ],
-                social_origins: [
-                    { social_origins_id: 1, name: 'Ressortissants Français' },
-                    { social_origins_id: 2, name: 'Ressortissants de l\'Union Européenne' },
-                    { social_origins_id: 3, name: 'Ressortissants extracommunautaires' },
-                ],
-            });
-
-            success(configuration);
-        }, 10);
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://localhost:5000/config');
+        xhr.onload = onLoad.bind(xhr, success, failure);
+        xhr.send();
     });
 }
 

@@ -89,7 +89,7 @@
                         <legend>Origines :</legend>
                         <p>Ne rien cocher si l'information est inconnue</p>
                         <div v-for="(origin, index) in socialOrigins">
-                            <input type="checkbox" :id="'socialOrigins' + index" :value="origin.social_origins_id" v-model="origins">
+                            <input type="checkbox" :id="'socialOrigins' + index" :value="origin.social_origin_id" v-model="origins">
                             <label :for="'socialOrigins' + index" class="label-inline">{{ origin.name }}</label>
                         </div>
                     </fieldset>
