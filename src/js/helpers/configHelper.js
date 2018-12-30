@@ -60,7 +60,7 @@ function onLoad(success, failure) {
 export function load() {
     return new Promise((success, failure) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', 'http://localhost:5000/config');
+        xhr.open('GET', `${process.env.API_URL}/config`);
         xhr.onload = onLoad.bind(xhr, success, failure);
         xhr.send();
     });
