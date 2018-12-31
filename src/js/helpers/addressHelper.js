@@ -45,10 +45,14 @@ function onAutocompleteLoad(success, failure) {
     try {
         const { features } = JSON.parse(this.responseText);
         success(
-            removeDuplicates(features).map(feature => ({
-                label: `${feature.properties.label}, ${feature.properties.context}`,
-                coordinates: feature.geometry.coordinates,
-            })),
+            removeDuplicates(features)
+                .filter(feature => (feature.properties && feature.properties.citycode))
+                .map(feature => ({
+                    citycode: feature.properties.citycode,
+                    city: feature.properties.city,
+                    label: `${feature.properties.label}, ${feature.properties.context}`,
+                    coordinates: feature.geometry.coordinates,
+                })),
         );
     } catch (error) {
         failure();

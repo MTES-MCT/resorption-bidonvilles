@@ -3,7 +3,7 @@
         <div class="quickview-close">
             <a href="#" @click="$emit('outside-click')"><svg class="icon icon-cross"><use xlink:href="#round-cross"></use></svg></a>
         </div>
-        <h1 class="quickview-title">Site de {{ town.city }}</h1>
+        <h1 class="quickview-title">Site de {{ town.city.name }}</h1>
         <h2 class="quickview-subtitle">{{ town.address }}</h2>
     </header>
 
@@ -13,17 +13,17 @@
 
     <section>
         <header class="notification full-width">Démographie</header>
-        <p><strong>Nombre de personnes :</strong> {{ town.population_total || 'inconnu' }}</p>
-        <p><strong>Nombre de ménages :</strong> {{ town.population_couples || 'inconnu' }}</p>
-        <p><strong>Nombre de mineurs :</strong> {{ town.population_minors || 'inconnu' }}</p>
-        <p><strong>Origines :</strong> {{ town.origins || 'inconnu' }}</p>
+        <p><strong>Nombre de personnes :</strong> {{ town.populationTotal !== null ? town.populationTotal : 'inconnu' }}</p>
+        <p><strong>Nombre de ménages :</strong> {{ town.populationCouples !== null ? town.populationCouples : 'inconnu' }}</p>
+        <p><strong>Nombre de mineurs :</strong> {{ town.populationMinors !== null ? town.populationMinors : 'inconnu' }}</p>
+        <p><strong>Origines :</strong> {{ town.socialOrigins.length > 0 ? town.socialOrigins.map(origin => (origin.label)).join(', ') : 'inconnu' }}</p>
     </section>
 
     <section>
         <header class="notification full-width">Conditions de vie</header>
-        <p><strong>Accès à l'eau :</strong> {{ town.access_to_water || 'inconnu' }}</p>
-        <p><strong>Accès à l'électricité :</strong> {{ town.access_to_electricity || 'inconnu' }}</p>
-        <p><strong>Évacuation des déchets :</strong> {{ town.trash_evacuation || 'inconnu' }}</p>
+        <p><strong>Accès à l'eau :</strong> {{ town.accessToWater === true ? 'oui' : (town.accessToWater === false ? 'non' : 'inconnu') }}</p>
+        <p><strong>Accès à l'électricité :</strong> {{ town.accessToElectricity === true ? 'oui' : (town.accessToElectricity === false ? 'non' : 'inconnu') }}</p>
+        <p><strong>Évacuation des déchets :</strong> {{ town.trashEvacuation === true ? 'oui' : (town.trashEvacuation === false ? 'non' : 'inconnu') }}</p>
     </section>
 
     <section>

@@ -53,9 +53,17 @@ export default {
             const { lat, lng } = this.positionMarker.getLatLng();
             return [lat, lng];
         },
+        city() {
+            return this.address !== null ? this.address.city : null;
+        },
+        citycode() {
+            return this.address !== null ? this.address.citycode : null;
+        },
         value() {
             return {
                 label: this.label,
+                city: this.city,
+                citycode: this.citycode,
                 coordinates: this.coordinates,
             };
         },

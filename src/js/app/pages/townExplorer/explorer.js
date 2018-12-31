@@ -86,7 +86,7 @@ export default {
                         .filter(option => option.checked)
                         .map(option => option.value);
 
-                    visibleTowns = visibleTowns.filter(town => allowedFieldTypes.indexOf(town.field_type_id) !== -1);
+                    visibleTowns = visibleTowns.filter(town => allowedFieldTypes.indexOf(town.fieldType.id) !== -1);
                 }
                     break;
 
@@ -97,7 +97,7 @@ export default {
 
                     disallowedPopulation.forEach((value) => {
                         if (value === null) {
-                            visibleTowns = visibleTowns.filter(town => town.population_total !== null);
+                            visibleTowns = visibleTowns.filter(town => town.populationTotal !== null);
                             return;
                         }
 
@@ -106,19 +106,21 @@ export default {
                         max = parseInt(max, 10);
 
                         visibleTowns = visibleTowns.filter((town) => {
+                            if (town.populationTotal === null) {
+                                return true;
+                            }
+
                             if (!Number.isNaN(min)
-                            && !Number.isNaN(max)
-                            && town.population_total >= min
-                            && town.population_total <= max) {
-                                return false;
+                            && !Number.isNaN(max)) {
+                                return town.populationTotal < min || town.populationTotal > max;
                             }
 
-                            if (!Number.isNaN(min) && town.population_total >= min) {
-                                return false;
+                            if (!Number.isNaN(min)) {
+                                return town.populationTotal < min;
                             }
 
-                            if (!Number.isNaN(max) && town.population_total <= max) {
-                                return false;
+                            if (!Number.isNaN(max)) {
+                                return town.populationTotal > max;
                             }
 
                             return true;
@@ -134,9 +136,9 @@ export default {
 
                     disallowedJustice.forEach((value) => {
                         if (value === 'yes') {
-                            visibleTowns = visibleTowns.filter(town => town.justice_status === false);
+                            visibleTowns = visibleTowns.filter(town => town.justiceStatus !== true);
                         } else if (value === 'no') {
-                            visibleTowns = visibleTowns.filter(town => town.justice_status === true);
+                            visibleTowns = visibleTowns.filter(town => town.justiceStatus === true);
                         }
                     });
                 }
@@ -204,9 +206,9 @@ export default {
                     fieldTypeFilter.options = [
                         // options based on field-types returned by the api
                         ...fieldTypes.map(fieldType => ({
-                            id: fieldType.field_type_id,
-                            value: fieldType.field_type_id,
-                            label: fieldType.name,
+                            id: fieldType.id,
+                            value: fieldType.id,
+                            label: fieldType.label,
                             checked: true,
                         })),
                     ];

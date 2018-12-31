@@ -13,14 +13,14 @@
     </thead>
     <tbody>
         <tr v-for="town in towns">
-            <td>{{ town.city }}</td>
+            <td>{{ town.city.name }}</td>
             <td>{{ town.address }}</td>
-            <td>{{ town.field_type || 'inconnu' }}</td>
-            <td>{{ town.population_total || 'inconnu' }}</td>
-            <td>{{ town.population_couples || 'inconnu' }}</td>
-            <td>{{ town.population_minors || 'inconnu' }}</td>
-            <td>{{ town.built_at || 'inconnu' }}</td>
-            <td>{{ town.owner_type || 'inconnu' }}</td>
+            <td>{{ town.fieldType.label }}</td>
+            <td>{{ town.populationTotal !== null ? town.populationTotal : 'inconnu' }}</td>
+            <td>{{ town.populationCouples !== null ? town.populationCouples : 'inconnu' }}</td>
+            <td>{{ town.populationMinors !== null ? town.populationMinors : 'inconnu' }}</td>
+            <td>{{ town.builtAt ? new Date(town.builtAt * 1000).toLocaleString().substr(0, 10) : 'inconnu' }}</td>
+            <td>{{ town.ownerType.label }}</td>
         </tr>
     </tbody>
 </table>

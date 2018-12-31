@@ -1,35 +1,75 @@
 /**
+ * Handles a response from an API request
+ *
+ * @param {Function} success
+ * @param {Function} failure
+ */
+function onApiResponse(success, failure) {
+    let response = null;
+    try {
+        response = JSON.parse(this.responseText);
+    } catch (error) {
+        failure({
+            user_message: 'Erreur inconnue',
+        });
+        return;
+    }
+
+    if (this.status !== 200) {
+        failure((response && response.error) || {
+            user_message: 'Erreur inconnue',
+        });
+        return;
+    }
+
+    success(response);
+}
+
+/**
  * Fetches all towns from the database
  *
  * @returns {Promise}
  */
 export function all() {
-    return new Promise((success) => {
-        setTimeout(() => {
-            const towns = [
-                {
-                    latitude: 43.641668,
-                    longitude: 1.467486,
-                    city: 'Toulouse',
-                    address: 'Gramont : avenue d\'Atlanta',
-                    field_type: 'Terrain',
-                    field_type_id: 1,
-                    population_total: 40,
-                    population_couples: null,
-                    population_minors: null,
-                    built_at: '01/08/2013',
-                    owner_type: 'public',
-                    justice_status: false,
-                    actions: [],
-                    access_to_electricity: null,
-                    access_to_water: null,
-                    trash_evacuation: null,
-                },
-            ];
-
-            success(towns);
-        }, 10);
+    return new Promise((success, failure) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `${process.env.API_URL}/towns`);
+        xhr.onload = onApiResponse.bind(xhr, success, failure);
+        xhr.send();
     });
 }
 
-export default all;
+/**
+ * Creates a new town
+ *
+ * @param {Town_Data} data
+ *
+ * @returns {Promise}
+ */
+export function add(data) {
+    return new Promise((success, failure) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', `${process.env.API_URL}/towns`);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onload = onApiResponse.bind(xhr, success, failure);
+        xhr.send(JSON.stringify(data));
+    });
+}
+
+/**
+ * @typedef {Object} Town_Data
+ * @property {number} latitude,
+ * @property {number} longitude,
+ * @property {string} address,
+ * @property {string} detailed_address,
+ * @property {?Date} built_at,
+ * @property {?number} population_total,
+ * @property {?number} population_couples,
+ * @property {?number} population_minors,
+ * @property {?boolean} access_to_electricity,
+ * @property {?boolean} access_to_water,
+ * @property {?boolean} trash_evacuation,
+ * @property {Array.<number>} social_origins,
+ * @property {number} field_type,
+ * @property {number} owner_type,
+ */

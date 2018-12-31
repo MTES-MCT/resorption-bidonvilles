@@ -3,6 +3,7 @@ import Map from '#app/pages/townExplorer/map/map.vue';
 import { get } from '#helpers/configHelper';
 import Datepicker from 'vuejs-datepicker';
 import { fr } from 'vuejs-datepicker/dist/locale';
+import { add } from '#helpers/townHelper';
 
 export default {
     components: {
@@ -39,19 +40,52 @@ export default {
             populationCouples: '',
             populationMinors: '',
             origins: [],
-            accessToElectricity: '',
-            accessToWater: '',
-            trashEvacuation: '',
+            accessToElectricity: null,
+            accessToWater: null,
+            trashEvacuation: null,
             yesnoValues: [
                 { value: -1, label: 'Inconnu' },
                 { value: 1, label: 'Oui' },
                 { value: 0, label: 'Non' },
             ],
+            error: null,
+            fieldErrors: {},
         };
     },
     methods: {
         submit() {
-            // console.log(this.address, this.detailedAddress, this.builtAt, this.fieldType, this.ownerType, this.populationTotal, this.populationCouples, this.populationMinors, this.origins, this.accessToElectricity, this.accessToWater, this.trashEvacuation);
+            // clean previous errors
+            this.error = null;
+            this.fieldErrors = {};
+
+            // send the form
+            const coordinates = this.address && this.address.coordinates;
+
+            add({
+                latitude: coordinates && coordinates[0],
+                longitude: coordinates && coordinates[1],
+                city: this.address && this.address.city,
+                citycode: this.address && this.address.citycode,
+                address: this.address && this.address.label,
+                detailed_address: this.detailedAddress,
+                built_at: this.builtAt,
+                population_total: this.populationTotal,
+                population_couples: this.populationCouples,
+                population_minors: this.populationMinors,
+                access_to_electricity: this.accessToElectricity,
+                access_to_water: this.accessToWater,
+                trash_evacuation: this.trashEvacuation,
+                social_origins: this.origins,
+                field_type: this.fieldType,
+                owner_type: this.ownerType,
+            })
+                .then(() => {
+                    this.$router.push('/liste-des-sites');
+                })
+                .catch((response) => {
+                    this.error = response.user_message;
+                    this.fieldErrors = response.fields || {};
+                });
         },
     },
 };
