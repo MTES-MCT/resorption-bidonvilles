@@ -14,6 +14,26 @@ export default {
             town: null,
         };
     },
+    computed: {
+        status() {
+            if (this.town === null) {
+                return null;
+            }
+
+            switch (this.town.status) {
+            case 'open':
+                return 'existe toujours';
+
+            case 'gone':
+            case 'covered':
+            case 'expelled':
+                return 'n\'existe plus';
+
+            default:
+                return 'inconnu';
+            }
+        },
+    },
     created() {
         this.fetchData();
     },

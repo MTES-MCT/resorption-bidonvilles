@@ -1,0 +1,10 @@
+h1 > .label {
+    font-weight: normal;
+    vertical-align: middle;
+    font-size: 0.4em;
+    background: #efaca6;
+}
+
+h1 > .label.open {
+    background: #daf5e7;
+}
