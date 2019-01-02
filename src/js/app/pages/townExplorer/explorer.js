@@ -194,6 +194,7 @@ export default {
             }
 
             this.loading = true;
+            this.error = undefined;
 
             fetchAll()
                 .then((towns) => {

@@ -21,5 +21,8 @@ export default {
                 this.$emit('outside-click', event);
             }
         },
+        showTown() {
+            this.$router.push(`/site/${this.town.id}`);
+        },
     },
 };

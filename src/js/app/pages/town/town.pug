@@ -1,0 +1,94 @@
+<div>
+    <NavBar></NavBar>
+    
+    <section class="section section-white">
+        <div class="container">
+            <div class="dashboard" v-if="loading">
+                <!-- LOADING STATE -->
+                <div class="notification full-width">
+                    <img src="/img/spinner_dark.svg" width="20" class="spinner" />
+                    <span>Chargement des données en cours...</span>
+                </div>
+            </div>
+
+            <div class="dashboard" v-else-if="error">
+                <!-- ERROR STATE -->
+                <div class="notification error full-width">
+                    <span>{{ error }}. <a href="#" @click="fetchData">Réessayer ?</a></span>
+                </div>
+            </div>
+
+            <div v-else>
+                <!-- SUCCESS STATE -->
+                <h1>Site de {{ town.city.name }}</h1>
+                <div class="panel">
+                    <div class="panel__header">
+                        <h3>1. Caractéristiques</h3>
+                    </div>
+                    <div class="form__group">
+                        <p>
+                            <strong>Adresse :</strong> {{ town.address }}
+                        </p>
+                        <p v-if="town.addressDetails">
+                            <strong>Informations d'accès :</strong> {{ town.addressDetails }}
+                        </p>
+                        <Map :show-address="false" :track-position="false" :towns="[ town ]"></Map>
+                        <p>
+                            <strong>Date d'installation du site :</strong> {{ town.builtAt !== null ? new Date(town.builtAt).toLocaleDateString().substr(0, 10) : 'Inconnue' }}
+                        </p>
+                        <p>
+                            <strong>Type de site :</strong> {{ town.fieldType.label }}
+                        </p>
+                        <p>
+                            <strong>Type de propriétaire :</strong> {{ town.ownerType.label }}
+                        </p>
+                        <p>
+                            <strong>Procédure judiciaire en cours :</strong> {{ town.justiceStatus !== null ? (town.justiceStatus === true ? 'oui' : 'non') : 'Inconnu' }}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel__header">
+                        <h3>2. Démographie</h3>
+                    </div>
+                    <div class="form__group">
+                        <p>
+                            <strong>Nombre de personnes :</strong> {{ town.populationTotal !== null ? town.populationTotal : 'inconnu' }}
+                        </p>
+                        <p>
+                            <strong>Nombre de couples :</strong> {{ town.populationCouples !== null ? town.populationCouples : 'inconnu' }}
+                        </p>
+                        <p>
+                            <strong>Nombre de mineurs :</strong> {{ town.populationMinors !== null ? town.populationMinors : 'inconnu' }}
+                        </p>
+                        <p>
+                            <strong>Origines :</strong>
+                            <ul v-if="town.socialOrigins.length > 0">
+                                <li v-for="origin in town.socialOrigins">{{ origin.label }}</li>
+                            </ul>
+                            <span v-else>inconnues</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel__header">
+                        <h3>3. Conditions de vie</h3>
+                    </div>
+                    <div class="form__group">
+                        <p>
+                            <strong>Accès à l'électricité:</strong> {{ town.accessToElectricity !== null ? (town.accessToElectricity ? 'oui' : 'non') : 'inconnu' }}
+                        </p>
+                        <p>
+                            <strong>Accès à l'eau :</strong> {{ town.accessToWater !== null ? (town.accessToWater ? 'oui' : 'non') : 'inconnu' }}
+                        </p>
+                        <p>
+                            <strong>Évacuation des déchets :</strong> {{ town.trashEvacuation !== null ? (town.trashEvacuation ? 'oui' : 'non') : 'inconnu' }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

@@ -33,6 +33,10 @@ export default {
             type: String,
             default: 'Centrez la carte sur un point précis en tapant ici le nom d\'une commune, département, région, ...',
         },
+        showAddress: {
+            type: Boolean,
+            default: true,
+        },
     },
     data() {
         const positionMarker = L.marker([0, 0], { draggable: true });

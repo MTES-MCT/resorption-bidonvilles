@@ -10,6 +10,17 @@ export function all() {
 }
 
 /**
+ * Fetchs a specific town from the database
+ *
+ * @param {string} id
+ *
+ * @returns {Promise}
+ */
+export function get(id) {
+    return getApi(`/towns/${id}`);
+}
+
+/**
  * Creates a new town
  *
  * @param {Town_Data} data

@@ -1,4 +1,4 @@
 <section>
-    <Address :placeholder="placeholder" :autofocus="autofocus" v-model="address"></Address>
+    <Address :placeholder="placeholder" :autofocus="autofocus" v-model="address" v-if="showAddress"></Address>
     <div id="map"></div>
 </section>

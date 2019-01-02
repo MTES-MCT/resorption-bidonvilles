@@ -12,7 +12,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr v-for="town in towns">
+        <tr v-for="town in towns" @click="showTown(town.id)">
             <td>{{ town.city.name }}</td>
             <td>{{ town.address }}</td>
             <td>{{ town.fieldType.label }}</td>

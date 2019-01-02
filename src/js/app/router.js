@@ -5,6 +5,7 @@ import SignUp from '#app/pages/signup/signup.vue';
 import TownsExplorer from '#app/pages/townExplorer/explorer.vue';
 import Landing from '#app/pages/landing/landing.vue';
 import AddTown from '#app/pages/addTown/addTown.vue';
+import Town from '#app/pages/town/town.vue';
 
 import { isLoggedIn } from '#helpers/api/user';
 import { isLoaded as isConfigLoaded } from '#helpers/api/config';
@@ -118,6 +119,11 @@ const router = new VueRouter({
         {
             path: '/nouveau-site',
             component: AddTown,
+            beforeEnter: guardians.loaded,
+        },
+        {
+            path: '/site/:id',
+            component: Town,
             beforeEnter: guardians.loaded,
         },
     ],
