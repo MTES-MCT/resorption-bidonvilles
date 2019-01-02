@@ -3,7 +3,7 @@
     
     <section class="section section-white">
         <div class="container">
-            <div class="dashboard" v-if="loading">
+            <div v-if="loading">
                 <!-- LOADING STATE -->
                 <div class="notification full-width">
                     <img src="/img/spinner_dark.svg" width="20" class="spinner" />
@@ -11,7 +11,7 @@
                 </div>
             </div>
 
-            <div class="dashboard" v-else-if="error">
+            <div v-else-if="error">
                 <!-- ERROR STATE -->
                 <div class="notification error full-width">
                     <span>{{ error }}. <a href="#" @click="fetchData">Réessayer ?</a></span>
