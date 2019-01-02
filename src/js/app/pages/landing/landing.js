@@ -1,5 +1,5 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
-import { isLoaded as isConfigLoaded, load } from '#helpers/configHelper';
+import { isLoaded as isConfigLoaded, load } from '#helpers/api/config';
 import { getEntryPoint } from '#app/router';
 
 export default {

@@ -6,8 +6,8 @@ import TownsExplorer from '#app/pages/townExplorer/explorer.vue';
 import Landing from '#app/pages/landing/landing.vue';
 import AddTown from '#app/pages/addTown/addTown.vue';
 
-import { isLoggedIn } from '#helpers/userHelper';
-import { isLoaded as isConfigLoaded } from '#helpers/configHelper';
+import { isLoggedIn } from '#helpers/api/user';
+import { isLoaded as isConfigLoaded } from '#helpers/api/config';
 
 /**
  * This is the route towards which the user is redirected by the landing page

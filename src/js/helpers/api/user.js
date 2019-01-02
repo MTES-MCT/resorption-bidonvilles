@@ -1,4 +1,5 @@
-import { unload as unloadConfig } from '#helpers/configHelper';
+import { unload as unloadConfig } from '#helpers/api/config';
+import { postApi } from '#helpers/api/main';
 
 /**
  * Sends a login request for the given user
@@ -14,23 +15,9 @@ import { unload as unloadConfig } from '#helpers/configHelper';
  * @returns {Promise}
  */
 export function login(email, password) {
-    const logins = {
-        'anis@beta.gouv.fr': 'fabnum',
-        'sophie.jacquemont@developpement-durable.gouv.fr': 'fabnum',
-        'clement.chapalain@beta.gouv.fr': 'fabnum',
-    };
-
-    return new Promise((success, failure) => {
-        setTimeout(() => {
-            if (Object.prototype.hasOwnProperty.call(logins, email) && password === logins[email]) {
-                localStorage.setItem('auth_token', email);
-                success();
-            } else {
-                failure({
-                    user_message: 'Identification échouée',
-                });
-            }
-        }, 1000);
+    return postApi('/signin', { email, password }).then((response) => {
+        localStorage.setItem('token', response.token);
+        return response;
     });
 }
 
@@ -41,7 +28,7 @@ export function login(email, password) {
  */
 export function logout() {
     unloadConfig();
-    localStorage.removeItem('auth_token');
+    localStorage.removeItem('token');
 }
 
 /**
@@ -55,7 +42,16 @@ export function logout() {
  * @returns {boolean}
  */
 export function isLoggedIn() {
-    return localStorage.getItem('auth_token') !== null;
+    return localStorage.getItem('token') !== null;
+}
+
+/**
+ * Returns the access token of the current session (if any)
+ *
+ * @returns {string|null}
+ */
+export function getToken() {
+    return localStorage.getItem('token');
 }
 
 /**

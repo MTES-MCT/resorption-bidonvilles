@@ -1,9 +1,9 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import Map from '#app/pages/townExplorer/map/map.vue';
-import { get } from '#helpers/configHelper';
+import { get } from '#helpers/api/config';
 import Datepicker from 'vuejs-datepicker';
 import { fr } from 'vuejs-datepicker/dist/locale';
-import { add } from '#helpers/townHelper';
+import { add } from '#helpers/api/town';
 
 export default {
     components: {

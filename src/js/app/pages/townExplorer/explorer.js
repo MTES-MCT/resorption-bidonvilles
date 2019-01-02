@@ -3,8 +3,8 @@ import FilterGroup from './filterGroup/filterGroup.vue';
 import Map from './map/map.vue';
 import Table from './table/table.vue';
 import Quickview from '#app/components/quickview/quickview.vue';
-import { all as fetchAll } from '#helpers/townHelper';
-import { get as getConfig } from '#helpers/configHelper';
+import { all as fetchAll } from '#helpers/api/town';
+import { get as getConfig } from '#helpers/api/config';
 
 export default {
     components: {
@@ -20,7 +20,7 @@ export default {
             loading: false,
             defaultMapView: {
                 center: getConfig().user.map_center,
-                zoom: 8,
+                zoom: 9,
             },
             towns: [],
             quickview: {

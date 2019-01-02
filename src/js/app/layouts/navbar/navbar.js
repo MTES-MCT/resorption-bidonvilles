@@ -1,5 +1,5 @@
-import { logout, isLoggedIn } from '#helpers/userHelper';
-import { isLoaded as isConfigLoaded } from '#helpers/configHelper';
+import { logout, isLoggedIn } from '#helpers/api/user';
+import { isLoaded as isConfigLoaded } from '#helpers/api/config';
 
 export default {
     data() {

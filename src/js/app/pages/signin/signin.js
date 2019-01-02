@@ -1,5 +1,5 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
-import { login } from '#helpers/userHelper';
+import { login } from '#helpers/api/user';
 
 export default {
     components: {

@@ -1,3 +1,5 @@
+import { getApi } from '#helpers/api/main';
+
 /**
  * Loaded configuration
  *
@@ -23,34 +25,6 @@ export function isLoaded() {
 }
 
 /**
- * Handles the response from the API
- *
- * @param {Function} success
- * @param {Function} failure
- */
-function onLoad(success, failure) {
-    let response = null;
-    try {
-        response = JSON.parse(this.responseText);
-    } catch (error) {
-        failure({
-            user_message: 'Erreur inconnue',
-        });
-        return;
-    }
-
-    if (this.status !== 200) {
-        failure((response && response.error) || {
-            user_message: 'Erreur inconnue',
-        });
-        return;
-    }
-
-    configuration = response;
-    success(response);
-}
-
-/**
  * Loads the configuration for the current user
  *
  * If there is no user currently logged in, this request will fail.
@@ -58,11 +32,9 @@ function onLoad(success, failure) {
  * @returns {Promise}
  */
 export function load() {
-    return new Promise((success, failure) => {
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', `${process.env.API_URL}/config`);
-        xhr.onload = onLoad.bind(xhr, success, failure);
-        xhr.send();
+    return getApi('/config').then((response) => {
+        configuration = response;
+        return response;
     });
 }
 
