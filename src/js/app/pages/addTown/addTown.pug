@@ -73,6 +73,21 @@
                         </div>
                     </fieldset>
                 </div>
+
+                <div class="form__group">
+                    <fieldset>
+                        <legend v-bind:class="{ error: fieldErrors.justice_status }">Procédure judiciaire en cours :</legend>
+                        <p class="error" v-if="fieldErrors.justice_status">
+                            <ul>
+                                <li v-for="error in fieldErrors.justice_status">{{ error }}</li>
+                            </ul>
+                        </p>
+                        <div v-for="(value, index) in yesnoValues">
+                            <input type="radio" name="justiceStatus" :id="'justiceStatus' + index" :value="value.value" v-model="justiceStatus">
+                            <label :for="'justiceStatus' + index" class="label-inline">{{ value.label }}</label>
+                        </div>
+                    </fieldset>
+                </div>
             </div>
 
             <div class="panel">

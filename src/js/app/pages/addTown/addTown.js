@@ -43,6 +43,7 @@ export default {
             accessToElectricity: null,
             accessToWater: null,
             trashEvacuation: null,
+            justiceStatus: null,
             yesnoValues: [
                 { value: -1, label: 'Inconnu' },
                 { value: 1, label: 'Oui' },
@@ -75,6 +76,7 @@ export default {
                 access_to_electricity: this.accessToElectricity,
                 access_to_water: this.accessToWater,
                 trash_evacuation: this.trashEvacuation,
+                justice_status: this.justiceStatus,
                 social_origins: this.origins,
                 field_type: this.fieldType,
                 owner_type: this.ownerType,
