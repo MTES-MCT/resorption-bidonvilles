@@ -31,7 +31,27 @@
                 <div v-if="mode === 'view'">
                     <div class="panel">
                         <div class="panel__header">
-                            <h3>1. Caractéristiques</h3>
+                            <h3>1. Situation du site</h3>
+                        </div>
+                        <div class="form__group">
+                            <p>
+                                <strong>Date d'installation du site :</strong> {{ town.builtAt !== null ? new Date(town.builtAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue' }}
+                            </p>
+                            <p v-if="town.status !== 'open'">
+                                <strong>Date de fermeture du site :</strong> {{ town.closedAt !== null ? new Date(town.closedAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue'}}
+                            </p>
+                            <p v-if="town.status !== 'open'">
+                                <strong>Cause de la fermeture :</strong> {{ town.status === 'gone' ? 'Disparition' : (town.status === 'expelled' ? 'Expulsé' : 'Résorbé' ) }}
+                            </p>
+                            <p>
+                                <strong>Procédure judiciaire en cours :</strong> {{ town.justiceStatus !== null ? (town.justiceStatus === true ? 'oui' : 'non') : 'Inconnu' }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel__header">
+                            <h3>2. Localisation</h3>
                         </div>
                         <div class="form__group">
                             <p>
@@ -42,26 +62,17 @@
                             </p>
                             <Map :show-address="false" :track-position="false" :towns="[ town ]"></Map>
                             <p>
-                                <strong>Date d'installation du site :</strong> {{ town.builtAt !== null ? new Date(town.builtAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue' }}
-                            </p>
-                            <p v-if="town.status !== 'open'">
-                                <strong>Date de fermeture du site :</strong> {{ town.closedAt !== null ? new Date(town.closedAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue'}}
-                            </p>
-                            <p>
                                 <strong>Type de site :</strong> {{ town.fieldType.label }}
                             </p>
                             <p>
                                 <strong>Type de propriétaire :</strong> {{ town.ownerType.label }}
-                            </p>
-                            <p>
-                                <strong>Procédure judiciaire en cours :</strong> {{ town.justiceStatus !== null ? (town.justiceStatus === true ? 'oui' : 'non') : 'Inconnu' }}
                             </p>
                         </div>
                     </div>
 
                     <div class="panel">
                         <div class="panel__header">
-                            <h3>2. Démographie</h3>
+                            <h3>3. Démographie</h3>
                         </div>
                         <div class="form__group">
                             <p>
@@ -104,7 +115,63 @@
                 <div v-if="mode === 'edit'">
                     <div class="panel">
                         <div class="panel__header">
-                            <h3>1. Caractéristiques</h3>
+                            <h3>1. Situation du site</h3>
+                        </div>
+
+                        <div class="form__group">
+                            <label v-bind:class="{ error: fieldErrors.built_at }">Date d'installation du site :</label>
+                            <p class="error" v-if="fieldErrors.built_at">
+                                <ul>
+                                    <li v-for="error in fieldErrors.built_at">{{ error }}</li>
+                                </ul>
+                            </p>
+                            <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" :full-month-name="true" :format="'dd MMMM yyyy'" v-model="edit.builtAt"></datepicker>
+                        </div>
+
+                        <div class="form__group">
+                            <label v-bind:class="{ error: fieldErrors.closed_at }">Date de fermeture du site :</label>
+                            <p class="error" v-if="fieldErrors.closed_at">
+                                <ul>
+                                    <li v-for="error in fieldErrors.closed_at">{{ error }}</li>
+                                </ul>
+                            </p>
+                            <datepicker :clear-button="true" :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" :full-month-name="true" :format="'dd MMMM yyyy'" v-model="edit.closedAt"></datepicker>
+                        </div>
+
+                        <div class="form__group" v-if="edit.closedAt !== null">
+                            <fieldset>
+                                <legend v-bind:class="{ error: fieldErrors.status }">Cause de la fermeture :</legend>
+                                <p class="error" v-if="fieldErrors.status">
+                                    <ul>
+                                        <li v-for="error in fieldErrors.status">{{ error }}</li>
+                                    </ul>
+                                </p>
+                                <div v-for="(value, index) in statusValues">
+                                    <input type="radio" name="status" :id="'status' + index" :value="value.value" v-model="edit.status">
+                                    <label :for="'status' + index" class="label-inline">{{ value.label }}</label>
+                                </div>
+                            </fieldset>
+                        </div>
+
+                        <div class="form__group">
+                            <fieldset>
+                                <legend v-bind:class="{ error: fieldErrors.justice_status }">Procédure judiciaire en cours :</legend>
+                                <p class="error" v-if="fieldErrors.justice_status">
+                                    <ul>
+                                        <li v-for="error in fieldErrors.justice_status">{{ error }}</li>
+                                    </ul>
+                                </p>
+                                <div v-for="(value, index) in yesnoValues">
+                                    <input type="radio" name="justiceStatus" :id="'justiceStatus' + index" :value="value.value" v-model="edit.justiceStatus">
+                                    <label :for="'justiceStatus' + index" class="label-inline">{{ value.label }}</label>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel__header">
+                            <h3>2. Localisation</h3>
                         </div>
                         <div class="form__group">
                             <label v-bind:class="{ error: fieldErrors.address }">Localisation géographique</label>
@@ -123,16 +190,6 @@
                             <div class="input__group">
                                 <input type="text" v-model="edit.detailedAddress">
                             </div>
-                        </div>
-
-                        <div class="form__group">
-                            <label v-bind:class="{ error: fieldErrors.built_at }">Date d'installation du site :</label>
-                            <p class="error" v-if="fieldErrors.built_at">
-                                <ul>
-                                    <li v-for="error in fieldErrors.built_at">{{ error }}</li>
-                                </ul>
-                            </p>
-                            <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" :full-month-name="true" :format="'dd MMMM yyyy'" v-model="edit.builtAt"></datepicker>
                         </div>
 
                         <div class="form__group">
@@ -164,26 +221,11 @@
                                 </div>
                             </fieldset>
                         </div>
-
-                        <div class="form__group">
-                            <fieldset>
-                                <legend v-bind:class="{ error: fieldErrors.justice_status }">Procédure judiciaire en cours :</legend>
-                                <p class="error" v-if="fieldErrors.justice_status">
-                                    <ul>
-                                        <li v-for="error in fieldErrors.justice_status">{{ error }}</li>
-                                    </ul>
-                                </p>
-                                <div v-for="(value, index) in yesnoValues">
-                                    <input type="radio" name="justiceStatus" :id="'justiceStatus' + index" :value="value.value" v-model="edit.justiceStatus">
-                                    <label :for="'justiceStatus' + index" class="label-inline">{{ value.label }}</label>
-                                </div>
-                            </fieldset>
-                        </div>
                     </div>
 
                     <div class="panel">
                         <div class="panel__header">
-                            <h3>2. Démographie</h3>
+                            <h3>3. Démographie</h3>
                         </div>
 
                         <div class="form__group">
@@ -239,7 +281,7 @@
 
                     <div class="panel">
                         <div class="panel__header">
-                            <h3>3. Conditions de vie</h3>
+                            <h3>4. Conditions de vie</h3>
                         </div>
 
                         <div class="form__group">
