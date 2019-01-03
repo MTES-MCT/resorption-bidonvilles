@@ -32,6 +32,18 @@ export function add(data) {
 }
 
 /**
+ * Edit atown
+ *
+ * @param {string}    id
+ * @param {Town_Data} data
+ *
+ * @returns {Promise}
+ */
+export function edit(id, data) {
+    return postApi(`/towns/${id}`, data);
+}
+
+/**
  * @typedef {Object} Town_Data
  * @property {number} latitude,
  * @property {number} longitude,

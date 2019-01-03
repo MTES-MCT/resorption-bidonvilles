@@ -1,17 +1,46 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import Map from '#app/pages/townExplorer/map/map.vue';
-import { get } from '#helpers/api/town';
+import { get, edit } from '#helpers/api/town';
+import { get as getConfig } from '#helpers/api/config';
+import Datepicker from 'vuejs-datepicker';
+import { fr } from 'vuejs-datepicker/dist/locale';
+
+function boolToYesNoValue(bool) {
+    if (bool === true) {
+        return 1;
+    }
+
+    if (bool === false) {
+        return 0;
+    }
+
+    return -1;
+}
 
 export default {
     components: {
         NavBar,
         Map,
+        Datepicker,
     },
     data() {
         return {
             loading: false,
             error: null,
             town: null,
+            mode: 'view',
+            editError: null,
+            fieldErrors: {},
+            fieldTypes: getConfig().field_types,
+            ownerTypes: getConfig().owner_types,
+            socialOrigins: getConfig().social_origins,
+            dateLanguage: fr,
+            yesnoValues: [
+                { value: -1, label: 'Inconnu' },
+                { value: 1, label: 'Oui' },
+                { value: 0, label: 'Non' },
+            ],
+            edit: null,
         };
     },
     computed: {
@@ -50,10 +79,83 @@ export default {
                 .then((town) => {
                     this.loading = false;
                     this.town = town;
+                    this.resetEdit();
                 })
                 .catch((errors) => {
                     this.error = errors.user_message;
                     this.loading = false;
+                });
+        },
+        setViewMode() {
+            this.mode = 'view';
+        },
+        setEditMode() {
+            this.resetEdit();
+            this.mode = 'edit';
+        },
+        resetEdit() {
+            this.editError = null;
+            this.fieldErrors = {};
+
+            if (this.town === null) {
+                this.edit = null;
+                return;
+            }
+
+            this.edit = {
+                address: {
+                    city: this.town.city.name,
+                    citycode: this.town.city.code,
+                    label: this.town.address,
+                    coordinates: [this.town.latitude, this.town.longitude],
+                },
+                detailedAddress: this.town.addressDetails,
+                builtAt: this.town.builtAt * 1000,
+                fieldType: this.town.fieldType.id,
+                ownerType: this.town.ownerType.id,
+                justiceStatus: boolToYesNoValue(this.town.justiceStatus),
+                populationTotal: this.town.populationTotal,
+                populationCouples: this.town.populationCouples,
+                populationMinors: this.town.populationMinors,
+                origins: this.town.socialOrigins.map(origin => origin.id),
+                accessToElectricity: boolToYesNoValue(this.town.accessToElectricity),
+                accessToWater: boolToYesNoValue(this.town.accessToWater),
+                trashEvacuation: boolToYesNoValue(this.town.trashEvacuation),
+            };
+        },
+        submit() {
+            // clean previous errors
+            this.editError = null;
+            this.fieldErrors = {};
+
+            // send the form
+            const coordinates = this.edit.address && this.edit.address.coordinates;
+
+            edit(this.town.id, {
+                latitude: coordinates && coordinates[0],
+                longitude: coordinates && coordinates[1],
+                city: this.edit.address && this.edit.address.city,
+                citycode: this.edit.address && this.edit.address.citycode,
+                address: this.edit.address && this.edit.address.label,
+                detailed_address: this.edit.detailedAddress,
+                built_at: this.edit.builtAt,
+                population_total: this.edit.populationTotal,
+                population_couples: this.edit.populationCouples,
+                population_minors: this.edit.populationMinors,
+                access_to_electricity: this.edit.accessToElectricity,
+                access_to_water: this.edit.accessToWater,
+                trash_evacuation: this.edit.trashEvacuation,
+                justice_status: this.edit.justiceStatus,
+                social_origins: this.edit.origins,
+                field_type: this.edit.fieldType,
+                owner_type: this.edit.ownerType,
+            })
+                .then(() => {
+                    this.$router.go();
+                })
+                .catch((response) => {
+                    this.editError = response.user_message;
+                    this.fieldErrors = response.fields || {};
                 });
         },
     },

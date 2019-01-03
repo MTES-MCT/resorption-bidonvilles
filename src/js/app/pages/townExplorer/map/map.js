@@ -7,6 +7,10 @@ export default {
         Address,
     },
     props: {
+        value: {
+            type: Object,
+            default: null,
+        },
         trackPosition: {
             type: Boolean,
             default: false,
@@ -39,14 +43,16 @@ export default {
         },
     },
     data() {
-        const positionMarker = L.marker([0, 0], { draggable: true });
+        const coordinates = this.value ? this.value.coordinates : [0, 0];
+
+        const positionMarker = L.marker(coordinates, { draggable: true });
         positionMarker.addEventListener('dragend', this.onDrag);
 
         return {
             map: null,
             positionMarker,
             townMarkers: [],
-            address: null,
+            address: this.value,
         };
     },
     computed: {
@@ -63,7 +69,7 @@ export default {
         citycode() {
             return this.address !== null ? this.address.citycode : null;
         },
-        value() {
+        input() {
             return {
                 label: this.label,
                 city: this.city,
@@ -85,7 +91,7 @@ export default {
                 this.setView([coordinates[1], coordinates[0]], 13);
             }
 
-            this.$emit('input', this.value);
+            this.$emit('input', this.input);
         },
     },
     mounted() {
@@ -100,12 +106,16 @@ export default {
             L.control.layers(layers).addTo(this.map);
 
             const { center, zoom } = this.defaultView;
-            this.setView(center, zoom);
+            if (this.value === null) {
+                this.setView(center, zoom);
+            } else {
+                this.centerMap(center, zoom);
+            }
 
             this.map.addEventListener('click', (event) => {
                 const { lat, lng } = event.latlng;
                 this.positionMarker.setLatLng([lat, lng]);
-                this.$emit('input', this.value);
+                this.$emit('input', this.input);
             });
         },
         getMapLayers() {
@@ -139,12 +149,15 @@ export default {
         handleTownMarkerClick(marker, event) {
             this.$emit('town-click', marker, event);
         },
-        setView(coordinates, zoom) {
-            this.positionMarker.setLatLng(coordinates);
+        centerMap(coordinates, zoom) {
             this.map.setView(coordinates, zoom);
         },
+        setView(coordinates, zoom) {
+            this.positionMarker.setLatLng(coordinates);
+            this.centerMap(coordinates, zoom);
+        },
         onDrag() {
-            this.$emit('input', this.value);
+            this.$emit('input', this.input);
         },
     },
 };
