@@ -1,4 +1,5 @@
 import { getApi } from '#helpers/api/main';
+import { refreshToken } from '#helpers/api/user';
 
 /**
  * Loaded configuration
@@ -33,6 +34,9 @@ export function isLoaded() {
  */
 export function load() {
     return getApi('/config').then((response) => {
+        // refresh the token, by the way
+        refreshToken();
+
         configuration = response;
         return response;
     });

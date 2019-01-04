@@ -1,5 +1,5 @@
 import { unload as unloadConfig } from '#helpers/api/config';
-import { postApi } from '#helpers/api/main';
+import { postApi, getApi } from '#helpers/api/main';
 
 /**
  * Sends a login request for the given user
@@ -18,6 +18,17 @@ export function login(email, password) {
     return postApi('/signin', { email, password }).then((response) => {
         localStorage.setItem('token', response.token);
         return response;
+    });
+}
+
+/**
+ * Renews the access token for a few more time
+ *
+ * @returns {Promise}
+ */
+export function refreshToken() {
+    return getApi('/refreshToken').then((response) => {
+        localStorage.setItem('token', response.token);
     });
 }
 
