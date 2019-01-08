@@ -121,7 +121,7 @@ export default {
         getMapLayers() {
             return {
                 Satellite: L.tileLayer.provider('Esri.WorldImagery'),
-                Dessin: L.tileLayer.provider('OpenStreetMap.Mapnik'),
+                Dessin: L.tileLayer.provider('Wikimedia'),
             };
         },
         addTownMarker(town) {
