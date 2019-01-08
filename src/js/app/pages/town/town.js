@@ -102,6 +102,7 @@ export default {
             this.mode = 'view';
         },
         setEditMode() {
+            this.setView('details');
             this.resetEdit();
             this.mode = 'edit';
         },
