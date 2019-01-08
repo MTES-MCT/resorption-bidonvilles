@@ -66,7 +66,7 @@
                                 <p v-if="town.addressDetails">
                                     <strong>Informations d'accès :</strong> {{ town.addressDetails }}
                                 </p>
-                                <Map :show-address="false" :track-position="false" :towns="[ town ]"></Map>
+                                <Map :show-address="false" :track-position="false" :towns="[ town ]" :default-view="center"></Map>
                                 <p>
                                     <strong>Type de site :</strong> {{ town.fieldType.label }}
                                 </p>

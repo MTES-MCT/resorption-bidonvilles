@@ -68,6 +68,12 @@ export default {
                 return 'inconnu';
             }
         },
+        center() {
+            return {
+                center: [this.town.latitude, this.town.longitude],
+                zoom: 13,
+            };
+        },
     },
     created() {
         this.fetchData();
