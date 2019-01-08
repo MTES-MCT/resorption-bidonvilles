@@ -28,6 +28,7 @@ export default {
             loading: false,
             error: null,
             town: null,
+            view: 'details',
             mode: 'view',
             editError: null,
             fieldErrors: {},
@@ -129,6 +130,10 @@ export default {
                 accessToWater: boolToYesNoValue(this.town.accessToWater),
                 trashEvacuation: boolToYesNoValue(this.town.trashEvacuation),
             };
+        },
+        setView(view) {
+            this.setViewMode();
+            this.view = view === 'actions' ? 'actions' : 'details';
         },
         submit() {
             // clean previous errors

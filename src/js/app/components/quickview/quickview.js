@@ -24,5 +24,8 @@ export default {
         showTown() {
             this.$router.push(`/site/${this.town.id}`);
         },
+        showAction(id) {
+            this.$router.push(`/action/${id}`);
+        },
     },
 };
