@@ -93,7 +93,6 @@ function home() {
  * Obviously, the routing configuration of the whole app
  */
 const router = new VueRouter({
-    linkExactActiveClass: 'active',
     routes: [
         {
             path: '/',
@@ -115,31 +114,49 @@ const router = new VueRouter({
             beforeEnter: guardians.loggedIn,
         },
         {
+            meta: {
+                group: 'townList',
+            },
             path: '/liste-des-sites',
             component: TownsExplorer,
             beforeEnter: guardians.loaded,
         },
         {
+            meta: {
+                group: 'townCreation',
+            },
             path: '/nouveau-site',
             component: AddTown,
             beforeEnter: guardians.loaded,
         },
         {
+            meta: {
+                group: 'townList',
+            },
             path: '/site/:id',
             component: Town,
             beforeEnter: guardians.loaded,
         },
         {
+            meta: {
+                group: 'actionList',
+            },
             path: '/liste-des-actions',
             component: ActionsExplorer,
             beforeEnter: guardians.loaded,
         },
         {
+            meta: {
+                group: 'actionCreation',
+            },
             path: '/nouvelle-action',
             component: AddAction,
             beforeEnter: guardians.loaded,
         },
         {
+            meta: {
+                group: 'actionList',
+            },
             path: '/action/:id',
             component: Action,
             beforeEnter: guardians.loaded,
