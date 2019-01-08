@@ -6,6 +6,9 @@ import TownsExplorer from '#app/pages/townExplorer/explorer.vue';
 import Landing from '#app/pages/landing/landing.vue';
 import AddTown from '#app/pages/addTown/addTown.vue';
 import Town from '#app/pages/town/town.vue';
+import ActionsExplorer from '#app/pages/actionExplorer/explorer.vue';
+import AddAction from '#app/pages/addAction/addAction.vue';
+import Action from '#app/pages/action/action.vue';
 
 import { isLoggedIn } from '#helpers/api/user';
 import { isLoaded as isConfigLoaded } from '#helpers/api/config';
@@ -124,6 +127,21 @@ const router = new VueRouter({
         {
             path: '/site/:id',
             component: Town,
+            beforeEnter: guardians.loaded,
+        },
+        {
+            path: '/liste-des-actions',
+            component: ActionsExplorer,
+            beforeEnter: guardians.loaded,
+        },
+        {
+            path: '/nouvelle-action',
+            component: AddAction,
+            beforeEnter: guardians.loaded,
+        },
+        {
+            path: '/action/:id',
+            component: Action,
             beforeEnter: guardians.loaded,
         },
     ],

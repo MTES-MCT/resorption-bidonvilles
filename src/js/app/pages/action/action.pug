@@ -1,0 +1,88 @@
+<div>
+    <NavBar></NavBar>
+    
+    <section class="section section-white">
+        <div class="container">
+            <div v-if="loading">
+                <!-- LOADING STATE -->
+                <div class="notification full-width">
+                    <img src="/img/spinner_dark.svg" width="20" class="spinner" />
+                    <span>Chargement des données en cours...</span>
+                </div>
+            </div>
+
+            <div v-else-if="error">
+                <!-- ERROR STATE -->
+                <div class="notification error full-width">
+                    <span>{{ error }}. <a href="#" @click="fetchData">Réessayer ?</a></span>
+                </div>
+            </div>
+
+            <div v-else>
+                <!-- SUCCESS STATE -->
+                <header class="town-header">
+                    <h1>{{ action.type.label }} sur {{ action.territory.name }}</h1>
+                    <h2>Dernière modification le <time>{{ new Date(action.updatedAt * 1000).toLocaleDateString().substr(0, 10) }}</time></h2>
+                </header>
+
+                <div>
+                    <div class="panel">
+                        <div class="panel__header">
+                            <h3>1. Description de l'action</h3>
+                        </div>
+                        <div class="form__group">
+                            <p>
+                                <strong>Type d'action :</strong> {{ action.type.label }}
+                            </p>
+                            <p>
+                                <strong>Débutée le :</strong> {{ new Date(action.startedAt * 1000).toLocaleDateString().substr(0, 10) }} 
+                            </p>
+                            <p>
+                                <strong>Détails sur l'action :</strong> {{ description || 'Pas de détails' }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel__header">
+                            <h3>2. Périmètre de l'action</h3>
+                        </div>
+                        <div class="form__group">
+                            <p>
+                                <strong>Territoire :</strong> {{ action.territory.name }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel__header">
+                            <h3>3. Étapes de l'action</h3>
+                        </div>
+
+                        <div class="form__group">
+                            <p v-if="action.steps.length === 0">Aucune étape enregistrée pour le moment</p>
+                            <p v-for="step in action.steps"><strong>Le {{ new Date(step.date * 1000).toLocaleDateString().substr(0, 10) }} :</strong><br/>{{ step.description }}</p>
+                        </div>
+
+                        <div class="form__group">
+                            <div class="notification error" v-if="formError">{{formError }}.</div>
+        
+                            <label v-bind:class="{ error: fieldErrors.description }">Ajouter une étape :</label>
+                            <p class="error" v-if="fieldErrors.description">
+                                <ul>
+                                    <li v-for="error in fieldErrors.description">{{ error }}</li>
+                                </ul>
+                            </p>
+                            <div class="input__group">
+                                <textarea v-model="newStep"></textarea>
+                            </div>
+                            <div class="input__group">
+                                <button class="button large" @click="submit">Ajouter l'étape</button>
+                            </div>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

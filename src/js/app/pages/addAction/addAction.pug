@@ -1,0 +1,79 @@
+<div>
+    <NavBar></NavBar>
+
+    <section class="section section-white">
+        <div class="container">
+            <h1>Déclarer une action</h1>
+
+            <div class="panel">
+                <div class="panel__header">
+                    <h3>1. Description de l'action<h3>
+                </div>
+
+                <div class="form__group">
+                    <fieldset>
+                        <legend v-bind:class="{ error: fieldErrors.type }">Type d'action :</legend>
+                        <p class="error" v-if="fieldErrors.type">
+                            <ul>
+                                <li v-for="error in fieldErrors.type">{{ error }}</li>
+                            </ul>
+                        </p>
+                        <div v-for="(type, index) in actionTypes">
+                            <input type="radio" :id="'actionType' + index" :value="type.id" v-model="actionType">
+                            <label :for="'actionType' + index" class="label-inline">{{ type.label }}</label>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div class="form__group">
+                    <label>Détails sur l'action :</label>
+                    <div class="input__group">
+                        <textarea v-model="description"></textarea>
+                    </div>
+                </div>
+
+                <div class="form__group">
+                    <label v-bind:class="{ error: fieldErrors.started_at }">Action débutée le :</label>
+                    <p class="error" v-if="fieldErrors.started_at">
+                        <ul>
+                            <li v-for="error in fieldErrors.started_at">{{ error }}</li>
+                        </ul>
+                    </p>
+                    <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="startedAt" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel__header">
+                    <h3>2. Périmètre de l'action<h3>
+                </div>
+
+                <div class="form__group">
+                    <fieldset>
+                        <legend v-bind:class="{ error: fieldErrors.territory }">Territoire concerné :</legend>
+                        <p class="error" v-if="fieldErrors.territory">
+                            <ul>
+                                <li v-for="error in fieldErrors.territory">{{ error }}</li>
+                            </ul>
+                        </p>
+                        <select v-model="territoryType">
+                            <option v-for="type in territoryTypes" :value="type.name">{{ type.label }}</option>
+                        </select>
+                        <select v-if="territoryType === 'region'" v-model="region">
+                            <option v-for="region in regions" :value="region.code">{{ region.code + ' - ' + region.name }}</option>
+                        </select>
+                        <select v-if="territoryType === 'departement'" v-model="departement">
+                            <option v-for="departement in departements" :value="departement.code">{{ departement.code + ' - ' + departement.name }}</option>
+                        </select>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="notification error" v-if="error">{{ error }}.</div>
+
+            <div class="form__group">
+                <button class="button large" @click="submit">Ajouter l'action</button>
+            </div>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,43 @@
+<div>
+    <NavBar></NavBar>
+
+    <section class="section section-white">
+        <div class="container">
+            <h1>Liste des actions</h1>
+
+            <div class="explorer" v-if="loading">
+                <!-- LOADING STATE -->
+                <div class="notification full-width">
+                    <img src="/img/spinner_dark.svg" width="20" class="spinner" />
+                    <span>Chargement des données en cours...</span>
+                </div>
+            </div>
+
+            <div class="explorer" v-else-if="error">
+                <!-- ERROR STATE -->
+                <div class="notification error full-width">
+                    <span>{{ error }}. <a href="#" @click="fetchData">Réessayer ?</a></span>
+                </div>
+            </div>
+
+            <div class="explorer" v-else>
+                <!-- SUCCESS STATE -->
+                <aside class="side-pane">
+                    <h4>Filtres</h4>
+
+                    <FilterGroup v-for="filterGroup in filters" :id="filterGroup.id" :label="filterGroup.label" :options="filterGroup.options"></FilterGroup>
+                </aside>
+
+                <div class="main-pane">
+                    <header class="explorer-header">
+                        <div>
+                            <h4>Résultats ({{ visibleActions.length }} actions)</h4>
+                        </div>
+                    </header>
+
+                    <Table :actions="actions"></Table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
