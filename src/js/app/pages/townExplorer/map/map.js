@@ -102,7 +102,7 @@ export default {
     methods: {
         createMap() {
             const layers = this.getMapLayers();
-            this.map = L.map('map', { layers: Object.values(layers) });
+            this.map = L.map('map', { layers: Object.values(layers), scrollWheelZoom: false });
             L.control.layers(layers).addTo(this.map);
 
             const { center, zoom } = this.defaultView;
