@@ -17,7 +17,7 @@ export default {
             }
 
             // if the click was outside ourselves, share the info
-            if (!this.$el.contains(event.target)) {
+            if (!this.$refs.quickviewPanel.contains(event.target)) {
                 this.$emit('outside-click', event);
             }
         },
