@@ -2,6 +2,8 @@ import Address from '#app/components/address/address.vue';
 import L from 'leaflet';
 import 'leaflet-providers';
 
+const DEFAULT_VIEW = [46.7755829, 2.0497727];
+
 export default {
     components: {
         Address,
@@ -25,7 +27,7 @@ export default {
             type: Object,
             default: () => ({
                 // basically, centering on France
-                center: [46.7755829, 2.0497727],
+                center: DEFAULT_VIEW,
                 zoom: 6,
             }),
         },
@@ -43,7 +45,7 @@ export default {
         },
     },
     data() {
-        const coordinates = this.value ? this.value.coordinates : [0, 0];
+        const coordinates = this.value && this.value.coordinates ? this.value.coordinates : DEFAULT_VIEW;
 
         const positionMarker = L.marker(coordinates, { draggable: true });
         positionMarker.addEventListener('dragend', this.onDrag);
@@ -111,7 +113,6 @@ export default {
             } else {
                 this.centerMap(center, zoom);
             }
-
             this.map.addEventListener('click', (event) => {
                 const { lat, lng } = event.latlng;
                 this.positionMarker.setLatLng([lat, lng]);
