@@ -1,6 +1,6 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import Map from '#app/pages/townExplorer/map/map.vue';
-import { get, edit } from '#helpers/api/town';
+import { get, edit, destroy } from '#helpers/api/town';
 import { get as getConfig } from '#helpers/api/config';
 import Datepicker from 'vuejs-datepicker';
 import { fr } from 'vuejs-datepicker/dist/locale';
@@ -31,6 +31,7 @@ export default {
             view: 'details',
             mode: 'view',
             editError: null,
+            deleteError: null,
             fieldErrors: {},
             fieldTypes: getConfig().field_types,
             ownerTypes: getConfig().owner_types,
@@ -178,6 +179,20 @@ export default {
                     this.editError = response.user_message;
                     this.fieldErrors = response.fields || {};
                 });
+        },
+        destroy() {
+            // eslint-disable-next-line
+            const confirmed = confirm('Êtes-vous sûr ? Cette suppression est irréversible');
+
+            if (confirmed === true) {
+                destroy(this.$route.params.id)
+                    .then(() => {
+                        this.$router.push('/liste-des-sites');
+                    })
+                    .catch((error) => {
+                        this.deleteError = error.user_message;
+                    });
+            }
         },
     },
 };

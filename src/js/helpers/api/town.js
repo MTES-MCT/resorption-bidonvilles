@@ -1,4 +1,4 @@
-import { getApi, postApi } from '#helpers/api/main';
+import { getApi, postApi, deleteApi } from '#helpers/api/main';
 
 /**
  * Fetches all towns from the database
@@ -32,7 +32,7 @@ export function add(data) {
 }
 
 /**
- * Edit atown
+ * Updates a town
  *
  * @param {string}    id
  * @param {Town_Data} data
@@ -41,6 +41,17 @@ export function add(data) {
  */
 export function edit(id, data) {
     return postApi(`/towns/${id}`, data);
+}
+
+/**
+ * Deletes a town
+ *
+ * @param {string} id
+ *
+ * @returns {Promise}
+ */
+export function destroy(id) {
+    return deleteApi(`/towns/${id}`);
 }
 
 /**

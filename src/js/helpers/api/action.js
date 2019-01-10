@@ -1,4 +1,4 @@
-import { getApi, postApi } from '#helpers/api/main';
+import { getApi, postApi, deleteApi } from '#helpers/api/main';
 
 /**
  * Fetches all actions from the database
@@ -32,6 +32,18 @@ export function add(data) {
 }
 
 /**
+ * Updates an action
+ *
+ * @param {string}      id
+ * @param {Action_Data} data
+ *
+ * @returns {Promise}
+ */
+export function edit(id, data) {
+    return postApi(`/actions/${id}`, data);
+}
+
+/**
  * Creates a new action step
  *
  * @param {string} id
@@ -41,6 +53,17 @@ export function add(data) {
  */
 export function addStep(id, data) {
     return postApi(`/actions/${id}/steps`, data);
+}
+
+/**
+ * Deletes an action
+ *
+ * @param {string} id
+ *
+ * @returns {Promise}
+ */
+export function destroy(id) {
+    return deleteApi(`/actions/${id}`);
 }
 
 /**

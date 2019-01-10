@@ -134,3 +134,16 @@ export function getApi(url, data, headers) {
 export function postApi(url, data, headers) {
     return request('POST', url, data, headers);
 }
+
+/**
+ * Alias for DELETE requests
+ *
+ * @param {string}                 url
+ * @param {Object}                 [data]
+ * @param {Object.<string,string>} [headers]
+ *
+ * @returns {Promise}
+ */
+export function deleteApi(url, data, headers) {
+    return request('DELETE', url, data, headers);
+}

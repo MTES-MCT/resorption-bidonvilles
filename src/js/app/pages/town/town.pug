@@ -21,6 +21,7 @@
             <div v-else>
                 <!-- SUCCESS STATE -->
                 <header class="town-header">
+                    <button v-if="mode !== 'edit'" @click="destroy" class="button warning">Supprimer le site</button>
                     <button v-if="town.status === 'open' && mode !== 'edit'" @click="setEditMode" class="button secondary">Modifier le site</button>
                     <button v-if="mode === 'edit'" @click="setViewMode" class="button warning">Annuler</button>
                     <button v-if="mode === 'edit'" @click="submit" class="button">Sauvegarder</button>
@@ -32,6 +33,10 @@
                     <button class="button" @click="setView('details')">Caractéristiques du site</button>
                     <button class="button" @click="setView('actions')">Actions sur le site</button>
                 </header>
+
+                <div class="notification error full-width" v-if="deleteError !== null">
+                    <span>{{ deleteError }}</span>
+                </div>
 
                 <div v-if="view === 'details'">
                     <div v-if="mode === 'view'">
