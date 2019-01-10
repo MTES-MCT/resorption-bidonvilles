@@ -26,6 +26,18 @@
                 </div>
 
                 <div class="form__group">
+                    <label v-bind:class="{ error: fieldErrors.name }">Nom de l'action :</label>
+                    <p class="error" v-if="fieldErrors.name">
+                        <ul>
+                            <li v-for="error in fieldErrors.name">{{ error }}</li>
+                        </ul>
+                    </p>
+                    <div class="input__group">
+                        <input type="text" v-model="name" />
+                    </div>
+                </div>
+
+                <div class="form__group">
                     <label>Détails sur l'action :</label>
                     <div class="input__group">
                         <textarea v-model="description"></textarea>

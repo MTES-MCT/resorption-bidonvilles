@@ -34,14 +34,14 @@
             <table class="table" v-if="town.actions.length">
                 <thead>
                     <tr>
-                        <th>Type d'action</th>
+                        <th>Nom de l'action</th>
                         <th>Action débutée</th>
                         <th>Opérateur</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="action in town.actions" class="action" @click="showAction(action.id)">
-                        <td>{{ action.type }}</td>
+                        <td>{{ action.name }}</td>
                         <td>{{ new Date(action.startedAt * 1000).toLocaleDateString().substr(0, 10) }}</td>
                         <td></td>
                     </tr>

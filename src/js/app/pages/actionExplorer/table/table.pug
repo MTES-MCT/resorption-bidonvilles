@@ -1,6 +1,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th>Nom</th>
             <th>Type d'action</th>
             <th>Action débutée le</th>
             <th>Territoire concerné</th>
@@ -8,6 +9,7 @@
     </thead>
     <tbody>
         <tr v-for="action in actions" @click="showAction(action.id)">
+            <td>{{ action.name }}</td>
             <td>{{ action.type.label }}</td>
             <td>{{ new Date(action.startedAt * 1000).toLocaleString().substr(0, 10) }}</td>
             <td>{{ action.territory.name }}</td>

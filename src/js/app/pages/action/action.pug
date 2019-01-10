@@ -21,7 +21,7 @@
             <div v-else>
                 <!-- SUCCESS STATE -->
                 <header class="town-header">
-                    <h1>{{ action.type.label }} sur {{ action.territory.name }}</h1>
+                    <h1>{{ action.name }}</h1>
                     <h2>Dernière modification le <time>{{ new Date(action.updatedAt * 1000).toLocaleDateString().substr(0, 10) }}</time></h2>
                 </header>
 

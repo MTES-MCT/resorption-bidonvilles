@@ -16,6 +16,7 @@ export default {
             departements: get().departements,
             dateLanguage: fr,
             actionType: null,
+            name: '',
             description: '',
             startedAt: '',
             territoryType: null,
@@ -51,6 +52,7 @@ export default {
 
             add({
                 type: this.actionType,
+                name: this.name,
                 description: this.description,
                 started_at: this.startedAt,
                 territory_type: this.territoryType,

@@ -348,10 +348,11 @@
                 <div v-else>
                     <div class="panel" v-for="action in town.actions">
                         <div class="panel__header">
-                            <h3><router-link :to="'/action/' + action.id">{{ action.type }}</router-link> - <small class="panel__header-extra">Débutée le {{ new Date(action.startedAt * 1000).toLocaleDateString().substr(0, 10) }}</small></h3>
+                            <h3><router-link :to="'/action/' + action.id">{{ action.name }}</router-link> - <small class="panel__header-extra">Débutée le {{ new Date(action.startedAt * 1000).toLocaleDateString().substr(0, 10) }}</small></h3>
                         </div>
+                        <p><strong>Type de l'action :</strong> {{ action.type }}</p>
                         <p><strong>Détails de l'action :</strong></p>
-                        <p>{{ action.description }}</p>
+                        <p>{{ action.description || 'Aucun détails fournis' }}</p>
                     </div>
                 </div>
             </div>
