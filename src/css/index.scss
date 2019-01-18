@@ -41,3 +41,12 @@ label.error.message {
     vertical-align: middle;
     margin-right: 10px;
 }
+
+.panel__header > h3 > a {
+    color: inherit;
+    text-decoration: underline;
+
+    &:hover {
+        text-decoration: none;
+    }
+}
