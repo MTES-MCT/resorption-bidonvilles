@@ -6,13 +6,9 @@
             <div class="quickview-close">
                 <a href="#" @click="$emit('outside-click')"><svg class="icon icon-cross"><use xlink:href="#round-cross"></use></svg></a>
             </div>
-            <h1 class="quickview-title">Site de {{ town.city.name }}</h1>
+            <h1 class="quickview-title"><a @click="showTown">Site de {{ town.city.name }}</a></h1>
             <h2 class="quickview-subtitle">{{ town.address }}</h2>
         </header>
-
-        <footer class="quickview-footer">
-            <button class="button secondary" @click="showTown">Voir le détail</button>
-        </footer>
 
         <section>
             <header class="notification full-width">Démographie</header>
