@@ -1,3 +1,57 @@
-span.navbar__domain {
+.navbar__domain {
     white-space: nowrap;
+}
+
+.navbar__hamburger {
+    display: none;
+    cursor: pointer;
+
+    > img {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+.navbar__close {
+    display: none;
+    margin-bottom: 10px;
+    text-align: right;
+
+    > img {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+    }
+}
+
+@media (max-width: 1279px) {
+    .navbar__hamburger {
+        display: block;
+    }
+
+    .navbar__close {
+        display: block;
+        margin-right: -20px;
+    }
+
+    .navbar__container > aside {
+        display: none;
+        z-index: 5000;
+        position: fixed;
+        padding: 10px 30px;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        border-left: 1px solid #c9d3df;
+        background: #fff;
+
+        .nav__item {
+            display: block;
+            margin-bottom: 20px;
+        }
+    }
+
+    .navbar.enabled aside {
+        display: block;
+    }
 }

@@ -1,30 +1,40 @@
-<header class="navbar" role="navigation">
+<header class="navbar" role="navigation" v-bind:class="{ enabled: isAsideMenuEnabled }">
     <div class="navbar__container">
         <router-link to="/" class="navbar__home">
             <img src="/img/logo-marianne.svg" class="navbar__logo" alt="action-bidonvilles.beta.gouv.fr" id="logo" /><span class="navbar__domain" >action-bidonvilles.</span><img src="/img/betagouvfr.svg" class="navbar__gouvfr" alt="beta.gouv.fr" id="betagouv" />
         </router-link>
 
-        <nav v-if="!loggedIn">
-            <ul class="nav__links">
-                <li class="nav__item"><router-link to="/connexion">Connexion</router-link></li>
-                <li class="nav__item"><router-link to="/demande-d-acces">Demander un accès</router-link></li>
-            </ul>
-        </nav>
+        <div class="navbar__hamburger">
+            <img src="/img/hamburger.svg" alt="Menu" @click="enableAsideMenu" />
+        </div>
 
-        <nav v-else-if="!configLoaded">
-            <ul class="nav__links">
-                <li class="nav__item"><a href="#" @click="logout">Déconnexion</a></li>
-            </ul>
-        </nav>
+        <aside>
+            <div class="navbar__close" @click="disableAsideMenu">
+                <img src="/img/cross.svg" alt="Fermer" />
+            </div>
 
-        <nav v-else>
-            <ul class="nav__links">
-                <li class="nav__item"><router-link to="/liste-des-sites" v-bind:class="{ active: isInTownList }">Liste des sites</router-link></li>
-                <li class="nav__item"><router-link to="/nouveau-site" v-bind:class="{ active: isInTownCreation }">Déclarer un site</router-link></li>
-                <li class="nav__item"><router-link to="/liste-des-actions" v-bind:class="{ active: isInActionList }">Liste des actions</router-link></li>
-                <li class="nav__item"><router-link to="/nouvelle-action" v-bind:class="{ active: isInActionCreation }">Déclarer une action</router-link></li>
-                <li class="nav__item"><a href="#" @click="logout">Déconnexion</a></li>
-            </ul>
-        </nav>
+            <nav v-if="!loggedIn">
+                <ul class="nav__links">
+                    <li class="nav__item"><router-link to="/connexion">Connexion</router-link></li>
+                    <li class="nav__item"><router-link to="/demande-d-acces">Demander un accès</router-link></li>
+                </ul>
+            </nav>
+
+            <nav v-else-if="!configLoaded">
+                <ul class="nav__links">
+                    <li class="nav__item"><a href="#" @click="logout">Déconnexion</a></li>
+                </ul>
+            </nav>
+
+            <nav v-else>
+                <ul class="nav__links">
+                    <li class="nav__item"><router-link to="/liste-des-sites" v-bind:class="{ active: isInTownList }">Liste des sites</router-link></li>
+                    <li class="nav__item"><router-link to="/nouveau-site" v-bind:class="{ active: isInTownCreation }">Déclarer un site</router-link></li>
+                    <li class="nav__item"><router-link to="/liste-des-actions" v-bind:class="{ active: isInActionList }">Liste des actions</router-link></li>
+                    <li class="nav__item"><router-link to="/nouvelle-action" v-bind:class="{ active: isInActionCreation }">Déclarer une action</router-link></li>
+                    <li class="nav__item"><a href="#" @click="logout">Déconnexion</a></li>
+                </ul>
+            </nav>
+        </aside>
     </div>
 </header>
