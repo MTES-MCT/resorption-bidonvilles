@@ -59,6 +59,14 @@ export default {
                         { value: 'yes', label: 'Oui', checked: true },
                     ],
                 },
+                {
+                    label: 'Statut des sites',
+                    id: 'status',
+                    options: [
+                        { value: 'closed', label: 'Fermés', checked: false },
+                        { value: 'opened', label: 'Ouverts', checked: true },
+                    ],
+                },
             ],
             currentTab: 'map',
         };
@@ -154,6 +162,21 @@ export default {
                             visibleTowns = visibleTowns.filter(town => town.actions.length === 0);
                         } else if (value === 'no') {
                             visibleTowns = visibleTowns.filter(town => town.actions.length > 0);
+                        }
+                    });
+                }
+                    break;
+
+                case 'status': {
+                    const disallowedStatuses = filterGroup.options
+                        .filter(option => !option.checked)
+                        .map(option => option.value);
+
+                    disallowedStatuses.forEach((value) => {
+                        if (value === 'closed') {
+                            visibleTowns = visibleTowns.filter(town => town.status === 'open');
+                        } else if (value === 'opened') {
+                            visibleTowns = visibleTowns.filter(town => town.status !== 'open');
                         }
                     });
                 }
