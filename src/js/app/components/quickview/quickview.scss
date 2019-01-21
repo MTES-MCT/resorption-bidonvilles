@@ -59,6 +59,15 @@
 .quickview-title {
     margin: 0;
     font-size: 1.8rem;
+
+    > a {
+        color: white;
+        text-decoration: underline;
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
 }
 
 .quickview-subtitle {

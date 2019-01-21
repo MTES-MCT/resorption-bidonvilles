@@ -51,10 +51,21 @@ p.error {
     font-weight: normal;
 }
 
-.town-header > button {
-    float: right;
-}
+.side-menu {
+    min-width: 220px;
+    max-width: 220px;
 
-.town-tabbar {
-    margin: 20px 0;
+    > ul {
+        position: fixed;
+        width: 220px;
+
+        > li.side-menu-button {
+            margin-top: 20px;
+            text-align: center;
+
+            > .button {
+                width: 85%;
+            }
+        }
+    }
 }
