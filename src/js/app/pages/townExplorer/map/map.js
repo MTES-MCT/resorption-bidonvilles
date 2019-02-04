@@ -5,8 +5,31 @@ import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import 'leaflet.markercluster/dist/leaflet.markercluster';
 
+// eslint-disable-next-line
+import blackMarker from '/img/markers/black.svg';
+// eslint-disable-next-line
+import orangeMarker from '/img/markers/orange.svg';
+// eslint-disable-next-line
+import redMarker from '/img/markers/red.svg';
 
 const DEFAULT_VIEW = [46.7755829, 2.0497727];
+const ICONS = {
+    1: L.icon({
+        iconUrl: blackMarker,
+        iconSize: [42, 40],
+        iconAnchor: [0, 0],
+    }),
+    2: L.icon({
+        iconUrl: redMarker,
+        iconSize: [42, 40],
+        iconAnchor: [0, 0],
+    }),
+    3: L.icon({
+        iconUrl: orangeMarker,
+        iconSize: [42, 40],
+        iconAnchor: [0, 0],
+    }),
+};
 
 export default {
     components: {
@@ -41,7 +64,7 @@ export default {
         },
         placeholder: {
             type: String,
-            default: 'Centrez la carte sur un point précis en tapant ici le nom d\'une commune, département, région, ...',
+            default: 'Recherchez un lieu en saisissant une adresse',
         },
         showAddress: {
             type: Boolean,
@@ -107,10 +130,18 @@ export default {
         this.syncTownMarkers();
     },
     methods: {
+        resize() {
+            this.map.invalidateSize(true);
+        },
         createMap() {
             const layers = this.getMapLayers();
-            this.map = L.map('map', { layers: Object.values(layers), scrollWheelZoom: false });
-            L.control.layers(layers).addTo(this.map);
+            this.map = L.map('map', {
+                layers: Object.values(layers),
+                scrollWheelZoom: false,
+                zoomDelta: 2.5,
+            });
+            this.map.zoomControl.setPosition('bottomright');
+            L.control.layers(layers, undefined, { collapsed: false }).addTo(this.map);
 
             const { center, zoom } = this.defaultView;
             if (this.value === null) {
@@ -136,13 +167,17 @@ export default {
         },
         addTownMarker(town) {
             const { latitude, longitude } = town;
-            const marker = L.marker([latitude, longitude]);
+            const marker = L.marker([latitude, longitude], {
+                title: town.address,
+                icon: ICONS[town.priority || 3],
+            });
             this.markersGroup.addLayer(marker);
+
             marker.on('click', this.handleTownMarkerClick.bind(this, town));
             this.townMarkers.push(marker);
         },
         removeAllTownMarkers() {
-            this.townMarkers.forEach(marker => marker.remove());
+            this.markersGroup.clearLayers();
             this.townMarkers = [];
         },
         syncTownMarkers() {

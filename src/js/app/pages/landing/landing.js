@@ -18,7 +18,6 @@ export default {
         loadConfig() {
             if (isConfigLoaded() === true) {
                 this.redirect();
-                return;
             }
 
             this.error = null;

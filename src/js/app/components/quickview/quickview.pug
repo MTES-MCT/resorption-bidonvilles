@@ -1,50 +1,61 @@
-<div>
+<div v-bind:class="{ active }">
     <div class="shadow"></div>
 
-    <div class="quickview" ref="quickviewPanel">
-        <header class="quickview-header">
-            <div class="quickview-close">
+    <simplebar class="quickview" ref="quickviewPanel" data-simplebar-auto-hide="false">
+        <header class="quickview-header" v-if="town">
+            <div class="quickview-actions">
+                <button type="button" class="actionButton" @click="showTown">Modifier le site</button>
                 <a href="#" @click="$emit('outside-click')"><svg class="icon icon-cross"><use xlink:href="#round-cross"></use></svg></a>
             </div>
             <h1 class="quickview-title"><a @click="showTown">Site de {{ town.city.name }}</a></h1>
-            <h2 class="quickview-subtitle">{{ town.address }}</h2>
+            <h2 class="quickview-subtitle">{{ town.address.split(/[0-9]{5}/)[0].replace(/[0-9]/g, '').replace(/,/g, ' ').replace(/\s{2,}/g, ' ') }}</h2>
         </header>
 
-        <section>
-            <header class="notification full-width">Démographie</header>
-            <p><strong>Nombre de personnes :</strong> {{ town.populationTotal !== null ? town.populationTotal : 'inconnu' }}</p>
-            <p><strong>Nombre de ménages :</strong> {{ town.populationCouples !== null ? town.populationCouples : 'inconnu' }}</p>
-            <p><strong>Nombre de mineurs :</strong> {{ town.populationMinors !== null ? town.populationMinors : 'inconnu' }}</p>
-            <p><strong>Origines :</strong> {{ town.socialOrigins.length > 0 ? town.socialOrigins.map(origin => (origin.label)).join(', ') : 'inconnu' }}</p>
-        </section>
-
-        <section>
-            <header class="notification full-width">Conditions de vie</header>
-            <p><strong>Accès à l'eau :</strong> {{ town.accessToWater === true ? 'oui' : (town.accessToWater === false ? 'non' : 'inconnu') }}</p>
-            <p><strong>Accès à l'électricité :</strong> {{ town.accessToElectricity === true ? 'oui' : (town.accessToElectricity === false ? 'non' : 'inconnu') }}</p>
-            <p><strong>Évacuation des déchets :</strong> {{ town.trashEvacuation === true ? 'oui' : (town.trashEvacuation === false ? 'non' : 'inconnu') }}</p>
-        </section>
-
-        <section>
-            <header class="notification full-width">Actions menées sur le site</header>
-            <table class="table" v-if="town.actions.length">
-                <thead>
-                    <tr>
-                        <th>Nom de l'action</th>
-                        <th>Action débutée</th>
-                        <th>Opérateur</th>
-                    </tr>
-                </thead>
+        <section v-if="town">
+            <header><h1>Démographie</h1></header>
+            <table>
                 <tbody>
-                    <tr v-for="action in town.actions" class="action" @click="showAction(action.id)">
-                        <td>{{ action.name }}</td>
-                        <td>{{ new Date(action.startedAt * 1000).toLocaleDateString().substr(0, 10) }}</td>
-                        <td></td>
+                    <tr>
+                        <th>Nombre de personnes :</th>
+                        <td>{{ town.populationTotal !== null ? town.populationTotal : 'inconnu' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Nombre de ménages :</th>
+                        <td>{{ town.populationCouples !== null ? town.populationCouples : 'inconnu' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Nombre de mineurs :</th>
+                        <td>{{ town.populationMinors !== null ? town.populationMinors : 'inconnu' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Origines :</th>
+                        <td>{{ town.socialOrigins.length > 0 ? '' : 'inconnu' }}</td>
+                    </tr>
+                    <tr v-for="socialOrigin in town.socialOrigins">
+                        <td colspan="2">{{ socialOrigin.label }}</td>
                     </tr>
                 </tbody>
             </table>
-
-            <p v-else>Aucune action déclarée pour le moment</p>
         </section>
-    </div>
+
+        <section v-if="town" class="even">
+            <header><h1>Conditions de vie</h1></header>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Accès à l'eau :</th>
+                        <td>{{ town.accessToWater === true ? 'oui' : (town.accessToWater === false ? 'non' : 'inconnu') }}</td>
+                    </tr>
+                    <tr>
+                        <th>Accès à l'électricité :</th>
+                        <td>{{ town.accessToElectricity === true ? 'oui' : (town.accessToElectricity === false ? 'non' : 'inconnu') }}</td>
+                    </tr>
+                    <tr>
+                        <th>Évacuation des déchets :</th>
+                        <td>{{ town.trashEvacuation === true ? 'oui' : (town.trashEvacuation === false ? 'non' : 'inconnu') }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </simplebar>
 </div>

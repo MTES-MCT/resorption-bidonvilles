@@ -1,10 +1,21 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import FilterGroup from './filterGroup/filterGroup.vue';
 import Map from './map/map.vue';
-import Table from './table/table.vue';
+import { VueGoodTable as Table } from 'vue-good-table';
 import Quickview from '#app/components/quickview/quickview.vue';
 import { all as fetchAll } from '#helpers/api/town';
 import { get as getConfig } from '#helpers/api/config';
+import simplebar from 'simplebar-vue';
+// eslint-disable-next-line
+import iconType from '/img/type.svg';
+// eslint-disable-next-line
+import iconPeople from '/img/people.svg';
+// eslint-disable-next-line
+import iconJustice from '/img/justice.svg';
+// eslint-disable-next-line
+import iconAction from '/img/action.svg';
+// eslint-disable-next-line
+import iconStatus from '/img/status.svg';
 
 export default {
     components: {
@@ -13,6 +24,7 @@ export default {
         Map,
         Table,
         Quickview,
+        simplebar,
     },
     data() {
         return {
@@ -27,13 +39,20 @@ export default {
                 town: null,
                 originEvent: null,
             },
+            viewTypes: [
+                { value: 'map', label: 'Carte' },
+                { value: 'table', label: 'Tableau' },
+            ],
             filters: [
                 {
+                    icon: iconType,
                     label: 'Types de site',
                     id: 'fieldType',
                     options: [],
+                    opened: true,
                 },
                 {
+                    icon: iconPeople,
                     label: 'Nombre de personnes',
                     id: 'population',
                     options: [
@@ -44,7 +63,8 @@ export default {
                     ],
                 },
                 {
-                    label: 'Procédure judiciaire en cours',
+                    icon: iconJustice,
+                    label: 'Procédure judiciaire',
                     id: 'justice',
                     options: [
                         { value: 'no', label: 'Non', checked: true },
@@ -52,6 +72,7 @@ export default {
                     ],
                 },
                 {
+                    icon: iconAction,
                     label: 'Actions en cours',
                     id: 'action',
                     options: [
@@ -60,6 +81,7 @@ export default {
                     ],
                 },
                 {
+                    icon: iconStatus,
                     label: 'Statut des sites',
                     id: 'status',
                     options: [
@@ -81,7 +103,42 @@ export default {
             }
 
             return {
-                towns: this.visibleTowns,
+                styleClass: 'table',
+                columns: [
+                    {
+                        label: 'Commune',
+                        field: 'city.name',
+                    },
+                    {
+                        label: 'Adresse',
+                        field: 'address',
+                    },
+                    {
+                        label: 'Type de site',
+                        field: 'fieldType.label',
+                    },
+                    {
+                        label: 'Personnes',
+                        field: town => (town.populationTotal !== null ? town.populationTotal : 'inconnu'),
+                    },
+                    {
+                        label: 'Ménages',
+                        field: town => (town.populationCouples !== null ? town.populationCouples : 'inconnu'),
+                    },
+                    {
+                        label: 'Mineurs',
+                        field: town => (town.populationMinors !== null ? town.populationMinors : 'inconnu'),
+                    },
+                    {
+                        label: 'Date d\'installation',
+                        field: town => (town.builtAt ? new Date(town.builtAt * 1000).toLocaleString().substr(0, 10) : 'inconnu'),
+                    },
+                    {
+                        label: 'Type de propriétaire',
+                        field: 'ownerType.label',
+                    },
+                ],
+                rows: this.visibleTowns,
             };
         },
         visibleTowns() {
@@ -195,6 +252,12 @@ export default {
     created() {
         this.fetchData();
     },
+    mounted() {
+        window.addEventListener('resize', this.resize);
+    },
+    beforeDestroy() {
+        window.removeEventListener('resize', this.resize);
+    },
     methods: {
         showQuickview(town, event) {
             this.quickview = {
@@ -208,8 +271,34 @@ export default {
                 originEvent: null,
             };
         },
-        setTab(name) {
-            this.currentTab = name;
+        routeToTown(params) {
+            this.$router.push(`/site/${params.row.id}`);
+        },
+        resize() {
+            if (!this.$refs.main) {
+                return;
+            }
+
+            this.stretchToBottom(this.$refs.main);
+            this.stretchToBottom(this.$refs.filters.$el);
+        },
+        stretchToBottom(element) {
+            const height = element.offsetHeight;
+            const newHeight = height + (document.body.offsetHeight - (this.absoluteOffsetTop(element) + height));
+
+            // eslint-disable-next-line
+            element.style.height = `${newHeight}px`;
+        },
+        absoluteOffsetTop(element) {
+            let top = 0;
+            let el = element;
+
+            do {
+                top += el.offsetTop || 0;
+                el = el.offsetParent;
+            } while (el);
+
+            return top;
         },
         fetchData() {
             if (this.loading === true) {
@@ -238,6 +327,10 @@ export default {
                     ];
 
                     this.towns = towns;
+                    this.$nextTick(() => {
+                        this.resize();
+                        this.$refs.map.resize();
+                    });
                 })
                 .catch((errors) => {
                     this.error = errors.user_message;

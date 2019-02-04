@@ -1,7 +1,10 @@
-<fieldset>
-    <legend>{{ label }}</legend>
-    <div v-for="(option, index) in options">
-        <input v-model="option.checked" type="checkbox" :id="id + '-' + (option.id || index)" :value="option.value">
-        <label :for="id + '-' + (option.id || index)" class="label-inline">{{ option.label }}</label><br/>
-    </div>
+<div class="filterGroup">
+    <aside><img :src="icon" alt="" /></aside>
+    <main>
+        <h1 @click="toggle">{{ label }} <span class="filterGroup-toggle">( {{ toggler }} )</span></h1>
+        <div v-for="(option, index) in options" v-if="status === 'open'">
+            <input v-model="option.checked" type="checkbox" :id="id + '-' + (option.id || index)" :value="option.value">
+            <label :for="id + '-' + (option.id || index)" class="label-inline">{{ option.label }}</label><br/>
+        </div>
+    </main>
 </fieldset>

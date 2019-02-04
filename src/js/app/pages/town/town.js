@@ -1,6 +1,8 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import Map from '#app/pages/townExplorer/map/map.vue';
-import { get, edit, destroy } from '#helpers/api/town';
+import {
+    get, edit, destroy, addComment,
+} from '#helpers/api/town';
 import { get as getConfig } from '#helpers/api/config';
 import Datepicker from 'vuejs-datepicker';
 import { fr } from 'vuejs-datepicker/dist/locale';
@@ -47,6 +49,9 @@ export default {
                 { value: 'expelled', label: 'Expulsé' },
                 { value: 'covered', label: 'Résorbé' },
             ],
+            newComment: '',
+            commentError: null,
+            commentErrors: {},
             edit: null,
         };
     },
@@ -117,6 +122,7 @@ export default {
             }
 
             this.edit = {
+                priority: this.town.priority,
                 address: {
                     city: this.town.city.name,
                     citycode: this.town.city.code,
@@ -141,7 +147,7 @@ export default {
         },
         setView(view) {
             this.setViewMode();
-            this.view = view === 'actions' ? 'actions' : 'details';
+            this.view = view;
         },
         submit() {
             // clean previous errors
@@ -152,6 +158,7 @@ export default {
             const coordinates = this.edit.address && this.edit.address.coordinates;
 
             edit(this.town.id, {
+                priority: this.edit.priority,
                 latitude: coordinates && coordinates[0],
                 longitude: coordinates && coordinates[1],
                 city: this.edit.address && this.edit.address.city,
@@ -193,6 +200,23 @@ export default {
                         this.deleteError = error.user_message;
                     });
             }
+        },
+        addComment() {
+            // clean previous errors
+            this.commentError = null;
+            this.commentErrors = {};
+
+            addComment(this.$route.params.id, {
+                description: this.newComment,
+            })
+                .then((response) => {
+                    this.town.comments = response.comments;
+                    this.newStep = '';
+                })
+                .catch((response) => {
+                    this.commentError = response.user_message;
+                    this.commentErrors = response.fields || {};
+                });
         },
     },
 };
