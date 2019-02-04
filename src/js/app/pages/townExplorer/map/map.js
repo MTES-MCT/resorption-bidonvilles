@@ -1,6 +1,10 @@
 import Address from '#app/components/address/address.vue';
 import L from 'leaflet';
 import 'leaflet-providers';
+import 'leaflet.markercluster/dist/MarkerCluster.css';
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+import 'leaflet.markercluster/dist/leaflet.markercluster';
+
 
 const DEFAULT_VIEW = [46.7755829, 2.0497727];
 
@@ -52,6 +56,7 @@ export default {
 
         return {
             map: null,
+            markersGroup: null,
             positionMarker,
             townMarkers: [],
             address: this.value,
@@ -113,6 +118,10 @@ export default {
             } else {
                 this.centerMap(center, zoom);
             }
+
+            this.markersGroup = L.markerClusterGroup();
+            this.map.addLayer(this.markersGroup);
+
             this.map.addEventListener('click', (event) => {
                 const { lat, lng } = event.latlng;
                 this.positionMarker.setLatLng([lat, lng]);
@@ -128,7 +137,7 @@ export default {
         addTownMarker(town) {
             const { latitude, longitude } = town;
             const marker = L.marker([latitude, longitude]);
-            marker.addTo(this.map);
+            this.markersGroup.addLayer(marker);
             marker.on('click', this.handleTownMarkerClick.bind(this, town));
             this.townMarkers.push(marker);
         },

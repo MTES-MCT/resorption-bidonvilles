@@ -51,5 +51,8 @@
     "src/**/*.js": [
       "eslint --fix"
     ]
+  },
+  "dependencies": {
+    "leaflet.markercluster": "^1.4.1"
   }
 }
