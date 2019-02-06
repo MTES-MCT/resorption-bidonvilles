@@ -13,6 +13,13 @@ label.error.message {
     padding: 0;
 }
 
+@media (min-width: 800px) {
+    .container,
+    .dashboard {
+        padding: 0 100px;
+    }
+}
+
 @media (min-width: 550px) {
     .container {
         width: 100%;
