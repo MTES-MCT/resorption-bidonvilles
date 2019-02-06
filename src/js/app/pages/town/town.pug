@@ -59,16 +59,16 @@
                                         <strong>Niveau de priorité du site :</strong> {{ town.priority }}
                                     </p>
                                     <p>
+                                        <strong>Date de signalement du site :</strong> {{ town.declaredAt !== null ? new Date(town.declaredAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue' }}
+                                    </p>
+                                    <p>
                                         <strong>Date d'installation du site :</strong> {{ town.builtAt !== null ? new Date(town.builtAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue' }}
                                     </p>
                                     <p v-if="town.status !== 'open'">
                                         <strong>Date de fermeture du site :</strong> {{ town.closedAt !== null ? new Date(town.closedAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue'}}
                                     </p>
                                     <p v-if="town.status !== 'open'">
-                                        <strong>Cause de la fermeture :</strong> {{ town.status === 'gone' ? 'Disparition' : (town.status === 'expelled' ? 'Expulsé' : 'Résorbé' ) }}
-                                    </p>
-                                    <p>
-                                        <strong>Procédure judiciaire en cours :</strong> {{ town.justiceStatus !== null ? (town.justiceStatus === true ? 'oui' : 'non') : 'Inconnu' }}
+                                        <strong>Cause de la fermeture :</strong> {{ town.status === 'covered' ? 'Résorbé' : (town.status === 'closed' ? 'Inconnu' : 'Expulsé' ) }}
                                     </p>
                                 </div>
                             </div>
@@ -91,6 +91,9 @@
                                     <p>
                                         <strong>Type de propriétaire :</strong> {{ town.ownerType.label }}
                                     </p>
+                                    <p>
+                                        <strong>Propriétaire :</strong> {{ town.owner || 'Inconnu' }}
+                                    </p>
                                 </div>
                             </div>
 
@@ -99,6 +102,18 @@
                                     <h3>3. Démographie</h3>
                                 </div>
                                 <div class="form__group">
+                                    <p>
+                                        <strong>Statut du recensement :</strong> {{ town.censusStatus === 'done' ? 'Réalisé' : (town.censusStatus === 'scheduled' ? 'Prévu' : 'Non prévu') }}
+                                    </p>
+                                    <p>
+                                        <strong>Date de la saisine :</strong> {{ town.censusRequestedAt !== null ? new Date(town.censusRequestedAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue' }}
+                                    </p>
+                                    <p>
+                                        <strong>Date du recensement :</strong> {{ town.censusConductedAt !== null ? new Date(town.censusConductedAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue' }}
+                                    </p>
+                                    <p>
+                                        <strong>Opérateur en charge du recensement :</strong> {{ town.censusConductedBy || 'Inconnu' }}
+                                    </p>
                                     <p>
                                         <strong>Nombre de personnes :</strong> {{ town.populationTotal !== null ? town.populationTotal : 'inconnu' }}
                                     </p>
@@ -131,6 +146,35 @@
                                     </p>
                                     <p>
                                         <strong>Évacuation des déchets :</strong> {{ town.trashEvacuation !== null ? (town.trashEvacuation ? 'oui' : 'non') : 'inconnu' }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="panel">
+                                <div class="panel__header">
+                                    <h3>5. Évacuation</h3>
+                                </div>
+                                <div class="form__group">
+                                    <p>
+                                        <strong>Procédure judiciaire en cours :</strong> {{ town.justiceStatus === 'rendered' ? 'Décision rendue' : (town.justiceStatus === 'seized' ? 'Juge saisi' : 'Juge non-saisi') }}
+                                    </p>
+                                    <p>
+                                        <strong>Origine de la décision :</strong> {{ town.justiceRenderedBy || 'Inconnue' }}
+                                    </p>
+                                    <p>
+                                        <strong>Date de la décision :</strong> {{ town.justiceRenderedAt !== null ? new Date(town.justiceRenderedAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue' }}
+                                    </p>
+                                    <p>
+                                        <strong>Concours de la force publique :</strong> {{ town.policeStatus === 'granted' ? 'Obtenu' : (town.policeStatus === 'requested' ? 'Demandé' : 'Inconnu') }}
+                                    </p>
+                                    <p>
+                                        <strong>Date de la demande du CFP :</strong> {{ town.policeRequestedAt !== null ? new Date(town.policeRequestedAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue' }}
+                                    </p>
+                                    <p>
+                                        <strong>Date d'octroi du CFP :</strong> {{ town.policeGrantedAt !== null ? new Date(town.policeGrantedAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue' }}
+                                    </p>
+                                    <p>
+                                        <strong>Étude d'huissiers :</strong> {{ town.bailiff || 'Inconnues' }}
                                     </p>
                                 </div>
                             </div>

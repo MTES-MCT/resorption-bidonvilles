@@ -1,13 +1,50 @@
 <div>
     <NavBar></NavBar>
 
+    //- <section class="section">
+    //-     <div class="container">
+    //-         <nav>
+    //-             <ul>
+    //-                 <li v-for="(step, index) in steps">
+    //-                     <span>{{ index + 1 }}</span>
+    //-                     <span>{{ step.title }}</span>
+    //-                 </li>
+    //-             </ul>
+    //-         </nav>
+    //-     </div>
+
+    //-     <div class="panel">
+    //-         <div class="panel__header">
+    //-             <h3>{{ currentStepIndex + 1 }}. {{ currentStep.title }}</h3>
+    //-         </div>
+
+    //-         <div class="form__group" v-for="(field, index) in currentStep.fields">
+    //-             <label v-bind:class="{ error: field_errors[field.name] }">{{ field.label }}</label>
+    //-             <p v-if="field_errors[field.name]" class="error">
+    //-                 <ul>
+    //-                     <li v-for="error in field_errors[field.name]">{{ error }}</li>
+    //-                 </ul>
+    //-             </p>
+
+    //-             <p v-if="field.description">{{ field.description }}</p>
+    //-             <Input :name="field.name" :type="field.type" :values="field.values" />
+    //-         </div>
+    //-     </div>
+
+    //-     <div class="notification error" v-if="main_error">{{ main_error }}.</div>
+
+    //-     <div class="form__group">
+    //-         <button class="button large" @click="nextStep">{{ submitLabel }}</button>
+    //-     </div>
+    //- </section>
+
     <section class="section section-white">
         <div class="container">
             <h1>Déclarer un site</h1>
 
             //- <section class="breadcrumbs">
             //-     <ul>
-            //-         <li v-for="(step, index) in steps" class="breadcrumbs-step" :class="{ done: currentStep > index, active: currentStep === index }" @click="onStepClick(index)"><span>{{ index + 1 }}</span> {{ step.label }}</li>
+            //-         <li v-for="(step, index) in steps" class="breadcrumbs-step" :class="{ done: currentStep > index, active: currentStep === index }" @click="onStepClick(index)"><span>{{ index + 1 }}</span> {{ step.title }}</li>
             //-     </ul>
             //- </section>
 
@@ -46,7 +83,18 @@
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
+                        <option value="4">4</option>
                     </select>
+                </div>
+
+                <div class="form__group">
+                    <label v-bind:class="{ error: fieldErrors.declared_at }">Date de signalement du site :</label>
+                    <p class="error" v-if="fieldErrors.declared_at">
+                        <ul>
+                            <li v-for="error in fieldErrors.declared_at">{{ error }}</li>
+                        </ul>
+                    </p>
+                    <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="declared_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
                 </div>
 
                 <div class="form__group">
@@ -91,15 +139,14 @@
 
                 <div class="form__group">
                     <fieldset>
-                        <legend v-bind:class="{ error: fieldErrors.justice_status }">Procédure judiciaire en cours :</legend>
-                        <p class="error" v-if="fieldErrors.justice_status">
+                        <legend v-bind:class="{ error: fieldErrors.owner }">Identité du propriétaire :</legend>
+                        <p class="error" v-if="fieldErrors.owner">
                             <ul>
-                                <li v-for="error in fieldErrors.justice_status">{{ error }}</li>
+                                <li v-for="error in fieldErrors.owner">{{ error }}</li>
                             </ul>
                         </p>
-                        <div v-for="(value, index) in yesnoValues">
-                            <input type="radio" name="justiceStatus" :id="'justiceStatus' + index" :value="value.value" v-model="justiceStatus">
-                            <label :for="'justiceStatus' + index" class="label-inline">{{ value.label }}</label>
+                        <div class="input__group">
+                            <input type="text" v-model="owner" />
                         </div>
                     </fieldset>
                 </div>
@@ -108,6 +155,53 @@
             <div class="panel">
                 <div class="panel__header">
                     <h3>2. Démographie</h3>
+                </div>
+
+                <div class="form__group">
+                    <label v-bind:class="{ error: fieldErrors.census_status }">Statut du recensement / diagnostic :</label>
+                    <p class="error" v-if="fieldErrors.census_status">
+                        <ul>
+                            <li v-for="error in fieldErrors.census_status">{{ error }}</li>
+                        </ul>
+                    </p>
+                    <div v-for="(value, index) in diagnosisValues">
+                        <input type="radio" name="diagnosis" :id="'diagnosis' + index" :value="value.value" v-model="census_status">
+                        <label :for="'diagnosis' + index" class="label-inline">{{ value.label }}</label>
+                    </div>
+                </div>
+
+                <div class="form__group">
+                    <label v-bind:class="{ error: fieldErrors.census_requested_at }">Date de la saisine :</label>
+                    <p class="error" v-if="fieldErrors.census_requested_at">
+                        <ul>
+                            <li v-for="error in fieldErrors.census_requested_at">{{ error }}</li>
+                        </ul>
+                    </p>
+                    <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="census_requested_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
+                </div>
+
+                <div class="form__group">
+                    <label v-bind:class="{ error: fieldErrors.census_conducted_at }">Date du recensement :</label>
+                    <p class="error" v-if="fieldErrors.census_conducted_at">
+                        <ul>
+                            <li v-for="error in fieldErrors.census_conducted_at">{{ error }}</li>
+                        </ul>
+                    </p>
+                    <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="census_conducted_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
+                </div>
+
+                <div class="form__group">
+                    <fieldset>
+                        <legend v-bind:class="{ error: fieldErrors.census_conducted_by }">Opérateur en charge du recensement :</legend>
+                        <p class="error" v-if="fieldErrors.census_conducted_by">
+                            <ul>
+                                <li v-for="error in fieldErrors.census_conducted_by">{{ error }}</li>
+                            </ul>
+                        </p>
+                        <div class="input__group">
+                            <input type="text" v-model="census_conducted_by" />
+                        </div>
+                    </fieldset>
                 </div>
 
                 <div class="form__group">
@@ -207,6 +301,91 @@
                         <div v-for="(value, index) in yesnoValues">
                             <input type="radio" name="trashEvacuation" :id="'trashEvacuation' + index" :value="value.value" v-model="trashEvacuation">
                             <label :for="'trashEvacuation' + index" class="label-inline">{{ value.label }}</label>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel__header">
+                    <h3>4. Évacuation</h3>
+                </div>
+
+                <div class="form__group">
+                    <label>Procédure judiciaire :</label>
+                    <div v-for="(value, index) in justiceValues">
+                        <input type="radio" name="justice" :id="'justice' + index" :value="value.value" v-model="justiceStatus">
+                        <label :for="'justice' + index" class="label-inline">{{ value.label }}</label>
+                    </div>
+                </div>
+
+                <div class="form__group">
+                    <fieldset>
+                        <legend v-bind:class="{ error: fieldErrors.justice_rendered_by }">Origine de la décision :</legend>
+                        <p class="error" v-if="fieldErrors.justice_rendered_by">
+                            <ul>
+                                <li v-for="error in fieldErrors.justice_rendered_by">{{ error }}</li>
+                            </ul>
+                        </p>
+                        <div class="input__group">
+                            <input type="text" v-model="justice_rendered_by" />
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div class="form__group">
+                    <label v-bind:class="{ error: fieldErrors.justice_rendered_at }">Date de la décision :</label>
+                    <p class="error" v-if="fieldErrors.justice_rendered_at">
+                        <ul>
+                            <li v-for="error in fieldErrors.justice_rendered_at">{{ error }}</li>
+                        </ul>
+                    </p>
+                    <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="justice_rendered_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
+                </div>
+
+                <div class="form__group">
+                    <label v-bind:class="{ error: fieldErrors.police_status }">Concours de la force publique :</label>
+                    <p class="error" v-if="fieldErrors.police_status">
+                        <ul>
+                            <li v-for="error in fieldErrors.police_status">{{ error }}</li>
+                        </ul>
+                    </p>
+                    <div v-for="(value, index) in cfpValues">
+                        <input type="radio" name="cfp" :id="'cfp' + index" :value="value.value" v-model="police_status">
+                        <label :for="'cfp' + index" class="label-inline">{{ value.label }}</label>
+                    </div>
+                </div>
+
+                <div class="form__group">
+                    <label v-bind:class="{ error: fieldErrors.police_requested_at }">Date de la demande du CFP :</label>
+                    <p class="error" v-if="fieldErrors.police_requested_at">
+                        <ul>
+                            <li v-for="error in fieldErrors.police_requested_at">{{ error }}</li>
+                        </ul>
+                    </p>
+                    <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="police_requested_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
+                </div>
+
+                <div class="form__group">
+                    <label v-bind:class="{ error: fieldErrors.police_granted_at }">Date d'octroi du CFP :</label>
+                    <p class="error" v-if="fieldErrors.police_granted_at">
+                        <ul>
+                            <li v-for="error in fieldErrors.police_granted_at">{{ error }}</li>
+                        </ul>
+                    </p>
+                    <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="police_granted_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
+                </div>
+
+                <div class="form__group">
+                    <fieldset>
+                        <legend v-bind:class="{ error: fieldErrors.bailiff }">Etude d'huissiers :</legend>
+                        <p class="error" v-if="fieldErrors.bailiff">
+                            <ul>
+                                <li v-for="error in fieldErrors.bailiff">{{ error }}</li>
+                            </ul>
+                        </p>
+                        <div class="input__group">
+                            <input type="text" v-model="bailiff" />
                         </div>
                     </fieldset>
                 </div>
