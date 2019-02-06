@@ -63,7 +63,7 @@ export function destroy(id) {
  * @returns {Promise}
  */
 export function addComment(id, data) {
-    return postApi(`/towns/${id}/steps`, data);
+    return postApi(`/towns/${id}/comments`, data);
 }
 
 /**
