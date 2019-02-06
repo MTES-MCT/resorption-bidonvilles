@@ -7,6 +7,6 @@ import Component from './filterGroup.js';
 export default Component;
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import './filterGroup.scss';
 </style>

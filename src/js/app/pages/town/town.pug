@@ -32,10 +32,12 @@
                 <aside class="side-menu">
                     <ul>
                         <li><a v-bind:class="{ active: view === 'details' }" @click="setView('details')">Caractéristiques du site</a></li>
-                        <li><a v-bind:class="{ active: view === 'actions' }" @click="setView('actions')">Actions sur le site</a></li>
+                        //- <li><a v-bind:class="{ active: view === 'actions' }" @click="setView('actions')">Actions sur le site</a></li>
+                        <li><a v-bind:class="{ active: view === 'comments' }" @click="setView('comments')">Commentaires sur le site</a></li>
                         <li v-if="town.status === 'open' && mode !== 'edit'" class="side-menu-button"><button @click="setEditMode" class="button secondary">Déclarer la fermeture du site</button></li>
                         <li v-if="town.status === 'open' && mode !== 'edit'" class="side-menu-button"><button @click="setEditMode" class="button secondary">Modifier le site</button></li>
                         //- <li v-if="mode !== 'edit'" class="side-menu-button"><button @click="destroy" class="button warning">Supprimer le site</button></li>
+
                         <li v-if="mode === 'edit'" class="side-menu-button"><button @click="submit" class="button">Sauvegarder</button></li>
                         <li v-if="mode === 'edit'" class="side-menu-button"><button @click="setViewMode" class="button warning">Annuler</button></li>
                     </ul>
@@ -53,6 +55,9 @@
                                     <h3>1. Situation du site</h3>
                                 </div>
                                 <div class="form__group">
+                                    <p>
+                                        <strong>Niveau de priorité du site :</strong> {{ town.priority }}
+                                    </p>
                                     <p>
                                         <strong>Date d'installation du site :</strong> {{ town.builtAt !== null ? new Date(town.builtAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue' }}
                                     </p>
@@ -135,6 +140,22 @@
                             <div class="panel">
                                 <div class="panel__header">
                                     <h3>1. Situation du site</h3>
+                                </div>
+
+                                <div class="form__group">
+                                    <label v-bind:class="{ error: fieldErrors.priority }">Niveau de priorité du site :</label>
+                                    <p>1 étant le niveau de priorité le plus haut</p>
+                                    <p class="error" v-if="fieldErrors.priority">
+                                        <ul>
+                                            <li v-for="error in fieldErrors.priority">{{ error }}</li>
+                                        </ul>
+                                    </p>
+
+                                    <select v-model="edit.priority">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                    </select>
                                 </div>
 
                                 <div class="form__group">
@@ -358,7 +379,7 @@
                     </div>
 
                     <!-- actions -->
-                    <div v-else>
+                    <div v-else-if="view === 'actions'">
                         <div class="panel" v-for="action in town.actions">
                             <div class="panel__header">
                                 <h3><router-link :to="'/action/' + action.id">{{ action.name }}</router-link> - <small class="panel__header-extra">Débutée le {{ new Date(action.startedAt * 1000).toLocaleDateString().substr(0, 10) }}</small></h3>
@@ -366,6 +387,31 @@
                             <p><strong>Type de l'action :</strong> {{ action.type }}</p>
                             <p><strong>Détails de l'action :</strong></p>
                             <p>{{ action.description || 'Aucun détails fournis' }}</p>
+                        </div>
+                    </div>
+
+                    <!-- comments -->
+                    <div v-else-if="view === 'comments'">
+                        <div class="form__group">
+                            <p v-if="town.comments.length === 0">Aucun commentaire enregistré pour le moment</p>
+                            <p v-for="comment in town.comments"><strong>Le {{ new Date(comment.createdAt * 1000).toLocaleDateString().substr(0, 10) }} :</strong><br/>{{ comment.description }}</p>
+                        </div>
+
+                        <div class="form__group">
+                            <div class="notification error" v-if="commentError">{{ commentError }}.</div>
+        
+                            <label v-bind:class="{ error: commentErrors.description }">Ajouter un commentaire :</label>
+                            <p class="error" v-if="commentErrors.description">
+                                <ul>
+                                    <li v-for="error in commentErrors.description">{{ error }}</li>
+                                </ul>
+                            </p>
+                            <div class="input__group">
+                                <textarea v-model="newComment"></textarea>
+                            </div>
+                            <div class="input__group">
+                                <button class="button large" @click="addComment">Ajouter le commentaire</button>
+                            </div>  
                         </div>
                     </div>
                 </div>

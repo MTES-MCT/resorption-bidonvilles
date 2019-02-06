@@ -35,6 +35,21 @@
                 </div>
 
                 <div class="form__group">
+                    <label v-bind:class="{ error: fieldErrors.priority }">Niveau de priorité du site :</label>
+                    <p>1 étant le niveau de priorité le plus haut</p>
+                    <p class="error" v-if="fieldErrors.priority">
+                        <ul>
+                            <li v-for="error in fieldErrors.priority">{{ error }}</li>
+                        </ul>
+                    </p>
+                    <select v-model="priority">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+
+                <div class="form__group">
                     <label v-bind:class="{ error: fieldErrors.built_at }">Date d'installation du site :</label>
                     <p class="error" v-if="fieldErrors.built_at">
                         <ul>

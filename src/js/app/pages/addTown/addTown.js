@@ -32,6 +32,7 @@ export default {
             socialOrigins: get().social_origins,
             dateLanguage: fr,
             address: {},
+            priority: 3,
             detailedAddress: '',
             builtAt: '',
             fieldType: null,
@@ -63,6 +64,7 @@ export default {
             const coordinates = this.address && this.address.coordinates;
 
             add({
+                priority: this.priority,
                 latitude: coordinates && coordinates[0],
                 longitude: coordinates && coordinates[1],
                 city: this.address && this.address.city,

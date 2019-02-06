@@ -10,7 +10,7 @@ import ActionsExplorer from '#app/pages/actionExplorer/explorer.vue';
 import AddAction from '#app/pages/addAction/addAction.vue';
 import Action from '#app/pages/action/action.vue';
 
-import { isLoggedIn } from '#helpers/api/user';
+import { logout, isLoggedIn } from '#helpers/api/user';
 import { isLoaded as isConfigLoaded } from '#helpers/api/config';
 
 /**
@@ -112,6 +112,13 @@ const router = new VueRouter({
             path: '/landing',
             component: Landing,
             beforeEnter: guardians.loggedIn,
+        },
+        {
+            path: '/deconnexion',
+            beforeEnter: (to, from, next) => {
+                logout();
+                next('/');
+            },
         },
         {
             meta: {

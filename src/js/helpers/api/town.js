@@ -55,6 +55,18 @@ export function destroy(id) {
 }
 
 /**
+ * Adds a comment to a town
+ *
+ * @param {string}                 id   Town id
+ * @param {ShantytownComment_Data} data Comment data
+ *
+ * @returns {Promise}
+ */
+export function addComment(id, data) {
+    return postApi(`/towns/${id}/steps`, data);
+}
+
+/**
  * @typedef {Object} Town_Data
  * @property {number} latitude,
  * @property {number} longitude,
@@ -70,4 +82,9 @@ export function destroy(id) {
  * @property {Array.<number>} social_origins,
  * @property {number} field_type,
  * @property {number} owner_type,
+ */
+
+/**
+ * @typedef {Object} ShantytownComment_Data
+ * @property {string} description
  */

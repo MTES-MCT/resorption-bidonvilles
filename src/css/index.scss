@@ -1,5 +1,3 @@
-$MAX_CONTAINER_WIDTH: 1400px;
-
 label.error {
     color: #d63626;
     font-weight: bold;
@@ -11,7 +9,8 @@ label.error.message {
 }
 
 .container {
-    max-width: $MAX_CONTAINER_WIDTH;
+    max-width: none;
+    padding: 0;
 }
 
 @media (min-width: 550px) {
@@ -26,15 +25,12 @@ label.error.message {
     }
 }
 
-@media (max-width: $MAX_CONTAINER_WIDTH) {
-    .container {
-        padding-left: 2em;
-        padding-right: 2em;
-    }
+.section {
+    padding: 0;
 }
 
-.section:first-of-type {
-    padding-top: 2em;
+.main-pane {
+    padding: 0;
 }
 
 .notification > .spinner {
@@ -51,7 +47,12 @@ label.error.message {
     }
 }
 
-.section {
-    padding-left: 5em;
-    padding-right: 5em;
+.actionButton {
+    padding: 3px 10px;
+    color: white;
+    background: #006be6;
+    border-radius: 3px;
+    border: none;
+    font-size: 0.8rem;
+    text-transform: uppercase;
 }

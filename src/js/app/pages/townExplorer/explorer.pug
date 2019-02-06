@@ -1,51 +1,41 @@
 <div>
-    <Quickview v-if="quickview.town" :town="quickview.town" :origin="quickview.originEvent" @outside-click="hideQuickview"></Quickview>
+    <Quickview :town="quickview.town" :origin="quickview.originEvent" @outside-click="hideQuickview"></Quickview>
     <NavBar></NavBar>
 
-    <section class="section section-white">
-        <div class="container">
-            <h1>Liste des sites</h1>
+    <section class="explorer">
+        //- <h1>Liste des sites</h1>
 
-            <div class="explorer" v-if="loading">
-                <!-- LOADING STATE -->
-                <div class="notification full-width">
-                    <img src="/img/spinner_dark.svg" width="20" class="spinner" />
-                    <span>Chargement des données en cours...</span>
-                </div>
+        //- notifications
+        <div v-if="loading" class="notification full-width">
+            <img src="/img/spinner_dark.svg" width="20" class="spinner" />
+            <span>Chargement des données en cours...</span>
+        </div>
+
+        <div v-if="error" class="notification error full-width">
+            <span>{{ error }}. <a href="#" @click="fetchData">Réessayer ?</a></span>
+        </div>
+
+        //- filters
+        <simplebar class="filters" ref="filters" data-simplebar-auto-hide="false">
+            <div class="filterGroup">
+                <aside><img src="/img/people.svg" width="50" alt="" /></aside>
+                <main>
+                    <h1>Résultats sous forme de</h1>
+                    <div v-for="(option, index) in viewTypes">
+                        <input v-model="currentTab" type="radio" :id="'viewType-' + index" name="viewTypes" :value="option.value">
+                        <label :for="'viewType-' + index" class="label-inline">{{ option.label }}</label><br/>
+                    </div>
+                </main>
             </div>
 
-            <div class="explorer" v-else-if="error">
-                <!-- ERROR STATE -->
-                <div class="notification error full-width">
-                    <span>{{ error }}. <a href="#" @click="fetchData">Réessayer ?</a></span>
-                </div>
-            </div>
+            <FilterGroup v-for="filterGroup in filters" :id="filterGroup.id" :icon="filterGroup.icon" :label="filterGroup.label" :options="filterGroup.options" :opened="filterGroup.opened"></FilterGroup>
+        </simplebar>
 
-            <div class="explorer" v-else>
-                <!-- SUCCESS STATE -->
-                <aside class="side-pane">
-                    <h4>Filtres</h4>
-
-                    <FilterGroup v-for="filterGroup in filters" :id="filterGroup.id" :label="filterGroup.label" :options="filterGroup.options"></FilterGroup>
-                </aside>
-
-                <div class="main-pane">
-                    <header class="explorer-header">
-                        <div>
-                            <h4>Résultats ({{ visibleTowns.length }} sites)</h4>
-                        </div>
-                        <div>
-                            <h6>Visualiser les résultats sous forme de :</h6>
-                            <button class="primary" v-bind:class="{ 'button-outline': currentTab !== 'map', button: currentTab === 'map' }" @click="setTab('map')">Carte</button>
-                            <button class="primary" v-bind:class="{ 'button-outline': currentTab !== 'table', button: currentTab === 'table' }" @click="setTab('table')">Tableau</button>
-                        </div>
-                    </header>
-
-                    <keep-alive>
-                        <component :is="currentTabComponent" v-bind="rendererProps" @town-click="showQuickview"></component>
-                    </keep-alive>
-                </div>
-            </div>
+        //- content
+        <div class="content" ref="main">
+            <keep-alive>
+                <component :is="currentTabComponent" v-bind="rendererProps" @town-click="showQuickview" @on-row-click="routeToTown" ref="map"></component>
+            </keep-alive>
         </div>
     </section>
 </div>

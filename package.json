@@ -53,6 +53,8 @@
     ]
   },
   "dependencies": {
+    "simplebar-vue": "^0.1.4",
+    "vue-good-table": "^2.16.0",
     "leaflet.markercluster": "^1.4.1"
   }
 }

@@ -1,3 +1,205 @@
-span.navbar__domain {
-    white-space: nowrap;
+.topbar {
+    .topbar-container {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        background: #20396B;
+
+        -webkit-box-pack: space-between;
+        -ms-flex-pack: space-between;
+        justify-content: space-between;
+
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+
+        padding: 5px;
+        border-bottom: 1px solid #294377;
+
+        // home link
+        .topbar-home {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            height: 40px;
+
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+
+            letter-spacing: .05em;
+            text-decoration: none;
+            color: white;
+            font-family: Evolventa;
+            white-space: nowrap;
+
+            > img {
+                height: 30px;
+            }
+
+            .topbar-marianne {
+                margin-right: 5px;
+                background: white;
+            }
+
+            .topbar-domain {
+                font-size: 0.8em;
+                -webkit-padding-after: 3px;
+            }
+        }
+
+        .topbar-menu {
+            color: white;
+            font-size: 0.8em;
+            letter-spacing: .05em;
+            font-family: Evolventa;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .nav__links {
+            display: none;
+
+            .nav__item a {
+                background: none;
+                font-size: 0.9em;
+                color: #8393a7;
+                border-radius: 0;
+                border-bottom: 1px solid transparent;
+                margin: 0 0.8em;
+                padding: 0.2em 0;
+                // letter-spacing: 0.05em;
+                text-transform: uppercase;
+                transition: color 0.2s linear;
+                -webkit-transition: color 0.2s linear;
+
+                &.active {
+                    &:before {
+                        display: inline-block;
+                        content: '';
+                        width: 5px;
+                        height: 5px;
+                        background: white;
+                        border-radius: 50%;
+                        vertical-align: middle;
+                        margin-right: 10px;
+                    }
+
+                    color: white;
+                    // border-color: rgba(255, 255, 255, 0.5);
+                }
+
+                &:hover {
+                    color: white;
+                }
+            }
+        }
+    }
+}
+
+.sidebar {
+    z-index: 8000;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: -230px;
+    background: #182B51;
+    width: 230px;
+    transition: right 0.25s ease-in-out;
+    -webkit-transition: right 0.25s ease-in-out;
+
+    .nav__links {
+        display: block;
+        margin: 20px 0 20px 30px;
+
+        .nav__item {
+            display: block;
+            margin-bottom: 20px;
+
+            a {
+                color: white;
+
+                &:hover {
+                    color: #003b80;
+                    background: #c9d3df;
+                }
+
+                &.active {
+                    color: #003b80;
+                    background: white;
+                }
+            }
+        }
+    }
+
+    &.opened {
+        right: 0;
+    }
+
+    .sidebar-cross {
+        padding: 10px;
+        text-align: right;
+
+        > img {
+            cursor: pointer;
+            width: 20px;
+        }
+    }
+}
+
+@media (min-width: 500px) {
+    .topbar {
+        .topbar-container {
+            .topbar-home {
+                .topbar-domain,
+                .topbar-betagouv {
+                    display: inline;
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: 630px) {
+    .topbar {
+        .topbar-container {
+            padding: 15px;
+
+            .topbar-home {
+                .topbar-marianne {
+                    margin-right: 10px;
+                }
+
+                .topbar-domain {
+                    font-size: 1em;
+                }
+
+                > img {
+                    height: 40px;
+                }
+            }
+
+            .topbar-menu {
+                font-size: 0.9em;
+            }
+        }
+    }
+}
+
+@media (min-width: 1150px) {
+    .topbar {
+        .topbar-container {
+            .topbar-menu {
+                display: none;
+            }
+
+            .nav__links {
+                display: block;
+            }
+        }
+    }
+
+    .sidebar.opened {
+        display: none;
+    }
 }

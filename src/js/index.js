@@ -1,5 +1,6 @@
 // load the whole betagouv template
 import 'template.data.gouv.fr/dist/style/main.css';
+import 'simplebar/dist/simplebar.min.css';
 import '../css/index.scss';
 
 // import polyfills

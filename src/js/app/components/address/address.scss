@@ -6,6 +6,7 @@
     border: 1px solid #adb9c9;
     max-height: 202px;
     overflow: hidden;
+    color: #182B51;
 }
 
 .autocomplete-result {
@@ -16,7 +17,7 @@
 }
 
 .autocomplete-result.active {
-    background: #b4e1fa;
+    background: #F4F8FC;
 }
 
 .autocomplete-result:hover {

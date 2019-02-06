@@ -7,6 +7,6 @@ import Component from './explorer.js';
 export default Component;
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import './explorer.scss';
 </style>
