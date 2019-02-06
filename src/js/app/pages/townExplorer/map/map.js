@@ -29,6 +29,11 @@ const ICONS = {
         iconSize: [42, 40],
         iconAnchor: [0, 0],
     }),
+    4: L.icon({
+        iconUrl: orangeMarker,
+        iconSize: [42, 40],
+        iconAnchor: [0, 0],
+    }),
 };
 
 export default {
