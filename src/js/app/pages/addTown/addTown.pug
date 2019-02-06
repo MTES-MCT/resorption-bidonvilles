@@ -312,7 +312,12 @@
                 </div>
 
                 <div class="form__group">
-                    <label>Procédure judiciaire :</label>
+                    <label v-bind:class="{ error: fieldErrors.justice_status }">Procédure judiciaire :</label>
+                    <p class="error" v-if="fieldErrors.justice_status">
+                        <ul>
+                            <li v-for="error in fieldErrors.justice_status">{{ error }}</li>
+                        </ul>
+                    </p>
                     <div v-for="(value, index) in justiceValues">
                         <input type="radio" name="justice" :id="'justice' + index" :value="value.value" v-model="justiceStatus">
                         <label :for="'justice' + index" class="label-inline">{{ value.label }}</label>
