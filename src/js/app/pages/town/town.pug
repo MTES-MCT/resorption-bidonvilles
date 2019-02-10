@@ -245,9 +245,9 @@
                                                 <li v-for="error in fieldErrors.justice_status">{{ error }}</li>
                                             </ul>
                                         </p>
-                                        <div v-for="(value, index) in yesnoValues">
-                                            <input type="radio" name="justiceStatus" :id="'justiceStatus' + index" :value="value.value" v-model="edit.justiceStatus">
-                                            <label :for="'justiceStatus' + index" class="label-inline">{{ value.label }}</label>
+                                        <div v-for="(value, index) in justiceValues">
+                                            <input type="radio" name="justiceStatus" :id="'justice' + index" :value="value.value" v-model="edit.justiceStatus">
+                                            <label :for="'justice' + index" class="label-inline">{{ value.label }}</label>
                                         </div>
                                     </fieldset>
                                 </div>
