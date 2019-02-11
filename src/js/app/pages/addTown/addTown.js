@@ -122,8 +122,8 @@ export default {
                 police_granted_at: this.police_granted_at,
                 bailiff: this.bailiff,
             })
-                .then(() => {
-                    this.$router.push('/liste-des-sites');
+                .then((response) => {
+                    this.$router.push(`/site/${response.id}`);
                 })
                 .catch((response) => {
                     this.error = response.user_message;
