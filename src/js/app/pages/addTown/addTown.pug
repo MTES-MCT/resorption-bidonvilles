@@ -137,7 +137,7 @@
                     </fieldset>
                 </div>
 
-                <div class="form__group">
+                <div class="form__group" v-if="ownerTypes.find((type) => { return type.label !== 'Inconnu' && type.id === ownerType; })">
                     <fieldset>
                         <legend v-bind:class="{ error: fieldErrors.owner }">Identité du propriétaire :</legend>
                         <p class="error" v-if="fieldErrors.owner">
@@ -171,7 +171,7 @@
                     </div>
                 </div>
 
-                <div class="form__group">
+                <div class="form__group" v-if="census_status === 'scheduled' || census_status === 'done'">
                     <label v-bind:class="{ error: fieldErrors.census_conducted_at }">Date du diagnostic :</label>
                     <p class="error" v-if="fieldErrors.census_conducted_at">
                         <ul>
@@ -181,7 +181,7 @@
                     <datepicker :language="dateLanguage" :monday-first="true" v-model="census_conducted_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
                 </div>
 
-                <div class="form__group">
+                <div class="form__group" v-if="census_status === 'scheduled' || census_status === 'done'">
                     <fieldset>
                         <legend v-bind:class="{ error: fieldErrors.census_conducted_by }">Service ou opérateur en charge du diagnostic :</legend>
                         <p class="error" v-if="fieldErrors.census_conducted_by">
@@ -315,7 +315,7 @@
                     </div>
                 </div>
 
-                <div class="form__group">
+                <div class="form__group" v-if="justice_procedure === 1">
                     <label v-bind:class="{ error: fieldErrors.justice_rendered }"><sup class="mandatory">(*)</sup> Décision de justice rendue :</label>
                     <p class="error" v-if="fieldErrors.justice_rendered">
                         <ul>
@@ -328,7 +328,7 @@
                     </div>
                 </div>
 
-                <div class="form__group">
+                <div class="form__group" v-if="justice_procedure === 1 && justice_rendered === 1">
                     <fieldset>
                         <legend v-bind:class="{ error: fieldErrors.justice_rendered_by }">Origine de la décision :</legend>
                         <p class="error" v-if="fieldErrors.justice_rendered_by">
@@ -342,7 +342,7 @@
                     </fieldset>
                 </div>
 
-                <div class="form__group">
+                <div class="form__group" v-if="justice_procedure === 1 && justice_rendered === 1">
                     <label v-bind:class="{ error: fieldErrors.justice_rendered_at }">Date de la décision :</label>
                     <p class="error" v-if="fieldErrors.justice_rendered_at">
                         <ul>
@@ -352,7 +352,7 @@
                     <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="justice_rendered_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
                 </div>
 
-                <div class="form__group">
+                <div class="form__group" v-if="justice_procedure === 1 && justice_rendered === 1">
                     <label v-bind:class="{ error: fieldErrors.justice_challenged }"><sup class="mandatory">(*)</sup> Contentieux relatif à la décision de justice :</label>
                     <p class="error" v-if="fieldErrors.justice_challenged">
                         <ul>
@@ -378,7 +378,7 @@
                     </div>
                 </div>
 
-                <div class="form__group">
+                <div class="form__group" v-if="police_status === 'requested' || police_status === 'granted'">
                     <label v-bind:class="{ error: fieldErrors.police_requested_at }">Date de la demande du CFP :</label>
                     <p class="error" v-if="fieldErrors.police_requested_at">
                         <ul>
@@ -388,7 +388,7 @@
                     <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="police_requested_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
                 </div>
 
-                <div class="form__group">
+                <div class="form__group" v-if="police_status === 'granted'">
                     <label v-bind:class="{ error: fieldErrors.police_granted_at }">Date d'octroi du CFP :</label>
                     <p class="error" v-if="fieldErrors.police_granted_at">
                         <ul>
