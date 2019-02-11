@@ -68,7 +68,7 @@
                                         <strong>Date de disparition du site :</strong> {{ town.closedAt !== null ? new Date(town.closedAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue'}}
                                     </p>
                                     <p v-if="town.status !== 'open'">
-                                        <strong>Cause de la disparition :</strong> {{ town.status === 'covered' ? 'Résorbé' : (town.status === 'closed' ? 'Inconnu' : 'Expulsé' ) }}
+                                        <strong>Cause de la disparition :</strong> {{ statusLabel }}
                                     </p>
                                 </div>
                             </div>

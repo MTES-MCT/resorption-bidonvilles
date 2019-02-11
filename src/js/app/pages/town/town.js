@@ -45,10 +45,9 @@ export default {
                 { value: 0, label: 'Non' },
             ],
             statusValues: [
-                { value: 'gone', label: 'Flagrance' },
-                { value: 'expelled', label: 'Exécution d\'une décision de justice' },
-                { value: 'expelled', label: 'Exécution d\'une décision administrative' },
-                { value: 'covered', label: 'Site résorbé' },
+                { value: 'closed_by_justice', label: 'Exécution d\'une décision de justice' },
+                { value: 'closed_by_admin', label: 'Exécution d\'une décision administrative' },
+                { value: 'other', label: 'Autre' },
                 { value: 'unknown', label: 'Raison inconnue' },
             ],
             newComment: '',
@@ -67,10 +66,30 @@ export default {
             case 'open':
                 return 'existe toujours';
 
-            case 'gone':
-            case 'covered':
-            case 'expelled':
-                return 'n\'existe plus';
+            case 'closed_by_justice':
+            case 'closed_by_admin':
+            case 'other':
+            case 'unknown':
+                return 'disparu';
+
+            default:
+                return 'inconnu';
+            }
+        },
+        statusLabel() {
+            if (this.town === null) {
+                return 'inconnu';
+            }
+
+            switch (this.town.status) {
+            case 'closed_by_justice':
+                return 'Exécution d\'une décision de justice';
+
+            case 'closed_by_admin':
+                return 'Exécution d\'une décision administrative';
+
+            case 'other':
+                return 'Autre';
 
             default:
                 return 'inconnu';
@@ -79,7 +98,7 @@ export default {
         center() {
             return {
                 center: [this.town.latitude, this.town.longitude],
-                zoom: 13,
+                zoom: 15,
             };
         },
     },
