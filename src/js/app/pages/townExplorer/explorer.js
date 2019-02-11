@@ -85,8 +85,8 @@ export default {
                     label: 'Statut des sites',
                     id: 'status',
                     options: [
-                        { value: 'closed', label: 'Fermés', checked: false },
-                        { value: 'opened', label: 'Ouverts', checked: true },
+                        { value: 'closed', label: 'Disparus', checked: false },
+                        { value: 'opened', label: 'Existants', checked: true },
                     ],
                 },
             ],

@@ -34,7 +34,7 @@
                         <li><a v-bind:class="{ active: view === 'details' }" @click="setView('details')">Caractéristiques du site</a></li>
                         //- <li><a v-bind:class="{ active: view === 'actions' }" @click="setView('actions')">Actions sur le site</a></li>
                         <li><a v-bind:class="{ active: view === 'comments' }" @click="setView('comments')">Commentaires sur le site</a></li>
-                        <li v-if="town.status === 'open' && mode !== 'edit'" class="side-menu-button"><button @click="setEditMode" class="button secondary">Déclarer la fermeture du site</button></li>
+                        <li v-if="town.status === 'open' && mode !== 'edit'" class="side-menu-button"><button @click="setEditMode" class="button secondary">Déclarer la disparition du site</button></li>
                         <li v-if="town.status === 'open' && mode !== 'edit'" class="side-menu-button"><button @click="setEditMode" class="button secondary">Modifier le site</button></li>
                         //- <li v-if="mode !== 'edit'" class="side-menu-button"><button @click="destroy" class="button warning">Supprimer le site</button></li>
 
@@ -65,10 +65,10 @@
                                         <strong>Date d'installation du site :</strong> {{ town.builtAt !== null ? new Date(town.builtAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue' }}
                                     </p>
                                     <p v-if="town.status !== 'open'">
-                                        <strong>Date de fermeture du site :</strong> {{ town.closedAt !== null ? new Date(town.closedAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue'}}
+                                        <strong>Date de disparition du site :</strong> {{ town.closedAt !== null ? new Date(town.closedAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue'}}
                                     </p>
                                     <p v-if="town.status !== 'open'">
-                                        <strong>Cause de la fermeture :</strong> {{ town.status === 'covered' ? 'Résorbé' : (town.status === 'closed' ? 'Inconnu' : 'Expulsé' ) }}
+                                        <strong>Cause de la disparition :</strong> {{ town.status === 'covered' ? 'Résorbé' : (town.status === 'closed' ? 'Inconnu' : 'Expulsé' ) }}
                                     </p>
                                 </div>
                             </div>
@@ -217,7 +217,7 @@
                                 </div>
 
                                 <div class="form__group">
-                                    <label v-bind:class="{ error: fieldErrors.closed_at }">Date de fermeture du site :</label>
+                                    <label v-bind:class="{ error: fieldErrors.closed_at }">Date de disparition du site :</label>
                                     <p class="error" v-if="fieldErrors.closed_at">
                                         <ul>
                                             <li v-for="error in fieldErrors.closed_at">{{ error }}</li>
@@ -228,7 +228,7 @@
 
                                 <div class="form__group" v-if="edit.closedAt !== null">
                                     <fieldset>
-                                        <legend v-bind:class="{ error: fieldErrors.status }">Cause de la fermeture :</legend>
+                                        <legend v-bind:class="{ error: fieldErrors.status }">Cause de la disparition :</legend>
                                         <p class="error" v-if="fieldErrors.status">
                                             <ul>
                                                 <li v-for="error in fieldErrors.status">{{ error }}</li>
