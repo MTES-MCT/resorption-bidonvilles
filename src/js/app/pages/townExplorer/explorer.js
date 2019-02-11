@@ -201,9 +201,9 @@ export default {
 
                     disallowedJustice.forEach((value) => {
                         if (value === 'yes') {
-                            visibleTowns = visibleTowns.filter(town => town.justiceStatus !== true);
+                            visibleTowns = visibleTowns.filter(town => town.justiceProcedure !== true);
                         } else if (value === 'no') {
-                            visibleTowns = visibleTowns.filter(town => town.justiceStatus === true);
+                            visibleTowns = visibleTowns.filter(town => town.justiceProcedure === true);
                         }
                     });
                 }

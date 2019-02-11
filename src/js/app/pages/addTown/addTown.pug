@@ -299,19 +299,32 @@
 
             <div class="panel">
                 <div class="panel__header">
-                    <h3>4. Évacuation</h3>
+                    <h3>4. Procédure judiciaire d’expulsion des occupants</h3>
                 </div>
 
                 <div class="form__group">
-                    <label v-bind:class="{ error: fieldErrors.justice_status }"><sup class="mandatory">(*)</sup> Procédure judiciaire :</label>
-                    <p class="error" v-if="fieldErrors.justice_status">
+                    <label v-bind:class="{ error: fieldErrors.justice_procedure }"><sup class="mandatory">(*)</sup> Existence d'une procédure judiciaire :</label>
+                    <p class="error" v-if="fieldErrors.justice_procedure">
                         <ul>
-                            <li v-for="error in fieldErrors.justice_status">{{ error }}</li>
+                            <li v-for="error in fieldErrors.justice_procedure">{{ error }}</li>
                         </ul>
                     </p>
-                    <div v-for="(value, index) in justiceValues">
-                        <input type="radio" name="justice" :id="'justice' + index" :value="value.value" v-model="justiceStatus">
-                        <label :for="'justice' + index" class="label-inline">{{ value.label }}</label>
+                    <div v-for="(value, index) in yesnoValues">
+                        <input type="radio" name="justiceProcedure" :id="'justiceProcedure' + index" :value="value.value" v-model="justice_procedure">
+                        <label :for="'justiceProcedure' + index" class="label-inline">{{ value.label }}</label>
+                    </div>
+                </div>
+
+                <div class="form__group">
+                    <label v-bind:class="{ error: fieldErrors.justice_rendered }"><sup class="mandatory">(*)</sup> Décision de justice rendue :</label>
+                    <p class="error" v-if="fieldErrors.justice_rendered">
+                        <ul>
+                            <li v-for="error in fieldErrors.justice_rendered">{{ error }}</li>
+                        </ul>
+                    </p>
+                    <div v-for="(value, index) in yesnoValues">
+                        <input type="radio" name="justiceRendered" :id="'justiceRendered' + index" :value="value.value" v-model="justice_rendered">
+                        <label :for="'justiceRendered' + index" class="label-inline">{{ value.label }}</label>
                     </div>
                 </div>
 
@@ -337,6 +350,19 @@
                         </ul>
                     </p>
                     <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="justice_rendered_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
+                </div>
+
+                <div class="form__group">
+                    <label v-bind:class="{ error: fieldErrors.justice_challenged }"><sup class="mandatory">(*)</sup> Contentieux relatif à la décision de justice :</label>
+                    <p class="error" v-if="fieldErrors.justice_challenged">
+                        <ul>
+                            <li v-for="error in fieldErrors.justice_challenged">{{ error }}</li>
+                        </ul>
+                    </p>
+                    <div v-for="(value, index) in yesnoValues">
+                        <input type="radio" name="justiceChallenged" :id="'justiceChallenged' + index" :value="value.value" v-model="justice_challenged">
+                        <label :for="'justiceChallenged' + index" class="label-inline">{{ value.label }}</label>
+                    </div>
                 </div>
 
                 <div class="form__group">

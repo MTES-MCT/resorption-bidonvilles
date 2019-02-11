@@ -153,13 +153,19 @@
                                 </div>
                                 <div class="form__group">
                                     <p>
-                                        <strong>Procédure judiciaire en cours :</strong> {{ town.justiceStatus === 'rendered' ? 'Décision rendue' : (town.justiceStatus === 'seized' ? 'Juge saisi' : 'Juge non-saisi') }}
+                                        <strong>Existence d’une procédure judiciaire :</strong> {{ town.justiceProcedure === null ? 'Inconnu' : (town.justiceProcedure ? 'Oui' : 'Non') }}
+                                    </p>
+                                    <p>
+                                        <strong>Décision de justice rendue :</strong> {{ town.justiceRendered === null ? 'Inconnu' : (town.justiceRendered ? 'Oui' : 'Non') }}
                                     </p>
                                     <p>
                                         <strong>Origine de la décision :</strong> {{ town.justiceRenderedBy || 'Inconnue' }}
                                     </p>
                                     <p>
                                         <strong>Date de la décision :</strong> {{ town.justiceRenderedAt !== null ? new Date(town.justiceRenderedAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue' }}
+                                    </p>
+                                    <p>
+                                        <strong>Contentieux relatif à la décision de justice :</strong> {{ town.justiceChallenged === null ? 'Inconnu' : (town.justiceChallenged ? 'Oui' : 'Non') }}
                                     </p>
                                     <p>
                                         <strong>Concours de la force publique :</strong> {{ town.policeStatus === 'granted' ? 'Obtenu' : (town.policeStatus === 'requested' ? 'Demandé' : 'Inconnu') }}
@@ -237,15 +243,15 @@
 
                                 <div class="form__group">
                                     <fieldset>
-                                        <legend v-bind:class="{ error: fieldErrors.justice_status }">Procédure judiciaire en cours :</legend>
-                                        <p class="error" v-if="fieldErrors.justice_status">
+                                        <legend v-bind:class="{ error: fieldErrors.justice_procedure }">Procédure judiciaire en cours :</legend>
+                                        <p class="error" v-if="fieldErrors.justice_procedure">
                                             <ul>
-                                                <li v-for="error in fieldErrors.justice_status">{{ error }}</li>
+                                                <li v-for="error in fieldErrors.justice_procedure">{{ error }}</li>
                                             </ul>
                                         </p>
-                                        <div v-for="(value, index) in justiceValues">
-                                            <input type="radio" name="justiceStatus" :id="'justice' + index" :value="value.value" v-model="edit.justiceStatus">
-                                            <label :for="'justice' + index" class="label-inline">{{ value.label }}</label>
+                                        <div v-for="(value, index) in yesnoValues">
+                                            <input type="radio" name="justiceProcedure" :id="'justiceProcedure' + index" :value="value.value" v-model="edit.justiceProcedure">
+                                            <label :for="'justiceProcedure' + index" class="label-inline">{{ value.label }}</label>
                                         </div>
                                     </fieldset>
                                 </div>
