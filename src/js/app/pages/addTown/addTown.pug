@@ -158,12 +158,13 @@
                 </div>
 
                 <div class="form__group">
-                    <label v-bind:class="{ error: fieldErrors.census_status }"><sup class="mandatory">(*)</sup> Statut du recensement / diagnostic :</label>
+                    <label v-bind:class="{ error: fieldErrors.census_status }"><sup class="mandatory">(*)</sup> Statut du diagnostic social :</label>
                     <p class="error" v-if="fieldErrors.census_status">
                         <ul>
                             <li v-for="error in fieldErrors.census_status">{{ error }}</li>
                         </ul>
                     </p>
+                    <p>Un diagnostic social vise à identifier les situations et besoins des familles et personnes, de repérer le contexte territorial et les acteurs en présence.</p>
                     <div v-for="(value, index) in diagnosisValues">
                         <input type="radio" name="diagnosis" :id="'diagnosis' + index" :value="value.value" v-model="census_status">
                         <label :for="'diagnosis' + index" class="label-inline">{{ value.label }}</label>
@@ -171,7 +172,7 @@
                 </div>
 
                 <div class="form__group">
-                    <label v-bind:class="{ error: fieldErrors.census_conducted_at }">Date du recensement :</label>
+                    <label v-bind:class="{ error: fieldErrors.census_conducted_at }">Date du diagnostic :</label>
                     <p class="error" v-if="fieldErrors.census_conducted_at">
                         <ul>
                             <li v-for="error in fieldErrors.census_conducted_at">{{ error }}</li>
@@ -182,7 +183,7 @@
 
                 <div class="form__group">
                     <fieldset>
-                        <legend v-bind:class="{ error: fieldErrors.census_conducted_by }">Opérateur en charge du recensement :</legend>
+                        <legend v-bind:class="{ error: fieldErrors.census_conducted_by }">Service ou opérateur en charge du diagnostic :</legend>
                         <p class="error" v-if="fieldErrors.census_conducted_by">
                             <ul>
                                 <li v-for="error in fieldErrors.census_conducted_by">{{ error }}</li>
