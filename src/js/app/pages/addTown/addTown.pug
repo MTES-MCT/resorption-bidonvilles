@@ -53,7 +53,7 @@
                     <h3>1. Caractéristiques</h3>
                 </div>
                 <div class="form__group">
-                    <label v-bind:class="{ error: fieldErrors.address }">Localisation géographique</label>
+                    <label v-bind:class="{ error: fieldErrors.address }"><sup class="mandatory">(*)</sup> Localisation géographique :</label>
                     <p class="error" v-if="fieldErrors.address">
                         <ul>
                             <li v-for="error in fieldErrors.address">{{ error }}</li>
@@ -72,7 +72,7 @@
                 </div>
 
                 <div class="form__group">
-                    <label v-bind:class="{ error: fieldErrors.priority }">Niveau de priorité du site :</label>
+                    <label v-bind:class="{ error: fieldErrors.priority }"><sup class="mandatory">(*)</sup> Niveau de priorité du site :</label>
                     <p>1 étant le niveau de priorité le plus haut</p>
                     <p class="error" v-if="fieldErrors.priority">
                         <ul>
@@ -109,7 +109,7 @@
 
                 <div class="form__group">
                     <fieldset>
-                        <legend v-bind:class="{ error: fieldErrors.field_type }">Type de site :</legend>
+                        <legend v-bind:class="{ error: fieldErrors.field_type }"><sup class="mandatory">(*)</sup> Type de site :</legend>
                         <p class="error" v-if="fieldErrors.field_type">
                             <ul>
                                 <li v-for="error in fieldErrors.field_type">{{ error }}</li>
@@ -124,7 +124,7 @@
 
                 <div class="form__group">
                     <fieldset>
-                        <legend v-bind:class="{ error: fieldErrors.owner_type }">Type de propriétaire :</legend>
+                        <legend v-bind:class="{ error: fieldErrors.owner_type }"><sup class="mandatory">(*)</sup> Type de propriétaire :</legend>
                         <p class="error" v-if="fieldErrors.owner_type">
                             <ul>
                                 <li v-for="error in fieldErrors.owner_type">{{ error }}</li>
@@ -158,7 +158,7 @@
                 </div>
 
                 <div class="form__group">
-                    <label v-bind:class="{ error: fieldErrors.census_status }">Statut du recensement / diagnostic :</label>
+                    <label v-bind:class="{ error: fieldErrors.census_status }"><sup class="mandatory">(*)</sup> Statut du recensement / diagnostic :</label>
                     <p class="error" v-if="fieldErrors.census_status">
                         <ul>
                             <li v-for="error in fieldErrors.census_status">{{ error }}</li>
@@ -252,7 +252,7 @@
 
                 <div class="form__group">
                     <fieldset>
-                        <legend v-bind:class="{ error: fieldErrors.access_to_electricity }">Accès à l'électricité :</legend>
+                        <legend v-bind:class="{ error: fieldErrors.access_to_electricity }"><sup class="mandatory">(*)</sup> Accès à l'électricité :</legend>
                         <p class="error" v-if="fieldErrors.access_to_electricity">
                             <ul>
                                 <li v-for="error in fieldErrors.access_to_electricity">{{ error }}</li>
@@ -267,7 +267,7 @@
 
                 <div class="form__group">
                     <fieldset>
-                        <legend v-bind:class="{ error: fieldErrors.access_to_water }">Accès à l'eau :</legend>
+                        <legend v-bind:class="{ error: fieldErrors.access_to_water }"><sup class="mandatory">(*)</sup> Accès à l'eau :</legend>
                         <p class="error" v-if="fieldErrors.access_to_water">
                             <ul>
                                 <li v-for="error in fieldErrors.access_to_water">{{ error }}</li>
@@ -282,7 +282,7 @@
 
                 <div class="form__group">
                     <fieldset>
-                        <legend v-bind:class="{ error: fieldErrors.trash_evacuation }">Évacuation des déchets :</legend>
+                        <legend v-bind:class="{ error: fieldErrors.trash_evacuation }"><sup class="mandatory">(*)</sup> Évacuation des déchets :</legend>
                         <p class="error" v-if="fieldErrors.trash_evacuation">
                             <ul>
                                 <li v-for="error in fieldErrors.trash_evacuation">{{ error }}</li>
@@ -302,7 +302,7 @@
                 </div>
 
                 <div class="form__group">
-                    <label v-bind:class="{ error: fieldErrors.justice_status }">Procédure judiciaire :</label>
+                    <label v-bind:class="{ error: fieldErrors.justice_status }"><sup class="mandatory">(*)</sup> Procédure judiciaire :</label>
                     <p class="error" v-if="fieldErrors.justice_status">
                         <ul>
                             <li v-for="error in fieldErrors.justice_status">{{ error }}</li>
