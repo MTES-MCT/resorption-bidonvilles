@@ -178,7 +178,7 @@
                             <li v-for="error in fieldErrors.census_conducted_at">{{ error }}</li>
                         </ul>
                     </p>
-                    <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="census_conducted_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
+                    <datepicker :language="dateLanguage" :monday-first="true" v-model="census_conducted_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
                 </div>
 
                 <div class="form__group">
