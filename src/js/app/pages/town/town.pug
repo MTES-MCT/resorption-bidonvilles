@@ -106,9 +106,6 @@
                                         <strong>Statut du recensement :</strong> {{ town.censusStatus === 'done' ? 'Réalisé' : (town.censusStatus === 'scheduled' ? 'Prévu' : 'Non prévu') }}
                                     </p>
                                     <p>
-                                        <strong>Date de la saisine :</strong> {{ town.censusRequestedAt !== null ? new Date(town.censusRequestedAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue' }}
-                                    </p>
-                                    <p>
                                         <strong>Date du recensement :</strong> {{ town.censusConductedAt !== null ? new Date(town.censusConductedAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue' }}
                                     </p>
                                     <p>
