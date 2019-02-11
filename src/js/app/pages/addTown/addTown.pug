@@ -171,16 +171,6 @@
                 </div>
 
                 <div class="form__group">
-                    <label v-bind:class="{ error: fieldErrors.census_requested_at }">Date de la saisine :</label>
-                    <p class="error" v-if="fieldErrors.census_requested_at">
-                        <ul>
-                            <li v-for="error in fieldErrors.census_requested_at">{{ error }}</li>
-                        </ul>
-                    </p>
-                    <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="census_requested_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
-                </div>
-
-                <div class="form__group">
                     <label v-bind:class="{ error: fieldErrors.census_conducted_at }">Date du recensement :</label>
                     <p class="error" v-if="fieldErrors.census_conducted_at">
                         <ul>
