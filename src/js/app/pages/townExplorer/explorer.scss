@@ -36,6 +36,12 @@
         }
 
         .table {
+            > thead {
+                th span {
+                    cursor: pointer;
+                }
+            }
+
             > tbody {
                 tr {
                     cursor: pointer;
