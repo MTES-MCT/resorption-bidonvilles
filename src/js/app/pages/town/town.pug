@@ -269,7 +269,7 @@
                                         </ul>
                                     </p>
                                     <p>Saisissez ici l'adresse du site, puis précisez sa position en déplaçant le point sur la carte.</p>
-                                    <Map placeholder="Saisissez ici l'adresse du site" :track-position="true" v-model="edit.address"></Map>
+                                    <Map placeholder="Saisissez ici l'adresse du site" :track-position="true" v-model="edit.address" :default-view="{center:edit.address.coordinates,zoom:16}"></Map>
                                 </div>
 
                                 <div class="form__group">
