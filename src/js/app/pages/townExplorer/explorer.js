@@ -157,7 +157,7 @@ export default {
                 },
                 'pagination-options': {
                     enabled: true,
-                    perPage: 5,
+                    perPage: 20,
                     perPageDropdown: [5, 10, 20, 30, 40, 50],
                     nextLabel: 'Suivant',
                     prevLabel: 'Précédent',
