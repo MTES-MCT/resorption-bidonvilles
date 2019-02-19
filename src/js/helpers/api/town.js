@@ -44,6 +44,18 @@ export function edit(id, data) {
 }
 
 /**
+ * Closes a town
+ *
+ * @param {string}    id
+ * @param {Town_Data} data
+ *
+ * @returns {Promise}
+ */
+export function close(id, data) {
+    return postApi(`/towns/${id}/close`, data);
+}
+
+/**
  * Deletes a town
  *
  * @param {string} id

@@ -20,6 +20,41 @@
         </div>
 
         <div v-else>
+            <div class="alert" v-if="mode === 'close'">
+                <div class="wrapper">
+                    <h2>Disparition du site</h2>
+                    <div class="form__group">
+                        <label v-bind:class="{ error: fieldErrors.closed_at }">Date de disparition du site :</label>
+                        <p class="error" v-if="fieldErrors.closed_at">
+                            <ul>
+                                <li v-for="error in fieldErrors.closed_at">{{ error }}</li>
+                            </ul>
+                        </p>
+                        <datepicker :clear-button="true" :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" :full-month-name="true" :format="'dd MMMM yyyy'" v-model="edit.closedAt"></datepicker>
+                    </div>
+
+                    <div class="form__group">
+                        <fieldset>
+                            <legend v-bind:class="{ error: fieldErrors.status }">Cause de la disparition :</legend>
+                            <p class="error" v-if="fieldErrors.status">
+                                <ul>
+                                    <li v-for="error in fieldErrors.status">{{ error }}</li>
+                                </ul>
+                            </p>
+                            <div v-for="(value, index) in statusValues">
+                                <input type="radio" name="status" :id="'status' + index" :value="value.value" v-model="edit.status">
+                                <label :for="'status' + index" class="label-inline">{{ value.label }}</label>
+                            </div>
+                        </fieldset>
+                    </div>
+
+                    <p>
+                        <button @click="submitClose" class="button">Valider</button>
+                        <button @click="closeAlert" class="button secondary">Annuler</button>
+                    </p>
+                </div>
+            </div>
+
             <div class="container">
                 <!-- SUCCESS STATE -->
                 <header class="town-header">
@@ -34,7 +69,7 @@
                         <li><a v-bind:class="{ active: view === 'details' }" @click="setView('details')">Caractéristiques du site</a></li>
                         //- <li><a v-bind:class="{ active: view === 'actions' }" @click="setView('actions')">Actions sur le site</a></li>
                         <li><a v-bind:class="{ active: view === 'comments' }" @click="setView('comments')">Commentaires sur le site</a></li>
-                        <li v-if="town.status === 'open' && mode !== 'edit'" class="side-menu-button"><button @click="setEditMode" class="button secondary">Déclarer la disparition du site</button></li>
+                        <li v-if="town.status === 'open' && mode !== 'edit'" class="side-menu-button"><button @click="setCloseMode" class="button secondary">Déclarer la disparition du site</button></li>
                         <li v-if="town.status === 'open' && mode !== 'edit'" class="side-menu-button"><button @click="setEditMode" class="button secondary">Modifier le site</button></li>
                         //- <li v-if="mode !== 'edit'" class="side-menu-button"><button @click="destroy" class="button warning">Supprimer le site</button></li>
 
@@ -63,12 +98,6 @@
                                     </p>
                                     <p>
                                         <strong>Date d'installation du site :</strong> {{ town.builtAt !== null ? new Date(town.builtAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue' }}
-                                    </p>
-                                    <p v-if="town.status !== 'open'">
-                                        <strong>Date de disparition du site :</strong> {{ town.closedAt !== null ? new Date(town.closedAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue'}}
-                                    </p>
-                                    <p v-if="town.status !== 'open'">
-                                        <strong>Cause de la disparition :</strong> {{ statusLabel }}
                                     </p>
                                 </div>
                             </div>
@@ -214,31 +243,6 @@
                                         </ul>
                                     </p>
                                     <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" :full-month-name="true" :format="'dd MMMM yyyy'" v-model="edit.builtAt"></datepicker>
-                                </div>
-
-                                <div class="form__group">
-                                    <label v-bind:class="{ error: fieldErrors.closed_at }">Date de disparition du site :</label>
-                                    <p class="error" v-if="fieldErrors.closed_at">
-                                        <ul>
-                                            <li v-for="error in fieldErrors.closed_at">{{ error }}</li>
-                                        </ul>
-                                    </p>
-                                    <datepicker :clear-button="true" :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" :full-month-name="true" :format="'dd MMMM yyyy'" v-model="edit.closedAt"></datepicker>
-                                </div>
-
-                                <div class="form__group" v-if="edit.closedAt !== null">
-                                    <fieldset>
-                                        <legend v-bind:class="{ error: fieldErrors.status }">Cause de la disparition :</legend>
-                                        <p class="error" v-if="fieldErrors.status">
-                                            <ul>
-                                                <li v-for="error in fieldErrors.status">{{ error }}</li>
-                                            </ul>
-                                        </p>
-                                        <div v-for="(value, index) in statusValues">
-                                            <input type="radio" name="status" :id="'status' + index" :value="value.value" v-model="edit.status">
-                                            <label :for="'status' + index" class="label-inline">{{ value.label }}</label>
-                                        </div>
-                                    </fieldset>
                                 </div>
 
                                 <div class="form__group">

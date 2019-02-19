@@ -1,7 +1,7 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import Map from '#app/pages/townExplorer/map/map.vue';
 import {
-    get, edit, destroy, addComment,
+    get, close, edit, destroy, addComment,
 } from '#helpers/api/town';
 import { get as getConfig } from '#helpers/api/config';
 import Datepicker from 'vuejs-datepicker';
@@ -133,6 +133,14 @@ export default {
             this.resetEdit();
             this.mode = 'edit';
         },
+        setCloseMode() {
+            this.resetEdit();
+            this.mode = 'close';
+        },
+        closeAlert() {
+            this.resetEdit();
+            this.mode = 'view';
+        },
         resetEdit() {
             this.editError = null;
             this.fieldErrors = {};
@@ -199,6 +207,24 @@ export default {
                 social_origins: this.edit.origins,
                 field_type: this.edit.fieldType,
                 owner_type: this.edit.ownerType,
+            })
+                .then(() => {
+                    this.$router.go();
+                })
+                .catch((response) => {
+                    this.editError = response.user_message;
+                    this.fieldErrors = response.fields || {};
+                });
+        },
+        submitClose() {
+            // clean previous errors
+            this.editError = null;
+            this.fieldErrors = {};
+
+            // send the form
+            close(this.town.id, {
+                closed_at: this.edit.closedAt,
+                status: this.edit.status,
             })
                 .then(() => {
                     this.$router.go();
