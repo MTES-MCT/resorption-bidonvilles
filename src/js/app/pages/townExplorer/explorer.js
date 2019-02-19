@@ -109,10 +109,18 @@ export default {
                     {
                         label: 'Commune',
                         field: 'city.name',
+                        filterOptions: {
+                            enabled: true,
+                            placeholder: 'Filtrer par commune',
+                        },
                     },
                     {
                         label: 'Adresse',
                         field: 'address',
+                        filterOptions: {
+                            enabled: true,
+                            placeholder: 'Filtrer par adresse',
+                        },
                     },
                     {
                         label: 'Type de site',
