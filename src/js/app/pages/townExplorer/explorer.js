@@ -2,6 +2,7 @@ import NavBar from '#app/layouts/navbar/navbar.vue';
 import FilterGroup from './filterGroup/filterGroup.vue';
 import Map from './map/map.vue';
 import { VueGoodTable as Table } from 'vue-good-table';
+import 'vue-good-table/dist/vue-good-table.css';
 import Quickview from '#app/components/quickview/quickview.vue';
 import { all as fetchAll } from '#helpers/api/town';
 import { get as getConfig } from '#helpers/api/config';
@@ -120,18 +121,22 @@ export default {
                     {
                         label: 'Personnes',
                         field: town => (town.populationTotal !== null ? town.populationTotal : 'inconnu'),
+                        type: 'number',
                     },
                     {
                         label: 'Ménages',
                         field: town => (town.populationCouples !== null ? town.populationCouples : 'inconnu'),
+                        type: 'number',
                     },
                     {
                         label: 'Mineurs',
                         field: town => (town.populationMinors !== null ? town.populationMinors : 'inconnu'),
+                        type: 'number',
                     },
                     {
                         label: 'Date d\'installation',
                         field: town => (town.builtAt ? new Date(town.builtAt * 1000).toLocaleString().substr(0, 10) : 'inconnu'),
+                        type: 'text',
                     },
                     {
                         label: 'Type de propriétaire',
@@ -139,6 +144,20 @@ export default {
                     },
                 ],
                 rows: this.visibleTowns,
+                'sort-options': {
+                    enabled: true,
+                },
+                'pagination-options': {
+                    enabled: true,
+                    perPage: 5,
+                    perPageDropdown: [5, 10, 20, 30, 40, 50],
+                    nextLabel: 'Suivant',
+                    prevLabel: 'Précédent',
+                    rowsPerPageLabel: 'Nombre de sites par page',
+                    ofLabel: 'sur',
+                    pageLabel: 'Page', // for 'pages' mode
+                    allLabel: 'Tous',
+                },
             };
         },
         visibleTowns() {
