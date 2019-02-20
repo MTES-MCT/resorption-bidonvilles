@@ -49,6 +49,7 @@ export default {
             census_status: undefined,
             census_conducted_at: '',
             census_conducted_by: '',
+            owner_complaint: undefined,
             justice_procedure: undefined,
             justice_rendered: -1,
             justice_rendered_by: '',
@@ -109,16 +110,24 @@ export default {
                 declared_at: this.declared_at,
                 owner: this.owner,
                 census_status: this.census_status,
-                census_conducted_at: this.census_conducted_at,
-                census_conducted_by: this.census_conducted_by,
-                justice_procedure: this.justice_procedure,
-                justice_rendered: this.justice_rendered,
-                justice_rendered_by: this.justice_rendered_by,
-                justice_rendered_at: this.justice_rendered_at,
-                justice_challenged: this.justice_challenged,
+                census_conducted_at: ['scheduled', 'done'].indexOf(this.census_status) !== -1 ? this.census_conducted_at : null,
+                census_conducted_by: ['scheduled', 'done'].indexOf(this.census_status) !== -1 ? this.census_conducted_by : '',
+                owner_complaint: this.owner_complaint,
+                justice_procedure: this.owner_complaint === 1 ? this.justice_procedure : undefined,
+                justice_rendered: this.owner_complaint === 1
+                    && this.justice_procedure === 1 ? this.justice_rendered : undefined,
+                justice_rendered_by: this.owner_complaint === 1
+                    && this.justice_procedure === 1
+                    && this.justice_rendered === 1 ? this.justice_rendered_by : '',
+                justice_rendered_at: this.owner_complaint === 1
+                    && this.justice_procedure === 1
+                    && this.justice_rendered === 1 ? this.justice_rendered_at : null,
+                justice_challenged: this.owner_complaint === 1
+                    && this.justice_procedure === 1
+                    && this.justice_rendered === 1 ? this.justice_challenged : undefined,
                 police_status: this.police_status,
-                police_requested_at: this.police_requested_at,
-                police_granted_at: this.police_granted_at,
+                police_requested_at: this.police_status === 1 ? this.police_requested_at : null,
+                police_granted_at: this.police_status === 1 ? this.police_granted_at : null,
                 bailiff: this.bailiff,
             })
                 .then((response) => {

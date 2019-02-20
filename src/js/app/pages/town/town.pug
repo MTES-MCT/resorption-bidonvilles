@@ -218,22 +218,25 @@
 
                             <div class="panel">
                                 <div class="panel__header">
-                                    <h3>5. Évacuation</h3>
+                                    <h3>5. Procédure judiciaire d’expulsion des occupants</h3>
                                 </div>
                                 <div class="form__group">
                                     <p>
+                                        <strong>Dépôt de plainte par le propriétaire :</strong> {{ town.ownerComplaint === null ? 'Inconnu' : (town.ownerComplaint ? 'Oui' : 'Non') }}
+                                    </p>
+                                    <p v-if="town.ownerComplaint">
                                         <strong>Existence d’une procédure judiciaire :</strong> {{ town.justiceProcedure === null ? 'Inconnu' : (town.justiceProcedure ? 'Oui' : 'Non') }}
                                     </p>
-                                    <p>
+                                    <p v-if="town.justiceProcedure">
                                         <strong>Décision de justice rendue :</strong> {{ town.justiceRendered === null ? 'Inconnu' : (town.justiceRendered ? 'Oui' : 'Non') }}
                                     </p>
-                                    <p>
+                                    <p v-if="town.justiceRendered">
                                         <strong>Origine de la décision :</strong> {{ town.justiceRenderedBy || 'Inconnue' }}
                                     </p>
-                                    <p>
+                                    <p v-if="town.justiceRendered">
                                         <strong>Date de la décision :</strong> {{ town.justiceRenderedAt !== null ? new Date(town.justiceRenderedAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue' }}
                                     </p>
-                                    <p>
+                                    <p v-if="town.justiceRendered">
                                         <strong>Contentieux relatif à la décision de justice :</strong> {{ town.justiceChallenged === null ? 'Inconnu' : (town.justiceChallenged ? 'Oui' : 'Non') }}
                                     </p>
                                     <p>
@@ -276,6 +279,16 @@
                                 </div>
 
                                 <div class="form__group">
+                                    <label v-bind:class="{ error: fieldErrors.declared_at }">Date de signalement du site :</label>
+                                    <p class="error" v-if="fieldErrors.declared_at">
+                                        <ul>
+                                            <li v-for="error in fieldErrors.declared_at">{{ error }}</li>
+                                        </ul>
+                                    </p>
+                                    <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="edit.declaredAt" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
+                                </div>
+
+                                <div class="form__group">
                                     <label v-bind:class="{ error: fieldErrors.built_at }">Date d'installation du site :</label>
                                     <p class="error" v-if="fieldErrors.built_at">
                                         <ul>
@@ -283,21 +296,6 @@
                                         </ul>
                                     </p>
                                     <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" :full-month-name="true" :format="'dd MMMM yyyy'" v-model="edit.builtAt"></datepicker>
-                                </div>
-
-                                <div class="form__group">
-                                    <fieldset>
-                                        <legend v-bind:class="{ error: fieldErrors.justice_procedure }">Procédure judiciaire en cours :</legend>
-                                        <p class="error" v-if="fieldErrors.justice_procedure">
-                                            <ul>
-                                                <li v-for="error in fieldErrors.justice_procedure">{{ error }}</li>
-                                            </ul>
-                                        </p>
-                                        <div v-for="(value, index) in yesnoValues">
-                                            <input type="radio" name="justiceProcedure" :id="'justiceProcedure' + index" :value="value.value" v-model="edit.justiceProcedure">
-                                            <label :for="'justiceProcedure' + index" class="label-inline">{{ value.label }}</label>
-                                        </div>
-                                    </fieldset>
                                 </div>
                             </div>
 
@@ -358,6 +356,44 @@
                             <div class="panel">
                                 <div class="panel__header">
                                     <h3>3. Démographie</h3>
+                                </div>
+
+                                <div class="form__group">
+                                    <label v-bind:class="{ error: fieldErrors.census_status }">Statut du diagnostic social :</label>
+                                    <p class="error" v-if="fieldErrors.census_status">
+                                        <ul>
+                                            <li v-for="error in fieldErrors.census_status">{{ error }}</li>
+                                        </ul>
+                                    </p>
+                                    <p>Un diagnostic social vise à identifier les situations et besoins des familles et personnes, de repérer le contexte territorial et les acteurs en présence.</p>
+                                    <div v-for="(value, index) in diagnosisValues">
+                                        <input type="radio" name="diagnosis" :id="'diagnosis' + index" :value="value.value" v-model="edit.census_status">
+                                        <label :for="'diagnosis' + index" class="label-inline">{{ value.label }}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form__group" v-if="edit.census_status === 'scheduled' || edit.census_status === 'done'">
+                                    <label v-bind:class="{ error: fieldErrors.census_conducted_at }">Date du diagnostic :</label>
+                                    <p class="error" v-if="fieldErrors.census_conducted_at">
+                                        <ul>
+                                            <li v-for="error in fieldErrors.census_conducted_at">{{ error }}</li>
+                                        </ul>
+                                    </p>
+                                    <datepicker :language="dateLanguage" :monday-first="true" v-model="edit.census_conducted_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
+                                </div>
+
+                                <div class="form__group" v-if="edit.census_status === 'scheduled' || edit.census_status === 'done'">
+                                    <fieldset>
+                                        <legend v-bind:class="{ error: fieldErrors.census_conducted_by }">Service ou opérateur en charge du diagnostic :</legend>
+                                        <p class="error" v-if="fieldErrors.census_conducted_by">
+                                            <ul>
+                                                <li v-for="error in fieldErrors.census_conducted_by">{{ error }}</li>
+                                            </ul>
+                                        </p>
+                                        <div class="input__group">
+                                            <input type="text" v-model="edit.census_conducted_by" />
+                                        </div>
+                                    </fieldset>
                                 </div>
 
                                 <div class="form__group">
@@ -457,6 +493,135 @@
                                         <div v-for="(value, index) in yesnoValues">
                                             <input type="radio" name="trashEvacuation" :id="'trashEvacuation' + index" :value="value.value" v-model="edit.trashEvacuation">
                                             <label :for="'trashEvacuation' + index" class="label-inline">{{ value.label }}</label>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+
+                            <div class="panel">
+                                <div class="panel__header">
+                                    <h3>5. Procédure judiciaire d’expulsion des occupants</h3>
+                                </div>
+
+                                <div class="form__group">
+                                    <label v-bind:class="{ error: fieldErrors.owner_complaint }">Dépôt de plainte par le propriétaire :</label>
+                                    <p class="error" v-if="fieldErrors.owner_complaint">
+                                        <ul>
+                                            <li v-for="error in fieldErrors.owner_complaint">{{ error }}</li>
+                                        </ul>
+                                    </p>
+                                    <div v-for="(value, index) in yesnoValues">
+                                        <input type="radio" name="ownerComplaint" :id="'ownerComplaint' + index" :value="value.value" v-model="edit.owner_complaint">
+                                        <label :for="'ownerComplaint' + index" class="label-inline">{{ value.label }}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form__group" v-if="edit.owner_complaint === 1">
+                                    <label v-bind:class="{ error: fieldErrors.justice_procedure }">Procédure judiciaire en cours :</label>
+                                    <p class="error" v-if="fieldErrors.justice_procedure">
+                                        <ul>
+                                            <li v-for="error in fieldErrors.justice_procedure">{{ error }}</li>
+                                        </ul>
+                                    </p>
+                                    <div v-for="(value, index) in yesnoValues">
+                                        <input type="radio" name="justiceProcedure" :id="'justiceProcedure' + index" :value="value.value" v-model="edit.justiceProcedure">
+                                        <label :for="'justiceProcedure' + index" class="label-inline">{{ value.label }}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form__group" v-if="edit.owner_complaint === 1 && edit.justiceProcedure === 1">
+                                    <label v-bind:class="{ error: fieldErrors.justice_rendered }">Décision de justice rendue :</label>
+                                    <p class="error" v-if="fieldErrors.justice_rendered">
+                                        <ul>
+                                            <li v-for="error in fieldErrors.justice_rendered">{{ error }}</li>
+                                        </ul>
+                                    </p>
+                                    <div v-for="(value, index) in yesnoValues">
+                                        <input type="radio" name="justiceRendered" :id="'justiceRendered' + index" :value="value.value" v-model="edit.justice_rendered">
+                                        <label :for="'justiceRendered' + index" class="label-inline">{{ value.label }}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form__group" v-if="edit.owner_complaint === 1 && edit.justiceProcedure === 1 && edit.justice_rendered === 1">
+                                    <fieldset>
+                                        <legend v-bind:class="{ error: fieldErrors.justice_rendered_by }">Origine de la décision :</legend>
+                                        <p class="error" v-if="fieldErrors.justice_rendered_by">
+                                            <ul>
+                                                <li v-for="error in fieldErrors.justice_rendered_by">{{ error }}</li>
+                                            </ul>
+                                        </p>
+                                        <div class="input__group">
+                                            <input type="text" v-model="edit.justice_rendered_by" />
+                                        </div>
+                                    </fieldset>
+                                </div>
+
+                                <div class="form__group" v-if="edit.owner_complaint === 1 && edit.justiceProcedure === 1 && edit.justice_rendered === 1">
+                                    <label v-bind:class="{ error: fieldErrors.justice_rendered_at }">Date de la décision :</label>
+                                    <p class="error" v-if="fieldErrors.justice_rendered_at">
+                                        <ul>
+                                            <li v-for="error in fieldErrors.justice_rendered_at">{{ error }}</li>
+                                        </ul>
+                                    </p>
+                                    <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="edit.justice_rendered_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
+                                </div>
+
+                                <div class="form__group" v-if="edit.owner_complaint === 1 && edit.justiceProcedure === 1 && edit.justice_rendered === 1">
+                                    <label v-bind:class="{ error: fieldErrors.justice_challenged }">Contentieux relatif à la décision de justice :</label>
+                                    <p class="error" v-if="fieldErrors.justice_challenged">
+                                        <ul>
+                                            <li v-for="error in fieldErrors.justice_challenged">{{ error }}</li>
+                                        </ul>
+                                    </p>
+                                    <div v-for="(value, index) in yesnoValues">
+                                        <input type="radio" name="justiceChallenged" :id="'justiceChallenged' + index" :value="value.value" v-model="edit.justice_challenged">
+                                        <label :for="'justiceChallenged' + index" class="label-inline">{{ value.label }}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form__group">
+                                    <label v-bind:class="{ error: fieldErrors.police_status }">Concours de la force publique :</label>
+                                    <p class="error" v-if="fieldErrors.police_status">
+                                        <ul>
+                                            <li v-for="error in fieldErrors.police_status">{{ error }}</li>
+                                        </ul>
+                                    </p>
+                                    <div v-for="(value, index) in cfpValues">
+                                        <input type="radio" name="cfp" :id="'cfp' + index" :value="value.value" v-model="edit.police_status">
+                                        <label :for="'cfp' + index" class="label-inline">{{ value.label }}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form__group" v-if="edit.police_status === 'requested' || edit.police_status === 'granted'">
+                                    <label v-bind:class="{ error: fieldErrors.police_requested_at }">Date de la demande du CFP :</label>
+                                    <p class="error" v-if="fieldErrors.police_requested_at">
+                                        <ul>
+                                            <li v-for="error in fieldErrors.police_requested_at">{{ error }}</li>
+                                        </ul>
+                                    </p>
+                                    <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="edit.police_requested_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
+                                </div>
+
+                                <div class="form__group" v-if="edit.police_status === 'granted'">
+                                    <label v-bind:class="{ error: fieldErrors.police_granted_at }">Date d'octroi du CFP :</label>
+                                    <p class="error" v-if="fieldErrors.police_granted_at">
+                                        <ul>
+                                            <li v-for="error in fieldErrors.police_granted_at">{{ error }}</li>
+                                        </ul>
+                                    </p>
+                                    <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="edit.police_granted_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
+                                </div>
+
+                                <div class="form__group">
+                                    <fieldset>
+                                        <legend v-bind:class="{ error: fieldErrors.bailiff }">Etude d'huissiers :</legend>
+                                        <p class="error" v-if="fieldErrors.bailiff">
+                                            <ul>
+                                                <li v-for="error in fieldErrors.bailiff">{{ error }}</li>
+                                            </ul>
+                                        </p>
+                                        <div class="input__group">
+                                            <input type="text" v-model="edit.bailiff" />
                                         </div>
                                     </fieldset>
                                 </div>

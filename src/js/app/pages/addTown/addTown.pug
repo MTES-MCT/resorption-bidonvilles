@@ -303,6 +303,19 @@
                 </div>
 
                 <div class="form__group">
+                    <label v-bind:class="{ error: fieldErrors.owner_complaint }"><sup class="mandatory">(*)</sup> Dépôt de plainte par le propriétaire :</label>
+                    <p class="error" v-if="fieldErrors.owner_complaint">
+                        <ul>
+                            <li v-for="error in fieldErrors.owner_complaint">{{ error }}</li>
+                        </ul>
+                    </p>
+                    <div v-for="(value, index) in yesnoValues">
+                        <input type="radio" name="ownerComplaint" :id="'ownerComplaint' + index" :value="value.value" v-model="owner_complaint">
+                        <label :for="'ownerComplaint' + index" class="label-inline">{{ value.label }}</label>
+                    </div>
+                </div>
+
+                <div class="form__group" v-if="owner_complaint === 1">
                     <label v-bind:class="{ error: fieldErrors.justice_procedure }"><sup class="mandatory">(*)</sup> Existence d'une procédure judiciaire :</label>
                     <p class="error" v-if="fieldErrors.justice_procedure">
                         <ul>
@@ -315,7 +328,7 @@
                     </div>
                 </div>
 
-                <div class="form__group" v-if="justice_procedure === 1">
+                <div class="form__group" v-if="owner_complaint === 1 && justice_procedure === 1">
                     <label v-bind:class="{ error: fieldErrors.justice_rendered }"><sup class="mandatory">(*)</sup> Décision de justice rendue :</label>
                     <p class="error" v-if="fieldErrors.justice_rendered">
                         <ul>
@@ -328,7 +341,7 @@
                     </div>
                 </div>
 
-                <div class="form__group" v-if="justice_procedure === 1 && justice_rendered === 1">
+                <div class="form__group" v-if="owner_complaint === 1 && justice_procedure === 1 && justice_rendered === 1">
                     <fieldset>
                         <legend v-bind:class="{ error: fieldErrors.justice_rendered_by }">Origine de la décision :</legend>
                         <p class="error" v-if="fieldErrors.justice_rendered_by">
@@ -342,7 +355,7 @@
                     </fieldset>
                 </div>
 
-                <div class="form__group" v-if="justice_procedure === 1 && justice_rendered === 1">
+                <div class="form__group" v-if="owner_complaint === 1 && justice_procedure === 1 && justice_rendered === 1">
                     <label v-bind:class="{ error: fieldErrors.justice_rendered_at }">Date de la décision :</label>
                     <p class="error" v-if="fieldErrors.justice_rendered_at">
                         <ul>
@@ -352,7 +365,7 @@
                     <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="justice_rendered_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
                 </div>
 
-                <div class="form__group" v-if="justice_procedure === 1 && justice_rendered === 1">
+                <div class="form__group" v-if="owner_complaint === 1 && justice_procedure === 1 && justice_rendered === 1">
                     <label v-bind:class="{ error: fieldErrors.justice_challenged }"><sup class="mandatory">(*)</sup> Contentieux relatif à la décision de justice :</label>
                     <p class="error" v-if="fieldErrors.justice_challenged">
                         <ul>
