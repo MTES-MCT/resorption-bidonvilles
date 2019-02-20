@@ -168,6 +168,13 @@ const router = new VueRouter({
             component: Action,
             beforeEnter: guardians.loaded,
         },
+        {
+            path: '/feedback',
+            beforeEnter(to, from, next) {
+                window.open('https://docs.google.com/forms/d/e/1FAIpQLSdffCEgWp2B1F770MsquDXbyqs251fleRBJLA3vlkQ-N78w9g/viewform', '_blank');
+                next(false);
+            },
+        },
     ],
 });
 
