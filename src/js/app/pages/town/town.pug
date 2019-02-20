@@ -48,10 +48,33 @@
                         </fieldset>
                     </div>
 
-                    <p>
+                    <div class="form__group">
+                        <fieldset>
+                            <legend v-bind:class="{ error: fieldErrors.solutions }">Orientations des ménages :</legend>
+                            <fieldset v-for="(value, index) in closingSolutions">
+                                <legend>
+                                    <input type="checkbox" name="closingSolution" :id="'closingSolution' + index" :value="value.id" v-model="edit.solutions[value.id].checked">
+                                    <label :for="'closingSolution' + index" class="label-inline">{{ value.label }}</label>
+                                </legend>
+                                <div class="solution-people" v-bind:class="{ visible: edit.solutions[value.id].checked }">
+                                    <p class="error" v-if="fieldErrors.solutions && fieldErrors.solutions[value.id]">
+                                        <ul>
+                                            <li v-for="error in fieldErrors.solutions[value.id]">{{ error }}</li>
+                                        </ul>
+                                    </p>
+                                    <p>Nombre de ménages concernés :<br/><input type="number" v-model="edit.solutions[value.id].householdsAffected" /></p>
+                                    <p>Nombre de personnes concernées :<br/><input type="number" v-model="edit.solutions[value.id].peopleAffected" /></p>
+                                </div>
+                            </fieldset>
+                        </fieldset>
+                    </div>
+
+                    <div class="notification error" v-if="editError">{{ editError }}.</div>
+
+                    <div class="form__group">
                         <button @click="submitClose" class="button">Valider</button>
                         <button @click="closeAlert" class="button secondary">Annuler</button>
-                    </p>
+                    </div>
                 </div>
             </div>
 

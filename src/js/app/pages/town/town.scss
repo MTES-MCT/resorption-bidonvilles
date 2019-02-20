@@ -85,6 +85,25 @@ p.error {
         left: 100px;
         right: 100px;
         top: 100px;
+        bottom: 100px;
+        overflow-y: auto;
         background: white;
+    }
+}
+
+.solution-people {
+    margin-left: 50px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s linear;
+    -webkit-transition: max-height 0.2s linear;
+
+    input {
+        max-width: 100px;
+    }
+
+    &.visible {
+        max-height: 200px;
+        margin-bottom: 30px;
     }
 }

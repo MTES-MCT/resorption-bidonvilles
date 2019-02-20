@@ -38,6 +38,7 @@ export default {
             fieldTypes: getConfig().field_types,
             ownerTypes: getConfig().owner_types,
             socialOrigins: getConfig().social_origins,
+            closingSolutions: getConfig().closing_solutions,
             dateLanguage: fr,
             yesnoValues: [
                 { value: -1, label: 'Inconnu' },
@@ -172,6 +173,16 @@ export default {
                 accessToElectricity: boolToYesNoValue(this.town.accessToElectricity),
                 accessToWater: boolToYesNoValue(this.town.accessToWater),
                 trashEvacuation: boolToYesNoValue(this.town.trashEvacuation),
+                solutions: this.closingSolutions.reduce((solutions, solution) => {
+                    const newSolutions = Object.assign(solutions, {});
+                    newSolutions[solution.id] = {
+                        checked: false,
+                        peopleAffected: '',
+                        householdsAffected: '',
+                    };
+
+                    return newSolutions;
+                }, {}),
             };
         },
         setView(view) {
@@ -225,6 +236,13 @@ export default {
             close(this.town.id, {
                 closed_at: this.edit.closedAt,
                 status: this.edit.status,
+                solutions: Object.keys(this.edit.solutions)
+                    .filter(key => this.edit.solutions[key].checked)
+                    .map(key => ({
+                        id: key,
+                        peopleAffected: this.edit.solutions[key].peopleAffected ? parseInt(this.edit.solutions[key].peopleAffected, 10) : null,
+                        householdsAffected: this.edit.solutions[key].householdsAffected ? parseInt(this.edit.solutions[key].householdsAffected, 10) : null,
+                    })),
             })
                 .then(() => {
                     this.$router.go();
