@@ -175,10 +175,11 @@ export default {
                 trashEvacuation: boolToYesNoValue(this.town.trashEvacuation),
                 solutions: this.closingSolutions.reduce((solutions, solution) => {
                     const newSolutions = Object.assign(solutions, {});
+                    const s = this.town.closingSolutions.find(sol => sol.id === solution.id);
                     newSolutions[solution.id] = {
-                        checked: false,
-                        peopleAffected: '',
-                        householdsAffected: '',
+                        checked: s !== undefined,
+                        peopleAffected: s && s.peopleAffected,
+                        householdsAffected: s && s.householdsAffected,
                     };
 
                     return newSolutions;
@@ -282,6 +283,24 @@ export default {
                     this.commentError = response.user_message;
                     this.commentErrors = response.fields || {};
                 });
+        },
+        formatSolution(solution) {
+            const details = [];
+            if (solution.householdsAffected !== null) {
+                const plural = solution.householdsAffected > 1 ? 's' : '';
+                details.push(`${solution.householdsAffected} ménage${plural} concerné${plural}`);
+            }
+
+            if (solution.peopleAffected !== null) {
+                const plural = solution.peopleAffected > 1 ? 's' : '';
+                details.push(`${solution.peopleAffected} personne${plural} concernée${plural}`);
+            }
+
+            if (details.length > 0) {
+                return details;
+            }
+
+            return ['aucun détail sur le nombre de ménages/personnes concernés'];
         },
     },
 };

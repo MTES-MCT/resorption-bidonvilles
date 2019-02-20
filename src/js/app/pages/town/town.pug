@@ -122,6 +122,23 @@
                                     <p>
                                         <strong>Date d'installation du site :</strong> {{ town.builtAt !== null ? new Date(town.builtAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue' }}
                                     </p>
+                                    <p v-if="town.status !== 'open'">
+                                        <strong>Date de disparition du site :</strong> {{ town.closedAt !== null ? new Date(town.closedAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue'}}
+                                    </p>
+                                    <p v-if="town.status !== 'open'">
+                                        <strong>Cause de la disparition :</strong> {{ statusLabel }}
+                                    </p>
+                                    <p v-if="town.status !== 'open'">
+                                        <strong>Orientation des ménages :</strong><span v-if="town.closingSolutions.length === 0"> aucune</span>
+                                        <ul v-if="town.closingSolutions.length > 0">
+                                            <li v-for="solution in town.closingSolutions">
+                                                <span>{{ closingSolutions.find(s => s.id === solution.id).label }}</span>
+                                                <ul>
+                                                    <li v-for="detail in formatSolution(solution)">{{ detail }}</li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </p>
                                 </div>
                             </div>
 
