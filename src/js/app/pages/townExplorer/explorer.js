@@ -92,6 +92,55 @@ export default {
                 },
             ],
             currentTab: 'map',
+            csvHeader: [
+                'statut du site',
+                'priorité',
+
+                // location
+                'ville (code insee)',
+                'ville',
+                'addresse',
+                'informations d\'accès',
+
+                // caracteristics
+                'date d\'installation',
+                'date de signalement',
+                'date de fermeture',
+                'type de terrain',
+                'type de propriétaire',
+                'identité du propriétaire',
+
+                // demography
+                'statut du diagnostic social',
+                'date du diagnostic',
+                'service en charge du diagnostic',
+                'nombre de personnes',
+                'nombre de ménages',
+                'nombre de mineurs',
+                'origines',
+
+                // life conditions
+                'accès à l\'électricité',
+                'accès à l\'eau',
+                'évacuation des déchets',
+
+                // justice
+                'dépôt de plainte par le propriétaire',
+                'existence d\'une procédure judiciaire',
+                'décision de justice rendue',
+                'date de la décision',
+                'origine de la décision',
+                'contentieux relatif à la décision de justice',
+
+                // police
+                'concours de la force publique',
+                'date de la demande du CFP',
+                'date d\'octroi du CFP',
+                'étude d\'huissiers',
+
+                // other
+                'mis à jour le',
+            ].join(','),
         };
     },
     computed: {
@@ -286,6 +335,86 @@ export default {
         window.removeEventListener('resize', this.resize);
     },
     methods: {
+        exportData() {
+            const encodedUri = encodeURI(`data:text/csv;charset=utf-8,${this.csvHeader}\n${this.visibleTowns.map(this.townToCsv).join('\n')}`);
+            window.open(encodedUri);
+        },
+        townToCsv(town) {
+            const convertBool = {
+                null: '',
+                true: 'oui',
+                false: 'non',
+            };
+            const convertCensusStatus = {
+                null: '',
+                none: 'Non prévu',
+                scheduled: 'Prévu',
+                done: 'Réalisé',
+            };
+            const convertPoliceStatus = {
+                null: 'Inconnu',
+                none: 'Non demandé',
+                requested: 'Demandé',
+                granted: 'Obtenu',
+            };
+            const convertStatus = {
+                open: 'ouvert',
+                other: 'fermé (autre raison)',
+                closed_by_justice: 'fermé (décision de justice)',
+                closed_by_admin: 'fermé (décision administrative)',
+                unknown: 'fermé (cause inconnue)',
+            };
+
+            return [
+                convertStatus[town.status],
+                town.priority,
+
+                // location
+                town.city.code,
+                town.city.name,
+                town.address || '',
+                town.addressDetails || '',
+
+                // caracteristics
+                town.builtAt ? App.formatDate(town.builtAt) : '',
+                town.declaredAt ? App.formatDate(town.declaredAt) : '',
+                town.closedAt ? App.formatDate(town.closedAt) : '',
+                town.fieldType ? town.fieldType.label : '',
+                town.ownerType ? town.ownerType.label : '',
+                town.owner || '',
+
+                // demography
+                convertCensusStatus[town.censusStatus],
+                town.censusConductedAt ? App.formatDate(town.censusConductedAt) : '',
+                town.censusConductedBy || '',
+                town.populationTotal || '',
+                town.populationCouples || '',
+                town.populationMinors || '',
+                town.socialOrigins.map(origin => origin.label).join(';') || '',
+
+                // life conditions
+                convertBool[town.accessToElectricity],
+                convertBool[town.accessToWater],
+                convertBool[town.trashEvacuation],
+
+                // justice
+                convertBool[town.ownerComplaint],
+                convertBool[town.justiceProcedure],
+                convertBool[town.justiceRendered],
+                town.justiceRenderedAt ? App.formatDate(town.justiceRenderedAt) : '',
+                town.justiceRenderedBy || '',
+                convertBool[town.justiceChallenged],
+
+                // police
+                convertPoliceStatus[town.policeStatus],
+                town.policeRequestedAt ? App.formatDate(town.policeRequestedAt) : '',
+                town.policeGrantedAt ? App.formatDate(town.policeGrantedAt) : '',
+                town.bailiff || '',
+
+                // other
+                town.updatedAt ? App.formatDate(town.updatedAt) : '',
+            ].map(value => (value && value.replace ? `"${value.replace(/"/g, '""')}"` : value)).join(',');
+        },
         showQuickview(town, event) {
             this.quickview = {
                 town,
