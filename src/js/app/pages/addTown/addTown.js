@@ -131,6 +131,13 @@ export default {
                 bailiff: this.bailiff,
             })
                 .then((response) => {
+                    this.$notify({
+                        group: 'notifications',
+                        type: 'success',
+                        title: 'Site correctement sauvegardé',
+                        text: `Le site de ${this.address.city} a bien été ajouté en base de données`,
+                    });
+
                     this.$router.push(`/site/${response.id}`);
                 })
                 .catch((response) => {

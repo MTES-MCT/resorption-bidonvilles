@@ -266,7 +266,27 @@ export default {
                 owner_type: this.edit.ownerType,
             })
                 .then(() => {
-                    this.$router.go();
+                    this.$notify({
+                        group: 'notifications',
+                        type: 'success',
+                        title: 'Site correctement sauvegardé',
+                        text: 'Le site a bien été modifié',
+                    });
+
+                    this.loading = true;
+                    this.error = null;
+
+                    return get(this.$route.params.id)
+                        .then((town) => {
+                            this.loading = false;
+                            this.town = town;
+                            this.setViewMode();
+                            this.resetEdit();
+                        })
+                        .catch((errors) => {
+                            this.error = errors.user_message;
+                            this.loading = false;
+                        });
                 })
                 .catch((response) => {
                     this.editError = response.user_message;
@@ -291,7 +311,27 @@ export default {
                     })),
             })
                 .then(() => {
-                    this.$router.go();
+                    this.$notify({
+                        group: 'notifications',
+                        type: 'success',
+                        title: 'Site correctement fermé',
+                        text: 'Le site a bien été marqué comme fermé',
+                    });
+
+                    this.loading = true;
+                    this.error = null;
+
+                    return get(this.$route.params.id)
+                        .then((town) => {
+                            this.loading = false;
+                            this.town = town;
+                            this.setViewMode();
+                            this.resetEdit();
+                        })
+                        .catch((errors) => {
+                            this.error = errors.user_message;
+                            this.loading = false;
+                        });
                 })
                 .catch((response) => {
                     this.editError = response.user_message;
