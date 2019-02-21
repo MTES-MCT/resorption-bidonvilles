@@ -5,36 +5,7 @@ import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import 'leaflet.markercluster/dist/leaflet.markercluster';
 
-// eslint-disable-next-line
-import blackMarker from '/img/markers/black.svg';
-// eslint-disable-next-line
-import orangeMarker from '/img/markers/orange.svg';
-// eslint-disable-next-line
-import redMarker from '/img/markers/red.svg';
-
 const DEFAULT_VIEW = [46.7755829, 2.0497727];
-const ICONS = {
-    1: L.icon({
-        iconUrl: blackMarker,
-        iconSize: [42, 40],
-        iconAnchor: [0, 0],
-    }),
-    2: L.icon({
-        iconUrl: redMarker,
-        iconSize: [42, 40],
-        iconAnchor: [0, 0],
-    }),
-    3: L.icon({
-        iconUrl: orangeMarker,
-        iconSize: [42, 40],
-        iconAnchor: [0, 0],
-    }),
-    4: L.icon({
-        iconUrl: orangeMarker,
-        iconSize: [42, 40],
-        iconAnchor: [0, 0],
-    }),
-};
 
 export default {
     components: {
@@ -174,7 +145,6 @@ export default {
             const { latitude, longitude } = town;
             const marker = L.marker([latitude, longitude], {
                 title: town.address,
-                icon: ICONS[town.priority || 3],
             });
             this.markersGroup.addLayer(marker);
 
