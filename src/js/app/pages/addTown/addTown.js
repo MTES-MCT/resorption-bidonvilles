@@ -126,8 +126,8 @@ export default {
                     && this.justice_procedure === 1
                     && this.justice_rendered === 1 ? this.justice_challenged : undefined,
                 police_status: this.police_status,
-                police_requested_at: this.police_status === 1 ? this.police_requested_at : null,
-                police_granted_at: this.police_status === 1 ? this.police_granted_at : null,
+                police_requested_at: ['requested', 'granted'].indexOf(this.police_status) !== -1 ? this.police_requested_at : null,
+                police_granted_at: ['granted'].indexOf(this.police_status) !== -1 ? this.police_granted_at : null,
                 bailiff: this.bailiff,
             })
                 .then((response) => {

@@ -20,6 +20,7 @@ export default {
         document.removeEventListener('click', this.checkOutsideClick);
     },
     methods: {
+        formatDate: ts => App.formatDate(ts),
         checkOutsideClick(event) {
             if (!this.town) {
                 return;

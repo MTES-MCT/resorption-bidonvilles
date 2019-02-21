@@ -12,6 +12,13 @@ import Notifications from 'vue-notification';
 import VueRouter from 'vue-router';
 import { router } from '#app/router';
 
+window.App = Object.freeze({
+    formatDate(timestamp) {
+        const date = new Date(timestamp * 1000);
+        return `${(`0${date.getDate()}`).slice(-2)}/${(`0${date.getMonth() + 1}`).slice(-2)}/${date.getFullYear()}`;
+    },
+});
+
 Vue.use(VueRouter);
 Vue.use(Notifications);
 

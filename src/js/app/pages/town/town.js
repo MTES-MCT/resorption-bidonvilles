@@ -119,6 +119,7 @@ export default {
         this.fetchData();
     },
     methods: {
+        formatDate: ts => App.formatDate(ts),
         fetchData() {
             if (this.loading === true) {
                 return;
@@ -258,8 +259,8 @@ export default {
                     && this.edit.justiceProcedure === 1
                     && this.edit.justice_rendered === 1 ? this.edit.justice_challenged : undefined,
                 police_status: this.edit.police_status,
-                police_requested_at: this.edit.police_status === 1 ? this.edit.police_requested_at : null,
-                police_granted_at: this.edit.police_status === 1 ? this.edit.police_granted_at : null,
+                police_requested_at: ['requested', 'granted'].indexOf(this.edit.police_status) !== -1 ? this.edit.police_requested_at : null,
+                police_granted_at: ['granted'].indexOf(this.edit.police_status) !== -1 ? this.edit.police_granted_at : null,
                 bailiff: this.edit.bailiff,
                 social_origins: this.edit.origins,
                 field_type: this.edit.fieldType,

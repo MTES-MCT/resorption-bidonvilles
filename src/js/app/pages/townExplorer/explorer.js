@@ -143,7 +143,7 @@ export default {
                     },
                     {
                         label: 'Date d\'installation',
-                        field: town => (town.builtAt ? new Date(town.builtAt * 1000).toLocaleString().substr(0, 10) : 'inconnu'),
+                        field: town => (town.builtAt ? App.formatDate(town.builtAt) : 'inconnu'),
                         type: 'text',
                     },
                     {

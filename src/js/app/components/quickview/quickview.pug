@@ -26,7 +26,7 @@
                     </tr>
                     <tr>
                         <th>Date d'installation :</th>
-                        <td>{{ town.builtAt ? new Date(town.builtAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue' }}</td>
+                        <td>{{ town.builtAt ? formatDate(town.builtAt) : 'Inconnue' }}</td>
                     </tr>
                 </tbody>
             </table>

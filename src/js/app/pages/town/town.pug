@@ -82,7 +82,7 @@
                 <!-- SUCCESS STATE -->
                 <header class="town-header">
                     <h1>Site de {{ town.city.name }} <span :class="`label ${town.status}`"><a>{{ status }}</a></span></h1>
-                    <h2>Dernière modification le <time>{{ new Date(town.updatedAt * 1000).toLocaleDateString().substr(0, 10) }}</time></h2>
+                    <h2>Dernière modification le <time>{{ formatDate(town.updatedAt) }}</time></h2>
                 </header>
             </div>
 
@@ -117,13 +117,13 @@
                                         <strong>Niveau de priorité du site :</strong> {{ town.priority }}
                                     </p>
                                     <p>
-                                        <strong>Date de signalement du site :</strong> {{ town.declaredAt !== null ? new Date(town.declaredAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue' }}
+                                        <strong>Date de signalement du site :</strong> {{ town.declaredAt !== null ? formatDate(town.declaredAt) : 'Inconnue' }}
                                     </p>
                                     <p>
-                                        <strong>Date d'installation du site :</strong> {{ town.builtAt !== null ? new Date(town.builtAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue' }}
+                                        <strong>Date d'installation du site :</strong> {{ town.builtAt !== null ? formatDate(town.builtAt) : 'Inconnue' }}
                                     </p>
                                     <p v-if="town.status !== 'open'">
-                                        <strong>Date de disparition du site :</strong> {{ town.closedAt !== null ? new Date(town.closedAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue'}}
+                                        <strong>Date de disparition du site :</strong> {{ town.closedAt !== null ? formatDate(town.closedAt) : 'Inconnue'}}
                                     </p>
                                     <p v-if="town.status !== 'open'">
                                         <strong>Cause de la disparition :</strong> {{ statusLabel }}
@@ -175,7 +175,7 @@
                                         <strong>Statut du recensement :</strong> {{ town.censusStatus === 'done' ? 'Réalisé' : (town.censusStatus === 'scheduled' ? 'Prévu' : 'Non prévu') }}
                                     </p>
                                     <p>
-                                        <strong>Date du recensement :</strong> {{ town.censusConductedAt !== null ? new Date(town.censusConductedAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue' }}
+                                        <strong>Date du recensement :</strong> {{ town.censusConductedAt !== null ? formatDate(town.censusConductedAt) : 'Inconnue' }}
                                     </p>
                                     <p>
                                         <strong>Opérateur en charge du recensement :</strong> {{ town.censusConductedBy || 'Inconnu' }}
@@ -234,7 +234,7 @@
                                         <strong>Origine de la décision :</strong> {{ town.justiceRenderedBy || 'Inconnue' }}
                                     </p>
                                     <p v-if="town.justiceRendered">
-                                        <strong>Date de la décision :</strong> {{ town.justiceRenderedAt !== null ? new Date(town.justiceRenderedAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue' }}
+                                        <strong>Date de la décision :</strong> {{ town.justiceRenderedAt !== null ? formatDate(town.justiceRenderedAt) : 'Inconnue' }}
                                     </p>
                                     <p v-if="town.justiceRendered">
                                         <strong>Contentieux relatif à la décision de justice :</strong> {{ town.justiceChallenged === null ? 'Inconnu' : (town.justiceChallenged ? 'Oui' : 'Non') }}
@@ -243,10 +243,10 @@
                                         <strong>Concours de la force publique :</strong> {{ town.policeStatus === 'granted' ? 'Obtenu' : (town.policeStatus === 'requested' ? 'Demandé' : 'Inconnu') }}
                                     </p>
                                     <p>
-                                        <strong>Date de la demande du CFP :</strong> {{ town.policeRequestedAt !== null ? new Date(town.policeRequestedAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue' }}
+                                        <strong>Date de la demande du CFP :</strong> {{ town.policeRequestedAt !== null ? formatDate(town.policeRequestedAt) : 'Inconnue' }}
                                     </p>
                                     <p>
-                                        <strong>Date d'octroi du CFP :</strong> {{ town.policeGrantedAt !== null ? new Date(town.policeGrantedAt * 1000).toLocaleDateString().substr(0, 10) : 'Inconnue' }}
+                                        <strong>Date d'octroi du CFP :</strong> {{ town.policeGrantedAt !== null ? formatDate(town.policeGrantedAt) : 'Inconnue' }}
                                     </p>
                                     <p>
                                         <strong>Étude d'huissiers :</strong> {{ town.bailiff || 'Inconnues' }}
@@ -639,7 +639,7 @@
                     <div v-else-if="view === 'actions'">
                         <div class="panel" v-for="action in town.actions">
                             <div class="panel__header">
-                                <h3><router-link :to="'/action/' + action.id">{{ action.name }}</router-link> - <small class="panel__header-extra">Débutée le {{ new Date(action.startedAt * 1000).toLocaleDateString().substr(0, 10) }}</small></h3>
+                                <h3><router-link :to="'/action/' + action.id">{{ action.name }}</router-link> - <small class="panel__header-extra">Débutée le {{ formatDate(action.startedAt) }}</small></h3>
                             </div>
                             <p><strong>Type de l'action :</strong> {{ action.type }}</p>
                             <p><strong>Détails de l'action :</strong></p>
@@ -651,7 +651,7 @@
                     <div v-else-if="view === 'comments'">
                         <div class="form__group">
                             <p v-if="town.comments.length === 0">Aucun commentaire enregistré pour le moment</p>
-                            <p v-for="comment in town.comments"><strong>Le {{ new Date(comment.createdAt * 1000).toLocaleDateString().substr(0, 10) }} :</strong><br/>{{ comment.description }}</p>
+                            <p v-for="comment in town.comments"><strong>Le {{ formatDate(comment.createdAt) }} :</strong><br/>{{ comment.description }}</p>
                         </div>
 
                         <div class="form__group">
