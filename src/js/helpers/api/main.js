@@ -78,8 +78,8 @@ function handleRequestFailure(callback) {
  * @returns {Promise}
  */
 function request(method, url, data, headers = {}) {
-    return new Promise((success, failure) => {
-        const xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
+    const promise = new Promise((success, failure) => {
         xhr.open(method, `${process.env.API_URL}${url}`);
 
         Object.keys(headers).forEach((name) => {
@@ -107,6 +107,11 @@ function request(method, url, data, headers = {}) {
             xhr.send();
         }
     });
+    promise.abort = () => {
+        xhr.abort();
+    };
+
+    return promise;
 }
 
 /**

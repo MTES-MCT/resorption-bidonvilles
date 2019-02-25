@@ -12,20 +12,24 @@ const TYPING_TIMEOUT = 200;
  *
  * @const {number}
  */
-const TYPING_MIN = 5;
+const TYPING_MIN = 3;
 
 export default {
     props: {
         value: Object,
         autofocus: Boolean,
         placeholder: String,
+        autocompleteFunction: {
+            type: Function,
+            default: autocomplete,
+        },
     },
     data() {
         return {
             pendingRequest: null,
             typingTimeout: null,
             suggestions: [],
-            coordinates: (this.value !== null && this.value.coordinates) || null,
+            filled: this.value !== null,
             query: (this.value !== null && this.value.label) || '',
             previousQuery: '',
             focused: false,
@@ -56,7 +60,7 @@ export default {
                 clearTimeout(this.typingTimeout);
             }
 
-            this.coordinates = null;
+            this.filled = false;
             this.$emit('input', null);
             this.setSuggestions([]);
             this.indexOfHighlightedSuggestion = null;
@@ -72,7 +76,7 @@ export default {
                 this.pendingRequest.abort();
             }
 
-            if (this.coordinates === null) {
+            if (this.filled === false) {
                 this.query = '';
                 this.previousQuery = '';
             }
@@ -106,10 +110,10 @@ export default {
             this.onSelect(suggestion);
         },
         onSelect(value) {
-            const { label, coordinates } = value;
+            const { label } = value;
             this.$emit('input', value);
             this.setSuggestions([]);
-            this.coordinates = coordinates;
+            this.filled = true;
             this.query = label;
             this.previousQuery = label;
         },
@@ -122,7 +126,7 @@ export default {
                 return;
             }
 
-            this.pendingRequest = autocomplete(this.query);
+            this.pendingRequest = this.autocompleteFunction(this.query);
             this.pendingRequest
                 .then((suggestions) => {
                     if (this.focused === true) {

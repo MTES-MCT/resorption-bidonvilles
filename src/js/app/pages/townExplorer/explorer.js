@@ -1,12 +1,14 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import FilterGroup from './filterGroup/filterGroup.vue';
 import Map from './map/map.vue';
+import Address from '#app/components/address/address.vue';
 import { VueGoodTable as Table } from 'vue-good-table';
 import 'vue-good-table/dist/vue-good-table.css';
 import Quickview from '#app/components/quickview/quickview.vue';
 import { all as fetchAll } from '#helpers/api/town';
 import { get as getConfig } from '#helpers/api/config';
 import simplebar from 'simplebar-vue';
+import { autocompleteLocation } from '#helpers/addressHelper';
 // eslint-disable-next-line
 import iconType from '/img/type.svg';
 // eslint-disable-next-line
@@ -26,6 +28,7 @@ export default {
         Table,
         Quickview,
         simplebar,
+        Address,
     },
     data() {
         return {
@@ -68,8 +71,11 @@ export default {
                     label: 'Procédure judiciaire',
                     id: 'justice',
                     options: [
-                        { value: 'no', label: 'Non', checked: true },
-                        { value: 'yes', label: 'Oui', checked: true },
+                        { value: 'unknown', label: 'Inconnue', checked: true },
+                        { value: 'none', label: 'Aucune', checked: true },
+                        { value: 'ownerComplaint', label: 'Plainte déposée', checked: true },
+                        { value: 'justiceProcedure', label: 'Procédure en cours', checked: true },
+                        { value: 'justiceRendered', label: 'Décision rendue', checked: true },
                     ],
                 },
                 {
@@ -90,7 +96,36 @@ export default {
                         { value: 'opened', label: 'Existants', checked: true },
                     ],
                 },
+                {
+                    icon: iconStatus,
+                    label: 'Type de propriétaire',
+                    id: 'ownerType',
+                    options: getConfig().owner_types.map(type => ({
+                        value: type.id,
+                        label: type.label,
+                        checked: true,
+                    })),
+                },
+                {
+                    icon: iconStatus,
+                    label: 'Origines',
+                    id: 'socialOrigin',
+                    options: [{
+                        value: -1,
+                        label: 'Inconnues',
+                        checked: true,
+                    }].concat(getConfig().social_origins.map(origin => ({
+                        value: origin.id,
+                        label: origin.label,
+                        checked: true,
+                    }))).concat([{
+                        value: -2,
+                        label: 'Mixtes',
+                        checked: true,
+                    }]),
+                },
             ],
+            location: null,
             currentTab: 'map',
             csvHeader: [
                 'statut du site',
@@ -220,6 +255,26 @@ export default {
         visibleTowns() {
             let visibleTowns = this.towns;
 
+            // location filters
+            if (this.location !== null) {
+                visibleTowns = visibleTowns.filter((town) => {
+                    switch (this.location.type) {
+                    case 'Commune':
+                        return town.city.code === this.location.code;
+
+                    case 'EPCI':
+                        return town.epci.code === this.location.code;
+
+                    case 'Département':
+                        return town.departement.code === this.location.code;
+
+                    default:
+                        return false;
+                    }
+                });
+            }
+
+            // regular filters
             this.filters.forEach((filterGroup) => {
                 switch (filterGroup.id) {
                 case 'fieldType': {
@@ -276,10 +331,29 @@ export default {
                         .map(option => option.value);
 
                     disallowedJustice.forEach((value) => {
-                        if (value === 'yes') {
-                            visibleTowns = visibleTowns.filter(town => town.justiceProcedure !== true);
-                        } else if (value === 'no') {
-                            visibleTowns = visibleTowns.filter(town => town.justiceProcedure === true);
+                        switch (value) {
+                        case 'unknown':
+                            visibleTowns = visibleTowns.filter(town => town.ownerComplaint !== null);
+                            break;
+
+                        case 'none':
+                            visibleTowns = visibleTowns.filter(town => town.ownerComplaint !== false);
+                            break;
+
+                        case 'ownerComplaint':
+                            visibleTowns = visibleTowns.filter(town => town.ownerComplaint !== true || town.justiceProcedure === true);
+                            break;
+
+                        case 'justiceProcedure':
+                            visibleTowns = visibleTowns.filter(town => town.justiceProcedure !== true || town.justiceRendered === true);
+                            break;
+
+                        case 'justiceRendered':
+                            visibleTowns = visibleTowns.filter(town => town.justiceRendered !== true);
+                            break;
+
+                        default:
+                            break;
                         }
                     });
                 }
@@ -315,6 +389,32 @@ export default {
                 }
                     break;
 
+                case 'ownerType': {
+                    const allowedOwnerTypes = filterGroup.options
+                        .filter(option => option.checked)
+                        .map(option => option.value);
+
+                    visibleTowns = visibleTowns.filter(town => allowedOwnerTypes.indexOf(town.ownerType.id) !== -1);
+                }
+                    break;
+
+                case 'socialOrigin': {
+                    const disallowedOrigins = filterGroup.options
+                        .filter(option => !option.checked)
+                        .map(option => option.value);
+
+                    disallowedOrigins.forEach((origin) => {
+                        if (origin === -1) {
+                            visibleTowns = visibleTowns.filter(town => town.socialOrigins.length > 0);
+                        } else if (origin === -2) {
+                            visibleTowns = visibleTowns.filter(town => town.socialOrigins.length <= 1);
+                        } else {
+                            visibleTowns = visibleTowns.filter(town => town.socialOrigins.length !== 1 || !town.socialOrigins.some(o => o.id === origin));
+                        }
+                    });
+                }
+                    break;
+
                 default:
                 }
             });
@@ -335,6 +435,7 @@ export default {
         window.removeEventListener('resize', this.resize);
     },
     methods: {
+        autocompleteLocation,
         exportData() {
             const encodedUri = encodeURI(`data:text/csv;charset=utf-8,${this.csvHeader}\n${this.visibleTowns.map(this.townToCsv).join('\n')}`);
             window.open(encodedUri);

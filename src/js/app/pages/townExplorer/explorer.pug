@@ -28,6 +28,14 @@
                 </main>
             </div>
 
+            <div class="filterGroup">
+                <aside><img src="/img/people.svg" width="50" alt="" /></aside>
+                <main>
+                    <h1>Ville</h1>
+                    <Address :autocomplete-function="autocompleteLocation" v-model="location"></Address>
+                </main>
+            </div>
+
             <FilterGroup v-for="filterGroup in filters" :id="filterGroup.id" :icon="filterGroup.icon" :label="filterGroup.label" :options="filterGroup.options" :opened="filterGroup.opened"></FilterGroup>
 
             <div class="filterGroup">

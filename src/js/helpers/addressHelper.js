@@ -1,3 +1,5 @@
+import { getApi } from '#helpers/api/main';
+
 /**
  * Computes the unique identifier of the given feature
  *
@@ -90,6 +92,24 @@ export function autocomplete(strSearch, limit = 5) {
     };
 
     return promise;
+}
+
+/**
+ * Searches for cities/epcis/departements
+ *
+ * @param {string} strSearch The string to be autocompleted
+ *
+ * @returns {Promise}
+ */
+export function autocompleteLocation(strSearch) {
+    const p1 = getApi(`/locations/search?q=${encodeURIComponent(strSearch)}`);
+    const p2 = p1.then(results => results.map(result => ({
+        label: result.name,
+        code: result.code,
+        type: result.type,
+    })));
+    p2.abort = p1.abort;
+    return p2;
 }
 
 /**
