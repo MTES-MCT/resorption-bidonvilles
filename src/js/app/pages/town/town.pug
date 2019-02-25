@@ -351,6 +351,20 @@
                                         </div>
                                     </fieldset>
                                 </div>
+
+                                <div class="form__group" v-if="ownerTypes.find((type) => { return type.label !== 'Inconnu' && type.id === edit.ownerType; })">
+                                    <fieldset>
+                                        <legend v-bind:class="{ error: fieldErrors.owner }">Identité du propriétaire :</legend>
+                                        <p class="error" v-if="fieldErrors.owner">
+                                            <ul>
+                                                <li v-for="error in fieldErrors.owner">{{ error }}</li>
+                                            </ul>
+                                        </p>
+                                        <div class="input__group">
+                                            <input type="text" v-model="edit.owner" />
+                                        </div>
+                                    </fieldset>
+                                </div>
                             </div>
 
                             <div class="panel">

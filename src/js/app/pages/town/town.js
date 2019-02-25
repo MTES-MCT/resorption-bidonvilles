@@ -179,6 +179,7 @@ export default {
                 status: this.town.status !== 'open' ? this.town.status : null,
                 fieldType: this.town.fieldType.id,
                 ownerType: this.town.ownerType.id,
+                owner: this.town.owner,
                 owner_complaint: boolToYesNoValue(this.town.ownerComplaint),
                 justiceProcedure: boolToYesNoValue(this.town.justiceProcedure),
                 justice_rendered: boolToYesNoValue(this.town.justiceRendered),
@@ -265,6 +266,7 @@ export default {
                 social_origins: this.edit.origins,
                 field_type: this.edit.fieldType,
                 owner_type: this.edit.ownerType,
+                owner: this.edit.owner,
             })
                 .then(() => {
                     this.$notify({
