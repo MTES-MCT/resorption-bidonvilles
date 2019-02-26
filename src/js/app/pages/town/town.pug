@@ -173,13 +173,13 @@
                                 </div>
                                 <div class="form__group">
                                     <p>
-                                        <strong>Statut du recensement :</strong> {{ town.censusStatus === 'done' ? 'Réalisé' : (town.censusStatus === 'scheduled' ? 'Prévu' : 'Non prévu') }}
+                                        <strong>Statut du diagnostic :</strong> {{ town.censusStatus === 'done' ? 'Réalisé' : (town.censusStatus === 'scheduled' ? 'Prévu' : 'Non prévu') }}
                                     </p>
                                     <p>
-                                        <strong>Date du recensement :</strong> {{ town.censusConductedAt !== null ? formatDate(town.censusConductedAt) : 'Inconnue' }}
+                                        <strong>Date du diagnostic :</strong> {{ town.censusConductedAt !== null ? formatDate(town.censusConductedAt) : 'Inconnue' }}
                                     </p>
                                     <p>
-                                        <strong>Opérateur en charge du recensement :</strong> {{ town.censusConductedBy || 'Inconnu' }}
+                                        <strong>Opérateur en charge du diagnostic :</strong> {{ town.censusConductedBy || 'Inconnu' }}
                                     </p>
                                     <p>
                                         <strong>Nombre de personnes :</strong> {{ town.populationTotal !== null ? town.populationTotal : 'inconnu' }}
