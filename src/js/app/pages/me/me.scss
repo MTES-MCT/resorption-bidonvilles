@@ -1,0 +1,9 @@
+.form__group {
+    > label {
+        font-weight: bold;
+    }
+
+    .error {
+        color: #d63626;
+    }
+}

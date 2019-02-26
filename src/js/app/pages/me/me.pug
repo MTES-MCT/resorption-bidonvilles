@@ -1,0 +1,70 @@
+<div>
+    <NavBar></NavBar>
+
+    <section class="section section-white" id="form">
+        <div class="container">
+            <h1>Modifier vos données personnelles</h1>
+
+            <div v-if="preloading && !preloadError" class="notification full-width">
+                <img src="/img/spinner_dark.svg" width="20" class="spinner" />
+                <span>Chargement des données en cours...</span>
+            </div>
+
+            <div v-else-if="preloading && preloadError" class="notification error full-width">
+                <span>{{preloadError }}. <a href="#" @click="preload">Réessayer ?</a></span>
+            </div>
+
+            <div v-else>
+                <div class="notification error" v-if="errors">{{ errors.user_message }}</div>
+
+                <div class="form__group">
+                    <label for="firstName" v-bind:class="{ error: fieldErrors.first_name }">Votre prénom :</label>
+                    <p class="error" v-if="fieldErrors.first_name">
+                        <ul>
+                            <li v-for="error in fieldErrors.first_name">{{ error }}</li>
+                        </ul>
+                    </p>
+                    <input type="text" id="firstName" v-model.lazy.trim="firstName" :readonly="loading">
+                </div>
+
+                <div class="form__group">
+                    <label for="lastName" v-bind:class="{ error: fieldErrors.last_name }">Votre nom de famille :</label>
+                    <p class="error" v-if="fieldErrors.last_name">
+                        <ul>
+                            <li v-for="error in fieldErrors.last_name">{{ error }}</li>
+                        </ul>
+                    </p>
+                    <input type="text" id="lastName" v-model.lazy="lastName" :readonly="loading">
+                </div>
+
+                <div class="form__group">
+                    <label for="company" v-bind:class="{ error: fieldErrors.company }">Nom de la structure pour laquelle vous travaillez :</label>
+                    <p class="error" v-if="fieldErrors.company">
+                        <ul>
+                            <li v-for="error in fieldErrors.company">{{ error }}</li>
+                        </ul>
+                    </p>
+                    <input type="text" id="company" v-model.lazy="company" :readonly="loading">
+                </div>
+
+                <div class="form__group">
+                    <label for="password" v-bind:class="{ error: fieldErrors.password }">Nouveau mot de passe :</label>
+                    <p>Laissez ce champ vide si vous souhaitez conserver votre mot de passe actuel</p>
+                    <p class="error" v-if="fieldErrors.password">
+                        <ul>
+                            <li v-for="error in fieldErrors.password">{{ error }}</li>
+                        </ul>
+                    </p>
+                    <input type="password" id="password" v-model.lazy="password" :readonly="loading">
+                </div>
+
+                <div class="form__group">
+                    <button class="button" type="submit" @click="submit">
+                        <img src="/img/spinner_light.svg" width="20" v-if="loading" />
+                        <span v-else>Modifier</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

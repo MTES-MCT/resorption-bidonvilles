@@ -90,3 +90,31 @@ export function signup(email, description) {
         }, 1000);
     });
 }
+
+/**
+ * Returns all available data about the current user
+ *
+ * @returns {Promise}
+ */
+export function me() {
+    return getApi('/me');
+}
+
+/**
+ * Updates data about the current user
+ *
+ * @param {User_Data} data
+ *
+ * @returns {Promise}
+ */
+export function edit(data) {
+    return postApi('/me', data);
+}
+
+/**
+ * @typedef {Object} User_Data
+ * @property {string} first_name
+ * @property {string} last_name
+ * @property {string} company
+ * @property {string} [password]
+ */

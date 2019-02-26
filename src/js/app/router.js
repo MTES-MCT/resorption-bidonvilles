@@ -9,6 +9,7 @@ import Town from '#app/pages/town/town.vue';
 import ActionsExplorer from '#app/pages/actionExplorer/explorer.vue';
 import AddAction from '#app/pages/addAction/addAction.vue';
 import Action from '#app/pages/action/action.vue';
+import Me from '#app/pages/me/me.vue';
 
 import { logout, isLoggedIn } from '#helpers/api/user';
 import { isLoaded as isConfigLoaded } from '#helpers/api/config';
@@ -174,6 +175,14 @@ const router = new VueRouter({
                 window.open('https://docs.google.com/forms/d/e/1FAIpQLSdffCEgWp2B1F770MsquDXbyqs251fleRBJLA3vlkQ-N78w9g/viewform', '_blank');
                 next(false);
             },
+        },
+        {
+            meta: {
+                group: 'account',
+            },
+            path: '/mon-compte',
+            component: Me,
+            beforeEnter: guardians.loaded,
         },
     ],
 });
