@@ -7,7 +7,8 @@ export default {
             return App.formatDate(ts);
         },
         showTown(id) {
-            this.$router.push(`/site/${id}`);
+            const routeData = this.$router.resolve(`/site/${id}`);
+            window.open(routeData.href, '_blank');
         },
     },
 };

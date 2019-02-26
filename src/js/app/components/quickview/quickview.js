@@ -37,7 +37,8 @@ export default {
             }
         },
         showTown() {
-            this.$router.push(`/site/${this.town.id}`);
+            const routerData = this.$router.resolve(`/site/${this.town.id}`);
+            window.open(routerData.href, '__blank');
         },
     },
 };

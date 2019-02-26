@@ -529,7 +529,8 @@ export default {
             };
         },
         routeToTown(params) {
-            this.$router.push(`/site/${params.row.id}`);
+            const routeData = this.$router.resolve(`/site/${params.row.id}`);
+            window.open(routeData.href, '_blank');
         },
         resize() {
             if (!this.$refs.main) {
