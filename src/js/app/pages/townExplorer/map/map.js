@@ -114,7 +114,6 @@ export default {
             this.map = L.map('map', {
                 layers: Object.values(layers),
                 scrollWheelZoom: false,
-                zoomDelta: 2.5,
             });
             this.map.zoomControl.setPosition('bottomright');
             L.control.layers(layers, undefined, { collapsed: false }).addTo(this.map);
