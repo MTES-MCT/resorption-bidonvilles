@@ -73,7 +73,7 @@
                     </tr>
                     <tr>
                         <th>Concours de la force publique demandé :</th>
-                        <td>{{ town.policeStatus }}</td>
+                        <td>{{ town.policeStatus === 'none' ? 'non demandé' : (town.policeStatus === 'requested' ? 'demandé' : (town.policeStatus === 'granted' ? 'obtenu' : 'inconnu')) }}</td>
                     </tr>
                 </tbody>
             </table>
