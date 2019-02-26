@@ -13,9 +13,12 @@ import VueRouter from 'vue-router';
 import { router } from '#app/router';
 
 window.App = Object.freeze({
-    formatDate(timestamp) {
+    formatDate(timestamp, format = 'd/m/y') {
         const date = new Date(timestamp * 1000);
-        return `${(`0${date.getDate()}`).slice(-2)}/${(`0${date.getMonth() + 1}`).slice(-2)}/${date.getFullYear()}`;
+        return format
+            .replace('d', (`0${date.getDate()}`).slice(-2))
+            .replace('m', (`0${date.getMonth() + 1}`).slice(-2))
+            .replace('y', date.getFullYear());
     },
 });
 

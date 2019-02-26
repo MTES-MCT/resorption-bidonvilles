@@ -438,7 +438,9 @@ export default {
         autocompleteLocation,
         exportData() {
             const encodedUri = encodeURI(`data:text/csv;charset=utf-8,${this.csvHeader}\n${this.visibleTowns.map(this.townToCsv).join('\n')}`);
-            window.open(encodedUri);
+            this.$refs.export.setAttribute('href', encodedUri);
+            this.$refs.export.setAttribute('download', `export_bidonvilles_${App.formatDate(Date.now() / 1000, 'y_m_d')}.csv`);
+            this.$refs.export.click();
         },
         townToCsv(town) {
             const convertBool = {
