@@ -78,11 +78,18 @@
                 </div>
             </div>
 
-            <div class="container">
+            <div class="container" ref="header">
                 <!-- SUCCESS STATE -->
                 <header class="town-header">
                     <h1>Site de {{ town.city.name }} <span :class="`label ${town.status}`"><a>{{ status }}</a></span></h1>
                     <h2>Dernière modification le <time>{{ formatDate(town.updatedAt) }}</time></h2>
+
+                    <div class="town-actionButtons">
+                        <button v-if="town.status === 'open' && mode !== 'edit'" @click="setCloseMode" class="button secondary">Déclarer la disparition du site</button>
+                        <button v-if="town.status === 'open' && mode !== 'edit'" @click="setEditMode" class="button secondary">Modifier le site</button>
+                        <button v-if="mode === 'edit'" @click="submit" class="button">Sauvegarder</button>
+                        <button v-if="mode === 'edit'" @click="setViewMode" class="button warning">Annuler</button>
+                    </div>
                 </header>
             </div>
 
@@ -92,12 +99,6 @@
                         <li><a v-bind:class="{ active: view === 'details' }" @click="setView('details')">Caractéristiques du site</a></li>
                         //- <li><a v-bind:class="{ active: view === 'actions' }" @click="setView('actions')">Actions sur le site</a></li>
                         <li><a v-bind:class="{ active: view === 'comments' }" @click="setView('comments')">Commentaires sur le site</a></li>
-                        <li v-if="town.status === 'open' && mode !== 'edit'" class="side-menu-button"><button @click="setCloseMode" class="button secondary">Déclarer la disparition du site</button></li>
-                        <li v-if="town.status === 'open' && mode !== 'edit'" class="side-menu-button"><button @click="setEditMode" class="button secondary">Modifier le site</button></li>
-                        //- <li v-if="mode !== 'edit'" class="side-menu-button"><button @click="destroy" class="button warning">Supprimer le site</button></li>
-
-                        <li v-if="mode === 'edit'" class="side-menu-button"><button @click="submit" class="button">Sauvegarder</button></li>
-                        <li v-if="mode === 'edit'" class="side-menu-button"><button @click="setViewMode" class="button warning">Annuler</button></li>
                     </ul>
                 </aside>
 

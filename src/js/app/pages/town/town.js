@@ -115,10 +115,33 @@ export default {
             };
         },
     },
+    mounted() {
+        window.addEventListener('scroll', this.stickTheHeader);
+    },
+    destroyed() {
+        window.removeEventListener('scroll', this.checkOutsideClick);
+    },
     created() {
         this.fetchData();
     },
     methods: {
+        offsetTop(el) {
+            let next = el;
+            let offset = 0;
+            while (next !== null) {
+                offset += next.offsetTop;
+                next = next.offsetParent;
+            }
+
+            return offset;
+        },
+        stickTheHeader() {
+            if (window.pageYOffset > this.offsetTop(this.$refs.header)) {
+                this.$refs.header.classList.add('sticky');
+            } else {
+                this.$refs.header.classList.remove('sticky');
+            }
+        },
         formatDate: ts => App.formatDate(ts),
         fetchData() {
             if (this.loading === true) {
