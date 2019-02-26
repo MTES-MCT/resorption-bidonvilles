@@ -23,6 +23,10 @@ export default {
             type: Function,
             default: autocomplete,
         },
+        showMagnifier: {
+            type: Boolean,
+            default: true,
+        },
     },
     data() {
         return {

@@ -3,7 +3,7 @@
     <div v-if="suggestions.length" class="autocomplete">
         <p v-for="(suggestion, index) in suggestions" class="autocomplete-result" v-bind:class="{ active: index === indexOfHighlightedSuggestion }" @mousedown="onSuggestionClick(suggestion)" v-html="(suggestion.type ? `<span>${suggestion.type}</span><br/>` : '') + suggestion.label"></p>
     </div>
-    <button class="overlay-button" aria-label="Recherche">
+    <button class="overlay-button" aria-label="Recherche" v-if="showMagnifier">
         <svg class="icon icon-search"><use xlink:href="#magnifier"></use></svg>
     </button>
 </div>
