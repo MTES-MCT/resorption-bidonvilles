@@ -6515,6 +6515,11 @@ vue-hot-reload-api@^2.3.1:
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.1.tgz#b2d3d95402a811602380783ea4f566eb875569a2"
   integrity sha512-AA86yKZ5uOKz87/q1UpngEXhbRkaYg1b7HMMVRobNV1IVKqZe8oLIzo6iMocVwZXnYitlGwf2k4ZRLOZlS8oPQ==
 
+vue-matomo@^3.7.0-2:
+  version "3.7.0-2"
+  resolved "https://registry.yarnpkg.com/vue-matomo/-/vue-matomo-3.7.0-2.tgz#0cf6839693f12e47e8fe57a1609d85f86b23deb4"
+  integrity sha512-OcSu+vbKG2R6+y06o58nqXyQ/4A4Q8EUxhtAux6DuG+aMrdnYFmKqxtq8yIIrdi7U81Oo2cVWBHFEcTpYV8DwQ==
+
 vue-notification@^1.3.16:
   version "1.3.16"
   resolved "https://registry.yarnpkg.com/vue-notification/-/vue-notification-1.3.16.tgz#b2eca3416a94a46e35aa2516710a0fcd2c8515ea"

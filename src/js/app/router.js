@@ -98,6 +98,9 @@ const router = new VueRouter({
         {
             path: '/',
             redirect: home,
+            meta: {
+                analyticsIgnore: true,
+            },
         },
         {
             path: '/connexion',
@@ -119,6 +122,9 @@ const router = new VueRouter({
             beforeEnter: (to, from, next) => {
                 logout();
                 next('/');
+            },
+            meta: {
+                analyticsIgnore: true,
             },
         },
         {
