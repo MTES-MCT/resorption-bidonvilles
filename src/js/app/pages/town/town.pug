@@ -173,7 +173,7 @@
                                 </div>
                                 <div class="form__group">
                                     <p>
-                                        <strong>Statut du diagnostic :</strong> {{ town.censusStatus === 'done' ? 'Réalisé' : (town.censusStatus === 'scheduled' ? 'Prévu' : 'Non prévu') }}
+                                        <strong>Statut du diagnostic :</strong> {{ town.censusStatus === 'done' ? 'Réalisé' : (town.censusStatus === 'scheduled' ? 'Prévu' : (town.censusStatus === 'none' ? 'Non prévu' : 'Inconnu')) }}
                                     </p>
                                     <p>
                                         <strong>Date du diagnostic :</strong> {{ town.censusConductedAt !== null ? formatDate(town.censusConductedAt) : 'Inconnue' }}
