@@ -10,7 +10,12 @@ export default {
     ],
     loaded: [
         { label: 'Liste des sites', target: '/liste-des-sites', group: 'townList' },
-        { label: 'Déclarer un site', target: '/nouveau-site', group: 'townCreation' },
+        {
+            label: 'Déclarer un site',
+            target: '/nouveau-site',
+            group: 'townCreation',
+            permission: 'createTown',
+        },
         { label: 'Mon compte', target: '/mon-compte', group: 'me' },
         { label: 'Nous contacter', target: '/feedback' },
         { label: 'Déconnexion', target: '/deconnexion' },

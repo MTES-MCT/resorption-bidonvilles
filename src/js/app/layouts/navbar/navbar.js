@@ -1,5 +1,5 @@
 import { isLoggedIn } from '#helpers/api/user';
-import { isLoaded as isConfigLoaded } from '#helpers/api/config';
+import { isLoaded as isConfigLoaded, get } from '#helpers/api/config';
 import ITEMS from './items';
 
 export default {
@@ -18,10 +18,25 @@ export default {
                 return ITEMS.loading;
             }
 
-            return ITEMS.loaded;
+            return this.filterItems(ITEMS.loaded);
         },
     },
     methods: {
+        filterItems(items) {
+            const permissions = get().user.permissions.map(permission => permission.name);
+
+            return items.filter((item) => {
+                const requiredPermissions = this.$router.resolve({
+                    path: item.target,
+                }).route.meta.permissions;
+
+                if (!requiredPermissions) {
+                    return true;
+                }
+
+                return requiredPermissions.every(permission => permissions.includes(permission));
+            });
+        },
         isCurrentRouteAMemberOf(group) {
             return this.$route.matched.some(route => route.meta.group === group);
         },

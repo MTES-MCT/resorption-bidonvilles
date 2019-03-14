@@ -12,7 +12,7 @@ import Action from '#app/pages/action/action.vue';
 import Me from '#app/pages/me/me.vue';
 
 import { logout, isLoggedIn } from '#helpers/api/user';
-import { isLoaded as isConfigLoaded } from '#helpers/api/config';
+import { isLoaded as isConfigLoaded, get } from '#helpers/api/config';
 
 /**
  * This is the route towards which the user is redirected by the landing page
@@ -50,6 +50,30 @@ function guard(checkers, to, from, next) {
             next(target);
             return;
         }
+    }
+
+    // check permissions
+    const requiredPermissions = to.meta.permissions;
+    if (!requiredPermissions) {
+        next();
+        return;
+    }
+
+    if (!isLoggedIn()) {
+        next('/connexion');
+        return;
+    }
+
+    if (!isConfigLoaded()) {
+        entryPoint = to;
+        next('/landing');
+        return;
+    }
+
+    const permissions = get().user.permissions.map(permission => permission.name);
+    if (!requiredPermissions.every(permission => permissions.includes(permission))) {
+        next('/landing');
+        return;
     }
 
     next();
@@ -138,6 +162,7 @@ const router = new VueRouter({
         {
             meta: {
                 group: 'townCreation',
+                permissions: ['createTown'],
             },
             path: '/nouveau-site',
             component: AddTown,
@@ -162,6 +187,7 @@ const router = new VueRouter({
         {
             meta: {
                 group: 'actionCreation',
+                permissions: ['createAction'],
             },
             path: '/nouvelle-action',
             component: AddAction,
