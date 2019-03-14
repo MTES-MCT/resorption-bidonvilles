@@ -1,5 +1,5 @@
 import { isLoggedIn } from '#helpers/api/user';
-import { isLoaded as isConfigLoaded, get } from '#helpers/api/config';
+import { isLoaded as isConfigLoaded, hasPermission } from '#helpers/api/config';
 import ITEMS from './items';
 
 export default {
@@ -23,8 +23,6 @@ export default {
     },
     methods: {
         filterItems(items) {
-            const permissions = get().user.permissions.map(permission => permission.name);
-
             return items.filter((item) => {
                 const requiredPermissions = this.$router.resolve({
                     path: item.target,
@@ -34,7 +32,7 @@ export default {
                     return true;
                 }
 
-                return requiredPermissions.every(permission => permissions.includes(permission));
+                return requiredPermissions.every(permission => hasPermission(permission));
             });
         },
         isCurrentRouteAMemberOf(group) {

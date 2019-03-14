@@ -61,6 +61,21 @@ export function get() {
 }
 
 /**
+ * Checks if the current user has a specific permission
+ *
+ * @param {Permission} permission
+ *
+ * @returns {boolean}
+ */
+export function hasPermission({ name, type }) {
+    if (configuration === null || configuration.user === null) {
+        return false;
+    }
+
+    return configuration.user.permissions.some(permission => permission.type === type && permission.name === name);
+}
+
+/**
  * @typedef {Object} Configuration
  * @property {UserConfiguration} user
  * @property {Array}             field_types

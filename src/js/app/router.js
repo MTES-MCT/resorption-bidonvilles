@@ -12,7 +12,7 @@ import Action from '#app/pages/action/action.vue';
 import Me from '#app/pages/me/me.vue';
 
 import { logout, isLoggedIn } from '#helpers/api/user';
-import { isLoaded as isConfigLoaded, get } from '#helpers/api/config';
+import { isLoaded as isConfigLoaded, hasPermission } from '#helpers/api/config';
 
 /**
  * This is the route towards which the user is redirected by the landing page
@@ -42,7 +42,7 @@ function guard(checkers, to, from, next) {
     for (let i = 0; i < checkers.length; i += 1) {
         const { checker, target, saveEntryPoint } = checkers[i];
 
-        if (checker() !== true) {
+        if (checker(to, from) !== true) {
             if (saveEntryPoint !== false) {
                 entryPoint = to;
             }
@@ -52,31 +52,26 @@ function guard(checkers, to, from, next) {
         }
     }
 
-    // check permissions
-    const requiredPermissions = to.meta.permissions;
-    if (!requiredPermissions) {
-        next();
-        return;
-    }
-
-    if (!isLoggedIn()) {
-        next('/connexion');
-        return;
-    }
-
-    if (!isConfigLoaded()) {
-        entryPoint = to;
-        next('/landing');
-        return;
-    }
-
-    const permissions = get().user.permissions.map(permission => permission.name);
-    if (!requiredPermissions.every(permission => permissions.includes(permission))) {
-        next('/landing');
-        return;
-    }
-
     next();
+}
+
+/**
+ * Checks if the current user has all required permissions to access the given route
+ *
+ * @param {Route} to
+ *
+ * @returns {boolean}
+ */
+function isPermitted(to) {
+    const { permissions } = to.meta;
+
+    // if there is no permission needed, access is obviously granted
+    if (!permissions) {
+        return true;
+    }
+
+    // ensure all permissions are given
+    return permissions.every(permission => hasPermission(permission));
 }
 
 /**
@@ -94,6 +89,7 @@ const guardians = {
     loaded: guard.bind(this, [
         { checker: isLoggedIn, target: '/connexion' },
         { checker: isConfigLoaded, target: '/landing' },
+        { checker: isPermitted, target: '/', saveEntrypoint: false },
     ]),
 };
 
@@ -162,7 +158,7 @@ const router = new VueRouter({
         {
             meta: {
                 group: 'townCreation',
-                permissions: ['createTown'],
+                permissions: [{ type: 'feature', name: 'createTown' }],
             },
             path: '/nouveau-site',
             component: AddTown,
@@ -187,7 +183,7 @@ const router = new VueRouter({
         {
             meta: {
                 group: 'actionCreation',
-                permissions: ['createAction'],
+                permissions: [{ type: 'feature', name: 'createAction' }],
             },
             path: '/nouvelle-action',
             component: AddAction,

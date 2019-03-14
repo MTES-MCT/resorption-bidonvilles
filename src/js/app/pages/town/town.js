@@ -3,7 +3,7 @@ import Map from '#app/pages/townExplorer/map/map.vue';
 import {
     get, close, edit, destroy, addComment,
 } from '#helpers/api/town';
-import { get as getConfig } from '#helpers/api/config';
+import { get as getConfig, hasPermission } from '#helpers/api/config';
 import Datepicker from 'vuejs-datepicker';
 import { fr } from 'vuejs-datepicker/dist/locale';
 
@@ -125,6 +125,9 @@ export default {
         this.fetchData();
     },
     methods: {
+        hasPermission(permission) {
+            return hasPermission(permission);
+        },
         offsetTop(el) {
             let next = el;
             let offset = 0;
@@ -166,11 +169,19 @@ export default {
             this.mode = 'view';
         },
         setEditMode() {
+            if (!hasPermission({ type: 'feature', name: 'updateTown' })) {
+                return;
+            }
+
             this.setView('details');
             this.resetEdit();
             this.mode = 'edit';
         },
         setCloseMode() {
+            if (!hasPermission({ type: 'feature', name: 'updateTown' })) {
+                return;
+            }
+
             this.resetEdit();
             this.mode = 'close';
         },
@@ -237,6 +248,10 @@ export default {
             };
         },
         setView(view) {
+            if (view === 'comments' && !hasPermission({ type: 'feature', name: 'readComment' })) {
+                return;
+            }
+
             this.setViewMode();
             this.view = view;
         },
@@ -379,6 +394,10 @@ export default {
             }
         },
         addComment() {
+            if (!hasPermission({ type: 'feature', name: 'createComment' })) {
+                return;
+            }
+
             // clean previous errors
             this.commentError = null;
             this.commentErrors = {};
