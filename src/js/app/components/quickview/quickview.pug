@@ -7,72 +7,17 @@
                 <button type="button" class="actionButton" @click="showTown">Voir le site</button>
                 <a href="#" @click="$emit('outside-click')"><svg class="icon icon-cross"><use xlink:href="#round-cross"></use></svg></a>
             </div>
-            <h1 class="quickview-title"><a @click="showTown">{{ town.address.split(/[0-9]{5}/)[0].replace(/[0-9]/g, '').replace(/,/g, ' ').replace(/\s{2,}/g, ' ') }}</a></h1>
+            <h1 class="quickview-title" v-if="hasPermission({ type: 'data', name: 'address' })"><a @click="showTown">{{ town.address.split(/[0-9]{5}/)[0].replace(/[0-9]/g, '').replace(/,/g, ' ').replace(/\s{2,}/g, ' ') }}</a></h1>
             <h2 class="quickview-subtitle">Site de {{ town.city.name }}</h2>
         </header>
 
-        <section v-if="town">
-            <header><h1>Caractéristiques</h1></header>
+        <section v-for="(section, index) in sections" v-bind:class="{ even: index % 2 !== 0 }">
+            <header><h1>{{ section.title }}</h1></header>
             <table>
                 <tbody>
-                    <tr>
-                        <th>Type de site :</th>
-                        <td>{{ town.fieldType.label }}</td>
-                    </tr>
-                    <tr>
-                        <th>Type de propriétaire :</th>
-                        <td>{{ town.ownerType.label }}</td>
-                    </tr>
-                    <tr>
-                        <th>Date d'installation :</th>
-                        <td>{{ town.builtAt ? formatDate(town.builtAt) : 'Inconnue' }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-
-        <section v-if="town" class="even">
-            <header><h1>Démographie</h1></header>
-            <table>
-                <tbody>
-                    <tr>
-                        <th>Nombre de personnes :</th>
-                        <td>{{ town.populationTotal !== null ? town.populationTotal : 'inconnu' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Nombre de ménages :</th>
-                        <td>{{ town.populationCouples !== null ? town.populationCouples : 'inconnu' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Nombre de mineurs :</th>
-                        <td>{{ town.populationMinors !== null ? town.populationMinors : 'inconnu' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Origines :</th>
-                        <td>{{ town.socialOrigins.length > 0 ? '' : 'inconnu' }}</td>
-                    </tr>
-                    <tr v-for="socialOrigin in town.socialOrigins">
-                        <td colspan="2">{{ socialOrigin.label }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-
-        <section v-if="town">
-            <header><h1>Procédure judiciaire d'expulsion</h1></header>
-            <table>
-                <tbody>
-                    <tr>
-                        <th>Existence d'une procédure judiciaire :</th>
-                        <td>{{ town.justiceProcedure === true ? 'oui' : (town.justiceProcedure === false ? 'non' : 'inconnu') }}</td>
-                    </tr>
-                    <tr>
-                        <th>Décision de justice rendue :</th>
-                        <td>{{ town.justiceRendered === true ? 'oui' : (town.justiceRendered === false ? 'non' : 'inconnu') }}</td>
-                    </tr>
-                    <tr>
-                        <th>Concours de la force publique demandé :</th>
-                        <td>{{ town.policeStatus === 'none' ? 'non demandé' : (town.policeStatus === 'requested' ? 'demandé' : (town.policeStatus === 'granted' ? 'obtenu' : 'inconnu')) }}</td>
+                    <tr v-for="row in section.rows">
+                        <th v-if="row.label">{{ row.label }} :</th>
+                        <td :colspan="row.label ? 1 : 2">{{ row.value }}</td>
                     </tr>
                 </tbody>
             </table>

@@ -36,7 +36,7 @@
                 </main>
             </div>
 
-            <FilterGroup v-for="filterGroup in filters" :id="filterGroup.id" :icon="filterGroup.icon" :label="filterGroup.label" :options="filterGroup.options" :opened="filterGroup.opened"></FilterGroup>
+            <FilterGroup v-for="filterGroup in allowedFilters" :id="filterGroup.id" :icon="filterGroup.icon" :label="filterGroup.label" :options="filterGroup.options" :opened="filterGroup.opened"></FilterGroup>
 
             <div class="filterGroup">
                 <aside><img src="/img/export.svg" width="50" alt="" /></aside>

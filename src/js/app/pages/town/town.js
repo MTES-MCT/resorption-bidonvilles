@@ -125,9 +125,7 @@ export default {
         this.fetchData();
     },
     methods: {
-        hasPermission(permission) {
-            return hasPermission(permission);
-        },
+        hasPermission,
         offsetTop(el) {
             let next = el;
             let offset = 0;

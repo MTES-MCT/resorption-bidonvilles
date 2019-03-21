@@ -72,7 +72,7 @@ export function hasPermission({ name, type }) {
         return false;
     }
 
-    return configuration.user.permissions.some(permission => permission.type === type && permission.name === name);
+    return configuration.user.permissions[type] && configuration.user.permissions[type].indexOf(name) !== -1;
 }
 
 /**
