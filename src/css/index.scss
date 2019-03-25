@@ -162,3 +162,24 @@ label.error.message {
         border-radius: 3px;
     }
 }
+
+.alert {
+    position: fixed;
+    z-index: 10000;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.5);
+
+    .wrapper {
+        position: absolute;
+        padding: 0 40px 40px;
+        left: 100px;
+        right: 100px;
+        top: 100px;
+        bottom: 100px;
+        overflow-y: auto;
+        background: white;
+    }
+}

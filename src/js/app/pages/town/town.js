@@ -119,7 +119,7 @@ export default {
         window.addEventListener('scroll', this.stickTheHeader);
     },
     destroyed() {
-        window.removeEventListener('scroll', this.checkOutsideClick);
+        window.removeEventListener('scroll', this.stickTheHeader);
     },
     created() {
         this.fetchData();

@@ -1,6 +1,7 @@
 <div>
     <Quickview :town="quickview.town" :origin="quickview.originEvent" @outside-click="hideQuickview"></Quickview>
     <NavBar></NavBar>
+    <Export v-bind:style="{ display: exporter.isVisible ? 'block' : 'none' }" @close="hideExport" :towns="visibleTowns"></Export>
 
     <section class="explorer">
         //- <h1>Liste des sites</h1>
@@ -41,8 +42,7 @@
             <div class="filterGroup">
                 <aside><img src="/img/export.svg" width="50" alt="" /></aside>
                 <main>
-                    <button class="button" @click="exportData">Exporter ces sites</button>
-                    <a href="#" ref="export" style="display: none" download="export-bidonvilles.csv"></a>
+                    <button class="button" @click="showExport">Exporter ces sites</button>
                 </main>
             </div>
         </simplebar>

@@ -5,6 +5,7 @@ import Address from '#app/components/address/address.vue';
 import { VueGoodTable as Table } from 'vue-good-table';
 import 'vue-good-table/dist/vue-good-table.css';
 import Quickview from '#app/components/quickview/quickview.vue';
+import Export from '#app/components/export/export.vue';
 import { all as fetchAll } from '#helpers/api/town';
 import { get as getConfig, hasPermission } from '#helpers/api/config';
 import simplebar from 'simplebar-vue';
@@ -29,6 +30,7 @@ export default {
         Quickview,
         simplebar,
         Address,
+        Export,
     },
     data() {
         return {
@@ -144,253 +146,14 @@ export default {
             ],
             location: null,
             currentTab: 'map',
-            csvColumns: [
-                {
-                    label: 'statut du site',
-                    field: 'status',
-                },
-                {
-                    label: 'priorité',
-                    field: 'priority',
-                    permissions: [
-                        { type: 'data', name: 'priority' },
-                    ],
-                },
-
-                // location
-                {
-                    label: 'ville (code insee)',
-                    field: 'cityCode',
-                },
-                {
-                    label: 'ville',
-                    field: 'cityName',
-                },
-                {
-                    label: 'addresse',
-                    field: 'address',
-                    permissions: [
-                        { type: 'data', name: 'address' },
-                    ],
-                },
-                {
-                    label: 'informations d\'accès',
-                    field: 'addressDetails',
-                    permissions: [
-                        { type: 'data', name: 'addressDetails' },
-                    ],
-                },
-
-                // caracteristics
-                {
-                    label: 'date d\'installation',
-                    field: 'builtAt',
-                    permissions: [
-                        { type: 'data', name: 'builtAt' },
-                    ],
-                },
-                {
-                    label: 'date de signalement',
-                    field: 'declaredAt',
-                    permissions: [
-                        { type: 'data', name: 'declaredAt' },
-                    ],
-                },
-                {
-                    label: 'date de fermeture',
-                    field: 'closedAt',
-                    permissions: [
-                        { type: 'data', name: 'closedAt' },
-                    ],
-                },
-                {
-                    label: 'type de terrain',
-                    field: 'fieldType',
-                    permissions: [
-                        { type: 'data', name: 'fieldType' },
-                    ],
-                },
-                {
-                    label: 'type de propriétaire',
-                    field: 'ownerType',
-                    permissions: [
-                        { type: 'data', name: 'ownerType' },
-                    ],
-                },
-                {
-                    label: 'identité du propriétaire',
-                    field: 'owner',
-                    permissions: [
-                        { type: 'data', name: 'owner' },
-                    ],
-                },
-
-                // demography
-                {
-                    label: 'statut du diagnostic social',
-                    field: 'censusStatus',
-                    permissions: [
-                        { type: 'data', name: 'censusStatus' },
-                    ],
-                },
-                {
-                    label: 'date du diagnostic',
-                    field: 'censusConductedAt',
-                    permissions: [
-                        { type: 'data', name: 'censusConductedAt' },
-                    ],
-                },
-                {
-                    label: 'service en charge du diagnostic',
-                    field: 'censusConductedBy',
-                    permissions: [
-                        { type: 'data', name: 'censusConductedBy' },
-                    ],
-                },
-                {
-                    label: 'nombre de personnes',
-                    field: 'populationTotal',
-                    permissions: [
-                        { type: 'data', name: 'populationTotal' },
-                    ],
-                },
-                {
-                    label: 'nombre de ménages',
-                    field: 'populationCouples',
-                    permissions: [
-                        { type: 'data', name: 'populationCouples' },
-                    ],
-                },
-                {
-                    label: 'nombre de mineurs',
-                    field: 'populationMinors',
-                    permissions: [
-                        { type: 'data', name: 'populationMinors' },
-                    ],
-                },
-                {
-                    label: 'origines',
-                    field: 'socialOrigins',
-                    permissions: [
-                        { type: 'data', name: 'socialOrigins' },
-                    ],
-                },
-
-                // life conditions
-                {
-                    label: 'accès à l\'électricité',
-                    field: 'accessToElectricity',
-                    permissions: [
-                        { type: 'data', name: 'accessToElectricity' },
-                    ],
-                },
-                {
-                    label: 'accès à l\'eau',
-                    field: 'accessToWater',
-                    permissions: [
-                        { type: 'data', name: 'accessToWater' },
-                    ],
-                },
-                {
-                    label: 'évacuation des déchets',
-                    field: 'trashEvacuation',
-                    permissions: [
-                        { type: 'data', name: 'trashEvacuation' },
-                    ],
-                },
-
-                // justice
-                {
-                    label: 'dépôt de plainte par le propriétaire',
-                    field: 'ownerComplaint',
-                    permissions: [
-                        { type: 'data', name: 'ownerComplaint' },
-                    ],
-                },
-                {
-                    label: 'existence d\'une procédure judiciaire',
-                    field: 'justiceProcedure',
-                    permissions: [
-                        { type: 'data', name: 'justiceProcedure' },
-                    ],
-                },
-                {
-                    label: 'décision de justice rendue',
-                    field: 'justiceRendered',
-                    permissions: [
-                        { type: 'data', name: 'justiceRendered' },
-                    ],
-                },
-                {
-                    label: 'date de la décision',
-                    field: 'justiceRenderedAt',
-                    permissions: [
-                        { type: 'data', name: 'justiceRenderedAt' },
-                    ],
-                },
-                {
-                    label: 'origine de la décision',
-                    field: 'justiceRenderedBy',
-                    permissions: [
-                        { type: 'data', name: 'justiceRenderedBy' },
-                    ],
-                },
-                {
-                    label: 'contentieux relatif à la décision de justice',
-                    field: 'justiceChallenged',
-                    permissions: [
-                        { type: 'data', name: 'justiceChallenged' },
-                    ],
-                },
-
-                // police
-                {
-                    label: 'concours de la force publique',
-                    field: 'policeStatus',
-                    permissions: [
-                        { type: 'data', name: 'policeStatus' },
-                    ],
-                },
-                {
-                    label: 'date de la demande du CFP',
-                    field: 'policeRequestedAt',
-                    permissions: [
-                        { type: 'data', name: 'policeRequestedAt' },
-                    ],
-                },
-                {
-                    label: 'date d\'octroi du CFP',
-                    field: 'policeGrantedAt',
-                    permissions: [
-                        { type: 'data', name: 'policeGrantedAt' },
-                    ],
-                },
-                {
-                    label: 'étude d\'huissiers',
-                    field: 'bailiff',
-                    permissions: [
-                        { type: 'data', name: 'bailiff' },
-                    ],
-                },
-
-                // other
-                {
-                    label: 'mis à jour le',
-                    field: 'updatedAt',
-                    permissions: [
-                        { type: 'data', name: 'updatedAt' },
-                    ],
-                },
-            ],
+            exporter: {
+                isVisible: false,
+            },
         };
     },
     computed: {
         allowedFilters() {
             return this.filters.filter(filter => !filter.permissions || filter.permissions.every(permission => hasPermission(permission)));
-        },
-        allowedCsvColumns() {
-            return this.csvColumns
-                .filter(column => !column.permissions || column.permissions.every(permission => hasPermission(permission)));
         },
         rendererProps() {
             if (this.currentTab === 'map') {
@@ -664,112 +427,11 @@ export default {
     },
     methods: {
         autocompleteLocation,
-        exportData() {
-            const encodedUri = encodeURI(`data:text/csv;charset=utf-8,${this.allowedCsvColumns.map(column => column.label).join(',')}\n${this.visibleTowns.map(this.townToCsv).join('\n')}`);
-            this.$refs.export.setAttribute('href', encodedUri);
-            this.$refs.export.setAttribute('download', `export_bidonvilles_${App.formatDate(Date.now() / 1000, 'y_m_d')}.csv`);
-            this.$refs.export.click();
+        showExport() {
+            this.exporter.isVisible = true;
         },
-        townToCsv(town) {
-            const convertBool = {
-                null: '',
-                true: 'oui',
-                false: 'non',
-            };
-            const convertCensusStatus = {
-                null: '',
-                none: 'Non prévu',
-                scheduled: 'Prévu',
-                done: 'Réalisé',
-            };
-            const convertPoliceStatus = {
-                null: 'Inconnu',
-                none: 'Non demandé',
-                requested: 'Demandé',
-                granted: 'Obtenu',
-            };
-            const convertStatus = {
-                open: 'ouvert',
-                other: 'fermé (autre raison)',
-                closed_by_justice: 'fermé (décision de justice)',
-                closed_by_admin: 'fermé (décision administrative)',
-                unknown: 'fermé (cause inconnue)',
-            };
-
-            return this.allowedCsvColumns
-                .map(({ field }) => {
-                    switch (field) {
-                    case 'status':
-                        return convertStatus[town.status];
-                    case 'priority':
-                        return town.priority;
-                    case 'cityCode':
-                        return town.city.code;
-                    case 'cityName':
-                        return town.city.name;
-                    case 'address':
-                        return town.address || '';
-                    case 'addressDetails':
-                        return town.addressDetails || '';
-                    case 'builtAt':
-                        return town.builtAt ? App.formatDate(town.builtAt) : '';
-                    case 'declaredAt':
-                        return town.declaredAt ? App.formatDate(town.declaredAt) : '';
-                    case 'closedAt':
-                        return town.closedAt ? App.formatDate(town.closedAt) : '';
-                    case 'fieldType':
-                        return town.fieldType ? town.fieldType.label : '';
-                    case 'ownerType':
-                        return town.ownerType ? town.ownerType.label : '';
-                    case 'owner':
-                        return town.owner || '';
-                    case 'censusStatus':
-                        return convertCensusStatus[town.censusStatus];
-                    case 'censusConductedAt':
-                        return town.censusConductedAt ? App.formatDate(town.censusConductedAt) : '';
-                    case 'censusConductedBy':
-                        return town.censusConductedBy || '';
-                    case 'populationTotal':
-                        return town.populationTotal || '';
-                    case 'populationCouples':
-                        return town.populationCouples || '';
-                    case 'populationMinors':
-                        return town.populationMinors || '';
-                    case 'socialOrigins':
-                        return town.socialOrigins.map(origin => origin.label).join(';') || '';
-                    case 'accessToElectricity':
-                        return convertBool[town.accessToElectricity];
-                    case 'accessToWater':
-                        return convertBool[town.accessToWater];
-                    case 'trashEvacuation':
-                        return convertBool[town.trashEvacuation];
-                    case 'ownerComplaint':
-                        return convertBool[town.ownerComplaint];
-                    case 'justiceProcedure':
-                        return convertBool[town.justiceProcedure];
-                    case 'justiceRendered':
-                        return convertBool[town.justiceRendered];
-                    case 'justiceRenderedAt':
-                        return town.justiceRenderedAt ? App.formatDate(town.justiceRenderedAt) : '';
-                    case 'justiceRenderedBy':
-                        return town.justiceRenderedBy || '';
-                    case 'justiceChallenged':
-                        return convertBool[town.justiceChallenged];
-                    case 'policeStatus':
-                        return convertPoliceStatus[town.policeStatus];
-                    case 'policeRequestedAt':
-                        return town.policeRequestedAt ? App.formatDate(town.policeRequestedAt) : '';
-                    case 'policeGrantedAt':
-                        return town.policeGrantedAt ? App.formatDate(town.policeGrantedAt) : '';
-                    case 'bailiff':
-                        return town.bailiff || '';
-                    case 'updatedAt':
-                        return town.updatedAt ? App.formatDate(town.updatedAt) : '';
-                    default:
-                        return '';
-                    }
-                })
-                .map(value => (value && value.replace ? `"${value.replace(/"/g, '""')}"` : value)).join(',');
+        hideExport() {
+            this.exporter.isVisible = false;
         },
         showQuickview(town, event) {
             this.quickview = {
