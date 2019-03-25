@@ -1,5 +1,6 @@
 import Address from '#app/components/address/address.vue';
 import L from 'leaflet';
+import { get } from '#helpers/api/config';
 import 'leaflet-providers';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
@@ -59,9 +60,20 @@ export default {
             positionMarker,
             townMarkers: [],
             address: this.value,
+            showAddresses: false,
+            fieldTypes: get().field_types,
         };
     },
     computed: {
+        colors() {
+            if (!this.fieldTypes) {
+                return {};
+            }
+
+            return this.fieldTypes.reduce((acc, fieldType) => Object.assign(acc, {
+                [fieldType.id]: fieldType.color,
+            }), {});
+        },
         label() {
             return this.address !== null ? this.address.label : null;
         },
@@ -85,6 +97,13 @@ export default {
         },
     },
     watch: {
+        showAddresses() {
+            if (this.showAddresses === true) {
+                document.body.setAttribute('class', 'leaflet-show-addresses');
+            } else {
+                document.body.setAttribute('class', '');
+            }
+        },
         trackPosition() {
             this.syncPositionMarker();
         },
@@ -133,6 +152,32 @@ export default {
                 this.positionMarker.setLatLng([lat, lng]);
                 this.$emit('input', this.input);
             });
+
+            const { adressToggler } = this.$refs;
+            const AddressToggler = L.Control.extend({
+                options: {
+                    position: 'bottomleft',
+                },
+
+                onAdd() {
+                    return adressToggler;
+                },
+            });
+
+            this.map.addControl(new AddressToggler());
+
+            const { legends } = this.$refs;
+            const Legend = L.Control.extend({
+                options: {
+                    position: 'bottomleft',
+                },
+
+                onAdd() {
+                    return legends;
+                },
+            });
+
+            this.map.addControl(new Legend());
         },
         getMapLayers() {
             return {
@@ -142,8 +187,29 @@ export default {
         },
         addTownMarker(town) {
             const { latitude, longitude } = town;
+            let address;
+            if (town.address.match(/[0-9]{5}/) !== null) {
+                address = town.address.split(/[0-9]{5}/)[0].replace(/[0-9]/g, '').replace(/,/g, ' ').replace(/\s{2,}/g, ' ');
+            } else {
+                address = town.city.name;
+            }
+
+            let color;
+            if (town.fieldType !== undefined) {
+                color = this.colors[town.fieldType.id];
+            }
+
+            if (!color) {
+                color = '#cccccc';
+            }
+
             const marker = L.marker([latitude, longitude], {
                 title: town.address,
+                icon: L.divIcon({
+                    className: 'leaflet-marker-custom',
+                    html: `<span style="background: ${color}"><i style="border-top-color: ${color}"></i>${address}</span>`,
+                    iconAnchor: [25, 36],
+                }),
             });
             this.markersGroup.addLayer(marker);
 

@@ -78,3 +78,87 @@ label.error.message {
         border-left-color: #42A85F;
     }
 }
+.leaflet-marker-custom {
+    > span {
+        display: block;
+        position: relative;
+        color: #fff;
+        width: 30px;
+        height: 30px;
+        font-size: 0px;
+        border-radius: 50%;
+        white-space: nowrap;
+    }
+
+    > span:after {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: -10px;
+        margin-left: -10px;
+        content: '';
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #fff;
+    }
+    
+    > span > i {
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 10px solid transparent;
+        position: absolute;
+        bottom: -6px;
+        left: 5px;
+    }
+}
+
+.leaflet-show-addresses {
+    .leaflet-marker-custom {
+        > span {
+            display: inline;
+            font-size: 14px;
+            padding: 5px 7px;
+            border-radius: 5px;
+        }
+
+        > span:before {
+            bottom: -10px;
+            left: 10px;
+        }
+
+        > span:after {
+            display: none;
+        }
+    }
+}
+
+.leaflet-address-toggler {
+    padding: 5px 10px;
+    background: white;
+    border-radius: 5px;
+    border: 2px solid rgba(0,0,0,0.2);
+}
+
+.leaflet-legend {
+    padding: 5px 10px;
+    background: white;
+    border-radius: 5px;
+    border: 2px solid rgba(0,0,0,0.2);
+
+    > h1 {
+        margin: 5px 0 0;
+        padding: 0;
+        font-size: 1rem;
+    }
+
+    > p > span {
+        display: inline-block;
+        margin-right: 5px;
+        width: 15px;
+        height: 15px;
+        vertical-align: middle;
+        background: red;
+        border-radius: 3px;
+    }
+}
