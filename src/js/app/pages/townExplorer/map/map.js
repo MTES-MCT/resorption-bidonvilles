@@ -188,7 +188,7 @@ export default {
         addTownMarker(town) {
             const { latitude, longitude } = town;
             let address;
-            if (town.address.match(/[0-9]{5}/) !== null) {
+            if (town.address && town.address.match(/[0-9]{5}/) !== null) {
                 address = town.address.split(/[0-9]{5}/)[0].replace(/[0-9]/g, '').replace(/,/g, ' ').replace(/\s{2,}/g, ' ');
             } else {
                 address = town.city.name;
