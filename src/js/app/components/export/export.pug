@@ -4,20 +4,20 @@
             <div class="alert-close-wrapper"><img src="/img/cross.svg" alt="" width="20" @click="close" /></div>
         </div>
         <h2>Exporter les sites</h2>
-        <p>Veuillez cocher toutes les informations que vous voulez exporter. Votre sélection sera automatiquement mémorisée pour le prochain export.</p>
+        <p>Veuillez cocher toutes les informations que vous souhaitez exporter, puis cliquez sur le bouton "Exporter" ci-dessous.</p>
 
-        <div class="form__group" v-for="(section, sectionId) in sections">
-            <h4>{{ section.title }}</h4>
-            <p v-for="(column, columnId) in section.fields">
-                <input type="checkbox" :id="'column-' + sectionId + '-' + columnId" v-model="columns[column.id]" />
-                <label :for="'column-' + sectionId + '-' + columnId">{{ column.label }}</label>
-            </p>
-        </div>
-
-        <div class="form__group">
+        <p class="alert-buttons">
             <a href="#" ref="link" style="display: none" download="export-bidonvilles.csv"></a>
             <button @click="download" class="button">Exporter</button>
             <button @click="close" class="button secondary">Annuler</button>
+        </p>
+
+        <div class="form__group" v-for="(section, sectionId) in sections">
+            <h4><input type="checkbox" :id="'section-' + sectionId" v-model="sectionStates[section.title]" @change="onSectionToggle(section)" /> <label :for="'section-' + sectionId">{{ section.title }}</label></h4>
+            <span v-for="(column, columnId) in section.fields">
+                <input type="checkbox" :id="'column-' + sectionId + '-' + columnId" v-model="columnStates[column.id]" @change="onColumnToggle(section, column)" />
+                <label :for="'column-' + sectionId + '-' + columnId">{{ column.label }}</label>
+            </span>
         </div>
     </div>
 </div>

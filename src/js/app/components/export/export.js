@@ -364,8 +364,11 @@ export default {
     },
     data() {
         return {
-            columns: Object.keys(columns).reduce((acc, column) => Object.assign(acc, {
+            columnStates: Object.keys(columns).reduce((acc, column) => Object.assign(acc, {
                 [column]: true,
+            }), {}),
+            sectionStates: sections.reduce((acc, { title }) => Object.assign(acc, {
+                [title]: true,
             }), {}),
         };
     },
@@ -386,6 +389,22 @@ export default {
         document.removeEventListener('click', this.checkOutsideClick);
     },
     methods: {
+        onSectionToggle({ fields, title }) {
+            fields.forEach(({ id }) => {
+                this.columnStates[id] = this.sectionStates[title];
+            });
+        },
+        onColumnToggle({ fields, title }, { id }) {
+            let sectionValue;
+
+            if (this.columnStates[id] === true) {
+                sectionValue = fields.every(({ id: columnId }) => this.columnStates[columnId]);
+            } else {
+                sectionValue = false;
+            }
+
+            this.sectionStates[title] = sectionValue;
+        },
         checkOutsideClick(event) {
             // ignore the origin event
             if (this.$refs.wrapper.offsetHeight === 0) {
@@ -399,7 +418,7 @@ export default {
         getAllowedColumns() {
             return exportOrder
                 .filter(column => !column.permissions || column.permissions.every(permission => hasPermission(permission)))
-                .filter(column => this.columns[column])
+                .filter(column => this.columnStates[column])
                 .map(column => columns[column]);
         },
         getData() {

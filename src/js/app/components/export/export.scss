@@ -1,8 +1,34 @@
 .alert {
-    .form__group > p > label {
-        cursor: pointer;
-        display: inline-block;
+    .form__group {
+        > h4 {
+            margin-bottom: 10px;
+
+            > label {
+                display: inline-block;
+                cursor: pointer;
+            }
+        }
+
+        > span {
+            display: inline-block;
+
+            > label {
+                display: inline-block;
+                vertical-align: middle;
+                width: 250px;
+                cursor: pointer;
+            }
+        }
     }
+
+    .form__group + .form__group {
+        margin-top: 40px;
+    }
+}
+
+.alert-buttons {
+    padding-bottom: 30px;
+    border-bottom: 1px solid #182B51;
 }
 
 .alert-close {
