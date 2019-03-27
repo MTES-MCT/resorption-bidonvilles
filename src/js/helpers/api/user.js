@@ -112,6 +112,19 @@ export function edit(data) {
 }
 
 /**
+ * Updates the default export for the current user
+ *
+ * @param {string} defaultExport
+ *
+ * @returns {Promise}
+ */
+export function setDefaultExport(defaultExport) {
+    return postApi('/me/default-export', {
+        export: defaultExport,
+    });
+}
+
+/**
  * @typedef {Object} User_Data
  * @property {string} first_name
  * @property {string} last_name

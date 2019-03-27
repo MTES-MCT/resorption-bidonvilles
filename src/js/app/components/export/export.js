@@ -1,4 +1,5 @@
-import { hasPermission } from '#helpers/api/config';
+import { get, hasPermission } from '#helpers/api/config';
+import { setDefaultExport } from '#helpers/api/user';
 
 const convertBool = {
     null: '',
@@ -363,9 +364,11 @@ export default {
         towns: Array,
     },
     data() {
+        const defaultExport = get().user.default_export;
+
         return {
             columnStates: Object.keys(columns).reduce((acc, column) => Object.assign(acc, {
-                [column]: true,
+                [column]: defaultExport.indexOf(column) !== -1,
             }), {}),
             sectionStates: sections.reduce((acc, { title }) => Object.assign(acc, {
                 [title]: true,
@@ -430,7 +433,10 @@ export default {
             this.$refs.link.setAttribute('download', `export_bidonvilles_${App.formatDate(Date.now() / 1000, 'y_m_d')}.csv`);
             this.$refs.link.click();
 
-            this.$emit('export', this.properties);
+            const selectedColumns = this.getAllowedColumns();
+            setDefaultExport(selectedColumns.map(column => column.id).join(','));
+
+            this.$emit('export');
         },
         close() {
             this.$emit('close');
