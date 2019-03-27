@@ -384,6 +384,7 @@ export default {
     },
     mounted() {
         document.addEventListener('click', this.checkOutsideClick);
+        this.sections.forEach(section => this.syncSection(section));
     },
     destroyed() {
         document.removeEventListener('click', this.checkOutsideClick);
@@ -394,16 +395,11 @@ export default {
                 this.columnStates[id] = this.sectionStates[title];
             });
         },
-        onColumnToggle({ fields, title }, { id }) {
-            let sectionValue;
-
-            if (this.columnStates[id] === true) {
-                sectionValue = fields.every(({ id: columnId }) => this.columnStates[columnId]);
-            } else {
-                sectionValue = false;
-            }
-
-            this.sectionStates[title] = sectionValue;
+        onColumnToggle(section) {
+            this.syncSection(section);
+        },
+        syncSection({ fields, title }) {
+            this.sectionStates[title] = fields.every(({ id: columnId }) => this.columnStates[columnId]);
         },
         checkOutsideClick(event) {
             // ignore the origin event

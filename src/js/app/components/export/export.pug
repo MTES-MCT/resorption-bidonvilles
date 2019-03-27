@@ -15,7 +15,7 @@
         <div class="form__group" v-for="(section, sectionId) in sections">
             <h4><input type="checkbox" :id="'section-' + sectionId" v-model="sectionStates[section.title]" @change="onSectionToggle(section)" /> <label :for="'section-' + sectionId">{{ section.title }}</label></h4>
             <span v-for="(column, columnId) in section.fields">
-                <input type="checkbox" :id="'column-' + sectionId + '-' + columnId" v-model="columnStates[column.id]" @change="onColumnToggle(section, column)" />
+                <input type="checkbox" :id="'column-' + sectionId + '-' + columnId" v-model="columnStates[column.id]" @change="onColumnToggle(section)" />
                 <label :for="'column-' + sectionId + '-' + columnId">{{ column.label }}</label>
             </span>
         </div>
