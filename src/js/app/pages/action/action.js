@@ -1,5 +1,5 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
-import { get as getConfig } from '#helpers/api/config';
+import { get as getConfig, hasPermission } from '#helpers/api/config';
 import {
     get, edit, addStep, destroy,
 } from '#helpers/api/action';
@@ -41,6 +41,7 @@ export default {
         this.fetchData();
     },
     methods: {
+        hasPermission,
         fetchData() {
             if (this.loading === true) {
                 return;

@@ -14,7 +14,16 @@ export default {
             label: 'Déclarer un site',
             target: '/nouveau-site',
             group: 'townCreation',
-            permission: 'createTown',
+        },
+        {
+            label: 'Liste des actions',
+            target: '/liste-des-actions',
+            group: 'actionList',
+        },
+        {
+            label: 'Déclarer une action',
+            target: '/nouvelle-action',
+            group: 'actionCreation',
         },
         { label: 'Mon compte', target: '/mon-compte', group: 'me' },
         { label: 'Nous contacter', target: '/feedback' },

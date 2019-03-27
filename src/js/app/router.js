@@ -175,6 +175,7 @@ const router = new VueRouter({
         {
             meta: {
                 group: 'actionList',
+                permissions: [{ type: 'feature', name: 'readAction' }],
             },
             path: '/liste-des-actions',
             component: ActionsExplorer,
@@ -192,6 +193,7 @@ const router = new VueRouter({
         {
             meta: {
                 group: 'actionList',
+                permissions: [{ type: 'feature', name: 'readAction' }],
             },
             path: '/action/:id',
             component: Action,

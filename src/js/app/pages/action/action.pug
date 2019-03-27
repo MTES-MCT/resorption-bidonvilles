@@ -21,8 +21,8 @@
             <div v-else>
                 <!-- SUCCESS STATE -->
                 <header class="action-header">
-                    <button v-if="mode !== 'edit'" @click="destroy" class="button warning">Supprimer l'action</button>
-                    <button v-if="action.endedAt === null && mode !== 'edit'" @click="setEditMode" class="button secondary">Modifier l'action</button>
+                    <button v-if="hasPermission({ type: 'feature', name: 'deleteAction' }) && mode !== 'edit'" @click="destroy" class="button warning">Supprimer l'action</button>
+                    <button v-if="hasPermission({ type: 'feature', name: 'createAction' }) && action.endedAt === null && mode !== 'edit'" @click="setEditMode" class="button secondary">Modifier l'action</button>
                     <button v-if="mode === 'edit'" @click="setViewMode" class="button warning">Annuler</button>
                     <button v-if="mode === 'edit'" @click="submitEdit" class="button">Sauvegarder</button>
                     <h1>{{ action.name }}</h1>
@@ -75,7 +75,7 @@
                             <p v-for="step in action.steps"><strong>Le {{ new Date(step.date * 1000).toLocaleDateString().substr(0, 10) }} :</strong><br/>{{ step.description }}</p>
                         </div>
 
-                        <div class="form__group">
+                        <div class="form__group" v-if="hasPermission({ type: 'feature', name: 'createAction' })">
                             <div class="notification error" v-if="formError">{{formError }}.</div>
         
                             <label v-bind:class="{ error: fieldErrors.description }">Ajouter une étape :</label>
