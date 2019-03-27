@@ -117,11 +117,11 @@
                                     <p v-if="town.priority !== undefined">
                                         <strong>Niveau de priorité du site :</strong> {{ town.priority }}
                                     </p>
-                                    <p v-if="town.declaredAt !== undefined">
-                                        <strong>Date de signalement du site :</strong> {{ town.declaredAt !== null ? formatDate(town.declaredAt) : 'Inconnue' }}
-                                    </p>
                                     <p v-if="town.builtAt !== undefined">
                                         <strong>Date d'installation du site :</strong> {{ town.builtAt !== null ? formatDate(town.builtAt) : 'Inconnue' }}
+                                    </p>
+                                    <p v-if="town.declaredAt !== undefined">
+                                        <strong>Date de signalement du site :</strong> {{ town.declaredAt !== null ? formatDate(town.declaredAt) : 'Inconnue' }}
                                     </p>
                                     <p v-if="town.status !== 'open' && town.closedAt !== undefined">
                                         <strong>Date de disparition du site :</strong> {{ town.closedAt !== null ? formatDate(town.closedAt) : 'Inconnue'}}
@@ -280,16 +280,6 @@
                                 </div>
 
                                 <div class="form__group">
-                                    <label v-bind:class="{ error: fieldErrors.declared_at }">Date de signalement du site :</label>
-                                    <p class="error" v-if="fieldErrors.declared_at">
-                                        <ul>
-                                            <li v-for="error in fieldErrors.declared_at">{{ error }}</li>
-                                        </ul>
-                                    </p>
-                                    <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="edit.declaredAt" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
-                                </div>
-
-                                <div class="form__group">
                                     <label v-bind:class="{ error: fieldErrors.built_at }">Date d'installation du site :</label>
                                     <p class="error" v-if="fieldErrors.built_at">
                                         <ul>
@@ -297,6 +287,16 @@
                                         </ul>
                                     </p>
                                     <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" :full-month-name="true" :format="'dd MMMM yyyy'" v-model="edit.builtAt"></datepicker>
+                                </div>
+
+                                <div class="form__group">
+                                    <label v-bind:class="{ error: fieldErrors.declared_at }">Date de signalement du site :</label>
+                                    <p class="error" v-if="fieldErrors.declared_at">
+                                        <ul>
+                                            <li v-for="error in fieldErrors.declared_at">{{ error }}</li>
+                                        </ul>
+                                    </p>
+                                    <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="edit.declaredAt" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
                                 </div>
                             </div>
 
