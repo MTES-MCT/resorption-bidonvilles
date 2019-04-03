@@ -1,0 +1,41 @@
+<div>
+    <NavBar></NavBar>
+
+    <section class="section section-white" id="form">
+        <div class="container">
+            <h1>Activation de votre compte utilisateur</h1>
+
+            //- state: loading in progress
+            <div v-if="state === 'loading'" class="notification full-width">
+                <img src="/img/spinner_dark.svg" width="20" class="spinner" />
+                <span>Chargement des données en cours...</span>
+            </div>
+
+            //- state: loading failed
+            <div v-if="state === 'error'" class="notification error full-width">
+                <span>{{ error }}. <a href="#" @click="retryLoading">Réessayer ?</a></span>
+            </div>
+
+            //- state: loaded
+            <div v-if="state === 'loaded'">
+                <div class="notification error" v-if="form.error">{{ form.error }}</div>
+
+                <div class="form__group">
+                    <label for="password" v-bind:class="{ error: form.fieldErrors.password }">Votre mot de passe :</label>
+                    <p class="error" v-if="form.fieldErrors.password">
+                        <ul>
+                            <li v-for="error in form.fieldErrors.password">{{ error }}</li>
+                        </ul>
+                    </p>
+                    <input type="password" id="password" v-model="form.input.password" :readonly="form.loading">
+                </div>
+
+                <div class="form__group">
+                    <button class="button" type="submit" @click="submit">
+                        <img  v-if="form.loading" src="/img/spinner_light.svg" width="20" />
+                        <span v-else>Activer mon compte</span>
+                    </button>
+                </div>
+            </div>
+    </section>
+</div>

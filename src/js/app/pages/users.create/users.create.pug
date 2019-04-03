@@ -1,0 +1,92 @@
+<div>
+    <NavBar></NavBar>
+    <ActivationLinkModal v-if="activationLink" @close="onModalClose" :link="activationLink"></ActivationLinkModal>
+
+    <section class="section section-white" id="form">
+        <div class="container">
+            <h1>Création d'un nouvel utilisateur</h1>
+
+            <div class="notification error" v-if="error">{{ error }}</div>
+
+            <div class="form__group">
+                <label for="email" v-bind:class="{ error: fieldErrors.email }">Adresse email :</label>
+                <p class="error" v-if="fieldErrors.email">
+                    <ul>
+                        <li v-for="error in fieldErrors.email">{{ error }}</li>
+                    </ul>
+                </p>
+                <input type="text" id="email" v-model.lazy.trim="input.email" :readonly="loading">
+            </div>
+
+            <div class="form__group">
+                <label for="firstName" v-bind:class="{ error: fieldErrors.first_name }">Prénom :</label>
+                <p class="error" v-if="fieldErrors.first_name">
+                    <ul>
+                        <li v-for="error in fieldErrors.first_name">{{ error }}</li>
+                    </ul>
+                </p>
+                <input type="text" id="firstName" v-model.lazy.trim="input.firstName" :readonly="loading">
+            </div>
+
+            <div class="form__group">
+                <label for="lastName" v-bind:class="{ error: fieldErrors.last_name }">Nom de famille :</label>
+                <p class="error" v-if="fieldErrors.last_name">
+                    <ul>
+                        <li v-for="error in fieldErrors.last_name">{{ error }}</li>
+                    </ul>
+                </p>
+                <input type="text" id="lastName" v-model.lazy="input.lastName" :readonly="loading">
+            </div>
+
+            <div class="form__group">
+                <label for="company" v-bind:class="{ error: fieldErrors.company }">Structure :</label>
+                <p class="error" v-if="fieldErrors.company">
+                    <ul>
+                        <li v-for="error in fieldErrors.company">{{ error }}</li>
+                    </ul>
+                </p>
+                <input type="text" id="company" v-model.lazy="input.company" :readonly="loading">
+            </div>
+
+            <div class="form__group">
+                <label for="departement" v-bind:class="{ error: fieldErrors.departement }">Département de rattachement :</label>
+                <p class="error" v-if="fieldErrors.departement">
+                    <ul>
+                        <li v-for="error in fieldErrors.departement">{{ error }}</li>
+                    </ul>
+                </p>
+                <select id="departement" v-model="input.departement" :disabled="loading">
+                    <option v-for="departement in departements" :value="departement.code">{{ departement.code + ' - ' + departement.name }}</option>
+                </select>
+            </div>
+
+            <div class="form__group">
+                <label for="role" v-bind:class="{ error: fieldErrors.role }">Rôle :</label>
+                <p class="error" v-if="fieldErrors.role">
+                    <ul>
+                        <li v-for="error in fieldErrors.role">{{ error }}</li>
+                    </ul>
+                </p>
+                <select id="role" v-model="input.role" :disabled="loading">
+                    <option v-for="role in roles" :value="role.id">{{ role.name }}</option>
+                </select>
+            </div>
+
+            <div class="form__group">
+                <input type="checkbox" id="dataOwnerAgreement" v-model="input.dataOwnerAgreement" />
+                <label for="dataOwnerAgreement" v-bind:class="{ error: fieldErrors.dataOwnerAgreement, inline: true }">Je certifie que ces données personnelles ont été saisies avec l'accord de leur propriétaire</label>
+                <p class="error" v-if="fieldErrors.dataOwnerAgreement">
+                    <ul>
+                        <li v-for="error in fieldErrors.dataOwnerAgreement">{{ error }}</li>
+                    </ul>
+                </p>
+            </div>
+
+            <div class="form__group">
+                <button class="button" type="submit" @click="submit" :disabled="loading || !input.dataOwnerAgreement">
+                    <img  v-if="loading" src="/img/spinner_light.svg" width="20" />
+                    <span v-else>Créer le compte</span>
+                </button>
+            </div>
+    </section>
+</div>

@@ -1,4 +1,5 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
+
 import { get as getConfig, hasPermission } from '#helpers/api/config';
 import {
     get, edit, addStep, destroy,

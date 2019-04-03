@@ -1,0 +1,11 @@
+<Modal @close="onClose">
+    <h2>Lien d'activation du compte</h2>
+    <p>Veuillez partager le lien suivant au possesseur du compte, afin qu'il finalise la création de son compte.</p>
+    <p><strong>Lien d'activation :</strong></p>
+    <p>
+        <input ref="input" type="text" readonly="readonly" :value="link" />
+    </p>
+    <div v-if="linkWasCopied" class="notification success full-width">
+        <span>Le lien a été automatiquement copié dans votre presse-papier</span>
+    </div>
+</Modal>

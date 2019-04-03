@@ -9,24 +9,54 @@ export default {
         { label: 'Déconnexion', target: '/deconnexion' },
     ],
     loaded: [
-        { label: 'Liste des sites', target: '/liste-des-sites', group: 'townList' },
         {
-            label: 'Déclarer un site',
-            target: '/nouveau-site',
-            group: 'townCreation',
+            label: 'Gestion des sites',
+            items: [
+                { label: 'Liste des sites', target: '/liste-des-sites', group: 'townList' },
+                {
+                    label: 'Déclarer un site',
+                    target: '/nouveau-site',
+                    group: 'townCreation',
+                },
+            ],
         },
         {
-            label: 'Liste des actions',
-            target: '/liste-des-actions',
-            group: 'actionList',
+            label: 'Gestion des actions',
+            items: [
+                {
+                    label: 'Liste des actions',
+                    target: '/liste-des-actions',
+                    group: 'actionList',
+                },
+                {
+                    label: 'Déclarer une action',
+                    target: '/nouvelle-action',
+                    group: 'actionCreation',
+                },
+            ],
         },
         {
-            label: 'Déclarer une action',
-            target: '/nouvelle-action',
-            group: 'actionCreation',
+            label: 'Utilisateurs',
+            items: [
+                {
+                    label: 'Gérer les utilisateurs',
+                    target: '/liste-des-utilisateurs',
+                    group: 'users',
+                },
+                {
+                    label: 'Créer un utilisateur',
+                    target: '/nouvel-utilisateur',
+                    group: 'users',
+                },
+            ],
         },
-        { label: 'Mon compte', target: '/mon-compte', group: 'me' },
+        {
+            label: 'Mon compte',
+            items: [
+                { label: 'Gérer mon compte', target: '/mon-compte', group: 'me' },
+                { label: 'Déconnexion', target: '/deconnexion' },
+            ],
+        },
         { label: 'Nous contacter', target: '/feedback' },
-        { label: 'Déconnexion', target: '/deconnexion' },
     ],
 };

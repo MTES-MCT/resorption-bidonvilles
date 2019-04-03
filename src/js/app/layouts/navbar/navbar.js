@@ -23,17 +23,34 @@ export default {
     },
     methods: {
         filterItems(items) {
-            return items.filter((item) => {
-                const requiredPermissions = this.$router.resolve({
-                    path: item.target,
-                }).route.meta.permissions;
+            return items
+                .map((item) => {
+                    if (item.items) {
+                        return Object.assign(item, {
+                            items: item.items.filter(subitem => this.isItemAllowed(subitem)),
+                        });
+                    }
 
-                if (!requiredPermissions) {
-                    return true;
-                }
+                    return item;
+                })
+                .filter((item) => {
+                    if (item.items) {
+                        return item.items.length > 0;
+                    }
 
-                return requiredPermissions.every(permission => hasPermission(permission));
-            });
+                    return this.isItemAllowed(item);
+                });
+        },
+        isItemAllowed(item) {
+            const requiredPermissions = this.$router.resolve({
+                path: item.target,
+            }).route.meta.permissions;
+
+            if (!requiredPermissions) {
+                return true;
+            }
+
+            return requiredPermissions.every(permission => hasPermission(permission));
         },
         isCurrentRouteAMemberOf(group) {
             return this.$route.matched.some(route => route.meta.group === group);

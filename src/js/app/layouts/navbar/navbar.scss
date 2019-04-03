@@ -60,37 +60,55 @@
         .nav__links {
             display: none;
 
-            .nav__item a {
-                background: none;
-                font-size: 0.9em;
-                color: #8393a7;
-                border-radius: 0;
-                border-bottom: 1px solid transparent;
-                margin: 0 0.8em;
-                padding: 0.2em 0;
-                // letter-spacing: 0.05em;
-                text-transform: uppercase;
-                transition: color 0.2s linear;
-                -webkit-transition: color 0.2s linear;
+            .nav__item {
+                .dropdown {
+                    color: #8393a7;
+                    text-transform: uppercase;
+                    transition: background 0.1s linear;
+                    -webkit-transition: background 0.1s linear;
 
-                &.active {
-                    &:before {
-                        display: inline-block;
-                        content: '';
-                        width: 5px;
-                        height: 5px;
-                        background: white;
-                        border-radius: 50%;
-                        vertical-align: middle;
-                        margin-right: 10px;
+                    &:hover {
+                        background: #fff;
                     }
 
-                    color: white;
-                    // border-color: rgba(255, 255, 255, 0.5);
+                    .dropdown-content {
+                        z-index: 6000;
+                        text-transform: initial;
+                        white-space: nowrap;
+                    }
                 }
 
-                &:hover {
-                    color: white;
+                > a {
+                    background: none;
+                    font-size: 0.9em;
+                    color: #8393a7;
+                    border-radius: 0;
+                    border-bottom: 1px solid transparent;
+                    margin: 0 0.8em;
+                    padding: 0.2em 0;
+                    // letter-spacing: 0.05em;
+                    text-transform: uppercase;
+                    transition: color 0.2s linear;
+                    -webkit-transition: color 0.2s linear;
+
+                    &.active {
+                        &:before {
+                            display: inline-block;
+                            content: '';
+                            width: 5px;
+                            height: 5px;
+                            background: white;
+                            border-radius: 50%;
+                            vertical-align: middle;
+                            margin-right: 10px;
+                        }
+
+                        color: white;
+                    }
+
+                    &:hover {
+                        color: white;
+                    }
                 }
             }
         }
@@ -115,6 +133,18 @@
         .nav__item {
             display: block;
             margin-bottom: 20px;
+
+            .dropdown {
+                color: white;
+
+                &:hover {
+                    color: #8393a7;
+                }
+
+                a {
+                    color: #8393a7;
+                }
+            }
 
             a {
                 color: white;
@@ -186,7 +216,7 @@
     }
 }
 
-@media (min-width: 1350px) {
+@media (min-width: 1150px) {
     .topbar {
         .topbar-container {
             .topbar-menu {

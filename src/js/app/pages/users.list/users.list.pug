@@ -1,0 +1,39 @@
+<div>
+    <NavBar></NavBar>
+    <ActivationLinkModal v-if="activationLink" :link="activationLink" @close="onActivationLinkClose"></ActivationLinkModal>
+    <Modal v-if="activationLinkError !== null" @close="onActivationLinkErrorClose">
+        <h2>Lien d'activation du compte</h2>
+        <p>Une erreur est survenue lors de la génération du lien d'activation :</p>
+        <div class="notification error full-width">
+            <span>{{ activationLinkError }}</span>
+        </div>
+    </Modal>
+
+    <section class="section section-white">
+        //- state: loading in progress
+        <div v-if="state === 'loading'" class="notification full-width">
+            <img src="/img/spinner_dark.svg" width="20" class="spinner" />
+            <span>Chargement des données en cours...</span>
+        </div>
+
+        //- state: loading failed
+        <div v-if="state === 'error'" class="notification error full-width">
+            <span>{{ error }}. <a href="#" @click="retryLoading">Réessayer ?</a></span>
+        </div>
+
+        //- state: loaded
+        <div v-if="state === 'loaded'">
+            <Table v-bind="tableProperties">
+                <template slot="table-row" slot-scope="props">
+                    <span v-if="props.column.id === 'activationLink'">
+                        <img v-if="props.row.generatingActivationLink === true" src="/img/spinner_dark.svg" width="20" class="spinner" />
+                        <span v-else-if="props.row.active !== true && generatingActivationLink !== true" @click="generateActivationLink(props.row)" class="activationLink">🔗</span>
+                    </span>
+
+                    <span v-else>{{ typeof props.column.field === 'function' ? props.column.field(props.row) : props.formattedRow[props.column.field] }}</span>
+                </template>
+            </Table>
+        </div>
+    </section>
+</div>
+
