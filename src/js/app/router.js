@@ -10,6 +10,9 @@ import ActionsExplorer from '#app/pages/actionExplorer/explorer.vue';
 import AddAction from '#app/pages/addAction/addAction.vue';
 import Action from '#app/pages/action/action.vue';
 import Me from '#app/pages/me/me.vue';
+import UserList from '#app/pages/users.list/users.list.vue';
+import UserCreate from '#app/pages/users.create/users.create.vue';
+import UserActivate from '#app/pages/users.activate/users.activate.vue';
 
 import { logout, isLoggedIn } from '#helpers/api/user';
 import { isLoaded as isConfigLoaded, hasPermission } from '#helpers/api/config';
@@ -213,6 +216,32 @@ const router = new VueRouter({
             path: '/mon-compte',
             component: Me,
             beforeEnter: guardians.loaded,
+        },
+        {
+            meta: {
+                group: 'users',
+                permissions: [{ type: 'feature', name: 'readUser' }],
+            },
+            path: '/liste-des-utilisateurs',
+            component: UserList,
+            beforeEnter: guardians.loaded,
+        },
+        {
+            meta: {
+                group: 'userCreation',
+                permissions: [{ type: 'feature', name: 'createUser' }],
+            },
+            path: '/nouvel-utilisateur',
+            component: UserCreate,
+            beforeEnter: guardians.loaded,
+        },
+        {
+            meta: {
+                group: 'account',
+            },
+            path: '/activer-mon-compte/:token',
+            component: UserActivate,
+            beforeEnter: guardians.anonymous,
         },
     ],
 });

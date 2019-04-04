@@ -8,9 +8,17 @@ label.error.message {
     font-style: italic;
 }
 
+.error > ul {
+    color: #d63626;
+}
+
 .container {
     max-width: none;
     padding: 0;
+}
+
+select {
+    background-size: 15px 15px;
 }
 
 @media (min-width: 800px) {
@@ -63,6 +71,12 @@ label.error.message {
     border: none;
     font-size: 0.8rem;
     text-transform: uppercase;
+}
+
+button:disabled,
+button:disabled:hover {
+    background-color: rgba(0, 83, 179, 0.5);
+    cursor: default;
 }
 
 .ab {

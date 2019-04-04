@@ -125,6 +125,41 @@ export function setDefaultExport(defaultExport) {
 }
 
 /**
+ * GET /users
+ */
+export function list() {
+    return getApi('/users');
+}
+
+/**
+ * GET /users/:id/activate
+ */
+export function generateActivationLink(user) {
+    return getApi(`/users/${user.id}/activate`);
+}
+
+/**
+ * POST /users
+ */
+export function create(data) {
+    return postApi('/users', data);
+}
+
+/**
+ * GET /activation-tokens/:token/check
+ */
+export function checkActivationToken(token) {
+    return getApi(`/activation-tokens/${encodeURIComponent(token)}/check`);
+}
+
+/**
+ * POST /users/activate
+ */
+export function activate(userId, data) {
+    return postApi(`/users/${userId}/activate`, data);
+}
+
+/**
  * @typedef {Object} User_Data
  * @property {string} first_name
  * @property {string} last_name

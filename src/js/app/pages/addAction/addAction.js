@@ -1,4 +1,5 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
+import Linker from '#app/components/linker/linker.vue';
 import { get } from '#helpers/api/config';
 import Datepicker from 'vuejs-datepicker';
 import { fr } from 'vuejs-datepicker/dist/locale';
@@ -8,6 +9,7 @@ export default {
     components: {
         NavBar,
         Datepicker,
+        Linker,
     },
     data() {
         return {
