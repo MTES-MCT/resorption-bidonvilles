@@ -10,7 +10,7 @@ export default {
     ],
     loaded: [
         {
-            label: 'Gestion des sites',
+            label: 'Sites',
             items: [
                 { label: 'Liste des sites', target: '/liste-des-sites', group: 'townList' },
                 {
@@ -21,17 +21,24 @@ export default {
             ],
         },
         {
-            label: 'Gestion des actions',
+            label: 'Dispositifs',
+            items: [
+                { label: 'Liste des dispositifs', target: '/liste-des-dispositifs' },
+                { label: 'Déclarer un dispositif', target: '/nouveau-dispositif' },
+            ],
+        },
+        {
+            label: 'Acteurs',
             items: [
                 {
-                    label: 'Liste des actions',
-                    target: '/liste-des-actions',
-                    group: 'actionList',
+                    label: 'Gérer les acteurs',
+                    target: '/liste-des-operateurs',
+                    group: 'operators',
                 },
                 {
-                    label: 'Déclarer une action',
-                    target: '/nouvelle-action',
-                    group: 'actionCreation',
+                    label: 'Créer un acteur',
+                    target: '/nouvel-operateur',
+                    group: 'operatorCreation',
                 },
             ],
         },

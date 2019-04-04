@@ -3,6 +3,20 @@ label.error {
     font-weight: bold;
 }
 
+.mandatory {
+    font-weight: bold;
+    color: #d63626;
+}
+
+p.error {
+    margin-top: 0;
+
+    & > ul {
+        margin-top: 0;
+        color: #d63626;
+    }
+}
+
 label.error.message {
     font-weight: normal;
     font-style: italic;

@@ -13,6 +13,10 @@ import Me from '#app/pages/me/me.vue';
 import UserList from '#app/pages/users.list/users.list.vue';
 import UserCreate from '#app/pages/users.create/users.create.vue';
 import UserActivate from '#app/pages/users.activate/users.activate.vue';
+import PlanList from '#app/pages/plans.list/plans.list.vue';
+import PlanCreate from '#app/pages/plans.create/plans.create.vue';
+import OperatorList from '#app/pages/operators.list/operators.list.vue';
+import OperatorCreate from '#app/pages/operators.create/operators.create.vue';
 
 import { logout, isLoggedIn } from '#helpers/api/user';
 import { isLoaded as isConfigLoaded, hasPermission } from '#helpers/api/config';
@@ -242,6 +246,42 @@ const router = new VueRouter({
             path: '/activer-mon-compte/:token',
             component: UserActivate,
             beforeEnter: guardians.anonymous,
+        },
+        {
+            meta: {
+                group: 'plans',
+                // permissions: [{ type: 'feature', name: 'readPlan' }],
+            },
+            path: '/liste-des-dispositifs',
+            component: PlanList,
+            beforeEnter: guardians.loaded,
+        },
+        {
+            meta: {
+                group: 'planCreation',
+                // permissions: [{ type: 'feature', name: 'createPlan' }],
+            },
+            path: '/nouveau-dispositif',
+            component: PlanCreate,
+            beforeEnter: guardians.loaded,
+        },
+        {
+            meta: {
+                group: 'operators',
+                // permissions: [{ type: 'feature', name: 'readOperator' }],
+            },
+            path: '/liste-des-operateurs',
+            component: OperatorList,
+            beforeEnter: guardians.loaded,
+        },
+        {
+            meta: {
+                group: 'operatorCreation',
+                // permissions: [{ type: 'feature', name: 'createOperator' }],
+            },
+            path: '/nouvel-operateur',
+            component: OperatorCreate,
+            beforeEnter: guardians.loaded,
         },
     ],
 });
