@@ -228,7 +228,7 @@ const router = new VueRouter({
         },
         {
             meta: {
-                group: 'users',
+                group: 'userCreation',
                 permissions: [{ type: 'feature', name: 'createUser' }],
             },
             path: '/nouvel-utilisateur',

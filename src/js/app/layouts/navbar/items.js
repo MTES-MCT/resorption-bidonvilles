@@ -46,7 +46,7 @@ export default {
                 {
                     label: 'Créer un utilisateur',
                     target: '/nouvel-utilisateur',
-                    group: 'users',
+                    group: 'userCreation',
                 },
             ],
         },
