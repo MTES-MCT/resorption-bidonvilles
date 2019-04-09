@@ -79,6 +79,7 @@ export default {
         {
             label: 'Aide',
             items: [
+                { label: 'Centre d\'aides', target: '/aide' },
                 { label: 'Nous contacter', target: '/feedback' },
                 { label: 'CGUs', target: '/conditions-d-utilisation' },
             ],
