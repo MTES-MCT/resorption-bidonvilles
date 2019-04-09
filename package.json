@@ -32,10 +32,10 @@
     "vue-router": "^3.0.2",
     "vue-template-compiler": "^2.5.21",
     "vuejs-datepicker": "^1.5.4"
-  },
+  },    
   "scripts": {
-    "dev": "parcel serve ./src/index.html --open --no-autoinstall",
-    "build": "rm -rf ./dist && parcel build ./src/index.html",
+    "dev": "parcel serve ./src/*.html --open --no-autoinstall",
+    "build": "rm -rf ./dist && parcel build ./src/*.html && cp -r ./src/landing ./dist",
     "release": "release() { git reset HEAD .; yarn build; git add dist; git commit -m \"📦 Release v$1\"; git tag \"v$1\"; git push origin HEAD; git push origin \"v$1\"; } && release",
     "deploy": "deploy() { git fetch origin \"refs/tags/$1:refs/tags/$1\"; git checkout $1; } && deploy"
   },
