@@ -2,10 +2,22 @@ export default {
     anonymous: [
         { label: 'Connexion', target: '/connexion' },
         { label: 'Demander un accès', target: '/demande-d-acces' },
-        { label: 'Nous contacter', target: '/feedback' },
+        {
+            label: 'Aide',
+            items: [
+                { label: 'Nous contacter', target: '/feedback' },
+                { label: 'CGUs', target: '/conditions-d-utilisation' },
+            ],
+        },
     ],
     loading: [
-        { label: 'Nous contacter', target: '/feedback' },
+        {
+            label: 'Aide',
+            items: [
+                { label: 'Nous contacter', target: '/feedback' },
+                { label: 'CGUs', target: '/conditions-d-utilisation' },
+            ],
+        },
         { label: 'Déconnexion', target: '/deconnexion' },
     ],
     loaded: [
@@ -64,6 +76,12 @@ export default {
                 { label: 'Déconnexion', target: '/deconnexion' },
             ],
         },
-        { label: 'Nous contacter', target: '/feedback' },
+        {
+            label: 'Aide',
+            items: [
+                { label: 'Nous contacter', target: '/feedback' },
+                { label: 'CGUs', target: '/conditions-d-utilisation' },
+            ],
+        },
     ],
 };

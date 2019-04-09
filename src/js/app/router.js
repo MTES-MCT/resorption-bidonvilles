@@ -17,6 +17,8 @@ import PlanList from '#app/pages/plans.list/plans.list.vue';
 import PlanCreate from '#app/pages/plans.create/plans.create.vue';
 import OperatorList from '#app/pages/operators.list/operators.list.vue';
 import OperatorCreate from '#app/pages/operators.create/operators.create.vue';
+// eslint-disable-next-line
+import CGU from '/doc/CGU_Action_Bidonvilles.pdf';
 
 import { logout, isLoggedIn } from '#helpers/api/user';
 import { isLoaded as isConfigLoaded, hasPermission } from '#helpers/api/config';
@@ -210,6 +212,13 @@ const router = new VueRouter({
             path: '/feedback',
             beforeEnter(to, from, next) {
                 window.open('https://docs.google.com/forms/d/e/1FAIpQLSdffCEgWp2B1F770MsquDXbyqs251fleRBJLA3vlkQ-N78w9g/viewform', '_blank');
+                next(false);
+            },
+        },
+        {
+            path: '/conditions-d-utilisation',
+            beforeEnter(to, from, next) {
+                window.open(CGU, '_blank');
                 next(false);
             },
         },
