@@ -17,6 +17,7 @@ import PlanList from '#app/pages/plans.list/plans.list.vue';
 import PlanCreate from '#app/pages/plans.create/plans.create.vue';
 import OperatorList from '#app/pages/operators.list/operators.list.vue';
 import OperatorCreate from '#app/pages/operators.create/operators.create.vue';
+import LegalMentions from '#app/pages/legalMentions/legalMentions.vue';
 // eslint-disable-next-line
 import CGU from '/doc/CGU_Action_Bidonvilles.pdf';
 
@@ -228,6 +229,10 @@ const router = new VueRouter({
                 window.open(CGU, '_blank');
                 next(false);
             },
+        },
+        {
+            path: '/mentions-legales',
+            component: LegalMentions,
         },
         {
             meta: {

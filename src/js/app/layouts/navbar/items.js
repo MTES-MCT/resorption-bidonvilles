@@ -6,6 +6,7 @@ export default {
             label: 'Aide',
             items: [
                 { label: 'Nous contacter', target: '/feedback' },
+                { label: 'Mentions légales', target: '/mentions-legales' },
                 { label: 'CGUs', target: '/conditions-d-utilisation' },
             ],
         },
@@ -15,6 +16,7 @@ export default {
             label: 'Aide',
             items: [
                 { label: 'Nous contacter', target: '/feedback' },
+                { label: 'Mentions légales', target: '/mentions-legales' },
                 { label: 'CGUs', target: '/conditions-d-utilisation' },
             ],
         },
@@ -81,6 +83,7 @@ export default {
             items: [
                 { label: 'Centre d\'aides', target: '/aide' },
                 { label: 'Nous contacter', target: '/feedback' },
+                { label: 'Mentions légales', target: '/mentions-legales' },
                 { label: 'CGUs', target: '/conditions-d-utilisation' },
             ],
         },
