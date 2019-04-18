@@ -19,7 +19,7 @@
         //- filters
         <simplebar class="filters" ref="filters" data-simplebar-auto-hide="false">
             <div class="filterGroup">
-                <aside><img src="/img/people.svg" width="50" alt="" /></aside>
+                <aside><img :src="iconFormat" width="50" alt="" /></aside>
                 <main>
                     <h1>Résultats sous forme de</h1>
                     <div v-for="(option, index) in viewTypes">
@@ -30,7 +30,7 @@
             </div>
 
             <div class="filterGroup">
-                <aside><img src="/img/people.svg" width="50" alt="" /></aside>
+                <aside><img :src="iconGeo" width="50" alt="" /></aside>
                 <main>
                     <h1>Périmètre géographique</h1>
                     <Address :autocomplete-function="autocompleteLocation" v-model="location" :show-magnifier="false"></Address>

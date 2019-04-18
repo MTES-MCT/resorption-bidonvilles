@@ -21,6 +21,13 @@ import iconAction from '/img/action.svg';
 // eslint-disable-next-line
 import iconStatus from '/img/status.svg';
 
+// eslint-disable-next-line
+import iconFormat from '/img/format.svg';
+// eslint-disable-next-line
+import iconGeo from '/img/geo.svg';
+// eslint-disable-next-line
+import iconOrigins from '/img/origins.svg';
+
 export default {
     components: {
         NavBar,
@@ -110,7 +117,7 @@ export default {
                     ],
                 },
                 {
-                    icon: iconStatus,
+                    icon: iconPeople,
                     label: 'Type de propriétaire',
                     id: 'ownerType',
                     permissions: [
@@ -123,7 +130,7 @@ export default {
                     })),
                 },
                 {
-                    icon: iconStatus,
+                    icon: iconOrigins,
                     label: 'Origines',
                     id: 'socialOrigin',
                     permissions: [
@@ -144,6 +151,8 @@ export default {
                     }]),
                 },
             ],
+            iconFormat,
+            iconGeo,
             location: null,
             currentTab: 'map',
             exporter: {
