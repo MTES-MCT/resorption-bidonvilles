@@ -99,15 +99,6 @@ export default {
                     ],
                 },
                 {
-                    icon: iconAction,
-                    label: 'Actions en cours',
-                    id: 'action',
-                    options: [
-                        { value: 'no', label: 'Non', checked: true },
-                        { value: 'yes', label: 'Oui', checked: true },
-                    ],
-                },
-                {
                     icon: iconStatus,
                     label: 'Statut des sites',
                     id: 'status',
