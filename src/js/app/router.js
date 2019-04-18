@@ -271,7 +271,7 @@ const router = new VueRouter({
         {
             meta: {
                 group: 'plans',
-                // permissions: [{ type: 'feature', name: 'readPlan' }],
+                permissions: [{ type: 'feature', name: 'readPlan' }],
             },
             path: '/liste-des-dispositifs',
             component: PlanList,
@@ -280,7 +280,7 @@ const router = new VueRouter({
         {
             meta: {
                 group: 'planCreation',
-                // permissions: [{ type: 'feature', name: 'createPlan' }],
+                permissions: [{ type: 'feature', name: 'createPlan' }],
             },
             path: '/nouveau-dispositif',
             component: PlanCreate,
@@ -289,7 +289,7 @@ const router = new VueRouter({
         {
             meta: {
                 group: 'operators',
-                // permissions: [{ type: 'feature', name: 'readOperator' }],
+                permissions: [{ type: 'feature', name: 'readOperator' }],
             },
             path: '/liste-des-operateurs',
             component: OperatorList,
@@ -298,7 +298,7 @@ const router = new VueRouter({
         {
             meta: {
                 group: 'operatorCreation',
-                // permissions: [{ type: 'feature', name: 'createOperator' }],
+                permissions: [{ type: 'feature', name: 'createOperator' }],
             },
             path: '/nouvel-operateur',
             component: OperatorCreate,
