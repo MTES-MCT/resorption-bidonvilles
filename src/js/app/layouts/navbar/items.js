@@ -45,7 +45,7 @@ export default {
             label: 'Acteurs',
             items: [
                 {
-                    label: 'Gérer les acteurs',
+                    label: 'Liste des acteurs',
                     target: '/liste-des-operateurs',
                     group: 'operators',
                 },
