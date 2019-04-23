@@ -1,9 +1,26 @@
 <div>
     <NavBar></NavBar>
 
-    <section class="section section-white" id="form">
+    <section class="section section-white">
         <div class="container">
             <h1>Liste des opérateurs</h1>
+
+            //- state: loading in progress
+            <div v-if="state === 'loading'" class="notification full-width">
+                <img src="/img/spinner_dark.svg" width="20" class="spinner" />
+                <span>Chargement des données en cours...</span>
+            </div>
+
+            //- state: loading failed
+            <div v-if="state === 'error'" class="notification error full-width">
+                <span>{{ error }}. <a href="#" @click="retryLoading">Réessayer ?</a></span>
+            </div>
+
+            //- state: loaded
+            <div v-if="state === 'loaded'">
+                <Table v-bind="tableProperties"></Table>
+            </div>
         </div>
     </section>
 </div>
+
