@@ -18,14 +18,7 @@ export default {
                 type: null,
             },
             rows: this.value,
-            fundingTypes: getConfig().fundingTypes || [
-                { id: 1, label: 'Financements étatiques hors crédits dédiés', allowsDetails: true },
-                { id: 2, label: 'Crédits dédiés à la résorption des bidonvilles', allowsDetails: false },
-                { id: 3, label: 'Cofinancement collectivité territoriale', allowsDetails: true },
-                { id: 4, label: 'Financement européen', allowsDetails: true },
-                { id: 5, label: 'Financement privé', allowsDetails: true },
-                { id: 6, label: 'Autre', allowsDetails: true },
-            ],
+            fundingTypes: getConfig().funding_types || [],
         };
     },
 
