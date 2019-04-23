@@ -21,16 +21,7 @@ export default {
              *
              * @type {Array.<PlanType>}
              */
-            planTypes: getConfig().planTypes || [
-                { id: 1, label: 'Espace temporaire d’insertion', needsDetails: false },
-                { id: 2, label: 'Diagnostic social', needsDetails: false },
-                { id: 3, label: 'Accompagnement social global', needsDetails: false },
-                { id: 4, label: 'Intervention sanitaire', needsDetails: false },
-                { id: 5, label: 'Accompagnement scolaire', needsDetails: false },
-                { id: 6, label: 'Protection de l’enfance', needsDetails: false },
-                { id: 7, label: 'Accompagnement emploi', needsDetails: false },
-                { id: 8, label: 'Autre', needsDetails: true },
-            ],
+            planTypes: getConfig().plan_types || [],
 
             /**
              * Language set for the datepicker
