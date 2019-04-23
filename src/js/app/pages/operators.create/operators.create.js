@@ -22,6 +22,15 @@ export default {
         };
     },
 
+    computed: {
+        formData() {
+            return {
+                name: this.form.input.name,
+                contacts: this.form.input.contacts.map(({ data }) => data),
+            };
+        },
+    },
+
     methods: {
         submit() {
             if (this.loading === true) {
@@ -32,7 +41,7 @@ export default {
             this.mainError = null;
             this.errors = {};
 
-            create(this.input)
+            create(this.formData)
                 .then(() => {
                     this.loading = false;
 
@@ -40,7 +49,7 @@ export default {
                         group: 'notifications',
                         type: 'success',
                         title: 'Opérateur créé',
-                        text: `L'opérateur ${this.input.name} a bien été créé`,
+                        text: `L'opérateur ${this.form.input.name} a bien été créé`,
                     });
 
                     this.$router.push('/liste-des-operateurs');

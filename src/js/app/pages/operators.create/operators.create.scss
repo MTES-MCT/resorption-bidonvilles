@@ -16,12 +16,16 @@
 
 .operators-removeContainer {
     display: inline-block;
-    width: 5%;
+    width: 4%;
+    vertical-align: top;
+    text-align: center;
 }
 
 .panel {
     display: inline-block;
+    vertical-align: top;
     width: 95%;
+    margin-bottom: 20px;
 }
 
 .operators-removeIcon {

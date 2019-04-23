@@ -21,10 +21,10 @@
                 <label v-bind:class="{ error: form.errors.contacts }">Contacts :</label>
                 <p>Vous pouvez préciser les coordonnées de personnes travaillant pour cet opérateur :</p>
                 <div class="operators-contact" v-for="(contact, index) in form.input.contacts">
+                    <OperatorContact v-model="contact.data" :errors="(form.errors.contacts && form.errors.contacts[index]) || {}" :disabled="loading"></OperatorContact>
                     <div class="operators-removeContainer">
                         <span v-bind:class="{ disabled: loading, 'operators-removeIcon': true }"><img src="/img/cross.svg" alt="" width="20" @click="removeContact(index)" /></span>
                     </div>
-                    <OperatorContact v-model="contact.data" :disabled="loading"></OperatorContact>
                 </div>
                 <div class="panel panel--empty" @click="addContact" v-if="!loading">Ajouter un contact</div>
             </div>
