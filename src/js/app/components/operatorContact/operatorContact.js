@@ -2,6 +2,10 @@ import { get as getConfig } from '#helpers/api/config';
 
 export default {
     props: {
+        value: {
+            type: Object,
+            default: () => ({}),
+        },
         disabled: {
             type: Boolean,
             default: false,
@@ -14,8 +18,17 @@ export default {
 
     data() {
         return {
-            input: {},
+            input: this.value,
             departements: getConfig().departements,
         };
+    },
+
+    watch: {
+        value() {
+            this.input = this.value;
+        },
+        input() {
+            this.$emit('input', this.input);
+        },
     },
 };
