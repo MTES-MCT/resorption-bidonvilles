@@ -57,6 +57,7 @@ export default {
             if (planType == null || planType.needsDetails !== true) {
                 data.planTypeOther = null;
             }
+            data.operator = (data.operator && data.operator.operator_id) || null;
 
             return data;
         },
@@ -109,9 +110,9 @@ export default {
 
                     this.$router.push('/liste-des-dispositifs');
                 })
-                .catch(({ error: { user_message: userMessage, fields } }) => {
+                .catch(({ user_message: userMessage, fields }) => {
                     this.form.mainError = userMessage;
-                    this.form.errors = fields;
+                    this.form.errors = fields || {};
                     this.form.pending = false;
                 });
         },
