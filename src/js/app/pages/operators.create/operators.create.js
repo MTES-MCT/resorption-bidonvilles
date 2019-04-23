@@ -46,8 +46,8 @@ export default {
                     this.$router.push('/liste-des-operateurs');
                 })
                 .catch(({ user_message: mainError, fields: errors }) => {
-                    this.form.mainError = mainError;
-                    this.form.errors = errors;
+                    this.form.mainError = mainError || null;
+                    this.form.errors = errors || {};
                     this.loading = false;
                 });
         },
