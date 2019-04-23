@@ -1,5 +1,5 @@
 import Autocompleter from '#app/components/address/address.vue';
-import { Promise } from 'q';
+import { search } from '#helpers/api/operator';
 
 export default {
     components: {
@@ -12,13 +12,15 @@ export default {
         };
     },
 
+    watch: {
+        operator() {
+            this.$emit('input', this.operator);
+        },
+    },
+
     methods: {
         searchOperator(str) {
-            const p = Promise.resolve([
-                { label: 'a' },
-            ]);
-            p.abort = () => {};
-            return p;
+            return search(str);
         },
     },
 };
