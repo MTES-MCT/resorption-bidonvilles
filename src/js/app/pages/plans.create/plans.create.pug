@@ -29,18 +29,6 @@
                 </div>
             </div>
 
-            <div class="form__group" v-if="planType && planType.needsDetails">
-                <label v-bind:class="{ error: form.errors.planTypeOther }"><sup class="mandatory">(*)</sup> Préciser :</label>
-                <p class="error" v-if="form.errors.planTypeOther">
-                    <ul>
-                        <li v-for="error in form.errors.planTypeOther">{{ error }}</li>
-                    </ul>
-                </p>
-                <div>
-                    <input type="text" v-model="form.data.planTypeOther" :disabled="form.pending" :readonly="form.pending" />
-                </div>
-            </div>
-
             <div class="form__group">
                 <label v-bind:class="{ error: form.errors.startedAt }"><sup class="mandatory">(*)</sup> Début du dispositif le :</label>
                 <p class="error" v-if="form.errors.startedAt">

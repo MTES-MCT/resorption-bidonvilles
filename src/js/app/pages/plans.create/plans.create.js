@@ -37,7 +37,6 @@ export default {
                 data: {
                     operator: null,
                     planType: null,
-                    planTypeOther: null,
                     startedAt: null,
                     funding: [],
                 },
@@ -53,10 +52,6 @@ export default {
          */
         formData() {
             const data = Object.assign({}, this.form.data);
-            const planType = this.getPlanType(data.planType);
-            if (planType == null || planType.needsDetails !== true) {
-                data.planTypeOther = null;
-            }
             data.operator = (data.operator && data.operator.operator_id) || null;
 
             return data;
