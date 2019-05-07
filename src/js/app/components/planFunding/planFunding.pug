@@ -1,0 +1,33 @@
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Type de financement</th>
+                <th class="planFunding-amount">Montant (€)</th>
+                <th class="planFunding-details">Précisions</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="(row, index) in rows">
+                <td>
+                    <select v-model="row.type" :disabled="disabled">
+                        <option v-for="type in fundingTypes" :value="type.id">{{ type.label }}</option>
+                    </select>
+                </td>
+                <td><input type="number" v-model="row.amount" min="0" :disabled="disabled" :readonly="disabled" /></td>
+                <td><input type="text" :disabled="disabled" v-model="row.details" /></td>
+                <td>
+                    <span v-bind:class="{ disabled: disabled, 'planFunding-removeIcon': true }"><img src="/img/cross.svg" alt="" width="20" @click="removeRow(index)" /></span>
+                </td>
+            </tr>
+            <tr v-if="rows.length === 0">
+                <td colspan="4">Veuillez cliquer sur le bouton "Ajouter une ligne" pour détailler le financement</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="planFunding-footer">
+        <button class="button" :disabled="disabled" @click="addRow">Ajouter une ligne</button>
+    </div>
+</div>

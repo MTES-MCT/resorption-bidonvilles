@@ -30,6 +30,8 @@
                     <input type="password" id="password" v-model="form.input.password" :readonly="form.loading">
                 </div>
 
+                <p>En cliquant sur "Activer mon compte", j'accepte les <router-link to="/conditions-d-utilisation">conditions générales d'utilisation</router-link>.</p>
+
                 <div class="form__group">
                     <button class="button" type="submit" @click="submit">
                         <img  v-if="form.loading" src="/img/spinner_light.svg" width="20" />

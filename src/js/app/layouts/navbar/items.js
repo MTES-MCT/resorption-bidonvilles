@@ -2,15 +2,29 @@ export default {
     anonymous: [
         { label: 'Connexion', target: '/connexion' },
         { label: 'Demander un accès', target: '/demande-d-acces' },
-        { label: 'Nous contacter', target: '/feedback' },
+        {
+            label: 'Aide',
+            items: [
+                { label: 'Nous contacter', target: '/feedback' },
+                { label: 'Mentions légales', target: '/mentions-legales' },
+                { label: 'CGUs', target: '/conditions-d-utilisation' },
+            ],
+        },
     ],
     loading: [
-        { label: 'Nous contacter', target: '/feedback' },
+        {
+            label: 'Aide',
+            items: [
+                { label: 'Nous contacter', target: '/feedback' },
+                { label: 'Mentions légales', target: '/mentions-legales' },
+                { label: 'CGUs', target: '/conditions-d-utilisation' },
+            ],
+        },
         { label: 'Déconnexion', target: '/deconnexion' },
     ],
     loaded: [
         {
-            label: 'Gestion des sites',
+            label: 'Sites',
             items: [
                 { label: 'Liste des sites', target: '/liste-des-sites', group: 'townList' },
                 {
@@ -21,17 +35,24 @@ export default {
             ],
         },
         {
-            label: 'Gestion des actions',
+            label: 'Dispositifs',
+            items: [
+                { label: 'Liste des dispositifs', target: '/liste-des-dispositifs' },
+                { label: 'Déclarer un dispositif', target: '/nouveau-dispositif' },
+            ],
+        },
+        {
+            label: 'Acteurs',
             items: [
                 {
-                    label: 'Liste des actions',
-                    target: '/liste-des-actions',
-                    group: 'actionList',
+                    label: 'Liste des acteurs',
+                    target: '/liste-des-operateurs',
+                    group: 'operators',
                 },
                 {
-                    label: 'Déclarer une action',
-                    target: '/nouvelle-action',
-                    group: 'actionCreation',
+                    label: 'Créer un acteur',
+                    target: '/nouvel-operateur',
+                    group: 'operatorCreation',
                 },
             ],
         },
@@ -57,6 +78,14 @@ export default {
                 { label: 'Déconnexion', target: '/deconnexion' },
             ],
         },
-        { label: 'Nous contacter', target: '/feedback' },
+        {
+            label: 'Aide',
+            items: [
+                { label: 'Centre d\'aide', target: '/aide' },
+                { label: 'Nous contacter', target: '/feedback' },
+                { label: 'Mentions légales', target: '/mentions-legales' },
+                { label: 'CGUs', target: '/conditions-d-utilisation' },
+            ],
+        },
     ],
 };

@@ -1,0 +1,40 @@
+<div>
+    <NavBar></NavBar>
+
+    <section class="section section-white" id="form">
+        <div class="container">
+            <h1>Déclarer un nouvel opérateur</h1>
+
+            <div class="notification error" v-if="form.mainError">{{ form.mainError }}</div>
+
+            <div class="form__group">
+                <label for="name" v-bind:class="{ error: form.errors.name }">Nom de l'opérateur :</label>
+                <p class="error" v-if="form.errors.name">
+                    <ul>
+                        <li v-for="error in form.errors.name">{{ error }}</li>
+                    </ul>
+                </p>
+                <input type="text" id="name" v-model.lazy.trim="form.input.name" :disabled="loading" :readonly="loading">
+            </div>
+
+            <div class="form__group">
+                <label v-bind:class="{ error: form.errors.contacts }">Contacts :</label>
+                <p>Vous pouvez préciser les coordonnées de personnes travaillant pour cet opérateur :</p>
+                <div class="operators-contact" v-for="(contact, index) in form.input.contacts">
+                    <OperatorContact v-model="contact.data" :errors="(form.errors.contacts && form.errors.contacts[index]) || {}" :disabled="loading"></OperatorContact>
+                    <div class="operators-removeContainer">
+                        <span v-bind:class="{ disabled: loading, 'operators-removeIcon': true }"><img src="/img/cross.svg" alt="" width="20" @click="removeContact(index)" /></span>
+                    </div>
+                </div>
+                <div class="panel panel--empty" @click="addContact" v-if="!loading">Ajouter un contact</div>
+            </div>
+
+            <div class="form__group">
+                <button class="button" type="submit" @click="submit" :disabled="loading">
+                    <img  v-if="loading" src="/img/spinner_light.svg" width="20" />
+                    <span v-else>Créer l'opérateur</span>
+                </button>
+            </div>
+        </div>
+    </section>
+</div>
