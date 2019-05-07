@@ -1,0 +1,77 @@
+<div>
+    <NavBar></NavBar>
+    
+    <section class="section section-white">
+        <div class="container">
+            <div v-if="!status || status === 'loading'">
+                <!-- LOADING STATE -->
+                <div class="notification full-width">
+                    <img src="/img/spinner_dark.svg" width="20" class="spinner" />
+                    <span>Chargement des données en cours...</span>
+                </div>
+            </div>
+
+            <div v-else-if="status === 'loadingError'">
+                <!-- ERROR STATE -->
+                <div class="notification error full-width">
+                    <span>{{ error }}. <span @click="load">Réessayer ?</span></span>
+                </div>
+            </div>
+
+            <div v-else>
+                <div class="dashboard">
+                    <aside class="side-menu">
+                        <ul>
+                            <li><a class="active">Caractéristiques du dispositif</a></li>
+                        </ul>
+                    </aside>
+
+                    <div class="main">
+                        <div>
+                            <div>
+                                <div class="panel">
+                                    <div class="panel__header">
+                                        <h3>1. Caractéristiques générales</h3>
+                                    </div>
+                                    <div class="form__group">
+                                        <p v-if="plan.name">
+                                            <strong>Nom du dispositif :</strong> {{ plan.name }}
+                                        </p>
+                                        <p>
+                                            <strong>Type de dispositif :</strong> {{ plan.type.label }}
+                                        </p>
+                                        <p>
+                                            <strong>Dispositif démarré le :</strong> {{ formatDate(plan.startedAt) }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="panel">
+                                    <div class="panel__header">
+                                        <h3>2. Opérateur en charge</h3>
+                                    </div>
+                                    <div class="form__group">
+                                        <p>
+                                            <strong>Nom de l'opérateur :</strong> {{ plan.ngo.name }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="panel">
+                                    <div class="panel__header">
+                                        <h3>3. Caractéristiques spécifiques</h3>
+                                    </div>
+                                    <div class="form__group">
+                                        <p v-for="field in customFields">
+                                            <strong>{{ fieldsLabel[field] }} :</strong> {{ numericValue(plan[toCamelCase(field)]) }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
