@@ -43,12 +43,16 @@ export default {
             return {
                 columns: [
                     {
+                        label: 'Nom du dispositif',
+                        field: 'name',
+                    },
+                    {
                         label: 'Type de dispositif',
                         field: 'type.label',
                     },
                     {
                         label: 'Opérateur',
-                        field: 'operator.name',
+                        field: 'ngo.name',
                     },
                 ],
                 rows: this.plans,
@@ -97,6 +101,16 @@ export default {
          */
         retryLoading() {
             this.load();
+        },
+
+        /**
+         * Redirects to a plan's details page
+         *
+         * @param {Object}
+         */
+        routeToPlan({ row: { id: planId } }) {
+            const routeData = this.$router.resolve(`/dispositif/${planId}`);
+            window.open(routeData.href, '_blank');
         },
     },
 };

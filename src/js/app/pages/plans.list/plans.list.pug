@@ -13,12 +13,12 @@
 
             //- state: loading failed
             <div v-if="state === 'error'" class="notification error full-width">
-                <span>{{ error }}. <a href="#" @click="retryLoading">Réessayer ?</a></span>
+                <span>{{ error }}. <span @click="retryLoading">Réessayer ?</span></span>
             </div>
 
             //- state: loaded
             <div v-if="state === 'loaded'">
-                <Table v-bind="tableProperties"></Table>
+                <Table v-bind="tableProperties" @on-row-click="routeToPlan"></Table>
             </div>
         </div>
     </section>

@@ -12,6 +12,17 @@ export function list() {
 }
 
 /**
+ * Fetchs a specific plan from the database
+ *
+ * @param {string} id
+ *
+ * @returns {Promise}
+ */
+export function get(id) {
+    return getApi(`/plans/${id}`);
+}
+
+/**
  * Creates a new plan
  *
  * @param {Object} data

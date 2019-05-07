@@ -16,7 +16,7 @@
                     </select>
                 </td>
                 <td><input type="number" v-model="row.amount" min="0" :disabled="disabled" :readonly="disabled" /></td>
-                <td><input type="text" :disabled="disabled || !row.type || !getFundingType(row.type).allowDetails" v-model="row.details" /></td>
+                <td><input type="text" :disabled="disabled" v-model="row.details" /></td>
                 <td>
                     <span v-bind:class="{ disabled: disabled, 'planFunding-removeIcon': true }"><img src="/img/cross.svg" alt="" width="20" @click="removeRow(index)" /></span>
                 </td>

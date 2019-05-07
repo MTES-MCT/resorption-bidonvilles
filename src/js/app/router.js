@@ -15,6 +15,7 @@ import UserCreate from '#app/pages/users.create/users.create.vue';
 import UserActivate from '#app/pages/users.activate/users.activate.vue';
 import PlanList from '#app/pages/plans.list/plans.list.vue';
 import PlanCreate from '#app/pages/plans.create/plans.create.vue';
+import PlanDetails from '#app/pages/plans.details/plans.details.vue';
 import OperatorList from '#app/pages/operators.list/operators.list.vue';
 import OperatorCreate from '#app/pages/operators.create/operators.create.vue';
 import LegalMentions from '#app/pages/legalMentions/legalMentions.vue';
@@ -288,8 +289,17 @@ const router = new VueRouter({
         },
         {
             meta: {
+                group: 'plans',
+                permissions: [{ type: 'feature', name: 'readPlan' }],
+            },
+            path: '/dispositif/:id',
+            component: PlanDetails,
+            beforeEnter: guardians.loaded,
+        },
+        {
+            meta: {
                 group: 'operators',
-                permissions: [{ type: 'feature', name: 'readOperator' }],
+                permissions: [{ type: 'feature', name: 'readNgo' }],
             },
             path: '/liste-des-operateurs',
             component: OperatorList,
@@ -298,7 +308,7 @@ const router = new VueRouter({
         {
             meta: {
                 group: 'operatorCreation',
-                permissions: [{ type: 'feature', name: 'createOperator' }],
+                permissions: [{ type: 'feature', name: 'createNgo' }],
             },
             path: '/nouvel-operateur',
             component: OperatorCreate,
