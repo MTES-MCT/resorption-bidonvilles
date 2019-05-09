@@ -67,6 +67,18 @@
                                         </p>
                                     </div>
                                 </div>
+
+                                <div class="panel">
+                                    <div class="panel__header">
+                                        <h3>4. Sites concernés</h3>
+                                    </div>
+                                    <div class="form__group" v-if="plan.towns.length > 0">
+                                        <ul>
+                                            <li v-for="town in plan.towns"><router-link :to="`/site/${town.id}`">Site de {{ town.address }}</router-link></li>
+                                        </ul>
+                                    </div>
+                                    <div class="form__group" v-else>Ce dispositif ne s'applique pas à un site particulier.</div>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -3,10 +3,17 @@ import { getApi, postApi, deleteApi } from '#helpers/api/main';
 /**
  * Fetches all towns from the database
  *
+ * @param {Object.<string,string>} [filters]
+ *
  * @returns {Promise}
  */
-export function all() {
-    return getApi('/towns');
+export function all(filters = {}) {
+    const arrFilters = [];
+    Object.keys(filters).forEach((filterName) => {
+        arrFilters.push(`${filterName}=${encodeURIComponent(filters[filterName])}`);
+    });
+
+    return getApi(`/towns${arrFilters.length > 0 ? `?${arrFilters.join('&')}` : ''}`);
 }
 
 /**

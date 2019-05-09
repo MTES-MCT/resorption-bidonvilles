@@ -3,8 +3,10 @@ import PlanFunding from '#app/components/planFunding/planFunding.vue';
 import Operator from '#app/components/operator/operator.vue';
 import Datepicker from 'vuejs-datepicker';
 import { fr } from 'vuejs-datepicker/dist/locale';
-import { get as getConfig } from '#helpers/api/config';
+import { get as getConfig, hasPermission } from '#helpers/api/config';
 import { create } from '#helpers/api/plan';
+import { all as fetchAll } from '#helpers/api/town';
+import { VueGoodTable } from 'vue-good-table';
 
 const fieldsByType = {
     'Espace temporaire d’insertion': [
@@ -47,10 +49,21 @@ export default {
         NavBar,
         PlanFunding,
         Operator,
+        VueGoodTable,
     },
 
     data() {
         return {
+            /**
+             *
+             */
+            status: null,
+
+            /**
+             *
+             */
+            error: null,
+
             /**
              * List of plan-types
              *
@@ -69,6 +82,11 @@ export default {
              *
              */
             departements: getConfig().departements,
+
+            /**
+             *
+             */
+            towns: [],
 
             form: {
                 pending: false,
@@ -130,6 +148,10 @@ export default {
             const data = Object.assign({}, this.form.data);
             data.ngo = (data.operator && data.operator.ngo_id) || null;
 
+            if (data.townSelection === true) {
+                data.towns = this.$refs.towns.selectedRows.map(({ id }) => id);
+            }
+
             return data;
         },
 
@@ -160,9 +182,86 @@ export default {
 
             return customFields;
         },
+
+        /**
+         *
+         */
+        filteredTowns() {
+            return this.towns.filter(({ departement: { code } }) => code === this.form.data.departement);
+        },
+
+        /**
+         *
+         */
+        tableProps() {
+            const columns = [
+                {
+                    label: 'Commune',
+                    field: 'city.name',
+                },
+                {
+                    label: 'Adresse',
+                    field: 'address',
+                    permissions: [
+                        { type: 'data', name: 'address' },
+                    ],
+                },
+            ];
+
+            return {
+                styleClass: 'table',
+                columns: columns.filter(column => !column.permissions || column.permissions.every(permission => hasPermission(permission))),
+                rows: this.filteredTowns,
+                'sort-options': {
+                    enabled: true,
+                },
+                'pagination-options': {
+                    enabled: true,
+                    perPage: 10,
+                    perPageDropdown: [5, 10, 20, 30, 40, 50],
+                    nextLabel: 'Suivant',
+                    prevLabel: 'Précédent',
+                    rowsPerPageLabel: 'Nombre de sites par page',
+                    ofLabel: 'sur',
+                    pageLabel: 'Page', // for 'pages' mode
+                    allLabel: 'Tous',
+                },
+                'select-options': {
+                    enabled: true,
+                    selectionText: 'sites sélectionnés',
+                    clearSelectionText: 'annuler',
+                },
+            };
+        },
+    },
+
+    created() {
+        this.load();
     },
 
     methods: {
+        /**
+         *
+         */
+        load() {
+            if (['loading', 'loaded'].indexOf(this.status) !== -1) {
+                return;
+            }
+
+            this.status = 'loading';
+            this.error = null;
+
+            fetchAll({ status: 'open' })
+                .then((data) => {
+                    this.towns = data;
+                    this.status = 'loaded';
+                })
+                .catch(({ user_message: message }) => {
+                    this.error = message;
+                    this.status = 'loadingError';
+                });
+        },
+
         /**
          * Finds a plan-type by id
          *

@@ -3,106 +3,136 @@
 
     <section class="section section-white" id="form">
         <div class="container">
-            <div>
-                <h3>1. Caractéristiques générales</h3>
-                <div class="form__group">
-                    <label v-bind:class="{ error: form.errors.name }">Nom du dispositif :</label>
-                    <p>Ce champ n'est pas obligatoire, vous pouvez le laisser vide</p>
-                    <p class="error" v-if="form.errors.name">
-                        <ul>
-                            <li v-for="error in form.errors.name">{{ error }}</li>
-                        </ul>
-                    </p>
-
-                    <input type="text" v-model="form.data.name" :disabled="form.pending" />
+            <div v-if="!status || status === 'loading'">
+                <!-- LOADING STATE -->
+                <div class="notification full-width">
+                    <img src="/img/spinner_dark.svg" width="20" class="spinner" />
+                    <span>Chargement des données en cours...</span>
                 </div>
+            </div>
 
-                <div class="form__group">
-                    <label v-bind:class="{ error: form.errors.planType }"><sup class="mandatory">(*)</sup> Type de dispositif :</label>
-                    <p class="error" v-if="form.errors.planType">
-                        <ul>
-                            <li v-for="error in form.errors.planType">{{ error }}</li>
-                        </ul>
-                    </p>
-                    <div v-for="(type, index) in planTypes">
-                        <input type="radio" :id="'planType' + index" :value="type.id" v-model="form.data.planType" :disabled="form.pending">
-                        <label :for="'planType' + index" class="label-inline">{{ type.label }}</label>
+            <div v-else-if="status === 'loadingError'">
+                <!-- ERROR STATE -->
+                <div class="notification error full-width">
+                    <span>{{ error }}. <span @click="load">Réessayer ?</span></span>
+                </div>
+            </div>
+
+            <div v-else>
+                <div>
+                    <h3>1. Caractéristiques générales</h3>
+                    <div class="form__group">
+                        <label v-bind:class="{ error: form.errors.name }">Nom du dispositif :</label>
+                        <p>Ce champ n'est pas obligatoire, vous pouvez le laisser vide</p>
+                        <p class="error" v-if="form.errors.name">
+                            <ul>
+                                <li v-for="error in form.errors.name">{{ error }}</li>
+                            </ul>
+                        </p>
+
+                        <input type="text" v-model="form.data.name" :disabled="form.pending" />
+                    </div>
+
+                    <div class="form__group">
+                        <label v-bind:class="{ error: form.errors.planType }"><sup class="mandatory">(*)</sup> Type de dispositif :</label>
+                        <p class="error" v-if="form.errors.planType">
+                            <ul>
+                                <li v-for="error in form.errors.planType">{{ error }}</li>
+                            </ul>
+                        </p>
+                        <div v-for="(type, index) in planTypes">
+                            <input type="radio" :id="'planType' + index" :value="type.id" v-model="form.data.planType" :disabled="form.pending">
+                            <label :for="'planType' + index" class="label-inline">{{ type.label }}</label>
+                        </div>
+                    </div>
+
+                    <div class="form__group">
+                        <label v-bind:class="{ error: form.errors.startedAt }"><sup class="mandatory">(*)</sup> Début du dispositif le :</label>
+                        <p class="error" v-if="form.errors.startedAt">
+                            <ul>
+                                <li v-for="error in form.errors.startedAt">{{ error }}</li>
+                            </ul>
+                        </p>
+                        <datepicker :language="dateLanguage" :monday-first="true" v-model="form.data.startedAt" :full-month-name="true" :format="'dd MMMM yyyy'" :disabled="form.pending"></datepicker>
                     </div>
                 </div>
 
-                <div class="form__group">
-                    <label v-bind:class="{ error: form.errors.startedAt }"><sup class="mandatory">(*)</sup> Début du dispositif le :</label>
-                    <p class="error" v-if="form.errors.startedAt">
-                        <ul>
-                            <li v-for="error in form.errors.startedAt">{{ error }}</li>
-                        </ul>
-                    </p>
-                    <datepicker :language="dateLanguage" :monday-first="true" v-model="form.data.startedAt" :full-month-name="true" :format="'dd MMMM yyyy'" :disabled="form.pending"></datepicker>
+                <div>
+                    <h3>2. Opérateur en charge</h3>
+                    <div class="form__group">
+                        <label v-bind:class="{ error: form.errors.ngo }"><sup class="mandatory">(*)</sup> Opérateur :</label>
+                        <p class="error" v-if="form.errors.ngo">
+                            <ul>
+                                <li v-for="error in form.errors.ngo">{{ error }}</li>
+                            </ul>
+                        </p>
+
+                        <Operator v-model="form.data.operator" :disabled="form.pending"></Operator>
+                    </div>
+                </div>
+
+                <div v-if="this.customFields.length">
+                    <h3>3. Caractéristiques spécifiques</h3>
+                    <div class="form__group" v-for="field in this.customFields">
+                        <label>{{ fieldsLabel[field] }} :</label>
+                        <input type="number" v-model="form.data[field]" :disabled="form.pending" />
+                    </div>
+                </div>
+
+                <div>
+                    <h3>4. Sites concernés</h3>
+                    <div class="form__group">   
+                        <label v-bind:class="{ error: form.errors.departement }"><sup class="mandatory">(*)</sup> Département concerné :</label>
+                        <p class="error" v-if="form.errors.departement">
+                            <ul>
+                                <li v-for="error in form.errors.departement">{{ error }}</li>
+                            </ul>
+                        </p>
+
+                        <select v-model="form.data.departement" :disabled="form.pending">
+                            <option v-for="departement in departements" :value="departement.code">{{ departement.code + ' - ' + departement.name }}</option>
+                        </select>
+                    </div>
+
+                    <div class="form__group">
+                        <label>L'action est menée sur un ou plusieurs site(s) en particulier :</label>
+                        <div v-for="(value, index) in [0,1]">
+                            <input type="radio" :id="'townSelection' + index" :value="value === 1" v-model="form.data.townSelection" :disabled="form.pending">
+                            <label :for="'townSelection' + index" class="label-inline">{{ value ? 'Oui' : 'Non' }}</label>
+                        </div>
+                    </div>
+
+                    <div class="form__group" v-if="form.data.townSelection === true">
+                        <VueGoodTable v-bind="tableProps" ref="towns"></VueGoodTable>
+                    </div>
+                </div>
+
+                <div>
+                    <h3>5. Financements</h3>
+                    <p>Merci d’identifier séparément (ligne par ligne) les sources de financement d’un même acteur.</p>
+                    <div class="form__group">
+                        <label v-bind:class="{ error: form.errors.funding }"><sup class="mandatory">(*)</sup> Financements :</label>
+                        <p class="error" v-if="form.errors.funding">
+                            <ul>
+                                <li v-for="error in form.errors.funding">{{ error }}</li>
+                            </ul>
+                        </p>
+
+                        <PlanFunding v-model="form.data.funding" :disabled="form.pending"></PlanFunding>
+                    </div>
+
+                    <div class="form__group">
+                        <div class="notification error" v-if="form.mainError">{{ form.mainError }}.</div>
+                    </div>
+
+                    <div class="form__group">
+                        <button class="button large" @click="submit" :disabled="form.pending">
+                            <img src="/img/spinner_light.svg" width="20" v-if="form.pending" />
+                            <span v-else>Déclarer le dispositif</span>
+                        </button>
+                    </div>
                 </div>
             </div>
-
-            <div>
-                <h3>2. Opérateur en charge</h3>
-                <div class="form__group">
-                    <label v-bind:class="{ error: form.errors.ngo }"><sup class="mandatory">(*)</sup> Opérateur :</label>
-                    <p class="error" v-if="form.errors.ngo">
-                        <ul>
-                            <li v-for="error in form.errors.ngo">{{ error }}</li>
-                        </ul>
-                    </p>
-
-                    <Operator v-model="form.data.operator" :disabled="form.pending"></Operator>
-                </div>
-            </div>
-
-            <div v-if="this.customFields.length">
-                <h3>3. Caractéristiques spécifiques</h3>
-                <div class="form__group" v-for="field in this.customFields">
-                    <label>{{ fieldsLabel[field] }} :</label>
-                    <input type="number" v-model="form.data[field]" :disabled="form.pending" />
-                </div>
-            </div>
-
-            <div>
-                <h3>4. Sites concernés</h3>
-                <div class="form__group">   
-                    <label v-bind:class="{ error: form.errors.departement }"><sup class="mandatory">(*)</sup> Département concerné :</label>
-                    <p class="error" v-if="form.errors.departement">
-                        <ul>
-                            <li v-for="error in form.errors.departement">{{ error }}</li>
-                        </ul>
-                    </p>
-
-                    <select v-model="form.data.departement" :disabled="form.pending">
-                        <option v-for="departement in departements" :value="departement.code">{{ departement.code + ' - ' + departement.name }}</option>
-                    </select>
-                </div>
-            </div>
-
-            <div>
-                <h3>5. Financements</h3>
-                <p>Merci d’identifier séparément (ligne par ligne) les sources de financement d’un même acteur.</p>
-                <div class="form__group">
-                    <label v-bind:class="{ error: form.errors.funding }"><sup class="mandatory">(*)</sup> Financements :</label>
-                    <p class="error" v-if="form.errors.funding">
-                        <ul>
-                            <li v-for="error in form.errors.funding">{{ error }}</li>
-                        </ul>
-                    </p>
-
-                    <PlanFunding v-model="form.data.funding" :disabled="form.pending"></PlanFunding>
-                </div>
-
-                <div class="form__group">
-                    <div class="notification error" v-if="form.mainError">{{ form.mainError }}.</div>
-                </div>
-
-                <div class="form__group">
-                    <button class="button large" @click="submit" :disabled="form.pending">
-                        <img src="/img/spinner_light.svg" width="20" v-if="form.pending" />
-                        <span v-else>Déclarer le dispositif</span>
-                    </button>
-                </div>
-            </div>
+        </div>
     </section>
 </div>
