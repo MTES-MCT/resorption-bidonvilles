@@ -22,51 +22,51 @@
                 <div class="dashboard">
                     <aside class="side-menu">
                         <ul>
-                            <li><a class="active">Caractéristiques du dispositif</a></li>
+                            <li><a v-bind:class="{ active: currentTab === 'main' }" @click="showTab('main')">Caractéristiques du dispositif</a></li>
+                            <li v-for="detail in details"><a v-bind:class="{ active: currentTab === detail.id }" @click="showTab(detail.id)">{{ detail.label }}</a></li>
                         </ul>
                     </aside>
 
                     <div class="main">
-                        <div>
-                            <div>
-                                <div class="panel">
-                                    <div class="panel__header">
-                                        <h3>1. Caractéristiques générales</h3>
-                                    </div>
-                                    <div class="form__group">
-                                        <p v-if="plan.name">
-                                            <strong>Nom du dispositif :</strong> {{ plan.name }}
-                                        </p>
-                                        <p>
-                                            <strong>Type de dispositif :</strong> {{ plan.type.label }}
-                                        </p>
-                                        <p>
-                                            <strong>Dispositif démarré le :</strong> {{ formatDate(plan.startedAt) }}
-                                        </p>
-                                    </div>
+                        <div v-if="currentTab === 'main'">
+                            <div class="panel">
+                                <div class="panel__header">
+                                    <h3>1. Caractéristiques générales</h3>
                                 </div>
-
-                                <div class="panel">
-                                    <div class="panel__header">
-                                        <h3>2. Opérateur en charge</h3>
-                                    </div>
-                                    <div class="form__group">
-                                        <p>
-                                            <strong>Nom de l'opérateur :</strong> {{ plan.ngo.name }}
-                                        </p>
-                                    </div>
+                                <div class="form__group">
+                                    <p v-if="plan.name">
+                                        <strong>Nom du dispositif :</strong> {{ plan.name }}
+                                    </p>
+                                    <p>
+                                        <strong>Type de dispositif :</strong> {{ plan.type.label }}
+                                    </p>
+                                    <p>
+                                        <strong>Dispositif démarré le :</strong> {{ formatDate(plan.startedAt) }}
+                                    </p>
                                 </div>
+                            </div>
 
-                                <div class="panel">
-                                    <div class="panel__header">
-                                        <h3>3. Sites concernés</h3>
-                                    </div>
-                                    <div class="form__group" v-if="plan.towns.length > 0">
-                                        <ul>
-                                            <li v-for="town in plan.towns"><router-link :to="`/site/${town.id}`">Site de {{ town.address }}</router-link></li>
-                                        </ul>
-                                    </div>
-                                    <div class="form__group" v-else>Ce dispositif ne s'applique pas à un site particulier.</div>
+                            <div class="panel">
+                                <div class="panel__header">
+                                    <h3>2. Opérateur en charge</h3>
+                                </div>
+                                <div class="form__group">
+                                    <p>
+                                        <strong>Nom de l'opérateur :</strong> {{ plan.ngo.name }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div v-else>
+                            <div class="panel">
+                                <div class="panel__header">
+                                    <h3>1. Caractéristiques de suivi</h3>
+                                </div>
+                                <div class="form__group">
+                                    <p v-for="field in customFields">
+                                        <strong>{{ field.label }} :</strong> {{ field.value }}
+                                    </p>
                                 </div>
                             </div>
                         </div>

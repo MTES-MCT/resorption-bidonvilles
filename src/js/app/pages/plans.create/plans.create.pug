@@ -89,12 +89,12 @@
                     <div class="form__group">
                         <label>L'action est menée sur un ou plusieurs site(s) en particulier :</label>
                         <div v-for="(value, index) in [0,1]">
-                            <input type="radio" :id="'townSelection' + index" :value="value === 1" v-model="form.data.townSelection" :disabled="form.pending">
-                            <label :for="'townSelection' + index" class="label-inline">{{ value ? 'Oui' : 'Non' }}</label>
+                            <input type="radio" :id="'targetedOnTowns' + index" :value="value === 1" v-model="form.data.targetedOnTowns" :disabled="form.pending">
+                            <label :for="'targetedOnTowns' + index" class="label-inline">{{ value ? 'Oui' : 'Non' }}</label>
                         </div>
                     </div>
 
-                    <div class="form__group" v-if="form.data.townSelection === true">
+                    <div class="form__group" v-if="form.data.targetedOnTowns === true">
                         <VueGoodTable v-bind="tableProps" ref="towns"></VueGoodTable>
                     </div>
                 </div>

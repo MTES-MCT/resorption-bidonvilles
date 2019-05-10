@@ -46,6 +46,7 @@ export default {
             status: null,
             error: null,
             plan: null,
+            currentTab: 'main',
             fieldsLabel: {
                 households_affected: 'Nombre de ménages concernés',
                 people_affected: 'Nombre de personnes concernées',
@@ -93,7 +94,41 @@ export default {
                 return [];
             }
 
-            return fieldsByType[this.plan.type.label];
+            if (this.currentTab === 'main') {
+                return [];
+            }
+
+            const fields = fieldsByType[this.plan.type.label];
+            let obj;
+            if (this.currentTab === 'details') {
+                obj = this.plan.details;
+            } else {
+                obj = this.plan.towns.find(({ id }) => id === this.currentTab);
+            }
+
+            return fields.map(field => ({
+                label: this.fieldsLabel[field],
+                value: this.numericValue(obj[this.toCamelCase(field)]),
+            }));
+        },
+        details() {
+            if (!this.plan) {
+                return [];
+            }
+
+            if (this.plan.targetedOnTowns === true) {
+                return this.plan.towns.map(town => ({
+                    id: town.id,
+                    label: town.address,
+                }));
+            }
+
+            return [
+                {
+                    id: 'details',
+                    label: 'Suivi du dispositif',
+                },
+            ];
         },
     },
 
@@ -149,6 +184,9 @@ export default {
             }
 
             return newStr;
+        },
+        showTab(id) {
+            this.currentTab = id;
         },
     },
 };

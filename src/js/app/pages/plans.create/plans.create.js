@@ -78,7 +78,7 @@ export default {
             const data = Object.assign({}, this.form.data);
             data.ngo = (data.operator && data.operator.ngo_id) || null;
 
-            if (data.townSelection === true) {
+            if (data.targetedOnTowns === true) {
                 data.towns = this.$refs.towns.selectedRows.map(({ id }) => id);
             }
 
