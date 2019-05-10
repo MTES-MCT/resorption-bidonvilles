@@ -1,5 +1,6 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
-import { get } from '#helpers/api/plan';
+import { get, destroy } from '#helpers/api/plan';
+import { hasPermission } from '#helpers/api/config';
 
 const fieldsByType = {
     'Espace temporaire d’insertion': [
@@ -133,6 +134,7 @@ export default {
     },
 
     methods: {
+        hasPermission,
         load() {
             if (['loading', 'loaded'].indexOf(this.status) !== -1) {
                 return;
@@ -187,6 +189,21 @@ export default {
         },
         showTab(id) {
             this.currentTab = id;
+        },
+        destroy() {
+            // eslint-disable-next-line
+            const confirmed = confirm('Êtes-vous sûr ? Cette suppression est irréversible');
+
+            if (confirmed === true) {
+                destroy(this.$route.params.id)
+                    .then(() => {
+                        this.$router.push('/liste-des-dispositifs');
+                    })
+                    .catch((error) => {
+                        // eslint-disable-next-line
+                        alert(error.user_message);
+                    });
+            }
         },
     },
 };

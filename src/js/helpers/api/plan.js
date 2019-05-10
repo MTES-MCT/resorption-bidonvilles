@@ -1,4 +1,4 @@
-import { getApi, postApi } from '#helpers/api/main';
+import { getApi, postApi, deleteApi } from '#helpers/api/main';
 
 /**
  * Lists all existing plans
@@ -33,4 +33,13 @@ export function create(data) {
     return postApi('/plans', data);
 }
 
-export default create;
+/**
+ * Deletes a plan
+ *
+ * @param {string} id
+ *
+ * @returns {Promise}
+ */
+export function destroy(id) {
+    return deleteApi(`/plans/${id}`);
+}
