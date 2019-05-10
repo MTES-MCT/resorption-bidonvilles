@@ -71,16 +71,8 @@
                     </div>
                 </div>
 
-                <div v-if="this.customFields.length">
-                    <h3>3. Caractéristiques spécifiques</h3>
-                    <div class="form__group" v-for="field in this.customFields">
-                        <label>{{ fieldsLabel[field] }} :</label>
-                        <input type="number" v-model="form.data[field]" :disabled="form.pending" />
-                    </div>
-                </div>
-
                 <div>
-                    <h3>4. Sites concernés</h3>
+                    <h3>3. Sites concernés</h3>
                     <div class="form__group">   
                         <label v-bind:class="{ error: form.errors.departement }"><sup class="mandatory">(*)</sup> Département concerné :</label>
                         <p class="error" v-if="form.errors.departement">
@@ -108,7 +100,7 @@
                 </div>
 
                 <div>
-                    <h3>5. Financements</h3>
+                    <h3>4. Financements</h3>
                     <p>Merci d’identifier séparément (ligne par ligne) les sources de financement d’un même acteur.</p>
                     <div class="form__group">
                         <label v-bind:class="{ error: form.errors.funding }"><sup class="mandatory">(*)</sup> Financements :</label>

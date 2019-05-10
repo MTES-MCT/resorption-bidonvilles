@@ -59,18 +59,7 @@
 
                                 <div class="panel">
                                     <div class="panel__header">
-                                        <h3>3. Caractéristiques spécifiques</h3>
-                                    </div>
-                                    <div class="form__group">
-                                        <p v-for="field in customFields">
-                                            <strong>{{ fieldsLabel[field] }} :</strong> {{ numericValue(plan[toCamelCase(field)]) }}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="panel">
-                                    <div class="panel__header">
-                                        <h3>4. Sites concernés</h3>
+                                        <h3>3. Sites concernés</h3>
                                     </div>
                                     <div class="form__group" v-if="plan.towns.length > 0">
                                         <ul>
