@@ -1,4 +1,5 @@
 import { list } from '#helpers/api/plan';
+import { get as getConfig } from '#helpers/api/config';
 import { VueGoodTable as Table } from 'vue-good-table';
 import 'vue-good-table/dist/vue-good-table.css';
 import NavBar from '#app/layouts/navbar/navbar.vue';
@@ -83,7 +84,7 @@ export default {
             this.state = 'loading';
             this.error = null;
 
-            list()
+            list(getConfig().user.departement)
                 .then((plans) => {
                     this.plans = plans;
                     this.state = 'loaded';
