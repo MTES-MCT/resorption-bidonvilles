@@ -1,6 +1,7 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import { get, destroy } from '#helpers/api/plan';
 import { hasPermission } from '#helpers/api/config';
+import { shortAddress } from '#helpers/townHelper';
 
 const fieldsByType = {
     'Espace temporaire d’insertion': [
@@ -120,7 +121,7 @@ export default {
             if (this.plan.targetedOnTowns === true) {
                 return this.plan.towns.map(town => ({
                     id: town.id,
-                    label: town.address,
+                    label: shortAddress(town),
                 }));
             }
 
