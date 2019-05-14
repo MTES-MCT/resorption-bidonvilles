@@ -59,7 +59,7 @@ export default {
                 errors: {},
                 data: {
                     ngo: null,
-                    planType: null,
+                    type: null,
                     startedAt: null,
                     funding: [],
                     departement: getConfig().user.departement,

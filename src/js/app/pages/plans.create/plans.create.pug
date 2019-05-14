@@ -34,14 +34,14 @@
                     </div>
 
                     <div class="form__group">
-                        <label v-bind:class="{ error: form.errors.planType }"><sup class="mandatory">(*)</sup> Type de dispositif :</label>
-                        <p class="error" v-if="form.errors.planType">
+                        <label v-bind:class="{ error: form.errors.type }"><sup class="mandatory">(*)</sup> Type de dispositif :</label>
+                        <p class="error" v-if="form.errors.type">
                             <ul>
-                                <li v-for="error in form.errors.planType">{{ error }}</li>
+                                <li v-for="error in form.errors.type">{{ error }}</li>
                             </ul>
                         </p>
                         <div v-for="(type, index) in planTypes">
-                            <input type="radio" :id="'planType' + index" :value="type.id" v-model="form.data.planType" :disabled="form.pending">
+                            <input type="radio" :id="'planType' + index" :value="type.id" v-model="form.data.type" :disabled="form.pending">
                             <label :for="'planType' + index" class="label-inline">{{ type.label }}</label>
                         </div>
                     </div>
