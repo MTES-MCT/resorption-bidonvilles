@@ -27,6 +27,10 @@ export default {
             type: Boolean,
             default: true,
         },
+        typingMin: {
+            type: Number,
+            default: TYPING_MIN,
+        },
     },
     data() {
         return {
@@ -126,7 +130,7 @@ export default {
                 this.pendingRequest.abort();
             }
 
-            if (this.query.length < TYPING_MIN || this.focused !== true) {
+            if (this.query.length < this.typingMin || this.focused !== true) {
                 return;
             }
 
