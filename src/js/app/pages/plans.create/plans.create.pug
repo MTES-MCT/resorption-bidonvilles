@@ -103,7 +103,7 @@
                     <h3>4. Financements</h3>
                     <p>Merci d’identifier séparément (ligne par ligne) les sources de financement d’un même acteur.</p>
                     <div class="form__group">
-                        <label v-bind:class="{ error: form.errors.funding }"><sup class="mandatory">(*)</sup> Financements :</label>
+                        <label v-bind:class="{ error: form.errors.funding }">Financements :</label>
                         <p class="error" v-if="form.errors.funding">
                             <ul>
                                 <li v-for="error in form.errors.funding">{{ error }}</li>
