@@ -1,6 +1,7 @@
 import Address from '#app/components/address/address.vue';
 import L from 'leaflet';
 import { get } from '#helpers/api/config';
+import { shortAddress } from '#helpers/townHelper';
 import 'leaflet-providers';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
@@ -187,12 +188,7 @@ export default {
         },
         addTownMarker(town) {
             const { latitude, longitude } = town;
-            let address;
-            if (town.address && town.address.match(/[0-9]{5}/) !== null) {
-                address = town.address.split(/[0-9]{5}/)[0].replace(/[0-9]/g, '').replace(/,/g, ' ').replace(/\s{2,}/g, ' ');
-            } else {
-                address = town.city.name;
-            }
+            const address = shortAddress(town);
 
             let color;
             if (town.fieldType !== undefined) {
