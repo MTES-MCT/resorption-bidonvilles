@@ -18,7 +18,9 @@
 
             //- state: loaded
             <div v-if="state === 'loaded'">
-                <Table v-bind="tableProperties" @on-row-click="routeToPlan"></Table>
+                <Table v-bind="tableProperties" @on-row-click="routeToPlan">
+                    <div slot="emptystate">Vous n'avez pas encore déclaré de dispositif dans votre territoire</div>
+                </Table>
             </div>
         </div>
     </section>
