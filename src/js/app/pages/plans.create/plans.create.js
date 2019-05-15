@@ -120,7 +120,7 @@ export default {
                 {
                     label: 'Statut du site',
                     field: 'status',
-                    formatFn: (value) => value === 'open' ? 'Existant' : 'Disparu',
+                    formatFn: value => (value === 'open' ? 'Existant' : 'Disparu'),
                 },
             ];
 
