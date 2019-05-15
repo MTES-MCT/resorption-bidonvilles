@@ -1,5 +1,5 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
-import { get, destroy } from '#helpers/api/plan';
+import { get, update, destroy } from '#helpers/api/plan';
 import { hasPermission } from '#helpers/api/config';
 import { shortAddress } from '#helpers/townHelper';
 
@@ -48,6 +48,7 @@ export default {
             status: null,
             error: null,
             plan: null,
+            mode: 'read',
             currentTab: 'main',
             fieldsLabel: {
                 households_affected: 'Nombre de ménages concernés',
@@ -83,6 +84,11 @@ export default {
                 minors_with_admin_procedure: 'Nombre de mineurs concernés par une mesure de protection administrative',
                 minors_with_justice_procedure: 'Nombre de mineurs concernés par une mesure de protection judiciaire',
             },
+            form: {
+                error: null,
+                pending: false,
+                data: {},
+            },
         };
     },
 
@@ -105,12 +111,13 @@ export default {
             if (this.currentTab === 'details') {
                 obj = this.plan.details;
             } else {
-                obj = this.plan.towns.find(({ id }) => id === this.currentTab);
+                obj = this.plan.towns.find(({ detailId }) => detailId === this.currentTab);
             }
 
             return fields.map(field => ({
+                id: field,
                 label: this.fieldsLabel[field],
-                value: this.numericValue(obj[this.toCamelCase(field)]),
+                value: obj[this.toCamelCase(field)],
             }));
         },
         details() {
@@ -120,7 +127,7 @@ export default {
 
             if (this.plan.targetedOnTowns === true) {
                 return this.plan.towns.map(town => ({
-                    id: town.id,
+                    id: town.detailId,
                     label: shortAddress(town),
                 }));
             }
@@ -191,6 +198,19 @@ export default {
         showTab(id) {
             this.currentTab = id;
         },
+        setMode(mode) {
+            if (mode === 'edit' && this.currentTab === 'main') {
+                return;
+            }
+
+            if (mode === 'edit') {
+                this.form.data = this.customFields.reduce((acc, field) => Object.assign({}, acc, {
+                    [field.id]: field.value,
+                }), {});
+            }
+
+            this.mode = mode;
+        },
         destroy() {
             // eslint-disable-next-line
             const confirmed = confirm('Êtes-vous sûr ? Cette suppression est irréversible');
@@ -205,6 +225,47 @@ export default {
                         alert(error.user_message);
                     });
             }
+        },
+        submit() {
+            if (this.currentTab === 'main') {
+                return;
+            }
+
+            if (this.form.pending === true) {
+                return;
+            }
+
+            this.form.pending = true;
+            this.form.error = null;
+
+            const camelData = {};
+            Object.keys(this.form.data).forEach((key) => {
+                camelData[this.toCamelCase(key)] = this.form.data[key];
+            });
+
+            update(
+                this.currentTab === 'details' ? null : this.currentTab,
+                camelData,
+            )
+                .then(() => {
+                    this.$notify({
+                        group: 'notifications',
+                        type: 'success',
+                        title: 'Indicateurs correctement sauvegardés',
+                        text: 'Le dispositif a bien été modifié',
+                    });
+
+                    this.form.pending = false;
+                    this.form.error = null;
+                    this.setMode('read');
+
+                    this.status = null;
+                    this.load();
+                })
+                .catch((response) => {
+                    this.form.pending = false;
+                    this.form.error = response.user_message;
+                });
         },
     },
 };

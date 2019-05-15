@@ -34,6 +34,18 @@ export function create(data) {
 }
 
 /**
+ * Updates a plan's details
+ *
+ * @param {number|null} detailsId
+ * @param {Object}      data
+ *
+ * @returns {Promise}
+ */
+export function update(detailsId, data) {
+    return postApi(`/plan-details/${detailsId}`, data);
+}
+
+/**
  * Deletes a plan
  *
  * @param {string} id

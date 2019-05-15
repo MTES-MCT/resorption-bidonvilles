@@ -21,6 +21,9 @@
             <div v-else>
                 <div class="container" ref="header">
                     <div class="town-actionButtons">
+                        <button v-if="mode !== 'edit' && currentTab !== 'main' && hasPermission({ type: 'feature', name: 'updatePlan' })" @click="setMode('edit')" class="button secondary">Modifier les indicateurs</button>
+                        <button v-if="mode === 'edit'" @click="submit()" class="button">Sauvegarder</button>
+                        <button v-if="mode === 'edit'" @click="setMode('read')" class="button warning">Annuler</button>
                         <button v-if="hasPermission({ type: 'feature', name: 'deletePlan' })" @click="destroy" class="button warning">Supprimer le dispositif</button>
                     </div>
                 </div>
@@ -71,8 +74,18 @@
                                 </div>
                                 <div class="form__group">
                                     <p v-for="field in customFields">
-                                        <strong>{{ field.label }} :</strong> {{ field.value }}
+                                        <strong>{{ field.label }} :</strong>
+                                        <span v-if="mode === 'read'">{{ numericValue(field.value) }}</span>
+                                        <span v-if="mode === 'edit'">
+                                            <input type="number" v-model="form.data[field.id]" :disabled="form.pending" />
+                                        </span>
                                     </p>
+                                </div>
+
+                                <div class="notification error" v-if="form.error">{{ form.error }}.</div>
+
+                                <div class="form__group" v-if="mode === 'edit'">
+                                    <button class="button large" @click="submit" :disabled="form.pending">Sauvegarder</button>
                                 </div>
                             </div>
                         </div>
