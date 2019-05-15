@@ -117,6 +117,11 @@ export default {
                         { type: 'data', name: 'address' },
                     ],
                 },
+                {
+                    label: 'Statut du site',
+                    field: 'status',
+                    formatFn: (value) => value === 'open' ? 'Existant' : 'Disparu',
+                },
             ];
 
             return {
@@ -162,7 +167,7 @@ export default {
             this.status = 'loading';
             this.error = null;
 
-            fetchAll({ status: 'open' })
+            fetchAll()
                 .then((data) => {
                     this.towns = data;
                     this.status = 'loaded';
