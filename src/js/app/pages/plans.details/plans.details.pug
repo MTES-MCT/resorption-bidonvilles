@@ -21,7 +21,7 @@
             <div v-else>
                 <div class="container" ref="header">
                     <h1>Fiche de dispositif</h1>
-                    <p>cette fiche dispositif présente les caractéristiques générales du dispositif (telles que déclarées lors du remplissage du formulaire). Elle permet aussi de renseigner des indicateurs de suivi des actions menées, soit site par site lorsque l'action est déployée sur un ou plusieursbidonvilles, soit à l'échelle globale du dispositif.</p>
+                    <p>Cette fiche dispositif présente les caractéristiques générales du dispositif (telles que déclarées lors du remplissage du formulaire). Elle permet aussi de renseigner des indicateurs de suivi des actions menées, soit site par site lorsque l'action est déployée sur un ou plusieurs bidonvilles, soit à l'échelle globale du dispositif.</p>
                     
                     <div class="town-actionButtons">
                         <button v-if="mode !== 'edit' && currentTab !== 'main' && hasPermission({ type: 'feature', name: 'updatePlan' })" @click="setMode('edit')" class="button secondary">Modifier les indicateurs</button>
@@ -73,7 +73,7 @@
                         <div v-else>
                             <div class="panel">
                                 <div class="panel__header">
-                                    <h3>1. Caractéristiques de suivi</h3>
+                                    <h3>1. Indicateurs de suivi pour 2019</h3>
                                 </div>
                                 <div class="form__group">
                                     <p v-for="field in customFields">
