@@ -3,6 +3,9 @@
 
     <section class="section section-white" id="form">
         <div class="container">
+            <h1>Déclarer un dispositif</h1>
+            <p>Ce formulaire vous permet de déclarer un dispositif ou une action menée sur votre territoire. Il peut s'agir notamment d'actions d'accompagnement social global, d'espaces temporaires d'insertion ou encore d'actions sanitaires (déployés sur un ou plusieurs bidonville ou "hors les murs"). Une fois ce formulaire validé, ledispositif fera l'objet d'une fiche dédiée, accessible via l'onglet "liste des dispositifs". Lorsque le symbole (*) apparaît en rouge au début de l'intitulé de la question, cela signifie qu'il s'agit d'une question obligatoire. Il n'est pas possible de valider le formulaire sans y avoir répondu.</p>
+
             <div v-if="!status || status === 'loading'">
                 <!-- LOADING STATE -->
                 <div class="notification full-width">
