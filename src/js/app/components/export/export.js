@@ -149,11 +149,11 @@ let columns = {
             { type: 'data', name: 'socialOrigins' },
         ],
     },
-    accessToElectricity: {
+    electricityType: {
         label: 'Accès à l\'électricité',
-        value: town => convertBool[town.accessToElectricity],
+        value: town => town.electricityType.label,
         permissions: [
-            { type: 'data', name: 'accessToElectricity' },
+            { type: 'data', name: 'electricityType' },
         ],
     },
     accessToWater: {
@@ -294,7 +294,7 @@ const exportOrder = [
     'populationCouples',
     'populationMinors',
     'socialOrigins',
-    'accessToElectricity',
+    'electricityType',
     'accessToWater',
     'trashEvacuation',
     'ownerComplaint',
@@ -345,7 +345,7 @@ const sections = [
         title: 'Conditions de vie',
         fields: [
 
-            'accessToElectricity',
+            'electricityType',
             'accessToWater',
             'trashEvacuation',
         ],

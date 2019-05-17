@@ -120,7 +120,7 @@ export function deleteComment(townId, commentId) {
  * @property {?number} population_total,
  * @property {?number} population_couples,
  * @property {?number} population_minors,
- * @property {?boolean} access_to_electricity,
+ * @property {Object} electricity_type,
  * @property {?boolean} access_to_water,
  * @property {?boolean} trash_evacuation,
  * @property {Array.<number>} social_origins,

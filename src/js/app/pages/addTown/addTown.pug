@@ -255,15 +255,15 @@
 
                 <div class="form__group">
                     <fieldset>
-                        <legend v-bind:class="{ error: fieldErrors.access_to_electricity }"><sup class="mandatory">(*)</sup> Accès à l'électricité :</legend>
-                        <p class="error" v-if="fieldErrors.access_to_electricity">
+                        <legend v-bind:class="{ error: fieldErrors.electricity_type }"><sup class="mandatory">(*)</sup> Accès à l'électricité :</legend>
+                        <p class="error" v-if="fieldErrors.electricity_type">
                             <ul>
-                                <li v-for="error in fieldErrors.access_to_electricity">{{ error }}</li>
+                                <li v-for="error in fieldErrors.electricity_type">{{ error }}</li>
                             </ul>
                         </p>
-                        <div v-for="(value, index) in yesnoValues">
-                            <input type="radio" name="accessToElectricity" :id="'accessToElectricity' + index" :value="value.value" v-model="accessToElectricity">
-                            <label :for="'accessToElectricity' + index" class="label-inline">{{ value.label }}</label>
+                        <div v-for="(type, index) in electricityTypes">
+                            <input type="radio" name="electricityType" :id="'electricityType' + index" :value="type.id" v-model="electricityType">
+                            <label :for="'electricityType' + index" class="label-inline">{{ type.label }}</label>
                         </div>
                     </fieldset>
                 </div>
