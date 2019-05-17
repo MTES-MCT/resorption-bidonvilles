@@ -185,6 +185,7 @@ export default {
                 {
                     label: 'Personnes',
                     field: town => (town.populationTotal !== null ? town.populationTotal : 'inconnu'),
+                    sortFn: this.sortNumber,
                     type: 'number',
                     permissions: [
                         { type: 'data', name: 'populationTotal' },
@@ -193,6 +194,7 @@ export default {
                 {
                     label: 'Ménages',
                     field: town => (town.populationCouples !== null ? town.populationCouples : 'inconnu'),
+                    sortFn: this.sortNumber,
                     type: 'number',
                     permissions: [
                         { type: 'data', name: 'populationCouples' },
@@ -201,6 +203,7 @@ export default {
                 {
                     label: 'Mineurs',
                     field: town => (town.populationMinors !== null ? town.populationMinors : 'inconnu'),
+                    sortFn: this.sortNumber,
                     type: 'number',
                     permissions: [
                         { type: 'data', name: 'populationMinors' },
@@ -427,6 +430,29 @@ export default {
     },
     methods: {
         autocompleteLocation,
+        sortNumber(x, y) {
+            if (x === 'inconnu' && y === 'inconnu') {
+                return 0;
+            }
+
+            if (x === 'inconnu') {
+                return -1;
+            }
+
+            if (y === 'inconnu') {
+                return 1;
+            }
+
+            if (x < y) {
+                return -1;
+            }
+
+            if (x > y) {
+                return 1;
+            }
+
+            return 0;
+        },
         showExport() {
             this.exporter.isVisible = true;
         },
