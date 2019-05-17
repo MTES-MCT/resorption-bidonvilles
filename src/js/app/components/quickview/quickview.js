@@ -152,6 +152,7 @@ export default {
     },
     methods: {
         hasPermission,
+        formatDate: ts => App.formatDate(ts),
         checkOutsideClick(event) {
             if (!this.town) {
                 return;

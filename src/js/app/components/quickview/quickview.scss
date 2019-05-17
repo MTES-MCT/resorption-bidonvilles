@@ -45,15 +45,22 @@
             }
         }
 
-        .quickview-subtitle {
+        .quickview-subtitle,
+        .quickview-time {
             margin: 0;
             font-weight: normal;
             font-size: 0.8rem;
             letter-spacing: 0.05em;
         }
 
+        .quickview-time {
+            margin-top: 1rem;
+            font-size: 0.7rem;
+        }
+
         .quickview-title,
-        .quickview-subtitle {
+        .quickview-subtitle,
+        .quickview-time {
             padding: 0 25px;
         }
 
