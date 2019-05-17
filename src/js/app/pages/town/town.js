@@ -1,7 +1,7 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import Map from '#app/pages/townExplorer/map/map.vue';
 import {
-    get, close, edit, destroy, addComment,
+    get, close, edit, destroy, addComment, editComment, deleteComment,
 } from '#helpers/api/town';
 import { get as getConfig, hasPermission } from '#helpers/api/config';
 import Datepicker from 'vuejs-datepicker';
@@ -27,6 +27,7 @@ export default {
     },
     data() {
         return {
+            userId: getConfig().user.id,
             loading: false,
             error: null,
             town: null,
@@ -67,6 +68,12 @@ export default {
             commentError: null,
             commentErrors: {},
             edit: null,
+            commentEdit: {
+                commentId: null,
+                value: null,
+                pending: false,
+                error: null,
+            },
         };
     },
     computed: {
@@ -429,6 +436,75 @@ export default {
             }
 
             return ['aucun détail sur le nombre de ménages/personnes concernés'];
+        },
+        canEditComment(comment) {
+            return hasPermission({ type: 'feature', name: 'updateComment' })
+                || (comment.createdBy.id === this.userId && hasPermission({ type: 'feature', name: 'updateOwnComment' }));
+        },
+        canDeleteComment(comment) {
+            return hasPermission({ type: 'feature', name: 'deleteComment' })
+                || (comment.createdBy.id === this.userId && hasPermission({ type: 'feature', name: 'deleteOwnComment' }));
+        },
+        editComment(comment) {
+            this.commentEdit.commentId = comment.id;
+            this.commentEdit.value = comment.description;
+            this.commentEdit.pending = false;
+            this.commentEdit.error = null;
+        },
+        deleteComment(comment) {
+            // eslint-disable-next-line
+            if (!confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ? La suppression est définitive.')) {
+                return;
+            }
+
+            deleteComment(this.$route.params.id, comment.id)
+                .then((response) => {
+                    this.town.comments = response.comments;
+                    this.$notify({
+                        group: 'notifications',
+                        type: 'success',
+                        title: 'Opération réussie',
+                        text: 'Le commentaire a bien été supprimé',
+                    });
+                });
+        },
+        sendEditComment(comment) {
+            if (this.commentEdit.pending !== false) {
+                return;
+            }
+
+            this.commentEdit.pending = true;
+            this.commentEdit.error = null;
+
+            editComment(this.$route.params.id, comment.id, { description: this.commentEdit.value })
+                .then((response) => {
+                    this.town.comments = response.comments;
+                    this.commentEdit.commentId = null;
+                    this.commentEdit.value = null;
+                    this.commentEdit.pending = false;
+                    this.commentEdit.error = null;
+
+                    this.$notify({
+                        group: 'notifications',
+                        type: 'success',
+                        title: 'Opération réussie',
+                        text: 'Le commentaire a bien été modifié',
+                    });
+                })
+                .catch((response) => {
+                    this.commentEdit.pending = false;
+                    this.commentEdit.error = response.user_message;
+                });
+        },
+        cancelEditComment() {
+            if (this.commentEdit.pending !== false) {
+                return;
+            }
+
+            this.commentEdit.commentId = null;
+            this.commentEdit.value = null;
+            this.commentEdit.pending = false;
+            this.commentEdit.error = null;
         },
     },
 };

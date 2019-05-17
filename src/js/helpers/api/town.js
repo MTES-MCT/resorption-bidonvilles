@@ -86,6 +86,31 @@ export function addComment(id, data) {
 }
 
 /**
+ * Edits a comment from a town
+ *
+ * @param {string}                 townId    Town id
+ * @param {number}                 commentId Comment id
+ * @param {ShantytownComment_Data} data      Comment data
+ *
+ * @returns {Promise}
+ */
+export function editComment(townId, commentId, comment) {
+    return postApi(`/towns/${townId}/comments/${commentId}`, comment);
+}
+
+/**
+ * Delete a comment from a town
+ *
+ * @param {string} townId    Town id
+ * @param {number} commentId Comment id
+ *
+ * @returns {Promise}
+ */
+export function deleteComment(townId, commentId) {
+    return deleteApi(`/towns/${townId}/comments/${commentId}`);
+}
+
+/**
  * @typedef {Object} Town_Data
  * @property {number} latitude,
  * @property {number} longitude,

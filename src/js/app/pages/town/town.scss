@@ -1,10 +1,17 @@
 .comment-container {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2.3rem;
 }
 
 .comment-time {
     font-size: 0.85rem;
     font-style: italic;
+}
+
+.comment-edit,
+.comment-delete {
+    cursor: pointer;
+    width: 15px;
+    height: 15px;
 }
 
 .comment-content {

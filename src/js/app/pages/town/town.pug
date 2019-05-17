@@ -667,9 +667,23 @@
                         <div class="form__group">
                             <p v-if="town.comments.length === 0">Aucun commentaire enregistré pour le moment</p>
                             <p class="comment-container" v-for="comment in town.comments">
-                                <strong>{{ comment.createdBy.lastName.toUpperCase() + ' ' + comment.createdBy.firstName }} :</strong><br/>
+                                <strong>
+                                    <span>{{ comment.createdBy.lastName.toUpperCase() + ' ' + comment.createdBy.firstName }}</span>
+                                    <img v-if="canEditComment(comment)" src="/img/edit.svg" width="15" alt="Modifier mon commentaire" class="comment-edit" @click="editComment(comment) " />
+                                    <img v-if="canDeleteComment(comment)" src="/img/delete.svg" width="15" alt="Supprimer mon commentaire" class="comment-delete" @click="deleteComment(comment)" />
+                                </strong><br/>
                                 <span class="comment-time">Publié le {{ formatDate(comment.createdAt) }}</span><br/>
-                                <span class="comment-content">{{ comment.description }}</span>
+                                <span v-if="commentEdit.commentId !== comment.id" class="comment-content">{{ comment.description }}</span>
+                                <span class="error" v-if="commentEdit.commentId === comment.id && commentEdit.error">
+                                    <ul>
+                                        <li>{{ commentEdit.error }}</li>
+                                    </ul>
+                                </span>
+                                <textarea v-if="commentEdit.commentId === comment.id" v-model="commentEdit.value" :disabled="commentEdit.pending"></textarea>
+                                <span v-if="commentEdit.commentId === comment.id" class="input__group">
+                                    <button class="button" @click="sendEditComment(comment)">Modifier le commentaire</button>
+                                    <button class="button warning" @click="cancelEditComment">Annuler</button>
+                                </span>
                             </p>
                         </div>
 
@@ -687,7 +701,7 @@
                             </div>
                             <div class="input__group">
                                 <button class="button large" @click="addComment">Ajouter le commentaire</button>
-                            </div>  
+                            </div>
                         </div>
                     </div>
                 </div>
