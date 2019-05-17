@@ -255,6 +255,19 @@ let columns = {
             { type: 'data', name: 'updatedAt' },
         ],
     },
+    comments: {
+        label: 'Commentaires',
+        value: (town) => {
+            if (!town.comments || town.comments.length <= 0) {
+                return '';
+            }
+
+            return town.comments.map(({ description }) => description).join('\n_\n');
+        },
+        permissions: [
+            { type: 'feature', name: 'readComment' },
+        ],
+    },
 };
 
 columns = Object.keys(columns).reduce((acc, key) => Object.assign(acc, {
@@ -295,6 +308,7 @@ const exportOrder = [
     'policeGrantedAt',
     'bailiff',
     'updatedAt',
+    'comments',
 ];
 
 const sections = [
@@ -355,6 +369,7 @@ const sections = [
         title: 'Autres',
         fields: [
             'updatedAt',
+            'comments',
         ],
     },
 ];
