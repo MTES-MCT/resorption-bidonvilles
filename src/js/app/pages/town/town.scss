@@ -1,3 +1,19 @@
+.comment-container {
+    margin-bottom: 1.5rem;
+}
+
+.comment-time {
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+.comment-content {
+    margin: 0.6rem 0 0;
+    padding: 0;
+    display: block;
+    white-space: pre-wrap;
+}
+
 h1 > .label {
     font-weight: normal;
     vertical-align: middle;

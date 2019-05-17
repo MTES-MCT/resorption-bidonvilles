@@ -7,6 +7,6 @@ import Component from './town.js';
 export default Component;
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import './town.scss';
 </style>

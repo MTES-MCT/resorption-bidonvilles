@@ -666,7 +666,11 @@
                     <div v-else-if="view === 'comments'">
                         <div class="form__group">
                             <p v-if="town.comments.length === 0">Aucun commentaire enregistré pour le moment</p>
-                            <p v-for="comment in town.comments"><strong>Le {{ formatDate(comment.createdAt) }} :</strong><br/>{{ comment.description }}</p>
+                            <p class="comment-container" v-for="comment in town.comments">
+                                <strong>{{ comment.createdBy.lastName.toUpperCase() + ' ' + comment.createdBy.firstName }} :</strong><br/>
+                                <span class="comment-time">Publié le {{ formatDate(comment.createdAt) }}</span><br/>
+                                <span class="comment-content">{{ comment.description }}</span>
+                            </p>
                         </div>
 
                         <div class="form__group" v-if="hasPermission({ type: 'feature', name: 'createComment' })">
