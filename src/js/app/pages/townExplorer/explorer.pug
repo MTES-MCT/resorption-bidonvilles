@@ -4,18 +4,6 @@
     <Export v-bind:style="{ display: exporter.isVisible ? 'block' : 'none' }" @close="hideExport" :towns="visibleTowns"></Export>
 
     <section class="explorer">
-        //- <h1>Liste des sites</h1>
-
-        //- notifications
-        <div v-if="loading" class="notification full-width">
-            <img src="/img/spinner_dark.svg" width="20" class="spinner" />
-            <span>Chargement des données en cours...</span>
-        </div>
-
-        <div v-if="error" class="notification error full-width">
-            <span>{{ error }}. <a href="#" @click="fetchData">Réessayer ?</a></span>
-        </div>
-
         //- filters
         <simplebar class="filters" ref="filters" data-simplebar-auto-hide="false">
             <div class="filterGroup">
@@ -48,10 +36,20 @@
         </simplebar>
 
         //- content
-        <div class="content" ref="main">
+        <div v-bind:style="{ width: !loading && !error ? 'auto' : 0 }" class="content" ref="main">
             <keep-alive>
                 <component :is="currentTabComponent" v-bind="rendererProps" @town-click="showQuickview" @on-row-click="routeToTown" ref="map"></component>
             </keep-alive>
+        </div>
+
+        //- notifications
+        <div v-if="loading" class="notification full-width">
+            <img src="/img/spinner_dark.svg" width="20" class="spinner" />
+            <span>Chargement des données en cours...</span>
+        </div>
+
+        <div v-if="error" class="notification error full-width">
+            <span>{{ error }}. <a href="#" @click="fetchData">Réessayer ?</a></span>
         </div>
     </section>
 </div>
