@@ -1,0 +1,52 @@
+<div class="form__group inputContainer" v-bind:class="{ error: errors.length > 0 }" :id="id">
+    <label class="input-label">{{ label }}<sup v-if="mandatory" class="input-mandatory"> (*)</sup></label>
+    <p v-if="description" class="input-description">{{ description }}</p>
+
+    <div class="notification error" v-if="errors.length > 0">
+        <ul v-for="error in errors">
+            <li>{{ error }}</li>
+        </ul>
+    </div>
+
+    //- text input
+    <input v-if="type === 'text'" type="text" class="input input--text" v-bind="props" v-model="data" :disabled="disabled" :readonly="disabled" />
+
+    //- number input
+    <input v-if="type === 'number'" type="number" class="input input--number" v-bind="props" v-model="data" :disabled="disabled" :readonly="disabled" />
+
+    //- select
+    <select v-if="type === 'select' || type === 'selectMultiple'" class="input input--select" v-bind="props" v-model="data" :multiple="type === 'selectMultiple'" :disabled="disabled">
+        <option v-for="option in options" :value="option.value">{{ option.label }}</option>
+    </select>
+
+    //- radio
+    <div v-if="type === 'radio'">
+        <div v-for="(option, index) in options">
+            <input type="radio" :id="`input${_uid}-${index}`" :value="option.value" :name="`input${_uid}`" v-model="data" :disabled="disabled" class="input input--radio" />
+            <label :for="`input${_uid}-${index}`" class="label-inline">{{ option.label }}</label>
+        </div>
+    </div>
+
+    //- checkbox
+    <div v-if="type === 'checkbox'">
+        <div v-for="(option, index) in options">
+            <input type="checkbox" :id="`input${_uid}-${index}`" :value="option.value" :name="`input${_uid}`" v-model="data" :disabled="disabled" class="input input--checkbox" />
+            <label :for="`input${_uid}-${index}`" class="label-inline">{{ option.label }}</label>
+        </div>
+    </div>
+
+    //- date input
+    <Datepicker v-if="type === 'date'" input-class="input input--date" v-bind="props" v-model="data" :disabled="disabled"></Datepicker>
+
+    //- autocompleter input
+    <Autocompleter v-if="type === 'autocompleter'" v-bind="props" v-model="data" :disabled="disabled"></Autocompleter>
+
+    //- address
+    <Address v-if="type === 'address'" v-bind="props" v-model="data" :disabled="disabled"></Address>
+
+    //- location
+    <Location v-if="type === 'location'" v-bind="props" v-model="data" :disabled="disabled"></Location>
+
+    //- address with location
+    <AddressWithLocation v-if="type === 'addressWithLocation'" v-bind="props" v-model="data" :disabled="disabled"></Address>
+</div>

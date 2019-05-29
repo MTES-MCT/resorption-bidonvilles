@@ -35,7 +35,16 @@ export function get(id) {
  * @returns {Promise}
  */
 export function add(data) {
-    return postApi('/towns', data);
+    const formattedData = Object.assign({}, data);
+
+    if (data.address) {
+        ([formattedData.latitude, formattedData.longitude] = data.address.location.coordinates);
+        formattedData.city = data.address.address.data.city;
+        formattedData.citycode = data.address.address.data.citycode;
+        formattedData.address = data.address.address.label;
+    }
+
+    return postApi('/towns', formattedData);
 }
 
 /**

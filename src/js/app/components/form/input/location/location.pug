@@ -1,0 +1,13 @@
+<div class="location">
+    <div ref="map" class="location-map"></div>
+
+    <div class="location-tutorial" v-if="showTutorial">
+        <div class="location-tutorialWrapper">
+            <h1 class="location-tutorialTitle">{{ tutorialWording.title }}</h1><br/>
+            <p class="location-tutorialDescription">{{ tutorialWording.description }}</p>
+            <p class="location-tutorialButton" v-if="showCloseTutorial">
+                <button class="button" @click="closeTutorial">J'ai compris</button>
+            </p>
+        </div>
+    </div>
+</div>

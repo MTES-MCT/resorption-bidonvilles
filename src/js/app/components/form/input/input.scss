@@ -1,0 +1,66 @@
+.input--text {
+    max-width: 350px;
+}
+
+.input--number {
+    max-width: 350px;
+}
+
+.input--date,
+.vdp-datepicker input {
+    max-width: 220px;
+    padding-left: 45px;
+}
+
+.form__group {
+    .vdp-datepicker__calendar {
+        z-index: 5000;
+    }
+}
+
+.vdp-datepicker__calendar-button {
+    position: absolute;
+    z-index: 1000;
+    height: 100%;
+    width: 40px;
+    font-size: 0;
+    background: url('/img/calendar.svg') no-repeat center;
+}
+.vdp-datepicker__clear-button {
+    position: absolute;
+    height: 100%;
+    margin-left: -45px;
+    background: url('/img/remove.svg') no-repeat center;
+    background-size: 40%;
+    width: 50px;
+    text-align: center;
+    font-size: 0;
+}
+
+input:disabled + .vdp-datepicker__clear-button {
+    display: none;
+}
+
+.input-label {
+    font-weight: bold;
+}
+
+.input-description {
+    margin: 0 0 12px;
+    padding: 0;
+}
+
+.input-mandatory {
+    font-weight: bold;
+    color: #d63626;
+}
+
+.inputContainer.error {
+    .input-label {
+        color: #d63626;
+    }
+
+    .input {
+        border: 1px solid #d63626;
+    }
+}

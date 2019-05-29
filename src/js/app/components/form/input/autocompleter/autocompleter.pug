@@ -1,0 +1,57 @@
+<div class="autocompleter">
+    <div ref="measure" class="autocompleter-measure">{{ currentLabel }}</div>
+
+    <div class="autocompleter-textfield">
+        //- textfield
+        <div class="autocompleter-prefixIcon" ref="prefixIcon">
+            <img src="/img/search.svg" />
+        </div>
+        <input type="text" v-model="currentLabel" @keydown="onNavigation" @keyup="onType" @focus="focused = true"  @blur="focused = false" ref="input" :disabled="disabled" :readonly="disabled" />
+        <div class="autocompleter-spinner" ref="spinner" v-bind:style="{ visibility: suggestionRequest.pending ? 'visible' : 'hidden' }">
+            <img src="/img/spinner_dark.svg" />
+        </div>
+        <span class="autocompleter-clearIcon" v-if="currentLabel && !disabled" @click="clearLabel" ref="suffixIcon"></span>
+
+        //- suggestions
+        <div v-if="suggestions !== null" class="autocompleter-suggestionContainer" v-bind:class="{ 'autocompleter-suggestionContainer--float': float, 'autocompleter-suggestionContainer--withoutCategories': !showCategory }" ref="suggestionContainer">
+            <div v-if="nonEmptyCategories.length > 0" class="autocompleter-suggestionCategoryContainer" v-for="category in nonEmptyCategories">
+                <div class="autocompleter-suggestionCategory" v-if="showCategory">{{ category }}</div>
+                <ul class="autocompleter-suggestionCategoryItems">
+                    <li v-for="item in unselectedSuggestions[category]" class="autocompleter-suggestionCategoryItem" v-bind:class="{ 'autocompleter-suggestionCategoryItem--empty': item.isExtra, 'active': item.id === idOfHighlightedItem }" @click="selectItem(item)">{{ item.label }}</li>
+                </ul>
+            </div>
+        </div>
+
+        <div v-if="suggestions === null && suggestionRequest.error && float" class="autocompleter-suggestionContainer autocompleter-suggestionContainer--float autocompleter-suggestionContainer--withoutCategories">
+            <div class="autocompleter-suggestionCategoryContainer">
+                <ul class="autocompleter-suggestionCategoryItems">
+                    <li class="autocompleter-suggestionCategoryItem autocompleter-suggestionCategoryItem--error"><img src="/img/warning.svg" /> {{ suggestionRequest.error }}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <p class="autocompleter-error" v-if="suggestionRequest.error && !float">
+        <img src="/img/warning.svg" />
+        <span>{{ suggestionRequest.error }}</span>
+    </p>
+
+    //- selected items
+    <div class="autocompleter-selectionContainer" v-if="allowMultiple && selectedItems.length > 0">
+        <p>{{ wording.selectedItems }} :</p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>{{ wording.label }}</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in selectedItems">
+                    <td>{{ item.label }}</td>
+                    <td><img src="/img/remove.svg" v-if="!disabled" class="autocompleter-removeItemIcon" @click="unselectItem(item)" /></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
