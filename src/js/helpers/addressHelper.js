@@ -52,8 +52,16 @@ function onAutocompleteLoad(success, failure) {
                 .map(feature => ({
                     citycode: feature.properties.citycode,
                     city: feature.properties.city,
-                    label: `${feature.properties.label}, ${feature.properties.context}`,
                     coordinates: feature.geometry.coordinates,
+                    id: feature.properties.id,
+                    label: `${feature.properties.label}, ${feature.properties.context}`,
+                    category: 'address',
+                    data: {
+                        citycode: feature.properties.citycode,
+                        city: feature.properties.city,
+                        label: `${feature.properties.label}, ${feature.properties.context}`,
+                        coordinates: feature.geometry.coordinates,
+                    },
                 })),
         );
     } catch (error) {
@@ -133,6 +141,21 @@ export function autocompleteLocation(strSearch) {
  * @typedef {Suggestion}
  * @property {string}         label
  * @property {Array.<number>} coordinates
+ */
+
+/**
+ * @typedef {Object} Address
+ * @property {String}      id
+ * @property {String}      label
+ * @property {AddressData} data
+ */
+
+/**
+ * @typedef {Object} AddressData
+ * @property {String} citycode
+ * @property {String} city
+ * @property {String} label
+ * @property {Point}  coordinates
  */
 
 export default autocomplete;

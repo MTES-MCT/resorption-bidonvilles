@@ -125,6 +125,18 @@ function home() {
  * Obviously, the routing configuration of the whole app
  */
 const router = new VueRouter({
+    scrollBehavior: (to) => {
+        if (to.hash) {
+            return {
+                selector: to.hash,
+            };
+        }
+
+        return {
+            x: 0,
+            y: 0,
+        };
+    },
     routes: [
         {
             path: '/',

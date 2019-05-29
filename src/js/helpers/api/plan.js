@@ -46,6 +46,20 @@ export function update(detailsId, data) {
 }
 
 /**
+ * Links  a nw town to an existing  plan
+ *
+ * @param {number} planId
+ * @param {number} townId
+ *
+ * @returns {Promise}
+ */
+export function link(planId, townId) {
+    return postApi(`/plans/${planId}/towns`, {
+        townId,
+    });
+}
+
+/**
  * Deletes a plan
  *
  * @param {string} id
