@@ -45,7 +45,7 @@ export default {
              *
              * @type {boolean}
              */
-            generatingActivationLink: false,
+            loading: false,
 
             /**
              * The generated activation link, if any
@@ -138,26 +138,58 @@ export default {
          */
         generateActivationLink(user) {
             // avoid generating two links at the same time
-            if (this.generatingActivationLink === true) {
+            if (this.loading === true) {
                 return;
             }
 
             // eslint-disable-next-line
-            user.generatingActivationLink = true;
-            this.generatingActivationLink = true;
+            user.loading = true;
+            this.loading = true;
 
             generateActivationLink(user)
                 .then(({ activationLink: link }) => {
                     // eslint-disable-next-line
-                    user.generatingActivationLink = false;
-                    this.generatingActivationLink = false;
+                    user.loading = false;
+                    this.loading = false;
 
                     this.activationLink = link;
                 })
                 .catch(({ user_message: error }) => {
                     // eslint-disable-next-line
-                    user.generatingActivationLink = false;
-                    this.generatingActivationLink = false;
+                    user.loading = false;
+                    this.loading = false;
+
+                    this.activationLinkError = error;
+                });
+        },
+
+        /**
+         * Deactivates a user, and then fetches an activation link
+         *
+         * @param {User} user
+         */
+        regenerateActivationLink(user) {
+            // avoid generating two links at the same time
+            if (this.loading === true) {
+                return;
+            }
+
+            // eslint-disable-next-line
+            user.loading = true;
+            this.loading = true;
+
+            generateActivationLink(user)
+                .then(({ activationLink: link }) => {
+                    // eslint-disable-next-line
+                    user.loading = false;
+                    this.loading = false;
+
+                    this.activationLink = link;
+                })
+                .catch(({ user_message: error }) => {
+                    // eslint-disable-next-line
+                    user.loading = false;
+                    this.loading = false;
 
                     this.activationLinkError = error;
                 });

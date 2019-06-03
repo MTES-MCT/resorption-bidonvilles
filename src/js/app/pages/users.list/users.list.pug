@@ -29,9 +29,9 @@
                 <Table v-bind="tableProperties">
                     <template slot="table-row" slot-scope="props">
                         <span v-if="props.column.id === 'activationLink'">
-                            <img v-if="props.row.generatingActivationLink === true" src="/img/spinner_dark.svg" width="20" class="spinner" />
-                            <span v-else-if="props.row.active !== true && generatingActivationLink !== true" @click="generateActivationLink(props.row)" class="activationLink">🔗</span>
-                            <span v-else>N/A</span>
+                            <img v-if="props.row.loading === true" src="/img/spinner_dark.svg" width="20" class="spinner" />
+                            <span v-else-if="props.row.active !== true && loading !== true" @click="generateActivationLink(props.row)" class="activationLink">🔗</span>
+                            <span v-else @click="regenerateActivationLink(props.row)" class="activationLink">🔁</span>
                         </span>
 
                         <span v-else>{{ typeof props.column.field === 'function' ? props.column.field(props.row) : props.formattedRow[props.column.field] }}</span>
