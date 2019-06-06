@@ -87,11 +87,11 @@ export default {
                 wording: this.address
                     ? {
                         tutorialTitle: 'Adresse détectée',
-                        tutorialDescription: 'Vous pouvez précisez la position du marqueur en vous déplaçant sur la carte puis en cliquant sur la localisation désirée',
+                        tutorialDescription: 'Vous pouvez déplacer le marqueur en cliquant à l\'endroit souhaité sur la carte',
                     }
                     : {
                         tutorialTitle: 'Saisir une adresse',
-                        tutorialDescription: 'Veuillez saisir une adresse dans le champ ci-dessus avec d\'accéder à la carte',
+                        tutorialDescription: 'Veuillez saisir une adresse dans le champ de texte ci-dessus avant d\'accéder à la carte',
                     },
             });
         },
