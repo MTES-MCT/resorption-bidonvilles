@@ -48,5 +48,11 @@
     <Location v-if="type === 'location'" v-bind="props" v-model="data" :disabled="disabled"></Location>
 
     //- address with location
-    <AddressWithLocation v-if="type === 'addressWithLocation'" v-bind="props" v-model="data" :disabled="disabled"></Address>
+    <AddressWithLocation v-if="type === 'addressWithLocation'" v-bind="props" v-model="data" :disabled="disabled"></AddressWithLocation>
+
+    //- town or list of towns
+    <TownList v-if="type === 'townList'" v-bind="props" v-model="data" :disabled="disabled"></TownList>
+
+    //- a single-year plan funding
+    <PlanFunding v-if="type === 'planFunding'" v-bind="props" v-model="data" :disabled="disabled"></PlanFunding>
 </div>

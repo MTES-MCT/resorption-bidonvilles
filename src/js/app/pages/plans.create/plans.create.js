@@ -1,225 +1,161 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
-import PlanFunding from '#app/components/planFunding/planFunding.vue';
-import Operator from '#app/components/operator/operator.vue';
-import Datepicker from 'vuejs-datepicker';
-import { fr } from 'vuejs-datepicker/dist/locale';
-import { get as getConfig, hasPermission } from '#helpers/api/config';
+import Form from '#app/components/form/form.vue';
+import { get as getConfig } from '#helpers/api/config';
 import { create } from '#helpers/api/plan';
-import { all as fetchAll } from '#helpers/api/town';
-import { VueGoodTable } from 'vue-good-table';
+import { search } from '#helpers/api/operator';
 
 export default {
     components: {
-        Datepicker,
         NavBar,
-        PlanFunding,
-        Operator,
-        VueGoodTable,
+        Form,
     },
 
     data() {
-        return {
-            /**
-             *
-             */
-            status: null,
+        const { plan_types: planTypes, departements, user: { departement } } = getConfig();
 
-            /**
-             *
-             */
-            error: null,
-
-            /**
-             * List of plan-types
-             *
-             * @type {Array.<PlanType>}
-             */
-            planTypes: getConfig().plan_types || [],
-
-            /**
-             * Language set for the datepicker
-             *
-             * @type {Object}
-             */
-            dateLanguage: fr,
-
-            /**
-             *
-             */
-            departements: getConfig().departements,
-
-            /**
-             *
-             */
-            towns: [],
-
-            form: {
-                pending: false,
-                mainError: null,
-                errors: {},
-                data: {
-                    ngo: null,
-                    type: null,
-                    startedAt: null,
-                    funding: [],
-                    departement: getConfig().user.departement,
-                },
+        const data = {
+            formData: {
+                departement,
             },
         };
-    },
 
-    computed: {
-        /**
-         * Parses the form data and returns it without unecessary values
-         *
-         * @returns {Object}
-         */
-        formData() {
-            const data = Object.assign({}, this.form.data);
-            data.ngo = (data.operator && data.operator.ngo_id) || null;
-
-            if (data.targetedOnTowns === true) {
-                data.towns = this.$refs.towns.selectedRows.map(({ id }) => id);
-            }
-
-            return data;
-        },
-
-        /**
-         * Returns the currently selected plan type, if any
-         *
-         * @returns {PlanType|null}
-         */
-        planType() {
-            return this.getPlanType(this.form.data.planType);
-        },
-
-        /**
-         *
-         */
-        filteredTowns() {
-            return this.towns.filter(({ departement: { code } }) => code === this.form.data.departement);
-        },
-
-        /**
-         *
-         */
-        tableProps() {
-            const columns = [
+        data.formDefinition = {
+            title: 'Déclaration d\'un dispositif',
+            description: 'Ce formulaire vous permet de déclarer un dispositif ou une action menée sur votre territoire. Il peut s\'agir notamment d\'actions d\'accompagnement social global, d\'espaces temporaires d\'insertion ou encore d\'actions sanitaires (déployés sur un ou plusieurs bidonville ou "hors les murs"). Une fois ce formulaire validé, ledispositif fera l\'objet d\'une fiche dédiée, accessible via l\'onglet "liste des dispositifs". Lorsque le symbole (*) apparaît en rouge au début de l\'intitulé de la question, cela signifie qu\'il s\'agit d\'une question obligatoire. Il n\'est pas possible de valider le formulaire sans y avoir répondu.',
+            steps: [
                 {
-                    label: 'Commune',
-                    field: 'city.name',
-                },
-                {
-                    label: 'Adresse',
-                    field: 'address',
-                    permissions: [
-                        { type: 'data', name: 'address' },
+                    title: 'Dispositf',
+                    wording: {
+                        error: 'La déclaration du dispositif a échoué',
+                        submit: 'Déclarer le dispositif',
+                    },
+                    sections: [
+                        {
+                            title: 'Caractéristiques générales',
+                            inputs: {
+                                name: {
+                                    type: 'text',
+                                    label: 'Nom du dispositif',
+                                    mandatory: false,
+                                },
+                                type: {
+                                    type: 'radio',
+                                    label: 'Type de dispositif',
+                                    mandatory: true,
+                                    options: planTypes.map(({ id, label }) => ({
+                                        value: id,
+                                        label,
+                                    })),
+                                },
+                                startedAt: {
+                                    type: 'date',
+                                    label: 'Date de début du dispositif',
+                                    mandatory: true,
+                                },
+                            },
+                        },
+                        {
+                            title: 'Opérateur en charge',
+                            inputs: {
+                                ngo: {
+                                    type: 'autocompleter',
+                                    specificProps: {
+                                        autocompleter: (d) => {
+                                            const p = search(d);
+                                            const p2 = p.then(items => items.map(item => ({
+                                                id: item.ngo_id,
+                                                label: item.label,
+                                            })));
+                                            p2.abort = p.abort;
+
+                                            return p2;
+                                        },
+                                        showCategory: false,
+                                        allowMultiple: false,
+                                        float: true,
+                                        createNew: () => {
+                                            const routerData = this.$router.resolve('/nouvel-operateur');
+                                            window.open(routerData.href, '__blank');
+                                        },
+                                    },
+                                    label: 'Opérateur',
+                                    description: 'Commencez à saisir le nom de l\'opérateur, puis sélectionnez l\'opérateur désiré dans la liste proposée',
+                                    mandatory: true,
+                                },
+                            },
+                        },
+                        {
+                            title: 'Sites concernés',
+                            inputs: {
+                                departement: {
+                                    type: 'select',
+                                    label: 'Département concerné',
+                                    mandatory: true,
+                                    options: departements.map(({ code, name }) => ({
+                                        value: code,
+                                        label: `${code} - ${name}`,
+                                    })),
+                                },
+                                targetedOnTowns: {
+                                    type: 'radio',
+                                    label: 'L\'action est menée sur un ou plusieurs site(s) en particulier :',
+                                    mandatory: true,
+                                    options: [
+                                        { value: false, label: 'Non' },
+                                        { value: true, label: 'Oui' },
+                                    ],
+                                },
+                                towns: {
+                                    type: 'townList',
+                                    label: 'Sites concernés',
+                                    mandatory: false,
+                                    specificProps: {
+                                        filter: ({ departement: { code } }) => code === this.formData.departement,
+                                    },
+                                    condition({ targetedOnTowns }) {
+                                        return targetedOnTowns;
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            title: 'Financements',
+                            inputs: {
+                                funding: {
+                                    type: 'planFunding',
+                                    label: 'Financements 2019',
+                                    description: 'Ce tableau de financement ne concerne que l\'année courante',
+                                    mandatory: false,
+                                },
+                            },
+                        },
                     ],
+                    submit: d => create(Object.assign({}, d, {
+                        ngo: d.ngo && d.ngo.length ? d.ngo[0].id : null,
+                    })),
                 },
-                {
-                    label: 'Statut du site',
-                    field: 'status',
-                    formatFn: value => (value === 'open' ? 'Existant' : 'Disparu'),
-                },
-            ];
+            ],
+        };
 
-            return {
-                styleClass: 'table',
-                columns: columns.filter(column => !column.permissions || column.permissions.every(permission => hasPermission(permission))),
-                rows: this.filteredTowns,
-                'sort-options': {
-                    enabled: true,
-                },
-                'pagination-options': {
-                    enabled: true,
-                    perPage: 10,
-                    perPageDropdown: [5, 10, 20, 30, 40, 50],
-                    nextLabel: 'Suivant',
-                    prevLabel: 'Précédent',
-                    rowsPerPageLabel: 'Nombre de sites par page',
-                    ofLabel: 'sur',
-                    pageLabel: 'Page', // for 'pages' mode
-                    allLabel: 'Tous',
-                },
-                'select-options': {
-                    enabled: true,
-                    selectionText: 'sites sélectionnés',
-                    clearSelectionText: 'annuler',
-                },
-            };
-        },
+        return data;
     },
 
-    created() {
-        this.load();
+    watch: {
+        'formData.departement': function a() {
+            this.$refs.form.getInputById('towns').specificProps.filter = ({ departement: { code } }) => code === this.formData.departement;
+        },
     },
 
     methods: {
-        /**
-         *
-         */
-        load() {
-            if (['loading', 'loaded'].indexOf(this.status) !== -1) {
-                return;
-            }
+        onComplete() {
+            this.$notify({
+                group: 'notifications',
+                type: 'success',
+                title: 'Dispositif correctement déclaré',
+                text: 'Le dispositif a bien été ajouté en base de données',
+            });
 
-            this.status = 'loading';
-            this.error = null;
-
-            fetchAll()
-                .then((data) => {
-                    this.towns = data;
-                    this.status = 'loaded';
-                })
-                .catch(({ user_message: message }) => {
-                    this.error = message;
-                    this.status = 'loadingError';
-                });
-        },
-
-        /**
-         * Finds a plan-type by id
-         *
-         * @param {number} id
-         *
-         * @returns {PlanType|null}
-         */
-        getPlanType(id) {
-            return this.planTypes.find(({ id: planTypeId }) => planTypeId === id) || null;
-        },
-
-        /**
-         * Submits the form
-         */
-        submit() {
-            // avoid submitting the form twice
-            if (this.form.pending === true) {
-                return;
-            }
-
-            this.form.pending = true;
-            this.form.errors = {};
-            this.form.mainError = null;
-
-            create(this.formData)
-                .then(() => {
-                    this.form.pending = false;
-
-                    this.$notify({
-                        group: 'notifications',
-                        type: 'success',
-                        title: 'Dispositif correctement déclaré',
-                        text: 'Le dispositif a bien été ajouté en base de données',
-                    });
-
-                    this.$router.push('/liste-des-dispositifs');
-                })
-                .catch(({ user_message: userMessage, fields }) => {
-                    this.form.mainError = userMessage;
-                    this.form.errors = fields || {};
-                    this.form.pending = false;
-                });
+            this.$router.push('/liste-des-dispositifs');
         },
     },
 };

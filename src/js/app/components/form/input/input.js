@@ -4,6 +4,21 @@ import Autocompleter from './autocompleter/autocompleter.vue';
 import Address from './address/address.vue';
 import Location from './location/location.vue';
 import AddressWithLocation from './address-with-location/address-with-location.vue';
+import TownList from './townList/townList.vue';
+import PlanFunding from './planFunding/planFunding.vue';
+
+/**
+ * Input types that accept a list of values
+ *
+ * @type {Array.<string>}
+ */
+const multipleValueInputs = [
+    'selectMultiple',
+    'checkbox',
+    'autocompleter',
+    'townList',
+    'planFunding',
+];
 
 export default {
 
@@ -14,6 +29,8 @@ export default {
         Address,
         Location,
         AddressWithLocation,
+        TownList,
+        PlanFunding,
     },
 
 
@@ -52,7 +69,9 @@ export default {
          *  'autocompleter',
          *  'address',
          *  'location',
-         *  'addressWithLocation'
+         *  'addressWithLocation',
+         *  'townList',
+         *  'planFunding'
          * }
          */
         type: {
@@ -121,7 +140,7 @@ export default {
         value: {
             required: false,
             default() {
-                if (this.type === 'selectMultiple' || this.type === 'checkbox') {
+                if (multipleValueInputs.indexOf(this.type) !== -1) {
                     return [];
                 }
 

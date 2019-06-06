@@ -1,0 +1,9 @@
+img {
+    cursor: pointer;
+}
+
+.planFundingRow--disabled {
+    img {
+        display: none;
+    }
+}

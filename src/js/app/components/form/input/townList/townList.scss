@@ -1,0 +1,25 @@
+.error {
+    img {
+        vertical-align: middle;
+    }
+
+    color: rgb(214, 54, 38);
+}
+
+.label--open {
+    background: #E5CA87;
+}
+
+.vgt-wrap {
+    table.table {
+        & tr {
+            img {
+                vertical-align: middle;
+            }
+        }
+    }
+
+    .selectionInfo {
+        display: none;
+    }
+}

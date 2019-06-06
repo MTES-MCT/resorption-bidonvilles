@@ -1,0 +1,16 @@
+<table class="table planFunding">
+    <thead>
+        <tr>
+            <th class="planFunding-type">Type de financement</th>
+            <th class="planFunding-amount">Montant (€)</th>
+            <th class="planFunding-details">Précisions</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <PlanFundingRow v-for="(funding, index) in fundings" v-model="funding.data" @onremove="removeRow(index)" @input="onRowChange" :disabled="disabled"></PlanFundingRow>
+        <tr>
+            <td colspan="4" @click="addRow" class="planFunding-addRow" v-bind:class="{ 'planFunding-addRow--disabled': disabled }">Ajouter une ligne de financement</td>
+        </tr>
+    </tbody>
+</table>

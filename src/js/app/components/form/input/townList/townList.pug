@@ -1,0 +1,19 @@
+<div>
+    <div v-if="status === 'loading' || status === null">
+        <img src="/img/spinner_dark.svg" width="20" class="spinner" /> Chargement de la liste des sites en cours...
+    </div>
+
+    <div v-if="status === 'error'" class="error">
+        <img src="/img/warning.svg" width="20" class="spinner" /> Le chargement de la liste des sites a échoué : {{ loadingError }}
+    </div>
+
+    <p class="selectionInfo">Nombre total de sites sélectionnés : {{ selectedTowns.length }}</p>
+    <VueGoodTable v-if="status === 'loaded'" v-bind="tableProps" ref="table" @on-search="onSearch" @on-select-all="onSelectAll" @on-selected-rows-change="onSelectionChange">
+        <div slot="emptystate">Aucun site</div>
+
+        <template slot="table-row" slot-scope="props">
+            <span v-if="props.column.field === 'status'" class="label" v-bind:class="{ 'label--open': props.row.status === 'open', 'label--closed': props.row.status  !== 'open' }">{{ props.formattedRow[props.column.field] }}</span>
+            <span v-else>{{ props.formattedRow[props.column.field] }}</span>
+        </template>
+    </VueGoodTable>
+</div>

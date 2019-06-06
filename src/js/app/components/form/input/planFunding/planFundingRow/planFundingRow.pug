@@ -1,0 +1,16 @@
+<tr class="planFundingRow" v-bind:class="{ 'planFundingRow--disabled': disabled }">
+    <td>
+        <select v-model="type" :disabled="disabled">
+            <option v-for="fundingType in fundingTypes" :value="fundingType.id">{{ fundingType.label }}</option>
+        </select>
+    </td>
+    <td>
+        <input type="number" v-model="amount" step="0.01" :readonly="disabled" :disabled="disabled" />
+    </td>
+    <td>
+        <input type="text" v-model="details" :readonly="disabled" :disabled="disabled" />
+    </td>
+    <td>
+        <img src="/img/remove.svg" @click="remove" />
+    </td>
+</tr>
