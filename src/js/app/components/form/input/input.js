@@ -200,6 +200,11 @@ export default {
         },
     },
 
+    mounted() {
+        this.$nextTick(() => {
+            this.$emit('input', this.data);
+        });
+    },
 
     watch: {
         // two-way binding
