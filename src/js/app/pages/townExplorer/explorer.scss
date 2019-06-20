@@ -9,6 +9,18 @@
         color: white;
         background: #182B51;
         box-shadow: -2px 9px 5px 5px rgba(0,0,0,0.5);
+
+        .autocomplete-result {
+            padding-top: 10px;
+            padding-bottom: 10px;
+
+            span {
+                padding-bottom: 25px;
+            }
+
+            white-space: normal;
+            line-height: 25px;
+        }
     }
 
     .content {

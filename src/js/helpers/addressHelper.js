@@ -112,7 +112,7 @@ export function autocomplete(strSearch, limit = 5) {
 export function autocompleteLocation(strSearch) {
     const p1 = getApi(`/locations/search?q=${encodeURIComponent(strSearch)}`);
     const p2 = p1.then(results => results.map(result => ({
-        label: result.name,
+        label: result.code.length === 5 ? `(${result.code.slice(0, 2)}) ${result.name}` : result.name,
         code: result.code,
         type: result.type,
     })));
