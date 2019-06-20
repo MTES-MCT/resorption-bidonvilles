@@ -254,7 +254,7 @@ export default {
                 visibleTowns = visibleTowns.filter((town) => {
                     switch (this.location.type) {
                     case 'Commune':
-                        return town.city.code === this.location.code;
+                        return town.city.code === this.location.code || town.city.main === this.location.code;
 
                     case 'EPCI':
                         return town.epci.code === this.location.code;
