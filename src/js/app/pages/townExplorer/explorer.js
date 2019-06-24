@@ -99,6 +99,20 @@ export default {
                     ],
                 },
                 {
+                    icon: iconJustice,
+                    label: 'Concours de Force Publique',
+                    id: 'police',
+                    permissions: [
+                        { type: 'data', name: 'justiceProcedure' },
+                    ],
+                    options: [
+                        { value: null, label: 'Inconnu', checked: true },
+                        { value: 'none', label: 'Non demandé', checked: true },
+                        { value: 'requested', label: 'Demandé', checked: true },
+                        { value: 'granted', label: 'Obtenu', checked: true },
+                    ],
+                },
+                {
                     icon: iconStatus,
                     label: 'Statut des sites',
                     id: 'status',
@@ -350,6 +364,17 @@ export default {
                             break;
                         }
                     });
+                }
+                    break;
+
+                case 'police': {
+                    const disallowedPolice = filterGroup.options
+                        .filter(option => !option.checked)
+                        .map(option => option.value);
+
+                    if (disallowedPolice.length > 0) {
+                        visibleTowns = visibleTowns.filter(town => disallowedPolice.indexOf(town.policeStatus) === -1);
+                    }
                 }
                     break;
 
