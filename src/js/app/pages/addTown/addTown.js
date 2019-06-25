@@ -78,7 +78,7 @@ export default {
                                 declaredAt: {
                                     type: 'date',
                                     label: 'Date de signalement du site',
-                                    mandatory: true,
+                                    mandatory: false,
                                 },
                                 fieldType: {
                                     type: 'radio',
