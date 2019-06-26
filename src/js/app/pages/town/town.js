@@ -240,7 +240,7 @@ export default {
                 electricityType: this.town.electricityType.id,
                 accessToWater: boolToYesNoValue(this.town.accessToWater),
                 trashEvacuation: boolToYesNoValue(this.town.trashEvacuation),
-                solutions: this.closingSolutions.reduce((solutions, solution) => {
+                solutions: this.town.closingSolutions ? this.closingSolutions.reduce((solutions, solution) => {
                     const newSolutions = Object.assign(solutions, {});
                     const s = this.town.closingSolutions.find(sol => sol.id === solution.id);
                     newSolutions[solution.id] = {
@@ -250,7 +250,7 @@ export default {
                     };
 
                     return newSolutions;
-                }, {}),
+                }, {}) : [],
             };
         },
         setView(view) {

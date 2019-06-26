@@ -217,7 +217,7 @@
                                 </div>
                             </div>
 
-                            <div class="panel">
+                            <div class="panel" v-if="hasPermission({ type: 'data', name: 'ownerComplaint' })">
                                 <div class="panel__header">
                                     <h3>5. Procédure judiciaire d’expulsion des occupants</h3>
                                 </div>
@@ -513,7 +513,7 @@
                                 </div>
                             </div>
 
-                            <div class="panel">
+                            <div class="panel" v-if="hasPermission({ type: 'data', name: 'ownerComplaint' })">
                                 <div class="panel__header">
                                     <h3>5. Procédure judiciaire d’expulsion des occupants</h3>
                                 </div>
