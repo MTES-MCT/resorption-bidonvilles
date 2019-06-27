@@ -1,7 +1,7 @@
 {
-  "name": "action-bidonvilles-frontend",
+  "name": "resorption-bidonvilles-frontend",
   "version": "0.0.1",
-  "description": "Frontend d'Action Bidonvilles",
+  "description": "Frontend de Résorption Bidonvilles",
   "author": {
     "name": "Anis Safine Laget",
     "email": "anis@users.noreply.github.com"

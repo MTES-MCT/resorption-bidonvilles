@@ -20,7 +20,7 @@ import OperatorList from '#app/pages/operators.list/operators.list.vue';
 import OperatorCreate from '#app/pages/operators.create/operators.create.vue';
 import LegalMentions from '#app/pages/legalMentions/legalMentions.vue';
 // eslint-disable-next-line
-import CGU from '/doc/CGU_Action_Bidonvilles.pdf';
+import CGU from '/doc/CGU_Resorption_Bidonvilles.pdf';
 
 import { logout, isLoggedIn } from '#helpers/api/user';
 import { isLoaded as isConfigLoaded, hasPermission } from '#helpers/api/config';
