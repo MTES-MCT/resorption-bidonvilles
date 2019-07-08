@@ -30,6 +30,11 @@ function handleRequestResponse(success, failure) {
         return;
     }
 
+    if (response.success === true) {
+        success(response.response);
+        return;
+    }
+
     if (this.status !== 200) {
         switch (response && response.error && response.error.code) {
         // handle generic errors

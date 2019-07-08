@@ -72,6 +72,12 @@ export default {
             ],
         },
         {
+            label: 'Administration',
+            items: [
+                { label: 'Statistiques', target: '/statistiques', group: 'stats' },
+            ],
+        },
+        {
             label: 'Mon compte',
             items: [
                 { label: 'Gérer mon compte', target: '/mon-compte', group: 'me' },

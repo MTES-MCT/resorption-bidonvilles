@@ -18,6 +18,7 @@ import PlanCreate from '#app/pages/plans.create/plans.create.vue';
 import PlanDetails from '#app/pages/plans.details/plans.details.vue';
 import OperatorList from '#app/pages/operators.list/operators.list.vue';
 import OperatorCreate from '#app/pages/operators.create/operators.create.vue';
+import Statistics from '#app/pages/stats/stats.vue';
 import LegalMentions from '#app/pages/legalMentions/legalMentions.vue';
 // eslint-disable-next-line
 import CGU from '/doc/CGU_Resorption_Bidonvilles.pdf';
@@ -324,6 +325,15 @@ const router = new VueRouter({
             },
             path: '/nouvel-operateur',
             component: OperatorCreate,
+            beforeEnter: guardians.loaded,
+        },
+        {
+            meta: {
+                group: 'stats',
+                permissions: [{ type: 'feature', name: 'stats' }],
+            },
+            path: '/statistiques',
+            component: Statistics,
             beforeEnter: guardians.loaded,
         },
     ],

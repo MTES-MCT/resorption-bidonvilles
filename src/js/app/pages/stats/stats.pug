@@ -1,0 +1,39 @@
+<div>
+    <NavBar></NavBar>
+
+    <div class="container">
+        <div v-if="status === 'loaded'">
+            <section class="formSection" v-for="section in sections">
+                <header class="formSection-header">
+                    <h1 class="formSection-title">{{ section.title }}</h1>
+                </header>
+
+                <div class="panel">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Département</th>
+                                <th>{{ section.title }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in stats[section.id]">
+                                <td>({{ item.code}}) - {{ item.name }}</td>
+                                <td>{{ item.total }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <div v-if="status === 'error'" class="notification full-width">
+            <img src="/img/spinner_dark.svg" width="20" class="spinner" />
+            <span>Chargement des données en cours...</span>
+        </div>
+
+        <div v-if="status !== 'error' && status  !== 'loaded'" class="notification full-width">
+            <span>{{ error }}. <a href="#" @click="load">Réessayer ?</a></span>
+        </div>
+    </div<
+</div>
