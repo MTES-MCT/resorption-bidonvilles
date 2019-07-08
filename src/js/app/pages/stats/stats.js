@@ -51,5 +51,11 @@ export default {
                     this.error = userMessage;
                 });
         },
+        computeTotal(sectionId) {
+            return this.stats[sectionId].reduce(
+                (total, list) => total + parseInt(list.total, 10),
+                0,
+            );
+        },
     },
 };

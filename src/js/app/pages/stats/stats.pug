@@ -6,6 +6,7 @@
             <section class="formSection" v-for="section in sections">
                 <header class="formSection-header">
                     <h1 class="formSection-title">{{ section.title }}</h1>
+                    <p>Total : {{ computeTotal(section.id) }}</p>
                 </header>
 
                 <div class="panel">
@@ -35,5 +36,5 @@
         <div v-if="status !== 'error' && status  !== 'loaded'" class="notification full-width">
             <span>{{ error }}. <a href="#" @click="load">Réessayer ?</a></span>
         </div>
-    </div<
+    </div>
 </div>
