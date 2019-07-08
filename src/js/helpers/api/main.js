@@ -30,7 +30,7 @@ function handleRequestResponse(success, failure) {
         return;
     }
 
-    if (response.success === true) {
+    if (response.success === true && response.response !== undefined) {
         success(response.response);
         return;
     }
