@@ -40,11 +40,13 @@ export default {
         Export,
     },
     data() {
+        const { user, departements } = getConfig();
+
         return {
             error: undefined,
             loading: false,
             defaultMapView: {
-                center: getConfig().user.map_center,
+                center: user.map_center,
                 zoom: 9,
             },
             towns: [],
@@ -158,7 +160,11 @@ export default {
             ],
             iconFormat,
             iconGeo,
-            location: null,
+            location: {
+                type: 'Département',
+                code: user.departement,
+                label: departements.find(({ code }) => code === user.departement).name,
+            },
             currentTab: 'map',
             exporter: {
                 isVisible: false,
