@@ -69,7 +69,7 @@ export default {
                                         ],
                                         label: 'Niveau de priorité du site',
                                         description: '1 étant le niveau de priorité le plus haut',
-                                        mandatory: true,
+                                        mandatory: false,
                                     },
                                     builtAt: {
                                         type: 'date',
