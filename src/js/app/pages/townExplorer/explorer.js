@@ -185,12 +185,16 @@ export default {
 
             const columns = [
                 {
+                    label: 'Département',
+                    field: ({ departement: { name, code } }) => `${code} - ${name}`,
+                },
+                {
                     label: 'Commune',
                     field: 'city.name',
                 },
                 {
                     label: 'Adresse',
-                    field: 'address',
+                    field: 'addressSimple',
                     permissions: [
                         { type: 'data', name: 'address' },
                     ],
