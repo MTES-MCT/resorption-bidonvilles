@@ -23,7 +23,7 @@ let columns = {
     },
     priority: {
         label: 'Priorité',
-        value: town => town.priority,
+        value: town => (town.priority !== null ? town.priority : 'Inconnue'),
         permissions: [
             { type: 'data', name: 'priority' },
         ],

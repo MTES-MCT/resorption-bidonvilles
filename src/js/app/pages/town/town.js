@@ -270,7 +270,7 @@ export default {
             const coordinates = this.edit.address && this.edit.address.coordinates;
 
             edit(this.town.id, {
-                priority: this.edit.priority,
+                priority: this.edit.priority || null,
                 latitude: coordinates && coordinates[0],
                 longitude: coordinates && coordinates[1],
                 city: this.edit.address && this.edit.address.city,
