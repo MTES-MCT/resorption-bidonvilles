@@ -85,9 +85,9 @@
                     <h2 v-if="town.updatedAt !== undefined">Dernière modification le <time>{{ formatDate(town.updatedAt) }}</time></h2>
 
                     <div class="town-actionButtons">
-                        <button v-if="mode !== 'edit' && hasPermission({ type: 'feature', name: 'deleteTown' })" @click="destroy" class="button warning">Supprimer le site</button>
-                        <button v-if="town.status === 'open' && mode !== 'edit' && hasPermission({ type: 'feature', name: 'closeTown' })" @click="setCloseMode" class="button secondary">Déclarer la disparition du site</button>
-                        <button v-if="town.status === 'open' && mode !== 'edit' && hasPermission({ type: 'feature', name: 'updateTown' })" @click="setEditMode" class="button secondary">Modifier le site</button>
+                        <button v-if="mode !== 'edit' && hasPermission({ type: 'feature', name: 'deleteTown' }, town)" @click="destroy" class="button warning">Supprimer le site</button>
+                        <button v-if="town.status === 'open' && mode !== 'edit' && hasPermission({ type: 'feature', name: 'closeTown' }, town)" @click="setCloseMode" class="button secondary">Déclarer la disparition du site</button>
+                        <button v-if="town.status === 'open' && mode !== 'edit' && hasPermission({ type: 'feature', name: 'updateTown' }, town)" @click="setEditMode" class="button secondary">Modifier le site</button>
                         <button v-if="mode === 'edit'" @click="submit" class="button">Sauvegarder</button>
                         <button v-if="mode === 'edit'" @click="setViewMode" class="button warning">Annuler</button>
                     </div>

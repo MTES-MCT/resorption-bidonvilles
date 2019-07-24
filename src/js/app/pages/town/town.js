@@ -133,7 +133,17 @@ export default {
         this.fetchData();
     },
     methods: {
-        hasPermission,
+        hasPermission: (permission, town) => {
+            if (!hasPermission(permission)) {
+                return false;
+            }
+
+            if (town !== undefined && hasPermission({ type: 'data', name: 'regional' })) {
+                return town.region.code === getConfig().user.region;
+            }
+
+            return true;
+        },
         offsetTop(el) {
             let next = el;
             let offset = 0;
