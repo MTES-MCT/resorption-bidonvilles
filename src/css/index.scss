@@ -212,3 +212,14 @@ button:disabled:hover {
         background: white;
     }
 }
+
+.link {
+    text-decoration: none;
+    font-weight: bold;
+    color: #0053B3;
+    cursor: pointer;
+}
+
+.link:hover {
+    text-decoration: underline;
+}

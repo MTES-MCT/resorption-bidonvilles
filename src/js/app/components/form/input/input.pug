@@ -1,6 +1,6 @@
 <div class="form__group inputContainer" v-bind:class="{ error: errors.length > 0 }" :id="id">
     <label class="input-label">{{ label }}<sup v-if="mandatory" class="input-mandatory"> (*)</sup></label>
-    <p v-if="description" class="input-description">{{ description }}</p>
+    <p v-if="description" class="input-description" v-html="description"></p>
 
     <div class="notification error" v-if="errors.length > 0">
         <ul v-for="error in errors">
@@ -10,6 +10,13 @@
 
     //- text input
     <input v-if="type === 'text'" type="text" class="input input--text" v-bind="props" v-model="data" :disabled="disabled" :readonly="disabled" />
+
+    //- password input
+    <input v-if="type === 'password'" :type="showPassword ? 'text' : 'password'" class="input input--password" v-bind="props" v-model="data" :disabled="disabled" :readonly="disabled" />
+    <span v-if="type === 'password'" @click="showPassword = !showPassword" class="input--password-toggler"><font-awesome-icon :icon="showPassword ? 'eye' : 'eye-slash'"></font-awesome-icon></span>
+
+    //- textarea input
+    <textarea v-if="type === 'textarea'" class="input input--textarea" v-bind="props" v-model="data" :disabled="disabled" :readonly="disabled"></textarea>
 
     //- number input
     <input v-if="type === 'number'" type="number" class="input input--number" v-bind="props" v-model="data" :disabled="disabled" :readonly="disabled" />
@@ -55,4 +62,7 @@
 
     //- a single-year plan funding
     <PlanFunding v-if="type === 'planFunding'" v-bind="props" v-model="data" :disabled="disabled"></PlanFunding>
+
+    //- collectivity autocompleter
+    <Collectivity v-if="type === 'collectivity'" v-bind="props" v-model="data" :disabled="disabled"></Collectivity>
 </div>

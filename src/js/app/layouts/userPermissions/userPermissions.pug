@@ -1,0 +1,9 @@
+<div>
+    <h1 class="userPermissions-sectionTitle">{{ title }}</h1>
+    <ul class="userPermissionsList">
+        <li v-for="item in parsedItems" v-bind:class="{ 'userPermissionsList-item': true, [`userPermissionsList-item--${item.type}`]: true, 'userPermissionsList-item--subsection': item.subsection === true }">
+            <span v-html="item.label.replace(/%(.+?)%/gi, '<em>$1</em>')"></span>
+            <span v-if="item.comments" class="userPermissionsList-comments"><br/>{{ item.comments }}</span>
+        </li>
+    </ul>
+</div>

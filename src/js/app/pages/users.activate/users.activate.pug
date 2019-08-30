@@ -3,10 +3,6 @@
 
     <section class="section section-white" id="form">
         <div class="container">
-            <h1>Activation de votre compte utilisateur</h1>
-
-            <p>Vous vous apprêtez à activer votre compte utilisateur, veuillez choisir votre mot de passe de connexion :</p>
-
             //- state: loading in progress
             <div v-if="state === 'loading'" class="notification full-width">
                 <img src="/img/spinner_dark.svg" width="20" class="spinner" />
@@ -15,31 +11,14 @@
 
             //- state: loading failed
             <div v-if="state === 'error'" class="notification error full-width">
-                <span>{{ error }}. <a href="#" @click="retryLoading">Réessayer ?</a></span>
+                <p><font-awesome-icon icon="times"></font-awesome-icon> <strong>Une erreur est survenue</strong></p>
+                <p><span v-html="error.replace(/\n/g, '<br/>')"></span></p>
+                <p><a href="#" @click="retryLoading">Réessayer ?</a></p>
             </div>
 
             //- state: loaded
             <div v-if="state === 'loaded'">
-                <div class="notification error" v-if="form.error">{{ form.error }}</div>
-
-                <div class="form__group">
-                    <label for="password" v-bind:class="{ error: form.fieldErrors.password }"><strong>Votre mot de passe :</strong></label>
-                    <p class="error" v-if="form.fieldErrors.password">
-                        <ul>
-                            <li v-for="error in form.fieldErrors.password">{{ error }}</li>
-                        </ul>
-                    </p>
-                    <input type="password" id="password" v-model="form.input.password" :readonly="form.loading">
-                </div>
-
-                <p>En cliquant sur "Activer mon compte", j'accepte les <router-link to="/conditions-d-utilisation">conditions générales d'utilisation</router-link>.</p>
-
-                <div class="form__group">
-                    <button class="button" type="submit" @click="submit">
-                        <img  v-if="form.loading" src="/img/spinner_light.svg" width="20" />
-                        <span v-else>Activer mon compte</span>
-                    </button>
-                </div>
+                <Form v-bind="formDefinition" v-model="formData" @complete="onComplete" ref="form"></Form>
             </div>
     </section>
 </div>

@@ -15,24 +15,6 @@
         </ul>
     </header>
 
-    <section class="form-stepNav">
-        <button class="form-stepButton button" @click="submit" :disabled="pending">
-            <span v-if="!pending">{{ wording.submit }}</span>
-            <img v-else src="/img/spinner_light.svg" width="20" />
-        </button>
-    </section>
-
-    <div class="notification error" v-if="errors && errors.main">
-        <span>{{ wording.error + ' : ' + errors.main }}</span>
-        <p v-if="numberOfFilteredErrors > 0">Les champs en erreur sont :
-            <ul>
-                <li v-for="(details, inputId) in filteredErrors">
-                    <a @click="$router.replace('#top', () => $router.replace(`#${inputId}`));">{{ (getInputById(inputId) || {}).label || 'inconnu' }}</a>
-                </li>
-            </ul>
-        </p>
-    </div>
-
     <section v-for="section in sections" class="formSection">
         <header class="formSection-header">
             <h1 v-if="section.title" class="formSection-title">{{ section.title }}</h1>
@@ -40,7 +22,7 @@
         </header>
 
         <div class="panel">
-            <Input v-for="(input, inputId) in section.inputs" v-if="isInputActive(input)" :id="inputId" v-bind="input" v-model="data[inputId]" :errors="(errors && errors.fields && errors.fields[inputId]) || undefined" :disabled="pending" @change="onDataChange" />
+            <Input v-for="(input, inputId) in section.inputs" v-if="isInputActive(input)" :id="inputId" v-bind="input" v-model="data[inputId]" :errors="(errors && errors.fields && errors.fields[inputId]) || undefined" :disabled="pending || input.disabled" @change="onDataChange" />
         </div>
     </section>
 
@@ -56,6 +38,7 @@
     </div>
 
     <section class="form-stepNav">
+        <p v-if="submitPrefix" v-html="submitPrefix"></p>
         <button class="form-stepButton button" @click="submit" :disabled="pending">
             <span v-if="!pending">{{ wording.submit }}</span>
             <img v-else src="/img/spinner_light.svg" width="20" />

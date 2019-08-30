@@ -114,10 +114,20 @@ export function autocompleteLocation(strSearch) {
     const p2 = p1.then(results => results.map(result => ({
         label: result.code.length === 5 ? `(${result.code.slice(0, 2)}) ${result.name}` : result.name,
         code: result.code,
-        type: result.type,
+        type: result.label,
+        locationType: result.type,
     })));
     p2.abort = p1.abort;
     return p2;
+}
+
+/**
+ * Lists all departements
+ *
+ * @returns {Promise}
+ */
+export function departements() {
+    return getApi('/departements');
 }
 
 /**

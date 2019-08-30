@@ -11,11 +11,21 @@ export default {
     },
 
     data() {
-        const { plan_types: planTypes, departements, user: { departement } } = getConfig();
+        const {
+            plan_types: planTypes,
+            departements,
+            user: {
+                organization: {
+                    location: {
+                        departement,
+                    },
+                },
+            },
+        } = getConfig();
 
         const data = {
             formData: {
-                departement,
+                departement: departement !== null ? departement.code : null,
             },
         };
 

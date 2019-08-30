@@ -1,0 +1,64 @@
+.userPermissions-sectionTitle {
+    margin: 0;
+    padding: 20px 0 3px;
+    font-size: 15px;
+}
+
+.userPermissionsList,
+.userOptionsList {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.userPermissionsList-item {
+    font-style: italic;
+
+    em {
+        font-style: inherit;
+        text-decoration: underline;
+    }
+}
+
+.userPermissionsList-item--subsection {
+    margin-top: 20px;
+    font-style: normal;
+}
+
+.userPermissionsList-item--subsection:first-child {
+    margin-top: 0;
+}
+
+.userPermissionsList-item:before {
+    position: absolute;
+    margin-top: 3px;
+    margin-left: -22px;
+    width: 15px;
+    height: 15px;
+    content: '';
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.userPermissionsList-item--view:before {
+    background-color: #00B84A;
+    -webkit-mask: url('/img/permissions/view.svg') no-repeat center;
+    mask: url('/img/permissions/view.svg') no-repeat center;
+}
+
+.userPermissionsList-item--edit:before {
+    background-color: #00B84A;
+    -webkit-mask: url('/img/permissions/edit.svg') no-repeat center;
+    mask: url('/img/permissions/edit.svg') no-repeat center;
+}
+
+.userPermissionsList-item--deny:before {
+    background-color: #e05656;
+    -webkit-mask: url('/img/permissions/deny.svg') no-repeat center;
+    mask: url('/img/permissions/deny.svg') no-repeat center;
+}
+
+.userPermissionsList-comments {
+    font-style: italic;
+}

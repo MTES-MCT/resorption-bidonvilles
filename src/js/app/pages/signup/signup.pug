@@ -1,5 +1,23 @@
 <div>
     <NavBar></NavBar>
 
-    <iframe style="display: block; margin: 50px auto 0;" src="https://docs.google.com/forms/d/e/1FAIpQLSfhtJlVpZ0nmSBsFWGSioec6gYDauT7zaTQa8J0zS4nimSSqw/viewform?embedded=true" width="640" height="646" frameborder="0" marginheight="0" marginwidth="0"></iframe>
+    <section class="section section-white">
+        <div class="container">
+            //- state: loading in progress
+            <div v-if="state === 'loading'" class="notification full-width">
+                <img src="/img/spinner_dark.svg" width="20" class="spinner" />
+                <span>Chargement des données en cours...</span>
+            </div>
+
+            //- state: loading failed
+            <div v-if="state === 'error'" class="notification error full-width">
+                <span>{{ loadingError }}. <span @click="retryLoading">Réessayer ?</span></span>
+            </div>
+
+            //- state: loaded
+            <div v-if="state === 'loaded'">
+                <Form v-bind="formDefinition" v-model="formData" @complete="onComplete" ref="form"></Form>
+            </div>
+        </div>
+    </section>
 </div>

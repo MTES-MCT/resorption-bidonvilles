@@ -85,9 +85,9 @@
                     <h2 v-if="town.updatedAt !== undefined">Dernière modification le <time>{{ formatDate(town.updatedAt) }}</time></h2>
 
                     <div class="town-actionButtons">
-                        <button v-if="mode !== 'edit' && hasPermission({ type: 'feature', name: 'deleteTown' }, town)" @click="destroy" class="button warning">Supprimer le site</button>
-                        <button v-if="town.status === 'open' && mode !== 'edit' && hasPermission({ type: 'feature', name: 'closeTown' }, town)" @click="setCloseMode" class="button secondary">Déclarer la disparition du site</button>
-                        <button v-if="town.status === 'open' && mode !== 'edit' && hasPermission({ type: 'feature', name: 'updateTown' }, town)" @click="setEditMode" class="button secondary">Modifier le site</button>
+                        <button v-if="mode !== 'edit' && hasPermission('shantytown.delete', town)" @click="destroy" class="button warning">Supprimer le site</button>
+                        <button v-if="town.status === 'open' && mode !== 'edit' && hasPermission('shantytown.close', town)" @click="setCloseMode" class="button secondary">Déclarer la disparition du site</button>
+                        <button v-if="town.status === 'open' && mode !== 'edit' && hasPermission('shantytown.update', town)" @click="setEditMode" class="button secondary">Modifier le site</button>
                         <button v-if="mode === 'edit'" @click="submit" class="button">Sauvegarder</button>
                         <button v-if="mode === 'edit'" @click="setViewMode" class="button warning">Annuler</button>
                     </div>
@@ -98,7 +98,7 @@
                 <aside class="side-menu">
                     <ul>
                         <li><a v-bind:class="{ active: view === 'details' }" @click="setView('details')">Caractéristiques du site</a></li>
-                        <li><a v-bind:class="{ active: view === 'comments' }" @click="setView('comments')" v-if="hasPermission({ type: 'feature', name: 'readComment' })">Commentaires sur le site</a></li>
+                        <li><a v-bind:class="{ active: view === 'comments' }" @click="setView('comments')" v-if="hasPermission('shantytown_comment.list', town)">Commentaires sur le site</a></li>
                     </ul>
                 </aside>
 
@@ -217,7 +217,7 @@
                                 </div>
                             </div>
 
-                            <div class="panel" v-if="hasPermission({ type: 'data', name: 'ownerComplaint' })">
+                            <div class="panel" v-if="hasPermission('shantytown.list.data_justice', town)">
                                 <div class="panel__header">
                                     <h3>5. Procédure judiciaire d’expulsion des occupants</h3>
                                 </div>
@@ -512,7 +512,7 @@
                                 </div>
                             </div>
 
-                            <div class="panel" v-if="hasPermission({ type: 'data', name: 'ownerComplaint' })">
+                            <div class="panel" v-if="hasPermission('shantytown.update.data_justice', town)">
                                 <div class="panel__header">
                                     <h3>5. Procédure judiciaire d’expulsion des occupants</h3>
                                 </div>
@@ -686,7 +686,7 @@
                             </p>
                         </div>
 
-                        <div class="form__group" v-if="hasPermission({ type: 'feature', name: 'createComment' })">
+                        <div class="form__group" v-if="hasPermission('shantytown_comment.create', town)">
                             <div class="notification error" v-if="commentError">{{ commentError }}.</div>
         
                             <label v-bind:class="{ error: commentErrors.description }">Ajouter un commentaire :</label>

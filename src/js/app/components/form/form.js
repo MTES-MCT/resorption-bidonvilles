@@ -213,6 +213,13 @@ export default {
 
             return Object.keys(this.filteredErrors).length;
         },
+
+        /**
+         *
+         */
+        submitPrefix() {
+            return this.currentStep && this.currentStep.submitPrefix;
+        },
     },
 
 
@@ -341,10 +348,11 @@ export default {
 
 /**
  * @typedef {Object} FormStep
- * @property {String}              title     Title of the step
+ * @property {String}              title          Title of the step
  * @property {Array.<FormSection>} sections
- * @property {FormStepWording}     [wording] Custom wording
- * @property {Function}            [submit]  Function called with the user's input. Should return a promise.
+ * @property {FormStepWording}     [wording]      Custom wording
+ * @property {Function}            [submit]       Function called with the user's input. Should return a promise.
+ * @property {String}              [submitPrefix] Prefix text that is displayed above the submit button (HTML accepted)
  */
 
 /**
