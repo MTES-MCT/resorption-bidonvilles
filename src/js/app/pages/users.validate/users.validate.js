@@ -1,5 +1,7 @@
 import { VueGoodTable as Table } from 'vue-good-table';
-import { get, sendActivationLink, denyAccess } from '#helpers/api/user';
+import {
+    get, sendActivationLink, denyAccess, remove,
+} from '#helpers/api/user';
 import UserPermissions from '#app/layouts/userPermissions/userPermissions.vue';
 import 'vue-good-table/dist/vue-good-table.css';
 import NavBar from '#app/layouts/navbar/navbar.vue';
@@ -113,7 +115,7 @@ export default {
          */
         isExpired() {
             const now = Date.now();
-            return this.user !== null && this.user.active !== true && this.user.activation_link_expires_on !== null && ((now - (this.user.activation_link_expires_on * 1000)) > 0);
+            return this.user !== null && this.user.status !== 'active' && this.user.activation_link_expires_on !== null && ((now - (this.user.activation_link_expires_on * 1000)) > 0);
         },
     },
 
@@ -225,6 +227,41 @@ export default {
                         group: 'notifications',
                         type: 'success',
                         title: 'Accès refusé',
+                        text: 'L\'utilisateur a été supprimé de la base',
+                    });
+
+                    this.$router.push('/liste-des-utilisateurs');
+                })
+                .catch(({ user_message: error }) => {
+                    this.validation.state = null;
+                    this.validation.error = error;
+                });
+        },
+
+        /**
+         *
+         */
+        remove() {
+            if (this.validation.state === 'loading') {
+                return;
+            }
+
+            // eslint-disable-next-line no-alert
+            if (!window.confirm('Êtes-vous sûr de vouloir supprimer cet accès ?')) {
+                return;
+            }
+
+            this.validation.state = 'loading';
+            this.validation.error = null;
+
+            remove(this.$route.params.id)
+                .then(() => {
+                    this.validation.state = null;
+
+                    this.$notify({
+                        group: 'notifications',
+                        type: 'success',
+                        title: 'Accès supprimé',
                         text: 'L\'utilisateur a été supprimé de la base',
                     });
 

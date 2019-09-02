@@ -16,11 +16,9 @@
 
             //- state: loaded
             <section class="userValidation" v-if="state === 'loaded'">
-                <h1>Demande d'accès</h1>
+                <h1 v-if="user && !user.activated_on">Demande d'accès</h1>
 
-                <div v-if="user.activated_on !== null" class="notification error">Cet utilisateur a déjà été activé.</div>
-
-                <div v-else>
+                <div>
                     <div class="userValidation-main" >
                         <aside class="userInfo">
                             <section class="userInfo-section">
@@ -70,8 +68,13 @@
                     <div class="userValidation-error notification error" v-if="validation.error">{{ validation.error }}</div>
 
                     <footer class="userValidationFooter">
-                        <p class="userValidationFooter-deny" v-if="!user.last_activation_link_sent_on"><span @click="deny" v-if="validation.state !== 'loading'">Refuser l'accès</span></p>
-                        <p class="userValidationFooter-allow">
+                        <p class="userValidationFooter-remove" v-if="user.status === 'active'">
+                            <span @click="remove" v-if="validation.state !== 'loading'">Supprimer l'accès</span>
+                        </p>
+                        <p class="userValidationFooter-deny" v-if="user.status === 'new' && !user.last_activation_link_sent_on">
+                            <span @click="deny" v-if="validation.state !== 'loading'">Refuser l'accès</span>
+                        </p>
+                        <p class="userValidationFooter-allow" v-if="user.status === 'new'">
                             <button class="button" @click="validate" :disabled="validation.state === 'loading'" :readonly="validation.state === 'loading'">
                                 <img  v-if="validation.state === 'loading'" src="/img/spinner_light.svg" width="20" />
                                 <span v-else>Envoyer un accès</span>

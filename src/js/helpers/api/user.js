@@ -1,5 +1,5 @@
 import { unload as unloadConfig } from '#helpers/api/config';
-import { postApi, getApi } from '#helpers/api/main';
+import { postApi, getApi, deleteApi } from '#helpers/api/main';
 
 /**
  * Sends a login request for the given user
@@ -152,6 +152,13 @@ export function activate(userId, data) {
  */
 export function upgrade(userId, data) {
     return postApi(`/users/${userId}/upgrade`, data);
+}
+
+/**
+ * DELETE /users/:id
+ */
+export function remove(userId) {
+    return deleteApi(`/users/${userId}`);
 }
 
 /**

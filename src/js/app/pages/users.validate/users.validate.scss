@@ -134,7 +134,8 @@
         display: inline-block;
         vertical-align: top;
 
-        &.userValidationFooter-deny {
+        &.userValidationFooter-deny,
+        &.userValidationFooter-remove {
             line-height: 30px;
 
             > span {

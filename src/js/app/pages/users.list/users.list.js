@@ -98,7 +98,7 @@ export default {
                         id: 'status',
                         label: 'STATUT DU COMPTE',
                         field: (user) => {
-                            if (user.active) {
+                            if (user.status === 'active') {
                                 if (user.role_id === 'local_admin') {
                                     return {
                                         icon: 'user-shield',
@@ -142,11 +142,11 @@ export default {
                     {
                         id: 'validate',
                         label: '',
-                        field: user => user.active === true,
+                        field: () => true,
                     },
                 ],
                 rows: this.users,
-                'row-style-class': row => (!row.active && row.last_activation_link_sent_on === null ? 'user user--highlight' : 'user'),
+                'row-style-class': row => (row.status !== 'active' && row.last_activation_link_sent_on === null ? 'user user--highlight' : 'user'),
                 'sort-options': {
                     enabled: true,
                 },
@@ -180,7 +180,7 @@ export default {
 
             list()
                 .then((users) => {
-                    this.users = users;
+                    this.users = users.filter(({ status }) => status !== 'inactive');
                     this.state = 'loaded';
                 })
                 .catch(({ user_message: error }) => {
@@ -202,10 +202,6 @@ export default {
          *
          */
         routeToUserValidation(params) {
-            if (params.row.activated_on !== null) {
-                return;
-            }
-
             const routeData = this.$router.resolve(`/nouvel-utilisateur/${params.row.id}`);
             window.open(routeData.href, '_blank');
         },

@@ -30,7 +30,7 @@
                             <span class="user-role">{{ props.formattedRow[props.column.field] }}</span>
                         </span>
                         <span v-else-if="props.column.id === 'validate'">
-                            <span v-if="!props.formattedRow[props.column.field]"><font-awesome-icon class="user-validateIcon" icon="arrow-right" @click="routeToUserValidation"></font-awesome-icon></span>
+                            <span><font-awesome-icon class="user-validateIcon" icon="arrow-right" @click="routeToUserValidation"></font-awesome-icon></span>
                         </span>
                         <span v-else>{{ props.formattedRow[props.column.field] }}</span>
                     </template>
