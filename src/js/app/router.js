@@ -272,7 +272,7 @@ const router = new VueRouter({
         {
             meta: {
                 group: 'users',
-                permissions: ['user.read'],
+                permissions: ['user.activate'],
             },
             path: '/nouvel-utilisateur/:id',
             component: UserValidate,
