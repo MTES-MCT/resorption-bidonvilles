@@ -3,7 +3,6 @@ import { list } from '#helpers/api/user';
 import 'vue-good-table/dist/vue-good-table.css';
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import Modal from '#app/components/modal/modal.vue';
-import ActivationLinkModal from '#app/layouts/activationLink/activationLink.vue';
 import { get as getConfig } from '#helpers/api/config';
 
 export default {
@@ -11,7 +10,6 @@ export default {
         NavBar,
         Table,
         Modal,
-        ActivationLinkModal,
     },
 
     data() {
@@ -49,27 +47,6 @@ export default {
              * @type {string|null}
              */
             state: null,
-
-            /**
-             * Wether an activation link is being generated for one of the users
-             *
-             * @type {boolean}
-             */
-            loading: false,
-
-            /**
-             * The generated activation link, if any
-             *
-             * @type {string|null}
-             */
-            activationLink: null,
-
-            /**
-             * The error obtained while trying to generate an activation link
-             *
-             * @type {string|null}
-             */
-            activationLinkError: null,
         };
     },
 

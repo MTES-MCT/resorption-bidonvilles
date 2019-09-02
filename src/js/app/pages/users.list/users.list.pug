@@ -1,13 +1,5 @@
 <div>
     <NavBar></NavBar>
-    <ActivationLinkModal v-if="activationLink" :link="activationLink" @close="onActivationLinkClose"></ActivationLinkModal>
-    <Modal v-if="activationLinkError !== null" @close="onActivationLinkErrorClose">
-        <h2>Lien d'activation du compte</h2>
-        <p>Une erreur est survenue lors de la génération du lien d'activation :</p>
-        <div class="notification error full-width">
-            <span>{{ activationLinkError }}</span>
-        </div>
-    </Modal>
 
     <section class="section section-white">
         <div class="container">
