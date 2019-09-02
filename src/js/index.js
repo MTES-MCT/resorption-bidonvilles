@@ -13,11 +13,7 @@ import VueRouter from 'vue-router';
 import VueMatomo from 'vue-matomo';
 
 // import font-awesome
-import { library } from '@fortawesome/fontawesome-svg-core';
-import {
-    faFlag, faPaperPlane, faUnlink, faUserCheck, faUserShield, faArrowRight,
-    faEye, faEyeSlash, faPencilAlt, faTimes,
-} from '@fortawesome/free-solid-svg-icons';
+import './icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { router } from '#app/router';
 
@@ -33,17 +29,6 @@ window.App = Object.freeze({
             .replace('y', date.getFullYear());
     },
 });
-
-library.add(faFlag);
-library.add(faPaperPlane);
-library.add(faUnlink);
-library.add(faUserCheck);
-library.add(faUserShield);
-library.add(faArrowRight);
-library.add(faEye);
-library.add(faEyeSlash);
-library.add(faPencilAlt);
-library.add(faTimes);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
