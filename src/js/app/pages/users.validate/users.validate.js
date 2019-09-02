@@ -15,7 +15,8 @@ export default {
     },
 
     data() {
-        ({ permissions_description: permissions } = getConfig());
+        let activationTokenExpiresIn;
+        ({ permissions_description: permissions, activation_token_expires_in: activationTokenExpiresIn } = getConfig());
 
         return {
             /**
@@ -64,6 +65,13 @@ export default {
              * @type {Object.<String,Boolean>}
              */
             checkedOptions: {},
+
+            /**
+             * Number of days of validity of an activation days
+             *
+             * @type {Number}
+             */
+            tokenExpiresIn: (activationTokenExpiresIn / 3600) / 24,
         };
     },
 
@@ -96,6 +104,16 @@ export default {
             }
 
             return this.permission.options;
+        },
+
+        /**
+         * Indicates whether the activation link is now expired
+         *
+         * @returns {Boolean}
+         */
+        isExpired() {
+            const now = Date.now();
+            return this.user !== null && this.user.active !== true && this.user.activation_link_expires_on !== null && ((now - (this.user.activation_link_expires_on * 1000)) > 0);
         },
     },
 

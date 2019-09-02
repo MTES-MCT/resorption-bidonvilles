@@ -4,6 +4,7 @@ import 'vue-good-table/dist/vue-good-table.css';
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import Modal from '#app/components/modal/modal.vue';
 import ActivationLinkModal from '#app/layouts/activationLink/activationLink.vue';
+import { get as getConfig } from '#helpers/api/config';
 
 export default {
     components: {
@@ -14,7 +15,16 @@ export default {
     },
 
     data() {
+        const { token_expires_in: tokenExpiresIn } = getConfig();
+
         return {
+            /**
+             * Duration of validity of an activation token (in seconds)
+             *
+             * @type {Number}
+             */
+            tokenExpiresIn,
+
             /**
              * List of users
              *
@@ -133,6 +143,13 @@ export default {
                             }
 
                             if (user.last_activation_link_sent_on !== null) {
+                                if (Date.now() - (user.activation_link_expires_on * 1000) >= 0) {
+                                    return {
+                                        icon: 'unlink',
+                                        label: `<strong>Lien expiré</strong> le ${App.formatDate(user.activation_link_expires_on, 'd M y')}`,
+                                    };
+                                }
+
                                 return {
                                     icon: 'paper-plane',
                                     label: `<strong>Accès envoyé</strong> le ${App.formatDate(user.last_activation_link_sent_on, 'd M y')}`,
