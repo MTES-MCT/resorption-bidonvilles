@@ -46,7 +46,7 @@
                                 <h2 class="user-role">{{ user.role }}</h2>
                             </hgroup>
 
-                            <p>{{ permission.description }}</p>
+                            <p>{{ permission.description }}<br/>&nbsp;</p>
                             <p>Ainsi, l'utilisateur peut :</p>
 
                             <UserPermissions v-if="hasPermissionsFor('national')" title="À l'échelle nationale" :items="permission.national_permissions"></UserPermissions>
