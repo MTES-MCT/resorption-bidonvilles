@@ -1,7 +1,7 @@
 <div>
     <Quickview :town="quickview.town" :origin="quickview.originEvent" @outside-click="hideQuickview"></Quickview>
     <NavBar></NavBar>
-    <Export v-bind:style="{ display: exporter.isVisible ? 'block' : 'none' }" @close="hideExport" :towns="visibleTowns"></Export>
+    <Export v-if="exporter.isVisible" @close="hideExport" :towns="visibleTowns"></Export>
 
     <section class="explorer">
         //- filters

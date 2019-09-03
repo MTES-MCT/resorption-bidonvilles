@@ -460,7 +460,9 @@ export default {
             return 0;
         },
         showExport() {
-            this.exporter.isVisible = true;
+            setTimeout(() => {
+                this.exporter.isVisible = true;
+            }, 100);
         },
         hideExport() {
             this.exporter.isVisible = false;
