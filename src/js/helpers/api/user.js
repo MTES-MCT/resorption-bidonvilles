@@ -141,10 +141,24 @@ export function checkActivationToken(token) {
 }
 
 /**
+ * GET /password-tokens/:token/check
+ */
+export function checkPasswordToken(token) {
+    return getApi(`/password-tokens/${encodeURIComponent(token)}/check`);
+}
+
+/**
  * POST /users/:id/activate
  */
 export function activate(userId, data) {
     return postApi(`/users/${userId}/activate`, data);
+}
+
+/**
+ * POST /users/:id/newPassword
+ */
+export function setPassword(userId, data) {
+    return postApi(`/users/${userId}/newPassword`, data);
 }
 
 /**
@@ -159,6 +173,13 @@ export function upgrade(userId, data) {
  */
 export function remove(userId) {
     return deleteApi(`/users/${userId}`);
+}
+
+/**
+ * POST /users/new-password
+ */
+export function requestNewPassword(email) {
+    return postApi('/users/new-password', { email });
 }
 
 /**

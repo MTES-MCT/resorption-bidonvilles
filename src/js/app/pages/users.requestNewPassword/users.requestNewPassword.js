@@ -1,5 +1,5 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
-import { login } from '#helpers/api/user';
+import { requestNewPassword } from '#helpers/api/user';
 import Form from '#app/components/form/form.vue';
 
 export default {
@@ -11,7 +11,8 @@ export default {
         return {
             formData: {},
             formDefinition: {
-                title: 'Connexion à la plateforme',
+                title: 'Renouvellement de mot de passe',
+                description: 'Si vous avez perdu votre mot de passe, vous pouvez demander à en définir un nouveau.',
 
                 steps: [
                     {
@@ -21,23 +22,18 @@ export default {
                                     email: {
                                         type: 'text',
                                         label: 'Votre courriel',
-                                        mandatory: true,
-                                    },
-                                    password: {
-                                        type: 'password',
-                                        label: 'Votre mot de passe',
+                                        description: 'Saisissez ici le courriel associé au compte Résorption Bidonvilles pour lequel vous souhaitez renouveler le mot de passe',
                                         mandatory: true,
                                     },
                                 },
                             },
                         ],
                         wording: {
-                            submit: 'Me connecter',
-                            succes: 'Vous êtes désormais connecté',
-                            error: 'La tentative de connexion a échoué',
+                            submit: 'Renouveller mon mot de passe',
+                            success: 'Un mail vous a été adressé avec les instructions',
+                            error: 'La demande de renouvellement a échoué',
                         },
-                        submitPrefix: '<a href="/#/nouveau-mot-de-passe">J\'ai perdu mon mot de passe</a>',
-                        submit: ({ email, password }) => login(email, password),
+                        submit: ({ email }) => requestNewPassword(email),
                     },
                 ],
             },

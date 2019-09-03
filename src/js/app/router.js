@@ -12,6 +12,8 @@ import UserCreate from '#app/pages/users.create/users.create.vue';
 import UserActivate from '#app/pages/users.activate/users.activate.vue';
 import UserValidate from '#app/pages/users.validate/users.validate.vue';
 import UserUpgrade from '#app/pages/users.upgrade/users.upgrade.vue';
+import UserRequestNewPassword from '#app/pages/users.requestNewPassword/users.requestNewPassword.vue';
+import UserSetNewPassword from '#app/pages/users.setNewPassword/users.setNewPassword.vue';
 import PlanList from '#app/pages/plans.list/plans.list.vue';
 import PlanCreate from '#app/pages/plans.create/plans.create.vue';
 import PlanDetails from '#app/pages/plans.details/plans.details.vue';
@@ -285,6 +287,22 @@ const router = new VueRouter({
             path: '/mise-a-niveau',
             component: UserUpgrade,
             beforeEnter: guardians.loaded,
+        },
+        {
+            meta: {
+                group: 'users',
+            },
+            path: '/nouveau-mot-de-passe',
+            component: UserRequestNewPassword,
+            beforeEnter: guardians.anonymous,
+        },
+        {
+            meta: {
+                group: 'users',
+            },
+            path: '/renouveler-mot-de-passe/:token',
+            component: UserSetNewPassword,
+            beforeEnter: guardians.anonymous,
         },
         {
             meta: {
