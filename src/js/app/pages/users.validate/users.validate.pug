@@ -47,7 +47,7 @@
                             </hgroup>
 
                             <p>{{ permission.description }}</p>
-                            <p>Sur la plateforme, ils peuvent :</p>
+                            <p>Ainsi, l'utilisateur peut :</p>
 
                             <UserPermissions v-if="hasPermissionsFor('national')" title="À l'échelle nationale" :items="permission.national_permissions"></UserPermissions>
                             <UserPermissions v-if="hasPermissionsFor('local')" title="Sur le territoire d'intervention" :items="permission.local_permissions"></UserPermissions>
