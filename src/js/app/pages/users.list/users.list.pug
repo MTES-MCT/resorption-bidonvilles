@@ -1,13 +1,5 @@
 <div>
     <NavBar></NavBar>
-    <ActivationLinkModal v-if="activationLink" :link="activationLink" @close="onActivationLinkClose"></ActivationLinkModal>
-    <Modal v-if="activationLinkError !== null" @close="onActivationLinkErrorClose">
-        <h2>Lien d'activation du compte</h2>
-        <p>Une erreur est survenue lors de la génération du lien d'activation :</p>
-        <div class="notification error full-width">
-            <span>{{ activationLinkError }}</span>
-        </div>
-    </Modal>
 
     <section class="section section-white">
         <div class="container">
@@ -26,15 +18,21 @@
 
             //- state: loaded
             <div v-if="state === 'loaded'">
-                <Table v-bind="tableProperties">
-                    <template slot="table-row" slot-scope="props">
-                        <span v-if="props.column.id === 'activationLink'">
-                            <img v-if="props.row.loading === true" src="/img/spinner_dark.svg" width="20" class="spinner" />
-                            <span v-else-if="props.row.active !== true && loading !== true" @click="generateActivationLink(props.row)" class="activationLink">🔗</span>
-                            <span v-else @click="regenerateActivationLink(props.row)" class="activationLink">🔁</span>
-                        </span>
+                <header class="userList-header">
+                    <router-link to="/typologie-des-acces" class="link">Les typologies d'accès</router-link>
+                    <router-link to="/nouvel-utilisateur" class="button">Ajouter un utilisateur</router-link>
+                </header>
 
-                        <span v-else>{{ typeof props.column.field === 'function' ? props.column.field(props.row) : props.formattedRow[props.column.field] }}</span>
+                <Table v-bind="tableProperties" @on-row-click="routeToUserValidation">
+                    <template slot="table-row" slot-scope="props">
+                        <span v-if="props.column.id === 'status'"><font-awesome-icon class="user-statusIcon" :class="`user-statusIcon--${props.formattedRow[props.column.field].icon}`" :icon="props.formattedRow[props.column.field].icon"></font-awesome-icon> <span v-html="props.formattedRow[props.column.field].label"></span></span>
+                        <span v-else-if="props.column.id === 'role'">
+                            <span class="user-role">{{ props.formattedRow[props.column.field] }}</span>
+                        </span>
+                        <span v-else-if="props.column.id === 'validate'">
+                            <span><font-awesome-icon class="user-validateIcon" icon="arrow-right" @click="routeToUserValidation"></font-awesome-icon></span>
+                        </span>
+                        <span v-else>{{ props.formattedRow[props.column.field] }}</span>
                     </template>
                 </Table>
             </div>

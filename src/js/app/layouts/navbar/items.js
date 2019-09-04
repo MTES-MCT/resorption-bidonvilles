@@ -42,21 +42,6 @@ export default {
             ],
         },
         {
-            label: 'Acteurs',
-            items: [
-                {
-                    label: 'Liste des acteurs',
-                    target: '/liste-des-operateurs',
-                    group: 'operators',
-                },
-                {
-                    label: 'Créer un acteur',
-                    target: '/nouvel-operateur',
-                    group: 'operatorCreation',
-                },
-            ],
-        },
-        {
             label: 'Utilisateurs',
             items: [
                 {

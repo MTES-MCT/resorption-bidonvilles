@@ -184,7 +184,7 @@ export default {
                                 },
                             },
                         ],
-                        ...hasPermission({ type: 'data', name: 'ownerComplaint' })
+                        ...hasPermission('shantytown.create.data_justice')
                             ? [{
                                 title: 'Procédure judiciaire d\'expulsion des occupants',
                                 inputs: {

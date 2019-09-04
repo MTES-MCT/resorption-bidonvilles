@@ -1,11 +1,11 @@
+import Datepicker from 'vuejs-datepicker';
+import { fr } from 'vuejs-datepicker/dist/locale';
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import Map from '#app/pages/townExplorer/map/map.vue';
 import {
     get, close, edit, destroy, addComment, editComment, deleteComment,
 } from '#helpers/api/town';
 import { get as getConfig, hasPermission } from '#helpers/api/config';
-import Datepicker from 'vuejs-datepicker';
-import { fr } from 'vuejs-datepicker/dist/locale';
 
 function boolToYesNoValue(bool) {
     if (bool === true) {
@@ -133,17 +133,7 @@ export default {
         this.fetchData();
     },
     methods: {
-        hasPermission: (permission, town) => {
-            if (!hasPermission(permission)) {
-                return false;
-            }
-
-            if (town !== undefined && hasPermission({ type: 'data', name: 'regional' })) {
-                return town.region.code === getConfig().user.region;
-            }
-
-            return true;
-        },
+        hasPermission: permissionName => hasPermission(permissionName),
         offsetTop(el) {
             let next = el;
             let offset = 0;
@@ -185,7 +175,7 @@ export default {
             this.mode = 'view';
         },
         setEditMode() {
-            if (!hasPermission({ type: 'feature', name: 'updateTown' })) {
+            if (!hasPermission('shantytown.update')) {
                 return;
             }
 
@@ -194,7 +184,7 @@ export default {
             this.mode = 'edit';
         },
         setCloseMode() {
-            if (!hasPermission({ type: 'feature', name: 'updateTown' })) {
+            if (!hasPermission('shantytown.close')) {
                 return;
             }
 
@@ -264,7 +254,7 @@ export default {
             };
         },
         setView(view) {
-            if (view === 'comments' && !hasPermission({ type: 'feature', name: 'readComment' })) {
+            if (view === 'comments' && !hasPermission('shantytown_comment.list')) {
                 return;
             }
 
@@ -410,7 +400,7 @@ export default {
             }
         },
         addComment() {
-            if (!hasPermission({ type: 'feature', name: 'createComment' })) {
+            if (!hasPermission('shantytown_create')) {
                 return;
             }
 
@@ -449,12 +439,10 @@ export default {
             return ['aucun détail sur le nombre de ménages/personnes concernés'];
         },
         canEditComment(comment) {
-            return hasPermission({ type: 'feature', name: 'updateComment' })
-                || (comment.createdBy.id === this.userId && hasPermission({ type: 'feature', name: 'updateOwnComment' }));
+            return hasPermission('shantytown_comment.create') || (comment.createdBy.id === this.userId);
         },
         canDeleteComment(comment) {
-            return hasPermission({ type: 'feature', name: 'deleteComment' })
-                || (comment.createdBy.id === this.userId && hasPermission({ type: 'feature', name: 'deleteOwnComment' }));
+            return hasPermission('shantytown_comment.delete') || (comment.createdBy.id === this.userId);
         },
         editComment(comment) {
             this.commentEdit.commentId = comment.id;

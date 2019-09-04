@@ -21,7 +21,7 @@
     "leaflet": "^1.3.4",
     "leaflet-providers": "^1.5.0",
     "lint-staged": "^8.1.0",
-    "parcel-bundler": "^1.10.3",
+    "parcel-bundler": "^1.12.3",
     "pug": "^2.0.3",
     "sass": "^1.15.2",
     "template.data.gouv.fr": "^1.1.8",
@@ -32,10 +32,10 @@
     "vue-router": "^3.0.2",
     "vue-template-compiler": "^2.5.21",
     "vuejs-datepicker": "^1.5.4"
-  },    
+  },
   "scripts": {
-    "dev": "parcel serve ./src/*.html --open --no-autoinstall",
-    "build": "rm -rf ./dist && parcel build ./src/*.html && cp -r ./src/landing ./dist",
+    "dev": "parcel serve ./src/*.html --open --no-autoinstall --no-source-maps",
+    "build": "rm -rf ./dist && parcel build ./src/*.html --no-source-maps && cp -r ./src/landing ./dist",
     "release": "release() { git reset HEAD .; yarn build; git add dist; git commit -m \"📦 Release v$1\"; git tag \"v$1\"; git push origin HEAD; git push origin \"v$1\"; } && release",
     "deploy": "deploy() { git fetch origin \"refs/tags/$1:refs/tags/$1\"; git checkout $1; } && deploy"
   },
@@ -55,6 +55,9 @@
     ]
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.22",
+    "@fortawesome/free-solid-svg-icons": "^5.10.2",
+    "@fortawesome/vue-fontawesome": "^0.1.6",
     "leaflet.markercluster": "^1.4.1",
     "simplebar-vue": "^0.1.4",
     "vue-good-table": "^2.16.0"

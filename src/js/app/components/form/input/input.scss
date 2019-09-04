@@ -1,5 +1,11 @@
-.input--text {
+.input--text,
+.input--password {
     max-width: 350px;
+}
+
+.input--password-toggler {
+    padding-left: 10px;
+    cursor: pointer;
 }
 
 .input--number {

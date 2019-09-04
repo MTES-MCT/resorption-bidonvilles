@@ -1,5 +1,5 @@
 // load the whole betagouv template
-import 'template.data.gouv.fr/dist/style/main.css';
+import 'template.data.gouv.fr/dist/main.css';
 import 'simplebar/dist/simplebar.min.css';
 import '../css/index.scss';
 
@@ -11,7 +11,13 @@ import Vue from 'vue';
 import Notifications from 'vue-notification';
 import VueRouter from 'vue-router';
 import VueMatomo from 'vue-matomo';
+
+// import font-awesome
+import './icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { router } from '#app/router';
+
+const MONTHS = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
 
 window.App = Object.freeze({
     formatDate(timestamp, format = 'd/m/y') {
@@ -19,9 +25,12 @@ window.App = Object.freeze({
         return format
             .replace('d', (`0${date.getDate()}`).slice(-2))
             .replace('m', (`0${date.getMonth() + 1}`).slice(-2))
+            .replace('M', MONTHS[date.getMonth()])
             .replace('y', date.getFullYear());
     },
 });
+
+Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 Vue.use(VueRouter);
 Vue.use(Notifications);

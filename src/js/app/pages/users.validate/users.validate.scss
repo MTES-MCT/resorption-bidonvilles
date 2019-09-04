@@ -1,0 +1,163 @@
+.email {
+    text-decoration: underline;
+}
+
+.container--userValidation {
+    text-align: center;
+}
+
+.userValidation {
+    display: inline-flex;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+
+    flex-direction: column;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+
+    text-align: left;
+}
+
+.userValidation-main {
+    display: flex;
+    display: -webkit-box;
+    display: -ms-flexbox;
+
+    flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+
+    justify-content: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+}
+
+.userInfo {
+    width: 345px;
+    margin-right: 60px;
+    border-radius: 10px;
+    background: #EBEFF3;
+    font-size: 16px;
+}
+
+.userInfo-section {
+    padding: 20px 30px;
+    border-bottom: 1px solid #ADB9C9;
+
+    h1,
+    h2,
+    h3 {
+        margin: 0;
+        padding: 0;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    h3 {
+        margin-top: 5px;
+        font-size: 12px;
+        font-weight: normal;
+        text-transform: uppercase;
+    }
+
+    h2 {
+        font-size: 16px;
+    }
+
+    p {
+        margin: 15px 0;
+
+        &.userHistory-item {
+            margin: 0 0 5px;
+        }
+    }
+}
+
+.userHistory-item {
+    .user-statusIcon {
+        margin-right: 6px;
+    }
+}
+
+.userInfo-section:first-of-type {
+    padding-top: 45px;
+}
+
+.userInfo-section:last-of-type {
+    padding-bottom: 45px;
+    border-bottom: none;
+}
+
+.userPermissions {
+    max-width: 875px;
+    font-size: 16px;
+
+    p {
+        margin: 0;
+        padding: 0;
+    } 
+}
+
+.userPermissions-header {
+    margin-bottom: 20px;
+
+    h1,
+    h2 {
+        margin: 0;
+        padding: 0;
+    }
+
+    h1 {
+        font-size: 20px;
+        margin-bottom: 5px;
+    }
+
+    h2 {
+        display: inline;
+        padding: 2px 20px;
+        font-size: 25px;
+    }
+}
+
+.userValidation-error {
+    margin: 25px 0 0;
+}
+
+.userValidationFooter {
+    margin-top: 20px;
+    text-align: right;
+
+    > p {
+        display: inline-block;
+        vertical-align: top;
+
+        &.userValidationFooter-deny,
+        &.userValidationFooter-remove {
+            line-height: 30px;
+
+            > span {
+                text-decoration: none;
+                font-weight: bold;
+                color: #0053B3;
+                cursor: pointer;
+            }
+        }
+
+        &.userValidationFooter-allow {
+            width: 250px;
+
+            > .button {
+                margin-bottom: 10px;
+            }
+
+            > span {
+                color: #707070;
+                font-weight: bold;
+            }
+        }
+    }
+}

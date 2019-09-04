@@ -1,26 +1,70 @@
 import { checkActivationToken, activate } from '#helpers/api/user';
 import NavBar from '#app/layouts/navbar/navbar.vue';
+import Form from '#app/components/form/form.vue';
 
 export default {
     components: {
         NavBar,
+        Form,
     },
 
     data() {
+        const formData = {
+            email: '',
+        };
+
+        const formDefinition = {
+            title: 'Activation de votre compte utilisateur',
+            description: 'Vous vous apprêtez à activer votre compte utilisateur, veuillez choisir votre mot de passe de connexion.',
+            steps: [
+                {
+                    title: '',
+                    sections: [
+                        {
+                            title: '',
+                            inputs: {
+                                email: {
+                                    label: 'Votre email',
+                                    mandatory: false,
+                                    type: 'text',
+                                    disabled: true,
+                                },
+                                password: {
+                                    label: 'Définissez votre mot de passe',
+                                    description: "Votre mot de passe doit comporter au minimum 12 caractères, une majuscule, une minuscule, et un caractère non alphabétique (exemples : '.' ';' ',' '_' '!' '?', ...)<br/>Nous vous recommandons de choisir <strong>une phrase intelligible en guise de mot de passe</strong> : plus simple à retenir qu'une suite de caractères aléatoires, et plus sécurisée.",
+                                    mandatory: true,
+                                    type: 'password',
+                                },
+                            },
+                        },
+                    ],
+                    wording: {
+                        submit: 'Activer mon compte',
+                        error: 'Votre compte n\'a pas pu être activé',
+                        success: 'Vous pouvez désormais vous connecter à la plateforme',
+                    },
+                    submitPrefix: 'En cliquant sur "Activer mon compte", j\'accepte les <a href="/#/conditions-d-utilisation">conditions générales d\'utilisation</a>',
+                    submit: data => activate(this.user.id, Object.assign(data, { token: this.$route.params.token })),
+                },
+            ],
+        };
+
         return {
             state: null,
             error: null,
+            user: null,
 
-            form: {
-                loading: false,
-                error: null,
-                fieldErrors: {},
-                input: {
-                    password: '',
-                },
-            },
+            /**
+             * Form data
+             */
+            formData,
 
-            userId: null,
+            /**
+             * Form definition
+             *
+             * @type {Form},
+             */
+            formDefinition,
         };
     },
 
@@ -42,8 +86,9 @@ export default {
             this.error = null;
 
             checkActivationToken(this.$route.params.token)
-                .then(({ userId }) => {
-                    this.userId = userId;
+                .then((user) => {
+                    this.user = user;
+                    this.formData.email = user.email;
                     this.state = 'loaded';
                 })
                 .catch(({ user_message: error }) => {
@@ -62,34 +107,10 @@ export default {
         },
 
         /**
-         * Sends an activation request to the API (and handles the response)
+         *
          */
-        submit() {
-            // avoid submitting the form twice at the same time
-            if (this.form.loading === true) {
-                return;
-            }
-
-            this.form.loading = true;
-            this.form.error = null;
-            this.form.fieldErrors = {};
-
-            activate(this.userId, Object.assign(this.form.input, { token: this.$route.params.token }))
-                .then(() => {
-                    this.$notify({
-                        group: 'notifications',
-                        type: 'success',
-                        title: 'Compte activé',
-                        text: 'Vous pouvez désormais vous connecter à la plateforme',
-                    });
-
-                    this.$router.push('/');
-                })
-                .catch((error) => {
-                    this.form.loading = false;
-                    this.form.error = error.user_message;
-                    this.form.fieldErrors = error.fields || {};
-                });
+        onComplete() {
+            this.$router.push('/');
         },
     },
 };

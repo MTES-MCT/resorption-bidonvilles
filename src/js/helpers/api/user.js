@@ -1,5 +1,5 @@
 import { unload as unloadConfig } from '#helpers/api/config';
-import { postApi, getApi } from '#helpers/api/main';
+import { postApi, getApi, deleteApi } from '#helpers/api/main';
 
 /**
  * Sends a login request for the given user
@@ -66,29 +66,10 @@ export function getToken() {
 }
 
 /**
- * Sends a sign-up request with the given credentials
- *
- * @param {string} email
- * @param {string} description
- *
- * @returns {Promise}
+ * POST /users
  */
-export function signup(email, description) {
-    return new Promise((success, failure) => {
-        setTimeout(() => {
-            if (email !== '' && description !== '') {
-                success();
-            } else {
-                failure({
-                    user_message: 'Données incorrectes !',
-                    details: {
-                        email: 'Ce champ est obligatoire',
-                        description: 'Ce champ est obligatoire',
-                    },
-                });
-            }
-        }, 1000);
-    });
+export function create(data) {
+    return postApi('/users', data);
 }
 
 /**
@@ -132,17 +113,24 @@ export function list() {
 }
 
 /**
- * GET /users/:id/activate
+ * GET /users/:id
  */
-export function generateActivationLink(user) {
-    return getApi(`/users/${user.id}/activate`);
+export function get(id) {
+    return getApi(`/users/${id}`);
 }
 
 /**
- * POST /users
+ * POST /users/:id/sendActivationLink
  */
-export function create(data) {
-    return postApi('/users', data);
+export function sendActivationLink(user, data) {
+    return postApi(`/users/${user}/sendActivationLink`, data);
+}
+
+/**
+ * POST /users/:id/denyAccess
+ */
+export function denyAccess(user) {
+    return postApi(`/users/${user}/denyAccess`);
 }
 
 /**
@@ -153,10 +141,45 @@ export function checkActivationToken(token) {
 }
 
 /**
- * POST /users/activate
+ * GET /password-tokens/:token/check
+ */
+export function checkPasswordToken(token) {
+    return getApi(`/password-tokens/${encodeURIComponent(token)}/check`);
+}
+
+/**
+ * POST /users/:id/activate
  */
 export function activate(userId, data) {
     return postApi(`/users/${userId}/activate`, data);
+}
+
+/**
+ * POST /users/:id/newPassword
+ */
+export function setPassword(userId, data) {
+    return postApi(`/users/${userId}/newPassword`, data);
+}
+
+/**
+ * POST /users/:id/upgrade
+ */
+export function upgrade(userId, data) {
+    return postApi(`/users/${userId}/upgrade`, data);
+}
+
+/**
+ * DELETE /users/:id
+ */
+export function remove(userId) {
+    return deleteApi(`/users/${userId}`);
+}
+
+/**
+ * POST /users/new-password
+ */
+export function requestNewPassword(email) {
+    return postApi('/users/new-password', { email });
 }
 
 /**

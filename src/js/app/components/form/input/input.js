@@ -6,6 +6,7 @@ import Location from './location/location.vue';
 import AddressWithLocation from './address-with-location/address-with-location.vue';
 import TownList from './townList/townList.vue';
 import PlanFunding from './planFunding/planFunding.vue';
+import Collectivity from './collectivity/collectivity.vue';
 
 /**
  * Input types that accept a list of values
@@ -31,6 +32,7 @@ export default {
         AddressWithLocation,
         TownList,
         PlanFunding,
+        Collectivity,
     },
 
 
@@ -60,6 +62,8 @@ export default {
          *
          * @type {
          *  'text',
+         *  'password',
+         *  'textarea',
          *  'number',
          *  'select',
          *  'selectMultiple',
@@ -71,7 +75,8 @@ export default {
          *  'location',
          *  'addressWithLocation',
          *  'townList',
-         *  'planFunding'
+         *  'planFunding',
+         *  'collectivity'
          * }
          */
         type: {
@@ -171,12 +176,23 @@ export default {
                 return [];
             },
         },
+
+        /**
+         * A function that indicates if the input should be active or not
+         *
+         * @type {Function}
+         */
+        condition: {
+            type: Function,
+            required: false,
+        },
     },
 
 
     data() {
         return {
             data: this.value,
+            showPassword: false, // for type 'password' only
         };
     },
 

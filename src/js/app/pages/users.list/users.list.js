@@ -1,20 +1,28 @@
-import { list, generateActivationLink } from '#helpers/api/user';
 import { VueGoodTable as Table } from 'vue-good-table';
+import { list } from '#helpers/api/user';
 import 'vue-good-table/dist/vue-good-table.css';
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import Modal from '#app/components/modal/modal.vue';
-import ActivationLinkModal from '#app/layouts/activationLink/activationLink.vue';
+import { get as getConfig } from '#helpers/api/config';
 
 export default {
     components: {
         NavBar,
         Table,
         Modal,
-        ActivationLinkModal,
     },
 
     data() {
+        const { token_expires_in: tokenExpiresIn } = getConfig();
+
         return {
+            /**
+             * Duration of validity of an activation token (in seconds)
+             *
+             * @type {Number}
+             */
+            tokenExpiresIn,
+
             /**
              * List of users
              *
@@ -39,27 +47,6 @@ export default {
              * @type {string|null}
              */
             state: null,
-
-            /**
-             * Wether an activation link is being generated for one of the users
-             *
-             * @type {boolean}
-             */
-            loading: false,
-
-            /**
-             * The generated activation link, if any
-             *
-             * @type {string|null}
-             */
-            activationLink: null,
-
-            /**
-             * The error obtained while trying to generate an activation link
-             *
-             * @type {string|null}
-             */
-            activationLinkError: null,
         };
     },
 
@@ -68,24 +55,104 @@ export default {
             return {
                 columns: [
                     {
-                        id: 'email',
-                        label: 'Email',
-                        field: 'email',
+                        id: 'lastName',
+                        label: 'NOM',
+                        field: user => user.last_name.toUpperCase(),
                     },
                     {
-                        id: 'active',
-                        label: 'Compte activé',
-                        field: user => (user.active ? 'oui' : 'non'),
+                        id: 'firstName',
+                        label: 'PRÉNOM',
+                        field: 'first_name',
                     },
                     {
-                        id: 'activationLink',
-                        label: 'Générer un lien d\'activation',
-                        field: () => '', // please see the custom row template (in users.list.pug)
+                        id: 'organization',
+                        label: 'STRUCTURE',
+                        field: 'organization.name',
+                    },
+                    {
+                        id: 'location',
+                        label: 'TERRITOIRE',
+                        field: (user) => {
+                            if (user.organization.location.type === 'nation') {
+                                return 'National';
+                            }
+
+                            const location = user.organization.location[user.organization.location.type];
+                            if (!location) {
+                                return '';
+                            }
+
+                            if (user.organization.location.type === 'departement') {
+                                return `${location.name} (${location.code})`;
+                            }
+
+                            return location.name;
+                        },
+                    },
+                    {
+                        id: 'role',
+                        label: 'TYPE D\'ACCÈS',
+                        field: 'role',
+                    },
+                    {
+                        id: 'status',
+                        label: 'STATUT DU COMPTE',
+                        field: (user) => {
+                            if (user.status === 'active') {
+                                if (user.role_id === 'local_admin') {
+                                    return {
+                                        icon: 'user-shield',
+                                        label: '<strong>Administrateur local</strong>',
+                                    };
+                                }
+
+                                if (user.role_id === 'national_admin') {
+                                    return {
+                                        icon: 'user-shield',
+                                        label: '<strong>Administrateur national</strong>',
+                                    };
+                                }
+
+                                return {
+                                    icon: 'user-check',
+                                    label: `<strong>Compte activé</strong> le ${App.formatDate(user.activated_on, 'd M y')}`,
+                                };
+                            }
+
+                            if (user.last_activation_link_sent_on !== null) {
+                                if (Date.now() - (user.activation_link_expires_on * 1000) >= 0) {
+                                    return {
+                                        icon: 'unlink',
+                                        label: `<strong>Lien expiré</strong> le ${App.formatDate(user.activation_link_expires_on, 'd M y')}`,
+                                    };
+                                }
+
+                                return {
+                                    icon: 'paper-plane',
+                                    label: `<strong>Accès envoyé</strong> le ${App.formatDate(user.last_activation_link_sent_on, 'd M y')}`,
+                                };
+                            }
+
+                            return {
+                                icon: 'flag',
+                                label: `<strong>Demandé</strong> le ${App.formatDate(user.created_at, 'd M y')}`,
+                            };
+                        },
+                    },
+                    {
+                        id: 'validate',
+                        label: '',
+                        field: () => true,
                     },
                 ],
                 rows: this.users,
+                'row-style-class': row => (row.status !== 'active' && row.last_activation_link_sent_on === null ? 'user user--highlight' : 'user'),
                 'sort-options': {
                     enabled: true,
+                },
+                'search-options': {
+                    enabled: true,
+                    placeholder: 'Rechercher par utilisateur, structure, territoire, ou type d\'accès',
                 },
             };
         },
@@ -113,7 +180,7 @@ export default {
 
             list()
                 .then((users) => {
-                    this.users = users;
+                    this.users = users.filter(({ status }) => status !== 'inactive');
                     this.state = 'loaded';
                 })
                 .catch(({ user_message: error }) => {
@@ -132,81 +199,11 @@ export default {
         },
 
         /**
-         * Fetches an activation link for the given user, and then displays it
          *
-         * @param {User} user
          */
-        generateActivationLink(user) {
-            // avoid generating two links at the same time
-            if (this.loading === true) {
-                return;
-            }
-
-            // eslint-disable-next-line
-            user.loading = true;
-            this.loading = true;
-
-            generateActivationLink(user)
-                .then(({ activationLink: link }) => {
-                    // eslint-disable-next-line
-                    user.loading = false;
-                    this.loading = false;
-
-                    this.activationLink = link;
-                })
-                .catch(({ user_message: error }) => {
-                    // eslint-disable-next-line
-                    user.loading = false;
-                    this.loading = false;
-
-                    this.activationLinkError = error;
-                });
-        },
-
-        /**
-         * Deactivates a user, and then fetches an activation link
-         *
-         * @param {User} user
-         */
-        regenerateActivationLink(user) {
-            // avoid generating two links at the same time
-            if (this.loading === true) {
-                return;
-            }
-
-            // eslint-disable-next-line
-            user.loading = true;
-            this.loading = true;
-
-            generateActivationLink(user)
-                .then(({ activationLink: link }) => {
-                    // eslint-disable-next-line
-                    user.loading = false;
-                    this.loading = false;
-
-                    this.activationLink = link;
-                })
-                .catch(({ user_message: error }) => {
-                    // eslint-disable-next-line
-                    user.loading = false;
-                    this.loading = false;
-
-                    this.activationLinkError = error;
-                });
-        },
-
-        /**
-         * Handles the closing of the activation link modal
-         */
-        onActivationLinkClose() {
-            this.activationLink = null;
-        },
-
-        /**
-         * Handles the closing of the activation link error modal
-         */
-        onActivationLinkErrorClose() {
-            this.activationLinkError = null;
+        routeToUserValidation(params) {
+            const routeData = this.$router.resolve(`/nouvel-utilisateur/${params.row.id}`);
+            window.open(routeData.href, '_blank');
         },
     },
 };

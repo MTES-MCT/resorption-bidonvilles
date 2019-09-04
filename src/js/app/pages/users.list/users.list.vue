@@ -7,6 +7,6 @@ import Component from './users.list.js';
 export default Component;
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import './users.list.scss';
 </style>

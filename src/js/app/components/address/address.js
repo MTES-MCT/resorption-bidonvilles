@@ -39,7 +39,7 @@ export default {
             suggestions: [],
             filled: this.value !== null,
             query: (this.value !== null && this.value.label) || '',
-            previousQuery: '',
+            previousQuery: this.value !== null ? this.value.label : '',
             focused: false,
             indexOfHighlightedSuggestion: null,
         };

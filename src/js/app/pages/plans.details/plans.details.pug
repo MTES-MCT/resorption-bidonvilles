@@ -24,10 +24,10 @@
                     <p>Cette fiche dispositif présente les caractéristiques générales du dispositif (telles que déclarées lors du remplissage du formulaire). Elle permet aussi de renseigner des indicateurs de suivi des actions menées, soit site par site lorsque l'action est déployée sur un ou plusieurs bidonvilles, soit à l'échelle globale du dispositif.</p>
                     
                     <div class="town-actionButtons">
-                        <button v-if="mode !== 'edit' && currentTab !== 'main' && hasPermission({ type: 'feature', name: 'updatePlan' })" @click="setMode('edit')" class="button secondary">Modifier les indicateurs</button>
+                        <button v-if="mode !== 'edit' && currentTab !== 'main' && hasPermission('plan.update')" @click="setMode('edit')" class="button secondary">Modifier les indicateurs</button>
                         <button v-if="mode === 'edit'" @click="submit()" class="button">Sauvegarder</button>
                         <button v-if="mode === 'edit'" @click="setMode('read')" class="button warning">Annuler</button>
-                        <button v-if="hasPermission({ type: 'feature', name: 'deletePlan' })" @click="destroy" class="button warning">Supprimer le dispositif</button>
+                        <button v-if="hasPermission('plan.delete')" @click="destroy" class="button warning">Supprimer le dispositif</button>
                     </div>
                 </div>
 

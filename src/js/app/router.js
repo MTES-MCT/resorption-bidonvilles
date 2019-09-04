@@ -6,25 +6,26 @@ import TownsExplorer from '#app/pages/townExplorer/explorer.vue';
 import Landing from '#app/pages/landing/landing.vue';
 import AddTown from '#app/pages/addTown/addTown.vue';
 import Town from '#app/pages/town/town.vue';
-import ActionsExplorer from '#app/pages/actionExplorer/explorer.vue';
-import AddAction from '#app/pages/addAction/addAction.vue';
-import Action from '#app/pages/action/action.vue';
 import Me from '#app/pages/me/me.vue';
 import UserList from '#app/pages/users.list/users.list.vue';
 import UserCreate from '#app/pages/users.create/users.create.vue';
 import UserActivate from '#app/pages/users.activate/users.activate.vue';
+import UserValidate from '#app/pages/users.validate/users.validate.vue';
+import UserUpgrade from '#app/pages/users.upgrade/users.upgrade.vue';
+import UserRequestNewPassword from '#app/pages/users.requestNewPassword/users.requestNewPassword.vue';
+import UserSetNewPassword from '#app/pages/users.setNewPassword/users.setNewPassword.vue';
 import PlanList from '#app/pages/plans.list/plans.list.vue';
 import PlanCreate from '#app/pages/plans.create/plans.create.vue';
 import PlanDetails from '#app/pages/plans.details/plans.details.vue';
-import OperatorList from '#app/pages/operators.list/operators.list.vue';
-import OperatorCreate from '#app/pages/operators.create/operators.create.vue';
 import Statistics from '#app/pages/stats/stats.vue';
 import LegalMentions from '#app/pages/legalMentions/legalMentions.vue';
 // eslint-disable-next-line
 import CGU from '/doc/CGU_Resorption_Bidonvilles.pdf';
+// eslint-disable-next-line
+import TypologieAcces from '/doc/typologie_des_acces.pdf';
 
 import { logout, isLoggedIn } from '#helpers/api/user';
-import { isLoaded as isConfigLoaded, hasPermission } from '#helpers/api/config';
+import { get as getConfig, isLoaded as isConfigLoaded, hasPermission } from '#helpers/api/config';
 
 /**
  * This is the route towards which the user is redirected by the landing page
@@ -87,6 +88,16 @@ function isPermitted(to) {
 }
 
 /**
+ * Checks whether the current user has to upgrade his account before accessing any other page
+ *
+ * @returns {boolean}
+ */
+function hasToUpgrade() {
+    const { user: { position } } = getConfig();
+    return position !== '';
+}
+
+/**
  * List of actual guards used by the routes below
  *
  * @type {Object.<string,Function>}
@@ -102,6 +113,12 @@ const guardians = {
         { checker: isLoggedIn, target: '/connexion' },
         { checker: isConfigLoaded, target: '/landing' },
         { checker: isPermitted, target: '/', saveEntrypoint: false },
+    ]),
+    loadedAndUpgraded: guard.bind(this, [
+        { checker: isLoggedIn, target: '/connexion' },
+        { checker: isConfigLoaded, target: '/landing' },
+        { checker: isPermitted, target: '/', saveEntrypoint: false },
+        { checker: hasToUpgrade, target: '/mise-a-niveau' },
     ]),
 };
 
@@ -177,16 +194,16 @@ const router = new VueRouter({
             },
             path: '/liste-des-sites',
             component: TownsExplorer,
-            beforeEnter: guardians.loaded,
+            beforeEnter: guardians.loadedAndUpgraded,
         },
         {
             meta: {
                 group: 'townCreation',
-                permissions: [{ type: 'feature', name: 'createTown' }],
+                permissions: ['shantytown.create'],
             },
             path: '/nouveau-site',
             component: AddTown,
-            beforeEnter: guardians.loaded,
+            beforeEnter: guardians.loadedAndUpgraded,
         },
         {
             meta: {
@@ -194,34 +211,7 @@ const router = new VueRouter({
             },
             path: '/site/:id',
             component: Town,
-            beforeEnter: guardians.loaded,
-        },
-        {
-            meta: {
-                group: 'actionList',
-                permissions: [{ type: 'feature', name: 'readAction' }],
-            },
-            path: '/liste-des-actions',
-            component: ActionsExplorer,
-            beforeEnter: guardians.loaded,
-        },
-        {
-            meta: {
-                group: 'actionCreation',
-                permissions: [{ type: 'feature', name: 'createAction' }],
-            },
-            path: '/nouvelle-action',
-            component: AddAction,
-            beforeEnter: guardians.loaded,
-        },
-        {
-            meta: {
-                group: 'actionList',
-                permissions: [{ type: 'feature', name: 'readAction' }],
-            },
-            path: '/action/:id',
-            component: Action,
-            beforeEnter: guardians.loaded,
+            beforeEnter: guardians.loadedAndUpgraded,
         },
         {
             path: '/feedback',
@@ -245,6 +235,13 @@ const router = new VueRouter({
             },
         },
         {
+            path: '/typologie-des-acces',
+            beforeEnter(to, from, next) {
+                window.open(TypologieAcces, '_blank');
+                next(false);
+            },
+        },
+        {
             path: '/mentions-legales',
             component: LegalMentions,
         },
@@ -254,25 +251,58 @@ const router = new VueRouter({
             },
             path: '/mon-compte',
             component: Me,
+            beforeEnter: guardians.loadedAndUpgraded,
+        },
+        {
+            meta: {
+                group: 'users',
+                permissions: ['user.list'],
+            },
+            path: '/liste-des-utilisateurs',
+            component: UserList,
+            beforeEnter: guardians.loadedAndUpgraded,
+        },
+        {
+            meta: {
+                group: 'userCreation',
+                permissions: ['user.create'],
+            },
+            path: '/nouvel-utilisateur',
+            component: UserCreate,
+            beforeEnter: guardians.loadedAndUpgraded,
+        },
+        {
+            meta: {
+                group: 'users',
+                permissions: ['user.activate'],
+            },
+            path: '/nouvel-utilisateur/:id',
+            component: UserValidate,
+            beforeEnter: guardians.loadedAndUpgraded,
+        },
+        {
+            meta: {
+                group: 'users',
+            },
+            path: '/mise-a-niveau',
+            component: UserUpgrade,
             beforeEnter: guardians.loaded,
         },
         {
             meta: {
                 group: 'users',
-                permissions: [{ type: 'feature', name: 'readUser' }],
             },
-            path: '/liste-des-utilisateurs',
-            component: UserList,
-            beforeEnter: guardians.loaded,
+            path: '/nouveau-mot-de-passe',
+            component: UserRequestNewPassword,
+            beforeEnter: guardians.anonymous,
         },
         {
             meta: {
-                group: 'userCreation',
-                permissions: [{ type: 'feature', name: 'createUser' }],
+                group: 'users',
             },
-            path: '/nouvel-utilisateur',
-            component: UserCreate,
-            beforeEnter: guardians.loaded,
+            path: '/renouveler-mot-de-passe/:token',
+            component: UserSetNewPassword,
+            beforeEnter: guardians.anonymous,
         },
         {
             meta: {
@@ -285,56 +315,38 @@ const router = new VueRouter({
         {
             meta: {
                 group: 'plans',
-                permissions: [{ type: 'feature', name: 'readPlan' }],
+                permissions: ['plan.list'],
             },
             path: '/liste-des-dispositifs',
             component: PlanList,
-            beforeEnter: guardians.loaded,
+            beforeEnter: guardians.loadedAndUpgraded,
         },
         {
             meta: {
                 group: 'planCreation',
-                permissions: [{ type: 'feature', name: 'createPlan' }],
+                permissions: ['plan.create'],
             },
             path: '/nouveau-dispositif',
             component: PlanCreate,
-            beforeEnter: guardians.loaded,
+            beforeEnter: guardians.loadedAndUpgraded,
         },
         {
             meta: {
                 group: 'plans',
-                permissions: [{ type: 'feature', name: 'readPlan' }],
+                permissions: ['plan.read'],
             },
             path: '/dispositif/:id',
             component: PlanDetails,
-            beforeEnter: guardians.loaded,
-        },
-        {
-            meta: {
-                group: 'operators',
-                permissions: [{ type: 'feature', name: 'readNgo' }],
-            },
-            path: '/liste-des-operateurs',
-            component: OperatorList,
-            beforeEnter: guardians.loaded,
-        },
-        {
-            meta: {
-                group: 'operatorCreation',
-                permissions: [{ type: 'feature', name: 'createNgo' }],
-            },
-            path: '/nouvel-operateur',
-            component: OperatorCreate,
-            beforeEnter: guardians.loaded,
+            beforeEnter: guardians.loadedAndUpgraded,
         },
         {
             meta: {
                 group: 'stats',
-                permissions: [{ type: 'feature', name: 'stats' }],
+                permissions: ['stats.read'],
             },
             path: '/statistiques',
             component: Statistics,
-            beforeEnter: guardians.loaded,
+            beforeEnter: guardians.loadedAndUpgraded,
         },
     ],
 });

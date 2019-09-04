@@ -3,12 +3,10 @@ import { getApi, postApi, deleteApi } from '#helpers/api/main';
 /**
  * Lists all existing plans
  *
- * @param {string} [departement]
- *
  * @returns {Promise}
  */
-export function list(departement) {
-    return getApi(`/plans${departement ? `?departement=${encodeURIComponent(departement)}` : ''}`);
+export function list() {
+    return getApi('/plans');
 }
 
 /**

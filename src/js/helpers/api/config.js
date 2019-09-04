@@ -61,18 +61,41 @@ export function get() {
 }
 
 /**
+ * @param {String} permission
+ *
+ * @returns {Permission}
+ */
+export function getPermission(permissionName) {
+    if (configuration === null || configuration.user === null) {
+        return null;
+    }
+
+    const [entity, feature] = permissionName.split('.');
+    if (!Object.prototype.hasOwnProperty.call(configuration.user.permissions, entity)
+        || !Object.prototype.hasOwnProperty.call(configuration.user.permissions[entity], feature)) {
+        return null;
+    }
+
+    const permission = configuration.user.permissions[entity][feature];
+    if (permission.allowed !== true) {
+        return null;
+    }
+
+    return permission;
+}
+
+/**
  * Checks if the current user has a specific permission
  *
- * @param {Permission} permission
+ * @param {String} permission
  *
  * @returns {boolean}
  */
-export function hasPermission({ name, type }) {
-    if (configuration === null || configuration.user === null) {
-        return false;
-    }
+export function hasPermission(permissionName) {
+    const [entity, feature, data] = permissionName.split('.');
+    const permission = getPermission(`${entity}.${feature}`);
 
-    return configuration.user.permissions[type] && configuration.user.permissions[type].indexOf(name) !== -1;
+    return permission !== null && (data === undefined || permission[data] === true);
 }
 
 /**

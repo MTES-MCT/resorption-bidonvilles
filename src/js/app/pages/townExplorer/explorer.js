@@ -7,7 +7,7 @@ import 'vue-good-table/dist/vue-good-table.css';
 import Quickview from '#app/components/quickview/quickview.vue';
 import Export from '#app/components/export/export.vue';
 import { all as fetchAll } from '#helpers/api/town';
-import { get as getConfig, hasPermission } from '#helpers/api/config';
+import { get as getConfig, getPermission } from '#helpers/api/config';
 import simplebar from 'simplebar-vue';
 import { autocompleteLocation } from '#helpers/addressHelper';
 // eslint-disable-next-line
@@ -40,13 +40,13 @@ export default {
         Export,
     },
     data() {
-        const { user, departements } = getConfig();
+        const { user } = getConfig();
 
         return {
             error: undefined,
             loading: false,
             defaultMapView: {
-                center: user.map_center,
+                center: [user.organization.location.latitude, user.organization.location.longitude],
                 zoom: 9,
             },
             towns: [],
@@ -58,14 +58,12 @@ export default {
                 { value: 'map', label: 'Carte' },
                 { value: 'table', label: 'Tableau' },
             ],
+            permission: getPermission('shantytown.list'),
             filters: [
                 {
                     icon: iconType,
                     label: 'Types de site',
                     id: 'fieldType',
-                    permissions: [
-                        { type: 'data', name: 'fieldType' },
-                    ],
                     options: [],
                     opened: true,
                 },
@@ -73,9 +71,6 @@ export default {
                     icon: iconPeople,
                     label: 'Nombre de personnes',
                     id: 'population',
-                    permissions: [
-                        { type: 'data', name: 'populationTotal' },
-                    ],
                     options: [
                         { value: null, label: 'Inconnu', checked: true },
                         { value: '-9', label: 'Moins de 10 personnes', checked: true },
@@ -87,11 +82,7 @@ export default {
                     icon: iconJustice,
                     label: 'Procédure judiciaire',
                     id: 'justice',
-                    permissions: [
-                        { type: 'data', name: 'ownerComplaint' },
-                        { type: 'data', name: 'justiceProcedure' },
-                        { type: 'data', name: 'justiceRendered' },
-                    ],
+                    permissions: ['data_justice'],
                     options: [
                         { value: 'unknown', label: 'Inconnue', checked: true },
                         { value: 'none', label: 'Aucune', checked: true },
@@ -104,9 +95,7 @@ export default {
                     icon: iconJustice,
                     label: 'Concours de Force Publique',
                     id: 'police',
-                    permissions: [
-                        { type: 'data', name: 'justiceProcedure' },
-                    ],
+                    permissions: ['data_justice'],
                     options: [
                         { value: null, label: 'Inconnu', checked: true },
                         { value: 'none', label: 'Non demandé', checked: true },
@@ -127,9 +116,6 @@ export default {
                     icon: iconPeople,
                     label: 'Type de propriétaire',
                     id: 'ownerType',
-                    permissions: [
-                        { type: 'data', name: 'ownerType' },
-                    ],
                     options: getConfig().owner_types.map(type => ({
                         value: type.id,
                         label: type.label,
@@ -140,9 +126,6 @@ export default {
                     icon: iconOrigins,
                     label: 'Origines',
                     id: 'socialOrigin',
-                    permissions: [
-                        { type: 'data', name: 'socialOrigins' },
-                    ],
                     options: [{
                         value: -1,
                         label: 'Inconnues',
@@ -160,11 +143,11 @@ export default {
             ],
             iconFormat,
             iconGeo,
-            location: {
-                type: 'Département',
-                code: user.departement,
-                label: departements.find(({ code }) => code === user.departement).name,
-            },
+            location: user.organization.location.type !== 'nation' ? {
+                locationType: user.organization.location.type,
+                code: user.organization.location[user.organization.location.type].code,
+                label: user.organization.location[user.organization.location.type].name,
+            } : null,
             currentTab: 'map',
             exporter: {
                 isVisible: false,
@@ -173,7 +156,13 @@ export default {
     },
     computed: {
         allowedFilters() {
-            return this.filters.filter(filter => !filter.permissions || filter.permissions.every(permission => hasPermission(permission)));
+            if (!this.permission) {
+                return [];
+            }
+
+            return this.filters.filter(
+                filter => !filter.permissions || filter.permissions.every(permission => this.permission[permission]),
+            );
         },
         rendererProps() {
             if (this.currentTab === 'map') {
@@ -195,64 +184,43 @@ export default {
                 {
                     label: 'Adresse',
                     field: 'addressSimple',
-                    permissions: [
-                        { type: 'data', name: 'address' },
-                    ],
                 },
                 {
                     label: 'Type de site',
                     field: 'fieldType.label',
-                    permissions: [
-                        { type: 'data', name: 'fieldType' },
-                    ],
                 },
                 {
                     label: 'Personnes',
                     field: town => (town.populationTotal !== null ? town.populationTotal : 'inconnu'),
                     sortFn: this.sortNumber,
                     type: 'number',
-                    permissions: [
-                        { type: 'data', name: 'populationTotal' },
-                    ],
                 },
                 {
                     label: 'Ménages',
                     field: town => (town.populationCouples !== null ? town.populationCouples : 'inconnu'),
                     sortFn: this.sortNumber,
                     type: 'number',
-                    permissions: [
-                        { type: 'data', name: 'populationCouples' },
-                    ],
                 },
                 {
                     label: 'Mineurs',
                     field: town => (town.populationMinors !== null ? town.populationMinors : 'inconnu'),
                     sortFn: this.sortNumber,
                     type: 'number',
-                    permissions: [
-                        { type: 'data', name: 'populationMinors' },
-                    ],
                 },
                 {
                     label: 'Date d\'installation',
                     field: town => (town.builtAt ? App.formatDate(town.builtAt) : 'inconnu'),
                     type: 'text',
-                    permissions: [
-                        { type: 'data', name: 'builtAt' },
-                    ],
                 },
                 {
                     label: 'Type de propriétaire',
                     field: 'ownerType.label',
-                    permissions: [
-                        { type: 'data', name: 'ownerType' },
-                    ],
                 },
             ];
 
             return {
                 styleClass: 'table',
-                columns: columns.filter(column => !column.permissions || column.permissions.every(permission => hasPermission(permission))),
+                columns,
                 rows: this.visibleTowns,
                 'sort-options': {
                     enabled: true,
@@ -276,15 +244,18 @@ export default {
             // location filters
             if (this.location !== null) {
                 visibleTowns = visibleTowns.filter((town) => {
-                    switch (this.location.type) {
-                    case 'Commune':
+                    switch (this.location.locationType) {
+                    case 'city':
                         return town.city.code === this.location.code || town.city.main === this.location.code;
 
-                    case 'EPCI':
+                    case 'epci':
                         return town.epci.code === this.location.code;
 
-                    case 'Département':
+                    case 'departement':
                         return town.departement.code === this.location.code;
+
+                    case 'region':
+                        return town.region.code === this.location.code;
 
                     default:
                         return false;
@@ -489,7 +460,9 @@ export default {
             return 0;
         },
         showExport() {
-            this.exporter.isVisible = true;
+            setTimeout(() => {
+                this.exporter.isVisible = true;
+            }, 100);
         },
         hideExport() {
             this.exporter.isVisible = false;

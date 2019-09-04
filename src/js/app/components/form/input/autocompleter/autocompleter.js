@@ -598,6 +598,7 @@ export default {
 
                 if (item.id === 'new') {
                     this.createNew(this.currentLabel);
+                    this.resetSuggestions();
                 }
 
                 return;
