@@ -97,12 +97,8 @@ export default {
          * @returns {Array}
          */
         options() {
-            if (this.user === null) {
+            if (this.user === null || !this.permission) {
                 return [];
-            }
-
-            if (this.user.organization.active === true) {
-                return this.user.permission_options;
             }
 
             return this.permission.options;
