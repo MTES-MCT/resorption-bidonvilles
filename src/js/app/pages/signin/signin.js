@@ -36,7 +36,7 @@ export default {
                             succes: 'Vous êtes désormais connecté',
                             error: 'La tentative de connexion a échoué',
                         },
-                        submitPrefix: '<a href="/#/nouveau-mot-de-passe">J\'ai perdu mon mot de passe</a>',
+                        submitPrefix: '<a href="/app.html#/nouveau-mot-de-passe">J\'ai perdu mon mot de passe</a>',
                         submit: ({ email, password }) => login(email, password),
                     },
                 ],
