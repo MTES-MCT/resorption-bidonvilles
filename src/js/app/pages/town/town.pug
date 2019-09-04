@@ -667,7 +667,7 @@
                             <p v-if="town.comments.length === 0">Aucun commentaire enregistré pour le moment</p>
                             <p class="comment-container" v-for="comment in town.comments">
                                 <strong>
-                                    <span>{{ comment.createdBy.lastName.toUpperCase() + ' ' + comment.createdBy.firstName }}</span>
+                                    <span>{{ comment.createdBy.lastName.toUpperCase() + ' ' + comment.createdBy.firstName }} ({{ comment.createdBy.position }} - {{ comment.createdBy.organization }})</span>
                                     <img v-if="canEditComment(comment)" src="/img/edit.svg" width="15" alt="Modifier mon commentaire" class="comment-edit" @click="editComment(comment) " />
                                     <img v-if="canDeleteComment(comment)" src="/img/delete.svg" width="15" alt="Supprimer mon commentaire" class="comment-delete" @click="deleteComment(comment)" />
                                 </strong><br/>
