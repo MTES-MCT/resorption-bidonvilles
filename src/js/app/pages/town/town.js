@@ -400,7 +400,7 @@ export default {
             }
         },
         addComment() {
-            if (!hasPermission('shantytown_create')) {
+            if (!hasPermission('shantytown_comment.create')) {
                 return;
             }
 
