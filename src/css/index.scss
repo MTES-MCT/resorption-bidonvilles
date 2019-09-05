@@ -63,6 +63,36 @@ select {
     padding: 0;
 }
 
+.notifications.customNotifications {
+    display: flex;
+    display: -webkit-box;
+    display: -ms-flexbox;
+
+    flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+
+    justify-content: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+
+    > span {
+        display: flex;
+        display: -webkit-box;
+        display: -ms-flexbox;
+
+        flex-direction: column;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+
+        justify-content: center;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+    }
+}
+
 .notification > .spinner {
     vertical-align: middle;
     margin-right: 10px;
@@ -93,10 +123,14 @@ button:disabled:hover {
     cursor: default;
 }
 
-.ab {
+.ab.vue-notification,
+.ab.vue-notification-template {
     font-size: 1.1rem;
-    padding: 10px;
+    padding: 50px 10px;
     margin: 0 5px 5px;
+    width: 400px;
+    border-radius: 5px;
+    text-align: center;
 
     color: #ffffff;
     background: #44A4FC;
