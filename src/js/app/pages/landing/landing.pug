@@ -17,9 +17,9 @@
 
             <nav>
                 <ul class="nav__links">
-                    <li class="nav__item"><a href="#contexte">Contexte</a></li>
-                    <li class="nav__item"><a href="#plateforme">La plateforme</a></li>
-                    <li class="nav__item"><a href="#partenaires">Partenaires</a></li>
+                    <li class="nav__item"><a @click="$router.replace('#top', () => $router.replace('#contexte'));">Contexte</a></li>
+                    <li class="nav__item"><a @click="$router.replace('#top', () => $router.replace('#plateforme'));">La plateforme</a></li>
+                    <li class="nav__item"><a @click="$router.replace('#top', () => $router.replace('#partenaires'));">Partenaires</a></li>
                     <li class="nav__item"><router-link to="/demande-d-acces" class="button secondary">Demander un accès</router-link></li>
                     <li class="nav__item"><router-link to="/connexion" class="button">Se connecter</router-link></li>
                 </ul>
@@ -40,7 +40,7 @@
         </div>
     </div>
 
-    <main role="main">
+    <main role="main" id="contexte">
         <section class="section section-white">
             <div class="container container-large">
                 <h1 class="blue-medium landing__title">Contexte :</h1>
@@ -86,7 +86,7 @@
                 <p>Dans le respect des lois de la République, ces actions concernent l’amélioration des conditions de vie ; l’accès au logements, la santé, la scolarisation, l’emploi ; la prévention de la délinquance, la protection de l’enfance et au cas par cas la réinstallation dans le pays d’origine.</p>
             </div>
         </section>
-        <section class="section section-grey">
+        <section class="section section-grey" id="plateforme">
             <div class="container container-large">
                 <h1 class="blue-medium landing__title">La plateforme :</h1>
                 <h1 class="landing__subtitle">faciliter le partage d’informations et la coordination entre les acteurs pour une meilleure action sur le terrain</h1>
@@ -152,7 +152,7 @@
         </section>
     </main>
 
-    <main role="main">
+    <main role="main" id="partenaires">
         <section class="section section-white">
             <div class="container container-large">
                 <h1 class="blue-medium landing__title">Partenaires :</h1>
@@ -214,9 +214,9 @@
             </ul>
 
             <ul class="footer__links">
-                <li><a href="#contexte">Contexte</a></li>
-                <li><a href="#plateforme">La plateforme</a></li>
-                <li><a href="#partenaires">Partenaires</a></li>
+                <li><a @click="$router.replace('#top', () => $router.replace('#contexte'));">Contexte</a></li>
+                <li><a @click="$router.replace('#top', () => $router.replace('#plateforme'));">La plateforme</a></li>
+                <li><a @click="$router.replace('#top', () => $router.replace('#partenaires'));">Partenaires</a></li>
                 <li><a href="https://github.com/MTES-MCT/action-bidonvilles" title="Github"><svg class="icon icon-github"><use xlink:href="#github"></use></svg></a></li>
             </ul>
 
