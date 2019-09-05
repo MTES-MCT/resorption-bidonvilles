@@ -33,8 +33,9 @@
 }
 
 .hero {
-    background: url('https://dummyimage.com/1080x360') no-repeat center;
+    background: url('/img/landing/hero01.jpg') no-repeat center;
     background-size: cover;
+    background-position: center 40%;
 }
 
 .hero:first-of-type {
@@ -42,11 +43,15 @@
 }
 
 .hero-second {
-    background-image: url('https://dummyimage.com/1080x360');
+    background-image: url('/img/landing/hero02.jpg');
+    background-position: center 20%;
+    background-size: cover;
 }
 
 .hero-third {
-    background-image: url('https://dummyimage.com/1080x360');
+    background-image: url('/img/landing/hero03.jpg');
+    background-position: center 20%;
+    background-size: cover;
 }
 
 .hero__white-background {
