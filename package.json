@@ -35,7 +35,7 @@
   },
   "scripts": {
     "dev": "parcel serve ./src/app.html --open --no-autoinstall --no-source-maps",
-    "build": "rm -rf ./dist && parcel build ./src/app.html --no-source-maps && cp -r ./src/landing ./dist",
+    "build": "rm -rf ./dist && parcel build ./src/app.html --no-source-maps ./dist",
     "release": "release() { git reset HEAD .; yarn build; git add dist; git commit -m \"📦 Release v$1\"; git tag \"v$1\"; git push origin HEAD; git push origin \"v$1\"; } && release",
     "deploy": "deploy() { git fetch origin \"refs/tags/$1:refs/tags/$1\"; git checkout $1; } && deploy"
   },
