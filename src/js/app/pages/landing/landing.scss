@@ -12,6 +12,7 @@
 
 .navbar {
     padding-top: 15px;
+    padding-bottom: 25px;
 }
 
 .navbar__home {
@@ -73,6 +74,22 @@
     margin-top: 80px;
     text-align: center;
     font-size: 1rem;
+
+    > a {
+        position: relative;
+        display: inline-block;
+
+        .play {
+            width: 50px;
+            height: auto;
+            position: absolute;
+            top: 50%;
+            margin-top: -25px;
+            left: 50%;
+            margin-left: -25px;
+            background: white;
+        }
+    }
 }
 
 .blue-medium {
