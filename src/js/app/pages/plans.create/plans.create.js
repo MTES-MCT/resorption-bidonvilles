@@ -3,6 +3,7 @@ import Form from '#app/components/form/form.vue';
 import { get as getConfig } from '#helpers/api/config';
 import { create } from '#helpers/api/plan';
 import { search } from '#helpers/api/operator';
+import { notify } from '#helpers/notificationHelper';
 
 export default {
     components: {
@@ -158,7 +159,7 @@ export default {
 
     methods: {
         onComplete() {
-            this.$notify({
+            notify({
                 group: 'notifications',
                 type: 'success',
                 title: 'Dispositif correctement déclaré',

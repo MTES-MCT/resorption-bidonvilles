@@ -1,4 +1,5 @@
 import Input from './input/input.vue';
+import { notify } from '#helpers/notificationHelper';
 
 export default {
 
@@ -256,7 +257,7 @@ export default {
             this.currentStep.submit(this.filteredData, this.responses)
                 .then((response) => {
                     if (this.wording.success !== null) {
-                        this.$notify({
+                        notify({
                             group: 'notifications',
                             type: 'success',
                             title: 'Succès',

@@ -2,6 +2,7 @@ import NavBar from '#app/layouts/navbar/navbar.vue';
 import { get, update, destroy } from '#helpers/api/plan';
 import { hasPermission } from '#helpers/api/config';
 import { shortAddress } from '#helpers/townHelper';
+import { notify } from '#helpers/notificationHelper';
 
 const fieldsByType = {
     'Espace temporaire d’insertion': [
@@ -248,7 +249,7 @@ export default {
                 camelData,
             )
                 .then(() => {
-                    this.$notify({
+                    notify({
                         group: 'notifications',
                         type: 'success',
                         title: 'Indicateurs correctement sauvegardés',

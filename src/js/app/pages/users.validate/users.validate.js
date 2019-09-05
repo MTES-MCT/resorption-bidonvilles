@@ -6,6 +6,7 @@ import UserPermissions from '#app/layouts/userPermissions/userPermissions.vue';
 import 'vue-good-table/dist/vue-good-table.css';
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import { get as getConfig } from '#helpers/api/config';
+import { notify } from '#helpers/notificationHelper';
 
 let permissions;
 
@@ -189,7 +190,7 @@ export default {
                 .then(() => {
                     this.validation.state = null;
 
-                    this.$notify({
+                    notify({
                         group: 'notifications',
                         type: 'success',
                         title: 'Accès envoyé',
@@ -219,7 +220,7 @@ export default {
                 .then(() => {
                     this.validation.state = null;
 
-                    this.$notify({
+                    notify({
                         group: 'notifications',
                         type: 'success',
                         title: 'Accès refusé',
@@ -254,7 +255,7 @@ export default {
                 .then(() => {
                     this.validation.state = null;
 
-                    this.$notify({
+                    notify({
                         group: 'notifications',
                         type: 'success',
                         title: 'Accès supprimé',

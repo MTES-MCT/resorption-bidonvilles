@@ -6,6 +6,7 @@ import {
     get, close, edit, destroy, addComment, editComment, deleteComment,
 } from '#helpers/api/town';
 import { get as getConfig, hasPermission } from '#helpers/api/config';
+import { notify } from '#helpers/notificationHelper';
 
 function boolToYesNoValue(bool) {
     if (bool === true) {
@@ -313,7 +314,7 @@ export default {
                 owner: this.edit.owner,
             })
                 .then(() => {
-                    this.$notify({
+                    notify({
                         group: 'notifications',
                         type: 'success',
                         title: 'Site correctement sauvegardé',
@@ -358,7 +359,7 @@ export default {
                     })),
             })
                 .then(() => {
-                    this.$notify({
+                    notify({
                         group: 'notifications',
                         type: 'success',
                         title: 'Site correctement fermé',
@@ -459,7 +460,7 @@ export default {
             deleteComment(this.$route.params.id, comment.id)
                 .then((response) => {
                     this.town.comments = response.comments;
-                    this.$notify({
+                    notify({
                         group: 'notifications',
                         type: 'success',
                         title: 'Opération réussie',
@@ -483,7 +484,7 @@ export default {
                     this.commentEdit.pending = false;
                     this.commentEdit.error = null;
 
-                    this.$notify({
+                    notify({
                         group: 'notifications',
                         type: 'success',
                         title: 'Opération réussie',
