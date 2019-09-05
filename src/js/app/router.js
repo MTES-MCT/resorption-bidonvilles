@@ -1,5 +1,6 @@
 import VueRouter from 'vue-router';
 
+import Landing from '#app/pages/landing/landing.vue';
 import SignIn from '#app/pages/signin/signin.vue';
 import SignUp from '#app/pages/signup/signup.vue';
 import TownsExplorer from '#app/pages/townExplorer/explorer.vue';
@@ -24,7 +25,7 @@ import CGU from '/doc/CGU_Resorption_Bidonvilles.pdf';
 // eslint-disable-next-line
 import TypologieAcces from '/doc/typologie_des_acces.pdf';
 
-import { logout, isLoggedIn } from '#helpers/api/user';
+import { logout, isLoggedIn, alreadyLoggedBefore } from '#helpers/api/user';
 import { get as getConfig, isLoaded as isConfigLoaded, hasPermission } from '#helpers/api/config';
 
 /**
@@ -129,7 +130,11 @@ const guardians = {
  */
 function home() {
     if (isLoggedIn() !== true) {
-        return '/connexion';
+        if (alreadyLoggedBefore()) {
+            return '/connexion';
+        }
+
+        return '/landing';
     }
 
     if (isConfigLoaded() !== true) {
@@ -162,6 +167,11 @@ const router = new VueRouter({
             meta: {
                 analyticsIgnore: true,
             },
+        },
+        {
+            path: '/landing',
+            component: Landing,
+            beforeEnter: guardians.anonymous,
         },
         {
             path: '/connexion',
