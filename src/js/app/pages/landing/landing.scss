@@ -1,15 +1,40 @@
-.landing__logo,
 .landing__marianne {
-    height: 100%;
+    width: auto;
+    height: 40px;
+    margin-left: 30px;
 }
 
-.landing__marianne {
-    margin-left: 30px;
+.landing__logo {
+    width: auto;
+    height: 80px;
+    vertical-align: bottom;
+}
+
+.navbar {
+    padding-top: 15px;
+}
+
+.navbar__container {
+    -webkit-box-align: baseline;
+      -ms-flex-align: baseline;
+          align-items: baseline;
+}
+
+.nav__item {
+    vertical-align: middle;
+
+    .button {
+        margin-left: 20px;
+
+        &:not(.secondary):hover {
+            background: #003b80;
+        }
+    }
 }
 
 .hero {
     background: url('https://dummyimage.com/1080x360') no-repeat center;
-    background-size: 100%;
+    background-size: cover;
 }
 
 .hero:first-of-type {
@@ -36,6 +61,29 @@
 
 .blue-medium {
     color: #0053b3;
+}
+
+.figures {
+    display: flex;
+}
+
+.figures-block {
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    flex-basis: 0;
+    -webkit-flex-basis: 0;
+
+    h1,
+    h2,
+    p {
+        margin: 0;
+        padding: 0;
+    }
+
+    h1 {
+        font-size: 3em;
+    }
 }
 
 .container-large {
