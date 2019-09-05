@@ -5,7 +5,7 @@ import Vue from 'vue';
  *
  * @const {Number}
  */
-const DEFAULT_DURATION = 3000;
+const DEFAULT_DURATION = 6000;
 
 /**
  * Proxy to vue-notification.notify()
