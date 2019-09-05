@@ -1,8 +1,8 @@
 <template lang="pug">
-    include landing.pug
+    include launcher.pug
 </template>
 
 <script>
-import Component from './landing.js';
+import Component from './launcher.js';
 export default Component;
 </script>
