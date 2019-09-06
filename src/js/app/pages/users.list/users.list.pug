@@ -32,7 +32,7 @@
                         <span v-else-if="props.column.id === 'validate'">
                             <span><font-awesome-icon class="user-validateIcon" icon="arrow-right" @click="routeToUserValidation"></font-awesome-icon></span>
                         </span>
-                        <span v-else>{{ props.formattedRow[props.column.field] }}</span>
+                        <span v-else :class="`userList-row--${props.column.id}`">{{ props.formattedRow[props.column.field] }}</span>
                     </template>
                 </Table>
             </div>
