@@ -28,6 +28,27 @@ import iconGeo from '/img/geo.svg';
 // eslint-disable-next-line
 import iconOrigins from '/img/origins.svg';
 
+/**
+ * Returns the appropriate zoom level for the given location type
+ *
+ * @param {String} locationType
+ *
+ * @returns {Number}
+ */
+function getDefaultZoomFor(locationType) {
+    switch (locationType) {
+    case 'nation':
+    case 'region':
+        return 6;
+
+    default:
+    case 'departement':
+    case 'epci':
+    case 'city':
+        return 10;
+    }
+}
+
 export default {
     components: {
         NavBar,
@@ -47,7 +68,7 @@ export default {
             loading: false,
             defaultMapView: {
                 center: [user.organization.location.latitude, user.organization.location.longitude],
-                zoom: 9,
+                zoom: getDefaultZoomFor(user.organization.location.type),
             },
             towns: [],
             quickview: {

@@ -1,5 +1,5 @@
-import Address from '#app/components/address/address.vue';
 import L from 'leaflet';
+import Address from '#app/components/address/address.vue';
 import { get } from '#helpers/api/config';
 import { shortAddress } from '#helpers/townHelper';
 import 'leaflet-providers';
