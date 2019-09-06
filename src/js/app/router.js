@@ -22,7 +22,7 @@ import LegalMentions from '#app/pages/legalMentions/legalMentions.vue';
 // eslint-disable-next-line
 import CGU from '/doc/CGU_Resorption_Bidonvilles.pdf';
 // eslint-disable-next-line
-import TypologieAcces from '/doc/typologie_des_acces.pdf';
+import TypologieAcces from '/doc/droits_d_acces_et_guide_de_l_administrateur_local.pdf';
 
 import { logout, isLoggedIn } from '#helpers/api/user';
 import { get as getConfig, isLoaded as isConfigLoaded, hasPermission } from '#helpers/api/config';
