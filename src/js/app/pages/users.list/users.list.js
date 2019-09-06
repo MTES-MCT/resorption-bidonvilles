@@ -67,7 +67,17 @@ export default {
                     {
                         id: 'organization',
                         label: 'STRUCTURE',
-                        field: 'organization.name',
+                        field: (user) => {
+                            if (user.organization.type.abbreviation !== null) {
+                                return `${user.organization.type.abbreviation} (${user.organization.name})`;
+                            }
+
+                            if (user.organization.abbreviation !== null) {
+                                return `${user.organization.abbreviation} (${user.organization.name})`;
+                            }
+
+                            return user.organization.name;
+                        },
                     },
                     {
                         id: 'location',
