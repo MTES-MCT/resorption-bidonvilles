@@ -93,10 +93,10 @@ export default (wording, submitFn) => ({
                                                 const usedLabels = [];
 
                                                 return organizations
-                                                    .map(({ id, name }) => ({
+                                                    .map(({ id, name, abbreviation }) => ({
                                                         id,
                                                         value: id,
-                                                        label: name,
+                                                        label: abbreviation ? `${abbreviation} (${name})` : name,
                                                         category: null,
                                                         data: {},
                                                     }))
