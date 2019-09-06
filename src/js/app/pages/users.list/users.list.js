@@ -103,6 +103,9 @@ export default {
                         id: 'role',
                         label: 'TYPE D\'ACCÈS',
                         field: 'role',
+                        width: '230px',
+                        thClass: 'userList-column--role',
+                        tdClass: 'userList-column--role',
                     },
                     {
                         id: 'status',
