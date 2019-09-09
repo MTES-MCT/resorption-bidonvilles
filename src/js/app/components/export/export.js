@@ -401,7 +401,8 @@ export default {
             ];
         },
         download() {
-            const encodedUri = encodeURI(`data:text/csv;charset=utf-8,${this.getData().join('\n')}`);
+            const universalBOM = '\uFEFF';
+            const encodedUri = `data:text/csv;charset=utf-8,${encodeURIComponent(universalBOM + this.getData().join('\n'))}`;
             this.$refs.link.setAttribute('href', encodedUri);
             this.$refs.link.setAttribute('download', `export_bidonvilles_${App.formatDate(Date.now() / 1000, 'y_m_d')}.csv`);
             this.$refs.link.click();
