@@ -6,7 +6,9 @@ import { create } from '#helpers/api/user';
 const component = newUser({
     title: 'Demander un accès à la plateforme Résorption bidonville',
     description: 'La demande sera envoyée à votre administrateur local.',
+    organizationTitle: 'Votre structure',
     organization: 'Quelle est votre structure ?',
+    position: 'Votre fonction',
     stepWording: {
         submit: 'Envoyer',
         error: 'Votre demande d\'accès n\'a pas pu être envoyée',
