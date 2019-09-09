@@ -85,44 +85,8 @@ export default (wording, submitFn) => ({
                                 association: {
                                     label: 'Nom de la structure',
                                     mandatory: true,
-                                    type: 'autocompleter',
-                                    specificProps: {
-                                        autocompleter: (str) => {
-                                            const p1 = getOrganizationsByCategory('association', str);
-                                            const p2 = p1.then(({ organizations }) => {
-                                                const usedLabels = [];
-
-                                                return organizations
-                                                    .map(({ id, name }) => ({
-                                                        id,
-                                                        value: id,
-                                                        label: name,
-                                                        category: null,
-                                                        data: {},
-                                                    }))
-                                                    .filter((item) => {
-                                                        if (usedLabels.includes(item.label)) {
-                                                            return false;
-                                                        }
-
-                                                        usedLabels.push(item.label);
-                                                        return true;
-                                                    });
-                                            });
-                                            p2.abort = p1.abort;
-                                            return p2;
-                                        },
-                                        showCategory: false,
-                                        allowMultiple: false,
-                                        float: true,
-                                        createNew: (data) => {
-                                            formData.association = [{
-                                                value: data,
-                                                label: data,
-                                                category: null,
-                                            }];
-                                        },
-                                    },
+                                    type: 'select',
+                                    options: [],
                                     condition({ organization_category: category }) {
                                         return category === 'association';
                                     },
@@ -156,21 +120,9 @@ export default (wording, submitFn) => ({
                             },
                         },
                     ],
-                    submit: (data) => {
-                        let association;
-                        if (data.association !== undefined) {
-                            if (data.association && data.association.length === 1) {
-                                [association] = data.association;
-                            } else {
-                                association = null;
-                            }
-                        }
-
-                        return submitFn(Object.assign({}, data, {
-                            legal: data.legal && data.legal.length === 1 && data.legal[0] === true,
-                            association,
-                        }));
-                    },
+                    submit: data => submitFn(Object.assign({}, data, {
+                        legal: data.legal && data.legal.length === 1 && data.legal[0] === true,
+                    })),
                 },
             ],
         };
@@ -248,9 +200,10 @@ export default (wording, submitFn) => ({
                 getOrgCategories(),
                 getOrgTypes('public_establishment'),
                 getOrganizationsByCategory('administration'),
+                getOrganizationsByCategory('association'),
                 listDepartements(),
             ])
-                .then(([{ categories }, { types }, { organizations }, { departements }]) => {
+                .then(([{ categories }, { types }, { organizations }, { organizations: associations }, { departements }]) => {
                     this.formDefinition.steps[0].sections[1].inputs.organization_category.options = categories.map(({ uid, name_singular: name }) => ({
                         value: uid,
                         label: name,
@@ -266,6 +219,21 @@ export default (wording, submitFn) => ({
                         value: id,
                         label: name,
                     }));
+
+                    const usedAssociations = [];
+                    this.formDefinition.steps[0].sections[1].inputs.association.options = associations
+                        .filter((association) => {
+                            if (usedAssociations.indexOf(association.name) !== -1) {
+                                return false;
+                            }
+
+                            usedAssociations.push(association.name);
+                            return true;
+                        })
+                        .map(({ name, abbreviation }) => ({
+                            value: name,
+                            label: abbreviation !== null ? `${abbreviation} (${name})` : name,
+                        }));
                     this.formDefinition.steps[0].sections[1].inputs.departement.options = departements.map(({ code, name }) => ({
                         value: code,
                         label: `${code} - ${name}`,
