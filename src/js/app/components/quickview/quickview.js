@@ -1,5 +1,6 @@
 import simplebar from 'simplebar-vue';
 import { hasPermission } from '#helpers/api/config';
+import { open } from '#helpers/tabHelper';
 
 export default {
     components: {
@@ -170,7 +171,7 @@ export default {
         },
         showTown() {
             const routerData = this.$router.resolve(`/site/${this.town.id}`);
-            window.open(routerData.href, '__blank');
+            open(routerData.href);
         },
     },
 };
