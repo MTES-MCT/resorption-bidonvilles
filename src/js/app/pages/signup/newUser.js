@@ -91,6 +91,22 @@ export default (wording, submitFn) => ({
                                         return category === 'association';
                                     },
                                 },
+                                newAssociationName: {
+                                    label: 'Précisez le nom complet',
+                                    mandatory: true,
+                                    type: 'text',
+                                    condition({ organization_category: category, association }) {
+                                        return category === 'association' && association === 'Autre';
+                                    },
+                                },
+                                newAssociationAbbreviation: {
+                                    label: 'Précisez l\'acronyme, si besoin',
+                                    mandatory: false,
+                                    type: 'text',
+                                    condition({ organization_category: category, association }) {
+                                        return category === 'association' && association === 'Autre';
+                                    },
+                                },
                                 departement: {
                                     label: 'Territoire de rattachement',
                                     mandatory: true,
@@ -221,19 +237,31 @@ export default (wording, submitFn) => ({
                     }));
 
                     const usedAssociations = [];
-                    this.formDefinition.steps[0].sections[1].inputs.association.options = associations
-                        .filter((association) => {
-                            if (usedAssociations.indexOf(association.name) !== -1) {
-                                return false;
-                            }
+                    this.formDefinition.steps[0].sections[1].inputs.association.options = [
+                        {
+                            label: 'Autres cas',
+                            options: [{
+                                value: 'Autre',
+                                label: 'Mon association n\'est pas dans cette liste',
+                            }],
+                        },
+                        {
+                            label: 'Associations connues',
+                            options: associations
+                                .filter((association) => {
+                                    if (usedAssociations.indexOf(association.name) !== -1) {
+                                        return false;
+                                    }
 
-                            usedAssociations.push(association.name);
-                            return true;
-                        })
-                        .map(({ name, abbreviation }) => ({
-                            value: name,
-                            label: abbreviation !== null ? `${abbreviation} (${name})` : name,
-                        }));
+                                    usedAssociations.push(association.name);
+                                    return true;
+                                })
+                                .map(({ name, abbreviation }) => ({
+                                    value: name,
+                                    label: abbreviation !== null ? `${abbreviation} (${name})` : name,
+                                })),
+                        },
+                    ];
                     this.formDefinition.steps[0].sections[1].inputs.departement.options = departements.map(({ code, name }) => ({
                         value: code,
                         label: `${code} - ${name}`,
