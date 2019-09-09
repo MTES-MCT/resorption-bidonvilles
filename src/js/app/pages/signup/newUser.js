@@ -11,7 +11,8 @@ import { departements as listDepartements } from '#helpers/addressHelper';
  * @property {String} title
  * @property {String} description
  * @property {Object} stepWording
- * @property {String} organization Label of the input organization_category
+ * @property {String} organization          Label of the input organization_category
+ * @property {String} associationIsMissing Label of the 'other' option of the input association
  */
 
 /**
@@ -242,7 +243,7 @@ export default (wording, submitFn) => ({
                             label: 'Autres cas',
                             options: [{
                                 value: 'Autre',
-                                label: 'Mon association n\'est pas dans cette liste',
+                                label: wording.associationIsMissing,
                             }],
                         },
                         {
