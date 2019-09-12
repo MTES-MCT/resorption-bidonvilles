@@ -65,12 +65,12 @@ p.error {
     margin-bottom: 30px;
 }
 
-.town-header > h1 {
+.town-header h1 {
     margin-bottom: 0;
 }
 
-.town-header > h2 {
-    margin: 0;
+.town-header h2 {
+    margin: 0 0 10px;
     font-size: 1rem;
     font-weight: normal;
 }
@@ -80,21 +80,26 @@ p.error {
     position: fixed;
     top: 0;
     left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-bottom: 20px;
     padding-top: 20px;
     width: 100%;
     border-bottom: 1px solid #ccc;
     background: white;
+
+    > div {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
 }
 
 .sticky + .dashboard {
     padding-top: 130px;
 }
 
-.town-actionButtons {
-    position: absolute;
-    right: 100px;
-    margin-top: -20px;
-    top: 50%;
+.dashboard {
+    padding: 0;
 }
 
 .side-menu {
