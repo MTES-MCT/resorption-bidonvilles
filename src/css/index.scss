@@ -26,11 +26,6 @@ label.error.message {
     color: #d63626;
 }
 
-.container {
-    max-width: none;
-    padding: 0;
-}
-
 select {
     background-size: 15px 15px;
 }
@@ -39,18 +34,6 @@ select {
     .container,
     .dashboard {
         padding: 0 100px;
-    }
-}
-
-@media (min-width: 550px) {
-    .container {
-        width: 100%;
-    }
-}
-
-@media (min-width: 400px) {
-    .container {
-        width: 100%;
     }
 }
 
