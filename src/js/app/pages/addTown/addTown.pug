@@ -1,5 +1,7 @@
 <div>
     <NavBar></NavBar>
 
-    <Form v-bind="formDefinition" v-model="data" @complete="onComplete" @stepcomplete="onStepComplete" ref="form"></Form>
+    <div class="container">
+        <Form v-bind="formDefinition" v-model="data" @complete="onComplete" @stepcomplete="onStepComplete" ref="form"></Form>
+    </div>
 </div>
