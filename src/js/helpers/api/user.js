@@ -57,6 +57,15 @@ export function isLoggedIn() {
 }
 
 /**
+ * Checks if the current visitor has already been logged at least once
+ *
+ * @returns {Boolean}
+ */
+export function alreadyLoggedBefore() {
+    return localStorage.getItem('logged_once') === true;
+}
+
+/**
  * Returns the access token of the current session (if any)
  *
  * @returns {string|null}

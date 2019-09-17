@@ -1,0 +1,16 @@
+<div>
+    <NavBar></NavBar>
+
+    <section class="section section-white">
+        <div class="container">
+            <div v-if="error" class="notification error full-width">
+                <span>{{ error }}. <a href="#" @click="loadConfig">Réessayer ?</a></span>
+            </div>
+
+            <div v-else class="notification full-width">
+                <img src="/img/spinner_dark.svg" width="20" class="spinner" />
+                <span>Initialisation de la plateforme en cours...</span>
+            </div>
+        </div>
+    </section>
+</div>
