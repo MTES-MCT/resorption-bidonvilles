@@ -10,6 +10,8 @@ import { all as fetchAll } from '#helpers/api/town';
 import { get as getConfig, getPermission } from '#helpers/api/config';
 import simplebar from 'simplebar-vue';
 import { autocompleteLocation } from '#helpers/addressHelper';
+import { open } from '#helpers/tabHelper';
+
 // eslint-disable-next-line
 import iconType from '/img/type.svg';
 // eslint-disable-next-line
@@ -502,7 +504,7 @@ export default {
         },
         routeToTown(params) {
             const routeData = this.$router.resolve(`/site/${params.row.id}`);
-            window.open(routeData.href, '_blank');
+            open(routeData.href);
         },
         resize() {
             if (!this.$refs.main) {

@@ -4,6 +4,7 @@ import 'vue-good-table/dist/vue-good-table.css';
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import Modal from '#app/components/modal/modal.vue';
 import { get as getConfig } from '#helpers/api/config';
+import { open } from '#helpers/tabHelper';
 
 export default {
     components: {
@@ -203,7 +204,7 @@ export default {
          */
         routeToUserValidation(params) {
             const routeData = this.$router.resolve(`/nouvel-utilisateur/${params.row.id}`);
-            window.open(routeData.href, '_blank');
+            open(routeData.href);
         },
     },
 };

@@ -1,3 +1,5 @@
+import { open } from '#helpers/tabHelper';
+
 export default {
     props: {
         towns: Array,
@@ -8,7 +10,7 @@ export default {
         },
         showTown(id) {
             const routeData = this.$router.resolve(`/site/${id}`);
-            window.open(routeData.href, '_blank');
+            open(routeData.href);
         },
     },
 };
