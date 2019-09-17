@@ -86,7 +86,7 @@ export default {
 
             switch (this.town.status) {
             case 'open':
-                return 'existe toujours';
+                return 'existe';
 
             case 'closed_by_justice':
             case 'closed_by_admin':
