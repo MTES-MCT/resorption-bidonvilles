@@ -21,7 +21,6 @@
 
 .userValidation-main {
     display: flex;
-    display: -webkit-box;
     display: -ms-flexbox;
 
     flex-direction: row;
@@ -93,7 +92,7 @@
 }
 
 .userPermissions {
-    max-width: 875px;
+    max-width: 650px;
     font-size: 16px;
 
     p {

@@ -43,3 +43,12 @@ table.vgt-table {
         vertical-align: middle;
     }
 }
+
+.userList-row--lastName,
+.userList-row--firstName {
+    font-weight: bold;
+}
+
+.userList-column--role {
+    text-align: center;
+}

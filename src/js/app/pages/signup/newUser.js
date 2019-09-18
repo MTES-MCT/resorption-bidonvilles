@@ -11,7 +11,9 @@ import { departements as listDepartements } from '#helpers/addressHelper';
  * @property {String} title
  * @property {String} description
  * @property {Object} stepWording
- * @property {String} organization          Label of the input organization_category
+ * @property {String} organizationTitle    Title of the organization section
+ * @property {String} position             Label of the input 'position'
+ * @property {String} organization         Label of the input organization_category
  * @property {String} associationIsMissing Label of the 'other' option of the input association
  */
 
@@ -51,7 +53,7 @@ export default (wording, submitFn) => ({
                             },
                         },
                         {
-                            title: 'Votre structure',
+                            title: wording.organizationTitle,
                             inputs: {
                                 organization_category: {
                                     label: wording.organization,
@@ -127,7 +129,7 @@ export default (wording, submitFn) => ({
                                     },
                                 },
                                 position: {
-                                    label: 'Votre fonction',
+                                    label: wording.position,
                                     mandatory: true,
                                     type: 'text',
                                     condition({ organization_category: category }) {

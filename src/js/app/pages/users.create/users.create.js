@@ -5,7 +5,9 @@ import { create } from '#helpers/api/user';
 
 const component = newUser({
     title: 'Créer un utilisateur',
-    organization: 'Quelle est la structure ?',
+    organizationTitle: 'Structure',
+    organization: 'Quelle est la structure de l\'utilisateur ?',
+    position: 'Fonction de l\'utiliisateur',
     associationIsMissing: 'L\'association de l\'utilisateur n\'est pas dans cette liste',
     stepWording: {
         submit: 'Envoyer',
