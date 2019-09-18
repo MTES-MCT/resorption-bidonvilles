@@ -23,7 +23,10 @@
 
     //- select
     <select v-if="type === 'select' || type === 'selectMultiple'" class="input input--select" v-bind="props" v-model="data" :multiple="type === 'selectMultiple'" :disabled="disabled">
-        <option v-for="option in options" :value="option.value">{{ option.label }}</option>
+        <optgroup v-if="optionsAreGrouped" v-for="groupName in Object.keys(options)" :label="options[groupName].label">
+            <option v-for="option in options[groupName].options" :value="option.value">{{ option.label }}</option>
+        </optgroup>
+        <option v-if="!optionsAreGrouped" v-for="option in options" :value="option.value">{{ option.label }}</option>
     </select>
 
     //- radio

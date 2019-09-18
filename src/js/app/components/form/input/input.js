@@ -114,7 +114,9 @@ export default {
          * - radio
          * - checkbox
          *
-         * @type {Array.<InputOption>}
+         * Please note that the InputOptionGroup is accepted for selects only.
+         *
+         * @type {Array.<InputOption>|Array.<InputOptionGroup>}
          */
         options: {
             type: Array,
@@ -214,6 +216,10 @@ export default {
 
             return Object.assign(defaultProps, this.specificProps);
         },
+
+        optionsAreGrouped() {
+            return this.options && Object.prototype.hasOwnProperty.call(this.options[0], 'options');
+        },
     },
 
     mounted() {
@@ -240,4 +246,10 @@ export default {
  * @typedef {Object} InputOption
  * @property {String|Number} value
  * @property {String}        label
+ */
+
+/**
+ * @typedef {Object} InputOptionGroup
+ * @property {String}              label
+ * @property {Array.<InputOption>} options
  */
