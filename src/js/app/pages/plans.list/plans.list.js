@@ -2,6 +2,7 @@ import { VueGoodTable as Table } from 'vue-good-table';
 import { list } from '#helpers/api/plan';
 import 'vue-good-table/dist/vue-good-table.css';
 import NavBar from '#app/layouts/navbar/navbar.vue';
+import { open } from '#helpers/tabHelper';
 
 export default {
     components: {
@@ -110,7 +111,7 @@ export default {
          */
         routeToPlan({ row: { id: planId } }) {
             const routeData = this.$router.resolve(`/dispositif/${planId}`);
-            window.open(routeData.href, '_blank');
+            open(routeData.href);
         },
     },
 };

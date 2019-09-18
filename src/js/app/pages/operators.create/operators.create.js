@@ -1,6 +1,7 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import { create } from '#helpers/api/operator';
 import Form from '#app/components/form/form.vue';
+import { notify } from '#helpers/notificationHelper';
 
 export default {
     components: {
@@ -42,7 +43,7 @@ export default {
 
     methods: {
         onComplete() {
-            this.$notify({
+            notify({
                 group: 'notifications',
                 type: 'success',
                 title: 'Opérateur créé',

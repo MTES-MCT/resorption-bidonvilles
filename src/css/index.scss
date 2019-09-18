@@ -30,11 +30,6 @@ label.error.message {
     color: #d63626;
 }
 
-.container {
-    max-width: none;
-    padding: 0;
-}
-
 select {
     background-size: 15px 15px;
 }
@@ -43,18 +38,6 @@ select {
     .container,
     .dashboard {
         padding: 0 100px;
-    }
-}
-
-@media (min-width: 550px) {
-    .container {
-        width: 100%;
-    }
-}
-
-@media (min-width: 400px) {
-    .container {
-        width: 100%;
     }
 }
 
@@ -97,20 +80,69 @@ button:disabled:hover {
     cursor: default;
 }
 
-.ab {
-    font-size: 1.1rem;
-    padding: 10px;
-    margin: 0 5px 5px;
+.customNotifications {
+    .notification-wrapper {
+        margin-top: 50px;
+    }
 
-    color: #ffffff;
-    background: #44A4FC;
-    border-left: 5px solid #187FE7;
+    .vue-notification,
+    .vue-notification-template {
+        display: flex;
+        display: -webkit-box;
+        display: -ms-flexbox;
 
-    &.success {
-        background: #68CD86;
-        border-left-color: #42A85F;
+        font-size: 1.1rem;
+        padding: 30px 10px;
+        margin: 0 5px 5px;
+        width: 400px;
+        border-radius: 5px;
+        text-align: center;
+
+        color: #ffffff;
+        background: #44A4FC;
+        border-left: 5px solid #187FE7;
+
+        .notification-icon {
+            padding-left: 20px;
+            text-align: center;
+
+            &:before {
+                content: '';
+                display: inline-block;
+                width: 70px;
+                height: 70px;
+                background: #fff;
+                -webkit-mask: url('/img/check.svg') no-repeat center;
+                mask: url('/img/check.svg') no-repeat center;
+            }
+        }
+
+        .notification-content {
+            flex-grow: 1;
+            -webkit-box-flex: 1;
+            -ms-flex-positive: 1;
+
+            display: flex;
+            display: -webkit-box;
+            display: -ms-flexbox;
+
+            flex-direction: column;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+
+            justify-content: center;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+        }
+
+        &.success {
+            background: #68CD86;
+            border-left-color: #42A85F;
+        }
     }
 }
+
 .leaflet-marker-custom {
     > span {
         display: block;

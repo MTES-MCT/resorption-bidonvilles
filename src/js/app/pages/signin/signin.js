@@ -45,6 +45,7 @@ export default {
     },
     methods: {
         onComplete() {
+            window.localStorage.setItem('logged_once', true);
             this.$router.push({ path: '/' });
         },
     },

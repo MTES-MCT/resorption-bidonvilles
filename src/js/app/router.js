@@ -1,9 +1,10 @@
 import VueRouter from 'vue-router';
 
+import Landing from '#app/pages/landing/landing.vue';
 import SignIn from '#app/pages/signin/signin.vue';
 import SignUp from '#app/pages/signup/signup.vue';
 import TownsExplorer from '#app/pages/townExplorer/explorer.vue';
-import Landing from '#app/pages/landing/landing.vue';
+import Launcher from '#app/pages/launcher/launcher.vue';
 import AddTown from '#app/pages/addTown/addTown.vue';
 import Town from '#app/pages/town/town.vue';
 import Me from '#app/pages/me/me.vue';
@@ -24,11 +25,11 @@ import CGU from '/doc/CGU_Resorption_Bidonvilles.pdf';
 // eslint-disable-next-line
 import TypologieAcces from '/doc/droits_d_acces_et_guide_de_l_administrateur_local.pdf';
 
-import { logout, isLoggedIn } from '#helpers/api/user';
+import { logout, isLoggedIn, alreadyLoggedBefore } from '#helpers/api/user';
 import { get as getConfig, isLoaded as isConfigLoaded, hasPermission } from '#helpers/api/config';
 
 /**
- * This is the route towards which the user is redirected by the landing page
+ * This is the route towards which the user is redirected by the launcher page
  *
  * @var {Route|null}
  */
@@ -111,12 +112,12 @@ const guardians = {
     ]),
     loaded: guard.bind(this, [
         { checker: isLoggedIn, target: '/connexion' },
-        { checker: isConfigLoaded, target: '/landing' },
+        { checker: isConfigLoaded, target: '/launcher' },
         { checker: isPermitted, target: '/', saveEntrypoint: false },
     ]),
     loadedAndUpgraded: guard.bind(this, [
         { checker: isLoggedIn, target: '/connexion' },
-        { checker: isConfigLoaded, target: '/landing' },
+        { checker: isConfigLoaded, target: '/launcher' },
         { checker: isPermitted, target: '/', saveEntrypoint: false },
         { checker: hasToUpgrade, target: '/mise-a-niveau' },
     ]),
@@ -129,11 +130,15 @@ const guardians = {
  */
 function home() {
     if (isLoggedIn() !== true) {
-        return '/connexion';
+        if (alreadyLoggedBefore()) {
+            return '/connexion';
+        }
+
+        return '/landing';
     }
 
     if (isConfigLoaded() !== true) {
-        return '/landing';
+        return '/launcher';
     }
 
     return '/liste-des-sites';
@@ -164,6 +169,11 @@ const router = new VueRouter({
             },
         },
         {
+            path: '/landing',
+            component: Landing,
+            beforeEnter: guardians.anonymous,
+        },
+        {
             path: '/connexion',
             component: SignIn,
             beforeEnter: guardians.anonymous,
@@ -174,8 +184,8 @@ const router = new VueRouter({
             beforeEnter: guardians.anonymous,
         },
         {
-            path: '/landing',
-            component: Landing,
+            path: '/launcher',
+            component: Launcher,
             beforeEnter: guardians.loggedIn,
         },
         {

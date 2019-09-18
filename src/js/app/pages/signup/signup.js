@@ -9,6 +9,7 @@ const component = newUser({
     organizationTitle: 'Votre structure',
     organization: 'Quelle est votre structure ?',
     position: 'Votre fonction',
+    associationIsMissing: 'Mon association n\'est pas dans cette liste',
     stepWording: {
         submit: 'Envoyer',
         error: 'Votre demande d\'accès n\'a pas pu être envoyée',
