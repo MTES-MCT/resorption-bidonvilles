@@ -414,6 +414,7 @@ export default {
             })
                 .then((response) => {
                     this.town.comments = response.comments;
+                    this.newComment = '';
                     this.newStep = '';
                 })
                 .catch((response) => {
