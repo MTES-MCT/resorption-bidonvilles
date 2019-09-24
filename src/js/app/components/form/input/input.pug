@@ -1,5 +1,6 @@
 <div class="form__group inputContainer" v-bind:class="{ error: errors.length > 0 }" :id="id">
     <label class="input-label">{{ label }}<sup v-if="mandatory" class="input-mandatory"> (*)</sup></label>
+    <p v-if="alertMessage" class="notification warning">{{ alertMessage }}</p>
     <p v-if="description" class="input-description" v-html="description"></p>
 
     <div class="notification error" v-if="errors.length > 0">

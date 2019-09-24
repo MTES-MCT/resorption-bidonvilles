@@ -180,13 +180,14 @@ export default {
         },
 
         /**
-         * A function that indicates if the input should be active or not
+         * Message to be displayed as a prefix alert
          *
-         * @type {Function}
+         * @type {String}
          */
-        condition: {
-            type: Function,
+        alertMessage: {
+            type: String,
             required: false,
+            default: null,
         },
     },
 

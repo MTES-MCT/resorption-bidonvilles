@@ -323,7 +323,7 @@ export default {
         },
 
         /**
-         * Handles a change in the value of one of the inputs
+         * Indicates whether the given input is active or not
          *
          * @param {Input} input
          *
@@ -335,6 +335,46 @@ export default {
             }
 
             return input.condition(this.data);
+        },
+
+        /**
+         * Indicates whether the given input is visible or not
+         *
+         * Please note that an input might be visible but inactive (meaning disabled and
+         * not included in filtered-data).
+         *
+         * @param {Input} input
+         *
+         * @returns {Boolean}
+         */
+        isInputVisible(input) {
+            return this.isInputActive(input) || input.keepIfInactive === true;
+        },
+
+        /**
+         * Indicates whether the given input is disabled or not
+         *
+         * @param {Input} input
+         *
+         * @returns {Boolean}
+         */
+        isInputDisabled(input) {
+            return this.pending === true || input.disabled === true || (!this.isInputActive(input) && input.keepIfInactive === true);
+        },
+
+        /**
+         * Returns the alert message to be displayed for the given input
+         *
+         * @param {Input} input
+         *
+         * @returns {String|Null}
+         */
+        getInputAlert(input) {
+            if (!this.isInputActive(input) && input.keepIfInactive === true && input.inactiveMessage) {
+                return input.inactiveMessage;
+            }
+
+            return null;
         },
     },
 
@@ -359,7 +399,14 @@ export default {
 /**
  * @typedef {Object} FormSection
  * @property {String}                [title] Title of that section
- * @property {Object.<string,Input>} inputs  List of inputs
+ * @property {Object.<string,FormInput>} inputs  List of inputs
+ */
+
+/**
+ * @typedef {Input} FormInput
+ * @property {Function} [condition]       A function that indicates if the input should be active or not
+ * @property {Boolean}  [keepIfInactive]  Indicates if the input should remain visible (but disabled) if inactive
+ * @property {String}   [inactiveMessage] Message to be displayed if inactive but still visible
  */
 
 /**
