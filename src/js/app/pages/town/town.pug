@@ -665,6 +665,7 @@
                         <!-- comments -->
                         <div v-else-if="view === 'comments'">
                             <div class="form__group">
+                                <h4>Commentaires</h4>
                                 <p v-if="town.comments.length === 0">Aucun commentaire enregistré pour le moment</p>
                                 <p class="comment-container" v-for="comment in town.comments">
                                     <strong>
@@ -688,9 +689,12 @@
                             </div>
 
                             <div class="form__group" v-if="hasPermission('shantytown_comment.create', town)">
+                                <h4>Ajouter un commentaire :</h4>
                                 <div class="notification error" v-if="commentError">{{ commentError }}.</div>
             
-                                <label v-bind:class="{ error: commentErrors.description }">Ajouter un commentaire :</label>
+                                <p>Merci de renseigner des informations en respectant les règles de confidentialité. Ne pas citer les caractéristiques des individus (Nom, âge, sexe, origine...)</p>
+
+                                <label v-bind:class="{ error: commentErrors.description }"></label>
                                 <p class="error" v-if="commentErrors.description">
                                     <ul>
                                         <li v-for="error in commentErrors.description">{{ error }}</li>
