@@ -1,72 +1,75 @@
 <div class="form__group inputContainer" v-bind:class="{ error: errors.length > 0 }" :id="id">
     <label class="input-label">{{ label }}<sup v-if="mandatory" class="input-mandatory"> (*)</sup></label>
     <p v-if="alertMessage" class="notification warning">{{ alertMessage }}</p>
-    <p v-if="description" class="input-description" v-html="description"></p>
 
-    <div class="notification error" v-if="errors.length > 0">
-        <ul v-for="error in errors">
-            <li>{{ error }}</li>
-        </ul>
-    </div>
+    <div v-else>
+        <p v-if="description" class="input-description" v-html="description"></p>
 
-    //- text input
-    <input v-if="type === 'text'" type="text" class="input input--text" v-bind="props" v-model="data" :disabled="disabled" :readonly="disabled" />
-
-    //- password input
-    <input v-if="type === 'password'" :type="showPassword ? 'text' : 'password'" class="input input--password" v-bind="props" v-model="data" :disabled="disabled" :readonly="disabled" />
-    <span v-if="type === 'password'" @click="showPassword = !showPassword" class="input--password-toggler"><font-awesome-icon :icon="showPassword ? 'eye' : 'eye-slash'"></font-awesome-icon></span>
-
-    //- textarea input
-    <textarea v-if="type === 'textarea'" class="input input--textarea" v-bind="props" v-model="data" :disabled="disabled" :readonly="disabled"></textarea>
-
-    //- number input
-    <input v-if="type === 'number'" type="number" class="input input--number" v-bind="props" v-model="data" :disabled="disabled" :readonly="disabled" />
-
-    //- select
-    <select v-if="type === 'select' || type === 'selectMultiple'" class="input input--select" v-bind="props" v-model="data" :multiple="type === 'selectMultiple'" :disabled="disabled">
-        <optgroup v-if="optionsAreGrouped" v-for="groupName in Object.keys(options)" :label="options[groupName].label">
-            <option v-for="option in options[groupName].options" :value="option.value">{{ option.label }}</option>
-        </optgroup>
-        <option v-if="!optionsAreGrouped" v-for="option in options" :value="option.value">{{ option.label }}</option>
-    </select>
-
-    //- radio
-    <div v-if="type === 'radio'">
-        <div v-for="(option, index) in options">
-            <input type="radio" :id="`input${_uid}-${index}`" :value="option.value" :name="`input${_uid}`" v-model="data" :disabled="disabled" class="input input--radio" />
-            <label :for="`input${_uid}-${index}`" class="label-inline">{{ option.label }}</label>
+        <div class="notification error" v-if="errors.length > 0">
+            <ul v-for="error in errors">
+                <li>{{ error }}</li>
+            </ul>
         </div>
-    </div>
 
-    //- checkbox
-    <div v-if="type === 'checkbox'">
-        <div v-for="(option, index) in options">
-            <input type="checkbox" :id="`input${_uid}-${index}`" :value="option.value" :name="`input${_uid}`" v-model="data" :disabled="disabled" class="input input--checkbox" />
-            <label :for="`input${_uid}-${index}`" class="label-inline">{{ option.label }}</label>
+        //- text input
+        <input v-if="type === 'text'" type="text" class="input input--text" v-bind="props" v-model="data" :disabled="disabled" :readonly="disabled" />
+
+        //- password input
+        <input v-if="type === 'password'" :type="showPassword ? 'text' : 'password'" class="input input--password" v-bind="props" v-model="data" :disabled="disabled" :readonly="disabled" />
+        <span v-if="type === 'password'" @click="showPassword = !showPassword" class="input--password-toggler"><font-awesome-icon :icon="showPassword ? 'eye' : 'eye-slash'"></font-awesome-icon></span>
+
+        //- textarea input
+        <textarea v-if="type === 'textarea'" class="input input--textarea" v-bind="props" v-model="data" :disabled="disabled" :readonly="disabled"></textarea>
+
+        //- number input
+        <input v-if="type === 'number'" type="number" class="input input--number" v-bind="props" v-model="data" :disabled="disabled" :readonly="disabled" />
+
+        //- select
+        <select v-if="type === 'select' || type === 'selectMultiple'" class="input input--select" v-bind="props" v-model="data" :multiple="type === 'selectMultiple'" :disabled="disabled">
+            <optgroup v-if="optionsAreGrouped" v-for="groupName in Object.keys(options)" :label="options[groupName].label">
+                <option v-for="option in options[groupName].options" :value="option.value">{{ option.label }}</option>
+            </optgroup>
+            <option v-if="!optionsAreGrouped" v-for="option in options" :value="option.value">{{ option.label }}</option>
+        </select>
+
+        //- radio
+        <div v-if="type === 'radio'">
+            <div v-for="(option, index) in options">
+                <input type="radio" :id="`input${_uid}-${index}`" :value="option.value" :name="`input${_uid}`" v-model="data" :disabled="disabled" class="input input--radio" />
+                <label :for="`input${_uid}-${index}`" class="label-inline">{{ option.label }}</label>
+            </div>
         </div>
+
+        //- checkbox
+        <div v-if="type === 'checkbox'">
+            <div v-for="(option, index) in options">
+                <input type="checkbox" :id="`input${_uid}-${index}`" :value="option.value" :name="`input${_uid}`" v-model="data" :disabled="disabled" class="input input--checkbox" />
+                <label :for="`input${_uid}-${index}`" class="label-inline">{{ option.label }}</label>
+            </div>
+        </div>
+
+        //- date input
+        <Datepicker v-if="type === 'date'" input-class="input input--date" v-bind="props" v-model="data" :disabled="disabled"></Datepicker>
+
+        //- autocompleter input
+        <Autocompleter v-if="type === 'autocompleter'" v-bind="props" v-model="data" :disabled="disabled"></Autocompleter>
+
+        //- address
+        <Address v-if="type === 'address'" v-bind="props" v-model="data" :disabled="disabled"></Address>
+
+        //- location
+        <Location v-if="type === 'location'" v-bind="props" v-model="data" :disabled="disabled"></Location>
+
+        //- address with location
+        <AddressWithLocation v-if="type === 'addressWithLocation'" v-bind="props" v-model="data" :disabled="disabled"></AddressWithLocation>
+
+        //- town or list of towns
+        <TownList v-if="type === 'townList'" v-bind="props" v-model="data" :disabled="disabled"></TownList>
+
+        //- a single-year plan funding
+        <PlanFunding v-if="type === 'planFunding'" v-bind="props" v-model="data" :disabled="disabled"></PlanFunding>
+
+        //- collectivity autocompleter
+        <Collectivity v-if="type === 'collectivity'" v-bind="props" v-model="data" :disabled="disabled"></Collectivity>
     </div>
-
-    //- date input
-    <Datepicker v-if="type === 'date'" input-class="input input--date" v-bind="props" v-model="data" :disabled="disabled"></Datepicker>
-
-    //- autocompleter input
-    <Autocompleter v-if="type === 'autocompleter'" v-bind="props" v-model="data" :disabled="disabled"></Autocompleter>
-
-    //- address
-    <Address v-if="type === 'address'" v-bind="props" v-model="data" :disabled="disabled"></Address>
-
-    //- location
-    <Location v-if="type === 'location'" v-bind="props" v-model="data" :disabled="disabled"></Location>
-
-    //- address with location
-    <AddressWithLocation v-if="type === 'addressWithLocation'" v-bind="props" v-model="data" :disabled="disabled"></AddressWithLocation>
-
-    //- town or list of towns
-    <TownList v-if="type === 'townList'" v-bind="props" v-model="data" :disabled="disabled"></TownList>
-
-    //- a single-year plan funding
-    <PlanFunding v-if="type === 'planFunding'" v-bind="props" v-model="data" :disabled="disabled"></PlanFunding>
-
-    //- collectivity autocompleter
-    <Collectivity v-if="type === 'collectivity'" v-bind="props" v-model="data" :disabled="disabled"></Collectivity>
 </div>

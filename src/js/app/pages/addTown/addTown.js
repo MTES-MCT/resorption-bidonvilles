@@ -157,8 +157,7 @@ export default {
                                         condition({ populationTotal }) {
                                             return parseInt(populationTotal, 10) > 10;
                                         },
-                                        keepIfInactive: true,
-                                        inactiveMessage: 'Pour des raisons légales, l\'origine des habitants ne peut être précisée pour des sites de moins de 10 personnes',
+                                        inactiveMessage: 'Pour des sites de 10 personnes ou moins l\'origine des habitants ne peut être précisée, pour des raisons légales',
                                     },
                                 },
                             },

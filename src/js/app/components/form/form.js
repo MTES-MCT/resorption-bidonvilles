@@ -348,7 +348,7 @@ export default {
          * @returns {Boolean}
          */
         isInputVisible(input) {
-            return this.isInputActive(input) || input.keepIfInactive === true;
+            return this.isInputActive(input) || input.inactiveMessage;
         },
 
         /**
@@ -359,7 +359,7 @@ export default {
          * @returns {Boolean}
          */
         isInputDisabled(input) {
-            return this.pending === true || input.disabled === true || (!this.isInputActive(input) && input.keepIfInactive === true);
+            return this.pending === true || input.disabled === true || (input.inactiveMessage && !this.isInputActive(input));
         },
 
         /**
@@ -370,7 +370,7 @@ export default {
          * @returns {String|Null}
          */
         getInputAlert(input) {
-            if (!this.isInputActive(input) && input.keepIfInactive === true && input.inactiveMessage) {
+            if (input.inactiveMessage && !this.isInputActive(input)) {
                 return input.inactiveMessage;
             }
 
@@ -405,8 +405,7 @@ export default {
 /**
  * @typedef {Input} FormInput
  * @property {Function} [condition]       A function that indicates if the input should be active or not
- * @property {Boolean}  [keepIfInactive]  Indicates if the input should remain visible (but disabled) if inactive
- * @property {String}   [inactiveMessage] Message to be displayed if inactive but still visible
+ * @property {String}   [inactiveMessage] Message to be displayed if inactive (if not provided, the whole input will be invisible)
  */
 
 /**
