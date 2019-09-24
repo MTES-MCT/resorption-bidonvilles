@@ -453,11 +453,14 @@
                                     <div class="form__group">
                                         <fieldset>
                                             <legend>Origines :</legend>
-                                            <p>Ne rien cocher si l'information est inconnue</p>
-                                            <div v-for="(origin, index) in socialOrigins">
-                                                <input type="checkbox" :id="'socialOrigins' + index" :value="origin.id" v-model="edit.origins">
-                                                <label :for="'socialOrigins' + index" class="label-inline">{{ origin.label }}</label>
+                                            <div v-if="parseInt(edit.populationTotal, 10) > 10">
+                                                <p>Ne rien cocher si l'information est inconnue</p>
+                                                <div v-for="(origin, index) in socialOrigins">
+                                                    <input type="checkbox" :id="'socialOrigins' + index" :value="origin.id" v-model="edit.origins">
+                                                    <label :for="'socialOrigins' + index" class="label-inline">{{ origin.label }}</label>
+                                                </div>
                                             </div>
+                                            <p v-else class="notification warning">Pour des sites de 10 personnes ou moins l'origine des habitants ne peut être précisée, pour des raisons légales</p>
                                         </fieldset>
                                     </div>
                                 </div>
