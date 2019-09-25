@@ -7,6 +7,7 @@ import TownsExplorer from '#app/pages/townExplorer/explorer.vue';
 import Launcher from '#app/pages/launcher/launcher.vue';
 import AddTown from '#app/pages/addTown/addTown.vue';
 import Town from '#app/pages/town/town.vue';
+import ShantytownCommentList from '#app/pages/shantytownComment.list/shantytownComment.list.vue';
 import Me from '#app/pages/me/me.vue';
 import UserList from '#app/pages/users.list/users.list.vue';
 import UserCreate from '#app/pages/users.create/users.create.vue';
@@ -351,11 +352,20 @@ const router = new VueRouter({
         },
         {
             meta: {
-                group: 'stats',
+                group: 'admin',
                 permissions: ['stats.read'],
             },
             path: '/statistiques',
             component: Statistics,
+            beforeEnter: guardians.loadedAndUpgraded,
+        },
+        {
+            meta: {
+                group: 'admin',
+                permissions: ['shantytown_comment.moderate'],
+            },
+            path: '/moderation-commentaires',
+            component: ShantytownCommentList,
             beforeEnter: guardians.loadedAndUpgraded,
         },
     ],

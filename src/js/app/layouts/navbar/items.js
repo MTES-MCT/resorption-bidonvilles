@@ -59,7 +59,8 @@ export default {
         {
             label: 'Administration',
             items: [
-                { label: 'Statistiques', target: '/statistiques', group: 'stats' },
+                { label: 'Statistiques', target: '/statistiques', group: 'admin' },
+                { label: 'Commentaires', target: '/moderation-commentaires', group: 'admin' },
             ],
         },
         {

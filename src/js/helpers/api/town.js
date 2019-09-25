@@ -120,6 +120,15 @@ export function deleteComment(townId, commentId) {
 }
 
 /**
+ * Gets all recent comments
+ *
+ * @returns {Promise}
+ */
+export function getRecentComments() {
+    return getApi('/comments');
+}
+
+/**
  * @typedef {Object} Town_Data
  * @property {number} latitude,
  * @property {number} longitude,
