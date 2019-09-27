@@ -2,10 +2,7 @@ import NavBar from '#app/layouts/navbar/navbar.vue';
 import FilterGroup from './filterGroup/filterGroup.vue';
 import Map from './map/map.vue';
 import Address from '#app/components/address/address.vue';
-import { VueGoodTable as Table } from 'vue-good-table';
-import 'vue-good-table/dist/vue-good-table.css';
 import Quickview from '#app/components/quickview/quickview.vue';
-import Export from '#app/components/export/export.vue';
 import { all as fetchAll } from '#helpers/api/town';
 import { get as getConfig, getPermission } from '#helpers/api/config';
 import simplebar from 'simplebar-vue';
@@ -23,8 +20,6 @@ import iconAction from '/img/action.svg';
 // eslint-disable-next-line
 import iconStatus from '/img/status.svg';
 
-// eslint-disable-next-line
-import iconFormat from '/img/format.svg';
 // eslint-disable-next-line
 import iconGeo from '/img/geo.svg';
 // eslint-disable-next-line
@@ -56,11 +51,9 @@ export default {
         NavBar,
         FilterGroup,
         Map,
-        Table,
         Quickview,
         simplebar,
         Address,
-        Export,
     },
     data() {
         const { user } = getConfig();
@@ -77,10 +70,6 @@ export default {
                 town: null,
                 originEvent: null,
             },
-            viewTypes: [
-                { value: 'map', label: 'Carte' },
-                { value: 'table', label: 'Tableau' },
-            ],
             permission: getPermission('shantytown.list'),
             filters: [
                 {
@@ -164,17 +153,12 @@ export default {
                     }]),
                 },
             ],
-            iconFormat,
             iconGeo,
             location: user.organization.location.type !== 'nation' ? {
                 locationType: user.organization.location.type,
                 code: user.organization.location[user.organization.location.type].code,
                 label: user.organization.location[user.organization.location.type].name,
             } : null,
-            currentTab: 'map',
-            exporter: {
-                isVisible: false,
-            },
         };
     },
     computed: {
@@ -188,77 +172,9 @@ export default {
             );
         },
         rendererProps() {
-            if (this.currentTab === 'map') {
-                return {
-                    towns: this.visibleTowns,
-                    defaultView: this.defaultMapView,
-                };
-            }
-
-            const columns = [
-                {
-                    label: 'Département',
-                    field: ({ departement: { name, code } }) => `${code} - ${name}`,
-                },
-                {
-                    label: 'Commune',
-                    field: 'city.name',
-                },
-                {
-                    label: 'Adresse',
-                    field: 'addressSimple',
-                },
-                {
-                    label: 'Type de site',
-                    field: 'fieldType.label',
-                },
-                {
-                    label: 'Personnes',
-                    field: town => (town.populationTotal !== null ? town.populationTotal : 'inconnu'),
-                    sortFn: this.sortNumber,
-                    type: 'number',
-                },
-                {
-                    label: 'Ménages',
-                    field: town => (town.populationCouples !== null ? town.populationCouples : 'inconnu'),
-                    sortFn: this.sortNumber,
-                    type: 'number',
-                },
-                {
-                    label: 'Mineurs',
-                    field: town => (town.populationMinors !== null ? town.populationMinors : 'inconnu'),
-                    sortFn: this.sortNumber,
-                    type: 'number',
-                },
-                {
-                    label: 'Date d\'installation',
-                    field: town => (town.builtAt ? App.formatDate(town.builtAt) : 'inconnu'),
-                    type: 'text',
-                },
-                {
-                    label: 'Type de propriétaire',
-                    field: 'ownerType.label',
-                },
-            ];
-
             return {
-                styleClass: 'table',
-                columns,
-                rows: this.visibleTowns,
-                'sort-options': {
-                    enabled: true,
-                },
-                'pagination-options': {
-                    enabled: true,
-                    perPage: 20,
-                    perPageDropdown: [5, 10, 20, 30, 40, 50],
-                    nextLabel: 'Suivant',
-                    prevLabel: 'Précédent',
-                    rowsPerPageLabel: 'Nombre de sites par page',
-                    ofLabel: 'sur',
-                    pageLabel: 'Page', // for 'pages' mode
-                    allLabel: 'Tous',
-                },
+                towns: this.visibleTowns,
+                defaultView: this.defaultMapView,
             };
         },
         visibleTowns() {
@@ -444,9 +360,6 @@ export default {
 
             return visibleTowns;
         },
-        currentTabComponent() {
-            return this.currentTab === 'map' ? Map : Table;
-        },
     },
     created() {
         this.fetchData();
@@ -481,14 +394,6 @@ export default {
             }
 
             return 0;
-        },
-        showExport() {
-            setTimeout(() => {
-                this.exporter.isVisible = true;
-            }, 100);
-        },
-        hideExport() {
-            this.exporter.isVisible = false;
         },
         showQuickview(town, event) {
             this.quickview = {

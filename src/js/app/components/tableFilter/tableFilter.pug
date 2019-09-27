@@ -1,0 +1,14 @@
+<div class="tableFilter" v-bind:style="{ display: visible === true ? 'block' : 'none' }" ref="container">
+    <ul>
+        <li v-for="(item, itemId) in items">
+            <input type="checkbox" v-model="item.checked" :id="`tableFilter-${id}-${itemId}`" />
+            <label :for="`tableFilter-${id}-${itemId}`">
+                <slot v-bind:item="item">{{ item.label }}</slot>
+            </label>
+        </li>
+    </ul>
+    <footer>
+        <span class="link link--secondary" @click="clean">Effacer</span>
+        //-<span class="link">Enregistrer</span>
+    </footer>
+</div>

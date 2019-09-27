@@ -1,0 +1,175 @@
+<div class="page--withMargin">
+    <NavBar></NavBar>
+
+    //- state: loading in progress
+    <section v-if="state === 'loading'" class="section section-white">
+        <div class="container">
+            <div  class="notification full-width">
+                <img src="/img/spinner_dark.svg" width="20" class="spinner" />
+                <span>Chargement des données en cours...</span>
+            </div>
+        </div>
+    </section>
+
+    //- state: loading failed
+    <section v-if="state === 'error'" class="section section-white">
+        <div class="container">
+            <div class="notification error full-width">
+                <span>{{ error }}. <a href="#" @click="retryLoading">Réessayer ?</a></span>
+            </div>
+        </div>
+    </section>
+
+    //- state: loaded
+    <section v-if="state === 'loaded'" class="section section-white">
+        <div class="container">
+            <header class="townList-header">
+                <div>
+                    <hgroup class="townList-hgroup">
+                        <h3>Sites existants</h3>
+                        <h1>{{ locationTitle }}</h1>
+                    </hgroup>
+
+                    <CollectivityInput class="townList-search" v-model="location"></CollectivityInput>
+
+                    <div class="switch">
+                        <button v-bind:class="{ active: !showClosedTowns }" @click="showTowns('open')">Sites existants</button><button v-bind:class="{ active: showClosedTowns }" @click="showTowns('closed')">Sites fermés</button>
+                    </div>
+                </div>
+
+                <div class="townList-headerRight">
+                    <div class="townList-actions">
+                        <router-link to="/nouveau-site" class="button secondary">Déclarer un site</router-link>
+                        <a class="button button--excel"><font-awesome-icon icon="file-excel"></font-awesome-icon> Exporter</a>
+                    </div>
+
+                    <section class="townList-summary" v-if="!showClosedTowns">
+                        <header>
+                            <h1>Au total : <span>{{ currentLocation.label }}</span></h1>
+                            <h2 v-if="lastUpdate">mis à jour le {{ formatDate(lastUpdate, 'd M y') }}</h2>
+                        </header>
+
+                        <div class="townList-figures">
+                            <div><span>{{ dashboardShantytowns.length }}</span><br/>sites existants</div>
+                            <div><span>{{ populationTotal }}</span><br/>personnes</div>
+                            <div><span>{{ minorsTotal }}</span><br/>mineurs</div>
+                            <div v-if="hasJusticePermission"><span>{{ justiceTotal }}</span> site(s) avec une<br/>procédure judiciaire</div>
+                        </div>
+                    </section>
+                </div>
+            </header>
+
+            <div class="paginationContainer">
+                <span class="link pagination-previous" v-bind:class="{ 'link--disabled': currentPage === 0 }" @click="previousPage"><font-awesome-icon icon="caret-square-left"></font-awesome-icon> Précédent</span>
+                <span class="pagination-pages">{{ pageBeginning }} - {{ pageEnd }} sur {{ filteredShantytowns.length }}</span>
+                <span class="link pagination-next" v-bind:class="{ 'link--disabled': currentPage === lastPage }" @click="nextPage">Suivant <font-awesome-icon icon="caret-square-right"></font-awesome-icon></span>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table class="table" ref="table">
+                <thead>
+                    <tr>
+                        <th class="townColumn-departement"><span>Département</span></th>
+                        <th class="townColumn-city"><span>Commune</span></th>
+                        <th class="townColumn-address"><span>Adresse</span></th>
+                        <th class="townColumn-fieldType filterable">
+                            <TableFilter v-model="fieldFilterItems" v-slot="slotProps" :visible="currentFilter === 'fieldType'" @outside-click="hideFilter" @clean="hideFilter">
+                                <span class="fieldType"><i :style="`background-color: ${slotProps.item.color}`"></i> <span>{{ slotProps.item.label }}</span></span>
+                            </TableFilter>
+                            <span v-bind:class="{ active: checkedFieldFilterItems > 0 }" @click="toggleFilter('fieldType')">Type
+                                <span v-if="checkedFieldFilterItems > 0" class="badge">{{ checkedFieldFilterItems }}</span>
+                                <font-awesome-icon icon="sort-down" size="2x"></font-awesome-icon>
+                            </span>
+                        </th>
+                        <th class="townColumn-status"><span>Statut</span></th>
+                        <th class="townColumn-statusDetails filterable" v-if="showClosedTowns">
+                            <TableFilter v-model="statusFilterItems" :visible="currentFilter === 'status'" @outside-click="hideFilter" @clean="hideFilter"></TableFilter>
+                            <span v-bind:class="{ active: checkedStatusFilterItems > 0 }" @click="toggleFilter('status')">Cause de la fermeture
+                                <span v-if="checkedStatusFilterItems > 0" class="badge">{{ checkedStatusFilterItems }}</span>
+                                <font-awesome-icon icon="sort-down" size="2x"></font-awesome-icon>
+                            </span>
+                        </th>
+                        <th class="townColumn-population filterable">
+                            <TableFilter v-model="populationFilterItems" :visible="currentFilter === 'population'" @outside-click="hideFilter" @clean="hideFilter"></TableFilter>
+                            <span v-bind:class="{ active: checkedPopulationFilterItems > 0 }" @click="toggleFilter('population')">Personnes
+                                <span v-if="checkedPopulationFilterItems > 0" class="badge">{{ checkedPopulationFilterItems }}</span>
+                                <font-awesome-icon icon="sort-down" size="2x"></font-awesome-icon>
+                            </span>
+                        </th>
+                        <th class="townColumn-minors"><span>Mineurs</span></th>
+                        <th class="townColumn-couples"><span>Ménages</span></th>
+                        <th class="townColumn-origins"><span>Origines</span></th>
+                        <th class="townColumn-livingConditions" v-if="!showClosedTowns"><span>Conditions de vies</span></th>
+                        <th class="townColumn-census" v-if="!showClosedTowns"><span>Diagnostic</span></th>
+                        <th class="townColumn-justice filterable" v-if="!showClosedTowns && hasJusticePermission">
+                            <TableFilter v-model="justiceFilterItems" :visible="currentFilter === 'justice'" @outside-click="hideFilter" @clean="hideFilter"></TableFilter>
+                            <span v-bind:class="{ active: checkedJusticeFilterItems > 0 }" @click="toggleFilter('justice')">Procédure judiciaire
+                                <span v-if="checkedJusticeFilterItems > 0" class="badge">{{ checkedJusticeFilterItems }}</span>
+                                <font-awesome-icon icon="sort-down" size="2x"></font-awesome-icon>
+                            </span>
+                        </th>
+                        <th class="townColumn-closingSolutions" v-if="showClosedTowns"><span>Orientations des ménages</span></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr v-if="pageContent.length === 0" class="townRow--empty">
+                        <td :colspan="showClosedTowns ? 11 : (12 - (hasJusticePermission ? 0 : 1))">Il n'existe aucun site correspondant aux filtres sélectionnés</td>
+                    </tr>
+                    <tr v-for="(shantytown, index) in pageContent" :class="index % 2 === 0 ? 'odd' : ''" @click="routeToTown(shantytown)">
+                        <td class="townColumn-departement">{{ shantytown.departement.code }} - {{ shantytown.departement.name }}</td>
+                        <td class="townColumn-city">{{ shantytown.city.name }}</td>
+                        <td class="townColumn-address">{{ shantytown.addressSimple }}</td>
+                        <td class="townColumn-fieldType"><span class="fieldType"><i :style="`background-color: ${shantytown.fieldType.color}`"></i> <span>{{ shantytown.fieldType.label }}</span></span></td>
+                        <td class="townColumn-status">{{ shantytown.statusName }} depuis<br/>le {{ formatDate(shantytown.statusDate, 'd/m/y') }}<br/>{{ shantytown.statusSince }}</td>
+                        <td class="townColumn-statusDetails" v-if="showClosedTowns">{{ shantytown.statusDetails }}</td>
+                        <td class="townColumn-population">
+                            <span v-if="shantytown.populationTotal === null" class="secondary">NC</span>
+                            <div v-else>
+                                <span class="primary">{{ shantytown.populationTotal }}</span>
+                                <br/>
+                                <span class="secondary">au {{ formatDate(shantytown.updatedAt || shantytown.builtAt, 'd/m/y') }}</span>
+                            </div>
+                        </td>
+                        <td class="townColumn-minors">
+                            <span v-if="shantytown.populationMinors === null" class="secondary">NC</span>
+                            <span v-else>{{ shantytown.populationMinors }}
+                        </td>
+                        <td class="townColumn-couples">
+                            <span v-if="shantytown.populationCouples === null" class="secondary">NC</span>
+                            <span v-else>{{ shantytown.populationCouples }}
+                        </td>
+                        <td class="townColumn-origins">
+                            <span v-if="shantytown.socialOrigins.length === 0" class="secondary">NC</span>
+                            <span v-else>citoyens<br/>{{ shantytown.socialOrigins.map(({ label }) => label).join(' / ') }}</span>
+                        </td>
+                        <td class="townColumn-livingConditions" v-if="!showClosedTowns">
+                            <ul class="list">
+                                <li :class="`listItem-${boolToCss[shantytown.electricityType.value]}`">électricité : {{ boolToLabel[shantytown.electricityType.value] }}</li>
+                                <li :class="`listItem-${boolToCss[shantytown.accessToWater]}`">eau : {{ boolToLabel[shantytown.accessToWater] }}</li>
+                                <li :class="`listItem-${boolToCss[shantytown.trashEvacuation]}`">évacuation des déchets : {{ boolToLabel[shantytown.trashEvacuation] }}</li>
+                            </ul>
+                        </td>
+                        <td class="townColumn-census" v-if="!showClosedTowns">
+                            <span v-if="shantytown.censusStatus === null" class="secondary">NC</span>
+                            <span v-else-if="shantytown.censusStatus !== 'done'">{{ censusStatuses[shantytown.censusStatus] }}</span>
+                            <span v-else>Réalisé le<br/>{{ formatDate(shantytown.censusConductedAt, 'd/m/y') }}</span>
+                        </td>
+                        <td class="townColumn-justice" v-if="!showClosedTowns && hasJusticePermission">
+                            <span v-if="shantytown.justiceStatus === null" class="secondary">NC</span>
+                            <span v-else>{{ shantytown.justiceStatus.label }}<span v-if="shantytown.justiceStatus.date !== null"><br/>le {{ formatDate(shantytown.justiceStatus.date, 'd/m/y') }}</span></span>
+                        </td>
+                        <td class="townColumn-closingSolutions" v-if="showClosedTowns">
+                            <span v-if="shantytown.closingSolutions.length === 0" class="secondary">NC</span>
+                            <ul class="list" v-else>
+                                <li v-for="solution in shantytown.closingSolutions">{{ solution.householdsAffected || 'NC' }} - {{ closingSolutionNames[solution.id] }}</li>
+                                <li v-if="shantytown.totalSolutions !== null">= {{ shantytown.totalSolutions }} ménages</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>

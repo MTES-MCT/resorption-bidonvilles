@@ -1,22 +1,10 @@
 <div>
     <Quickview :town="quickview.town" :origin="quickview.originEvent" @outside-click="hideQuickview"></Quickview>
     <NavBar></NavBar>
-    <Export v-if="exporter.isVisible" @close="hideExport" :towns="visibleTowns"></Export>
 
     <section class="explorer">
         //- filters
         <simplebar class="filters" ref="filters" data-simplebar-auto-hide="false">
-            <div class="filterGroup">
-                <aside><img :src="iconFormat" width="50" alt="" /></aside>
-                <main>
-                    <h1>Résultats sous forme de</h1>
-                    <div v-for="(option, index) in viewTypes">
-                        <input v-model="currentTab" type="radio" :id="'viewType-' + index" name="viewTypes" :value="option.value">
-                        <label :for="'viewType-' + index" class="label-inline">{{ option.label }}</label><br/>
-                    </div>
-                </main>
-            </div>
-
             <div class="filterGroup">
                 <aside><img :src="iconGeo" width="50" alt="" /></aside>
                 <main>
@@ -26,19 +14,12 @@
             </div>
 
             <FilterGroup v-for="filterGroup in allowedFilters" :id="filterGroup.id" :icon="filterGroup.icon" :label="filterGroup.label" :options="filterGroup.options" :opened="filterGroup.opened"></FilterGroup>
-
-            <div class="filterGroup">
-                <aside><img src="/img/export.svg" width="50" alt="" /></aside>
-                <main>
-                    <button class="button" @click="showExport">Exporter ces sites</button>
-                </main>
-            </div>
         </simplebar>
 
         //- content
         <div v-bind:style="{ width: !loading && !error ? 'auto' : 0 }" class="content" ref="main">
             <keep-alive>
-                <component :is="currentTabComponent" v-bind="rendererProps" @town-click="showQuickview" @on-row-click="routeToTown" ref="map"></component>
+                <Map v-bind="rendererProps" @town-click="showQuickview" @on-row-click="routeToTown" ref="map"></Map>
             </keep-alive>
         </div>
 

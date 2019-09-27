@@ -2,7 +2,8 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import {
     faFlag, faPaperPlane, faUnlink, faUserCheck, faUserShield, faArrowRight,
     faEye, faEyeSlash, faPencilAlt, faTimes, faMapMarkedAlt, faChartLine,
-    faComments, faEnvelope, faPlayCircle,
+    faComments, faEnvelope, faPlayCircle, faFileExcel, faSortDown,
+    faCaretSquareLeft, faCaretSquareRight,
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(faFlag);
@@ -20,3 +21,7 @@ library.add(faChartLine);
 library.add(faComments);
 library.add(faEnvelope);
 library.add(faPlayCircle);
+library.add(faFileExcel);
+library.add(faSortDown);
+library.add(faCaretSquareLeft);
+library.add(faCaretSquareRight);

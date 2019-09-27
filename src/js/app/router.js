@@ -5,6 +5,7 @@ import SignIn from '#app/pages/signin/signin.vue';
 import SignUp from '#app/pages/signup/signup.vue';
 import TownsExplorer from '#app/pages/townExplorer/explorer.vue';
 import Launcher from '#app/pages/launcher/launcher.vue';
+import TownList from '#app/pages/towns.list/towns.list.vue';
 import AddTown from '#app/pages/addTown/addTown.vue';
 import Town from '#app/pages/town/town.vue';
 import ShantytownCommentList from '#app/pages/shantytownComment.list/shantytownComment.list.vue';
@@ -142,7 +143,7 @@ function home() {
         return '/launcher';
     }
 
-    return '/liste-des-sites';
+    return '/cartographie';
 }
 
 /**
@@ -203,8 +204,16 @@ const router = new VueRouter({
             meta: {
                 group: 'townList',
             },
-            path: '/liste-des-sites',
+            path: '/cartographie',
             component: TownsExplorer,
+            beforeEnter: guardians.loadedAndUpgraded,
+        },
+        {
+            meta: {
+                group: 'townList',
+            },
+            path: '/liste-des-sites',
+            component: TownList,
             beforeEnter: guardians.loadedAndUpgraded,
         },
         {

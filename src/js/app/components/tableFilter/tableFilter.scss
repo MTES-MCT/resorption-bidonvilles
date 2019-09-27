@@ -1,0 +1,35 @@
+.tableFilter {
+    display: none;
+    z-index: 10;
+    min-width: 200px;
+    position: absolute;
+    top: 50px;
+    padding: 10px 20px;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px 0px rgba(0,0,0,0.2);
+    text-transform: none;
+    color: #26353f;
+    font-weight: normal;
+
+    &.active {
+        display: block;
+    }
+
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    footer {
+        display: flex;
+        justify-content: space-between;
+        margin: 10px 0 0;
+    }
+
+    label {
+        display: inline;
+        cursor: pointer;
+    }
+}

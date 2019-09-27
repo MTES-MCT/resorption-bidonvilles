@@ -259,3 +259,36 @@ button:disabled:hover {
 .link:hover {
     text-decoration: underline;
 }
+
+.fieldType {
+    > i {
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        border-radius: 3px;
+        vertical-align: middle;
+    }
+
+    > span {
+        margin-left: 5px;
+        white-space: normal;
+        display: inline-block;
+        vertical-align: middle;
+        max-width: 90px;
+        line-height: 20px;
+    }
+}
+
+.link--secondary {
+    color: #8393a7;
+}
+
+.link--disabled {
+    cursor: default;
+    color: #ccc;
+    font-weight: normal;
+
+    &:hover {
+        text-decoration: none;
+    }
+}
