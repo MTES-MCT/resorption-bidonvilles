@@ -1,23 +1,40 @@
 <div class="alert">
-    <div class="wrapper" ref="wrapper">
-        <div class="alert-close">
-            <div class="alert-close-wrapper"><img src="/img/cross.svg" alt="" width="20" @click="close" /></div>
-        </div>
-        <h2>Exporter les sites</h2>
-        <p>Veuillez cocher toutes les informations que vous souhaitez exporter, puis cliquez sur le bouton "Exporter" ci-dessous.</p>
+    <div class="alert-wrapper" ref="wrapper">
+        <header class="alert-header">
+            <hgroup>
+                <h1 class="alert-title">Exporter les sites {{ title }} :</h1>
+                <h2 class="alert-subtitle">{{ location.label }}</h2>
+            </hgroup>
 
-        <p class="alert-buttons">
-            <a href="#" ref="link" style="display: none" download="export-bidonvilles.csv"></a>
-            <button @click="download" class="button">Exporter</button>
-            <button @click="close" class="button secondary">Annuler</button>
-        </p>
+            <div class="alert-actionButtons">
+                <a href="#" ref="link" style="display: none"></a>
+                <button @click="close" class="button secondary">Annuler</button>
+                <button @click="download" class="button"><font-awesome-icon icon="file-excel"></font-awesome-icon> &nbsp;Exporter</button>
+            </div>
+        </header>
 
-        <div class="form__group" v-for="(section, sectionId) in sections">
-            <h4><input type="checkbox" :id="'section-' + sectionId" v-model="sectionStates[section.title]" @change="onSectionToggle(section)" /> <label :for="'section-' + sectionId">{{ section.title }}</label></h4>
-            <span v-for="(column, columnId) in section.fields">
-                <input type="checkbox" :id="'column-' + sectionId + '-' + columnId" v-model="columnStates[column.id]" @change="onColumnToggle(section)" />
-                <label :for="'column-' + sectionId + '-' + columnId">{{ column.label }}</label>
-            </span>
-        </div>
+        <section class="alert-body">
+            <p>
+                <strong>Les données exportées par défaut</strong>
+                <ul class="list--circle">
+                    <li>Localisation : département, commune, adresse</li>
+                    <li>Site : type de site (terrain / bâti), date d’installation, date de signalement</li>
+                    <li>Démographie : nombre de personnes, mineurs, ménages et origines</li>
+                    <li v-if="closedTowns">Orientations des ménages après la fermeture</li>
+                    <li>Date de la dernière mise à jour</li>
+                </ul>
+            </p>
+
+            <p class="alert-options">Cochez les informations supplémentaires que vous souhaitez exporter
+                <ul>
+                    <li v-for="option in availableOptions">
+                        <span>
+                            <input type="checkbox" :id="`option-${option.id}`" v-model="options[option.id]" />
+                            <label :for="`option-${option.id}`" >{{ option.label }}<span v-if="option.description">&nbsp;{{ option.description }}</span></label>
+                        </span>
+                    </li>
+                </ul>
+            </p>
+        </section>
     </div>
 </div>

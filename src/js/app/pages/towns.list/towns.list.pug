@@ -1,5 +1,6 @@
 <div class="page--withMargin">
     <NavBar></NavBar>
+    <Export v-if="exportIsVisible" :towns="[]" @close="hideExport" :location="currentLocation" :closedTowns="showClosedTowns"></Export>
 
     //- state: loading in progress
     <section v-if="state === 'loading'" class="section section-white">
@@ -40,7 +41,7 @@
                 <div class="townList-headerRight">
                     <div class="townList-actions">
                         <router-link to="/nouveau-site" class="button secondary">Déclarer un site</router-link>
-                        <a class="button button--excel"><font-awesome-icon icon="file-excel"></font-awesome-icon> Exporter</a>
+                        <a class="button button--excel" v-if="dashboardShantytowns.length > 0" @click="showExport"><font-awesome-icon icon="file-excel"></font-awesome-icon> &nbsp;Exporter</a>
                     </div>
 
                     <section class="townList-summary" v-if="!showClosedTowns">
@@ -158,18 +159,29 @@
                         </td>
                         <td class="townColumn-justice" v-if="!showClosedTowns && hasJusticePermission">
                             <span v-if="shantytown.justiceStatus === null" class="secondary">NC</span>
-                            <span v-else>{{ shantytown.justiceStatus.label }}<span v-if="shantytown.justiceStatus.date !== null"><br/>le {{ formatDate(shantytown.justiceStatus.date, 'd/m/y') }}</span></span>
+                            <ul class="list list--circle" v-else>
+                                <li v-for="status in shantytown.justiceStatuses">{{ status.label }}
+                                    <span v-if="status.date" class="secondary"><br/>le {{ formatDate(status.date, 'd/m/y') }}</span>
+                                </li>
+                            </ul>
                         </td>
                         <td class="townColumn-closingSolutions" v-if="showClosedTowns">
                             <span v-if="shantytown.closingSolutions.length === 0" class="secondary">NC</span>
                             <ul class="list" v-else>
                                 <li v-for="solution in shantytown.closingSolutions">{{ solution.householdsAffected || 'NC' }} - {{ closingSolutionNames[solution.id] }}</li>
-                                <li v-if="shantytown.totalSolutions !== null">= {{ shantytown.totalSolutions }} ménages</li>
                             </ul>
                         </td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+
+        <div class="container" v-if="pageContent.length > 2">
+            <div class="paginationContainer">
+                <span class="link pagination-previous" v-bind:class="{ 'link--disabled': currentPage === 0 }" @click="previousPage"><font-awesome-icon icon="caret-square-left"></font-awesome-icon> Précédent</span>
+                <span class="pagination-pages">{{ pageBeginning }} - {{ pageEnd }} sur {{ filteredShantytowns.length }}</span>
+                <span class="link pagination-next" v-bind:class="{ 'link--disabled': currentPage === lastPage }" @click="nextPage">Suivant <font-awesome-icon icon="caret-square-right"></font-awesome-icon></span>
+            </div>
         </div>
     </section>
 </div>

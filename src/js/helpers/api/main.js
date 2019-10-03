@@ -1,5 +1,6 @@
 import { getToken, logout } from '#helpers/api/user';
 import { router } from '#app/router';
+import { open as openTab } from '#helpers/tabHelper';
 
 /**
  * Generic error codes
@@ -156,4 +157,15 @@ export function postApi(url, data, headers) {
  */
 export function deleteApi(url, data, headers) {
     return request('DELETE', url, data, headers);
+}
+
+/**
+ * Opens a new tab with the given URL
+ *
+ * Appends the access token to the request
+ *
+ * @param {String} url
+ */
+export function open(url) {
+    return openTab(`${url}${url.indexOf('?') === -1 ? '?' : '&'}accessToken=${encodeURIComponent(getToken())}`);
 }

@@ -3,6 +3,10 @@
     justify-content: space-between;
 }
 
+header + .paginationContainer {
+    margin-top: 60px;
+}
+
 .switch {
     button {
         padding: 0 20px;
@@ -98,7 +102,7 @@
 }
 
 .paginationContainer {
-    margin: 60px 0 15px;
+    margin: 20px 0 15px;
     text-align: right;
 
     .pagination-pages {
@@ -112,8 +116,8 @@
 
     th {
         position: relative;
-        padding-top: 20px;
-        padding-bottom: 20px;
+        padding-top: 7px;
+        padding-bottom: 7px;
         color: #adb9c8;
         background: #53657d;
 
@@ -229,7 +233,6 @@ td.townColumn-closingSolutions {
 
 td.townColumn-city,
 td.townColumn-address,
-td.townColumn-minors,
 span.primary {
     font-weight: bold;  
 }
@@ -276,7 +279,7 @@ tbody {
 
 .table-container {
     overflow: auto;
-    min-height: 500px;
+    min-height: 250px;
 }
 
 ul.list {

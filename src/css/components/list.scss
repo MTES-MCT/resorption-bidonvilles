@@ -1,0 +1,20 @@
+.list--circle {
+    padding: 0 0 0 19px;
+    list-style: none;
+    line-height: 28px;
+
+    li:before {
+        position: absolute;
+        content: '';
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+        margin-top: 10px;
+        margin-left: -19px;
+        width: 8px;
+        height: 8px;
+        background: #ADB9C9;
+        -webkit-mask: url('/img/circle.svg') no-repeat center;
+        mask: url('/img/circle.svg') no-repeat center;
+    }
+}

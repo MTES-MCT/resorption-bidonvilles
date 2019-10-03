@@ -4,6 +4,7 @@ import { open } from '#helpers/tabHelper';
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import CollectivityInput from '#app/components/form/input/collectivity/collectivity.vue';
 import TableFilter from '#app/components/tableFilter/tableFilter.vue';
+import Export from '#app/components/export/export.vue';
 
 function getSince(ts) {
     const now = new Date();
@@ -37,6 +38,7 @@ export default {
         NavBar,
         CollectivityInput,
         TableFilter,
+        Export,
     },
 
     data() {
@@ -149,6 +151,7 @@ export default {
             locationTitle: null,
             defaultLocation: null,
             location: null,
+            exportIsVisible: false,
         };
 
         const userLocation = {
@@ -294,6 +297,9 @@ export default {
         location() {
             this.currentPage = 0;
         },
+        filteredShantytowns() {
+            this.currentPage = 0;
+        },
     },
 
     methods: {
@@ -339,18 +345,57 @@ export default {
                 electricityValue = false;
             }
 
-            // justice status
-            let justiceStatus = null;
-            let justiceDate = null;
-            if (shantytown.justiceChallenged === true) {
-                justiceStatus = 'Contentieux';
-            } else if (shantytown.justiceRendered === true) {
-                justiceStatus = 'Décision rendue';
-                justiceDate = shantytown.justiceRenderedAt;
+            // justice statuses
+            const justiceStatuses = [];
+
+            if (shantytown.justiceChallenged === true || shantytown.justiceRendered === true) {
+                justiceStatuses.push({
+                    label: 'Décision rendue',
+                    date: shantytown.justiceRenderedAt,
+                });
+
+                if (shantytown.justiceChallenged === true) {
+                    justiceStatuses.push({
+                        label: 'Contentieux',
+                    });
+                }
             } else if (shantytown.justiceProcedure === true) {
-                justiceStatus = 'Procédure en cours';
+                justiceStatuses.push({
+                    label: 'Procédure en cours',
+                });
             } else if (shantytown.ownerComplaint === true) {
-                justiceStatus = 'Plainte déposée';
+                justiceStatuses.push({
+                    label: 'Plainte déposée',
+                });
+            }
+
+            switch (shantytown.policeStatus) {
+            case 'none':
+                justiceStatuses.push({
+                    label: 'Concours de la force publique non demandé',
+                });
+                break;
+
+            case 'requested':
+                justiceStatuses.push({
+                    label: 'Concours de la force publique demandé',
+                    date: shantytown.policeRequestedAt,
+                });
+                break;
+
+            case 'granted':
+                justiceStatuses.push({
+                    label: 'Concours de la force publique accordé',
+                    date: shantytown.policeGrantedAt,
+                });
+                break;
+
+            default:
+            case null:
+                justiceStatuses.push({
+                    label: 'Concours de la force publique : NC',
+                });
+                break;
             }
 
             // status
@@ -395,10 +440,7 @@ export default {
                 electricityType: Object.assign({}, shantytown.electricityType, {
                     value: electricityValue,
                 }),
-                justiceStatus: justiceStatus !== null ? {
-                    label: justiceStatus,
-                    date: justiceDate,
-                } : null,
+                justiceStatuses,
                 totalSolutions,
             });
         },
@@ -547,6 +589,16 @@ export default {
                     this[filter][i].checked = false;
                 }
             });
+        },
+
+        showExport() {
+            setTimeout(() => {
+                this.exportIsVisible = true;
+            }, 100);
+        },
+
+        hideExport() {
+            this.exportIsVisible = false;
         },
     },
 };
