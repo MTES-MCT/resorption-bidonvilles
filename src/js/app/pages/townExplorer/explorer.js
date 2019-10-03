@@ -1,12 +1,10 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import FilterGroup from './filterGroup/filterGroup.vue';
 import Map from './map/map.vue';
-import Address from '#app/components/address/address.vue';
 import Quickview from '#app/components/quickview/quickview.vue';
 import { all as fetchAll } from '#helpers/api/town';
 import { get as getConfig, getPermission } from '#helpers/api/config';
 import simplebar from 'simplebar-vue';
-import { autocompleteLocation } from '#helpers/addressHelper';
 import { open } from '#helpers/tabHelper';
 
 // eslint-disable-next-line
@@ -19,9 +17,6 @@ import iconJustice from '/img/justice.svg';
 import iconAction from '/img/action.svg';
 // eslint-disable-next-line
 import iconStatus from '/img/status.svg';
-
-// eslint-disable-next-line
-import iconGeo from '/img/geo.svg';
 // eslint-disable-next-line
 import iconOrigins from '/img/origins.svg';
 
@@ -53,7 +48,6 @@ export default {
         Map,
         Quickview,
         simplebar,
-        Address,
     },
     data() {
         const { user } = getConfig();
@@ -153,12 +147,6 @@ export default {
                     }]),
                 },
             ],
-            iconGeo,
-            location: user.organization.location.type !== 'nation' ? {
-                locationType: user.organization.location.type,
-                code: user.organization.location[user.organization.location.type].code,
-                label: user.organization.location[user.organization.location.type].name,
-            } : null,
         };
     },
     computed: {
@@ -180,29 +168,6 @@ export default {
         visibleTowns() {
             let visibleTowns = this.towns;
 
-            // location filters
-            if (this.location !== null) {
-                visibleTowns = visibleTowns.filter((town) => {
-                    switch (this.location.locationType) {
-                    case 'city':
-                        return town.city.code === this.location.code || town.city.main === this.location.code;
-
-                    case 'epci':
-                        return town.epci.code === this.location.code;
-
-                    case 'departement':
-                        return town.departement.code === this.location.code;
-
-                    case 'region':
-                        return town.region.code === this.location.code;
-
-                    default:
-                        return false;
-                    }
-                });
-            }
-
-            // regular filters
             this.allowedFilters.forEach((filterGroup) => {
                 switch (filterGroup.id) {
                 case 'fieldType': {
@@ -298,21 +263,6 @@ export default {
                 }
                     break;
 
-                case 'action': {
-                    const disallowedActions = filterGroup.options
-                        .filter(option => !option.checked)
-                        .map(option => option.value);
-
-                    disallowedActions.forEach((value) => {
-                        if (value === 'yes') {
-                            visibleTowns = visibleTowns.filter(town => town.actions.length === 0);
-                        } else if (value === 'no') {
-                            visibleTowns = visibleTowns.filter(town => town.actions.length > 0);
-                        }
-                    });
-                }
-                    break;
-
                 case 'status': {
                     const disallowedStatuses = filterGroup.options
                         .filter(option => !option.checked)
@@ -371,7 +321,6 @@ export default {
         window.removeEventListener('resize', this.resize);
     },
     methods: {
-        autocompleteLocation,
         sortNumber(x, y) {
             if (x === 'inconnu' && y === 'inconnu') {
                 return 0;
