@@ -22,6 +22,8 @@ import PlanCreate from '#app/pages/plans.create/plans.create.vue';
 import PlanDetails from '#app/pages/plans.details/plans.details.vue';
 import Statistics from '#app/pages/stats/stats.vue';
 import LegalMentions from '#app/pages/legalMentions/legalMentions.vue';
+import Directory from '#app/pages/directory/directory.vue';
+
 // eslint-disable-next-line
 import CGU from '/doc/CGU_Resorption_Bidonvilles.pdf';
 // eslint-disable-next-line
@@ -375,6 +377,14 @@ const router = new VueRouter({
             },
             path: '/moderation-commentaires',
             component: ShantytownCommentList,
+            beforeEnter: guardians.loadedAndUpgraded,
+        },
+        {
+            meta: {
+                group: 'directory',
+            },
+            path: '/annuaire',
+            component: Directory,
             beforeEnter: guardians.loadedAndUpgraded,
         },
     ],

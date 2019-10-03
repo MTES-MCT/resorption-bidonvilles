@@ -42,6 +42,11 @@ export default {
             ],
         },
         {
+            label: 'Annuaire',
+            target: '/annuaire',
+            group: 'directory',
+        },
+        {
             label: 'Utilisateurs',
             items: [
                 {
