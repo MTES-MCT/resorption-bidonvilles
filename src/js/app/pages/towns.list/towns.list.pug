@@ -143,7 +143,7 @@
                         </td>
                         <td class="townColumn-origins">
                             <span v-if="shantytown.socialOrigins.length === 0" class="secondary">NC</span>
-                            <span v-else>citoyens<br/>{{ shantytown.socialOrigins.map(({ label }) => label).join(' / ') }}</span>
+                            <span v-else>{{ shantytown.socialOrigins.map(({ label }) => label).join(' / ') }}</span>
                         </td>
                         <td class="townColumn-livingConditions" v-if="!showClosedTowns">
                             <ul class="list">
