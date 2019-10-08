@@ -1,0 +1,26 @@
+<div class="rb-table">
+    <table class="table">
+        <thead>
+            <tr>
+                <th v-for="column in computedColumns" :class="`table-col--${column.id}`" v-bind:class="{ 'table-col--filterable': column.isFilterable, 'table-col--active': checkedFilters[column.id] > 0 }">
+                    <TableFilter v-if="column.isFilterable" v-model="filters[columnId]" :visible="currentFilter === column.id" @outside-click="hideFilter" @clean="hideFilter"></TableFilter>
+                    <span v-if="column.isFilterable" @click="toggleFilter(column.id)">{{ column.label }}
+                        <span v-if="checkedFilters[column.id] > 0" class="badge">{{ checkedFilters[column.id] }}</span>
+                        <font-awesome-icon icon="sort-down" size="2x"></font-awesome-icon>
+                    </span>
+                    <span v-else>{{ column.label }}</span>
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr v-if="content.length === 0" class="table-row--empty">
+                <td :colspan="computedColumns.length">{{ emptyLabel }}</td>
+            </tr>
+
+            <tr v-for="(row, index) in content" :class="index % 2 === 0 ? 'table-row--odd' : ''" @click="click(row)">
+                <td v-for="column in computedColumns" v-html="row[column.id]" :class="`table-col--${column.id}`"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

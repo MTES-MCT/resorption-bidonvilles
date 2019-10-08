@@ -192,6 +192,20 @@ export function requestNewPassword(email) {
 }
 
 /**
+ * GET /directory
+ */
+export function getDirectory() {
+    return getApi('/directory');
+}
+
+/**
+ * GET /organizations/search
+ */
+export function autocompleteOrganization(str) {
+    return getApi(`/organizations/search?query=${encodeURIComponent(str)}`);
+}
+
+/**
  * @typedef {Object} User_Data
  * @property {string} first_name
  * @property {string} last_name

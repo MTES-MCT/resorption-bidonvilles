@@ -97,6 +97,9 @@
     font-family: Evolventa;
     background: #eee;
     border-bottom: 1px solid #ccc;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .autocompleter-suggestionCategoryItems {

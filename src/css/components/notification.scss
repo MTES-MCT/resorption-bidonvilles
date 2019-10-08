@@ -1,0 +1,38 @@
+.notification,
+.notification.error,
+.notification--failure,
+.notification--loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .notification-icon,
+    .notification-content {
+        margin: 0;
+        padding: 0;
+    }
+
+    .notification-icon {
+        margin-right: 10px;
+
+        > img,
+        > svg {
+            width: 50px;
+        }
+    }
+
+    .notification-content {
+        text-align: left;
+    }
+
+    .notification-title {
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+}
+
+.notification--loading {
+    .notification-content {
+        color: #003B7F;
+    }
+}

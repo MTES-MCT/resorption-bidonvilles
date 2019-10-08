@@ -3,36 +3,8 @@
     justify-content: space-between;
 }
 
-header + .paginationContainer {
+header + .rb-pagination {
     margin-top: 60px;
-}
-
-.switch {
-    button {
-        padding: 0 20px;
-        font-weight: bold;
-        color: #53657d;
-        background: #ebeff3;
-        border: 1px solid #b1bccb;
-        line-height: 35px;
-        font-size: 0.8rem;
-
-        &.active {
-            background: #016be6;
-            color: white;
-        }
-    }
-
-    button:first-of-type {
-        border-top-left-radius: 5px;
-        border-bottom-left-radius: 5px;
-    }
-
-    button:not(:first-of-type) {
-        border-left: none;
-        border-top-right-radius: 5px;
-        border-bottom-right-radius: 5px;
-    }
 }
 
 .townList-hgroup {
@@ -101,77 +73,6 @@ header + .paginationContainer {
     }
 }
 
-.paginationContainer {
-    margin: 20px 0 15px;
-    text-align: right;
-
-    .pagination-pages {
-        padding: 0 15px;
-        color: #596b82;
-    }
-}
-
-.table {
-    table-layout: fixed;
-
-    th {
-        position: relative;
-        padding-top: 7px;
-        padding-bottom: 7px;
-        color: #adb9c8;
-        background: #53657d;
-
-        > span {
-            padding: 3px 10px;
-            border: 1px solid transparent;
-        }
-    }
-}
-
-.badge {
-    display: inline-block;
-    border-radius: 50%;
-    font-size: 0.7rem;
-    text-align: center;
-    color: #fff;
-    background: #016be6;
-    width: 15px;
-    line-height: 15px;
-    margin-left: 5px;
-}
-
-th {
-    white-space: nowrap;
-}
-
-th.filterable {
-    > span {
-        cursor: pointer;
-        border: 1px solid #fff;
-        border-radius: 3px;
-        color: #fff;
-
-        > img,
-        > svg {
-            margin-top: -10px;
-            margin-left: 5px;
-        }
-
-        &:hover {
-            background: rgba(255, 255, 255, 0.2);
-
-            &.active {
-                background: rgba(255, 255, 255, 0.8);
-            }
-        }
-
-        &.active {
-            background: white;
-            color: #53657d;
-        }
-    }
-}
-
 th.townColumn-departement {
     width: 200px;
 }
@@ -234,7 +135,7 @@ td.townColumn-closingSolutions {
 td.townColumn-city,
 td.townColumn-address,
 span.primary {
-    font-weight: bold;  
+    font-weight: bold;
 }
 
 td.townColumn-statusDetails {
@@ -251,35 +152,14 @@ span.secondary {
 }
 
 tbody {
-    tr {
-        cursor: pointer;
-
-        &:hover {
-            background: #dde1e5;
-        }
-
-        &.odd {
-            background: #ebeff3;
-
-            &:hover {
-                background: #dde1e5;
-            }
-        }
-
-        &.townRow--empty {
-            td {
-                padding: 50px 0;
-                text-align: center;
-                text-transform: uppercase;
-                font-weight: bold;
-            }
+    tr.townRow--empty {
+        td {
+            padding: 50px 0;
+            text-align: center;
+            text-transform: uppercase;
+            font-weight: bold;
         }
     }
-}
-
-.table-container {
-    overflow: auto;
-    min-height: 250px;
 }
 
 ul.list {

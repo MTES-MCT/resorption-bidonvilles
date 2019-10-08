@@ -114,6 +114,16 @@ export default {
             required: false,
             default: false,
         },
+
+        /**
+         * Placeholder
+         *
+         * @type {String}
+         */
+        placeholder: {
+            type: String,
+            required: false,
+        },
     },
 
 

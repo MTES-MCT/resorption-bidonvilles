@@ -7,6 +7,7 @@ import AddressWithLocation from './address-with-location/address-with-location.v
 import TownList from './townList/townList.vue';
 import PlanFunding from './planFunding/planFunding.vue';
 import Collectivity from './collectivity/collectivity.vue';
+import Organization from './organization/organization.vue';
 
 /**
  * Input types that accept a list of values
@@ -33,6 +34,7 @@ export default {
         TownList,
         PlanFunding,
         Collectivity,
+        Organization,
     },
 
 
@@ -76,7 +78,8 @@ export default {
          *  'addressWithLocation',
          *  'townList',
          *  'planFunding',
-         *  'collectivity'
+         *  'collectivity',
+         *  'organization',
          * }
          */
         type: {

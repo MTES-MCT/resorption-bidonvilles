@@ -31,7 +31,7 @@
             </div>
 
             //- loaded
-            <slot v-if="loading.status === 'loaded'" name="content"></slot>
+            <slot v-if="loading.status === 'loaded'" v-bind:data="data" name="content"></slot>
         </div>
     </section>
 </div>

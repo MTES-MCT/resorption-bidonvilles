@@ -1,0 +1,27 @@
+.switch {
+    button {
+        padding: 0 20px;
+        font-weight: bold;
+        color: #53657d;
+        background: #ebeff3;
+        border: 1px solid #b1bccb;
+        line-height: 35px;
+        font-size: 0.8rem;
+
+        &.active {
+            background: #016be6;
+            color: white;
+        }
+    }
+
+    button:first-of-type {
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+    }
+
+    button:not(:first-of-type) {
+        border-left: none;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
+}

@@ -53,6 +53,7 @@ export default {
             // try loading
             this.loader()
                 .then((data) => {
+                    this.$emit('loaded', data);
                     this.data = data;
                     this.loading.status = 'loaded';
                 })

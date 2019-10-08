@@ -1,0 +1,30 @@
+<div class="popin">
+    <div class="popin-wrapper" ref="wrapper">
+        <p class="popin-close"><span class="link" @click="close"><font-awesome-icon icon="times" size="2x"></font-awesome-icon></span></p>
+
+        <section class="organization-body">
+            <h1 class="primary">Structure</h1>
+            <p>{{ organization.name }}</p>
+
+            <h1 class="primary">Territoire</h1>
+            <p>{{ organization.locationName }}</p>
+
+            <h1 class="primary">Rôle</h1>
+            <p style="margin: 5px 0 15px 0"><span class="role">{{ organization.role }}</span></p>
+
+            <h1>{{ organization.users.length }} contact{{ organization.users.length > 1 ? 's' : ''}}</h1>
+            <div class="organization-users">
+                <div v-for="user in organization.users" class="userCard">
+                    <h1>{{ user.first_name }} {{ user.last_name.toUpperCase() }}</h1>
+                    <h2>Fonction</h2>
+                    <h3>{{ user.position }}</h3>
+
+                    <ul class="userCard-infoList">
+                        <li class="userCard-info--email"><a :href="`mailto:${user.email}`">{{ user.email }}</a></li>
+                        <li class="userCard-info--phone" v-if="user.phone">{{ user.phone }}</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

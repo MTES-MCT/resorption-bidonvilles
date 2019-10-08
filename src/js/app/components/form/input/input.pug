@@ -71,5 +71,8 @@
 
         //- collectivity autocompleter
         <Collectivity v-if="type === 'collectivity'" v-bind="props" v-model="data" :disabled="disabled"></Collectivity>
+
+        //- organization autocompleter
+        <Organization v-if="type === 'organization'" v-bind="props" v-model="data" :disabled="disabled"></Organization>
     </div>
 </div>

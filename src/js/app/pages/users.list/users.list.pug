@@ -27,7 +27,7 @@
                     <template slot="table-row" slot-scope="props">
                         <span v-if="props.column.id === 'status'"><font-awesome-icon class="user-statusIcon" :class="`user-statusIcon--${props.formattedRow[props.column.field].icon}`" :icon="props.formattedRow[props.column.field].icon"></font-awesome-icon> <span v-html="props.formattedRow[props.column.field].label"></span></span>
                         <span v-else-if="props.column.id === 'role'">
-                            <span class="user-role">{{ props.formattedRow[props.column.field] }}</span>
+                            <span class="role">{{ props.formattedRow[props.column.field] }}</span>
                         </span>
                         <span v-else-if="props.column.id === 'validate'">
                             <span><font-awesome-icon class="user-validateIcon" icon="arrow-right" @click="routeToUserValidation"></font-awesome-icon></span>

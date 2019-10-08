@@ -60,14 +60,14 @@
                 </div>
             </header>
 
-            <div class="paginationContainer">
-                <span class="link pagination-previous" v-bind:class="{ 'link--disabled': currentPage === 0 }" @click="previousPage"><font-awesome-icon icon="caret-square-left"></font-awesome-icon> Précédent</span>
+            <div class="rb-pagination">
+                <span class="link" v-bind:class="{ 'link--disabled': currentPage === 0 }" @click="previousPage"><font-awesome-icon icon="caret-square-left"></font-awesome-icon> Précédent</span>
                 <span class="pagination-pages">{{ pageBeginning }} - {{ pageEnd }} sur {{ filteredShantytowns.length }}</span>
-                <span class="link pagination-next" v-bind:class="{ 'link--disabled': currentPage === lastPage }" @click="nextPage">Suivant <font-awesome-icon icon="caret-square-right"></font-awesome-icon></span>
+                <span class="link" v-bind:class="{ 'link--disabled': currentPage === lastPage }" @click="nextPage">Suivant <font-awesome-icon icon="caret-square-right"></font-awesome-icon></span>
             </div>
         </div>
 
-        <div class="table-container">
+        <div class="rb-table">
             <table class="table" ref="table">
                 <thead>
                     <tr>
@@ -177,10 +177,10 @@
         </div>
 
         <div class="container" v-if="pageContent.length > 2">
-            <div class="paginationContainer">
-                <span class="link pagination-previous" v-bind:class="{ 'link--disabled': currentPage === 0 }" @click="previousPage"><font-awesome-icon icon="caret-square-left"></font-awesome-icon> Précédent</span>
+            <div class="rb-pagination">
+                <span class="link" v-bind:class="{ 'link--disabled': currentPage === 0 }" @click="previousPage"><font-awesome-icon icon="caret-square-left"></font-awesome-icon> Précédent</span>
                 <span class="pagination-pages">{{ pageBeginning }} - {{ pageEnd }} sur {{ filteredShantytowns.length }}</span>
-                <span class="link pagination-next" v-bind:class="{ 'link--disabled': currentPage === lastPage }" @click="nextPage">Suivant <font-awesome-icon icon="caret-square-right"></font-awesome-icon></span>
+                <span class="link" v-bind:class="{ 'link--disabled': currentPage === lastPage }" @click="nextPage">Suivant <font-awesome-icon icon="caret-square-right"></font-awesome-icon></span>
             </div>
         </div>
     </section>

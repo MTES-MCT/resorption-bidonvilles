@@ -6,7 +6,7 @@
         <div class="autocompleter-prefixIcon" ref="prefixIcon">
             <img src="/img/search.svg" />
         </div>
-        <input type="text" v-model="currentLabel" @keydown="onNavigation" @keyup="onType" @focus="focused = true"  @blur="focused = false" ref="input" :disabled="disabled" :readonly="disabled" />
+        <input type="text" v-model="currentLabel" @keydown="onNavigation" @keyup="onType" @focus="focused = true"  @blur="focused = false" ref="input" :disabled="disabled" :readonly="disabled" :placeholder="placeholder" />
         <div class="autocompleter-spinner" ref="spinner" v-bind:style="{ visibility: suggestionRequest.pending ? 'visible' : 'hidden' }">
             <img src="/img/spinner_dark.svg" />
         </div>

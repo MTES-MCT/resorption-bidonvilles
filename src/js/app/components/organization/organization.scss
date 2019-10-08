@@ -1,0 +1,29 @@
+.organization-body {
+    > h1 {
+        margin: 0;
+        padding: 0;
+        font-size: 0.9rem;
+        font-weight: bold;
+    }
+
+    > p {
+        margin: 0 0 15px 0;
+        padding: 0;
+        font-size: 1rem;
+    }
+
+    .primary {
+        color: #0E9FAA;
+    }
+}
+
+.organization-users {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 10px;
+
+    .userCard {
+        margin-bottom: 25px;
+    }
+}

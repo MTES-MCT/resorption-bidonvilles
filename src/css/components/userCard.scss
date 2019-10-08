@@ -1,0 +1,63 @@
+.userCard {
+    padding: 25px 25px 25px 50px;
+    background: white;
+    width: 450px;
+    box-shadow: 0 5px 5px 0 rgba(0,0, 0, 0.1);
+
+    > h1 {
+        margin: 0;
+        padding: 0;
+        font-size: 1.2rem;
+    }
+
+    > h2 {
+        margin: 3px 0 0;
+        padding: 0;
+        font-size: 0.9rem;
+        color: #0E9FAA;
+    }
+
+    > h3 {
+        margin: 0;
+        padding: 0;
+        font-size: 0.9rem;
+        font-weight: normal;
+    }
+}
+
+.userCard-infoList {
+    margin: 10px 0 0;
+    padding: 0;
+    list-style: none;
+
+    > li {
+        padding: 2px 0;
+    }
+
+    > li:before {
+        position: absolute;
+        content: '';
+        margin-top: 6px;
+        margin-left: -25px;
+        width: 15px;
+        height: 15px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background: #ADB9C9;
+    }
+
+    > .userCard-info--email {
+        &:before {
+            -webkit-mask: url('/img/envelope.svg') no-repeat center;
+            mask: url('/img/envelope.svg') no-repeat center;
+        }
+    }
+
+    > .userCard-info--phone {
+        &:before {
+            -webkit-mask: url('/img/phone.svg') no-repeat center;
+            mask: url('/img/phone.svg') no-repeat center;
+        }
+    }
+}

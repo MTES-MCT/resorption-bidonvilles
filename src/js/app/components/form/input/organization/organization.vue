@@ -1,0 +1,8 @@
+<template lang="pug">
+    include ./organization.pug
+</template>
+
+<script>
+import Component from "./organization.js";
+export default Component;
+</script>

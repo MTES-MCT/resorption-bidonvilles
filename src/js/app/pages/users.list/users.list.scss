@@ -1,20 +1,9 @@
 table.vgt-table {
     tr {
-        &.user {
-            .user-role {
-                padding: 3px 15px;
-            }
-        }
-    
         &.user--highlight {
             background: #FFF0E4;
         }
     }
-}
-
-.user-role {
-    border: 1px solid #ADB9C9;
-    border-radius: 15px;
 }
 
 .user-statusIcon,
