@@ -1,0 +1,51 @@
+.changelog-title {
+    font-size: 1.5rem;
+}
+
+.changelog-date {
+    font-size: 1rem;
+    font-weight: normal;
+}
+
+.changelog-title,
+.changelog-date {
+    margin: 0;
+    text-align: center;
+}
+
+.changelog-body {
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    > .carousel {
+        flex: 0 0 500px;
+    }
+}
+
+.changelog-page,
+.changelog-itemTitle {
+    margin: 0;
+    padding: 0;
+}
+
+.changelog-page {
+    font-weight: bold;
+    color: #8393A7;
+
+    > span {
+        color: #006BE6;
+    }
+}
+
+.changelog-itemTitle {
+    margin-top: 5px;
+    font-size: 1rem;
+}
+
+.changelog-footer {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}

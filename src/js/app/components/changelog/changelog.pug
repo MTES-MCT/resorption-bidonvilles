@@ -1,0 +1,31 @@
+<div class="popin">
+    <div class="popin-wrapper" ref="wrapper">
+        <h1 class="changelog-title">Des nouveautés sont disponibles sur la plateforme</h1>
+        <h2 class="changelog-date">{{ log.date }}</h2>
+
+        <section class="changelog-body">
+            <div class="carousel">
+                <div class="carousel-container">
+                    <img v-for="item in log.items" :src="item.image" :alt="item.title" />
+                </div>
+                <div class="carousel-bullets">
+                    <span v-for="(item, index) in log.items" class="carousel-bullet" v-bind:class="{ 'carousel-bullet--active': index === currentItemIndex }"></span>
+                </div>
+            </div>
+
+            <div class="changelog-content">
+                <header>
+                    <p class="changelog-page"><span>{{ currentItemIndex + 1 }}</span> / {{ log.items.length }}</p>
+                    <h1 class="changelog-itemTitle">{{ currentItem.title }}</h1>
+                </header>
+
+                <div v-html="currentItem.description"></div>
+            </div>
+        </section>
+
+        <footer class="changelog-footer">
+            <span class="link" @click="previous">{{ currentItemIndex > 0 ? 'Précédent' : '' }}</span>
+            <button class="button" @click="next">{{ nextLabel }}</button>
+        </footer>
+    </div>
+</div>

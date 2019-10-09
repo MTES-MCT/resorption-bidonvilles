@@ -11,6 +11,8 @@
                 <img src="/img/spinner_dark.svg" width="20" class="spinner" />
                 <span>Initialisation de la plateforme en cours...</span>
             </div>
+
+            <Changelog v-if="changelog !== null" :log="changelog" @done="redirect"></Changelog>
         </div>
     </section>
 </div>

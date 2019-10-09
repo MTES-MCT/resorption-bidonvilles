@@ -1,0 +1,32 @@
+.carousel {
+    margin-right: 50px;
+    width: 500px;
+    overflow: hidden;
+}
+
+.carousel-container {
+    white-space: nowrap;
+
+    > img {
+        width: 100%;
+    }
+}
+
+.carousel-bullets {
+    margin-top: 10px;
+    text-align: center;
+
+    .carousel-bullet {
+        margin: 0 3px;
+        display: inline-block;
+        vertical-align: middle;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #ADB9C9;
+    }
+
+    .carousel-bullet--active {
+        background: #0053B3;
+    }
+}
