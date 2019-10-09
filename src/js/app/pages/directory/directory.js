@@ -87,7 +87,7 @@ export default {
                         location: organization.location,
                         locationName,
                         role: organization.role,
-                        users: [...organization.users, ...organization.users, ...organization.users],
+                        users: organization.users,
 
                     },
                 };
