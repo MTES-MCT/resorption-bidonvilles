@@ -90,7 +90,7 @@ export default {
             }
 
             return {
-                title: 'Démographie',
+                title: 'Habitants',
                 rows,
             };
         },

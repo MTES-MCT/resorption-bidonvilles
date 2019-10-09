@@ -102,7 +102,7 @@ export default {
                                 },
                             },
                             {
-                                title: 'Démographie',
+                                title: 'Habitants',
                                 inputs: {
                                     censusStatus: {
                                         type: 'radio',
@@ -272,7 +272,7 @@ export default {
                                     },
                                     bailiff: {
                                         type: 'text',
-                                        label: 'Étude d\'huissiers',
+                                        label: 'Nom de l\'étude d\'huissiers',
                                         mandatory: false,
                                     },
                                 },

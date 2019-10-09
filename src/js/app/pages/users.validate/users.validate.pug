@@ -16,7 +16,8 @@
 
             //- state: loaded
             <section class="userValidation" v-if="state === 'loaded'">
-                <h1 v-if="user && !user.activated_on">Demande d'accès</h1>
+                <h1 v-if="user && user.status !== 'active'">Demande d'accès</h1>
+                <h1 v-else-if="user">Fiche utilisateur</h1>
 
                 <div class="userValidation-main" >
                     <aside class="userInfo">

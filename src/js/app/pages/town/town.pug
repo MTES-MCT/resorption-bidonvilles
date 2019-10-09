@@ -170,7 +170,7 @@
 
                                 <div class="panel">
                                     <div class="panel__header">
-                                        <h3>3. Démographie</h3>
+                                        <h3>3. Habitants</h3>
                                     </div>
                                     <div class="form__group">
                                         <p v-if="town.censusStatus !== undefined">
@@ -251,7 +251,7 @@
                                             <strong>Date d'octroi du CFP :</strong> {{ town.policeGrantedAt !== null ? formatDate(town.policeGrantedAt) : 'Inconnue' }}
                                         </p>
                                         <p v-if="town.bailiff !== undefined">
-                                            <strong>Étude d'huissiers :</strong> {{ town.bailiff || 'Inconnues' }}
+                                            <strong>Nom de l\'étude d'huissiers :</strong> {{ town.bailiff || 'Inconnues' }}
                                         </p>
                                     </div>
                                 </div>
@@ -370,7 +370,7 @@
 
                                 <div class="panel">
                                     <div class="panel__header">
-                                        <h3>3. Démographie</h3>
+                                        <h3>3. Habitants</h3>
                                     </div>
 
                                     <div class="form__group">
@@ -632,7 +632,7 @@
 
                                     <div class="form__group">
                                         <fieldset>
-                                            <legend v-bind:class="{ error: fieldErrors.bailiff }">Etude d'huissiers :</legend>
+                                            <legend v-bind:class="{ error: fieldErrors.bailiff }">Nom de l'étude d'huissiers :</legend>
                                             <p class="error" v-if="fieldErrors.bailiff">
                                                 <ul>
                                                     <li v-for="error in fieldErrors.bailiff">{{ error }}</li>

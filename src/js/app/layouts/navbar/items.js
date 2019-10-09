@@ -50,7 +50,7 @@ export default {
             label: 'Utilisateurs',
             items: [
                 {
-                    label: 'Gérer les utilisateurs',
+                    label: 'Liste des utilisateurs',
                     target: '/liste-des-utilisateurs',
                     group: 'users',
                 },
