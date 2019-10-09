@@ -40,8 +40,8 @@
 
                 <div class="townList-headerRight">
                     <div class="townList-actions">
-                        <router-link to="/nouveau-site" class="button secondary">Déclarer un site</router-link>
-                        <a class="button button--excel" v-if="dashboardShantytowns.length > 0" @click="showExport"><font-awesome-icon icon="file-excel"></font-awesome-icon> &nbsp;Exporter</a>
+                        <router-link v-if="hasPermission('shantytown.create')" to="/nouveau-site" class="button secondary">Déclarer un site</router-link>
+                        <a  v-if="hasPermission('shantytown.export')" class="button button--excel" v-if="dashboardShantytowns.length > 0" @click="showExport"><font-awesome-icon icon="file-excel"></font-awesome-icon> &nbsp;Exporter</a>
                     </div>
 
                     <section class="townList-summary" v-if="!showClosedTowns">

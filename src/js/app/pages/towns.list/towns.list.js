@@ -1,5 +1,5 @@
 import { all as fetchAll } from '#helpers/api/town';
-import { get as getConfig, getPermission } from '#helpers/api/config';
+import { get as getConfig, hasPermission, getPermission } from '#helpers/api/config';
 import { open } from '#helpers/tabHelper';
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import CollectivityInput from '#app/components/form/input/collectivity/collectivity.vue';
@@ -599,6 +599,10 @@ export default {
 
         hideExport() {
             this.exportIsVisible = false;
+        },
+
+        hasPermission(...args) {
+            return hasPermission(...args);
         },
     },
 };
