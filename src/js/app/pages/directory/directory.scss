@@ -7,6 +7,22 @@
     white-space: nowrap;
 }
 
+.directory-tableAside {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.directory-figures {
+    margin: 0;
+    font-weight: bold;
+}
+
+.rb-table.directory {
+    min-height: auto;
+}
+
 .table {
     .table-col--contacts {
         text-align: right;

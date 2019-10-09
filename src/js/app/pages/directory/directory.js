@@ -139,6 +139,10 @@ export default {
 
             return Math.ceil(this.filteredOrganizations.length / ITEMS_PER_PAGE) - 1;
         },
+
+        usersTotal() {
+            return this.filteredOrganizations.reduce((total, org) => total + org.raw.users.length, 0);
+        },
     },
 
     watch: {
