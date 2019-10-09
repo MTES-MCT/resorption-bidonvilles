@@ -1,6 +1,6 @@
 <Skeleton :loader="loader" @loaded="onLoaded">
     <template v-slot:title>
-        <h1 class="page-title">Annuaire des acteurs</h1>
+        <h1 class="page-title">Annuaire</h1>
         <p class="page-subtitle">Cette liste n’est pas exhaustive et regroupe à ce stade les utilisateurs de la plateforme à l’échelle nationale.</p>
     </template>
 
@@ -21,6 +21,12 @@
             <span class="link" v-bind:class="{ 'link--disabled': currentPage === lastPage }" @click="nextPage">Suivant <font-awesome-icon icon="caret-square-right"></font-awesome-icon></span>
         </div>
 
-        <Table :columns="columns" :content="pageContent" :emptyLabel="'Aucune structure répertoriée pour les filtres sélectionnés'" @click="focus"></Table>
+        <Table :columns="columns" :content="pageContent" :emptyLabel="'Aucun contact répertorié pour les filtres sélectionnés'" @click="focus"></Table>
+
+        <div class="rb-pagination" v-if="pageContent.length > 3">
+            <span class="link" v-bind:class="{ 'link--disabled': currentPage === 0 }" @click="previousPage"><font-awesome-icon icon="caret-square-left"></font-awesome-icon> Précédent</span>
+            <span class="pagination-pages">{{ pageBeginning }} - {{ pageEnd }} sur {{ filteredOrganizations.length }}</span>
+            <span class="link" v-bind:class="{ 'link--disabled': currentPage === lastPage }" @click="nextPage">Suivant <font-awesome-icon icon="caret-square-right"></font-awesome-icon></span>
+        </div>
     </template>
 </Skeleton>

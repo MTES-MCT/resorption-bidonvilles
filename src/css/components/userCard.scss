@@ -22,6 +22,11 @@
         padding: 0;
         font-size: 0.9rem;
         font-weight: normal;
+
+        &.userCard-position--empty {
+            font-style: italic;
+            color: #53657d;
+        }
     }
 }
 

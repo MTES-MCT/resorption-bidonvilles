@@ -19,7 +19,10 @@
             </tr>
 
             <tr v-for="(row, index) in content" :class="index % 2 === 0 ? 'table-row--odd' : ''" @click="click(row)">
-                <td v-for="column in computedColumns" v-html="row[column.id]" :class="`table-col--${column.id}`"></td>
+                <td v-for="column in computedColumns" :class="`table-col--${column.id}`">
+                    <span v-html="row[column.id]"></span>
+                    <font-awesome-icon v-if="row[column.id] && column.icon" :icon="column.icon"></font-awesome-icon>
+                </td>
             </tr>
         </tbody>
     </table>

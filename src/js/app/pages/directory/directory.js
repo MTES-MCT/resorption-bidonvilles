@@ -23,7 +23,7 @@ export default {
                 { id: 'organization', label: 'Structure' },
                 { id: 'location', label: 'Territoire' },
                 { id: 'role', label: 'Rôle' },
-                { id: 'contacts', label: '' },
+                { id: 'contacts', label: '', icon: 'arrow-right' },
             ],
             local: getConfig().user.organization.location,
             level: 'local',
@@ -88,7 +88,6 @@ export default {
                         locationName,
                         role: organization.role,
                         users: organization.users,
-
                     },
                 };
             });
@@ -139,6 +138,12 @@ export default {
             }
 
             return Math.ceil(this.filteredOrganizations.length / ITEMS_PER_PAGE) - 1;
+        },
+    },
+
+    watch: {
+        search() {
+            this.currentPage = 0;
         },
     },
 

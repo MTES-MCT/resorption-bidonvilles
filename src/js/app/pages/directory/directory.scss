@@ -10,5 +10,12 @@
 .table {
     .table-col--contacts {
         text-align: right;
+
+        img,
+        svg {
+            color: #0053B3;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
     }
 }

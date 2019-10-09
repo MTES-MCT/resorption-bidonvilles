@@ -11,7 +11,7 @@
 .popin-wrapper {
     position: absolute;
     margin-left: -500px;
-    padding: 20px 40px;
+    padding: 35px 70px;
     width: 1000px;
     left: 50%;
     top: 200px;
@@ -22,5 +22,8 @@
 }
 
 .popin-close {
-    text-align: right;
+    position: absolute;
+    margin: 0;
+    top: 35px;
+    right: 40px;
 }
