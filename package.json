@@ -36,7 +36,7 @@
     "scripts": {
         "dev": "parcel serve --no-autoinstall ./src/app.html --open --no-source-maps",
         "build": "rm -rf ./dist && parcel build ./src/app.html --no-source-maps ./dist",
-        "release": "release() { git reset HEAD .; rm -rf dist; echo \"\\\"$1\\\"\" > src/js/version.json; yarn build; git add dist; git commit -m \"📦 Release v$1\"; git tag \"v$1\"; git push origin HEAD; git push origin \"v$1\"; } && release",
+        "release": "release() { git reset HEAD .; rm -rf dist; echo \"\\\"$1\\\"\" > src/js/version.json; yarn build; git add dist src/js/version.json; git commit -m \"📦 Release v$1\"; git tag \"v$1\"; git push origin HEAD; git push origin \"v$1\"; } && release",
         "deploy": "deploy() { git fetch origin \"refs/tags/$1:refs/tags/$1\"; git checkout $1; } && deploy"
     },
     "alias": {
