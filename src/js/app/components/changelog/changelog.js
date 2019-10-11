@@ -33,6 +33,7 @@ export default {
             }
 
             this.currentItemIndex -= 1;
+            this.syncCarousel();
         },
 
         next() {
@@ -42,6 +43,12 @@ export default {
             }
 
             this.currentItemIndex += 1;
+            this.syncCarousel();
+        },
+
+        syncCarousel() {
+            const firstImage = this.$refs.carousel.firstChild;
+            firstImage.style.marginLeft = `${-1 * firstImage.offsetWidth * this.currentItemIndex}px`;
         },
     },
 

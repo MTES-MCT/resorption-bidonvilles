@@ -12,7 +12,7 @@
                 <span>Initialisation de la plateforme en cours...</span>
             </div>
 
-            <Changelog v-if="changelog !== null" :log="changelog" @done="redirect"></Changelog>
+            <Changelog v-if="changelog !== null" :log="changelog" @done="markChangelogAsRead"></Changelog>
         </div>
     </section>
 </div>

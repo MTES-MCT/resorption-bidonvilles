@@ -1,4 +1,4 @@
-import { getApi } from '#helpers/api/main';
+import { getApi, postApi } from '#helpers/api/main';
 import { refreshToken } from '#helpers/api/user';
 
 /**
@@ -96,6 +96,17 @@ export function hasPermission(permissionName) {
     const permission = getPermission(`${entity}.${feature}`);
 
     return permission !== null && (data === undefined || permission[data] === true);
+}
+
+/**
+ * Marks a changelog as read
+ *
+ * @param {Number} version The latest version read by the user
+ *
+ * @returns {Promise}
+ */
+export function closeChangelog(version) {
+    postApi('/changelog', { version });
 }
 
 /**

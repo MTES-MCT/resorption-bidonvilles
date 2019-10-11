@@ -1,65 +1,66 @@
 {
-  "name": "resorption-bidonvilles-frontend",
-  "version": "0.0.1",
-  "description": "Frontend de Résorption Bidonvilles",
-  "author": {
-    "name": "Anis Safine Laget",
-    "email": "anis@users.noreply.github.com"
-  },
-  "main": "./dist/index.html",
-  "license": "AGPL-3.0-or-later",
-  "private": true,
-  "devDependencies": {
-    "@babel/core": "^7.2.2",
-    "@babel/polyfill": "^7.0.0",
-    "@babel/preset-env": "^7.2.0",
-    "@vue/component-compiler-utils": "^2.3.1",
-    "eslint": "^5.10.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.14.0",
-    "husky": "^1.2.1",
-    "leaflet": "^1.3.4",
-    "leaflet-providers": "^1.5.0",
-    "lint-staged": "^8.1.0",
-    "parcel-bundler": "^1.12.3",
-    "pug": "^2.0.3",
-    "sass": "^1.15.2",
-    "template.data.gouv.fr": "^1.1.8",
-    "vue": "^2.5.21",
-    "vue-hot-reload-api": "^2.3.1",
-    "vue-matomo": "^3.7.0-2",
-    "vue-notification": "^1.3.16",
-    "vue-router": "^3.0.2",
-    "vue-template-compiler": "^2.5.21",
-    "vuejs-datepicker": "^1.5.4"
-  },
-  "scripts": {
-    "dev": "parcel serve ./src/app.html --open --no-autoinstall --no-source-maps",
-    "build": "rm -rf ./dist && parcel build ./src/app.html --no-source-maps ./dist",
-    "release": "release() { git reset HEAD .; yarn build; git add dist; git commit -m \"📦 Release v$1\"; git tag \"v$1\"; git push origin HEAD; git push origin \"v$1\"; } && release",
-    "deploy": "deploy() { git fetch origin \"refs/tags/$1:refs/tags/$1\"; git checkout $1; } && deploy"
-  },
-  "alias": {
-    "#helpers": "./src/js/helpers",
-    "#app": "./src/js/app",
-    "vue": "./node_modules/vue/dist/vue.common.js"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
+    "name": "resorption-bidonvilles-frontend",
+    "version": "0.0.1",
+    "description": "Frontend de Résorption Bidonvilles",
+    "author": {
+        "name": "Anis Safine Laget",
+        "email": "anis@users.noreply.github.com"
+    },
+    "main": "./dist/index.html",
+    "license": "AGPL-3.0-or-later",
+    "private": true,
+    "devDependencies": {
+        "@babel/core": "^7.2.2",
+        "@babel/polyfill": "^7.0.0",
+        "@babel/preset-env": "^7.2.0",
+        "@vue/component-compiler-utils": "^2.3.1",
+        "eslint": "^5.10.0",
+        "eslint-config-airbnb-base": "^13.1.0",
+        "eslint-plugin-import": "^2.14.0",
+        "husky": "^1.2.1",
+        "leaflet": "^1.3.4",
+        "leaflet-providers": "^1.5.0",
+        "lint-staged": "^8.1.0",
+        "parcel-bundler": "^1.12.3",
+        "pug": "^2.0.3",
+        "sass": "^1.15.2",
+        "template.data.gouv.fr": "^1.1.8",
+        "vue": "^2.5.21",
+        "vue-hot-reload-api": "^2.3.1",
+        "vue-matomo": "^3.7.0-2",
+        "vue-notification": "^1.3.16",
+        "vue-router": "^3.0.2",
+        "vue-template-compiler": "^2.5.21",
+        "vuejs-datepicker": "^1.5.4"
+    },
+    "scripts": {
+        "dev": "parcel serve --no-autoinstall ./src/app.html --open --no-source-maps",
+        "build": "rm -rf ./dist && parcel build ./src/app.html --no-source-maps ./dist",
+        "release": "release() { git reset HEAD .; rm -rf dist; yarn build; git add dist; git commit -m \"📦 Release v$1\"; git tag \"v$1\"; git push origin HEAD; git push origin \"v$1\"; } && release",
+        "deploy": "deploy() { git fetch origin \"refs/tags/$1:refs/tags/$1\"; git checkout $1; } && deploy"
+    },
+    "alias": {
+        "#helpers": "./src/js/helpers",
+        "#app": "./src/js/app",
+        "#root": "./src/js",
+        "vue": "./node_modules/vue/dist/vue.common.js"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "src/**/*.js": [
+            "eslint --fix"
+        ]
+    },
+    "dependencies": {
+        "@fortawesome/fontawesome-svg-core": "^1.2.22",
+        "@fortawesome/free-solid-svg-icons": "^5.10.2",
+        "@fortawesome/vue-fontawesome": "^0.1.6",
+        "leaflet.markercluster": "^1.4.1",
+        "simplebar-vue": "^0.1.4",
+        "vue-good-table": "^2.16.0"
     }
-  },
-  "lint-staged": {
-    "src/**/*.js": [
-      "eslint --fix"
-    ]
-  },
-  "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.22",
-    "@fortawesome/free-solid-svg-icons": "^5.10.2",
-    "@fortawesome/vue-fontawesome": "^0.1.6",
-    "leaflet.markercluster": "^1.4.1",
-    "simplebar-vue": "^0.1.4",
-    "vue-good-table": "^2.16.0"
-  }
 }

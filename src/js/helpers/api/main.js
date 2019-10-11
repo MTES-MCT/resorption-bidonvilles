@@ -1,6 +1,7 @@
 import { getToken, logout } from '#helpers/api/user';
 import { router } from '#app/router';
 import { open as openTab } from '#helpers/tabHelper';
+import version from '#root/version.json';
 
 /**
  * Generic error codes
@@ -45,7 +46,7 @@ function handleRequestResponse(success, failure) {
             router.push('/');
             break;
 
-        // for everything else, let the current component decide what's best
+            // for everything else, let the current component decide what's best
         default:
             failure((response && response.error) || {
                 user_message: 'Une erreur inconnue est survenue',
@@ -98,6 +99,8 @@ function request(method, url, data, headers = {}) {
                 xhr.setRequestHeader('x-access-token', token);
             }
         }
+
+        xhr.setRequestHeader('x-app-version', version);
 
         xhr.onload = handleRequestResponse.bind(xhr, success, failure);
         xhr.onerror = handleRequestFailure.bind(xhr, failure);

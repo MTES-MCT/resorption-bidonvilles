@@ -9,6 +9,10 @@
 
     > img {
         width: 100%;
+
+        &:first-of-type {
+            transition: margin-left 0.3s ease-in-out;
+        }
     }
 }
 
