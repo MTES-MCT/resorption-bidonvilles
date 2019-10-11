@@ -36341,7 +36341,7 @@ function open(url) {
 var _default = open;
 exports.default = _default;
 },{}],"js/version.json":[function(require,module,exports) {
-module.exports = "0.0.75";
+module.exports = "0.0.76";
 },{}],"js/helpers/api/main.js":[function(require,module,exports) {
 "use strict";
 
