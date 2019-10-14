@@ -20,10 +20,11 @@
     overflow-y: auto;
     background: #EBEFF3;
     border-radius: 10px;
-    align-items: center;
+    align-items: flex-start;
 
     > div {
         flex-grow: 1;
+        padding-bottom: 35px;
     }
 }
 
