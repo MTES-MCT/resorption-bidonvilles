@@ -1,35 +1,93 @@
-.comment-container {
-    margin-bottom: 2.3rem;
+.town-wrapper {
+    margin-top: 10px;
 }
 
-.comment-time {
-    font-size: 0.85rem;
-    font-style: italic;
+.town-header {
+    .container {
+        display: flex;
+        padding-top: 20px;
+        margin-top: 0px;
+        margin-bottom: 20px;
+        align-items: center;
+        justify-content: space-between;
+    }
 }
 
-.comment-edit,
-.comment-delete {
-    cursor: pointer;
-    width: 15px;
-    height: 15px;
+.town-actionButtons {
+    display: flex;
+    display: -webkit-box;
+    display: -ms-flexbox;
+
+    flex-direction: column;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+
+    > button {
+        display: block;
+        margin-bottom: 8px;
+    }
 }
 
-.comment-content {
-    margin: 0.6rem 0 0;
+@media (min-width: 1400px) {
+    .town-actionButtons {
+        > button {
+            display: inline-block;
+        }
+    }
+}
+
+.town-reference {
+    color: #26353F;
+    font-weight: bold;
+}
+
+.town-reference > h1,
+.town-reference > h2 {
+    margin: 0;
     padding: 0;
-    display: block;
-    white-space: pre-wrap;
 }
 
-h1 > .label {
+.town-reference > h1 {
+    font-size: 28px;
+    letter-spacing: -0.05em;
+}
+
+.town-reference > h2 {
+    font-size: 18px;
+}
+
+.town-reference > p {
+    margin: 8px 0 10px;
+    padding: 0;
+
+    > span {
+        margin-right: 15px;
+    }
+}
+
+.town-status {
+    padding: 2px 10px;
     font-weight: normal;
     vertical-align: middle;
-    font-size: 0.4em;
+    font-size: 0.5em;
     background: #efaca6;
+    letter-spacing: 0;
+    border-radius: 3px;
+
+    &.open {
+        background: #daf5e7;
+    }
 }
 
-h1 > .label.open {
-    background: #daf5e7;
+.town-links {
+    display: inline-block;
+}
+
+.town-main {
+    padding-top: 35px;
+    background: #EBEFF3;
+    padding-bottom: 40px;
 }
 
 .panel .form__group > label,
@@ -60,21 +118,6 @@ p.error {
     }
 }
 
-.town-header {
-    margin-top: 20px;
-    margin-bottom: 30px;
-}
-
-.town-header h1 {
-    margin-bottom: 0;
-}
-
-.town-header h2 {
-    margin: 0 0 10px;
-    font-size: 1rem;
-    font-weight: normal;
-}
-
 .sticky {
     z-index: 5000;
     position: fixed;
@@ -82,16 +125,8 @@ p.error {
     left: 0;
     margin-top: 0;
     margin-bottom: 0;
-    padding-bottom: 20px;
-    padding-top: 20px;
     width: 100%;
-    border-bottom: 1px solid #ccc;
     background: white;
-
-    > div {
-        max-width: 1000px;
-        margin: 0 auto;
-    }
 }
 
 .sticky + .dashboard {
@@ -146,4 +181,27 @@ fieldset {
     .button {
         margin: 20px 0 0;
     }
+}
+
+.comment-container {
+    margin-bottom: 2.3rem;
+}
+
+.comment-time {
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+.comment-edit,
+.comment-delete {
+    cursor: pointer;
+    width: 15px;
+    height: 15px;
+}
+
+.comment-content {
+    margin: 0.6rem 0 0;
+    padding: 0;
+    display: block;
+    white-space: pre-wrap;
 }
