@@ -20,7 +20,7 @@
         </div>
     </section>
 
-    <section v-else class="section section-white town-wrapper">
+    <section v-else class="section section-white town-wrapper" ref="wrapper">
         <div class="alert" v-if="mode === 'close'">
             <div class="wrapper">
                 <h2>Disparition du site</h2>
@@ -87,9 +87,9 @@
                     <p class="town-links">
                         <span v-bind:class="{ link: true }">Dernière modification le <time>{{ formatDate(town.updatedAt) }}</time></span>
                     </p>
-                    //- <p class="town-links">
-                    //-     <a class="link" v-if="hasPermission('shantytown_comment.list', town)">{{ town.comments.length }} commentaire{{ town.comments.length > 1 ? 's' : '' }}</a>
-                    //- </p>
+                    <p class="town-links">
+                        <a class="link" v-if="hasPermission('shantytown_comment.list', town)" @click="this.showAside">{{ town.comments.length }} commentaire{{ town.comments.length > 1 ? 's' : '' }}</a>
+                    </p>
                 </div>
 
                 <div class="town-actionButtons">
@@ -102,7 +102,65 @@
             </div>
         </header>
 
-        <div class="town-main">
+        <div class="town-main" ref="main">
+            <simplebar class="town-aside" ref="aside" data-simplebar-auto-hide="false" v-bind:class="{ active: showComments }">
+                <div class="asidePanel-close" @click="this.hideAside">
+                    <font-awesome-icon icon="times" size="2x"></font-awesome-icon>
+                </div>
+
+                <header class="asidePanel-header">
+                    <h1><font-awesome-icon icon="comment"></font-awesome-icon> Commentaires</h1>
+                </header>
+
+                <div class="comment-form" v-if="hasPermission('shantytown_comment.create', town)">
+                    <h1>Ajouter un commentaire</h1>
+                    <p>Merci de renseigner des informations en respectant les règles de confidentialité. Ne pas citer les caractéristiques des individus (Nom, âge, sexe, origine...)</p>
+
+                    <p class="error" v-if="commentErrors.description">
+                        <ul>
+                            <li v-for="error in commentErrors.description">{{ error }}</li>
+                        </ul>
+                    </p>
+
+                    <div class="input__group">
+                        <textarea v-model="newComment"></textarea>
+                    </div>
+                    <p><button class="button large" @click="addComment">Ajouter le commentaire</button></p>
+                </div>
+
+                <p v-if="town.comments.length === 0">Aucun commentaire enregistré pour le moment</p>
+
+                <article class="comment" v-for="comment in town.comments">
+                    <header class="comment-header">
+                        <p class="comment-date"><time>{{ formatDate(comment.createdAt, 'd M y à h:m') }}</time></p>
+                        <h1 class="comment-title">
+                            <span>
+                                <font-awesome-icon icon="user"></font-awesome-icon>
+                                <span>{{ comment.createdBy.lastName.toUpperCase() }} {{ comment.createdBy.firstName }}</span>
+                            </span>
+                            <span class="comment-actions">
+                                <font-awesome-icon icon="pencil-alt" class="comment-action--edit" v-if="canEditComment(comment)" @click="editComment(comment)"></font-awesome-icon>
+                                <font-awesome-icon icon="trash-alt" class="comment-action--delete" v-if="canDeleteComment(comment)" @click="deleteComment(comment)"></font-awesome-icon>
+                            </span>
+                        </h1>
+                    </header>
+
+                    <div v-if="commentEdit.commentId === comment.id">
+                        <p class="error" v-if="commentEdit.error">
+                            <ul>
+                                <li>{{ commentEdit.error }}</li>
+                            </ul>
+                        </p>
+                        <textarea v-model="commentEdit.value" :disabled="commentEdit.pending"></textarea>
+                        <p>
+                            <button class="button" @click="sendEditComment(comment)">Modifier</button>
+                            <button class="button warning" @click="cancelEditComment">Annuler</button>
+                        </p>
+                    </div>
+                    <p v-else class="comment-content">{{ comment.description }}</p>
+                </article>
+            </simplebar>
+
             <!-- SUCCESS STATE -->
             <div class="container">
                 <div class="notification error full-width" v-if="deleteError !== null">
@@ -663,53 +721,6 @@
                         <p><strong>Type de l'action :</strong> {{ action.type }}</p>
                         <p><strong>Détails de l'action :</strong></p>
                         <p>{{ action.description || 'Aucun détails fournis' }}</p>
-                    </div>
-                </div>
-
-                <!-- comments -->
-                <div v-else-if="view === 'comments'" class="comments">
-                    <div class="form__group">
-                        <h4>Commentaires</h4>
-                        <p v-if="town.comments.length === 0">Aucun commentaire enregistré pour le moment</p>
-                        <p class="comment-container" v-for="comment in town.comments">
-                            <strong>
-                                <span>{{ comment.createdBy.lastName.toUpperCase() + ' ' + comment.createdBy.firstName }} ({{ comment.createdBy.position }} - {{ comment.createdBy.organization }})</span>
-                                <img v-if="canEditComment(comment)" src="/img/edit.svg" width="15" alt="Modifier mon commentaire" class="comment-edit" @click="editComment(comment) " />
-                                <img v-if="canDeleteComment(comment)" src="/img/delete.svg" width="15" alt="Supprimer mon commentaire" class="comment-delete" @click="deleteComment(comment)" />
-                            </strong><br/>
-                            <span class="comment-time">Publié le {{ formatDate(comment.createdAt) }}</span><br/>
-                            <span v-if="commentEdit.commentId !== comment.id" class="comment-content">{{ comment.description }}</span>
-                            <span class="error" v-if="commentEdit.commentId === comment.id && commentEdit.error">
-                                <ul>
-                                    <li>{{ commentEdit.error }}</li>
-                                </ul>
-                            </span>
-                            <textarea v-if="commentEdit.commentId === comment.id" v-model="commentEdit.value" :disabled="commentEdit.pending"></textarea>
-                            <span v-if="commentEdit.commentId === comment.id" class="input__group">
-                                <button class="button" @click="sendEditComment(comment)">Modifier le commentaire</button>
-                                <button class="button warning" @click="cancelEditComment">Annuler</button>
-                            </span>
-                        </p>
-                    </div>
-
-                    <div class="form__group" v-if="hasPermission('shantytown_comment.create', town)">
-                        <h4>Ajouter un commentaire :</h4>
-                        <div class="notification error" v-if="commentError">{{ commentError }}.</div>
-    
-                        <p>Merci de renseigner des informations en respectant les règles de confidentialité. Ne pas citer les caractéristiques des individus (Nom, âge, sexe, origine...)</p>
-
-                        <label v-bind:class="{ error: commentErrors.description }"></label>
-                        <p class="error" v-if="commentErrors.description">
-                            <ul>
-                                <li v-for="error in commentErrors.description">{{ error }}</li>
-                            </ul>
-                        </p>
-                        <div class="input__group">
-                            <textarea v-model="newComment"></textarea>
-                        </div>
-                        <div class="input__group">
-                            <button class="button large" @click="addComment">Ajouter le commentaire</button>
-                        </div>
                     </div>
                 </div>
             </div>

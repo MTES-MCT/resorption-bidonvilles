@@ -1,7 +1,9 @@
+import simplebar from 'simplebar-vue';
 import Datepicker from 'vuejs-datepicker';
 import { fr } from 'vuejs-datepicker/dist/locale';
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import Map from '#app/pages/townExplorer/map/map.vue';
+import Quickview from '#app/components/quickview/quickview.vue';
 import {
     get, close, edit, destroy, addComment, editComment, deleteComment,
 } from '#helpers/api/town';
@@ -25,6 +27,8 @@ export default {
         NavBar,
         Map,
         Datepicker,
+        Quickview,
+        simplebar,
     },
     data() {
         return {
@@ -67,6 +71,7 @@ export default {
                 { value: 'granted', label: 'Obtenu' },
             ],
             newComment: '',
+            showComments: false,
             commentError: null,
             commentErrors: {},
             edit: null,
@@ -125,15 +130,32 @@ export default {
         },
     },
     mounted() {
+        this.scroll = window.pageYOffset;
         window.addEventListener('scroll', this.stickTheHeader);
     },
     destroyed() {
         window.removeEventListener('scroll', this.stickTheHeader);
+        document.body.removeEventListener('click', this.checkClickOutsideAside);
     },
     created() {
         this.fetchData();
     },
     methods: {
+        showAside() {
+            this.showComments = true;
+            setTimeout(() => {
+                document.body.addEventListener('click', this.checkClickOutsideAside);
+            }, 100);
+        },
+        hideAside() {
+            this.showComments = false;
+            document.body.removeEventListener('click', this.checkClickOutsideAside);
+        },
+        checkClickOutsideAside(event) {
+            if (!this.$refs.aside.$el.contains(event.target)) {
+                this.hideAside();
+            }
+        },
         hasPermission: permissionName => hasPermission(permissionName),
         offsetTop(el) {
             let next = el;
@@ -146,13 +168,20 @@ export default {
             return offset;
         },
         stickTheHeader() {
-            if (window.pageYOffset > this.offsetTop(this.$refs.header)) {
-                this.$refs.header.classList.add('sticky');
-            } else {
-                this.$refs.header.classList.remove('sticky');
+            const goesUp = window.pageYOffset < this.scroll;
+            this.scroll = window.pageYOffset;
+
+            if (goesUp === true) {
+                if (window.pageYOffset - this.$refs.main.offsetTop <= 0) {
+                    this.$refs.wrapper.classList.remove('sticky');
+                    this.$refs.aside.$el.style.top = 0;
+                }
+            } else if (window.pageYOffset > this.offsetTop(this.$refs.header)) {
+                this.$refs.wrapper.classList.add('sticky');
+                this.$refs.aside.$el.style.top = `${this.$refs.header.offsetTop + this.$refs.header.offsetHeight}px`;
             }
         },
-        formatDate: ts => App.formatDate(ts),
+        formatDate: (...args) => App.formatDate(...args),
         fetchData() {
             if (this.loading === true) {
                 return;
@@ -255,10 +284,6 @@ export default {
             };
         },
         setView(view) {
-            if (view === 'comments' && !hasPermission('shantytown_comment.list')) {
-                return;
-            }
-
             this.setViewMode();
             this.view = view;
         },
@@ -498,14 +523,16 @@ export default {
                 });
         },
         cancelEditComment() {
-            if (this.commentEdit.pending !== false) {
-                return;
-            }
+            setTimeout(() => {
+                if (this.commentEdit.pending !== false) {
+                    return;
+                }
 
-            this.commentEdit.commentId = null;
-            this.commentEdit.value = null;
-            this.commentEdit.pending = false;
-            this.commentEdit.error = null;
+                this.commentEdit.commentId = null;
+                this.commentEdit.value = null;
+                this.commentEdit.pending = false;
+                this.commentEdit.error = null;
+            }, 100);
         },
     },
 };

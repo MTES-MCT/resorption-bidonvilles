@@ -1,0 +1,68 @@
+@import '/css/config/colors.scss';
+
+.comment {
+    margin-bottom: 30px;
+}
+
+.comment {
+    p {
+        margin: 0;
+    }
+
+    textarea {
+        margin-top: 15px;
+    }
+
+    .button {
+        margin: 0;
+        display: inline-block;
+    }
+}
+
+.comment:hover {
+    .comment-actions {
+        visibility: visible;
+    }
+}
+
+.comment-date {
+    margin: 0;
+    padding: 0;
+}
+
+.comment-title {
+    display: flex;
+    margin: 5px 0 0;
+    padding: 0;
+    font-size: 1rem;
+    color: $TITLE_BLUE;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.comment-content {
+    margin: 0;
+    padding: 0;
+}
+
+.comment-form {
+    margin-bottom: 30px;
+
+    > h1 {
+        font-size: 1rem;
+    }
+}
+
+.comment-actions {
+    visibility: hidden;
+}
+
+.comment-action--edit,
+.comment-action--delete {
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.comment-action--delete {
+    color: #d63626;
+}

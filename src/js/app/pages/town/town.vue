@@ -3,10 +3,10 @@
 </template>
 
 <script>
-import Component from './town.js';
+import Component from "./town.js";
 export default Component;
 </script>
 
 <style lang="scss" scoped>
-@import './town.scss';
+@import "./town.scss";
 </style>

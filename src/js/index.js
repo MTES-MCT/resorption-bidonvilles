@@ -26,7 +26,9 @@ window.App = Object.freeze({
             .replace('d', (`0${date.getDate()}`).slice(-2))
             .replace('m', (`0${date.getMonth() + 1}`).slice(-2))
             .replace('M', MONTHS[date.getMonth()])
-            .replace('y', date.getFullYear());
+            .replace('y', date.getFullYear())
+            .replace('h', (`0${date.getHours()}`).slice(-2))
+            .replace('m', (`0${date.getMinutes()}`).slice(-2));
     },
 });
 

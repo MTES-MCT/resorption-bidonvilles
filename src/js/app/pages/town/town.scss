@@ -1,3 +1,5 @@
+@import '/css/config/colors.scss';
+
 .town-wrapper {
     margin-top: 10px;
 }
@@ -85,9 +87,52 @@
 }
 
 .town-main {
+    position: relative;
     padding-top: 35px;
     background: #EBEFF3;
     padding-bottom: 40px;
+}
+
+.town-aside {
+    z-index: 7000;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: -425px;
+    width: 425px;
+    color: #182B51;
+    transition: right 0.4s ease-in-out;
+    -webkit-transition: right 0.4s ease-in-out;
+    background: #C9D3DF;
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.16);
+    max-height: 750px;
+
+    &.active {
+        right: 0;
+    }
+}
+
+.town-aside {
+    padding: 15px 35px;
+
+    .asidePanel-close {
+        position: absolute;
+        top: 20px;
+        right: 50px;
+        cursor: pointer;
+    }
+
+    .asidePanel-header {
+        margin-bottom: 25px;
+
+        > h1 {
+            color: $TITLE_BLUE;
+            margin: 0;
+            padding: 0;
+            font-size: 1.1rem;  
+            line-height: 40px;
+        }
+    }
 }
 
 .panel .form__group > label,
@@ -119,22 +164,25 @@ p.error {
 }
 
 .sticky {
-    z-index: 5000;
-    position: fixed;
-    top: 0;
-    left: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-    width: 100%;
-    background: white;
-}
+    .town-header {
+        z-index: 5000;
+        position: fixed;
+        top: 0;
+        left: 0;
+        margin-top: 0;
+        margin-bottom: 0;
+        width: 100%;
+        background: white;
+    }
 
-.sticky + .dashboard {
-    padding-top: 130px;
-}
+    .town-main {
+        padding-top: 174px;
+    }
 
-.dashboard {
-    padding: 0;
+    .town-aside {
+        position: fixed;
+        max-height: none;
+    }
 }
 
 .side-menu {
