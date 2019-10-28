@@ -3,7 +3,6 @@ import Datepicker from 'vuejs-datepicker';
 import { fr } from 'vuejs-datepicker/dist/locale';
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import Map from '#app/pages/townExplorer/map/map.vue';
-import Quickview from '#app/components/quickview/quickview.vue';
 import {
     get, close, edit, destroy, addComment, editComment, deleteComment,
 } from '#helpers/api/town';
@@ -27,7 +26,6 @@ export default {
         NavBar,
         Map,
         Datepicker,
-        Quickview,
         simplebar,
     },
     data() {
