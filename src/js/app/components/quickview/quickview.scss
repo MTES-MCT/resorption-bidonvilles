@@ -19,7 +19,7 @@
     bottom: 0;
     right: -300px;
     width: 300px;
-    color: #182B51;
+    color: $NILE_BLUE;
     transition: right 0.4s ease-in-out;
     -webkit-transition: right 0.4s ease-in-out;
     background: #ffffff;
@@ -36,7 +36,7 @@
             letter-spacing: 0.05em;
 
             > a {
-                color: #182B51;
+                color: $NILE_BLUE;
                 text-decoration: none;
 
                 &:hover {
@@ -74,7 +74,7 @@
             .icon {
                 width: 20px;
                 height: 20px;
-                color: #182B51;
+                color: $NILE_BLUE;
                 vertical-align: middle;
             }
         }

@@ -1,5 +1,3 @@
-@import '/css/config/colors.scss';
-
 .carousel {
     margin-right: 50px;
     width: 500px;
@@ -33,6 +31,6 @@
     }
 
     .carousel-bullet--active {
-        background: $TITLE_BLUE;
+        background: $ENDEAVOUR_BLUE;
     }
 }

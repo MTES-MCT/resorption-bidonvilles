@@ -84,11 +84,11 @@
                 <div class="town-reference">
                     <h1>Site {{ town.addressSimple }} <span :class="`town-status ${town.status}`">{{ status }}</span></h1>
                     <h2>{{ town.city.name }}</h2>
-                    <p class="town-links">
-                        <span v-bind:class="{ link: true }">Dernière modification le <time>{{ formatDate(town.updatedAt) }}</time></span>
+                    <p class="town-links" v-if="town.changelog.length > 0">
+                        <span v-bind:class="{ link: true }" @click="showAside('changelog')" data-group="sidePanelLink">Dernière modification le {{ formatDate(town.updatedAt) }}</span>
                     </p>
-                    <p class="town-links">
-                        <a class="link" v-if="hasPermission('shantytown_comment.list', town)" @click="this.showAside">{{ town.comments.length }} commentaire{{ town.comments.length > 1 ? 's' : '' }}</a>
+                    <p class="town-links" v-if="hasPermission('shantytown_comment.list', town)">
+                        <a class="link" @click="showAside('comments')" data-group="sidePanelLink">{{ town.comments.length }} commentaire{{ town.comments.length > 1 ? 's' : '' }}</a>
                     </p>
                 </div>
 
@@ -103,63 +103,101 @@
         </header>
 
         <div class="town-main" ref="main">
-            <simplebar class="town-aside" ref="aside" data-simplebar-auto-hide="false" v-bind:class="{ active: showComments }">
-                <div class="asidePanel-close" @click="this.hideAside">
-                    <font-awesome-icon icon="times" size="2x"></font-awesome-icon>
+            <div class="sidepanel" ref="aside" v-bind:class="{ 'sidepanel--visible': sidePanel !== null }">
+                <div class="sidepanel-actions">
+                    <span @click="hideAside"><font-awesome-icon icon="times" size="2x"></font-awesome-icon></span>
                 </div>
 
-                <header class="asidePanel-header">
-                    <h1><font-awesome-icon icon="comment"></font-awesome-icon> Commentaires</h1>
-                </header>
-
-                <div class="comment-form" v-if="hasPermission('shantytown_comment.create', town)">
-                    <h1>Ajouter un commentaire</h1>
-                    <p>Merci de renseigner des informations en respectant les règles de confidentialité. Ne pas citer les caractéristiques des individus (Nom, âge, sexe, origine...)</p>
-
-                    <p class="error" v-if="commentErrors.description">
-                        <ul>
-                            <li v-for="error in commentErrors.description">{{ error }}</li>
-                        </ul>
-                    </p>
-
-                    <div class="input__group">
-                        <textarea v-model="newComment"></textarea>
-                    </div>
-                    <p><button class="button large" @click="addComment">Ajouter le commentaire</button></p>
-                </div>
-
-                <p v-if="town.comments.length === 0">Aucun commentaire enregistré pour le moment</p>
-
-                <article class="comment" v-for="comment in town.comments">
-                    <header class="comment-header">
-                        <p class="comment-date"><time>{{ formatDate(comment.createdAt, 'd M y à h:m') }}</time></p>
-                        <h1 class="comment-title">
-                            <span>
-                                <font-awesome-icon icon="user"></font-awesome-icon>
-                                <span>{{ comment.createdBy.lastName.toUpperCase() }} {{ comment.createdBy.firstName }}</span>
-                            </span>
-                            <span class="comment-actions">
-                                <font-awesome-icon icon="pencil-alt" class="comment-action--edit" v-if="canEditComment(comment)" @click="editComment(comment)"></font-awesome-icon>
-                                <font-awesome-icon icon="trash-alt" class="comment-action--delete" v-if="canDeleteComment(comment)" @click="deleteComment(comment)"></font-awesome-icon>
-                            </span>
-                        </h1>
+                <div v-if="sidePanel === 'changelog'">
+                    <header class="sidepanel-header">
+                        <h1 class="sidepanel-title">Historique des activités</h1>
                     </header>
 
-                    <div v-if="commentEdit.commentId === comment.id">
-                        <p class="error" v-if="commentEdit.error">
-                            <ul>
-                                <li>{{ commentEdit.error }}</li>
-                            </ul>
-                        </p>
-                        <textarea v-model="commentEdit.value" :disabled="commentEdit.pending"></textarea>
-                        <p>
-                            <button class="button" @click="sendEditComment(comment)">Modifier</button>
-                            <button class="button warning" @click="cancelEditComment">Annuler</button>
-                        </p>
+                    <div class="sidepanel-content">
+                        <div class="sidepanel-section" v-for="changelog in town.changelog">
+                            <article class="userpost userpost--changelog">
+                                <header class="userpost-header">
+                                    <p class="userpost-date"><time>{{ formatDate(changelog.date, 'd M y à h:m') }}</time></p>
+                                    <h1 class="userpost-title">
+                                        <span>
+                                            <font-awesome-icon icon="user"></font-awesome-icon>
+                                            <span>{{ changelog.author.last_name.toUpperCase() }} {{ changelog.author.first_name }}</span>
+                                        </span>
+                                    </h1>
+                                </header>
+
+                                <p v-for="diff in changelog.diff" class="changelog">
+                                    <span class="changelog-name">{{ diff.field }}</span><br/>
+                                    <span class="changelog-oldValue">{{ diff.oldValue || 'non renseigné' }}</span><br/>
+                                    <span class="changelog-newValue">{{ diff.newValue }}</span>
+                                </p>
+                            </article>
+                        </div>
                     </div>
-                    <p v-else class="comment-content">{{ comment.description }}</p>
-                </article>
-            </simplebar>
+                </div>
+
+                <div v-if="sidePanel === 'comments'">
+                    <header class="sidepanel-header">
+                        <h1 class="sidepanel-title"><font-awesome-icon icon="comment"></font-awesome-icon> Commentaires</h1>
+                    </header>
+
+                    <div class="sidepanel-content">
+                        <div class="sidepanel-section">
+                            <div class="comment-form" v-if="hasPermission('shantytown_comment.create', town)">
+                                <h1>Ajouter un commentaire</h1>
+                                <p>Merci de renseigner des informations en respectant les règles de confidentialité. Ne pas citer les caractéristiques des individus (Nom, âge, sexe, origine...)</p>
+
+                                <p class="error" v-if="commentErrors.description">
+                                    <ul>
+                                        <li v-for="error in commentErrors.description">{{ error }}</li>
+                                    </ul>
+                                </p>
+
+                                <div class="input__group">
+                                    <textarea v-model="newComment"></textarea>
+                                </div>
+                                <p><button class="button large" @click="addComment">Ajouter le commentaire</button></p>
+                            </div>
+                        </div>
+
+                        <div class="sidepanel-section" v-if="town.comments.length === 0">
+                            <p>Aucun commentaire enregistré pour le moment</p>
+                        </div>
+
+                        <div class="sidepanel-section" v-for="comment in town.comments">
+                            <article class="userpost userpost--comment">
+                                <header class="userpost-header">
+                                    <p class="userpost-date"><time>{{ formatDate(comment.createdAt, 'd M y à h:m') }}</time></p>
+                                    <h1 class="userpost-title">
+                                        <span>
+                                            <font-awesome-icon icon="user"></font-awesome-icon>
+                                            <span>{{ comment.createdBy.lastName.toUpperCase() }} {{ comment.createdBy.firstName }}</span>
+                                        </span>
+                                        <span class="userpost-actions">
+                                            <font-awesome-icon icon="pencil-alt" class="userpost-action--edit" v-if="canEditComment(comment)" @click="editComment(comment)"></font-awesome-icon>
+                                            <font-awesome-icon icon="trash-alt" class="userpost-action--delete" v-if="canDeleteComment(comment)" @click="deleteComment(comment)"></font-awesome-icon>
+                                        </span>
+                                    </h1>
+                                </header>
+
+                                <div v-if="commentEdit.commentId === comment.id">
+                                    <p class="error" v-if="commentEdit.error">
+                                        <ul>
+                                            <li>{{ commentEdit.error }}</li>
+                                        </ul>
+                                    </p>
+                                    <textarea v-model="commentEdit.value" :disabled="commentEdit.pending"></textarea>
+                                    <p>
+                                        <button class="button" @click="sendEditComment(comment)">Modifier</button>
+                                        <button class="button warning" @click="cancelEditComment">Annuler</button>
+                                    </p>
+                                </div>
+                                <p v-else class="comment">{{ comment.description }}</p>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- SUCCESS STATE -->
             <div class="container">

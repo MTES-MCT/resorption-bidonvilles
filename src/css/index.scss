@@ -1,16 +1,18 @@
 @import './config/colors.scss';
 @import './components/badge.scss';
 @import './components/carousel.scss';
-@import './components/comment.scss';
+@import './components/changelog.scss';
 @import './components/list.scss';
 @import './components/notification.scss';
 @import './components/page.scss';
 @import './components/pagination.scss';
 @import './components/popin.scss';
 @import './components/role.scss';
+@import './components/sidepanel.scss';
 @import './components/switch.scss';
 @import './components/table.scss';
 @import './components/userCard.scss';
+@import './components/userpost.scss';
 
 .page--withMargin {
     padding-bottom: 50px;
@@ -266,7 +268,7 @@ button:disabled:hover {
 .link {
     text-decoration: none;
     font-weight: bold;
-    color: $TITLE_BLUE;
+    color: $ENDEAVOUR_BLUE;
     cursor: pointer;
 }
 

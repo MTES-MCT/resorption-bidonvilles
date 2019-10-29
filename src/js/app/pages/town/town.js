@@ -69,7 +69,7 @@ export default {
                 { value: 'granted', label: 'Obtenu' },
             ],
             newComment: '',
-            showComments: false,
+            sidePanel: null,
             commentError: null,
             commentErrors: {},
             edit: null,
@@ -79,6 +79,7 @@ export default {
                 pending: false,
                 error: null,
             },
+            asideTimeout: null,
         };
     },
     computed: {
@@ -139,18 +140,19 @@ export default {
         this.fetchData();
     },
     methods: {
-        showAside() {
-            this.showComments = true;
-            setTimeout(() => {
+        showAside(content) {
+            this.sidePanel = content;
+            this.asideTimeout = setTimeout(() => {
                 document.body.addEventListener('click', this.checkClickOutsideAside);
             }, 100);
         },
         hideAside() {
-            this.showComments = false;
+            clearTimeout(this.asideTimeout);
+            this.sidePanel = null;
             document.body.removeEventListener('click', this.checkClickOutsideAside);
         },
         checkClickOutsideAside(event) {
-            if (!this.$refs.aside.$el.contains(event.target)) {
+            if (!this.$refs.aside.contains(event.target) && event.target.dataset.group !== 'sidePanelLink') {
                 this.hideAside();
             }
         },
@@ -172,11 +174,11 @@ export default {
             if (goesUp === true) {
                 if (window.pageYOffset - this.$refs.main.offsetTop <= 0) {
                     this.$refs.wrapper.classList.remove('sticky');
-                    this.$refs.aside.$el.style.top = 0;
+                    this.$refs.aside.style.top = 0;
                 }
             } else if (window.pageYOffset > this.offsetTop(this.$refs.header)) {
                 this.$refs.wrapper.classList.add('sticky');
-                this.$refs.aside.$el.style.top = `${this.$refs.header.offsetTop + this.$refs.header.offsetHeight}px`;
+                this.$refs.aside.style.top = `${this.$refs.header.offsetTop + this.$refs.header.offsetHeight}px`;
             }
         },
         formatDate: (...args) => App.formatDate(...args),

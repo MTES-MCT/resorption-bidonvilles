@@ -1,10 +1,8 @@
-@import '/css/config/colors.scss';
-
 .table {
     .planFunding-addRow {
         text-align: center;
         cursor: pointer;
-        background-color: $TITLE_BLUE;
+        background-color: $ENDEAVOUR_BLUE;
         color: white;
 
         &:hover {

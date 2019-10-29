@@ -1,0 +1,56 @@
+$SIDEPANEL__SIDE_PADDING: 35px;
+$SIDEPANEL__TOP_PADDING: 15px;
+$SIDEPANEL__HEADER_HEIGHT: 40px;
+
+.sidepanel {
+    position: fixed;
+    z-index: 7000;
+    width: 425px;
+    top: 0;
+    bottom: 0;
+    right: -425px;
+    color: $NILE_BLUE;
+    background: #C9D3DF;
+    transition: right 0.4s ease-in-out;
+    -webkit-transition: right 0.4s ease-in-out;
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.16);
+    overflow-y: scroll;
+    padding: $SIDEPANEL__TOP_PADDING 0;
+}
+
+.sidepanel--visible {
+    right: 0;
+}
+
+.sidepanel-header {
+    margin-bottom: $SIDEPANEL__TOP_PADDING;
+}
+
+.sidepanel-title {
+    margin: 0;
+    padding: 0 $SIDEPANEL__SIDE_PADDING;
+    color: $ENDEAVOUR_BLUE;
+    font-size: 1.1rem;
+    line-height: $SIDEPANEL__HEADER_HEIGHT;
+}
+
+.sidepanel-actions {
+    position: absolute;
+    top: $SIDEPANEL__TOP_PADDING;
+    padding: 0 $SIDEPANEL__SIDE_PADDING;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    text-align: right;  
+    height: $SIDEPANEL__HEADER_HEIGHT;
+
+    > span {
+        cursor: pointer;
+    }
+}
+
+.sidepanel-section {
+    border-top: 1px solid $REGENT_GRAY;
+    padding: 20px $SIDEPANEL__SIDE_PADDING;
+}
