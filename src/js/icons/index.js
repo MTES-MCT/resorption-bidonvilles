@@ -3,7 +3,7 @@ import {
     faFlag, faPaperPlane, faUnlink, faUser, faUserCheck, faUserShield, faArrowRight,
     faEye, faEyeSlash, faPencilAlt, faTimes, faMapMarkedAlt, faChartLine,
     faComments, faEnvelope, faPlayCircle, faFileExcel, faSortDown,
-    faCaretSquareLeft, faCaretSquareRight, faComment, faTrashAlt,
+    faCaretSquareLeft, faCaretSquareRight, faComment, faTrashAlt, faHistory,
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(faFlag);
@@ -28,3 +28,4 @@ library.add(faCaretSquareLeft);
 library.add(faCaretSquareRight);
 library.add(faComment);
 library.add(faTrashAlt);
+library.add(faHistory);

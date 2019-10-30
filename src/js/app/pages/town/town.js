@@ -174,11 +174,9 @@ export default {
             if (goesUp === true) {
                 if (window.pageYOffset - this.$refs.main.offsetTop <= 0) {
                     this.$refs.wrapper.classList.remove('sticky');
-                    this.$refs.aside.style.top = 0;
                 }
             } else if (window.pageYOffset > this.offsetTop(this.$refs.header)) {
                 this.$refs.wrapper.classList.add('sticky');
-                this.$refs.aside.style.top = `${this.$refs.header.offsetTop + this.$refs.header.offsetHeight}px`;
             }
         },
         formatDate: (...args) => App.formatDate(...args),

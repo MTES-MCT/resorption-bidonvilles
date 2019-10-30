@@ -5,6 +5,7 @@
 
 .changelog-oldValue {
     position: relative;
+    color: $REGENT_GRAY;
 
     &:before {
         height: 1px;
@@ -19,5 +20,9 @@
 }
 
 .changelog-newValue {
-    color: $RED;
+    color: $BLACK;
+}
+
+.changelog-value--unknown {
+    color: $REGENT_GRAY;
 }
