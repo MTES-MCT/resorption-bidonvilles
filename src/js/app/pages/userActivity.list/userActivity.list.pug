@@ -1,0 +1,95 @@
+<div class="page--withMargin">
+    <NavBar></NavBar>
+
+    //- state: loading in progress
+    <section v-if="state === 'loading'" class="section section-white">
+        <div class="container">
+            <div  class="notification full-width">
+                <img src="/img/spinner_dark.svg" width="20" class="spinner" />
+                <span>Chargement des données en cours...</span>
+            </div>
+        </div>
+    </section>
+
+    //- state: loading failed
+    <section v-if="state === 'error'" class="section section-white">
+        <div class="container">
+            <div class="notification error full-width">
+                <span>{{ error }}. <a href="#" @click="retryLoading">Réessayer ?</a></span>
+            </div>
+        </div>
+    </section>
+
+    //- state: loaded
+    <section v-if="state === 'loaded'" class="section section-white">
+        <CommentDeletion v-if="toBeDeleted !== null" :comment="toBeDeleted" @close="closePopin" @deleted="onCommentDeleted"></CommentDeletion>
+
+        <div class="container">
+            <header>
+                <div>
+                    <hgroup>
+                        <h3>Historique des activités</h3>
+                    </hgroup>
+                </div>
+
+                <div class="billboard">
+                    <header class="billboard-header">
+                        <h1>Règles de modération d'un commentaire</h1>
+                    </header>
+                    <section class="billboard-body">
+                        <h1>En tant qu'administrateur, vous êtes en charge de la modération des commentaires.</h1>
+                        <p>Vous pouvez supprimer un commentaire ou demandez à son auteur de le modifier s'il ne respecte pas les règles suivantes :
+                            <ul>
+                                <li>être neutre et factuel ;</li>
+                                <li>ne pas collecter des données personnelles (nom, condamnation judiciaire...) de personnes ou groupes, porter une attention particulière aux personnes habitants ou issues d'un bidonville ;</li>
+                                <li>ne doit pas être subjectif, insultant ou inapproprié</li>
+                            </ul>
+                        </p>
+                    </section>
+                </div>
+
+                <div class="switch">
+                    <button v-bind:class="{ active: filter === 'all' }" @click="show('all')">Tout</button><button v-bind:class="{ active: filter === 'comment' }" @click="show('comment')">Commentaires</button><button v-bind:class="{ active: filter === 'shantytown' }" @click="show('shantytown')">Modifications</button>
+                </div>
+            </header>
+
+            <div class="rb-pagination">
+                <span class="link" v-bind:class="{ 'link--disabled': currentPage === 0 }" @click="previousPage"><font-awesome-icon icon="caret-square-left"></font-awesome-icon> Précédent</span>
+                <span class="pagination-pages">{{ pageBeginning }} - {{ pageEnd }} sur {{ filteredActivities.length }}</span>
+                <span class="link" v-bind:class="{ 'link--disabled': currentPage === lastPage }" @click="nextPage">Suivant <font-awesome-icon icon="caret-square-right"></font-awesome-icon></span>
+            </div>
+
+            <Table class="userActivity" :columns="columns" :content="pageContent" :emptyLabel="'Aucune activité trouvée pour les filtres sélectionnés'" @click="onRowClick">
+                <template v-slot:date="props"><strong>{{ props.row.date }}</strong><br/>à {{ props.row.time }}</template>
+
+                <template v-slot:author="props">
+                    <font-awesome-icon icon="user" class="link"></font-awesome-icon> &nbsp;
+                    <router-link data-group="link" :to="`/annuaire/${props.row.author.organization}`" class="link">{{ props.row.author.name }}</router-link>
+                </template>
+
+                <template v-slot:activity="props">
+                    <span class="userActivity-action">
+                        <font-awesome-icon :icon="props.row.icon"></font-awesome-icon> {{ props.row.action }} site : {{ props.row.address }}
+                    </span>
+
+                    <div v-if="props.row.content !== undefined" class="userActivity-content" v-html="props.row.content"></div>
+                    <div v-if="props.row.comment !== undefined" class="userActivity-remove">
+                        <span class="link" @click="confirmCommentDeletion(props.row, $event)"><font-awesome-icon icon="trash-alt"></font-awesome-icon> Supprimer</a>
+                    </div>
+
+                    <p v-if="props.row.diff" v-for="diff in props.row.diff" class="changelog">
+                        <span class="changelog-name">{{ diff.field }} :</span><br/>
+                        <span class="changelog-oldValue" v-bind:class="{ 'changelog-value--unknown': !diff.oldValue }">{{ diff.oldValue || 'non renseigné' }}</span>,
+                        <span class="changelog-newValue" v-bind:class="{ 'changelog-value--unknown': !diff.newValue }">{{ diff.newValue || 'non renseigné' }}</span>
+                    </p>
+                </template>
+            </Table>
+
+            <div class="rb-pagination">
+                <span class="link" v-bind:class="{ 'link--disabled': currentPage === 0 }" @click="previousPage"><font-awesome-icon icon="caret-square-left"></font-awesome-icon> Précédent</span>
+                <span class="pagination-pages">{{ pageBeginning }} - {{ pageEnd }} sur {{ filteredActivities.length }}</span>
+                <span class="link" v-bind:class="{ 'link--disabled': currentPage === lastPage }" @click="nextPage">Suivant <font-awesome-icon icon="caret-square-right"></font-awesome-icon></span>
+            </div>
+        </div>
+    </section>
+</div>

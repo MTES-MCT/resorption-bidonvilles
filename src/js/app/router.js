@@ -8,7 +8,6 @@ import Launcher from '#app/pages/launcher/launcher.vue';
 import TownList from '#app/pages/towns.list/towns.list.vue';
 import AddTown from '#app/pages/addTown/addTown.vue';
 import Town from '#app/pages/town/town.vue';
-import ShantytownCommentList from '#app/pages/shantytownComment.list/shantytownComment.list.vue';
 import Me from '#app/pages/me/me.vue';
 import UserList from '#app/pages/users.list/users.list.vue';
 import UserCreate from '#app/pages/users.create/users.create.vue';
@@ -23,6 +22,7 @@ import PlanDetails from '#app/pages/plans.details/plans.details.vue';
 import Statistics from '#app/pages/stats/stats.vue';
 import LegalMentions from '#app/pages/legalMentions/legalMentions.vue';
 import Directory from '#app/pages/directory/directory.vue';
+import UserActivityList from '#app/pages/userActivity.list/userActivity.list.vue';
 
 // eslint-disable-next-line
 import CGU from '/doc/CGU_Resorption_Bidonvilles.pdf';
@@ -375,15 +375,15 @@ const router = new VueRouter({
                 group: 'admin',
                 permissions: ['shantytown_comment.moderate'],
             },
-            path: '/moderation-commentaires',
-            component: ShantytownCommentList,
+            path: '/historique-des-activites',
+            component: UserActivityList,
             beforeEnter: guardians.loadedAndUpgraded,
         },
         {
             meta: {
                 group: 'directory',
             },
-            path: '/annuaire',
+            path: '/annuaire/:id?',
             component: Directory,
             beforeEnter: guardians.loadedAndUpgraded,
         },

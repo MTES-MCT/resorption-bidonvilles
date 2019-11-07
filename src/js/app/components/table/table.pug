@@ -2,7 +2,7 @@
     <table class="table">
         <thead>
             <tr>
-                <th v-for="column in computedColumns" :class="`table-col--${column.id}`" v-bind:class="{ 'table-col--filterable': column.isFilterable, 'table-col--active': checkedFilters[column.id] > 0 }">
+                <th v-for="column in computedColumns" v-bind:class="{ 'table-col--filterable': column.isFilterable, 'table-col--active': checkedFilters[column.id] > 0, [`table-col--${column.id}`]: true }">
                     <TableFilter v-if="column.isFilterable" v-model="filters[columnId]" :visible="currentFilter === column.id" @outside-click="hideFilter" @clean="hideFilter"></TableFilter>
                     <span v-if="column.isFilterable" @click="toggleFilter(column.id)">{{ column.label }}
                         <span v-if="checkedFilters[column.id] > 0" class="badge">{{ checkedFilters[column.id] }}</span>
@@ -18,10 +18,12 @@
                 <td :colspan="computedColumns.length">{{ emptyLabel }}</td>
             </tr>
 
-            <tr v-for="(row, index) in content" :class="index % 2 === 0 ? 'table-row--odd' : ''" @click="click(row)">
+            <tr v-for="(row, index) in content" :class="index % 2 === 0 ? 'table-row--odd' : ''" @click="click($event, row)">
                 <td v-for="column in computedColumns" :class="`table-col--${column.id}`">
-                    <span v-html="row[column.id]"></span>
-                    <font-awesome-icon v-if="row[column.id] && column.icon" :icon="column.icon"></font-awesome-icon>
+                    <slot :name="column.id" v-bind:row="row">
+                        <span v-html="row[column.id]"></span>
+                        <font-awesome-icon v-if="row[column.id] && column.icon" :icon="column.icon"></font-awesome-icon>
+                    </slot>
                 </td>
             </tr>
         </tbody>

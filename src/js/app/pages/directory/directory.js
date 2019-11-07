@@ -18,7 +18,6 @@ export default {
     data() {
         return {
             organizations: [],
-            focusedOrganization: null,
             columns: [
                 { id: 'organization', label: 'Structure' },
                 { id: 'location', label: 'Territoire' },
@@ -83,6 +82,7 @@ export default {
                     role: `<span class="role">${organization.role}</span>`,
                     contacts: organization.users.length > 0 ? `<span class="link">${organization.users.length} contact${organization.users.length > 1 ? 's' : ''}</span>` : '',
                     raw: {
+                        id: organization.id,
                         name: organizationName,
                         location: organization.location,
                         locationName,
@@ -100,20 +100,33 @@ export default {
 
             let filter;
             switch (this.search.data.type.id) {
-            case 'user':
-                filter = ({ id }) => id === this.search.data.organization;
-                break;
-            case 'location':
-                filter = ({ raw: { location } }) => location[this.search.data.location_type] && location[this.search.data.location_type].code === this.search.data.id;
-                break;
-            case 'organization':
-                filter = ({ id }) => id === this.search.data.id;
-                break;
-            default:
-                filter = () => false;
+                case 'user':
+                    filter = ({ id }) => id === this.search.data.organization;
+                    break;
+                case 'location':
+                    filter = ({ raw: { location } }) => location[this.search.data.location_type] && location[this.search.data.location_type].code === this.search.data.id;
+                    break;
+                case 'organization':
+                    filter = ({ id }) => id === this.search.data.id;
+                    break;
+                default:
+                    filter = () => false;
             }
 
             return this.parsedOrganizations.filter(filter);
+        },
+
+        focusedOrganization() {
+            if (!this.$route.params.id) {
+                return null;
+            }
+
+            const organization = this.parsedOrganizations.find(({ id }) => id === parseInt(this.$route.params.id, 10));
+            if (organization === undefined) {
+                return null;
+            }
+
+            return organization.raw;
         },
 
         pageContent() {
@@ -184,7 +197,11 @@ export default {
         },
 
         focus({ raw: organization }) {
-            this.focusedOrganization = organization;
+            this.$router.push(`/annuaire/${organization.id}`);
+        },
+
+        resetFocusedOrganization() {
+            this.$router.push('/annuaire');
         },
     },
 };

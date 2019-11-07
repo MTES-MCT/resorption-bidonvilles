@@ -5,7 +5,7 @@
     </template>
 
     <template v-slot:content>
-        <Organization v-if="focusedOrganization !== null" :organization="focusedOrganization" @close="focusedOrganization = null"></Organization>
+        <Organization v-if="focusedOrganization !== null" :organization="focusedOrganization" @close="resetFocusedOrganization"></Organization>
 
         <div class="directory-search">
             <OrganizationInput v-model="search" :specificProps="{ placeholder: 'Acteur, structure, ou territoire' }"></OrganizationInput>

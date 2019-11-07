@@ -71,8 +71,8 @@ export default {
             this.currentFilter = null;
         },
 
-        click(row) {
-            this.$emit('click', row);
+        click(event, row) {
+            this.$emit('click', row, event);
         },
     },
 };

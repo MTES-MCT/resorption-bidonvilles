@@ -21,6 +21,8 @@
     </section>
 
     <section v-else class="section section-white town-wrapper" ref="wrapper">
+        <CommentDeletion v-if="commentToBeDeleted !== null" :comment="commentToBeDeleted" @close="closeCommentDeletion" @deleted="onCommentDeleted" ref="commentDeletionPopin"></CommentDeletion>
+
         <div class="alert" v-if="mode === 'close'">
             <div class="wrapper">
                 <h2>Disparition du site</h2>
@@ -125,7 +127,7 @@
                             <div class="sidepanel-section" v-for="changelog in town.changelog">
                                 <article class="userpost userpost--changelog">
                                     <header class="userpost-header">
-                                        <p class="userpost-date"><time>{{ formatDate(changelog.date, 'd M y à h:m') }}</time></p>
+                                        <p class="userpost-date"><time>{{ formatDate(changelog.date, 'd M y à h:i') }}</time></p>
                                         <h1 class="userpost-title">
                                             <span>
                                                 <font-awesome-icon icon="user"></font-awesome-icon>
@@ -175,7 +177,7 @@
                             <div class="sidepanel-section" v-for="comment in town.comments">
                                 <article class="userpost userpost--comment">
                                     <header class="userpost-header">
-                                        <p class="userpost-date"><time>{{ formatDate(comment.createdAt, 'd M y à h:m') }}</time></p>
+                                        <p class="userpost-date"><time>{{ formatDate(comment.createdAt, 'd M y à h:i') }}</time></p>
                                         <h1 class="userpost-title">
                                             <span>
                                                 <font-awesome-icon icon="user"></font-awesome-icon>
@@ -200,7 +202,7 @@
                                             <button class="button warning" @click="cancelEditComment">Annuler</button>
                                         </p>
                                     </div>
-                                    <p v-else class="comment">{{ comment.description }}</p>
+                                    <p v-else>{{ comment.description }}</p>
                                 </article>
                             </div>
                         </div>

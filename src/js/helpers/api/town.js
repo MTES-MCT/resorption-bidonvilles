@@ -112,11 +112,12 @@ export function editComment(townId, commentId, comment) {
  *
  * @param {string} townId    Town id
  * @param {number} commentId Comment id
+ * @param {String} message
  *
  * @returns {Promise}
  */
-export function deleteComment(townId, commentId) {
-    return deleteApi(`/towns/${townId}/comments/${commentId}`);
+export function deleteComment(townId, commentId, message) {
+    return deleteApi(`/towns/${townId}/comments/${commentId}`, { message });
 }
 
 /**

@@ -3,8 +3,9 @@ import Datepicker from 'vuejs-datepicker';
 import { fr } from 'vuejs-datepicker/dist/locale';
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import Map from '#app/pages/townExplorer/map/map.vue';
+import CommentDeletion from '#app/components/comment-deletion/comment-deletion.vue';
 import {
-    get, close, edit, destroy, addComment, editComment, deleteComment,
+    get, close, edit, destroy, addComment, editComment,
 } from '#helpers/api/town';
 import { get as getConfig, hasPermission } from '#helpers/api/config';
 import { notify } from '#helpers/notificationHelper';
@@ -27,6 +28,7 @@ export default {
         Map,
         Datepicker,
         simplebar,
+        CommentDeletion,
     },
     data() {
         return {
@@ -80,6 +82,7 @@ export default {
                 error: null,
             },
             asideTimeout: null,
+            commentToBeDeleted: null,
         };
     },
     computed: {
@@ -152,7 +155,9 @@ export default {
             document.body.removeEventListener('click', this.checkClickOutsideAside);
         },
         checkClickOutsideAside(event) {
-            if (!this.$refs.aside.contains(event.target) && event.target.dataset.group !== 'sidePanelLink') {
+            if ((!this.$refs.commentDeletionPopin || !this.$refs.commentDeletionPopin.$el.contains(event.target))
+                && !this.$refs.aside.contains(event.target)
+                && event.target.dataset.group !== 'sidePanelLink') {
                 this.hideAside();
             }
         },
@@ -476,21 +481,19 @@ export default {
             this.commentEdit.error = null;
         },
         deleteComment(comment) {
-            // eslint-disable-next-line
-            if (!confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ? La suppression est définitive.')) {
-                return;
-            }
-
-            deleteComment(this.$route.params.id, comment.id)
-                .then((response) => {
-                    this.town.comments = response.comments;
-                    notify({
-                        group: 'notifications',
-                        type: 'success',
-                        title: 'Opération réussie',
-                        text: 'Le commentaire a bien été supprimé',
-                    });
-                });
+            this.commentToBeDeleted = {
+                id: comment.id,
+                date: comment.createdAt,
+                shantytown: {
+                    id: this.town.id,
+                    name: this.town.addressSimple || 'Pas d\'adresse précise',
+                    city: this.town.city.name,
+                },
+                author: {
+                    name: `${comment.createdBy.firstName} ${comment.createdBy.lastName.toUpperCase()}`,
+                },
+                content: comment.description,
+            };
         },
         sendEditComment(comment) {
             if (this.commentEdit.pending !== false) {
@@ -531,6 +534,22 @@ export default {
                 this.commentEdit.pending = false;
                 this.commentEdit.error = null;
             }, 100);
+        },
+        closeCommentDeletion() {
+            setTimeout(() => {
+                this.commentToBeDeleted = null;
+            }, 100);
+        },
+        onCommentDeleted() {
+            this.town.comments = this.town.comments.filter(({ id }) => id !== this.commentToBeDeleted.id);
+            this.commentToBeDeleted = null;
+
+            notify({
+                group: 'notifications',
+                type: 'success',
+                title: 'Commentaire supprimé',
+                text: 'L\'auteur du commentaire en a été notifié par email',
+            });
         },
     },
 };

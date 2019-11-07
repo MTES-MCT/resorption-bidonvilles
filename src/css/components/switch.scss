@@ -19,7 +19,7 @@
         border-bottom-left-radius: 5px;
     }
 
-    button:not(:first-of-type) {
+    button:last-of-type {
         border-left: none;
         border-top-right-radius: 5px;
         border-bottom-right-radius: 5px;

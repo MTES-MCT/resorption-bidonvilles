@@ -1,0 +1,38 @@
+<div class="popin popin--commentDeletion">
+    <div class="popin-wrapper" ref="wrapper">
+        <div>
+            <p class="popin-close" v-if="status !== 'pending'">
+                <span class="link" @click="close"><font-awesome-icon icon="times" size="2x"></font-awesome-icon></span>
+            </p>
+
+            <div class="popin-header">
+                <span class="popin-icon"><font-awesome-icon icon="trash-alt" size="lg"></font-awesome-icon></span>
+                <h1 class="popin-title">Confirmez-vous la suppression du commentaire ?</h1>
+            </div>
+
+            <div class="popin-body">
+                <div class="comment">
+                    <header class="comment-header">{{ date }} à {{ time }}</header>
+                    <ul>
+                        <li class="comment-author"><span><font-awesome-icon icon="user"></font-awesome-icon></span> {{ comment.author.name }}</li>
+                        <li class="comment-comment"><span><font-awesome-icon icon="comment"></font-awesome-icon></span> Commentaire</li>
+                        <li class="comment-shantytown"><span><font-awesome-icon icon="map-pin"></font-awesome-icon></span> Site : {{ address }}</li>
+                    </ul>
+                    <div class="comment-content" v-html="comment.content"></div>
+                </div>
+
+                <h1 class="popin-h1">Pourquoi souhaitez-vous supprimer ce commentaire ?</h1>
+                <p v-if="error !== null" class="error">{{error }}</p>
+                <textarea placeholder="Précisez la raison de la suppression à l'auteur, un mail lui sera envoyé" v-model="message"></textarea>
+
+                <div class="commentDeletionButtons">
+                    <button class="button secondary" @click="close" v-if="status !== 'pending'">Annuler</button>
+                    <button class="button primary" :disabled="status === 'pending'" @click="deleteComment">
+                        <span v-if="status !== 'pending'">Oui, confirmer</span>
+                        <span v-else><img src="/img/spinner_light.svg" width="20" /></span>
+                    </button>
+                </div>
+            </div>
+        </div>  
+    </div>
+</div>
