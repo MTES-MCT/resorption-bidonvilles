@@ -407,7 +407,7 @@ export default {
                     statusName = 'Existe';
                     statusDate = shantytown.builtAt;
                 } else if (shantytown.declaredAt) {
-                    statusName = 'Déclaré';
+                    statusName = 'Signalé';
                     statusDate = shantytown.declaredAt;
                 } else {
                     statusName = null;
