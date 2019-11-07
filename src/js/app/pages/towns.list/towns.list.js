@@ -403,20 +403,30 @@ export default {
             let statusDate;
             const statusSince = [];
             if (shantytown.status === 'open') {
-                statusName = 'Existe';
-                statusDate = shantytown.builtAt;
+                if (shantytown.builtAt) {
+                    statusName = 'Existe';
+                    statusDate = shantytown.builtAt;
+                } else if (shantytown.declaredAt) {
+                    statusName = 'Déclaré';
+                    statusDate = shantytown.declaredAt;
+                } else {
+                    statusName = null;
+                    statusDate = null;
+                }
             } else {
                 statusName = 'Fermé';
                 statusDate = shantytown.closedAt;
             }
 
-            const { years, months } = getSince(statusDate);
-            if (years > 0) {
-                statusSince.push(`${years} année${years > 1 ? 's' : ''}`);
-            }
+            if (statusDate !== null) {
+                const { years, months } = getSince(statusDate);
+                if (years > 0) {
+                    statusSince.push(`${years} an${years > 1 ? 's' : ''}`);
+                }
 
-            if (months > 0) {
-                statusSince.push(`${months} mois`);
+                if (months > 0) {
+                    statusSince.push(`${months} mois`);
+                }
             }
 
             // closing solutions
