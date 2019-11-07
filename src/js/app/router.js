@@ -23,6 +23,7 @@ import Statistics from '#app/pages/stats/stats.vue';
 import LegalMentions from '#app/pages/legalMentions/legalMentions.vue';
 import Directory from '#app/pages/directory/directory.vue';
 import UserActivityList from '#app/pages/userActivity.list/userActivity.list.vue';
+import OpenStats from '#app/pages/open.stats/open.stats.vue';
 
 // eslint-disable-next-line
 import CGU from '/doc/CGU_Resorption_Bidonvilles.pdf';
@@ -176,6 +177,10 @@ const router = new VueRouter({
             path: '/landing',
             component: Landing,
             beforeEnter: guardians.anonymous,
+        },
+        {
+            path: '/statistiques-publiques',
+            component: OpenStats,
         },
         {
             path: '/connexion',

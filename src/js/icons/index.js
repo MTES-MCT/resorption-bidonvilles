@@ -4,7 +4,7 @@ import {
     faEye, faEyeSlash, faPencilAlt, faTimes, faMapMarkedAlt, faChartLine,
     faComments, faEnvelope, faPlayCircle, faFileExcel, faSortDown,
     faCaretSquareLeft, faCaretSquareRight, faComment, faTrashAlt, faHistory,
-    faMapPin, faFilePdf,
+    faMapPin, faFilePdf, faUsers, faUserPlus, faFileDownload, faAddressBook, faSync,
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(faFlag);
@@ -32,3 +32,8 @@ library.add(faTrashAlt);
 library.add(faHistory);
 library.add(faMapPin);
 library.add(faFilePdf);
+library.add(faUsers);
+library.add(faUserPlus);
+library.add(faFileDownload);
+library.add(faAddressBook);
+library.add(faSync);
