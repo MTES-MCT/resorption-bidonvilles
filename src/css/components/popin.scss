@@ -1,5 +1,8 @@
 .popin {
     position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     z-index: 4001;
     top: 0;
     left: 0;
@@ -9,14 +12,11 @@
 }
 
 .popin-wrapper {
+    position: relative;
     display: flex;
-    position: absolute;
-    margin-left: -500px;
     padding: 35px 70px;
+    max-height: 95%;
     width: 1000px;
-    left: 50%;
-    top: 170px;
-    bottom: 170px;
     overflow-y: auto;
     background: #EBEFF3;
     border-radius: 10px;
