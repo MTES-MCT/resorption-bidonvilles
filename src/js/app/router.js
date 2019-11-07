@@ -27,7 +27,7 @@ import UserActivityList from '#app/pages/userActivity.list/userActivity.list.vue
 // eslint-disable-next-line
 import CGU from '/doc/CGU_Resorption_Bidonvilles.pdf';
 // eslint-disable-next-line
-import TypologieAcces from '/doc/droits_d_acces_et_guide_de_l_administrateur_local.pdf';
+import TypologieAcces from '/doc/guide_de_l_administrateur.pdf';
 
 import { logout, isLoggedIn, alreadyLoggedBefore } from '#helpers/api/user';
 import { get as getConfig, isLoaded as isConfigLoaded, hasPermission } from '#helpers/api/config';
