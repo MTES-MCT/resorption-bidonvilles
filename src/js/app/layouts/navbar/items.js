@@ -47,7 +47,7 @@ export default {
             group: 'directory',
         },
         {
-            label: 'Utilisateurs',
+            label: 'Administration',
             items: [
                 {
                     label: 'Liste des utilisateurs',
@@ -59,12 +59,7 @@ export default {
                     target: '/nouvel-utilisateur',
                     group: 'userCreation',
                 },
-            ],
-        },
-        {
-            label: 'Administration',
-            items: [
-                { label: 'Statistiques', target: '/statistiques', group: 'admin' },
+                { label: 'Statistiques', target: '/statistiques', group: 'stats' },
                 { label: 'Historique des activités', target: '/historique-des-activites', group: 'admin' },
             ],
         },
