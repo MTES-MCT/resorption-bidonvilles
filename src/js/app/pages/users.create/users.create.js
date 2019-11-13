@@ -10,7 +10,7 @@ const component = newUser({
     position: 'Fonction de l\'utiliisateur',
     associationIsMissing: 'L\'association de l\'utilisateur n\'est pas dans cette liste',
     stepWording: {
-        submit: 'Envoyer',
+        submit: 'Continuer',
         error: 'L\'utilisateur n\'a pas pu être créé',
         success: 'L\'utilisateur a bien été créé',
     },
