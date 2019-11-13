@@ -1,3 +1,19 @@
+h3 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+.userActivity-rule {
+    margin: 20px 0 30px;
+    width: 75%;
+
+    .slideNote-body {
+        > h1 {
+            margin-top: 10px;
+        }
+    }
+}
+
 .userActivity {
     .table td {
         vertical-align: top;

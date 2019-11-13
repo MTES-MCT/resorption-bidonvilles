@@ -1,0 +1,40 @@
+.slideNote {
+    padding: 15px 25px;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
+}
+
+.slideNote-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.slideNote-title {
+    margin: 0;
+    padding: 0;
+    font-size: 1.2rem;
+
+    > svg,
+    > img {
+        margin-right: 5px; 
+        color: $ENDEAVOUR_BLUE;
+    }
+}
+
+.slideNote-toggle {
+    cursor: pointer;
+    color: $ENDEAVOUR_BLUE;
+}
+
+.slideNote-body {
+    margin: 0;
+    padding: 0 0 0 30px;
+    transition: max-height 0.3s ease-out;
+    -webkit-transition: max-height 0.3s ease-out;
+    overflow: hidden;
+
+    > h1 {
+        font-size: 1rem;
+        color: $EASTERN_BLUE;
+    }
+}
