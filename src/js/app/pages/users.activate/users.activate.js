@@ -43,7 +43,7 @@ export default {
                         error: 'Votre compte n\'a pas pu être activé',
                         success: 'Vous pouvez désormais vous connecter à la plateforme',
                     },
-                    submitPrefix: 'En cliquant sur "Activer mon compte", j\'accepte les <a href="/app.html/#/conditions-d-utilisation">conditions générales d\'utilisation</a>',
+                    submitPrefix: 'En cliquant sur "Activer mon compte", j\'accepte les <a href="/app.html/#/conditions-d-utilisation">conditions générales d\'utilisation</a> et de partager mes données (nom, prénom, courriel, structure et lorsque renseigné, numéro de téléphone) aux utilisateurs de la plateforme via l’annuaire',
                     submit: data => activate(this.user.id, Object.assign(data, { token: this.$route.params.token })),
                 },
             ],
