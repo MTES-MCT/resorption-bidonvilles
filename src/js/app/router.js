@@ -248,13 +248,6 @@ const router = new VueRouter({
             },
         },
         {
-            path: '/aide',
-            beforeEnter(to, from, next) {
-                window.open('https://action-bidonvilles.helpsite.com/', '_blank');
-                next(false);
-            },
-        },
-        {
             path: '/conditions-d-utilisation',
             beforeEnter(to, from, next) {
                 window.open(CGU, '_blank');
