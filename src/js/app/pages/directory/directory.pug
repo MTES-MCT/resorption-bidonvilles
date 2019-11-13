@@ -15,23 +15,14 @@
             <button v-bind:class="{ active: level === 'local' }" @click="setLevel('local')">Acteurs de mon territoire</button><button v-bind:class="{ active: level !== 'local' }" @click="setLevel('national')">Tous les acteurs</button>
         </div>
 
-        <div class="directory-tableAside">
-            <p class="directory-figures">{{ filteredOrganizations.length }} structure{{ filteredOrganizations.length > 1 ? 's' : '' }} - {{ usersTotal }} contact{{ usersTotal > 1 ? 's' : '' }}</p>
-            <div class="rb-pagination">
-                <span class="link" v-bind:class="{ 'link--disabled': currentPage === 0 }" @click="previousPage"><font-awesome-icon icon="caret-square-left"></font-awesome-icon> Précédent</span>
-                <span class="pagination-pages">{{ pageBeginning }} - {{ pageEnd }} sur {{ filteredOrganizations.length }}</span>
-                <span class="link" v-bind:class="{ 'link--disabled': currentPage === lastPage }" @click="nextPage">Suivant <font-awesome-icon icon="caret-square-right"></font-awesome-icon></span>
-            </div>
-        </div>
-        <Table class="directory" :columns="columns" :content="pageContent" :emptyLabel="'Aucun contact répertorié pour les filtres sélectionnés'" @click="focus"></Table>
+        <Table class="directory" :columns="columns" :content="pageContent" :emptyLabel="'Aucun contact répertorié pour les filtres sélectionnés'" @click="focus">
+            <template slot="aside">
+                <p class="directory-figures">{{ filteredOrganizations.length }} structure{{ filteredOrganizations.length > 1 ? 's' : '' }} - {{ usersTotal }} contact{{ usersTotal > 1 ? 's' : '' }}</p>
+            </template>
+        </Table>
 
         <div class="directory-tableAside">
             <p>Vous recherchez un contact public ? <a href="https://lannuaire.service-public.fr">https://lannuaire.service-public.fr</a></p>
-            <div class="rb-pagination" v-if="pageContent.length > 3">
-                <span class="link" v-bind:class="{ 'link--disabled': currentPage === 0 }" @click="previousPage"><font-awesome-icon icon="caret-square-left"></font-awesome-icon> Précédent</span>
-                <span class="pagination-pages">{{ pageBeginning }} - {{ pageEnd }} sur {{ filteredOrganizations.length }}</span>
-                <span class="link" v-bind:class="{ 'link--disabled': currentPage === lastPage }" @click="nextPage">Suivant <font-awesome-icon icon="caret-square-right"></font-awesome-icon></span>
-            </div>
         </div>
     </template>
 </Skeleton>

@@ -1,11 +1,22 @@
 <div class="rb-table">
+    <aside class="rb-table-aside">
+        <slot name="aside">
+            <p></p>
+        </slot>
+        <div class="rb-pagination">
+            <span class="link" v-bind:class="{ 'link--disabled': currentPage === 0 }" @click="previousPage"><font-awesome-icon icon="caret-square-left"></font-awesome-icon> Précédent</span>
+            <span class="pagination-pages">{{ indexOfFirstRowInCurrentPage }} - {{ indexOfLastRowInCurrentPage }} sur {{ filteredContent.length }}</span>
+            <span class="link" v-bind:class="{ 'link--disabled': currentPage === indexOfLastPage }" @click="nextPage">Suivant <font-awesome-icon icon="caret-square-right"></font-awesome-icon></span>
+        </div>
+    </aside>
+
     <table class="table">
         <thead>
             <tr>
-                <th v-for="column in computedColumns" v-bind:class="{ 'table-col--filterable': column.isFilterable, 'table-col--active': checkedFilters[column.id] > 0, [`table-col--${column.id}`]: true }">
-                    <TableFilter v-if="column.isFilterable" v-model="filters[columnId]" :visible="currentFilter === column.id" @outside-click="hideFilter" @clean="hideFilter"></TableFilter>
+                <th v-for="column in parsedColumns" v-bind:class="{ 'table-col--filterable': column.isFilterable, 'table-col--active':  [column.id].length > 0, [`table-col--${column.id}`]: true }">
+                    <TableFilter v-if="column.isFilterable" v-model="parsedFilters[column.id]" :visible="currentFilter === column.id" @outside-click="hideFilter" @clean="hideFilter"></TableFilter>
                     <span v-if="column.isFilterable" @click="toggleFilter(column.id)">{{ column.label }}
-                        <span v-if="checkedFilters[column.id] > 0" class="badge">{{ checkedFilters[column.id] }}</span>
+                        <span v-if="checkedFilters[column.id].length > 0" class="badge">{{ checkedFilters[column.id].length }}</span>
                         <font-awesome-icon icon="sort-down" size="2x"></font-awesome-icon>
                     </span>
                     <span v-else>{{ column.label }}</span>
@@ -14,18 +25,28 @@
         </thead>
 
         <tbody>
-            <tr v-if="content.length === 0" class="table-row--empty">
-                <td :colspan="computedColumns.length">{{ emptyLabel }}</td>
+            <tr v-if="filteredContent.length === 0" class="table-row--empty">
+                <td :colspan="parsedColumns.length">{{ emptyLabel }}</td>
             </tr>
 
-            <tr v-for="(row, index) in content" :class="index % 2 === 0 ? 'table-row--odd' : ''" @click="click($event, row)">
-                <td v-for="column in computedColumns" :class="`table-col--${column.id}`">
+            <tr v-for="(row, index) in currentPageContent" :class="index % 2 === 0 ? 'table-row--odd' : ''" @click="click($event, row)">
+                <td v-for="column in parsedColumns" :class="`table-col--${column.id}`">
                     <slot :name="column.id" v-bind:row="row">
                         <span v-html="row[column.id]"></span>
-                        <font-awesome-icon v-if="row[column.id] && column.icon" :icon="column.icon"></font-awesome-icon>
                     </slot>
                 </td>
             </tr>
         </tbody>
     </table>
+
+    <aside class="rb-table-aside">
+        <slot name="aside">
+            <p></p>
+        </slot>
+        <div class="rb-pagination">
+            <span class="link" v-bind:class="{ 'link--disabled': currentPage === 0 }" @click="previousPage"><font-awesome-icon icon="caret-square-left"></font-awesome-icon> Précédent</span>
+            <span class="pagination-pages">{{ indexOfFirstRowInCurrentPage }} - {{ indexOfLastRowInCurrentPage }} sur {{ filteredContent.length }}</span>
+            <span class="link" v-bind:class="{ 'link--disabled': currentPage === indexOfLastPage }" @click="nextPage">Suivant <font-awesome-icon icon="caret-square-right"></font-awesome-icon></span>
+        </div>
+    </aside>
 </div>

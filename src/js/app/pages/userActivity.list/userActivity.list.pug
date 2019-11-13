@@ -50,17 +50,11 @@
                 </div>
 
                 <div class="switch">
-                    <button v-bind:class="{ active: filter === 'all' }" @click="show('all')">Tout</button><button v-bind:class="{ active: filter === 'comment' }" @click="show('comment')">Commentaires</button><button v-bind:class="{ active: filter === 'shantytown' }" @click="show('shantytown')">Modifications</button>
+                    <button v-bind:class="{ active: filter === 'all' }" @click="show('all')">Tout</button><button v-bind:class="{ active: filter === 'shantytown' }" @click="show('shantytown')">Modifications</button><button v-bind:class="{ active: filter === 'comment' }" @click="show('comment')">Commentaires</button>
                 </div>
             </header>
 
-            <div class="rb-pagination">
-                <span class="link" v-bind:class="{ 'link--disabled': currentPage === 0 }" @click="previousPage"><font-awesome-icon icon="caret-square-left"></font-awesome-icon> Précédent</span>
-                <span class="pagination-pages">{{ pageBeginning }} - {{ pageEnd }} sur {{ filteredActivities.length }}</span>
-                <span class="link" v-bind:class="{ 'link--disabled': currentPage === lastPage }" @click="nextPage">Suivant <font-awesome-icon icon="caret-square-right"></font-awesome-icon></span>
-            </div>
-
-            <Table class="userActivity" :columns="columns" :content="pageContent" :emptyLabel="'Aucune activité trouvée pour les filtres sélectionnés'" @click="onRowClick">
+            <Table class="userActivity" :columns="columns" :content="parsedActivities" :emptyLabel="'Aucune activité trouvée pour les filtres sélectionnés'" @click="onRowClick">
                 <template v-slot:date="props"><strong>{{ props.row.date }}</strong><br/>à {{ props.row.time }}</template>
 
                 <template v-slot:author="props">
@@ -85,12 +79,6 @@
                     </p>
                 </template>
             </Table>
-
-            <div class="rb-pagination">
-                <span class="link" v-bind:class="{ 'link--disabled': currentPage === 0 }" @click="previousPage"><font-awesome-icon icon="caret-square-left"></font-awesome-icon> Précédent</span>
-                <span class="pagination-pages">{{ pageBeginning }} - {{ pageEnd }} sur {{ filteredActivities.length }}</span>
-                <span class="link" v-bind:class="{ 'link--disabled': currentPage === lastPage }" @click="nextPage">Suivant <font-awesome-icon icon="caret-square-right"></font-awesome-icon></span>
-            </div>
         </div>
     </section>
 </div>

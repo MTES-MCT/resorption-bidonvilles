@@ -5,8 +5,6 @@ import OrganizationInput from '#app/components/form/input/organization/organizat
 import { getDirectory } from '#helpers/api/user';
 import { get as getConfig } from '#helpers/api/config';
 
-const ITEMS_PER_PAGE = 10;
-
 export default {
     components: {
         Skeleton,
@@ -26,7 +24,6 @@ export default {
             ],
             local: getConfig().user.organization.location,
             level: 'local',
-            currentPage: 0,
             search: null,
         };
     },
@@ -133,34 +130,8 @@ export default {
             return this.filteredOrganizations.slice(this.pageBeginning - 1, this.pageEnd);
         },
 
-        pageBeginning() {
-            if (this.filteredOrganizations.length === 0) {
-                return 0;
-            }
-
-            return (this.currentPage * ITEMS_PER_PAGE) + 1;
-        },
-
-        pageEnd() {
-            return Math.min(this.pageBeginning + ITEMS_PER_PAGE - 1, this.filteredOrganizations.length);
-        },
-
-        lastPage() {
-            if (this.filteredOrganizations.length === 0) {
-                return 0;
-            }
-
-            return Math.ceil(this.filteredOrganizations.length / ITEMS_PER_PAGE) - 1;
-        },
-
         usersTotal() {
             return this.filteredOrganizations.reduce((total, org) => total + org.raw.users.length, 0);
-        },
-    },
-
-    watch: {
-        search() {
-            this.currentPage = 0;
         },
     },
 
@@ -177,23 +148,6 @@ export default {
             }
 
             this.level = level;
-            this.currentPage = 0;
-        },
-
-        previousPage() {
-            if (this.currentPage === 0) {
-                return;
-            }
-
-            this.currentPage -= 1;
-        },
-
-        nextPage() {
-            if (this.currentPage >= this.lastPage) {
-                return;
-            }
-
-            this.currentPage += 1;
         },
 
         focus({ raw: organization }) {

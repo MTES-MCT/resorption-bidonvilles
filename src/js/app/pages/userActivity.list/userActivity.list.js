@@ -4,8 +4,6 @@ import Table from '#app/components/table/table.vue';
 import CommentDeletion from '#app/components/comment-deletion/comment-deletion.vue';
 import { notify } from '#helpers/notificationHelper';
 
-const PER_PAGE = 10;
-
 export default {
     components: {
         NavBar,
@@ -41,22 +39,6 @@ export default {
             state: null,
 
             /**
-             * Index of the current page, starting by 0
-             *
-             * @type {Number}
-             */
-            currentPage: 0,
-
-            /**
-             *
-             */
-            columns: [
-                { id: 'date', label: 'Date' },
-                { id: 'author', label: 'Auteur' },
-                { id: 'activity', label: 'Activités' },
-            ],
-
-            /**
              *
              */
             toBeDeleted: null,
@@ -69,6 +51,26 @@ export default {
     },
 
     computed: {
+        columns() {
+            return [
+                { id: 'date', label: 'Date' },
+                { id: 'author', label: 'Auteur' },
+                Object.assign(
+                    { id: 'activity', label: 'Activités' },
+                    this.filter === 'shantytown'
+                        ? {
+                            filters: [
+                                { label: 'Déclaration', value: 'creation' },
+                                { label: 'Modification', value: 'update' },
+                                { label: 'Fermeture', value: 'closing' },
+                            ],
+                            filterFn: (row, checkedItems) => checkedItems.map(({ value }) => value)
+                                .indexOf(row.rawAction) !== -1,
+                        }
+                        : {},
+                ),
+            ];
+        },
         filteredActivities() {
             if (this.filter === 'all') {
                 return this.activities;
@@ -80,6 +82,7 @@ export default {
             return this.filteredActivities.map((activity, index) => {
                 const obj = {
                     index,
+                    rawAction: activity.action,
                     rawDate: activity.date,
                     rawShantytown: activity.shantytown,
                     date: App.formatDate(activity.date, 'd/m/y'),
@@ -107,18 +110,6 @@ export default {
 
                 return obj;
             });
-        },
-        pageContent() {
-            return this.parsedActivities.slice(this.currentPage * PER_PAGE, (this.currentPage * PER_PAGE) + PER_PAGE);
-        },
-        lastPage() {
-            return Math.max(0, Math.ceil(this.filteredActivities.length / PER_PAGE) - 1);
-        },
-        pageBeginning() {
-            return this.filteredActivities.length > 0 ? (this.currentPage * PER_PAGE) + 1 : 0;
-        },
-        pageEnd() {
-            return Math.min(this.pageBeginning - 1 + PER_PAGE, this.filteredActivities.length);
         },
     },
 
@@ -160,20 +151,6 @@ export default {
          */
         retryLoading() {
             this.load();
-        },
-
-        /**
-         *
-         */
-        previousPage() {
-            this.currentPage = Math.max(0, this.currentPage - 1);
-        },
-
-        /**
-         *
-         */
-        nextPage() {
-            this.currentPage = Math.min(this.lastPage, this.currentPage + 1);
         },
 
         /**
@@ -230,7 +207,6 @@ export default {
 
         show(filter) {
             this.filter = filter;
-            this.currentPage = 0;
         },
     },
 };
