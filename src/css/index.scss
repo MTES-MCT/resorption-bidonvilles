@@ -310,3 +310,7 @@ button:disabled:hover {
         text-decoration: none;
     }
 }
+
+.mail:after {
+    content: attr(data-name) "@" attr(data-domain) "." attr(data-tld);
+}

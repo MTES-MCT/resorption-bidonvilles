@@ -373,7 +373,7 @@
 
                             <div class="form__group">
                                 <label v-bind:class="{ error: fieldErrors.priority }">Niveau de priorité du site :</label>
-                                <p>1 étant le niveau de priorité le plus haut</p>
+                                <p>1 étant le niveau de priorité le plus haut<br/>Le niveau de priorité est un indicateur réservé aux correspondants des services de l’État.</p>
                                 <p class="error" v-if="fieldErrors.priority">
                                     <ul>
                                         <li v-for="error in fieldErrors.priority">{{ error }}</li>
@@ -568,7 +568,7 @@
                                             <label :for="'socialOrigins' + index" class="label-inline">{{ origin.label }}</label>
                                         </div>
                                     </div>
-                                    <p v-else class="notification warning">Pour des sites de 10 personnes ou moins l'origine des habitants ne peut être précisée, pour des raisons légales</p>
+                                    <p v-else class="notification warning">Pour les sites de 10 personnes ou moins, l'origine des habitants ne peut être précisée conformément à la réglementation relative aux données à caractère personnel</p>
                                 </fieldset>
                             </div>
                         </div>

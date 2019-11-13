@@ -68,7 +68,7 @@ export default {
                                             { label: '3', value: 3 },
                                         ],
                                         label: 'Niveau de priorité du site',
-                                        description: '1 étant le niveau de priorité le plus haut',
+                                        description: '1 étant le niveau de priorité le plus haut.<br/>Le niveau de priorité est un indicateur réservé aux correspondants des services de l’État.',
                                         mandatory: false,
                                     },
                                     builtAt: {
@@ -165,7 +165,7 @@ export default {
                                         condition({ populationTotal }) {
                                             return parseInt(populationTotal, 10) > 10;
                                         },
-                                        inactiveMessage: 'Pour des sites de 10 personnes ou moins l\'origine des habitants ne peut être précisée, pour des raisons légales',
+                                        inactiveMessage: 'Pour les sites de 10 personnes ou moins, l\'origine des habitants ne peut être précisée conformément à la réglementation relative aux données à caractère personnel',
                                     },
                                 },
                             },
