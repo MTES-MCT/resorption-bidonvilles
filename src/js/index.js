@@ -1,5 +1,6 @@
 // load the whole betagouv template
 import '../.sassrc';
+import '@openfonts/fira-code_all';
 import 'template.data.gouv.fr/dist/main.min.css';
 import 'simplebar/dist/simplebar.min.css';
 import '../css/index.scss';
