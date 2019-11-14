@@ -30,8 +30,16 @@ export default {
             return this.stats ? (this.stats.numberOfCollaboratorAndAssociationOrganizations.public_establishment || 0) : '...';
         },
 
+        numberOfExports() {
+            return this.stats ? this.stats.numberOfExports : '...';
+        },
+
         numberOfComments() {
             return this.stats ? this.stats.numberOfComments : '...';
+        },
+
+        numberOfDirectoryViews() {
+            return this.stats ? this.stats.numberOfDirectoryViews : '...';
         },
 
         numberOfNewUsers() {
