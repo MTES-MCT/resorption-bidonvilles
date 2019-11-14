@@ -129,10 +129,10 @@
                                     <header class="userpost-header">
                                         <p class="userpost-date"><time>{{ formatDate(changelog.date, 'd M y à h:i') }}</time></p>
                                         <h1 class="userpost-title">
-                                            <span>
+                                            <router-link :to="`/annuaire/${changelog.author.organization.id}`">
                                                 <font-awesome-icon icon="user"></font-awesome-icon>
                                                 <span>{{ changelog.author.last_name.toUpperCase() }} {{ changelog.author.first_name }}</span>
-                                            </span>
+                                            </router-link>
                                         </h1>
                                     </header>
 
@@ -179,10 +179,10 @@
                                     <header class="userpost-header">
                                         <p class="userpost-date"><time>{{ formatDate(comment.createdAt, 'd M y à h:i') }}</time></p>
                                         <h1 class="userpost-title">
-                                            <span>
+                                            <router-link :to="`/annuaire/${comment.createdBy.organizationId}`">
                                                 <font-awesome-icon icon="user"></font-awesome-icon>
                                                 <span>{{ comment.createdBy.lastName.toUpperCase() }} {{ comment.createdBy.firstName }}</span>
-                                            </span>
+                                            </router-link>
                                             <span class="userpost-actions">
                                                 <font-awesome-icon icon="pencil-alt" class="userpost-action--edit" v-if="canEditComment(comment)" @click="editComment(comment)"></font-awesome-icon>
                                                 <font-awesome-icon icon="trash-alt" class="userpost-action--delete" v-if="canDeleteComment(comment)" @click="deleteComment(comment)"></font-awesome-icon>
