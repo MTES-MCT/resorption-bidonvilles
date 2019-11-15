@@ -30,8 +30,16 @@ export default {
             return this.stats ? (this.stats.numberOfCollaboratorAndAssociationOrganizations.public_establishment || 0) : '...';
         },
 
+        numberOfExports() {
+            return this.stats ? this.stats.numberOfExports : '...';
+        },
+
         numberOfComments() {
             return this.stats ? this.stats.numberOfComments : '...';
+        },
+
+        numberOfDirectoryViews() {
+            return this.stats ? this.stats.numberOfDirectoryViews : '...';
         },
 
         numberOfNewUsers() {
@@ -39,11 +47,11 @@ export default {
         },
 
         meanTimeBeforeCreationDeclaration() {
-            return this.stats ? (this.stats.meanTimeBeforeCreationDeclaration.average || '?') : '...';
+            return this.stats ? (Math.round(this.stats.meanTimeBeforeCreationDeclaration.average) || '?') : '...';
         },
 
         meanTimeBeforeClosingDeclaration() {
-            return this.stats ? (this.stats.meanTimeBeforeClosingDeclaration.average || '?') : '...';
+            return this.stats ? (Math.round(this.stats.meanTimeBeforeClosingDeclaration.average) || '?') : '...';
         },
 
         numberOfShantytownOperations() {

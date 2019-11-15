@@ -3,6 +3,7 @@ import Table from '#app/components/table/table.vue';
 import Organization from '#app/components/organization/organization.vue';
 import OrganizationInput from '#app/components/form/input/organization/organization.vue';
 import { getDirectory } from '#helpers/api/user';
+import { directoryViews } from '#helpers/api/statistics';
 import { get as getConfig } from '#helpers/api/config';
 
 export default {
@@ -132,6 +133,14 @@ export default {
 
         usersTotal() {
             return this.filteredOrganizations.reduce((total, org) => total + org.raw.users.length, 0);
+        },
+    },
+
+    watch: {
+        focusedOrganization() {
+            if (this.focusedOrganization !== null) {
+                directoryViews(this.focusedOrganization.id);
+            }
         },
     },
 
