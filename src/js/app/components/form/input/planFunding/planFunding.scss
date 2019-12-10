@@ -19,6 +19,22 @@
     }
 }
 
+.planFunding-header {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.planFunding-yearSwitch {
+    color: $ENDEAVOUR_BLUE;
+    cursor: pointer;
+    line-height: 30px;
+}
+
+.planFunding-yearSwitch--disabled {
+    color: $REGENT_GRAY;
+}
+
 .planFunding-type {
     min-width: 200px;
 }

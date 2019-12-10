@@ -1,47 +1,47 @@
 <div class="form" id="top">
     <header class="form-header">
-        <hgroup class="form-titleGroup">
-            <h1 v-if="title" class="form-title">{{ title }}</h1>
-            <p v-if="description" class="form-description">{{ description }}</p>
-        </hgroup>
-
-        <ul class="form-breadcrumb" v-if="breadcrumbItems.length > 1">
-            <li v-for="item in breadcrumbItems" v-bind:class="item.classNames">
-                <a v-if="!item.isSeparator" href="#">
-                    <span>{{ item.stepIndex + 1 }}</span>
-                </a>
-                <p v-if="!item.isSeparator">{{ item.title }}</p>
-            </li>
-        </ul>
+        <div class="container">
+            <h1 class="form-title">{{ title || 'Formulaire' }}</h1>
+        </div>
     </header>
 
-    <section v-for="section in sections" class="formSection">
-        <header class="formSection-header">
-            <h1 v-if="section.title" class="formSection-title">{{ section.title }}</h1>
-            <p v-if="section.description" class="formSection-description">{{ section.description }}</p>
-        </header>
+    <div class="container">
+        <div class="form-body">
+            <div class="container">
+                <SlideNote v-if="description" :title="descriptionTitle" :content="description"></SlideNote>
 
-        <div class="panel">
-            <Input v-for="(input, inputId) in section.inputs" v-if="isInputVisible(input)" :id="inputId" v-bind="input" v-model="data[inputId]" :errors="(errors && errors.fields && errors.fields[inputId]) || undefined" :disabled="isInputDisabled(input)" :alertMessage="getInputAlert(input)" @change="onDataChange" />
+                <section v-for="section in sections" class="formSection">
+                    <header class="formSection-header">
+                        <h1 v-if="section.title" class="formSection-title">
+                            <span class="formSection-icon"><font-awesome-icon :icon="section.icon || 'flag'"></font-awesome-icon></span> {{ section.title }}
+                        </h1>
+                        <p v-if="section.description" class="formSection-description">{{ section.description }}</p>
+                    </header>
+
+                    <div>
+                        <Input v-for="(input, inputId) in section.inputs" v-if="isInputVisible(input)" :id="inputId" v-bind="input" v-model="data[inputId]" :errors="(errors && errors.fields && errors.fields[inputId]) || undefined" :disabled="isInputDisabled(input)" :alertMessage="getInputAlert(input)" @change="onDataChange" />
+                    </div>
+                </section>
+
+                <div class="notification error" v-if="errors && errors.main">
+                    <span>{{ wording.error + ' : ' + errors.main }}</span>
+                    <p v-if="numberOfFilteredErrors > 0">Les champs en erreur sont :
+                        <ul>
+                            <li v-for="(details, inputId) in filteredErrors">
+                                <a @click="$router.replace('#top', () => $router.replace(`#${inputId}`));">{{ (getInputById(inputId) || {}).label || 'inconnu' }}</a>
+                            </li>
+                        </ul>
+                    </p>
+                </div>
+
+                <section class="form-stepNav">
+                    <p v-if="submitPrefix" v-html="submitPrefix"></p>
+                    <button class="form-stepButton button" @click="submit" :disabled="pending">
+                        <span v-if="!pending">{{ wording.submit }}</span>
+                        <img v-else src="/img/spinner_light.svg" width="20" />
+                    </button>
+                </section>
+            </div>
         </div>
-    </section>
-
-    <div class="notification error" v-if="errors && errors.main">
-        <span>{{ wording.error + ' : ' + errors.main }}</span>
-        <p v-if="numberOfFilteredErrors > 0">Les champs en erreur sont :
-            <ul>
-                <li v-for="(details, inputId) in filteredErrors">
-                    <a @click="$router.replace('#top', () => $router.replace(`#${inputId}`));">{{ (getInputById(inputId) || {}).label || 'inconnu' }}</a>
-                </li>
-            </ul>
-        </p>
     </div>
-
-    <section class="form-stepNav">
-        <p v-if="submitPrefix" v-html="submitPrefix"></p>
-        <button class="form-stepButton button" @click="submit" :disabled="pending">
-            <span v-if="!pending">{{ wording.submit }}</span>
-            <img v-else src="/img/spinner_light.svg" width="20" />
-        </button>
-    </section>
 </div>

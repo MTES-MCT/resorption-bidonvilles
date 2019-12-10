@@ -1,20 +1,16 @@
 @import '/css/config/colors.scss';
+@import '/css/components/note.scss';
 
 .slideNote {
-    padding: 15px 25px;
-    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
+    @extend .note;
 }
 
 .slideNote-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    @extend .note-header;
 }
 
 .slideNote-title {
-    margin: 0;
-    padding: 0;
-    font-size: 1.2rem;
+    @extend .note-title;
 
     > svg,
     > img {
@@ -29,14 +25,10 @@
 }
 
 .slideNote-body {
-    margin: 0;
-    padding: 0 0 0 30px;
+    @extend .note-body;
+    text-align: left;
+
     transition: max-height 0.3s ease-out;
     -webkit-transition: max-height 0.3s ease-out;
     overflow: hidden;
-
-    > h1 {
-        font-size: 1rem;
-        color: $EASTERN_BLUE;
-    }
 }

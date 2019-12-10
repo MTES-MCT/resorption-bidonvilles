@@ -1,7 +1,7 @@
 <tr class="planFundingRow" v-bind:class="{ 'planFundingRow--disabled': disabled }">
     <td>
         <select v-model="type" :disabled="disabled">
-            <option v-for="fundingType in fundingTypes" :value="fundingType.id">{{ fundingType.label }}</option>
+            <option v-for="financeType in financeTypes" :value="financeType.uid">{{ financeType.name }}</option>
         </select>
     </td>
     <td>

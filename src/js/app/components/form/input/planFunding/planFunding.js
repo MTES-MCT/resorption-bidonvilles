@@ -8,13 +8,13 @@ export default {
 
     props: {
         /**
-         * @type {Array.<PlanFunding>}
+         * @type {Array.<Object>}
          */
         value: {
             type: Array,
             required: false,
             default() {
-                return [];
+                return {};
             },
         },
 
@@ -34,24 +34,63 @@ export default {
     data() {
         return {
             /**
+             * Upper limit for current-year
+             *
+             * @type {Number}
+             */
+            maxYear: (new Date()).getFullYear(),
+
+            /**
+             * Currently edited year
+             *
+             * @type {Number}
+             */
+            currentYear: (new Date()).getFullYear(),
+
+            /**
              * Funding rows
              *
-             * @type {Array.<PlanFunding>}
+             * @type {Array.<Object>}
              */
-            fundings: this.value.map(data => ({ data })),
+            fundings: [],
         };
+    },
+
+    computed: {
+        currentFundings() {
+            const currentFundings = this.getCurrentFundings();
+            if (currentFundings === undefined) {
+                return [];
+            }
+
+            return currentFundings.data;
+        },
     },
 
 
     watch: {
         // two-way binding
         value() {
-            this.fundings = this.value.map(data => ({ data }));
+            this.fundings = this.value.map(({ year, data }) => ({
+                year,
+                data: data.map(d => ({
+                    data: d,
+                })),
+            }));
         },
     },
 
 
     methods: {
+        /**
+         * Returns the funding rows for currently selected year
+         *
+         * @returns {Array.<PlanFunding>}
+         */
+        getCurrentFundings() {
+            return this.fundings.find(({ year }) => year === this.currentYear);
+        },
+
         /**
          * Adds a funding row
          *
@@ -62,7 +101,16 @@ export default {
                 return;
             }
 
-            this.fundings.push({
+            let currentFundings = this.getCurrentFundings();
+            if (currentFundings === undefined) {
+                currentFundings = {
+                    year: this.currentYear,
+                    data: [],
+                };
+                this.fundings.push(currentFundings);
+            }
+
+            currentFundings.data.push({
                 data: {
                     type: null,
                     amount: 0.0,
@@ -84,7 +132,12 @@ export default {
                 return;
             }
 
-            this.fundings.splice(index, 1);
+            const currentFundings = this.getCurrentFundings();
+            if (currentFundings === undefined) {
+                return;
+            }
+
+            currentFundings.data.splice(index, 1);
             this.emitInput();
         },
 
@@ -103,7 +156,28 @@ export default {
          * @returns {undefined}
          */
         emitInput() {
-            this.$emit('input', this.fundings.map(({ data }) => data));
+            this.$emit('input', this.fundings.map(({ year, data }) => ({
+                year,
+                data: data.map(({ data: d }) => d),
+            })));
+        },
+
+        /**
+         * Switches to next year
+         *
+         * @returns {undefined}
+         */
+        showNextYear() {
+            this.currentYear = Math.min(this.maxYear, this.currentYear + 1);
+        },
+
+        /**
+         * Switches to previous year
+         *
+         * @returns {undefined}
+         */
+        showPreviousYear() {
+            this.currentYear -= 1;
         },
     },
 

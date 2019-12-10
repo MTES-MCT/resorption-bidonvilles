@@ -1,0 +1,70 @@
+.dataSection {
+    margin-bottom: 60px;
+}
+
+.dataSection-header {
+    display: flex;
+    align-items: center;
+}
+
+.dataSection-title {
+    margin: 0;
+    padding: 0;
+    font-size: 1.75rem;
+}
+
+.dataSection-header > p {
+    margin-left: 15px;
+    padding-top: 5px;
+    flex-grow: 1;
+}
+
+.dataSection-actions {
+    float: right;
+    font-size: 1.3rem;
+    color: $ENDEAVOUR_BLUE;
+
+    > svg {
+        cursor: pointer;
+    }
+}
+
+.dataSection-icon {
+    position: absolute;
+    margin-left: -50px;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    line-height: 35px;
+    color: $WHITE;
+    background: $BLACK;
+    font-size: 1rem;
+    font-weight: normal;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
+.dataSection-line {
+    display: flex;
+    margin-bottom: 30px;
+    align-items: center;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    > .data {
+        margin: 0 50px 0 0;
+    }
+}
+
+.data-label {
+    font-weight: bold;
+    color: $EASTERN_BLUE;
+}
+
+.dataSection-schoolHeader {
+    th {
+        width: 120px;
+    }
+}

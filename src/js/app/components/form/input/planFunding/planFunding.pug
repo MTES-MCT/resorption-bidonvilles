@@ -1,16 +1,24 @@
-<table class="table planFunding">
-    <thead>
-        <tr>
-            <th class="planFunding-type">Type de financement</th>
-            <th class="planFunding-amount">Montant (€)</th>
-            <th class="planFunding-details">Précisions</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        <PlanFundingRow v-for="(funding, index) in fundings" v-model="funding.data" @onremove="removeRow(index)" @input="onRowChange" :disabled="disabled"></PlanFundingRow>
-        <tr>
-            <td colspan="4" @click="addRow" class="planFunding-addRow" v-bind:class="{ 'planFunding-addRow--disabled': disabled }">Ajouter une ligne de financement</td>
-        </tr>
-    </tbody>
-</table>
+<div class="planFunding">
+    <header class="planFunding-header">
+        <font-awesome-icon icon="caret-square-left" @click="showPreviousYear" class="planFunding-yearSwitch"></font-awesome-icon>
+        <span>{{ currentYear }} </span>
+        <font-awesome-icon icon="caret-square-right" @click="showNextYear" class="planFunding-yearSwitch" v-bind:class="{ 'planFunding-yearSwitch--disabled': this.currentYear === this.maxYear }"></font-awesome-icon>
+    </header>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="planFunding-type">Type de financements</th>
+                <th class="planFunding-amount">Montants<br/>Prévus</th>
+                <th class="planFunding-details">Précision</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <PlanFundingRow v-for="(funding, index) in currentFundings" v-model="funding.data" @onremove="removeRow(index)" @input="onRowChange" :disabled="disabled"></PlanFundingRow>
+            <tr>
+                <td colspan="4" @click="addRow" class="planFunding-addRow" v-bind:class="{ 'planFunding-addRow--disabled': disabled }">Ajouter une ligne de financement</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

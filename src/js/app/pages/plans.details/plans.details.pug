@@ -1,8 +1,8 @@
 <div class="page--withMargin">
     <NavBar></NavBar>
     
-    <section class="section section-white">
-        <div class="container">
+    <section class="section-white">
+        <div class="container" v-if="status !== 'loaded'">
             <div v-if="!status || status === 'loading'">
                 <!-- LOADING STATE -->
                 <div class="notification full-width">
@@ -17,84 +17,506 @@
                     <span>{{ error }}. <span @click="load">Réessayer ?</span></span>
                 </div>
             </div>
+        </div>
 
-            <div v-else>
-                <div ref="header">
-                    <h1>Fiche de dispositif</h1>
-                    <p>Cette fiche dispositif présente les caractéristiques générales du dispositif (telles que déclarées lors du remplissage du formulaire). Elle permet aussi de renseigner des indicateurs de suivi des actions menées, soit site par site lorsque l'action est déployée sur un ou plusieurs bidonvilles, soit à l'échelle globale du dispositif.</p>
-                    
-                    <div class="town-actionButtons">
-                        <button v-if="mode !== 'edit' && currentTab !== 'main' && hasPermission('plan.update')" @click="setMode('edit')" class="button secondary">Modifier les indicateurs</button>
-                        <button v-if="mode === 'edit'" @click="submit()" class="button">Sauvegarder</button>
-                        <button v-if="mode === 'edit'" @click="setMode('read')" class="button warning">Annuler</button>
-                        <button v-if="hasPermission('plan.delete')" @click="destroy" class="button warning">Supprimer le dispositif</button>
-                    </div>
+        <div v-if="status === 'loaded'">
+            <header class="pageHeader">
+                <div class="pageHeader-wrapper">
+                    <section class="pageHeader-main">
+                        <section class="pageHeader-info">
+                            <h1 class="pageHeader-title">{{ plan.name }}</h1>
+                        </section>
+
+                        <aside class="pageHeader-buttons">
+                            <router-link class="button" :to="`/dispositif/${plan.id}/indicateurs`">
+                                <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
+                                <span>Modifier</span>
+                            </router-link>
+                        </aside>
+                    </section>
+
+                    //- <section class="pageHeader-anchors">
+                    //-     <ul>
+                    //-         <li class="pageHeader-anchorItem pageHeader-anchorItem--active">Synthèse</li>
+                    //-         <li class="pageHeader-anchorItem">Suivi</li>
+                    //-     </ul>
+                    //- </section>
                 </div>
+            </header>
 
-                <div class="dashboard">
-                    <aside class="side-menu">
-                        <ul>
-                            <li><a v-bind:class="{ active: currentTab === 'main' }" @click="showTab('main')">Caractéristiques du dispositif</a></li>
-                            <li v-for="detail in details"><a v-bind:class="{ active: currentTab === detail.id }" @click="showTab(detail.id)">{{ detail.label }}</a></li>
-                        </ul>
-                    </aside>
+            <section class="container">
+                <SlideNote title="Qu'est-ce qu'un dispositif ?">
+                    <template slot="content">
+                        <p>C’est une action mise en place et financée en partie ou en totalité par un acteur public. Sa finalité est la résorption des bidonvilles.<br/><strong>Qui doit le déclarer ?</strong> Le service de l'Etat à l'initiative du dispositif doit le déclarer. L'acteur de terrain sera en charge de renseigner les informations relatives à l'action menée.</p>
 
-                    <div class="main">
-                        <div v-if="currentTab === 'main'">
-                            <div class="panel">
-                                <div class="panel__header">
-                                    <h3>1. Caractéristiques générales</h3>
-                                </div>
-                                <div class="form__group">
-                                    <p v-if="plan.name">
-                                        <strong>Nom du dispositif :</strong> {{ plan.name }}
-                                    </p>
-                                    <p>
-                                        <strong>Type de dispositif :</strong> {{ plan.type.label }}
-                                    </p>
-                                    <p>
-                                        <strong>Dispositif démarré le :</strong> {{ formatDate(plan.startedAt) }}
-                                    </p>
-                                </div>
-                            </div>
+                        <p><strong>À quoi sert le suivi ?</strong><br/>La mise à jour des données de suivi permettent d’observer la progression des démarches des habitants par rapport à une situation initiale et les résultats des actions.<br/>Toutes ces données peuvent êtres utilisées pour la communication auprès des partenaires.</p>
+                    </template>
+                </SlideNote>
 
-                            <div class="panel">
-                                <div class="panel__header">
-                                    <h3>2. Opérateur en charge</h3>
-                                </div>
-                                <div class="form__group">
-                                    <p>
-                                        <strong>Nom de l'opérateur :</strong> {{ plan.ngo.name }}
-                                    </p>
-                                </div>
-                            </div>
+                <section class="dataSection">
+                    <header class="dataSection-header">
+                        <h1 class="dataSection-title">
+                            <span class="dataSection-icon"><font-awesome-icon icon="list"></font-awesome-icon></span> Intervention
+                        </h1>
+                    </header>
+
+                    <article class="block">
+                        <div class="dataSection-line">
+                            <p class="data"><span class="data-label">Date de début</span><br/>{{ formatDate(plan.started_at / 1000, 'd M y') }}</p>
+                            <p v-if="plan.expected_to_end_at" class="data"><span class="data-label">Date de fin prévue</span><br/>{{ formatDate(plan.expected_to_end_at / 1000, 'd M y') }}<br/><strong>Durée prévue : {{ dateDiff(plan.started_at, plan.expected_to_end_at) }}</strong></p>
                         </div>
 
-                        <div v-else>
-                            <div class="panel">
-                                <div class="panel__header">
-                                    <h3>1. Indicateurs de suivi pour 2019</h3>
-                                </div>
-                                <div class="form__group">
-                                    <p v-for="field in customFields">
-                                        <strong>{{ field.label }} :</strong>
-                                        <span v-if="mode === 'read'">{{ numericValue(field.value) }}</span>
-                                        <span v-if="mode === 'edit'">
-                                            <input type="number" v-model="form.data[field.id]" :disabled="form.pending" />
-                                        </span>
-                                    </p>
-                                </div>
+                        <p class="data-label">Champs d'intervention</p>
+                        <p v-for="topic in plan.topics"><span class="rbTag rbTag--warning">{{ topic.name }}</span><br/></p>
 
-                                <div class="notification error" v-if="form.error">{{ form.error }}.</div>
-
-                                <div class="form__group" v-if="mode === 'edit'">
-                                    <button class="button large" @click="submit" :disabled="form.pending">Sauvegarder</button>
-                                </div>
-                            </div>
+                        <div class="dataSection-line">
+                            <p class="data">
+                                <span class="data-label">Objectifs</span><br/>
+                                <span v-html="escapeHtml(plan.goals).replace(/\n/g, '<br/>')"></span>
+                            </p>
                         </div>
+                    </article>
+                </section>
+
+                <section class="dataSection">
+                    <header class="dataSection-header">
+                        <h1 class="dataSection-title">
+                            <span class="dataSection-icon"><font-awesome-icon icon="map-pin"></font-awesome-icon></span> Lieu
+                        </h1>
+                    </header>
+
+                    <article class="block">
+                        <div class="dataSection-line">
+                            <p>
+                                <span class="data-label">{{ plan.location_type.label }}</span><br/>
+                                <span v-if="plan.location_type.id === 'shantytowns'">
+                                    <p v-for="shantytown in plan.shantytowns">
+                                        <router-link :to="`/site/${shantytown.id}`" class="locationPoint">{{ shantytown.addressSimple }}</router-link>
+                                    </p>
+                                </span>
+                                <span v-if="plan.location_type.id === 'location'" class="locationPoint">{{ plan.location.label }}</span>
+                                <span v-if="plan.location_type.id === 'other'">{{ plan.location_details }}</span>
+                            </p>
+                        </div>
+                        <Map v-if="plan.location_type.id === 'location'" :show-address="false" :track-position="false" :towns="[ address ]" :default-view="center"></Map>
+                    </article>
+                </section>
+
+                <section class="dataSection">
+                    <header class="dataSection-header">
+                        <h1 class="dataSection-title">
+                            <span class="dataSection-icon"><font-awesome-icon icon="address-book"></font-awesome-icon></span> Contacts
+                        </h1>
+                    </header>
+
+                    <article class="block">
+                        <div class="dataSection-line">
+                            <p class="data"><span class="data-label">Service de l'état</span><br/><router-link :to="`/annuaire/${plan.government_contacts[0].organization.id}`" class="user">{{ plan.government_contacts[0].name }}<br/>{{ plan.government_contacts[0].organization.name }}</span></p>
+                        </div>
+                        <div class="dataSection-line">
+                            <p class="data"><span class="data-label">Opérateur ou service en charge</span><br/><router-link :to="`/annuaire/${plan.operator_contacts[0].organization.id}`" class="user">{{ plan.operator_contacts[0].name }}<br/>{{ plan.operator_contacts[0].organization.name }}</span></p>
+                        </div>
+                    </article>
+                </section>
+
+                <section class="dataSection rb-table" v-if="plan.fundings.length > 0">
+                    <header class="dataSection-header">
+                        <h1 class="dataSection-title">
+                            <span class="dataSection-icon"><font-awesome-icon icon="euro-sign"></font-awesome-icon></span> Financements
+                        </h1>
+                    </header>
+
+                    <table class="table block">
+                        <thead>
+                            <tr>
+                                <th class="table-col">Type de financements</th>
+                                <th class="table-col">Montants<br/>prévus</th>
+                                <th class="table-col">Précision</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr v-for="funding in plan.fundings[0].lines">
+                                <td>{{ financeTypes[funding.type] }}</td>
+                                <td>{{ funding.amount }} €<br/>soit {{ Math.round((funding.amount / fundingTotal()) * 100) }}%</td>
+                                <td>{{ funding.details }}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2"><strong>TOTAL : {{ fundingTotal() }}€</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="dataSection rb-table" v-if="plan.team && availableEtpTypes.length > 0">
+                    <header class="dataSection-header">
+                        <h1 class="dataSection-title">
+                            <span class="dataSection-icon"><font-awesome-icon icon="users"></font-awesome-icon></span> Équipe
+                        </h1>
+                    </header>
+
+                    <table class="table block">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th v-for="team in plan.team">{{ formatDate(new Date(team.date).getTime() / 1000, 'd M') }}</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr v-for="etpType in availableEtpTypes">
+                                <th>{{ etpType.label }}</th>
+                                <td v-for="team in plan.team">{{ team.etp.find(({ type }) => type === etpType.id) ? team.etp.find(({ type }) => type === etpType.id).total : '0' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="dataSection rb-table" v-if="plan.audience && plan.audience.length > 0">
+                    <header class="dataSection-header">
+                        <h1 class="dataSection-title">
+                            <span class="dataSection-icon"><font-awesome-icon icon="arrow-right"></font-awesome-icon></span> Public
+                        </h1>
+                    </header>
+
+                    <table class="table block">
+                        <thead>
+                            <tr>
+                                <th class="table-col"></th>
+                                <th class="table-col">Ménages</th>
+                                <th class="table-col">Personnes</th>
+                                <th class="table-col">dont femmes</th>
+                                <th class="table-col">dont mineurs</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td><strong>Entrées</strong> dans le dispositif</td>
+                                <td>{{ plan.audience[0].in.households }}</td>
+                                <td>{{ plan.audience[0].in.people }}</td>
+                                <td>{{ plan.audience[0].in.women }}</td>
+                                <td>{{ plan.audience[0].in.minors }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sorties positivement</strong><br/>fin accompagnement social et/ou<br/>prise en charge dans un autre dispositif</td>
+                                <td>{{ plan.audience[0].out_positive.households }}</td>
+                                <td>{{ plan.audience[0].out_positive.people }}</td>
+                                <td>{{ plan.audience[0].out_positive.women }}</td>
+                                <td>{{ plan.audience[0].out_positive.minors }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Exclusion</strong> du dispositif</td>
+                                <td>{{ plan.audience[0].out_exclusion.households }}</td>
+                                <td>{{ plan.audience[0].out_exclusion.people }}</td>
+                                <td>{{ plan.audience[0].out_exclusion.women }}</td>
+                                <td>{{ plan.audience[0].out_exclusion.minors }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Abandon / départ volontaire</strong></td>
+                                <td>{{ plan.audience[0].out_giveup.households }}</td>
+                                <td>{{ plan.audience[0].out_giveup.people }}</td>
+                                <td>{{ plan.audience[0].out_giveup.women }}</td>
+                                <td>{{ plan.audience[0].out_giveup.minors }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="dataSection rb-table" v-if="plan.common_rights && plan.common_rights.length > 0">
+                    <header class="dataSection-header">
+                        <h1 class="dataSection-title">
+                            <span class="dataSection-icon"><font-awesome-icon icon="id-card"></font-awesome-icon></span> Droit commun et ressources
+                        </h1>
+                    </header>
+
+                    <table class="table block">
+                        <thead>
+                            <tr>
+                                <th class="table-col">Nombre de personnes ayant</th>
+                                <th class="table-col" v-for="rights in plan.common_rights">{{ formatDate(new Date(rights.date).getTime() / 1000, 'd M') }}</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>une domiciliation</td>
+                                <td v-for="rights in plan.common_rights">{{ rights.housing }}</td>
+                            </tr>
+                            <tr>
+                                <td>des droits CAF ouverts</td>
+                                <td v-for="rights in plan.common_rights">{{ rights.caf }}</td>
+                            </tr>
+                            <tr>
+                                <td>un emploi stable / ressources suffisantes</td>
+                                <td v-for="rights in plan.common_rights">{{ rights.job }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="dataSection rb-table" v-if="plan.healthcare && plan.healthcare.length > 0">
+                    <header class="dataSection-header">
+                        <h1 class="dataSection-title">
+                            <span class="dataSection-icon"><font-awesome-icon icon="user-md"></font-awesome-icon></span> Santé
+                        </h1>
+                    </header>
+
+                    <table class="table block">
+                        <thead>
+                            <tr>
+                                <th class="table-col"></th>
+                                <th class="table-col" v-for="health in plan.healthcare">{{ formatDate(new Date(health.date).getTime() / 1000, 'd M') }}</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <th :colspan="plan.healthcare.length + 1"><strong>Nombre de personnes avec...</strong></th>
+                            </tr>
+                            <tr>
+                                <td>une couverture AME valide</td>
+                                <td v-for="health in plan.healthcare">{{ health.granted_ame }}</td>
+                            </tr>
+                            <tr>
+                                <td>une couverture PUMA valide</td>
+                                <td v-for="health in plan.healthcare">{{ health.granted_puma }}</td>
+                            </tr>
+                            <tr>
+                                <td>une demande AME en cours</td>
+                                <td v-for="health in plan.healthcare">{{ health.requesting_ame }}</td>
+                            </tr>
+                            <tr>
+                                <td>une demande PUMA en cours</td>
+                                <td v-for="health in plan.healthcare">{{ health.requesting_puma }}</td>
+                            </tr>
+                            <tr>
+                                <th :colspan="plan.healthcare.length + 1"><strong>Nombre de personnes ayant fait l'objet d'au moins...</strong></th>
+                            </tr>
+                            <tr>
+                                <td>une orientation vers une structure de santé</td>
+                                <td v-for="health in plan.healthcare">{{ health.verbally_redirected }}</td>
+                            </tr>
+                            <tr>
+                                <td>un accompagnement physique vers une structure de santé</td>
+                                <td v-for="health in plan.healthcare">{{ health.physically_redirected }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="dataSection rb-table" v-if="plan.schooling && plan.schooling.length > 0">
+                    <header class="dataSection-header">
+                        <h1 class="dataSection-title">
+                            <span class="dataSection-icon"><font-awesome-icon icon="user-md"></font-awesome-icon></span> Éducation et scolarisation
+                        </h1>
+                    </header>
+
+                    <table class="table block">
+                        <thead>
+                            <tr>
+                                <th class="table-col"></th>
+                                <th class="table-col" v-for="row in plan.schooling">{{ formatDate(new Date(row.date).getTime() / 1000, 'd M') }}</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>Mineurs en âge d'être scolarisés</td>
+                                <td v-for="row in plan.schooling">{{ row.can_be_schooled }}</td>
+                            </tr>
+                            <tr>
+                                <td>Élémentaire</td>
+                                <td v-for="row in plan.schooling">{{ row.children_signed_to_maternelle }}</td>
+                            </tr>
+                            <tr>
+                                <td>Primaire</td>
+                                <td v-for="row in plan.schooling">{{ row.children_signed_to_elementaire }}</td>
+                            </tr>
+                            <tr>
+                                <td>Collège</td>
+                                <td v-for="row in plan.schooling">{{ row.children_signed_to_college }}</td>
+                            </tr>
+                            <tr>
+                                <td>Lycée</td>
+                                <td v-for="row in plan.schooling">{{ row.children_signed_to_lycee }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="dataSection rb-table" v-if="plan.job && plan.job.length > 0">
+                    <header class="dataSection-header">
+                        <h1 class="dataSection-title">
+                            <span class="dataSection-icon"><font-awesome-icon icon="briefcase"></font-awesome-icon></span> Formation et emploi
+                        </h1>
+                    </header>
+
+                    <table class="table block">
+                        <thead>
+                            <tr>
+                                <th class="table-col"></th>
+                                <th class="table-col" v-for="row in plan.job">{{ formatDate(new Date(row.date).getTime() / 1000, 'd M') }}</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <th :colspan="plan.job.length + 1"><strong>Nombre de personnes inscrites ou suivies par...</strong></th>
+                            </tr>
+                            <tr>
+                                <td>Pôle emploi</td>
+                                <td v-for="row in plan.job">{{ row.pole_emploi_total }}</td>
+                            </tr>
+                            <tr>
+                                <td><em>(dont femmes)</em></td>
+                                <td v-for="row in plan.job">{{ row.pole_emploi_women }}</td>
+                            </tr>
+                            <tr>
+                                <td>Mission locale</td>
+                                <td v-for="row in plan.job">{{ row.mission_locale_total }}</td>
+                            </tr>
+                            <tr>
+                                <td><em>(dont femmes)</em></td>
+                                <td v-for="row in plan.job">{{ row.mission_locale_women }}</td>
+                            </tr>
+                            <tr>
+                                <th :colspan="plan.job.length + 1"><strong>Nombre de personnes ayant</strong></th>
+                            </tr>
+                            <tr>
+                                <td>Un contrat ou une formation</td>
+                                <td v-for="row in plan.job">{{ row.contract_total }}</td>
+                            </tr>
+                            <tr>
+                                <td><em>(dont femmes)</em></td>
+                                <td v-for="row in plan.job">{{ row.contract_women }}</td>
+                            </tr>
+                            <tr>
+                                <td>Un statut autoentrepreneur</td>
+                                <td v-for="row in plan.job">{{ row.autoentrepreneur_total }}</td>
+                            </tr>
+                            <tr>
+                                <td><em>(dont femmes)</em></td>
+                                <td v-for="row in plan.job">{{ row.autoentrepreneur_women }}</td>
+                            </tr>
+                            <tr>
+                                <td>l'ARE</td>
+                                <td v-for="row in plan.job">{{ row.are_total }}</td>
+                            </tr>
+                            <tr>
+                                <td><em>(dont femmes)</em></td>
+                                <td v-for="row in plan.job">{{ row.are_women }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="dataSection rb-table" v-if="plan.housing && plan.housing.length > 0">
+                    <header class="dataSection-header">
+                        <h1 class="dataSection-title">
+                            <span class="dataSection-icon"><font-awesome-icon icon="home"></font-awesome-icon></span> Logement
+                        </h1>
+                    </header>
+
+                    <table class="table block">
+                        <thead>
+                            <tr>
+                                <th class="table-col"></th>
+                                <th class="table-col" v-for="row in plan.housing">{{ formatDate(new Date(row.date).getTime() / 1000, 'd M') }}</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <th :colspan="plan.housing.length + 1"><strong>Nombre de personnes ayant fait une demande</strong></th>
+                            </tr>
+                            <tr>
+                                <td>SIAO</td>
+                                <td v-for="row in plan.housing">{{ row.requested_siao }}</td>
+                            </tr>
+                            <tr>
+                                <td>logement social</td>
+                                <td v-for="row in plan.housing">{{ row.requested_social }}</td>
+                            </tr>
+                            <tr>
+                                <td>DALO</td>
+                                <td v-for="row in plan.housing">{{ row.requested_dalo }}</td>
+                            </tr>
+                            <tr>
+                                <th :colspan="plan.housing.length + 1"><strong>Nombre de ménages ayant accédé à un logement</strong></th>
+                            </tr>
+                            <tr>
+                                <td>accompagné / adapté</td>
+                                <td v-for="row in plan.housing">{{ row.housed_with_help }}</td>
+                            </tr>
+                            <tr>
+                                <td>sans accompagnement (social ou privé)</td>
+                                <td v-for="row in plan.housing">{{ row.housed_without_help }}</td>
+                            </tr>
+                            <tr>
+                                <th :colspan="plan.housing.length + 1"><strong>Nombre de ménages</strong></th>
+                            </tr>
+                            <tr>
+                                <td>hébergés (hors mise à l'abri ou hébergement d'urgence)</td>
+                                <td v-for="row in plan.housing">{{ row.hosted }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="dataSection rb-table" v-if="plan.safety && plan.safety.length > 0">
+                    <header class="dataSection-header">
+                        <h1 class="dataSection-title">
+                            <span class="dataSection-icon"><font-awesome-icon icon="seedling"></font-awesome-icon></span> Stabilisation et sécurisation du site
+                        </h1>
+                    </header>
+
+                    <table class="table block">
+                        <thead>
+                            <tr>
+                                <th class="table-col"></th>
+                                <th class="table-col" v-for="row in plan.safety">{{ formatDate(new Date(row.date).getTime() / 1000, 'd M') }}</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>Nombre de points d'eau</td>
+                                <td v-for="row in plan.safety">{{ row.water }}</td>
+                            </tr>
+                            <tr>
+                                <td>Nombre de WC</td>
+                                <td v-for="row in plan.safety">{{ row.toilets }}</td>
+                            </tr>
+                            <tr>
+                                <td>Nombre de douches</td>
+                                <td v-for="row in plan.safety">{{ row.bath }}</td>
+                            </tr>
+                            <tr>
+                                <td>Nombre d'accès à l'électricité</td>
+                                <td v-for="row in plan.safety">{{ row.electricity }}</td>
+                            </tr>
+                            <tr>
+                                <td>Fréquence d'évacuation des déchets</td>
+                                <td v-for="row in plan.safety">{{ frequencies[row.trash_frequency] }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <div class="note" v-if="!plan.audience">
+                    <div class="note-body">
+                        <p>
+                            <strong>Aucun indicateur de suivi renseigné par l'opérateur</strong><br/>
+                            <router-link :to="`/dispositif/${plan.id}/indicateurs`" class="button">
+                                <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
+                                <span>Modifier</span>
+                            </router-link>
+                        </p>
                     </div>
                 </div>
-            </div>
+            </section>
         </div>
     </section>
 </div>

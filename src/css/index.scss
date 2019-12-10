@@ -1,11 +1,15 @@
 @import './config/colors.scss';
 @import './components/badge.scss';
+@import './components/block.scss';
 @import './components/carousel.scss';
 @import './components/comment.scss';
 @import './components/changelog.scss';
+@import './components/dataSection.scss';
 @import './components/list.scss';
+@import './components/note.scss';
 @import './components/notification.scss';
 @import './components/page.scss';
+@import './components/pageheader.scss';
 @import './components/pagination.scss';
 @import './components/popin.scss';
 @import './components/role.scss';
@@ -14,6 +18,16 @@
 @import './components/table.scss';
 @import './components/userCard.scss';
 @import './components/userpost.scss';
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Fira Sans", Arial, sans-serif;
+}
 
 .page--withMargin {
     padding-bottom: 50px;
@@ -54,7 +68,7 @@ select {
 @media (min-width: 800px) {
     .container,
     .dashboard {
-        padding: 0 100px;
+        padding: 0;
     }
 }
 
@@ -312,4 +326,104 @@ button:disabled:hover {
 
 .mail:after {
     content: attr(data-name) "@" attr(data-domain) "." attr(data-tld);
+}
+
+.subtitle {
+    color: $EASTERN_BLUE;
+    font-weight: bold;
+}
+
+.background--gray {
+    background: $MYSTIC;
+}
+
+.bordered--right {
+    border-right: 1px solid $LIGTHER_GREY;
+}
+
+.bordered--bottom {
+    border-bottom: 1px solid $LIGTHER_GREY;
+}
+
+table.bordered {
+    margin: 0;
+    padding: 0;
+    border-collapse: collapse;
+
+    td,
+    th {
+        padding: 5px 0;
+        border-bottom: 1px solid $LIGTHER_GREY;
+    }
+
+    th {
+        text-align: left;
+    }
+
+    th:first-child {
+        padding-right: 30px;
+    }
+}
+
+.rbTag {
+    padding: 0 10px;
+    margin-right: 5px;
+    border-radius: 3px;
+    font-weight: bold;
+    background: $PATTENS_BLUE;
+}
+
+.rbTag--warning {
+    background: $SERENADE;
+}
+
+.locationPoint {
+    &:before {
+        margin-right: 7px;
+        margin-bottom: 5px;
+        display: inline-block;
+        content: '';
+        width: 20px;
+        height: 26px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background: $ENDEAVOUR_BLUE;
+        -webkit-mask: url('/img/map-marker-alt.svg') no-repeat center;
+        mask: url('/img/map-marker-alt.svg') no-repeat center;
+        vertical-align: middle;
+    }
+
+    color: $ENDEAVOUR_BLUE;
+    font-weight: bold;
+}
+
+.user {
+    display: flex;
+
+    &:before {
+        margin-right: 7px;
+        display: inline-block;
+        content: '';
+        width: 20px;
+        height: 26px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background: $ENDEAVOUR_BLUE;
+        -webkit-mask: url('/img/user.svg') no-repeat center;
+        mask: url('/img/user.svg') no-repeat center;
+    }
+
+    color: $ENDEAVOUR_BLUE;
+    font-weight: bold;
+}
+
+.divider {
+    margin: 10px 0;
+    border-top: 1px solid $LIGTHER_GREY;
+}
+
+.align--right {
+    text-align: right;
 }

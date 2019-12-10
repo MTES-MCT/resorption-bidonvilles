@@ -1,0 +1,44 @@
+<div class="rb-table">
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="table-col"></th>
+                <th class="table-col">Ménages</th>
+                <th class="table-col">Personnes</th>
+                <th class="table-col">dont femmes<br/>(facultatif)</th>
+                <th class="table-col">dont mineurs<br/>(facultatif)</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td><strong>Entrées</strong> dans le dispositif</td>
+                <td><input type="number" v-model="data.in.households" :disabled="disabled" /></td>
+                <td><input type="number" v-model="data.in.people" :disabled="disabled" /></td>
+                <td><input type="number" v-model="data.in.women" :disabled="disabled" /></td>
+                <td><input type="number" v-model="data.in.minors" :disabled="disabled" /></td>
+            </tr>
+            <tr>
+                <td><strong>Sorties positivement</strong><br/>fin accompagnement social et/ou<br/>prise en charge dans un autre dispositif</td>
+                <td><input type="number" v-model="data.out_positive.households" :disabled="disabled" /></td>
+                <td><input type="number" v-model="data.out_positive.people" :disabled="disabled" /></td>
+                <td><input type="number" v-model="data.out_positive.women" :disabled="disabled" /></td>
+                <td><input type="number" v-model="data.out_positive.minors" :disabled="disabled" /></td>
+            </tr>
+            <tr>
+                <td><strong>Exclusion</strong> du dispositif</td>
+                <td><input type="number" v-model="data.out_exclusion.households" :disabled="disabled" /></td>
+                <td><input type="number" v-model="data.out_exclusion.people" :disabled="disabled" /></td>
+                <td><input type="number" v-model="data.out_exclusion.women" :disabled="disabled" /></td>
+                <td><input type="number" v-model="data.out_exclusion.minors" :disabled="disabled" /></td>
+            </tr>
+            <tr>
+                <td><strong>Abandon / départ volontaire</strong></td>
+                <td><input type="number" v-model="data.out_giveup.households" :disabled="disabled" /></td>
+                <td><input type="number" v-model="data.out_giveup.people" :disabled="disabled" /></td>
+                <td><input type="number" v-model="data.out_giveup.women" :disabled="disabled" /></td>
+                <td><input type="number" v-model="data.out_giveup.minors" :disabled="disabled" /></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

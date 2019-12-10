@@ -19,6 +19,7 @@ import UserSetNewPassword from '#app/pages/users.setNewPassword/users.setNewPass
 import PlanList from '#app/pages/plans.list/plans.list.vue';
 import PlanCreate from '#app/pages/plans.create/plans.create.vue';
 import PlanDetails from '#app/pages/plans.details/plans.details.vue';
+import PlanMarks from '#app/pages/plans.marks/plans.marks.vue';
 import Statistics from '#app/pages/stats/stats.vue';
 import LegalMentions from '#app/pages/legalMentions/legalMentions.vue';
 import Directory from '#app/pages/directory/directory.vue';
@@ -367,6 +368,15 @@ const router = new VueRouter({
             },
             path: '/dispositif/:id',
             component: PlanDetails,
+            beforeEnter: guardians.loadedAndUpgraded,
+        },
+        {
+            meta: {
+                group: 'plans',
+                permissions: ['plan.read'],
+            },
+            path: '/dispositif/:id/indicateurs',
+            component: PlanMarks,
             beforeEnter: guardians.loadedAndUpgraded,
         },
         {

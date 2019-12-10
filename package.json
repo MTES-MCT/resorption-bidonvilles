@@ -60,7 +60,7 @@
         "@fortawesome/free-solid-svg-icons": "^5.10.2",
         "@fortawesome/vue-fontawesome": "^0.1.6",
         "axios": "^0.18.0",
-        "@openfonts/fira-code_all": "^1.44.0",
+        "@openfonts/fira-code_all": "^1.44.2",
         "leaflet.markercluster": "^1.4.1",
         "moment": "^2.24.0",
         "popper.js": "^1.14.7",

@@ -1,4 +1,5 @@
 import Input from './input/input.vue';
+import SlideNote from '#app/components/slide-note/slide-note.vue';
 import { notify } from '#helpers/notificationHelper';
 
 export default {
@@ -6,6 +7,7 @@ export default {
 
     components: {
         Input,
+        SlideNote,
     },
 
 
@@ -16,6 +18,16 @@ export default {
          * @type {String}
          */
         title: {
+            type: String,
+            required: false,
+        },
+
+        /**
+         * Description title of the form
+         *
+         * @type {String}
+         */
+        descriptionTitle: {
             type: String,
             required: false,
         },

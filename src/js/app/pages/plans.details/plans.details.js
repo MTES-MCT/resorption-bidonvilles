@@ -1,6 +1,10 @@
+import Datepicker from 'vuejs-datepicker';
+import { fr as datepickerFr } from 'vuejs-datepicker/dist/locale';
 import NavBar from '#app/layouts/navbar/navbar.vue';
+import SlideNote from '#app/components/slide-note/slide-note.vue';
+import Map from '#app/pages/townExplorer/map/map.vue';
 import { get, update, destroy } from '#helpers/api/plan';
-import { hasPermission } from '#helpers/api/config';
+import { hasPermission, get as getConfig } from '#helpers/api/config';
 import { shortAddress } from '#helpers/townHelper';
 import { notify } from '#helpers/notificationHelper';
 
@@ -41,11 +45,22 @@ const fieldsByType = {
 
 export default {
     components: {
+        Datepicker,
         NavBar,
+        SlideNote,
+        Map,
     },
 
     data() {
         return {
+            /**
+             * List of funding-types
+             *
+             * @type {Array.<FinanceType>}
+             */
+            financeTypes: (getConfig().finance_types || []).reduce((acc, type) => Object.assign({}, acc, {
+                [type.uid]: type.name,
+            }), {}),
             status: null,
             error: null,
             plan: null,
@@ -90,6 +105,42 @@ export default {
                 pending: false,
                 data: {},
             },
+            etpTypes: [
+                {
+                    id: 'social',
+                    label: 'Travailleur social',
+                },
+                {
+                    id: 'cip',
+                    label: 'CIP (Conseiller d\'insertion Pro.)',
+                },
+                {
+                    id: 'service',
+                    label: 'Service civique',
+                },
+                {
+                    id: 'caretaking',
+                    label: 'Entretien / gardiennage',
+                },
+                {
+                    id: 'manager',
+                    label: 'Coordinateur ou chef de service',
+                },
+                {
+                    id: 'interpreter',
+                    label: 'Interprète',
+                },
+                {
+                    id: 'volunteer',
+                    label: 'Bénévole',
+                },
+            ],
+            frequencies: {
+                every_day: 'Tous les jours',
+                several_times_a_week: 'Plusieurs fois par semaine',
+                every_week: 'Toutes les semaines',
+                less_than_once_a_week: 'Moins d\'une fois par semaine',
+            },
         };
     },
 
@@ -98,6 +149,41 @@ export default {
     },
 
     computed: {
+        availableEtpTypes() {
+            return this.etpTypes.filter(({ id }) => this.plan.team.some(({ etp }) => etp.find(({ type }) => id === type) !== undefined));
+        },
+        address() {
+            if (!this.plan.location) {
+                return null;
+            }
+
+            return {
+                latitude: this.plan.location.latitude,
+                longitude: this.plan.location.longitude,
+                address: this.plan.location.label,
+            };
+        },
+        center() {
+            if (!this.plan.location) {
+                return null;
+            }
+
+            return {
+                center: [this.plan.location.latitude, this.plan.location.longitude],
+                zoom: 15,
+            };
+        },
+        dateProps() {
+            return {
+                language: datepickerFr,
+                mondayFirst: true,
+                fullMonthName: true,
+                format: 'dd MMMM yyyy',
+                calendarButton: true,
+                calendarButtonIconContent: '',
+                clearButton: true,
+            };
+        },
         customFields() {
             if (!this.plan) {
                 return [];
@@ -144,6 +230,9 @@ export default {
 
     methods: {
         hasPermission,
+        fundingTotal() {
+            return this.plan.fundings[0].lines.reduce((total, { amount }) => total + parseFloat(amount), 0);
+        },
         load() {
             if (['loading', 'loaded'].indexOf(this.status) !== -1) {
                 return;
@@ -174,7 +263,15 @@ export default {
 
             return int;
         },
-        formatDate: ts => App.formatDate(ts),
+        escapeHtml(...args) {
+            return App.escapeHtml(...args);
+        },
+        dateDiff(...args) {
+            return App.dateDiff(...args);
+        },
+        formatDate(...args) {
+            return App.formatDate(...args);
+        },
         fromCamelCase(str) {
             const atoms = str.split(/[A-Z]/g);
             const camels = str.match(/[A-Z]/g);

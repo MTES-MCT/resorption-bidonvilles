@@ -1,0 +1,67 @@
+@import '/css/config/colors.scss';
+
+.pageHeader {
+    box-shadow: 0 10px 10px 0 rgba(0,0,0,0.2);
+}
+
+.pageHeader-wrapper {
+    margin: 0 auto;
+    width: 90%;
+}
+
+.pageHeader-main {
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.pageHeader-info {
+    min-height: 60px;
+}
+
+.pageHeader-meta {
+    margin: 0;
+    padding: 6px 0;
+
+    .link:not(:last-child) {
+        margin-right: 15px;
+    }
+}
+
+.pageHeader-title {
+    margin: 0;
+    padding: 0;
+    font-size: 2.2rem;
+}
+
+.pageHeader-anchors {
+    padding-top: 6px;
+    border-top: 1px solid $LIGTHER_GREY;
+
+    > ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+}
+
+.pageHeader-anchorItem {
+    display: inline-block;
+    color: $ENDEAVOUR_BLUE;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    border-bottom: 4px solid transparent;
+
+    &:not(:last-child) {
+        margin-right: 20px;
+    }
+
+    &:hover:not(.pageHeader-anchorItem--active) {
+        border-bottom-color: adjust-color($ENDEAVOUR_BLUE, $alpha: -0.7);
+    }
+}
+
+.pageHeader-anchorItem--active {
+    border-bottom-color: $ENDEAVOUR_BLUE;
+}

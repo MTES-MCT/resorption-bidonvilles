@@ -37,9 +37,9 @@ export default {
             /**
              * List of funding-types
              *
-             * @type {Array.<FundingType>}
+             * @type {Array.<FinanceType>}
              */
-            fundingTypes: getConfig().funding_types || [],
+            financeTypes: getConfig().finance_types || [],
 
             // please see definition of PlanFundingData
             type: this.value.type,
@@ -96,7 +96,7 @@ export default {
 };
 
 /**
- * @typedef {Object} FundingType
- * @property {Number} id
- * @property {String} label
+ * @typedef {Object} FinanceType
+ * @property {Number} uid
+ * @property {String} name
  */

@@ -8,6 +8,8 @@ import TownList from './townList/townList.vue';
 import PlanFunding from './planFunding/planFunding.vue';
 import Collectivity from './collectivity/collectivity.vue';
 import Organization from './organization/organization.vue';
+import Etp from './etp/etp.vue';
+import Audience from './audience/audience.vue';
 
 /**
  * Input types that accept a list of values
@@ -20,6 +22,7 @@ const multipleValueInputs = [
     'autocompleter',
     'townList',
     'planFunding',
+    'etp',
 ];
 
 export default {
@@ -35,6 +38,8 @@ export default {
         PlanFunding,
         Collectivity,
         Organization,
+        Etp,
+        Audience,
     },
 
 
@@ -63,6 +68,7 @@ export default {
          * Input type
          *
          * @type {
+         *  'hidden',
          *  'text',
          *  'password',
          *  'textarea',
@@ -80,6 +86,8 @@ export default {
          *  'planFunding',
          *  'collectivity',
          *  'organization',
+         *  'etp',
+         *  'audience'
          * }
          */
         type: {
@@ -240,6 +248,13 @@ export default {
         data() {
             this.$emit('input', this.data);
             this.$emit('change');
+        },
+        options() {
+            if (Array.isArray(this.data)) {
+                this.data = this.data.filter(v => this.options.indexOf(v) !== -1);
+            } else if (this.options.indexOf(this.data) === -1) {
+                this.data = undefined;
+            }
         },
     },
 
