@@ -28,6 +28,8 @@ import OpenStats from '#app/pages/open.stats/open.stats.vue';
 // eslint-disable-next-line
 import CGU from '/doc/CGU_Resorption_Bidonvilles.pdf';
 // eslint-disable-next-line
+import CharteEngagement from '/doc/charte-d-engagement-resorption-bidonvilles.pdf';
+// eslint-disable-next-line
 import TypologieAcces from '/doc/guide_de_l_administrateur.pdf';
 
 import { logout, isLoggedIn, alreadyLoggedBefore } from '#helpers/api/user';
@@ -258,6 +260,13 @@ const router = new VueRouter({
             path: '/typologie-des-acces',
             beforeEnter(to, from, next) {
                 window.open(TypologieAcces, '_blank');
+                next(false);
+            },
+        },
+        {
+            path: '/charte-d-engagement',
+            beforeEnter(to, from, next) {
+                window.open(CharteEngagement, '_blank');
                 next(false);
             },
         },
