@@ -6,7 +6,7 @@ import SignUp from '#app/pages/signup/signup.vue';
 import TownsExplorer from '#app/pages/townExplorer/explorer.vue';
 import Launcher from '#app/pages/launcher/launcher.vue';
 import TownList from '#app/pages/towns.list/towns.list.vue';
-import AddTown from '#app/pages/addTown/addTown.vue';
+import TownsCreate from '#app/pages/towns.create/towns.create.vue';
 import Town from '#app/pages/town/town.vue';
 import Me from '#app/pages/me/me.vue';
 import UserList from '#app/pages/users.list/users.list.vue';
@@ -231,7 +231,7 @@ const router = new VueRouter({
                 permissions: ['shantytown.create'],
             },
             path: '/nouveau-site',
-            component: AddTown,
+            component: TownsCreate,
             beforeEnter: guardians.loadedAndUpgraded,
         },
         {

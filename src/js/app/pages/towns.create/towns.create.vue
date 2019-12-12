@@ -1,12 +1,12 @@
 <template lang="pug">
-    include addTown.pug
+    include towns.create.pug
 </template>
 
 <script>
-import Component from './addTown.js';
+import Component from "./towns.create.js";
 export default Component;
 </script>
 
 <style lang="scss" scoped>
-@import './addTown.scss';
+@import "./towns.create.scss";
 </style>
