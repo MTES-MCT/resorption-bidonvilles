@@ -183,6 +183,7 @@ const router = new VueRouter({
         {
             path: '/statistiques-publiques',
             component: OpenStats,
+            beforeEnter: guardians.anonymous,
         },
         {
             path: '/connexion',
