@@ -13,15 +13,15 @@ export default {
             stats: null,
             sections: [
                 {
-                    id: 'created',
+                    id: 'creations',
                     title: 'Nombre de sites créés',
                 },
                 {
-                    id: 'updated',
+                    id: 'updates',
                     title: 'Nombre de sites modifiés',
                 },
                 {
-                    id: 'closed',
+                    id: 'closings',
                     title: 'Nombre de sites fermés',
                 },
             ],
@@ -52,10 +52,7 @@ export default {
                 });
         },
         computeTotal(sectionId) {
-            return this.stats[sectionId].reduce(
-                (total, list) => total + parseInt(list.total, 10),
-                0,
-            );
+            return this.stats.numberOfShantytownOperations[sectionId].reduce((sum, { total }) => sum + parseInt(total, 10), 0);
         },
     },
 };
