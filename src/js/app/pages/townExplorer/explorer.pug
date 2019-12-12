@@ -10,9 +10,7 @@
 
         //- content
         <div v-bind:style="{ width: !loading && !error ? 'auto' : 0 }" class="content" ref="main">
-            <keep-alive>
-                <Map v-bind="rendererProps" @town-click="showQuickview" @on-row-click="routeToTown" ref="map"></Map>
-            </keep-alive>
+            <Map v-bind="rendererProps" @town-click="showQuickview" @on-row-click="routeToTown" ref="map"></Map>
         </div>
 
         //- notifications

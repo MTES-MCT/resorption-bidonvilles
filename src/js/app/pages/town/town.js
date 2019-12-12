@@ -2,7 +2,7 @@ import simplebar from 'simplebar-vue';
 import Datepicker from 'vuejs-datepicker';
 import { fr } from 'vuejs-datepicker/dist/locale';
 import NavBar from '#app/layouts/navbar/navbar.vue';
-import Map from '#app/pages/townExplorer/map/map.vue';
+import Map from '#app/components/map/map.vue';
 import CommentDeletion from '#app/components/comment-deletion/comment-deletion.vue';
 import {
     get, close, edit, destroy, addComment, editComment,

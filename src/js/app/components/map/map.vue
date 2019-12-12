@@ -3,10 +3,10 @@
 </template>
 
 <script>
-import Component from './map.js';
+import Component from "./map.js";
 export default Component;
 </script>
 
 <style lang="scss" scoped>
-@import './map.scss';
+@import "./map.scss";
 </style>
