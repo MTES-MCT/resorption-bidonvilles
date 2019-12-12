@@ -5,9 +5,9 @@ import SignIn from '#app/pages/signin/signin.vue';
 import SignUp from '#app/pages/signup/signup.vue';
 import Dashboard from '#app/pages/dashboard/dashboard.vue';
 import Launcher from '#app/pages/launcher/launcher.vue';
-import TownList from '#app/pages/towns.list/towns.list.vue';
+import TownsList from '#app/pages/towns.list/towns.list.vue';
 import TownsCreate from '#app/pages/towns.create/towns.create.vue';
-import Town from '#app/pages/town/town.vue';
+import TownsDetails from '#app/pages/towns.details/towns.details.vue';
 import Me from '#app/pages/me/me.vue';
 import UserList from '#app/pages/users.list/users.list.vue';
 import UserCreate from '#app/pages/users.create/users.create.vue';
@@ -222,7 +222,7 @@ const router = new VueRouter({
                 group: 'townList',
             },
             path: '/liste-des-sites',
-            component: TownList,
+            component: TownsList,
             beforeEnter: guardians.loadedAndUpgraded,
         },
         {
@@ -239,7 +239,7 @@ const router = new VueRouter({
                 group: 'townList',
             },
             path: '/site/:id',
-            component: Town,
+            component: TownsDetails,
             beforeEnter: guardians.loadedAndUpgraded,
         },
         {
