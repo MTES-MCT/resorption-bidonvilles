@@ -1,15 +1,26 @@
 {
     "extends": "airbnb-base",
     "rules": {
-        "indent": [ "error", 4 ],
+        "indent": [
+            "error",
+            4
+        ],
         "import/no-extraneous-dependencies": false,
         "prefer-promise-reject-errors": 0,
         "import/no-unresolved": [
             "error",
-            { "ignore": ["#"] }
+            {
+                "ignore": [
+                    "#"
+                ]
+            }
         ],
         "max-len": "off",
-        "no-param-reassign": "warn"
+        "no-param-reassign": "warn",
+        "import/extensions": [
+            "error",
+            "never"
+        ]
     },
     "env": {
         "browser": true

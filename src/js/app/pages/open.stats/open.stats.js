@@ -43,7 +43,7 @@ export default {
         },
 
         numberOfNewUsers() {
-            return this.stats ? this.stats.numberOfNewUsersLastMonth : '...';
+            return this.stats && this.stats.numberOfNewUsersPerMonth ? this.stats.numberOfNewUsersPerMonth.slice(-1)[0] : { total: '...', month: '...' };
         },
 
         meanTimeBeforeCreationDeclaration() {
