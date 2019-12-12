@@ -3,7 +3,7 @@ import VueRouter from 'vue-router';
 import Landing from '#app/pages/landing/landing.vue';
 import SignIn from '#app/pages/signin/signin.vue';
 import SignUp from '#app/pages/signup/signup.vue';
-import TownsExplorer from '#app/pages/townExplorer/explorer.vue';
+import Dashboard from '#app/pages/dashboard/dashboard.vue';
 import Launcher from '#app/pages/launcher/launcher.vue';
 import TownList from '#app/pages/towns.list/towns.list.vue';
 import TownsCreate from '#app/pages/towns.create/towns.create.vue';
@@ -214,7 +214,7 @@ const router = new VueRouter({
                 group: 'townList',
             },
             path: '/cartographie',
-            component: TownsExplorer,
+            component: Dashboard,
             beforeEnter: guardians.loadedAndUpgraded,
         },
         {

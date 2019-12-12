@@ -2,7 +2,7 @@
     <Quickview :town="quickview.town" :origin="quickview.originEvent" @outside-click="hideQuickview"></Quickview>
     <NavBar></NavBar>
 
-    <section class="explorer">
+    <section class="dashboard">
         //- filters
         <simplebar class="filters" ref="filters" data-simplebar-auto-hide="false">
             <FilterGroup v-for="filterGroup in allowedFilters" :id="filterGroup.id" :icon="filterGroup.icon" :label="filterGroup.label" :options="filterGroup.options" :opened="filterGroup.opened"></FilterGroup>

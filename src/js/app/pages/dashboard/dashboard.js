@@ -200,7 +200,7 @@ export default {
                             }
 
                             if (!Number.isNaN(min)
-                            && !Number.isNaN(max)) {
+                                    && !Number.isNaN(max)) {
                                 return town.populationTotal < min || town.populationTotal > max;
                             }
 

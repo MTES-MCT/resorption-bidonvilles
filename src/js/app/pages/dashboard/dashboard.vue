@@ -1,12 +1,12 @@
 <template lang="pug">
-    include explorer.pug
+    include dashboard.pug
 </template>
 
 <script>
-import Component from './explorer.js';
+import Component from "./dashboard.js";
 export default Component;
 </script>
 
 <style lang="scss">
-@import './explorer.scss';
+@import "./dashboard.scss";
 </style>
