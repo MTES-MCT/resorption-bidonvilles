@@ -48,6 +48,8 @@
                         <h2>nouveaux utilisateurs en {{ numberOfNewUsers.month }}</h2>
                     </div>
                 </div>
+
+                <TrendChart class="stats-chart" v-if="numberOfNewUsersPerMonth !== null" :datasets="usersEvolutionDatasets" :labels="usersEvolutionLabels" :grid="{ verticalLines: true, horizontalLines: true }" :max="usersEvolutionMax" :min="0"></TrendChart>
             </section>
 
             <section class="stats-section">

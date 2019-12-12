@@ -12,6 +12,7 @@ import Vue from 'vue';
 import Notifications from 'vue-notification';
 import VueRouter from 'vue-router';
 import VueMatomo from 'vue-matomo';
+import TrendChart from 'vue-trend-chart';
 
 // import font-awesome
 import './icons';
@@ -35,6 +36,7 @@ window.App = Object.freeze({
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
+Vue.use(TrendChart);
 Vue.use(VueRouter);
 Vue.use(Notifications);
 Vue.use(VueMatomo, {

@@ -42,6 +42,47 @@ export default {
             return this.stats ? this.stats.numberOfDirectoryViews : '...';
         },
 
+        numberOfNewUsersPerMonth() {
+            return (this.stats && this.stats.numberOfNewUsersPerMonth) || null;
+        },
+
+        usersEvolutionDatasets() {
+            if (this.numberOfNewUsersPerMonth === null) {
+                return [];
+            }
+
+            return [
+                {
+                    data: this.numberOfNewUsersPerMonth.map(({ total }) => parseInt(total, 10)),
+                    smooth: true,
+                    fill: true,
+                },
+            ];
+        },
+
+        usersEvolutionMax() {
+            if (this.numberOfNewUsersPerMonth === null) {
+                return 0;
+            }
+
+            const max = this.numberOfNewUsersPerMonth.reduce((m, { total }) => Math.max(m, total), 0);
+            return Math.ceil(max / 10) * 10;
+        },
+
+        usersEvolutionLabels() {
+            if (this.numberOfNewUsersPerMonth === null) {
+                return {
+                    xLabels: [],
+                    yLabels: 10,
+                };
+            }
+
+            return {
+                xLabels: this.numberOfNewUsersPerMonth.map(({ month }) => month),
+                yLabels: (this.usersEvolutionMax / 10) + 1,
+            };
+        },
+
         numberOfNewUsers() {
             return this.stats && this.stats.numberOfNewUsersPerMonth ? this.stats.numberOfNewUsersPerMonth.slice(-1)[0] : { total: '...', month: '...' };
         },

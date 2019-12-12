@@ -59,8 +59,13 @@
         "@fortawesome/fontawesome-svg-core": "^1.2.22",
         "@fortawesome/free-solid-svg-icons": "^5.10.2",
         "@fortawesome/vue-fontawesome": "^0.1.6",
+        "axios": "^0.18.0",
         "leaflet.markercluster": "^1.4.1",
+        "moment": "^2.24.0",
+        "popper.js": "^1.14.7",
         "simplebar-vue": "^0.1.4",
-        "vue-good-table": "^2.16.0"
+        "vue-axios": "^2.1.4",
+        "vue-good-table": "^2.16.0",
+        "vue-trend-chart": "^0.15.1"
     }
 }
