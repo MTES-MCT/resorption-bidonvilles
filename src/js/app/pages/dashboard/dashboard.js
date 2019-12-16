@@ -14,8 +14,6 @@ import iconPeople from '/img/people.svg';
 // eslint-disable-next-line
 import iconJustice from '/img/justice.svg';
 // eslint-disable-next-line
-import iconAction from '/img/action.svg';
-// eslint-disable-next-line
 import iconStatus from '/img/status.svg';
 // eslint-disable-next-line
 import iconOrigins from '/img/origins.svg';

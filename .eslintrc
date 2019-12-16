@@ -19,7 +19,10 @@
         "no-param-reassign": "warn",
         "import/extensions": [
             "error",
-            "never"
+            "never",
+            {
+                "vue": "always"
+            }
         ]
     },
     "env": {
