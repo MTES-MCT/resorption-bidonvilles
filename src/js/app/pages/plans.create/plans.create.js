@@ -2,9 +2,7 @@ import NavBar from '#app/layouts/navbar/navbar.vue';
 import Form from '#app/components/form/form.vue';
 import { get as getConfig } from '#helpers/api/config';
 import { create } from '#helpers/api/plan';
-import { search } from '#helpers/api/operator';
 import { notify } from '#helpers/notificationHelper';
-import { open } from '#helpers/tabHelper';
 
 export default {
     components: {
@@ -62,36 +60,6 @@ export default {
                                 startedAt: {
                                     type: 'date',
                                     label: 'Date de début du dispositif',
-                                    mandatory: true,
-                                },
-                            },
-                        },
-                        {
-                            title: 'Opérateur en charge',
-                            inputs: {
-                                ngo: {
-                                    type: 'autocompleter',
-                                    specificProps: {
-                                        autocompleter: (d) => {
-                                            const p = search(d);
-                                            const p2 = p.then(items => items.map(item => ({
-                                                id: item.ngo_id,
-                                                label: item.label,
-                                            })));
-                                            p2.abort = p.abort;
-
-                                            return p2;
-                                        },
-                                        showCategory: false,
-                                        allowMultiple: false,
-                                        float: true,
-                                        createNew: () => {
-                                            const routerData = this.$router.resolve('/nouvel-operateur');
-                                            open(routerData.href);
-                                        },
-                                    },
-                                    label: 'Opérateur',
-                                    description: 'Commencez à saisir le nom de l\'opérateur, puis sélectionnez l\'opérateur désiré dans la liste proposée',
                                     mandatory: true,
                                 },
                             },
