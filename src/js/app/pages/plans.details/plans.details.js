@@ -52,6 +52,8 @@ export default {
     },
 
     data() {
+        const { etp_types: etpTypes } = getConfig();
+
         return {
             /**
              * List of funding-types
@@ -105,36 +107,7 @@ export default {
                 pending: false,
                 data: {},
             },
-            etpTypes: [
-                {
-                    id: 'social',
-                    label: 'Travailleur social',
-                },
-                {
-                    id: 'cip',
-                    label: 'CIP (Conseiller d\'insertion Pro.)',
-                },
-                {
-                    id: 'service',
-                    label: 'Service civique',
-                },
-                {
-                    id: 'caretaking',
-                    label: 'Entretien / gardiennage',
-                },
-                {
-                    id: 'manager',
-                    label: 'Coordinateur ou chef de service',
-                },
-                {
-                    id: 'interpreter',
-                    label: 'Interprète',
-                },
-                {
-                    id: 'volunteer',
-                    label: 'Bénévole',
-                },
-            ],
+            etpTypes,
             frequencies: {
                 every_day: 'Tous les jours',
                 several_times_a_week: 'Plusieurs fois par semaine',
@@ -150,7 +123,7 @@ export default {
 
     computed: {
         availableEtpTypes() {
-            return this.etpTypes.filter(({ id }) => this.plan.team.some(({ etp }) => etp.find(({ type }) => id === type) !== undefined));
+            return this.etpTypes.filter(({ uid }) => this.plan.states.some(({ etp }) => etp.some(({ type: { uid: u } }) => uid === u)));
         },
         address() {
             if (!this.plan.location) {
@@ -226,12 +199,70 @@ export default {
                 },
             ];
         },
+        lastState() {
+            if (!this.plan || this.plan.states.length === 0) {
+                return null;
+            }
+
+            return this.plan.states.slice(-1)[0];
+        },
+        audience() {
+            if (!this.plan || this.plan.states.length === 0) {
+                return null;
+            }
+
+            function sum(originalObj, additionalObj) {
+                return {
+                    total: originalObj.total + additionalObj.total,
+                    families: originalObj.families + additionalObj.families,
+                    women: originalObj.women + additionalObj.women,
+                    minors: originalObj.minors + additionalObj.minors,
+                };
+            }
+
+            return this.plan.states.reduce((acc, { audience }) => {
+                if (audience.in) {
+                    acc.in = sum(acc.in, audience.in);
+                }
+
+                if (audience.out_positive) {
+                    acc.out_positive = sum(acc.out_positive, audience.out_positive);
+                }
+
+                if (audience.out_abandoned) {
+                    acc.out_abandoned = sum(acc.out_abandoned, audience.out_abandoned);
+                }
+
+                if (audience.out_excluded) {
+                    acc.out_excluded = sum(acc.out_excluded, audience.out_excluded);
+                }
+
+                return acc;
+            }, {
+                in: {
+                    total: 0, families: 0, women: 0, minors: 0,
+                },
+                out_positive: {
+                    total: 0, families: 0, women: 0, minors: 0,
+                },
+                out_abandoned: {
+                    total: 0, families: 0, women: 0, minors: 0,
+                },
+                out_excluded: {
+                    total: 0, families: 0, women: 0, minors: 0,
+                },
+            });
+        },
     },
 
     methods: {
         hasPermission,
-        fundingTotal() {
-            return this.plan.fundings[0].lines.reduce((total, { amount }) => total + parseFloat(amount), 0);
+        financeTotal() {
+            if (!this.plan) {
+                return 0;
+            }
+
+            return this.plan.finances[0].data.reduce((total, { amount }) => total + parseFloat(amount), 0);
         },
         load() {
             if (['loading', 'loaded'].indexOf(this.status) !== -1) {

@@ -159,6 +159,15 @@ export default {
         },
 
         /**
+         * List of sections of the current step with at least one input
+         *
+         * @returns {Array.<FormSection>}
+         */
+        fullSections() {
+            return this.sections.filter(({ inputs }) => Object.values(inputs).some(input => this.isInputVisible(input)));
+        },
+
+        /**
          * Inputs of the current step
          *
          * @returns {Array.<Input>}
@@ -411,6 +420,7 @@ export default {
 /**
  * @typedef {Object} FormSection
  * @property {String}                [title] Title of that section
+ * @property {String}                [description] Description of that section
  * @property {Object.<string,FormInput>} inputs  List of inputs
  */
 

@@ -24,13 +24,13 @@ export default {
                         women: 0,
                         minors: 0,
                     },
-                    out_exclusion: {
+                    out_abandoned: {
                         households: 0,
                         people: 0,
                         women: 0,
                         minors: 0,
                     },
-                    out_giveup: {
+                    out_excluded: {
                         households: 0,
                         people: 0,
                         women: 0,
@@ -38,6 +38,32 @@ export default {
                     },
                 };
             },
+        },
+
+        /**
+         * In-only
+         *
+         * Whether the "in" fields only should be shown
+         *
+         * @type {Boolean}
+         */
+        inOnly: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
+
+        /**
+         * Out-only
+         *
+         * Whether the "out" fields only should be shown
+         *
+         * @type {Boolean}
+         */
+        outOnly: {
+            type: Boolean,
+            required: false,
+            default: false,
         },
 
         /**
@@ -71,15 +97,15 @@ export default {
         'data.out_positive.women'() { this.emitInput(); },
         'data.out_positive.minors'() { this.emitInput(); },
 
-        'data.out_exclusion.households'() { this.emitInput(); },
-        'data.out_exclusion.people'() { this.emitInput(); },
-        'data.out_exclusion.women'() { this.emitInput(); },
-        'data.out_exclusion.minors'() { this.emitInput(); },
+        'data.out_abandoned.households'() { this.emitInput(); },
+        'data.out_abandoned.people'() { this.emitInput(); },
+        'data.out_abandoned.women'() { this.emitInput(); },
+        'data.out_abandoned.minors'() { this.emitInput(); },
 
-        'data.out_giveup.households'() { this.emitInput(); },
-        'data.out_giveup.people'() { this.emitInput(); },
-        'data.out_giveup.women'() { this.emitInput(); },
-        'data.out_giveup.minors'() { this.emitInput(); },
+        'data.out_excluded.households'() { this.emitInput(); },
+        'data.out_excluded.people'() { this.emitInput(); },
+        'data.out_excluded.women'() { this.emitInput(); },
+        'data.out_excluded.minors'() { this.emitInput(); },
     },
 
 

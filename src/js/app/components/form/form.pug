@@ -10,12 +10,12 @@
             <div class="container">
                 <SlideNote v-if="description" :title="descriptionTitle" :content="description"></SlideNote>
 
-                <section v-for="section in sections" class="formSection">
+                <section v-for="section in fullSections" class="formSection">
                     <header class="formSection-header">
                         <h1 v-if="section.title" class="formSection-title">
                             <span class="formSection-icon"><font-awesome-icon :icon="section.icon || 'flag'"></font-awesome-icon></span> {{ section.title }}
                         </h1>
-                        <p v-if="section.description" class="formSection-description">{{ section.description }}</p>
+                        <p v-if="section.description" class="formSection-description" v-html="section.description"></p>
                     </header>
 
                     <div>

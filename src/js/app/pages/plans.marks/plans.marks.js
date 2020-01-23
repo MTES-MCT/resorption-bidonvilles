@@ -1,8 +1,9 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import Form from '#app/components/form/form.vue';
 import { get, addState } from '#helpers/api/plan';
-import { hasPermission } from '#helpers/api/config';
+import { hasPermission, get as getConfig } from '#helpers/api/config';
 import { notify } from '#helpers/notificationHelper';
+
 
 export default {
     components: {
@@ -16,6 +17,7 @@ export default {
             error: null,
             formData: {},
         };
+        const { frequence_dechets: frequenceDechets } = getConfig();
 
         data.formDefinition = {
             title: '',
@@ -39,24 +41,31 @@ export default {
                             },
                         },
                         {
-                            title: 'Équipe',
-                            icon: 'users',
-                            inputs: {
-                                etp: {
-                                    type: 'etp',
-                                    label: '',
-                                    mandatory: true,
-                                },
-                            },
-                        },
-                        {
                             title: 'Public',
                             icon: 'arrow-right',
                             inputs: {
                                 audience: {
                                     type: 'audience',
-                                    label: '',
+                                    label: 'Public',
                                     mandatory: true,
+                                    specificProps: {},
+                                    condition({ date }) {
+                                        return !!date;
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            title: 'Équipe',
+                            icon: 'users',
+                            inputs: {
+                                etp: {
+                                    type: 'etp',
+                                    label: 'Équipe',
+                                    mandatory: true,
+                                    condition({ date }) {
+                                        return !!date;
+                                    },
                                 },
                             },
                         },
@@ -65,20 +74,29 @@ export default {
                             description: 'Nombre de personnes avec...',
                             icon: 'id-card',
                             inputs: {
-                                housing: {
+                                domiciliation: {
                                     type: 'number',
                                     label: 'une domiciliation',
                                     mandatory: false,
+                                    condition({ date }) {
+                                        return !!date;
+                                    },
                                 },
-                                caf: {
+                                droits_caf: {
                                     type: 'number',
                                     label: 'des droits CAF ouverts',
                                     mandatory: false,
+                                    condition({ date }) {
+                                        return !!date;
+                                    },
                                 },
-                                job: {
+                                emploi_stable: {
                                     type: 'number',
                                     label: 'un emploi stable / ressources suffisantes',
                                     mandatory: false,
+                                    condition({ date }) {
+                                        return !!date;
+                                    },
                                 },
                             },
                         },
@@ -95,25 +113,37 @@ export default {
                     description: 'Nombre de personnes avec...',
                     icon: 'user-md',
                     inputs: {
-                        granted_ame: {
+                        ame_valide: {
                             type: 'number',
                             label: 'une couverture AME valide',
                             mandatory: false,
+                            condition({ date }) {
+                                return !!date;
+                            },
                         },
-                        granted_puma: {
+                        puma_valide: {
                             type: 'number',
                             label: 'une couverture PUMA valide',
                             mandatory: false,
+                            condition({ date }) {
+                                return !!date;
+                            },
                         },
-                        requesting_ame: {
+                        ame_en_cours: {
                             type: 'number',
                             label: 'une demande AME en cours',
                             mandatory: false,
+                            condition({ date }) {
+                                return !!date;
+                            },
                         },
-                        requesting_puma: {
+                        puma_en_cours: {
                             type: 'number',
                             label: 'une demande PUMA en cours',
                             mandatory: false,
+                            condition({ date }) {
+                                return !!date;
+                            },
                         },
                     },
                 },
@@ -122,15 +152,21 @@ export default {
                     description: 'Nombre de personnes ayant fait l\'objet d\'au moins',
                     icon: 'user-md',
                     inputs: {
-                        verbally_redirected: {
+                        orientation: {
                             type: 'number',
                             label: 'une orientation vers une structure de santé',
                             mandatory: false,
+                            condition({ date }) {
+                                return !!date;
+                            },
                         },
-                        physically_redirected: {
+                        accompagnement: {
                             type: 'number',
                             label: 'un accompagnement physique vers une structure de santé',
                             mandatory: false,
+                            condition({ date }) {
+                                return !!date;
+                            },
                         },
                     },
                 },
@@ -139,38 +175,56 @@ export default {
                 title: 'Éducation et scolarisation',
                 icon: 'book-reader',
                 inputs: {
-                    can_be_schooled: {
+                    scolarisables: {
                         type: 'number',
                         label: 'Parmi les mineurs, combien sont en âge d\'être scolarisés ?',
                         mandatory: false,
+                        condition({ date }) {
+                            return !!date;
+                        },
                     },
-                    children_signed_to_maternelle: {
+                    maternelles: {
                         type: 'number',
                         label: 'Enfants inscrits en maternelle',
                         mandatory: false,
+                        condition({ date }) {
+                            return !!date;
+                        },
                     },
-                    children_signed_to_elementaire: {
+                    elementaires: {
                         type: 'number',
                         label: 'Enfants inscrits en élémentaire',
                         mandatory: false,
+                        condition({ date }) {
+                            return !!date;
+                        },
                     },
-                    children_signed_to_college: {
+                    colleges: {
                         type: 'number',
                         label: 'Enfants inscrits au collège',
                         mandatory: false,
+                        condition({ date }) {
+                            return !!date;
+                        },
                     },
-                    children_signed_to_lycee: {
+                    lycees: {
                         type: 'number',
                         label: 'Enfants inscrits au lycée',
                         mandatory: false,
+                        condition({ date }) {
+                            return !!date;
+                        },
                     },
-                    issues: {
+                    difficultes: {
                         type: 'checkbox',
                         label: 'Difficultés éventuelles rencontrées :',
                         mandatory: false,
+                        condition({ date }) {
+                            return !!date;
+                        },
                         options: [
                             { value: 'cantine', label: 'Cantine' },
-                            { value: 'up2a', label: 'Manque de place en UP2A' },
+                            { value: 'place_up2a', label: 'Manque de place en UP2A' },
                             { value: 'transport', label: 'Transport' },
                         ],
                     },
@@ -182,25 +236,37 @@ export default {
                     icon: 'briefcase',
                     description: 'Nombre de personnes inscrites ou suivies par',
                     inputs: {
-                        pole_emploi_total: {
+                        pole_emploi: {
                             type: 'number',
                             label: 'Pôle emploi',
                             mandatory: false,
+                            condition({ date }) {
+                                return !!date;
+                            },
                         },
-                        pole_emploi_women: {
+                        pole_emploi_femmes: {
                             type: 'number',
                             label: '(dont femmes)',
                             mandatory: false,
+                            condition({ date }) {
+                                return !!date;
+                            },
                         },
-                        mission_locale_total: {
+                        mission_locale: {
                             type: 'number',
                             label: 'Mission locale',
                             mandatory: false,
+                            condition({ date }) {
+                                return !!date;
+                            },
                         },
-                        mission_locale_women: {
+                        mission_locale_femmes: {
                             type: 'number',
                             label: '(dont femmes)',
                             mandatory: false,
+                            condition({ date }) {
+                                return !!date;
+                            },
                         },
                     },
                 },
@@ -208,35 +274,53 @@ export default {
                     icon: 'briefcase',
                     description: 'Nombre de personnes ayant',
                     inputs: {
-                        contract_total: {
+                        contrats: {
                             type: 'number',
                             label: 'un contrat ou une formation',
                             mandatory: false,
+                            condition({ date }) {
+                                return !!date;
+                            },
                         },
-                        contract_women: {
+                        contrats_femmes: {
                             type: 'number',
                             label: '(dont femmes)',
                             mandatory: false,
+                            condition({ date }) {
+                                return !!date;
+                            },
                         },
-                        autoentrepreneur_total: {
+                        autoentrepreneurs: {
                             type: 'number',
                             label: 'un statut autoentrepreneur',
                             mandatory: false,
+                            condition({ date }) {
+                                return !!date;
+                            },
                         },
-                        autoentrepreneur_women: {
+                        autoentrepreneurs_femmes: {
                             type: 'number',
                             label: '(dont femmes)',
                             mandatory: false,
+                            condition({ date }) {
+                                return !!date;
+                            },
                         },
-                        are_total: {
+                        are: {
                             type: 'number',
                             label: 'l\'ARE',
                             mandatory: false,
+                            condition({ date }) {
+                                return !!date;
+                            },
                         },
-                        are_women: {
+                        are_femmes: {
                             type: 'number',
                             label: '(dont femmes)',
                             mandatory: false,
+                            condition({ date }) {
+                                return !!date;
+                            },
                         },
                     },
                 },
@@ -247,20 +331,29 @@ export default {
                     icon: 'home',
                     description: 'Nombre de ménages ayant fait une demande',
                     inputs: {
-                        requested_siao: {
+                        siao: {
                             type: 'number',
                             label: 'SIAO',
                             mandatory: false,
+                            condition({ date }) {
+                                return !!date;
+                            },
                         },
-                        requested_social: {
+                        logement_social: {
                             type: 'number',
                             label: 'logement social',
                             mandatory: false,
+                            condition({ date }) {
+                                return !!date;
+                            },
                         },
-                        requested_dalo: {
+                        dalo: {
                             type: 'number',
                             label: 'DALO',
                             mandatory: false,
+                            condition({ date }) {
+                                return !!date;
+                            },
                         },
                     },
                 },
@@ -268,15 +361,21 @@ export default {
                     icon: 'home',
                     description: 'Nombre de ménages ayant accédé à un logement',
                     inputs: {
-                        housed_with_help: {
+                        accompagnes: {
                             type: 'number',
                             label: 'accompagné / adapté',
                             mandatory: false,
+                            condition({ date }) {
+                                return !!date;
+                            },
                         },
-                        housed_without_help: {
+                        non_accompagnes: {
                             type: 'number',
                             label: 'sans accompagnement (social ou privé)',
                             mandatory: false,
+                            condition({ date }) {
+                                return !!date;
+                            },
                         },
                     },
                 },
@@ -284,10 +383,13 @@ export default {
                     icon: 'home',
                     description: 'Nombre de ménages',
                     inputs: {
-                        hosted: {
+                        heberges: {
                             type: 'number',
                             label: 'hébergés (hors mise à l\'abri ou hébergement d\'urgence)',
                             mandatory: false,
+                            condition({ date }) {
+                                return !!date;
+                            },
                         },
                     },
                 },
@@ -296,36 +398,49 @@ export default {
                 title: 'Stabilisation et sécurisation du site',
                 icon: 'seedling',
                 inputs: {
-                    water: {
+                    points_eau: {
                         type: 'number',
                         label: 'Nombre de points d\'eau',
                         mandatory: false,
+                        condition({ date }) {
+                            return !!date;
+                        },
                     },
-                    toilets: {
+                    wc: {
                         type: 'number',
                         label: 'Nombre de WC',
                         mandatory: false,
+                        condition({ date }) {
+                            return !!date;
+                        },
                     },
-                    bath: {
+                    douches: {
                         type: 'number',
                         label: 'Nombre de douches',
                         mandatory: false,
+                        condition({ date }) {
+                            return !!date;
+                        },
                     },
-                    electricity: {
+                    electricite: {
                         type: 'number',
                         label: 'Nombre d\'accès à l\'électricité',
                         mandatory: false,
+                        condition({ date }) {
+                            return !!date;
+                        },
                     },
-                    trash_frequency: {
+                    frequence_dechets: {
                         type: 'select',
                         label: 'Fréquence d\'évacuation des déchets',
                         mandatory: false,
-                        options: [
-                            { value: 'every_day', label: 'Tous les jours' },
-                            { value: 'several_times_a_week', label: 'Plusieurs fois par semaine' },
-                            { value: 'every_week', label: 'Toutes les semaines' },
-                            { value: 'less_than_once_a_week', label: 'Moins d\'une fois par semaine' },
-                        ],
+                        condition({ date }) {
+                            return !!date;
+                        },
+                        options: frequenceDechets.map(({ uid, name }) => ({
+                            value: uid,
+                            label: name,
+                        })),
                     },
                 },
             }],
@@ -360,6 +475,34 @@ export default {
                         });
                     });
 
+                    const audienceSection = this.formDefinition.steps[0].sections.find(({ inputs }) => inputs.audience !== undefined);
+                    let lastState = null;
+
+                    if (plan.states.length === 0) {
+                        audienceSection.title = 'Qui sont les publics ayant intégré le dispositif ?';
+                        audienceSection.description = 'Vous renseignez les indicateurs de suivi pour la première fois. Veuillez porter une attention particulière aux données que vous renseignez ci-dessous : les mises à jour ultérieures seront conditionnées par cette première déclaration.';
+                        audienceSection.inputs.audience.specificProps.inOnly = true;
+                    } else {
+                        [lastState] = plan.states.slice(-1);
+                        const dateOfLastState = App.formatDate(lastState.date / 1000, 'd/m/y');
+
+                        if (plan.in_and_out !== true) {
+                            audienceSection.title = `Quelles ont été les sorties du dispositif depuis la date du ${dateOfLastState} ?`;
+                            audienceSection.description = `Seules les sorties du dispositif sont suivies, car le pilote de l’action au sein des services de l’Etat a renseigné qu’il n’existe pas de système d’entrées et de sorties du dispositif : le dispositif concerne un seul groupe de personne, ayant débuté le projet à la même période.<br/>
+                            Attention : le remplissage de ce tableau a un impact sur le nombre de personnes identifiées dans ce dispositif. Merci de le renseigner avec attention`;
+                            audienceSection.inputs.audience.specificProps.outOnly = true;
+                        } else {
+                            audienceSection.title = `Quelles ont été les entrées et sorties du dispositif depuis la date du ${dateOfLastState} ?`;
+                            audienceSection.description = `Les entrées et sorties du dispositif sont suivies, car le pilote de l’action au sein des services de l’Etat a renseigné qu’il existe un système d’entrées et de sorties.<br/>
+                            Attention : le remplissage de ce tableau a un impact sur le nombre de personnes identifiées dans ce dispositif. Merci de le renseigner avec attention`;
+                        }
+
+                        audienceSection.description += `<br/><br/>
+                        Au ${dateOfLastState}, date de la dernière mise à jour des informations, sont intégrés dans le dispositif :
+                        ${plan.audience.families} ménages, ${plan.audience.total} personnes dont ${plan.audience.women} femmes et ${plan.audience.minors} mineurs
+                        `;
+                    }
+
                     if (plan.audience && plan.audience.length > 0) {
                         const inputs = {
                             team: ['etp'],
@@ -379,12 +522,59 @@ export default {
                         });
                     }
 
+                    if (lastState) {
+                        this.formData = {
+                            domiciliation: lastState.droit_commun ? lastState.droit_commun.domiciliation : 0,
+                            droits_caf: lastState.droit_commun ? lastState.droit_commun.droits_caf : 0,
+                            emploi_stable: lastState.droit_commun ? lastState.droit_commun.emploi_stable : 0,
+                            ame_valide: lastState.sante ? lastState.sante.ame_valide : 0,
+                            puma_valide: lastState.sante ? lastState.sante.puma_valide : 0,
+                            ame_en_cours: lastState.sante ? lastState.sante.ame_en_cours : 0,
+                            puma_en_cours: lastState.sante ? lastState.sante.puma_en_cours : 0,
+                            orientation: lastState.sante ? lastState.sante.orientation : 0,
+                            accompagnement: lastState.sante ? lastState.sante.accompagnement : 0,
+                            scolarisables: lastState.education ? lastState.education.scolarisables : 0,
+                            maternelles: lastState.education ? lastState.education.maternelles : 0,
+                            elementaires: lastState.education ? lastState.education.elementaires : 0,
+                            colleges: lastState.education ? lastState.education.colleges : 0,
+                            lycees: lastState.education ? lastState.education.lycees : 0,
+                            difficultes: ['cantine', 'place_up2a', 'transport'].filter(d => lastState.education && (lastState.education[`difficulte_${d}`] || lastState.education[`difficculte_${d}`])),
+                            pole_emploi: lastState.formation ? lastState.formation.pole_emploi : 0,
+                            pole_emploi_femmes: lastState.formation ? lastState.formation.pole_emploi_femmes : 0,
+                            mission_locale: lastState.formation ? lastState.formation.mission_locale : 0,
+                            mission_locale_femmes: lastState.formation ? lastState.formation.mission_locale_femmes : 0,
+                            contrats: lastState.formation ? lastState.formation.contrats : 0,
+                            contrats_femmes: lastState.formation ? lastState.formation.contrats_femmes : 0,
+                            autoentrepreneurs: lastState.formation ? lastState.formation.autoentrepreneurs : 0,
+                            autoentrepreneurs_femmes: lastState.formation ? lastState.formation.autoentrepreneurs_femmes : 0,
+                            are: lastState.formation ? lastState.formation.are : 0,
+                            are_femmes: lastState.formation ? lastState.formation.are_femmes : 0,
+                            siao: lastState.logement ? lastState.logement.siao : 0,
+                            logement_social: lastState.logement ? lastState.logement.logement_social : 0,
+                            dalo: lastState.logement ? lastState.logement.dalo : 0,
+                            accompagnes: lastState.logement ? lastState.logement.accompagnes : 0,
+                            non_accompagnes: lastState.logement ? lastState.logement.non_accompagnes : 0,
+                            heberges: lastState.logement ? lastState.logement.heberges : 0,
+                            points_eau: lastState.logement ? lastState.logement.heberges : 0,
+                            wc: lastState.securisation ? lastState.securisation.wc : 0,
+                            douches: lastState.securisation ? lastState.securisation.douches : 0,
+                            electricite: lastState.securisation ? lastState.securisation.electricite : 0,
+                            frequence_dechets: lastState.securisation.frequence_dechets
+                                ? lastState.securisation.frequence_dechets.uid
+                                : undefined,
+                            etp: lastState.etp.map(({ total, type: { uid } }) => ({
+                                total,
+                                type: uid,
+                            })),
+                        };
+                    }
+
                     this.formDefinition.title = plan.name;
                     this.plan = plan;
                     this.status = 'loaded';
                 })
-                .catch(({ user_message: message }) => {
-                    this.error = message;
+                .catch((error) => {
+                    this.error = error.user_message;
                     this.status = 'loadingError';
                 });
         },

@@ -119,7 +119,7 @@
                     </article>
                 </section>
 
-                <section class="dataSection rb-table" v-if="plan.fundings.length > 0">
+                <section class="dataSection rb-table" v-if="plan.finances.length > 0">
                     <header class="dataSection-header">
                         <h1 class="dataSection-title">
                             <span class="dataSection-icon"><font-awesome-icon icon="euro-sign"></font-awesome-icon></span> Financements
@@ -136,20 +136,20 @@
                         </thead>
 
                         <tbody>
-                            <tr v-for="funding in plan.fundings[0].lines">
-                                <td>{{ financeTypes[funding.type] }}</td>
-                                <td>{{ funding.amount }} €<br/>soit {{ Math.round((funding.amount / fundingTotal()) * 100) }}%</td>
-                                <td>{{ funding.details }}</td>
+                            <tr v-for="finance in plan.finances[0].data">
+                                <td>{{ finance.type.name }}</td>
+                                <td>{{ finance.amount }} €<br/>soit {{ Math.round((finance.amount / financeTotal()) * 100) }}%</td>
+                                <td>{{ finance.details }}</td>
                             </tr>
                             <tr>
                                 <td></td>
-                                <td colspan="2"><strong>TOTAL : {{ fundingTotal() }}€</strong></td>
+                                <td colspan="2"><strong>TOTAL : {{ financeTotal() }}€</strong></td>
                             </tr>
                         </tbody>
                     </table>
                 </section>
 
-                <section class="dataSection rb-table" v-if="plan.team && availableEtpTypes.length > 0">
+                <section class="dataSection rb-table" v-if="plan.states.length > 0">
                     <header class="dataSection-header">
                         <h1 class="dataSection-title">
                             <span class="dataSection-icon"><font-awesome-icon icon="users"></font-awesome-icon></span> Équipe
@@ -160,20 +160,20 @@
                         <thead>
                             <tr>
                                 <th></th>
-                                <th v-for="team in plan.team">{{ formatDate(new Date(team.date).getTime() / 1000, 'd M') }}</th>
+                                <th v-for="state in plan.states">{{ formatDate(new Date(state.date).getTime() / 1000, 'd M') }}</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             <tr v-for="etpType in availableEtpTypes">
-                                <th>{{ etpType.label }}</th>
-                                <td v-for="team in plan.team">{{ team.etp.find(({ type }) => type === etpType.id) ? team.etp.find(({ type }) => type === etpType.id).total : '0' }}</td>
+                                <th>{{ etpType.name }}</th>
+                                <td v-for="state in plan.states">{{ (state.etp.find(({ type: { uid } }) => uid === etpType.uid) || { total: 0 }).total }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </section>
 
-                <section class="dataSection rb-table" v-if="plan.audience && plan.audience.length > 0">
+                <section class="dataSection rb-table" v-if="plan.audience">
                     <header class="dataSection-header">
                         <h1 class="dataSection-title">
                             <span class="dataSection-icon"><font-awesome-icon icon="arrow-right"></font-awesome-icon></span> Public
@@ -194,37 +194,37 @@
                         <tbody>
                             <tr>
                                 <td><strong>Entrées</strong> dans le dispositif</td>
-                                <td>{{ plan.audience[0].in.households }}</td>
-                                <td>{{ plan.audience[0].in.people }}</td>
-                                <td>{{ plan.audience[0].in.women }}</td>
-                                <td>{{ plan.audience[0].in.minors }}</td>
+                                <td>{{ audience.in.families }}</td>
+                                <td>{{ audience.in.total }}</td>
+                                <td>{{ audience.in.women }}</td>
+                                <td>{{ audience.in.minors }}</td>
                             </tr>
                             <tr>
                                 <td><strong>Sorties positivement</strong><br/>fin accompagnement social et/ou<br/>prise en charge dans un autre dispositif</td>
-                                <td>{{ plan.audience[0].out_positive.households }}</td>
-                                <td>{{ plan.audience[0].out_positive.people }}</td>
-                                <td>{{ plan.audience[0].out_positive.women }}</td>
-                                <td>{{ plan.audience[0].out_positive.minors }}</td>
+                                <td>{{ audience.out_positive.families }}</td>
+                                <td>{{ audience.out_positive.total }}</td>
+                                <td>{{ audience.out_positive.women }}</td>
+                                <td>{{ audience.out_positive.minors }}</td>
                             </tr>
                             <tr>
                                 <td><strong>Exclusion</strong> du dispositif</td>
-                                <td>{{ plan.audience[0].out_exclusion.households }}</td>
-                                <td>{{ plan.audience[0].out_exclusion.people }}</td>
-                                <td>{{ plan.audience[0].out_exclusion.women }}</td>
-                                <td>{{ plan.audience[0].out_exclusion.minors }}</td>
+                                <td>{{ audience.out_excluded.families }}</td>
+                                <td>{{ audience.out_excluded.total }}</td>
+                                <td>{{ audience.out_excluded.women }}</td>
+                                <td>{{ audience.out_excluded.minors }}</td>
                             </tr>
                             <tr>
                                 <td><strong>Abandon / départ volontaire</strong></td>
-                                <td>{{ plan.audience[0].out_giveup.households }}</td>
-                                <td>{{ plan.audience[0].out_giveup.people }}</td>
-                                <td>{{ plan.audience[0].out_giveup.women }}</td>
-                                <td>{{ plan.audience[0].out_giveup.minors }}</td>
+                                <td>{{ audience.out_abandoned.families }}</td>
+                                <td>{{ audience.out_abandoned.total }}</td>
+                                <td>{{ audience.out_abandoned.women }}</td>
+                                <td>{{ audience.out_abandoned.minors }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </section>
 
-                <section class="dataSection rb-table" v-if="plan.common_rights && plan.common_rights.length > 0">
+                <section class="dataSection rb-table" v-if="plan.states.length > 0">
                     <header class="dataSection-header">
                         <h1 class="dataSection-title">
                             <span class="dataSection-icon"><font-awesome-icon icon="id-card"></font-awesome-icon></span> Droit commun et ressources
@@ -235,28 +235,28 @@
                         <thead>
                             <tr>
                                 <th class="table-col">Nombre de personnes ayant</th>
-                                <th class="table-col" v-for="rights in plan.common_rights">{{ formatDate(new Date(rights.date).getTime() / 1000, 'd M') }}</th>
+                                <th class="table-col" v-for="state in plan.states">{{ formatDate(new Date(state.date).getTime() / 1000, 'd M') }}</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             <tr>
                                 <td>une domiciliation</td>
-                                <td v-for="rights in plan.common_rights">{{ rights.housing }}</td>
+                                <td v-for="state in plan.states">{{ state.droit_commun.domiciliation }}</td>
                             </tr>
                             <tr>
                                 <td>des droits CAF ouverts</td>
-                                <td v-for="rights in plan.common_rights">{{ rights.caf }}</td>
+                                <td v-for="state in plan.states">{{ state.droit_commun.droits_caf }}</td>
                             </tr>
                             <tr>
                                 <td>un emploi stable / ressources suffisantes</td>
-                                <td v-for="rights in plan.common_rights">{{ rights.job }}</td>
+                                <td v-for="state in plan.states">{{ state.droit_commun.emploi_stable }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </section>
 
-                <section class="dataSection rb-table" v-if="plan.healthcare && plan.healthcare.length > 0">
+                <section class="dataSection rb-table" v-if="plan.states.length > 0 && plan.topics.find(({ uid }) => uid === 'health')">
                     <header class="dataSection-header">
                         <h1 class="dataSection-title">
                             <span class="dataSection-icon"><font-awesome-icon icon="user-md"></font-awesome-icon></span> Santé
@@ -267,46 +267,46 @@
                         <thead>
                             <tr>
                                 <th class="table-col"></th>
-                                <th class="table-col" v-for="health in plan.healthcare">{{ formatDate(new Date(health.date).getTime() / 1000, 'd M') }}</th>
+                                <th class="table-col" v-for="state in plan.states">{{ formatDate(new Date(state.date).getTime() / 1000, 'd M') }}</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             <tr>
-                                <th :colspan="plan.healthcare.length + 1"><strong>Nombre de personnes avec...</strong></th>
+                                <th :colspan="plan.states.length + 1"><strong>Nombre de personnes avec...</strong></th>
                             </tr>
                             <tr>
                                 <td>une couverture AME valide</td>
-                                <td v-for="health in plan.healthcare">{{ health.granted_ame }}</td>
+                                <td v-for="state in plan.states">{{ state.sante.ame_valide }}</td>
                             </tr>
                             <tr>
                                 <td>une couverture PUMA valide</td>
-                                <td v-for="health in plan.healthcare">{{ health.granted_puma }}</td>
+                                <td v-for="state in plan.states">{{ state.sante.puma_valide }}</td>
                             </tr>
                             <tr>
                                 <td>une demande AME en cours</td>
-                                <td v-for="health in plan.healthcare">{{ health.requesting_ame }}</td>
+                                <td v-for="state in plan.states">{{ state.sante.ame_en_cours }}</td>
                             </tr>
                             <tr>
                                 <td>une demande PUMA en cours</td>
-                                <td v-for="health in plan.healthcare">{{ health.requesting_puma }}</td>
+                                <td v-for="state in plan.states">{{ state.sante.puma_en_cours }}</td>
                             </tr>
                             <tr>
-                                <th :colspan="plan.healthcare.length + 1"><strong>Nombre de personnes ayant fait l'objet d'au moins...</strong></th>
+                                <th :colspan="plan.states.length + 1"><strong>Nombre de personnes ayant fait l'objet d'au moins...</strong></th>
                             </tr>
                             <tr>
                                 <td>une orientation vers une structure de santé</td>
-                                <td v-for="health in plan.healthcare">{{ health.verbally_redirected }}</td>
+                                <td v-for="state in plan.states">{{ state.sante.orientation }}</td>
                             </tr>
                             <tr>
                                 <td>un accompagnement physique vers une structure de santé</td>
-                                <td v-for="health in plan.healthcare">{{ health.physically_redirected }}</td>
+                                <td v-for="state in plan.states">{{ state.sante.accompagnement }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </section>
 
-                <section class="dataSection rb-table" v-if="plan.schooling && plan.schooling.length > 0">
+                <section class="dataSection rb-table" v-if="plan.states.length > 0 && plan.topics.find(({ uid }) => uid === 'school')">
                     <header class="dataSection-header">
                         <h1 class="dataSection-title">
                             <span class="dataSection-icon"><font-awesome-icon icon="user-md"></font-awesome-icon></span> Éducation et scolarisation
@@ -317,36 +317,36 @@
                         <thead>
                             <tr>
                                 <th class="table-col"></th>
-                                <th class="table-col" v-for="row in plan.schooling">{{ formatDate(new Date(row.date).getTime() / 1000, 'd M') }}</th>
+                                <th class="table-col" v-for="state in plan.states">{{ formatDate(new Date(state.date).getTime() / 1000, 'd M') }}</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             <tr>
                                 <td>Mineurs en âge d'être scolarisés</td>
-                                <td v-for="row in plan.schooling">{{ row.can_be_schooled }}</td>
+                                <td v-for="state in plan.states">{{ state.education.scolarisables }}</td>
                             </tr>
                             <tr>
                                 <td>Élémentaire</td>
-                                <td v-for="row in plan.schooling">{{ row.children_signed_to_maternelle }}</td>
+                                <td v-for="state in plan.states">{{ state.education.maternelles }}</td>
                             </tr>
                             <tr>
                                 <td>Primaire</td>
-                                <td v-for="row in plan.schooling">{{ row.children_signed_to_elementaire }}</td>
+                                <td v-for="state in plan.states">{{ state.education.elementaires }}</td>
                             </tr>
                             <tr>
                                 <td>Collège</td>
-                                <td v-for="row in plan.schooling">{{ row.children_signed_to_college }}</td>
+                                <td v-for="state in plan.states">{{ state.education.colleges }}</td>
                             </tr>
                             <tr>
                                 <td>Lycée</td>
-                                <td v-for="row in plan.schooling">{{ row.children_signed_to_lycee }}</td>
+                                <td v-for="state in plan.states">{{ state.education.lycees }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </section>
 
-                <section class="dataSection rb-table" v-if="plan.job && plan.job.length > 0">
+                <section class="dataSection rb-table" v-if="plan.states.length > 0 && plan.topics.find(({ uid }) => uid === 'work')">
                     <header class="dataSection-header">
                         <h1 class="dataSection-title">
                             <span class="dataSection-icon"><font-awesome-icon icon="briefcase"></font-awesome-icon></span> Formation et emploi
@@ -357,62 +357,62 @@
                         <thead>
                             <tr>
                                 <th class="table-col"></th>
-                                <th class="table-col" v-for="row in plan.job">{{ formatDate(new Date(row.date).getTime() / 1000, 'd M') }}</th>
+                                <th class="table-col" v-for="state in plan.states">{{ formatDate(new Date(state.date).getTime() / 1000, 'd M') }}</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             <tr>
-                                <th :colspan="plan.job.length + 1"><strong>Nombre de personnes inscrites ou suivies par...</strong></th>
+                                <th :colspan="plan.states.length + 1"><strong>Nombre de personnes inscrites ou suivies par...</strong></th>
                             </tr>
                             <tr>
                                 <td>Pôle emploi</td>
-                                <td v-for="row in plan.job">{{ row.pole_emploi_total }}</td>
+                                <td v-for="state in plan.states">{{ state.formation.pole_emploi }}</td>
                             </tr>
                             <tr>
                                 <td><em>(dont femmes)</em></td>
-                                <td v-for="row in plan.job">{{ row.pole_emploi_women }}</td>
+                                <td v-for="state in plan.states">{{ state.formation.pole_emploi_femmes }}</td>
                             </tr>
                             <tr>
                                 <td>Mission locale</td>
-                                <td v-for="row in plan.job">{{ row.mission_locale_total }}</td>
+                                <td v-for="state in plan.states">{{ state.formation.mission_locale }}</td>
                             </tr>
                             <tr>
                                 <td><em>(dont femmes)</em></td>
-                                <td v-for="row in plan.job">{{ row.mission_locale_women }}</td>
+                                <td v-for="state in plan.states">{{ state.formation.mission_locale_femmes }}</td>
                             </tr>
                             <tr>
-                                <th :colspan="plan.job.length + 1"><strong>Nombre de personnes ayant</strong></th>
+                                <th :colspan="plan.states.length + 1"><strong>Nombre de personnes ayant</strong></th>
                             </tr>
                             <tr>
                                 <td>Un contrat ou une formation</td>
-                                <td v-for="row in plan.job">{{ row.contract_total }}</td>
+                                <td v-for="state in plan.states">{{ state.formation.contrats }}</td>
                             </tr>
                             <tr>
                                 <td><em>(dont femmes)</em></td>
-                                <td v-for="row in plan.job">{{ row.contract_women }}</td>
+                                <td v-for="state in plan.states">{{ state.formation.contrats_femmes }}</td>
                             </tr>
                             <tr>
                                 <td>Un statut autoentrepreneur</td>
-                                <td v-for="row in plan.job">{{ row.autoentrepreneur_total }}</td>
+                                <td v-for="state in plan.states">{{ state.formation.autoentrepreneurs }}</td>
                             </tr>
                             <tr>
                                 <td><em>(dont femmes)</em></td>
-                                <td v-for="row in plan.job">{{ row.autoentrepreneur_women }}</td>
+                                <td v-for="state in plan.states">{{ state.formation.autoentrepreneurs_femmes }}</td>
                             </tr>
                             <tr>
                                 <td>l'ARE</td>
-                                <td v-for="row in plan.job">{{ row.are_total }}</td>
+                                <td v-for="state in plan.states">{{ state.formation.are }}</td>
                             </tr>
                             <tr>
                                 <td><em>(dont femmes)</em></td>
-                                <td v-for="row in plan.job">{{ row.are_women }}</td>
+                                <td v-for="state in plan.states">{{ state.formation.are_femmes }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </section>
 
-                <section class="dataSection rb-table" v-if="plan.housing && plan.housing.length > 0">
+                <section class="dataSection rb-table" v-if="plan.states.length > 0 && plan.topics.find(({ uid }) => uid === 'housing')">
                     <header class="dataSection-header">
                         <h1 class="dataSection-title">
                             <span class="dataSection-icon"><font-awesome-icon icon="home"></font-awesome-icon></span> Logement
@@ -423,49 +423,49 @@
                         <thead>
                             <tr>
                                 <th class="table-col"></th>
-                                <th class="table-col" v-for="row in plan.housing">{{ formatDate(new Date(row.date).getTime() / 1000, 'd M') }}</th>
+                                <th class="table-col" v-for="state in plan.states">{{ formatDate(new Date(state.date).getTime() / 1000, 'd M') }}</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             <tr>
-                                <th :colspan="plan.housing.length + 1"><strong>Nombre de personnes ayant fait une demande</strong></th>
+                                <th :colspan="plan.states.length + 1"><strong>Nombre de personnes ayant fait une demande</strong></th>
                             </tr>
                             <tr>
                                 <td>SIAO</td>
-                                <td v-for="row in plan.housing">{{ row.requested_siao }}</td>
+                                <td v-for="state in plan.states">{{ state.logement.siao }}</td>
                             </tr>
                             <tr>
                                 <td>logement social</td>
-                                <td v-for="row in plan.housing">{{ row.requested_social }}</td>
+                                <td v-for="state in plan.states">{{ state.logement.logement_social }}</td>
                             </tr>
                             <tr>
                                 <td>DALO</td>
-                                <td v-for="row in plan.housing">{{ row.requested_dalo }}</td>
+                                <td v-for="state in plan.states">{{ state.logement.dalo }}</td>
                             </tr>
                             <tr>
-                                <th :colspan="plan.housing.length + 1"><strong>Nombre de ménages ayant accédé à un logement</strong></th>
+                                <th :colspan="plan.states.length + 1"><strong>Nombre de ménages ayant accédé à un logement</strong></th>
                             </tr>
                             <tr>
                                 <td>accompagné / adapté</td>
-                                <td v-for="row in plan.housing">{{ row.housed_with_help }}</td>
+                                <td v-for="state in plan.states">{{ state.logement.accompagnes }}</td>
                             </tr>
                             <tr>
                                 <td>sans accompagnement (social ou privé)</td>
-                                <td v-for="row in plan.housing">{{ row.housed_without_help }}</td>
+                                <td v-for="state in plan.states">{{ state.logement.non_accompagnes }}</td>
                             </tr>
                             <tr>
-                                <th :colspan="plan.housing.length + 1"><strong>Nombre de ménages</strong></th>
+                                <th :colspan="plan.states.length + 1"><strong>Nombre de ménages</strong></th>
                             </tr>
                             <tr>
                                 <td>hébergés (hors mise à l'abri ou hébergement d'urgence)</td>
-                                <td v-for="row in plan.housing">{{ row.hosted }}</td>
+                                <td v-for="state in plan.states">{{ state.logement.heberges }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </section>
 
-                <section class="dataSection rb-table" v-if="plan.safety && plan.safety.length > 0">
+                <section class="dataSection rb-table" v-if="plan.states.length > 0 && plan.topics.find(({ uid }) => uid === 'safety')">
                     <header class="dataSection-header">
                         <h1 class="dataSection-title">
                             <span class="dataSection-icon"><font-awesome-icon icon="seedling"></font-awesome-icon></span> Stabilisation et sécurisation du site
@@ -476,36 +476,36 @@
                         <thead>
                             <tr>
                                 <th class="table-col"></th>
-                                <th class="table-col" v-for="row in plan.safety">{{ formatDate(new Date(row.date).getTime() / 1000, 'd M') }}</th>
+                                <th class="table-col" v-for="state in plan.states">{{ formatDate(new Date(state.date).getTime() / 1000, 'd M') }}</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             <tr>
                                 <td>Nombre de points d'eau</td>
-                                <td v-for="row in plan.safety">{{ row.water }}</td>
+                                <td v-for="state in plan.states">{{ state.securisation.points_eau }}</td>
                             </tr>
                             <tr>
                                 <td>Nombre de WC</td>
-                                <td v-for="row in plan.safety">{{ row.toilets }}</td>
+                                <td v-for="state in plan.states">{{ state.securisation.wc }}</td>
                             </tr>
                             <tr>
                                 <td>Nombre de douches</td>
-                                <td v-for="row in plan.safety">{{ row.bath }}</td>
+                                <td v-for="state in plan.states">{{ state.securisation.douches }}</td>
                             </tr>
                             <tr>
                                 <td>Nombre d'accès à l'électricité</td>
-                                <td v-for="row in plan.safety">{{ row.electricity }}</td>
+                                <td v-for="state in plan.states">{{ state.securisation.electricite }}</td>
                             </tr>
                             <tr>
                                 <td>Fréquence d'évacuation des déchets</td>
-                                <td v-for="row in plan.safety">{{ frequencies[row.trash_frequency] }}</td>
+                                <td v-for="state in plan.states">{{ state.securisation.frequence_dechets.name }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </section>
 
-                <div class="note" v-if="!plan.audience">
+                <div class="note" v-if="plan.states.length === 0">
                     <div class="note-body">
                         <p>
                             <strong>Aucun indicateur de suivi renseigné par l'opérateur</strong><br/>
