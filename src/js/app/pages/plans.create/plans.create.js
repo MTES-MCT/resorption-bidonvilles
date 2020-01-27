@@ -212,7 +212,7 @@ export default {
         };
 
         if (me.organization.category.uid === 'public_establishment') {
-            data.formData.state = [{
+            data.formData.government = [{
                 id: me.id,
                 label: `${me.first_name} ${me.last_name.toUpperCase()}`,
             }];
