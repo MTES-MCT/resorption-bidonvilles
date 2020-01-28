@@ -32,6 +32,17 @@ export async function create(data) {
 }
 
 /**
+ * Updates a plan
+ *
+ * @param {Object} data
+ *
+ * @returns {Promise}
+ */
+export async function update(id, data) {
+    return postApi(`/plans/${id}`, data);
+}
+
+/**
  * Updates a plan's details
  *
  * @param {number} planId

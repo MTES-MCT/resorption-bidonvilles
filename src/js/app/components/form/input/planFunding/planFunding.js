@@ -52,7 +52,12 @@ export default {
              *
              * @type {Array.<Object>}
              */
-            fundings: [],
+            fundings: this.value.map(({ year, data }) => ({
+                year,
+                data: data.map(d => ({
+                    data: d,
+                })),
+            })),
         };
     },
 

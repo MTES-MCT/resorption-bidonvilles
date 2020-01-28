@@ -19,6 +19,7 @@
                     </header>
 
                     <div>
+                        <span style="display: none">{{ refreshId }}</span>
                         <Input v-for="(input, inputId) in section.inputs" v-if="isInputVisible(input)" :id="inputId" v-bind="input" v-model="data[inputId]" :errors="(errors && errors.fields && errors.fields[inputId]) || undefined" :disabled="isInputDisabled(input)" :alertMessage="getInputAlert(input)" @change="onDataChange" />
                     </div>
                 </section>

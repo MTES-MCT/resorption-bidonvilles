@@ -70,6 +70,13 @@ export default {
     data() {
         return {
             /**
+             * Index used to force a refresh of the form
+             *
+             * @type {Number}
+             */
+            refreshId: 0,
+
+            /**
              * Index of the current step
              *
              * @type {Number}
@@ -340,6 +347,7 @@ export default {
          * @returns {undefined}
          */
         onDataChange() {
+            this.refreshId += 1;
             this.$emit('input', this.data);
         },
 
