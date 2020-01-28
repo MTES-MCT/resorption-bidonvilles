@@ -165,8 +165,8 @@ export default {
                             title: 'Financements',
                             inputs: {
                                 finances: {
+                                    label: 'Financements',
                                     type: 'planFunding',
-                                    label: '',
                                     mandatory: false,
                                 },
                             },
