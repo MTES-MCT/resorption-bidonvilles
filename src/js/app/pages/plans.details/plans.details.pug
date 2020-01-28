@@ -115,19 +115,25 @@
 
                     <article class="block">
                         <div class="dataSection-line">
-                            <p class="data"><span class="data-label">Service de l'état</span><br/><router-link :to="`/annuaire/${plan.government_contacts[0].organization.id}`" class="user">{{ plan.government_contacts[0].name }}<br/>{{ plan.government_contacts[0].organization.name }}</span></p>
+                            <p class="data"><span class="data-label">Service de l'état</span><br/><router-link :to="`/annuaire/${plan.government_contacts[0].organization.id}`" class="user">{{ plan.government_contacts[0].first_name }} {{ plan.government_contacts[0].last_name.toUpperCase() }}<br/>{{ plan.government_contacts[0].organization.name }}</span></p>
                         </div>
                         <div class="dataSection-line">
-                            <p class="data"><span class="data-label">Opérateur ou service en charge</span><br/><router-link :to="`/annuaire/${plan.operator_contacts[0].organization.id}`" class="user">{{ plan.operator_contacts[0].name }}<br/>{{ plan.operator_contacts[0].organization.name }}</span></p>
+                            <p class="data"><span class="data-label">Opérateur ou service en charge</span><br/><router-link :to="`/annuaire/${plan.operator_contacts[0].organization.id}`" class="user">{{ plan.operator_contacts[0].first_name }} {{ plan.operator_contacts[0].last_name.toUpperCase() }}<br/>{{ plan.operator_contacts[0].organization.name }}</span></p>
                         </div>
                     </article>
                 </section>
 
-                <section class="dataSection rb-table" v-if="plan.finances.length > 0">
+                <section class="dataSection rb-table" v-if="plan && plan.finances && plan.finances.length > 0">
                     <header class="dataSection-header">
                         <h1 class="dataSection-title">
                             <span class="dataSection-icon"><font-awesome-icon icon="euro-sign"></font-awesome-icon></span> Financements
                         </h1>
+                    </header>
+
+                    <header class="planFunding-header">
+                        <font-awesome-icon icon="caret-square-left" @click="showPreviousYear" class="planFunding-yearSwitch" v-bind:class="{ 'planFunding-yearSwitch--disabled': reachedMinFinanceIndex === true }"></font-awesome-icon>
+                        <span>{{ plan.finances[currentFinanceIndex].year }} </span>
+                        <font-awesome-icon icon="caret-square-right" @click="showNextYear" class="planFunding-yearSwitch" v-bind:class="{ 'planFunding-yearSwitch--disabled': reachedMaxFinanceIndex === true }"></font-awesome-icon>
                     </header>
 
                     <table class="table block">
@@ -136,18 +142,22 @@
                                 <th class="table-col">Type de financements</th>
                                 <th class="table-col">Montants<br/>prévus</th>
                                 <th class="table-col">Précision</th>
+                                <th class="table-col">Dépenses<br/>exécutées</th>
                             </tr>
                         </thead>
 
                         <tbody>
-                            <tr v-for="finance in plan.finances[0].data">
+                            <tr v-for="finance in plan.finances[currentFinanceIndex].data">
                                 <td>{{ finance.type.name }}</td>
                                 <td>{{ finance.amount }} €<br/>soit {{ Math.round((finance.amount / financeTotal()) * 100) }}%</td>
                                 <td>{{ finance.details }}</td>
+                                <td v-if="finance.realAmount">{{ finance.realAmount }} €</td>
+                                <td v-else-if="reachedMaxFinanceIndex">À remplir entre janvier et mars</td>
+                                <td v-else>Non renseignées</td>
                             </tr>
                             <tr>
                                 <td></td>
-                                <td colspan="2"><strong>TOTAL : {{ financeTotal() }}€</strong></td>
+                                <td colspan="3"><strong>TOTAL : {{ financeTotal() }}€</strong></td>
                             </tr>
                         </tbody>
                     </table>

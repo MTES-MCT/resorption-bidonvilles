@@ -10,6 +10,10 @@
     <td>
         <input type="text" v-model="details" :readonly="disabled" :disabled="disabled" />
     </td>
+    <td v-if="allowRealAmount"><input type="number" v-model="realAmount" step="0.01" :readonly="disabled" :disabled="disabled" /></td>
+    <td v-else>
+        <span v-if="index === 0">À remplir entre janvier et mars de l'année prochaine</span>
+    </td>
     <td>
         <img src="/img/remove.svg" @click="remove" />
     </td>

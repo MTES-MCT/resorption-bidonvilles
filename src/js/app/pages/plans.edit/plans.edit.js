@@ -272,7 +272,7 @@ export default {
                 text: 'Le dispositif a bien été mis à jour',
             });
 
-            this.$router.push('/liste-des-dispositifs');
+            this.$router.push(`/dispositif/${this.$route.params.id}`);
         },
     },
 };

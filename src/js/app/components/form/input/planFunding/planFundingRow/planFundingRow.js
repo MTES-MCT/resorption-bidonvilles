@@ -5,6 +5,26 @@ export default {
 
     props: {
         /**
+         * Wether a real amount can be provided
+         *
+         * @type {Boolean}
+         */
+        allowRealAmount: {
+            type: Boolean,
+            required: true,
+        },
+
+        /**
+         * Index of the row, starting from 0
+         *
+         * @type {Number}
+         */
+        index: {
+            type: Number,
+            required: true,
+        },
+
+        /**
          * @type {PlanFundingData}
          */
         value: {
@@ -14,6 +34,7 @@ export default {
                 return {
                     type: null,
                     amount: 0.0,
+                    realAmount: this.allowRealAmount ? 0.0 : null,
                     details: '',
                 };
             },
@@ -44,6 +65,7 @@ export default {
             // please see definition of PlanFundingData
             type: this.value.type,
             amount: this.value.amount,
+            realAmount: this.allowRealAmount ? this.value.realAmount : null,
             details: this.value.details,
         };
     },
@@ -54,6 +76,7 @@ export default {
         value() {
             this.type = this.value.type;
             this.amount = this.value.amount;
+            this.realAmount = this.allowRealAmount ? this.value.realAmount : null;
             this.details = this.value.details;
         },
 
@@ -61,6 +84,9 @@ export default {
             this.emitInput();
         },
         amount() {
+            this.emitInput();
+        },
+        realAmount() {
             this.emitInput();
         },
         details() {
@@ -79,6 +105,7 @@ export default {
             this.$emit('input', {
                 type: this.type,
                 amount: this.amount,
+                realAmount: this.realAmount,
                 details: this.details,
             });
         },

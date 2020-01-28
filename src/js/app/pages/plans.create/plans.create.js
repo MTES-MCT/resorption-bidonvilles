@@ -242,7 +242,7 @@ export default {
     },
 
     methods: {
-        onComplete() {
+        onComplete(stepData, [{ id }]) {
             notify({
                 group: 'notifications',
                 type: 'success',
@@ -250,7 +250,7 @@ export default {
                 text: 'Le dispositif a bien été ajouté en base de données',
             });
 
-            this.$router.push('/liste-des-dispositifs');
+            this.$router.push(`/dispositif/${id}`);
         },
     },
 };

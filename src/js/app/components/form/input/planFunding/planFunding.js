@@ -62,6 +62,9 @@ export default {
     },
 
     computed: {
+        allowRealAmount() {
+            return this.currentYear < (new Date()).getFullYear();
+        },
         currentFundings() {
             const currentFundings = this.getCurrentFundings();
             if (currentFundings === undefined) {
@@ -119,6 +122,7 @@ export default {
                 data: {
                     type: null,
                     amount: 0.0,
+                    realAmount: null,
                     details: '',
                 },
             });
@@ -190,8 +194,9 @@ export default {
 
 /**
  * @typedef {Object} PlanFundingData
- * @property {Number} type    Type id
- * @property {Number} amount  Amount in euros as a float number
+ * @property {Number} type       Type id
+ * @property {Number} amount     Amount in euros as a float number
+ * @property {Number} realAmount Amount in euros as a float number
  * @property {String} details
  */
 
