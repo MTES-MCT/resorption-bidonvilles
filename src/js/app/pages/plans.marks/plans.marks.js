@@ -559,7 +559,7 @@ export default {
                             wc: lastState.securisation ? lastState.securisation.wc : 0,
                             douches: lastState.securisation ? lastState.securisation.douches : 0,
                             electricite: lastState.securisation ? lastState.securisation.electricite : 0,
-                            frequence_dechets: lastState.securisation.frequence_dechets
+                            frequence_dechets: lastState.securisation && lastState.securisation.frequence_dechets
                                 ? lastState.securisation.frequence_dechets.uid
                                 : undefined,
                             etp: lastState.etp.map(({ total, type: { uid } }) => ({
