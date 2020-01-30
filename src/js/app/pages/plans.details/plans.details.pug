@@ -496,24 +496,20 @@
 
                         <tbody>
                             <tr>
-                                <td>Nombre de points d'eau</td>
+                                <td>Nombre d'accès réguliers à l'eau potable</td>
                                 <td v-for="state in plan.states">{{ state.securisation.points_eau === null ? 'NC' : state.securisation.points_eau }}</td>
                             </tr>
                             <tr>
-                                <td>Nombre de WC</td>
+                                <td>Nombre de sanitaires</td>
                                 <td v-for="state in plan.states">{{ state.securisation.wc === null ? 'NC' : state.securisation.wc }}</td>
                             </tr>
                             <tr>
-                                <td>Nombre de douches</td>
-                                <td v-for="state in plan.states">{{ state.securisation.douches === null ? 'NC' : state.securisation.douches }}</td>
-                            </tr>
-                            <tr>
-                                <td>Nombre d'accès à l'électricité</td>
+                                <td>Nombre d'accès réguliers à l'électricité</td>
                                 <td v-for="state in plan.states">{{ state.securisation.electricite === null ? 'NC' : state.securisation.electricite }}</td>
                             </tr>
                             <tr>
-                                <td>Fréquence d'évacuation des déchets</td>
-                                <td v-for="state in plan.states">{{ state.securisation.frequence_dechets.name }}</td>
+                                <td>Nombre de bennes disponibles pour le ramassage des déchets du site</td>
+                                <td v-for="state in plan.states">{{ state.securisation.nombre_bennes === null ? 'NC' : state.securisation.nombre_bennes }}</td>
                             </tr>
                         </tbody>
                     </table>

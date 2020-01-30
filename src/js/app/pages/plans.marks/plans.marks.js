@@ -1,7 +1,7 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import Form from '#app/components/form/form.vue';
 import { get, addState } from '#helpers/api/plan';
-import { hasPermission, get as getConfig } from '#helpers/api/config';
+import { hasPermission } from '#helpers/api/config';
 import { notify } from '#helpers/notificationHelper';
 
 
@@ -17,7 +17,6 @@ export default {
             error: null,
             formData: {},
         };
-        const { frequence_dechets: frequenceDechets } = getConfig();
 
         data.formDefinition = {
             title: '',
@@ -400,7 +399,7 @@ export default {
                 inputs: {
                     points_eau: {
                         type: 'number',
-                        label: 'Nombre de points d\'eau',
+                        label: 'Nombre d\'accès réguliers à l\'eau potable',
                         mandatory: false,
                         condition({ date }) {
                             return !!date;
@@ -408,15 +407,7 @@ export default {
                     },
                     wc: {
                         type: 'number',
-                        label: 'Nombre de WC',
-                        mandatory: false,
-                        condition({ date }) {
-                            return !!date;
-                        },
-                    },
-                    douches: {
-                        type: 'number',
-                        label: 'Nombre de douches',
+                        label: 'Nombre de sanitaires',
                         mandatory: false,
                         condition({ date }) {
                             return !!date;
@@ -424,23 +415,19 @@ export default {
                     },
                     electricite: {
                         type: 'number',
-                        label: 'Nombre d\'accès à l\'électricité',
+                        label: 'Nombre d\'accès réguliers à l\'électricité',
                         mandatory: false,
                         condition({ date }) {
                             return !!date;
                         },
                     },
-                    frequence_dechets: {
-                        type: 'select',
-                        label: 'Fréquence d\'évacuation des déchets',
+                    nombre_bennes: {
+                        type: 'number',
+                        label: 'Nombre de bennes disponibles pour le ramassage des déchets du site',
                         mandatory: false,
                         condition({ date }) {
                             return !!date;
                         },
-                        options: frequenceDechets.map(({ uid, name }) => ({
-                            value: uid,
-                            label: name,
-                        })),
                     },
                 },
             }],
@@ -503,31 +490,9 @@ export default {
                         `;
                     }
 
-                    if (plan.audience && plan.audience.length > 0) {
-                        const inputs = {
-                            team: ['etp'],
-                            common_rights: ['housing', 'caf', 'job'],
-                            healthcare: ['granted_ame', 'granted_puma', 'requesting_ame', 'requesting_puma', 'verbally_redirected', 'physically_redirected'],
-                            schooling: ['can_be_schooled', 'children_signed_to_maternelle', 'children_signed_to_elementaire', 'children_signed_to_college', 'children_signed_to_lycee', 'issues'],
-                            job: ['pole_emploi_total', 'mission_locale_total', 'contract_total', 'autoentrepreneur_total', 'are_total', 'pole_emploi_women', 'mission_locale_women', 'contract_women', 'autoentrepreneur_women', 'are_women'],
-                            housing: ['requested_siao', 'requested_social', 'requested_dalo', 'housed_with_help', 'housed_without_help', 'hosted'],
-                            safety: ['water', 'toilets', 'bath', 'electricity', 'trash_frequency'],
-                        };
-                        Object.keys(inputs).forEach((category) => {
-                            if (plan[category] && plan[category].length > 0) {
-                                inputs[category].forEach((field) => {
-                                    this.formData[field] = plan[category].slice(-1)[0][field];
-                                });
-                            }
-                        });
-                    }
-
                     if (lastState) {
                         this.formData = {
                             difficultes: ['cantine', 'place_up2a', 'transport'].filter(d => lastState.education && (lastState.education[`difficulte_${d}`] || lastState.education[`difficculte_${d}`])),
-                            frequence_dechets: lastState.securisation && lastState.securisation.frequence_dechets
-                                ? lastState.securisation.frequence_dechets.uid
-                                : undefined,
                             etp: lastState.etp.map(({ total, type: { uid } }) => ({
                                 total,
                                 type: uid,
