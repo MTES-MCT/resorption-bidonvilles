@@ -256,15 +256,15 @@
                         <tbody>
                             <tr>
                                 <td>une domiciliation</td>
-                                <td v-for="state in plan.states">{{ state.droit_commun.domiciliation }}</td>
+                                <td v-for="state in plan.states">{{ state.droit_commun.domiciliation === null ? 'NC' : state.droit_commun.domiciliation }}</td>
                             </tr>
                             <tr>
                                 <td>des droits CAF ouverts</td>
-                                <td v-for="state in plan.states">{{ state.droit_commun.droits_caf }}</td>
+                                <td v-for="state in plan.states">{{ state.droit_commun.droits_caf === null ? 'NC' : state.droit_commun.droits_caf }}</td>
                             </tr>
                             <tr>
                                 <td>un emploi stable / ressources suffisantes</td>
-                                <td v-for="state in plan.states">{{ state.droit_commun.emploi_stable }}</td>
+                                <td v-for="state in plan.states">{{ state.droit_commun.emploi_stable === null ? 'NC' : state.droit_commun.emploi_stable }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -291,30 +291,30 @@
                             </tr>
                             <tr>
                                 <td>une couverture AME valide</td>
-                                <td v-for="state in plan.states">{{ state.sante.ame_valide }}</td>
+                                <td v-for="state in plan.states">{{ state.sante.ame_valide === null ? 'NC' : state.sante.ame_valide }}</td>
                             </tr>
                             <tr>
                                 <td>une couverture PUMA valide</td>
-                                <td v-for="state in plan.states">{{ state.sante.puma_valide }}</td>
+                                <td v-for="state in plan.states">{{ state.sante.puma_valide === null ? 'NC' : state.sante.puma_valide }}</td>
                             </tr>
                             <tr>
                                 <td>une demande AME en cours</td>
-                                <td v-for="state in plan.states">{{ state.sante.ame_en_cours }}</td>
+                                <td v-for="state in plan.states">{{ state.sante.ame_en_cours === null ? 'NC' : state.sante.ame_en_cours }}</td>
                             </tr>
                             <tr>
                                 <td>une demande PUMA en cours</td>
-                                <td v-for="state in plan.states">{{ state.sante.puma_en_cours }}</td>
+                                <td v-for="state in plan.states">{{ state.sante.puma_en_cours === null ? 'NC' : state.sante.puma_en_cours }}</td>
                             </tr>
                             <tr>
                                 <th :colspan="plan.states.length + 1"><strong>Nombre de personnes ayant fait l'objet d'au moins...</strong></th>
                             </tr>
                             <tr>
                                 <td>une orientation vers une structure de santé</td>
-                                <td v-for="state in plan.states">{{ state.sante.orientation }}</td>
+                                <td v-for="state in plan.states">{{ state.sante.orientation === null ? 'NC' : state.sante.orientation }}</td>
                             </tr>
                             <tr>
                                 <td>un accompagnement physique vers une structure de santé</td>
-                                <td v-for="state in plan.states">{{ state.sante.accompagnement }}</td>
+                                <td v-for="state in plan.states">{{ state.sante.accompagnement === null ? 'NC' : state.sante.accompagnement }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -338,23 +338,23 @@
                         <tbody>
                             <tr>
                                 <td>Mineurs en âge d'être scolarisés</td>
-                                <td v-for="state in plan.states">{{ state.education.scolarisables }}</td>
+                                <td v-for="state in plan.states">{{ state.education.scolarisables === null ? 'NC' : state.education.scolarisables }}</td>
                             </tr>
                             <tr>
                                 <td>Élémentaire</td>
-                                <td v-for="state in plan.states">{{ state.education.maternelles }}</td>
+                                <td v-for="state in plan.states">{{ state.education.maternelles === null ? 'NC' : state.education.maternelles }}</td>
                             </tr>
                             <tr>
                                 <td>Primaire</td>
-                                <td v-for="state in plan.states">{{ state.education.elementaires }}</td>
+                                <td v-for="state in plan.states">{{ state.education.elementaires === null ? 'NC' : state.education.elementaires }}</td>
                             </tr>
                             <tr>
                                 <td>Collège</td>
-                                <td v-for="state in plan.states">{{ state.education.colleges }}</td>
+                                <td v-for="state in plan.states">{{ state.education.colleges === null ? 'NC' : state.education.colleges }}</td>
                             </tr>
                             <tr>
                                 <td>Lycée</td>
-                                <td v-for="state in plan.states">{{ state.education.lycees }}</td>
+                                <td v-for="state in plan.states">{{ state.education.lycees === null ? 'NC' : state.education.lycees }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -381,46 +381,46 @@
                             </tr>
                             <tr>
                                 <td>Pôle emploi</td>
-                                <td v-for="state in plan.states">{{ state.formation.pole_emploi }}</td>
+                                <td v-for="state in plan.states">{{ state.formation.pole_emploi === null ? 'NC' : state.formation.pole_emploi }}</td>
                             </tr>
                             <tr>
                                 <td><em>(dont femmes)</em></td>
-                                <td v-for="state in plan.states">{{ state.formation.pole_emploi_femmes }}</td>
+                                <td v-for="state in plan.states">{{ state.formation.pole_emploi_femmes === null ? 'NC' : state.formation.pole_emploi_femmes }}</td>
                             </tr>
                             <tr>
                                 <td>Mission locale</td>
-                                <td v-for="state in plan.states">{{ state.formation.mission_locale }}</td>
+                                <td v-for="state in plan.states">{{ state.formation.mission_locale === null ? 'NC' : state.formation.mission_locale }}</td>
                             </tr>
                             <tr>
                                 <td><em>(dont femmes)</em></td>
-                                <td v-for="state in plan.states">{{ state.formation.mission_locale_femmes }}</td>
+                                <td v-for="state in plan.states">{{ state.formation.mission_locale_femmes === null ? 'NC' : state.formation.mission_locale_femmes }}</td>
                             </tr>
                             <tr>
                                 <th :colspan="plan.states.length + 1"><strong>Nombre de personnes ayant</strong></th>
                             </tr>
                             <tr>
                                 <td>Un contrat ou une formation</td>
-                                <td v-for="state in plan.states">{{ state.formation.contrats }}</td>
+                                <td v-for="state in plan.states">{{ state.formation.contrats === null ? 'NC' : state.formation.contrats }}</td>
                             </tr>
                             <tr>
                                 <td><em>(dont femmes)</em></td>
-                                <td v-for="state in plan.states">{{ state.formation.contrats_femmes }}</td>
+                                <td v-for="state in plan.states">{{ state.formation.contrats_femmes === null ? 'NC' : state.formation.contrats_femmes }}</td>
                             </tr>
                             <tr>
                                 <td>Un statut autoentrepreneur</td>
-                                <td v-for="state in plan.states">{{ state.formation.autoentrepreneurs }}</td>
+                                <td v-for="state in plan.states">{{ state.formation.autoentrepreneurs === null ? 'NC' : state.formation.autoentrepreneurs }}</td>
                             </tr>
                             <tr>
                                 <td><em>(dont femmes)</em></td>
-                                <td v-for="state in plan.states">{{ state.formation.autoentrepreneurs_femmes }}</td>
+                                <td v-for="state in plan.states">{{ state.formation.autoentrepreneurs_femmes === null ? 'NC' : state.formation.autoentrepreneurs_femmes }}</td>
                             </tr>
                             <tr>
                                 <td>l'ARE</td>
-                                <td v-for="state in plan.states">{{ state.formation.are }}</td>
+                                <td v-for="state in plan.states">{{ state.formation.are === null ? 'NC' : state.formation.are }}</td>
                             </tr>
                             <tr>
                                 <td><em>(dont femmes)</em></td>
-                                <td v-for="state in plan.states">{{ state.formation.are_femmes }}</td>
+                                <td v-for="state in plan.states">{{ state.formation.are_femmes === null ? 'NC' : state.formation.are_femmes }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -447,33 +447,33 @@
                             </tr>
                             <tr>
                                 <td>SIAO</td>
-                                <td v-for="state in plan.states">{{ state.logement.siao }}</td>
+                                <td v-for="state in plan.states">{{ state.logement.siao === null ? 'NC' : state.logement.siao }}</td>
                             </tr>
                             <tr>
                                 <td>logement social</td>
-                                <td v-for="state in plan.states">{{ state.logement.logement_social }}</td>
+                                <td v-for="state in plan.states">{{ state.logement.logement_social === null ? 'NC' : state.logement.logement_social }}</td>
                             </tr>
                             <tr>
                                 <td>DALO</td>
-                                <td v-for="state in plan.states">{{ state.logement.dalo }}</td>
+                                <td v-for="state in plan.states">{{ state.logement.dalo === null ? 'NC' : state.logement.dalo }}</td>
                             </tr>
                             <tr>
                                 <th :colspan="plan.states.length + 1"><strong>Nombre de ménages ayant accédé à un logement</strong></th>
                             </tr>
                             <tr>
                                 <td>accompagné / adapté</td>
-                                <td v-for="state in plan.states">{{ state.logement.accompagnes }}</td>
+                                <td v-for="state in plan.states">{{ state.logement.accompagnes === null ? 'NC' : state.logement.accompagnes }}</td>
                             </tr>
                             <tr>
                                 <td>sans accompagnement (social ou privé)</td>
-                                <td v-for="state in plan.states">{{ state.logement.non_accompagnes }}</td>
+                                <td v-for="state in plan.states">{{ state.logement.non_accompagnes === null ? 'NC' : state.logement.non_accompagnes }}</td>
                             </tr>
                             <tr>
                                 <th :colspan="plan.states.length + 1"><strong>Nombre de ménages</strong></th>
                             </tr>
                             <tr>
                                 <td>hébergés (hors mise à l'abri ou hébergement d'urgence)</td>
-                                <td v-for="state in plan.states">{{ state.logement.heberges }}</td>
+                                <td v-for="state in plan.states">{{ state.logement.heberges === null ? 'NC' : state.logement.heberges }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -497,19 +497,19 @@
                         <tbody>
                             <tr>
                                 <td>Nombre de points d'eau</td>
-                                <td v-for="state in plan.states">{{ state.securisation.points_eau }}</td>
+                                <td v-for="state in plan.states">{{ state.securisation.points_eau === null ? 'NC' : state.securisation.points_eau }}</td>
                             </tr>
                             <tr>
                                 <td>Nombre de WC</td>
-                                <td v-for="state in plan.states">{{ state.securisation.wc }}</td>
+                                <td v-for="state in plan.states">{{ state.securisation.wc === null ? 'NC' : state.securisation.wc }}</td>
                             </tr>
                             <tr>
                                 <td>Nombre de douches</td>
-                                <td v-for="state in plan.states">{{ state.securisation.douches }}</td>
+                                <td v-for="state in plan.states">{{ state.securisation.douches === null ? 'NC' : state.securisation.douches }}</td>
                             </tr>
                             <tr>
                                 <td>Nombre d'accès à l'électricité</td>
-                                <td v-for="state in plan.states">{{ state.securisation.electricite }}</td>
+                                <td v-for="state in plan.states">{{ state.securisation.electricite === null ? 'NC' : state.securisation.electricite }}</td>
                             </tr>
                             <tr>
                                 <td>Fréquence d'évacuation des déchets</td>

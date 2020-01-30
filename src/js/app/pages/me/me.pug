@@ -1,21 +1,17 @@
 <div class="page--withMargin">
     <NavBar></NavBar>
 
-    <section class="section section-white" id="form">
-        <div class="container">
-            <div v-if="preloading && !preloadError" class="notification full-width">
-                <img src="/img/spinner_dark.svg" width="20" class="spinner" />
-                <span>Chargement des données en cours...</span>
-            </div>
+    <div v-if="preloading && !preloadError" class="notification full-width">
+        <img src="/img/spinner_dark.svg" width="20" class="spinner" />
+        <span>Chargement des données en cours...</span>
+    </div>
 
-            <div v-else-if="preloading && preloadError" class="notification error full-width">
-                <span>{{preloadError }}. <a href="#" @click="preload">Réessayer ?</a></span>
-            </div>
+    <div v-else-if="preloading && preloadError" class="notification error full-width">
+        <span>{{preloadError }}. <a href="#" @click="preload">Réessayer ?</a></span>
+    </div>
 
-            <div v-else>
-                <Form v-bind="formDefinition" v-model="formData" @complete="onComplete" ref="form"></Form>
-                <p>Plus d'informations sur les droits d'accès et les utilisateurs de la plateforme<br/><router-link to="/typologie-des-acces" class="link"><font-awesome-icon icon="file-pdf"></font-awesome-icon> &nbsp;Guide des accès et de l'administrateur</router-link><br/><router-link to="/charte-d-engagement" class="link"><font-awesome-icon icon="file-pdf"></font-awesome-icon> &nbsp;Charte d'engagement de l'utilisateur</router-link></p>
-            </div>
-        </div>
-    </section>
+    <div v-else>
+        <Form v-bind="formDefinition" v-model="formData" @complete="onComplete" ref="form"></Form>
+        <p>Plus d'informations sur les droits d'accès et les utilisateurs de la plateforme<br/><router-link to="/typologie-des-acces" class="link"><font-awesome-icon icon="file-pdf"></font-awesome-icon> &nbsp;Guide des accès et de l'administrateur</router-link><br/><router-link to="/charte-d-engagement" class="link"><font-awesome-icon icon="file-pdf"></font-awesome-icon> &nbsp;Charte d'engagement de l'utilisateur</router-link></p>
+    </div>
 </div>

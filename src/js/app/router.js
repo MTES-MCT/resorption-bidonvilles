@@ -365,7 +365,7 @@ const router = new VueRouter({
         {
             meta: {
                 group: 'plans',
-                permissions: ['plan.create'],
+                permissions: ['plan.update'],
             },
             path: '/modifier-dispositif/:id',
             component: PlanEdit,
@@ -383,7 +383,7 @@ const router = new VueRouter({
         {
             meta: {
                 group: 'plans',
-                permissions: ['plan.read'],
+                permissions: ['plan.update'],
             },
             path: '/dispositif/:id/indicateurs',
             component: PlanMarks,

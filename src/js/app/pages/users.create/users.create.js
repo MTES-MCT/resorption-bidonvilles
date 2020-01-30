@@ -7,7 +7,7 @@ const component = newUser({
     title: 'Créer un utilisateur',
     organizationTitle: 'Structure',
     organization: 'Quelle est la structure de l\'utilisateur ?',
-    position: 'Fonction de l\'utiliisateur',
+    position: 'Fonction de l\'utilisateur',
     associationIsMissing: 'L\'association de l\'utilisateur n\'est pas dans cette liste',
     stepWording: {
         submit: 'Continuer',
@@ -25,6 +25,7 @@ export default {
 
     data() {
         const data = component.data();
+        data.isPopup = this.$route.query.association_name !== undefined;
         data.formDefinition.steps[0].sections.push({
             inputs: {
                 legal: {
@@ -37,10 +38,25 @@ export default {
                 },
             },
         });
+
+        if (this.$route.query.association_name !== undefined) {
+            data.formDefinition.steps[0].sections[1].inputs.organization_category.disabled = true;
+            data.formDefinition.steps[0].sections[1].inputs.association.disabled = true;
+            data.formDefinition.steps[0].sections[1].inputs.departement.disabled = true;
+        }
+
         return data;
     },
 
-    watch: Object.assign(component.watch, {}),
+    watch: Object.assign(component.watch, {
+        state() {
+            if (this.state === 'loaded' && this.$route.query.association_name !== undefined) {
+                this.formData.organization_category = 'association';
+                this.formData.association = this.$route.query.association_name;
+                this.formData.departement = this.$route.query.association_departement;
+            }
+        },
+    }),
 
     mounted() {
         this.load();
@@ -59,8 +75,14 @@ export default {
         /**
          * On form's complete
          */
-        onComplete({ id: userId }) {
-            this.$router.push(`/nouvel-utilisateur/${userId}`);
+        onComplete(user) {
+            if (this.isPopup) {
+                window.opener.postMessage(user, '*');
+                window.close();
+                return;
+            }
+
+            this.$router.push(`/nouvel-utilisateur/${user.id}`);
         },
     }),
 

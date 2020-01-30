@@ -1,6 +1,6 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import Form from '#app/components/form/form.vue';
-import { get as getConfig } from '#helpers/api/config';
+import { get as getConfig, hasPermission } from '#helpers/api/config';
 import { create } from '#helpers/api/plan';
 import { getByCategory, getMembers, getMembersOfCategory } from '#helpers/api/organization';
 import { notify } from '#helpers/notificationHelper';
@@ -20,6 +20,19 @@ export default {
         };
         const that = this;
         const refs = this.$refs;
+
+        const contactMissing = {
+            type: 'hidden',
+            label: 'Personne référente dans la structure',
+            description: 'Aucune personne de cette structure n\'est encore enregistrée sur la plateforme résorption bidonville.',
+            mandatory: true,
+            condition({ association }) {
+                return association !== undefined
+                    && association.length > 0
+                    && refs.form.getInputById('contact').options.length === 0
+                    && that.loadingAssociationContacts === false;
+            },
+        };
 
         data.formDefinition = {
             title: 'Déclarer un dispositif',
@@ -93,7 +106,7 @@ export default {
                                         { value: 'shantytowns', label: 'sur site(s) : bidonville ou squat' },
                                         { value: 'location', label: 'sur terrain d\'insertion' },
                                         { value: 'housing', label: 'dans le logement' },
-                                        { value: 'other', label: 'dans plusieurs lieux' },
+                                        { value: 'other', label: 'dans plusieurs lieux (hébergement, permanence, plusieurs sites...)' },
                                     ],
                                 },
                                 locationShantytowns: {
@@ -160,6 +173,10 @@ export default {
                                                     id: organization.id,
                                                     label: organization.name,
                                                     category: `${organization.departement_code} - ${organization.departement_name}`,
+                                                    data: {
+                                                        name: organization.name,
+                                                        departement: organization.departement_code,
+                                                    },
                                                 })));
                                             p2.abort = p.abort;
 
@@ -179,18 +196,7 @@ export default {
                                         return association !== undefined && association.length > 0 && this.options.length > 0;
                                     },
                                 },
-                                contact_missing: {
-                                    type: 'hidden',
-                                    label: 'Personne référente dans la structure',
-                                    description: 'Aucune personne de cette structure n\'est encore enregistrée sur la plateforme résorption bidonville',
-                                    mandatory: true,
-                                    condition({ association }) {
-                                        return association !== undefined
-                                            && association.length > 0
-                                            && refs.form.getInputById('contact').options.length === 0
-                                            && that.loadingAssociationContacts === false;
-                                    },
-                                },
+                                contact_missing: contactMissing,
                             },
                         },
                         {
@@ -210,6 +216,11 @@ export default {
                 },
             ],
         };
+
+        if (hasPermission('user.create')) {
+            window.createUser = this.createUser;
+            contactMissing.description += '<br/><a class="link" onclick="createUser()">Vous pouvez créer un compte utilisateur en cliquant ici.</span>';
+        }
 
         if (me.organization.category.uid === 'public_establishment') {
             data.formData.government = [{
@@ -241,7 +252,30 @@ export default {
         },
     },
 
+    mounted() {
+        window.addEventListener('message', ({ data }) => {
+            this.$refs.form.getInputById('contact').options = [{
+                value: data.id,
+                label: `${data.first_name} ${data.last_name.toUpperCase()}`,
+            }];
+            this.formData.contact = data.id;
+            this.loadingAssociationContacts = false;
+
+            notify({
+                group: 'notifications',
+                type: 'success',
+                title: 'Utilisateur créé',
+                text: 'La personne référente est désormais sélectionnée',
+            });
+        }, false);
+    },
+
     methods: {
+        createUser() {
+            const { name, departement } = this.formData.association[0].data;
+            const { href } = this.$router.resolve('/nouvel-utilisateur');
+            window.open(`${href}?association_name=${encodeURIComponent(name)}&association_departement=${departement}`, 'newUser', 'menubar=no, status=no');
+        },
         onComplete(stepData, [{ id }]) {
             notify({
                 group: 'notifications',
