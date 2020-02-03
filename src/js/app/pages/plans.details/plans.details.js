@@ -1,6 +1,6 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import SlideNote from '#app/components/slide-note/slide-note.vue';
-import Map from '#app/pages/townExplorer/map/map.vue';
+import Map from '#app/components/map/map.vue';
 import { get } from '#helpers/api/plan';
 import { hasPermission, get as getConfig } from '#helpers/api/config';
 import { shortAddress } from '#helpers/townHelper';

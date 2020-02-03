@@ -275,7 +275,7 @@ export default {
                     inputs: {
                         contrats: {
                             type: 'number',
-                            label: 'un contrat ou une formation',
+                            label: 'un contrat',
                             mandatory: false,
                             condition({ date }) {
                                 return !!date;
@@ -291,7 +291,7 @@ export default {
                         },
                         formations: {
                             type: 'number',
-                            label: 'Une formation',
+                            label: 'une formation',
                             mandatory: false,
                             condition({ date }) {
                                 return !!date;
