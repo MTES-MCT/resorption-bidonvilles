@@ -399,12 +399,20 @@
                                 <th :colspan="plan.states.length + 1"><strong>Nombre de personnes ayant</strong></th>
                             </tr>
                             <tr>
-                                <td>Un contrat ou une formation</td>
+                                <td>Un contrat</td>
                                 <td v-for="state in plan.states">{{ state.formation.contrats === null ? 'NC' : state.formation.contrats }}</td>
                             </tr>
                             <tr>
                                 <td><em>(dont femmes)</em></td>
                                 <td v-for="state in plan.states">{{ state.formation.contrats_femmes === null ? 'NC' : state.formation.contrats_femmes }}</td>
+                            </tr>
+                            <tr>
+                                <td>Une formation</td>
+                                <td v-for="state in plan.states">{{ state.formation.formations === null ? 'NC' : state.formation.formations }}</td>
+                            </tr>
+                            <tr>
+                                <td><em>(dont femmes)</em></td>
+                                <td v-for="state in plan.states">{{ state.formation.formations_femmes === null ? 'NC' : state.formation.formations_femmes }}</td>
                             </tr>
                             <tr>
                                 <td>Un statut autoentrepreneur</td>

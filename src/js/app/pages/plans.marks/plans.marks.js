@@ -289,6 +289,22 @@ export default {
                                 return !!date;
                             },
                         },
+                        formations: {
+                            type: 'number',
+                            label: 'Une formation',
+                            mandatory: false,
+                            condition({ date }) {
+                                return !!date;
+                            },
+                        },
+                        formations_femmes: {
+                            type: 'number',
+                            label: '(dont femmes)',
+                            mandatory: false,
+                            condition({ date }) {
+                                return !!date;
+                            },
+                        },
                         autoentrepreneurs: {
                             type: 'number',
                             label: 'un statut autoentrepreneur',
