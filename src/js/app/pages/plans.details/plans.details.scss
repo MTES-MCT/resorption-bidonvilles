@@ -1,8 +1,115 @@
-.town-actionButtons {
-    text-align: right;
-    margin-bottom: 25px;
+@import '/css/config/colors';
+
+.container {
+    padding-top: 60px;
 }
 
-.dashboard {
-    padding: 0;
+.slideNote {
+    margin-bottom: 60px;
+}
+
+.team-prefixTitle {
+    width: 100px;
+}
+
+.team-prefix {
+    padding: 5px 5px 5px 0;
+    text-align: right;
+    vertical-align: top;
+}
+
+.team-labelTitle {
+    padding-top: 10px;
+    vertical-align: top;
+    text-align: center;
+    font-weight: bold;
+    color: $EASTERN_BLUE;
+    width: 250px;
+}
+
+.team-label {
+    padding: 5px 0;
+    text-align: left;
+
+    > span {
+        font-weight: normal;
+    }
+}
+
+.team-figuresTitle {
+    padding: 10px 0 15px 15px;
+}
+
+.team-figuresCol {
+    padding-right: 20px;
+    padding-bottom: 5px;
+    width: 100px;
+    text-align: right;
+}
+
+.team-figures {
+    padding-right: 20px;
+    text-align: right;
+}
+
+.input--date {
+    display: inline-block;
+    padding-left: 0;
+}
+
+.dataSection-audienceDates {
+    margin-bottom: 20px;
+
+    p {
+        margin: 0;
+        padding: 0;
+    }
+
+    > div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        > p > span {
+            padding: 0 10px;
+            color: $LIGTHER_GREY;
+        }
+    }
+}
+
+.dataSection-audienceFormat {
+    font-size: 1.5rem;
+    color: $LIGTHER_GREY;
+
+    > svg {
+        cursor: pointer;
+        margin-left: 10px;
+    }
+
+    .active {
+        color: $ENDEAVOUR_BLUE;
+    }
+
+    > svg:hover:not(.active) {
+        color: adjust-color($ENDEAVOUR_BLUE, $alpha: -0.6);
+    }
+}
+
+.block.block--dark {
+    font-size: 1.75rem;
+    margin-right: 10px;
+    margin-bottom: 5px;
+
+    > span {
+        font-size: 1rem;
+    }
+}
+
+.dataSection-audience {
+    flex-grow: 1;
+
+    > p:not(.divider) {
+        margin: 0;
+        padding: 0;
+    }
 }

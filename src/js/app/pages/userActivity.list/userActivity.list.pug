@@ -32,11 +32,8 @@
                     </hgroup>
                 </div>
 
-                <div class="billboard">
-                    <header class="billboard-header">
-                        <h1>Règles de modération d'un commentaire</h1>
-                    </header>
-                    <section class="billboard-body">
+                <SlideNote title="Règles de modération d'un commentaire" class="userActivity-rule">
+                    <template slot="content">
                         <h1>En tant qu'administrateur, vous êtes en charge de la modération des commentaires.</h1>
                         <p>Vous pouvez supprimer un commentaire ou demander à son auteur de le modifier s'il ne respecte pas les règles suivantes :
                             <ul>
@@ -45,9 +42,10 @@
                                 <li>ne doit pas être subjectif, insultant ou inapproprié.</li>
                             </ul>
                         </p>
+
                         <p>Pour plus d'informations :<br/><router-link to="/typologie-des-acces" class="link"><font-awesome-icon icon="file-pdf"></font-awesome-icon> &nbsp;Guide des accès et de l'administrateur</router-link><br/><router-link to="/charte-d-engagement" class="link"><font-awesome-icon icon="file-pdf"></font-awesome-icon> &nbsp;Charte d'engagement de l'utilisateur</router-link></p>
-                    </section>
-                </div>
+                    </template>
+                </SlideNote>
 
                 <div class="switch">
                     <button v-bind:class="{ active: filter === 'all' }" @click="show('all')">Tout</button><button v-bind:class="{ active: filter === 'shantytown' }" @click="show('shantytown')">Modifications</button><button v-bind:class="{ active: filter === 'comment' }" @click="show('comment')">Commentaires</button>

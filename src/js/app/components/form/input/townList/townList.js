@@ -56,9 +56,6 @@ export default {
             {
                 label: 'Adresse',
                 field: 'address',
-                permissions: [
-                    { type: 'data', name: 'address' },
-                ],
             },
         ];
 
@@ -87,7 +84,7 @@ export default {
             /**
              * Ids of selected towns
              *
-             * @type {Array.<Number>}
+             * @type {Array.<Shantytown>}
              */
             selectedTowns: this.value,
 
@@ -121,6 +118,10 @@ export default {
                 rows: [],
                 'sort-options': {
                     enabled: true,
+                    initialSortBy: {
+                        field: 'status',
+                        type: 'asc',
+                    },
                 },
                 'pagination-options': {
                     enabled: true,
@@ -253,11 +254,11 @@ export default {
 
             // parse the list of selected rows and compute which towns should be added/removed to/from selection
             const { toBeAdded, toBeRemoved } = this.$refs.table.processedRows[0].children
-                .reduce((acc, { id }) => {
-                    if (rows.some(({ id: selectedId }) => selectedId === id)) {
-                        acc.toBeAdded.push(id);
+                .reduce((acc, shantytown) => {
+                    if (rows.some(({ id: selectedId }) => selectedId === shantytown.id)) {
+                        acc.toBeAdded.push(shantytown);
                     } else {
-                        acc.toBeRemoved.push(id);
+                        acc.toBeRemoved.push(shantytown);
                     }
 
                     return acc;
@@ -276,14 +277,14 @@ export default {
         /**
          * Merges the two given list of town ids without duplicates
          *
-         * @param {Array.<Number>} selection Original selection
-         * @param {Array.<Number>} toBeAdded Ids to be added to the original selection
+         * @param {Array.<Shantytown>} selection Original selection
+         * @param {Array.<Shantytown>} toBeAdded Ids to be added to the original selection
          *
-         * @returns {Array.<Number>}
+         * @returns {Array.<Shantytown>}
          */
         addToSelection(selection, toBeAdded) {
             return [
-                ...selection.filter(id => !toBeAdded.some(townId => id === townId)),
+                ...selection.filter(({ id }) => !toBeAdded.some(({ id: toBeAddedId }) => id === toBeAddedId)),
                 ...toBeAdded,
             ];
         },
@@ -291,13 +292,13 @@ export default {
         /**
          * Removes a list of ids from the given selection
          *
-         * @param {Array.<Number>} selection Original selection
-         * @param {Array.<Number>} toBeAdded Ids to be removed from the original selection
+         * @param {Array.<Shantytown>} selection   Original selection
+         * @param {Array.<Shantytown>} toBeRemoved Ids to be removed from the original selection
          *
-         * @returns {Array.<Number>}
+         * @returns {Array.<Shantytown>}
          */
         removeFromSelection(selection, toBeRemoved) {
-            return selection.filter(id => !toBeRemoved.some(townId => id === townId));
+            return selection.filter(({ id }) => !toBeRemoved.some(({ id: toBeRemovedId }) => id === toBeRemovedId));
         },
 
         /**
@@ -334,7 +335,7 @@ export default {
          */
         filteredTowns() {
             return (this.filter !== null ? this.towns.filter(this.filter) : this.towns).map(town => Object.assign({}, town, {
-                vgtSelected: this.selectedTowns.indexOf(town.id) !== -1,
+                vgtSelected: this.selectedTowns.some(({ id }) => id === town.id) === true,
             }));
         },
     },

@@ -1,0 +1,26 @@
+<div>
+    <NavBar></NavBar>
+    
+    <section class="section-white">
+        <div class="container" v-if="status !== 'loaded'">
+            <div v-if="!status || status === 'loading'">
+                <!-- LOADING STATE -->
+                <div class="notification full-width">
+                    <img src="/img/spinner_dark.svg" width="20" class="spinner" />
+                    <span>Chargement des données en cours...</span>
+                </div>
+            </div>
+
+            <div v-else-if="status === 'loadingError'">
+                <!-- ERROR STATE -->
+                <div class="notification error full-width">
+                    <span>{{ error }}. <span @click="load">Réessayer ?</span></span>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="status === 'loaded'">
+            <Form v-bind="formDefinition" v-model="formData" @complete="onComplete" ref="form"></Form>
+        </div>
+    </section>
+</div>

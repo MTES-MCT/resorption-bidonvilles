@@ -1,0 +1,30 @@
+@import '/css/config/colors.scss';
+
+.note {
+    padding: 15px 25px;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
+    background: $SERENADE;
+}
+
+.note-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.note-title {
+    margin: 0;
+    padding: 0;
+    font-size: 1.2rem;
+}
+
+.note-body {
+    margin: 0;
+    padding: 0 0 0 30px;
+    text-align: center;
+
+    > h1 {
+        font-size: 1rem;
+        color: $EASTERN_BLUE;
+    }
+}

@@ -42,3 +42,32 @@ export function getByCategory(categoryUid, search = null) {
 export function getByType(typeId) {
     return getApi(`/organization-types/${typeId}/organizations`);
 }
+
+/**
+ * Lists all users of a specific organization
+ *
+ * @param {Number} organizationId
+ *
+ * @returns {Promise}
+ */
+export function getMembers(organizationId) {
+    return getApi(`/organizations/${organizationId}/users`);
+}
+
+/**
+ * Lists all users of a specific organization
+ *
+ * @param {Number} organizationId
+ *
+ * @returns {Promise}
+ */
+export function getMembersOfCategory(categoryId, regionId, departementId) {
+    let query = '';
+    if (departementId !== undefined) {
+        query = `departementId=${encodeURIComponent(departementId)}`;
+    } else if (regionId !== undefined) {
+        query = `regionId=${encodeURIComponent(regionId)}`;
+    }
+
+    return getApi(`/organization-categories/${categoryId}/users?${query}`);
+}

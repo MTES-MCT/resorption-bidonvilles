@@ -12,20 +12,23 @@
         </div>
 
         //- text input
-        <input v-if="type === 'text'" type="text" class="input input--text" v-bind="props" v-model="data" :disabled="disabled" :readonly="disabled" />
+        <input v-if="type === 'text'" type="text" class="input input--text" :id="`input-${id}`" v-bind="props" v-model="data" :disabled="disabled" :readonly="disabled" />
+
+        //- hidden input
+        <input v-if="type === 'hidden'" type="hidden" class="input input--hidden" :id="`input-${id}`" v-bind="props" v-model="data" :disabled="disabled" :readonly="disabled" />
 
         //- password input
-        <input v-if="type === 'password'" :type="showPassword ? 'text' : 'password'" class="input input--password" v-bind="props" v-model="data" :disabled="disabled" :readonly="disabled" />
+        <input v-if="type === 'password'" :type="showPassword ? 'text' : 'password'" class="input input--password" :id="`input-${id}`" v-bind="props" v-model="data" :disabled="disabled" :readonly="disabled" />
         <span v-if="type === 'password'" @click="showPassword = !showPassword" class="input--password-toggler"><font-awesome-icon :icon="showPassword ? 'eye' : 'eye-slash'"></font-awesome-icon></span>
 
         //- textarea input
-        <textarea v-if="type === 'textarea'" class="input input--textarea" v-bind="props" v-model="data" :disabled="disabled" :readonly="disabled"></textarea>
+        <textarea v-if="type === 'textarea'" class="input input--textarea" :id="`input-${id}`" v-bind="props" v-model="data" :disabled="disabled" :readonly="disabled"></textarea>
 
         //- number input
-        <input v-if="type === 'number'" type="number" class="input input--number" v-bind="props" v-model="data" :disabled="disabled" :readonly="disabled" />
+        <input v-if="type === 'number'" type="number" class="input input--number" :id="`input-${id}`" v-bind="props" v-model="data" :disabled="disabled" :readonly="disabled" />
 
         //- select
-        <select v-if="type === 'select' || type === 'selectMultiple'" class="input input--select" v-bind="props" v-model="data" :multiple="type === 'selectMultiple'" :disabled="disabled">
+        <select v-if="type === 'select' || type === 'selectMultiple'" class="input input--select" :id="`input-${id}`" v-bind="props" v-model="data" :multiple="type === 'selectMultiple'" :disabled="disabled">
             <optgroup v-if="optionsAreGrouped" v-for="groupName in Object.keys(options)" :label="options[groupName].label">
                 <option v-for="option in options[groupName].options" :value="option.value">{{ option.label }}</option>
             </optgroup>
@@ -33,20 +36,22 @@
         </select>
 
         //- radio
-        <div v-if="type === 'radio'">
-            <div v-for="(option, index) in options">
-                <input type="radio" :id="`input${_uid}-${index}`" :value="option.value" :name="`input${_uid}`" v-model="data" :disabled="disabled" class="input input--radio" />
-                <label :for="`input${_uid}-${index}`" class="label-inline">{{ option.label }}</label>
-            </div>
-        </div>
+        <ul v-if="type === 'radio'" :id="`input-${id}`" class="input input--radio">
+            <li v-for="(option, index) in options" class="input--radio-option">
+                <label :for="`input${_uid}-${index}`">
+                    <input type="radio" :id="`input${_uid}-${index}`" :value="option.value" :name="`input${_uid}`" v-model="data" :disabled="disabled" class="input input--radio" /> {{ option.label }}
+                </label>
+            </li>
+        </ul>
 
         //- checkbox
-        <div v-if="type === 'checkbox'">
-            <div v-for="(option, index) in options">
-                <input type="checkbox" :id="`input${_uid}-${index}`" :value="option.value" :name="`input${_uid}`" v-model="data" :disabled="disabled" class="input input--checkbox" />
-                <label :for="`input${_uid}-${index}`" class="label-inline">{{ option.label }}</label>
-            </div>
-        </div>
+        <ul v-if="type === 'checkbox'" class="input--checkbox" :id="`input-${id}`">
+            <li v-for="(option, index) in options" class="input--checkbox-option">
+                <label :for="`input${_uid}-${index}`">
+                    <input type="checkbox" :id="`input${_uid}-${index}`" :value="option.value" :name="`input${_uid}`" v-model="data" :disabled="disabled" class="input input--checkbox" /> {{ option.label }}
+                </label>
+            </li>
+        </ul>
 
         //- date input
         <Datepicker v-if="type === 'date'" input-class="input input--date" v-bind="props" v-model="data" :disabled="disabled"></Datepicker>
@@ -74,5 +79,11 @@
 
         //- organization autocompleter
         <Organization v-if="type === 'organization'" v-bind="props" v-model="data" :disabled="disabled"></Organization>
+
+        //- etp
+        <Etp v-if="type === 'etp'" v-bind="props" v-model="data" :disabled="disabled"></Etp>
+
+        //- audience
+        <Audience v-if="type === 'audience'" v-bind="props" v-model="data" :disabled="disabled"></Audience>
     </div>
 </div>

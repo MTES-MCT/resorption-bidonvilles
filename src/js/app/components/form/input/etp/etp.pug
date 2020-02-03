@@ -1,0 +1,16 @@
+<div>
+    <p v-if="rows.length > 0" v-for="(row, index) in rows" class="etp-row dataSection-line">
+        <select v-model="row.type" :disabled="disabled" class="etp-type">
+            <option v-for="type in types" :value="type.uid">{{ type.name }}</option>
+        </select>
+        <input type="number" v-model="row.total" :disabled="disabled" class="etp-total" step="0.1" /> ETP
+        <font-awesome-icon icon="trash-alt" class="etp-removeButton" @click="removeRow(index)"></font-awesome-icon>
+    </p>
+
+    <p v-if="rows.length === 0">Aucun ETP enregistré pour le moment</p>
+
+    <p class="etp-addButton" @click="addRow">
+        <font-awesome-icon icon="plus-circle"></font-awesome-icon>
+        <span>Ajouter</span>
+    </p>
+</div>

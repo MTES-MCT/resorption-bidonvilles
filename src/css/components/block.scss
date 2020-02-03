@@ -1,0 +1,17 @@
+.block {
+    padding: 30px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.1);
+
+    &.block--dark {
+        font-weight: bold;
+        color: $WHITE;
+        background: $EBONY_CLAY;
+        box-shadow: none;
+    }
+}
+
+table.block {
+    width: 100%;
+    border-collapse: collapse;
+}

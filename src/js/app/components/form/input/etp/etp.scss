@@ -1,0 +1,36 @@
+@import '/css/config/colors.scss';
+
+.etp-type {
+    margin-right: 20px;
+    font-weight: bold;
+}
+
+.etp-total {
+    max-width: 70px;
+
+    &:after {
+        display: block;
+        content: 'ETP';
+        color: red;
+    }
+}
+
+.etp-removeButton {
+    cursor: pointer;
+    visibility: hidden;
+    margin-left: 20px;
+    color: $ENDEAVOUR_BLUE;
+}
+
+
+.etp-row:hover {
+    .etp-removeButton {
+        visibility: visible;
+    }
+}
+
+.etp-addButton {
+    cursor: pointer;
+    color: $ENDEAVOUR_BLUE;
+    font-weight: bold;
+}

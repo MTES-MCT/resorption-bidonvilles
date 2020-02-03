@@ -1,4 +1,5 @@
 import Input from './input/input.vue';
+import SlideNote from '#app/components/slide-note/slide-note.vue';
 import { notify } from '#helpers/notificationHelper';
 
 export default {
@@ -6,6 +7,7 @@ export default {
 
     components: {
         Input,
+        SlideNote,
     },
 
 
@@ -16,6 +18,16 @@ export default {
          * @type {String}
          */
         title: {
+            type: String,
+            required: false,
+        },
+
+        /**
+         * Description title of the form
+         *
+         * @type {String}
+         */
+        descriptionTitle: {
             type: String,
             required: false,
         },
@@ -57,6 +69,13 @@ export default {
 
     data() {
         return {
+            /**
+             * Index used to force a refresh of the form
+             *
+             * @type {Number}
+             */
+            refreshId: 0,
+
             /**
              * Index of the current step
              *
@@ -144,6 +163,15 @@ export default {
          */
         sections() {
             return this.currentStep ? this.currentStep.sections : [];
+        },
+
+        /**
+         * List of sections of the current step with at least one input
+         *
+         * @returns {Array.<FormSection>}
+         */
+        fullSections() {
+            return this.sections.filter(({ inputs }) => Object.values(inputs).some(input => this.isInputVisible(input)));
         },
 
         /**
@@ -319,6 +347,7 @@ export default {
          * @returns {undefined}
          */
         onDataChange() {
+            this.refreshId += 1;
             this.$emit('input', this.data);
         },
 
@@ -399,6 +428,7 @@ export default {
 /**
  * @typedef {Object} FormSection
  * @property {String}                [title] Title of that section
+ * @property {String}                [description] Description of that section
  * @property {Object.<string,FormInput>} inputs  List of inputs
  */
 

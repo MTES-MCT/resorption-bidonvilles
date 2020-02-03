@@ -1,11 +1,8 @@
 <div class="page--withMargin">
     <NavBar></NavBar>
 
-    <section class="section section-white">
-        <div class="container">
-            <h1>Liste des dispositifs existants</h1>
-            <p>La page ci-dessous vous permet de voir un tableau récapitulatif de l'ensemble des dispositifs ayant été déclarés sur votre territoire. Vous pouvez accéder à la fiche du dispositif en cliquant sur le un dispositif de ce tableau.</p>
-
+    <section>
+        <div class="container" v-if="state !== 'loaded'">
             //- state: loading in progress
             <div v-if="state === 'loading'" class="notification full-width">
                 <img src="/img/spinner_dark.svg" width="20" class="spinner" />
@@ -16,14 +13,56 @@
             <div v-if="state === 'error'" class="notification error full-width">
                 <span>{{ error }}. <span @click="retryLoading">Réessayer ?</span></span>
             </div>
+        </div>
 
-            //- state: loaded
-            <div v-if="state === 'loaded'">
-                <Table v-bind="tableProperties" @on-row-click="routeToPlan">
-                    <div slot="emptystate">Vous n'avez pas encore déclaré de dispositif dans votre territoire</div>
+        //- state: loaded
+        <div v-if="state === 'loaded'">
+            <header class="pageHeader">
+                <div class="pageHeader-wrapper">
+                    <section class="pageHeader-main">
+                        <section class="pageHeader-info">
+                            <h1 class="pageHeader-title">Dispositifs - {{ locationTitle }}</h1>
+                        </section>
+
+                        <aside class="pageHeader-buttons">
+                            <router-link to="/nouveau-dispositif" class="button">
+                                <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
+                                <span>Déclarer un dispositif</span>
+                            </router-link>
+                        </aside>
+                    </section>
+                </div>
+            </header>
+
+            <div class="container plansList-body">
+                <CollectivityInput class="planList-search" v-model="location"></CollectivityInput>
+
+                <Table :columns="columns" :content="pageContent" :emptyLabel="'Aucun dispositif sur ce territoire'" @click="routeToPlan">
+                    <template v-slot:name="props">
+                        <strong>{{ props.row.name }}</strong><br/>
+                        <span v-if="props.row.expected_to_end_at">du {{ formatDate(props.row.started_at / 1000) }}<br/>au {{ formatDate(props.row.expected_to_end_at / 1000) }}<br/>{{ dateDiff(props.row.started_at, props.row.expected_to_end_at) }}</span>
+                        <span v-else>depuis le {{ formatDate(props.row.started_at / 1000) }}</span><br/>
+                        <p v-for="topic in props.row.topics">
+                            <span class="rbTag">{{ topic.name }}</span>
+                        </p>
+                    </template>
+                    <template v-slot:departement="props">{{ props.row.departement }}</template>
+                    <template v-slot:location="props">
+                        <span v-if="props.row.location_type.id === 'shantytowns'">
+                            <span v-for="shantytown in props.row.shantytowns">- {{ shantytown.addressSimple }}<br/></span>
+                        </span>
+                        <span v-if="props.row.location_type.id === 'location'">{{ props.row.location.label }}</span>
+                        <span v-if="props.row.location_type.id === 'housing'">Dans le logement</span>
+                        <span v-if="props.row.location_type.id === 'other'">{{ props.row.location_details }}</span>
+                    </template>
+                    <template v-slot:government="props">
+                        <router-link :to="`/annuaire/${props.row.government_contacts[0].organization.id}`" class="user">{{ props.row.government_contacts[0].name }}<br/>{{ props.row.government_contacts[0].organization.name }}</router-link>
+                    </template>
+                    <template v-slot:operator="props">
+                        <router-link :to="`/annuaire/${props.row.operator_contacts[0].organization.id}`" class="user">{{ props.row.operator_contacts[0].name }}<br/>{{ props.row.operator_contacts[0].organization.name }}</router-link>
+                    </template>
                 </Table>
-            </div>
+            </div>  
         </div>
     </section>
 </div>
-

@@ -2,6 +2,7 @@ import { list } from '#helpers/api/userActivity';
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import Table from '#app/components/table/table.vue';
 import CommentDeletion from '#app/components/comment-deletion/comment-deletion.vue';
+import SlideNote from '#app/components/slide-note/slide-note.vue';
 import { notify } from '#helpers/notificationHelper';
 
 export default {
@@ -9,6 +10,7 @@ export default {
         NavBar,
         Table,
         CommentDeletion,
+        SlideNote,
     },
 
     data() {

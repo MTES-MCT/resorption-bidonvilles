@@ -3,10 +3,10 @@
 </template>
 
 <script>
-import Component from './plans.create.js';
+import Component from "./plans.create.js";
 export default Component;
 </script>
 
-<style lang="scss" scoped>
-@import './plans.create.scss';
+<style lang="scss">
+@import "./plans.create.scss";
 </style>

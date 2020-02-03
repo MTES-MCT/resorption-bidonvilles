@@ -160,7 +160,7 @@ export default {
                     },
                 ],
                 rows: this.users,
-                'row-style-class': row => (row.status !== 'active' && row.last_activation_link_sent_on === null ? 'user user--highlight' : 'user'),
+                'row-style-class': row => (row.status !== 'active' && row.last_activation_link_sent_on === null ? 'userList-row userList-row--highlight' : 'userList-row'),
                 'sort-options': {
                     enabled: true,
                 },

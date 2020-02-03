@@ -1,9 +1,4 @@
 <div class="page--withMargin">
     <NavBar></NavBar>
-
-    <section class="section section-white signin">
-        <div class="container">
-            <Form v-bind="formDefinition" v-model="formData" @complete="onComplete"></Form>
-        </div>
-    </section>
+    <Form v-bind="formDefinition" v-model="formData" @complete="onComplete"></Form>
 </div>
