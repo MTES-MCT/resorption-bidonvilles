@@ -383,7 +383,7 @@ const router = new VueRouter({
         {
             meta: {
                 group: 'plans',
-                permissions: ['plan.update'],
+                permissions: ['plan.updateMarks'],
             },
             path: '/dispositif/:id/indicateurs',
             component: PlanMarks,

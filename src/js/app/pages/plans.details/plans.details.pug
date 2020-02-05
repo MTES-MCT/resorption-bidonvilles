@@ -28,23 +28,16 @@
                         </section>
 
                         <aside class="pageHeader-buttons">
-                            <router-link class="button" :to="`/modifier-dispositif/${plan.id}`">
+                            <router-link v-if="plan && plan.canUpdate" class="button" :to="`/modifier-dispositif/${plan.id}`">
                                 <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
                                 <span>Mettre à jour</span>
                             </router-link>
-                            <router-link class="button" :to="`/dispositif/${plan.id}/indicateurs`">
+                            <router-link v-if="plan && plan.canUpdateMarks" class="button" :to="`/dispositif/${plan.id}/indicateurs`">
                                 <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
                                 <span>Indicateurs</span>
                             </router-link>
                         </aside>
                     </section>
-
-                    //- <section class="pageHeader-anchors">
-                    //-     <ul>
-                    //-         <li class="pageHeader-anchorItem pageHeader-anchorItem--active">Synthèse</li>
-                    //-         <li class="pageHeader-anchorItem">Suivi</li>
-                    //-     </ul>
-                    //- </section>
                 </div>
             </header>
 
