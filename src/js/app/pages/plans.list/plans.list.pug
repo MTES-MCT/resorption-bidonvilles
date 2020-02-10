@@ -25,7 +25,7 @@
                         </section>
 
                         <aside class="pageHeader-buttons">
-                            <router-link to="/nouveau-dispositif" class="button">
+                            <router-link v-if="hasPermission('plan.create')" to="/nouveau-dispositif" class="button">
                                 <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
                                 <span>Déclarer un dispositif</span>
                             </router-link>

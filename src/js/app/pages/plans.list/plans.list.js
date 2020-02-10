@@ -4,7 +4,7 @@ import 'vue-good-table/dist/vue-good-table.css';
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import CollectivityInput from '#app/components/form/input/collectivity/collectivity.vue';
 import { open } from '#helpers/tabHelper';
-import { get as getConfig, getPermission } from '#helpers/api/config';
+import { get as getConfig, getPermission, hasPermission } from '#helpers/api/config';
 
 export default {
     components: {
@@ -165,6 +165,10 @@ export default {
         routeToPlan({ id: planId }) {
             const routeData = this.$router.resolve(`/dispositif/${planId}`);
             open(routeData.href);
+        },
+
+        hasPermission(...args) {
+            return hasPermission(...args);
         },
     },
 };
