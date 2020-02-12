@@ -235,7 +235,9 @@ export default {
                     this.formData.topics = plan.topics.map(({ uid }) => uid);
                     this.formData.goals = plan.goals;
                     this.formData.locationType = plan.location_type.id;
-                    // this.formData.locationShantytowns = '';
+                    this.formData.locationShantytowns = plan.shantytowns && plan.shantytowns.length > 0
+                        ? plan.shantytowns.map(({ id }) => id)
+                        : undefined;
                     // this.formData.locationAddress = '';
                     this.formData.locationDetails = plan.location_details;
                     this.formData.government = [{
