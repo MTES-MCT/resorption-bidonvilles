@@ -4,16 +4,24 @@ import { getApi, postApi, deleteApi } from '#helpers/api/main';
  * Fetches all towns from the database
  *
  * @param {Object.<string,string>} [filters]
+ * @param {Array.<String>}         [order]
  *
  * @returns {Promise}
  */
-export function all(filters = {}) {
-    const arrFilters = [];
+export function all(filters = {}, order = []) {
+    const queries = [];
+
+    // filters
     Object.keys(filters).forEach((filterName) => {
-        arrFilters.push(`${filterName}=${encodeURIComponent(filters[filterName])}`);
+        queries.push(`${filterName}=${encodeURIComponent(filters[filterName])}`);
     });
 
-    return getApi(`/towns${arrFilters.length > 0 ? `?${arrFilters.join('&')}` : ''}`);
+    // order
+    if (order.length > 0) {
+        queries.push(`order=${order.map(s => encodeURIComponent(s)).join(',')}`);
+    }
+
+    return getApi(`/towns${queries.length > 0 ? `?${queries.join('&')}` : ''}`);
 }
 
 /**

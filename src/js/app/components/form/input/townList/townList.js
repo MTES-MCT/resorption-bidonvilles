@@ -1,10 +1,12 @@
-import { VueGoodTable } from 'vue-good-table';
-import { hasPermission } from '#helpers/api/config';
+import { get as getConfig, getPermission } from '#helpers/api/config';
 import { all as fetchAll } from '#helpers/api/town';
+import Table from '#app/components/table/table.vue';
+import CollectivityInput from '#app/components/form/input/collectivity/collectivity.vue';
 
 export default {
     components: {
-        VueGoodTable,
+        Table,
+        CollectivityInput,
     },
 
     props: {
@@ -43,23 +45,54 @@ export default {
     },
 
     data() {
-        const columns = [
-            {
-                label: 'Statut du site',
-                field: 'status',
-                formatFn: value => (value === 'open' ? 'Existant' : 'Disparu'),
+        const { field_types: fieldTypes, user } = getConfig();
+        const permission = getPermission('shantytown.list');
+
+        const userLocation = {
+            id: user.organization.location.type === 'nation' ? null : user.organization.location[user.organization.location.type].code,
+            label: user.organization.location.type === 'nation' ? 'France' : user.organization.location[user.organization.location.type].name,
+            category: user.organization.location.type,
+            data: {
+                code: user.organization.location.type === 'nation' ? null : user.organization.location[user.organization.location.type].code,
+                type: user.organization.location.type,
             },
-            {
-                label: 'Commune',
-                field: 'city.name',
-            },
-            {
-                label: 'Adresse',
-                field: 'address',
-            },
-        ];
+        };
+        const hasNationalPermission = permission.geographic_level === 'nation';
+
+        let location;
+        let defaultLocation;
+        if (hasNationalPermission !== true || user.organization.location.type === 'nation') {
+            defaultLocation = Object.assign({}, userLocation);
+            location = null;
+        } else {
+            defaultLocation = {
+                id: null,
+                label: 'France',
+                category: 'Pays',
+                data: {
+                    code: null,
+                    type: 'nation',
+                },
+            };
+            location = Object.assign({}, userLocation);
+        }
 
         return {
+            location,
+            defaultLocation,
+
+            columns: [
+                { id: 'checkbox', label: '' },
+                { id: 'city', label: 'Commune' },
+                { id: 'address', label: 'Adresse' },
+                { id: 'fieldType', label: 'Type de site' },
+                { id: 'people', label: 'Nombre de personnes' },
+            ],
+
+            fieldTypes: fieldTypes.reduce((acc, fieldType) => Object.assign({}, acc, {
+                [fieldType.id]: fieldType,
+            }), {}),
+
             /**
              * Data loading status
              *
@@ -84,71 +117,44 @@ export default {
             /**
              * Ids of selected towns
              *
-             * @type {Array.<Shantytown>}
+             * @type {Array.<Number>}
              */
             selectedTowns: this.value,
 
             /**
-             * Last detected search term
+             * Status of visible towns
              *
-             * @type {String}
+             * @type {'open'|'closed'}
              */
-            lastSearch: '',
-
-            /**
-             * Wheter the latest change in selection has been handled by onSelectionChange
-             *
-             * Please see onSelectAll() for more details about the usage of this
-             * property.
-             *
-             * @type {Boolean}
-             */
-            changeIsHandled: false,
-
-            /**
-             * Table properties
-             *
-             * Please see VueGoodTable's documentation for more details.
-             *
-             * @type {Object}
-             */
-            tableProps: {
-                styleClass: 'table',
-                columns: columns.filter(column => !column.permissions || column.permissions.every(permission => hasPermission(permission))),
-                rows: [],
-                'sort-options': {
-                    enabled: true,
-                    initialSortBy: {
-                        field: 'status',
-                        type: 'asc',
-                    },
-                },
-                'pagination-options': {
-                    enabled: true,
-                    perPage: 10,
-                    perPageDropdown: [5, 10, 20, 30, 40, 50],
-                    nextLabel: 'Suivant',
-                    prevLabel: 'Précédent',
-                    rowsPerPageLabel: 'Nombre de sites par page',
-                    ofLabel: 'sur',
-                    pageLabel: 'Page', // for 'pages' mode
-                    allLabel: 'Tous',
-                },
-                'select-options': {
-                    enabled: true,
-                    selectionInfoClass: 'selectionInfo',
-                    selectionText: 'sites sélectionnés',
-                    clearSelectionText: 'annuler',
-                },
-                'search-options': {
-                    enabled: true,
-                    placeholder: 'Taper ici le début d\'une adresse ou du nom d\'une commune',
-                },
-                'row-style-class': row => (row.status === 'open' ? 'open' : 'closed'),
-            },
+            statusOfVisibleTowns: 'open',
         };
     },
 
+    computed: {
+
+        currentLocation() {
+            return this.location || this.defaultLocation;
+        },
+
+        pageContent() {
+            return this.towns
+                .filter(({ closedAt }) => {
+                    if (this.statusOfVisibleTowns === 'open') {
+                        return closedAt === null;
+                    }
+                    return closedAt !== null;
+                })
+                .filter((shantytown) => {
+                    if (this.currentLocation.data.type === 'nation') {
+                        return true;
+                    }
+
+                    const l = shantytown[this.currentLocation.data.type];
+                    return l && `${l.code}` === `${this.currentLocation.data.code}`;
+                });
+        },
+
+    },
 
     watch: {
         // two-way binding
@@ -157,27 +163,7 @@ export default {
         },
 
         selectedTowns() {
-            this.tableProps.rows = this.filteredTowns();
             this.$emit('input', this.selectedTowns);
-        },
-
-        /**
-         * Handles a change in the filter method
-         *
-         * @returns {undefined}
-         */
-        filter() {
-            this.selectedTowns = [];
-        },
-
-        /**
-         * Handles a change of 'disabled'
-         *
-         * @returns {undefined}
-         */
-        disabled() {
-            this.tableProps['select-options'].enabled = !this.disabled;
-            this.tableProps['search-options'].enabled = !this.disabled;
         },
     },
 
@@ -189,118 +175,6 @@ export default {
 
 
     methods: {
-        /**
-         * Handles a new search
-         *
-         * @returns {undefined}
-         */
-        onSearch() {
-            this.$nextTick(() => {
-                this.lastSearch = this.$refs.table.globalSearchTerm;
-            });
-        },
-
-        /**
-         * Handles a click on the '(un)select all' checkbox of the table
-         *
-         * In most cases, the selection change caused by the click on the '(un)select all' checkbox
-         * also triggers a 'selectionChange' event, handled by the method onSelectionChange().
-         * But there are a few cases for which this is not true.
-         *
-         * This method detects thoses cases, and updates the table accordingly.
-         *
-         * @param {Object} params Please see VueGoodTable's documentation
-         *
-         * @returns {undefined}
-         */
-        onSelectAll({ selected }) {
-            if (selected) {
-                return;
-            }
-
-            // The idea here is to detect if onSelectionChange() will be called too or not
-            // and if not, update the table.
-            // To do so, we set "changeIsHandled" to false and wait a little time (hence the nextTick).
-            // If after that time, "changeIsHandled" is still set to false, then onSelectionChange()
-            // has not be called (and will not) and we can proceed with our business
-            this.changeIsHandled = false;
-
-            this.$nextTick(() => {
-                this.lastSearch = this.$refs.table.globalSearchTerm;
-
-                if (this.changeIsHandled === false) {
-                    this.tableProps.rows = this.filteredTowns(); // necessary to keep selected rows checked
-                }
-            });
-        },
-
-        /**
-         * Handles a change in the list of selected towns
-         *
-         * @param {Object} params Please see VueGoodTable's documentation
-         *
-         * @returns {undefined}
-         */
-        onSelectionChange({ selectedRows: rows }) {
-            // mark the event as handled
-            this.changeIsHandled = true;
-
-            // ensure this change has not been triggered by a new search query
-            if (this.$refs.table.globalSearchTerm !== this.lastSearch) {
-                this.lastSearch = this.$refs.table.globalSearchTerm;
-                this.tableProps.rows = this.filteredTowns(); // necessary to keep selected rows checked
-                return;
-            }
-
-            // parse the list of selected rows and compute which towns should be added/removed to/from selection
-            const { toBeAdded, toBeRemoved } = this.$refs.table.processedRows[0].children
-                .reduce((acc, shantytown) => {
-                    if (rows.some(({ id: selectedId }) => selectedId === shantytown.id)) {
-                        acc.toBeAdded.push(shantytown);
-                    } else {
-                        acc.toBeRemoved.push(shantytown);
-                    }
-
-                    return acc;
-                }, {
-                    toBeAdded: [],
-                    toBeRemoved: [],
-                });
-
-            // update the selection
-            this.selectedTowns = this.removeFromSelection(
-                this.addToSelection(this.selectedTowns, toBeAdded),
-                toBeRemoved,
-            );
-        },
-
-        /**
-         * Merges the two given list of town ids without duplicates
-         *
-         * @param {Array.<Shantytown>} selection Original selection
-         * @param {Array.<Shantytown>} toBeAdded Ids to be added to the original selection
-         *
-         * @returns {Array.<Shantytown>}
-         */
-        addToSelection(selection, toBeAdded) {
-            return [
-                ...selection.filter(({ id }) => !toBeAdded.some(({ id: toBeAddedId }) => id === toBeAddedId)),
-                ...toBeAdded,
-            ];
-        },
-
-        /**
-         * Removes a list of ids from the given selection
-         *
-         * @param {Array.<Shantytown>} selection   Original selection
-         * @param {Array.<Shantytown>} toBeRemoved Ids to be removed from the original selection
-         *
-         * @returns {Array.<Shantytown>}
-         */
-        removeFromSelection(selection, toBeRemoved) {
-            return selection.filter(({ id }) => !toBeRemoved.some(({ id: toBeRemovedId }) => id === toBeRemovedId));
-        },
-
         /**
          * Loads shantytowns
          *
@@ -314,11 +188,10 @@ export default {
             this.status = 'loading';
             this.loadingError = null;
 
-            fetchAll()
+            fetchAll({}, ['city.asc', 'population.desc'])
                 .then((data) => {
                     this.status = 'loaded';
                     this.towns = data;
-                    this.tableProps.rows = this.filteredTowns();
                 })
                 .catch(({ user_message: error }) => {
                     this.status = 'error';
@@ -327,16 +200,31 @@ export default {
         },
 
         /**
-         * Returns the properly filtered list of towns
+         * Changes which towns are displayed in the list
          *
-         * Please note that the "selection" state of each town is also set.
+         * @param {'open'|'closed'} status
          *
-         * @returns {Array.<Object>}
+         * @returns {undefined}
          */
-        filteredTowns() {
-            return (this.filter !== null ? this.towns.filter(this.filter) : this.towns).map(town => Object.assign({}, town, {
-                vgtSelected: this.selectedTowns.some(({ id }) => id === town.id) === true,
-            }));
+        showTowns(status) {
+            this.statusOfVisibleTowns = status;
         },
+
+        /**
+         * Adds/removes a town from the list of selected towns
+         *
+         * @param {Shantytown} town
+         *
+         * @returns {undefined}
+         */
+        toggleTown({ id: townId }) {
+            const index = this.selectedTowns.findIndex(id => id === townId);
+            if (index !== -1) {
+                this.selectedTowns.splice(index, 1);
+            } else {
+                this.selectedTowns.push(townId);
+            }
+        },
+
     },
 };

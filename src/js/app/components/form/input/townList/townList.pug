@@ -7,13 +7,28 @@
         <img src="/img/warning.svg" width="20" class="spinner" /> Le chargement de la liste des sites a échoué : {{ loadingError }}
     </div>
 
-    <p class="selectionInfo">Nombre total de sites sélectionnés : {{ selectedTowns.length }}</p>
-    <VueGoodTable v-if="status === 'loaded'" v-bind="tableProps" ref="table" @on-search="onSearch" @on-select-all="onSelectAll" @on-selected-rows-change="onSelectionChange">
-        <div slot="emptystate">Aucun site</div>
+    <div v-if="status === 'loaded'">
+        <p class="selectionInfo">Nombre total de sites sélectionnés : {{ selectedTowns.length }}</p>
 
-        <template slot="table-row" slot-scope="props">
-            <span v-if="props.column.field === 'status'" class="label" v-bind:class="{ 'label--open': props.row.status === 'open', 'label--closed': props.row.status  !== 'open' }">{{ props.formattedRow[props.column.field] }}</span>
-            <span v-else>{{ props.formattedRow[props.column.field] }}</span>
-        </template>
-    </VueGoodTable>
+        <div class="switch">
+            <button v-bind:class="{ active: statusOfVisibleTowns === 'open' }" @click="showTowns('open')">Sites existants</button><button v-bind:class="{ active: statusOfVisibleTowns === 'closed' }" @click="showTowns('closed')">Sites fermés</button>
+        </div>
+
+        <CollectivityInput class="townList-search" v-model="location"></CollectivityInput>
+
+        <Table :columns="columns" :content="pageContent" emptyLabel="Aucun site" @click="toggleTown">
+            <template v-slot:checkbox="props">
+                <input type="checkbox" :checked="selectedTowns.some(id => id === props.row.id)" :disabled="disabled" @change="toggleTown(props.row)" />
+            </template>
+            <template v-slot:city="props">{{ props.row.city.name }}</template>
+            <template v-slot:address="props">{{ props.row.addressSimple }}</template>
+            <template v-slot:fieldType="props">
+                <span class="fieldType"><i :style="`background-color: ${fieldTypes[props.row.fieldType.id].color}`"></i> <span>{{ props.row.fieldType.label }}</span></span>
+            </template>
+            <template v-slot:people="props">
+                <span v-if="props.row.populationTotal === null" class="secondary">NC</span>
+                <span v-else>{{ props.row.populationTotal }}</span>
+            </template>
+        </Table>
+    </div>
 </div>
