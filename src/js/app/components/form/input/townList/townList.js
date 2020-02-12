@@ -218,6 +218,10 @@ export default {
          * @returns {undefined}
          */
         toggleTown({ id: townId }) {
+            if (this.disabled) {
+                return;
+            }
+
             const index = this.selectedTowns.findIndex(id => id === townId);
             if (index !== -1) {
                 this.selectedTowns.splice(index, 1);
