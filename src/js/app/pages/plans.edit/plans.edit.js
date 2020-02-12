@@ -238,7 +238,15 @@ export default {
                     this.formData.locationShantytowns = plan.shantytowns && plan.shantytowns.length > 0
                         ? plan.shantytowns.map(({ id }) => id)
                         : undefined;
-                    // this.formData.locationAddress = '';
+                    this.formData.locationAddress = plan.location ? {
+                        address: {
+                            label: plan.location.address,
+                        },
+                        location: {
+                            coordinates: [plan.location.latitude, plan.location.longitude],
+                            zoom: 15,
+                        },
+                    } : undefined;
                     this.formData.locationDetails = plan.location_details;
                     this.formData.government = [{
                         id: plan.government_contacts[0].id,
