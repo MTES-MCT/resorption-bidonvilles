@@ -248,7 +248,7 @@ const router = new VueRouter({
         {
             path: '/feedback',
             beforeEnter(to, from, next) {
-                window.open('https://docs.google.com/forms/d/e/1FAIpQLSdffCEgWp2B1F770MsquDXbyqs251fleRBJLA3vlkQ-N78w9g/viewform', '_blank');
+                window.location.href = 'mailto:contact@resorption-bidonvilles.beta.gouv.fr';
                 next(false);
             },
         },
