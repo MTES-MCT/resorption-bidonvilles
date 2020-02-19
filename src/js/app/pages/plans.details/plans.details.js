@@ -1,15 +1,20 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import SlideNote from '#app/components/slide-note/slide-note.vue';
 import Map from '#app/components/map/map.vue';
-import { get } from '#helpers/api/plan';
+import { get, close } from '#helpers/api/plan';
 import { hasPermission, get as getConfig } from '#helpers/api/config';
 import { shortAddress } from '#helpers/townHelper';
+import PlanFunding from '#app/components/form/input/planFunding/planFunding.vue';
+import Input from '#app/components/form/input/input.vue';
+import { notify } from '#helpers/notificationHelper';
 
 export default {
     components: {
         NavBar,
         SlideNote,
         Map,
+        PlanFunding,
+        Input,
     },
 
     data() {
@@ -21,6 +26,14 @@ export default {
             plan: null,
             etpTypes,
             currentFinanceIndex: 0,
+            closingAlertStatus: 'hidden',
+            closingErrors: [],
+            closingStatus: null,
+            closingData: {
+                closedAt: new Date(),
+                finances: [],
+                comment: '',
+            },
         };
     },
 
@@ -29,6 +42,25 @@ export default {
     },
 
     computed: {
+        closingCommentDescription() {
+            if (!this.audience) {
+                return '';
+            }
+
+            const remainingAudience = Object.assign({}, this.audience.in);
+            ['out_positive', 'out_abandoned', 'out_excluded'].forEach((key) => {
+                remainingAudience.total -= this.audience[key].total;
+                remainingAudience.families -= this.audience[key].families;
+                remainingAudience.women -= this.audience[key].women;
+                remainingAudience.minors -= this.audience[key].minors;
+            });
+
+            if (remainingAudience.total === 0 && remainingAudience.families === 0 && remainingAudience.women === 0 && remainingAudience.minors === 0) {
+                return 'Précisez les raisons de la fermeture du dispositif';
+            }
+
+            return `À la fermeture du dispositif, ${remainingAudience.families} ménage${remainingAudience.families > 1 ? 's' : ''} (soit ${remainingAudience.total} personne${remainingAudience.total > 1 ? 's' : ''}) [nombres issus de la section public] sont identifiés dans le dispositif. Merci de préciser les solutions mobilisées pour ces personnes et les raisons de la fermeture du dispositif.<br /><br />Merci de respecter les règles de confidentialité.Ne pas citer l'identité des individus (Nom, âge, sexe, origine...)`;
+        },
         reachedMaxFinanceIndex() {
             if (!this.plan || !this.plan.finances || this.plan.finances.length === 0) {
                 return true;
@@ -42,6 +74,13 @@ export default {
             }
 
             return this.currentFinanceIndex >= this.plan.finances.length - 1;
+        },
+        minYear() {
+            if (!this.plan || !this.plan.finances || this.plan.finances.length === 0) {
+                return null;
+            }
+
+            return this.plan.finances.reduce((min, { year }) => (min !== null ? Math.min(min, year) : year), null);
         },
         availableEtpTypes() {
             return this.etpTypes.filter(({ uid }) => this.plan.states.some(({ etp }) => etp.some(({ type: { uid: u } }) => uid === u)));
@@ -162,6 +201,11 @@ export default {
             get(this.$route.params.id)
                 .then((data) => {
                     this.plan = data;
+                    this.closingData.finances = this.plan.finances.map(finance => Object.assign({}, finance, {
+                        data: finance.data.map(row => Object.assign({}, row, {
+                            type: row.type.uid,
+                        })),
+                    }));
                     this.status = 'loaded';
                 })
                 .catch(({ user_message: message }) => {
@@ -193,6 +237,54 @@ export default {
             }
 
             this.currentFinanceIndex -= 1;
+        },
+
+        setClosingAlertStatus(newStatus) {
+            this.closingErrors = [];
+            this.closingAlertStatus = newStatus;
+        },
+
+        checkClosing() {
+            const yearsInError = [];
+            for (let year = (new Date()).getFullYear(); year >= Math.max(2019, this.minYear); year -= 1) {
+                const finance = this.closingData.finances.find(({ year: y }) => y === year);
+                if (!finance || finance.data.length === 0 || finance.data.some(({ realAmount }) => realAmount === undefined || realAmount === null)) {
+                    yearsInError.push(year);
+                }
+            }
+
+            if (yearsInError.length > 0) {
+                this.closingErrors = yearsInError.map(year => `Les dépenses exécutées pour l'année ${year} ne sont pas renseignées, il n'est pas possible de fermer le dispositif.`);
+            } else {
+                this.setClosingAlertStatus('step2');
+            }
+        },
+
+        close() {
+            if (this.closingStatus === 'pending') {
+                return;
+            }
+
+            this.closingStatus = 'pending';
+
+            close(this.$route.params.id, this.closingData)
+                .then(() => {
+                    this.closingStatus = 'success';
+                    notify({
+                        group: 'notifications',
+                        type: 'success',
+                        title: 'Dispositif fermé',
+                        text: 'Le dispositif a bien été fermé',
+                    });
+                    this.$router.push('/liste-des-dispositifs');
+                })
+                .catch(({ fields }) => {
+                    this.closingStatus = 'error';
+                    this.closingErrors = Object.keys(fields).reduce((acc, key) => [
+                        ...acc,
+                        ...fields[key],
+                    ], []);
+                });
         },
     },
 };

@@ -1,6 +1,7 @@
 import { getToken, logout } from '#helpers/api/user';
 import { router } from '#app/router';
 import { open as openTab } from '#helpers/tabHelper';
+// eslint-disable-next-line import/extensions
 import version from '#root/version.json';
 
 /**
@@ -39,19 +40,19 @@ function handleRequestResponse(success, failure) {
 
     if (this.status !== 200) {
         switch (response && response.error && response.error.code) {
-        // handle generic errors
-        case ERRORS.MISSING_TOKEN:
-        case ERRORS.EXPIRED_OR_INVALID_TOKEN:
-            logout();
-            router.push('/');
-            break;
+            // handle generic errors
+            case ERRORS.MISSING_TOKEN:
+            case ERRORS.EXPIRED_OR_INVALID_TOKEN:
+                logout();
+                router.push('/');
+                break;
 
             // for everything else, let the current component decide what's best
-        default:
-            failure((response && response.error) || {
-                user_message: 'Une erreur inconnue est survenue',
-                developer_message: 'The server responded with an error status but did not provide error details',
-            });
+            default:
+                failure((response && response.error) || {
+                    user_message: 'Une erreur inconnue est survenue',
+                    developer_message: 'The server responded with an error status but did not provide error details',
+                });
         }
 
         return;
@@ -160,6 +161,19 @@ export function postApi(url, data, headers) {
  */
 export function deleteApi(url, data, headers) {
     return request('DELETE', url, data, headers);
+}
+
+/**
+ * Alias for PATCH requests
+ *
+ * @param {string}                 url
+ * @param {Object}                 [data]
+ * @param {Object.<string,string>} [headers]
+ *
+ * @returns {Promise}
+ */
+export function patchApi(url, data, headers) {
+    return request('PATCH', url, data, headers);
 }
 
 /**

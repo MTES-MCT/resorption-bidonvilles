@@ -259,10 +259,13 @@ export default {
                     this.formData.contact = plan.operator_contacts[0].id;
                     this.formData.finances = plan.finances.map(({ year, data }) => ({
                         year,
-                        data: data.map(({ type: { uid }, amount, details }) => ({
+                        data: data.map(({
+                            type: { uid }, amount, details, realAmount,
+                        }) => ({
                             type: uid,
                             amount,
                             details,
+                            realAmount,
                         })),
                     }));
 

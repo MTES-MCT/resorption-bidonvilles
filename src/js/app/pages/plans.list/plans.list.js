@@ -98,6 +98,7 @@ export default {
         },
         pageContent() {
             return this.plans
+                .filter(({ closed_at: closedAt }) => closedAt === null)
                 .filter((plan) => {
                     if (this.currentLocation.data.type === 'nation') {
                         return true;

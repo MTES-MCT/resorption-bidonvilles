@@ -1,16 +1,18 @@
 <tr class="planFundingRow" v-bind:class="{ 'planFundingRow--disabled': disabled }">
     <td>
-        <select v-model="type" :disabled="disabled">
+        <select v-model="type" :disabled="disabled || inputMode === 'closing' || !allowEdition">
             <option v-for="financeType in financeTypes" :value="financeType.uid">{{ financeType.name }}</option>
         </select>
     </td>
     <td>
-        <input type="number" v-model="amount" step="0.01" :readonly="disabled" :disabled="disabled" />
+        <input type="text" v-model="amount" :readonly="disabled || inputMode === 'closing' || !allowEdition" :disabled="disabled || inputMode === 'closing' || !allowEdition" />
     </td>
     <td>
-        <input type="text" v-model="details" :readonly="disabled" :disabled="disabled" />
+        <input type="text" v-model="details" :readonly="disabled || inputMode === 'closing' || !allowEdition" :disabled="disabled || inputMode === 'closing' || !allowEdition" />
     </td>
-    <td v-if="allowRealAmount"><input type="number" v-model="realAmount" step="0.01" :readonly="disabled" :disabled="disabled" /></td>
+    <td v-if="showRealAmount">
+        <input type="text" v-model="realAmount" :readonly="disabled || !allowEdition" :disabled="disabled || !allowEdition" />
+    </td>
     <td v-else>
         <span v-if="index === 0">À remplir entre janvier et mars de l'année prochaine</span>
     </td>

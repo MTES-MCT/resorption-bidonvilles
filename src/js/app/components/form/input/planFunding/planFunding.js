@@ -14,7 +14,7 @@ export default {
             type: Array,
             required: false,
             default() {
-                return {};
+                return [];
             },
         },
 
@@ -28,13 +28,41 @@ export default {
             required: false,
             default: false,
         },
+
+        /**
+         * The oldest year that can be provided
+         *
+         * @type {Number|null}
+         */
+        minYear: {
+            type: Number,
+            required: false,
+            default: null,
+        },
+
+        /**
+         * Input mode
+         *
+         * Three possible modes:
+         * - "default": new rows are allowed, all inputs are enabled except the realAmount
+         *   of the current year
+         * - "closing": new rows are not allowed, all inputs are disabled except empty realAmounts
+         *   (even the ones of the current year)p
+         *
+         * @type {"default|"closing"}
+         */
+        inputMode: {
+            type: String,
+            required: false,
+            default: 'default',
+        },
     },
 
 
     data() {
         return {
             /**
-             * Upper limit for current-year
+             * Upper limit for focusedYear
              *
              * @type {Number}
              */
@@ -45,7 +73,7 @@ export default {
              *
              * @type {Number}
              */
-            currentYear: (new Date()).getFullYear(),
+            focusedYear: (new Date()).getFullYear(),
 
             /**
              * Funding rows
@@ -63,7 +91,7 @@ export default {
 
     computed: {
         allowRealAmount() {
-            return this.currentYear < (new Date()).getFullYear();
+            return this.inputMode === 'closing' || this.focusedYear < (new Date()).getFullYear();
         },
         currentFundings() {
             const currentFundings = this.getCurrentFundings();
@@ -96,7 +124,7 @@ export default {
          * @returns {Array.<PlanFunding>}
          */
         getCurrentFundings() {
-            return this.fundings.find(({ year }) => year === this.currentYear);
+            return this.fundings.find(({ year }) => year === this.focusedYear);
         },
 
         /**
@@ -112,7 +140,7 @@ export default {
             let currentFundings = this.getCurrentFundings();
             if (currentFundings === undefined) {
                 currentFundings = {
-                    year: this.currentYear,
+                    year: this.focusedYear,
                     data: [],
                 };
                 this.fundings.push(currentFundings);
@@ -177,7 +205,7 @@ export default {
          * @returns {undefined}
          */
         showNextYear() {
-            this.currentYear = Math.min(this.maxYear, this.currentYear + 1);
+            this.focusedYear = Math.min(this.maxYear, this.focusedYear + 1);
         },
 
         /**
@@ -186,7 +214,11 @@ export default {
          * @returns {undefined}
          */
         showPreviousYear() {
-            this.currentYear -= 1;
+            if (this.minYear === null) {
+                this.focusedYear -= 1;
+            } else {
+                this.focusedYear = Math.max(this.minYear, this.focusedYear - 1);
+            }
         },
     },
 

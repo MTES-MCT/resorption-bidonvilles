@@ -5,26 +5,6 @@ export default {
 
     props: {
         /**
-         * Wether a real amount can be provided
-         *
-         * @type {Boolean}
-         */
-        allowRealAmount: {
-            type: Boolean,
-            required: true,
-        },
-
-        /**
-         * Index of the row, starting from 0
-         *
-         * @type {Number}
-         */
-        index: {
-            type: Number,
-            required: true,
-        },
-
-        /**
          * @type {PlanFundingData}
          */
         value: {
@@ -34,7 +14,7 @@ export default {
                 return {
                     type: null,
                     amount: 0.0,
-                    realAmount: this.allowRealAmount ? 0.0 : null,
+                    realAmount: null,
                     details: '',
                 };
             },
@@ -50,10 +30,46 @@ export default {
             required: false,
             default: false,
         },
+
+        /**
+         * Index of the row, starting from 0
+         *
+         * @type {Number}
+         */
+        index: {
+            type: Number,
+            required: true,
+        },
+
+        /**
+         * Year related to the row
+         *
+         * @type {Number}
+         */
+        relatedYear: {
+            type: Number,
+            required: true,
+        },
+
+        /**
+         * Input mode
+         *
+         * @see planFunding.js
+         *
+         * @type {"default|"closing"}
+         */
+        inputMode: {
+            type: String,
+            required: false,
+            default: 'default',
+        },
     },
 
 
     data() {
+        const showRealAmount = this.inputMode !== 'default' || !this.isCurrentYear();
+        const allowEdition = !Number.isFinite(this.value.realAmount);
+
         return {
             /**
              * List of funding-types
@@ -62,10 +78,16 @@ export default {
              */
             financeTypes: getConfig().finance_types || [],
 
+            /**
+             *
+             */
+            showRealAmount,
+            allowEdition,
+
             // please see definition of PlanFundingData
             type: this.value.type,
             amount: this.value.amount,
-            realAmount: this.allowRealAmount ? this.value.realAmount : null,
+            realAmount: showRealAmount ? this.value.realAmount : null,
             details: this.value.details,
         };
     },
@@ -74,9 +96,11 @@ export default {
     watch: {
         // two-way binding
         value() {
+            this.showRealAmount = this.inputMode !== 'default' || !this.isCurrentYear();
+            this.allowEdition = !Number.isFinite(this.value.realAmount);
             this.type = this.value.type;
             this.amount = this.value.amount;
-            this.realAmount = this.allowRealAmount ? this.value.realAmount : null;
+            this.realAmount = this.showRealAmount ? this.value.realAmount : null;
             this.details = this.value.details;
         },
 
@@ -96,6 +120,13 @@ export default {
 
 
     methods: {
+        /**
+         *
+         */
+        isCurrentYear() {
+            return (new Date()).getFullYear() === this.relatedYear;
+        },
+
         /**
          * Emits an input for data binding
          *

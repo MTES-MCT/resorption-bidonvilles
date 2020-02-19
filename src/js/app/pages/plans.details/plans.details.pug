@@ -1,6 +1,41 @@
 <div class="page--withMargin">
     <NavBar></NavBar>
-    
+    <div class="alert" v-if="closingAlertStatus !== 'hidden'">
+        <div class="alert-wrapper" ref="wrapper">
+            <header class="alert-header">
+                <hgroup>
+                    <h1 class="alert-title">Confirmez-vous la fermeture du dispositif {{ plan.name }} ?</h1>
+                </hgroup>
+
+                <div class="alert-actionButtons">
+                    <button class="button secondary" @click="setClosingAlertStatus('hidden')" :disabled="closingStatus === 'pending'">Annuler</button>
+                    <button class="button" v-if="closingAlertStatus === 'step1'" @click="checkClosing">Suite</button>
+                    <button class="button" v-if="closingAlertStatus === 'step2'" @click="close" :disabled="closingStatus === 'pending'">Valider</button>
+                </div>
+            </header>
+
+            <section class="alert-body">
+                <div v-if="closingAlertStatus === 'step1'">
+                    <p>Avant de fermer définitivement le dispositif, assurez-vous que les dépenses exécutées et les indicateurs de suivi sont à jour. (Date de la dernière mise à jour : {{ formatDate(plan.last_update / 1000, 'd/m/y') }}). Les indicateurs de suivi peuvent être mis à jour par l’opérateur.<br><br/>Cliquez sur "annuler" pour consulter la fiche du dispositif.</p>
+
+                    <PlanFunding inputMode="closing" v-model="closingData.finances" :minYear="minYear"></PlanFunding>
+                </div>
+
+                <div v-else>
+                    <p><Input id="closedAt" :mandatory="true" type="date" label="Date de fermeture du dispositif" v-model="closingData.closedAt" :disabled="closingStatus === 'pending'" /></p>
+                    <p><Input id="comment" :mandatory="true" type="textarea" label="Commentaire" :description="closingCommentDescription" v-model="closingData.comment" :disabled="closingStatus === 'pending'" /></p>
+                </div>
+
+                <div class="notification error" v-if="closingErrors.length > 0">Une erreur est survenue</div>
+                <p class="error" v-if="closingErrors.length > 0">
+                    <ul>
+                        <li v-for="error in closingErrors">{{ error }}</li>
+                    </ul>
+                </p>
+            </section>
+        </div>
+    </div>
+
     <section class="section-white">
         <div class="container" v-if="status !== 'loaded'">
             <div v-if="!status || status === 'loading'">
@@ -36,6 +71,9 @@
                                 <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
                                 <span>Indicateurs</span>
                             </router-link>
+                            <a v-if="plan && plan.closed_at === null && plan.canClose" class="button" @click="setClosingAlertStatus('step1')">
+                                <span>Fermer le dispositif</span>
+                            </a>
                         </aside>
                     </section>
                 </div>
@@ -61,6 +99,7 @@
                         <div class="dataSection-line">
                             <p class="data"><span class="data-label">Date de début</span><br/>{{ formatDate(plan.started_at / 1000, 'd M y') }}</p>
                             <p v-if="plan.expected_to_end_at" class="data"><span class="data-label">Date de fin prévue</span><br/>{{ formatDate(plan.expected_to_end_at / 1000, 'd M y') }}<br/><strong>Durée prévue : {{ dateDiff(plan.started_at, plan.expected_to_end_at) }}</strong></p>
+                            <p v-if="plan.closed_at" class="data"><span class="data-label">Date de fin</span><br/>{{ formatDate(plan.closed_at / 1000, 'd M y') }}<br/><strong>Durée : {{ dateDiff(plan.started_at, plan.closed_at) }}</strong></p>
                         </div>
 
                         <p class="data-label">Champs d'intervention</p>
@@ -70,6 +109,13 @@
                             <p class="data">
                                 <span class="data-label">Objectifs</span><br/>
                                 <span v-html="escapeHtml(plan.goals).replace(/\n/g, '<br/>')"></span>
+                            </p>
+                        </div>
+
+                        <div class="dataSection-line" v-if="plan.final_comment">
+                            <p class="data">
+                                <span class="data-label">Commentaire</span><br/>
+                                <span v-html="escapeHtml(plan.final_comment).replace(/\n/g, '<br/>')"></span>
                             </p>
                         </div>
                     </article>

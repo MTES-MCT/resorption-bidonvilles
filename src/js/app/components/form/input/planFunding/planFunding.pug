@@ -1,8 +1,8 @@
 <div class="planFunding">
     <header class="planFunding-header">
-        <font-awesome-icon icon="caret-square-left" @click="showPreviousYear" class="planFunding-yearSwitch"></font-awesome-icon>
-        <span>{{ currentYear }} </span>
-        <font-awesome-icon icon="caret-square-right" @click="showNextYear" class="planFunding-yearSwitch" v-bind:class="{ 'planFunding-yearSwitch--disabled': this.currentYear === this.maxYear }"></font-awesome-icon>
+        <font-awesome-icon icon="caret-square-left" @click="showPreviousYear" class="planFunding-yearSwitch" v-bind:class="{ 'planFunding-yearSwitch--disabled': this.focusedYear === this.minYear }"></font-awesome-icon>
+        <span>{{ focusedYear }} </span>
+        <font-awesome-icon icon="caret-square-right" @click="showNextYear" class="planFunding-yearSwitch" v-bind:class="{ 'planFunding-yearSwitch--disabled': this.focusedYear === this.maxYear }"></font-awesome-icon>
     </header>
 
     <table class="table">
@@ -16,8 +16,8 @@
             </tr>
         </thead>
         <tbody>
-            <PlanFundingRow v-for="(funding, index) in currentFundings" :allowRealAmount="allowRealAmount" :index="index" v-model="funding.data" @onremove="removeRow(index)" @input="onRowChange" :disabled="disabled"></PlanFundingRow>
-            <tr>
+            <PlanFundingRow v-for="(funding, index) in currentFundings" :index="index" :inputMode="inputMode" :relatedYear="focusedYear" v-model="funding.data" @onremove="removeRow(index)" @input="onRowChange" :disabled="disabled"></PlanFundingRow>
+            <tr v-if="inputMode === 'default'">
                 <td colspan="5" @click="addRow" class="planFunding-addRow" v-bind:class="{ 'planFunding-addRow--disabled': disabled }">Ajouter une ligne de financement</td>
             </tr>
         </tbody>

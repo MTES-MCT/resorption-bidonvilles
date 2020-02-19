@@ -1,4 +1,4 @@
-import { postApi, getApi } from '#helpers/api/main';
+import { postApi, getApi, patchApi } from '#helpers/api/main';
 
 /**
  * Lists all existing plans
@@ -52,4 +52,14 @@ export async function update(id, data) {
  */
 export async function addState(planId, data) {
     return postApi(`/plans/${planId}/states`, data);
+}
+
+/**
+ *
+ */
+export async function close(planId, data) {
+    return patchApi(`/plans/${planId}`, {
+        operation: 'close',
+        data,
+    });
 }
