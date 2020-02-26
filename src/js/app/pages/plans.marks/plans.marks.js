@@ -60,7 +60,7 @@ export default {
                             inputs: {
                                 etp: {
                                     type: 'etp',
-                                    label: 'Équipe',
+                                    label: 'Nombre d’ETP dédiés par fonction',
                                     mandatory: true,
                                     condition({ date }) {
                                         return !!date;
