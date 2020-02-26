@@ -59,7 +59,7 @@ export default {
                 return 'Précisez les raisons de la fermeture du dispositif';
             }
 
-            return `À la fermeture du dispositif, ${remainingAudience.families} ménage${remainingAudience.families > 1 ? 's' : ''} (soit ${remainingAudience.total} personne${remainingAudience.total > 1 ? 's' : ''}) [nombres issus de la section public] sont identifiés dans le dispositif. Merci de préciser les solutions mobilisées pour ces personnes et les raisons de la fermeture du dispositif.<br /><br />Merci de respecter les règles de confidentialité.Ne pas citer l'identité des individus (Nom, âge, sexe, origine...)`;
+            return `À la fermeture du dispositif, ${remainingAudience.families} ménage${remainingAudience.families > 1 ? 's' : ''} (soit ${remainingAudience.total} personne${remainingAudience.total > 1 ? 's' : ''}) sont identifiés dans le dispositif. Merci de préciser les solutions mobilisées pour ces personnes et les raisons de la fermeture du dispositif.<br /><br />Merci de respecter les règles de confidentialité.Ne pas citer l'identité des individus (Nom, âge, sexe, origine...)`;
         },
         reachedMaxFinanceIndex() {
             if (!this.plan || !this.plan.finances || this.plan.finances.length === 0) {

@@ -16,7 +16,7 @@
 
             <section class="alert-body">
                 <div v-if="closingAlertStatus === 'step1'">
-                    <p>Avant de fermer définitivement le dispositif, assurez-vous que les dépenses exécutées et les indicateurs de suivi sont à jour. (Date de la dernière mise à jour : {{ formatDate(plan.last_update / 1000, 'd/m/y') }}). Les indicateurs de suivi peuvent être mis à jour par l’opérateur.<br><br/>Cliquez sur "annuler" pour consulter la fiche du dispositif.</p>
+                    <p>Avant de fermer définitivement le dispositif, assurez-vous que les indicateurs de suivi renseignés par l'opérateur sont à jour. Pour information, la dernière mise à jour des indicateurs a eu lieu le {{ formatDate(plan.last_update / 1000, 'd/m/y') }}.<br/>Merci de renseigner les dépenses exécutées de l'année en cours et des années précédentes si nécessaire</p>
 
                     <PlanFunding inputMode="closing" v-model="closingData.finances" :minYear="minYear"></PlanFunding>
                 </div>
