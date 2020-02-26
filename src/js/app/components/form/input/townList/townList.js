@@ -217,7 +217,11 @@ export default {
          *
          * @returns {undefined}
          */
-        toggleTown({ id: townId }) {
+        toggleTown({ id: townId }, event) {
+            if (event && event.target && event.target.type === 'checkbox') {
+                return;
+            }
+
             if (this.disabled) {
                 return;
             }
