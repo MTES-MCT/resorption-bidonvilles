@@ -22,7 +22,7 @@
                 </div>
 
                 <div v-else>
-                    <p><Input id="closedAt" :mandatory="true" type="date" label="Date de fermeture du dispositif" v-model="closingData.closedAt" :disabled="closingStatus === 'pending'" /></p>
+                    <p><Input id="closedAt" :mandatory="true" type="date" label="Date de fermeture du dispositif" description="La date de fermeture du dispositif doit être postérieure - ou égale - à la dernière date de mise à jour des indicateurs." v-model="closingData.closedAt" :disabled="closingStatus === 'pending'" /></p>
                     <p><Input id="comment" :mandatory="true" type="textarea" label="Commentaire" :description="closingCommentDescription" v-model="closingData.comment" :disabled="closingStatus === 'pending'" /></p>
                 </div>
 
