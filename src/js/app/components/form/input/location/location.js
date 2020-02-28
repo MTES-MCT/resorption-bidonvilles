@@ -232,7 +232,7 @@ export default {
         setTileLayers() {
             const layers = {
                 Satellite: L.tileLayer.provider('Esri.WorldImagery'),
-                Dessin: L.tileLayer.provider('Wikimedia'),
+                Dessin: L.tileLayer.provider('OpenStreetMap.Mapnik'),
             };
 
             layers.Dessin.addTo(this.map);
