@@ -130,6 +130,21 @@ export default {
                 zoom: 15,
             };
         },
+        hasAccessToWater() {
+            if (!this.edit) {
+                return false;
+            }
+
+            return this.edit.accessToWater === 1;
+        },
+        hasAccessToElectricity() {
+            if (!this.edit) {
+                return false;
+            }
+
+            const type = this.electricityTypes.find(({ id }) => id === this.edit.electricityType);
+            return type && type.label.indexOf('Oui') !== -1; // @todo: aaaaawfuuuuulllyyyyy baaaaaaad...
+        },
     },
     mounted() {
         this.scroll = window.pageYOffset;
@@ -271,7 +286,9 @@ export default {
                 populationMinors: this.town.populationMinors,
                 origins: this.town.socialOrigins.map(origin => origin.id),
                 electricityType: this.town.electricityType.id,
+                electricityComments: this.town.electricityComments || '',
                 accessToWater: boolToYesNoValue(this.town.accessToWater),
+                waterComments: this.town.waterComments || '',
                 trashEvacuation: boolToYesNoValue(this.town.trashEvacuation),
                 solutions: this.town.closingSolutions ? this.closingSolutions.reduce((solutions, solution) => {
                     const newSolutions = Object.assign(solutions, {});
@@ -317,7 +334,9 @@ export default {
                 population_couples: this.edit.populationCouples,
                 population_minors: this.edit.populationMinors,
                 electricity_type: this.edit.electricityType,
+                electricity_comments: this.hasAccessToElectricity ? this.edit.electricityComments : null,
                 access_to_water: this.edit.accessToWater,
+                water_comments: this.hasAccessToWater ? this.edit.waterComments : null,
                 trash_evacuation: this.edit.trashEvacuation,
                 owner_complaint: this.edit.owner_complaint,
                 justice_procedure: this.edit.owner_complaint === 1 ? this.edit.justiceProcedure : undefined,

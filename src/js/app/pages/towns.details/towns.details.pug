@@ -593,6 +593,19 @@
                                 </fieldset>
                             </div>
 
+                            <div class="form__group" v-if="hasAccessToElectricity">
+                                <fieldset>
+                                    <legend v-bind:class="{ error: fieldErrors.electricity_comments }">Modalités d'accès :</legend>
+                                    <p>Exemples : groupe électrogène, raccordement à une usine...</p>
+                                    <p class="error" v-if="fieldErrors.electricity_comments">
+                                        <ul>
+                                            <li v-for="error in fieldErrors.electricity_comments">{{ error }}</li>
+                                        </ul>
+                                    </p>
+                                    <textarea class="input input--textarea" v-model="edit.electricityComments"></textarea>
+                                </fieldset>
+                            </div>
+
                             <div class="form__group">
                                 <fieldset>
                                     <legend v-bind:class="{ error: fieldErrors.access_to_water }">Accès à l'eau :</legend>
@@ -605,6 +618,19 @@
                                         <input type="radio" name="accessToWater" :id="'accessToWater' + index" :value="value.value" v-model="edit.accessToWater">
                                         <label :for="'accessToWater' + index" class="label-inline">{{ value.label }}</label>
                                     </div>
+                                </fieldset>
+                            </div>
+
+                            <div class="form__group" v-if="hasAccessToWater">
+                                <fieldset>
+                                    <legend v-bind:class="{ error: fieldErrors.water_comments }">Modalités d'accès :</legend>
+                                    <p>Exemple : type, nombre, distance…</p>
+                                    <p class="error" v-if="fieldErrors.water_comments">
+                                        <ul>
+                                            <li v-for="error in fieldErrors.water_comments">{{ error }}</li>
+                                        </ul>
+                                    </p>
+                                    <textarea class="input input--textarea" v-model="edit.waterComments"></textarea>
                                 </fieldset>
                             </div>
 
