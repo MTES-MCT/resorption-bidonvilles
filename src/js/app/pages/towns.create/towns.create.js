@@ -181,11 +181,30 @@ export default {
                                         label: 'Accès à l\'électricité',
                                         mandatory: true,
                                     },
+                                    electricityComments: {
+                                        type: 'textarea',
+                                        label: 'Modalités d\'accès',
+                                        description: 'Exemples : groupe électrogène, raccordement à une usine...',
+                                        mandatory: false,
+                                        condition({ electricityType }) {
+                                            const type = electricityTypes.find(({ id }) => id === electricityType);
+                                            return type && type.label.indexOf('Oui') !== -1; // @todo: awfully bad :(
+                                        },
+                                    },
                                     accessToWater: {
                                         type: 'radio',
                                         options: yesNoValues,
                                         label: 'Accès à l\'eau',
                                         mandatory: true,
+                                    },
+                                    waterComments: {
+                                        type: 'textarea',
+                                        label: 'Modalités d\'accès',
+                                        description: 'Exemple : type, nombre, distance…',
+                                        mandatory: false,
+                                        condition({ accessToWater }) {
+                                            return accessToWater === 1;
+                                        },
                                     },
                                     trashEvacuation: {
                                         type: 'radio',
