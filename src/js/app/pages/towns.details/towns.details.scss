@@ -93,6 +93,18 @@
     font-weight: bold;
 }
 
+.town-links--covid {
+    .link {
+        color: $RED;
+    }
+}
+
+.covid-header,
+.comment-form p.covid-header {
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
 .town-main {
     position: relative;
     padding-top: 35px;

@@ -71,9 +71,19 @@ export default {
                 { value: 'granted', label: 'Obtenu' },
             ],
             newComment: '',
+            covidComment: {
+                date: new Date(),
+                description: '',
+                information: false,
+                distribution_de_kits: false,
+                cas_contacts: false,
+                cas_suspects: false,
+                cas_averes: false,
+            },
             sidePanel: null,
             commentError: null,
             commentErrors: {},
+            covidErrors: {},
             edit: null,
             commentEdit: {
                 commentId: null,
@@ -468,6 +478,9 @@ export default {
                     this.commentError = response.user_message;
                     this.commentErrors = response.fields || {};
                 });
+        },
+        addCovidComment() {
+
         },
         formatSolution(solution) {
             const details = [];
