@@ -317,8 +317,14 @@
                                 <p>
                                     <strong>Accès à l'électricité:</strong> {{ town.electricityType.label }}
                                 </p>
+                                <p v-if="town.electricityType.label.indexOf('Oui') !== -1">
+                                    <strong>Modalités d'accès à l'électricité :</strong> {{ town.electricityComments }}
+                                </p>
                                 <p v-if="town.accessToWater !== undefined">
                                     <strong>Accès à l'eau :</strong> {{ town.accessToWater !== null ? (town.accessToWater ? 'oui' : 'non') : 'inconnu' }}
+                                </p>
+                                <p v-if="town.accessToWater === true">
+                                    <strong>Modalités d'accès à l'eau :</strong> {{ town.waterComments }}
                                 </p>
                                 <p v-if="town.trashEvacuation !== undefined">
                                     <strong>Évacuation des déchets :</strong> {{ town.trashEvacuation !== null ? (town.trashEvacuation ? 'oui' : 'non') : 'inconnu' }}
