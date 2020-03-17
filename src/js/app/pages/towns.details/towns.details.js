@@ -460,7 +460,7 @@ export default {
                 description: this.newComment,
             })
                 .then((response) => {
-                    this.town.comments = response.comments;
+                    this.town.comments.regular = response.comments;
                     this.newComment = '';
                     this.newStep = '';
                 })
@@ -524,7 +524,7 @@ export default {
 
             editComment(this.$route.params.id, comment.id, { description: this.commentEdit.value })
                 .then((response) => {
-                    this.town.comments = response.comments;
+                    this.town.comments.regular = response.comments;
                     this.commentEdit.commentId = null;
                     this.commentEdit.value = null;
                     this.commentEdit.pending = false;
@@ -560,7 +560,7 @@ export default {
             }, 100);
         },
         onCommentDeleted() {
-            this.town.comments = this.town.comments.filter(({ id }) => id !== this.commentToBeDeleted.id);
+            this.town.comments.regular = this.town.comments.regular.filter(({ id }) => id !== this.commentToBeDeleted.id);
             this.commentToBeDeleted = null;
 
             notify({
