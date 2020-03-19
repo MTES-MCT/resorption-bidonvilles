@@ -222,9 +222,10 @@
                                     <h1>Ajouter un commentaire COVID-19</h1>
                                     <p>Merci de respecter les règles de confidentialité. Ne pas citer l’identité des individus (Nom, âge, sexe, origine...)</p>
 
-                                    <p class="error" v-if="covidErrors.description">
+                                    <p class="covid-header error" v-if="covidErrors.length > 0">
+                                        <span class="error">Le fomulaire comporte des erreurs :</span>
                                         <ul>
-                                            <li v-for="error in covidErrors.description">{{ error }}</li>
+                                            <li v-for="error in covidErrors">{{ error }}</li>
                                         </ul>
                                     </p>
 

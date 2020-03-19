@@ -39,7 +39,8 @@ function handleRequestResponse(success, failure) {
     }
 
     if (this.status !== 200) {
-        switch (response && response.error && response.error.code) {
+        const errorObject = (response && response.error) || response || {};
+        switch (errorObject.code) {
             // handle generic errors
             case ERRORS.MISSING_TOKEN:
             case ERRORS.EXPIRED_OR_INVALID_TOKEN:
@@ -49,7 +50,7 @@ function handleRequestResponse(success, failure) {
 
             // for everything else, let the current component decide what's best
             default:
-                failure((response && response.error) || {
+                failure(errorObject.user_message ? errorObject : {
                     user_message: 'Une erreur inconnue est survenue',
                     developer_message: 'The server responded with an error status but did not provide error details',
                 });

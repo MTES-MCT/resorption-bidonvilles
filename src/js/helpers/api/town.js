@@ -103,6 +103,18 @@ export function addComment(id, data) {
 }
 
 /**
+ * Adds a covid comment to a town
+ *
+ * @param {string}                 id   Town id
+ * @param {ShantytownCovidComment_Data} data Comment data
+ *
+ * @returns {Promise}
+ */
+export function addCovidComment(id, data) {
+    return postApi(`/towns/${id}/covidComments`, data);
+}
+
+/**
  * Edits a comment from a town
  *
  * @param {string}                 townId    Town id

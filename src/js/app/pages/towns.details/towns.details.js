@@ -5,7 +5,7 @@ import NavBar from '#app/layouts/navbar/navbar.vue';
 import Map from '#app/components/map/map.vue';
 import CommentDeletion from '#app/components/comment-deletion/comment-deletion.vue';
 import {
-    get, close, edit, destroy, addComment, editComment,
+    get, close, edit, destroy, addComment, editComment, addCovidComment,
 } from '#helpers/api/town';
 import { get as getConfig, hasPermission } from '#helpers/api/config';
 import { notify } from '#helpers/notificationHelper';
@@ -83,7 +83,7 @@ export default {
             sidePanel: null,
             commentError: null,
             commentErrors: {},
-            covidErrors: {},
+            covidErrors: [],
             edit: null,
             commentEdit: {
                 commentId: null,
@@ -480,7 +480,29 @@ export default {
                 });
         },
         addCovidComment() {
+            // clean previous errors
+            this.covidErrors = [];
 
+            addCovidComment(this.$route.params.id, this.covidComment)
+                .then((response) => {
+                    this.town.comments.covid = response;
+                    this.covidComment = {
+                        date: new Date(),
+                        description: '',
+                        information: false,
+                        distribution_de_kits: false,
+                        cas_contacts: false,
+                        cas_suspects: false,
+                        cas_averes: false,
+                    };
+                })
+                .catch((response) => {
+                    const fields = response.fields || {};
+                    this.covidErrors = Object.keys(fields).reduce((acc, key) => [
+                        ...acc,
+                        ...fields[key],
+                    ], []);
+                });
         },
         formatSolution(solution) {
             const details = [];
