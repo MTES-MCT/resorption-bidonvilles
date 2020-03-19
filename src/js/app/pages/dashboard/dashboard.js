@@ -27,15 +27,15 @@ import iconOrigins from '/img/origins.svg';
  */
 function getDefaultZoomFor(locationType) {
     switch (locationType) {
-    case 'nation':
-    case 'region':
-        return 6;
+        case 'nation':
+        case 'region':
+            return 6;
 
-    default:
-    case 'departement':
-    case 'epci':
-    case 'city':
-        return 10;
+        default:
+        case 'departement':
+        case 'epci':
+        case 'city':
+            return 10;
     }
 }
 
@@ -168,141 +168,141 @@ export default {
 
             this.allowedFilters.forEach((filterGroup) => {
                 switch (filterGroup.id) {
-                case 'fieldType': {
-                    const allowedFieldTypes = filterGroup.options
-                        .filter(option => option.checked)
-                        .map(option => option.value);
+                    case 'fieldType': {
+                        const allowedFieldTypes = filterGroup.options
+                            .filter(option => option.checked)
+                            .map(option => option.value);
 
-                    visibleTowns = visibleTowns.filter(town => town.fieldType && allowedFieldTypes.indexOf(town.fieldType.id) !== -1);
-                }
-                    break;
-
-                case 'population': {
-                    const disallowedPopulation = filterGroup.options
-                        .filter(option => !option.checked)
-                        .map(option => option.value);
-
-                    disallowedPopulation.forEach((value) => {
-                        if (value === null) {
-                            visibleTowns = visibleTowns.filter(town => town.populationTotal !== null);
-                            return;
-                        }
-
-                        let [min, max] = value.split('-');
-                        min = parseInt(min, 10);
-                        max = parseInt(max, 10);
-
-                        visibleTowns = visibleTowns.filter((town) => {
-                            if (town.populationTotal === null) {
-                                return true;
-                            }
-
-                            if (!Number.isNaN(min)
-                                    && !Number.isNaN(max)) {
-                                return town.populationTotal < min || town.populationTotal > max;
-                            }
-
-                            if (!Number.isNaN(min)) {
-                                return town.populationTotal < min;
-                            }
-
-                            if (!Number.isNaN(max)) {
-                                return town.populationTotal > max;
-                            }
-
-                            return true;
-                        });
-                    });
-                }
-                    break;
-
-                case 'justice': {
-                    const disallowedJustice = filterGroup.options
-                        .filter(option => !option.checked)
-                        .map(option => option.value);
-
-                    disallowedJustice.forEach((value) => {
-                        switch (value) {
-                        case 'unknown':
-                            visibleTowns = visibleTowns.filter(town => town.ownerComplaint !== null);
-                            break;
-
-                        case 'none':
-                            visibleTowns = visibleTowns.filter(town => town.ownerComplaint !== false);
-                            break;
-
-                        case 'ownerComplaint':
-                            visibleTowns = visibleTowns.filter(town => town.ownerComplaint !== true || town.justiceProcedure === true);
-                            break;
-
-                        case 'justiceProcedure':
-                            visibleTowns = visibleTowns.filter(town => town.justiceProcedure !== true || town.justiceRendered === true);
-                            break;
-
-                        case 'justiceRendered':
-                            visibleTowns = visibleTowns.filter(town => town.justiceRendered !== true);
-                            break;
-
-                        default:
-                            break;
-                        }
-                    });
-                }
-                    break;
-
-                case 'police': {
-                    const disallowedPolice = filterGroup.options
-                        .filter(option => !option.checked)
-                        .map(option => option.value);
-
-                    if (disallowedPolice.length > 0) {
-                        visibleTowns = visibleTowns.filter(town => disallowedPolice.indexOf(town.policeStatus) === -1);
+                        visibleTowns = visibleTowns.filter(town => town.fieldType && allowedFieldTypes.indexOf(town.fieldType.id) !== -1);
                     }
-                }
-                    break;
+                        break;
 
-                case 'status': {
-                    const disallowedStatuses = filterGroup.options
-                        .filter(option => !option.checked)
-                        .map(option => option.value);
+                    case 'population': {
+                        const disallowedPopulation = filterGroup.options
+                            .filter(option => !option.checked)
+                            .map(option => option.value);
 
-                    disallowedStatuses.forEach((value) => {
-                        if (value === 'closed') {
-                            visibleTowns = visibleTowns.filter(town => town.status === 'open');
-                        } else if (value === 'opened') {
-                            visibleTowns = visibleTowns.filter(town => town.status !== 'open');
+                        disallowedPopulation.forEach((value) => {
+                            if (value === null) {
+                                visibleTowns = visibleTowns.filter(town => town.populationTotal !== null);
+                                return;
+                            }
+
+                            let [min, max] = value.split('-');
+                            min = parseInt(min, 10);
+                            max = parseInt(max, 10);
+
+                            visibleTowns = visibleTowns.filter((town) => {
+                                if (town.populationTotal === null) {
+                                    return true;
+                                }
+
+                                if (!Number.isNaN(min)
+                                    && !Number.isNaN(max)) {
+                                    return town.populationTotal < min || town.populationTotal > max;
+                                }
+
+                                if (!Number.isNaN(min)) {
+                                    return town.populationTotal < min;
+                                }
+
+                                if (!Number.isNaN(max)) {
+                                    return town.populationTotal > max;
+                                }
+
+                                return true;
+                            });
+                        });
+                    }
+                        break;
+
+                    case 'justice': {
+                        const disallowedJustice = filterGroup.options
+                            .filter(option => !option.checked)
+                            .map(option => option.value);
+
+                        disallowedJustice.forEach((value) => {
+                            switch (value) {
+                                case 'unknown':
+                                    visibleTowns = visibleTowns.filter(town => town.ownerComplaint !== null);
+                                    break;
+
+                                case 'none':
+                                    visibleTowns = visibleTowns.filter(town => town.ownerComplaint !== false);
+                                    break;
+
+                                case 'ownerComplaint':
+                                    visibleTowns = visibleTowns.filter(town => town.ownerComplaint !== true || town.justiceProcedure === true);
+                                    break;
+
+                                case 'justiceProcedure':
+                                    visibleTowns = visibleTowns.filter(town => town.justiceProcedure !== true || town.justiceRendered === true);
+                                    break;
+
+                                case 'justiceRendered':
+                                    visibleTowns = visibleTowns.filter(town => town.justiceRendered !== true);
+                                    break;
+
+                                default:
+                                    break;
+                            }
+                        });
+                    }
+                        break;
+
+                    case 'police': {
+                        const disallowedPolice = filterGroup.options
+                            .filter(option => !option.checked)
+                            .map(option => option.value);
+
+                        if (disallowedPolice.length > 0) {
+                            visibleTowns = visibleTowns.filter(town => disallowedPolice.indexOf(town.policeStatus) === -1);
                         }
-                    });
-                }
-                    break;
+                    }
+                        break;
 
-                case 'ownerType': {
-                    const allowedOwnerTypes = filterGroup.options
-                        .filter(option => option.checked)
-                        .map(option => option.value);
+                    case 'status': {
+                        const disallowedStatuses = filterGroup.options
+                            .filter(option => !option.checked)
+                            .map(option => option.value);
 
-                    visibleTowns = visibleTowns.filter(town => town.ownerType && allowedOwnerTypes.indexOf(town.ownerType.id) !== -1);
-                }
-                    break;
+                        disallowedStatuses.forEach((value) => {
+                            if (value === 'closed') {
+                                visibleTowns = visibleTowns.filter(town => town.status === 'open');
+                            } else if (value === 'opened') {
+                                visibleTowns = visibleTowns.filter(town => town.status !== 'open');
+                            }
+                        });
+                    }
+                        break;
 
-                case 'socialOrigin': {
-                    const disallowedOrigins = filterGroup.options
-                        .filter(option => !option.checked)
-                        .map(option => option.value);
+                    case 'ownerType': {
+                        const allowedOwnerTypes = filterGroup.options
+                            .filter(option => option.checked)
+                            .map(option => option.value);
 
-                    disallowedOrigins.forEach((origin) => {
-                        if (origin === -1) {
-                            visibleTowns = visibleTowns.filter(town => town.socialOrigins.length > 0);
-                        } else if (origin === -2) {
-                            visibleTowns = visibleTowns.filter(town => town.socialOrigins.length <= 1);
-                        } else {
-                            visibleTowns = visibleTowns.filter(town => town.socialOrigins.length !== 1 || !town.socialOrigins.some(o => o.id === origin));
-                        }
-                    });
-                }
-                    break;
+                        visibleTowns = visibleTowns.filter(town => town.ownerType && allowedOwnerTypes.indexOf(town.ownerType.id) !== -1);
+                    }
+                        break;
 
-                default:
+                    case 'socialOrigin': {
+                        const disallowedOrigins = filterGroup.options
+                            .filter(option => !option.checked)
+                            .map(option => option.value);
+
+                        disallowedOrigins.forEach((origin) => {
+                            if (origin === -1) {
+                                visibleTowns = visibleTowns.filter(town => town.socialOrigins.length > 0);
+                            } else if (origin === -2) {
+                                visibleTowns = visibleTowns.filter(town => town.socialOrigins.length <= 1);
+                            } else {
+                                visibleTowns = visibleTowns.filter(town => town.socialOrigins.length !== 1 || !town.socialOrigins.some(o => o.id === origin));
+                            }
+                        });
+                    }
+                        break;
+
+                    default:
                 }
             });
 
