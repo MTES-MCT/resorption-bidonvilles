@@ -65,6 +65,17 @@ export default {
             permission: getPermission('shantytown.list'),
             filters: [
                 {
+                    icon: iconStatus,
+                    label: 'Accès à l\'eau',
+                    id: 'accessToWater',
+                    options: [
+                        { value: true, label: 'Oui', checked: true },
+                        { value: false, label: 'Non', checked: true },
+                        { value: null, label: 'Inconnu', checked: true },
+                    ],
+                    opened: true,
+                },
+                {
                     icon: iconType,
                     label: 'Types de site',
                     id: 'fieldType',
@@ -125,6 +136,15 @@ export default {
 
             this.allowedFilters.forEach((filterGroup) => {
                 switch (filterGroup.id) {
+                    case 'accessToWater': {
+                        const allowed = filterGroup.options
+                            .filter(option => option.checked)
+                            .map(option => option.value);
+
+                        visibleTowns = visibleTowns.filter(town => allowed.indexOf(town.accessToWater) !== -1);
+                    }
+                        break;
+
                     case 'fieldType': {
                         const allowedFieldTypes = filterGroup.options
                             .filter(option => option.checked)
