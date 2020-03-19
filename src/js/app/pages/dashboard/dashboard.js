@@ -83,31 +83,6 @@ export default {
                     ],
                 },
                 {
-                    icon: iconJustice,
-                    label: 'Procédure judiciaire',
-                    id: 'justice',
-                    permissions: ['data_justice'],
-                    options: [
-                        { value: 'unknown', label: 'Inconnue', checked: true },
-                        { value: 'none', label: 'Aucune', checked: true },
-                        { value: 'ownerComplaint', label: 'Plainte déposée', checked: true },
-                        { value: 'justiceProcedure', label: 'Procédure en cours', checked: true },
-                        { value: 'justiceRendered', label: 'Décision rendue', checked: true },
-                    ],
-                },
-                {
-                    icon: iconJustice,
-                    label: 'Concours de Force Publique',
-                    id: 'police',
-                    permissions: ['data_justice'],
-                    options: [
-                        { value: null, label: 'Inconnu', checked: true },
-                        { value: 'none', label: 'Non demandé', checked: true },
-                        { value: 'requested', label: 'Demandé', checked: true },
-                        { value: 'granted', label: 'Obtenu', checked: true },
-                    ],
-                },
-                {
                     icon: iconStatus,
                     label: 'Statut des sites',
                     id: 'status',
@@ -125,24 +100,6 @@ export default {
                         label: type.label,
                         checked: true,
                     })),
-                },
-                {
-                    icon: iconOrigins,
-                    label: 'Origines',
-                    id: 'socialOrigin',
-                    options: [{
-                        value: -1,
-                        label: 'Inconnues',
-                        checked: true,
-                    }].concat(getConfig().social_origins.map(origin => ({
-                        value: origin.id,
-                        label: origin.label,
-                        checked: true,
-                    }))).concat([{
-                        value: -2,
-                        label: 'Mixtes',
-                        checked: true,
-                    }]),
                 },
             ],
         };
@@ -216,51 +173,6 @@ export default {
                     }
                         break;
 
-                    case 'justice': {
-                        const disallowedJustice = filterGroup.options
-                            .filter(option => !option.checked)
-                            .map(option => option.value);
-
-                        disallowedJustice.forEach((value) => {
-                            switch (value) {
-                                case 'unknown':
-                                    visibleTowns = visibleTowns.filter(town => town.ownerComplaint !== null);
-                                    break;
-
-                                case 'none':
-                                    visibleTowns = visibleTowns.filter(town => town.ownerComplaint !== false);
-                                    break;
-
-                                case 'ownerComplaint':
-                                    visibleTowns = visibleTowns.filter(town => town.ownerComplaint !== true || town.justiceProcedure === true);
-                                    break;
-
-                                case 'justiceProcedure':
-                                    visibleTowns = visibleTowns.filter(town => town.justiceProcedure !== true || town.justiceRendered === true);
-                                    break;
-
-                                case 'justiceRendered':
-                                    visibleTowns = visibleTowns.filter(town => town.justiceRendered !== true);
-                                    break;
-
-                                default:
-                                    break;
-                            }
-                        });
-                    }
-                        break;
-
-                    case 'police': {
-                        const disallowedPolice = filterGroup.options
-                            .filter(option => !option.checked)
-                            .map(option => option.value);
-
-                        if (disallowedPolice.length > 0) {
-                            visibleTowns = visibleTowns.filter(town => disallowedPolice.indexOf(town.policeStatus) === -1);
-                        }
-                    }
-                        break;
-
                     case 'status': {
                         const disallowedStatuses = filterGroup.options
                             .filter(option => !option.checked)
@@ -282,23 +194,6 @@ export default {
                             .map(option => option.value);
 
                         visibleTowns = visibleTowns.filter(town => town.ownerType && allowedOwnerTypes.indexOf(town.ownerType.id) !== -1);
-                    }
-                        break;
-
-                    case 'socialOrigin': {
-                        const disallowedOrigins = filterGroup.options
-                            .filter(option => !option.checked)
-                            .map(option => option.value);
-
-                        disallowedOrigins.forEach((origin) => {
-                            if (origin === -1) {
-                                visibleTowns = visibleTowns.filter(town => town.socialOrigins.length > 0);
-                            } else if (origin === -2) {
-                                visibleTowns = visibleTowns.filter(town => town.socialOrigins.length <= 1);
-                            } else {
-                                visibleTowns = visibleTowns.filter(town => town.socialOrigins.length !== 1 || !town.socialOrigins.some(o => o.id === origin));
-                            }
-                        });
                     }
                         break;
 
