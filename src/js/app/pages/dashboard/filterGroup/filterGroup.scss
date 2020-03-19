@@ -11,7 +11,8 @@
     > aside {
         padding: 0 15px;
 
-        > img {
+        > img,
+        > svg {
             width: 0;
             height: 0;
         }
@@ -51,9 +52,11 @@
 @media (min-width: 1150px) {
     .filterGroup {
         > aside {
-            > img {
+            > img,
+            > svg.svg-inline--fa.fa-w-11 {
                 width: 25px;
                 height: 25px;
+                color: #ADB9C9;
             }
         }
     }

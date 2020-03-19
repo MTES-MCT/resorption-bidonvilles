@@ -1,10 +1,16 @@
 <div class="filterGroup">
-    <aside><img :src="icon" alt="" /></aside>
+    <aside>
+        <font-awesome-icon v-if="faIcon !== null" :icon="faIcon"></font-awesome-icon>
+        <img v-else :src="icon" alt="" />
+    </aside>
     <main>
         <h1 @click="toggle">{{ label }} <span class="filterGroup-toggle">( {{ toggler }} )</span></h1>
         <div v-for="(option, index) in options" v-if="status === 'open'">
             <input v-model="option.checked" type="checkbox" :id="id + '-' + (option.id || index)" :value="option.value">
-            <label :for="id + '-' + (option.id || index)" class="label-inline">{{ option.label }}</label><br/>
+            <label :for="id + '-' + (option.id || index)" class="label-inline">
+                <font-awesome-icon v-if="option.icon !== undefined" :icon="option.icon.id" :style="{ color: '#' + option.icon.color }" fixed-width></font-awesome-icon>
+                <span>{{ option.label }}</span>
+            </label><br/>
         </div>
     </main>
 </fieldset>

@@ -65,13 +65,19 @@ export default {
             permission: getPermission('shantytown.list'),
             filters: [
                 {
-                    icon: iconStatus,
+                    faIcon: 'tint',
                     label: 'Accès à l\'eau',
                     id: 'accessToWater',
                     options: [
-                        { value: true, label: 'Oui', checked: true },
-                        { value: false, label: 'Non', checked: true },
-                        { value: null, label: 'Inconnu', checked: true },
+                        {
+                            value: true, label: 'Oui', checked: true, icon: { id: 'tint', color: '00a0e3' },
+                        },
+                        {
+                            value: false, label: 'Non', checked: true, icon: { id: 'tint-slash', color: 'ADB9C9' },
+                        },
+                        {
+                            value: null, label: 'Inconnu', checked: true, icon: { id: 'question', color: 'ADB9C9' },
+                        },
                     ],
                     opened: true,
                 },
