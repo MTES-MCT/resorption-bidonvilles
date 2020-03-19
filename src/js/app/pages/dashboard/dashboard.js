@@ -27,15 +27,15 @@ import iconOrigins from '/img/origins.svg';
  */
 function getDefaultZoomFor(locationType) {
     switch (locationType) {
-    case 'nation':
-    case 'region':
-        return 6;
+        case 'nation':
+        case 'region':
+            return 6;
 
-    default:
-    case 'departement':
-    case 'epci':
-    case 'city':
-        return 10;
+        default:
+        case 'departement':
+        case 'epci':
+        case 'city':
+            return 10;
     }
 }
 
@@ -65,6 +65,23 @@ export default {
             permission: getPermission('shantytown.list'),
             filters: [
                 {
+                    faIcon: 'tint',
+                    label: 'Accès à l\'eau',
+                    id: 'accessToWater',
+                    options: [
+                        {
+                            value: true, label: 'Oui', checked: true, icon: { id: 'tint', color: '00a0e3' },
+                        },
+                        {
+                            value: false, label: 'Non', checked: true, icon: { id: 'tint-slash', color: 'ADB9C9' },
+                        },
+                        {
+                            value: null, label: 'Inconnu', checked: true, icon: { id: 'question', color: 'ADB9C9' },
+                        },
+                    ],
+                    opened: true,
+                },
+                {
                     icon: iconType,
                     label: 'Types de site',
                     id: 'fieldType',
@@ -80,31 +97,6 @@ export default {
                         { value: '-9', label: 'Moins de 10 personnes', checked: true },
                         { value: '10-99', label: 'Entre 10 et 99 personnes', checked: true },
                         { value: '100-', label: '100 personnes et plus', checked: true },
-                    ],
-                },
-                {
-                    icon: iconJustice,
-                    label: 'Procédure judiciaire',
-                    id: 'justice',
-                    permissions: ['data_justice'],
-                    options: [
-                        { value: 'unknown', label: 'Inconnue', checked: true },
-                        { value: 'none', label: 'Aucune', checked: true },
-                        { value: 'ownerComplaint', label: 'Plainte déposée', checked: true },
-                        { value: 'justiceProcedure', label: 'Procédure en cours', checked: true },
-                        { value: 'justiceRendered', label: 'Décision rendue', checked: true },
-                    ],
-                },
-                {
-                    icon: iconJustice,
-                    label: 'Concours de Force Publique',
-                    id: 'police',
-                    permissions: ['data_justice'],
-                    options: [
-                        { value: null, label: 'Inconnu', checked: true },
-                        { value: 'none', label: 'Non demandé', checked: true },
-                        { value: 'requested', label: 'Demandé', checked: true },
-                        { value: 'granted', label: 'Obtenu', checked: true },
                     ],
                 },
                 {
@@ -125,24 +117,6 @@ export default {
                         label: type.label,
                         checked: true,
                     })),
-                },
-                {
-                    icon: iconOrigins,
-                    label: 'Origines',
-                    id: 'socialOrigin',
-                    options: [{
-                        value: -1,
-                        label: 'Inconnues',
-                        checked: true,
-                    }].concat(getConfig().social_origins.map(origin => ({
-                        value: origin.id,
-                        label: origin.label,
-                        checked: true,
-                    }))).concat([{
-                        value: -2,
-                        label: 'Mixtes',
-                        checked: true,
-                    }]),
                 },
             ],
         };
@@ -168,141 +142,88 @@ export default {
 
             this.allowedFilters.forEach((filterGroup) => {
                 switch (filterGroup.id) {
-                case 'fieldType': {
-                    const allowedFieldTypes = filterGroup.options
-                        .filter(option => option.checked)
-                        .map(option => option.value);
+                    case 'accessToWater': {
+                        const allowed = filterGroup.options
+                            .filter(option => option.checked)
+                            .map(option => option.value);
 
-                    visibleTowns = visibleTowns.filter(town => town.fieldType && allowedFieldTypes.indexOf(town.fieldType.id) !== -1);
-                }
-                    break;
-
-                case 'population': {
-                    const disallowedPopulation = filterGroup.options
-                        .filter(option => !option.checked)
-                        .map(option => option.value);
-
-                    disallowedPopulation.forEach((value) => {
-                        if (value === null) {
-                            visibleTowns = visibleTowns.filter(town => town.populationTotal !== null);
-                            return;
-                        }
-
-                        let [min, max] = value.split('-');
-                        min = parseInt(min, 10);
-                        max = parseInt(max, 10);
-
-                        visibleTowns = visibleTowns.filter((town) => {
-                            if (town.populationTotal === null) {
-                                return true;
-                            }
-
-                            if (!Number.isNaN(min)
-                                    && !Number.isNaN(max)) {
-                                return town.populationTotal < min || town.populationTotal > max;
-                            }
-
-                            if (!Number.isNaN(min)) {
-                                return town.populationTotal < min;
-                            }
-
-                            if (!Number.isNaN(max)) {
-                                return town.populationTotal > max;
-                            }
-
-                            return true;
-                        });
-                    });
-                }
-                    break;
-
-                case 'justice': {
-                    const disallowedJustice = filterGroup.options
-                        .filter(option => !option.checked)
-                        .map(option => option.value);
-
-                    disallowedJustice.forEach((value) => {
-                        switch (value) {
-                        case 'unknown':
-                            visibleTowns = visibleTowns.filter(town => town.ownerComplaint !== null);
-                            break;
-
-                        case 'none':
-                            visibleTowns = visibleTowns.filter(town => town.ownerComplaint !== false);
-                            break;
-
-                        case 'ownerComplaint':
-                            visibleTowns = visibleTowns.filter(town => town.ownerComplaint !== true || town.justiceProcedure === true);
-                            break;
-
-                        case 'justiceProcedure':
-                            visibleTowns = visibleTowns.filter(town => town.justiceProcedure !== true || town.justiceRendered === true);
-                            break;
-
-                        case 'justiceRendered':
-                            visibleTowns = visibleTowns.filter(town => town.justiceRendered !== true);
-                            break;
-
-                        default:
-                            break;
-                        }
-                    });
-                }
-                    break;
-
-                case 'police': {
-                    const disallowedPolice = filterGroup.options
-                        .filter(option => !option.checked)
-                        .map(option => option.value);
-
-                    if (disallowedPolice.length > 0) {
-                        visibleTowns = visibleTowns.filter(town => disallowedPolice.indexOf(town.policeStatus) === -1);
+                        visibleTowns = visibleTowns.filter(town => allowed.indexOf(town.accessToWater) !== -1);
                     }
-                }
-                    break;
+                        break;
 
-                case 'status': {
-                    const disallowedStatuses = filterGroup.options
-                        .filter(option => !option.checked)
-                        .map(option => option.value);
+                    case 'fieldType': {
+                        const allowedFieldTypes = filterGroup.options
+                            .filter(option => option.checked)
+                            .map(option => option.value);
 
-                    disallowedStatuses.forEach((value) => {
-                        if (value === 'closed') {
-                            visibleTowns = visibleTowns.filter(town => town.status === 'open');
-                        } else if (value === 'opened') {
-                            visibleTowns = visibleTowns.filter(town => town.status !== 'open');
-                        }
-                    });
-                }
-                    break;
+                        visibleTowns = visibleTowns.filter(town => town.fieldType && allowedFieldTypes.indexOf(town.fieldType.id) !== -1);
+                    }
+                        break;
 
-                case 'ownerType': {
-                    const allowedOwnerTypes = filterGroup.options
-                        .filter(option => option.checked)
-                        .map(option => option.value);
+                    case 'population': {
+                        const disallowedPopulation = filterGroup.options
+                            .filter(option => !option.checked)
+                            .map(option => option.value);
 
-                    visibleTowns = visibleTowns.filter(town => town.ownerType && allowedOwnerTypes.indexOf(town.ownerType.id) !== -1);
-                }
-                    break;
+                        disallowedPopulation.forEach((value) => {
+                            if (value === null) {
+                                visibleTowns = visibleTowns.filter(town => town.populationTotal !== null);
+                                return;
+                            }
 
-                case 'socialOrigin': {
-                    const disallowedOrigins = filterGroup.options
-                        .filter(option => !option.checked)
-                        .map(option => option.value);
+                            let [min, max] = value.split('-');
+                            min = parseInt(min, 10);
+                            max = parseInt(max, 10);
 
-                    disallowedOrigins.forEach((origin) => {
-                        if (origin === -1) {
-                            visibleTowns = visibleTowns.filter(town => town.socialOrigins.length > 0);
-                        } else if (origin === -2) {
-                            visibleTowns = visibleTowns.filter(town => town.socialOrigins.length <= 1);
-                        } else {
-                            visibleTowns = visibleTowns.filter(town => town.socialOrigins.length !== 1 || !town.socialOrigins.some(o => o.id === origin));
-                        }
-                    });
-                }
-                    break;
+                            visibleTowns = visibleTowns.filter((town) => {
+                                if (town.populationTotal === null) {
+                                    return true;
+                                }
 
-                default:
+                                if (!Number.isNaN(min)
+                                    && !Number.isNaN(max)) {
+                                    return town.populationTotal < min || town.populationTotal > max;
+                                }
+
+                                if (!Number.isNaN(min)) {
+                                    return town.populationTotal < min;
+                                }
+
+                                if (!Number.isNaN(max)) {
+                                    return town.populationTotal > max;
+                                }
+
+                                return true;
+                            });
+                        });
+                    }
+                        break;
+
+                    case 'status': {
+                        const disallowedStatuses = filterGroup.options
+                            .filter(option => !option.checked)
+                            .map(option => option.value);
+
+                        disallowedStatuses.forEach((value) => {
+                            if (value === 'closed') {
+                                visibleTowns = visibleTowns.filter(town => town.status === 'open');
+                            } else if (value === 'opened') {
+                                visibleTowns = visibleTowns.filter(town => town.status !== 'open');
+                            }
+                        });
+                    }
+                        break;
+
+                    case 'ownerType': {
+                        const allowedOwnerTypes = filterGroup.options
+                            .filter(option => option.checked)
+                            .map(option => option.value);
+
+                        visibleTowns = visibleTowns.filter(town => town.ownerType && allowedOwnerTypes.indexOf(town.ownerType.id) !== -1);
+                    }
+                        break;
+
+                    default:
                 }
             });
 

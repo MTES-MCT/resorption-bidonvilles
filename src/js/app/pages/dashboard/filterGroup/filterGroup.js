@@ -1,7 +1,16 @@
 export default {
     props: {
         id: String,
-        icon: String,
+        icon: {
+            type: String,
+            required: false,
+            default: null,
+        },
+        faIcon: {
+            type: String,
+            required: false,
+            default: null,
+        },
         label: String,
         options: Array,
         opened: {
