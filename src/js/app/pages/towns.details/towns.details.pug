@@ -231,7 +231,7 @@
 
                                     <div class="covid-header">
                                         <label>Date :</label>
-                                        <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" :full-month-name="true" :format="'dd MMMM yyyy'" v-model="covidComment.date"></datepicker>
+                                        <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ to: town ? new Date(town.builtAt * 1000) : undefined, from: new Date() }" :full-month-name="true" :format="'dd MMMM yyyy'" v-model="covidComment.date"></datepicker>
                                     </div>
 
                                     <div class="input__group">
