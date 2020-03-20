@@ -5,7 +5,7 @@ import NavBar from '#app/layouts/navbar/navbar.vue';
 import Map from '#app/components/map/map.vue';
 import CommentDeletion from '#app/components/comment-deletion/comment-deletion.vue';
 import {
-    get, close, edit, destroy, addComment, editComment,
+    get, close, edit, destroy, addComment, editComment, addCovidComment,
 } from '#helpers/api/town';
 import { get as getConfig, hasPermission } from '#helpers/api/config';
 import { notify } from '#helpers/notificationHelper';
@@ -71,9 +71,30 @@ export default {
                 { value: 'granted', label: 'Obtenu' },
             ],
             newComment: '',
+            covidComment: {
+                date: new Date(),
+                description: '',
+                equipe_maraude: false,
+                equipe_sanitaire: false,
+                equipe_accompagnement: false,
+                distribution_alimentaire: false,
+                personnes_orientees: false,
+                personnes_avec_symptomes: false,
+                besoin_action: false,
+            },
+            covidTags: [
+                { prop: 'equipe_maraude', label: 'Équipe de maraude', type: 'warning' },
+                { prop: 'equipe_sanitaire', label: 'Équipe sanitaire', type: 'warning' },
+                { prop: 'equipe_accompagnement', label: 'Équipe d\'accompagnement', type: 'warning' },
+                { prop: 'distribution_alimentaire', label: 'Distribution d\'aide alimentaire', type: 'warning' },
+                { prop: 'personnes_orientees', label: 'Personne(s) orientée(s) vers un centre d\'hébergement spécialisé (desserrement)', type: 'error' },
+                { prop: 'personnes_avec_symptomes', label: 'Personne(s) avec des symptômes Covid-19', type: 'error' },
+                { prop: 'besoin_action', label: 'Besoin d\'une action prioritaire', type: 'error' },
+            ],
             sidePanel: null,
             commentError: null,
             commentErrors: {},
+            covidErrors: [],
             edit: null,
             commentEdit: {
                 commentId: null,
@@ -92,17 +113,17 @@ export default {
             }
 
             switch (this.town.status) {
-            case 'open':
-                return 'existe';
+                case 'open':
+                    return 'existe';
 
-            case 'closed_by_justice':
-            case 'closed_by_admin':
-            case 'other':
-            case 'unknown':
-                return 'disparu';
+                case 'closed_by_justice':
+                case 'closed_by_admin':
+                case 'other':
+                case 'unknown':
+                    return 'disparu';
 
-            default:
-                return 'inconnu';
+                default:
+                    return 'inconnu';
             }
         },
         statusLabel() {
@@ -111,17 +132,17 @@ export default {
             }
 
             switch (this.town.status) {
-            case 'closed_by_justice':
-                return 'Exécution d\'une décision de justice';
+                case 'closed_by_justice':
+                    return 'Exécution d\'une décision de justice';
 
-            case 'closed_by_admin':
-                return 'Exécution d\'une décision administrative';
+                case 'closed_by_admin':
+                    return 'Exécution d\'une décision administrative';
 
-            case 'other':
-                return 'Autre';
+                case 'other':
+                    return 'Autre';
 
-            default:
-                return 'inconnu';
+                default:
+                    return 'inconnu';
             }
         },
         center() {
@@ -460,13 +481,40 @@ export default {
                 description: this.newComment,
             })
                 .then((response) => {
-                    this.town.comments = response.comments;
+                    this.town.comments.regular = response.comments;
                     this.newComment = '';
                     this.newStep = '';
                 })
                 .catch((response) => {
                     this.commentError = response.user_message;
                     this.commentErrors = response.fields || {};
+                });
+        },
+        addCovidComment() {
+            // clean previous errors
+            this.covidErrors = [];
+
+            addCovidComment(this.$route.params.id, this.covidComment)
+                .then((response) => {
+                    this.town.comments.covid = response;
+                    this.covidComment = {
+                        date: new Date(),
+                        description: '',
+                        equipe_maraude: false,
+                        equipe_sanitaire: false,
+                        equipe_accompagnement: false,
+                        distribution_alimentaire: false,
+                        personnes_orientees: false,
+                        personnes_avec_symptomes: false,
+                        besoin_action: false,
+                    };
+                })
+                .catch((response) => {
+                    const fields = response.fields || {};
+                    this.covidErrors = Object.keys(fields).reduce((acc, key) => [
+                        ...acc,
+                        ...fields[key],
+                    ], []);
                 });
         },
         formatSolution(solution) {
@@ -524,7 +572,7 @@ export default {
 
             editComment(this.$route.params.id, comment.id, { description: this.commentEdit.value })
                 .then((response) => {
-                    this.town.comments = response.comments;
+                    this.town.comments.regular = response.comments;
                     this.commentEdit.commentId = null;
                     this.commentEdit.value = null;
                     this.commentEdit.pending = false;
@@ -560,7 +608,7 @@ export default {
             }, 100);
         },
         onCommentDeleted() {
-            this.town.comments = this.town.comments.filter(({ id }) => id !== this.commentToBeDeleted.id);
+            this.town.comments.regular = this.town.comments.regular.filter(({ id }) => id !== this.commentToBeDeleted.id);
             this.commentToBeDeleted = null;
 
             notify({

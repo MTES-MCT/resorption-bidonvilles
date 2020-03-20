@@ -34,7 +34,8 @@ h6 {
     padding-bottom: 50px;
 }
 
-label.error {
+label.error,
+span.error {
     color: #d63626;
     font-weight: bold;
 }
@@ -384,6 +385,10 @@ table.bordered {
 
 .rbTag--warning {
     background: $SERENADE;
+}
+
+.rbTag--error {
+    background: $SHILO;
 }
 
 .locationPoint {
