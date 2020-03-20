@@ -379,6 +379,10 @@ table.bordered {
     background: $SERENADE;
 }
 
+.rbTag--error {
+    background: $SHILO;
+}
+
 .locationPoint {
     &:before {
         margin-right: 7px;

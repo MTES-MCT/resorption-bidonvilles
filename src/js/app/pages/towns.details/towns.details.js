@@ -74,12 +74,23 @@ export default {
             covidComment: {
                 date: new Date(),
                 description: '',
-                information: false,
-                distribution_de_kits: false,
-                cas_contacts: false,
-                cas_suspects: false,
-                cas_averes: false,
+                equipe_maraude: false,
+                equipe_sanitaire: false,
+                equipe_accompagnement: false,
+                distribution_alimentaire: false,
+                personnes_orientees: false,
+                personnes_avec_symptomes: false,
+                besoin_action: false,
             },
+            covidTags: [
+                { prop: 'equipe_maraude', label: 'Équipe de maraude', type: 'warning' },
+                { prop: 'equipe_sanitaire', label: 'Équipe sanitaire', type: 'warning' },
+                { prop: 'equipe_accompagnement', label: 'Équipe d\'accompagnement', type: 'warning' },
+                { prop: 'distribution_alimentaire', label: 'Distribution d\'aide alimentaire', type: 'warning' },
+                { prop: 'personnes_orientees', label: 'Personne(s) orientée(s) vers un centre d\'hébergement spécialisé (desserrement)', type: 'error' },
+                { prop: 'personnes_avec_symptomes', label: 'Personne(s) avec des symptômes Covid-19', type: 'error' },
+                { prop: 'besoin_action', label: 'Besoin d\'une action prioritaire', type: 'error' },
+            ],
             sidePanel: null,
             commentError: null,
             commentErrors: {},
@@ -102,17 +113,17 @@ export default {
             }
 
             switch (this.town.status) {
-            case 'open':
-                return 'existe';
+                case 'open':
+                    return 'existe';
 
-            case 'closed_by_justice':
-            case 'closed_by_admin':
-            case 'other':
-            case 'unknown':
-                return 'disparu';
+                case 'closed_by_justice':
+                case 'closed_by_admin':
+                case 'other':
+                case 'unknown':
+                    return 'disparu';
 
-            default:
-                return 'inconnu';
+                default:
+                    return 'inconnu';
             }
         },
         statusLabel() {
@@ -121,17 +132,17 @@ export default {
             }
 
             switch (this.town.status) {
-            case 'closed_by_justice':
-                return 'Exécution d\'une décision de justice';
+                case 'closed_by_justice':
+                    return 'Exécution d\'une décision de justice';
 
-            case 'closed_by_admin':
-                return 'Exécution d\'une décision administrative';
+                case 'closed_by_admin':
+                    return 'Exécution d\'une décision administrative';
 
-            case 'other':
-                return 'Autre';
+                case 'other':
+                    return 'Autre';
 
-            default:
-                return 'inconnu';
+                default:
+                    return 'inconnu';
             }
         },
         center() {
@@ -489,11 +500,13 @@ export default {
                     this.covidComment = {
                         date: new Date(),
                         description: '',
-                        information: false,
-                        distribution_de_kits: false,
-                        cas_contacts: false,
-                        cas_suspects: false,
-                        cas_averes: false,
+                        equipe_maraude: false,
+                        equipe_sanitaire: false,
+                        equipe_accompagnement: false,
+                        distribution_alimentaire: false,
+                        personnes_orientees: false,
+                        personnes_avec_symptomes: false,
+                        besoin_action: false,
                     };
                 })
                 .catch((response) => {
