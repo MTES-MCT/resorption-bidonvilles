@@ -1,0 +1,59 @@
+<div class="page--withMargin">
+    <NavBar></NavBar>
+
+    //- state: loading in progress
+    <section v-if="state === 'loading'" class="section section-white">
+        <div class="container">
+            <div  class="notification full-width">
+                <img src="/img/spinner_dark.svg" width="20" class="spinner" />
+                <span>Chargement des données en cours...</span>
+            </div>
+        </div>
+    </section>
+
+    //- state: loading failed
+    <section v-if="state === 'error'" class="section section-white">
+        <div class="container">
+            <div class="notification error full-width">
+                <span>{{ error }}. <a href="#" @click="retryLoading">Réessayer ?</a></span>
+            </div>
+        </div>
+    </section>
+
+    //- state: loaded
+    <section v-if="state === 'loaded'" class="section section-white">
+        <div class="container">
+            <header>
+                <div>
+                    <hgroup>
+                        <h3>Covid-19</h3>
+                    </hgroup>
+                    <p>L'ensemble des commentaires sur votre territoire (département ou région)</p>
+                </div>
+            </header>
+
+            <Table class="userActivity" :columns="columns" :content="parsedActivities" :emptyLabel="'Aucune activité trouvée pour les filtres sélectionnés'" @click="onRowClick">
+                <template v-slot:date="props"><strong>{{ props.row.date }}</strong><br/>à {{ props.row.time }}</template>
+
+                <template v-slot:author="props">
+                    <font-awesome-icon icon="user" class="link"></font-awesome-icon> &nbsp;
+                    <router-link data-group="link" :to="`/annuaire/${props.row.author.organization}`" class="link">{{ props.row.author.name }}</router-link>
+                </template>
+
+                <template v-slot:activity="props">
+                    <span class="userActivity-action">
+                        <font-awesome-icon :icon="props.row.icon"></font-awesome-icon> {{ props.row.action }} site : {{ props.row.address }}
+                    </span>
+
+                    <div class="userActivity-content">
+                        <p>
+                            <span v-for="tag in covidTags" v-if="props.row.covid[tag.prop] === true" :class="`rbTag rbTag--${tag.type}`">{{ tag.label }}</span>
+                        </p>
+                        <p>Date de l'intervention : {{ formatDate(props.row.covid.date) }}</p>
+                        <p v-html="props.row.content"></p>
+                    </div>
+                </template>
+            </Table>
+        </div>
+    </section>
+</div>

@@ -109,6 +109,14 @@
                     &:hover {
                         color: white;
                     }
+
+                    &.router-link--covid {
+                        background: $RED;
+                        color: $WHITE;
+                        font-weight: bold;
+                        padding-left: 10px;
+                        padding-right: 10px;
+                    }
                 }
             }
         }
@@ -157,6 +165,14 @@
                 &.active {
                     color: #003b80;
                     background: white;
+                }
+
+                &.router-link--covid {
+                    background: $RED;
+                    color: $WHITE;
+                    font-weight: bold;
+                    padding-left: 10px;
+                    padding-right: 10px;
                 }
             }
         }

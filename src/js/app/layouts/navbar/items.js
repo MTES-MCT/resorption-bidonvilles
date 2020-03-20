@@ -24,6 +24,13 @@ export default {
     ],
     loaded: [
         {
+            label: 'Covid-19',
+            target: '/covid-19',
+            classes: {
+                'router-link--covid': true,
+            },
+        },
+        {
             label: 'Sites',
             items: [
                 { label: 'Liste des sites', target: '/liste-des-sites', group: 'townList' },
