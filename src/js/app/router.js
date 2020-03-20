@@ -26,6 +26,7 @@ import LegalMentions from '#app/pages/legalMentions/legalMentions.vue';
 import Directory from '#app/pages/directory/directory.vue';
 import UserActivityList from '#app/pages/userActivity.list/userActivity.list.vue';
 import OpenStats from '#app/pages/open.stats/open.stats.vue';
+import Covid from '#app/pages/covid/covid.vue';
 
 // eslint-disable-next-line
 import CGU from '/doc/CGU_Resorption_Bidonvilles.pdf';
@@ -405,6 +406,14 @@ const router = new VueRouter({
             },
             path: '/historique-des-activites',
             component: UserActivityList,
+            beforeEnter: guardians.loadedAndUpgraded,
+        },
+        {
+            meta: {
+                group: 'covid',
+            },
+            path: '/covid-19',
+            component: Covid,
             beforeEnter: guardians.loadedAndUpgraded,
         },
         {
