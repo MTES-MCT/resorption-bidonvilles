@@ -7,6 +7,13 @@ import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import 'leaflet.markercluster/dist/leaflet.markercluster';
 
+// eslint-disable-next-line
+import waterYes from '/img/water-yes.png';
+// eslint-disable-next-line
+import waterNo from '/img/water-no.png';
+// eslint-disable-next-line
+import waterNull from '/img/water-null.png';
+
 const DEFAULT_VIEW = [46.7755829, 2.0497727];
 
 export default {
@@ -199,11 +206,20 @@ export default {
                 color = '#cccccc';
             }
 
+            let waterImg;
+            if (town.accessToWater === true) {
+                waterImg = waterYes;
+            } else if (town.accessToWater === false) {
+                waterImg = waterNo;
+            } else {
+                waterImg = waterNull;
+            }
+
             const marker = L.marker([latitude, longitude], {
                 title: town.address,
                 icon: L.divIcon({
                     className: 'leaflet-marker-custom',
-                    html: `<span style="background: ${color}"><i style="border-top-color: ${color}"></i>${address}</span>`,
+                    html: `<span style="background: ${color}" class="address"><i style="border-top-color: ${color}"></i>${address}</span><span class="water"><img src="${waterImg}"></img></span>`,
                     iconAnchor: [25, 36],
                 }),
             });
