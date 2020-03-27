@@ -15,12 +15,35 @@ export default {
             required: false,
             type: String,
         },
+
+        /**
+         * Whether the block should be visible by default
+         *
+         * @type {Boolean}
+         */
+        opened: {
+            required: false,
+            type: Boolean,
+            default: true,
+        },
+
+        /**
+         * Font-awesome-icon
+         *
+         * @type {String}
+         */
+        icon: {
+            required: false,
+            type: String,
+            default: 'info-circle',
+        },
     },
 
     data() {
         return {
+            iconName: this.icon,
             maxHeight: null,
-            visible: true,
+            visible: this.opened !== false,
         };
     },
 
