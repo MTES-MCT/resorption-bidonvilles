@@ -1,21 +1,66 @@
+import { get as getConfig } from '#helpers/api/config';
+import {
+    getDepartementsForRegion,
+    getDepartementsForEpci,
+} from '#helpers/api/geo';
+import { create } from '#helpers/api/highCovidComment';
 import { list } from '#helpers/api/userActivity';
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import Table from '#app/components/table/table.vue';
+import SlideNote from '#app/components/slide-note/slide-note.vue';
 
 export default {
     components: {
         NavBar,
         Table,
+        SlideNote,
     },
 
     data() {
+        const { user } = getConfig();
+
         return {
+            /**
+             * Current user
+             *
+             * @type {User}
+             */
+            user,
+
+            /**
+             * Current filter
+             *
+             * @type {'all'|'regular'|'high'}
+             */
+            filter: 'all',
+
             /**
              * List of activities
              *
              * @type {Array.<UserActivity>}
              */
             activities: [],
+
+            /**
+             * List of departements
+             *
+             * @type {Array.<Departement>}
+             */
+            allowedDepartements: [],
+
+            /**
+             * List of selected departements
+             *
+             * @type {Object}
+             */
+            highCovidComment: {
+                pending: false,
+                error: null,
+                data: {
+                    description: '',
+                    departements: [],
+                },
+            },
 
             /**
              * The error's user message
@@ -59,7 +104,17 @@ export default {
             ];
         },
         filteredActivities() {
-            return this.activities;
+            if (this.filter === 'all') {
+                return this.activities;
+            }
+
+            return this.activities.filter((activity) => {
+                if (this.filter === 'regular') {
+                    return activity.covid !== null;
+                }
+
+                return activity.highCovid !== null;
+            });
         },
         parsedActivities() {
             return this.filteredActivities.map((activity, index) => ({
@@ -77,7 +132,11 @@ export default {
                 content: activity.content,
                 comment: activity.comment_id,
                 covid: activity.covid,
+                highCovid: activity.highCovid,
             }));
+        },
+        canSubmitHighComment() {
+            return this.user.organization.location.type !== 'nation';
         },
     },
 
@@ -101,9 +160,43 @@ export default {
             this.state = 'loading';
             this.error = null;
 
-            list({ covid: '1' })
-                .then((userActivities) => {
+            //
+            let departementsPromise;
+            switch (this.user.organization.location.type) {
+                default:
+                case 'nation':
+                    departementsPromise = Promise.resolve({
+                        departements: [],
+                    });
+                    break;
+
+                case 'region':
+                    departementsPromise = getDepartementsForRegion(
+                        this.user.organization.location.region.code,
+                    );
+                    break;
+
+                case 'epci':
+                    departementsPromise = getDepartementsForEpci(
+                        this.user.organization.location.epci.code,
+                    );
+                    break;
+
+                case 'departement':
+                case 'city':
+                    departementsPromise = Promise.resolve({
+                        departements: [this.user.organization.location.departement],
+                    });
+            }
+
+            Promise.all([
+                list({ covid: '1' }),
+                departementsPromise,
+            ])
+                .then(([userActivities, { departements }]) => {
                     this.activities = userActivities;
+                    this.allowedDepartements = departements;
+                    this.highCovidComment.data.departements = departements.map(({ code }) => code);
                     this.state = 'loaded';
                 })
                 .catch(({ user_message: error }) => {
@@ -132,7 +225,46 @@ export default {
          *
          */
         onRowClick(row) {
+            if (!row.shantytown) {
+                return;
+            }
+
             this.$router.push(`/site/${row.shantytown}`);
+        },
+
+        /**
+         * Sets filter
+         *
+         * @param {'all'|'regular'|'high'} filter
+         */
+        setFilter(filter) {
+            this.filter = filter;
+        },
+
+        /**
+         *
+         */
+        submitHighCovidComment() {
+            if (this.highCovidComment.pending) {
+                return;
+            }
+
+            this.highCovidComment.pending = true;
+            this.highCovidComment.error = null;
+
+            create(this.highCovidComment.data)
+                .then(() => {
+                    this.highCovidComment.pending = false;
+                    this.state = null;
+                    this.load();
+                })
+                .catch(({ user_message: message, fields }) => {
+                    this.highCovidComment.pending = false;
+                    this.highCovidComment.error = {
+                        message,
+                        fields,
+                    };
+                });
         },
     },
 };

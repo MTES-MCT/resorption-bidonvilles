@@ -1,6 +1,6 @@
 <div v-bind:class="{ slideNote: true, 'slideNote--visible': visible }">
     <header class="slideNote-header">
-        <h1 class="slideNote-title"><font-awesome-icon icon="info-circle"></font-awesome-icon> {{ title }}</h1>
+        <h1 class="slideNote-title"><font-awesome-icon :icon="iconName"></font-awesome-icon> {{ title }}</h1>
         <span class="slideNote-toggle" @click="toggle"><font-awesome-icon :icon="caret" size="2x"></font-awesome-icon></span>
     </header>
 
