@@ -77,6 +77,7 @@ export default {
                 content: activity.content,
                 comment: activity.comment_id,
                 covid: activity.covid,
+                highCovid: activity.highCovid,
             }));
         },
     },
@@ -132,6 +133,10 @@ export default {
          *
          */
         onRowClick(row) {
+            if (!row.shantytown) {
+                return;
+            }
+
             this.$router.push(`/site/${row.shantytown}`);
         },
     },

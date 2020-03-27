@@ -41,15 +41,18 @@
                 </template>
 
                 <template v-slot:activity="props">
-                    <span class="userActivity-action">
+                    <span class="userActivity-action" v-if="props.row.covid">
                         <font-awesome-icon :icon="props.row.icon"></font-awesome-icon> {{ props.row.action }} site : {{ props.row.address }}
+                    </span>
+                    <span class="userActivity-action" v-else>
+                        <font-awesome-icon :icon="props.row.icon"></font-awesome-icon> Commentaire sur le territoire : {{ props.row.highCovid.departements.map(({ code }) => code ).join(', ') }}
                     </span>
 
                     <div class="userActivity-content">
-                        <p>
+                        <p v-if="props.row.covid">
                             <span v-for="tag in covidTags" v-if="props.row.covid[tag.prop] === true" :class="`rbTag rbTag--${tag.type}`">{{ tag.label }}</span>
                         </p>
-                        <p>Date de l'intervention : {{ formatDate(props.row.covid.date) }}</p>
+                        <p v-if="props.row.covid">Date de l'intervention : {{ formatDate(props.row.covid.date) }}</p>
                         <p v-html="props.row.content"></p>
                     </div>
                 </template>
