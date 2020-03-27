@@ -24,7 +24,7 @@ const ERRORS = {
 function handleRequestResponse(success, failure) {
     let response = null;
     try {
-        response = JSON.parse(this.responseText);
+        response = this.responseText ? JSON.parse(this.responseText) : this.responseText;
     } catch (error) {
         failure({
             user_message: 'Une erreur inconnue est survenue',
@@ -38,7 +38,7 @@ function handleRequestResponse(success, failure) {
         return;
     }
 
-    if (this.status !== 200) {
+    if ((this.status / 200) < 1 || (this.status / 200) >= 1.5) {
         const errorObject = (response && response.error) || response || {};
         switch (errorObject.code) {
             // handle generic errors
