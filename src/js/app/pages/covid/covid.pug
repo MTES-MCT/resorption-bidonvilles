@@ -29,6 +29,39 @@
                         <h3>Covid-19</h3>
                     </hgroup>
                     <p>L'ensemble des commentaires sur votre territoire (département ou région)</p>
+
+                    <SlideNote title="Écrire un commentaire 'Territoire'" v-if="canSubmitHighComment" :opened="true" icon="comment">
+                        <template slot="content">
+                            <p>Les commentaires "territoires" permettent de partager des informations sur le pilotage, la coordination et l'organisation retenus au niveau local.</p>
+
+                            <p>
+                                <span><strong>Territoire(s) concerné(s) par votre commentaire :</strong></span><br/>
+                                <ul class="input--checkbox">
+                                    <li v-for="(option, index) in allowedDepartements" class="input--checkbox-option">
+                                        <label :for="`input${_uid}-${index}`">
+                                            <input type="checkbox" :id="`input${_uid}-${index}`" :value="option.code" :name="`input${_uid}`" v-model="highCovidComment.data.departements" class="input input--checkbox" :disabled="highCovidComment.pending || allowedDepartements.length <= 1" /> {{ option.code + ' - ' + option.name }}
+                                        </label>
+                                    </li>
+                                </ul>
+                            </p>
+
+                            <p>
+                                <span><strong>Votre commentaire :</strong></span><br/>
+                                <textarea class="input input--textarea" v-model="highCovidComment.data.description" :disabled="highCovidComment.pending" :readonly="highCovidComment.pending"></textarea>
+                            </p>
+
+                            <p class="error" v-if="highCovidComment.error !== null">
+                                <span class="error">{{ highCovidComment.error.message }}</span>
+                            </p>
+
+                            <p>
+                                <button class="form-stepButton button" @click="submitHighCovidComment" :disabled="highCovidComment.pending">
+                                    <span v-if="!highCovidComment.pending">Envoyer</span>
+                                    <img v-else src="/img/spinner_light.svg" width="20" />
+                                </button>
+                            </p>
+                        </template>
+                    </SlideNote>
                 </div>
             </header>
 
