@@ -63,6 +63,10 @@
                         </template>
                     </SlideNote>
                 </div>
+
+                <div class="switch">
+                    <button v-bind:class="{ active: filter === 'all' }" @click="setFilter('all')">Tous</button><button v-bind:class="{ active: filter === 'regular' }" @click="setFilter('regular')">Commentaires "Sites"</button><button v-bind:class="{ active: filter === 'high' }" @click="setFilter('high')">Commentaires "Territoire"</button>
+                </div>
             </header>
 
             <Table class="userActivity" :columns="columns" :content="parsedActivities" :emptyLabel="'Aucune activité trouvée pour les filtres sélectionnés'" @click="onRowClick">

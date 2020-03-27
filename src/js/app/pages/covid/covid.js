@@ -28,6 +28,13 @@ export default {
             user,
 
             /**
+             * Current filter
+             *
+             * @type {'all'|'regular'|'high'}
+             */
+            filter: 'all',
+
+            /**
              * List of activities
              *
              * @type {Array.<UserActivity>}
@@ -97,7 +104,17 @@ export default {
             ];
         },
         filteredActivities() {
-            return this.activities;
+            if (this.filter === 'all') {
+                return this.activities;
+            }
+
+            return this.activities.filter((activity) => {
+                if (this.filter === 'regular') {
+                    return activity.covid !== null;
+                }
+
+                return activity.highCovid !== null;
+            });
         },
         parsedActivities() {
             return this.filteredActivities.map((activity, index) => ({
@@ -213,6 +230,15 @@ export default {
             }
 
             this.$router.push(`/site/${row.shantytown}`);
+        },
+
+        /**
+         * Sets filter
+         *
+         * @param {'all'|'regular'|'high'} filter
+         */
+        setFilter(filter) {
+            this.filter = filter;
         },
 
         /**
