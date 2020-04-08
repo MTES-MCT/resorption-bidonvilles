@@ -16,6 +16,8 @@ export default {
                 { id: 'life_conditions', label: 'Conditions de vie', description: ': accès à l\'électricité, l\'eau, évacuation des déchets' },
                 { id: 'demographics', label: 'Diagnostic', description: ': statut, date, et service en charge' },
                 { id: 'justice', label: 'Procédures judiciaires', description: ': statut et date des étapes' },
+                { id: 'comments', label: 'Commentaires', description: ': les 5 derniers' },
+                { id: 'covid_comments', label: 'Commentaires Covid-19' },
             ],
             options: {
                 priority: false,
@@ -24,6 +26,8 @@ export default {
                 life_conditions: false,
                 justice: false,
                 owner: false,
+                comments: false,
+                covid_comments: false,
             },
         };
     },

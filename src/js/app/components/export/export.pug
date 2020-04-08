@@ -28,7 +28,7 @@
             <p class="alert-options">Cochez les informations supplémentaires que vous souhaitez exporter
                 <ul>
                     <li v-for="option in availableOptions">
-                        <span>
+                        <span :class="`option-${option.id}`">
                             <input type="checkbox" :id="`option-${option.id}`" v-model="options[option.id]" />
                             <label :for="`option-${option.id}`" >{{ option.label }}<span v-if="option.description">&nbsp;{{ option.description }}</span></label>
                         </span>
