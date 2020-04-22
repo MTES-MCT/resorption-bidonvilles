@@ -105,7 +105,7 @@
                     <p class="town-links" v-if="hasPermission('shantytown_comment.list', town)">
                         <span class="link" @click="showAside('comments')" data-group="sidePanelLink"><font-awesome-icon icon="comment"></font-awesome-icon> &nbsp;{{ town.comments.regular.length }} commentaire{{ town.comments.regular.length > 1 ? 's' : '' }}</span>
                     </p>
-                    <p class="town-links town-links--covid">
+                    <p class="town-links town-links--covid" v-if="hasPermission('covid_comment.list')">
                         <span class="link" @click="showAside('covidComments')" data-group="sidePanelLink"><font-awesome-icon icon="comment"></font-awesome-icon> &nbsp;{{ town.comments.covid.length }} commentaire{{ town.comments.covid.length > 1 ? 's' : '' }} COVID-19</span>
                     </p>
                 </div>

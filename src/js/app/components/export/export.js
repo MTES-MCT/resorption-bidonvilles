@@ -1,4 +1,5 @@
 import { open } from '#helpers/api/main';
+import { getPermission } from '#helpers/api/config';
 
 export default {
     props: {
@@ -9,15 +10,60 @@ export default {
         return {
             existingOptions: [
                 {
-                    id: 'priority', label: 'Priorité', description: '(1, 2, 3)', closedTowns: false,
+                    id: 'priority',
+                    label: 'Priorité',
+                    description: '(1, 2, 3)',
+                    closedTowns: false,
                 },
-                { id: 'address_details', label: 'Informations d\'accès au site', closedTowns: false },
-                { id: 'owner', label: 'Propriétaire', description: ': type et identité' },
-                { id: 'life_conditions', label: 'Conditions de vie', description: ': accès à l\'électricité, l\'eau, évacuation des déchets' },
-                { id: 'demographics', label: 'Diagnostic', description: ': statut, date, et service en charge' },
-                { id: 'justice', label: 'Procédures judiciaires', description: ': statut et date des étapes' },
-                { id: 'comments', label: 'Commentaires', description: ': les 5 derniers' },
-                { id: 'covid_comments', label: 'Commentaires Covid-19' },
+                {
+                    id: 'address_details',
+                    label: 'Informations d\'accès au site',
+                    closedTowns: false,
+                },
+                {
+                    id: 'owner',
+                    label: 'Propriétaire',
+                    description: ': type et identité',
+                },
+                {
+                    id: 'life_conditions',
+                    label: 'Conditions de vie',
+                    description: ': accès à l\'électricité, l\'eau, évacuation des déchets',
+                },
+                {
+                    id: 'demographics',
+                    label: 'Diagnostic',
+                    description: ': statut, date, et service en charge',
+                },
+                {
+                    id: 'justice',
+                    label: 'Procédures judiciaires',
+                    description: ': statut et date des étapes',
+                    permission: {
+                        entity: 'shantytown',
+                        feature: 'export',
+                        data: 'justice',
+                    },
+                },
+                {
+                    id: 'comments',
+                    label: 'Commentaires',
+                    description: ': les 5 derniers',
+                    permission: {
+                        entity: 'shantytown_comment',
+                        feature: 'list',
+                        data: null,
+                    },
+                },
+                {
+                    id: 'covid_comments',
+                    label: 'Commentaires Covid-19',
+                    permission: {
+                        entity: 'covid_comment',
+                        feature: 'list',
+                        data: null,
+                    },
+                },
             ],
             options: {
                 priority: false,
@@ -36,7 +82,20 @@ export default {
             return this.closedTowns ? 'fermés' : 'existants';
         },
         availableOptions() {
-            return this.existingOptions.filter(({ closedTowns }) => closedTowns === undefined || this.closedTowns === closedTowns);
+            return this.existingOptions
+                .filter(({ closedTowns }) => closedTowns === undefined || this.closedTowns === closedTowns)
+                .filter(({ permission }) => {
+                    if (permission === undefined) {
+                        return true;
+                    }
+
+                    const p = getPermission(`${permission.entity}.${permission.feature}`);
+                    if (p === null) {
+                        return false;
+                    }
+
+                    return permission.data === null || p[`data_${permission.data}`] === true;
+                });
         },
     },
     mounted() {
