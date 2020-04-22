@@ -1,4 +1,4 @@
-import { get as getConfig } from '#helpers/api/config';
+import { get as getConfig, getPermission } from '#helpers/api/config';
 import {
     getDepartementsForRegion,
     getDepartementsForEpci,
@@ -136,7 +136,8 @@ export default {
             }));
         },
         canSubmitHighComment() {
-            return this.user.organization.location.type !== 'nation';
+            return this.user.organization.location.type !== 'nation'
+                && getPermission('covid_comment.list').geographic_level !== 'nation';
         },
     },
 
