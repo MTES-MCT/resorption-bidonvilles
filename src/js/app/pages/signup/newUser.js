@@ -27,6 +27,7 @@ export default (wording, submitFn) => ({
         const formData = {};
         const formDefinition = {
             title: wording.title,
+            descriptionTitle: '',
             description: wording.description,
             steps: [
                 {

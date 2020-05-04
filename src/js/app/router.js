@@ -27,16 +27,18 @@ import Directory from '#app/pages/directory/directory.vue';
 import UserActivityList from '#app/pages/userActivity.list/userActivity.list.vue';
 import OpenStats from '#app/pages/open.stats/open.stats.vue';
 import Covid from '#app/pages/covid/covid.vue';
+import Changelog from '#app/pages/changelog/changelog.vue';
+import CharteEngagement from '#app/pages/charte_engagement/charte_engagement.vue';
 
 // eslint-disable-next-line
 import CGU from '/doc/CGU_Resorption_Bidonvilles.pdf';
 // eslint-disable-next-line
-import CharteEngagement from '/doc/charte-d-engagement-resorption-bidonvilles.pdf';
-// eslint-disable-next-line
 import TypologieAcces from '/doc/guide_de_l_administrateur.pdf';
 
 import { logout, isLoggedIn, alreadyLoggedBefore } from '#helpers/api/user';
-import { get as getConfig, isLoaded as isConfigLoaded, hasPermission } from '#helpers/api/config';
+import {
+    get as getConfig, isLoaded as isConfigLoaded, hasPermission, hasAcceptedCharte,
+} from '#helpers/api/config';
 
 /**
  * This is the route towards which the user is redirected by the launcher page
@@ -103,9 +105,19 @@ function isPermitted(to) {
  *
  * @returns {boolean}
  */
-function hasToUpgrade() {
+function isUpgraded() {
     const { user: { position } } = getConfig();
     return position !== '';
+}
+
+/**
+ * Checks whether the user has an unread changelog pending
+ *
+ * @returns {boolean}
+ */
+function hasNoPendingChangelog() {
+    const { changelog } = getConfig();
+    return changelog === null;
 }
 
 /**
@@ -129,7 +141,16 @@ const guardians = {
         { checker: isLoggedIn, target: '/connexion' },
         { checker: isConfigLoaded, target: '/launcher' },
         { checker: isPermitted, target: '/', saveEntrypoint: false },
-        { checker: hasToUpgrade, target: '/mise-a-niveau' },
+        { checker: hasAcceptedCharte, target: '/signature-charte-engagement' },
+        { checker: isUpgraded, target: '/mise-a-niveau' },
+    ]),
+    loadedAndUpToDate: guard.bind(this, [
+        { checker: isLoggedIn, target: '/connexion' },
+        { checker: isConfigLoaded, target: '/launcher' },
+        { checker: isPermitted, target: '/', saveEntrypoint: false },
+        { checker: hasAcceptedCharte, target: '/signature-charte-engagement' },
+        { checker: isUpgraded, target: '/mise-a-niveau' },
+        { checker: hasNoPendingChangelog, target: '/nouvelle-version' },
     ]),
 };
 
@@ -204,6 +225,11 @@ const router = new VueRouter({
             beforeEnter: guardians.loggedIn,
         },
         {
+            path: '/nouvelle-version',
+            component: Changelog,
+            beforeEnter: guardians.loadedAndUpgraded,
+        },
+        {
             path: '/deconnexion',
             beforeEnter: (to, from, next) => {
                 logout();
@@ -219,7 +245,7 @@ const router = new VueRouter({
             },
             path: '/cartographie',
             component: Dashboard,
-            beforeEnter: guardians.loadedAndUpgraded,
+            beforeEnter: guardians.loadedAndUpToDate,
         },
         {
             meta: {
@@ -227,7 +253,7 @@ const router = new VueRouter({
             },
             path: '/liste-des-sites',
             component: TownsList,
-            beforeEnter: guardians.loadedAndUpgraded,
+            beforeEnter: guardians.loadedAndUpToDate,
         },
         {
             meta: {
@@ -236,7 +262,7 @@ const router = new VueRouter({
             },
             path: '/nouveau-site',
             component: TownsCreate,
-            beforeEnter: guardians.loadedAndUpgraded,
+            beforeEnter: guardians.loadedAndUpToDate,
         },
         {
             meta: {
@@ -244,7 +270,7 @@ const router = new VueRouter({
             },
             path: '/site/:id',
             component: TownsDetails,
-            beforeEnter: guardians.loadedAndUpgraded,
+            beforeEnter: guardians.loadedAndUpToDate,
         },
         {
             path: '/feedback',
@@ -270,7 +296,8 @@ const router = new VueRouter({
         {
             path: '/charte-d-engagement',
             beforeEnter(to, from, next) {
-                window.open(CharteEngagement, '_blank');
+                const { version_charte_engagement: { fichier } } = getConfig();
+                window.open(fichier, '_blank');
                 next(false);
             },
         },
@@ -284,7 +311,7 @@ const router = new VueRouter({
             },
             path: '/mon-compte',
             component: Me,
-            beforeEnter: guardians.loadedAndUpgraded,
+            beforeEnter: guardians.loadedAndUpToDate,
         },
         {
             meta: {
@@ -293,7 +320,7 @@ const router = new VueRouter({
             },
             path: '/liste-des-utilisateurs',
             component: UserList,
-            beforeEnter: guardians.loadedAndUpgraded,
+            beforeEnter: guardians.loadedAndUpToDate,
         },
         {
             meta: {
@@ -302,7 +329,22 @@ const router = new VueRouter({
             },
             path: '/nouvel-utilisateur',
             component: UserCreate,
-            beforeEnter: guardians.loadedAndUpgraded,
+            beforeEnter: guardians.loadedAndUpToDate,
+        },
+        {
+            path: '/signature-charte-engagement',
+            component: CharteEngagement,
+            beforeEnter: guard.bind(this, [
+                { checker: isLoggedIn, target: '/connexion' },
+                { checker: isConfigLoaded, target: '/launcher' },
+                { checker: isPermitted, target: '/', saveEntrypoint: false },
+                {
+                    checker() {
+                        return !hasAcceptedCharte();
+                    },
+                    target: '/',
+                },
+            ]),
         },
         {
             meta: {
@@ -311,7 +353,7 @@ const router = new VueRouter({
             },
             path: '/nouvel-utilisateur/:id',
             component: UserValidate,
-            beforeEnter: guardians.loadedAndUpgraded,
+            beforeEnter: guardians.loadedAndUpToDate,
         },
         {
             meta: {
@@ -352,7 +394,7 @@ const router = new VueRouter({
             },
             path: '/liste-des-dispositifs',
             component: PlanList,
-            beforeEnter: guardians.loadedAndUpgraded,
+            beforeEnter: guardians.loadedAndUpToDate,
         },
         {
             meta: {
@@ -361,7 +403,7 @@ const router = new VueRouter({
             },
             path: '/nouveau-dispositif',
             component: PlanCreate,
-            beforeEnter: guardians.loadedAndUpgraded,
+            beforeEnter: guardians.loadedAndUpToDate,
         },
         {
             meta: {
@@ -370,7 +412,7 @@ const router = new VueRouter({
             },
             path: '/modifier-dispositif/:id',
             component: PlanEdit,
-            beforeEnter: guardians.loadedAndUpgraded,
+            beforeEnter: guardians.loadedAndUpToDate,
         },
         {
             meta: {
@@ -379,7 +421,7 @@ const router = new VueRouter({
             },
             path: '/dispositif/:id',
             component: PlanDetails,
-            beforeEnter: guardians.loadedAndUpgraded,
+            beforeEnter: guardians.loadedAndUpToDate,
         },
         {
             meta: {
@@ -388,7 +430,7 @@ const router = new VueRouter({
             },
             path: '/dispositif/:id/indicateurs',
             component: PlanMarks,
-            beforeEnter: guardians.loadedAndUpgraded,
+            beforeEnter: guardians.loadedAndUpToDate,
         },
         {
             meta: {
@@ -397,7 +439,7 @@ const router = new VueRouter({
             },
             path: '/statistiques',
             component: Statistics,
-            beforeEnter: guardians.loadedAndUpgraded,
+            beforeEnter: guardians.loadedAndUpToDate,
         },
         {
             meta: {
@@ -406,7 +448,7 @@ const router = new VueRouter({
             },
             path: '/historique-des-activites',
             component: UserActivityList,
-            beforeEnter: guardians.loadedAndUpgraded,
+            beforeEnter: guardians.loadedAndUpToDate,
         },
         {
             meta: {
@@ -414,7 +456,7 @@ const router = new VueRouter({
             },
             path: '/covid-19',
             component: Covid,
-            beforeEnter: guardians.loadedAndUpgraded,
+            beforeEnter: guardians.loadedAndUpToDate,
         },
         {
             meta: {
@@ -422,7 +464,7 @@ const router = new VueRouter({
             },
             path: '/annuaire/:id?',
             component: Directory,
-            beforeEnter: guardians.loadedAndUpgraded,
+            beforeEnter: guardians.loadedAndUpToDate,
         },
     ],
 });

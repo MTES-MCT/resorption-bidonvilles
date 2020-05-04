@@ -1,5 +1,7 @@
 import { unload as unloadConfig } from '#helpers/api/config';
-import { postApi, getApi, deleteApi } from '#helpers/api/main';
+import {
+    postApi, putApi, getApi, deleteApi,
+} from '#helpers/api/main';
 
 /**
  * Sends a login request for the given user
@@ -203,6 +205,15 @@ export function getDirectory() {
  */
 export function autocompleteOrganization(str) {
     return getApi(`/organizations/search?query=${encodeURIComponent(str)}`);
+}
+
+/**
+ * PUT /users/:id/charte_engagement
+ */
+export function acceptCharte(userId, charteVersion) {
+    return putApi(`/users/${userId}/charte_engagement`, {
+        version_de_charte: charteVersion,
+    });
 }
 
 /**
