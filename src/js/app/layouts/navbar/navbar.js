@@ -1,5 +1,5 @@
 import { isLoggedIn } from '#helpers/api/user';
-import { isLoaded as isConfigLoaded, hasPermission } from '#helpers/api/config';
+import { isLoaded as isConfigLoaded, hasPermission, hasAcceptedCharte } from '#helpers/api/config';
 import ITEMS from './items';
 
 export default {
@@ -14,7 +14,7 @@ export default {
                 return ITEMS.anonymous;
             }
 
-            if (isConfigLoaded() !== true) {
+            if (isConfigLoaded() !== true || hasAcceptedCharte() !== true) {
                 return ITEMS.loading;
             }
 

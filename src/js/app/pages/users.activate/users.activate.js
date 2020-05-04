@@ -15,6 +15,7 @@ export default {
 
         const formDefinition = {
             title: 'Activation de votre compte utilisateur',
+            descriptionTitle: '',
             description: 'Vous vous apprêtez à activer votre compte utilisateur, veuillez choisir votre mot de passe de connexion.',
             steps: [
                 {

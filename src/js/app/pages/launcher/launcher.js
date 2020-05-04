@@ -1,18 +1,15 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
-import Changelog from '#app/components/changelog/changelog.vue';
-import { isLoaded as isConfigLoaded, load, closeChangelog } from '#helpers/api/config';
+import { isLoaded as isConfigLoaded, load } from '#helpers/api/config';
 import { getEntryPoint } from '#app/router';
 
 export default {
     data() {
         return {
             error: null,
-            changelog: null,
         };
     },
     components: {
         NavBar,
-        Changelog,
     },
     mounted() {
         this.loadConfig();
@@ -25,23 +22,13 @@ export default {
             }
 
             this.error = null;
-            this.changelog = null;
             load()
-                .then(({ changelog }) => {
-                    if (changelog !== null && changelog !== undefined) {
-                        this.changelog = changelog;
-                        return;
-                    }
-
+                .then(() => {
                     this.redirect();
                 })
                 .catch((response) => {
                     this.error = response.user_message;
                 });
-        },
-        markChangelogAsRead() {
-            closeChangelog(this.changelog.app_version);
-            this.redirect();
         },
         redirect() {
             this.$router.push(getEntryPoint());

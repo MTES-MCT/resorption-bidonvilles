@@ -4,12 +4,24 @@ export default {
             type: Object,
             required: true,
         },
+        error: {
+            type: String,
+            required: false,
+            default: null,
+        },
     },
 
     data() {
         return {
+            dataError: this.error ? this.error : null,
             currentItemIndex: 0,
         };
+    },
+
+    watch: {
+        error() {
+            this.dataError = this.error ? this.error : null;
+        },
     },
 
     computed: {
@@ -28,6 +40,8 @@ export default {
 
     methods: {
         previous() {
+            this.dataError = null;
+
             if (this.currentItemIndex === 0) {
                 return;
             }
@@ -37,6 +51,8 @@ export default {
         },
 
         next() {
+            this.dataError = null;
+
             if (this.currentItemIndex === this.log.items.length - 1) {
                 this.$emit('done');
                 return;

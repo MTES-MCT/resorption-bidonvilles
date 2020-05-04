@@ -61,6 +61,33 @@ export function get() {
 }
 
 /**
+ * Updates the local configuration
+ *
+ * @param {String} property A chain of properties (example: user.first_name)
+ * @param {Object} value    The new value for the property
+ *
+ * @returns {undefined}
+ */
+export function set(property, value) {
+    if (configuration === null) {
+        return;
+    }
+
+    const chain = property.split('.');
+    let ref = configuration;
+
+    while (chain.length > 1) {
+        if (ref === undefined) {
+            return;
+        }
+
+        ref = ref[chain.shift()];
+    }
+
+    ref[chain[0]] = value;
+}
+
+/**
  * @param {String} permission
  *
  * @returns {Permission}
@@ -106,7 +133,20 @@ export function hasPermission(permissionName) {
  * @returns {Promise}
  */
 export function closeChangelog(version) {
-    postApi('/changelog', { version });
+    return postApi('/changelog', { version });
+}
+
+/**
+ * Indicates whether the current user has accepted the charte
+ *
+ * @returns {Boolean}
+ */
+export function hasAcceptedCharte() {
+    if (configuration === null) {
+        return false;
+    }
+
+    return configuration.user.charte_engagement_a_jour;
 }
 
 /**

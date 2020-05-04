@@ -178,6 +178,19 @@ export function patchApi(url, data, headers) {
 }
 
 /**
+ * Alias for PUT requests
+ *
+ * @param {string}                 url
+ * @param {Object}                 [data]
+ * @param {Object.<string,string>} [headers]
+ *
+ * @returns {Promise}
+ */
+export function putApi(url, data, headers) {
+    return request('PUT', url, data, headers);
+}
+
+/**
  * Opens a new tab with the given URL
  *
  * Appends the access token to the request

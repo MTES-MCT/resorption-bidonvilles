@@ -25,8 +25,11 @@
             </section>
 
             <footer class="changelog-footer">
-                <span class="link" @click="previous">{{ currentItemIndex > 0 ? 'Précédent' : '' }}</span>
-                <button class="button" @click="next">{{ nextLabel }}</button>
+                <p><span class="link" @click="previous">{{ currentItemIndex > 0 ? 'Précédent' : '' }}</span></p>
+                <p>
+                    <span class="error" v-if="dataError !== null">{{ dataError }}</span><br/>
+                    <button class="button" @click="next">{{ nextLabel }}</button>
+                </p>
             </footer>
         </div>
     </div>
