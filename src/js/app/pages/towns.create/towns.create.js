@@ -102,7 +102,6 @@ export default {
                                     owner: {
                                         type: 'text',
                                         label: 'Identité du propriétaire',
-                                        mandatory: true,
                                         condition({ ownerType }) {
                                             return ownerType && ownerTypes.find(({ id }) => id === ownerType).label !== 'Inconnu';
                                         },
