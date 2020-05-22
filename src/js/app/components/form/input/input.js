@@ -6,6 +6,7 @@ import Location from './location/location.vue';
 import AddressWithLocation from './address-with-location/address-with-location.vue';
 import TownList from './townList/townList.vue';
 import PlanFunding from './planFunding/planFunding.vue';
+import PlanHousing from './planHousing/planHousing.vue';
 import Collectivity from './collectivity/collectivity.vue';
 import Organization from './organization/organization.vue';
 import Etp from './etp/etp.vue';
@@ -40,6 +41,7 @@ export default {
         Organization,
         Etp,
         Audience,
+        PlanHousing,
     },
 
 
@@ -87,7 +89,8 @@ export default {
          *  'collectivity',
          *  'organization',
          *  'etp',
-         *  'audience'
+         *  'audience',
+         *  'planHousing'
          * }
          */
         type: {

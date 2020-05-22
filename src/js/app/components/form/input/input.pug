@@ -85,5 +85,8 @@
 
         //- audience
         <Audience v-if="type === 'audience'" v-bind="props" v-model="data" :disabled="disabled"></Audience>
+
+        //- planHousing
+        <PlanHousing v-if="type === 'planHousing'" v-bind="props" v-model="data" :disabled="disabled"></PlanHousing>
     </div>
 </div>

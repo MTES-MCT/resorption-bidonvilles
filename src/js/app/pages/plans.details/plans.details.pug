@@ -489,39 +489,19 @@
                         </thead>
 
                         <tbody>
-                            <tr>
-                                <th :colspan="plan.states.length + 1"><strong>Nombre de ménages ayant fait une demande</strong></th>
-                            </tr>
-                            <tr>
-                                <td>SIAO</td>
-                                <td v-for="state in plan.states">{{ state.logement.siao === null ? 'NC' : state.logement.siao }}</td>
-                            </tr>
-                            <tr>
-                                <td>logement social</td>
-                                <td v-for="state in plan.states">{{ state.logement.logement_social === null ? 'NC' : state.logement.logement_social }}</td>
-                            </tr>
-                            <tr>
-                                <td>DALO</td>
-                                <td v-for="state in plan.states">{{ state.logement.dalo === null ? 'NC' : state.logement.dalo }}</td>
-                            </tr>
-                            <tr>
-                                <th :colspan="plan.states.length + 1"><strong>Nombre de ménages ayant accédé à un logement</strong></th>
-                            </tr>
-                            <tr>
-                                <td>accompagné / adapté</td>
-                                <td v-for="state in plan.states">{{ state.logement.accompagnes === null ? 'NC' : state.logement.accompagnes }}</td>
-                            </tr>
-                            <tr>
-                                <td>sans accompagnement (social ou privé)</td>
-                                <td v-for="state in plan.states">{{ state.logement.non_accompagnes === null ? 'NC' : state.logement.non_accompagnes }}</td>
-                            </tr>
-                            <tr>
-                                <th :colspan="plan.states.length + 1"><strong>Nombre de ménages</strong></th>
-                            </tr>
-                            <tr>
-                                <td>hébergés (hors mise à l'abri ou hébergement d'urgence)</td>
-                                <td v-for="state in plan.states">{{ state.logement.heberges === null ? 'NC' : state.logement.heberges }}</td>
-                            </tr>
+                            <template v-for="field in housingFields">
+                                <tr>
+                                    <th :colspan="plan.states.length + 1"><strong>{{ field.label }}</strong></th>
+                                </tr>
+                                <tr>
+                                    <td>Nombre de personnes</td>
+                                    <td v-for="state in plan.states">{{ state.logement[field.name].people === null ? 'NC' : state.logement[field.name].people }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Nombre de ménages</td>
+                                    <td v-for="state in plan.states">{{ state.logement[field.name].families === null ? 'NC' : state.logement[field.name].families }}</td>
+                                </tr>
+                            </template>
                         </tbody>
                     </table>
                 </section>
@@ -562,7 +542,7 @@
                     </table>
                 </section>
 
-                <div class="note" v-if="plan.states.length === 0">
+                <div class="note" v-if="plan.states.length === 0 && plan.canUpdateMarks">
                     <div class="note-body">
                         <p>
                             <strong>Aucun indicateur de suivi renseigné par l'opérateur</strong><br/>

@@ -100,7 +100,11 @@ export default {
                             },
                         },
                     ],
-                    submit: d => addState(this.$route.params.id, d),
+                    submit: (d) => {
+                        const builtData = Object.assign({}, d, d.housing);
+                        delete builtData.housing;
+                        return addState(this.$route.params.id, builtData);
+                    },
                 },
             ],
         };
@@ -344,63 +348,10 @@ export default {
                 {
                     title: 'Logement',
                     icon: 'home',
-                    description: 'Nombre de ménages ayant fait une demande',
                     inputs: {
-                        siao: {
-                            type: 'number',
-                            label: 'SIAO',
-                            mandatory: false,
-                            condition({ date }) {
-                                return !!date;
-                            },
-                        },
-                        logement_social: {
-                            type: 'number',
-                            label: 'logement social',
-                            mandatory: false,
-                            condition({ date }) {
-                                return !!date;
-                            },
-                        },
-                        dalo: {
-                            type: 'number',
-                            label: 'DALO',
-                            mandatory: false,
-                            condition({ date }) {
-                                return !!date;
-                            },
-                        },
-                    },
-                },
-                {
-                    icon: 'home',
-                    description: 'Nombre de ménages ayant accédé à un logement',
-                    inputs: {
-                        accompagnes: {
-                            type: 'number',
-                            label: 'accompagné / adapté',
-                            mandatory: false,
-                            condition({ date }) {
-                                return !!date;
-                            },
-                        },
-                        non_accompagnes: {
-                            type: 'number',
-                            label: 'sans accompagnement (social ou privé)',
-                            mandatory: false,
-                            condition({ date }) {
-                                return !!date;
-                            },
-                        },
-                    },
-                },
-                {
-                    icon: 'home',
-                    description: 'Nombre de ménages',
-                    inputs: {
-                        heberges: {
-                            type: 'number',
-                            label: 'hébergés (hors mise à l\'abri ou hébergement d\'urgence)',
+                        housing: {
+                            type: 'planHousing',
+                            label: '',
                             mandatory: false,
                             condition({ date }) {
                                 return !!date;
