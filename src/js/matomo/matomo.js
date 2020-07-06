@@ -72,7 +72,11 @@ function initMatomo(Vue, options) {
             }
 
             const maybeHash = options.router.mode === 'hash' ? '/#' : '';
-            const url = `${protocol}//${loc.host}${maybeHash}${to.path}`;
+            let url = `${protocol}//${loc.host}${maybeHash}${to.path}`;
+
+            if (typeof to.query.pk_campaign === 'string') {
+                url = `${url}?pk_campaign=${encodeURIComponent(to.query.pk_campaign)}`;
+            }
 
             if (to.meta.analyticsIgnore) {
                 return;
