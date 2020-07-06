@@ -34,8 +34,8 @@ export default {
             const { user } = get();
             this.$piwik.setCustomVariable(
                 1,
-                'admin',
-                user.is_admin,
+                'superuser',
+                user.is_superuser,
             );
             this.$piwik.setCustomVariable(
                 2,
