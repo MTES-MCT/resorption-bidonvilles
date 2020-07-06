@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import Landing from '#app/pages/landing/landing.vue';
@@ -232,7 +233,7 @@ const router = new VueRouter({
         {
             path: '/deconnexion',
             beforeEnter: (to, from, next) => {
-                logout();
+                logout(Vue.prototype.$piwik);
                 next('/');
             },
             meta: {

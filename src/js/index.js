@@ -11,12 +11,12 @@ import '@babel/polyfill';
 import Vue from 'vue';
 import Notifications from 'vue-notification';
 import VueRouter from 'vue-router';
-import VueMatomo from 'vue-matomo';
 import TrendChart from 'vue-trend-chart';
 
 // import font-awesome
 import './icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import VueMatomo from './matomo/matomo';
 import { router } from '#app/router';
 
 const MONTHS = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
