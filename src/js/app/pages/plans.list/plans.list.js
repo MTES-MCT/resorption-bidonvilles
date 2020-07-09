@@ -23,17 +23,22 @@ export default {
             location: null,
         };
 
+        let userLocationType = user.organization.location.type;
+        if (userLocationType === 'epci' || userLocationType === 'city') {
+            userLocationType = 'departement';
+        }
+
         const userLocation = {
-            id: user.organization.location.type === 'nation' ? null : user.organization.location[user.organization.location.type].code,
-            label: user.organization.location.type === 'nation' ? 'France' : user.organization.location[user.organization.location.type].name,
-            category: user.organization.location.type,
+            id: userLocationType === 'nation' ? null : user.organization.location[userLocationType].code,
+            label: userLocationType === 'nation' ? 'France' : user.organization.location[userLocationType].name,
+            category: userLocationType,
             data: {
-                code: user.organization.location.type === 'nation' ? null : user.organization.location[user.organization.location.type].code,
-                type: user.organization.location.type,
+                code: userLocationType === 'nation' ? null : user.organization.location[userLocationType].code,
+                type: userLocationType,
             },
         };
 
-        if (hasNationalPermission !== true || user.organization.location.type === 'nation') {
+        if (hasNationalPermission !== true || userLocationType === 'nation') {
             data.defaultLocation = Object.assign({}, userLocation);
             data.location = null;
         } else {
@@ -104,8 +109,8 @@ export default {
                         return true;
                     }
 
-                    const l = plan.government_contacts[0].organization.location[this.currentLocation.data.type];
-                    return l && `${l.code}` === `${this.currentLocation.data.code}`;
+                    const l = plan[this.currentLocation.data.type];
+                    return l && l.code === `${this.currentLocation.data.code}`;
                 });
         },
     },

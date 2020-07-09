@@ -4,6 +4,7 @@ import { get as getConfig, hasPermission } from '#helpers/api/config';
 import { create } from '#helpers/api/plan';
 import { getByCategory, getMembers, getMembersOfCategory } from '#helpers/api/organization';
 import { notify } from '#helpers/notificationHelper';
+import { getDepartementsForRegion } from '#helpers/api/geo';
 
 export default {
     components: {
@@ -14,8 +15,13 @@ export default {
     data() {
         const { user: me, topics } = getConfig();
         const data = {
+            user: me,
             formData: {
                 association: [],
+            },
+            loading: {
+                status: null,
+                error: null,
             },
         };
         const that = this;
@@ -53,6 +59,11 @@ export default {
                                 name: {
                                     type: 'text',
                                     label: 'Nom du dispositif',
+                                    mandatory: true,
+                                },
+                                departement: {
+                                    type: 'select',
+                                    label: 'Département d\'intervention',
                                     mandatory: true,
                                 },
                                 startedAt: {
@@ -211,9 +222,7 @@ export default {
                             },
                         },
                     ],
-                    submit: d => create(Object.assign({}, d, {
-                        departement: me.organization.location.departement ? me.organization.location.departement.code : null,
-                    })),
+                    submit: create,
                 },
             ],
         };
@@ -254,6 +263,7 @@ export default {
     },
 
     mounted() {
+        this.load();
         window.addEventListener('message', ({ data }) => {
             this.$refs.form.getInputById('contact').options = [{
                 value: data.id,
@@ -272,6 +282,69 @@ export default {
     },
 
     methods: {
+        getDepartementsForCurrentUser() {
+            const LEVEL_VALUES = {
+                city: 1,
+                epci: 2,
+                departement: 3,
+                region: 4,
+                nation: 5,
+            };
+            const featureLevel = this.user.permissions.plan.create.geographic_level;
+            const userLevel = this.user.organization.location.type;
+
+            let level;
+            if (featureLevel === 'local') {
+                level = userLevel;
+            } else if (LEVEL_VALUES[userLevel] > LEVEL_VALUES[featureLevel]) {
+                level = userLevel;
+            } else {
+                level = featureLevel;
+            }
+
+            // feature level = "local"
+            switch (level) {
+                case 'nation': {
+                    const { departements } = getConfig();
+                    return Promise.resolve(departements);
+                }
+
+                case 'region':
+                    return getDepartementsForRegion(
+                        this.user.organization.location.region.code,
+                    )
+                        .then(({ departements }) => departements);
+
+                default:
+                    return Promise.resolve([this.user.organization.location.departement]);
+            }
+        },
+
+        load() {
+            if (this.loading.status === 'loading' || this.loading.status === 'completed') {
+                return;
+            }
+
+            this.loading.status = 'loading';
+            this.loading.error = null;
+
+            this.getDepartementsForCurrentUser()
+                .then((departements) => {
+                    this.loading.status = 'completed';
+
+                    this.$nextTick(() => {
+                        const input = this.$refs.form.getInputById('departement');
+                        input.options = departements.map(({ code, name }) => ({
+                            label: `${code} - ${name}`,
+                            value: code,
+                        }));
+                    });
+                })
+                .catch((error) => {
+                    this.loading.status = 'failed';
+                    this.loading.error = error;
+                });
+        },
         createUser() {
             const { name, departement } = this.formData.association[0].data;
             const { href } = this.$router.resolve('/nouvel-utilisateur');

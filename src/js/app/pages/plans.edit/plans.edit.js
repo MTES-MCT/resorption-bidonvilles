@@ -48,6 +48,12 @@ export default {
                                     label: 'Nom du dispositif',
                                     mandatory: true,
                                 },
+                                departement: {
+                                    type: 'text',
+                                    label: 'Département d\'intervention',
+                                    mandatory: true,
+                                    disabled: true,
+                                },
                                 startedAt: {
                                     type: 'date',
                                     label: 'Date de début',
@@ -172,9 +178,7 @@ export default {
                             },
                         },
                     ],
-                    submit: d => update(this.$route.params.id, Object.assign({}, d, {
-                        departement: me.organization.location.departement ? me.organization.location.departement.code : null,
-                    })),
+                    submit: update,
                 },
             ],
         };
@@ -229,6 +233,7 @@ export default {
                 .then((plan) => {
                     this.formDefinition.title = `Modifier un dispositif - ${plan.name}`;
                     this.formData.name = plan.name;
+                    this.formData.departement = `${plan.departement.code} - ${plan.departement.name}`;
                     this.formData.startedAt = plan.started_at;
                     this.formData.expectedToEndAt = plan.expected_to_end_at;
                     this.formData.in_and_out = plan.in_and_out ? 1 : 0;

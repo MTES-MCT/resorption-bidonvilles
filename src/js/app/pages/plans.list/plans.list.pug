@@ -46,7 +46,7 @@
                             <span class="rbTag">{{ topic.name }}</span>
                         </p>
                     </template>
-                    <template v-slot:departement="props">{{ props.row.departement }}</template>
+                    <template v-slot:departement="props">{{ props.row.departement.code }}</template>
                     <template v-slot:location="props">
                         <span v-if="props.row.location_type.id === 'shantytowns'">
                             <span v-for="shantytown in props.row.shantytowns">- {{ shantytown.addressSimple }}<br/></span>
