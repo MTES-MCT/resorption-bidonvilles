@@ -32,6 +32,7 @@ export default {
         },
         redirect() {
             const { user } = get();
+            this.$piwik.setUserId(user.id);
             this.$piwik.setCustomVariable(
                 1,
                 'superuser',

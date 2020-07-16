@@ -44,6 +44,7 @@ export function refreshToken() {
 export function logout(piwik) {
     unloadConfig();
     localStorage.removeItem('token');
+    this.$piwik.resetUserId();
     piwik.setCustomVariable(1, 'superuser', null);
     piwik.setCustomVariable(2, 'structure', null);
     piwik.setCustomVariable(3, 'niveau_geo', null);
