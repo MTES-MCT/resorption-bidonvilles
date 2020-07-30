@@ -190,6 +190,9 @@ export default {
     },
 
     computed: {
+        pageTitle() {
+            return this.showClosedTowns === true ? 'fermés' : 'existants';
+        },
         currentLocation() {
             return this.location || this.defaultLocation;
         },
