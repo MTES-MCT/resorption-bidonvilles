@@ -481,7 +481,7 @@ export default {
                 group: 'notifications',
                 type: 'success',
                 title: 'Indicateurs correctement enregistrés',
-                text: 'Le dispositif a bien mis à jour',
+                text: 'Le dispositif a bien été mis à jour',
             });
 
             this.$router.push(`/dispositif/${this.$route.params.id}`);
