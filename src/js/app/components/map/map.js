@@ -1,6 +1,8 @@
+/* eslint-disable no-underscore-dangle */
+
 import L from 'leaflet';
 import Address from '#app/components/address/address.vue';
-import { get } from '#helpers/api/config';
+import { get as getConfig } from '#helpers/api/config';
 import { shortAddress } from '#helpers/townHelper';
 import 'leaflet-providers';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
@@ -16,25 +18,78 @@ import waterNull from '/img/water-null.png';
 
 const DEFAULT_VIEW = [46.7755829, 2.0497727];
 
+
+/* **************************************************************************************************
+ * Ce composant fait apparaître une carte qui propose deux fonctionnalités distinctes :
+ *
+ * - la possibilité de faire apparaître une liste de bidonvilles sur la carte, chacun d'entre eux
+ *   étant représenté par un marqueur dont la position est fixe (townMarker)
+ *   Cette fonctionnalité vient avec une légende spécifique et la possibilité de faire apparaître ou
+ *   non l'adresse des sites en question.
+ *
+ * - la possibilité de se déplacer sur la carte en recherchant une adresse via une barre de recherche
+ *   avec autocomplétion (searchbar)
+ ************************************************************************************************* */
+
 export default {
     components: {
         Address,
     },
+
     props: {
-        value: {
-            type: Object,
-            default: null,
-        },
-        trackPosition: {
-            type: Boolean,
-            default: false,
-        },
+
+        /* *****************************
+         * Options pour la liste des sites
+         * ************************** */
+
+        /**
+         * Liste des bidonvilles à afficher
+         *
+         * @type {Array.<Shantytown>}
+         */
         towns: {
             type: Array,
+            required: false,
             default() {
                 return [];
             },
         },
+
+        /* *****************************
+         * Options de la searchbar
+         * ************************** */
+
+        /**
+         * Indique si la searchbar doit être affichée ou non
+         *
+         * @type {Boolean}
+         */
+        displaySearchbar: {
+            type: Boolean,
+            required: false,
+            default: true,
+        },
+
+        /**
+         * Placeholder de la searchbar
+         *
+         * @type {String}
+         */
+        placeholder: {
+            type: String,
+            required: false,
+            default: 'Recherchez un lieu en saisissant une adresse',
+        },
+
+        /* *****************************
+         * Options génériques
+         * ************************** */
+
+        /**
+         * Centre et niveau de zoom par défaut de la carte
+         *
+         * @type {MapView}
+         */
         defaultView: {
             type: Object,
             default: () => ({
@@ -43,37 +98,88 @@ export default {
                 zoom: 6,
             }),
         },
-        autofocus: {
-            type: Boolean,
-            default: false,
-        },
-        placeholder: {
-            type: String,
-            default: 'Recherchez un lieu en saisissant une adresse',
-        },
-        showAddress: {
-            type: Boolean,
-            default: true,
-        },
     },
+
+
     data() {
-        const coordinates = this.value && this.value.coordinates ? this.value.coordinates : DEFAULT_VIEW;
-
-        const positionMarker = L.marker(coordinates, { draggable: true });
-        positionMarker.addEventListener('dragend', this.onDrag);
-
         return {
+            /**
+             * La carte
+             *
+             * @type {L.Map}
+             */
             map: null,
-            markersGroup: null,
-            positionMarker,
+
+            /**
+             * Groupement de markers
+             *
+             * @type {Object.<String, L.markerClusterGroup>}
+             */
+            markersGroup: {
+                towns: L.markerClusterGroup(),
+                search: L.markerClusterGroup(),
+            },
+
+            /**
+             * Search marker
+             *
+             * @type {L.Marker}
+             */
+            searchMarker: this.createSearchMarker(),
+
+            /**
+             * Town marker that was marked as a search result
+             *
+             * @type {L.Marker}
+             */
+            townSearchMarker: null,
+
+            /**
+             * Town markers
+             *
+             * @type {Array.<L.Marker>}
+             */
             townMarkers: [],
-            address: this.value,
+
+            /**
+             * Town markers, hashed by coordinates
+             *
+             * @type {Object.<String, DOMElement>}
+             */
+            hashedTownMarkers: {},
+
+            /**
+             * Valeur de la searchbar
+             *
+             * @type {Address}
+             */
+            address: null,
+
+            /**
+             * Indique s'il faut afficher les adresses des sites sur la carte ou non
+             *
+             * Cette valeur est contrôlée par une checkbox directement sur la carte
+             *
+             * @type {Boolean}
+             */
             showAddresses: false,
-            fieldTypes: get().field_types,
+
+            /**
+             * Liste des types de terrains existants
+             *
+             * @type {Array.<FieldType>}
+             */
+            fieldTypes: getConfig().field_types,
         };
     },
+
     computed: {
-        colors() {
+        /**
+         * Codes couleur des types de terrain, hashés par id
+         *
+         * @returns {Object.<String, String>}
+         */
+        fieldTypeColors() {
             if (!this.fieldTypes) {
                 return {};
             }
@@ -82,29 +188,34 @@ export default {
                 [fieldType.id]: fieldType.color,
             }), {});
         },
-        label() {
-            return this.address !== null ? this.address.label : null;
-        },
-        coordinates() {
-            const { lat, lng } = this.positionMarker.getLatLng();
-            return [lat, lng];
-        },
-        city() {
-            return this.address !== null ? this.address.city : null;
-        },
-        citycode() {
-            return this.address !== null ? this.address.citycode : null;
-        },
-        input() {
+
+        /**
+         * Liste des fonds de carte disponibles
+         *
+         * @returns {Object.<String, L.TileLayer>}
+         */
+        mapLayers() {
             return {
-                label: this.label,
-                city: this.city,
-                citycode: this.citycode,
-                coordinates: this.coordinates,
+                Satellite: L.tileLayer.provider('Esri.WorldImagery'),
+                Dessin: L.tileLayer.provider('OpenStreetMap.Mapnik'),
             };
         },
     },
+
+
     watch: {
+        /**
+         * Met à jour la liste des marqueurs de site
+         */
+        towns() {
+            this.syncTownMarkers();
+        },
+
+        /**
+         * Affiche/masque les adresses des sites
+         *
+         * @returns {undefined}
+         */
         showAddresses() {
             if (this.showAddresses === true) {
                 document.body.setAttribute('class', 'leaflet-show-addresses');
@@ -112,55 +223,77 @@ export default {
                 document.body.setAttribute('class', '');
             }
         },
-        trackPosition() {
-            this.syncPositionMarker();
-        },
-        towns() {
-            this.syncTownMarkers();
-        },
+
+        /**
+         * Ajoute un résultat de recherche sur la carte
+         *
+         * @returns {undefined}
+         */
         address() {
-            if (this.address !== null) {
-                const { coordinates } = this.address;
-                this.setView([coordinates[1], coordinates[0]], 13);
+            if (this.address === null) {
+                this.clearSearchMarker();
+                return;
             }
 
-            this.$emit('input', this.input);
+            const { coordinates: [lon, lat], label, addressType: type } = this.address;
+            this.centerMap([lat, lon], 20);
+
+            this.$nextTick(() => {
+                this.setSearchMarker(type, label, [lat, lon]);
+            });
         },
     },
+
+
     mounted() {
         this.createMap();
-        this.syncPositionMarker();
         this.syncTownMarkers();
     },
+
+
     methods: {
-        resize() {
-            this.map.invalidateSize(true);
+        /**
+         * Initialise tous les contrôles de la carte
+         *
+         * @returns {undefined}
+         */
+        setupMapControls() {
+            this.setupZoomControl();
+            this.setupLayersControl();
+            this.setupAddressTogglerControl();
+            this.setupFieldTypesLegendControl();
         },
-        createMap() {
-            const layers = this.getMapLayers();
-            this.map = L.map('map', {
-                layers: Object.values(layers),
-                scrollWheelZoom: false,
-            });
+
+        /**
+         * Initialise le contrôle "Zoom"
+         *
+         * @returns {undefined}
+         */
+        setupZoomControl() {
             this.map.zoomControl.setPosition('bottomright');
-            L.control.layers(layers, undefined, { collapsed: false }).addTo(this.map);
+        },
 
-            const { center, zoom } = this.defaultView;
-            if (this.value === null) {
-                this.setView(center, zoom);
-            } else {
-                this.centerMap(center, zoom);
-            }
+        /**
+         * Initialise le contrôle "Fonds de carte"
+         *
+         * @returns {undefined}
+         */
+        setupLayersControl() {
+            const layersControl = L.control.layers(
+                this.mapLayers,
+                undefined,
+                { collapsed: false },
+            );
 
-            this.markersGroup = L.markerClusterGroup();
-            this.map.addLayer(this.markersGroup);
+            this.map.addControl(layersControl);
+        },
 
-            this.map.addEventListener('click', (event) => {
-                const { lat, lng } = event.latlng;
-                this.positionMarker.setLatLng([lat, lng]);
-                this.$emit('input', this.input);
-            });
-
+        /**
+         * Initialise le contrôle "Voir les adresses des sites"
+         *
+         * @returns {undefined}
+         */
+        setupAddressTogglerControl() {
             const { adressToggler } = this.$refs;
             const AddressToggler = L.Control.extend({
                 options: {
@@ -173,7 +306,14 @@ export default {
             });
 
             this.map.addControl(new AddressToggler());
+        },
 
+        /**
+         * Initialise le contrôle "Légende"
+         *
+         * @returns {undefined}
+         */
+        setupFieldTypesLegendControl() {
             const { legends } = this.$refs;
             const Legend = L.Control.extend({
                 options: {
@@ -187,74 +327,258 @@ export default {
 
             this.map.addControl(new Legend());
         },
-        getMapLayers() {
-            return {
-                Satellite: L.tileLayer.provider('Esri.WorldImagery'),
-                Dessin: L.tileLayer.provider('OpenStreetMap.Mapnik'),
-            };
+
+        /**
+         * Initialise tous les clusters de markers
+         *
+         * @returns {undefined}
+         */
+        setupMarkerGroups() {
+            this.map.addLayer(this.markersGroup.towns);
+            this.map.addLayer(this.markersGroup.search);
         },
-        addTownMarker(town) {
-            const { latitude, longitude } = town;
-            const address = shortAddress(town);
 
-            let color;
-            if (town.fieldType !== undefined) {
-                color = this.colors[town.fieldType.id];
-            }
+        /**
+         * Met en place la vue par défaut sur la carte
+         *
+         * @returns {undefined}
+         */
+        setupView() {
+            const { center, zoom } = this.defaultView;
+            this.centerMap(center, zoom);
+        },
 
-            if (!color) {
-                color = '#cccccc';
-            }
-
-            let waterImg;
-            if (town.accessToWater === true) {
-                waterImg = waterYes;
-            } else if (town.accessToWater === false) {
-                waterImg = waterNo;
-            } else {
-                waterImg = waterNull;
-            }
-
-            const marker = L.marker([latitude, longitude], {
-                title: town.address,
-                icon: L.divIcon({
-                    className: 'leaflet-marker-custom',
-                    html: `<span style="background: ${color}" class="address"><i style="border-top-color: ${color}"></i>${address}</span><span class="water"><img src="${waterImg}"></img></span>`,
-                    iconAnchor: [25, 36],
-                }),
+        /**
+         * Crée la carte et initialise sa vue et ses contrôles
+         *
+         * Attention, cette méthode n'initialise pas le contenu (les markers) de la carte !
+         *
+         * @returns {undefined}
+         */
+        createMap() {
+            this.map = L.map('map', {
+                layers: this.mapLayers.Dessin, // fond de carte par défaut
+                scrollWheelZoom: false, // interdire le zoom via la molette de la souris
             });
-            this.markersGroup.addLayer(marker);
 
-            marker.on('click', this.handleTownMarkerClick.bind(this, town));
-            this.townMarkers.push(marker);
+            this.setupMapControls();
+            this.setupMarkerGroups();
+            this.setupView();
         },
-        removeAllTownMarkers() {
-            this.markersGroup.clearLayers();
-            this.townMarkers = [];
-        },
+
+        /**
+         * Supprime et recrée la liste des marqueurs de site
+         *
+         * @returns {undefined}
+         */
         syncTownMarkers() {
             this.removeAllTownMarkers();
-            this.towns.forEach(this.addTownMarker);
+            this.towns.forEach(this.createTownMarker);
         },
-        syncPositionMarker() {
-            if (this.trackPosition === true) {
-                this.positionMarker.addTo(this.map);
-            } else {
-                this.positionMarker.remove();
+
+        /**
+         * Supprime tous les marqueurs de site existants
+         *
+         * @returns {undefined}
+         */
+        removeAllTownMarkers() {
+            this.markersGroup.towns.clearLayers();
+            this.townMarkers = [];
+            this.hashedTownMarkers = {};
+        },
+
+        getTownAddress(town) {
+            return shortAddress(town);
+        },
+
+        getTownCoordinates(town) {
+            const { latitude, longitude } = town;
+            return [latitude, longitude];
+        },
+
+        getTownColor(town) {
+            if (town.fieldType !== undefined) {
+                return this.fieldTypeColors[town.fieldType.id];
             }
+
+            return '#cccccc';
         },
+
+        getTownWaterImage(town) {
+            if (town.accessToWater === true) {
+                return waterYes;
+            }
+
+            if (town.accessToWater === false) {
+                return waterNo;
+            }
+
+            return waterNull;
+        },
+
+        /**
+         * Crée le marqueur de résultat de recherche
+         *
+         * @returns {L.Marker}
+         */
+        createSearchMarker() {
+            return L.marker(DEFAULT_VIEW, {
+                title: 'A',
+                icon: L.divIcon({
+                    className: 'leaflet-marker',
+                    html: `<span class="mapPin mapPin--result">
+                        <span class="mapPin-wrapper">
+                            <span class="mapPin-marker" style="background-color: red"></span>
+                        </span>
+                        <span class="mapPin-address"></span>
+                    </span>`,
+                    iconAnchor: [13, 28],
+                }),
+            });
+        },
+
+        /**
+         * Crée un marqueur de site et l'ajoute sur la carte
+         *
+         * @param {Shantytown} town
+         *
+         * @returns {undefined}
+         */
+        createTownMarker(town) {
+            const address = this.getTownAddress(town);
+            const coordinates = this.getTownCoordinates(town);
+            const color = this.getTownColor(town);
+            const waterImage = this.getTownWaterImage(town);
+
+            const marker = L.marker(coordinates, {
+                title: town.address,
+                icon: L.divIcon({
+                    className: 'leaflet-marker',
+                    html: `<span class="mapPin mapPin--shantytown">
+                        <span class="mapPin-wrapper">
+                            <span class="mapPin-water"><img src="${waterImage}" /></span>
+                            <span class="mapPin-marker" style="background-color: ${color}"></span>
+                        </span>
+                        <span class="mapPin-address">${address}</span>
+                    </span>`,
+                    iconAnchor: [13, 28],
+                }),
+            });
+            marker.on('click', this.handleTownMarkerClick.bind(this, town));
+            marker.on('add', () => {
+                if (marker.searchResult === true) {
+                    this.markTownAsSearchResult(marker);
+                }
+            });
+
+            marker.addTo(this.markersGroup.towns);
+            this.townMarkers.push(marker);
+            this.hashedTownMarkers[coordinates.join(';')] = marker;
+        },
+
+        /**
+         * Gère un clic sur un marqueur de site
+         *
+         * @param {L.Marker} marker
+         * @param {Event}    event
+         *
+         * @returns {undefined}
+         */
         handleTownMarkerClick(marker, event) {
             this.$emit('town-click', marker, event);
         },
+
+        /**
+         * Met à jour le centre et le zoom de la carte
+         *
+         * @param {MapCoordinates} coordinates
+         * @param {Number}         zoom
+         *
+         * @returns {undefined}
+         */
         centerMap(coordinates, zoom) {
             this.map.setView(coordinates, zoom);
         },
-        setView(coordinates, zoom) {
-            this.positionMarker.setLatLng(coordinates);
-            this.centerMap(coordinates, zoom);
+
+        /**
+         * Force un redimensionnement de la carte pour prendre toute la place disponible
+         *
+         * @returns {undefined}
+         */
+        resize() {
+            if (this.map === null) {
+                return;
+            }
+
+            this.map.invalidateSize(true);
         },
-        onDrag() {
-            this.$emit('input', this.input);
+
+        clearSearchMarker() {
+            if (this.townSearchMarker !== null) {
+                if (this.townSearchMarker._icon) {
+                    this.townSearchMarker._icon.querySelector('.mapPin').classList.remove('mapPin--result');
+                }
+
+                this.townSearchMarker.searchResult = false;
+                this.townSearchMarker = null;
+                return;
+            }
+
+            this.searchMarker.remove();
+        },
+
+        getMatchingTownMarker(coordinates) {
+            return this.hashedTownMarkers[coordinates.join(';')] || null;
+        },
+
+        markTownAsSearchResult(marker) {
+            this.townSearchMarker = marker;
+            this.townSearchMarker.searchResult = true;
+            marker._icon.querySelector('.mapPin').classList.add('mapPin--result');
+        },
+
+        setSearchMarker(type, address, coordinates) {
+            this.clearSearchMarker();
+
+            // check if there is a marker existing at that exact address
+            const townMarker = this.getMatchingTownMarker(coordinates);
+            if (townMarker !== null) {
+                this.markTownAsSearchResult(townMarker);
+                return;
+            }
+
+            this.searchMarker.addTo(this.markersGroup.search);
+            this.searchMarker.setLatLng(coordinates);
+
+
+            this.searchMarker._icon.querySelector('.mapPin-address').innerHTML = address;
+
+            let action = 'add';
+            if (type !== 'housenumber') {
+                action = 'remove';
+            }
+
+            this.searchMarker._icon.querySelector('.mapPin').classList[action]('mapPin--street');
         },
     },
 };
+
+/**
+ * @typedef {Array} MapCoordinates
+ * @property {Float} [0] Latitude
+ * @property {Float} [1] Longitude
+ */
+
+/**
+ * @typedef {Object} MapView
+ * @property {MapCoordinates} center Coordonnées géographiques du centre de la vue
+ * @property {Number}         zoom   Niveau de zoom, voir la documentation de Leaflet
+ */
+
+/**
+ * @typedef {Object} Address Une adresse au format adresse.data.gouv.fr
+ * @property {String}         label       Adresse complète
+ * @property {String}         city        Nom de la ville
+ * @property {String}         citycode    Code communal (/!\ différent du code postal)
+ * @property {MapCoordinates} coordinates Coordonnées géographiques
+ */

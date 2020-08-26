@@ -366,7 +366,7 @@
                                 <p v-if="town.addressDetails !== undefined">
                                     <strong>Informations d'accès :</strong> {{ town.addressDetails }}
                                 </p>
-                                <Map :show-address="false" :track-position="false" :towns="[ town ]" :default-view="center"></Map>
+                                <Map :display-searchbar="false" :towns="[ town ]" :default-view="center"></Map>
                                 <p v-if="town.fieldType !== undefined   ">
                                     <strong>Type de site :</strong> {{ town.fieldType.label }}
                                 </p>
@@ -529,7 +529,7 @@
                                     </ul>
                                 </p>
                                 <p>Saisissez ici l'adresse du site, puis précisez sa position en déplaçant le point sur la carte.</p>
-                                <Map placeholder="Saisissez ici l'adresse du site" :track-position="true" v-model="edit.address" :default-view="{center:edit.address.coordinates,zoom:16}"></Map>
+                                <AddressWithLocation v-model="edit.address"></AddressWithLocation>
                             </div>
 
                             <div class="form__group">

@@ -3,6 +3,7 @@ import Datepicker from 'vuejs-datepicker';
 import { fr } from 'vuejs-datepicker/dist/locale';
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import Map from '#app/components/map/map.vue';
+import AddressWithLocation from '#app/components/form/input/address-with-location/address-with-location.vue';
 import CommentDeletion from '#app/components/comment-deletion/comment-deletion.vue';
 import {
     get, close, edit, destroy, addComment, editComment, addCovidComment,
@@ -26,6 +27,7 @@ export default {
     components: {
         NavBar,
         Map,
+        AddressWithLocation,
         Datepicker,
         simplebar,
         CommentDeletion,
@@ -276,10 +278,15 @@ export default {
             this.edit = {
                 priority: this.town.priority,
                 address: {
-                    city: this.town.city.name,
-                    citycode: this.town.city.code,
-                    label: this.town.address,
-                    coordinates: [this.town.latitude, this.town.longitude],
+                    address: {
+                        city: this.town.city.name,
+                        citycode: this.town.city.code,
+                        label: this.town.address,
+                    },
+                    location: {
+                        coordinates: [this.town.latitude, this.town.longitude],
+                        zoom: 16,
+                    },
                 },
                 detailedAddress: this.town.addressDetails,
                 declaredAt: this.town.declaredAt !== null ? this.town.declaredAt * 1000 : null,
@@ -334,15 +341,16 @@ export default {
             this.fieldErrors = {};
 
             // send the form
-            const coordinates = this.edit.address && this.edit.address.coordinates;
+            const coordinates = this.edit.address && this.edit.address.location && this.edit.address.location.coordinates;
+            const { address } = this.edit.address || {};
 
             edit(this.town.id, {
                 priority: this.edit.priority || null,
                 latitude: coordinates && coordinates[0],
                 longitude: coordinates && coordinates[1],
-                city: this.edit.address && this.edit.address.city,
-                citycode: this.edit.address && this.edit.address.citycode,
-                address: this.edit.address && this.edit.address.label,
+                city: address && address.city,
+                citycode: address && address.citycode,
+                address: address && address.label,
                 detailed_address: this.edit.detailedAddress,
                 declared_at: this.edit.declaredAt,
                 built_at: this.edit.builtAt,
