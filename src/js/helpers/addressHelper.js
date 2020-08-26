@@ -50,6 +50,7 @@ function onAutocompleteLoad(success, failure) {
             removeDuplicates(features)
                 .filter(feature => (feature.properties && feature.properties.citycode))
                 .map(feature => ({
+                    addressType: feature.properties.type,
                     citycode: feature.properties.citycode,
                     city: feature.properties.city,
                     coordinates: feature.geometry.coordinates,

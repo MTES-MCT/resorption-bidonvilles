@@ -141,7 +141,7 @@
                                 <span v-if="plan.location_type.id === 'other'">{{ plan.location_details }}</span>
                             </p>
                         </div>
-                        <Map v-if="plan.location_type.id === 'location'" :show-address="false" :track-position="false" :towns="[ address ]" :default-view="center"></Map>
+                        <Map v-if="plan.location_type.id === 'location'" :display-searchbar="false" :towns="[ address ]" :default-view="center"></Map>
                     </article>
                 </section>
 

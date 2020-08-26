@@ -1,5 +1,5 @@
 <section class="map">
-    <Address :placeholder="placeholder" :autofocus="autofocus" v-model="address" v-if="showAddress"></Address>
+    <Address :placeholder="placeholder" v-model="address" v-if="displaySearchbar"></Address>
 
     <div id="map">
         <div ref="adressToggler" class="leaflet-address-toggler">

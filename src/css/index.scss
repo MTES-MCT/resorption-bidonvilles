@@ -219,6 +219,81 @@ button:disabled:hover {
     }
 }
 
+.mapPin {
+    display: flex;
+    align-items: center;
+
+    .mapPin-wrapper {
+        border-radius: 50%;
+        flex-shrink: 0;
+        text-align: center;
+
+        .mapPin-marker {
+            display: inline-block;
+            width: 1.6rem;
+            height: 2.1rem;
+            flex-shrink: 0;
+            -webkit-mask-image: url(/img/map-marker.svg);
+            mask-image: url(/img/map-marker.svg);
+        }
+    
+        .mapPin-water {
+            position: absolute;
+            z-index: 10;
+            margin-top: 0.2rem;
+            margin-left: 0.2rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            background: white;
+            border-radius: 50%;
+    
+            > img {
+                width: 100%;
+                height: auto;
+            }
+        }
+    }
+    
+    .mapPin-address {
+        visibility: hidden;
+        text-align: left;
+        margin-left: 0.3rem;
+        font-size: 1rem;
+        padding: 0.1rem 0.5rem;
+        background: rgba(255, 255, 255, 0.65);
+        white-space: nowrap;
+    }
+
+    &.mapPin--result.mapPin--street {
+        .mapPin-address {
+            visibility: visible;
+            color: red;
+        }
+    }
+
+    &.mapPin--result.mapPin--shantytown {
+        .mapPin-address {
+            visibility: visible;
+        }
+
+        .mapPin-wrapper {
+            padding-top: 0.5rem;
+            width: 3.5rem;
+            height: 3.5rem;
+            border: 3px solid red;
+        }
+    }
+}
+
+.leaflet-show-addresses {
+    .mapPin:not(.mapPin--result),
+    .mapPin.mapPin--result.mapPin--shantytown {
+        .mapPin-address {
+            visibility: visible;
+        }
+    }
+}
+
 .leaflet-show-addresses {
     .leaflet-marker-custom {
         > span.address {
