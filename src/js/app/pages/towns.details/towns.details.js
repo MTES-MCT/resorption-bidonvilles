@@ -54,6 +54,10 @@ export default {
                 { value: 0, label: 'Non' },
                 { value: -1, label: 'Inconnu' },
             ],
+            closedWithSolutionsValues: [
+                { value: true, label: 'Oui' },
+                { value: false, label: 'Non' },
+            ],
             statusValues: [
                 { value: 'closed_by_justice', label: 'Exécution d\'une décision de justice' },
                 { value: 'closed_by_admin', label: 'Exécution d\'une décision administrative' },
@@ -425,6 +429,7 @@ export default {
             // send the form
             close(this.town.id, {
                 closed_at: this.edit.closedAt,
+                closed_with_solutions: this.edit.closedWithSolutions,
                 status: this.edit.status,
                 solutions: Object.keys(this.edit.solutions)
                     .filter(key => this.edit.solutions[key].checked)

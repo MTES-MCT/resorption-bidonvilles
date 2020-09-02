@@ -36,6 +36,22 @@
                     <datepicker :clear-button="true" :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" :full-month-name="true" :format="'dd MMMM yyyy'" v-model="edit.closedAt"></datepicker>
                 </div>
 
+                 <div class="form__group">
+                    <fieldset>
+                        <legend v-bind:class="{ error: fieldErrors.closed_with_solutions }">Est-ce que ce site a été résorbé définitivement ? :</legend>
+                        <p class="error" v-if="fieldErrors.closed_with_solutions">
+                            <ul>
+                                <li v-for="error in fieldErrors.closed_with_solutions">{{ error }}</li>
+                            </ul>
+                        </p>
+                        
+                        <div v-for="(value, index) in closedWithSolutionsValues">
+                            <input type="radio" name="closed_with_solutions" :id="'status' + index" :value="value.value" v-model="edit.closedWithSolutions">
+                            <label :for="'status' + index" class="label-inline">{{ value.label }}</label>
+                        </div>
+                    </fieldset>
+                </div>
+
                 <div class="form__group">
                     <fieldset>
                         <legend v-bind:class="{ error: fieldErrors.status }">Cause de la disparition :</legend>
