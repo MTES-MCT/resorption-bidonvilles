@@ -18,23 +18,23 @@ export default {
         } = getConfig();
 
         const censusStatuses = [
-            { value: null, label: 'Inconnu' },
             { value: 'none', label: 'Non prévu' },
             { value: 'scheduled', label: 'Prévu' },
             { value: 'done', label: 'Réalisé' },
+            { value: null, label: 'Inconnu' },
         ];
 
         const yesNoValues = [
-            { value: -1, label: 'Inconnu' },
             { value: 1, label: 'Oui' },
             { value: 0, label: 'Non' },
+            { value: -1, label: 'Inconnu' },
         ];
 
         const cfpValues = [
-            { value: null, label: 'Inconnu' },
             { value: 'none', label: 'Non demandé' },
             { value: 'requested', label: 'Demandé' },
             { value: 'granted', label: 'Obtenu' },
+            { value: null, label: 'Inconnu' },
         ];
 
         const formDefinition = {
