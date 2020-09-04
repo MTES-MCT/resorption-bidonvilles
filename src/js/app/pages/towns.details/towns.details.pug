@@ -23,76 +23,81 @@
     <section v-else class="section section-white town-wrapper" ref="wrapper">
         <CommentDeletion v-if="commentToBeDeleted !== null" :comment="commentToBeDeleted" @close="closeCommentDeletion" @deleted="onCommentDeleted" ref="commentDeletionPopin"></CommentDeletion>
 
-        <div class="alert" v-if="mode === 'close'">
-            <div class="wrapper">
-                <h2>Disparition du site</h2>
-                <div class="form__group">
-                    <label v-bind:class="{ error: fieldErrors.closed_at }">Date de disparition du site :</label>
-                    <p class="error" v-if="fieldErrors.closed_at">
-                        <ul>
-                            <li v-for="error in fieldErrors.closed_at">{{ error }}</li>
-                        </ul>
-                    </p>
-                    <datepicker :clear-button="true" :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" :full-month-name="true" :format="'dd MMMM yyyy'" v-model="edit.closedAt"></datepicker>
-                </div>
-
-                 <div class="form__group">
-                    <fieldset>
-                        <legend v-bind:class="{ error: fieldErrors.closed_with_solutions }">Est-ce que ce site a été résorbé définitivement ? :</legend>
-                        <p class="error" v-if="fieldErrors.closed_with_solutions">
-                            <ul>
-                                <li v-for="error in fieldErrors.closed_with_solutions">{{ error }}</li>
-                            </ul>
-                        </p>
-                        
-                        <div v-for="(value, index) in closedWithSolutionsValues">
-                            <input type="radio" name="closed_with_solutions" :id="'status' + index" :value="value.value" v-model="edit.closedWithSolutions">
-                            <label :for="'status' + index" class="label-inline">{{ value.label }}</label>
+        <div class="popin" v-if="mode === 'close'">
+            <div class="popin-wrapper" ref="wrapper">
+                <div>
+                    <p class="popin-close"><span class="link" @click="closePopin"><font-awesome-icon icon="times" size="2x"></font-awesome-icon></span></p>
+                    <section>
+                        <h2>Disparition du site</h2>
+                        <div class="form__group">
+                            <label v-bind:class="{ error: fieldErrors.closed_at }">Date de disparition du site :</label>
+                            <p class="error" v-if="fieldErrors.closed_at">
+                                <ul>
+                                    <li v-for="error in fieldErrors.closed_at">{{ error }}</li>
+                                </ul>
+                            </p>
+                            <datepicker :clear-button="true" :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" :full-month-name="true" :format="'dd MMMM yyyy'" v-model="edit.closedAt"></datepicker>
                         </div>
-                    </fieldset>
-                </div>
 
-                <div class="form__group">
-                    <fieldset>
-                        <legend v-bind:class="{ error: fieldErrors.status }">Cause de la disparition :</legend>
-                        <p class="error" v-if="fieldErrors.status">
-                            <ul>
-                                <li v-for="error in fieldErrors.status">{{ error }}</li>
-                            </ul>
-                        </p>
-                        <div v-for="(value, index) in statusValues">
-                            <input type="radio" name="status" :id="'status' + index" :value="value.value" v-model="edit.status">
-                            <label :for="'status' + index" class="label-inline">{{ value.label }}</label>
-                        </div>
-                    </fieldset>
-                </div>
-
-                <div class="form__group">
-                    <fieldset>
-                        <legend v-bind:class="{ error: fieldErrors.solutions }">Orientations des ménages :</legend>
-                        <fieldset v-for="(value, index) in closingSolutions">
-                            <legend>
-                                <input type="checkbox" name="closingSolution" :id="'closingSolution' + index" :value="value.id" v-model="edit.solutions[value.id].checked">
-                                <label :for="'closingSolution' + index" class="label-inline">{{ value.label }}</label>
-                            </legend>
-                            <div class="solution-people" v-bind:class="{ visible: edit.solutions[value.id].checked }">
-                                <p class="error" v-if="fieldErrors.solutions && fieldErrors.solutions[value.id]">
+                         <div class="form__group">
+                            <fieldset>
+                                <legend v-bind:class="{ error: fieldErrors.closed_with_solutions }">Est-ce que ce site a été résorbé définitivement ? :</legend>
+                                <p class="error" v-if="fieldErrors.closed_with_solutions">
                                     <ul>
-                                        <li v-for="error in fieldErrors.solutions[value.id]">{{ error }}</li>
+                                        <li v-for="error in fieldErrors.closed_with_solutions">{{ error }}</li>
                                     </ul>
                                 </p>
-                                <p>Nombre de ménages concernés :<br/><input type="number" v-model="edit.solutions[value.id].householdsAffected" /></p>
-                                <p>Nombre de personnes concernées :<br/><input type="number" v-model="edit.solutions[value.id].peopleAffected" /></p>
-                            </div>
-                        </fieldset>
-                    </fieldset>
-                </div>
 
-                <div class="notification error" v-if="editError">{{ editError }}.</div>
+                                <div v-for="(value, index) in closedWithSolutionsValues">
+                                    <input type="radio" name="closed_with_solutions" :id="'status' + index" :value="value.value" v-model="edit.closedWithSolutions">
+                                    <label :for="'status' + index" class="label-inline">{{ value.label }}</label>
+                                </div>
+                            </fieldset>
+                        </div>
 
-                <div class="form__group">
-                    <button @click="submitClose" class="button">Valider</button>
-                    <button @click="closeAlert" class="button secondary">Annuler</button>
+                        <div class="form__group">
+                            <fieldset>
+                                <legend v-bind:class="{ error: fieldErrors.status }">Cause de la disparition :</legend>
+                                <p class="error" v-if="fieldErrors.status">
+                                    <ul>
+                                        <li v-for="error in fieldErrors.status">{{ error }}</li>
+                                    </ul>
+                                </p>
+                                <div v-for="(value, index) in statusValues">
+                                    <input type="radio" name="status" :id="'status' + index" :value="value.value" v-model="edit.status">
+                                    <label :for="'status' + index" class="label-inline">{{ value.label }}</label>
+                                </div>
+                            </fieldset>
+                        </div>
+
+                        <div class="form__group">
+                            <fieldset>
+                                <legend v-bind:class="{ error: fieldErrors.solutions }">Orientations des ménages :</legend>
+                                <fieldset v-for="(value, index) in closingSolutions">
+                                    <legend>
+                                        <input type="checkbox" name="closingSolution" :id="'closingSolution' + index" :value="value.id" v-model="edit.solutions[value.id].checked">
+                                        <label :for="'closingSolution' + index" class="label-inline">{{ value.label }}</label>
+                                    </legend>
+                                    <div class="solution-people" v-bind:class="{ visible: edit.solutions[value.id].checked }">
+                                        <p class="error" v-if="fieldErrors.solutions && fieldErrors.solutions[value.id]">
+                                            <ul>
+                                                <li v-for="error in fieldErrors.solutions[value.id]">{{ error }}</li>
+                                            </ul>
+                                        </p>
+                                        <p>Nombre de ménages concernés :<br/><input type="number" v-model="edit.solutions[value.id].householdsAffected" /></p>
+                                        <p>Nombre de personnes concernées :<br/><input type="number" v-model="edit.solutions[value.id].peopleAffected" /></p>
+                                    </div>
+                                </fieldset>
+                            </fieldset>
+                        </div>
+
+                        <div class="notification error" v-if="editError">{{ editError }}.</div>
+
+                        <div class="form__group">
+                            <button @click="submitClose" class="button">Valider</button>
+                            <button @click="closePopin" class="button secondary">Annuler</button>
+                        </div>
+                    </section>
                 </div>
             </div>
         </div>

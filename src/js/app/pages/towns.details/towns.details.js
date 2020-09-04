@@ -266,7 +266,7 @@ export default {
             this.resetEdit();
             this.mode = 'close';
         },
-        closeAlert() {
+        closePopin() {
             this.resetEdit();
             this.mode = 'view';
         },
