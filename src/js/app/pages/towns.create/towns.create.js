@@ -184,7 +184,7 @@ export default {
                                         type: 'textarea',
                                         label: 'Modalités d\'accès',
                                         description: 'Exemples : groupe électrogène, raccordement à une usine...',
-                                        mandatory: false
+                                        mandatory: false,
                                     },
                                     accessToWater: {
                                         type: 'radio',

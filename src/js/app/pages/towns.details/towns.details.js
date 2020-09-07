@@ -363,7 +363,7 @@ export default {
                 population_couples: this.edit.populationCouples,
                 population_minors: this.edit.populationMinors,
                 electricity_type: this.edit.electricityType,
-                electricity_comments: this.hasAccessToElectricity ? this.edit.electricityComments : null,
+                electricity_comments: this.edit.electricityComments,
                 access_to_water: this.edit.accessToWater,
                 water_comments: this.hasAccessToWater ? this.edit.waterComments : null,
                 trash_evacuation: this.edit.trashEvacuation,
