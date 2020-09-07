@@ -420,7 +420,7 @@
                                 <p>
                                     <strong>Accès à l'électricité:</strong> {{ town.electricityType.label }}
                                 </p>
-                                <p v-if="town.electricityType.label.indexOf('Oui') !== -1">
+                                <p>
                                     <strong>Modalités d'accès à l'électricité :</strong> {{ town.electricityComments }}
                                 </p>
                                 <p v-if="town.accessToWater !== undefined">
@@ -702,7 +702,7 @@
                                 </fieldset>
                             </div>
 
-                            <div class="form__group" v-if="hasAccessToElectricity">
+                            <div class="form__group">
                                 <fieldset>
                                     <legend v-bind:class="{ error: fieldErrors.electricity_comments }">Modalités d'accès :</legend>
                                     <p>Exemples : groupe électrogène, raccordement à une usine...</p>
