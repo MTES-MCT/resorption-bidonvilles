@@ -184,11 +184,7 @@ export default {
                                         type: 'textarea',
                                         label: 'Modalités d\'accès',
                                         description: 'Exemples : groupe électrogène, raccordement à une usine...',
-                                        mandatory: false,
-                                        condition({ electricityType }) {
-                                            const type = electricityTypes.find(({ id }) => id === electricityType);
-                                            return type.uid === 'oui'
-                                        },
+                                        mandatory: false
                                     },
                                     accessToWater: {
                                         type: 'radio',
