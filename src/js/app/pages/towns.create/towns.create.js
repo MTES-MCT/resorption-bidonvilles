@@ -187,7 +187,7 @@ export default {
                                         mandatory: false,
                                         condition({ electricityType }) {
                                             const type = electricityTypes.find(({ id }) => id === electricityType);
-                                            return type && type.label.indexOf('Oui') !== -1; // @todo: awfully bad :(
+                                            return type.uid === 'oui'
                                         },
                                     },
                                     accessToWater: {
