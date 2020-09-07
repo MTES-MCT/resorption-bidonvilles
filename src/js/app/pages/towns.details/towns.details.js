@@ -166,7 +166,7 @@ export default {
             }
 
             const type = this.electricityTypes.find(({ id }) => id === this.edit.electricityType);
-            return type && type.label.indexOf('Oui') !== -1; // @todo: aaaaawfuuuuulllyyyyy baaaaaaad...
+            return type.uid === 'oui';
         },
     },
     mounted() {
