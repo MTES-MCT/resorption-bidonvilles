@@ -41,7 +41,10 @@
 
                          <div class="form__group">
                             <fieldset>
-                                <legend v-bind:class="{ error: fieldErrors.closed_with_solutions }">Est-ce que ce site a été résorbé définitivement ? :</legend>
+                                <legend v-bind:class="{ error: fieldErrors.closed_with_solutions }">
+                                    <strong>Est-ce que ce site a été résorbé définitivement ? :</strong>
+                                </legend>
+                                <p class="question-info">C’est-à-dire sans réinstallation illicite et avec un accompagnement de la majorité des personnes vers des solutions pérennes</p>
                                 <p class="error" v-if="fieldErrors.closed_with_solutions">
                                     <ul>
                                         <li v-for="error in fieldErrors.closed_with_solutions">{{ error }}</li>
@@ -57,7 +60,9 @@
 
                         <div class="form__group">
                             <fieldset>
-                                <legend v-bind:class="{ error: fieldErrors.status }">Cause de la disparition :</legend>
+                                <legend v-bind:class="{ error: fieldErrors.status }">
+                                    <strong>Cause de la disparition :</strong>
+                                </legend>
                                 <p class="error" v-if="fieldErrors.status">
                                     <ul>
                                         <li v-for="error in fieldErrors.status">{{ error }}</li>
@@ -72,7 +77,9 @@
 
                         <div class="form__group">
                             <fieldset>
-                                <legend v-bind:class="{ error: fieldErrors.solutions }">Orientations des ménages :</legend>
+                                <legend v-bind:class="{ error: fieldErrors.solutions }">
+                                    <strong>Orientations des ménages :</strong>
+                                </legend>
                                 <fieldset v-for="(value, index) in closingSolutions">
                                     <legend>
                                         <input type="checkbox" name="closingSolution" :id="'closingSolution' + index" :value="value.id" v-model="edit.solutions[value.id].checked">
