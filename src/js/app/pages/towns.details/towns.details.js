@@ -126,7 +126,7 @@ export default {
                 case 'closed_by_admin':
                 case 'other':
                 case 'unknown':
-                    return 'disparu';
+                    return this.town.closedWithSolutions === 'yes' ? 'résorbé' : 'disparu';
 
                 default:
                     return 'inconnu';
