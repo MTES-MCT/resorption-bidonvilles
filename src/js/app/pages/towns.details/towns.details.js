@@ -166,7 +166,7 @@ export default {
             }
 
             const type = this.electricityTypes.find(({ id }) => id === this.edit.electricityType);
-            return type.uid === 'oui';
+            return type && type.uid === 'oui';
         },
     },
     mounted() {
