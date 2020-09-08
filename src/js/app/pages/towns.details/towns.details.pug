@@ -448,14 +448,20 @@
                                 <p>
                                     <strong>Accès à l'électricité:</strong> {{ town.electricityType.label }}
                                 </p>
-                                <p>
+                                <p v-if="town.electricityComments">
                                     <strong>Modalités d'accès à l'électricité :</strong> {{ town.electricityComments }}
                                 </p>
                                 <p v-if="town.accessToWater !== undefined">
                                     <strong>Accès à l'eau :</strong> {{ town.accessToWater !== null ? (town.accessToWater ? 'oui' : 'non') : 'inconnu' }}
                                 </p>
-                                <p v-if="town.accessToWater === true">
+                                <p v-if="town.waterComments">
                                     <strong>Modalités d'accès à l'eau :</strong> {{ town.waterComments }}
+                                </p>
+                                <p v-if="town.accessToWater !== undefined">
+                                    <strong>Accès aux toilettes :</strong> {{ town.accessToSanitary !== null ? (town.accessToSanitary ? 'oui' : 'non') : 'inconnu' }}
+                                </p>
+                                <p v-if="town.sanitaryComments">
+                                    <strong>Modalités d'accès aux toilettes :</strong> {{ town.sanitaryComments }}
                                 </p>
                                 <p v-if="town.trashEvacuation !== undefined">
                                     <strong>Évacuation des déchets :</strong> {{ town.trashEvacuation !== null ? (town.trashEvacuation ? 'oui' : 'non') : 'inconnu' }}
@@ -768,6 +774,34 @@
                                         </ul>
                                     </p>
                                     <textarea class="input input--textarea" v-model="edit.waterComments"></textarea>
+                                </fieldset>
+                            </div>
+
+                            <div class="form__group">
+                                <fieldset>
+                                    <legend v-bind:class="{ error: fieldErrors.access_to_sanitary }">Accès à des toilettes :</legend>
+                                    <p class="error" v-if="fieldErrors.access_to_sanitary">
+                                        <ul>
+                                            <li v-for="error in fieldErrors.access_to_sanitary">{{ error }}</li>
+                                        </ul>
+                                    </p>
+                                    <div v-for="(value, index) in yesnoValues">
+                                        <input type="radio" name="accessToSanitary" :id="'accessToSanitary' + index" :value="value.value" v-model="edit.accessToSanitary">
+                                        <label :for="'accessToSanitary' + index" class="label-inline">{{ value.label }}</label>
+                                    </div>
+                                </fieldset>
+                            </div>
+
+                            <div class="form__group">
+                                <fieldset>
+                                    <legend v-bind:class="{ error: fieldErrors.sanitary_comments }">Modalités d'accès :</legend>
+                                    <p>Exemples : 3 toilettes sèches, toilettes raccordés au réseau, un bloc sanitaire fourni par la ville...</p>
+                                    <p class="error" v-if="fieldErrors.sanitary_comments">
+                                        <ul>
+                                            <li v-for="error in fieldErrors.sanitary_comments">{{ error }}</li>
+                                        </ul>
+                                    </p>
+                                    <textarea class="input input--textarea" v-model="edit.sanitaryComments"></textarea>
                                 </fieldset>
                             </div>
 
