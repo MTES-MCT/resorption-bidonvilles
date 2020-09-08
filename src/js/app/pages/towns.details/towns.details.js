@@ -170,7 +170,7 @@ export default {
             }
 
             const type = this.electricityTypes.find(({ id }) => id === this.edit.electricityType);
-            return type && type.uid === 'oui';
+            return type && type.label.indexOf('Oui') !== -1; // @todo: aaaaawfuuuuulllyyyyy baaaaaaad...
         },
     },
     mounted() {
@@ -369,7 +369,7 @@ export default {
                 population_couples: this.edit.populationCouples,
                 population_minors: this.edit.populationMinors,
                 electricity_type: this.edit.electricityType,
-                electricity_comments: this.edit.electricityComments,
+                electricity_comments: this.hasAccessToElectricity ? this.edit.electricityComments : null,
                 access_to_sanitary: this.edit.accessToSanitary,
                 sanitary_comments: this.edit.sanitaryComments,
                 access_to_water: this.edit.accessToWater,
