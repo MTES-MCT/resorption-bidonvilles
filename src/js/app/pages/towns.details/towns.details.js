@@ -5,6 +5,7 @@ import NavBar from '#app/layouts/navbar/navbar.vue';
 import Map from '#app/components/map/map.vue';
 import AddressWithLocation from '#app/components/form/input/address-with-location/address-with-location.vue';
 import CommentDeletion from '#app/components/comment-deletion/comment-deletion.vue';
+import TownEdit from './edit/townEdit.vue';
 import {
     get, close, edit, destroy, addComment, editComment, addCovidComment,
 } from '#helpers/api/town';
@@ -31,6 +32,7 @@ export default {
         Datepicker,
         simplebar,
         CommentDeletion,
+        TownEdit,
     },
     data() {
         return {
@@ -311,6 +313,7 @@ export default {
                 police_granted_at: this.town.policeGrantedAt !== null ? this.town.policeGrantedAt * 1000 : null,
                 bailiff: this.town.bailiff,
                 census_status: this.town.censusStatus,
+                censusStatus: this.town.censusStatus,
                 census_conducted_at: this.town.censusConductedAt !== null ? this.town.censusConductedAt * 1000 : null,
                 census_conducted_by: this.town.censusConductedBy,
                 populationTotal: this.town.populationTotal,
