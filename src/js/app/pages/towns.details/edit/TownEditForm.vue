@@ -12,33 +12,32 @@
 
 <script>
     import Input from '#app/components/form/input/input.vue';
-    import getTownEditFormDefinition from './getTownEditFormDefinition'
 
     export default {
         props: {
-            initialData: {
+            data: {
                 type: Object,
                 required: true
-            }
-        },
-        data() {
-            return {
-                formDefinition: getTownEditFormDefinition(),
-                errors: {},
-                data: { ...this.initialData }
+            },
+            formDefinition: {
+                type: Array,
+                required: true
             }
         },
         components: {
             Input
         },
-        mounted() {
-            console.log(this.data)
+        data() {
+            return {
+                errors: {}
+            }
         },
         methods: {
             onDataChange() {
                 this.refreshId += 1;
                 this.$emit('input', this.data);
             },
+
             /**
              * Indicates whether the given input is visible or not
              *
@@ -52,6 +51,7 @@
             isInputVisible(input) {
                 return this.isInputActive(input) || input.inactiveMessage;
             },
+
             /**
              * Indicates whether the given input is disabled or not
              *
@@ -62,6 +62,7 @@
             isInputDisabled(input) {
                 return this.pending === true || input.disabled === true || (input.inactiveMessage && !this.isInputActive(input));
             },
+
             /**
              * Indicates whether the given input is active or not
              *
@@ -76,6 +77,7 @@
 
                 return input.condition(this.data);
             },
+
             /**
              * Returns the alert message to be displayed for the given input
              *
@@ -92,6 +94,4 @@
             },
         }
     }
-
-
 </script>

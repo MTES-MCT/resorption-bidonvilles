@@ -5,7 +5,7 @@ import NavBar from '#app/layouts/navbar/navbar.vue';
 import Map from '#app/components/map/map.vue';
 import AddressWithLocation from '#app/components/form/input/address-with-location/address-with-location.vue';
 import CommentDeletion from '#app/components/comment-deletion/comment-deletion.vue';
-import TownEdit from './edit/townEdit.vue';
+import TownEdit from './edit/TownEdit.vue';
 import {
     get, close, edit, destroy, addComment, editComment, addCovidComment,
 } from '#helpers/api/town';
@@ -302,26 +302,27 @@ export default {
                 fieldType: this.town.fieldType.id,
                 ownerType: this.town.ownerType.id,
                 owner: this.town.owner,
-                owner_complaint: boolToYesNoValue(this.town.ownerComplaint),
+                ownerComplaint: boolToYesNoValue(this.town.ownerComplaint),
                 justiceProcedure: boolToYesNoValue(this.town.justiceProcedure),
-                justice_rendered: boolToYesNoValue(this.town.justiceRendered),
-                justice_rendered_by: this.town.justiceRenderedBy,
-                justice_rendered_at: this.town.justiceRenderedAt !== null ? this.town.justiceRenderedAt * 1000 : null,
-                justice_challenged: boolToYesNoValue(this.town.justiceChallenged),
-                police_status: this.town.policeStatus,
-                police_requested_at: this.town.policeRequestedAt !== null ? this.town.policeRequestedAt * 1000 : null,
-                police_granted_at: this.town.policeGrantedAt !== null ? this.town.policeGrantedAt * 1000 : null,
+                justiceRendered: boolToYesNoValue(this.town.justiceRendered),
+                justiceRenderedBy: this.town.justiceRenderedBy,
+                justiceRenderedAt: this.town.justiceRenderedAt !== null ? this.town.justiceRenderedAt * 1000 : null,
+                justiceChallenged: boolToYesNoValue(this.town.justiceChallenged),
+                policeStatus: this.town.policeStatus,
+                policeRequestedAt: this.town.policeRequestedAt !== null ? this.town.policeRequestedAt * 1000 : null,
+                policeGrantedAt: this.town.policeGrantedAt !== null ? this.town.policeGrantedAt * 1000 : null,
                 bailiff: this.town.bailiff,
-                census_status: this.town.censusStatus,
                 censusStatus: this.town.censusStatus,
-                census_conducted_at: this.town.censusConductedAt !== null ? this.town.censusConductedAt * 1000 : null,
-                census_conducted_by: this.town.censusConductedBy,
+                censusConductedAt: this.town.censusConductedAt !== null ? this.town.censusConductedAt * 1000 : null,
+                censusConductedBy: this.town.censusConductedBy,
                 populationTotal: this.town.populationTotal,
                 populationCouples: this.town.populationCouples,
                 populationMinors: this.town.populationMinors,
                 origins: this.town.socialOrigins.map(origin => origin.id),
                 electricityType: this.town.electricityType.id,
                 electricityComments: this.town.electricityComments || '',
+                accessToSanitary: boolToYesNoValue(this.town.accessToWater),
+                sanitaryComments: this.town.sanitaryComments || '',
                 accessToWater: boolToYesNoValue(this.town.accessToWater),
                 waterComments: this.town.waterComments || '',
                 trashEvacuation: boolToYesNoValue(this.town.trashEvacuation),
@@ -363,33 +364,35 @@ export default {
                 built_at: this.edit.builtAt,
                 closed_at: this.edit.closedAt,
                 status: 'open',
-                census_status: this.edit.census_status,
-                census_conducted_at: ['scheduled', 'done'].indexOf(this.edit.census_status) !== -1 ? this.edit.census_conducted_at : null,
-                census_conducted_by: ['scheduled', 'done'].indexOf(this.edit.census_status) !== -1 ? this.edit.census_conducted_by : '',
+                census_status: this.edit.censusStatus,
+                census_conducted_at: ['scheduled', 'done'].indexOf(this.edit.censusStatus) !== -1 ? this.edit.censusConductedAt : null,
+                census_conducted_by: ['scheduled', 'done'].indexOf(this.edit.censusStatus) !== -1 ? this.edit.censusConductedBy : '',
                 population_total: this.edit.populationTotal,
                 population_couples: this.edit.populationCouples,
                 population_minors: this.edit.populationMinors,
                 electricity_type: this.edit.electricityType,
                 electricity_comments: this.edit.electricityComments,
+                access_to_sanitary: this.edit.accessToSanitary,
+                sanitaryComments: this.edit.sanitaryComments,
                 access_to_water: this.edit.accessToWater,
                 water_comments: this.hasAccessToWater ? this.edit.waterComments : null,
                 trash_evacuation: this.edit.trashEvacuation,
-                owner_complaint: this.edit.owner_complaint,
-                justice_procedure: this.edit.owner_complaint === 1 ? this.edit.justiceProcedure : undefined,
-                justice_rendered: this.edit.owner_complaint === 1
-                    && this.edit.justiceProcedure === 1 ? this.edit.justice_rendered : undefined,
-                justice_rendered_by: this.edit.owner_complaint === 1
-                    && this.edit.justiceProcedure === 1
-                    && this.edit.justice_rendered === 1 ? this.edit.justice_rendered_by : '',
-                justice_rendered_at: this.edit.owner_complaint === 1
-                    && this.edit.justiceProcedure === 1
-                    && this.edit.justice_rendered === 1 ? this.edit.justice_rendered_at : null,
-                justice_challenged: this.edit.owner_complaint === 1
-                    && this.edit.justiceProcedure === 1
-                    && this.edit.justice_rendered === 1 ? this.edit.justice_challenged : undefined,
-                police_status: this.edit.police_status,
-                police_requested_at: ['requested', 'granted'].indexOf(this.edit.police_status) !== -1 ? this.edit.police_requested_at : null,
-                police_granted_at: ['granted'].indexOf(this.edit.police_status) !== -1 ? this.edit.police_granted_at : null,
+                owner_complaint: this.edit.ownerComplaint,
+                justice_procedure: this.edit.ownerComplaint === 1 ? this.edit.justiceProcedure : undefined,
+                justice_rendered: this.edit.ownerComplaint === 1
+                && this.edit.justiceProcedure === 1 ? this.edit.justiceRendered : undefined,
+                justice_rendered_by: this.edit.ownerComplaint === 1
+                && this.edit.justiceProcedure === 1
+                && this.edit.justiceRendered === 1 ? this.edit.justiceRenderedBy : '',
+                justice_rendered_at: this.edit.ownerComplaint === 1
+                && this.edit.justiceProcedure === 1
+                && this.edit.justiceRendered === 1 ? this.edit.justiceRenderedAt : null,
+                justice_challenged: this.edit.ownerComplaint === 1
+                && this.edit.justiceProcedure === 1
+                && this.edit.justiceRendered === 1 ? this.edit.justiceChallenged : undefined,
+                police_status: this.edit.policeStatus,
+                police_requested_at: ['requested', 'granted'].indexOf(this.edit.policeStatus) !== -1 ? this.edit.policeRequestedAt : null,
+                police_granted_at: ['granted'].indexOf(this.edit.policeStatus) !== -1 ? this.edit.policeGrantedAt : null,
                 bailiff: this.edit.bailiff,
                 social_origins: this.edit.origins,
                 field_type: this.edit.fieldType,
