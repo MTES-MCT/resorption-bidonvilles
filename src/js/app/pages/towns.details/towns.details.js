@@ -50,9 +50,9 @@ export default {
             closingSolutions: getConfig().closing_solutions,
             dateLanguage: fr,
             yesnoValues: [
-                { value: -1, label: 'Inconnu' },
                 { value: 1, label: 'Oui' },
                 { value: 0, label: 'Non' },
+                { value: -1, label: 'Inconnu' },
             ],
             statusValues: [
                 { value: 'closed_by_justice', label: 'Exécution d\'une décision de justice' },
@@ -61,16 +61,16 @@ export default {
                 { value: 'unknown', label: 'Raison inconnue' },
             ],
             diagnosisValues: [
-                { value: null, label: 'Inconnu' },
                 { value: 'none', label: 'Non prévu' },
                 { value: 'scheduled', label: 'Prévu' },
                 { value: 'done', label: 'Réalisé' },
+                { value: null, label: 'Inconnu' },
             ],
             cfpValues: [
-                { value: null, label: 'Inconnu' },
                 { value: 'none', label: 'Non demandé' },
                 { value: 'requested', label: 'Demandé' },
                 { value: 'granted', label: 'Obtenu' },
+                { value: null, label: 'Inconnu' },
             ],
             newComment: '',
             covidComment: {
