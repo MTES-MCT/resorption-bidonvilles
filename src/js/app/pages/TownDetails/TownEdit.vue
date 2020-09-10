@@ -1,6 +1,6 @@
 <template>
     <div>
-        <FormPanel :data="data" :formDefinition="formDefinition" />
+        <FormPanel :data="edit" :formDefinition="formDefinition" />
 
         <div class="notification error" v-if="editError">{{ editError }}.</div>
 
@@ -12,18 +12,15 @@
 
 <script>
     import FormPanel from '#app/components/form/formPanel.vue';
+    import getEditFormDefinition from "./getEditFormDefinition";
 
     export default {
         components: {
             FormPanel
         },
         props: {
-            data: {
+            edit: {
                 type: Object,
-                required: true
-            },
-            formDefinition: {
-                type: Array,
                 required: true
             },
             editError: {
@@ -34,8 +31,10 @@
                 required: true
             }
         },
-        mounted() {
-            console.log(this.props)
+        data() {
+            return {
+                formDefinition: getEditFormDefinition()
+            }
         }
     }
 </script>

@@ -101,32 +101,68 @@
 
 <script>
     import {fr} from "vuejs-datepicker/dist/locale";
+    import {addCovidComment} from "#helpers/api/town";
 
     export default {
         props: {
             town: {
                 required: true,
                 type: Object
-            },
-            covidTags: {
-                required: true,
-                type: Object
-            },
-            covidComment: {
-                required: true
-            },
-            addCovidComment: {
-                required: true
-            },
-            covidErrors: {
-                required: true
             }
         },
         methods: {
             formatDate: (...args) => App.formatDate(...args),
+            addCovidComment() {
+                // clean previous errors
+                this.covidErrors = [];
+
+                addCovidComment(this.$route.params.id, this.covidComment)
+                    .then((response) => {
+                        this.town.comments.covid = response;
+                        this.covidComment = {
+                            date: new Date(),
+                            description: '',
+                            equipe_maraude: false,
+                            equipe_sanitaire: false,
+                            equipe_accompagnement: false,
+                            distribution_alimentaire: false,
+                            personnes_orientees: false,
+                            personnes_avec_symptomes: false,
+                            besoin_action: false,
+                        };
+                    })
+                    .catch((response) => {
+                        const fields = response.fields || {};
+                        this.covidErrors = Object.keys(fields).reduce((acc, key) => [
+                            ...acc,
+                            ...fields[key],
+                        ], []);
+                    });
+            },
         },
         data() {
             return {
+                covidComment: {
+                    date: new Date(),
+                    description: '',
+                    equipe_maraude: false,
+                    equipe_sanitaire: false,
+                    equipe_accompagnement: false,
+                    distribution_alimentaire: false,
+                    personnes_orientees: false,
+                    personnes_avec_symptomes: false,
+                    besoin_action: false,
+                },
+                covidErrors: [],
+                covidTags: [
+                    { prop: 'equipe_maraude', label: 'Équipe de maraude', type: 'warning' },
+                    { prop: 'equipe_sanitaire', label: 'Équipe sanitaire', type: 'warning' },
+                    { prop: 'equipe_accompagnement', label: 'Équipe d\'accompagnement', type: 'warning' },
+                    { prop: 'distribution_alimentaire', label: 'Distribution d\'aide alimentaire', type: 'warning' },
+                    { prop: 'personnes_orientees', label: 'Personne(s) orientée(s) vers un centre d\'hébergement spécialisé (desserrement)', type: 'error' },
+                    { prop: 'personnes_avec_symptomes', label: 'Personne(s) avec des symptômes Covid-19', type: 'error' },
+                    { prop: 'besoin_action', label: 'Besoin d\'une action prioritaire', type: 'error' },
+                ],
                 dateLanguage: fr
             }
         }

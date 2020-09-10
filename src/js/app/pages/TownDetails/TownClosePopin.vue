@@ -128,9 +128,6 @@
                 ],
                 dateLanguage: fr,
             }
-        },
-        mounted() {
-            console.log(this)
         }
     }
 </script>

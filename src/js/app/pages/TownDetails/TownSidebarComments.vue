@@ -18,7 +18,7 @@
                     <div class="input__group">
                         <textarea v-model="newComment"></textarea>
                     </div>
-                    <p><button class="button large" @click="addComment">Ajouter le commentaire</button></p>
+                    <p><button class="button large" @click="createComment">Ajouter le commentaire</button></p>
                 </div>
             </div>
 
@@ -62,21 +62,119 @@
 
 <script>
     import {hasPermission} from "#helpers/api/config";
+    import {addComment, editComment} from "#helpers/api/town";
+    import {notify} from "#helpers/notificationHelper";
 
     export default {
         props: {
-            commentEdit: {
-                required: true
-            },
-            sendEditComment: { required: true},
-            cancelEditComment: { required: true},
             town: { required: true},
-            commentErrors: { required: true},
-            addComment: { required: true},
-            newComment: { required: true},
+        },
+        data() {
+            return {
+                newComment: '',
+                commentError: null,
+                commentErrors: {},
+                commentEdit: {
+                    commentId: null,
+                    value: null,
+                    pending: false,
+                    error: null,
+                },
+            }
         },
         methods: {
             hasPermission: permissionName => hasPermission(permissionName),
+            formatDate: (...args) => App.formatDate(...args),
+            createComment() {
+                if (!hasPermission('shantytown_comment.create')) {
+                    return;
+                }
+
+                // clean previous errors
+                this.commentError = null;
+                this.commentErrors = {};
+
+                addComment(this.$route.params.id, {
+                    description: this.newComment,
+                })
+                    .then((response) => {
+                        this.town.comments.regular = response.comments;
+                        this.newComment = '';
+                        this.newStep = '';
+                    })
+                    .catch((response) => {
+                        this.commentError = response.user_message;
+                        this.commentErrors = response.fields || {};
+                    });
+            },
+            sendEditComment(comment) {
+                if (this.commentEdit.pending !== false) {
+                    return;
+                }
+
+                this.commentEdit.pending = true;
+                this.commentEdit.error = null;
+
+                editComment(this.$route.params.id, comment.id, { description: this.commentEdit.value })
+                    .then((response) => {
+                        this.town.comments.regular = response.comments;
+                        this.commentEdit.commentId = null;
+                        this.commentEdit.value = null;
+                        this.commentEdit.pending = false;
+                        this.commentEdit.error = null;
+
+                        notify({
+                            group: 'notifications',
+                            type: 'success',
+                            title: 'Opération réussie',
+                            text: 'Le commentaire a bien été modifié',
+                        });
+                    })
+                    .catch((response) => {
+                        this.commentEdit.pending = false;
+                        this.commentEdit.error = response.user_message;
+                    });
+            },
+            cancelEditComment() {
+                setTimeout(() => {
+                    if (this.commentEdit.pending !== false) {
+                        return;
+                    }
+
+                    this.commentEdit.commentId = null;
+                    this.commentEdit.value = null;
+                    this.commentEdit.pending = false;
+                    this.commentEdit.error = null;
+                }, 100);
+            },
+
+            canEditComment(comment) {
+                return hasPermission('shantytown_comment.create') || (comment.createdBy.id === this.userId);
+            },
+            canDeleteComment(comment) {
+                return hasPermission('shantytown_comment.delete') || (comment.createdBy.id === this.userId);
+            },
+            editComment(comment) {
+                this.commentEdit.commentId = comment.id;
+                this.commentEdit.value = comment.description;
+                this.commentEdit.pending = false;
+                this.commentEdit.error = null;
+            },
+            deleteComment(comment) {
+                this.commentToBeDeleted = {
+                    id: comment.id,
+                    date: comment.createdAt,
+                    shantytown: {
+                        id: this.town.id,
+                        name: this.town.addressSimple || 'Pas d\'adresse précise',
+                        city: this.town.city.name,
+                    },
+                    author: {
+                        name: `${comment.createdBy.firstName} ${comment.createdBy.lastName.toUpperCase()}`,
+                    },
+                    content: comment.description,
+                };
+            }
         }
     }
 </script>

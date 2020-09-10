@@ -67,33 +67,16 @@
                         </div>
 
                         <div v-if="sidePanel === 'changelog'">
-                            <TownSidebarChangelog :town="town" v-if="sidePanel === 'changelog'" />
+                            <TownSidebarChangelog :town="town" />
                         </div>
 
                         <div v-else-if="sidePanel === 'comments'">
-                            <TownSidebarComments :commentEdit="commentEdit"
-                                                 :sendEditComment="sendEditComment"
-                                                 :cancelEditComment="cancelEditComment"
-                                                 :town="town"
-                                                 :commentErrors="commentErrors"
-                                                 :addComment="addComment"
-                                                 :newComment="newComment" />
+                            <TownSidebarComments :town="town" />
                         </div>
 
                         <div v-else-if="sidePanel === 'covidComments'">
-                            <TownSidebarCovidComments :town="town"
-                                                      :covidTags="covidTags"
-                                                      :covidComment="covidComment"
-                                                      :addCovidComment="addCovidComment"
-                                                      :covidErrors="covidErrors"
-
-                            />
+                            <TownSidebarCovidComments :town="town" />
                         </div>
-
-
-
-
-
 
                     </div>
                 </div>
@@ -108,11 +91,11 @@
 
                     <div v-if="view === 'details'">
                         <div v-if="mode === 'view'">
-                            <TownDetailsPanel  :town="town" />
+                            <TownDetailsPanel :town="town" />
                         </div>
 
                         <div v-if="mode === 'edit'">
-                            <TownEdit  :data="edit" :formDefinition="formDefinition" :editError="editError" :submit="submit"></TownEdit>
+                            <TownEdit :edit="edit" :editError="editError" :editError="editError" :submit="submit"></TownEdit>
                         </div>
 
                     </div>
@@ -143,11 +126,10 @@
     import AddressWithLocation from '#app/components/form/input/address-with-location/address-with-location.vue';
     import CommentDeletion from '#app/components/comment-deletion/comment-deletion.vue';
     import {
-        get, close, edit, destroy, addComment, editComment, addCovidComment,
+        get, edit, destroy, close
     } from '#helpers/api/town';
     import { get as getConfig, hasPermission } from '#helpers/api/config';
     import { notify } from '#helpers/notificationHelper';
-    import getEditFormDefinition from './getEditFormDefinition';
     import FormPanel from '#app/components/form/formPanel.vue';
     import TownClosePopin from './TownClosePopin';
     import TownDetailsPanel from './TownDetailsPanel';
@@ -186,7 +168,6 @@
         },
         data() {
             return {
-                formDefinition: getEditFormDefinition(),
                 userId: getConfig().user.id,
                 loading: false,
                 error: null,
@@ -221,38 +202,10 @@
                     { value: 'granted', label: 'Obtenu' },
                     { value: null, label: 'Inconnu' },
                 ],
-                newComment: '',
-                covidComment: {
-                    date: new Date(),
-                    description: '',
-                    equipe_maraude: false,
-                    equipe_sanitaire: false,
-                    equipe_accompagnement: false,
-                    distribution_alimentaire: false,
-                    personnes_orientees: false,
-                    personnes_avec_symptomes: false,
-                    besoin_action: false,
-                },
-                covidTags: [
-                    { prop: 'equipe_maraude', label: 'Équipe de maraude', type: 'warning' },
-                    { prop: 'equipe_sanitaire', label: 'Équipe sanitaire', type: 'warning' },
-                    { prop: 'equipe_accompagnement', label: 'Équipe d\'accompagnement', type: 'warning' },
-                    { prop: 'distribution_alimentaire', label: 'Distribution d\'aide alimentaire', type: 'warning' },
-                    { prop: 'personnes_orientees', label: 'Personne(s) orientée(s) vers un centre d\'hébergement spécialisé (desserrement)', type: 'error' },
-                    { prop: 'personnes_avec_symptomes', label: 'Personne(s) avec des symptômes Covid-19', type: 'error' },
-                    { prop: 'besoin_action', label: 'Besoin d\'une action prioritaire', type: 'error' },
-                ],
+
                 sidePanel: null,
-                commentError: null,
-                commentErrors: {},
-                covidErrors: [],
+
                 edit: null,
-                commentEdit: {
-                    commentId: null,
-                    value: null,
-                    pending: false,
-                    error: null,
-                },
                 asideTimeout: null,
                 commentToBeDeleted: null,
             };
@@ -276,41 +229,6 @@
                     default:
                         return 'inconnu';
                 }
-            },
-            statusLabel() {
-                if (this.town === null) {
-                    return 'inconnu';
-                }
-
-                switch (this.town.status) {
-                    case 'closed_by_justice':
-                        return 'Exécution d\'une décision de justice';
-
-                    case 'closed_by_admin':
-                        return 'Exécution d\'une décision administrative';
-
-                    case 'other':
-                        return 'Autre';
-
-                    default:
-                        return 'inconnu';
-                }
-            },
-
-            hasAccessToWater() {
-                if (!this.edit) {
-                    return false;
-                }
-
-                return this.edit.accessToWater === 1;
-            },
-            hasAccessToElectricity() {
-                if (!this.edit) {
-                    return false;
-                }
-
-                const type = this.electricityTypes.find(({ id }) => id === this.edit.electricityType);
-                return type && type.uid === 'oui';
             },
         },
         mounted() {
@@ -481,6 +399,7 @@
                 this.setViewMode();
                 this.view = view;
             },
+
             submit() {
                 // clean previous errors
                 this.editError = null;
@@ -625,123 +544,9 @@
                         });
                 }
             },
-            addComment() {
-                if (!hasPermission('shantytown_comment.create')) {
-                    return;
-                }
 
-                // clean previous errors
-                this.commentError = null;
-                this.commentErrors = {};
 
-                addComment(this.$route.params.id, {
-                    description: this.newComment,
-                })
-                    .then((response) => {
-                        this.town.comments.regular = response.comments;
-                        this.newComment = '';
-                        this.newStep = '';
-                    })
-                    .catch((response) => {
-                        this.commentError = response.user_message;
-                        this.commentErrors = response.fields || {};
-                    });
-            },
-            addCovidComment() {
-                // clean previous errors
-                this.covidErrors = [];
 
-                addCovidComment(this.$route.params.id, this.covidComment)
-                    .then((response) => {
-                        this.town.comments.covid = response;
-                        this.covidComment = {
-                            date: new Date(),
-                            description: '',
-                            equipe_maraude: false,
-                            equipe_sanitaire: false,
-                            equipe_accompagnement: false,
-                            distribution_alimentaire: false,
-                            personnes_orientees: false,
-                            personnes_avec_symptomes: false,
-                            besoin_action: false,
-                        };
-                    })
-                    .catch((response) => {
-                        const fields = response.fields || {};
-                        this.covidErrors = Object.keys(fields).reduce((acc, key) => [
-                            ...acc,
-                            ...fields[key],
-                        ], []);
-                    });
-            },
-
-            canEditComment(comment) {
-                return hasPermission('shantytown_comment.create') || (comment.createdBy.id === this.userId);
-            },
-            canDeleteComment(comment) {
-                return hasPermission('shantytown_comment.delete') || (comment.createdBy.id === this.userId);
-            },
-            editComment(comment) {
-                this.commentEdit.commentId = comment.id;
-                this.commentEdit.value = comment.description;
-                this.commentEdit.pending = false;
-                this.commentEdit.error = null;
-            },
-            deleteComment(comment) {
-                this.commentToBeDeleted = {
-                    id: comment.id,
-                    date: comment.createdAt,
-                    shantytown: {
-                        id: this.town.id,
-                        name: this.town.addressSimple || 'Pas d\'adresse précise',
-                        city: this.town.city.name,
-                    },
-                    author: {
-                        name: `${comment.createdBy.firstName} ${comment.createdBy.lastName.toUpperCase()}`,
-                    },
-                    content: comment.description,
-                };
-            },
-            sendEditComment(comment) {
-                if (this.commentEdit.pending !== false) {
-                    return;
-                }
-
-                this.commentEdit.pending = true;
-                this.commentEdit.error = null;
-
-                editComment(this.$route.params.id, comment.id, { description: this.commentEdit.value })
-                    .then((response) => {
-                        this.town.comments.regular = response.comments;
-                        this.commentEdit.commentId = null;
-                        this.commentEdit.value = null;
-                        this.commentEdit.pending = false;
-                        this.commentEdit.error = null;
-
-                        notify({
-                            group: 'notifications',
-                            type: 'success',
-                            title: 'Opération réussie',
-                            text: 'Le commentaire a bien été modifié',
-                        });
-                    })
-                    .catch((response) => {
-                        this.commentEdit.pending = false;
-                        this.commentEdit.error = response.user_message;
-                    });
-            },
-            cancelEditComment() {
-                setTimeout(() => {
-                    if (this.commentEdit.pending !== false) {
-                        return;
-                    }
-
-                    this.commentEdit.commentId = null;
-                    this.commentEdit.value = null;
-                    this.commentEdit.pending = false;
-                    this.commentEdit.error = null;
-                }, 100);
-            },
             closeCommentDeletion() {
                 setTimeout(() => {
                     this.commentToBeDeleted = null;
@@ -758,6 +563,7 @@
                     text: 'L\'auteur du commentaire en a été notifié par email',
                 });
             },
+
             formatDate: (...args) => App.formatDate(...args),
         },
     };
