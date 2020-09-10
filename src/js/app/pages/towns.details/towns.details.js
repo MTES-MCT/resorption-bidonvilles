@@ -218,6 +218,10 @@ export default {
             const goesUp = window.pageYOffset < this.scroll;
             this.scroll = window.pageYOffset;
 
+            if (this.$refs.main === undefined || this.$refs.header === undefined) {
+                return;
+            }
+
             if (goesUp === true) {
                 if (window.pageYOffset - this.$refs.main.offsetTop <= 0) {
                     this.$refs.wrapper.classList.remove('sticky');
