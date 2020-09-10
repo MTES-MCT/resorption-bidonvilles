@@ -11,9 +11,10 @@
                     <p>Merci de respecter les règles de confidentialité. Ne pas citer l’identité des individus (Nom, âge, sexe, origine...)</p>
 
                     <p class="error" v-if="commentErrors.description">
-                    <ul>
-                        <li v-for="error in commentErrors.description">{{ error }}</li>
-                    </ul>
+                        <ul>
+                            <li v-for="error in commentErrors.description">{{ error }}</li>
+                        </ul>
+                    </p>
 
                     <div class="input__group">
                         <textarea v-model="newComment"></textarea>
@@ -44,10 +45,12 @@
 
                     <div v-if="commentEdit.commentId === comment.id">
                         <p class="error" v-if="commentEdit.error">
-                        <ul>
-                            <li>{{ commentEdit.error }}</li>
-                        </ul>
+                            <ul>
+                                <li>{{ commentEdit.error }}</li>
+                            </ul>
+                        </p>
                         <textarea v-model="commentEdit.value" :disabled="commentEdit.pending"></textarea>
+
                         <p>
                             <button class="button" @click="sendEditComment(comment)">Modifier</button>
                             <button class="button warning" @click="cancelEditComment">Annuler</button>
@@ -61,13 +64,14 @@
 </template>
 
 <script>
-    import {hasPermission} from "#helpers/api/config";
+    import {get as getConfig, hasPermission} from "#helpers/api/config";
     import {addComment, editComment} from "#helpers/api/town";
     import {notify} from "#helpers/notificationHelper";
 
     export default {
         props: {
             town: { required: true},
+            deleteComment: { required: true, type: Function},
         },
         data() {
             return {
@@ -80,6 +84,7 @@
                     pending: false,
                     error: null,
                 },
+                userId: getConfig().user.id,
             }
         },
         methods: {
@@ -159,21 +164,6 @@
                 this.commentEdit.value = comment.description;
                 this.commentEdit.pending = false;
                 this.commentEdit.error = null;
-            },
-            deleteComment(comment) {
-                this.commentToBeDeleted = {
-                    id: comment.id,
-                    date: comment.createdAt,
-                    shantytown: {
-                        id: this.town.id,
-                        name: this.town.addressSimple || 'Pas d\'adresse précise',
-                        city: this.town.city.name,
-                    },
-                    author: {
-                        name: `${comment.createdBy.firstName} ${comment.createdBy.lastName.toUpperCase()}`,
-                    },
-                    content: comment.description,
-                };
             }
         }
     }

@@ -8,9 +8,9 @@
                     <div class="form__group">
                         <label v-bind:class="{ error: fieldErrors.closed_at }">Date de disparition du site :</label>
                         <p class="error" v-if="fieldErrors.closed_at">
-                        <ul>
-                            <li v-for="error in fieldErrors.closed_at">{{ error }}</li>
-                        </ul>
+                            <ul>
+                                <li v-for="error in fieldErrors.closed_at">{{ error }}</li>
+                            </ul>
                         </p>
                         <datepicker :clear-button="true" :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" :full-month-name="true" :format="'dd MMMM yyyy'" v-model="edit.closedAt"></datepicker>
                     </div>
@@ -22,9 +22,9 @@
                             </legend>
                             <p class="question-info">C’est-à-dire sans réinstallation illicite et avec un accompagnement de la majorité des personnes vers des solutions pérennes</p>
                             <p class="error" v-if="fieldErrors.closed_with_solutions">
-                            <ul>
-                                <li v-for="error in fieldErrors.closed_with_solutions">{{ error }}</li>
-                            </ul>
+                                <ul>
+                                    <li v-for="error in fieldErrors.closed_with_solutions">{{ error }}</li>
+                                </ul>
                             </p>
 
                             <div v-for="(value, index) in closedWithSolutionsValues">
@@ -40,9 +40,9 @@
                                 <strong>Cause de la disparition :</strong>
                             </legend>
                             <p class="error" v-if="fieldErrors.status">
-                            <ul>
-                                <li v-for="error in fieldErrors.status">{{ error }}</li>
-                            </ul>
+                                <ul>
+                                    <li v-for="error in fieldErrors.status">{{ error }}</li>
+                                </ul>
                             </p>
                             <div v-for="(value, index) in statusValues">
                                 <input type="radio" name="status" :id="'status' + index" :value="value.value" v-model="edit.status">
@@ -63,9 +63,9 @@
                                 </legend>
                                 <div class="solution-people" v-bind:class="{ visible: edit.solutions[value.id].checked }">
                                     <p class="error" v-if="fieldErrors.solutions && fieldErrors.solutions[value.id]">
-                                    <ul>
-                                        <li v-for="error in fieldErrors.solutions[value.id]">{{ error }}</li>
-                                    </ul>
+                                        <ul>
+                                            <li v-for="error in fieldErrors.solutions[value.id]">{{ error }}</li>
+                                        </ul>
                                     </p>
                                     <p>Nombre de ménages concernés :<br/><input type="number" v-model="edit.solutions[value.id].householdsAffected" /></p>
                                     <p>Nombre de personnes concernées :<br/><input type="number" v-model="edit.solutions[value.id].peopleAffected" /></p>

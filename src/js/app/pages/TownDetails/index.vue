@@ -71,7 +71,7 @@
                         </div>
 
                         <div v-else-if="sidePanel === 'comments'">
-                            <TownSidebarComments :town="town" />
+                            <TownSidebarComments :town="town" :deleteComment="deleteComment" />
                         </div>
 
                         <div v-else-if="sidePanel === 'covidComments'">
@@ -95,7 +95,7 @@
                         </div>
 
                         <div v-if="mode === 'edit'">
-                            <TownEdit :edit="edit" :editError="editError" :editError="editError" :submit="submit"></TownEdit>
+                            <TownEdit :edit="edit" :editError="editError" :submit="submit"></TownEdit>
                         </div>
 
                     </div>
@@ -562,6 +562,21 @@
                     title: 'Commentaire supprimé',
                     text: 'L\'auteur du commentaire en a été notifié par email',
                 });
+            },
+            deleteComment(comment) {
+                this.commentToBeDeleted = {
+                    id: comment.id,
+                    date: comment.createdAt,
+                    shantytown: {
+                        id: this.town.id,
+                        name: this.town.addressSimple || 'Pas d\'adresse précise',
+                        city: this.town.city.name,
+                    },
+                    author: {
+                        name: `${comment.createdBy.firstName} ${comment.createdBy.lastName.toUpperCase()}`,
+                    },
+                    content: comment.description,
+                };
             },
 
             formatDate: (...args) => App.formatDate(...args),

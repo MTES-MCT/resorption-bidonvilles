@@ -1,6 +1,6 @@
 <template>
     <div>
-        <FormPanel :data="edit" :formDefinition="formDefinition" />
+        <FormPanel :data="edit" :formDefinition="formDefinition" ></FormPanel>
 
         <div class="notification error" v-if="editError">{{ editError }}.</div>
 

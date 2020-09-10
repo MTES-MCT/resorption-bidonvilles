@@ -102,6 +102,7 @@
 <script>
     import {fr} from "vuejs-datepicker/dist/locale";
     import {addCovidComment} from "#helpers/api/town";
+    import Datepicker from 'vuejs-datepicker';
 
     export default {
         props: {
@@ -109,6 +110,9 @@
                 required: true,
                 type: Object
             }
+        },
+        components: {
+            datepicker: Datepicker
         },
         methods: {
             formatDate: (...args) => App.formatDate(...args),
