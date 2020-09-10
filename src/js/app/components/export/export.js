@@ -28,7 +28,7 @@ export default {
                 {
                     id: 'life_conditions',
                     label: 'Conditions de vie',
-                    description: ': accès à l\'électricité, l\'eau, évacuation des déchets',
+                    description: ': accès à l\'électricité, l\'eau, toilettes, évacuation des déchets',
                 },
                 {
                     id: 'demographics',
