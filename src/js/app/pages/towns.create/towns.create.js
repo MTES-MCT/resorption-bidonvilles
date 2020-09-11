@@ -54,6 +54,12 @@ export default {
                                         description: 'Saisissez ici l\'adresse du site, puis précisez sa position en déplaçant le point sur la carte.',
                                         mandatory: true,
                                     },
+                                    name: {
+                                        type: 'text',
+                                        label: 'Appellation du site',
+                                        description: 'Nom d\'usage du site s\'il est différent de l\'adresse. Ex "Entrepôt de la Poste" (35 caractères maximum)',
+                                        mandatory: false,
+                                    },
                                     addressDetails: {
                                         type: 'text',
                                         label: 'Informations d\'accès',
