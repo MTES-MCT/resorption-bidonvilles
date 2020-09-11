@@ -121,7 +121,7 @@
                     <tr v-for="(shantytown, index) in pageContent" :class="index % 2 === 0 ? 'odd' : ''" @click="routeToTown(shantytown)">
                         <td class="townColumn-departement">{{ shantytown.departement.code }} - {{ shantytown.departement.name }}</td>
                         <td class="townColumn-city">{{ shantytown.city.name }}</td>
-                        <td class="townColumn-address">{{ shantytown.addressSimple }}</td>
+                        <td class="townColumn-address">{{ formatAddress(shantytown) }} </td>
                         <td class="townColumn-fieldType"><span class="fieldType"><i :style="`background-color: ${shantytown.fieldType.color}`"></i> <span>{{ shantytown.fieldType.label }}</span></span></td>
                         <td class="townColumn-status">
                             <span v-if="shantytown.statusName === null" class="secondary">NC</span>

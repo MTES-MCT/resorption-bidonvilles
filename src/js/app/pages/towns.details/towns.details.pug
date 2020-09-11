@@ -391,6 +391,9 @@
                                 <p v-if="town.address !== undefined">
                                     <strong>Adresse :</strong> {{ town.address }}
                                 </p>
+                                <p v-if="town.name">
+                                    <strong>Appellation du site :</strong> {{ town.name }}
+                                </p>
                                 <p v-if="town.addressDetails !== undefined">
                                     <strong>Informations d'accès :</strong> {{ town.addressDetails }}
                                 </p>
@@ -564,6 +567,19 @@
                                 </p>
                                 <p>Saisissez ici l'adresse du site, puis précisez sa position en déplaçant le point sur la carte.</p>
                                 <AddressWithLocation v-model="edit.address"></AddressWithLocation>
+                            </div>
+
+                            <div class="form__group">
+                                <label>Appellation du site:</label>
+                                <p class="error" v-if="fieldErrors.name">
+                                    <ul>
+                                        <li v-for="error in fieldErrors.name">{{ error }}</li>
+                                    </ul>
+                                </p>
+                                <p>Nom d'usage du site s'il est différent de l'adresse. Ex "Entrepôt de la Poste" (35 caractères maximum)</p>
+                                <div class="input__group">
+                                    <input type="text" v-model="edit.name">
+                                </div>
                             </div>
 
                             <div class="form__group">

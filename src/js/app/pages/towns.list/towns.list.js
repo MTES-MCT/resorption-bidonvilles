@@ -381,32 +381,32 @@ export default {
             }
 
             switch (shantytown.policeStatus) {
-            case 'none':
-                justiceStatuses.push({
-                    label: 'Concours de la force publique non demandé',
-                });
-                break;
+                case 'none':
+                    justiceStatuses.push({
+                        label: 'Concours de la force publique non demandé',
+                    });
+                    break;
 
-            case 'requested':
-                justiceStatuses.push({
-                    label: 'Concours de la force publique demandé',
-                    date: shantytown.policeRequestedAt,
-                });
-                break;
+                case 'requested':
+                    justiceStatuses.push({
+                        label: 'Concours de la force publique demandé',
+                        date: shantytown.policeRequestedAt,
+                    });
+                    break;
 
-            case 'granted':
-                justiceStatuses.push({
-                    label: 'Concours de la force publique accordé',
-                    date: shantytown.policeGrantedAt,
-                });
-                break;
+                case 'granted':
+                    justiceStatuses.push({
+                        label: 'Concours de la force publique accordé',
+                        date: shantytown.policeGrantedAt,
+                    });
+                    break;
 
-            default:
-            case null:
-                justiceStatuses.push({
-                    label: 'Concours de la force publique : NC',
-                });
-                break;
+                default:
+                case null:
+                    justiceStatuses.push({
+                        label: 'Concours de la force publique : NC',
+                    });
+                    break;
             }
 
             // status
@@ -624,6 +624,13 @@ export default {
 
         hasPermission(...args) {
             return hasPermission(...args);
+        },
+        formatAddress(shantytown) {
+            if (shantytown.addressSimple && shantytown.name) {
+                return `${shantytown.addressSimple} «${shantytown.name}» `;
+            }
+
+            return `site dit ${shantytown.name}`;
         },
     },
 };
