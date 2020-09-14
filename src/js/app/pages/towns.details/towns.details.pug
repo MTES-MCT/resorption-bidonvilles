@@ -119,7 +119,7 @@
 
                     <div class="town-actionButtons">
                         <button v-if="town.status === 'open' && mode !== 'edit' && hasPermission('shantytown.close', town)" @click="setCloseMode" class="button secondary">Fermer le site</button>
-                        <button v-if="town.status === 'open' && mode !== 'edit' && hasPermission('shantytown.update', town)" @click="setEditMode" class="button">Modifier le site</button>
+                        <button v-if="town.status === 'open' && mode !== 'edit' && hasPermission('shantytown.update', town)" @click="setEditMode" class="button">Mettre à jour</button>
                         <button v-if="mode !== 'edit' && hasPermission('shantytown.delete', town)" @click="destroy" class="button warning">Supprimer le site</button>
                         <button v-if="mode === 'edit'" @click="submit" class="button">Sauvegarder</button>
                         <button v-if="mode === 'edit'" @click="setViewMode" class="button warning">Annuler</button>
