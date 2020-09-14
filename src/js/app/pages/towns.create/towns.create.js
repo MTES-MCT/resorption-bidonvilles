@@ -195,7 +195,7 @@ export default {
                                     waterComments: {
                                         type: 'textarea',
                                         label: 'Modalités d\'accès',
-                                        description: 'Exemple : type, nombre, distance…',
+                                        description: 'Exemples: Citerne de 100 litres remplie par les pompiers tous les jours, 3 robinets raccordés par la collectivité, borne incendie à 200 mètres...',
                                         mandatory: false,
                                         condition({ accessToWater }) {
                                             return accessToWater === 1;

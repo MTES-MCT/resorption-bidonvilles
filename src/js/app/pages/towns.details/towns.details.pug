@@ -761,7 +761,7 @@
                             <div class="form__group" v-if="hasAccessToWater">
                                 <fieldset>
                                     <legend v-bind:class="{ error: fieldErrors.water_comments }">Modalités d'accès :</legend>
-                                    <p>Exemple : type, nombre, distance…</p>
+                                    <p>Exemples: Citerne de 100 litres remplie par les pompiers tous les jours, 3 robinets raccordés par la collectivité, borne incendie à 200 mètres...</p>
                                     <p class="error" v-if="fieldErrors.water_comments">
                                         <ul>
                                             <li v-for="error in fieldErrors.water_comments">{{ error }}</li>
