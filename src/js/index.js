@@ -9,7 +9,7 @@ import '@babel/polyfill';
 
 // import vue
 import Vue from 'vue';
-import VueI18n from 'vue-i18n'
+import VueI18n from 'vue-i18n';
 import Notifications from 'vue-notification';
 import VueRouter from 'vue-router';
 import TrendChart from 'vue-trend-chart';
@@ -17,6 +17,7 @@ import TrendChart from 'vue-trend-chart';
 // import font-awesome
 import './icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import messages from './app/messages';
 import VueMatomo from './matomo/matomo';
 import { router } from '#app/router';
 
@@ -112,13 +113,17 @@ Vue.use(VueMatomo, {
     debug: true,
 });
 
+console.log(messages);
+
 const i18n = new VueI18n({
-    locale: "fr"
-})
+    locale: 'fr',
+    messages,
+
+});
 
 Vue.createElement = obj => new Vue(obj);
 Vue.createElement({
     el: '#app',
     router,
-    i18n
+    i18n,
 });
