@@ -5,7 +5,8 @@ import 'simplebar/dist/simplebar.min.css';
 import '../css/index.scss';
 
 // import polyfills
-import '@babel/polyfill';
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
 
 // import vue
 import Vue from 'vue';
