@@ -1,11 +1,11 @@
 <template>
     <div class="flex flex-row">
         <div>
-            <font-awesome-icon :icon="icon" class="text-secondary text-3xl"></font-awesome-icon>
+            <font-awesome-icon :icon="icon" size="2x" class="text-secondary"></font-awesome-icon>
         </div>
         <div class="ml-2">
-            <span class="text-xl">{{text}}</span>
-            <span class="text-sm">{{info}}</span>
+            <span class="text-display-md">{{text}}</span>
+            <span>{{info}}</span>
         </div>
     </div>
 </template>

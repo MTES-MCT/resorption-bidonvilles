@@ -1,6 +1,6 @@
 <template>
     <footer class="bg-black text-white py-8" role="contentinfo">
-        <div class="container grid grid-cols-3">
+        <div class="max-w-5xl mx-auto grid grid-cols-3">
             <ul>
                 <li><font-awesome-icon icon="envelope"></font-awesome-icon></li>
                 <li><h4>Contactez l’équipe du projet</h4></li>

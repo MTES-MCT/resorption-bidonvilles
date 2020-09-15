@@ -1,7 +1,9 @@
 <template>
     <div class="bg-corail text-white full-width text-center py-16">
-        <div class="text-2xl"><slot /></div>
-        <div class="pt-4"><Button variant="primary">{{cta}}</Button></div>
+        <div class="max-w-3xl mx-auto">
+            <div class="text-display-lg text-white"><slot /></div>
+            <div class="pt-4"><Button variant="primary">{{cta}}</Button></div>
+        </div>
     </div>
 </template>
 

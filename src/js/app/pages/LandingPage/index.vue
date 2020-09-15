@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="container mx-auto pt-4 pb-16">
+        <div class="max-w-5xl mx-auto pt-4 pb-16">
             <LandingPageHeader />
             <LandingPageHero class="mt-20" />
             <LandingPageFirstSection />
@@ -9,14 +9,14 @@
             {{$t('landingPage.firstBanner.text')}}
         </LandingPageBanner>
         <img class="h-128 w-full object-cover object-center" src="./assets/resorption-bidonvilles-1.jpg"  />
-        <div class="container mx-auto py-16">
+        <div class="max-w-5xl mx-auto py-16">
             <LandingPageSecondSection />
         </div>
         <LandingPageBanner class="mt-20" :cta="$t('landingPage.secondBanner.cta')">
             {{$t('landingPage.secondBanner.text')}}
         </LandingPageBanner>
         <img class="h-128 w-full object-cover object-top" src="./assets/resorption-bidonvilles-2.jpg" />
-        <div class="container mx-auto py-16">
+        <div class="max-w-5xl mx-auto py-16">
             <LandingPageThirdSection />
             <div class="text-center mt-20">
                 <h2 class="text-2xl text-secondary">{{$t('landingPage.hero.subtitle')}}</h2>
