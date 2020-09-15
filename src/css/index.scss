@@ -1,3 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 @import './config/colors.scss';
 @import './components/alert.scss';
 @import './components/badge.scss';
@@ -65,13 +68,6 @@ label.error.message {
 
 select {
     background-size: 15px 15px;
-}
-
-@media (min-width: 800px) {
-    .container,
-    .dashboard {
-        padding: 0;
-    }
 }
 
 .section {
@@ -200,7 +196,7 @@ button:disabled:hover {
         border-radius: 50%;
         background: #fff;
     }
-    
+
     > span.address > i {
         border-left: 10px solid transparent;
         border-right: 10px solid transparent;
@@ -236,7 +232,7 @@ button:disabled:hover {
             -webkit-mask-image: url(/img/map-marker.svg);
             mask-image: url(/img/map-marker.svg);
         }
-    
+
         .mapPin-water {
             position: absolute;
             z-index: 10;
@@ -246,14 +242,14 @@ button:disabled:hover {
             height: 1.25rem;
             background: white;
             border-radius: 50%;
-    
+
             > img {
                 width: 100%;
                 height: auto;
             }
         }
     }
-    
+
     .mapPin-address {
         visibility: hidden;
         text-align: left;
