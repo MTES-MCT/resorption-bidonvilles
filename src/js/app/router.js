@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import Landing from '#app/pages/Landing';
+import LandingPage from '#app/pages/LandingPage';
 import LandingOld from '#app/pages/LandingOld/landing.vue';
 import SignIn from '#app/pages/signin/signin.vue';
 import SignUp from '#app/pages/signup/signup.vue';
@@ -208,7 +208,7 @@ const router = new VueRouter({
         },
         {
             path: '/landing',
-            component: Landing,
+            component: LandingPage,
             beforeEnter: guardians.anonymous,
         },
         {
