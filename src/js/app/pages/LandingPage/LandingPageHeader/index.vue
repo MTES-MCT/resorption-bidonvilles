@@ -2,8 +2,10 @@
     <header role="navigation" class="flex flex-row justify-between items-center">
         <LandingPageLogo />
 
-        <div>
-            <Button variant="primary">{{$t('landingPage.header.connect')}}</Button>
+        <div class="hidden md:block">
+            <router-link to="/connexion">
+                <Button variant="primary">{{$t('landingPage.header.connect')}}</Button>
+            </router-link>
         </div>
     </header>
 </template>

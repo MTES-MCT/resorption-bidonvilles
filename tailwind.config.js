@@ -1,5 +1,8 @@
 module.exports = {
     theme: {
+        corePlugins: {
+            container: false
+        },
         fontFamily: {
             display: ['Marianne', 'arial', 'sans-serif'],
             body: ['Spectral', 'georgia', 'serif'],
@@ -15,6 +18,9 @@ module.exports = {
                 lineHeight: '1.25em',
             }],
             'size-display-sm': ['1.25rem', {
+                lineHeight: '1.375em',
+            }],
+            'size-display-xs': ['1rem', {
                 lineHeight: '1.375em',
             }],
             'size-xl': ['1.5rem', {
@@ -33,7 +39,6 @@ module.exports = {
                 lineHeight: '0.75em',
             }],
         },
-
         extend: {
             spacing: {
                 96: '24rem',
@@ -42,6 +47,7 @@ module.exports = {
             colors: {
                 primary: '#000091',
                 secondary: '#FF6F4C',
+                black: '#1E1E1E',
                 corail: '#FF6F4C',
                 blueFrance: '#000091',
 
@@ -65,6 +71,6 @@ module.exports = {
         },
     },
     variants: {
-        opacity: ['responsive', 'hover'],
-    },
+        opacity: ['responsive'],
+    }
 };

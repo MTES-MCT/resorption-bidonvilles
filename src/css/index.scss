@@ -17,53 +17,82 @@
     src: url("../fonts/Marianne-Light.otf") format("opentype");
 }
 
-.text-display {
-    @apply font-display font-bold text-G800
-}
-
-.text-body {
-    @apply font-display font-normal text-G700
-}
-
-.text-display-xl {
-    @apply text-size-display-xl text-display
-}
-
-.text-display-lg {
-    @apply text-size-display-lg text-display
-}
-
-.text-display-md {
-    @apply text-size-display-md text-display
-}
-
-.text-display-sm {
-    @apply text-size-display-sm text-display
-}
-
-.text-xl {
-    @apply text-size-xl text-body
-}
-
-.text-lg {
-    @apply text-size-lg text-body
-}
-
-.text-md {
-    @apply text-size-md text-body
-}
-
-.text-sm {
-    @apply text-size-sm font-light text-G600
-}
-
-.text-xs {
-    @apply text-size-sm text-body
-}
-
-
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    body {
+        @apply text-md text-G700
+    }
+}
+@layer utilities {
+    .container {
+        @apply max-w-screen-xl mx-auto px-4
+    }
+
+    .container-lg {
+        @apply max-w-screen-lg mx-auto
+    }
+
+    .container-md {
+        @apply max-w-screen-md mx-auto
+    }
+
+    .container-sm {
+        @apply max-w-screen-sm mx-auto
+    }
+
+    .text-font-display {
+        @apply font-display font-bold
+    }
+
+    .text-font-body {
+        @apply font-display font-normal
+    }
+
+    @responsive {
+        .text-display-xl {
+            @apply text-size-display-xl text-font-display
+        }
+
+        .text-display-lg {
+            @apply text-size-display-lg text-font-display
+        }
+
+        .text-display-md {
+            @apply text-size-display-md text-font-display
+        }
+
+        .text-display-sm {
+            @apply text-size-display-sm text-font-display
+        }
+
+        .text-display-xs {
+            @apply text-size-display-xs text-font-display
+        }
+
+        .text-xl {
+            @apply text-size-xl text-font-body
+        }
+
+        .text-lg {
+            @apply text-size-lg text-font-body
+        }
+
+        .text-md {
+            @apply text-size-md text-font-body
+        }
+
+        .text-sm {
+            @apply text-size-sm font-light
+        }
+
+        .text-sm {
+            @apply text-size-xs font-light
+        }
+    }
+}
+
 @import './config/colors.scss';
 @import './components/alert.scss';
 @import './components/badge.scss';

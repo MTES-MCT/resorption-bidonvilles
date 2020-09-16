@@ -6,11 +6,11 @@
 
             <div class="flex flex-row items-center my-20">
                 <div class="bg-black h-1 flex-1" />
-                <div class="inline-block bg-black text-white text-display-md px-4">2019</div>
+                <div class="inline-block bg-black text-white text-display-md text-black px-4">2019</div>
                 <div class="bg-black h-1 flex-1" />
             </div>
 
-            <div class="grid grid-cols-2 gap-16">
+            <div class="grid grid-cols-2 gap-y-8 md:gap-x-16" >
                 <LandingPageBilanBlock icon="users" :text="$t('landingPage.thirdSection.bilan.1.text')" :info="$t('landingPage.thirdSection.bilan.1.info')" />
                 <LandingPageBilanBlock icon="home" :text="$t('landingPage.thirdSection.bilan.2.text')" :info="$t('landingPage.thirdSection.bilan.2.info')" />
                 <LandingPageBilanBlock icon="hand-holding-medical" :text="$t('landingPage.thirdSection.bilan.3.text')" :info="$t('landingPage.thirdSection.bilan.3.info')" />
@@ -25,7 +25,7 @@
             </div>
         </div>
         <div class="mt-20">
-            <div class="text-display-md">
+            <div class="text-display-md text-black">
                 {{$t('landingPage.thirdSection.secondParagraph.title')}}
             </div>
             <div class="max-w-xl mx-auto">
@@ -51,16 +51,15 @@
 
                 </div>
 
-                <div class="flex flex-row items-center justify-between mt-8">
-                    <img class="h-32" src="./assets/logo-gouvernement.jpg" />
-                    <img class="h-32" src="./assets/logo-commission-europenne.png" />
+                <div class="flex flex-row flex-wrap items-center justify-between mt-8">
+                    <img class="h-20 m-2" src="./assets/logo-gouvernement.jpg" />
+                    <img class="h-20 m-2" src="./assets/logo-commission-europenne.png" />
+                    <img class="h-24 m-2" src="./assets/logo-fabrique-numerique.png" />
+                    <img class="h-16 m-2" src="./assets/logo_beta-gouv-fr.jpg" />
+                    <img class="h-12 m-2" src="./assets/logo-entrepreneur-interet-general.png" />
                 </div>
 
-                <div class="flex flex-row items-center justify-between">
-                    <img class="h-24" src="./assets/logo-fabrique-numerique.png" />
-                    <img class="h-16" src="./assets/logo_beta-gouv-fr.jpg" />
-                    <img class="h-12" src="./assets/logo-entrepreneur-interet-general.png" />
-                </div>
+
 
             </div>
         </div>

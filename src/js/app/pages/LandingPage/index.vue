@@ -1,28 +1,37 @@
 <template>
     <div>
-        <div class="max-w-5xl mx-auto pt-4 pb-16">
+        <div class="container pt-4">
             <LandingPageHeader />
-            <LandingPageHero class="mt-20" />
-            <LandingPageFirstSection />
+            <div class="container-md pb-16">
+                <LandingPageHero class="mt-20" />
+                <LandingPageFirstSection />
+            </div>
         </div>
+
         <LandingPageBanner  :cta="$t('landingPage.firstBanner.cta')">
             {{$t('landingPage.firstBanner.text')}}
         </LandingPageBanner>
         <img class="h-128 w-full object-cover object-center" src="./assets/resorption-bidonvilles-1.jpg"  />
-        <div class="max-w-5xl mx-auto py-16">
-            <LandingPageSecondSection />
+        <div class="container">
+            <div class="container-md py-16">
+                <LandingPageSecondSection />
+            </div>
         </div>
-        <LandingPageBanner class="mt-20" :cta="$t('landingPage.secondBanner.cta')">
+
+        <LandingPageBanner :cta="$t('landingPage.secondBanner.cta')">
             {{$t('landingPage.secondBanner.text')}}
         </LandingPageBanner>
         <img class="h-128 w-full object-cover object-top" src="./assets/resorption-bidonvilles-2.jpg" />
-        <div class="max-w-5xl mx-auto py-16">
-            <LandingPageThirdSection />
-            <div class="text-center mt-20">
-                <h2 class="text-2xl text-secondary">{{$t('landingPage.hero.subtitle')}}</h2>
-                <LandingPageContactForm class="mx-auto" />
+        <div class="container">
+            <div class="container-md py-16">
+                <LandingPageThirdSection />
+                <div class="text-center mt-20">
+                    <h2 class="text-display-md text-secondary">{{$t('landingPage.hero.subtitle')}}</h2>
+                    <LandingPageContactForm class="mx-auto" />
+                </div>
             </div>
         </div>
+
         <div class="grid grid-cols-3 w-full gap-0">
             <img class="h-64 w-full object-cover object-top" src="./assets/resorption-bidonvilles-3.jpg"  />
             <img class="h-64 w-full object-cover object-top" src="./assets/resorption-bidonvilles-4.jpg"  />
