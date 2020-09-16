@@ -1,26 +1,28 @@
-<div class="page--dashboard">
-    <Quickview :town="quickview.town" :origin="quickview.originEvent" @outside-click="hideQuickview"></Quickview>
-    <NavBar></NavBar>
+<div class="v1">
+    <div class="page--dashboard">
+        <Quickview :town="quickview.town" :origin="quickview.originEvent" @outside-click="hideQuickview"></Quickview>
+        <NavBar></NavBar>
 
-    <section class="dashboard">
-        //- filters
-        <simplebar class="filters" ref="filters" data-simplebar-auto-hide="false">
-            <FilterGroup v-for="filterGroup in allowedFilters" :id="filterGroup.id" :faIcon="filterGroup.faIcon" :icon="filterGroup.icon" :label="filterGroup.label" :options="filterGroup.options" :opened="filterGroup.opened"></FilterGroup>
-        </simplebar>
+        <section class="dashboard">
+            //- filters
+            <simplebar class="filters" ref="filters" data-simplebar-auto-hide="false">
+                <FilterGroup v-for="filterGroup in allowedFilters" :id="filterGroup.id" :faIcon="filterGroup.faIcon" :icon="filterGroup.icon" :label="filterGroup.label" :options="filterGroup.options" :opened="filterGroup.opened"></FilterGroup>
+            </simplebar>
 
-        //- content
-        <div v-bind:style="{ width: !loading && !error ? 'auto' : 0 }" class="content" ref="main">
-            <Map v-bind="rendererProps" @town-click="showQuickview" @on-row-click="routeToTown" ref="map"></Map>
-        </div>
+            //- content
+            <div v-bind:style="{ width: !loading && !error ? 'auto' : 0 }" class="content" ref="main">
+                <Map v-bind="rendererProps" @town-click="showQuickview" @on-row-click="routeToTown" ref="map"></Map>
+            </div>
 
-        //- notifications
-        <div v-if="loading" class="notification full-width">
-            <img src="/img/spinner_dark.svg" width="20" class="spinner" />
-            <span>Chargement des données en cours...</span>
-        </div>
+            //- notifications
+            <div v-if="loading" class="notification full-width">
+                <img src="/img/spinner_dark.svg" width="20" class="spinner" />
+                <span>Chargement des données en cours...</span>
+            </div>
 
-        <div v-if="error" class="notification error full-width">
-            <span>{{ error }}. <a href="#" @click="fetchData">Réessayer ?</a></span>
-        </div>
-    </section>
+            <div v-if="error" class="notification error full-width">
+                <span>{{ error }}. <a href="#" @click="fetchData">Réessayer ?</a></span>
+            </div>
+        </section>
+    </div>
 </div>

@@ -1,43 +1,46 @@
-table.vgt-table {
-    tr {
-        &.userList-row--highlight {
-            background: #FFF0E4;
+.v1 {
+    table.vgt-table {
+        tr {
+            &.userList-row--highlight {
+                background: #FFF0E4;
+            }
         }
     }
-}
 
-.user-statusIcon,
-.user-validateIcon {
-    color: #006BE6;
-}
-
-.user-validateIcon {
-    font-size: 16px;
-    cursor: pointer;
-}
-
-.user-statusIcon--flag {
-    color: #FF9947;
-}
-
-.userList-header {
-    text-align: right;
-    margin-bottom: 20px;
-
-    > .button {
-        margin-left: 15px;
+    .user-statusIcon,
+    .user-validateIcon {
+        color: #006BE6;
     }
 
-    > a {
-        vertical-align: middle;
+    .user-validateIcon {
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .user-statusIcon--flag {
+        color: #FF9947;
+    }
+
+    .userList-header {
+        text-align: right;
+        margin-bottom: 20px;
+
+        > .button {
+            margin-left: 15px;
+        }
+
+        > a {
+            vertical-align: middle;
+        }
+    }
+
+    .userList-row--lastName,
+    .userList-row--firstName {
+        font-weight: bold;
+    }
+
+    .userList-column--role {
+        text-align: center;
     }
 }
 
-.userList-row--lastName,
-.userList-row--firstName {
-    font-weight: bold;
-}
-
-.userList-column--role {
-    text-align: center;
-}

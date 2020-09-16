@@ -1,138 +1,141 @@
-@import '/css/config/colors.scss';
+@import '/css/v1/config/colors.scss';
 
-.landing__marianne {
-    width: auto;
-    height: 40px;
-}
+.v1 {
+    .landing__marianne {
+        width: auto;
+        height: 40px;
+    }
 
-.landing__logo {
-    width: auto;
-    height: 80px;
-    vertical-align: bottom;
-    margin-left: 30px;
-}
-
-.navbar {
-    padding-top: 15px;
-    padding-bottom: 25px;
-}
-
-.navbar__home {
-    margin-left: 0.8em;
-    height: auto;
-
-    > a {
-        display: inline-block;
+    .landing__logo {
+        width: auto;
+        height: 80px;
         vertical-align: bottom;
-    }
-}
-
-.navbar__container {
-    -webkit-box-align: baseline;
-      -ms-flex-align: baseline;
-          align-items: baseline;
-}
-
-.nav__item {
-    vertical-align: middle;
-
-    .button {
-        color: white;
-        margin-left: 20px;
-        text-align: center;
-
-        &:not(.secondary):hover {
-            background: #003b80;
-        }
-    }
-}
-
-.stats {
-    padding: 50px 120px 100px;
-    background: $LIGHT_GREY;
-}
-
-.stats-wrapper {
-    margin: 0 auto;
-    max-width: 1280px;
-}
-
-.stats-header {
-    > h1 {
-        margin: 0 0 5px;
-        padding: 0;
-        font-size: 1.8rem;
+        margin-left: 30px;
     }
 
-    > p {
-        margin: 0;
-        padding: 0;
-        font-size: 1.2rem;
-    }
-}
-
-.stats-section {
-    margin-top: 60px;
-
-    > h1 {
-        margin: 0;
-        padding: 0;
-        color: $EASTERN_BLUE;
-        font-size: 1.2rem;
+    .navbar {
+        padding-top: 15px;
+        padding-bottom: 25px;
     }
 
-    > h2 {
-        font-size: 14px;
-        font-weight: normal;
+    .navbar__home {
+        margin-left: 0.8em;
+        height: auto;
 
-        > span {
-            margin-right: 10px;
+        > a {
             display: inline-block;
-            max-width: 350px;
-            vertical-align: middle;
+            vertical-align: bottom;
+        }
+    }
+
+    .navbar__container {
+        -webkit-box-align: baseline;
+        -ms-flex-align: baseline;
+        align-items: baseline;
+    }
+
+    .nav__item {
+        vertical-align: middle;
+
+        .button {
+            color: white;
+            margin-left: 20px;
+            text-align: center;
+
+            &:not(.secondary):hover {
+                background: #003b80;
+            }
+        }
+    }
+
+    .stats {
+        padding: 50px 120px 100px;
+        background: $LIGHT_GREY;
+    }
+
+    .stats-wrapper {
+        margin: 0 auto;
+        max-width: 1280px;
+    }
+
+    .stats-header {
+        > h1 {
+            margin: 0 0 5px;
+            padding: 0;
+            font-size: 1.8rem;
         }
 
-        img,
-        svg {
+        > p {
+            margin: 0;
+            padding: 0;
+            font-size: 1.2rem;
+        }
+    }
+
+    .stats-section {
+        margin-top: 60px;
+
+        > h1 {
+            margin: 0;
+            padding: 0;
             color: $EASTERN_BLUE;
+            font-size: 1.2rem;
+        }
+
+        > h2 {
+            font-size: 14px;
+            font-weight: normal;
+
+            > span {
+                margin-right: 10px;
+                display: inline-block;
+                max-width: 350px;
+                vertical-align: middle;
+            }
+
+            img,
+            svg {
+                color: $EASTERN_BLUE;
+            }
+        }
+
+        > div {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
         }
     }
 
-    > div {
-        margin-top: 20px;
-        display: flex;
-        justify-content: space-between;
-    }
-}
+    .stats-block {
+        max-width: 250px;
 
-.stats-block {
-    max-width: 250px;
+        > h1 {
+            margin: 0;
+            padding: 0;
+            font-size: 3.5rem;
 
-    > h1 {
-        margin: 0;
-        padding: 0;
-        font-size: 3.5rem;
+            img,
+            svg {
+                font-size: 2.2rem;
+                color: $EASTERN_BLUE;
+                vertical-align: middle;
+            }
+        }
 
-        img,
-        svg {
-            font-size: 2.2rem;
-            color: $EASTERN_BLUE;
-            vertical-align: middle;
+        > h2 {
+            margin: 0;
+            padding: 0;
+            font-size: 1rem;
+        }
+
+        > p {
+            margin: 5px 0 0;
+            padding: 0;
         }
     }
 
-    > h2 {
-        margin: 0;
-        padding: 0;
-        font-size: 1rem;
-    }
-
-    > p {
-        margin: 5px 0 0;
-        padding: 0;
+    .stats-chart {
+        margin-top: 40px;
     }
 }
 
-.stats-chart {
-    margin-top: 40px;
-}

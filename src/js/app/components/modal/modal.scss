@@ -1,25 +1,28 @@
-@import '/css/config/colors.scss';
+@import '/css/v1/config/colors.scss';
 
-.alert-close {
-    position: absolute;
-    right: 15px;
-    top: 15px;
-    width: 30px;
-}
+.v1 {
+    .alert-close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        width: 30px;
+    }
 
-.alert-close-wrapper {
-    position: fixed;
-    display: inline-block;
-    cursor: pointer;
-    width: 30px;
-    height: 30px;
-    background: $NILE_BLUE;
-    border-radius: 50%;
-    text-align: center;
+    .alert-close-wrapper {
+        position: fixed;
+        display: inline-block;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        background: $NILE_BLUE;
+        border-radius: 50%;
+        text-align: center;
 
-    > img {
-        margin-top: 4px;
-        width: 20px;
-        height: 20px;
+        > img {
+            margin-top: 4px;
+            width: 20px;
+            height: 20px;
+        }
     }
 }
+

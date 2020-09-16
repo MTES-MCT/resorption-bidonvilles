@@ -1,101 +1,105 @@
-@import '/css/config/colors.scss';
+@import '/css/v1/config/colors';
 
-.input--text,
-.input--password,
-.input--textarea {
-    max-width: 500px;
-}
-
-.input--password-toggler {
-    padding-left: 10px;
-    cursor: pointer;
-}
-
-.input--number {
-    max-width: 350px;
-}
-
-.input--date,
-.vdp-datepicker input {
-    max-width: 220px;
-    padding-left: 45px;
-}
-
-.form__group {
-    .vdp-datepicker__calendar {
-        z-index: 5000;
+.v1 {
+    .input--text,
+    .input--password,
+    .input--textarea {
+        max-width: 500px;
     }
-}
 
-.vdp-datepicker__calendar-button {
-    position: absolute;
-    z-index: 1000;
-    height: 100%;
-    width: 20px;
-    font-size: 0;
-    margin-left: 10px;
-    background: #ADB9C9;
-    -webkit-mask: url('/img/calendar.svg') no-repeat center;
-    mask: url('/img/calendar.svg') no-repeat center;
-}
-.vdp-datepicker__clear-button {
-    position: absolute;
-    height: 100%;
-    margin-left: -45px;
-    background: url('/img/remove.svg') no-repeat center;
-    background-size: 40%;
-    width: 50px;
-    text-align: center;
-    font-size: 0;
-}
+    .input--password-toggler {
+        padding-left: 10px;
+        cursor: pointer;
+    }
 
-input:disabled + .vdp-datepicker__clear-button {
-    display: none;
-}
+    .input--number {
+        max-width: 350px;
+    }
 
-.input-label {
-    font-weight: bold;
-}
+    .input--date,
+    .vdp-datepicker input {
+        max-width: 220px;
+        padding-left: 45px;
+    }
 
-.input-description {
-    margin: 0 0 12px;
-    padding: 0;
-    font-style: italic;
-}
+    .form__group {
+        .vdp-datepicker__calendar {
+            z-index: 5000;
+        }
+    }
 
-.input-mandatory {
-    font-weight: bold;
-    color: #d63626;
-}
+    .vdp-datepicker__calendar-button {
+        position: absolute;
+        z-index: 1000;
+        height: 100%;
+        width: 20px;
+        font-size: 0;
+        margin-left: 10px;
+        background: #ADB9C9;
+        -webkit-mask: url('/img/calendar.svg') no-repeat center;
+        mask: url('/img/calendar.svg') no-repeat center;
+    }
+    .vdp-datepicker__clear-button {
+        position: absolute;
+        height: 100%;
+        margin-left: -45px;
+        background: url('/img/remove.svg') no-repeat center;
+        background-size: 40%;
+        width: 50px;
+        text-align: center;
+        font-size: 0;
+    }
 
-.inputContainer.error {
+    input:disabled + .vdp-datepicker__clear-button {
+        display: none;
+    }
+
     .input-label {
+        font-weight: bold;
+    }
+
+    .input-description {
+        margin: 0 0 12px;
+        padding: 0;
+        font-style: italic;
+    }
+
+    .input-mandatory {
+        font-weight: bold;
         color: #d63626;
     }
 
-    .input {
-        border: 1px solid #d63626;
+    .inputContainer.error {
+        .input-label {
+            color: #d63626;
+        }
+
+        .input {
+            border: 1px solid #d63626;
+        }
     }
+
+    .input--radio,
+    .input--checkbox {
+        display: inline-block;
+        margin: 8px 0 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .input--checkbox-option,
+    .input--radio-option {
+        > label {
+            display: block;
+            margin-bottom: 8px;
+            padding: 5px 10px;
+            border: 1px solid $LIGHT_GREY;
+            border-radius: 4px;
+            background: white;
+            color: $ENDEAVOUR_BLUE;
+            font-weight: bold;
+        }
+    }
+
 }
 
-.input--radio,
-.input--checkbox {
-    display: inline-block;
-    margin: 8px 0 0;
-    padding: 0;
-    list-style: none;
-}
-
-.input--checkbox-option,
-.input--radio-option {
-    > label {
-        display: block;
-        margin-bottom: 8px;
-        padding: 5px 10px;
-        border: 1px solid $LIGHT_GREY;
-        border-radius: 4px;
-        background: white;
-        color: $ENDEAVOUR_BLUE;
-        font-weight: bold;
-    }
-}

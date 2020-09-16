@@ -1,9 +1,11 @@
-.form__group {
-    > label {
-        font-weight: bold;
-    }
+.v1 {
+    .form__group {
+        > label {
+            font-weight: bold;
+        }
 
-    .error {
-        color: #d63626;
+        .error {
+            color: #d63626;
+        }
     }
 }

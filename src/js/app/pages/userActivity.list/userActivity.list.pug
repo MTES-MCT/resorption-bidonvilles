@@ -1,82 +1,84 @@
-<div class="page--withMargin">
-    <NavBar></NavBar>
+<div class="v1">
+    <div class="page--withMargin">
+        <NavBar></NavBar>
 
-    //- state: loading in progress
-    <section v-if="state === 'loading'" class="section section-white">
-        <div class="container">
-            <div  class="notification full-width">
-                <img src="/img/spinner_dark.svg" width="20" class="spinner" />
-                <span>Chargement des données en cours...</span>
-            </div>
-        </div>
-    </section>
-
-    //- state: loading failed
-    <section v-if="state === 'error'" class="section section-white">
-        <div class="container">
-            <div class="notification error full-width">
-                <span>{{ error }}. <a href="#" @click="retryLoading">Réessayer ?</a></span>
-            </div>
-        </div>
-    </section>
-
-    //- state: loaded
-    <section v-if="state === 'loaded'" class="section section-white">
-        <CommentDeletion v-if="toBeDeleted !== null" :comment="toBeDeleted" @close="closePopin" @deleted="onCommentDeleted"></CommentDeletion>
-
-        <div class="container">
-            <header>
-                <div>
-                    <hgroup>
-                        <h3>Historique des activités</h3>
-                    </hgroup>
+        //- state: loading in progress
+        <section v-if="state === 'loading'" class="section section-white">
+            <div class="container">
+                <div  class="notification full-width">
+                    <img src="/img/spinner_dark.svg" width="20" class="spinner" />
+                    <span>Chargement des données en cours...</span>
                 </div>
+            </div>
+        </section>
 
-                <SlideNote title="Règles de modération d'un commentaire" class="userActivity-rule">
-                    <template slot="content">
-                        <h1>En tant qu'administrateur, vous êtes en charge de la modération des commentaires.</h1>
-                        <p>Vous pouvez supprimer un commentaire ou demander à son auteur de le modifier s'il ne respecte pas les règles suivantes :
-                            <ul>
-                                <li>être neutre et factuel ;</li>
-                                <li>ne pas collecter des données personnelles (nom, condamnation judiciaire...) de personnes ou groupes, porter une attention particulière aux personnes habitant ou issues d'un bidonville ;</li>
-                                <li>ne doit pas être subjectif, insultant ou inapproprié.</li>
-                            </ul>
-                        </p>
-
-                        <p>Pour plus d'informations :<br/><router-link to="/typologie-des-acces" class="link"><font-awesome-icon icon="file-pdf"></font-awesome-icon> &nbsp;Guide des accès et de l'administrateur</router-link><br/><router-link to="/charte-d-engagement" class="link"><font-awesome-icon icon="file-pdf"></font-awesome-icon> &nbsp;Charte d'engagement de l'utilisateur</router-link></p>
-                    </template>
-                </SlideNote>
-
-                <div class="switch">
-                    <button v-bind:class="{ active: filter === 'all' }" @click="show('all')">Tout</button><button v-bind:class="{ active: filter === 'shantytown' }" @click="show('shantytown')">Modifications</button><button v-bind:class="{ active: filter === 'comment' }" @click="show('comment')">Commentaires</button>
+        //- state: loading failed
+        <section v-if="state === 'error'" class="section section-white">
+            <div class="container">
+                <div class="notification error full-width">
+                    <span>{{ error }}. <a href="#" @click="retryLoading">Réessayer ?</a></span>
                 </div>
-            </header>
+            </div>
+        </section>
 
-            <Table class="userActivity" :columns="columns" :content="parsedActivities" :emptyLabel="'Aucune activité trouvée pour les filtres sélectionnés'" @click="onRowClick">
-                <template v-slot:date="props"><strong>{{ props.row.date }}</strong><br/>à {{ props.row.time }}</template>
+        //- state: loaded
+        <section v-if="state === 'loaded'" class="section section-white">
+            <CommentDeletion v-if="toBeDeleted !== null" :comment="toBeDeleted" @close="closePopin" @deleted="onCommentDeleted"></CommentDeletion>
 
-                <template v-slot:author="props">
-                    <font-awesome-icon icon="user" class="link"></font-awesome-icon> &nbsp;
-                    <router-link data-group="link" :to="`/annuaire/${props.row.author.organization}`" class="link">{{ props.row.author.name }}</router-link>
-                </template>
-
-                <template v-slot:activity="props">
-                    <span class="userActivity-action">
-                        <font-awesome-icon :icon="props.row.icon"></font-awesome-icon> {{ props.row.action }} site : {{ props.row.address }}
-                    </span>
-
-                    <div v-if="props.row.content !== undefined" class="userActivity-content" v-html="props.row.content"></div>
-                    <div v-if="props.row.comment !== undefined" class="userActivity-remove">
-                        <span class="link" @click="confirmCommentDeletion(props.row, $event)"><font-awesome-icon icon="trash-alt"></font-awesome-icon> Supprimer</a>
+            <div class="container">
+                <header>
+                    <div>
+                        <hgroup>
+                            <h3>Historique des activités</h3>
+                        </hgroup>
                     </div>
 
-                    <p v-if="props.row.diff" v-for="diff in props.row.diff" class="changelog">
-                        <span class="changelog-name">{{ diff.field }} :</span><br/>
-                        <span class="changelog-oldValue" v-bind:class="{ 'changelog-value--unknown': !diff.oldValue }">{{ diff.oldValue || 'non renseigné' }}</span>,
-                        <span class="changelog-newValue" v-bind:class="{ 'changelog-value--unknown': !diff.newValue }">{{ diff.newValue || 'non renseigné' }}</span>
-                    </p>
-                </template>
-            </Table>
-        </div>
-    </section>
+                    <SlideNote title="Règles de modération d'un commentaire" class="userActivity-rule">
+                        <template slot="content">
+                            <h1>En tant qu'administrateur, vous êtes en charge de la modération des commentaires.</h1>
+                            <p>Vous pouvez supprimer un commentaire ou demander à son auteur de le modifier s'il ne respecte pas les règles suivantes :
+                                <ul>
+                                    <li>être neutre et factuel ;</li>
+                                    <li>ne pas collecter des données personnelles (nom, condamnation judiciaire...) de personnes ou groupes, porter une attention particulière aux personnes habitant ou issues d'un bidonville ;</li>
+                                    <li>ne doit pas être subjectif, insultant ou inapproprié.</li>
+                                </ul>
+                            </p>
+
+                            <p>Pour plus d'informations :<br/><router-link to="/typologie-des-acces" class="link"><font-awesome-icon icon="file-pdf"></font-awesome-icon> &nbsp;Guide des accès et de l'administrateur</router-link><br/><router-link to="/charte-d-engagement" class="link"><font-awesome-icon icon="file-pdf"></font-awesome-icon> &nbsp;Charte d'engagement de l'utilisateur</router-link></p>
+                        </template>
+                    </SlideNote>
+
+                    <div class="switch">
+                        <button v-bind:class="{ active: filter === 'all' }" @click="show('all')">Tout</button><button v-bind:class="{ active: filter === 'shantytown' }" @click="show('shantytown')">Modifications</button><button v-bind:class="{ active: filter === 'comment' }" @click="show('comment')">Commentaires</button>
+                    </div>
+                </header>
+
+                <Table class="userActivity" :columns="columns" :content="parsedActivities" :emptyLabel="'Aucune activité trouvée pour les filtres sélectionnés'" @click="onRowClick">
+                    <template v-slot:date="props"><strong>{{ props.row.date }}</strong><br/>à {{ props.row.time }}</template>
+
+                    <template v-slot:author="props">
+                        <font-awesome-icon icon="user" class="link"></font-awesome-icon> &nbsp;
+                        <router-link data-group="link" :to="`/annuaire/${props.row.author.organization}`" class="link">{{ props.row.author.name }}</router-link>
+                    </template>
+
+                    <template v-slot:activity="props">
+                        <span class="userActivity-action">
+                            <font-awesome-icon :icon="props.row.icon"></font-awesome-icon> {{ props.row.action }} site : {{ props.row.address }}
+                        </span>
+
+                        <div v-if="props.row.content !== undefined" class="userActivity-content" v-html="props.row.content"></div>
+                        <div v-if="props.row.comment !== undefined" class="userActivity-remove">
+                            <span class="link" @click="confirmCommentDeletion(props.row, $event)"><font-awesome-icon icon="trash-alt"></font-awesome-icon> Supprimer</a>
+                        </div>
+
+                        <p v-if="props.row.diff" v-for="diff in props.row.diff" class="changelog">
+                            <span class="changelog-name">{{ diff.field }} :</span><br/>
+                            <span class="changelog-oldValue" v-bind:class="{ 'changelog-value--unknown': !diff.oldValue }">{{ diff.oldValue || 'non renseigné' }}</span>,
+                            <span class="changelog-newValue" v-bind:class="{ 'changelog-value--unknown': !diff.newValue }">{{ diff.newValue || 'non renseigné' }}</span>
+                        </p>
+                    </template>
+                </Table>
+            </div>
+        </section>
+    </div>
 </div>

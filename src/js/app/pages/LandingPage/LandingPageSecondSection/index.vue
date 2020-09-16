@@ -23,7 +23,7 @@
         <div class="max-w-xl mt-20 mx-auto">
             <div>{{$t('landingPage.secondSection.firstParagraph')}}</div>
             <div class="mt-8"><span class="font-bold">{{$t('landingPage.secondSection.secondParagraph.bold')}}</span> {{$t('landingPage.secondSection.secondParagraph.normal')}}</div>
-            <div><a href="https://www.example.com">{{$t('landingPage.secondSection.secondParagraph.link')}}</a></div>
+            <div><a class="link" href="https://www.example.com">{{$t('landingPage.secondSection.secondParagraph.link')}}</a></div>
 
             <img class="mt-20" src="./assets/bidonvilles-france-map.jpg" />
         </div>

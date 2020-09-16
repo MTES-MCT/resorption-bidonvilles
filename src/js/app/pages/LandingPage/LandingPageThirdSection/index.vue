@@ -31,22 +31,22 @@
             <div class="max-w-xl mx-auto">
                 <div class="mt-4">
                     {{$t('landingPage.thirdSection.secondParagraph.body.text1')}}
-                    <a href="https://example.com">{{$t('landingPage.thirdSection.secondParagraph.body.link1')}}</a>,
+                    <a class="link" href="https://example.com">{{$t('landingPage.thirdSection.secondParagraph.body.link1')}}</a>,
                     {{$t('landingPage.thirdSection.secondParagraph.body.text2')}}.
                     <span class="font-bold">
                     {{$t('landingPage.thirdSection.secondParagraph.body.text3')}}
                     </span>
                     {{$t('landingPage.thirdSection.secondParagraph.body.text4')}}
-                    <a href="https://example.com">{{$t('landingPage.thirdSection.secondParagraph.body.link2')}}</a>
+                    <a class="link" href="https://example.com">{{$t('landingPage.thirdSection.secondParagraph.body.link2')}}</a>
                 </div>
 
                 <div class="mt-8">
                     <div>{{$t('landingPage.thirdSection.secondParagraph.items.title')}}</div>
 
                     <ul class="list-disc ml-8">
-                        <li><a href="https://example.com">{{$t('landingPage.thirdSection.secondParagraph.items.1.link')}}</a> {{$t('landingPage.thirdSection.secondParagraph.items.1.text')}}</li>
+                        <li><a class="link" href="https://example.com">{{$t('landingPage.thirdSection.secondParagraph.items.1.link')}}</a> {{$t('landingPage.thirdSection.secondParagraph.items.1.text')}}</li>
                         <li>{{$t('landingPage.thirdSection.secondParagraph.items.2.text')}}</li>
-                        <li><a href="https://example.com">{{$t('landingPage.thirdSection.secondParagraph.items.3.link')}}</a> {{$t('landingPage.thirdSection.secondParagraph.items.3.text')}}</li>
+                        <li><a class="link" href="https://example.com">{{$t('landingPage.thirdSection.secondParagraph.items.3.link')}}</a> {{$t('landingPage.thirdSection.secondParagraph.items.3.text')}}</li>
                     </ul>
 
                 </div>

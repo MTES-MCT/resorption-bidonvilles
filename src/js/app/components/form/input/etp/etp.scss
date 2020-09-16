@@ -1,36 +1,39 @@
-@import '/css/config/colors.scss';
+@import '/css/v1/config/colors';
 
-.etp-type {
-    margin-right: 20px;
-    font-weight: bold;
-}
-
-.etp-total {
-    max-width: 70px;
-
-    &:after {
-        display: block;
-        content: 'ETP';
-        color: red;
+.v1 {
+    .etp-type {
+        margin-right: 20px;
+        font-weight: bold;
     }
-}
 
-.etp-removeButton {
-    cursor: pointer;
-    visibility: hidden;
-    margin-left: 20px;
-    color: $ENDEAVOUR_BLUE;
-}
+    .etp-total {
+        max-width: 70px;
 
+        &:after {
+            display: block;
+            content: 'ETP';
+            color: red;
+        }
+    }
 
-.etp-row:hover {
     .etp-removeButton {
-        visibility: visible;
+        cursor: pointer;
+        visibility: hidden;
+        margin-left: 20px;
+        color: $ENDEAVOUR_BLUE;
     }
-}
 
-.etp-addButton {
-    cursor: pointer;
-    color: $ENDEAVOUR_BLUE;
-    font-weight: bold;
+
+    .etp-row:hover {
+        .etp-removeButton {
+            visibility: visible;
+        }
+    }
+
+    .etp-addButton {
+        cursor: pointer;
+        color: $ENDEAVOUR_BLUE;
+        font-weight: bold;
+    }
+
 }

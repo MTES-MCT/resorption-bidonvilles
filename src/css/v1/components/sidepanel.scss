@@ -1,4 +1,4 @@
-@import '/css/config/colors.scss';
+@import '/css/v1/config/colors.scss';
 
 $SIDEPANEL__SIDE_PADDING: 35px;
 $SIDEPANEL__TOP_PADDING: 15px;
@@ -58,7 +58,7 @@ $SIDEPANEL__HEADER_HEIGHT: 40px;
     justify-content: flex-end;
     align-items: center;
     width: 100%;
-    text-align: right;  
+    text-align: right;
     height: $SIDEPANEL__HEADER_HEIGHT;
     color: $ENDEAVOUR_BLUE;
 

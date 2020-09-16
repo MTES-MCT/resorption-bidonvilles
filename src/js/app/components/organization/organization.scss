@@ -1,30 +1,33 @@
-.organization-body {
-    > h1 {
-        margin: 0;
-        padding: 0;
-        font-size: 0.9rem;
-        font-weight: bold;
+.v1 {
+    .organization-body {
+        > h1 {
+            margin: 0;
+            padding: 0;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        > p {
+            margin: 0 0 15px 0;
+            padding: 0;
+            font-size: 1rem;
+        }
+
+        .primary {
+            color: #0E9FAA;
+        }
     }
 
-    > p {
-        margin: 0 0 15px 0;
-        padding: 0;
-        font-size: 1rem;
-    }
+    .organization-users {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-top: 10px;
 
-    .primary {
-        color: #0E9FAA;
+        .userCard {
+            width: 48%;
+            margin-bottom: 25px;
+        }
     }
 }
 
-.organization-users {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin-top: 10px;
-
-    .userCard {
-        width: 48%;
-        margin-bottom: 25px;
-    }
-}

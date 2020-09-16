@@ -1,49 +1,51 @@
-<div class="page--withMargin">
-    <NavBar></NavBar>
+<div class="v1">
+    <div class="page--withMargin">
+        <NavBar></NavBar>
 
-    <section class="section section-white">
-        <div class="container">
-            <header>
-                <h1>Signature de la charte d'engagement</h1>
-            </header>
+        <section class="section section-white">
+            <div class="container">
+                <header>
+                    <h1>Signature de la charte d'engagement</h1>
+                </header>
 
-            <p><strong>Avant d'accéder à la plateforme, merci de lire et de valider la <a :href="charte.fichier">charte d'engagement</a></strong>. Le respect des règles de confidentialité des informations est primordial vis à vis des habitants et de l'action publique.</p>
+                <p><strong>Avant d'accéder à la plateforme, merci de lire et de valider la <a :href="charte.fichier">charte d'engagement</a></strong>. Le respect des règles de confidentialité des informations est primordial vis à vis des habitants et de l'action publique.</p>
 
-            <p>
-                <strong>Selon la charte d'engagement, l'utilisateur s'engage à :</strong>
-                <ul>
-                    <li>utiliser des paramètres de connexion (identifiants et mots de passe) personnels et confidentiels.</li>
-                    <li>exploiter les informations présentes sur la plateforme exclusivement à des fins professionnelles, pour les besoins propres et internes de son organisation.</li>
-                </ul>
-            </p>
+                <p>
+                    <strong>Selon la charte d'engagement, l'utilisateur s'engage à :</strong>
+                    <ul>
+                        <li>utiliser des paramètres de connexion (identifiants et mots de passe) personnels et confidentiels.</li>
+                        <li>exploiter les informations présentes sur la plateforme exclusivement à des fins professionnelles, pour les besoins propres et internes de son organisation.</li>
+                    </ul>
+                </p>
 
-            <p>
-                <strong>Ainsi, l'utilisateur s'interdit de :</strong>
-                <ul>
-                    <li>transmettre les identifiants et mots de passe à un tiers.</li>
-                    <li>communiquer les informations présentes sur la plateforme sous aucune forme (orale, écrite, copie) à un tiers.</li>
-                </ul>
-            </p>
+                <p>
+                    <strong>Ainsi, l'utilisateur s'interdit de :</strong>
+                    <ul>
+                        <li>transmettre les identifiants et mots de passe à un tiers.</li>
+                        <li>communiquer les informations présentes sur la plateforme sous aucune forme (orale, écrite, copie) à un tiers.</li>
+                    </ul>
+                </p>
 
-            <p>Le non respect de ces règles peut entraîner des avertissements ou la suppression de votre accès à la plateforme numérique.</p>
+                <p>Le non respect de ces règles peut entraîner des avertissements ou la suppression de votre accès à la plateforme numérique.</p>
 
-            <p>
-                <label for="charte">
-                    <input type="checkbox" id="charte" value="1" v-model="data" :disabled="form.status === 'pending'" class="input input--checkbox" /> Je m’engage à respecter les règles et obligations de la <a :href="charte.fichier">charte d’engagement</a> auprès des services de l’État, dans le cadre de l’accès à la plateforme Résorption bidonvilles.
-                </label>
-            </p>
+                <p>
+                    <label for="charte">
+                        <input type="checkbox" id="charte" value="1" v-model="data" :disabled="form.status === 'pending'" class="input input--checkbox" /> Je m’engage à respecter les règles et obligations de la <a :href="charte.fichier">charte d’engagement</a> auprès des services de l’État, dans le cadre de l’accès à la plateforme Résorption bidonvilles.
+                    </label>
+                </p>
 
-            <p class="error" v-if="form.status === 'error'">
-                <span class="error">Une erreur est survenue :</span><br/>
-                <span class="error">{{ form.error }}</span>
-            </p>
+                <p class="error" v-if="form.status === 'error'">
+                    <span class="error">Une erreur est survenue :</span><br/>
+                    <span class="error">{{ form.error }}</span>
+                </p>
 
-            <p>
-                <button class="button" @click="submit" :disabled="form.status === 'pending' || data !== true">
-                    <span v-if="form.status !== 'pending'">Accéder à la plateforme</span>
-                    <img v-else src="/img/spinner_light.svg" width="20" />
-                </button>
-            </p>
-        </div>
-    </section>
+                <p>
+                    <button class="button" @click="submit" :disabled="form.status === 'pending' || data !== true">
+                        <span v-if="form.status !== 'pending'">Accéder à la plateforme</span>
+                        <img v-else src="/img/spinner_light.svg" width="20" />
+                    </button>
+                </p>
+            </div>
+        </section>
+    </div>
 </div>

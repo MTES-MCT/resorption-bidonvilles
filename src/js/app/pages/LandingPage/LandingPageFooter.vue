@@ -6,7 +6,7 @@
                     <ul>
                         <li><font-awesome-icon icon="envelope"></font-awesome-icon></li>
                         <li><h4>Contactez l’équipe du projet</h4></li>
-                        <li><h4><a href="mailto:contact@resorption-bidonvilles.beta.gouv.fr">contact@resorption-bidonvilles.beta.gouv.fr</a></h4></li>
+                        <li><h4><a class="underline" href="mailto:contact@resorption-bidonvilles.beta.gouv.fr">contact@resorption-bidonvilles.beta.gouv.fr</a></h4></li>
                     </ul>
 
                     <ul class="my-3 md:my-0">
