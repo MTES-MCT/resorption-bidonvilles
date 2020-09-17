@@ -1,4 +1,13 @@
 module.exports = {
+    purge: {
+        mode: 'layers',
+        layers: ['base', 'components', 'utilities'],
+        content: ['./src/**/*.vue'],
+    },
+    future: {
+        removeDeprecatedGapUtilities: true,
+        purgeLayersByDefault: true,
+    },
     theme: {
         corePlugins: {
             container: false
