@@ -42,6 +42,10 @@
     @apply max-w-screen-sm mx-auto
   }
 
+  .link {
+    @apply text-blueFrance underline
+  }
+
   .text-font-display {
     @apply font-display font-bold
   }

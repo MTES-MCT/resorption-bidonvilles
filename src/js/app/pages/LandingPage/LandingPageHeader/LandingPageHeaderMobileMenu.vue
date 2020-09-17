@@ -1,0 +1,54 @@
+<template>
+    <div class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg">
+        <Menu>
+            <MenuItem>
+                <router-link to="/connexion">
+                    {{$t('landingPage.header.connect')}}
+                </router-link>
+            </MenuItem>
+
+
+            <MenuItem>
+                <router-link to="/contact">
+                {{$t('landingPage.header.contact')}}
+                </router-link>
+            </MenuItem>
+        </Menu>
+    </div>
+</template>
+
+<script>
+    import Menu from '#app/components/ui/Menu'
+    import MenuItem from '#app/components/ui/MenuItem'
+
+    export default {
+        props: {
+            closeMenu: {
+                required: true,
+                type: Function
+            }
+        },
+        components: {
+            Menu,
+            MenuItem
+        },
+        mounted() {
+            // Delay listener, otherwise the check happens before the menu is rendered and close the menu immediately
+            setTimeout(() => {
+                document.addEventListener('click', this.checkOutsideClick);
+            }, 0)
+
+        },
+        destroyed() {
+            document.removeEventListener('click', this.checkOutsideClick);
+        },
+        methods: {
+            checkOutsideClick(event) {
+                console.log('check');
+                if (!this.$el.contains(event.target)) {
+                    this.closeMenu();
+                }
+            },
+        }
+    }
+</script>
