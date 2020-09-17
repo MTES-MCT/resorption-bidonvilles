@@ -1,5 +1,5 @@
 <template>
-    <div class="max-w-3xl mx-auto">
+    <div>
         <div>
             <div class="text-xl">{{$t('landingPage.secondSection.title')}}</div>
             <div class="text-xl font-bold">{{$t('landingPage.secondSection.subtitle')}}</div>
@@ -20,21 +20,17 @@
                     :line3="$t('landingPage.secondSection.data.3.line3')" />
 
         </div>
-        <div class="max-w-xl mt-20 mx-auto">
+        <div class="container-md mt-20">
             <div>{{$t('landingPage.secondSection.firstParagraph')}}</div>
             <div class="mt-8"><span class="font-bold">{{$t('landingPage.secondSection.secondParagraph.bold')}}</span> {{$t('landingPage.secondSection.secondParagraph.normal')}}</div>
             <div><a class="link" href="https://www.example.com">{{$t('landingPage.secondSection.secondParagraph.link')}}</a></div>
 
             <img class="mt-20" src="./assets/bidonvilles-france-map.jpg" />
         </div>
-            <div class="mt-20 flex flex-row">
-                <div class="w-1/2 mr-16 bg-gray-500">video</div>
-                <div class="w-1/2 text-display-md text-black">Comprendre la résorption des bidonvilles en 2 minutes</div>
-            </div>
-
-
-
-
+        <div class="mt-20 flex flex-row">
+            <div class="w-1/2 mr-16 bg-gray-500">video</div>
+            <div class="w-1/2 text-display-md text-black">Comprendre la résorption des bidonvilles en 2 minutes</div>
+        </div>
     </div>
 </template>
 

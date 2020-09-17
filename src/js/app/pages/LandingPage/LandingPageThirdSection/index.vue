@@ -1,7 +1,7 @@
 <template>
-    <div class="max-w-3xl mx-auto">
+    <div>
         <div class="text-xl">{{$t('landingPage.thirdSection.title')}}</div>
-        <div class="max-w-xl mx-auto mt-8">
+        <div class="container-md mx-auto mt-8">
             <div><span class="font-bold">{{$t('landingPage.thirdSection.firstParagraph.bold')}}</span> {{$t('landingPage.thirdSection.firstParagraph.normal')}}</div>
 
             <div class="flex flex-row items-center my-20">
@@ -28,7 +28,7 @@
             <div class="text-display-md text-black">
                 {{$t('landingPage.thirdSection.secondParagraph.title')}}
             </div>
-            <div class="max-w-xl mx-auto">
+            <div class="container-md">
                 <div class="mt-4">
                     {{$t('landingPage.thirdSection.secondParagraph.body.text1')}}
                     <a class="link" href="https://example.com">{{$t('landingPage.thirdSection.secondParagraph.body.link1')}}</a>,
@@ -52,11 +52,13 @@
                 </div>
 
                 <div class="flex flex-row flex-wrap items-center justify-between mt-8">
-                    <img class="h-20 m-2" src="./assets/logo-gouvernement.jpg" />
-                    <img class="h-20 m-2" src="./assets/logo-commission-europenne.png" />
+                    <img class="h-32 m-2" src="./assets/logo-gouvernement.jpg" />
+                    <img class="h-24 m-2" src="./assets/logo-commission-europenne.png" />
+                </div>
+                <div class="flex flex-row flex-wrap items-center justify-between mt-8">
                     <img class="h-24 m-2" src="./assets/logo-fabrique-numerique.png" />
-                    <img class="h-16 m-2" src="./assets/logo_beta-gouv-fr.jpg" />
-                    <img class="h-12 m-2" src="./assets/logo-entrepreneur-interet-general.png" />
+                    <img class="h-20 m-2" src="./assets/logo_beta-gouv-fr.jpg" />
+                    <img class="h-16 m-2" src="./assets/logo-entrepreneur-interet-general.png" />
                 </div>
 
 
