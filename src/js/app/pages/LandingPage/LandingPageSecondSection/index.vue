@@ -23,23 +23,35 @@
         <div class="container-sm mt-16">
             <div>{{$t('landingPage.secondSection.firstParagraph')}}</div>
             <div class="mt-8"><span class="font-bold">{{$t('landingPage.secondSection.secondParagraph.bold')}}</span> {{$t('landingPage.secondSection.secondParagraph.normal')}}</div>
-            <div><a class="link" href="https://www.example.com">{{$t('landingPage.secondSection.secondParagraph.link')}}</a></div>
+            <div><a class="link" href="https://www.ecologie.gouv.fr/resorption-des-campements-illicites-et-des-bidonvilles">{{$t('landingPage.secondSection.secondParagraph.link')}}</a></div>
 
             <img class="mt-20" src="./assets/bidonvilles-france-map.jpg" />
         </div>
-        <div class="mt-20 flex flex-row">
-            <div class="w-1/2 mr-16 bg-gray-500">video</div>
-            <div class="w-1/2 text-display-md text-black">Comprendre la résorption des bidonvilles en 2 minutes</div>
+        <div class="mt-20 flex flex-row items-center">
+            <div class="w-1/2 mr-16 bg-gray-500">
+
+                <LandingPageResponsiveEmbed>
+                    <iframe src="https://www.dailymotion.com/embed/video/x7mf87e"
+                            allowfullscreen
+                            allow="autoplay; fullscreen">
+                    </iframe>
+                </LandingPageResponsiveEmbed>
+            </div>
+            <div class="w-1/2 text-display-md text-black">
+                {{$t('landingPage.secondSection.video.text')}}
+            </div>
         </div>
     </div>
 </template>
 
 <script>
     import LandingPageDataBlock from './LandingPageDataBlock';
+    import LandingPageResponsiveEmbed from '../LandingPageResponsiveEmbed';
 
     export default {
         components: {
-            LandingPageDataBlock
+            LandingPageDataBlock,
+            LandingPageResponsiveEmbed
         }
     }
 </script>

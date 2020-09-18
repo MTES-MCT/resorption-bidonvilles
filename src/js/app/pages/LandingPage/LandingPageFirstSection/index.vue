@@ -1,6 +1,11 @@
 <template>
     <div>
         <img class="full-width mx-auto" src="./assets/resorption-bidonvilles-dessin.png" />
+        <div class="container-sm mt-8">
+            <LandingPageResponsiveEmbed videoRatio="50%">
+                <iframe src="https://www.youtube.com/embed/_hC7cZqqK-s" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </LandingPageResponsiveEmbed>
+        </div>
         <div>
             <div class="md:grid md:grid-cols-3 gap-16 mt-16">
                 <LandingPageFeatureBlock icon="map-marked-alt">{{$t('landingPage.firstSection.features.position')}}</LandingPageFeatureBlock>
@@ -13,7 +18,6 @@
                 <div class="container-sm mt-4">
                     <div>{{$t('landingPage.firstSection.context.text')}}</div>
                 </div>
-
             </div>
 
             <div class="md:flex md:flex-row mt-16">
@@ -21,10 +25,7 @@
                 <div class="hidden md:block border-solid border-r-2 border-gray-200 m-20" />
                 <LandingPageContextImage label="Après"><img src="./assets/after.jpg" /></LandingPageContextImage>
             </div>
-            <div class="container-sm mt-16">
-                <div class="text-xl">{{$t('landingPage.firstSection.feedback.1.text')}}</div>
-                <div class="text-lg font-light">{{$t('landingPage.firstSection.feedback.1.author')}}</div>
-            </div>
+            <LandingPageUserFeedback class="mt-32"/>
         </div>
     </div>
 </template>
@@ -32,7 +33,9 @@
 <script>
     import LandingPageFeatureBlock from '#app/pages/LandingPage/LandingPageFirstSection/LandingPageFeatureBlock';
     import LandingPageContextImage from '#app/pages/LandingPage/LandingPageFirstSection/LandingPageContextImage';
+    import LandingPageUserFeedback from './LandingPageUserFeedback';
+    import LandingPageResponsiveEmbed from '../LandingPageResponsiveEmbed';
     export default {
-        components: { LandingPageContextImage, LandingPageFeatureBlock }
+        components: { LandingPageContextImage, LandingPageFeatureBlock, LandingPageUserFeedback, LandingPageResponsiveEmbed }
     };
 </script>

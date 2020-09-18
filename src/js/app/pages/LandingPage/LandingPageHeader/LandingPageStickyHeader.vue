@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed top-0 left-0 w-full bg-white shadow">
+    <div class="fixed z-10 top-0 left-0 w-full bg-white shadow">
         <header role="navigation" class="container py-4 flex flex-row justify-between items-center">
             <LandingPageLogo />
             <!-- Desktop actions -->

@@ -7,7 +7,7 @@
                 :type="type"
                 :value="value"
                 :placeholder="placeholder"
-                class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 w-full appearance-none leading-normal"
+                class="bg-white outline-none border border-gray-300 rounded-lg py-2 px-4 w-full appearance-none leading-normal"
                 @input="onInput($event.target.value)"
                 @focus="onFocus($event.target.value)"
         >

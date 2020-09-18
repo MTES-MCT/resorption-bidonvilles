@@ -44,8 +44,9 @@
         },
         methods: {
           handleScroll() {
-              this.scrollTop = window.scrollY
-              console.log(this.scrollTop);
+              setTimeout(() => {
+                  this.scrollTop = window.scrollY
+              })
              },
           openMenu() {
               this.menuDisplayed = true
@@ -60,7 +61,7 @@
         },
         computed: {
            sticky() {
-               return this.scrollTop > 150
+               return this.scrollTop > 200
            }
         },
         mounted() {

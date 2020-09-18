@@ -22,6 +22,14 @@
       "1": {
         "text": "C’est super parce que vous avez l’info en ligne, vous n’êtes pas face à un tableau excel avec des codes que vous ne comprenez pas.",
         "author": "Préfecture Seine-Saint-Denis"
+      },
+      "2": {
+        "text": "La plateforme a fiabilisé l’information, parce que le tableau Excel n’était pas partagé. Plus on aura des outils collaboratifs, mieux ça sera.",
+        "author": "Ville de poitiers"
+      },
+      "3": {
+        "text": "J’ai pu orienter la famille d’une personne que j’accompagne vers une maison des solidarités à partir de la localisation de leur bidonville.",
+        "author": "Association de Haute-Garonne"
       }
     }
   },
@@ -54,6 +62,9 @@
       "bold": "Le gouvernement fixe un objectif clair de résorption des bidonvilles en dépassant l’approche centrée sur les évacuations au profit d’une approche globale",
       "normal": "alliant insertion sociale, respect de l’ordre public et prévention des réinstallations. Dans tous les territoires concernés, des actions multi-partenariales efficaces, humaines et pragmatiques doivent être mises en place.",
       "link": "En savoir plus sur la politique de résorption des bidonvilles"
+    },
+    "video": {
+      "text": "Comprendre la résorption des bidonvilles en 2 minutes"
     }
   },
   "secondBanner": {
