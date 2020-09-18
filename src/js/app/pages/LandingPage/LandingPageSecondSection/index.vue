@@ -1,10 +1,10 @@
 <template>
     <div>
-        <div>
-            <div class="text-xl">{{$t('landingPage.secondSection.title')}}</div>
-            <div class="text-xl font-bold">{{$t('landingPage.secondSection.subtitle')}}</div>
-        </div>
-        <div class="mt-20 md:grid md:grid-cols-3 md:gap-16">
+        <h2>
+            <span class="text-size-display-lg font-display font-normal">{{$t('landingPage.secondSection.title')}}</span>
+            <span class="text-display-lg block">{{$t('landingPage.secondSection.subtitle')}}</span>
+        </h2>
+        <div class="mt-8 md:grid md:grid-cols-3 md:gap-16">
             <LandingPageDataBlock
                     :line1="$t('landingPage.secondSection.data.1.line1')"
                     :line2="$t('landingPage.secondSection.data.1.line2')"
@@ -20,7 +20,7 @@
                     :line3="$t('landingPage.secondSection.data.3.line3')" />
 
         </div>
-        <div class="container-md mt-20">
+        <div class="container-sm mt-16">
             <div>{{$t('landingPage.secondSection.firstParagraph')}}</div>
             <div class="mt-8"><span class="font-bold">{{$t('landingPage.secondSection.secondParagraph.bold')}}</span> {{$t('landingPage.secondSection.secondParagraph.normal')}}</div>
             <div><a class="link" href="https://www.example.com">{{$t('landingPage.secondSection.secondParagraph.link')}}</a></div>

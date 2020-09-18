@@ -1,5 +1,5 @@
 <template>
-    <component :is="type" :href="href" :type="submit" :class="['btn rounded font-bold text-white', sizeClass, variantClass]">
+    <component :is="type" :href="href" :type="submit" :class="['btn rounded text-white', sizeClass, variantClass]">
         <slot/>
     </component>
 </template>

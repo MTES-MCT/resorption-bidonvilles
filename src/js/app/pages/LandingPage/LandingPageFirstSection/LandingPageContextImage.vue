@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="text-secondary text-xl">{{label}}</div>
+        <div class="text-secondary text-display-md">{{label}}</div>
         <slot />
     </div>
 </template>

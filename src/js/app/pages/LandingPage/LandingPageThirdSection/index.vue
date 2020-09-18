@@ -1,13 +1,13 @@
 <template>
     <div>
-        <div class="text-xl">{{$t('landingPage.thirdSection.title')}}</div>
-        <div class="container-md mx-auto mt-8">
+        <h2 class="text-display-lg">{{$t('landingPage.thirdSection.title')}}</h2>
+        <div class="container-sm mx-auto mt-8">
             <div><span class="font-bold">{{$t('landingPage.thirdSection.firstParagraph.bold')}}</span> {{$t('landingPage.thirdSection.firstParagraph.normal')}}</div>
 
-            <div class="flex flex-row items-center my-20">
-                <div class="bg-black h-1 flex-1" />
+            <div class="flex flex-row items-center my-8">
+                <div class="bg-gray-500 h-px flex-1" />
                 <div class="inline-block bg-black text-white text-display-md text-black px-4">2019</div>
-                <div class="bg-black h-1 flex-1" />
+                <div class="bg-gray-500 h-px flex-1" />
             </div>
 
             <div class="grid grid-cols-2 gap-y-8 md:gap-x-16" >
@@ -24,11 +24,11 @@
                 </Button>
             </div>
         </div>
-        <div class="mt-20">
-            <div class="text-display-md text-black">
+        <div class="mt-32">
+            <h2 class="text-display-lg text-black">
                 {{$t('landingPage.thirdSection.secondParagraph.title')}}
-            </div>
-            <div class="container-md">
+            </h2>
+            <div class="container-sm">
                 <div class="mt-4">
                     {{$t('landingPage.thirdSection.secondParagraph.body.text1')}}
                     <a class="link" href="https://example.com">{{$t('landingPage.thirdSection.secondParagraph.body.link1')}}</a>,
@@ -52,8 +52,8 @@
                 </div>
 
                 <div class="flex flex-row flex-wrap items-center justify-between mt-8">
-                    <img class="h-32 m-2" src="./assets/logo-gouvernement.jpg" />
-                    <img class="h-24 m-2" src="./assets/logo-commission-europenne.png" />
+                    <img class="h-24 m-2" src="./assets/logo-gouvernement.jpg" />
+                    <img class="h-24 my-2" src="./assets/logo-commission-europenne.png" />
                 </div>
                 <div class="flex flex-row flex-wrap items-center justify-between mt-8">
                     <img class="h-24 m-2" src="./assets/logo-fabrique-numerique.png" />

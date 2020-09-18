@@ -1,8 +1,10 @@
 <template>
-    <div class="bg-corail text-white full-width text-center py-16">
-        <div class="container-md">
-            <div class="text-display-lg text-white "><slot /></div>
-            <div class="pt-4"><Button variant="primary">{{cta}}</Button></div>
+    <div class="bg-corail text-white full-width text-center py-8">
+        <div class="container">
+            <div class="container-md">
+                <h2 class="text-display-lg text-white "><slot /></h2>
+                <div class="pt-4"><Button variant="primary">{{cta}}</Button></div>
+            </div>
         </div>
     </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="text-md">{{line1}}</div>
-        <div class="text-display-lg text-black">{{line2}}</div>
+        <div class="text-size-display-xl text-font-display leading-none text-black">{{line2}}</div>
         <div class="text-md">{{line3}}</div>
     </div>
 </template>
@@ -25,3 +25,7 @@
         }
     }
 </script>
+
+<style>
+
+</style>

@@ -2,7 +2,7 @@
     <div>
         <div class="container pt-4">
             <LandingPageHeader />
-            <div class="container-lg pb-16">
+            <div class="container-lg pb-20">
                 <LandingPageHero class="mt-20" />
                 <LandingPageFirstSection />
             </div>
@@ -13,7 +13,7 @@
         </LandingPageBanner>
         <img class="h-128 w-full object-cover object-center" src="./assets/resorption-bidonvilles-1.jpg"  />
         <div class="container">
-            <div class="container-lg py-16">
+            <div class="container-lg py-20">
                 <LandingPageSecondSection />
             </div>
         </div>
@@ -23,10 +23,10 @@
         </LandingPageBanner>
         <img class="h-128 w-full object-cover object-top" src="./assets/resorption-bidonvilles-2.jpg" />
         <div class="container">
-            <div class="container-lg py-16">
+            <div class="container-lg py-20">
                 <LandingPageThirdSection />
-                <div class="text-center mt-20">
-                    <h2 class="text-display-md text-secondary">{{$t('landingPage.hero.subtitle')}}</h2>
+                <div class="text-center mt-40">
+                    <h2 class="text-display-lg text-secondary">{{$t('landingPage.hero.subtitle')}}</h2>
                     <LandingPageContactForm class="mx-auto" />
                 </div>
             </div>
