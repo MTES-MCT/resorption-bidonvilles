@@ -9,12 +9,8 @@ module.exports = {
         purgeLayersByDefault: true,
     },
     theme: {
-        corePlugins: {
-            container: false
-        },
         fontFamily: {
-            display: ['Marianne', 'arial', 'sans-serif'],
-            body: ['Spectral', 'georgia', 'serif'],
+            body: ['Marianne', 'arial', 'sans-serif'],
         },
         fontSize: {
             'size-display-xl': ['3rem', {
@@ -75,7 +71,7 @@ module.exports = {
                 success: '#0D6635',
                 info: '#3A55D1',
                 warning: '#FA5C00',
-                error: '#B60000',
+                error: '#B60000'
             },
         },
     },

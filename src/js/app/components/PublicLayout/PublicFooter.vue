@@ -1,7 +1,7 @@
 <template>
     <footer class="bg-black text-white py-8" role="contentinfo">
-        <div class="container mx-auto">
-            <div class="container-lg">
+        <PublicContainer>
+            <div class="max-w-screen-lg mx-auto">
                 <div class="md:flex flex-row justify-between">
                     <ul>
                         <li><font-awesome-icon icon="envelope"></font-awesome-icon></li>
@@ -17,6 +17,17 @@
                     </ul>
                 </div>
             </div>
-        </div>
+        </PublicContainer>
     </footer>
 </template>
+
+
+<script>
+    import PublicContainer from './PublicContainer'
+
+    export default {
+        components: {
+            PublicContainer
+        }
+    }
+</script>

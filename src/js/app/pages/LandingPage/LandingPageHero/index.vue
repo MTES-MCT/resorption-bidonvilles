@@ -1,6 +1,6 @@
 <template>
     <div class="text-center">
-        <h1 class="text-display-xl text-black font">{{$t('landingPage.hero.title')}}</h1>
+        <h1 class="text-display-xl font">{{$t('landingPage.hero.title')}}</h1>
         <h2 class="text-display-lg text-secondary mt-2">{{$t('landingPage.hero.subtitle')}}</h2>
         <LandingPageContactForm class="mx-auto" />
 

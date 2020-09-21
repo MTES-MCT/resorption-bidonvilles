@@ -1,7 +1,7 @@
 <template>
     <div>
         <font-awesome-icon :icon="icon" size="3x"></font-awesome-icon>
-        <h3 class="text-size-display-lg font-display font-display font-normal mt-2"><slot/></h3>
+        <h3 class="text-display-lg font-normal mt-2"><slot/></h3>
     </div>
 </template>
 

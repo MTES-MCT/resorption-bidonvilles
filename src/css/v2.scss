@@ -17,82 +17,59 @@
   src: url("../fonts/Marianne-Light.otf") format("opentype");
 }
 
+// Typography should be defined before utilities, otherwise it's not possible to override colors or font-weight easily
+@responsive {
+  .text-display-xl {
+    @apply text-size-display-xl font-bold text-black
+  }
+
+  .text-display-lg {
+    @apply text-size-display-lg font-bold text-black
+  }
+
+  .text-display-md {
+    @apply text-size-display-md font-bold text-black
+  }
+
+  .text-display-sm {
+    @apply text-size-display-sm font-bold text-black
+  }
+
+  .text-display-xs {
+    @apply text-size-display-xs font-bold text-black
+  }
+
+  .text-xl {
+    @apply text-size-xl
+  }
+
+  .text-lg {
+    @apply text-size-lg
+  }
+
+  .text-md {
+    @apply text-size-md
+  }
+
+  .text-sm {
+    @apply text-size-sm
+  }
+
+  .text-xs {
+    @apply text-size-xs font-light
+  }
+}
+
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   body {
-    @apply text-size-md font-display font-normal text-G700
+    @apply text-size-md font-body font-normal text-G700
   }
 }
 @layer utilities {
-  .container {
-    @apply max-w-screen-xl mx-auto px-4
-  }
-
-  .container-lg {
-    @apply max-w-screen-lg mx-auto
-  }
-
-  .container-md {
-    @apply max-w-screen-md mx-auto
-  }
-
-  .container-sm {
-    @apply max-w-screen-sm mx-auto
-  }
-
   .link {
     @apply text-blueFrance underline
-  }
-
-  .text-font-display {
-    @apply font-display font-bold
-  }
-
-  .text-font-body {
-    @apply font-display font-normal
-  }
-
-  @responsive {
-    .text-display-xl {
-      @apply text-size-display-xl text-font-display
-    }
-
-    .text-display-lg {
-      @apply text-size-display-lg text-font-display
-    }
-
-    .text-display-md {
-      @apply text-size-display-md text-font-display
-    }
-
-    .text-display-sm {
-      @apply text-size-display-sm text-font-display
-    }
-
-    .text-display-xs {
-      @apply text-size-display-xs text-font-display
-    }
-
-    .text-xl {
-      @apply text-size-xl text-font-body
-    }
-
-    .text-lg {
-      @apply text-size-lg text-font-body
-    }
-
-    .text-md {
-      @apply text-size-md text-font-body
-    }
-
-    .text-sm {
-      @apply text-size-sm font-light
-    }
-
-    .text-sm {
-      @apply text-size-xs font-light
-    }
   }
 }

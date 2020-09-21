@@ -1,7 +1,7 @@
 <template>
     <div>
         <img class="full-width mx-auto" src="./assets/resorption-bidonvilles-dessin.png" />
-        <div class="container-sm mt-8">
+        <div class="max-w-screen-sm mx-auto mt-8">
             <LandingPageResponsiveEmbed videoRatio="50%">
                 <iframe src="https://www.youtube.com/embed/_hC7cZqqK-s" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </LandingPageResponsiveEmbed>
@@ -13,9 +13,9 @@
                 <LandingPageFeatureBlock icon="comments">{{$t('landingPage.firstSection.features.exchange')}}</LandingPageFeatureBlock>
             </div>
             <div class="mt-24">
-                <div class="text-size-display-lg font-display font-normal">{{$t('landingPage.firstSection.context.title')}}</div>
+                <div class="text-display-lg font-normal">{{$t('landingPage.firstSection.context.title')}}</div>
                 <div class="text-display-lg">{{$t('landingPage.firstSection.context.subtitle')}}</div>
-                <div class="container-sm mt-4">
+                <div class="max-w-screen-sm mx-auto mt-4">
                     <div>{{$t('landingPage.firstSection.context.text')}}</div>
                 </div>
             </div>

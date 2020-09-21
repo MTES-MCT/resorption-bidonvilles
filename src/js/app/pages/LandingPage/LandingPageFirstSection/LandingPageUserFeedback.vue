@@ -1,7 +1,7 @@
 <template>
-    <div class="container-sm relative mt-16">
+    <div class="max-w-screen-sm mx-auto relative mt-16">
         <div class="text-xl feedbackText">{{$t('landingPage.firstSection.feedback.1.text')}}</div>
-        <div class="text-size-lg font-light">{{$t('landingPage.firstSection.feedback.1.author')}}</div>
+        <div class="text-lg font-light">{{$t('landingPage.firstSection.feedback.1.author')}}</div>
     </div>
 </template>
 

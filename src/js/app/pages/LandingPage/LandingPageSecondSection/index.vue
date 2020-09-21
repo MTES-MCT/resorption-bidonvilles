@@ -1,7 +1,7 @@
 <template>
     <div>
         <h2>
-            <span class="text-size-display-lg font-display font-normal">{{$t('landingPage.secondSection.title')}}</span>
+            <span class="text-display-lg font-normal">{{$t('landingPage.secondSection.title')}}</span>
             <span class="text-display-lg block">{{$t('landingPage.secondSection.subtitle')}}</span>
         </h2>
         <div class="mt-8 md:grid md:grid-cols-3 md:gap-16">
@@ -20,7 +20,7 @@
                     :line3="$t('landingPage.secondSection.data.3.line3')" />
 
         </div>
-        <div class="container-sm mt-16">
+        <div class="max-w-screen-sm mx-auto mt-16">
             <div>{{$t('landingPage.secondSection.firstParagraph')}}</div>
             <div class="mt-8"><span class="font-bold">{{$t('landingPage.secondSection.secondParagraph.bold')}}</span> {{$t('landingPage.secondSection.secondParagraph.normal')}}</div>
             <div><a class="link" href="https://www.ecologie.gouv.fr/resorption-des-campements-illicites-et-des-bidonvilles">{{$t('landingPage.secondSection.secondParagraph.link')}}</a></div>
@@ -37,7 +37,7 @@
                     </iframe>
                 </LandingPageResponsiveEmbed>
             </div>
-            <div class="w-1/2 text-display-md text-black">
+            <div class="w-1/2 text-display-md">
                 {{$t('landingPage.secondSection.video.text')}}
             </div>
         </div>
