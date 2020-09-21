@@ -27,7 +27,8 @@ import Statistics from '#app/pages/stats/stats.vue';
 import LegalMentions from '#app/pages/legalMentions/legalMentions.vue';
 import Directory from '#app/pages/directory/directory.vue';
 import UserActivityList from '#app/pages/userActivity.list/userActivity.list.vue';
-import OpenStats from '#app/pages/open.stats/open.stats.vue';
+import OpenStatsOld from '#app/pages/open.stats.old/open.stats.vue';
+import PublicStats from '#app/pages/PublicStats';
 import Covid from '#app/pages/covid/covid.vue';
 import Changelog from '#app/pages/changelog/changelog.vue';
 import CharteEngagement from '#app/pages/charte_engagement/charte_engagement.vue';
@@ -212,8 +213,13 @@ const router = new VueRouter({
             beforeEnter: guardians.anonymous,
         },
         {
+            path: '/statistiques-publiques-old',
+            component: OpenStatsOld,
+            beforeEnter: guardians.anonymous,
+        },
+        {
             path: '/statistiques-publiques',
-            component: OpenStats,
+            component: PublicStats,
             beforeEnter: guardians.anonymous,
         },
         {
