@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="text-display-lg">{{title}} <span class="text-secondary"><font-awesome-icon :icon="icon"/></span> </div>
+        <div class="text-display-lg">{{title}} <span class="text-secondary"><font-awesome-icon v-if="icon" :icon="icon"/></span> </div>
         <div class="text-display-sm">{{subtitle}}</div>
         <div class="text-sm">{{info}}</div>
     </div>
@@ -10,7 +10,7 @@
     export default {
         props: {
             title: {
-                type: String,
+                type: [String, Number],
                 required: true
             },
             subtitle: {
@@ -18,10 +18,12 @@
                 required: true
             },
             info: {
-                required: true
+                type: String,
+                required: false
             },
             icon: {
-                required: true
+                type: String,
+                required: false
             }
         }
     }
