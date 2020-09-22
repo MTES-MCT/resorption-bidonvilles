@@ -452,19 +452,19 @@
                                     <strong>Modalités d'accès à l'électricité :</strong> {{ town.electricityComments }}
                                 </p>
                                 <p v-if="town.accessToWater !== undefined">
-                                    <strong>Accès à l'eau :</strong> {{ town.accessToWater !== null ? (town.accessToWater ? 'oui' : 'non') : 'inconnu' }}
+                                    <strong>Accès à l'eau :</strong> {{ town.accessToWater !== null ? (town.accessToWater ? 'Oui' : 'Non') : 'Inconnu' }}
                                 </p>
                                 <p v-if="town.waterComments">
                                     <strong>Modalités d'accès à l'eau :</strong> {{ town.waterComments }}
                                 </p>
                                 <p v-if="town.accessToWater !== undefined">
-                                    <strong>Accès aux toilettes :</strong> {{ town.accessToSanitary !== null ? (town.accessToSanitary ? 'oui' : 'non') : 'inconnu' }}
+                                    <strong>Accès aux toilettes :</strong> {{ town.accessToSanitary !== null ? (town.accessToSanitary ? 'Oui' : 'Non') : 'Inconnu' }}
                                 </p>
                                 <p v-if="town.sanitaryComments">
                                     <strong>Modalités d'accès aux toilettes :</strong> {{ town.sanitaryComments }}
                                 </p>
                                 <p v-if="town.trashEvacuation !== undefined">
-                                    <strong>Évacuation des déchets :</strong> {{ town.trashEvacuation !== null ? (town.trashEvacuation ? 'oui' : 'non') : 'inconnu' }}
+                                    <strong>Évacuation des déchets :</strong> {{ town.trashEvacuation !== null ? (town.trashEvacuation ? 'Oui' : 'Non') : 'Inconnu' }}
                                 </p>
                             </div>
                         </div>
