@@ -30,7 +30,7 @@
     import NavBarMobileButton from './NavBarMobileButton'
     import NavBarMobileMenu from './NavBarMobileMenu'
     import PublicContainer from '../PublicContainer'
-    import Button from '../../ui/Button'
+    import Button from '../../ui/primitives/Button'
 
     export default {
         components: {

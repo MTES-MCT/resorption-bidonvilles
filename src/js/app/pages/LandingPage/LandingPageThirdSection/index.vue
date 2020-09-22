@@ -73,7 +73,7 @@
 
 <script>
     import LandingPageBilanBlock from './LandingPageBilanBlock';
-    import Button from '#app/components/ui/Button';
+    import Button from '#app/components/ui/primitives/Button';
 
     export default {
         components: {

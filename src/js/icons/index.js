@@ -6,10 +6,11 @@ import {
     faCaretSquareLeft, faCaretSquareRight, faCaretUp, faCaretDown, faComment, faTrashAlt,
     faHistory, faMapPin, faFilePdf, faUsers, faUserPlus, faFileDownload, faAddressBook, faSync,
     faInfoCircle, faList, faTable, faBookReader, faEuroSign, faPlusCircle, faIdCard,
-    faUserMd, faBriefcase, faHome, faSeedling, faQuestion, faTint, faTintSlash, faHandHoldingMedical, faMapMarkerAlt, faBook, faFileSignature,
+    faUserMd, faBriefcase, faHome, faSeedling, faQuestion, faTint, faTintSlash, faHandHoldingMedical, faMapMarkerAlt, faBook, faFileSignature, faChevronDown,
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(faFlag);
+library.add(faChevronDown);
 library.add(faPaperPlane);
 library.add(faUnlink);
 library.add(faUser);

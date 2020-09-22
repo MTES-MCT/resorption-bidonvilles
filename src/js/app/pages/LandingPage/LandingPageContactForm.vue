@@ -6,8 +6,8 @@
 </template>
 
 <script>
-    import Button from '#app/components/ui/Button'
-    import Input from '#app/components/ui/Input'
+    import Button from '#app/components/ui/primitives/Button'
+    import Input from '#app/components/ui/primitives/Input'
 
     export default {
         components: {

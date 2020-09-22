@@ -27,7 +27,7 @@
     import NavBarMobileMenu from './NavBarMobileMenu'
     import NavBarMobileButton from './NavBarMobileButton'
     import PublicContainer from '../PublicContainer'
-    import Button from '#app/components/ui/Button'
+    import Button from '#app/components/ui/primitives/Button'
 
     export default {
         props: {

@@ -17,6 +17,7 @@ import TrendChart from 'vue-trend-chart';
 import './icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import messages from './app/messages';
+import registerGlobalComponents from './app/components/ui/registerGlobalComponents';
 import VueMatomo from './matomo/matomo';
 import { router } from '#app/router';
 
@@ -112,7 +113,8 @@ Vue.use(VueMatomo, {
     debug: true,
 });
 
-console.log(messages);
+// Register styleguide components
+registerGlobalComponents(Vue);
 
 const i18n = new VueI18n({
     locale: 'fr',

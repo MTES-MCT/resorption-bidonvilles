@@ -18,8 +18,8 @@
 </template>
 
 <script>
-    import Menu from '#app/components/ui/Menu'
-    import MenuItem from '#app/components/ui/MenuItem'
+    import Menu from '#app/components/ui/Menu/Menu'
+    import MenuItem from '#app/components/ui/Menu/MenuItem'
 
     export default {
         props: {

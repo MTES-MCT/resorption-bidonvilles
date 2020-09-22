@@ -10,7 +10,7 @@
 </template>
 
 <script>
-    import Button from '#app/components/ui/Button'
+    import Button from '#app/components/ui/primitives/Button'
     import PublicContainer from '#app/components/PublicLayout/PublicContainer'
 
     export default {
