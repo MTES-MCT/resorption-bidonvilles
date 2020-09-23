@@ -233,7 +233,15 @@ export default {
                     }
 
                     const l = shantytown[this.currentLocation.data.type];
-                    return l && `${l.code}` === `${this.currentLocation.data.code}`;
+                    if (!l) {
+                        return true;
+                    }
+
+                    if (l.code === `${this.currentLocation.data.code}`) {
+                        return true;
+                    }
+
+                    return l.main === `${this.currentLocation.data.code}`;
                 });
         },
         filteredShantytowns() {
