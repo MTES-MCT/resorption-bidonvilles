@@ -41,7 +41,7 @@ module.exports = {
                 lineHeight: '1.5em',
             }],
             'size-xs': ['0.75rem', {
-                lineHeight: '0.75em',
+                lineHeight: '1em',
             }],
         },
         extend: {
@@ -51,7 +51,9 @@ module.exports = {
             },
             colors: {
                 primary: '#000091',
+                primaryDark: '#00006c',
                 secondary: '#FF6F4C',
+                secondaryDark: '#fe542a',
                 black: '#1E1E1E',
                 corail: '#FF6F4C',
                 blueFrance: '#000091',

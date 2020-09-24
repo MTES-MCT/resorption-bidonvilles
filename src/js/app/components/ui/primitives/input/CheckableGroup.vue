@@ -1,0 +1,78 @@
+<template>
+    <div>
+        <InputGroup v-if="title" :title="title" :info="info">
+            <div :class="'flex flex-col relative'">
+                <div v-if="error" class="absolute h-full bg-error leftBorder" />
+                <div :class="['flex', direction === 'vertical' ? 'flex-col checkableGroup--verticalLayout': 'flex-row checkableGroup--horizontalLayout']">
+                    <slot />
+                </div>
+            </div>
+            <InputError v-if="error">{{error}}</InputError>
+        </InputGroup>
+        <InputWrapper v-else>
+            <div :class="'flex flex-col relative'">
+                <div v-if="error" class="absolute h-full bg-error leftBorder" />
+                <div :class="['flex', direction === 'vertical' ? 'flex-col checkableGroup--verticalLayout': 'flex-row checkableGroup--horizontalLayout']">
+                    <slot />
+                </div>
+            </div>
+            <InputError v-if="error">{{error}}</InputError>
+        </InputWrapper>
+    </div>
+</template>
+
+<script>
+    import InputWrapper from './utils/InputWrapper'
+    import InputInfo from './utils/InputInfo'
+    import InputError from './utils/InputError'
+
+    export default {
+        props: {
+            title: {
+                type: String,
+            },
+            info: {
+                type: String
+            },
+            error: {
+                type: String
+            },
+            direction: {
+                type: String,
+                default: 'vertical'
+            }
+        },
+        components: {
+            InputInfo,
+            InputWrapper,
+            InputError,
+        }
+    }
+</script>
+
+<style scoped>
+    .leftBorder {
+        width: 2px;
+        left: -16px
+    }
+</style>
+
+<style>
+    .checkableGroup--horizontalLayout label {
+        @apply mr-6
+    }
+
+    .checkableGroup--horizontalLayout label:last-child {
+        @apply mr-0
+    }
+
+    .checkableGroup--verticalLayout label {
+        @apply mb-6
+    }
+
+    .checkableGroup--verticalLayout label:last-child {
+        @apply mb-0
+    }
+</style>
+
+

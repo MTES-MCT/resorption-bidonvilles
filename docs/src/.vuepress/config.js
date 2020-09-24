@@ -4,7 +4,7 @@ module.exports = {
   /**
    * Ref：https://v1.vuepress.vuejs.org/config/#title
    */
-  title: 'Vuepress Docs Boilerplate',
+  title: 'RB Design System',
   /**
    * Ref：https://v1.vuepress.vuejs.org/config/#description
    */
@@ -66,11 +66,37 @@ module.exports = {
           ]
         },
         {
+          title: 'Components',
+          collapsable: false,
+          children: [
+            'components/Dropdown',
+            'components/Modal',
+            'components/SidePanel',
+            'components/Callout',
+          ]
+        },
+        {
           title: 'Examples',
           collapsable: false,
           children: [
             'examples/LoginForm',
             'examples/UserForm',
+            'examples/TestForm',
+            'examples/ShantytownForm',
+          ]
+        },
+        {
+          title: 'TODO',
+          collapsable: false,
+          children: [
+            'todo/Autocomplete',
+            'todo/Panel',
+            'todo/Callout',
+            'todo/Notification',
+            'todo/SearchBar',
+            'todo/Table',
+            'todo/Map',
+            'todo/DatePicker',
           ]
         },
 
@@ -86,6 +112,6 @@ module.exports = {
     '@vuepress/plugin-medium-zoom',
   ],
   postcss: {
-    plugins: [require('tailwindcss')('../tailwind.config.js'), require('autoprefixer')],
+    plugins: [require('tailwindcss')('./tailwind.config.js'), require('autoprefixer')],
   },
 }

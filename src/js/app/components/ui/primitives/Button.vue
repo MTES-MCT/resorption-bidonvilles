@@ -1,6 +1,6 @@
 <template>
     <component
-            :class="['btn rounded text-white', sizeClasses, variantClasses]"
+            :class="['btn inline-block relative', sizeClasses, variantClasses, this.disabled && 'opacity-50 cursor-not-allowed']"
             :disabled="disabled || loading"
             :href="isLink ? (disabled ? null : href) : null"
             :is="isLink ? 'a' : 'button'"
@@ -8,14 +8,19 @@
 
             @click="onClick"
     >
-        <div class="ui-button__content">
-            <div class="ui-button__icon" v-if="icon || $slots.icon">
+        <div :class="['flex', iconPosition === 'right' ? 'flex-row-reverse' : 'flex-row', loading && 'invisible']">
+            <div v-if="icon || $slots.icon">
                 <slot name="icon">
                     <Icon :icon="icon" />
                 </slot>
             </div>
 
-            <slot></slot>
+            <div v-if="$slots.default" :class="iconPosition === 'right' ? 'mr-1' : 'ml-1'">
+                <slot></slot>
+            </div>
+        </div>
+        <div v-if="loading" class="absolute inset-0 flex justify-center items-center">
+            <Icon icon="spinner" spin />
         </div>
     </component>
 </template>
@@ -34,12 +39,12 @@
             href: String,
             size: {
                 type: String,
-                default: 'normal' // 'small', 'normal', 'large'
+                default: 'md' // 'sm', 'md', 'lg'
             },
             icon: String,
             iconPosition: {
                 type: String,
-                default: 'left' // 'left' or 'right'
+                default: 'right' // 'left' or 'right'
             },
             loading: {
                 type: Boolean,
@@ -51,17 +56,28 @@
             }
         },
         computed: {
+            iconPositionClass() {
+                return {
+                    left: 'mr-2',
+                    right: 'ml-2'
+                }
+            },
             sizeClasses() {
                 return {
-                    small: 'py-1 px-2',
-                    normal: 'py-2 px-4',
-                    large: 'py-2 px-4'
+                    sm: `text-sm ${this.isLink ? '' : 'py-1 px-2'}`,
+                    md: `text-md ${this.isLink ? '' : 'py-2 px-4'}`,
+                    lg: `text-lg ${this.isLink ? '' : 'py-2 px-4'}`
                 }[this.size]
             },
             variantClasses() {
                 return {
-                    primary: 'bg-primary',
-                    secondary: 'bg-secondary'
+                    primary: 'bg-primary text-white hover:bg-primaryDark',
+                    secondary: 'bg-secondary text-white hover:bg-secondaryDark',
+                    primaryOutline: 'border-2 border-primary text-primary hover:bg-primary hover:text-white',
+                    secondaryOutline: 'border-2  border-secondary text-secondary hover:bg-secondary hover:text-white',
+                    primaryText: 'text-primary hover:text-primaryDark',
+                    secondaryText: 'text-secondary hover:text-secondaryDark'
+
                 }[this.variant]
             },
             isLink() {

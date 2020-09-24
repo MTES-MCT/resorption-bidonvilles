@@ -1,5 +1,5 @@
 <template>
-    <font-awesome-icon :icon="icon" />
+    <font-awesome-icon :icon="icon" :spin="spin" />
 </template>
 
 <script>
@@ -9,6 +9,9 @@
             icon: {
                 type: String,
                 required: true
+            },
+            spin: {
+                type: Boolean
             }
 
         },

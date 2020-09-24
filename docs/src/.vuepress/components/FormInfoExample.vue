@@ -1,18 +1,14 @@
 <template>
-    <div class="w-full max-w-xs">
+    <div class="w-full max-w-xs max-w-xl">
         <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="onSubmit" >
-            <FormGroup label="Username" :error="errors.username">
-                <TextInput id="username" type="text" placeholder="Username" v-model="username" />
-            </FormGroup>
-            <FormGroup label="Password" :error="errors.password">
-                <TextInput id="password" type="password" placeholder="******************" v-model="password" />
-            </FormGroup>
+            <TextInput id="username" type="text" placeholder="Username" v-model="username" label="Username" :error="errors.username" />
+            <TextInput id="password" type="password" placeholder="******************" v-model="password" label="Password" :error="errors.password" />
 
             <div class="flex items-center justify-between">
                 <Button variant="primary" type="submit">
                     Sign in
                 </Button>
-                <Button variant="secondary">
+                <Button variant="primaryText">
                     Forgot password?
                 </Button>
             </div>

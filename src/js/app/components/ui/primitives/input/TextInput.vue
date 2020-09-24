@@ -1,14 +1,51 @@
 <template>
-    <input type="text"
-           @input="$emit('input', $event.target.value)"
-           v-bind="$props"
-           class="bg-gray-200 border-2 border-gray-200 rounded w-full py-2 px-4 focus:outline-none focus:bg-white focus:border-primary" />
+    <InputWrapper>
+        <InputLabel :label="label" :info="info" />
+        <input
+               @input="$emit('input', $event.target.value)"
+               v-bind="$props"
+               :class="['bg-G200 border-b-2 border-black rounded rounded-b-none w-full py-2 px-4 outlinePadding', error && 'border-error']" />
+        <InputError v-if="error">{{error}}</InputError>
+    </InputWrapper>
 </template>
 
 <script>
+import InputLabel from './utils/InputLabel'
+import InputWrapper from './utils/InputWrapper'
+import InputInfo from './utils/InputInfo'
+import InputError from './utils/InputError'
+
 export default {
     name: "TextInput",
-    props: {}
+    props: {
+        label: {
+            type: String
+        },
+        error: {
+            type: String
+        },
+        info: {
+            type: String
+        },
+        placeholder: {
+            type: String
+        },
+        type: {
+            type: String,
+            default: 'text'
+        }
+    },
+    components: {
+        InputLabel,
+        InputWrapper,
+        InputError,
+        InputInfo
+    }
 }
 </script>
 
+<style scoped>
+    .outlinePadding {
+        outline-offset: 4px
+    }
+</style>

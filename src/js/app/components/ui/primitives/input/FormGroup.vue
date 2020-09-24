@@ -1,19 +1,14 @@
 <template>
-    <div class="mb-4">
-        <Label>{{label}}</Label>
+    <div>
+        <div class="text-display-lg mb-8">{{title}}</div>
         <slot />
-        <p class="text-error">{{error}}</p>
     </div>
 </template>
 
 <script>
     export default {
-        name: 'FormGroup',
         props: {
-            label: {
-                type: String
-            },
-            error: {
+            title: {
                 type: String
             }
         }
