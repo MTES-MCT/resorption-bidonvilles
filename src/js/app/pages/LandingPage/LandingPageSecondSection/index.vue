@@ -37,7 +37,7 @@
                     </iframe>
                 </LandingPageResponsiveEmbed>
             </div>
-            <div class="w-1/2 text-display-md">
+            <div class="w-1/2 text-display-lg">
                 {{$t('landingPage.secondSection.video.text')}}
             </div>
         </div>

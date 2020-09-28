@@ -71,8 +71,8 @@
             },
             variantClasses() {
                 return {
-                    primary: 'bg-primary text-white hover:bg-primaryDark',
-                    secondary: 'bg-secondary text-white hover:bg-secondaryDark',
+                    primary: 'border-2 border-primary bg-primary text-white hover:bg-primaryDark',
+                    secondary: 'border-2 border-secondary bg-secondary text-white hover:bg-secondaryDark',
                     primaryOutline: 'border-2 border-primary text-primary hover:bg-primary hover:text-white',
                     secondaryOutline: 'border-2  border-secondary text-secondary hover:bg-secondary hover:text-white',
                     primaryText: 'text-primary hover:text-primaryDark',

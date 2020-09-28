@@ -15,7 +15,7 @@
     },
     "context": {
       "title": "Résorption-bidonvilles,",
-      "subtitle": "un accélérateur de la résorption des bidonvilles",
+      "subtitle": "Une plateforme pour accélérer la résorption des bidonvilles",
       "text": "Outil d’information, de partage et de pilotage, la plateforme offre une solution performante et efficace pour la résorption des bidonvilles. Elle permet de créer une véritable dynamique collaborative, au sein d’un territoire, entre les acteurs engagés vers l’objectif de résorption."
     },
     "feedback": {
@@ -99,8 +99,8 @@
         "info": "+100 en 1 an"
       },
       6: {
-        "text": "230 contracts de travail signés",
-        "info": "des +100 en 1 an"
+        "text": "230 contrats de travail signés",
+        "info": "+100 en 1 an"
       }
     },
     "cta": "Télécharger le dernier bilan",
