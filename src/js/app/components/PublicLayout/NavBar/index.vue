@@ -1,10 +1,10 @@
 <template>
     <div>
-        <div v-if="sticky">
-            <NavBarSticky v-if="sticky" :menuDisplayed="menuDisplayed" :toggleMenu="toggleMenu" :closeMenu="closeMenu" />
+        <div :class="!sticky && 'hidden'">
+            <NavBarSticky :menuDisplayed="menuDisplayed" :toggleMenu="toggleMenu" :closeMenu="closeMenu" />
         </div>
 
-        <div v-else>
+        <div :class="sticky && 'hidden'">
             <PublicContainer>
                 <header role="navigation" class="py-4 flex flex-row justify-between items-center">
                     <NavBarLogo />
@@ -49,9 +49,10 @@
         },
         methods: {
           handleScroll() {
-              setTimeout(() => {
-                  this.scrollTop = window.scrollY
-              })
+              // Header is 76px but 0px when sticky
+              const navbarHeight = this.$el.offsetHeight
+
+              this.scrollTop = window.scrollY - navbarHeight
              },
           openMenu() {
               this.menuDisplayed = true
