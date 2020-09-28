@@ -5,6 +5,7 @@ import LandingPage from '#app/pages/LandingPage';
 import LandingOld from '#app/pages/LandingOld/landing.vue';
 import SignIn from '#app/pages/signin/signin.vue';
 import SignUp from '#app/pages/signup/signup.vue';
+import Contact from '#app/pages/Contact';
 import Dashboard from '#app/pages/dashboard/dashboard.vue';
 import Launcher from '#app/pages/launcher/launcher.vue';
 import TownsList from '#app/pages/towns.list/towns.list.vue';
@@ -225,6 +226,11 @@ const router = new VueRouter({
         {
             path: '/connexion',
             component: SignIn,
+            beforeEnter: guardians.anonymous,
+        },
+        {
+            path: '/contact',
+            component: Contact,
             beforeEnter: guardians.anonymous,
         },
         {

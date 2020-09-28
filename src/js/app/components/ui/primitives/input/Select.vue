@@ -30,6 +30,9 @@
             },
             error: {
                 type: String
+            },
+            value: {
+                type: String
             }
         },
         components: {

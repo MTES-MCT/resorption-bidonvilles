@@ -6,20 +6,25 @@
                 <div>Depuis l'ouverture nationale de la plateforme en juin 2019</div>
             </div>
 
-            <StatsSection class="mt-16" title="Des utilisateurs dans toute la France métropolitaine">
+            <StatsSection class="mt-16" title="Utilisateurs">
                 <StatsBlock :title="numberOfDepartements" icon="flag" subtitle="départements de France métropolitaine" info="Soit tous les départements concernés par le phénomène de squats ou bidonvilles." />
                 <StatsBlock :title="numberOfCollaboratorAndAssociationUsers" icon="users" subtitle="utilisateurs institutionnels et associatifs" :info="numberOfPublicEstablishments+' services de l\'État, '+numberOfTerritorialCollectivities+ ' collectivités territoriales, '+numberOfAssociations+' associations'" />
                 <StatsBlock :title="numberOfNewUsers.total" icon="user-plus" :subtitle="'nouveaux utilisateurs en '+numberOfNewUsers.month" />
             </StatsSection>
-            <TrendChart class="stats-chart" v-if="numberOfNewUsersPerMonth !== null" :datasets="usersEvolutionDatasets" :labels="usersEvolutionLabels" :grid="{ verticalLines: true, horizontalLines: true }" :max="usersEvolutionMax" :min="0"></TrendChart>
 
-            <StatsSection title="Une plateforme utilisée pour le suivi local" class="mt-16">
+            <div v-if="numberOfNewUsersPerMonth !== null">
+                <h2 class="text-display-lg text-secondary mt-16">Nouveaux utilisateurs par mois</h2>
+                <TrendChart class="stats-chart" :datasets="usersEvolutionDatasets" :labels="usersEvolutionLabels" :grid="{ verticalLines: true, horizontalLines: true }" :max="usersEvolutionMax" :min="0"></TrendChart>
+            </div>
+
+
+            <StatsSection title="Usage" class="mt-16">
                     <StatsBlock :title="numberOfExports" icon="file-download" subtitle="extractions de données réalisées" info="Les exports Excel permettent aux acteurs locaux d'utiliser et d'analyser les données afin de suivre, communiquer et optimiser les actions de résorption depuis le 15/11/2019." />
                     <StatsBlock :title="numberOfComments" icon="comment"  subtitle="commentaires créés" info="Au delà du suivi des chiffrés, les commentaires permettent de suivre et de partager des informations qualitative utiles dans une action multi-partenariale." />
                     <StatsBlock :title="numberOfDirectoryViews" icon="address-book"  subtitle="fiches contact consultées" info="L'annuaire permet d'accéder aux coordonnées de tous les utilisateurs de la plateforme. Son utilisation participe à la mise en réseau partenaires locaux ou des pairs depuis le 15/11/2019" />
             </StatsSection>
 
-            <StatsSection title="Des données partagées fiabilisées" class="mt-16">
+            <StatsSection title="Fréquence de mise à jour" class="mt-16">
                 <template v-slot:info><span class="text-secondary"><font-awesome-icon icon="sync"/></span> La mise à jour régulière des données garantissent des informations justes à tous les acteurs.</template>
                 <template v-slot:default>
                     <StatsBlock :title="meanTimeBeforeCreationDeclaration" subtitle="jours entre l'installation d'un bidonville ou squat et sa déclaration" info="En moyenne, depuis le 01/09/2019." />
@@ -97,9 +102,13 @@
                     return [];
                 }
 
+                const cumulativeData = this.numberOfNewUsersPerMonth.reduce((acc,{ total }, index) => {
+                    return index === 0 ? [parseInt(total, 10)] : [...acc, parseInt(total + acc[acc.length - 1], 10)]
+                }, [])
+
                 return [
                     {
-                        data: this.numberOfNewUsersPerMonth.map(({ total }) => parseInt(total, 10)),
+                        data: cumulativeData,
                         smooth: true,
                         fill: true,
                     },
