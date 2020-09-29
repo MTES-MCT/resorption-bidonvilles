@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <ValidationProvider :rules="rules" :name="validationName || title" v-slot="{ errors }">
         <InputGroup v-if="title" :title="title" :info="info">
             <div :class="'flex flex-col relative'">
                 <div v-if="error" class="absolute h-full bg-error leftBorder" />
@@ -7,7 +7,7 @@
                     <slot />
                 </div>
             </div>
-            <InputError v-if="error">{{error}}</InputError>
+            <InputError>{{errors[0]}}</InputError>
         </InputGroup>
         <InputWrapper v-else>
             <div :class="'flex flex-col relative'">
@@ -16,9 +16,9 @@
                     <slot />
                 </div>
             </div>
-            <InputError v-if="error">{{error}}</InputError>
+            <InputError >{{errors[0]}}</InputError>
         </InputWrapper>
-    </div>
+    </ValidationProvider>
 </template>
 
 <script>
@@ -40,7 +40,14 @@
             direction: {
                 type: String,
                 default: 'vertical'
+            },
+            validationName: {
+                type: String,
+            },
+            rules: {
+                type: String,
             }
+
         },
         components: {
             InputInfo,

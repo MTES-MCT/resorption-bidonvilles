@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Select label="Précisez le type de structure" :value="associationName" @input="val => $emit('update:associationName', val)">
+        <Select label="Précisez le type de structure" :value="associationName" @input="val => $emit('update:associationName', val)" rules="required">
             <optgroup label="Autre">
                 <option value="other">Mon association n'est pas dans cette liste</option>
             </optgroup>
@@ -9,11 +9,11 @@
             </optgroup>
         </Select>
         <div v-if="associationName === 'other'">
-            <TextInput label="Précisez le nom complet" :value="newAssociationName" @input="val => $emit('update:newAssociationName', val)" />
-            <TextInput label="Précisez l'acronyme, si besoin" :value="newAssociationAcronym" @input="val => $emit('update:newAssociationAcronym', val)"/>
+            <TextInput label="Précisez le nom complet" :value="newAssociationName" @input="val => $emit('update:newAssociationName', val)" rules="required" />
+            <TextInput label="Précisez l'acronyme, si besoin" :value="newAssociationAcronym" @input="val => $emit('update:newAssociationAcronym', val)" rules="required"/>
         </div>
         <div>
-            <Select label="Territoire de rattachement" :value="associationTerritory" @input="val => $emit('update:associationTerritory', val)">
+            <Select label="Territoire de rattachement" :value="associationTerritory" @input="val => $emit('update:associationTerritory', val)" rules="required">
                 <SelectOption>- Selectionner un choix -</SelectOption>
                 <SelectOption v-for="item in associationTerritoryOptions" :key="item.value" :value="item.value">
                     {{ item.label }}
@@ -21,7 +21,7 @@
             </Select>
         </div>
 
-        <TextInput label="Votre fonction" :value="associationFunction" @input="val => $emit('update:associationFunction', val)" />
+        <TextInput label="Votre fonction" :value="associationFunction" @input="val => $emit('update:associationFunction', val)" rules="required" />
     </div>
 
 </template>

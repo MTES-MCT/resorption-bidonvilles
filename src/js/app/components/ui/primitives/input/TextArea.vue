@@ -1,11 +1,13 @@
 <template>
     <InputWrapper>
         <InputLabel :label="label" :info="info" />
-        <textarea
-               @input="$emit('input', $event.target.value)"
-               v-bind="$props"
-               :class="['bg-G200 border-b-2 border-black rounded rounded-b-none w-full py-2 px-4 outlinePadding', error && 'border-error']" />
-        <InputError v-if="error">{{error}}</InputError>
+        <ValidationProvider :rules="rules" :name="validationName || label" v-slot="{ errors }">
+            <textarea
+                   @input="$emit('input', $event.target.value)"
+                   v-bind="$props"
+                   :class="['bg-G200 border-b-2 border-black rounded rounded-b-none w-full py-2 px-4 outlinePadding', error && 'border-error']" />
+            <InputError>{{errors[0]}}</InputError>
+        </ValidationProvider>
     </InputWrapper>
 </template>
 
@@ -16,7 +18,7 @@ import InputInfo from './utils/InputInfo'
 import InputError from './utils/InputError'
 
 export default {
-    name: "TextInput",
+    name: "TextArea",
     props: {
         label: {
             type: String
@@ -33,7 +35,17 @@ export default {
         type: {
             type: String,
             default: 'text'
+        },
+        value: {
+            type: String,
+        },
+        rules: {
+            type: String,
+        },
+        validationName: {
+            type: String
         }
+
     },
     components: {
         InputLabel,

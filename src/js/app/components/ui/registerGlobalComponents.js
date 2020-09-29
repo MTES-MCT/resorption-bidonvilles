@@ -1,3 +1,7 @@
+import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
+import * as rules from 'vee-validate/dist/rules';
+import { messages } from 'vee-validate/dist/locale/fr';
+
 import Button from './primitives/Button.vue';
 import TextInput from './primitives/input/TextInput.vue';
 import TextArea from './primitives/input/TextArea.vue';
@@ -91,4 +95,22 @@ export default function (vueInstance) {
         'Callout',
         Callout,
     );
+    vueInstance.component(
+        'ValidationProvider',
+        ValidationProvider,
+    );
+
+    vueInstance.component(
+        'ValidationObserver',
+        ValidationObserver,
+    );
+
+    // No message specified.
+
+    Object.keys(rules).forEach((rule) => {
+        extend(rule, {
+            ...rules[rule], // copies rule configuration
+            message: messages[rule], // assign message
+        });
+    });
 }

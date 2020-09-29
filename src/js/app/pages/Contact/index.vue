@@ -4,61 +4,64 @@
             <div class="max-w-xl mx-auto">
                 <h1 class="text-display-xl">Contactez nous</h1>
 
-                <form class="max-w-xl mt-12" @submit.prevent="submitForm">
-                    <InputGroup>
-                        <TextInput label="Votre email" v-model="email" />
-                        <TextInput label="Prénom" v-model="first_name" />
-                        <TextInput label="Nom de famille" v-model="last_name" />
-                    </InputGroup>
-                    <CheckableGroup title="Vous souhaitez...">
-                        <Radio checkValue="help" label="Aider" v-model="type" />
-                        <Radio checkValue="report" label="Signaler" v-model="type" />
-                        <Radio checkValue="help-request" label="Demander de l'aide" v-model="type" />
-                        <Radio checkValue="info-request" label="Demander des infos" v-model="type" />
-                        <Radio checkValue="access-request" label="Demander un accès à la plateforme" v-model="type" />
-                    </CheckableGroup>
-                    <CheckableGroup title="Etes vous un acteur de la résorption des bidonvilles ? " info="Par exemple : un service de l'état, un opérateur associatif, une collectivité locale...">
-                        <Radio checkValue="yes" label="Oui" v-model="isActor" />
-                        <Radio checkValue="no" label="Non" v-model="isActor" />
-                    </CheckableGroup>
-                    <CheckableGroup v-if="isActor === 'yes'" title="Quelle est votre structure ?">
-                        <Radio v-model="category" checkValue="public_establishment" label="Service de l'État, établissement ou organisme public"></Radio>
-                        <Radio v-model="category" checkValue="territorial_collectivity" label="Collectivité territoriale"></Radio>
-                        <Radio v-model="category" checkValue="association" label="Association"></Radio>
-                        <Radio v-model="category" checkValue="administration" label="Admnistration centrale"></Radio>
-                    </CheckableGroup>
+                <ValidationObserver v-slot="{ handleSubmit }">
+                    <form class="max-w-xl mt-12" @submit.prevent="handleSubmit(submitForm)">
+                        <InputGroup>
+                            <TextInput label="Votre email" v-model="commonFields.email" name="Email" rules="required" />
+                            <TextInput label="Prénom" v-model="commonFields.first_name" name="Prénom" rules="required" />
+                            <TextInput label="Nom de famille" v-model="commonFields.last_name" name="Nom de famille" rules="required" />
+                        </InputGroup>
+                        <CheckableGroup title="Vous souhaitez..." name="Vous souhaitez..." rules="required" >
+                            <Radio checkValue="help" label="Aider" v-model="commonFields.request_type" />
+                            <Radio checkValue="report" label="Signaler" v-model="commonFields.request_type" />
+                            <Radio checkValue="help-request" label="Demander de l'aide" v-model="commonFields.request_type" />
+                            <Radio checkValue="info-request" label="Demander des infos" v-model="commonFields.request_type" />
+                            <Radio checkValue="access-request" label="Demander un accès à la plateforme" v-model="commonFields.request_type" />
+                        </CheckableGroup>
+                        <CheckableGroup v-if="commonFields.request_type === 'access-request'" title="Etes vous un acteur de la résorption des bidonvilles ? " info="Par exemple : un service de l'état, un opérateur associatif, une collectivité locale..." rules="required">
+                            <Radio checkValue="yes" label="Oui" v-model="commonFields.is_actor" />
+                            <Radio checkValue="no" label="Non" v-model="commonFields.is_actor" />
+                        </CheckableGroup>
+                        <CheckableGroup v-if="commonFields.is_actor === 'yes'" title="Quelle est votre structure ?" rules="required">
+                            <Radio v-model="requestAccessFields.organization_category" checkValue="public_establishment" label="Service de l'État, établissement ou organisme public"></Radio>
+                            <Radio v-model="requestAccessFields.organization_category" checkValue="territorial_collectivity" label="Collectivité territoriale"></Radio>
+                            <Radio v-model="requestAccessFields.organization_category" checkValue="association" label="Association"></Radio>
+                            <Radio v-model="requestAccessFields.organization_category" checkValue="administration" label="Admnistration centrale"></Radio>
+                        </CheckableGroup>
 
-                    <PublicEstablishmentForm
-                            v-if="category === 'public_establishment'"
-                            :organizationType.sync="organization.type"
-                            :organizationTerritory.sync="organization.territory"
-                            :organizationFunction.sync="organization.function"
-                    />
-                    <TerritorialCollectivityForm
-                            v-if="category === 'territorial_collectivity'"
-                            :collectivityName.sync="collectivity.name"
-                            :collectivityFunction.sync="collectivity.function"
-                    />
-                    <AssociationForm
-                            v-if="category === 'association'"
-                            :associationName.sync="association.name"
-                            :associationTerritory.sync="association.territory"
-                            :associationFunction.sync="association.function"
-                            :newAssociationName.sync="association.newName"
-                            :newAssociationAcronym.sync="association.newAcronym"
-                    />
-                    <AdministrationForm
-                            v-if="category === 'administration'"
-                            :administrationName.sync="administration.name"
-                            :administrationFunction.sync="administration.function"
-                    />
+                        <PublicEstablishmentForm
+                                v-if="requestAccessFields.organization_category === 'public_establishment'"
+                                :organizationType.sync="publicEstablishmentFields.organization_type"
+                                :organizationTerritory.sync="publicEstablishmentFields.organization_public"
+                                :organizationFunction.sync="requestAccessFields.position"
+                        />
+                        <TerritorialCollectivityForm
+                                v-if="requestAccessFields.organization_category === 'territorial_collectivity'"
+                                :collectivityName.sync="territorialCollectivityFields.territorial_collectivity"
+                                :collectivityFunction.sync="requestAccessFields.position"
+                        />
+                        <AssociationForm
+                                v-if="requestAccessFields.organization_category === 'association'"
+                                :associationName.sync="associationFields.association"
+                                :associationTerritory.sync="associationFields.departement"
+                                :associationFunction.sync="associationFields.position"
+                                :newAssociationName.sync="associationFields.newAssociationName"
+                                :newAssociationAcronym.sync="associationFields.newAssociationAbbreviation"
+                        />
+                        <AdministrationForm
+                                v-if="requestAccessFields.organization_category === 'administration'"
+                                :administrationName.sync="administrationFields.organization_administration"
+                                :administrationFunction.sync="requestAccessFields.position"
+                        />
 
-                    <TextArea label="Votre message" v-model="message" />
-                    <CheckableGroup>
-                        <Checkbox checkValue="confirm" label="Je certifie que ces données personnelles ont été saisies avec mon accord" v-model="confirmCheckbox" />
-                    </CheckableGroup>
-                    <Button type="primary">Envoyer</Button>
-                </form>
+                        <TextArea label="Votre message" v-model="commonFields.access_request_message" rules="required" />
+                        <CheckableGroup  v-slot="{ errors }" validationName="Accord" rules="required">
+                            <Checkbox checkValue="confirm" label="Je certifie que ces données personnelles ont été saisies avec mon accord" v-model="commonFields.legal" />
+                        </CheckableGroup>
+                        <Button type="primary">Envoyer</Button>
+
+                    </form>
+                </ValidationObserver>
             </div>
 
         </PublicContainer>
@@ -72,43 +75,57 @@
     import TerritorialCollectivityForm from './TerritorialCollectivityForm'
     import AssociationForm from './AssociationForm'
     import AdministrationForm from './AdministrationForm'
+    import CheckableGroup from '#app/components/ui/primitives/input/CheckableGroup';
+    import Checkbox from '#app/components/ui/primitives/input/Checkbox';
 
     export default {
-        components: { PublicContainer, PublicLayout, PublicEstablishmentForm, TerritorialCollectivityForm, AdministrationForm, AssociationForm },
+        components: { Checkbox, CheckableGroup, PublicContainer, PublicLayout, PublicEstablishmentForm, TerritorialCollectivityForm, AdministrationForm, AssociationForm },
         methods: {
           submitForm() {
-              console.log(this);
+
+
+              const data = {
+                  ...this.commonFields,
+                  ...(this.commonFields.request_type === 'access-request' && this.commonFields.is_actor === 'yes' ? this.requestAccessFields: {}),
+                  ...(this.requestAccessFields.organization_category === 'public_establishment' ? this.publicEstablishmentFields: {}),
+                  ...(this.requestAccessFields.organization_category === 'territorial_collectivity' ? this.territorialCollectivityFields: {}),
+                  ...(this.requestAccessFields.organization_category === 'association' ? this.associationFields: {}),
+                  ...(this.requestAccessFields.organization_category === 'administration' ? this.administrationFields: {}),
+              }
+
+              console.log(data);
           }
         },
         data() {
           return {
-              email: '',
-              first_name: '',
-              last_name: '',
-              category: null,
-              isActor: null,
-              message: '',
-              type: null,
-              confirmCheckbox: [false],
-              organization: {
-                  type: null,
-                  territory: null,
-                  function: ''
+              commonFields: {
+                  email: '',
+                  first_name: '',
+                  last_name: '',
+                  request_type: [],
+                  legal: [],
+                  is_actor: null,
+                  access_request_message: '',
               },
-              collectivity: {
-                  name: null,
-                  function: '',
+              requestAccessFields: {
+                  organization_category: null,
+                  position: '',
               },
-              association: {
-                  name: null,
-                  territory: null,
-                  function: '',
-                  newName: '',
-                  newAcronym: ''
+              publicEstablishmentFields: {
+                  organization_type: null,
+                  organization_public: null,
               },
-              administration: {
-                  name: '',
-                  function: '',
+              territorialCollectivityFields: {
+                  territorial_collectivity: null,
+              },
+              associationFields: {
+                  association: '',
+                  departement: '',
+                  newAssociationName: '',
+                  newAssociationAbbreviation: ''
+              },
+              administrationFields: {
+                  organization_administration: ''
               }
           }
         },

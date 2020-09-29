@@ -1,15 +1,17 @@
 <template>
     <InputWrapper>
         <InputLabel :label="label" :info="info" />
-        <div class="relative">
-            <select :class="['block appearance-none bg-G200 border-b-2 border-black rounded rounded-b-none w-full py-2 px-4 outlinePadding', error && 'border-error']" v-bind="$props" @change="$emit('input', $event.target.value)">
-                <slot />
-            </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <Icon icon="chevron-down" />
+        <ValidationProvider :rules="rules" :name="validationName || label" v-slot="{ errors }">
+            <div class="relative">
+                <select :class="['block appearance-none bg-G200 border-b-2 border-black rounded rounded-b-none w-full py-2 px-4 outlinePadding', error && 'border-error']" v-bind="$props" @change="$emit('input', $event.target.value)">
+                    <slot />
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                    <Icon icon="chevron-down" />
+                </div>
             </div>
-        </div>
-        <InputError v-if="error">{{error}}</InputError>
+            <InputError>{{errors[0]}}</InputError>
+        </ValidationProvider>
     </InputWrapper>
 </template>
 
@@ -32,6 +34,12 @@
                 type: String
             },
             value: {
+                type: String
+            },
+            validationName: {
+                type: String
+            },
+            rules: {
                 type: String
             }
         },

@@ -1,11 +1,13 @@
 <template>
     <InputWrapper>
         <InputLabel :label="label" :info="info" />
-        <input
-               @input="$emit('input', $event.target.value)"
-               v-bind="$props"
-               :class="['bg-G200 border-b-2 border-black rounded rounded-b-none w-full py-2 px-4 outlinePadding', error && 'border-error']" />
-        <InputError v-if="error">{{error}}</InputError>
+        <ValidationProvider :rules="rules" :name="validationName || label" v-slot="{ errors }">
+            <input
+                   @input="$emit('input', $event.target.value)"
+                   v-bind="$props"
+                   :class="['bg-G200 border-b-2 border-black rounded rounded-b-none w-full py-2 px-4 outlinePadding', error && 'border-error']" />
+            <InputError>{{ errors[0] }}</InputError>
+        </ValidationProvider>
     </InputWrapper>
 </template>
 
@@ -33,6 +35,15 @@ export default {
         type: {
             type: String,
             default: 'text'
+        },
+        validationName: {
+            type: String,
+        },
+        rules: {
+            type: String,
+        },
+        value: {
+            type: String,
         }
     },
     components: {
