@@ -1,25 +1,6 @@
-// ***********************************************
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-
-Cypress.Commands.add('signinAs', ({ email, password }) => {
-    cy.visit('/#/connexion');
-    cy.get('#input-email')
-        .type(email);
-    cy.get('#input-password')
-        .type(password);
-    cy.contains('Me connecter').click();
-});
-
-Cypress.Commands.add('pickOption', { prevSubject: true }, (subject, label) => {
-    const wrappedSubject = cy.wrap(subject);
-    wrappedSubject.find('label').contains(label).find('input').click();
-    return wrappedSubject;
-});
-
+/**
+ * @const {Object}
+ */
 const MONTHS = {
     Janvier: 0,
     Février: 1,
@@ -34,16 +15,31 @@ const MONTHS = {
     Novembre: 10,
     Décembre: 11,
 };
-Cypress.Commands.add('chooseDate', { prevSubject: true }, (subject, date) => {
-    subject.find('input').click();
 
-    // extract month and year
+/**
+ * This command takes a datepicker in input, and selects the required date in it
+ *
+ * @param {HTMLElement} subject The datepicker wrapper
+ * @param {String}      date    The date to be selected, in "dd/mm/YYYY" format
+ *
+ * @returns {undefined}
+ */
+Cypress.Commands.add('chooseDate', { prevSubject: true }, (subject, date) => {
+    const input = subject.find('input');
+    input.click();
+
+    if (input.value === date) {
+        return;
+    }
+
+    // extract the initial date from the datepicker
     const [initialMonthStr, initialYearStr] = subject.find('.day__month_btn')[0].textContent.split(' ');
     const initial = {
         month: MONTHS[initialMonthStr],
         year: parseInt(initialYearStr, 10),
     };
 
+    // extract the target date
     const [day, month, year] = date.split('/');
     const target = {
         day: parseInt(day, 10),
