@@ -113,14 +113,14 @@
             <div class="container">
                 <div class="town-name">
                     <div class="town-reference">
-                        <h1>Site {{ town.addressSimple }} <span :class="`town-status ${town.status}`">{{ status }}</span></h1>
-                        <h2>{{ town.city.name }}</h2>
+                        <h1><span data-cy-data="name">Site {{ town.addressSimple }}</span> <span :class="`town-status ${town.status}`">{{ status }}</span></h1>
+                        <h2><span data-cy-data="city">{{ town.city.name }}</span></h2>
                     </div>
 
                     <div class="town-actionButtons">
                         <button v-if="town.status === 'open' && mode !== 'edit' && hasPermission('shantytown.close', town)" @click="setCloseMode" class="button secondary">Fermer le site</button>
                         <button v-if="town.status === 'open' && mode !== 'edit' && hasPermission('shantytown.update', town)" @click="setEditMode" class="button">Mettre à jour</button>
-                        <button v-if="mode !== 'edit' && hasPermission('shantytown.delete', town)" @click="destroy" class="button warning">Supprimer le site</button>
+                        <button v-if="mode !== 'edit' && hasPermission('shantytown.delete', town)" @click="destroy" class="button warning" data-cy-button="delete">Supprimer le site</button>
                         <button v-if="mode === 'edit'" @click="submit" class="button">Sauvegarder</button>
                         <button v-if="mode === 'edit'" @click="setViewMode" class="button warning">Annuler</button>
                     </div>
@@ -355,13 +355,13 @@
                             </div>
                             <div class="form__group">
                                 <p v-if="town.priority">
-                                    <strong>Niveau de priorité du site :</strong> {{ town.priority }}
+                                    <strong>Niveau de priorité du site :</strong> <span data-cy-data="priority">{{ town.priority }}</span>
                                 </p>
                                 <p v-if="town.builtAt !== undefined">
-                                    <strong>Date d'installation du site :</strong> {{ town.builtAt !== null ? formatDate(town.builtAt) : 'Inconnue' }}
+                                    <strong>Date d'installation du site :</strong> <span data-cy-data="built_at">{{ town.builtAt !== null ? formatDate(town.builtAt) : 'Inconnue' }}</span>
                                 </p>
                                 <p v-if="town.declaredAt !== undefined">
-                                    <strong>Date de signalement du site :</strong> {{ town.declaredAt !== null ? formatDate(town.declaredAt) : 'Inconnue' }}
+                                    <strong>Date de signalement du site :</strong> <span data-cy-data="declared_at">{{ town.declaredAt !== null ? formatDate(town.declaredAt) : 'Inconnue' }}</span>
                                 </p>
                                 <p v-if="town.status !== 'open' && town.closedAt !== undefined">
                                     <strong>Date de disparition du site :</strong> {{ town.closedAt !== null ? formatDate(town.closedAt) : 'Inconnue'}}
@@ -389,20 +389,20 @@
                             </div>
                             <div class="form__group">
                                 <p v-if="town.address !== undefined">
-                                    <strong>Adresse :</strong> {{ town.address }}
+                                    <strong>Adresse :</strong> <span data-cy-data="address">{{ town.address }}</span>
                                 </p>
                                 <p v-if="town.addressDetails !== undefined">
-                                    <strong>Informations d'accès :</strong> {{ town.addressDetails }}
+                                    <strong>Informations d'accès :</strong> <span data-cy-data="address_details">{{ town.addressDetails }}</span>
                                 </p>
                                 <Map :display-searchbar="false" :towns="[ town ]" :default-view="center"></Map>
                                 <p v-if="town.fieldType !== undefined   ">
-                                    <strong>Type de site :</strong> {{ town.fieldType.label }}
+                                    <strong>Type de site :</strong> <span data-cy-data="field_type">{{ town.fieldType.label }}</span>
                                 </p>
                                 <p v-if="town.ownerType !== undefined">
-                                    <strong>Type de propriétaire :</strong> {{ town.ownerType.label }}
+                                    <strong>Type de propriétaire :</strong> <span data-cy-data="owner_type">{{ town.ownerType.label }}</span>
                                 </p>
                                 <p v-if="town.owner !== undefined">
-                                    <strong>Propriétaire :</strong> {{ town.owner || 'Inconnu' }}
+                                    <strong>Propriétaire :</strong> <span data-cy-data="owner">{{ town.owner || 'Inconnu' }}</span>
                                 </p>
                             </div>
                         </div>
@@ -413,24 +413,24 @@
                             </div>
                             <div class="form__group">
                                 <p v-if="town.censusStatus !== undefined">
-                                    <strong>Statut du diagnostic :</strong> {{ town.censusStatus === 'done' ? 'Réalisé' : (town.censusStatus === 'scheduled' ? 'Prévu' : (town.censusStatus === 'none' ? 'Non prévu' : 'Inconnu')) }}
+                                    <strong>Statut du diagnostic :</strong> <span data-cy-data="census_status">{{ town.censusStatus === 'done' ? 'Réalisé' : (town.censusStatus === 'scheduled' ? 'Prévu' : (town.censusStatus === 'none' ? 'Non prévu' : 'Inconnu')) }}</span>
                                 </p>
-                                <p v-if="town.censusConductedAt !== undefined">
-                                    <strong>Date du diagnostic :</strong> {{ town.censusConductedAt !== null ? formatDate(town.censusConductedAt) : 'Inconnue' }}
+                                <p v-if="town.censusStatus === 'done' || town.censusStatus === 'scheduled'">
+                                    <strong>Date du diagnostic :</strong> <span data-cy-data="census_conducted_at">{{ town.censusConductedAt !== null ? formatDate(town.censusConductedAt) : 'Inconnue' }}</span>
                                 </p>
-                                <p v-if="town.censusConductedBy !== undefined">
-                                    <strong>Opérateur en charge du diagnostic :</strong> {{ town.censusConductedBy || 'Inconnu' }}
+                                <p v-if="town.censusStatus === 'done' || town.censusStatus === 'scheduled'">
+                                    <strong>Opérateur en charge du diagnostic :</strong> <span data-cy-data="census_conducted_by">{{ town.censusConductedBy || 'Inconnu' }}</span>
                                 </p>
                                 <p v-if="town.populationTotal !== undefined">
-                                    <strong>Nombre de personnes :</strong> {{ town.populationTotal !== null ? town.populationTotal : 'inconnu' }}
+                                    <strong>Nombre de personnes :</strong> <span data-cy-data="population_total">{{ town.populationTotal !== null ? town.populationTotal : 'inconnu' }}</span>
                                 </p>
                                 <p v-if="town.populationCouples !== undefined">
-                                    <strong>Nombre de ménages :</strong> {{ town.populationCouples !== null ? town.populationCouples : 'inconnu' }}
+                                    <strong>Nombre de ménages :</strong> <span data-cy-data="population_couples">{{ town.populationCouples !== null ? town.populationCouples : 'inconnu' }}</span>
                                 </p>
                                 <p v-if="town.populationMinors !== undefined">
-                                    <strong>Nombre de mineurs :</strong> {{ town.populationMinors !== null ? town.populationMinors : 'inconnu' }}
+                                    <strong>Nombre de mineurs :</strong> <span data-cy-data="population_minors">{{ town.populationMinors !== null ? town.populationMinors : 'inconnu' }}</span>
                                 </p>
-                                <p v-if="town.socialOrigins !== undefined">
+                                <p v-if="town.socialOrigins !== undefined" data-cy-data="social_origins">
                                     <strong>Origines :</strong>
                                     <ul v-if="town.socialOrigins.length > 0">
                                         <li v-for="origin in town.socialOrigins">{{ origin.label }}</li>
@@ -446,25 +446,25 @@
                             </div>
                             <div class="form__group">
                                 <p>
-                                    <strong>Accès à l'électricité:</strong> {{ town.electricityType.label }}
+                                    <strong>Accès à l'électricité:</strong> <span data-cy-data="electricity_type">{{ town.electricityType.label }}</span>
                                 </p>
                                 <p v-if="town.electricityComments">
-                                    <strong>Modalités d'accès à l'électricité :</strong> {{ town.electricityComments }}
+                                    <strong>Modalités d'accès à l'électricité :</strong> <span data-cy-data="electricity_comments">{{ town.electricityComments }}</span>
                                 </p>
                                 <p v-if="town.accessToWater !== undefined">
-                                    <strong>Accès à l'eau :</strong> {{ town.accessToWater !== null ? (town.accessToWater ? 'Oui' : 'Non') : 'Inconnu' }}
+                                    <strong>Accès à l'eau :</strong> <span data-cy-data="access_to_water">{{ town.accessToWater !== null ? (town.accessToWater ? 'Oui' : 'Non') : 'Inconnu' }}</span>
                                 </p>
                                 <p v-if="town.waterComments">
-                                    <strong>Modalités d'accès à l'eau :</strong> {{ town.waterComments }}
+                                    <strong>Modalités d'accès à l'eau :</strong> <span data-cy-data="water_comments">{{ town.waterComments }}</span>
                                 </p>
-                                <p v-if="town.accessToWater !== undefined">
-                                    <strong>Accès aux toilettes :</strong> {{ town.accessToSanitary !== null ? (town.accessToSanitary ? 'Oui' : 'Non') : 'Inconnu' }}
+                                <p v-if="town.accessToSanitary !== undefined">
+                                    <strong>Accès aux toilettes :</strong> <span data-cy-data="access_to_sanitary">{{ town.accessToSanitary !== null ? (town.accessToSanitary ? 'Oui' : 'Non') : 'Inconnu' }}</span>
                                 </p>
                                 <p v-if="town.sanitaryComments">
-                                    <strong>Modalités d'accès aux toilettes :</strong> {{ town.sanitaryComments }}
+                                    <strong>Modalités d'accès aux toilettes :</strong> <span data-cy-data="sanitary_comments">{{ town.sanitaryComments }}</span>
                                 </p>
                                 <p v-if="town.trashEvacuation !== undefined">
-                                    <strong>Évacuation des déchets :</strong> {{ town.trashEvacuation !== null ? (town.trashEvacuation ? 'Oui' : 'Non') : 'Inconnu' }}
+                                    <strong>Évacuation des déchets :</strong> <span data-cy-data="trash_evacuation">{{ town.trashEvacuation !== null ? (town.trashEvacuation ? 'Oui' : 'Non') : 'Inconnu' }}</span>
                                 </p>
                             </div>
                         </div>
@@ -475,34 +475,34 @@
                             </div>
                             <div class="form__group">
                                 <p v-if="town.ownerComplaint !== undefined">
-                                    <strong>Dépôt de plainte par le propriétaire :</strong> {{ town.ownerComplaint === null ? 'Inconnu' : (town.ownerComplaint ? 'Oui' : 'Non') }}
+                                    <strong>Dépôt de plainte par le propriétaire :</strong> <span data-cy-data="owner_complaint">{{ town.ownerComplaint === null ? 'Inconnu' : (town.ownerComplaint ? 'Oui' : 'Non') }}</span>
                                 </p>
                                 <p v-if="town.ownerComplaint && town.justiceProcedure !== undefined">
-                                    <strong>Existence d’une procédure judiciaire :</strong> {{ town.justiceProcedure === null ? 'Inconnu' : (town.justiceProcedure ? 'Oui' : 'Non') }}
+                                    <strong>Existence d’une procédure judiciaire :</strong> <span data-cy-data="justice_procedure">{{ town.justiceProcedure === null ? 'Inconnu' : (town.justiceProcedure ? 'Oui' : 'Non') }}</span>
                                 </p>
                                 <p v-if="town.justiceProcedure && town.justiceRendered !== undefined">
-                                    <strong>Décision de justice rendue :</strong> {{ town.justiceRendered === null ? 'Inconnu' : (town.justiceRendered ? 'Oui' : 'Non') }}
+                                    <strong>Décision de justice rendue :</strong> <span data-cy-data="justice_rendered">{{ town.justiceRendered === null ? 'Inconnu' : (town.justiceRendered ? 'Oui' : 'Non') }}</span>
                                 </p>
                                 <p v-if="town.justiceRendered && town.justiceRenderedBy !== undefined">
-                                    <strong>Origine de la décision :</strong> {{ town.justiceRenderedBy || 'Inconnue' }}
+                                    <strong>Origine de la décision :</strong> <span data-cy-data="justice_rendered_by">{{ town.justiceRenderedBy || 'Inconnue' }}</span>
                                 </p>
                                 <p v-if="town.justiceRendered && town.justiceRenderedAt !== undefined">
-                                    <strong>Date de la décision :</strong> {{ town.justiceRenderedAt !== null ? formatDate(town.justiceRenderedAt) : 'Inconnue' }}
+                                    <strong>Date de la décision :</strong> <span data-cy-data="justice_rendered_at">{{ town.justiceRenderedAt !== null ? formatDate(town.justiceRenderedAt) : 'Inconnue' }}</span>
                                 </p>
                                 <p v-if="town.justiceRendered && town.justiceChallenged !== undefined">
-                                    <strong>Contentieux relatif à la décision de justice :</strong> {{ town.justiceChallenged === null ? 'Inconnu' : (town.justiceChallenged ? 'Oui' : 'Non') }}
+                                    <strong>Contentieux relatif à la décision de justice :</strong> <span data-cy-data="justice_challenged">{{ town.justiceChallenged === null ? 'Inconnu' : (town.justiceChallenged ? 'Oui' : 'Non') }}</span>
                                 </p>
                                 <p v-if="town.policeStatus !== undefined">
-                                    <strong>Concours de la force publique :</strong> {{ town.policeStatus === 'granted' ? 'Obtenu' : (town.policeStatus === 'requested' ? 'Demandé' : 'Inconnu') }}
+                                    <strong>Concours de la force publique :</strong> <span data-cy-data="police_status">{{ town.policeStatus === 'granted' ? 'Obtenu' : (town.policeStatus === 'requested' ? 'Demandé' : 'Inconnu') }}</span>
                                 </p>
-                                <p v-if="town.policeRequestedAt !== undefined">
-                                    <strong>Date de la demande du CFP :</strong> {{ town.policeRequestedAt !== null ? formatDate(town.policeRequestedAt) : 'Inconnue' }}
+                                <p v-if="town.policeStatus === 'requested' || town.policeStatus === 'granted'">
+                                    <strong>Date de la demande du CFP :</strong> <span data-cy-data="police_requested_at">{{ town.policeRequestedAt !== null ? formatDate(town.policeRequestedAt) : 'Inconnue' }}</span>
                                 </p>
-                                <p v-if="town.policeGrantedAt !== undefined">
-                                    <strong>Date d'octroi du CFP :</strong> {{ town.policeGrantedAt !== null ? formatDate(town.policeGrantedAt) : 'Inconnue' }}
+                                <p v-if="town.policeStatus === 'requested' || town.policeStatus === 'granted'">
+                                    <strong>Date d'octroi du CFP :</strong> <span data-cy-data="police_granted_at">{{ town.policeGrantedAt !== null ? formatDate(town.policeGrantedAt) : 'Inconnue' }}</span>
                                 </p>
                                 <p v-if="town.bailiff !== undefined">
-                                    <strong>Nom de l'étude d'huissiers :</strong> {{ town.bailiff || 'Inconnues' }}
+                                    <strong>Nom de l'étude d'huissiers :</strong> <span data-cy-data="bailiff">{{ town.bailiff || 'Inconnues' }}</span>
                                 </p>
                             </div>
                         </div>
@@ -523,7 +523,7 @@
                                     </ul>
                                 </p>
 
-                                <select v-model="edit.priority">
+                                <select data-cy-field="priority" v-model="edit.priority">
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
@@ -537,7 +537,7 @@
                                         <li v-for="error in fieldErrors.built_at">{{ error }}</li>
                                     </ul>
                                 </p>
-                                <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" :full-month-name="true" :format="'dd MMMM yyyy'" v-model="edit.builtAt"></datepicker>
+                                <datepicker data-cy-field="built_at" :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" :full-month-name="true" :format="'dd MMMM yyyy'" v-model="edit.builtAt"></datepicker>
                             </div>
 
                             <div class="form__group">
@@ -547,7 +547,7 @@
                                         <li v-for="error in fieldErrors.declared_at">{{ error }}</li>
                                     </ul>
                                 </p>
-                                <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="edit.declaredAt" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
+                                <datepicker data-cy-field="declared_at" :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="edit.declaredAt" :full-month-name="true" :format="'dd MMMM yyyy'" clearButton="true"></datepicker>
                             </div>
                         </div>
 
@@ -563,14 +563,14 @@
                                     </ul>
                                 </p>
                                 <p>Saisissez ici l'adresse du site, puis précisez sa position en déplaçant le point sur la carte.</p>
-                                <AddressWithLocation v-model="edit.address"></AddressWithLocation>
+                                <AddressWithLocation data-cy-field="address" v-model="edit.address"></AddressWithLocation>
                             </div>
 
                             <div class="form__group">
                                 <label>Informations d'accès :</label>
                                 <p>Saisissez ici toutes les informations qui, en plus de l'adresse, peuvent être utiles pour l'accès au site :</p>
                                 <div class="input__group">
-                                    <input type="text" v-model="edit.detailedAddress">
+                                    <input data-cy-field="address_details" type="text" v-model="edit.detailedAddress">
                                 </div>
                             </div>
 
@@ -583,7 +583,7 @@
                                         </ul>
                                     </p>
                                     <div v-for="(type, index) in fieldTypes">
-                                        <input type="radio" :id="'fieldType' + index" :value="type.id" v-model="edit.fieldType">
+                                        <input data-cy-field="field_type" :data-cy-label="type.label" type="radio" :id="'fieldType' + index" :value="type.id" v-model="edit.fieldType">
                                         <label :for="'fieldType' + index" class="label-inline">{{ type.label }}</label>
                                     </div>
                                 </fieldset>
@@ -598,7 +598,7 @@
                                         </ul>
                                     </p>
                                     <div v-for="(type, index) in ownerTypes">
-                                        <input type="radio" :id="'ownerType' + index" :value="type.id" v-model="edit.ownerType">
+                                        <input data-cy-field="owner_type" :data-cy-label="type.label" type="radio" :id="'ownerType' + index" :value="type.id" v-model="edit.ownerType">
                                         <label :for="'ownerType' + index" class="label-inline">{{ type.label }}</label>
                                     </div>
                                 </fieldset>
@@ -613,7 +613,7 @@
                                         </ul>
                                     </p>
                                     <div class="input__group">
-                                        <input type="text" v-model="edit.owner" />
+                                        <input data-cy-field="owner" type="text" v-model="edit.owner" />
                                     </div>
                                 </fieldset>
                             </div>
@@ -633,7 +633,7 @@
                                 </p>
                                 <p>Un diagnostic social vise à identifier les situations et besoins des familles et personnes, de repérer le contexte territorial et les acteurs en présence.</p>
                                 <div v-for="(value, index) in diagnosisValues">
-                                    <input type="radio" name="diagnosis" :id="'diagnosis' + index" :value="value.value" v-model="edit.census_status">
+                                    <input data-cy-field="census_status" :data-cy-label="value.label" type="radio" name="diagnosis" :id="'diagnosis' + index" :value="value.value" v-model="edit.census_status">
                                     <label :for="'diagnosis' + index" class="label-inline">{{ value.label }}</label>
                                 </div>
                             </div>
@@ -645,7 +645,7 @@
                                         <li v-for="error in fieldErrors.census_conducted_at">{{ error }}</li>
                                     </ul>
                                 </p>
-                                <datepicker :language="dateLanguage" :monday-first="true" v-model="edit.census_conducted_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
+                                <datepicker data-cy-field="census_conducted_at" :language="dateLanguage" :monday-first="true" v-model="edit.census_conducted_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
                             </div>
 
                             <div class="form__group" v-if="edit.census_status === 'scheduled' || edit.census_status === 'done'">
@@ -657,7 +657,7 @@
                                         </ul>
                                     </p>
                                     <div class="input__group">
-                                        <input type="text" v-model="edit.census_conducted_by" />
+                                        <input data-cy-field="census_conducted_by" type="text" v-model="edit.census_conducted_by" />
                                     </div>
                                 </fieldset>
                             </div>
@@ -671,7 +671,7 @@
                                 </p>
                                 <p>Laissez ce champ vide si l'information est inconnue</p>
                                 <div class="input__group">
-                                    <input type="number" v-model="edit.populationTotal">
+                                    <input data-cy-field="population_total" type="number" v-model="edit.populationTotal">
                                 </div>
                             </div>
 
@@ -684,7 +684,7 @@
                                 </p>
                                 <p>Laissez ce champ vide si l'information est inconnue</p>
                                 <div class="input__group">
-                                    <input type="number" v-model="edit.populationCouples">
+                                    <input data-cy-field="population_couples" type="number" v-model="edit.populationCouples">
                                 </div>
                             </div>
 
@@ -697,7 +697,7 @@
                                 </p>
                                 <p>Laissez ce champ vide si l'information est inconnue</p>
                                 <div class="input__group">
-                                    <input type="number" v-model="edit.populationMinors">
+                                    <input data-cy-field="population_minors" type="number" v-model="edit.populationMinors">
                                 </div>
                             </div>
 
@@ -707,7 +707,7 @@
                                     <div v-if="parseInt(edit.populationTotal, 10) > 10">
                                         <p>Ne rien cocher si l'information est inconnue</p>
                                         <div v-for="(origin, index) in socialOrigins">
-                                            <input type="checkbox" :id="'socialOrigins' + index" :value="origin.id" v-model="edit.origins">
+                                            <input data-cy-field="social_origins" :data-cy-label="origin.label" type="checkbox" :id="'socialOrigins' + index" :value="origin.id" v-model="edit.origins">
                                             <label :for="'socialOrigins' + index" class="label-inline">{{ origin.label }}</label>
                                         </div>
                                     </div>
@@ -730,7 +730,7 @@
                                         </ul>
                                     </p>
                                     <div v-for="(type, index) in electricityTypes">
-                                        <input type="radio" name="electricityType" :id="'electricityType' + index" :value="type.id" v-model="edit.electricityType">
+                                        <input data-cy-field="electricity_type" :data-cy-label="type.label" type="radio" name="electricityType" :id="'electricityType' + index" :value="type.id" v-model="edit.electricityType">
                                         <label :for="'electricityType' + index" class="label-inline">{{ type.label }}</label>
                                     </div>
                                 </fieldset>
@@ -745,7 +745,7 @@
                                             <li v-for="error in fieldErrors.electricity_comments">{{ error }}</li>
                                         </ul>
                                     </p>
-                                    <textarea class="input input--textarea" v-model="edit.electricityComments"></textarea>
+                                    <textarea data-cy-field="electricity_comments" class="input input--textarea" v-model="edit.electricityComments"></textarea>
                                 </fieldset>
                             </div>
 
@@ -758,7 +758,7 @@
                                         </ul>
                                     </p>
                                     <div v-for="(value, index) in yesnoValues">
-                                        <input type="radio" name="accessToWater" :id="'accessToWater' + index" :value="value.value" v-model="edit.accessToWater">
+                                        <input data-cy-field="access_to_water" :data-cy-label="value.label" type="radio" name="accessToWater" :id="'accessToWater' + index" :value="value.value" v-model="edit.accessToWater">
                                         <label :for="'accessToWater' + index" class="label-inline">{{ value.label }}</label>
                                     </div>
                                 </fieldset>
@@ -773,7 +773,7 @@
                                             <li v-for="error in fieldErrors.water_comments">{{ error }}</li>
                                         </ul>
                                     </p>
-                                    <textarea class="input input--textarea" v-model="edit.waterComments"></textarea>
+                                    <textarea data-cy-field="water_comments" class="input input--textarea" v-model="edit.waterComments"></textarea>
                                 </fieldset>
                             </div>
 
@@ -786,7 +786,7 @@
                                         </ul>
                                     </p>
                                     <div v-for="(value, index) in yesnoValues">
-                                        <input type="radio" name="accessToSanitary" :id="'accessToSanitary' + index" :value="value.value" v-model="edit.accessToSanitary">
+                                        <input data-cy-field="access_to_sanitary" :data-cy-label="value.label" type="radio" name="accessToSanitary" :id="'accessToSanitary' + index" :value="value.value" v-model="edit.accessToSanitary">
                                         <label :for="'accessToSanitary' + index" class="label-inline">{{ value.label }}</label>
                                     </div>
                                 </fieldset>
@@ -801,7 +801,7 @@
                                             <li v-for="error in fieldErrors.sanitary_comments">{{ error }}</li>
                                         </ul>
                                     </p>
-                                    <textarea class="input input--textarea" v-model="edit.sanitaryComments"></textarea>
+                                    <textarea data-cy-field="sanitary_comments" class="input input--textarea" v-model="edit.sanitaryComments"></textarea>
                                 </fieldset>
                             </div>
 
@@ -814,7 +814,7 @@
                                         </ul>
                                     </p>
                                     <div v-for="(value, index) in yesnoValues">
-                                        <input type="radio" name="trashEvacuation" :id="'trashEvacuation' + index" :value="value.value" v-model="edit.trashEvacuation">
+                                        <input data-cy-field="trash_evacuation" :data-cy-label="value.label" type="radio" name="trashEvacuation" :id="'trashEvacuation' + index" :value="value.value" v-model="edit.trashEvacuation">
                                         <label :for="'trashEvacuation' + index" class="label-inline">{{ value.label }}</label>
                                     </div>
                                 </fieldset>
@@ -834,7 +834,7 @@
                                     </ul>
                                 </p>
                                 <div v-for="(value, index) in yesnoValues">
-                                    <input type="radio" name="ownerComplaint" :id="'ownerComplaint' + index" :value="value.value" v-model="edit.owner_complaint">
+                                    <input data-cy-field="owner_complaint" :data-cy-label="value.label" type="radio" name="ownerComplaint" :id="'ownerComplaint' + index" :value="value.value" v-model="edit.owner_complaint">
                                     <label :for="'ownerComplaint' + index" class="label-inline">{{ value.label }}</label>
                                 </div>
                             </div>
@@ -847,7 +847,7 @@
                                     </ul>
                                 </p>
                                 <div v-for="(value, index) in yesnoValues">
-                                    <input type="radio" name="justiceProcedure" :id="'justiceProcedure' + index" :value="value.value" v-model="edit.justiceProcedure">
+                                    <input data-cy-field="justice_procedure" :data-cy-label="value.label" type="radio" name="justiceProcedure" :id="'justiceProcedure' + index" :value="value.value" v-model="edit.justiceProcedure">
                                     <label :for="'justiceProcedure' + index" class="label-inline">{{ value.label }}</label>
                                 </div>
                             </div>
@@ -860,7 +860,7 @@
                                     </ul>
                                 </p>
                                 <div v-for="(value, index) in yesnoValues">
-                                    <input type="radio" name="justiceRendered" :id="'justiceRendered' + index" :value="value.value" v-model="edit.justice_rendered">
+                                    <input data-cy-field="justice_rendered" :data-cy-label="value.label" type="radio" name="justiceRendered" :id="'justiceRendered' + index" :value="value.value" v-model="edit.justice_rendered">
                                     <label :for="'justiceRendered' + index" class="label-inline">{{ value.label }}</label>
                                 </div>
                             </div>
@@ -874,7 +874,7 @@
                                         </ul>
                                     </p>
                                     <div class="input__group">
-                                        <input type="text" v-model="edit.justice_rendered_by" />
+                                        <input data-cy-field="justice_rendered_by" type="text" v-model="edit.justice_rendered_by" />
                                     </div>
                                 </fieldset>
                             </div>
@@ -886,7 +886,7 @@
                                         <li v-for="error in fieldErrors.justice_rendered_at">{{ error }}</li>
                                     </ul>
                                 </p>
-                                <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="edit.justice_rendered_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
+                                <datepicker data-cy-field="justice_rendered_at" :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="edit.justice_rendered_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
                             </div>
 
                             <div class="form__group" v-if="edit.owner_complaint === 1 && edit.justiceProcedure === 1 && edit.justice_rendered === 1">
@@ -897,7 +897,7 @@
                                     </ul>
                                 </p>
                                 <div v-for="(value, index) in yesnoValues">
-                                    <input type="radio" name="justiceChallenged" :id="'justiceChallenged' + index" :value="value.value" v-model="edit.justice_challenged">
+                                    <input data-cy-field="justice_challenged" :data-cy-label="value.label" type="radio" name="justiceChallenged" :id="'justiceChallenged' + index" :value="value.value" v-model="edit.justice_challenged">
                                     <label :for="'justiceChallenged' + index" class="label-inline">{{ value.label }}</label>
                                 </div>
                             </div>
@@ -910,7 +910,7 @@
                                     </ul>
                                 </p>
                                 <div v-for="(value, index) in cfpValues">
-                                    <input type="radio" name="cfp" :id="'cfp' + index" :value="value.value" v-model="edit.police_status">
+                                    <input data-cy-field="police_status" :data-cy-label="value.label" type="radio" name="cfp" :id="'cfp' + index" :value="value.value" v-model="edit.police_status">
                                     <label :for="'cfp' + index" class="label-inline">{{ value.label }}</label>
                                 </div>
                             </div>
@@ -922,7 +922,7 @@
                                         <li v-for="error in fieldErrors.police_requested_at">{{ error }}</li>
                                     </ul>
                                 </p>
-                                <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="edit.police_requested_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
+                                <datepicker data-cy-field="police_requested_at" :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="edit.police_requested_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
                             </div>
 
                             <div class="form__group" v-if="edit.police_status === 'granted'">
@@ -932,7 +932,7 @@
                                         <li v-for="error in fieldErrors.police_granted_at">{{ error }}</li>
                                     </ul>
                                 </p>
-                                <datepicker :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="edit.police_granted_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
+                                <datepicker data-cy-field="police_granted_at" :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="edit.police_granted_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
                             </div>
 
                             <div class="form__group">
@@ -944,7 +944,7 @@
                                         </ul>
                                     </p>
                                     <div class="input__group">
-                                        <input type="text" v-model="edit.bailiff" />
+                                        <input data-cy-field="bailiff" type="text" v-model="edit.bailiff" />
                                     </div>
                                 </fieldset>
                             </div>
@@ -953,7 +953,7 @@
                         <div class="notification error" v-if="editError">{{ editError }}.</div>
 
                         <div class="form__group">
-                            <button class="button large" @click="submit">Sauvegarder</button>
+                            <button class="button large" @click="submit" data-cy-field="submit">Sauvegarder</button>
                         </div>
                     </div>
                 </div>
