@@ -37,7 +37,7 @@
 
                 <section class="form-stepNav">
                     <p v-if="submitPrefix" v-html="submitPrefix"></p>
-                    <button class="form-stepButton button" @click="submit" :disabled="pending">
+                    <button class="form-stepButton button" data-cy-button="submit" @click="submit" :disabled="pending">
                         <span v-if="!pending">{{ wording.submit }}</span>
                         <img v-else src="/img/spinner_light.svg" width="20" />
                     </button>
