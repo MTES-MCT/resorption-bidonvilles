@@ -1,16 +1,16 @@
 <template>
     <div>
-        <Select label="Précisez le type de structure" :value="organizationType" @input="val => $emit('update:organizationType', val)" rules="required">
+        <Select label="Précisez le type de structure" :value="organizationType" @input="val => $emit('update:organizationType', val)" rules="required" id="organization_type">
             <SelectOption value="none">- Selectionner un choix -</SelectOption>
             <SelectOption v-for="item in orgTypesOptions" :key="item.value" :value="item.value" >{{item.label}}</SelectOption>
         </Select>
-        <Select label="Territoire de rattachement" :value="organizationTerritory" @input="val => $emit('update:organizationTerritory', val)" rules="required">
+        <Select label="Territoire de rattachement" :value="organizationTerritory" @input="val => $emit('update:organizationTerritory', val)" rules="required" id="organization_public">
             <SelectOption>- Selectionner un choix -</SelectOption>
             <SelectOption v-for="item in orgTerritoryOptions" :key="item.value" :value="item.value">
                 {{ item.label }}
             </SelectOption>
         </Select>
-        <TextInput label="Votre fonction" :value="organizationFunction" @input="val => $emit('update:organizationFunction', val)" rules="required" />
+        <TextInput label="Votre fonction" :value="organizationFunction" @input="val => $emit('update:organizationFunction', val)" rules="required" id="position" />
     </div>
 
 </template>

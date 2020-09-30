@@ -2,14 +2,14 @@
     <div>
         <InputWrapper>
             <InputLabel label="Nom de la structure" />
-            <ValidationProvider rules="required" name="Nom de la structure" v-slot="{ errors }">
+            <ValidationProvider rules="required" name="Nom de la structure" v-slot="{ errors }" id="territorial_collectivity">
                 <div class="v1">
                     <Collectivity :value="collectivityName" @input="val => $emit('update:collectivityName', val)" />
                 </div>
                 <InputError>{{errors[0]}}</InputError>
             </ValidationProvider>
         </InputWrapper>
-        <TextInput label="Votre fonction" :value="collectivityFunction" @input="val => $emit('update:collectivityFunction', val)" rules="required" />
+        <TextInput label="Votre fonction" :value="collectivityFunction" @input="val => $emit('update:collectivityFunction', val)" rules="required" id="position" />
     </div>
 
 </template>

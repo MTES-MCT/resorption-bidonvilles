@@ -1,9 +1,9 @@
 <template>
     <InputWrapper>
         <InputLabel :label="label" :info="info" />
-        <ValidationProvider :rules="rules" :name="validationName || label" v-slot="{ errors }">
+        <ValidationProvider :rules="rules" :name="validationName || label" v-slot="{ errors }" :vid="id">
             <div class="relative">
-                <select :class="['block appearance-none bg-G200 border-b-2 border-black rounded rounded-b-none w-full py-2 px-4 outlinePadding', error && 'border-error']" v-bind="$props" @change="$emit('input', $event.target.value)">
+                <select :class="['block appearance-none bg-G200 border-b-2 border-black rounded rounded-b-none w-full py-2 px-4 outlinePadding', error && 'border-error']" v-bind="$props" @change="$emit('input', $event.target.value)" :id="id">
                     <slot />
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -40,6 +40,9 @@
                 type: String
             },
             rules: {
+                type: String
+            },
+            id: {
                 type: String
             }
         },

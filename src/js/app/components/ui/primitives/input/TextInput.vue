@@ -1,8 +1,9 @@
 <template>
     <InputWrapper>
         <InputLabel :label="label" :info="info" />
-        <ValidationProvider :rules="rules" :name="validationName || label" v-slot="{ errors }">
+        <ValidationProvider :rules="rules" :name="validationName || label" v-slot="{ errors }" :vid="id">
             <input
+                   :id="id"
                    @input="$emit('input', $event.target.value)"
                    v-bind="$props"
                    :class="['bg-G200 border-b-2 border-black rounded rounded-b-none w-full py-2 px-4 outlinePadding', error && 'border-error']" />
@@ -44,6 +45,9 @@ export default {
         },
         value: {
             type: String,
+        },
+        id: {
+            type: String
         }
     },
     components: {
