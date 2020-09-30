@@ -1,6 +1,6 @@
 <template>
     <div>
-        <NavBar />
+        <NavBar :stickyHeader="stickyHeader" />
         <slot />
         <PublicFooter />
     </div>
@@ -11,6 +11,12 @@
     import PublicFooter from './PublicFooter'
 
     export default {
+        props: {
+            stickyHeader: {
+                type: Boolean,
+                default: true
+            }
+        },
         components: {
             NavBar,
             PublicFooter

@@ -2,9 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import LandingPage from '#app/pages/LandingPage';
-import LandingOld from '#app/pages/LandingOld/landing.vue';
 import SignIn from '#app/pages/signin/signin.vue';
-import SignUp from '#app/pages/signup/signup.vue';
 import Contact from '#app/pages/Contact';
 import Dashboard from '#app/pages/dashboard/dashboard.vue';
 import Launcher from '#app/pages/launcher/launcher.vue';
@@ -28,7 +26,6 @@ import Statistics from '#app/pages/stats/stats.vue';
 import LegalMentions from '#app/pages/legalMentions/legalMentions.vue';
 import Directory from '#app/pages/directory/directory.vue';
 import UserActivityList from '#app/pages/userActivity.list/userActivity.list.vue';
-import OpenStatsOld from '#app/pages/open.stats.old/open.stats.vue';
 import PublicStats from '#app/pages/PublicStats';
 import Covid from '#app/pages/covid/covid.vue';
 import Changelog from '#app/pages/changelog/changelog.vue';
@@ -204,18 +201,8 @@ const router = new VueRouter({
             },
         },
         {
-            path: '/landingold',
-            component: LandingOld,
-            beforeEnter: guardians.anonymous,
-        },
-        {
             path: '/landing',
             component: LandingPage,
-            beforeEnter: guardians.anonymous,
-        },
-        {
-            path: '/statistiques-publiques-old',
-            component: OpenStatsOld,
             beforeEnter: guardians.anonymous,
         },
         {
@@ -231,11 +218,6 @@ const router = new VueRouter({
         {
             path: '/contact',
             component: Contact,
-            beforeEnter: guardians.anonymous,
-        },
-        {
-            path: '/demande-d-acces',
-            component: SignUp,
             beforeEnter: guardians.anonymous,
         },
         {
