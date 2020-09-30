@@ -1,5 +1,5 @@
 <template>
-    <PublicLayout>
+    <PublicLayout :stickyHeader="false">
         <PublicContainer class="py-16">
             <div class="max-w-xl mx-auto">
                 <h1 class="text-display-xl">Contactez nous</h1>

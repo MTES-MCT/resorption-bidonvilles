@@ -33,6 +33,11 @@
     import Button from '../../ui/primitives/Button'
 
     export default {
+        props: {
+          stickyHeader: {
+              type: Boolean
+          }
+        },
         components: {
             NavBarLogo,
             NavBarSticky,
@@ -67,7 +72,8 @@
         },
         computed: {
            sticky() {
-               return this.scrollTop > 200
+               console.log('sticky', this.stickyHeader);
+               return this.scrollTop > 200 && this.stickyHeader
            }
         },
         mounted() {
