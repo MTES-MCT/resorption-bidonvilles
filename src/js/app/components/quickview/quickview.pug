@@ -9,6 +9,7 @@
             </div>
             <h1 class="quickview-title"><a @click="showTown">{{ town.address.split(/[0-9]{5}/)[0].replace(/[0-9]/g, '').replace(/,/g, ' ').replace(/\s{2,}/g, ' ') }}</a></h1>
             <h2 class="quickview-subtitle">Site de {{ town.city.name }}</h2>
+            <h2 class="quickview-name" v-if="town.name">{{ town.name }}</h2>
             <h2 v-if="town.updatedAt !== undefined" class="quickview-time">(Dernière modification le <time>{{ formatDate(town.updatedAt) }}</time>)</h2>
         </header>
 

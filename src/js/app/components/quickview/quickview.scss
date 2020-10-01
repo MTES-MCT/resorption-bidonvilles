@@ -48,6 +48,7 @@
         }
 
         .quickview-subtitle,
+        .quickview-name,
         .quickview-time {
             margin: 0;
             font-weight: normal;
@@ -60,8 +61,15 @@
             font-size: 0.7rem;
         }
 
+        .quickview-name {
+            margin-top: 1rem;
+            font-weight: normal;
+            font-size: 1em;
+        }
+
         .quickview-title,
         .quickview-subtitle,
+        .quickview-name,
         .quickview-time {
             padding: 0 25px;
         }
