@@ -3,7 +3,6 @@
 import L from 'leaflet';
 import Address from '#app/components/address/address.vue';
 import { get as getConfig } from '#helpers/api/config';
-import { shortAddress } from '#helpers/townHelper';
 import 'leaflet-providers';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
@@ -388,7 +387,7 @@ export default {
         },
 
         getTownAddress(town) {
-            return shortAddress(town);
+            return town.usename;
         },
 
         getTownCoordinates(town) {
