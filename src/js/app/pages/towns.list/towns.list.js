@@ -625,12 +625,5 @@ export default {
         hasPermission(...args) {
             return hasPermission(...args);
         },
-        formatAddress(shantytown) {
-            if (shantytown.addressSimple && shantytown.name) {
-                return `${shantytown.addressSimple} «${shantytown.name}» `;
-            }
-
-            return `site dit ${shantytown.name}`;
-        },
     },
 };
