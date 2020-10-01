@@ -59,6 +59,9 @@ export default {
                                         label: 'Appellation du site',
                                         description: 'Exemples : Entrepôt de la Poste, Rond-point du centre...',
                                         mandatory: false,
+                                        specificProps: {
+                                            maxlength: 35,
+                                        },
                                     },
                                     addressDetails: {
                                         type: 'text',
