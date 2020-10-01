@@ -572,7 +572,7 @@ export default {
                 date: comment.createdAt,
                 shantytown: {
                     id: this.town.id,
-                    name: this.town.addressSimple || 'Pas d\'adresse précise',
+                    usename: this.town.usename,
                     city: this.town.city.name,
                 },
                 author: {

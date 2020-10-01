@@ -25,7 +25,7 @@ export default {
             return App.formatDate(this.comment.date, 'h:i');
         },
         address() {
-            return `${this.comment.shantytown.name || 'Pas d\'adresse précise'}, ${this.comment.shantytown.city}`;
+            return `${this.comment.shantytown.usename}, ${this.comment.shantytown.city}`;
         },
     },
 

@@ -21,7 +21,7 @@
                 <input type="checkbox" :checked="selectedTowns.some(id => id === props.row.id)" :disabled="disabled" @change="toggleTown(props.row)" />
             </template>
             <template v-slot:city="props">{{ props.row.city.name }}</template>
-            <template v-slot:address="props">{{ props.row.addressSimple }}</template>
+            <template v-slot:address="props">{{ props.row.usename }}</template>
             <template v-slot:fieldType="props">
                 <span class="fieldType"><i :style="`background-color: ${fieldTypes[props.row.fieldType.id].color}`"></i> <span>{{ props.row.fieldType.label }}</span></span>
             </template>

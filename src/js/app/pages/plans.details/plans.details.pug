@@ -134,7 +134,7 @@
                                 <span class="data-label">{{ plan.location_type.label }}</span><br/>
                                 <span v-if="plan.location_type.id === 'shantytowns'">
                                     <p v-for="shantytown in plan.shantytowns">
-                                        <router-link :to="`/site/${shantytown.id}`" class="locationPoint">{{ shantytown.addressSimple }}</router-link>
+                                        <router-link :to="`/site/${shantytown.id}`" class="locationPoint">{{ shantytown.usename }}</router-link>
                                     </p>
                                 </span>
                                 <span v-if="plan.location_type.id === 'location'" class="locationPoint">{{ plan.location.label }}</span>

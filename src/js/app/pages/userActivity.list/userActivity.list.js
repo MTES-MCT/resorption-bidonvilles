@@ -92,7 +92,7 @@ export default {
                     author: activity.author,
                     icon: activity.entity === 'comment' ? 'comment' : 'pencil-alt',
                     shantytown: activity.shantytown.id,
-                    address: `${activity.shantytown.name || 'Pas d\'adresse précise'}, ${activity.shantytown.city}`,
+                    address: `${activity.shantytown.usename}, ${activity.shantytown.city}`,
                 };
 
                 const shantytownActions = {
