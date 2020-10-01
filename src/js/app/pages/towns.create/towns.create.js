@@ -57,7 +57,7 @@ export default {
                                     name: {
                                         type: 'text',
                                         label: 'Appellation du site',
-                                        description: 'Nom d\'usage du site s\'il est différent de l\'adresse. Ex "Entrepôt de la Poste" (35 caractères maximum)',
+                                        description: 'Exemples : Entrepôt de la Poste, Rond-point du centre...',
                                         mandatory: false,
                                     },
                                     addressDetails: {
