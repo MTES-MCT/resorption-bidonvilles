@@ -113,7 +113,7 @@
             <div class="container">
                 <div class="town-name">
                     <div class="town-reference">
-                        <h1>Site {{ town.addressSimple }} <span :class="`town-status ${town.status}`">{{ status }}</span></h1>
+                        <h1>Site {{ town.addressSimple }} <span class="town-usename" v-if="town.name">« {{ town.name }} »</span><span :class="`town-status ${town.status}`">{{ status }}</span></h1>
                         <h2>{{ town.city.name }}</h2>
                     </div>
 
@@ -390,9 +390,6 @@
                             <div class="form__group">
                                 <p v-if="town.address !== undefined">
                                     <strong>Adresse :</strong> {{ town.address }}
-                                </p>
-                                <p v-if="town.name">
-                                    <strong>Appellation du site :</strong> {{ town.name }}
                                 </p>
                                 <p v-if="town.addressDetails !== undefined">
                                     <strong>Informations d'accès :</strong> {{ town.addressDetails }}
