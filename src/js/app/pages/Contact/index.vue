@@ -7,7 +7,7 @@
                 <ValidationObserver ref="form" v-slot="{ handleSubmit, errors, failed }">
                     <form class="max-w-xl mt-12" @submit.prevent="handleSubmit(submitForm)">
                         <InputGroup>
-                            <TextInput label="Votre email" v-model="commonFields.email" id="email" validationName="Email" rules="required" />
+                            <TextInput label="Votre email" v-model="commonFields.email" id="email" validationName="Email" rules="required|email" />
                             <TextInput label="Prénom" v-model="commonFields.first_name" id="first_name" name="Prénom" rules="required" />
                             <TextInput label="Nom de famille" v-model="commonFields.last_name" id="last_name" name="Nom de famille" rules="required" />
                         </InputGroup>
@@ -87,7 +87,7 @@
 </template>
 
 <script>
-    import { create } from '#helpers/api/user';
+    import { contact } from '#helpers/api/contact';
     import { notify } from '#helpers/notificationHelper';
     import PublicLayout from '#app/components/PublicLayout'
     import PublicContainer from '#app/components/PublicLayout/PublicContainer'
@@ -135,7 +135,7 @@
 
               this.loading = true
               try {
-                  await create(data)
+                  await contact(data)
                   this.loading = false
                   this.$router.push('/');
                   notify({
