@@ -67,21 +67,29 @@
     }
 </style>
 
-<style>
-    .checkableGroup--horizontalLayout .input {
-        @apply mr-6 mb-2
+<style lang="scss">
+    .checkableGroup--horizontalLayout {
+        .checkbox-default,.checkbox-card,.radio-default,.radio-card {
+            &:last-child {
+                @apply mr-0 mb-0
+            }
+
+            @apply mr-4 mb-2
+        }
     }
 
-    .checkableGroup--horizontalLayout .input:last-child {
-        @apply mr-0
-    }
+    .checkableGroup--verticalLayout {
+        .checkbox-default,,.radio-default,.radio-card {
+            &:last-child {
+                @apply mb-0
+            }
 
-    .checkableGroup--verticalLayout .input {
-        @apply mb-6
-    }
+            @apply mb-6
+        }
 
-    .checkableGroup--verticalLayout .input:last-child {
-        @apply mb-0
+        .checkbox-card, .radio-card {
+            @apply mb-2
+        }
     }
 </style>
 

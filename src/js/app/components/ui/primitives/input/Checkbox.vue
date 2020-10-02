@@ -1,5 +1,5 @@
 <template>
-    <div class="input">
+    <div :class="`checkbox-${variant}`">
         <template v-if="variant === 'default'">
             <label :class="['inline-flex cursor-pointer', info ? 'items-start' : 'items-center']">
                 <input type="checkbox" class="form-checkbox h-5 w-5" v-bind="$props" :checked="isChecked" @change="onChange">

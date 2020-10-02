@@ -1,7 +1,7 @@
 <template >
-    <div class="input">
+    <div :class="`radio-${variant}`">
         <template v-if="variant === 'default'">
-            <label class="inline-flex items-center">
+            <label :class="['inline-flex items-center']">
                 <input type="radio" class="form-checkbox h-5 w-5"  v-bind="$props" :checked="isChecked" @change="onChange"><span class="ml-2">{{label}}</span>
             </label>
         </template>
