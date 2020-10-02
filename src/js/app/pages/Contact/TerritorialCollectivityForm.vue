@@ -2,7 +2,7 @@
     <div>
         <InputWrapper>
             <InputLabel label="Nom de la structure" />
-            <ValidationProvider rules="required" name="Nom de la structure" v-slot="{ errors }" id="territorial_collectivity">
+            <ValidationProvider rules="required" name="Nom de la structure" v-slot="{ errors }" vid="territorial_collectivity">
                 <div class="v1">
                     <Collectivity :value="collectivityName" @input="val => $emit('update:collectivityName', val)" />
                 </div>

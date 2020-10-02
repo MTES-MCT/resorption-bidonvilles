@@ -191,3 +191,14 @@
         },
     };
 </script>
+
+<style lang="scss">
+    // TODO: A supprimer quand le composant d'autocomplete sera refait avec le nouveau design
+    .autocompleter-textfield input {
+        @apply border-2 border-G200 rounded-md w-full py-2 px-4 outline-none
+    }
+
+    .autocompleter-textfield input:focus {
+        @apply border-primary
+    }
+</style>
