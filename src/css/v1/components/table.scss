@@ -6,7 +6,7 @@
     > table {
         table-layout: fixed;
 
-        thead { 
+        thead {
             th {
                 position: relative;
                 padding-top: 7px;
@@ -26,21 +26,21 @@
                         border: 1px solid #fff;
                         border-radius: 3px;
                         color: #fff;
-                
+
                         > img,
                         > svg {
                             margin-top: -10px;
                             margin-left: 5px;
                         }
-                
+
                         &:hover {
                             background: rgba(255, 255, 255, 0.2);
-                
+
                             &.active {
                                 background: rgba(255, 255, 255, 0.8);
                             }
                         }
-                
+
                         &.active {
                             background: white;
                             color: #53657d;
@@ -53,19 +53,19 @@
         tbody {
             tr {
                 cursor: pointer;
-        
+
                 &:hover {
                     background: #dde1e5;
                 }
-        
+
                 &.odd {
                     background: #ebeff3;
-        
+
                     &:hover {
                         background: #dde1e5;
                     }
                 }
-        
+
                 &.townRow--empty {
                     td {
                         padding: 50px 0;
@@ -87,7 +87,7 @@
     > table {
         table-layout: fixed;
 
-        thead { 
+        thead {
             th {
                 position: relative;
                 padding-top: 7px;
@@ -108,13 +108,13 @@
                     border: 1px solid #fff;
                     border-radius: 3px;
                     color: #fff;
-            
+
                     > img,
                     > svg {
                         margin-top: -10px;
                         margin-left: 5px;
                     }
-            
+
                     &:hover {
                         background: rgba(255, 255, 255, 0.2);
                     }
@@ -136,7 +136,7 @@
         tbody {
             tr {
                 cursor: pointer;
-        
+
                 &:hover {
                     background: #dde1e5;
                 }
@@ -144,7 +144,7 @@
 
             tr.table-row--odd {
                 background: #ebeff3;
-    
+
                 &:hover {
                     background: #dde1e5;
                 }
@@ -166,4 +166,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.vgt-table {
+    th, td {
+        padding: .75em !important;
+    }
 }

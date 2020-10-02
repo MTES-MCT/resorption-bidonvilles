@@ -106,6 +106,8 @@
 }
 
 .v1 {
+  font-family: "Fira Sans", Arial, sans-serif;
+
   @import "./template";
   @import './config/colors.scss';
   @import './components/alert.scss';
