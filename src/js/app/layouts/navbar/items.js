@@ -1,7 +1,7 @@
 export default {
     anonymous: [
         { label: 'Connexion', target: '/connexion' },
-        { label: 'Demander un accès', target: '/demande-d-acces' },
+        { label: 'Demander un accès', target: '/contact' },
         {
             label: 'Aide',
             items: [

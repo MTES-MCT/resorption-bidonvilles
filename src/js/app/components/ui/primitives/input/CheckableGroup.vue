@@ -3,7 +3,7 @@
         <InputGroup v-if="title" :title="title" :info="info" :id="id">
             <div :class="'flex flex-col relative'">
                 <div v-if="error" class="absolute h-full bg-error leftBorder" />
-                <div :class="['flex', direction === 'vertical' ? 'flex-col checkableGroup--verticalLayout': 'flex-row checkableGroup--horizontalLayout']">
+                <div :class="['flex', direction === 'vertical' ? 'flex-col checkableGroup--verticalLayout': 'flex-row flex-wrap checkableGroup--horizontalLayout']">
                     <slot />
                 </div>
             </div>
@@ -68,19 +68,19 @@
 </style>
 
 <style>
-    .checkableGroup--horizontalLayout label {
-        @apply mr-6
+    .checkableGroup--horizontalLayout .input {
+        @apply mr-6 mb-2
     }
 
-    .checkableGroup--horizontalLayout label:last-child {
+    .checkableGroup--horizontalLayout .input:last-child {
         @apply mr-0
     }
 
-    .checkableGroup--verticalLayout label {
+    .checkableGroup--verticalLayout .input {
         @apply mb-6
     }
 
-    .checkableGroup--verticalLayout label:last-child {
+    .checkableGroup--verticalLayout .input:last-child {
         @apply mb-0
     }
 </style>
