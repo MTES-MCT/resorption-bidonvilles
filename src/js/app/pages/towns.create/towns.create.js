@@ -195,11 +195,20 @@ export default {
                                     waterComments: {
                                         type: 'textarea',
                                         label: 'Modalités d\'accès',
-                                        description: 'Exemple : type, nombre, distance…',
+                                        description: 'Exemples: Citerne de 100 litres remplie par les pompiers tous les jours, 3 robinets raccordés par la collectivité, borne incendie à 200 mètres...',
                                         mandatory: false,
-                                        condition({ accessToWater }) {
-                                            return accessToWater === 1;
-                                        },
+                                    },
+                                    accessToSanitary: {
+                                        type: 'radio',
+                                        options: yesNoValues,
+                                        label: 'Accès à des toilettes',
+                                        mandatory: true,
+                                    },
+                                    sanitaryComments: {
+                                        type: 'textarea',
+                                        label: 'Modalités d\'accès',
+                                        description: 'Exemples : 3 toilettes sèches, toilettes raccordés au réseau, un bloc sanitaire fourni par la ville...',
+                                        mandatory: false,
                                     },
                                     trashEvacuation: {
                                         type: 'radio',

@@ -233,7 +233,15 @@ export default {
                     }
 
                     const l = shantytown[this.currentLocation.data.type];
-                    return l && `${l.code}` === `${this.currentLocation.data.code}`;
+                    if (!l) {
+                        return true;
+                    }
+
+                    if (l.code === `${this.currentLocation.data.code}`) {
+                        return true;
+                    }
+
+                    return l.main === `${this.currentLocation.data.code}`;
                 });
         },
         filteredShantytowns() {
@@ -373,32 +381,32 @@ export default {
             }
 
             switch (shantytown.policeStatus) {
-            case 'none':
-                justiceStatuses.push({
-                    label: 'Concours de la force publique non demandé',
-                });
-                break;
+                case 'none':
+                    justiceStatuses.push({
+                        label: 'Concours de la force publique non demandé',
+                    });
+                    break;
 
-            case 'requested':
-                justiceStatuses.push({
-                    label: 'Concours de la force publique demandé',
-                    date: shantytown.policeRequestedAt,
-                });
-                break;
+                case 'requested':
+                    justiceStatuses.push({
+                        label: 'Concours de la force publique demandé',
+                        date: shantytown.policeRequestedAt,
+                    });
+                    break;
 
-            case 'granted':
-                justiceStatuses.push({
-                    label: 'Concours de la force publique accordé',
-                    date: shantytown.policeGrantedAt,
-                });
-                break;
+                case 'granted':
+                    justiceStatuses.push({
+                        label: 'Concours de la force publique accordé',
+                        date: shantytown.policeGrantedAt,
+                    });
+                    break;
 
-            default:
-            case null:
-                justiceStatuses.push({
-                    label: 'Concours de la force publique : NC',
-                });
-                break;
+                default:
+                case null:
+                    justiceStatuses.push({
+                        label: 'Concours de la force publique : NC',
+                    });
+                    break;
             }
 
             // status
