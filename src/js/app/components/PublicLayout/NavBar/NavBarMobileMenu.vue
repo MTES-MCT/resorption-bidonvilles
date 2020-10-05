@@ -44,7 +44,6 @@
         },
         methods: {
             checkOutsideClick(event) {
-                console.log('check');
                 if (!this.$el.contains(event.target)) {
                     this.closeMenu();
                 }

@@ -23,7 +23,6 @@
         methods: {
             checkOutsideClick(event) {
                 if (this.isOpen && this.closeModal && !this.$refs.dialog.contains(event.target)) {
-                    console.log('close');
                     this.closeModal();
                 }
             },

@@ -72,7 +72,6 @@
         },
         computed: {
            sticky() {
-               console.log('sticky', this.stickyHeader);
                return this.scrollTop > 200 && this.stickyHeader
            }
         },
