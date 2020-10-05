@@ -2,7 +2,7 @@
     <PublicLayout :stickyHeader="false">
         <PublicContainer class="py-16">
             <div class="max-w-xl mx-auto">
-                <h1 class="text-display-xl">Contactez nous</h1>
+                <h1 class="text-display-xl">Contactez-nous</h1>
 
                 <ValidationObserver ref="form" v-slot="{ handleSubmit, errors, failed }">
                     <form class="max-w-xl mt-12" @submit.prevent="handleSubmit(submitForm)">

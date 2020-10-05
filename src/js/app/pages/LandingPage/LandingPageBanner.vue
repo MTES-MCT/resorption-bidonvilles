@@ -3,7 +3,7 @@
         <PublicContainer>
             <div class="max-w-screen-md mx-auto">
                 <h2 class="text-display-lg text-white "><slot /></h2>
-                <div class="pt-4"><Button variant="primary">{{cta}}</Button></div>
+                <div class="pt-4"><router-link to="/contact"><Button variant="primary">{{cta}}</Button></router-link></div>
             </div>
         </PublicContainer>
     </div>
