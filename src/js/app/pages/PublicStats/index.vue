@@ -13,7 +13,7 @@
             </StatsSection>
 
             <div v-if="numberOfNewUsersPerMonth !== null">
-                <h2 class="text-display-lg text-secondary mt-16">Nouveaux utilisateurs par mois</h2>
+                <h2 class="text-display-lg text-secondary mt-16">Nouveaux utilisateurs depuis {{numberOfNewUsersPerMonth[0].month}}</h2>
                 <TrendChart class="stats-chart" :datasets="usersEvolutionDatasets" :labels="usersEvolutionLabels" :grid="{ verticalLines: true, horizontalLines: true }" :max="usersEvolutionMax" :min="0"></TrendChart>
             </div>
 
@@ -103,7 +103,7 @@
                 }
 
                 const cumulativeData = this.numberOfNewUsersPerMonth.reduce((acc,{ total }, index) => {
-                    return index === 0 ? [parseInt(total, 10)] : [...acc, parseInt(total + acc[acc.length - 1], 10)]
+                    return index === 0 ? [parseInt(total, 10)] : [...acc, parseInt(total, 10) + acc[acc.length - 1]];
                 }, [])
 
                 return [
