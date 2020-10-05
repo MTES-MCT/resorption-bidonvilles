@@ -135,6 +135,7 @@
                 return {
                     xLabels: this.numberOfNewUsersPerMonth.map(({ month }) => month),
                     yLabels: (this.usersEvolutionMax / 10) + 1,
+                    yLabelsTextFormatter: val => val.toFixed(1)
                 };
             },
 
