@@ -19,8 +19,8 @@
                             <Checkbox checkValue="access-request" label="Demander un accès à la plateforme" v-model="commonFields.request_type" variant="card" />
                         </CheckableGroup>
                         <CheckableGroup v-if="isRequestAccess" title="Etes vous un acteur de la résorption des bidonvilles ? " info="Par exemple : un service de l'état, un opérateur associatif, une collectivité locale..." rules="required" id="access_request" direction="row">
-                            <Radio checkValue="yes" label="Oui" v-model="commonFields.is_actor" variant="card" />
-                            <Radio checkValue="no" label="Non" v-model="commonFields.is_actor" variant="card" />
+                            <Radio :checkValue="true" label="Oui" v-model="commonFields.is_actor" variant="card" />
+                            <Radio :checkValue="false" label="Non" v-model="commonFields.is_actor" variant="card" />
                         </CheckableGroup>
                         <CheckableGroup v-if="isRequestAccessAndActor" title="Quelle est votre structure ?" rules="required" id="is_actor" >
                             <Radio v-model="requestAccessFields.organization_category" checkValue="public_establishment" label="Service de l'État, établissement ou organisme public" variant="card"/>
@@ -45,8 +45,8 @@
                                 :associationName.sync="associationFields.association"
                                 :associationTerritory.sync="associationFields.departement"
                                 :associationFunction.sync="associationFields.position"
-                                :newAssociationName.sync="associationFields.newAssociationName"
-                                :newAssociationAcronym.sync="associationFields.newAssociationAbbreviation"
+                                :newAssociationName.sync="associationFields.new_association_name"
+                                :newAssociationAcronym.sync="associationFields.new_association_abbreviation"
                         />
                         <AdministrationForm
                                 v-if="isAdministrationRequest"
@@ -105,7 +105,7 @@
                 return this.commonFields.request_type.includes('access-request')
             },
             isRequestAccessAndActor() {
-                return this.isRequestAccess && this.commonFields.is_actor === 'yes'
+                return this.isRequestAccess && this.commonFields.is_actor
             },
             isPublicEstablishmentRequest() {
                 return this.isRequestAccessAndActor && this.requestAccessFields.organization_category === 'public_establishment'
@@ -126,6 +126,7 @@
               const data = {
                   ...this.commonFields,
                   legal: this.commonFields.legal.length > 0,
+                  is_actor: !!this.is_actor,
                   ...(this.isRequestAccessAndActor ? this.requestAccessFields: {}),
                   ...(this.isPublicEstablishmentRequest ? this.publicEstablishmentFields: {}),
                   ...(this.isTerritorialCollectivityRequest ? this.territorialCollectivityFields: {}),
@@ -142,7 +143,7 @@
                       group: 'notifications',
                       type: 'success',
                       title: 'Succès',
-                      text: 'Votre demande d\'accès a été envoyée',
+                      text: this.isRequestAccessAndActor ? 'Votre demande d\'accès a été envoyée' : 'Votre message a bien été envoyé' ,
                   });
 
               } catch (err) {
@@ -181,8 +182,8 @@
               associationFields: {
                   association: '',
                   departement: '',
-                  newAssociationName: '',
-                  newAssociationAbbreviation: ''
+                  new_association_name: '',
+                  new_association_abbreviation: ''
               },
               administrationFields: {
                   organization_administration: ''
