@@ -54,6 +54,15 @@ export default {
                                         description: 'Saisissez ici l\'adresse du site, puis précisez sa position en déplaçant le point sur la carte.',
                                         mandatory: true,
                                     },
+                                    name: {
+                                        type: 'text',
+                                        label: 'Appellation du site',
+                                        description: 'Exemples : Entrepôt de la Poste, Rond-point du centre...',
+                                        mandatory: false,
+                                        specificProps: {
+                                            maxlength: 35,
+                                        },
+                                    },
                                     addressDetails: {
                                         type: 'text',
                                         label: 'Informations d\'accès',

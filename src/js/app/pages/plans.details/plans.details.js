@@ -3,7 +3,6 @@ import SlideNote from '#app/components/slide-note/slide-note.vue';
 import Map from '#app/components/map/map.vue';
 import { get, close } from '#helpers/api/plan';
 import { hasPermission, get as getConfig } from '#helpers/api/config';
-import { shortAddress } from '#helpers/townHelper';
 import PlanFunding from '#app/components/form/input/planFunding/planFunding.vue';
 import Input from '#app/components/form/input/input.vue';
 import { notify } from '#helpers/notificationHelper';
@@ -114,25 +113,6 @@ export default {
                 center: [this.plan.location.latitude, this.plan.location.longitude],
                 zoom: 15,
             };
-        },
-        details() {
-            if (!this.plan) {
-                return [];
-            }
-
-            if (this.plan.targetedOnTowns === true) {
-                return this.plan.towns.map(town => ({
-                    id: town.detailId,
-                    label: shortAddress(town),
-                }));
-            }
-
-            return [
-                {
-                    id: 'details',
-                    label: 'Suivi du dispositif',
-                },
-            ];
         },
         lastState() {
             if (!this.plan || this.plan.states.length === 0) {

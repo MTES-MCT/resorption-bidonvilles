@@ -281,6 +281,7 @@ export default {
 
             this.edit = {
                 priority: this.town.priority,
+                name: this.town.name,
                 address: {
                     address: {
                         city: this.town.city.name,
@@ -351,6 +352,7 @@ export default {
             const { address } = this.edit.address || {};
 
             edit(this.town.id, {
+                name: this.edit.name,
                 priority: this.edit.priority || null,
                 latitude: coordinates && coordinates[0],
                 longitude: coordinates && coordinates[1],
@@ -570,7 +572,7 @@ export default {
                 date: comment.createdAt,
                 shantytown: {
                     id: this.town.id,
-                    name: this.town.addressSimple || 'Pas d\'adresse précise',
+                    usename: this.town.usename,
                     city: this.town.city.name,
                 },
                 author: {
