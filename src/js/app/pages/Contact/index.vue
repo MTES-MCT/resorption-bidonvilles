@@ -122,11 +122,10 @@
         },
         methods: {
           async submitForm() {
-
               const data = {
                   ...this.commonFields,
                   legal: this.commonFields.legal.length > 0,
-                  is_actor: !!this.is_actor,
+                  is_actor: !!this.commonFields.is_actor,
                   ...(this.isRequestAccessAndActor ? this.requestAccessFields: {}),
                   ...(this.isPublicEstablishmentRequest ? this.publicEstablishmentFields: {}),
                   ...(this.isTerritorialCollectivityRequest ? this.territorialCollectivityFields: {}),
