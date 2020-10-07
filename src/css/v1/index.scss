@@ -401,35 +401,6 @@
     }
   }
 
-  .leaflet-show-addresses {
-    .mapPin:not(.mapPin--result),
-    .mapPin.mapPin--result.mapPin--shantytown {
-      .mapPin-address {
-        visibility: visible;
-      }
-    }
-  }
-
-  .leaflet-show-addresses {
-    .leaflet-marker-custom {
-      > span.address {
-        display: inline;
-        font-size: 14px;
-        padding: 5px 7px;
-        border-radius: 5px;
-      }
-
-      > span.address:before {
-        bottom: -10px;
-        left: 10px;
-      }
-
-      > span.addess:after {
-        display: none;
-      }
-    }
-  }
-
   .leaflet-address-toggler {
     padding: 5px 10px;
     background: white;
@@ -634,3 +605,36 @@
   }
 }
 
+.leaflet-show-addresses {
+  .v1 {
+    .mapPin:not(.mapPin--result),
+    .mapPin.mapPin--result.mapPin--shantytown {
+      .mapPin-address {
+        visibility: visible;
+      }
+    }
+  }
+
+}
+
+.leaflet-show-addresses {
+  .v1 {
+    .leaflet-marker-custom {
+      > span.address {
+        display: inline;
+        font-size: 14px;
+        padding: 5px 7px;
+        border-radius: 5px;
+      }
+
+      > span.address:before {
+        bottom: -10px;
+        left: 10px;
+      }
+
+      > span.addess:after {
+        display: none;
+      }
+    }
+  }
+}
