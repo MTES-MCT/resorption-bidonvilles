@@ -1,5 +1,5 @@
 <template>
-    <PublicLayout>
+    <PublicLayout :stickyHeader="false">
         <PublicContainer class="py-16">
             <div>
                 <h1 class="text-display-xl">Statistiques</h1>
