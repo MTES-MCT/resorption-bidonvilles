@@ -2,8 +2,8 @@
     <div>
         <img class="full-width mx-auto" src="./assets/resorption-bidonvilles-dessin.png" />
         <div class="max-w-screen-sm mx-auto mt-8">
-            <LandingPageResponsiveEmbed videoRatio="50%">
-                <iframe src="https://www.youtube.com/embed/_hC7cZqqK-s" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <LandingPageResponsiveEmbed>
+                <iframe src="https://www.youtube.com/embed/AAD0QoOzIHM?modestbranding=1&autohide=1&showinfo=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </LandingPageResponsiveEmbed>
         </div>
         <div>
