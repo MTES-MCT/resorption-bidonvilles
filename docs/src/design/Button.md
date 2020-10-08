@@ -1,75 +1,28 @@
 # Button
 
 [Specs](https://www.sketch.com/s/6034ddd9-a0d3-4844-adda-bd4c821f24b1/a/P4wOW1)
+<GithubLink docPath="Button.vue">Docs</GithubLink>
+<GithubLink componentPath="Button.vue">Component</GithubLink>
 
 ## Variantes
-
-
-<Button class="m-2">default</Button>
-<Button class="m-2" variant="primary">primary</Button>
-<Button class="m-2" variant="secondary">secondary</Button>
-<Button class="m-2" variant="primaryOutline">primary outline</Button>
-<Button class="m-2" variant="secondaryOutline">secondary outline</Button>
-<Button class="m-2" variant="primaryText">primary text</Button>
-<Button class="m-2" variant="secondaryText">secondary text</Button>
-<Button class="m-2" disabled>primary disabled</Button>
-<Button class="m-2" disabled variant="primaryOutline">primary outline disabled</Button>
-<Button class="m-2" disabled variant="primaryText">primary text disabled</Button>
-
-```
-<Button>Button default</Button>
-<Button variant="primary">Button primary</Button>
-<Button variant="secondary">Button secondary</Button>
-<Button variant="primaryOutline">Button primary outline</Button>
-<Button variant="secondaryOutline">Button primary outline</Button>
-<Button variant="primaryText">Button primary outline</Button>
-<Button variant="secondaryText">Button primary outline</Button>
-```
+<Button-VariantsExample />
+<GithubLink examplePath="Button/VariantsExample.vue">View code</GithubLink>
 
 ## Taille
-<Button size="sm">Button small</Button>
-<Button>Button default</Button>
-<Button size="md">Button medium</Button>
-<Button size="lg">Button large</Button>
-
-```
-<Button size="sm">Button default</Button>
-<Button>Button default</Button>
-<Button size="md">Button medium</Button>
-<Button size="lg">Button large</Button>
-```
+<Button-SizeExample />
+<GithubLink examplePath="Button/SizeExample.vue">View code</GithubLink>
 
 ## Icon Button
-
-<Button icon="users" />
-<Button icon="users" iconPosition="right">Button with right icon</Button>
-<Button icon="users" iconPosition="left">Button with left icon</Button>
-
-```
-<Button icon="users" />
-<Button icon="users" iconPosition="right">Button with right icon</Button>
-<Button icon="users" iconPosition="left">Button with left icon</Button>
-```
+<Button-IconExample />
+<GithubLink examplePath="Button/IconExample.vue">View code</GithubLink>
 
 ## Link Button
-
-<Button variant="primaryText" icon="chevron-right" href="https://www.example.com">Example</Button>
-
-```
-<Button variant="primaryText" icon="chevron-right" href="https://www.example.com">Example</Button>
-
-```
-
+<Button-LinkExample />
+<GithubLink examplePath="Button/LinkExample.vue">View code</GithubLink>
 
 ## Loading Button
-
 <Button-LoadingExample />
-
-```
-<Button variant="primary" :loading="loading" @click="onClick">Click me</Button>
-<Button variant="primaryOutline" :loading="loading" @click="onClick">Click me</Button>
-<Button variant="primaryText" :loading="loading" @click="onClick">Click me</Button>
-```
+<GithubLink examplePath="Button/LoadingExample.vue">View code</GithubLink>
 
 
 
