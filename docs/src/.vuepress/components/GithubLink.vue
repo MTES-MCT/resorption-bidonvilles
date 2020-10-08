@@ -1,5 +1,7 @@
 <template>
-    <a :href="url" target="_blank"><slot /></a>
+    <div>
+        <a :href="url" target="_blank"><slot>{{defaultText}}</slot></a>
+    </div>
 </template>
 
 <script>
@@ -28,8 +30,19 @@
                 if (this.componentPath) {
                     return `https://github.com/MTES-MCT/action-bidonvilles/tree/design-system/src/js/app/components/ui/${this.componentPath}`
                 }
+            },
+            defaultText() {
+                if (this.examplePath) {
+                    return `View code snippet`
+                }
 
+                if (this.docPath) {
+                    return `Edit Docs`
+                }
 
+                if (this.componentPath) {
+                    return `Component Code`
+                }
             }
         }
 
