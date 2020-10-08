@@ -12,6 +12,7 @@
                         :getResultValue="resultValue"
                         placeholder="Search Wikipedia"
                         rules="required"
+                        :loading="loading"
 
                 />
                 <div v-if="result">result: {{result.pageid}} - {{result.title}}</div>
@@ -27,6 +28,7 @@
           return {
               input: 'test',
               result: '',
+              loading: false
           }
         },
         methods: {
@@ -38,23 +40,28 @@
             },
             search(input) {
                 this.input = input;
-                console.log(input);
                 const wikiUrl = 'https://en.wikipedia.org'
                 const wikiParams = 'action=query&list=search&format=json&origin=*'
+
+
 
                 return new Promise(resolve => {
                     const url = `${wikiUrl}/w/api.php?${wikiParams}&srsearch=${encodeURI(
                         input
                     )}`
 
-                    if (input.length < 3) {
+                    if (!input.length) {
                         return resolve([])
                     }
+
+                    this.loading = true
 
                     fetch(url)
                         .then(response => response.json())
                         .then(data => {
+
                             resolve(data.query.search)
+                            this.loading = false
                         })
                 })
             },
