@@ -18,16 +18,16 @@
 
 <script>
     export default {
-        name: 'Checkbox',
+        name: 'Radio',
         props: {
             checkValue: {
-                type: String
+                type: [String, Boolean, Number]
             },
             label: {
                 type: String
             },
             value: {
-                type: String
+                type: [String, Boolean, Number]
             },
             info: {
                 type: String

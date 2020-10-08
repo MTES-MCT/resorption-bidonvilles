@@ -9,8 +9,8 @@
             </optgroup>
         </Select>
         <div v-if="associationName === 'Autre'">
-            <TextInput label="Précisez le nom complet" :value="newAssociationName" @input="val => $emit('update:newAssociationName', val)" rules="required" id="newAssociationName" />
-            <TextInput label="Précisez l'acronyme, si besoin" :value="newAssociationAcronym" @input="val => $emit('update:newAssociationAcronym', val)" rules="required" id="newAssociationAbbreviation"/>
+            <TextInput label="Précisez le nom complet" :value="newAssociationName" @input="val => $emit('update:newAssociationName', val)" rules="required" id="new_association_name" />
+            <TextInput label="Précisez l'acronyme, si besoin" :value="newAssociationAcronym" @input="val => $emit('update:newAssociationAcronym', val)" id="new_association_abbreviation"/>
         </div>
         <div>
             <Select label="Territoire de rattachement" :value="associationTerritory" @input="val => $emit('update:associationTerritory', val)" rules="required" id="departement">
