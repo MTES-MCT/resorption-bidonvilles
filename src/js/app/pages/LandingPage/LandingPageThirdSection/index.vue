@@ -11,12 +11,11 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 md:gap-x-16" >
-                <LandingPageBilanBlock icon="users" :text="$t('landingPage.thirdSection.bilan.1.text')" :info="$t('landingPage.thirdSection.bilan.1.info')" />
-                <LandingPageBilanBlock icon="home" :text="$t('landingPage.thirdSection.bilan.2.text')" :info="$t('landingPage.thirdSection.bilan.2.info')" />
-                <LandingPageBilanBlock icon="hand-holding-medical" :text="$t('landingPage.thirdSection.bilan.3.text')" :info="$t('landingPage.thirdSection.bilan.3.info')" />
-                <LandingPageBilanBlock icon="map-marker-alt" :text="$t('landingPage.thirdSection.bilan.4.text')" :info="$t('landingPage.thirdSection.bilan.4.info')" />
+                <LandingPageBilanBlock icon="users" :text="$t('landingPage.thirdSection.bilan.1.text')"  />
+                <LandingPageBilanBlock icon="hand-holding-medical" :text="$t('landingPage.thirdSection.bilan.3.text')" />
+                <LandingPageBilanBlock icon="map-marker-alt" :text="$t('landingPage.thirdSection.bilan.4.text')" />
+                <LandingPageBilanBlock icon="file-signature" :text="$t('landingPage.thirdSection.bilan.6.text')" />
                 <LandingPageBilanBlock icon="book" :text="$t('landingPage.thirdSection.bilan.5.text')" :info="$t('landingPage.thirdSection.bilan.5.info')" />
-                <LandingPageBilanBlock icon="file-signature" :text="$t('landingPage.thirdSection.bilan.6.text')" :info="$t('landingPage.thirdSection.bilan.6.info')" />
             </div>
             <div class="text-center mt-8">
                 <a href="https://www.gouvernement.fr/sites/default/files/contenu/piece-jointe/2019/09/bilan_campements_2018_vecran.pdf">
