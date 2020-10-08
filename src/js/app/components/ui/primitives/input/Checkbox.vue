@@ -23,7 +23,7 @@
         name: 'Checkbox',
         props: {
             checkValue: {
-                type: String
+                type: [String, Boolean, Number]
             },
             label: {
                 type: String
