@@ -1,0 +1,7 @@
+<template>
+    <div>
+        <Button icon="users" />
+        <Button icon="users" iconPosition="right">Button with right icon</Button>
+        <Button icon="users" iconPosition="left">Button with left icon</Button>
+    </div>
+</template>

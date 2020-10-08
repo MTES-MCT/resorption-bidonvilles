@@ -76,6 +76,8 @@ module.exports = {
             'components/SidePanel',
             'components/Callout',
             'components/Notification',
+            'components/Table',
+            'components/Spinner',
           ]
         },
         {
@@ -87,18 +89,7 @@ module.exports = {
             'examples/Shantytown',
             'examples/StateDesignSystem',
           ]
-        },
-        {
-          title: 'TODO',
-          collapsable: false,
-          children: [
-            'todo/Panel',
-
-            'todo/Table',
-            'todo/Map',
-          ]
-        },
-
+        }
       ],
     }
   },
