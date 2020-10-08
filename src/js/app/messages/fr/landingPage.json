@@ -79,28 +79,20 @@
     },
     "bilan": {
       1: {
-        "text": "10 000 bénéficiaires",
-        "info": "des actions"
-      },
-      2: {
-        "text": "17 sites résorbés",
-        "info": "+10 en 1 an"
+        "text": "8 600 bénéficiaires des actions",
       },
       3: {
-        "text": "1 200 personnes relogées",
-        "info": "+100 en 1 an"
+        "text": "1 000 personnes relogées",
       },
       4: {
-        "text": "3 000 enfants scolarisés",
-        "info": "+100 en 1 an"
+        "text": "1 350 enfants scolarisés",
       },
       5: {
-        "text": "7 0000 bénéficiaires d'un accompagnement santé",
-        "info": "+100 en 1 an"
+        "text": "2 040 bénéficiaires",
+        "info": "d'un accompagnement santé"
       },
       6: {
-        "text": "230 contrats de travail signés",
-        "info": "+100 en 1 an"
+        "text": "615 contrats de travail signés",
       }
     },
     "cta": "Télécharger le dernier bilan",
