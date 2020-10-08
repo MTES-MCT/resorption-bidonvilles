@@ -1,7 +1,9 @@
+import AutocompleteVue from '@trevoreyre/autocomplete-vue';
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
 import * as rules from 'vee-validate/dist/rules';
 import { messages } from 'vee-validate/dist/locale/fr';
 
+import Notifications from 'vue-notification';
 import Button from './primitives/Button.vue';
 import TextInput from './primitives/input/TextInput.vue';
 import TextArea from './primitives/input/TextArea.vue';
@@ -19,6 +21,8 @@ import Dropdown from './Dropdown.vue';
 import Modal from './Modal.vue';
 import Callout from './Callout.vue';
 import SidePanel from './SidePanel.vue';
+import Autocompleter from './Autocompleter.vue';
+import Datepicker from './Datepicker.vue';
 import CheckableGroup from './primitives/input/CheckableGroup.vue';
 
 
@@ -96,6 +100,16 @@ export default function (vueInstance) {
         Callout,
     );
     vueInstance.component(
+        'AutocompleterV2',
+        Autocompleter,
+    );
+    vueInstance.component(
+        'DatepickerV2',
+        Datepicker,
+    );
+
+    vueInstance.use(Notifications);
+    vueInstance.component(
         'ValidationProvider',
         ValidationProvider,
     );
@@ -104,6 +118,8 @@ export default function (vueInstance) {
         'ValidationObserver',
         ValidationObserver,
     );
+
+    vueInstance.component('AutocompleteVue', AutocompleteVue);
 
     // No message specified.
 

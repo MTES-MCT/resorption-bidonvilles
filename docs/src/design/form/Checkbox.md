@@ -3,7 +3,7 @@
 
 ## Example
 
-<CheckboxExample />
+<Checkbox-Example />
 
 ```
 <div>
@@ -18,7 +18,7 @@
 
 ## With CheckableGroup
 
-<CheckboxGroupExample />
+<Checkbox-GroupExample />
 
 ```
 <CheckableGroup title="Titre de la section">

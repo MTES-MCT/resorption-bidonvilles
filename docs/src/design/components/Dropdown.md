@@ -1,7 +1,7 @@
 # DropDown / Menu
 
 <div>
-    <MenuExampleWithDropdown />
+    <Menu-WithDropdownExample />
 </div>
 
 ```

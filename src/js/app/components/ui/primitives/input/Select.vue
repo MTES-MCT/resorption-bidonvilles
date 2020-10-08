@@ -16,13 +16,16 @@
 </template>
 
 <script>
+    import filteredProps from '../../mixins/filteredProps';
     import InputLabel from './utils/InputLabel'
     import InputWrapper from './utils/InputWrapper'
     import InputInfo from './utils/InputInfo'
     import InputError from './utils/InputError'
+    import getInputClasses from './utils/getInputClasses';
 
     export default {
         name: "Select",
+        mixins: [filteredProps],
         props: {
             label: {
                 type: String
@@ -53,8 +56,8 @@
         computed: {
             classes() {
                 return {
-                    state: ['block appearance-none bg-G200 border-b-2 border-black rounded rounded-b-none w-full py-2 px-4 outlinePadding', this.error && 'border-error'],
-                    default: ['appearance-none border-2 border-G200 rounded-md w-full py-2 px-4 outline-none focus:border-primary'],
+                    state: ['appearance-none', ...getInputClasses('state', this.error)],
+                    default: ['appearance-none', ...getInputClasses('default')]
                 }[this.variant]
             }
         },
@@ -66,9 +69,3 @@
         }
     }
 </script>
-
-<style scoped>
-    .outlinePadding {
-        outline-offset: 4px
-    }
-</style>

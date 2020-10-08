@@ -69,34 +69,33 @@ module.exports = {
           title: 'Components',
           collapsable: false,
           children: [
+            'components/Autocomplete',
+            'components/DatePicker',
             'components/Dropdown',
             'components/Modal',
             'components/SidePanel',
             'components/Callout',
+            'components/Notification',
           ]
         },
         {
           title: 'Examples',
           collapsable: false,
           children: [
-            'examples/LoginForm',
-            'examples/UserForm',
-            'examples/TestForm',
-            'examples/ShantytownForm',
+            'examples/Grid',
+            'examples/Login',
+            'examples/Shantytown',
+            'examples/StateDesignSystem',
           ]
         },
         {
           title: 'TODO',
           collapsable: false,
           children: [
-            'todo/Autocomplete',
             'todo/Panel',
-            'todo/Callout',
-            'todo/Notification',
-            'todo/SearchBar',
+
             'todo/Table',
             'todo/Map',
-            'todo/DatePicker',
           ]
         },
 
@@ -109,7 +108,7 @@ module.exports = {
    */
   plugins: [
     '@vuepress/plugin-back-to-top',
-    '@vuepress/plugin-medium-zoom',
+    '@vuepress/plugin-medium-zoom'
   ],
   postcss: {
     plugins: [require('tailwindcss')('./tailwind.config.js'), require('autoprefixer')],

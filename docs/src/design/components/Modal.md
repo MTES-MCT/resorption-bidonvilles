@@ -1,6 +1,6 @@
 # Modal
 
-<ModalExample />
+<Modal-Example/>
 
 ```
 <div>

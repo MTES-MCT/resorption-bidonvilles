@@ -23,7 +23,7 @@
         name: 'CheckboxExample',
         data() {
             return {
-                radioValue: []
+                radioValue: null
             }
 
         }

@@ -5,7 +5,7 @@
             <input
                    :id="id"
                    @input="$emit('input', $event.target.value)"
-                   v-bind="$props"
+                   v-bind="filteredProps"
                    :class="classes" />
             <InputError>{{ errors[0] }}</InputError>
         </ValidationProvider>
@@ -13,18 +13,18 @@
 </template>
 
 <script>
+import filteredProps from '../../mixins/filteredProps';
 import InputLabel from './utils/InputLabel'
 import InputWrapper from './utils/InputWrapper'
 import InputInfo from './utils/InputInfo'
 import InputError from './utils/InputError'
+import getInputClasses from './utils/getInputClasses';
 
 export default {
     name: "TextInput",
+    mixins: [filteredProps],
     props: {
         label: {
-            type: String
-        },
-        error: {
             type: String
         },
         info: {
@@ -57,8 +57,8 @@ export default {
     computed: {
         classes() {
             return {
-                state: ['bg-G200 border-b-2 border-black rounded rounded-b-none w-full py-2 px-4 outlinePadding', this.error && 'border-error'],
-                default: ['border-2 border-G200 rounded-md w-full py-2 px-4 outline-none focus:border-primary'],
+                state: [...getInputClasses('state', this.error)],
+                default: getInputClasses('default')
             }[this.variant]
         }
     },
@@ -70,9 +70,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-    .outlinePadding {
-        outline-offset: 4px
-    }
-</style>
