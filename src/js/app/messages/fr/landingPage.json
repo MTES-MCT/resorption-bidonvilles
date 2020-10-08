@@ -11,7 +11,7 @@
     "features": {
       "position": "L'information utile sur les sites en un clin d'oeil",
       "actions": "L’essentiel des actions accessible à tout moment",
-      "exchange": "Des échanges facilités entres les acteurs"
+      "exchange": "Des échanges facilités entre les acteurs"
     },
     "context": {
       "title": "Résorption-bidonvilles,",
@@ -25,7 +25,7 @@
       },
       "2": {
         "text": "La plateforme a fiabilisé l’information, parce que le tableau Excel n’était pas partagé. Plus on aura des outils collaboratifs, mieux ça sera.",
-        "author": "Ville de poitiers"
+        "author": "Ville de Poitiers"
       },
       "3": {
         "text": "J’ai pu orienter la famille d’une personne que j’accompagne vers une maison des solidarités à partir de la localisation de leur bidonville.",
@@ -54,7 +54,7 @@
       3: {
         "line1": "Majoritairement",
         "line2": "européens",
-        "line3": "Roumains et Bulgare"
+        "line3": "Roumains et Bulgares"
       }
     },
     "firstParagraph": "Un bidonville est un terrain, une friche ou un immeuble bâti généralement dépourvu des services de base (eau, électricité, gestion des déchets) et occupé illégalement par plusieurs familles.",
