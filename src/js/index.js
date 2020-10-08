@@ -1,6 +1,5 @@
 // load the whole betagouv template
 import '@openfonts/fira-code_all';
-import 'template.data.gouv.fr/dist/main.min.css';
 import 'simplebar/dist/simplebar.min.css';
 import '../css/index.scss';
 
@@ -10,6 +9,7 @@ import 'regenerator-runtime/runtime';
 
 // import vue
 import Vue from 'vue';
+import VueI18n from 'vue-i18n';
 import Notifications from 'vue-notification';
 import VueRouter from 'vue-router';
 import TrendChart from 'vue-trend-chart';
@@ -17,6 +17,8 @@ import TrendChart from 'vue-trend-chart';
 // import font-awesome
 import './icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import messages from './app/messages';
+import registerGlobalComponents from './app/components/ui/registerGlobalComponents';
 import VueMatomo from './matomo/matomo';
 import { router } from '#app/router';
 
@@ -80,6 +82,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 Vue.use(TrendChart);
 Vue.use(VueRouter);
+Vue.use(VueI18n);
 Vue.use(Notifications);
 Vue.use(VueMatomo, {
     // Configure your matomo server and site by providing
@@ -111,8 +114,18 @@ Vue.use(VueMatomo, {
     debug: true,
 });
 
+// Register styleguide components
+registerGlobalComponents(Vue);
+
+const i18n = new VueI18n({
+    locale: 'fr',
+    messages,
+
+});
+
 Vue.createElement = obj => new Vue(obj);
 Vue.createElement({
     el: '#app',
     router,
+    i18n,
 });

@@ -1,32 +1,35 @@
-@import '/css/config/colors.scss';
+@import '/css/v1/config/colors.scss';
 
-.directory-search {
-    max-width: 500px;
-    margin-bottom: 20px;
-}
+.v1 {
+    .directory-search {
+        max-width: 500px;
+        margin-bottom: 20px;
+    }
 
-.directoryColumn-role {
-    white-space: nowrap;
-}
+    .directoryColumn-role {
+        white-space: nowrap;
+    }
 
-.directory-figures {
-    margin: 0;
-    font-weight: bold;
-}
+    .directory-figures {
+        margin: 0;
+        font-weight: bold;
+    }
 
-.rb-table.directory {
-    min-height: auto;
-}
+    .rb-table.directory {
+        min-height: auto;
+    }
 
-.table {
-    .table-col--contacts {
-        text-align: right;
+    .table {
+        .table-col--contacts {
+            text-align: right;
 
-        img,
-        svg {
-            color: $ENDEAVOUR_BLUE;
-            margin-left: 5px;
-            vertical-align: middle;
+            img,
+            svg {
+                color: $ENDEAVOUR_BLUE;
+                margin-left: 5px;
+                vertical-align: middle;
+            }
         }
     }
 }
+

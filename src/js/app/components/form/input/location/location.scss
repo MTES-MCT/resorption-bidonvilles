@@ -1,61 +1,63 @@
-.location {
-    position: relative;
-    width: 100%;
-    height: 500px;
-}
-
-.location-map {
-    width: 100%;
-    height: 100%;
-}
-
-.location-tutorial {
-    position: absolute;
-    z-index: 2000;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.4);
-
-    &:before {
-        display: inline-block;
-        content: '';
-        height: 100%;
-        vertical-align: middle;
+.v1 {
+    .location {
+        position: relative;
+        width: 100%;
+        height: 500px;
     }
-}
 
-.location-tutorialWrapper {
-    width: 99%;
-    display: inline-block;
-    vertical-align: middle;
-    text-align: center;
+    .location-map {
+        width: 100%;
+        height: 100%;
+    }
 
-    color: #fff;
-}
+    .location-tutorial {
+        position: absolute;
+        z-index: 2000;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.4);
 
-.location-tutorialTitle {
-    margin: 0;
-    padding: 0;
-    text-transform: uppercase;
-    font-size: 1.5rem;
-}
+        &:before {
+            display: inline-block;
+            content: '';
+            height: 100%;
+            vertical-align: middle;
+        }
+    }
 
-.location-tutorialDescription {
-    margin: 10px 0;
-    padding: 0;
-}
+    .location-tutorialWrapper {
+        width: 99%;
+        display: inline-block;
+        vertical-align: middle;
+        text-align: center;
 
-.location-tutorialTitle,
-.location-tutorialDescription {
-    padding: 4px 20px;
-    display: inline-block;
-    text-shadow: 1px 1px 5px #000;
-    background: rgba(0,83,179, 0.3);
-}
+        color: #fff;
+    }
 
-.location-tutorialButton {
-    margin: 40px 0 0;
-    padding: 0;
+    .location-tutorialTitle {
+        margin: 0;
+        padding: 0;
+        text-transform: uppercase;
+        font-size: 1.5rem;
+    }
+
+    .location-tutorialDescription {
+        margin: 10px 0;
+        padding: 0;
+    }
+
+    .location-tutorialTitle,
+    .location-tutorialDescription {
+        padding: 4px 20px;
+        display: inline-block;
+        text-shadow: 1px 1px 5px #000;
+        background: rgba(0,83,179, 0.3);
+    }
+
+    .location-tutorialButton {
+        margin: 40px 0 0;
+        padding: 0;
+    }
 }

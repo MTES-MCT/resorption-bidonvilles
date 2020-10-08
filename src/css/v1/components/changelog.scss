@@ -1,0 +1,30 @@
+@import '/css/v1/config/colors.scss';
+
+.changelog-name {
+    font-weight: bold;
+    color: $EASTERN_BLUE;
+}
+
+.changelog-oldValue {
+    position: relative;
+    color: $REGENT_GRAY;
+
+    &:before {
+        height: 1px;
+        width: 100%;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        background: $RED;
+        content: '';
+        display: block;
+    }
+}
+
+.changelog-newValue {
+    color: $BLACK;
+}
+
+.changelog-value--unknown {
+    color: $REGENT_GRAY;
+}

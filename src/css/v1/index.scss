@@ -1,0 +1,654 @@
+/* global rules */
+
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("v1/fonts/Source Sans Pro/SourceSansPro-Regular.otf");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("v1/fonts/Source Sans Pro/SourceSansPro-Bold.otf");
+  font-weight: 800;
+}
+
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("v1/fonts/Source Sans Pro/SourceSansPro-It.otf");
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Evolventa";
+  src: url("v1/fonts/Evolventa/Evolventa-Regular.ttf");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Evolventa";
+  src: url("v1/fonts/Evolventa/Evolventa-Bold.ttf");
+  font-weight: 800;
+}
+
+/* Variables definition */
+:root {
+  /* Colors */
+  --blue: #0053b3;
+  --light-blue: #006be6;
+  --dark-blue: #003b80;
+  --darker-blue: #00234d;
+  --lighter-blue: #b4e1fa;
+  --white: #fff;
+  --lightest-grey: #fafbfc;
+  --lighter-grey: #ebeff3;
+  --light-grey: #c9d3df;
+  --grey: #adb9c9;
+  --dark-grey: #8393a7;
+  --darker-grey: #53657d;
+  --darkest-grey: #26353f;
+  --black: #1c1c1c;
+  --green: #03bd5b;
+  --light-green: #daf5e7;
+  --orange: #ff9947;
+  --dark-orange: #cc5c00;
+  --light-orange: #fff0e4;
+  --red: #d63626;
+  --dark-red: #ab2b1e;
+  --light-red: rgba(239,172,166,0.45882);
+
+  /* Breakpoints */
+  --mobile-min: 400px;
+  --mobile-max: 549px;
+  --phablet-min: 550px;
+  --phablet-max: 749px;
+  --tablet-min: 750px;
+  --tablet-max: 999px;
+  --desktop-min: 1000px;
+
+  /* Spaces */
+  --space-xxs: 0.25em;
+  --space-xs: 0.5em;
+  --space-s: 1em;
+  --space-m: 1.5em;
+  --space-l: 2em;
+  --space-xl: 3em;
+
+  /* Theme */
+  --theme-primary: var(--blue);
+  --theme-primary-light: var(--light-blue);
+  --theme-primary-lighter: var(--lighter-blue);
+  --theme-primary-dark: var(--dark-blue);
+  --theme-primary-darker: var(--darker-blue);
+  --theme-secondary: var(--blue);
+  --theme-secondary-darken: var(--dark-blue);
+  --theme-border: var(--grey);
+  --theme-border-lighter: var(--light-grey);
+  --theme-border-active: var(--light-blue);
+  --theme-border-radius: 3px;
+  --theme-background-white: var(--white);
+  --theme-background-grey: var(--lighter-grey);
+  --theme-background-color: var(--blue);
+  --theme-background-color-dark: var(--darker-blue);
+  --theme-background-gradient: linear-gradient(to left, var(--blue), var(--dark-blue));
+  --theme-background-dark: var(--black);
+  --theme-box-shadow: 0 1px 2px rgba(201, 211, 223, 0.2);
+  --theme-label-text: var(--darker-grey);
+  --theme-light-text: var(--white);
+  --theme-dark-text: var(--darkest-grey);
+  --theme-success-border: var(--green);
+  --theme-success-bg: var(--light-green);
+  --theme-warning-border: var(--orange);
+  --theme-warning-bg: var(--light-orange);
+  --theme-error-border: var(--red);
+  --theme-error-bg: var(--light-red);
+  --theme-info-border: var(--light-blue);
+  --theme-info-bg: var(--lighter-blue);
+}
+
+.v1 {
+  font-family: Fira Sans, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+
+  @import "./template";
+  @import './config/colors.scss';
+  @import './components/alert.scss';
+  @import './components/badge.scss';
+  @import './components/block.scss';
+  @import './components/carousel.scss';
+  @import './components/comment.scss';
+  @import './components/changelog.scss';
+  @import './components/dataSection.scss';
+  @import './components/list.scss';
+  @import './components/note.scss';
+  @import './components/notification.scss';
+  @import './components/page.scss';
+  @import './components/pageheader.scss';
+  @import './components/pagination.scss';
+  @import './components/popin.scss';
+  @import './components/role.scss';
+  @import './components/sidepanel.scss';
+  @import './components/switch.scss';
+  @import './components/table.scss';
+  @import './components/userCard.scss';
+  @import './components/userpost.scss';
+
+  img {
+    display: inline-block;
+  }
+
+  .icon {
+    vertical-align: initial;
+  }
+
+  .leaflet-control-zoom a {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-decoration: none;
+    color: black;
+    border-radius: 2px;
+  }
+
+  p {
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+  }
+
+
+  body,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+      font-family: "Fira Sans", Arial, sans-serif;
+  }
+
+
+
+  .page--withMargin {
+    padding-bottom: 50px;
+  }
+
+  label.error,
+  span.error {
+    color: #d63626;
+    font-weight: bold;
+  }
+
+  .mandatory {
+    font-weight: bold;
+    color: #d63626;
+  }
+
+  p.error {
+    margin-top: 0;
+
+    & > ul {
+      margin-top: 0;
+      color: #d63626;
+    }
+  }
+
+  label.error.message {
+    font-weight: normal;
+    font-style: italic;
+  }
+
+  .error > ul {
+    color: #d63626;
+  }
+
+  select {
+    background-size: 15px 15px;
+  }
+
+  .section {
+    margin-top: 50px;
+    padding: 0;
+  }
+
+  .main-pane {
+    padding: 0;
+  }
+
+  .notification > .spinner {
+    vertical-align: middle;
+    margin-right: 10px;
+  }
+
+  .panel__header > h3 > a {
+    color: inherit;
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .actionButton {
+    padding: 3px 10px;
+    color: white;
+    background: #006be6;
+    border-radius: 3px;
+    border: none;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+  }
+
+  button:disabled,
+  button:disabled:hover {
+    background-color: rgba(0, 83, 179, 0.5);
+    cursor: default;
+  }
+
+  .customNotifications {
+    .notification-wrapper {
+      margin-top: 50px;
+    }
+
+    .vue-notification,
+    .vue-notification-template {
+      display: flex;
+      display: -webkit-box;
+      display: -ms-flexbox;
+
+      font-size: 1.1rem;
+      padding: 30px 10px;
+      margin: 0 5px 5px;
+      width: 400px;
+      border-radius: 5px;
+      text-align: center;
+
+      color: #ffffff;
+      background: #44A4FC;
+      border-left: 5px solid #187FE7;
+
+      .notification-icon {
+        padding-left: 20px;
+        text-align: center;
+
+        &:before {
+          content: '';
+          display: inline-block;
+          width: 70px;
+          height: 70px;
+          background: #fff;
+          -webkit-mask: url('/img/check.svg') no-repeat center;
+          mask: url('/img/check.svg') no-repeat center;
+        }
+      }
+
+      .notification-content {
+        flex-grow: 1;
+        -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+
+        display: flex;
+        display: -webkit-box;
+        display: -ms-flexbox;
+
+        flex-direction: column;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+
+        justify-content: center;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+      }
+
+      &.success {
+        background: #68CD86;
+        border-left-color: #42A85F;
+      }
+    }
+  }
+
+  .leaflet-marker-custom {
+    > span.address {
+      display: block;
+      position: relative;
+      color: #fff;
+      width: 30px;
+      height: 30px;
+      font-size: 0px;
+      border-radius: 50%;
+      white-space: nowrap;
+    }
+
+    > span.address:after {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -10px;
+      margin-left: -10px;
+      content: '';
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    > span.address > i {
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 10px solid transparent;
+      position: absolute;
+      bottom: -6px;
+      left: 5px;
+    }
+
+    > span.water > img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-left: -1px;
+      width: 20px;
+    }
+  }
+
+  .mapPin {
+    display: flex;
+    align-items: center;
+
+    .mapPin-wrapper {
+      border-radius: 50%;
+      flex-shrink: 0;
+      text-align: center;
+
+      .mapPin-marker {
+        display: inline-block;
+        width: 1.6rem;
+        height: 2.1rem;
+        flex-shrink: 0;
+        -webkit-mask-image: url(/img/map-marker.svg);
+        mask-image: url(/img/map-marker.svg);
+      }
+
+      .mapPin-water {
+        position: absolute;
+        z-index: 10;
+        margin-top: 0.2rem;
+        margin-left: 0.2rem;
+        width: 1.25rem;
+        height: 1.25rem;
+        background: white;
+        border-radius: 50%;
+
+        > img {
+          width: 100%;
+          height: auto;
+        }
+      }
+    }
+
+    .mapPin-address {
+      visibility: hidden;
+      text-align: left;
+      margin-left: 0.3rem;
+      font-size: 1rem;
+      padding: 0.1rem 0.5rem;
+      background: rgba(255, 255, 255, 0.65);
+      white-space: nowrap;
+    }
+
+    &.mapPin--result.mapPin--street {
+      .mapPin-address {
+        visibility: visible;
+        color: red;
+      }
+    }
+
+    &.mapPin--result.mapPin--shantytown {
+      .mapPin-address {
+        visibility: visible;
+      }
+
+      .mapPin-wrapper {
+        padding-top: 0.5rem;
+        width: 3.5rem;
+        height: 3.5rem;
+        border: 3px solid red;
+      }
+    }
+  }
+
+  .leaflet-address-toggler {
+    padding: 5px 10px;
+    background: white;
+    border-radius: 5px;
+    border: 2px solid rgba(0,0,0,0.2);
+  }
+
+  .leaflet-legend {
+    padding: 5px 10px;
+    background: white;
+    border-radius: 5px;
+    border: 2px solid rgba(0,0,0,0.2);
+
+    > h1 {
+      margin: 5px 0 0;
+      padding: 0;
+      font-size: 1rem;
+    }
+
+    > p > span {
+      display: inline-block;
+      margin-right: 5px;
+      width: 15px;
+      height: 15px;
+      vertical-align: middle;
+      background: red;
+      border-radius: 3px;
+    }
+  }
+
+  .alert {
+    position: fixed;
+    z-index: 10000;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.5);
+
+    .wrapper {
+      position: absolute;
+      padding: 0 40px 40px;
+      left: 100px;
+      right: 100px;
+      top: 100px;
+      bottom: 100px;
+      overflow-y: auto;
+      background: white;
+    }
+  }
+
+  .link {
+    text-decoration: none;
+    font-weight: bold;
+    color: $ENDEAVOUR_BLUE;
+    cursor: pointer;
+  }
+
+  .link:hover {
+    text-decoration: underline;
+  }
+
+  .fieldType {
+    > i {
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      border-radius: 3px;
+      vertical-align: middle;
+    }
+
+    > span {
+      margin-left: 5px;
+      white-space: normal;
+      display: inline-block;
+      vertical-align: middle;
+      max-width: 90px;
+      line-height: 20px;
+    }
+  }
+
+  .link--secondary {
+    color: #8393a7;
+  }
+
+  .link--disabled {
+    cursor: default;
+    color: #ccc;
+    font-weight: normal;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .mail:after {
+    content: attr(data-name) "@" attr(data-domain) "." attr(data-tld);
+  }
+
+  .subtitle {
+    color: $EASTERN_BLUE;
+    font-weight: bold;
+  }
+
+  .background--gray {
+    background: $MYSTIC;
+  }
+
+  .bordered--right {
+    border-right: 1px solid $LIGTHER_GREY;
+  }
+
+  .bordered--bottom {
+    border-bottom: 1px solid $LIGTHER_GREY;
+  }
+
+  table.bordered {
+    margin: 0;
+    padding: 0;
+    border-collapse: collapse;
+
+    td,
+    th {
+      padding: 5px 0;
+      border-bottom: 1px solid $LIGTHER_GREY;
+    }
+
+    th {
+      text-align: left;
+    }
+
+    th:first-child {
+      padding-right: 30px;
+    }
+  }
+
+  .rbTag {
+    padding: 0 10px;
+    margin-right: 5px;
+    border-radius: 3px;
+    font-weight: bold;
+    background: $PATTENS_BLUE;
+  }
+
+  .rbTag--warning {
+    background: $SERENADE;
+  }
+
+  .rbTag--error {
+    background: $SHILO;
+  }
+
+  .locationPoint {
+    &:before {
+      margin-right: 7px;
+      margin-bottom: 5px;
+      display: inline-block;
+      content: '';
+      width: 20px;
+      height: 26px;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
+      background: $ENDEAVOUR_BLUE;
+      -webkit-mask: url('/img/map-marker-alt.svg') no-repeat center;
+      mask: url('/img/map-marker-alt.svg') no-repeat center;
+      vertical-align: middle;
+    }
+
+    color: $ENDEAVOUR_BLUE;
+    font-weight: bold;
+  }
+
+  .user {
+    display: flex;
+
+    &:before {
+      margin-right: 7px;
+      display: inline-block;
+      content: '';
+      width: 20px;
+      height: 26px;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
+      background: $ENDEAVOUR_BLUE;
+      -webkit-mask: url('/img/user.svg') no-repeat center;
+      mask: url('/img/user.svg') no-repeat center;
+    }
+
+    color: $ENDEAVOUR_BLUE;
+    font-weight: bold;
+  }
+
+  .divider {
+    margin: 10px 0;
+    border-top: 1px solid $LIGTHER_GREY;
+  }
+
+  .align--right {
+    text-align: right;
+  }
+}
+
+.leaflet-show-addresses {
+  .v1 {
+    .mapPin:not(.mapPin--result),
+    .mapPin.mapPin--result.mapPin--shantytown {
+      .mapPin-address {
+        visibility: visible;
+      }
+    }
+  }
+
+}
+
+.leaflet-show-addresses {
+  .v1 {
+    .leaflet-marker-custom {
+      > span.address {
+        display: inline;
+        font-size: 14px;
+        padding: 5px 7px;
+        border-radius: 5px;
+      }
+
+      > span.address:before {
+        bottom: -10px;
+        left: 10px;
+      }
+
+      > span.addess:after {
+        display: none;
+      }
+    }
+  }
+}

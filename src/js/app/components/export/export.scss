@@ -1,7 +1,10 @@
-@import '/css/config/colors.scss';
+@import '/css/v1/config/colors.scss';
 
-.option-covid_comments {
-    > label {
-        color: $RED;
+.v1 {
+    .option-covid_comments {
+        > label {
+            color: $RED;
+        }
     }
 }
+

@@ -160,27 +160,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.table thead th:not(:first-of-type) {
-  text-align: center;
-}
+.v1 {
+  .table thead th:not(:first-of-type) {
+    text-align: center;
+  }
 
-.table tbody th {
-  font-weight: bold;
+  .table tbody th {
+    font-weight: bold;
 
-  > span {
-    font-weight: normal;
+    > span {
+      font-weight: normal;
+    }
+  }
+
+  .table {
+    max-width: 40rem;
+
+    th:first-of-type {
+      width: 21rem;
+    }
+  }
+
+  .table:not(:first-of-type) {
+    margin-top: 2rem;
   }
 }
 
-.table {
-  max-width: 40rem;
-
-  th:first-of-type {
-    width: 21rem;
-  }
-}
-
-.table:not(:first-of-type) {
-  margin-top: 2rem;
-}
 </style>

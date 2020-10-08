@@ -1,48 +1,51 @@
-@import '/css/config/colors.scss';
+@import '/css/v1/config/colors';
 
-.table {
-    .planFunding-addRow {
-        text-align: center;
-        cursor: pointer;
-        background-color: $ENDEAVOUR_BLUE;
-        color: white;
+.v1 {
+    .table {
+        .planFunding-addRow {
+            text-align: center;
+            cursor: pointer;
+            background-color: $ENDEAVOUR_BLUE;
+            color: white;
 
-        &:hover {
-            background: #003b80;
+            &:hover {
+                background: #003b80;
+            }
+        }
+
+        .planFunding-addRow--disabled,
+        .planFunding-addRow--disabled:hover {
+            cursor: default;
+            background-color: rgb(0, 83, 179, 0.3);
         }
     }
 
-    .planFunding-addRow--disabled,
-    .planFunding-addRow--disabled:hover {
-        cursor: default;
-        background-color: rgb(0, 83, 179, 0.3);
+    .planFunding-header {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .planFunding-yearSwitch {
+        color: $ENDEAVOUR_BLUE;
+        cursor: pointer;
+        line-height: 30px;
+    }
+
+    .planFunding-yearSwitch--disabled {
+        color: $REGENT_GRAY;
+    }
+
+    .planFunding-type {
+        min-width: 200px;
+    }
+
+    .planFunding-amount {
+        min-width: 150px;
+    }
+
+    .planFunding-details {
+        width: 99%;
     }
 }
 
-.planFunding-header {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.planFunding-yearSwitch {
-    color: $ENDEAVOUR_BLUE;
-    cursor: pointer;
-    line-height: 30px;
-}
-
-.planFunding-yearSwitch--disabled {
-    color: $REGENT_GRAY;
-}
-
-.planFunding-type {
-    min-width: 200px;
-}
-
-.planFunding-amount {
-    min-width: 150px;
-}
-
-.planFunding-details {
-    width: 99%;
-}

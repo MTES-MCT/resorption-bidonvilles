@@ -1,0 +1,86 @@
+@import '/css/v1/config/colors.scss';
+
+$SIDEPANEL__SIDE_PADDING: 35px;
+$SIDEPANEL__TOP_PADDING: 15px;
+$SIDEPANEL__HEADER_HEIGHT: 40px;
+
+.sidepanel {
+    z-index: 4000;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.sidepanel-shadow {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    background: rgba(0,0,0,0.3);
+    opacity: 0;
+    transition: opacity 0.4s linear;
+    -webkit-transition: opacity 0.4s linear;
+}
+
+.sidepanel-wrapper {
+    position: fixed;
+    z-index: 7000;
+    width: 425px;
+    top: 0;
+    bottom: 0;
+    right: -425px;
+    color: $NILE_BLUE;
+    background: $LIGHT_GREY;
+    transition: right 0.4s ease-in-out;
+    -webkit-transition: right 0.4s ease-in-out;
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.16);
+    overflow-y: scroll;
+    padding: $SIDEPANEL__TOP_PADDING 0;
+}
+
+.sidepanel-header {
+    margin-bottom: $SIDEPANEL__TOP_PADDING;
+}
+
+.sidepanel-title {
+    margin: 0;
+    padding: 0 $SIDEPANEL__SIDE_PADDING;
+    color: $EBONY_CLAY;
+    font-size: 1.2rem;
+    line-height: $SIDEPANEL__HEADER_HEIGHT;
+}
+
+.sidepanel-actions {
+    position: absolute;
+    top: $SIDEPANEL__TOP_PADDING;
+    padding: 0 $SIDEPANEL__SIDE_PADDING;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    text-align: right;
+    height: $SIDEPANEL__HEADER_HEIGHT;
+    color: $ENDEAVOUR_BLUE;
+
+    > span {
+        cursor: pointer;
+    }
+}
+
+.sidepanel-section {
+    border-top: 1px solid $REGENT_GRAY;
+    padding: 20px $SIDEPANEL__SIDE_PADDING;
+}
+
+.sidepanel--visible {
+    bottom: 0;
+    right: 0;
+
+    .sidepanel-wrapper {
+        right: 0;
+    }
+
+    .sidepanel-shadow {
+        opacity: 1;
+    }
+}

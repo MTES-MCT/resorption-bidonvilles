@@ -1,0 +1,36 @@
+@import '/css/v1/config/colors.scss';
+
+.userpost-date {
+    margin: 0;
+    padding: 0;
+}
+
+.userpost-title {
+    display: flex;
+    margin: 5px 0 0;
+    padding: 0;
+    font-size: 1rem;
+    color: $ENDEAVOUR_BLUE;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.userpost-actions {
+    visibility: hidden;
+}
+
+.userpost-action--edit,
+.userpost-action--delete {
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.userpost-action--delete {
+    color: #d63626;
+}
+
+.userpost:hover {
+    .userpost-actions {
+        visibility: visible;
+    }
+}

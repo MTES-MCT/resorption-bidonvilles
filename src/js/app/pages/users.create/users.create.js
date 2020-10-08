@@ -1,7 +1,7 @@
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import Form from '#app/components/form/form.vue';
-import newUser from '#app/pages/signup/newUser';
 import { create } from '#helpers/api/user';
+import newUser from './newUser';
 
 const component = newUser({
     title: 'Créer un utilisateur',

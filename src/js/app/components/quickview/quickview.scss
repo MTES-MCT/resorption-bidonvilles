@@ -1,157 +1,160 @@
-@import '/css/config/colors.scss';
+@import '/css/v1/config/colors.scss';
 
-.shadow {
-    visibility: hidden;
-    z-index: 6000;
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.3);
-    opacity: 0;
-    transition: opacity 0.4s linear;
-    -webkit-transition: opacity 0.4s linear;
-}
+.v1 {
+    .shadow {
+        visibility: hidden;
+        z-index: 6000;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.3);
+        opacity: 0;
+        transition: opacity 0.4s linear;
+        -webkit-transition: opacity 0.4s linear;
+    }
 
-.quickview {
-    z-index: 7000;
-    position: fixed;
-    top: 71px;
-    bottom: 0;
-    right: -300px;
-    width: 300px;
-    color: $NILE_BLUE;
-    transition: right 0.4s ease-in-out;
-    -webkit-transition: right 0.4s ease-in-out;
-    background: #ffffff;
-    border-left: 1px solid #c9d3df;
+    .quickview {
+        z-index: 7000;
+        position: fixed;
+        top: 71px;
+        bottom: 0;
+        right: -300px;
+        width: 300px;
+        color: $NILE_BLUE;
+        transition: right 0.4s ease-in-out;
+        -webkit-transition: right 0.4s ease-in-out;
+        background: #ffffff;
+        border-left: 1px solid #c9d3df;
 
-    .quickview-header {
-        padding: 15px 0;
-        background: #F4F8FC;
+        .quickview-header {
+            padding: 15px 0;
+            background: #F4F8FC;
 
-        .quickview-title {
-            margin: 0;
-            font-weight: normal;
-            font-size: 1.3rem;
-            letter-spacing: 0.05em;
+            .quickview-title {
+                margin: 0;
+                font-weight: normal;
+                font-size: 1.3rem;
+                letter-spacing: 0.05em;
 
-            > a {
-                color: $NILE_BLUE;
-                text-decoration: none;
+                > a {
+                    color: $NILE_BLUE;
+                    text-decoration: none;
 
-                &:hover {
-                    text-decoration: underline;
+                    &:hover {
+                        text-decoration: underline;
+                    }
                 }
             }
-        }
 
-        .quickview-subtitle,
-        .quickview-name,
+            .quickview-subtitle,
+            .quickview-name,
         .quickview-time {
-            margin: 0;
-            font-weight: normal;
-            font-size: 0.8rem;
-            letter-spacing: 0.05em;
-        }
+                margin: 0;
+                font-weight: normal;
+                font-size: 0.8rem;
+                letter-spacing: 0.05em;
+            }
 
-        .quickview-time {
-            margin-top: 1rem;
-            font-size: 0.7rem;
-        }
+            .quickview-time {
+                margin-top: 1rem;
+                font-size: 0.7rem;
+            }
 
-        .quickview-name {
+            .quickview-name {
             margin-top: 1rem;
             font-weight: normal;
             font-size: 1em;
         }
 
         .quickview-title,
-        .quickview-subtitle,
+            .quickview-subtitle,
         .quickview-name,
-        .quickview-time {
-            padding: 0 25px;
-        }
+            .quickview-time {
+                padding: 0 25px;
+            }
 
-        .quickview-actions {
-            margin-bottom: 10px;
-            padding-bottom: 15px;
-            padding-right: 15px;
-            text-align: right;
-            border-bottom: 1px solid #E1E4E8;
+            .quickview-actions {
+                margin-bottom: 10px;
+                padding-bottom: 15px;
+                padding-right: 15px;
+                text-align: right;
+                border-bottom: 1px solid #E1E4E8;
 
-            .icon {
-                width: 20px;
-                height: 20px;
-                color: $NILE_BLUE;
-                vertical-align: middle;
+                .icon {
+                    width: 20px;
+                    height: 20px;
+                    color: $NILE_BLUE;
+                    vertical-align: middle;
+                }
             }
         }
-    }
 
-    section {
-        margin: 0;
-        padding: 30px 25px;
-        border-top: 1px solid #E1E4E8;
+        section {
+            margin: 0;
+            padding: 30px 25px;
+            border-top: 1px solid #E1E4E8;
 
-        &.even {
-            background: #F4F8FC;
-        }
+            &.even {
+                background: #F4F8FC;
+            }
 
-        > header {
-            padding-bottom: 15px;
+            > header {
+                padding-bottom: 15px;
 
-            > h1 {
+                > h1 {
+                    margin: 0;
+                    padding: 0;
+                    font-size: 1rem;
+                    font-weight: normal;
+                    color: #006be6;
+                }
+            }
+
+            > table {
+                width: 100%;
                 margin: 0;
                 padding: 0;
-                font-size: 1rem;
-                font-weight: normal;
-                color: #006be6;
+                vertical-align: middle;
+                border-collapse: collapse;
+
+                tr {
+                    height: 30px;
+                }
+
+                th {
+                    text-align: left;
+                    font-weight: normal;
+                    text-transform: uppercase;
+                    font-size: 0.80em;
+                    color: #53657d;
+                }
+
+                td {
+                    text-align: right;
+                }
             }
         }
 
-        > table {
+        .quickview-footer {
+            position: absolute;
+            bottom: 0;
+            padding: 0 0 50px;
             width: 100%;
-            margin: 0;
-            padding: 0;
-            vertical-align: middle;
-            border-collapse: collapse;
-
-            tr {
-                height: 30px;
-            }
-
-            th {
-                text-align: left;
-                font-weight: normal;
-                text-transform: uppercase;
-                font-size: 0.80em;
-                color: #53657d;
-            }
-
-            td {
-                text-align: right;
-            }
+            text-align: center;
         }
     }
 
-    .quickview-footer {
-        position: absolute;
-        bottom: 0;
-        padding: 0 0 50px;
-        width: 100%;
-        text-align: center;
-    }
-}
+    .active {
+        .shadow {
+            visibility: visible;
+            opacity: 1;
+        }
 
-.active {
-    .shadow {
-        visibility: visible;
-        opacity: 1;
+        .quickview {
+            right: 0;
+        }
     }
 
-    .quickview {
-        right: 0;
-    }
 }

@@ -1,209 +1,212 @@
-@import '/css/config/colors.scss';
+@import '/css/v1/config/colors.scss';
 
-.form {
-    background: $MYSTIC;
-}
+.v1 {
+    .form {
+        background: $MYSTIC;
+    }
 
-.form-header {
-    height: 80px;
-    line-height: 80px;
-    background: white;
-    box-shadow: 0 10px 5px -5px rgba(0, 0, 0, 0.1);
-}
+    .form-header {
+        height: 80px;
+        line-height: 80px;
+        background: white;
+        box-shadow: 0 10px 5px -5px rgba(0, 0, 0, 0.1);
+    }
 
-.form-titleGroup {
-    margin: 0 0 30px;
-}
+    .form-titleGroup {
+        margin: 0 0 30px;
+    }
 
-.form-title {
-    display: inline-block;
-    margin: 0 0 5px;
-    padding: 0;
-    font-size: 1.5rem;
-    letter-spacing: .05em;
-    font-family: Evolventa;
-}
+    .form-title {
+        display: inline-block;
+        margin: 0 0 5px;
+        padding: 0;
+        font-size: 1.5rem;
+        letter-spacing: .05em;
+        font-family: Evolventa;
+    }
 
-.form-description {
-    margin: 0;
-    padding: 0;
-    text-align: center;
-}
-
-.form-breadcrumb {
-    display: flex;
-    display: -webkit-box;
-    display: -ms-flexbox;
-
-    flex-direction: row;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: row;
-
-    justify-content: center;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-
-    margin: 60px 100px 100px;
-    padding: 0;
-    list-style: none;
-}
-
-$BREADCRUMB_ITEM_HEIGHT: 50px;
-$BREADCRUMB_SEPARATOR_HEIGHT: 5px;
-$BREADCRUMB_ITEM_INNER_HEIGHT: $BREADCRUMB_ITEM_HEIGHT - 8px;
-
-$BREADCRUMB_NEUTRAL_BG: #eee;
-$BREADCRUMB_NEUTRAL_COLOR: #ccc;
-
-.form-breadcrumbItem {
-    > a {
-        display: block;
-        cursor: default;
-        width: $BREADCRUMB_ITEM_HEIGHT;
-        height: $BREADCRUMB_ITEM_HEIGHT;
-        border-radius: 50%;
-        background: $BREADCRUMB_NEUTRAL_BG;
+    .form-description {
+        margin: 0;
+        padding: 0;
         text-align: center;
+    }
+
+    .form-breadcrumb {
+        display: flex;
+        display: -webkit-box;
+        display: -ms-flexbox;
+
+        flex-direction: row;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+
+        justify-content: center;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+
+        margin: 60px 100px 100px;
+        padding: 0;
+        list-style: none;
+    }
+
+    $BREADCRUMB_ITEM_HEIGHT: 50px;
+    $BREADCRUMB_SEPARATOR_HEIGHT: 5px;
+    $BREADCRUMB_ITEM_INNER_HEIGHT: $BREADCRUMB_ITEM_HEIGHT - 8px;
+
+    $BREADCRUMB_NEUTRAL_BG: #eee;
+    $BREADCRUMB_NEUTRAL_COLOR: #ccc;
+
+    .form-breadcrumbItem {
+        > a {
+            display: block;
+            cursor: default;
+            width: $BREADCRUMB_ITEM_HEIGHT;
+            height: $BREADCRUMB_ITEM_HEIGHT;
+            border-radius: 50%;
+            background: $BREADCRUMB_NEUTRAL_BG;
+            text-align: center;
+
+            &:before {
+                content: '';
+                display: inline-block;
+                vertical-align: middle;
+                height: 100%;
+            }
+
+            > span {
+                display: inline-block;
+                vertical-align: middle;
+                width: $BREADCRUMB_ITEM_INNER_HEIGHT;
+                height: $BREADCRUMB_ITEM_INNER_HEIGHT;
+                line-height: $BREADCRUMB_ITEM_INNER_HEIGHT;
+                border-radius: 50%;
+                color: $BREADCRUMB_NEUTRAL_COLOR;
+                background: $BREADCRUMB_NEUTRAL_BG;
+                text-decoration: none;
+                font-weight: bold;
+                font-size: 1.4rem;
+            }
+        }
+
+        > p {
+            position: absolute;
+            margin: 8px 0 0 ($BREADCRUMB_ITEM_HEIGHT / 2) - 75px;
+            width: 150px;
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 0.8em;
+            letter-spacing: .05em;
+            font-family: Evolventa;
+            color: #999;
+        }
+    }
+
+    .form-breadcrumbItem--current {
+        > a {
+            > span {
+                color: #fff;
+                background: #006BE6;
+            }
+        }
+
+        > p {
+            color: #006BE6;
+        }
+    }
+
+    .form-breadcrumbItem--done {
+        > a {
+            > span {
+                color: #fff;
+                background: #9DD33F;
+            }
+        }
+
+        > p {
+            color: #444;
+        }
+    }
+
+    .form-breadcrumbSeparator {
+        flex-grow: 1;
+        -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+        margin: 0 -4px;
+        line-height: $BREADCRUMB_ITEM_HEIGHT - ($BREADCRUMB_SEPARATOR_HEIGHT / 2);
 
         &:before {
             content: '';
             display: inline-block;
             vertical-align: middle;
-            height: 100%;
-        }
-
-        > span {
-            display: inline-block;
-            vertical-align: middle;
-            width: $BREADCRUMB_ITEM_INNER_HEIGHT;
-            height: $BREADCRUMB_ITEM_INNER_HEIGHT;
-            line-height: $BREADCRUMB_ITEM_INNER_HEIGHT;
-            border-radius: 50%;
-            color: $BREADCRUMB_NEUTRAL_COLOR;
-            background: $BREADCRUMB_NEUTRAL_BG;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.4rem;
+            width: 100%;
+            height: $BREADCRUMB_SEPARATOR_HEIGHT;
+            background:$BREADCRUMB_NEUTRAL_BG;
         }
     }
 
-    > p {
-        position: absolute;
-        margin: 8px 0 0 ($BREADCRUMB_ITEM_HEIGHT / 2) - 75px;
-        width: 150px;
-        text-align: center;
-        text-transform: uppercase;
-        font-size: 0.8em;
-        letter-spacing: .05em;
+    .form-stepNav {
+        margin: 30px 0 10px;
+        text-align: right;
+    }
+
+    .form-body {
+        padding: 50px 0;
+
+        .slideNote {
+            margin-bottom: 50px;
+        }
+    }
+
+    .formSection {
+        margin-bottom: 85px;
+    }
+
+    .formSection-header {
+        margin-bottom: 10px;
+    }
+
+    .formSection-title {
+        margin: 0;
+        padding: 0;
+        font-size: 1.5rem;
         font-family: Evolventa;
-        color: #999;
-    }
-}
-
-.form-breadcrumbItem--current {
-    > a {
-        > span {
-            color: #fff;
-            background: #006BE6;
-        }
     }
 
-    > p {
-        color: #006BE6;
+    .formSection-icon {
+        position: absolute;
+        margin-left: -45px;
+        background: $BLACK;
+        color: $WHITE;
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        border-radius: 50%;
+        font-size: 1rem;
     }
-}
 
-.form-breadcrumbItem--done {
-    > a {
-        > span {
-            color: #fff;
-            background: #9DD33F;
-        }
-    }
-
-    > p {
-        color: #444;
-    }
-}
-
-.form-breadcrumbSeparator {
-    flex-grow: 1;
-    -webkit-box-flex: 1;
-    -ms-flex-positive: 1;
-    margin: 0 -4px;
-    line-height: $BREADCRUMB_ITEM_HEIGHT - ($BREADCRUMB_SEPARATOR_HEIGHT / 2);
-
-    &:before {
-        content: '';
-        display: inline-block;
-        vertical-align: middle;
-        width: 100%;
-        height: $BREADCRUMB_SEPARATOR_HEIGHT;
-        background:$BREADCRUMB_NEUTRAL_BG;
-    }
-}
-
-.form-stepNav {
-    margin: 30px 0 10px;
-    text-align: right;
-}
-
-.form-body {
-    padding: 50px 0;
-
-    .slideNote {
-        margin-bottom: 50px;
-    }
-}
-
-.formSection {
-    margin-bottom: 85px;
-}
-
-.formSection-header {
-    margin-bottom: 10px;
-}
-
-.formSection-title {
-    margin: 0;
-    padding: 0;
-    font-size: 1.5rem;
-    font-family: Evolventa;
-}
-
-.formSection-icon {
-    position: absolute;
-    margin-left: -45px;
-    background: $BLACK;
-    color: $WHITE;
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    line-height: 30px;
-    border-radius: 50%;
-    font-size: 1rem;
-}
-
-.formSection-description {
-    margin: 0;
-    padding: 0;
-}
-
-.notification.error {
-    color: #d63626;
-
-    ul {
-        margin: 0 0 0 20px;
+    .formSection-description {
+        margin: 0;
         padding: 0;
     }
 
-    p {
-        margin: 10px 0;
-        padding: 0;
+    .notification.error {
+        color: #d63626;
+
+        ul {
+            margin: 0 0 0 20px;
+            padding: 0;
+        }
+
+        p {
+            margin: 10px 0;
+            padding: 0;
+        }
+
+        > span {
+            font-weight: bold;
+        }
     }
 
-    > span {
-        font-weight: bold;
-    }
 }

@@ -1,0 +1,107 @@
+<div class="v1">
+    <header class="navbar" role="navigation">
+        <div class="navbar__container">
+            <div class="navbar__home">
+                <img class="landing__marianne" src="/img/logo-marianne.svg" class="topbar-marianne" alt="france" />
+
+                <router-link to="/landing">
+                    <img class="landing__logo" src="/img/logo.svg" alt="resorption-bidonvilles.beta.gouv.fr" />
+                </router-link>
+            </div>
+
+            <nav>
+                <ul class="nav__links">
+                    <li class="nav__item"><router-link to="/landing#contexte">Contexte</router-link></li>
+                    <li class="nav__item"><router-link to="/landing#plateforme'));">La plateforme</router-link></li>
+                    <li class="nav__item"><router-link to="/landing#partenaires'));">Partenaires</router-link></li>
+                    <li class="nav__item"><router-link to="/demande-d-acces" class="button secondary">Demander un accès</router-link></li>
+                    <li class="nav__item"><router-link to="/connexion" class="button">Se connecter</router-link></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="stats">
+        <div class="stats-wrapper">
+            <header class="stats-header">
+                <h1>Statistiques</h1>
+                <p>Depuis l'ouverture nationale de la plateforme en juin 2019</p>
+            </header>
+
+            <section class="stats-section">
+                <h1>Des utilisateurs dans toute la France métropolitaine</h1>
+                <div>
+                    <div class="stats-block">
+                        <h1 class="stats-figure">{{ numberOfDepartements }} <font-awesome-icon icon="flag" size="2x"></font-awesome-icon></h1>
+                        <h2>départements de France métropolitaine</h2>
+                        <p>Soit tous les départements concernés par le phénomène de squats ou bidonvilles.</p>
+                    </div>
+
+                    <div class="stats-block">
+                        <h1 class="stats-figure">{{ numberOfCollaboratorAndAssociationUsers }} <font-awesome-icon icon="users" size="2x"></font-awesome-icon></h1>
+                        <h2>utilisateurs institutionnels et associatifs</h2>
+                        <p>{{ numberOfPublicEstablishments }} services de l'État<br/>{{ numberOfTerritorialCollectivities }} collectivités territoriales<br/>{{ numberOfAssociations }} associations</p>
+                    </div>
+
+                    <div class="stats-block">
+                        <h1 class="stats-figure">{{ numberOfNewUsers.total }} <font-awesome-icon icon="user-plus" size="2x"></font-awesome-icon></h1>
+                        <h2>nouveaux utilisateurs en {{ numberOfNewUsers.month }}</h2>
+                    </div>
+                </div>
+
+                <TrendChart class="stats-chart" v-if="numberOfNewUsersPerMonth !== null" :datasets="usersEvolutionDatasets" :labels="usersEvolutionLabels" :grid="{ verticalLines: true, horizontalLines: true }" :max="usersEvolutionMax" :min="0"></TrendChart>
+            </section>
+
+            <section class="stats-section">
+                <h1>Une plateforme utilisée pour le suivi local </h1>
+                <div>
+                    <div class="stats-block">
+                        <h1 class="stats-figure">{{ numberOfExports }} <font-awesome-icon icon="file-download" size="2x"></font-awesome-icon></h1>
+                        <h2>extractions de données réalisées</h2>
+                        <p>Les exports Excel permettent aux acteurs locaux d'utiliser et d'analyser les données afin de suivre, communiquer et optimiser les actions de résorption.<br/><em>depuis le 15/11/2019</em></p>
+                    </div>
+
+                    <div class="stats-block">
+                        <h1 class="stats-figure">{{ numberOfComments }} <font-awesome-icon icon="comment" size="2x"></font-awesome-icon></h1>
+                        <h2>commentaires créés</h2>
+                        <p>Au delà du suivi des chiffrés, les commentaires permettent de suivre et de partager des informations qualitative utiles dans une action multi-partenariale. </p>
+                    </div>
+
+                    <div class="stats-block">
+                        <h1 class="stats-figure">{{ numberOfDirectoryViews }} <font-awesome-icon icon="address-book" size="2x"></font-awesome-icon></h1>
+                        <h2>fiches contact consultées</h2>
+                        <p>L'annuaire permet d'accéder aux coordonnées de tous les utilisateurs de la plateforme. Son utilisation participe à la mise en réseau partenaires locaux ou des pairs.<br/><em>depuis le 15/11/2019</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="stats-section">
+                <h1>Des données partagées fiabilisées</h1>
+                <h2>
+                    <span><font-awesome-icon icon="sync" size="2x"></font-awesome-icon></span>
+                    <span>La mise à jour régulière des données garantissent des informations justes à tous les acteurs.</span>
+                </h2>
+
+                <div>
+                    <div class="stats-block">
+                        <h1 class="stats-figure">{{ meanTimeBeforeCreationDeclaration }}</h1>
+                        <h2>jours entre l'installation d'un bidonville ou squat et sa déclaration</h2>
+                        <p>En moyenne, depuis le 01/09/2019.</p>
+                    </div>
+
+                    <div class="stats-block">
+                        <h1 class="stats-figure">{{ meanTimeBeforeClosingDeclaration }}</h1>
+                        <h2>jours entre la fermeture du site et sa déclaration</h2>
+                        <p>En moyenne, depuis le 01/09/2019.</p>
+                    </div>
+
+                    <div class="stats-block">
+                        <h1 class="stats-figure">{{ numberOfShantytownOperations }}</h1>
+                        <h2>bidonvilles ou squats mis à jour</h2>
+                        <p>Toutes opérations confondues : création, modification, fermeture</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>

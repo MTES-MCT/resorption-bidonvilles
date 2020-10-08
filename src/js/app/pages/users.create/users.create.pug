@@ -1,19 +1,21 @@
-<div class="page--withMargin">
-    <NavBar v-if="!isPopup"></NavBar>
+<div class="v1">
+    <div class="page--withMargin">
+        <NavBar v-if="!isPopup"></NavBar>
 
-    //- state: loading in progress
-    <div v-if="state === 'loading'" class="notification full-width">
-        <img src="/img/spinner_dark.svg" width="20" class="spinner" />
-        <span>Chargement des données en cours...</span>
-    </div>
+        //- state: loading in progress
+        <div v-if="state === 'loading'" class="notification full-width">
+            <img src="/img/spinner_dark.svg" width="20" class="spinner" />
+            <span>Chargement des données en cours...</span>
+        </div>
 
-    //- state: loading failed
-    <div v-if="state === 'error'" class="notification error full-width">
-        <span>{{ loadingError }}. <span @click="retryLoading">Réessayer ?</span></span>
-    </div>
+        //- state: loading failed
+        <div v-if="state === 'error'" class="notification error full-width">
+            <span>{{ loadingError }}. <span @click="retryLoading">Réessayer ?</span></span>
+        </div>
 
-    //- state: loaded
-    <div v-if="state === 'loaded'">
-        <Form v-bind="formDefinition" v-model="formData" @complete="onComplete" ref="form"></Form>
+        //- state: loaded
+        <div v-if="state === 'loaded'">
+            <Form v-bind="formDefinition" v-model="formData" @complete="onComplete" ref="form"></Form>
+        </div>
     </div>
 </div>

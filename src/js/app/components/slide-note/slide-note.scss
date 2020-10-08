@@ -1,34 +1,37 @@
-@import '/css/config/colors.scss';
-@import '/css/components/note.scss';
+@import '/css/v1/config/colors.scss';
+@import '/css/v1/components/note.scss';
 
-.slideNote {
-    @extend .note;
-}
+.v1 {
+    .slideNote {
+        @extend .note;
+    }
 
-.slideNote-header {
-    @extend .note-header;
-}
+    .slideNote-header {
+        @extend .note-header;
+    }
 
-.slideNote-title {
-    @extend .note-title;
+    .slideNote-title {
+        @extend .note-title;
 
-    > svg,
-    > img {
-        margin-right: 5px; 
+        > svg,
+        > img {
+            margin-right: 5px;
+            color: $ENDEAVOUR_BLUE;
+        }
+    }
+
+    .slideNote-toggle {
+        cursor: pointer;
         color: $ENDEAVOUR_BLUE;
+    }
+
+    .slideNote-body {
+        @extend .note-body;
+        text-align: left;
+
+        transition: max-height 0.3s ease-out;
+        -webkit-transition: max-height 0.3s ease-out;
+        overflow-y: auto;
     }
 }
 
-.slideNote-toggle {
-    cursor: pointer;
-    color: $ENDEAVOUR_BLUE;
-}
-
-.slideNote-body {
-    @extend .note-body;
-    text-align: left;
-
-    transition: max-height 0.3s ease-out;
-    -webkit-transition: max-height 0.3s ease-out;
-    overflow-y: auto;
-}
