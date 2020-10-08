@@ -1,5 +1,5 @@
 <template>
-    <PublicLayout :stickyHeader="false">
+    <PublicLayout :stickyHeader="false" class="contact">
         <PublicContainer class="py-16">
             <div class="max-w-xl mx-auto">
                 <h1 class="text-display-xl">Contactez-nous</h1>
@@ -193,12 +193,15 @@
 </script>
 
 <style lang="scss">
-    // TODO: A supprimer quand le composant d'autocomplete sera refait avec le nouveau design
-    .autocompleter-textfield input {
-        @apply border-2 border-G200 rounded-md w-full py-2 px-4 outline-none
+    .contact {
+        // TODO: A supprimer quand le composant d'autocomplete sera refait avec le nouveau design
+        .autocompleter-textfield input {
+            @apply border-2 border-G200 rounded-md  py-2 outline-none
+        }
+
+        .autocompleter-textfield input:focus {
+            @apply border-primary
+        }
     }
 
-    .autocompleter-textfield input:focus {
-        @apply border-primary
-    }
 </style>

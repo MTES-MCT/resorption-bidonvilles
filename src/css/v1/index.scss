@@ -106,7 +106,8 @@
 }
 
 .v1 {
-  font-family: "Fira Sans", Arial, sans-serif;
+  font-family: Fira Sans, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
 
   @import "./template";
   @import './config/colors.scss';
@@ -133,6 +134,19 @@
 
   img {
     display: inline-block;
+  }
+
+  .icon {
+    vertical-align: initial;
+  }
+
+  .leaflet-control-zoom a {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-decoration: none;
+    color: black;
+    border-radius: 2px;
   }
 
   p {
