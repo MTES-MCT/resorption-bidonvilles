@@ -1,6 +1,6 @@
 # SidePanel
 
-<SidePanelExample />
+<SidePanel-Example />
 
 ```
 <div>

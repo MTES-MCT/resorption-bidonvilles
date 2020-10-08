@@ -63,7 +63,7 @@
 
 ## Loading Button
 
-<ButtonLoadingExample />
+<Button-LoadingExample />
 
 ```
 <Button variant="primary" :loading="loading" @click="onClick">Click me</Button>

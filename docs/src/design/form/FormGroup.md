@@ -4,7 +4,7 @@ Wrapper avec titre autour d'inputs
 
 ## Default
 
-<FormGroupExample />
+<FormGroup-Example />
 
 ```
 <template>

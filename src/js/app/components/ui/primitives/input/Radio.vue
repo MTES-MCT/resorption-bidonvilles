@@ -1,24 +1,31 @@
 <template >
     <div :class="`radio-${variant}`">
-        <template v-if="variant === 'default'">
-            <label :class="['inline-flex items-center']">
-                <input type="radio" class="form-checkbox h-5 w-5"  v-bind="$props" :checked="isChecked" @change="onChange"><span class="ml-2">{{label}}</span>
-            </label>
-        </template>
-        <template v-if="variant === 'card'">
-            <label :class="['inline-flex cursor-pointer border-2 rounded-md border-primary px-4 py-3 hover:bg-primary hover:text-white', isChecked ? 'bg-primary text-white' : 'text-primary']">
-                <input type="radio" class="appearance-none" v-bind="$props" :checked="isChecked" @change="onChange">
+        <!-- Card Variant -->
+        <CheckableCard v-if="variant === 'card'" :ischecked="isChecked">
+            <input type="radio" class="appearance-none" v-bind="filteredProps" :checked="isChecked" @change="onChange">
+            <div>{{label}}</div>
+        </CheckableCard>
+
+        <!-- Other Variants -->
+        <label v-else :class="['inline-flex cursor-pointer', info ? 'items-start' : 'items-center']">
+            <input type="radio" class="form-checkbox h-5 w-5"  v-bind="filteredProps" :checked="isChecked" @change="onChange">
+            <div class="ml-2">
                 <div>{{label}}</div>
-            </label>
-        </template>
+                <div v-if="info" class="text-xs">{{info}}</div>
+            </div>
+        </label>
     </div>
 </template>
 
 
 
 <script>
+    import filteredProps from '../../mixins/filteredProps';
+    import CheckableCard from './utils/CheckableCard';
     export default {
         name: 'Radio',
+        mixins: [filteredProps],
+        components: {CheckableCard},
         props: {
             checkValue: {
                 type: [String, Boolean, Number]

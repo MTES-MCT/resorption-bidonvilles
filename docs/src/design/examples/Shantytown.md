@@ -2,4 +2,4 @@
 
 Example inspired from the creation of a shantytown
 
-<FormDeclarationShantytown />
+<Example-Shantytown />

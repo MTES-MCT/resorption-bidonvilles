@@ -10,7 +10,6 @@ import 'regenerator-runtime/runtime';
 // import vue
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
-import Notifications from 'vue-notification';
 import VueRouter from 'vue-router';
 import TrendChart from 'vue-trend-chart';
 
@@ -83,7 +82,6 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.use(TrendChart);
 Vue.use(VueRouter);
 Vue.use(VueI18n);
-Vue.use(Notifications);
 Vue.use(VueMatomo, {
     // Configure your matomo server and site by providing
     host: 'https://stats.data.gouv.fr',

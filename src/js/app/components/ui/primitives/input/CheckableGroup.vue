@@ -1,6 +1,6 @@
 <template>
     <ValidationProvider :rules="rules" :name="validationName || title" v-slot="{ errors }" :vid="id">
-        <InputGroup v-if="title" :title="title" :info="info" :id="id">
+        <CheckableGroupWrapper :title="title" :info="info" :id="id">
             <div :class="'flex flex-col relative'">
                 <div v-if="error" class="absolute h-full bg-error leftBorder" />
                 <div :class="['flex', direction === 'vertical' ? 'flex-col checkableGroup--verticalLayout': 'flex-row flex-wrap checkableGroup--horizontalLayout']">
@@ -8,16 +8,7 @@
                 </div>
             </div>
             <InputError>{{errors[0]}}</InputError>
-        </InputGroup>
-        <InputWrapper v-else :id="id">
-            <div :class="'flex flex-col relative'">
-                <div v-if="error" class="absolute h-full bg-error leftBorder" />
-                <div :class="['flex', direction === 'vertical' ? 'flex-col checkableGroup--verticalLayout': 'flex-row checkableGroup--horizontalLayout']">
-                    <slot />
-                </div>
-            </div>
-            <InputError >{{errors[0]}}</InputError>
-        </InputWrapper>
+        </CheckableGroupWrapper>
     </ValidationProvider>
 </template>
 
@@ -25,6 +16,7 @@
     import InputWrapper from './utils/InputWrapper'
     import InputInfo from './utils/InputInfo'
     import InputError from './utils/InputError'
+    import CheckableGroupWrapper from './utils/CheckableGroupWrapper';
 
     export default {
         props: {
@@ -53,6 +45,7 @@
 
         },
         components: {
+            CheckableGroupWrapper,
             InputInfo,
             InputWrapper,
             InputError,
