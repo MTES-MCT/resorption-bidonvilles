@@ -13,6 +13,8 @@
       "actions": "L’essentiel des actions accessible à tout moment",
       "exchange": "Des échanges facilités entre les acteurs"
     },
+    "before": "Avant",
+    "after": "Après",
     "context": {
       "title": "Résorption-bidonvilles,",
       "subtitle": "Une plateforme pour accélérer la résorption des bidonvilles",
