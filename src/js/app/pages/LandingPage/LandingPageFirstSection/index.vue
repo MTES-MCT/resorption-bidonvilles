@@ -21,9 +21,9 @@
             </div>
 
             <div class="md:flex md:flex-row mt-16">
-                <LandingPageContextImage label="Avant"><img src="./assets/before.jpg" /></LandingPageContextImage>
+                <LandingPageContextImage :label="$t('landingPage.firstSection.before')"><img src="./assets/before.jpg" /></LandingPageContextImage>
                 <div class="hidden md:block border-solid border-r-2 border-gray-200 m-20" />
-                <LandingPageContextImage label="Après"><img src="./assets/after.jpg" /></LandingPageContextImage>
+                <LandingPageContextImage :label="$t('landingPage.firstSection.after')"><img src="./assets/after.jpg" /></LandingPageContextImage>
             </div>
             <LandingPageUserFeedback class="mt-32"/>
         </div>
