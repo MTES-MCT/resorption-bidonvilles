@@ -1,5 +1,5 @@
 <template>
-    <PublicLayout>
+    <PublicLayout :displayLanguagePicker="true">
         <PublicContainer>
             <div class="pt-4">
                 <div class="max-w-screen-lg mx-auto pb-20">
