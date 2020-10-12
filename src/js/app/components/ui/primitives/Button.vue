@@ -8,7 +8,7 @@
 
             @click="onClick"
     >
-        <div :class="['flex', iconPosition === 'right' ? 'flex-row-reverse' : 'flex-row', loading && 'invisible']">
+        <div :class="['flex', 'items-center', iconPosition === 'right' ? 'flex-row-reverse' : 'flex-row', loading && 'invisible']">
             <div v-if="icon || $slots.icon">
                 <slot name="icon">
                     <Icon :icon="icon" />
