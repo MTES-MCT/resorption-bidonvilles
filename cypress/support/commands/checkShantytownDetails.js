@@ -8,8 +8,15 @@
  * @returns {undefined}
  */
 Cypress.Commands.add('checkShantytownDetails', (shantytown) => {
-    cy.get('[data-cy-data=\'name\']')
+    cy.get('[data-cy-data=\'address\']')
         .should('contain', `Site ${shantytown.address_simple}`);
+
+    if (shantytown.name) {
+        cy.get('[data-cy-data=\'name\']')
+            .should('contain', `${shantytown.name}`);
+    } else {
+        cy.get('[data-cy-data=\'name\']').should('not.exist');
+    }
 
     cy.get('[data-cy-data=\'city\']')
         .should('contain', shantytown.city);

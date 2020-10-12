@@ -16,6 +16,11 @@ Cypress.Commands.add('fillCreateTown', (shantytown) => {
         cy.contains(shantytown.address).click();
     }
 
+    // name
+    if (shantytown.name) {
+        cy.get('[data-cy-field=\'name\']').type(shantytown.name);
+    }
+
     // address details
     if (shantytown.address_details) {
         cy.get('[data-cy-field=\'detailedAddress\']').type(shantytown.address_details);

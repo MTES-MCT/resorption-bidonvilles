@@ -40,6 +40,13 @@ Cypress.Commands.add('fillEditTown', (shantytown) => {
         cy.get('[data-cy-field=\'address\']').emptyAdressAutocompleter();
     }
 
+    // name
+    if (shantytown.name) {
+        cy.get('[data-cy-field=\'name\']').typeReplace(shantytown.name);
+    } else {
+        cy.get('[data-cy-field=\'name\']').clear();
+    }
+
     // address details
     if (shantytown.address_details) {
         cy.get('[data-cy-field=\'address_details\']').typeReplace(shantytown.address_details);

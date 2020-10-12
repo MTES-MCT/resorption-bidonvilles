@@ -113,7 +113,7 @@
             <div class="container">
                 <div class="town-name">
                     <div class="town-reference">
-                        <h1><span data-cy-data="name">Site {{ town.addressSimple }}</span> <span class="town-usename" v-if="town.name">« {{ town.name }} »</span><span :class="`town-status ${town.status}`">{{ status }}</span></h1>
+                        <h1><span data-cy-data="address">Site {{ town.addressSimple }}</span> <span class="town-usename" data-cy-data="name" v-if="town.name">« {{ town.name }} »</span><span :class="`town-status ${town.status}`">{{ status }}</span></h1>
                         <h2><span data-cy-data="city">{{ town.city.name }}</span></h2>
                     </div>
 
@@ -575,7 +575,7 @@
                                 </p>
                                 <p>Exemples : Entrepôt de la Poste, Rond-point du centre...</p>
                                 <div class="input__group">
-                                    <input type="text" v-model="edit.name" maxlength="35">
+                                    <input data-cy-field="name" type="text" v-model="edit.name" maxlength="35">
                                 </div>
                             </div>
 
