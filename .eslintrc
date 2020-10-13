@@ -1,5 +1,8 @@
 {
-    "extends": "airbnb-base",
+    "extends": [
+        "airbnb-base",
+        "plugin:vue/recommended"
+    ],
     "rules": {
         "indent": [
             "error",
@@ -8,7 +11,7 @@
                 "SwitchCase": 1
             }
         ],
-        "import/no-extraneous-dependencies": false,
+        "import/no-extraneous-dependencies": 0,
         "prefer-promise-reject-errors": 0,
         "import/no-unresolved": [
             "error",
