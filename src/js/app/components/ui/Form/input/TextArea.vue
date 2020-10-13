@@ -2,26 +2,26 @@
     <InputWrapper>
         <InputLabel :label="label" :info="info" />
         <ValidationProvider :rules="rules" :name="validationName || label" v-slot="{ errors }" :vid="id">
-            <input
+            <textarea
                    :id="id"
                    @input="$emit('input', $event.target.value)"
-                   v-bind="filteredProps"
+                   v-bind="$props"
                    :class="classes" />
-            <InputError>{{ errors[0] }}</InputError>
+            <InputError>{{errors[0]}}</InputError>
         </ValidationProvider>
     </InputWrapper>
 </template>
 
 <script>
 import filteredProps from '../../mixins/filteredProps';
-import InputLabel from './utils/InputLabel'
-import InputWrapper from './utils/InputWrapper'
-import InputInfo from './utils/InputInfo'
-import InputError from './utils/InputError'
-import getInputClasses from './utils/getInputClasses';
+import InputLabel from '../utils/InputLabel'
+import InputWrapper from '../utils/InputWrapper'
+import InputInfo from '../utils/InputInfo'
+import InputError from '../utils/InputError'
+import getInputClasses from '../utils/getInputClasses';
 
 export default {
-    name: "TextInput",
+    name: "TextArea",
     mixins: [filteredProps],
     props: {
         label: {
@@ -37,14 +37,14 @@ export default {
             type: String,
             default: 'text'
         },
-        validationName: {
+        value: {
             type: String,
         },
         rules: {
             type: String,
         },
-        value: {
-            type: String,
+        validationName: {
+            type: String
         },
         id: {
             type: String
@@ -53,6 +53,7 @@ export default {
             type: String,
             default: 'default'
         },
+
     },
     computed: {
         classes() {

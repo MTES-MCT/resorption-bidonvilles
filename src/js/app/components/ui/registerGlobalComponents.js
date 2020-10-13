@@ -4,17 +4,17 @@ import * as rules from 'vee-validate/dist/rules';
 import { messages } from 'vee-validate/dist/locale/fr';
 
 import Notifications from 'vue-notification';
-import Button from './primitives/Button.vue';
-import TextInput from './primitives/input/TextInput.vue';
-import TextArea from './primitives/input/TextArea.vue';
-import Icon from './primitives/Icon.vue';
-import Checkbox from './primitives/input/Checkbox.vue';
-import Radio from './primitives/input/Radio.vue';
-import Select from './primitives/input/Select.vue';
-import SelectOption from './primitives/input/SelectOption.vue';
-import FormGroup from './primitives/input/FormGroup.vue';
-import InputGroup from './primitives/input/InputGroup.vue';
-import FormParagraph from './primitives/FormParagraph.vue';
+import Button from './Button.vue';
+import TextInput from './Form/input/TextInput.vue';
+import TextArea from './Form/input/TextArea.vue';
+import Icon from './Icon.vue';
+import Checkbox from './Form/input/Checkbox.vue';
+import Radio from './Form/input/Radio.vue';
+import Select from './Form/input/Select.vue';
+import SelectOption from './Form/input/SelectOption.vue';
+import FormGroup from './Form/FormGroup.vue';
+import InputGroup from './Form/InputGroup.vue';
+import FormParagraph from './Form/FormParagraph.vue';
 import Menu from './Menu/Menu.vue';
 import MenuItem from './Menu/MenuItem.vue';
 import Dropdown from './Dropdown.vue';
@@ -24,7 +24,7 @@ import SidePanel from './SidePanel.vue';
 import Autocompleter from './Autocompleter.vue';
 import Datepicker from './Datepicker.vue';
 import Spinner from './Spinner.vue';
-import CheckableGroup from './primitives/input/CheckableGroup.vue';
+import CheckableGroup from './Form/CheckableGroup.vue';
 
 
 export default function (vueInstance) {

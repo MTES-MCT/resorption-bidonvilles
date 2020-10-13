@@ -1,29 +1,13 @@
 # FormGroup / InputGroup
 
-Wrapper avec titre autour d'inputs     
+<GithubLink componentPath="primitives/input/FormGroup.vue" />
+<GithubLink docPath="form/FormGroup.md" />      
+  
+  
+Wrapper de champs de formulaire, permet de standardiser les titres & padding/margin entre les différents inputs  
+    
 
-## Default
+## Example
 
 <FormGroup-Example />
-
-```
-<template>
-    <FormGroup title="Titre groupe de champs" class="max-w-sm">
-        <InputGroup title="Vos informations personnelles">
-            <TextInput label="Nom" />
-            <TextInput label="Prénom" />
-        </InputGroup>
-
-
-        <InputGroup title="Votre projet">
-            <TextInput label="Nature du projet" />
-            <TextInput label="Stade d'avancement" info="Initialisation - en cours - finalisation" />
-            <Select label="Public ciblé">
-                <SelectOption>a</SelectOption>
-                <SelectOption>b</SelectOption>
-            </Select>
-        </InputGroup>
-    </FormGroup>
-</template>
-
-```
+<GithubLink examplePath="FormGroup/Example.vue" />

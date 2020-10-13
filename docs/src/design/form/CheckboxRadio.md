@@ -8,4 +8,4 @@
 
 <Checkbox-VariantsExample />
 
-<GithubLink examplePath="form/Checkbox-VariantsExample.vue" />
+<GithubLink examplePath="Checkbox/VariantsExample.vue" />
