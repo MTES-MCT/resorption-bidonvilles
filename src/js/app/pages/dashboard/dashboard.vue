@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './dashboard';
+import Component from './dashboard.js';
 
 export default Component;
 </script>

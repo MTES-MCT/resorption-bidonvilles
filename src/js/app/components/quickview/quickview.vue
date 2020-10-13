@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './quickview';
+import Component from './quickview.js';
 
 export default Component;
 </script>

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './comment-deletion';
+import Component from './comment-deletion.js';
 
 export default Component;
 </script>

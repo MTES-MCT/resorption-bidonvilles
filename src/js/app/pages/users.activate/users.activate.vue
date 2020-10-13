@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './users.activate';
+import Component from './users.activate.js';
 
 export default Component;
 </script>

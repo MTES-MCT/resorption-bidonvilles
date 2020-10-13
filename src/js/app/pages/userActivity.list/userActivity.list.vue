@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './userActivity.list';
+import Component from './userActivity.list.js';
 
 export default Component;
 </script>

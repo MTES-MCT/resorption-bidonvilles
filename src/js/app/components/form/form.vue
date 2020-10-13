@@ -7,7 +7,7 @@
 </style>
 
 <script>
-import Component from './form';
+import Component from './form.js';
 
 export default Component;
 </script>

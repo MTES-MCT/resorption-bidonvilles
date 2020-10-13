@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './legalMentions';
+import Component from './legalMentions.js';
 
 export default Component;
 </script>

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './filterGroup';
+import Component from './filterGroup.js';
 
 export default Component;
 </script>

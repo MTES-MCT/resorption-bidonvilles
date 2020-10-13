@@ -7,7 +7,7 @@
 </style>
 
 <script>
-import Component from './input';
+import Component from './input.js';
 
 export default Component;
 </script>

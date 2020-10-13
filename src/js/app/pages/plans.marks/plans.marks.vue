@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './plans.marks';
+import Component from './plans.marks.js';
 
 export default Component;
 </script>

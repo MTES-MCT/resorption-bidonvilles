@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './export';
+import Component from './export.js';
 
 export default Component;
 </script>

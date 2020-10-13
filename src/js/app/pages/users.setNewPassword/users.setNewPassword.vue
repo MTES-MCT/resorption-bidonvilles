@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './users.setNewPassword';
+import Component from './users.setNewPassword.js';
 
 export default Component;
 </script>

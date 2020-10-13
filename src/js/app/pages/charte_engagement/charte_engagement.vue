@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './charte_engagement';
+import Component from './charte_engagement.js';
 
 export default Component;
 </script>

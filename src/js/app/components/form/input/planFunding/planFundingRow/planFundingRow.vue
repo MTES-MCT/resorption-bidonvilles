@@ -7,7 +7,7 @@
 </style>
 
 <script>
-import Component from './planFundingRow';
+import Component from './planFundingRow.js';
 
 export default Component;
 </script>

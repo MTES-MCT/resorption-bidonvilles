@@ -36,5 +36,22 @@
     },
     "globals": {
         "App": "readonly"
-    }
+    },
+    "overrides": [
+        {
+            "files": [ "**/*.vue"],
+            "rules": {
+                "import/extensions": [
+                    "error",
+                    "never",
+                    {
+                        // For an unkown reason, import js in vue file without extension doesnt work
+                        // Probably an issue with parcel
+                        "js": "always",
+                        "vue": "always"
+                    }
+                ]
+            }
+        }
+    ]
 }

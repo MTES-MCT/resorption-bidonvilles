@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './changelog';
+import Component from './changelog.js';
 
 export default Component;
 </script>

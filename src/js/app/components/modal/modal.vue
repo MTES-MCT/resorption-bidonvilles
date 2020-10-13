@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './modal';
+import Component from './modal.js';
 
 export default Component;
 </script>

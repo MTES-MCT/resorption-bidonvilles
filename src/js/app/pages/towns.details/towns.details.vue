@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './towns.details';
+import Component from './towns.details.js';
 
 export default Component;
 </script>

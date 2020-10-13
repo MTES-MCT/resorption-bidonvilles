@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './skeleton';
+import Component from './skeleton.js';
 
 export default Component;
 </script>

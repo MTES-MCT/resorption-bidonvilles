@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './users.upgrade';
+import Component from './users.upgrade.js';
 
 export default Component;
 </script>

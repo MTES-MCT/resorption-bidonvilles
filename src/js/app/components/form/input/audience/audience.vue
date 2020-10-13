@@ -7,7 +7,7 @@
 </style>
 
 <script>
-import Component from './audience';
+import Component from './audience.js';
 
 export default Component;
 </script>
