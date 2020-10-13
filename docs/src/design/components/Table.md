@@ -1,5 +1,4 @@
 # Table
-<GithubLink componentPath="Table.vue" />
 <GithubLink docPath="components/Table.md" />
 This component is based on [vue-good-table](https://xaksis.github.io/vue-good-table/)
 

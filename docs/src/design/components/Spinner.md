@@ -1,6 +1,6 @@
 # Spinner 
-<GithubLink componentPath="Modal.vue" />
-<GithubLink docPath="components/Modal.md" />
+<GithubLink componentPath="Spinner.vue" />
+<GithubLink docPath="components/Spinner.md" />
 
 # Example
 

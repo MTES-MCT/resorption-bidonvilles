@@ -1,6 +1,6 @@
 # FormGroup / InputGroup
 
-<GithubLink componentPath="primitives/input/FormGroup.vue" />
+<GithubLink componentPath="Form/FormGroup.vue" />
 <GithubLink docPath="form/FormGroup.md" />      
   
   
