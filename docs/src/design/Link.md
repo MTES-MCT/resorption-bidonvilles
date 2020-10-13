@@ -5,14 +5,14 @@
 ## Example
 
 <Link-Example />
-<GithubLink examplePath="Link/Example.md" />
+<GithubLink examplePath="Link/Example.vue" />
 
 ## Links with left icons
 
 <Link-LeftIconExample />
-<GithubLink examplePath="Link/LeftIconExample.md" />
+<GithubLink examplePath="Link/LeftIconExample.vue" />
 
 ## Links with right icons
 
 <Link-RightIconExample />
-<GithubLink examplePath="Link/RightIconExample.md" />
+<GithubLink examplePath="Link/RightIconExample.vue" />

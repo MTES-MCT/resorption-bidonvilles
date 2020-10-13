@@ -1,12 +1,7 @@
 # SidePanel
+<GithubLink componentPath="Modal.vue" />
+<GithubLink docPath="components/Modal.md" />
 
+# Example
 <SidePanel-Example />
-
-```
-<div>
-    <Button @click="isOpen = !isOpen">{{isOpen ? 'Close' : 'Open'}}</Button>
-    <SidePanel :isOpen="isOpen" :closePanel="closePanel">
-        <div class="text-xl">Heading</div>
-    </SidePanel>
-</div>
-```
+<GithubLink examplePath="SidePanel/Example.vue" />

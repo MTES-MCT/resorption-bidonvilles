@@ -1,9 +1,8 @@
 # Spinner 
+<GithubLink componentPath="Modal.vue" />
+<GithubLink docPath="components/Modal.md" />
 
-<Spinner class="text-primary"/>
-<Spinner class="text-secondary"/>
+# Example
 
-```
-<Spinner class="text-primary"/>
-<Spinner class="text-secondary"/>
-```
+<Spinner-Example />
+<GithubLink examplePath="Spinner/Example.vue" />

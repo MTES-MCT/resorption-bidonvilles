@@ -2,7 +2,7 @@
     <div>
         <ValidationObserver ref="form" v-slot="{ handleSubmit, errors, failed }">
             <form class="w-full max-w-xl" @submit.prevent="handleSubmit(onSubmit)">
-                <AutocompleterV2
+                <AutocompleteV2
                         id="test"
                         label="Search Wikipedia"
                         :defaultValue="result ? resultValue(result) : ''"

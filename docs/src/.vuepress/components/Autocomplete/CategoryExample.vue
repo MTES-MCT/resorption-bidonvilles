@@ -2,7 +2,7 @@
     <div>
         <ValidationObserver ref="form" v-slot="{ handleSubmit, errors, failed }">
             <form class="w-full max-w-xl" @submit.prevent="handleSubmit(onSubmit)">
-                <AutocompleterV2
+                <AutocompleteV2
                         id="test"
                         label="Pick a label"
                         :defaultValue="result ? resultValue(result) : ''"
@@ -37,7 +37,7 @@
                         </Menu>
                     </template>
 
-                </AutocompleterV2>
+                </AutocompleteV2>
                 <div v-if="result">result: {{result.category}} - {{result.label}}</div>
                 <Button type="submit">Submit</Button>
             </form>
