@@ -20,6 +20,3 @@
 <TextInputSelect-WithStateVariant />
 <GithubLink examplePath="TextInputSelect/WithStateVariant.vue" />
 
-## Todo
-
-Add Prefix / Suffix icons
