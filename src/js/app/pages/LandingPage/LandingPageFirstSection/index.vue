@@ -58,8 +58,8 @@
 <script>
 import LandingPageFeatureBlock from '#app/pages/LandingPage/LandingPageFirstSection/LandingPageFeatureBlock';
 import LandingPageContextImage from '#app/pages/LandingPage/LandingPageFirstSection/LandingPageContextImage';
-import LandingPageUserFeedback from './LandingPageUserFeedback';
-import LandingPageResponsiveEmbed from '../LandingPageResponsiveEmbed';
+import LandingPageUserFeedback from './LandingPageUserFeedback/index.vue';
+import LandingPageResponsiveEmbed from '../LandingPageResponsiveEmbed.vue';
 
 export default {
     components: {

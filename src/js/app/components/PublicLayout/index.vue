@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import NavBar from './NavBar';
-import PublicFooter from './PublicFooter';
+import NavBar from './NavBar/index.vue';
+import PublicFooter from './PublicFooter.vue';
 
 export default {
     components: {

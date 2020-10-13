@@ -41,13 +41,11 @@
 </template>
 
 <script>
-import InputWrapper from './utils/InputWrapper';
-import InputInfo from './utils/InputInfo';
-import InputError from './utils/InputError';
+import InputWrapper from './utils/InputWrapper.vue';
+import InputError from './utils/InputError.vue';
 
 export default {
     components: {
-        InputInfo,
         InputWrapper,
         InputError,
     },

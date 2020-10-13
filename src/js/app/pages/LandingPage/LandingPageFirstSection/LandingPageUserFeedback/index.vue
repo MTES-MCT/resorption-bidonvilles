@@ -35,8 +35,8 @@
 </template>
 
 <script>
-import LandingPageUserFeedbackBullet from './LandingPageUserFeedbackBullet';
-import LandingPageUserFeedbackSection from './LandingPageUserFeedbackSection';
+import LandingPageUserFeedbackBullet from './LandingPageUserFeedbackBullet.vue';
+import LandingPageUserFeedbackSection from './LandingPageUserFeedbackSection.vue';
 
 export default {
     components: {

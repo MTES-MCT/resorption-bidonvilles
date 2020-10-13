@@ -11,7 +11,7 @@
 
         <ValidationObserver
           ref="form"
-          v-slot="{ handleSubmit, errors, failed }"
+          v-slot="{ handleSubmit, errors }"
         >
           <form
             class="max-w-xl mt-12"
@@ -163,7 +163,6 @@
             />
             <CheckableGroup
               id="legal"
-              v-slot="{ errors }"
               validation-name="Accord"
               rules="required"
             >
@@ -184,6 +183,7 @@
                 <li
                   v-for="(error, inputId) in errors"
                   v-show="error.length"
+                  :key="inputId"
                 >
                   <router-link
                     class="link"
@@ -221,10 +221,10 @@ import { contact } from '#helpers/api/contact';
 import { notify } from '#helpers/notificationHelper';
 import PublicLayout from '#app/components/PublicLayout';
 import PublicContainer from '#app/components/PublicLayout/PublicContainer';
-import PublicEstablishmentForm from './PublicEstablishmentForm';
-import TerritorialCollectivityForm from './TerritorialCollectivityForm';
-import AssociationForm from './AssociationForm';
-import AdministrationForm from './AdministrationForm';
+import PublicEstablishmentForm from './PublicEstablishmentForm.vue';
+import TerritorialCollectivityForm from './TerritorialCollectivityForm.vue';
+import AssociationForm from './AssociationForm.vue';
+import AdministrationForm from './AdministrationForm.vue';
 import CheckableGroup from '#app/components/ui/primitives/input/CheckableGroup';
 import Checkbox from '#app/components/ui/primitives/input/Checkbox';
 

@@ -67,7 +67,7 @@ export default {
         };
     },
     watch: {
-        async organizationType(newVal, oldVal) {
+        async organizationType(newVal) {
             if (newVal === 'none') {
                 this.orgTerritoryOptions = [];
                 return;

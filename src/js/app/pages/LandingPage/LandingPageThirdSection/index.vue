@@ -117,7 +117,7 @@
 </template>
 
 <script>
-import LandingPageBilanBlock from './LandingPageBilanBlock';
+import LandingPageBilanBlock from './LandingPageBilanBlock.vue';
 import Button from '#app/components/ui/primitives/Button';
 
 export default {

@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import PublicContainer from './PublicContainer';
+import PublicContainer from './PublicContainer.vue';
 
 export default {
     components: {

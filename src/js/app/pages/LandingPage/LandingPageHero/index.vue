@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import LandingPageContactForm from '../LandingPageContactForm';
+import LandingPageContactForm from '../LandingPageContactForm.vue';
 
 export default {
     components: {

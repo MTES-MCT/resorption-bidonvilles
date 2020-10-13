@@ -101,8 +101,8 @@
 <script>
 import PublicLayout from '#app/components/PublicLayout';
 import PublicContainer from '#app/components/PublicLayout/PublicContainer';
-import StatsBlock from './StatsBlock';
-import StatsSection from './StatsSection';
+import StatsBlock from './StatsBlock.vue';
+import StatsSection from './StatsSection.vue';
 import { all as getStats } from '#helpers/api/stats';
 
 export default {
