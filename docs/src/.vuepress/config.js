@@ -58,10 +58,8 @@ module.exports = {
           title: 'Form',
           collapsable: false,
           children: [
-            'form/Checkbox',
-            'form/Radio',
-            'form/Select',
-            'form/TextInput',
+            'form/CheckboxRadio',
+            'form/TextInputSelect',
             'form/FormGroup'
           ]
         },
