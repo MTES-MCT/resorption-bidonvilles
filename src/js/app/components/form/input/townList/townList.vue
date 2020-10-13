@@ -7,7 +7,7 @@
 </style>
 
 <script>
-import Component from './townList.js';
+import Component from './townList';
 
 export default Component;
 </script>

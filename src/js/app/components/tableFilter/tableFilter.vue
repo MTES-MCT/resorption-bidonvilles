@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './tableFilter.js';
+import Component from './tableFilter';
 
 export default Component;
 </script>

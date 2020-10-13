@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './navbar.js';
+import Component from './navbar';
 
 export default Component;
 </script>

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './linker.js';
+import Component from './linker';
 
 export default Component;
 </script>

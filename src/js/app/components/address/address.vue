@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './address.js';
+import Component from './address';
 
 export default Component;
 </script>
