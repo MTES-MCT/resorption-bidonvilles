@@ -3,7 +3,8 @@
 </template>
 
 <script>
-import Component from "./organization.js";
+import Component from './organization.js';
+
 export default Component;
 </script>
 

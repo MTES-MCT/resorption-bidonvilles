@@ -4,6 +4,7 @@
 
 <script>
 import Component from './address.js';
+
 export default Component;
 </script>
 

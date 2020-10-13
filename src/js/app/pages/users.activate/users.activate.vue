@@ -4,6 +4,7 @@
 
 <script>
 import Component from './users.activate.js';
+
 export default Component;
 </script>
 

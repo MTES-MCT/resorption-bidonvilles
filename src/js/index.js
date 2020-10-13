@@ -78,7 +78,7 @@ window.App = Object.freeze({
     },
 });
 
-Vue.component('font-awesome-icon', FontAwesomeIcon);
+Vue.component('FontAwesomeIcon', FontAwesomeIcon);
 
 Vue.use(TrendChart);
 Vue.use(VueRouter);
@@ -123,7 +123,7 @@ const i18n = new VueI18n({
 
 });
 
-Vue.createElement = obj => new Vue(obj);
+Vue.createElement = (obj) => new Vue(obj);
 Vue.createElement({
     el: '#app',
     router,

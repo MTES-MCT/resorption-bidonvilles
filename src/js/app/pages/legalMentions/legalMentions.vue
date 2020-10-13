@@ -4,6 +4,7 @@
 
 <script>
 import Component from './legalMentions.js';
+
 export default Component;
 </script>
 

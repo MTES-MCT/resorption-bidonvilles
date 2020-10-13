@@ -151,7 +151,7 @@ export default {
                                         autocompleter: (d) => {
                                             const p = getMembersOfCategory('public_establishment');
                                             const p2 = p.then(({ users }) => users
-                                                .filter(({ first_name: firstName, last_name: lastName }) => [firstName, lastName].some(value => d.split(' ').every(part => value.toLowerCase().indexOf(part.toLowerCase()) !== -1)))
+                                                .filter(({ first_name: firstName, last_name: lastName }) => [firstName, lastName].some((value) => d.split(' ').every((part) => value.toLowerCase().indexOf(part.toLowerCase()) !== -1)))
                                                 .map(({ id, first_name: firstName, last_name: lastName }) => ({
                                                     id,
                                                     label: `${firstName} ${lastName.toUpperCase()}`,

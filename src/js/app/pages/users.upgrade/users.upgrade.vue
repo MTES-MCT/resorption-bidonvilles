@@ -4,6 +4,7 @@
 
 <script>
 import Component from './users.upgrade.js';
+
 export default Component;
 </script>
 

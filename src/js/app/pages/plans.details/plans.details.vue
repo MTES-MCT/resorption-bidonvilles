@@ -4,6 +4,7 @@
 
 <script>
 import Component from './plans.details.js';
+
 export default Component;
 </script>
 

@@ -96,7 +96,7 @@ export default {
                 if (this.indexOfHighlightedSuggestion - 1 < 0) {
                     this.indexOfHighlightedSuggestion = null;
                 } else {
-                    this.indexOfHighlightedSuggestion = this.indexOfHighlightedSuggestion - 1;
+                    this.indexOfHighlightedSuggestion -= 1;
                 }
             } else if (event.keyCode === 40) { // down arrow (= next suggestion)
                 if (this.suggestions.length > 0) {

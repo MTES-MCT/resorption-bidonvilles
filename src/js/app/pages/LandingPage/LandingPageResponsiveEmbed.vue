@@ -1,24 +1,26 @@
 <template>
-    <div class="wrapper" :style="paddingStyle">
-        <slot />
-    </div>
-
+  <div
+    class="wrapper"
+    :style="paddingStyle"
+  >
+    <slot />
+  </div>
 </template>
 
 <script>
-    export default {
-        props: {
-            videoRatio: {
-                type: String,
-                default: '56.25%' /* 16:9 */
-            }
+export default {
+    props: {
+        videoRatio: {
+            type: String,
+            default: '56.25%', /* 16:9 */
         },
-        computed: {
-            paddingStyle() {
-                return `padding-bottom: ${this.videoRatio}`
-            }
-        }
-    }
+    },
+    computed: {
+        paddingStyle() {
+            return `padding-bottom: ${this.videoRatio}`;
+        },
+    },
+};
 </script>
 
 <style>

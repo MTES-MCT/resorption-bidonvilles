@@ -13,28 +13,52 @@
         <tr>
           <th>SIAO</th>
           <td>
-            <input type="number" v-model="data.siao.families" :disabled="disabled" />
+            <input
+              v-model="data.siao.families"
+              type="number"
+              :disabled="disabled"
+            >
           </td>
           <td>
-            <input type="number" v-model="data.siao.people" :disabled="disabled" />
+            <input
+              v-model="data.siao.people"
+              type="number"
+              :disabled="disabled"
+            >
           </td>
         </tr>
         <tr>
           <th>Logement social</th>
           <td>
-            <input type="number" v-model="data.logement_social.families" :disabled="disabled" />
+            <input
+              v-model="data.logement_social.families"
+              type="number"
+              :disabled="disabled"
+            >
           </td>
           <td>
-            <input type="number" v-model="data.logement_social.people" :disabled="disabled" />
+            <input
+              v-model="data.logement_social.people"
+              type="number"
+              :disabled="disabled"
+            >
           </td>
         </tr>
         <tr>
           <th>DALO</th>
           <td>
-            <input type="number" v-model="data.dalo.families" :disabled="disabled" />
+            <input
+              v-model="data.dalo.families"
+              type="number"
+              :disabled="disabled"
+            >
           </td>
           <td>
-            <input type="number" v-model="data.dalo.people" :disabled="disabled" />
+            <input
+              v-model="data.dalo.people"
+              type="number"
+              :disabled="disabled"
+            >
           </td>
         </tr>
       </tbody>
@@ -53,23 +77,39 @@
         <tr>
           <th>Logement accompagné / adapté</th>
           <td>
-            <input type="number" v-model="data.accompagnes.families" :disabled="disabled" />
+            <input
+              v-model="data.accompagnes.families"
+              type="number"
+              :disabled="disabled"
+            >
           </td>
           <td>
-            <input type="number" v-model="data.accompagnes.people" :disabled="disabled" />
+            <input
+              v-model="data.accompagnes.people"
+              type="number"
+              :disabled="disabled"
+            >
           </td>
         </tr>
         <tr>
           <th>
             Logement sans accompagnement
-            <br />
+            <br>
             <span>(social ou privé)</span>
           </th>
           <td>
-            <input type="number" v-model="data.non_accompagnes.families" :disabled="disabled" />
+            <input
+              v-model="data.non_accompagnes.families"
+              type="number"
+              :disabled="disabled"
+            >
           </td>
           <td>
-            <input type="number" v-model="data.non_accompagnes.people" :disabled="disabled" />
+            <input
+              v-model="data.non_accompagnes.people"
+              type="number"
+              :disabled="disabled"
+            >
           </td>
         </tr>
         <tr>
@@ -78,10 +118,18 @@
             <span>(hors mise à l'abri ou hébergement d'urgence)</span>
           </th>
           <td>
-            <input type="number" v-model="data.heberges.families" :disabled="disabled" />
+            <input
+              v-model="data.heberges.families"
+              type="number"
+              :disabled="disabled"
+            >
           </td>
           <td>
-            <input type="number" v-model="data.heberges.people" :disabled="disabled" />
+            <input
+              v-model="data.heberges.people"
+              type="number"
+              :disabled="disabled"
+            >
           </td>
         </tr>
       </tbody>
@@ -91,71 +139,71 @@
 
 <script>
 export default {
-  props: {
-    value: {
-      type: Object,
-      required: false,
-      default() {
-        return {
-          siao: {
-            people: "",
-            families: ""
-          },
-          logement_social: {
-            people: "",
-            families: ""
-          },
-          dalo: {
-            people: "",
-            families: ""
-          },
-          accompagnes: {
-            people: "",
-            families: ""
-          },
-          non_accompagnes: {
-            people: "",
-            families: ""
-          },
-          heberges: {
-            people: "",
-            families: ""
-          }
-        };
-      }
+    props: {
+        value: {
+            type: Object,
+            required: false,
+            default() {
+                return {
+                    siao: {
+                        people: '',
+                        families: '',
+                    },
+                    logement_social: {
+                        people: '',
+                        families: '',
+                    },
+                    dalo: {
+                        people: '',
+                        families: '',
+                    },
+                    accompagnes: {
+                        people: '',
+                        families: '',
+                    },
+                    non_accompagnes: {
+                        people: '',
+                        families: '',
+                    },
+                    heberges: {
+                        people: '',
+                        families: '',
+                    },
+                };
+            },
+        },
+
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
     },
 
-    disabled: {
-      type: Boolean,
-      required: false,
-      default: false
-    }
-  },
+    data() {
+        return {
+            data: this.value,
+        };
+    },
 
-  data() {
-    return {
-      data: this.value
-    };
-  },
+    watch: {
+        data: {
+            handler(val) {
+                this.emitInput();
+            },
+            deep: true,
+        },
+    },
 
-  watch: {
-    data: {
-      handler(val) {
+    mounted() {
         this.emitInput();
-      },
-      deep: true
-    }
-  },
+    },
 
-  mounted() {
-    this.emitInput();
-  },
-
-  methods: {
-    emitInput() {
-      this.$emit("input", this.data);
-    }
-  }
+    methods: {
+        emitInput() {
+            this.$emit('input', this.data);
+        },
+    },
 };
 </script>
 

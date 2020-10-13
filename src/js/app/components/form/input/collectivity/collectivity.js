@@ -7,7 +7,6 @@ export default {
         Autocompleter,
     },
 
-
     props: {
         /**
          * @type {Address|null}
@@ -45,7 +44,6 @@ export default {
         },
     },
 
-
     data() {
         return {
             /**
@@ -56,11 +54,12 @@ export default {
             /**
              * @type {Object}
              */
-            options: Object.assign({}, this.specificProps, {
+            options: {
+                ...this.specificProps,
                 showCategory: true,
                 autocompleter: (...args) => {
                     const p1 = autocompleter(...args);
-                    const p2 = p1.then(result => result.map(
+                    const p2 = p1.then((result) => result.map(
                         ({
                             label, code, type, locationType,
                         }) => ({
@@ -76,10 +75,9 @@ export default {
                     p2.abort = p1.abort;
                     return p2;
                 },
-            }),
+            },
         };
     },
-
 
     watch: {
         // two-way binding

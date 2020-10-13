@@ -27,7 +27,7 @@ export default {
                 .map((item) => {
                     if (item.items) {
                         return Object.assign(item, {
-                            items: item.items.filter(subitem => this.isItemAllowed(subitem)),
+                            items: item.items.filter((subitem) => this.isItemAllowed(subitem)),
                         });
                     }
 
@@ -50,10 +50,10 @@ export default {
                 return true;
             }
 
-            return requiredPermissions.every(permission => hasPermission(permission));
+            return requiredPermissions.every((permission) => hasPermission(permission));
         },
         isCurrentRouteAMemberOf(group) {
-            return this.$route.matched.some(route => route.meta.group === group);
+            return this.$route.matched.some((route) => route.meta.group === group);
         },
         showSidebar() {
             this.isSidebarOpened = true;

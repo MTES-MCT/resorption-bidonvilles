@@ -1,63 +1,82 @@
 <template>
-    <ValidationProvider :rules="rules" :name="validationName || title" v-slot="{ errors }" :vid="id">
-        <InputGroup v-if="title" :title="title" :info="info" :id="id">
-            <div :class="'flex flex-col relative'">
-                <div v-if="error" class="absolute h-full bg-error leftBorder" />
-                <div :class="['flex', direction === 'vertical' ? 'flex-col checkableGroup--verticalLayout': 'flex-row flex-wrap checkableGroup--horizontalLayout']">
-                    <slot />
-                </div>
-            </div>
-            <InputError>{{errors[0]}}</InputError>
-        </InputGroup>
-        <InputWrapper v-else :id="id">
-            <div :class="'flex flex-col relative'">
-                <div v-if="error" class="absolute h-full bg-error leftBorder" />
-                <div :class="['flex', direction === 'vertical' ? 'flex-col checkableGroup--verticalLayout': 'flex-row checkableGroup--horizontalLayout']">
-                    <slot />
-                </div>
-            </div>
-            <InputError >{{errors[0]}}</InputError>
-        </InputWrapper>
-    </ValidationProvider>
+  <ValidationProvider
+    v-slot="{ errors }"
+    :rules="rules"
+    :name="validationName || title"
+    :vid="id"
+  >
+    <InputGroup
+      v-if="title"
+      :id="id"
+      :title="title"
+      :info="info"
+    >
+      <div :class="'flex flex-col relative'">
+        <div
+          v-if="error"
+          class="absolute h-full bg-error leftBorder"
+        />
+        <div :class="['flex', direction === 'vertical' ? 'flex-col checkableGroup--verticalLayout': 'flex-row flex-wrap checkableGroup--horizontalLayout']">
+          <slot />
+        </div>
+      </div>
+      <InputError>{{ errors[0] }}</InputError>
+    </InputGroup>
+    <InputWrapper
+      v-else
+      :id="id"
+    >
+      <div :class="'flex flex-col relative'">
+        <div
+          v-if="error"
+          class="absolute h-full bg-error leftBorder"
+        />
+        <div :class="['flex', direction === 'vertical' ? 'flex-col checkableGroup--verticalLayout': 'flex-row checkableGroup--horizontalLayout']">
+          <slot />
+        </div>
+      </div>
+      <InputError>{{ errors[0] }}</InputError>
+    </InputWrapper>
+  </ValidationProvider>
 </template>
 
 <script>
-    import InputWrapper from './utils/InputWrapper'
-    import InputInfo from './utils/InputInfo'
-    import InputError from './utils/InputError'
+import InputWrapper from './utils/InputWrapper';
+import InputInfo from './utils/InputInfo';
+import InputError from './utils/InputError';
 
-    export default {
-        props: {
-            title: {
-                type: String,
-            },
-            info: {
-                type: String
-            },
-            error: {
-                type: String
-            },
-            direction: {
-                type: String,
-                default: 'vertical'
-            },
-            validationName: {
-                type: String,
-            },
-            rules: {
-                type: String,
-            },
-            id: {
-                type: String,
-            }
-
+export default {
+    components: {
+        InputInfo,
+        InputWrapper,
+        InputError,
+    },
+    props: {
+        title: {
+            type: String,
         },
-        components: {
-            InputInfo,
-            InputWrapper,
-            InputError,
-        }
-    }
+        info: {
+            type: String,
+        },
+        error: {
+            type: String,
+        },
+        direction: {
+            type: String,
+            default: 'vertical',
+        },
+        validationName: {
+            type: String,
+        },
+        rules: {
+            type: String,
+        },
+        id: {
+            type: String,
+        },
+
+    },
+};
 </script>
 
 <style scoped>
@@ -92,5 +111,3 @@
         }
     }
 </style>
-
-

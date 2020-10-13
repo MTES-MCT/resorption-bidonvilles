@@ -7,6 +7,7 @@
 </style>
 
 <script>
-    import Component from './collectivity.js';
-    export default Component;
+import Component from './collectivity.js';
+
+export default Component;
 </script>

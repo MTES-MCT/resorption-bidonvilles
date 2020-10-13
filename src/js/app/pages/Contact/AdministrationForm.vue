@@ -1,41 +1,60 @@
 <template>
-    <div>
-        <Select label="Nom de la structure" :value="administrationName" @input="val => $emit('update:administrationName', val)" rules="required" id="organization_administration">
-            <SelectOption value="none">- Selectionner un choix -</SelectOption>
-            <SelectOption v-for="item in administrationNameOptions" :key="item.value" :value="item.value" >{{item.label}}</SelectOption>
-        </Select>
-        <TextInput label="Votre fonction" :value="administrationFunction" @input="val => $emit('update:administrationFunction', val)" rules="required" id="position" />
-    </div>
-
+  <div>
+    <Select
+      id="organization_administration"
+      label="Nom de la structure"
+      :value="administrationName"
+      rules="required"
+      @input="val => $emit('update:administrationName', val)"
+    >
+      <SelectOption value="none">
+        - Selectionner un choix -
+      </SelectOption>
+      <SelectOption
+        v-for="item in administrationNameOptions"
+        :key="item.value"
+        :value="item.value"
+      >
+        {{ item.label }}
+      </SelectOption>
+    </Select>
+    <TextInput
+      id="position"
+      label="Votre fonction"
+      :value="administrationFunction"
+      rules="required"
+      @input="val => $emit('update:administrationFunction', val)"
+    />
+  </div>
 </template>
 
 <script>
-    import {
-        getByCategory as getOrganizationsByCategory,
-    } from '#helpers/api/organization';
+import {
+    getByCategory as getOrganizationsByCategory,
+} from '#helpers/api/organization';
 
-    export default {
-        props: {
-            administrationName: {
-                required: true
-            },
-            administrationFunction: {
-                required: true
+export default {
+    props: {
+        administrationName: {
+            required: true,
+        },
+        administrationFunction: {
+            required: true,
 
-            }
         },
-        data() {
-            return {
-                administrationNameOptions: [],
-            }
-        },
-        async mounted() {
-            const { organizations } = await getOrganizationsByCategory('administration');
-            this.administrationNameOptions = organizations
-                .map(({ id, name }) => ({
-                    value: id,
-                    label: name,
-                }));
-        },
-    }
+    },
+    data() {
+        return {
+            administrationNameOptions: [],
+        };
+    },
+    async mounted() {
+        const { organizations } = await getOrganizationsByCategory('administration');
+        this.administrationNameOptions = organizations
+            .map(({ id, name }) => ({
+                value: id,
+                label: name,
+            }));
+    },
+};
 </script>

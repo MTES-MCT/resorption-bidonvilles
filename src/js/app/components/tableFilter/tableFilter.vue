@@ -4,6 +4,7 @@
 
 <script>
 import Component from './tableFilter.js';
+
 export default Component;
 </script>
 

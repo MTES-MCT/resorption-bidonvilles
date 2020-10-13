@@ -158,7 +158,7 @@ export default {
                                         autocompleter: (d) => {
                                             const p = getMembersOfCategory('public_establishment');
                                             const p2 = p.then(({ users }) => users
-                                                .filter(({ first_name: firstName, last_name: lastName }) => [firstName, lastName].some(value => d.split(' ').every(part => value.toLowerCase().indexOf(part.toLowerCase()) !== -1)))
+                                                .filter(({ first_name: firstName, last_name: lastName }) => [firstName, lastName].some((value) => d.split(' ').every((part) => value.toLowerCase().indexOf(part.toLowerCase()) !== -1)))
                                                 .map(({ id, first_name: firstName, last_name: lastName }) => ({
                                                     id,
                                                     label: `${firstName} ${lastName.toUpperCase()}`,
@@ -180,8 +180,8 @@ export default {
                                         autocompleter: (d) => {
                                             const p = getByCategory('association');
                                             const p2 = p.then(({ organizations }) => organizations
-                                                .filter(({ name, abbreviation }) => d.split(' ').every(part => name.toLowerCase().indexOf(part.toLowerCase()) !== -1) || (abbreviation !== null && abbreviation.toLowerCase().indexOf(d.toLowerCase()) >= 0))
-                                                .map(organization => ({
+                                                .filter(({ name, abbreviation }) => d.split(' ').every((part) => name.toLowerCase().indexOf(part.toLowerCase()) !== -1) || (abbreviation !== null && abbreviation.toLowerCase().indexOf(d.toLowerCase()) >= 0))
+                                                .map((organization) => ({
                                                     id: organization.id,
                                                     label: organization.name,
                                                     category: `${organization.departement_code} - ${organization.departement_name}`,

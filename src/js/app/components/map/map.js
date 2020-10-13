@@ -17,7 +17,6 @@ import waterNull from '/img/water-null.png';
 
 const DEFAULT_VIEW = [46.7755829, 2.0497727];
 
-
 /* **************************************************************************************************
  * Ce composant fait apparaître une carte qui propose deux fonctionnalités distinctes :
  *
@@ -98,7 +97,6 @@ export default {
             }),
         },
     },
-
 
     data() {
         return {
@@ -201,7 +199,6 @@ export default {
         },
     },
 
-
     watch: {
         /**
          * Met à jour la liste des marqueurs de site
@@ -243,12 +240,10 @@ export default {
         },
     },
 
-
     mounted() {
         this.createMap();
         this.syncTownMarkers();
     },
-
 
     methods: {
         /**
@@ -548,7 +543,6 @@ export default {
 
             this.searchMarker.addTo(this.markersGroup.search);
             this.searchMarker.setLatLng(coordinates);
-
 
             this.searchMarker._icon.querySelector('.mapPin-address').innerHTML = address;
 

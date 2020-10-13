@@ -1,85 +1,100 @@
 <template>
-    <div>
-        <div :class="!sticky && 'hidden'">
-            <NavBarSticky :menuDisplayed="menuDisplayed" :toggleMenu="toggleMenu" :closeMenu="closeMenu" />
-        </div>
-
-        <div :class="sticky && 'hidden'">
-            <PublicContainer>
-                <header role="navigation" class="py-4 flex flex-row justify-between items-center">
-                    <NavBarLogo />
-
-                    <div class="hidden md:block">
-                        <router-link to="/connexion">
-                            <Button variant="primary">{{$t('landingPage.header.connect')}}</Button>
-                        </router-link>
-                    </div>
-
-                    <NavBarMobileButton class="md:hidden" :onClick="toggleMenu" />
-                </header>
-
-                <NavBarMobileMenu v-if="menuDisplayed" :closeMenu="closeMenu" />
-            </PublicContainer>
-        </div>
+  <div>
+    <div :class="!sticky && 'hidden'">
+      <NavBarSticky
+        :menu-displayed="menuDisplayed"
+        :toggle-menu="toggleMenu"
+        :close-menu="closeMenu"
+      />
     </div>
+
+    <div :class="sticky && 'hidden'">
+      <PublicContainer>
+        <header
+          role="navigation"
+          class="py-4 flex flex-row justify-between items-center"
+        >
+          <NavBarLogo />
+
+          <div class="hidden md:block">
+            <router-link to="/connexion">
+              <Button variant="primary">
+                {{ $t('landingPage.header.connect') }}
+              </Button>
+            </router-link>
+          </div>
+
+          <NavBarMobileButton
+            class="md:hidden"
+            :on-click="toggleMenu"
+          />
+        </header>
+
+        <NavBarMobileMenu
+          v-if="menuDisplayed"
+          :close-menu="closeMenu"
+        />
+      </PublicContainer>
+    </div>
+  </div>
 </template>
 
 <script>
-    import NavBarLogo from './NavBarLogo'
-    import NavBarSticky from './NavBarSticky'
-    import NavBarMobileButton from './NavBarMobileButton'
-    import NavBarMobileMenu from './NavBarMobileMenu'
-    import PublicContainer from '../PublicContainer'
-    import Button from '../../ui/primitives/Button'
+import NavBarLogo from './NavBarLogo';
+import NavBarSticky from './NavBarSticky';
+import NavBarMobileButton from './NavBarMobileButton';
+import NavBarMobileMenu from './NavBarMobileMenu';
+import PublicContainer from '../PublicContainer';
+import Button from '../../ui/primitives/Button';
 
-    export default {
-        props: {
-          stickyHeader: {
-              type: Boolean
-          }
+export default {
+    components: {
+        NavBarLogo,
+        NavBarSticky,
+        Button,
+        NavBarMobileMenu,
+        NavBarMobileButton,
+        PublicContainer,
+    },
+    props: {
+        stickyHeader: {
+            type: Boolean,
         },
-        components: {
-            NavBarLogo,
-            NavBarSticky,
-            Button,
-            NavBarMobileMenu,
-            NavBarMobileButton,
-            PublicContainer
+    },
+    data() {
+        return {
+            scrollTop: 0,
+            menuDisplayed: false,
+        };
+    },
+    computed: {
+        sticky() {
+            return this.scrollTop > 200 && this.stickyHeader;
         },
-        data() {
-          return {
-              scrollTop: 0,
-              menuDisplayed: false
-          }
-        },
-        methods: {
-          handleScroll() {
-              // Header is 76px but 0px when sticky
-              const navbarHeight = this.$el.offsetHeight
+    },
+    mounted() {
+        window.addEventListener('scroll', this.handleScroll);
+    },
+    destroyed() {
+        window.removeEventListener('scroll', this.handleScroll);
+    },
+    methods: {
+        handleScroll() {
+            // Header is 76px but 0px when sticky
+            const navbarHeight = this.$el.offsetHeight;
 
-              this.scrollTop = window.scrollY - navbarHeight
-             },
-          openMenu() {
-              this.menuDisplayed = true
-          },
-          closeMenu() {
-              this.menuDisplayed = false
-          },
+            this.scrollTop = window.scrollY - navbarHeight;
+        },
+        openMenu() {
+            this.menuDisplayed = true;
+        },
+        closeMenu() {
+            this.menuDisplayed = false;
+        },
 
-            toggleMenu() {
-            this.menuDisplayed = !this.menuDisplayed
-            }
+        toggleMenu() {
+            this.menuDisplayed = !this.menuDisplayed;
         },
-        computed: {
-           sticky() {
-               return this.scrollTop > 200 && this.stickyHeader
-           }
-        },
-        mounted() {
-            window.addEventListener('scroll', this.handleScroll);
-        },
-        destroyed() {
-            window.removeEventListener('scroll', this.handleScroll);
-        }
-    }
+    },
+};
 </script>

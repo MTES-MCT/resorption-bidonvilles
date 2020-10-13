@@ -48,8 +48,8 @@ function onAutocompleteLoad(success, failure) {
         const { features } = JSON.parse(this.responseText);
         success(
             removeDuplicates(features)
-                .filter(feature => (feature.properties && feature.properties.citycode))
-                .map(feature => ({
+                .filter((feature) => (feature.properties && feature.properties.citycode))
+                .map((feature) => ({
                     addressType: feature.properties.type,
                     citycode: feature.properties.citycode,
                     city: feature.properties.city,
@@ -112,7 +112,7 @@ export function autocomplete(strSearch, limit = 5) {
  */
 export function autocompleteLocation(strSearch) {
     const p1 = getApi(`/locations/search?q=${encodeURIComponent(strSearch)}`);
-    const p2 = p1.then(results => results.map(result => ({
+    const p2 = p1.then((results) => results.map((result) => ({
         label: result.code.length === 5 ? `(${result.code.slice(0, 2)}) ${result.name}` : result.name,
         code: result.code,
         type: result.label,

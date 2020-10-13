@@ -98,7 +98,7 @@ function isPermitted(to) {
     }
 
     // ensure all permissions are given
-    return permissions.every(permission => hasPermission(permission));
+    return permissions.every((permission) => hasPermission(permission));
 }
 
 /**

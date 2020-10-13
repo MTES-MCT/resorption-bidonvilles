@@ -4,6 +4,7 @@
 
 <script>
 import Component from './activationLink.js';
+
 export default Component;
 </script>
 

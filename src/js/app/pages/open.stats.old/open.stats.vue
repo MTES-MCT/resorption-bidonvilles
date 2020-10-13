@@ -3,7 +3,8 @@
 </template>
 
 <script>
-import Component from "./open.stats.js";
+import Component from './open.stats.js';
+
 export default Component;
 </script>
 

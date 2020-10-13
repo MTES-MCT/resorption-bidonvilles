@@ -21,7 +21,6 @@ import Callout from './Callout.vue';
 import SidePanel from './SidePanel.vue';
 import CheckableGroup from './primitives/input/CheckableGroup.vue';
 
-
 export default function (vueInstance) {
     vueInstance.component(
         'Button',

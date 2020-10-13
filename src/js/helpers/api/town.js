@@ -18,7 +18,7 @@ export function all(filters = {}, order = []) {
 
     // order
     if (order.length > 0) {
-        queries.push(`order=${order.map(s => encodeURIComponent(s)).join(',')}`);
+        queries.push(`order=${order.map((s) => encodeURIComponent(s)).join(',')}`);
     }
 
     return getApi(`/towns${queries.length > 0 ? `?${queries.join('&')}` : ''}`);
@@ -43,7 +43,7 @@ export function get(id) {
  * @returns {Promise}
  */
 export function add(data) {
-    const formattedData = Object.assign({}, data);
+    const formattedData = { ...data };
 
     if (data.address) {
         ([formattedData.latitude, formattedData.longitude] = data.address.location.coordinates);

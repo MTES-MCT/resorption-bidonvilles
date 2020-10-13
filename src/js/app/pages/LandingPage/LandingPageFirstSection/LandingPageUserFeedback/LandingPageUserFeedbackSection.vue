@@ -1,24 +1,28 @@
 <template>
-    <div :class="active ? 'transition duration-500 block opacity-100 visible' : 'invisible opacity-0 absolute'">
-        <div class="relative text-xl feedbackText">{{text}}</div>
-        <div class="text-lg font-light">{{author}}</div>
+  <div :class="active ? 'transition duration-500 block opacity-100 visible' : 'invisible opacity-0 absolute'">
+    <div class="relative text-xl feedbackText">
+      {{ text }}
     </div>
+    <div class="text-lg font-light">
+      {{ author }}
+    </div>
+  </div>
 </template>
 
 <script>
-    export default {
-        props: {
-            text: {
-                type: String
-            },
-            author: {
-                type: String
-            },
-            active: {
-                type: Boolean
-            }
-        }
-    }
+export default {
+    props: {
+        text: {
+            type: String,
+        },
+        author: {
+            type: String,
+        },
+        active: {
+            type: Boolean,
+        },
+    },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -38,5 +42,3 @@
             }
     }
 </style>
-
-

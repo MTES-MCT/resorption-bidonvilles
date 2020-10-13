@@ -4,6 +4,7 @@
 
 <script>
 import Component from './linker.js';
+
 export default Component;
 </script>
 

@@ -4,5 +4,6 @@
 
 <script>
 import Component from './shantytownComment.list.js';
+
 export default Component;
 </script>
