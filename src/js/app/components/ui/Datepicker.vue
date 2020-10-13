@@ -11,11 +11,11 @@
 <script>
     import Datepicker from 'vuejs-datepicker';
     import { fr } from 'vuejs-datepicker/dist/locale';
-    import getInputClasses from './primitives/input/utils/getInputClasses';
-    import InputLabel from './primitives/input/utils/InputLabel'
-    import InputWrapper from './primitives/input/utils/InputWrapper'
-    import InputInfo from './primitives/input/utils/InputInfo'
-    import InputError from './primitives/input/utils/InputError'
+    import getInputClasses from './Form/utils/getInputClasses';
+    import InputLabel from './Form/utils/InputLabel'
+    import InputWrapper from './Form/utils/InputWrapper'
+    import InputInfo from './Form/utils/InputInfo'
+    import InputError from './Form/utils/InputError'
 
     export default {
         props: {

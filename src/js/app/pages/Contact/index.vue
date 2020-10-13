@@ -95,8 +95,8 @@
     import TerritorialCollectivityForm from './TerritorialCollectivityForm'
     import AssociationForm from './AssociationForm'
     import AdministrationForm from './AdministrationForm'
-    import CheckableGroup from '#app/components/ui/primitives/input/CheckableGroup';
-    import Checkbox from '#app/components/ui/primitives/input/Checkbox';
+    import CheckableGroup from '#app/components/ui/Form/CheckableGroup';
+    import Checkbox from '#app/components/ui/Form/input/Checkbox';
 
     export default {
         components: { Checkbox, CheckableGroup, PublicContainer, PublicLayout, PublicEstablishmentForm, TerritorialCollectivityForm, AdministrationForm, AssociationForm },

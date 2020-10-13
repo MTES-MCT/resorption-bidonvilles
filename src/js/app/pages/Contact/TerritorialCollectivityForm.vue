@@ -16,9 +16,9 @@
 
 <script>
     import Collectivity from '#app/components/form/input/collectivity/collectivity';
-    import InputLabel from '#app/components/ui/primitives/input/utils/InputLabel';
-    import InputWrapper from '#app/components/ui/primitives/input/utils/InputWrapper';
-    import InputError from '#app/components/ui/primitives/input/utils/InputError';
+    import InputLabel from '#app/components/ui/Form/utils/InputLabel';
+    import InputWrapper from '#app/components/ui/Form/utils/InputWrapper';
+    import InputError from '#app/components/ui/Form/utils/InputError';
 
     export default {
         components: { InputLabel, Collectivity, InputWrapper, InputError },
