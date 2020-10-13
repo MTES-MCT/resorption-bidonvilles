@@ -4,7 +4,7 @@ module.exports = {
   /**
    * Ref：https://v1.vuepress.vuejs.org/config/#title
    */
-  title: 'RB Design System',
+  title: 'Design System - Résorption Bidonvilles',
   /**
    * Ref：https://v1.vuepress.vuejs.org/config/#description
    */
@@ -34,12 +34,12 @@ module.exports = {
     lastUpdated: false,
     nav: [
       {
-        text: 'Design System',
+        text: 'Components',
         link: '/design/',
       },
       {
-        text: 'VuePress',
-        link: 'https://v1.vuepress.vuejs.org'
+        text: 'GitHub',
+        link: 'https://github.com/MTES-MCT/action-bidonvilles/tree/design-system/src/js/app/components/ui'
       }
     ],
     sidebar: {
@@ -86,6 +86,13 @@ module.exports = {
             'examples/Login',
             'examples/Shantytown',
             'examples/StateDesignSystem',
+          ]
+        },
+        {
+          title: 'Todo',
+          collapsable: false,
+          children: [
+            'Todo',
           ]
         }
       ],
