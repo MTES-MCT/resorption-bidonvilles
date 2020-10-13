@@ -1,6 +1,6 @@
 # TextInput / Select
 [Specs](https://www.sketch.com/s/6034ddd9-a0d3-4844-adda-bd4c821f24b1/a/Ovw782)
-<GithubLink componentPath="primitives/input/TextInput.vue" />
+<GithubLink componentPath="Form/input/TextInput.vue" />
 <GithubLink docPath="form/TextInputSelect.md" />
 
 ## Inputs without labels

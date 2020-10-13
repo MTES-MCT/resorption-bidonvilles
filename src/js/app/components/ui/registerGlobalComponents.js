@@ -21,7 +21,7 @@ import Dropdown from './Dropdown.vue';
 import Modal from './Modal.vue';
 import Callout from './Callout.vue';
 import SidePanel from './SidePanel.vue';
-import Autocompleter from './Autocompleter.vue';
+import Autocomplete from './Autocomplete.vue';
 import Datepicker from './Datepicker.vue';
 import Spinner from './Spinner.vue';
 import CheckableGroup from './Form/CheckableGroup.vue';
@@ -105,8 +105,8 @@ export default function (vueInstance) {
         Spinner,
     );
     vueInstance.component(
-        'AutocompleterV2',
-        Autocompleter,
+        'AutocompleteV2',
+        Autocomplete,
     );
     vueInstance.component(
         'DatepickerV2',
