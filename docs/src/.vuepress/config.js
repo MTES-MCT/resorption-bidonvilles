@@ -68,7 +68,7 @@ module.exports = {
           collapsable: false,
           children: [
             'components/Autocomplete',
-            'components/DatePicker',
+            'components/Datepicker',
             'components/Dropdown',
             'components/Modal',
             'components/SidePanel',
