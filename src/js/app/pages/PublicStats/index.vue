@@ -9,11 +9,11 @@
             <StatsSection class="mt-16" title="Utilisateurs">
                 <StatsBlock :title="numberOfDepartements" icon="flag" subtitle="départements de France métropolitaine" info="Soit tous les départements concernés par le phénomène de squats ou bidonvilles." />
                 <StatsBlock :title="numberOfCollaboratorAndAssociationUsers" icon="users" subtitle="utilisateurs institutionnels et associatifs" :info="numberOfPublicEstablishments+' services de l\'État, '+numberOfTerritorialCollectivities+ ' collectivités territoriales, '+numberOfAssociations+' associations'" />
-                <StatsBlock :title="numberOfNewUsers.total" icon="user-plus" :subtitle="'nouveaux utilisateurs en '+numberOfNewUsers.month" />
+                <StatsBlock :title="numberOfNewUsers.total" icon="user-plus" :subtitle="'nouveaux utilisateurs en '+numberOfNewUsers.month.toLowerCase()" />
             </StatsSection>
 
             <div v-if="numberOfNewUsersPerMonth !== null">
-                <h2 class="text-display-lg text-secondary mt-16">Nouveaux utilisateurs depuis {{numberOfNewUsersPerMonth[0].month}}</h2>
+              <h2 class="text-display-lg text-secondary mt-16">Nombre d'utilisateurs depuis {{numberOfNewUsersPerMonth[0].month.toLowerCase()}}</h2>
                 <TrendChart class="stats-chart" :datasets="usersEvolutionDatasets" :labels="usersEvolutionLabels" :grid="{ verticalLines: true, horizontalLines: true }" :max="usersEvolutionMax" :min="0"></TrendChart>
             </div>
 
