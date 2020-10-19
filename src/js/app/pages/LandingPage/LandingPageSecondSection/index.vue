@@ -25,7 +25,11 @@
             <div class="mt-8"><span class="font-bold">{{$t('landingPage.secondSection.secondParagraph.bold')}}</span> {{$t('landingPage.secondSection.secondParagraph.normal')}}</div>
             <div><a class="link" href="https://www.ecologie.gouv.fr/resorption-des-campements-illicites-et-des-bidonvilles">{{$t('landingPage.secondSection.secondParagraph.link')}}</a></div>
 
-            <img class="mt-20" src="./assets/bidonvilles-france-map.jpg" />
+          <img v-if="$i18n.locale === 'fr'" class="mt-20 w-full" src="./assets/map-fr.jpg" />
+          <img v-if="$i18n.locale === 'en'" class="mt-20 w-full" src="./assets/map-en.jpg" />
+          <img v-if="$i18n.locale === 'bg'" class="mt-20 w-full" src="./assets/map-bg.jpg" />
+          <img v-if="$i18n.locale === 'ro'" class="mt-20 w-full" src="./assets/map-ro.jpg" />
+
         </div>
         <div class="mt-20 md:flex md:flex-row items-center">
           <div class="block md:hidden mb-4 text-display-lg">
