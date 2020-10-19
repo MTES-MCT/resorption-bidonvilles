@@ -21,9 +21,19 @@
             </div>
 
             <div class="md:flex md:flex-row mt-16">
-                <LandingPageContextImage :label="$t('landingPage.firstSection.before')"><img src="./assets/before.jpg" /></LandingPageContextImage>
+                <LandingPageContextImage :label="$t('landingPage.firstSection.before')">
+                  <img v-if="$i18n.locale === 'fr'" src="./assets/fr/before.jpg" />
+                  <img v-if="$i18n.locale === 'en'" src="./assets/en/before.jpg" />
+                  <img v-if="$i18n.locale === 'bg'" src="./assets/bg/before.jpg" />
+                  <img v-if="$i18n.locale === 'ro'" src="./assets/ro/before.jpg" />
+                </LandingPageContextImage>
                 <div class="hidden md:block border-solid border-r-2 border-gray-200 m-20" />
-                <LandingPageContextImage :label="$t('landingPage.firstSection.after')"><img src="./assets/after.jpg" /></LandingPageContextImage>
+                <LandingPageContextImage :label="$t('landingPage.firstSection.after')">
+                  <img v-if="$i18n.locale === 'fr'" src="./assets/fr/after.jpg" />
+                  <img v-if="$i18n.locale === 'en'" src="./assets/en/after.jpg" />
+                  <img v-if="$i18n.locale === 'bg'" src="./assets/bg/after.jpg" />
+                  <img v-if="$i18n.locale === 'ro'" src="./assets/ro/after.jpg" />
+                </LandingPageContextImage>
             </div>
             <LandingPageUserFeedback class="mt-32"/>
         </div>
