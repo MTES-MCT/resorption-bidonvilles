@@ -10,7 +10,7 @@
                 <span class="uppercase">{{$i18n.locale}}</span>
             </Button>
         </template>
-        <template ref="test" v-slot:menu="{ closeMenu }">
+        <template v-slot:menu="{ closeMenu }">
             <Menu @click="closeMenu">
                 <MenuItem @click="pickLang('fr')">
                     <img src="./assets/FR.svg" class="inline-block h-6" /> FR
@@ -30,11 +30,13 @@
 </template>
 
 <script>
+    import { localize } from 'vee-validate';
+
     export default {
         methods: {
             pickLang(lang) {
-                console.log(this.$refs.test)
                 this.$i18n.locale = lang
+                localize(lang)
             },
         },
         computed: {
