@@ -1,8 +1,12 @@
 <template>
     <PublicLayout :stickyHeader="false" :displayLanguagePicker="true" class="contact">
         <PublicContainer class="py-16">
+            <div class="max-w-3xl mx-auto">
+              <h1 class="text-display-lg text-secondary mb-16">{{$t('contactPage.title')}}</h1>
+            </div>
+
             <div class="max-w-xl mx-auto">
-                <h1 class="text-display-xl">{{$t('contactPage.contactUs')}}</h1>
+                <h2 class="text-display-md">{{$t('contactPage.contactUs')}}</h2>
 
                 <ValidationObserver ref="form" v-slot="{ handleSubmit, errors, failed }">
                     <form class="max-w-xl mt-12" @submit.prevent="handleSubmit(submitForm)">
