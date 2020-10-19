@@ -3,7 +3,7 @@ import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
 import * as rules from 'vee-validate/dist/rules';
 import { messages } from 'vee-validate/dist/locale/fr';
 
-import Notifications from 'vue-notification';
+import notifications from 'vue-notification/dist/ssr';
 import Button from './Button.vue';
 import TextInput from './Form/input/TextInput.vue';
 import TextArea from './Form/input/TextArea.vue';
@@ -18,14 +18,14 @@ import FormParagraph from './Form/FormParagraph.vue';
 import Menu from './Menu/Menu.vue';
 import MenuItem from './Menu/MenuItem.vue';
 import Dropdown from './Dropdown.vue';
+import NotificationsGroup from './NotificationsGroup.vue';
 import Modal from './Modal.vue';
 import Callout from './Callout.vue';
 import SidePanel from './SidePanel.vue';
 import Autocomplete from './Autocomplete.vue';
-import Datepicker from './Datepicker.vue';
 import Spinner from './Spinner.vue';
 import CheckableGroup from './Form/CheckableGroup.vue';
-
+import Datepicker from './Datepicker.vue';
 
 export default function (vueInstance) {
     vueInstance.component(
@@ -113,7 +113,8 @@ export default function (vueInstance) {
         Datepicker,
     );
 
-    vueInstance.use(Notifications);
+    vueInstance.use(notifications);
+    vueInstance.component('NotificationsGroup', NotificationsGroup);
     vueInstance.component(
         'ValidationProvider',
         ValidationProvider,
