@@ -23,5 +23,6 @@
   "legal": "I give my consent to the processing of my personal data.",
   "send": "Send",
   "cancel": "Cancel",
-  "error": "Your request contains errors:"
+  "error": "Your request contains errors:",
+  "share": "Share this page"
 }

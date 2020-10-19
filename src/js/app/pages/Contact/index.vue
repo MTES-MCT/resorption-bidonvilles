@@ -6,7 +6,8 @@
             </div>
 
             <div class="max-w-xl mx-auto">
-                <h2 class="text-display-md">{{$t('contactPage.contactUs')}}</h2>
+
+                <h2 class="text-display-md mb-4">{{$t('contactPage.contactUs')}}</h2>
 
                 <ValidationObserver ref="form" v-slot="{ handleSubmit, errors, failed }">
                     <form class="max-w-xl mt-12" @submit.prevent="handleSubmit(submitForm)">
@@ -84,6 +85,8 @@
 
                     </form>
                 </ValidationObserver>
+              <div class="text-display-md mt-32 mb-2">{{$t('contactPage.share')}}</div>
+              <SocialShare  class="mb-8" />
             </div>
 
         </PublicContainer>
@@ -101,9 +104,10 @@
     import AdministrationForm from './AdministrationForm'
     import CheckableGroup from '#app/components/ui/primitives/input/CheckableGroup';
     import Checkbox from '#app/components/ui/primitives/input/Checkbox';
+    import SocialShare from '#app/pages/Contact/SocialShare';
 
     export default {
-        components: { Checkbox, CheckableGroup, PublicContainer, PublicLayout, PublicEstablishmentForm, TerritorialCollectivityForm, AdministrationForm, AssociationForm },
+        components: { SocialShare, Checkbox, CheckableGroup, PublicContainer, PublicLayout, PublicEstablishmentForm, TerritorialCollectivityForm, AdministrationForm, AssociationForm },
         computed: {
             isFrenchLocale() {
                 return this.$i18n.locale === "fr"
