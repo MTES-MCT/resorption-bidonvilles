@@ -34,7 +34,7 @@
                                 @blur="handleBlur"
                                 v-model="searchInput"
                         />
-                        <Spinner v-if="loading" />
+<!--                        <Spinner v-if="loading" />-->
                         <div :class="['origin-top-left-10 absolute z-10 left-0 mt-2 w-full rounded-md shadow-lg transform transition ease-in-out duration-200', focused ? 'opacity-100' : 'opacity-0']">
                             <slot :results="results" :resultListProps="resultListProps" :resultListListeners="resultListListeners" :resultProps="resultProps" :getResultValue="getResultValue">
                                 <Menu v-if="!results.length">
