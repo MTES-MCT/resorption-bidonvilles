@@ -1,15 +1,15 @@
 <template>
+  <ClientONly
     <InputWrapper>
         <InputLabel :label="label" :info="info" />
         <ValidationProvider ref="provider" :rules="rules" :name="validationName || label" v-slot="{ errors }" :vid="id">
-            <Datepicker :input-class="inputClasses" v-bind="$attrs" v-on="$listeners" :language="dateLanguage" :monday-first="true"></Datepicker>
+            <component :is="dynamicComponent" :input-class="inputClasses" v-bind="$attrs" v-on="$listeners" :language="dateLanguage" :monday-first="true"></component>
             <InputError>{{ errors[0] }}</InputError>
         </ValidationProvider>
     </InputWrapper>
 </template>
 
 <script>
-    import Datepicker from 'vuejs-datepicker';
     import { fr } from 'vuejs-datepicker/dist/locale';
     import getInputClasses from './Form/utils/getInputClasses';
     import InputLabel from './Form/utils/InputLabel'
@@ -40,7 +40,7 @@
             }
         },
         components: {
-            Datepicker,
+
             InputLabel,
             InputWrapper,
             InputError,
@@ -48,8 +48,15 @@
         },
         data() {
             return {
-                dateLanguage: fr
+                dateLanguage: fr,
+                dynamicComponent: null
             }
+        },
+        mounted () {
+          // Make vuejs-datepicker friendly with SSR
+          import('vuejs-datepicker').then(module => {
+            this.dynamicComponent = module.default
+          })
         },
         computed: {
             inputClasses() {

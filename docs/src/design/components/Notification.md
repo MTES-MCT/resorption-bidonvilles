@@ -1,6 +1,6 @@
 # Notification
-<GithubLink componentPath="Modal.vue" />
-<GithubLink docPath="components/Modal.md" />
+<GithubLink componentPath="NotificationsGroup.vue" />
+<GithubLink docPath="components/Notification.md" />
 This component is based on [vue-notification](https://github.com/euvl/vue-notification)
 
 # Example
