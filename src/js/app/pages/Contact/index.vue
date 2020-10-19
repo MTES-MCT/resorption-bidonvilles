@@ -105,8 +105,11 @@
     export default {
         components: { Checkbox, CheckableGroup, PublicContainer, PublicLayout, PublicEstablishmentForm, TerritorialCollectivityForm, AdministrationForm, AssociationForm },
         computed: {
+            isFrenchLocale() {
+                return this.$i18n.locale === "fr"
+            },
             isRequestAccess() {
-                return this.commonFields.request_type.includes('access-request')
+                return this.commonFields.request_type.includes('access-request') && this.isFrenchLocale
             },
             isRequestAccessAndActor() {
                 return this.isRequestAccess && this.commonFields.is_actor
