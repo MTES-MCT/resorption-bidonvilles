@@ -1,5 +1,5 @@
 <template>
-    <font-awesome-icon :icon="icon" :spin="spin" />
+    <font-awesome-icon :icon="icon" :spin="spin" v-bind="$attrs" />
 </template>
 
 <script>

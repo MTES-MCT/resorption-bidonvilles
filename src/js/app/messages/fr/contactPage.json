@@ -23,5 +23,6 @@
   "legal": "Je certifie que ces données personnelles ont été saisies avec mon accord",
   "send": "Envoyer",
   "cancel": "Annuler",
-  "error": "Votre demande comprend des erreurs:"
+  "error": "Votre demande comprend des erreurs:",
+  "share": "Partager cette page"
 }
