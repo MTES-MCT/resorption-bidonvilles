@@ -7,7 +7,7 @@
         </template>
         <template v-if="variant === 'card'">
             <label :class="['inline-flex cursor-pointer border-2 rounded-md border-primary px-4 py-3 hover:bg-primary hover:text-white', isChecked ? 'bg-primary text-white' : 'text-primary']">
-                <input type="radio" class="appearance-none hidden" v-bind="$props" :checked="isChecked" @change="onChange">
+                <input type="radio" class="appearance-none absolute invisible" v-bind="$props" :checked="isChecked" @change="onChange">
                 <div>{{label}}</div>
             </label>
         </template>

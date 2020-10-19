@@ -1,14 +1,14 @@
 <template>
     <PublicLayout :stickyHeader="false" :displayLanguagePicker="true" class="contact">
+        <div class="bg-corail full-width text-center py-8">
+          <div class="max-w-3xl mx-auto">
+            <h1 class="text-display-lg  text-white ">{{$t('contactPage.title')}}</h1>
+          </div>
+
+        </div>
         <PublicContainer class="py-16">
-            <div class="max-w-3xl mx-auto">
-              <h1 class="text-display-lg text-secondary mb-16">{{$t('contactPage.title')}}</h1>
-            </div>
-
             <div class="max-w-xl mx-auto">
-
-                <h2 class="text-display-md mb-4">{{$t('contactPage.contactUs')}}</h2>
-
+              <h2 class="text-display-lg mb-4">{{$t('contactPage.contactUs')}}</h2>
                 <ValidationObserver ref="form" v-slot="{ handleSubmit, errors, failed }">
                     <form class="max-w-xl mt-12" @submit.prevent="handleSubmit(submitForm)">
                         <InputGroup>
