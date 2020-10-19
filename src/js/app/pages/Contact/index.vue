@@ -58,7 +58,7 @@
                                 :administrationFunction.sync="requestAccessFields.position"
                         />
 
-                        <TextArea :label="$t('contactPage.message')" v-model="commonFields.access_request_message" id="access_request_message" />
+                        <TextArea :rows="8" :label="$t('contactPage.message')" v-model="commonFields.access_request_message" id="access_request_message" />
                         <CheckableGroup  v-slot="{ errors }" validationName="Accord" rules="required" id="legal">
                             <Checkbox checkValue="confirm" :label="$t('contactPage.legal')" v-model="commonFields.legal" />
                         </CheckableGroup>
