@@ -12,12 +12,8 @@
                         <Button variant="primary">{{$t('landingPage.header.connect')}}</Button>
                     </router-link>
                 </div>
-
                 <NavBarMobileButton  class="md:hidden" :onClick="toggleMenu" />
-
             </header>
-
-            <NavBarMobileMenu v-if="menuDisplayed" :closeMenu="closeMenu" />
         </PublicContainer>
     </div>
 </template>
@@ -36,10 +32,6 @@
               required: true
           },
           toggleMenu: {
-              type: Function,
-              required: true
-          },
-            closeMenu: {
               type: Function,
               required: true
           },

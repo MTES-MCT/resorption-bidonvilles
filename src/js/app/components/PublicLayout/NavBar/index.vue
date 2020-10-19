@@ -1,7 +1,7 @@
 <template>
     <div>
         <div :class="!sticky && 'hidden'">
-            <NavBarSticky :menuDisplayed="menuDisplayed" :toggleMenu="toggleMenu" :closeMenu="closeMenu" />
+            <NavBarSticky :menuDisplayed="menuDisplayed" :toggleMenu="toggleMenu"  />
         </div>
 
         <div :class="sticky && 'hidden'">
@@ -20,10 +20,9 @@
 
                     <NavBarMobileButton class="md:hidden" :onClick="toggleMenu" />
                 </header>
-
-                <NavBarMobileMenu v-if="menuDisplayed" :closeMenu="closeMenu" />
             </PublicContainer>
         </div>
+      <NavBarMobileMenu class="fixed top-0 right-0 mt-16 z-10" v-if="menuDisplayed" :closeMenu="closeMenu" :displayLanguagePicker="displayLanguagePicker" />
     </div>
 </template>
 
