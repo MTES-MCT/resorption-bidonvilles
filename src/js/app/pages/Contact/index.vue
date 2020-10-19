@@ -7,7 +7,7 @@
                 <ValidationObserver ref="form" v-slot="{ handleSubmit, errors, failed }">
                     <form class="max-w-xl mt-12" @submit.prevent="handleSubmit(submitForm)">
                         <InputGroup>
-                            <TextInput :label="$t('contactPage.contactUs')" v-model="commonFields.email" id="email" validationName="Email" rules="required|email" />
+                            <TextInput :label="$t('contactPage.email')" v-model="commonFields.email" id="email" validationName="Email" rules="required|email" />
                             <TextInput :label="$t('contactPage.firstname')" v-model="commonFields.first_name" id="first_name" name="Prénom" rules="required" />
                             <TextInput :label="$t('contactPage.lastname')" v-model="commonFields.last_name" id="last_name" name="Nom de famille" rules="required" />
                         </InputGroup>

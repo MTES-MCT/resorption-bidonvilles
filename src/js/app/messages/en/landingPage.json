@@ -4,21 +4,21 @@
     "contact": "Contact us"
   },
   "hero": {
-    "title": "Taking action to reduce shantytowns",
-    "subtitle": "Ask us a question or request access"
+    "title": "Taking action for slum clearance",
+    "subtitle": "Ask a question or request an access"
   },
   "firstSection": {
     "features": {
-      "position": "Useful information on sites at a glance",
-      "actions": "The essential of the actions accessible at any time",
-      "exchange": "Facilitating exchanges between parties involved"
+      "position": "Useful information on slums at a glance",
+      "actions": "The projects carried out available at any time",
+      "exchange": "Facilitating dialogue between parties involved"
     },
     "before": "Before",
     "after": "After",
     "context": {
-      "title": "Resorption Shantytown,",
-      "subtitle": "A platform to accelerate the resorption of shantytowns",
-      "text": "A tool for information, sharing and steering, the platform offers a high-performance and effective solution for shantytown resorption. It enables the creation of a real collaborative dynamic, within a territory, between the actors committed to the objective of resorption."
+      "title": "Résorption-bidonvilles,",
+      "subtitle": "A platform to boost the resorption of shantytowns",
+      "text": "A tool for information, sharing and steering, the platform offers a high-performance and effective solution for slum clearance. It enables the collaboration of all local stakeholders involved in the slum clearance policy."
     },
     "feedback": {
       "1": {
@@ -26,26 +26,26 @@
         "author": "Prefecture Seine-Saint-Denis"
       },
       "2": {
-        "text": "The platform made the information more reliable, because the Excel table was not shared. The more collaborative tools we have, the better.",
+        "text": "The platform made the information more reliable because, before the Excel table was not shared. The more collaborative tools we have, the better it is.",
         "author": "City of Poitiers"
       },
       "3": {
-        "text": "I was able to direct the family of a person I was accompanying to a solidarity house from the location of their shantytown.",
+        "text": "I was able to direct the family of a person I was accompanying to a solidarity house from the location of their slum.",
         "author": "Haute-Garonne Association"
       }
     }
   },
   "firstBanner": {
-    "text": "Actors in shantytown resorption, share and publicise your actions",
+    "text": "Involved Stakeholders in slum clearance, please share and highlight your projects",
     "cta": "Request access"
   },
   "secondSection": {
-    "title": "Complete resorption of shantytowns,",
+    "title": "Reaching slum clearance,",
     "subtitle": "a national objective",
     "data": {
       1: {
         "line1": "More than",
-        "line2": "300 shantytowns",
+        "line2": "300 slums",
         "line3": "in mainland France"
       },
       2: {
@@ -56,10 +56,10 @@
       3: {
         "line1": "Mostly",
         "line2": "Europeans",
-        "line3": "Romanians and Bulgarians"
+        "line3": "Romanian and Bulgarian citizens"
       }
     },
-    "firstParagraph": "A shantytown is a piece of land, a wasteland or a built-up area that generally lacks basic services (water, electricity, waste management) and is illegally occupied by several families.",
+    "firstParagraph": "A slum is an area that usually lacks basic services (water, electricity, waste management) and is illegally occupied by several families.",
     "secondParagraph": {
       "bold": "The government sets a clear objective of shanty town resorption by moving away from an evacuation-centred approach to a global approach.",
       "normal": "combining social inclusion, respect for public order and prevention of resettlement. In all the territories concerned, effective, humane and pragmatic multi-partner actions must be implemented.",
@@ -76,8 +76,8 @@
   "thirdSection": {
     "title": "Actions in figures",
     "firstParagraph": {
-      "bold": "More than 30 shantytown resorption actions carried out in 2019 by 35 operators.",
-      "normal": "These actions are financed 75% by the State, 15% by local authorities and 10% by private or European funds. \nTeams of professionals support families living in shantytowns, squats or housing in all aspects: health, housing, employment, education, stabilising and securing the site."
+      "bold": "In 2019, more than 30 slum clearance projects have been carried out by 35 NGOs",
+      "normal": "They have been financed 75% by the State, 15% by local authorities and 10% by private or European funds. Families living in slums have been supported in order to access to health, housing, employment, education and sanitation."
     },
     "bilan": {
       1: {
@@ -99,14 +99,14 @@
     },
     "cta": "Download the latest report",
     "secondParagraph": {
-      "title": "A project led by the Interministerial Delegation for Housing and Access to Housing",
+      "title": "A project led by the interministerial delegation for access to housing (DIHAL)",
       "body": {
-        "text1": "The shantytown resorption digital platform, carried and launched in 2018 by the",
-        "link1": "Dihal",
-        "text2": "is part of an objective of transforming public action",
+        "text1": "The digital platform Résorption-bidonvilles, launched in 2018 by the",
+        "link1": "DIHAL",
+        "text2": "plays a role in transforming public action",
         "text3": "The platform continues to be developed in close collaboration with its users.",
-        "text4": "Would you like to know more about the genesis of the project? Go to its file on",
-        "link2": "the official website of state start-ups"
+        "text4": "To learn more about the beginning of the project, please visit ",
+        "link2": "the official website about Start-up d'Etat"
       },
       "items": {
         "title": "The project was the winner of several calls for proposals:",
@@ -115,7 +115,7 @@
           "text": "of the Future Investment Program in 2019"
         },
         2: {
-          "text": "European Commission's \"rights, citizenship and equality\" programme in the first quarter of 2020"
+          "text": "European Commission's \"rights, citizenship and equality\" programme in 2020"
         },
         3: {
           "link": "State Start-up Acceleration Fund 3",
