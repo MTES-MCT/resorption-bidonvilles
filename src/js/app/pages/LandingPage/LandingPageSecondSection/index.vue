@@ -27,9 +27,11 @@
 
             <img class="mt-20" src="./assets/bidonvilles-france-map.jpg" />
         </div>
-        <div class="mt-20 flex flex-row items-center">
-            <div class="w-1/2 mr-16 bg-gray-500">
-
+        <div class="mt-20 md:flex md:flex-row items-center">
+          <div class="block md:hidden mb-4 text-display-lg">
+            {{$t('landingPage.secondSection.video.text')}}
+          </div>
+          <div class="md:w-1/2 md:mr-16 bg-gray-500">
                 <LandingPageResponsiveEmbed>
                     <iframe src="https://www.dailymotion.com/embed/video/x7mf87e"
                             allowfullscreen
@@ -37,7 +39,7 @@
                     </iframe>
                 </LandingPageResponsiveEmbed>
             </div>
-            <div class="w-1/2 text-display-lg">
+            <div class="hidden md:block w-1/2 text-display-lg">
                 {{$t('landingPage.secondSection.video.text')}}
             </div>
         </div>
