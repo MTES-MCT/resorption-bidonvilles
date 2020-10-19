@@ -15,7 +15,7 @@
                             <TextInput :label="$t('contactPage.firstname')" v-model="commonFields.first_name" id="first_name" name="Prénom" rules="required" />
                             <TextInput :label="$t('contactPage.lastname')" v-model="commonFields.last_name" id="last_name" name="Nom de famille" rules="required" />
                         </InputGroup>
-                        <CheckableGroup :title="$t('contactPage.requestType')" :name="$t('contactPage.requestType')" rules="required" id="request_type" direction="row">
+                        <CheckableGroup :title="$t('contactPage.requestType')" :name="$t('contactPage.requestType')" id="request_type" direction="row">
                             <Checkbox checkValue="help" :label="$t('contactPage.help')" v-model="commonFields.request_type" variant="card" />
                             <Checkbox checkValue="report" :label="$t('contactPage.report')" v-model="commonFields.request_type" variant="card" />
                             <Checkbox checkValue="help-request" :label="$t('contactPage.requestHelp')" v-model="commonFields.request_type" variant="card" />
