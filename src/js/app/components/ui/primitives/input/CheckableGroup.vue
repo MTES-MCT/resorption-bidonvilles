@@ -74,7 +74,7 @@
                 @apply mr-0 mb-0
             }
 
-            @apply mr-4 mb-2
+            @apply mr-2 mb-2
         }
     }
 
