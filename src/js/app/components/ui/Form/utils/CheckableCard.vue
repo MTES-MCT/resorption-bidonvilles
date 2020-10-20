@@ -6,11 +6,11 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            isChecked: {
-                type: Boolean
-            }
-        }
-    }
+export default {
+    props: {
+        isChecked: {
+            type: Boolean,
+        },
+    },
+};
 </script>

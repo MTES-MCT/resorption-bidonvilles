@@ -45,14 +45,13 @@
 </template>
 
 <script>
-    import LandingPageDataBlock from './LandingPageDataBlock';
-    import LandingPageResponsiveEmbed from '../LandingPageResponsiveEmbed';
+import LandingPageDataBlock from './LandingPageDataBlock.vue';
+import LandingPageResponsiveEmbed from '../LandingPageResponsiveEmbed.vue';
 
-    export default {
-        components: {
-            LandingPageDataBlock,
-            LandingPageResponsiveEmbed
-        }
-    }
+export default {
+    components: {
+        LandingPageDataBlock,
+        LandingPageResponsiveEmbed,
+    },
+};
 </script>
-

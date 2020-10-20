@@ -142,7 +142,7 @@ export default {
                 this.caracteristicSection,
                 this.demographySection,
                 this.justiceSection,
-            ].filter(section => section !== null);
+            ].filter((section) => section !== null);
         },
     },
     mounted() {
@@ -153,7 +153,7 @@ export default {
     },
     methods: {
         hasPermission,
-        formatDate: ts => App.formatDate(ts),
+        formatDate: (ts) => App.formatDate(ts),
         checkOutsideClick(event) {
             if (!this.town) {
                 return;

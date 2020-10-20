@@ -14,6 +14,3 @@
         height: 24px
     }
 </style>
-
-
-

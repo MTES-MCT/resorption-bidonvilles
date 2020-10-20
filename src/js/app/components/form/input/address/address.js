@@ -7,7 +7,6 @@ export default {
         Autocompleter,
     },
 
-
     props: {
         /**
          * @type {Address|null}
@@ -45,7 +44,6 @@ export default {
         },
     },
 
-
     data() {
         return {
             /**
@@ -56,12 +54,9 @@ export default {
             /**
              * @type {Object}
              */
-            options: Object.assign({}, this.specificProps, {
-                autocompleter,
-            }),
+            options: { ...this.specificProps, autocompleter },
         };
     },
-
 
     watch: {
         // two-way binding

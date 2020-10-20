@@ -18,46 +18,46 @@
 </template>
 
 <script>
-    import filteredProps from '../../mixins/filteredProps';
-    import CheckableCard from '../utils/CheckableCard';
+import filteredProps from '../../mixins/filteredProps';
+import CheckableCard from '../utils/CheckableCard.vue';
 
-    export default {
-        name: 'Checkbox',
-        mixins: [filteredProps],
-        components: {CheckableCard},
-        props: {
-            checkValue: {
-                type: String
-            },
-            label: {
-                type: String
-            },
-            value: {
-                type: Array
-            },
-            info: {
-                type: String
-            },
-            variant: {
-                type: String,
-                default: 'default'
-            }
+export default {
+    name: 'Checkbox',
+    mixins: [filteredProps],
+    components: { CheckableCard },
+    props: {
+        checkValue: {
+            type: String,
         },
-        methods: {
-            onChange: function(e) {
-                let currentValue = [...this.value]
-                if (e.target.checked) {
-                    currentValue.push(this.checkValue)
-                } else {
-                    currentValue = currentValue.filter(item => item !== this.checkValue)
-                }
-                this.$emit('input', currentValue);
-            }
+        label: {
+            type: String,
         },
-        computed: {
-            isChecked() {
-                return this.value && this.value.includes(this.checkValue)
-            },
-        }
-    };
+        value: {
+            type: Array,
+        },
+        info: {
+            type: String,
+        },
+        variant: {
+            type: String,
+            default: 'default',
+        },
+    },
+    methods: {
+        onChange(e) {
+            let currentValue = [...this.value];
+            if (e.target.checked) {
+                currentValue.push(this.checkValue);
+            } else {
+                currentValue = currentValue.filter((item) => item !== this.checkValue);
+            }
+            this.$emit('input', currentValue);
+        },
+    },
+    computed: {
+        isChecked() {
+            return this.value && this.value.includes(this.checkValue);
+        },
+    },
+};
 </script>

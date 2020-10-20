@@ -6,16 +6,16 @@
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                email: ''
-            }
+export default {
+    data() {
+        return {
+            email: '',
+        };
+    },
+    methods: {
+        onSubmit() {
+            this.$router.push(`/contact${this.email ? `?email=${encodeURIComponent(this.email)}` : ''}`);
         },
-        methods: {
-            onSubmit() {
-                this.$router.push(`/contact${this.email ? '?email='+encodeURIComponent(this.email): ''}`)
-            }
-        }
-    }
+    },
+};
 </script>

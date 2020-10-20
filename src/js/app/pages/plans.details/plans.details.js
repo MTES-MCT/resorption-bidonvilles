@@ -55,7 +55,7 @@ export default {
                 return '';
             }
 
-            const remainingAudience = Object.assign({}, this.audience.in);
+            const remainingAudience = { ...this.audience.in };
             ['out_positive', 'out_abandoned', 'out_excluded'].forEach((key) => {
                 remainingAudience.total -= this.audience[key].total;
                 remainingAudience.families -= this.audience[key].families;
@@ -190,10 +190,9 @@ export default {
             get(this.$route.params.id)
                 .then((data) => {
                     this.plan = data;
-                    this.closingData.finances = this.plan.finances.map(finance => Object.assign({}, finance, {
-                        data: finance.data.map(row => Object.assign({}, row, {
-                            type: row.type.uid,
-                        })),
+                    this.closingData.finances = this.plan.finances.map((finance) => ({
+                        ...finance,
+                        data: finance.data.map((row) => ({ ...row, type: row.type.uid })),
                     }));
                     this.status = 'loaded';
                 })
@@ -243,7 +242,7 @@ export default {
             }
 
             if (yearsInError.length > 0) {
-                this.closingErrors = yearsInError.map(year => `Les dépenses exécutées pour l'année ${year} ne sont pas renseignées, il n'est pas possible de fermer le dispositif.`);
+                this.closingErrors = yearsInError.map((year) => `Les dépenses exécutées pour l'année ${year} ne sont pas renseignées, il n'est pas possible de fermer le dispositif.`);
             } else {
                 this.setClosingAlertStatus('step2');
             }

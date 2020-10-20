@@ -10,15 +10,15 @@
 </template>
 
 <script>
-    import InputWrapper from './InputWrapper.vue';
-    import InputGroup from '../InputGroup.vue';
+import InputWrapper from './InputWrapper.vue';
+import InputGroup from '../InputGroup.vue';
 
-    export default {
-        components: {InputWrapper, InputGroup},
-        props: {
-            title: { type: String },
-            info: { type: String },
-            id: { type: String },
-        }
-    }
+export default {
+    components: { InputWrapper, InputGroup },
+    props: {
+        title: { type: String },
+        info: { type: String },
+        id: { type: String },
+    },
+};
 </script>

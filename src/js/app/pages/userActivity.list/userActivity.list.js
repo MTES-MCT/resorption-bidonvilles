@@ -57,9 +57,10 @@ export default {
             return [
                 { id: 'date', label: 'Date' },
                 { id: 'author', label: 'Auteur' },
-                Object.assign(
-                    { id: 'activity', label: 'Activités' },
-                    this.filter === 'shantytown'
+                {
+                    id: 'activity',
+                    label: 'Activités',
+                    ...(this.filter === 'shantytown'
                         ? {
                             filters: [
                                 { label: 'Déclaration', value: 'creation' },
@@ -69,8 +70,8 @@ export default {
                             filterFn: (row, checkedItems) => checkedItems.map(({ value }) => value)
                                 .indexOf(row.rawAction) !== -1,
                         }
-                        : {},
-                ),
+                        : {}),
+                },
             ];
         },
         filteredActivities() {

@@ -8,7 +8,6 @@ export default {
         Location,
     },
 
-
     props: {
         /**
          * @type {AddressWithLocationValue}
@@ -49,7 +48,6 @@ export default {
         },
     },
 
-
     data() {
         return {
             /**
@@ -64,7 +62,6 @@ export default {
         };
     },
 
-
     computed: {
         /**
          * Options for the address component
@@ -72,7 +69,7 @@ export default {
          * @returns {Object}
          */
         addressOptions() {
-            return Object.assign({}, this.specificProps.address);
+            return { ...this.specificProps.address };
         },
 
         /**
@@ -81,7 +78,8 @@ export default {
          * @returns {Object}
          */
         locationOptions() {
-            return Object.assign({}, this.specificProps.location, {
+            return {
+                ...this.specificProps.location,
                 tutorial: this.address ? 'auto' : 'yes',
                 autoHideMarker: !this.address,
                 wording: this.address
@@ -93,7 +91,7 @@ export default {
                         tutorialTitle: 'Saisir une adresse',
                         tutorialDescription: 'Veuillez saisir une adresse dans le champ de texte ci-dessus avant d\'accéder à la carte',
                     },
-            });
+            };
         },
 
         /**
@@ -112,7 +110,6 @@ export default {
             };
         },
     },
-
 
     watch: {
         // two-way binding

@@ -3,7 +3,8 @@
 </template>
 
 <script>
-import Component from './signin.js';
+import Component from './signin';
+
 export default Component;
 </script>
 

@@ -62,7 +62,7 @@ export default {
         let location;
         let defaultLocation;
         if (hasNationalPermission !== true || user.organization.location.type === 'nation') {
-            defaultLocation = Object.assign({}, userLocation);
+            defaultLocation = { ...userLocation };
             location = null;
         } else {
             defaultLocation = {
@@ -74,7 +74,7 @@ export default {
                     type: 'nation',
                 },
             };
-            location = Object.assign({}, userLocation);
+            location = { ...userLocation };
         }
 
         return {
@@ -89,9 +89,7 @@ export default {
                 { id: 'people', label: 'Nombre de personnes' },
             ],
 
-            fieldTypes: fieldTypes.reduce((acc, fieldType) => Object.assign({}, acc, {
-                [fieldType.id]: fieldType,
-            }), {}),
+            fieldTypes: fieldTypes.reduce((acc, fieldType) => ({ ...acc, [fieldType.id]: fieldType }), {}),
 
             /**
              * Data loading status
@@ -167,12 +165,10 @@ export default {
         },
     },
 
-
     mounted() {
         // on mount, try to load the list of shantytowns
         this.load();
     },
-
 
     methods: {
         /**
@@ -226,7 +222,7 @@ export default {
                 return;
             }
 
-            const index = this.selectedTowns.findIndex(id => id === townId);
+            const index = this.selectedTowns.findIndex((id) => id === townId);
             if (index !== -1) {
                 this.selectedTowns.splice(index, 1);
             } else {

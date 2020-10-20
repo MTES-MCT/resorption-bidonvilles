@@ -73,11 +73,11 @@ module.exports = {
                 success: '#0D6635',
                 info: '#3A55D1',
                 warning: '#FA5C00',
-                error: '#B60000'
+                error: '#B60000',
             },
         },
     },
     variants: {
         opacity: ['responsive'],
-    }
+    },
 };

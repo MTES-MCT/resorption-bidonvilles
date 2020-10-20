@@ -28,7 +28,6 @@ const multipleValueInputs = [
 
 export default {
 
-
     components: {
         Datepicker,
         Autocompleter,
@@ -43,7 +42,6 @@ export default {
         Audience,
         PlanHousing,
     },
-
 
     props: {
         /**
@@ -205,14 +203,12 @@ export default {
         },
     },
 
-
     data() {
         return {
             data: this.value,
             showPassword: false, // for type 'password' only
         };
     },
-
 
     computed: {
         props() {
@@ -254,13 +250,12 @@ export default {
         },
         options() {
             if (Array.isArray(this.data)) {
-                this.data = this.data.filter(v => this.options.indexOf(v) !== -1);
+                this.data = this.data.filter((v) => this.options.indexOf(v) !== -1);
             } else if (this.options.indexOf(this.data) === -1) {
                 this.data = undefined;
             }
         },
     },
-
 
 };
 

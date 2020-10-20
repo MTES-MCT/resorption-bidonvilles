@@ -6,14 +6,14 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            label: {
-                type: String
-            },
-            info: {
-                type: String
-            }
-        }
-    }
+export default {
+    props: {
+        label: {
+            type: String,
+        },
+        info: {
+            type: String,
+        },
+    },
+};
 </script>

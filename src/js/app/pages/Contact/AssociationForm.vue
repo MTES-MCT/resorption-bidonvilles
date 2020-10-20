@@ -27,58 +27,58 @@
 </template>
 
 <script>
-    import {
-        getByCategory as getOrganizationsByCategory,
-    } from '#helpers/api/organization';
-    import { departements as listDepartements } from '#helpers/addressHelper';
+import {
+    getByCategory as getOrganizationsByCategory,
+} from '#helpers/api/organization';
+import { departements as listDepartements } from '#helpers/addressHelper';
 
-    export default {
-        props: {
-            associationName: {
-                required: true
-            },
-            associationTerritory: {
-                required: true
-            },
-            associationFunction: {
-                required: true
-            },
-            newAssociationName: {
-                required: true
-            },
-            newAssociationAcronym: {
-                required: true
-            }
+export default {
+    props: {
+        associationName: {
+            required: true,
         },
-        data() {
-          return {
-              associationNameOptions: [],
-              associationTerritoryOptions: []
-          }
+        associationTerritory: {
+            required: true,
         },
-        async mounted() {
-            const  [{ organizations: associations }, { departements }] = await Promise.all([getOrganizationsByCategory('association'), listDepartements()]);
+        associationFunction: {
+            required: true,
+        },
+        newAssociationName: {
+            required: true,
+        },
+        newAssociationAcronym: {
+            required: true,
+        },
+    },
+    data() {
+        return {
+            associationNameOptions: [],
+            associationTerritoryOptions: [],
+        };
+    },
+    async mounted() {
+        const [{ organizations: associations }, { departements }] = await Promise.all([getOrganizationsByCategory('association'), listDepartements()]);
 
-            const usedAssociations = [];
-            this.associationNameOptions = associations
-                .filter((association) => {
-                    if (usedAssociations.indexOf(association.name) !== -1) {
-                        return false;
-                    }
+        const usedAssociations = [];
+        this.associationNameOptions = associations
+            .filter((association) => {
+                if (usedAssociations.indexOf(association.name) !== -1) {
+                    return false;
+                }
 
-                    usedAssociations.push(association.name);
-                    return true;
-                })
-                .map(({ name, abbreviation }) => ({
-                    value: name,
-                    label: abbreviation !== null ? `${abbreviation} (${name})` : name,
-                }))
-
-            this.associationTerritoryOptions = departements.map(({ code, name }) => ({
-                value: code,
-                label: `${code} - ${name}`,
+                usedAssociations.push(association.name);
+                return true;
+            })
+            .map(({ name, abbreviation }) => ({
+                value: name,
+                label: abbreviation !== null ? `${abbreviation} (${name})` : name,
             }));
-        },
 
-    }
+        this.associationTerritoryOptions = departements.map(({ code, name }) => ({
+            value: code,
+            label: `${code} - ${name}`,
+        }));
+    },
+
+};
 </script>

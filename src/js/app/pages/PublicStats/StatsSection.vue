@@ -9,12 +9,12 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            title: {
-                required: true,
-                type: String
-            }
-        }
-    }
+export default {
+    props: {
+        title: {
+            required: true,
+            type: String,
+        },
+    },
+};
 </script>

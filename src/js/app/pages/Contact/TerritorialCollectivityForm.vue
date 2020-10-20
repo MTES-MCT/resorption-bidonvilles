@@ -15,20 +15,22 @@
 </template>
 
 <script>
-    import Collectivity from '#app/components/form/input/collectivity/collectivity';
-    import InputLabel from '#app/components/ui/Form/utils/InputLabel';
-    import InputWrapper from '#app/components/ui/Form/utils/InputWrapper';
-    import InputError from '#app/components/ui/Form/utils/InputError';
+import Collectivity from '#app/components/form/input/collectivity/collectivity';
+import InputLabel from '#app/components/ui/Form/utils/InputLabel.vue';
+import InputWrapper from '#app/components/ui/Form/utils/InputWrapper.vue';
+import InputError from '#app/components/ui/Form/utils/InputError.vue';
 
-    export default {
-        components: { InputLabel, Collectivity, InputWrapper, InputError },
-        props: {
-            collectivityName: {
-                required: true
-            },
-            collectivityFunction: {
-                required: true
-            },
-        }
-    }
+export default {
+    components: {
+        InputLabel, Collectivity, InputWrapper, InputError,
+    },
+    props: {
+        collectivityName: {
+            required: true,
+        },
+        collectivityFunction: {
+            required: true,
+        },
+    },
+};
 </script>

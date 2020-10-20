@@ -18,9 +18,7 @@ const FRANCE_CENTER = {
     zoom: DEFAULT_ZOOM,
 };
 
-
 export default {
-
 
     props: {
         /**
@@ -88,7 +86,6 @@ export default {
         },
     },
 
-
     data() {
         return {
             /**
@@ -127,7 +124,6 @@ export default {
             tutorialHasBeenClosed: false,
         };
     },
-
 
     computed: {
         /**
@@ -173,7 +169,6 @@ export default {
         },
     },
 
-
     watch: {
         value() {
             this.syncMap(this.value, false);
@@ -200,11 +195,9 @@ export default {
         },
     },
 
-
     mounted() {
         this.$nextTick(this.initialize);
     },
-
 
     methods: {
         /**
@@ -351,7 +344,6 @@ export default {
             return !this.tutorialHasBeenClosed;
         },
     },
-
 
 };
 

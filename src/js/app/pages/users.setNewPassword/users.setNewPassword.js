@@ -43,7 +43,7 @@ export default {
                         error: 'Votre mot de passe n\'a pas pu être changé',
                         success: 'Votre nouveau mot de passe a été changé',
                     },
-                    submit: data => setPassword(this.user.id, Object.assign(data, { token: this.$route.params.token })),
+                    submit: (data) => setPassword(this.user.id, Object.assign(data, { token: this.$route.params.token })),
                 },
             ],
         };

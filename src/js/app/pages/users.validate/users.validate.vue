@@ -3,7 +3,8 @@
 </template>
 
 <script>
-import Component from './users.validate.js';
+import Component from './users.validate';
+
 export default Component;
 </script>
 
