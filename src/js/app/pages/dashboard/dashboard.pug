@@ -6,7 +6,7 @@
         <section class="dashboard">
             //- filters
             <simplebar class="filters" ref="filters" data-simplebar-auto-hide="false">
-                <FilterGroup v-for="filterGroup in allowedFilters" :id="filterGroup.id" :faIcon="filterGroup.faIcon" :icon="filterGroup.icon" :label="filterGroup.label" :options="filterGroup.options" :opened="filterGroup.opened"></FilterGroup>
+                <FilterGroup v-for="filterGroup in allowedFilters" :id="filterGroup.id" :key="filterGroup.id" :faIcon="filterGroup.faIcon" :icon="filterGroup.icon" :label="filterGroup.label" :options="filterGroup.options" :opened="filterGroup.opened"></FilterGroup>
             </simplebar>
 
             //- content
