@@ -6,14 +6,14 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            active: {
-                type: Boolean
-            },
-            onClick: {
-                type: Function
-            }
-        }
-    }
+export default {
+    props: {
+        active: {
+            type: Boolean,
+        },
+        onClick: {
+            type: Function,
+        },
+    },
+};
 </script>

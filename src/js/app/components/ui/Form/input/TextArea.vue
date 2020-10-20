@@ -18,29 +18,28 @@
 
 <script>
 import filteredProps from '../../mixins/filteredProps';
-import InputLabel from '../utils/InputLabel'
-import InputWrapper from '../utils/InputWrapper'
-import InputInfo from '../utils/InputInfo'
-import InputError from '../utils/InputError'
-import InputIcon from '../utils/InputIcon'
+import InputLabel from '../utils/InputLabel.vue';
+import InputWrapper from '../utils/InputWrapper.vue';
+import InputError from '../utils/InputError.vue';
+import InputIcon from '../utils/InputIcon.vue';
 import getInputClasses from '../utils/getInputClasses';
 
 export default {
-    name: "TextArea",
+    name: 'TextArea',
     mixins: [filteredProps],
     props: {
         label: {
-            type: String
+            type: String,
         },
         info: {
-            type: String
+            type: String,
         },
         placeholder: {
-            type: String
+            type: String,
         },
         type: {
             type: String,
-            default: 'text'
+            default: 'text',
         },
         value: {
             type: String,
@@ -49,39 +48,38 @@ export default {
             type: String,
         },
         validationName: {
-            type: String
+            type: String,
         },
         id: {
-            type: String
+            type: String,
         },
         variant: {
             type: String,
-            default: 'default'
+            default: 'default',
         },
         prefixIcon: {
-          type: String,
+            type: String,
         },
         suffixIcon: {
-          type: String,
+            type: String,
         },
 
     },
     computed: {
         classes() {
-            const inputOptions = {error: this.error, prefixIcon: this.prefixIcon, suffixIcon: this.suffixIcon};
+            const inputOptions = { error: this.error, prefixIcon: this.prefixIcon, suffixIcon: this.suffixIcon };
 
             return {
                 state: [...getInputClasses('state', inputOptions)],
-                default: getInputClasses('default', inputOptions)
-            }[this.variant]
-        }
+                default: getInputClasses('default', inputOptions),
+            }[this.variant];
+        },
     },
     components: {
         InputLabel,
         InputWrapper,
         InputError,
-        InputInfo,
-        InputIcon
-    }
-}
+        InputIcon,
+    },
+};
 </script>

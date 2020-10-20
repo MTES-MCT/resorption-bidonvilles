@@ -4,12 +4,10 @@ import { notify } from '#helpers/notificationHelper';
 
 export default {
 
-
     components: {
         Input,
         SlideNote,
     },
-
 
     props: {
         /**
@@ -66,7 +64,6 @@ export default {
         },
     },
 
-
     data() {
         return {
             /**
@@ -113,7 +110,6 @@ export default {
         };
     },
 
-
     computed: {
         /**
          * Computes the list of all breadcrumb items
@@ -128,7 +124,8 @@ export default {
             return this.steps.reduce((breadcrumb, step, stepIndex) => [
                 ...breadcrumb,
                 ...[
-                    Object.assign({}, step, {
+                    {
+                        ...step,
                         classNames: {
                             'form-breadcrumbItem': true,
                             'form-breadcrumbItem--current': stepIndex === this.currentStepIndex,
@@ -136,7 +133,7 @@ export default {
                         },
                         isSeparator: false,
                         stepIndex,
-                    }),
+                    },
                     {
                         classNames: {
                             'form-breadcrumbSeparator': true,
@@ -171,7 +168,7 @@ export default {
          * @returns {Array.<FormSection>}
          */
         fullSections() {
-            return this.sections.filter(({ inputs }) => Object.values(inputs).some(input => this.isInputVisible(input)));
+            return this.sections.filter(({ inputs }) => Object.values(inputs).some((input) => this.isInputVisible(input)));
         },
 
         /**
@@ -181,7 +178,7 @@ export default {
          */
         inputs() {
             return this.currentStep.sections
-                .reduce((inputs, section) => Object.assign({}, inputs, section.inputs), {});
+                .reduce((inputs, section) => ({ ...inputs, ...section.inputs }), {});
         },
 
         /**
@@ -190,11 +187,12 @@ export default {
          * @returns {FormStepWording}
          */
         wording() {
-            return Object.assign({
+            return {
                 submit: 'Étape suivante',
                 error: 'Certaines données saisies sont incorrectes',
                 success: null,
-            }, this.currentStep.wording || {});
+                ...this.currentStep.wording || {},
+            };
         },
 
         /**
@@ -207,10 +205,8 @@ export default {
         filteredData() {
             const inputIds = Object.keys(this.inputs);
             return inputIds
-                .filter(id => this.isInputActive(this.inputs[id]))
-                .reduce((data, id) => Object.assign({}, data, {
-                    [id]: this.data[id],
-                }), {});
+                .filter((id) => this.isInputActive(this.inputs[id]))
+                .reduce((data, id) => ({ ...data, [id]: this.data[id] }), {});
         },
 
         /**
@@ -224,10 +220,8 @@ export default {
             }
 
             return Object.keys(this.errors.fields || {})
-                .filter(inputId => this.inputs[inputId] !== undefined)
-                .reduce((errors, inputId) => Object.assign({}, errors, {
-                    [inputId]: this.errors.fields[inputId],
-                }), {});
+                .filter((inputId) => this.inputs[inputId] !== undefined)
+                .reduce((errors, inputId) => ({ ...errors, [inputId]: this.errors.fields[inputId] }), {});
         },
 
         /**
@@ -251,7 +245,6 @@ export default {
         },
     },
 
-
     watch: {
         // two-way binding
         value() {
@@ -261,7 +254,6 @@ export default {
             this.onDataChange();
         },
     },
-
 
     methods: {
         /**

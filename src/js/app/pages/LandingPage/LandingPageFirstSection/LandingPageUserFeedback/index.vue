@@ -24,43 +24,42 @@
 </template>
 
 <script>
-    import LandingPageUserFeedbackBullet from './LandingPageUserFeedbackBullet'
-    import LandingPageUserFeedbackSection from './LandingPageUserFeedbackSection'
+import LandingPageUserFeedbackBullet from './LandingPageUserFeedbackBullet.vue';
+import LandingPageUserFeedbackSection from './LandingPageUserFeedbackSection.vue';
 
-    export default {
-        data() {
-            return {
-                active: 1,
-                interval: null
+export default {
+    data() {
+        return {
+            active: 1,
+            interval: null,
+        };
+    },
+    methods: {
+        setNextSection() {
+            if (this.active === 1) {
+                this.active = 2;
+            } else if (this.active === 2) {
+                this.active = 3;
+            } else if (this.active === 3) {
+                this.active = 1;
             }
         },
-        methods: {
-            setNextSection() {
-              if (this.active === 1) {
-                  this.active = 2
-              } else if (this.active === 2) {
-                  this.active = 3
-              } else if (this.active === 3) {
-                  this.active = 1
-                }
-            },
-            setSection(activeSection) {
-                this.active = activeSection
-                // reset delay
-                clearInterval(this.interval)
-                this.interval = setInterval(this.setNextSection, 8000)
-            }
+        setSection(activeSection) {
+            this.active = activeSection;
+            // reset delay
+            clearInterval(this.interval);
+            this.interval = setInterval(this.setNextSection, 8000);
         },
-        mounted() {
-            this.interval = setInterval(this.setNextSection, 8000)
-        },
-        beforeDestroy() {
-            clearInterval(this.interval)
-        },
-        components: {
-            LandingPageUserFeedbackBullet,
-            LandingPageUserFeedbackSection
-        }
-    }
+    },
+    mounted() {
+        this.interval = setInterval(this.setNextSection, 8000);
+    },
+    beforeDestroy() {
+        clearInterval(this.interval);
+    },
+    components: {
+        LandingPageUserFeedbackBullet,
+        LandingPageUserFeedbackSection,
+    },
+};
 </script>
-

@@ -7,19 +7,19 @@
 </template>
 
 <script>
-    import NavBar from './NavBar'
-    import PublicFooter from './PublicFooter'
+import NavBar from './NavBar/index.vue';
+import PublicFooter from './PublicFooter.vue';
 
-    export default {
-        props: {
-            stickyHeader: {
-                type: Boolean,
-                default: true
-            }
+export default {
+    props: {
+        stickyHeader: {
+            type: Boolean,
+            default: true,
         },
-        components: {
-            NavBar,
-            PublicFooter
-        }
-    }
+    },
+    components: {
+        NavBar,
+        PublicFooter,
+    },
+};
 </script>

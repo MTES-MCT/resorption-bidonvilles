@@ -51,7 +51,7 @@ export default {
                     {
                         id: 'author',
                         label: 'AUTEUR',
-                        field: comment => `${comment.createdBy.lastName.toUpperCase()} ${comment.createdBy.firstName} (${comment.createdBy.position} - ${comment.createdBy.organization})`,
+                        field: (comment) => `${comment.createdBy.lastName.toUpperCase()} ${comment.createdBy.firstName} (${comment.createdBy.position} - ${comment.createdBy.organization})`,
                     },
                     {
                         id: 'see',

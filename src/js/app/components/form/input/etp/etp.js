@@ -28,7 +28,6 @@ export default {
         },
     },
 
-
     data() {
         const { etp_types: types } = getConfig();
 
@@ -38,23 +37,20 @@ export default {
         };
     },
 
-
     computed: {
         parsedRows() {
-            return this.rows.map(row => ({
+            return this.rows.map((row) => ({
                 type: row.type ? row.type : null,
                 total: parseFloat(row.total),
             }));
         },
     },
 
-
     watch: {
         parsedRows() {
             this.emitInput();
         },
     },
-
 
     methods: {
         /**

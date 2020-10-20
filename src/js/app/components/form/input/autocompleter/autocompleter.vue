@@ -7,6 +7,7 @@
 </style>
 
 <script>
-    import Component from './autocompleter.js';
-    export default Component;
+import Component from './autocompleter';
+
+export default Component;
 </script>

@@ -9,63 +9,63 @@
 </template>
 
 <script>
-    import { fr } from 'vuejs-datepicker/dist/locale';
-    import getInputClasses from './Form/utils/getInputClasses';
-    import InputLabel from './Form/utils/InputLabel'
-    import InputWrapper from './Form/utils/InputWrapper'
-    import InputInfo from './Form/utils/InputInfo'
-    import InputError from './Form/utils/InputError'
+import { fr } from 'vuejs-datepicker/dist/locale';
+import getInputClasses from './Form/utils/getInputClasses';
+import InputLabel from './Form/utils/InputLabel.vue';
+import InputWrapper from './Form/utils/InputWrapper.vue';
+import InputInfo from './Form/utils/InputInfo.vue';
+import InputError from './Form/utils/InputError.vue';
 
-    export default {
-        props: {
-            label: {
-                type: String
-            },
-            info: {
-                type: String
-            },
-            id: {
-                type: String
-            },
-            validationName: {
-                type: String,
-            },
-            variant: {
-                type: String,
-                default: 'default'
-            },
-            rules: {
-                type: String
-            }
+export default {
+    props: {
+        label: {
+            type: String,
         },
-        components: {
+        info: {
+            type: String,
+        },
+        id: {
+            type: String,
+        },
+        validationName: {
+            type: String,
+        },
+        variant: {
+            type: String,
+            default: 'default',
+        },
+        rules: {
+            type: String,
+        },
+    },
+    components: {
 
-            InputLabel,
-            InputWrapper,
-            InputError,
-            InputInfo
-        },
-        data() {
+        InputLabel,
+        InputWrapper,
+        InputError,
+        InputInfo,
+    },
+    data() {
+        return {
+            dateLanguage: fr,
+            dynamicComponent: null,
+        };
+    },
+    mounted() {
+        // Make vuejs-datepicker friendly with SSR
+        import('vuejs-datepicker').then((module) => {
+            this.dynamicComponent = module.default;
+        });
+    },
+    computed: {
+        inputClasses() {
+            const inputOptions = { error: this.error };
+
             return {
-                dateLanguage: fr,
-                dynamicComponent: null
-            }
+                state: [...getInputClasses('state', inputOptions)],
+                default: getInputClasses('default', inputOptions),
+            }[this.variant];
         },
-        mounted () {
-          // Make vuejs-datepicker friendly with SSR
-          import('vuejs-datepicker').then(module => {
-            this.dynamicComponent = module.default
-          })
-        },
-        computed: {
-            inputClasses() {
-                const inputOptions = { error : this.error }
-
-                return {
-                    state: [...getInputClasses('state', inputOptions)],
-                    default: getInputClasses('default', inputOptions)
-                }[this.variant]
-            }
-        },
-    }
+    },
+};
 </script>

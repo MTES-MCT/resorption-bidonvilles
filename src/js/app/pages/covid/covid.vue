@@ -3,7 +3,8 @@
 </template>
 
 <script>
-import Component from "./covid.js";
+import Component from './covid';
+
 export default Component;
 </script>
 

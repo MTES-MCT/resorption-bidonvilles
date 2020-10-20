@@ -7,14 +7,14 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            title: {
-                type: String
-            },
-            info: {
-                type: String
-            }
-        }
-    }
+export default {
+    props: {
+        title: {
+            type: String,
+        },
+        info: {
+            type: String,
+        },
+    },
+};
 </script>

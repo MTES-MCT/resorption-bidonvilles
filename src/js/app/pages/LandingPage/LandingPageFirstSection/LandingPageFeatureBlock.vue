@@ -6,13 +6,13 @@
 </template>
 
 <script>
-    export default {
-        name: "LandingPageFeatureBlock",
-        props: {
-            icon: {
-                type: String,
-                required: true
-            },
-        }
-    }
+export default {
+    name: 'LandingPageFeatureBlock',
+    props: {
+        icon: {
+            type: String,
+            required: true,
+        },
+    },
+};
 </script>

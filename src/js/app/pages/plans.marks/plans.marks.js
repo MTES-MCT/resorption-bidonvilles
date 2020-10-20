@@ -4,7 +4,6 @@ import { get, addState } from '#helpers/api/plan';
 import { hasPermission } from '#helpers/api/config';
 import { notify } from '#helpers/notificationHelper';
 
-
 export default {
     components: {
         NavBar,
@@ -101,7 +100,7 @@ export default {
                         },
                     ],
                     submit: (d) => {
-                        const builtData = Object.assign({}, d, d.housing);
+                        const builtData = { ...d, ...d.housing };
                         delete builtData.housing;
                         return addState(this.$route.params.id, builtData);
                     },
@@ -459,7 +458,7 @@ export default {
 
                     if (lastState) {
                         this.formData = {
-                            difficultes: ['cantine', 'place_up2a', 'transport'].filter(d => lastState.education && (lastState.education[`difficulte_${d}`] || lastState.education[`difficculte_${d}`])),
+                            difficultes: ['cantine', 'place_up2a', 'transport'].filter((d) => lastState.education && (lastState.education[`difficulte_${d}`] || lastState.education[`difficculte_${d}`])),
                             etp: lastState.etp.map(({ total, type: { uid } }) => ({
                                 total,
                                 type: uid,

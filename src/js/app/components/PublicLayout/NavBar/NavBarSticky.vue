@@ -23,34 +23,34 @@
 </template>
 
 <script>
-    import NavBarLogo from './NavBarLogo'
-    import NavBarMobileMenu from './NavBarMobileMenu'
-    import NavBarMobileButton from './NavBarMobileButton'
-    import PublicContainer from '../PublicContainer'
-    import Button from '#app/components/ui/Button'
+import NavBarLogo from './NavBarLogo.vue';
+import NavBarMobileMenu from './NavBarMobileMenu.vue';
+import NavBarMobileButton from './NavBarMobileButton.vue';
+import PublicContainer from '../PublicContainer.vue';
+import Button from '#app/components/ui/Button.vue';
 
-    export default {
-        props: {
-          menuDisplayed: {
-              type: Boolean,
-              required: true
-          },
-          toggleMenu: {
-              type: Function,
-              required: true
-          },
-            closeMenu: {
-              type: Function,
-              required: true
-          },
+export default {
+    props: {
+        menuDisplayed: {
+            type: Boolean,
+            required: true,
         },
-        components: {
-            NavBarLogo,
-            Button,
-            NavBarMobileMenu,
-            NavBarMobileButton,
-            PublicContainer
+        toggleMenu: {
+            type: Function,
+            required: true,
         },
+        closeMenu: {
+            type: Function,
+            required: true,
+        },
+    },
+    components: {
+        NavBarLogo,
+        Button,
+        NavBarMobileMenu,
+        NavBarMobileButton,
+        PublicContainer,
+    },
 
-    }
+};
 </script>

@@ -78,13 +78,11 @@ export default {
         },
     },
 
-
     data() {
         return {
             data: this.value,
         };
     },
-
 
     watch: {
         'data.in.households'() { this.emitInput(); },
@@ -108,11 +106,9 @@ export default {
         'data.out_excluded.minors'() { this.emitInput(); },
     },
 
-
     mounted() {
         this.emitInput();
     },
-
 
     methods: {
         emitInput() {

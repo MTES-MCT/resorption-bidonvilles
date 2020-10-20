@@ -26,71 +26,71 @@
 </template>
 
 <script>
-    import Icon from './Icon.vue';
+import Icon from './Icon.vue';
 
-    export default {
-        name: 'Button',
-        props: {
-            variant: {
-                type: String,
-                default: 'primary' // 'primary' or 'secondary'
-            },
+export default {
+    name: 'Button',
+    props: {
+        variant: {
             type: String,
-            href: String,
-            size: {
-                type: String,
-                default: 'md' // 'sm', 'md', 'lg'
-            },
-            icon: String,
-            iconPosition: {
-                type: String,
-                default: 'right' // 'left' or 'right'
-            },
-            loading: {
-                type: Boolean,
-                default: false
-            },
-            disabled: {
-                type: Boolean,
-                default: false
-            }
+            default: 'primary', // 'primary' or 'secondary'
         },
-        computed: {
-            iconPositionClass() {
-                return {
-                    left: 'mr-2',
-                    right: 'ml-2'
-                }
-            },
-            sizeClasses() {
-                return {
-                    sm: `text-sm ${this.isLink ? '' : 'py-1 px-2'}`,
-                    md: `text-md ${this.isLink ? '' : 'py-2 px-4'}`,
-                    lg: `text-lg ${this.isLink ? '' : 'py-2 px-4'}`
-                }[this.size]
-            },
-            variantClasses() {
-                return {
-                    primary: 'border-2 border-primary bg-primary text-white hover:bg-primaryDark',
-                    secondary: 'border-2 border-secondary bg-secondary text-white hover:bg-secondaryDark',
-                    primaryOutline: 'border-2 border-primary text-primary hover:bg-primary hover:text-white',
-                    secondaryOutline: 'border-2  border-secondary text-secondary hover:bg-secondary hover:text-white',
-                    primaryText: 'text-primary hover:text-primaryDark',
-                    secondaryText: 'text-secondary hover:text-secondaryDark'
+        type: String,
+        href: String,
+        size: {
+            type: String,
+            default: 'md', // 'sm', 'md', 'lg'
+        },
+        icon: String,
+        iconPosition: {
+            type: String,
+            default: 'right', // 'left' or 'right'
+        },
+        loading: {
+            type: Boolean,
+            default: false,
+        },
+        disabled: {
+            type: Boolean,
+            default: false,
+        },
+    },
+    computed: {
+        iconPositionClass() {
+            return {
+                left: 'mr-2',
+                right: 'ml-2',
+            };
+        },
+        sizeClasses() {
+            return {
+                sm: `text-sm ${this.isLink ? '' : 'py-1 px-2'}`,
+                md: `text-md ${this.isLink ? '' : 'py-2 px-4'}`,
+                lg: `text-lg ${this.isLink ? '' : 'py-2 px-4'}`,
+            }[this.size];
+        },
+        variantClasses() {
+            return {
+                primary: 'border-2 border-primary bg-primary text-white hover:bg-primaryDark',
+                secondary: 'border-2 border-secondary bg-secondary text-white hover:bg-secondaryDark',
+                primaryOutline: 'border-2 border-primary text-primary hover:bg-primary hover:text-white',
+                secondaryOutline: 'border-2  border-secondary text-secondary hover:bg-secondary hover:text-white',
+                primaryText: 'text-primary hover:text-primaryDark',
+                secondaryText: 'text-secondary hover:text-secondaryDark',
 
-                }[this.variant]
-            },
-            isLink() {
-                return this.href !== undefined;
-            },
+            }[this.variant];
         },
-        methods: {
-            onClick(e) {
-                this.$emit('click', e);
-            }
+        isLink() {
+            return this.href !== undefined;
         },
-        components: {
-            Icon
-        }
-    };
+    },
+    methods: {
+        onClick(e) {
+            this.$emit('click', e);
+        },
+    },
+    components: {
+        Icon,
+    },
+};
 </script>

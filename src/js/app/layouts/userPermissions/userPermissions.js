@@ -61,7 +61,7 @@ export default {
          * @returns {UserPermissionParsedItem}
          */
         resolveIcon(item) {
-            return Object.assign({}, item, { icon: TYPES_TO_ICONS[item.type] });
+            return { ...item, icon: TYPES_TO_ICONS[item.type] };
         },
     },
 
