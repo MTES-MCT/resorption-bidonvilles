@@ -7,7 +7,6 @@
  */
 const DEFAULT_TIMEOUT = 200;
 
-
 export default {
 
     props: {
@@ -126,7 +125,6 @@ export default {
         },
     },
 
-
     data() {
         let label = '';
         if (!this.allowMultiple && this.value.length === 1) {
@@ -199,7 +197,6 @@ export default {
             indexOfHighligtedItem: null,
         };
     },
-
 
     computed: {
         /**
@@ -323,7 +320,6 @@ export default {
         },
     },
 
-
     watch: {
         // two-way binding
         value() {
@@ -335,16 +331,13 @@ export default {
         },
     },
 
-
     mounted() {
         document.addEventListener('click', this.checkOutsideClick);
     },
 
-
     destroyed() {
         document.removeEventListener('click', this.checkOutsideClick);
     },
-
 
     methods: {
         /**
@@ -394,7 +387,7 @@ export default {
                 if (this.indexOfHighligtedItem - 1 < 0) {
                     this.indexOfHighligtedItem = null;
                 } else {
-                    this.indexOfHighligtedItem = this.indexOfHighligtedItem - 1;
+                    this.indexOfHighligtedItem -= 1;
                 }
             } else if (event.keyCode === 40) { // down arrow (= next suggestion)
                 if (this.unselectedSuggestionsFlat.length > 0) {
@@ -587,7 +580,7 @@ export default {
             const refs = ['prefixIcon', 'input', 'suffixIcon', 'suggestionContainer'];
 
             // if the click does not come from the input, reset the field
-            if (!refs.some(ref => this.$refs[ref] && this.$refs[ref].contains(event.target))) {
+            if (!refs.some((ref) => this.$refs[ref] && this.$refs[ref].contains(event.target))) {
                 this.reset();
             }
         },
@@ -659,7 +652,6 @@ export default {
     },
 
 };
-
 
 /**
  * Please note that the property 'data' is completely useless for this component itself,

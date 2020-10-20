@@ -4,6 +4,7 @@
 
 <script>
 import Component from './modal.js';
+
 export default Component;
 </script>
 

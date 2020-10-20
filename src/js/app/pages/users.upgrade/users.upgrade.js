@@ -64,7 +64,7 @@ export default {
                             error: 'Votre compte n\'a pas pu être mis à jour',
                             success: 'Votre compte a ben été mis à jour',
                         },
-                        submit: data => upgrade(userId, data),
+                        submit: (data) => upgrade(userId, data),
                     },
                 ],
             },

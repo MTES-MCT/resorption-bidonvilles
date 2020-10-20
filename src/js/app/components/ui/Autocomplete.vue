@@ -59,108 +59,107 @@
 </template>
 
 <script>
-    import InputLabel from './Form/utils/InputLabel'
-    import InputWrapper from './Form/utils/InputWrapper'
-    import InputInfo from './Form/utils/InputInfo'
-    import InputError from './Form/utils/InputError'
-    import getInputClasses from './Form/utils/getInputClasses';
+import InputLabel from './Form/utils/InputLabel';
+import InputWrapper from './Form/utils/InputWrapper';
+import InputInfo from './Form/utils/InputInfo';
+import InputError from './Form/utils/InputError';
+import getInputClasses from './Form/utils/getInputClasses';
 
-    export default {
-        components: {
-            InputLabel,
-            InputWrapper,
-            InputInfo,
-            InputError
+export default {
+    components: {
+        InputLabel,
+        InputWrapper,
+        InputInfo,
+        InputError,
+    },
+    props: {
+        loading: {
+            type: Boolean,
         },
-        props: {
-            loading: {
-                type: Boolean
-            },
-            label: {
-                type: String
-            },
-            info: {
-                type: String
-            },
-            validationName: {
-                type: String,
-            },
-            rules: {
-                type: String,
-            },
-            id: {
-                type: String
-            },
-            search: {
-              type: Function,
-              required: true
-            },
-            defaultValue: {
-                type: String,
-                required: false,
-                default: ''
-            },
-            placeholder: {
-                type: String,
-            },
-            getResultValue: {
-                type: Function,
-                default: val => val
-            },
-            debounceTime: {
-              type: Number,
-              default: 0
-            },
-            variant: {
-                type: String,
-                default: 'default'
-            },
+        label: {
+            type: String,
         },
-        computed: {
-            classes() {
-                return {
-                    state: [...getInputClasses('state', this.error)],
-                    default: getInputClasses('default')
-                }[this.variant]
-            },
+        info: {
+            type: String,
         },
-        data() {
+        validationName: {
+            type: String,
+        },
+        rules: {
+            type: String,
+        },
+        id: {
+            type: String,
+        },
+        search: {
+            type: Function,
+            required: true,
+        },
+        defaultValue: {
+            type: String,
+            required: false,
+            default: '',
+        },
+        placeholder: {
+            type: String,
+        },
+        getResultValue: {
+            type: Function,
+            default: (val) => val,
+        },
+        debounceTime: {
+            type: Number,
+            default: 0,
+        },
+        variant: {
+            type: String,
+            default: 'default',
+        },
+    },
+    computed: {
+        classes() {
             return {
-                focused: false,
-                value: '',
-                searchInput: '',
-                results: []
-            }
+                state: [...getInputClasses('state', this.error)],
+                default: getInputClasses('default'),
+            }[this.variant];
         },
-        methods: {
-            onItemSelect(newValue) {
-                // If user has selected an item, update search input
-                if (newValue) {
-                    this.searchInput = this.getResultValue(newValue)
-                }
-                // Update local new value & Emit
-                this.value = newValue;
-                this.$emit('submit', newValue)
-                this.$refs.provider.syncValue(newValue);
-                this.$refs.provider.validate();
-                this.$refs.searchInput.blur()
-
-            },
-            handleFocus() {
-                this.focused = true
-            },
-
-            handleBlur() {
-                // If user has deleted his input, delete the selected value
-                if (!this.searchInput) {
-                    this.onItemSelect(null)
-                }
-                // If user has changed his last input, restore to last value
-                else {
-                    this.searchInput = this.getResultValue(this.value)
-                }
-                this.focused = false
+    },
+    data() {
+        return {
+            focused: false,
+            value: '',
+            searchInput: '',
+            results: [],
+        };
+    },
+    methods: {
+        onItemSelect(newValue) {
+            // If user has selected an item, update search input
+            if (newValue) {
+                this.searchInput = this.getResultValue(newValue);
             }
-        }
-    }
+            // Update local new value & Emit
+            this.value = newValue;
+            this.$emit('submit', newValue);
+            this.$refs.provider.syncValue(newValue);
+            this.$refs.provider.validate();
+            this.$refs.searchInput.blur();
+        },
+        handleFocus() {
+            this.focused = true;
+        },
+
+        handleBlur() {
+            // If user has deleted his input, delete the selected value
+            if (!this.searchInput) {
+                this.onItemSelect(null);
+            }
+            // If user has changed his last input, restore to last value
+            else {
+                this.searchInput = this.getResultValue(this.value);
+            }
+            this.focused = false;
+        },
+    },
+};
 </script>

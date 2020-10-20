@@ -31,7 +31,6 @@ import Covid from '#app/pages/covid/covid.vue';
 import Changelog from '#app/pages/changelog/changelog.vue';
 import CharteEngagement from '#app/pages/charte_engagement/charte_engagement.vue';
 
-
 import { logout, isLoggedIn, alreadyLoggedBefore } from '#helpers/api/user';
 import {
     get as getConfig, isLoaded as isConfigLoaded, hasPermission, hasAcceptedCharte,
@@ -94,7 +93,7 @@ function isPermitted(to) {
     }
 
     // ensure all permissions are given
-    return permissions.every(permission => hasPermission(permission));
+    return permissions.every((permission) => hasPermission(permission));
 }
 
 /**

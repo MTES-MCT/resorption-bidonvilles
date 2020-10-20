@@ -4,6 +4,7 @@
 
 <script>
 import Component from './stats.js';
+
 export default Component;
 </script>
 

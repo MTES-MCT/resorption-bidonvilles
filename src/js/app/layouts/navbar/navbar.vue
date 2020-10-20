@@ -4,6 +4,7 @@
 
 <script>
 import Component from './navbar.js';
+
 export default Component;
 </script>
 

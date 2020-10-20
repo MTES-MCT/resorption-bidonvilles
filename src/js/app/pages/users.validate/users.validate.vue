@@ -4,6 +4,7 @@
 
 <script>
 import Component from './users.validate.js';
+
 export default Component;
 </script>
 

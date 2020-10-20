@@ -3,9 +3,8 @@
 </template>
 
 <script>
-    export default {
-        name: "SelectOption",
-        props: {}
-    }
+export default {
+    name: 'SelectOption',
+    props: {},
+};
 </script>
-

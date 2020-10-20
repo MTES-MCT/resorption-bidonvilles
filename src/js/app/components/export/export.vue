@@ -4,6 +4,7 @@
 
 <script>
 import Component from './export.js';
+
 export default Component;
 </script>
 

@@ -14,28 +14,28 @@
 
 <script>
 import filteredProps from '../../mixins/filteredProps';
-import InputLabel from '../utils/InputLabel'
-import InputWrapper from '../utils/InputWrapper'
-import InputInfo from '../utils/InputInfo'
-import InputError from '../utils/InputError'
+import InputLabel from '../utils/InputLabel';
+import InputWrapper from '../utils/InputWrapper';
+import InputInfo from '../utils/InputInfo';
+import InputError from '../utils/InputError';
 import getInputClasses from '../utils/getInputClasses';
 
 export default {
-    name: "TextInput",
+    name: 'TextInput',
     mixins: [filteredProps],
     props: {
         label: {
-            type: String
+            type: String,
         },
         info: {
-            type: String
+            type: String,
         },
         placeholder: {
-            type: String
+            type: String,
         },
         type: {
             type: String,
-            default: 'text'
+            default: 'text',
         },
         validationName: {
             type: String,
@@ -47,26 +47,26 @@ export default {
             type: String,
         },
         id: {
-            type: String
+            type: String,
         },
         variant: {
             type: String,
-            default: 'default'
+            default: 'default',
         },
     },
     computed: {
         classes() {
             return {
                 state: [...getInputClasses('state', this.error)],
-                default: getInputClasses('default')
-            }[this.variant]
-        }
+                default: getInputClasses('default'),
+            }[this.variant];
+        },
     },
     components: {
         InputLabel,
         InputWrapper,
         InputError,
-        InputInfo
-    }
-}
+        InputInfo,
+    },
+};
 </script>

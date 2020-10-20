@@ -4,5 +4,6 @@
 
 <script>
 import Component from './skeleton.js';
+
 export default Component;
 </script>

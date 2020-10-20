@@ -4,6 +4,7 @@
 
 <script>
 import Component from './quickview.js';
+
 export default Component;
 </script>
 

@@ -13,44 +13,44 @@
 </template>
 
 <script>
-    import InputWrapper from './utils/InputWrapper'
-    import InputInfo from './utils/InputInfo'
-    import InputError from './utils/InputError'
-    import CheckableGroupWrapper from './utils/CheckableGroupWrapper';
+import InputWrapper from './utils/InputWrapper';
+import InputInfo from './utils/InputInfo';
+import InputError from './utils/InputError';
+import CheckableGroupWrapper from './utils/CheckableGroupWrapper';
 
-    export default {
-        props: {
-            title: {
-                type: String,
-            },
-            info: {
-                type: String
-            },
-            error: {
-                type: String
-            },
-            direction: {
-                type: String,
-                default: 'vertical'
-            },
-            validationName: {
-                type: String,
-            },
-            rules: {
-                type: String,
-            },
-            id: {
-                type: String,
-            }
-
+export default {
+    props: {
+        title: {
+            type: String,
         },
-        components: {
-            CheckableGroupWrapper,
-            InputInfo,
-            InputWrapper,
-            InputError,
-        }
-    }
+        info: {
+            type: String,
+        },
+        error: {
+            type: String,
+        },
+        direction: {
+            type: String,
+            default: 'vertical',
+        },
+        validationName: {
+            type: String,
+        },
+        rules: {
+            type: String,
+        },
+        id: {
+            type: String,
+        },
+
+    },
+    components: {
+        CheckableGroupWrapper,
+        InputInfo,
+        InputWrapper,
+        InputError,
+    },
+};
 </script>
 
 <style scoped>
@@ -85,5 +85,3 @@
         }
     }
 </style>
-
-

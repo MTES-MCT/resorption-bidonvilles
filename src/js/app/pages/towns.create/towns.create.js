@@ -359,7 +359,7 @@ export default {
                         error: 'L\'intégration du site aux dispositifs a échoué',
                         success: 'L\'intégration du site aux dispositifs a réussi',
                     },
-                    submit: (data, [{ town: { id: townId } }]) => Promise.all(data.plans.map(planId => link(planId, townId))),
+                    submit: (data, [{ town: { id: townId } }]) => Promise.all(data.plans.map((planId) => link(planId, townId))),
                 },
             ],
         };

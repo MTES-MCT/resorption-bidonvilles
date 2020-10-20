@@ -4,5 +4,6 @@
 
 <script>
 import Component from './launcher.js';
+
 export default Component;
 </script>

@@ -21,13 +21,12 @@
     </footer>
 </template>
 
-
 <script>
-    import PublicContainer from './PublicContainer'
+import PublicContainer from './PublicContainer';
 
-    export default {
-        components: {
-            PublicContainer
-        }
-    }
+export default {
+    components: {
+        PublicContainer,
+    },
+};
 </script>

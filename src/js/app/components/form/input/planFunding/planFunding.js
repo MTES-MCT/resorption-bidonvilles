@@ -58,7 +58,6 @@ export default {
         },
     },
 
-
     data() {
         return {
             /**
@@ -82,7 +81,7 @@ export default {
              */
             fundings: this.value.map(({ year, data }) => ({
                 year,
-                data: data.map(d => ({
+                data: data.map((d) => ({
                     data: d,
                 })),
             })),
@@ -103,19 +102,17 @@ export default {
         },
     },
 
-
     watch: {
         // two-way binding
         value() {
             this.fundings = this.value.map(({ year, data }) => ({
                 year,
-                data: data.map(d => ({
+                data: data.map((d) => ({
                     data: d,
                 })),
             }));
         },
     },
-
 
     methods: {
         /**

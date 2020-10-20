@@ -91,71 +91,71 @@
 
 <script>
 export default {
-  props: {
-    value: {
-      type: Object,
-      required: false,
-      default() {
-        return {
-          siao: {
-            people: "",
-            families: ""
-          },
-          logement_social: {
-            people: "",
-            families: ""
-          },
-          dalo: {
-            people: "",
-            families: ""
-          },
-          accompagnes: {
-            people: "",
-            families: ""
-          },
-          non_accompagnes: {
-            people: "",
-            families: ""
-          },
-          heberges: {
-            people: "",
-            families: ""
-          }
-        };
-      }
+    props: {
+        value: {
+            type: Object,
+            required: false,
+            default() {
+                return {
+                    siao: {
+                        people: '',
+                        families: '',
+                    },
+                    logement_social: {
+                        people: '',
+                        families: '',
+                    },
+                    dalo: {
+                        people: '',
+                        families: '',
+                    },
+                    accompagnes: {
+                        people: '',
+                        families: '',
+                    },
+                    non_accompagnes: {
+                        people: '',
+                        families: '',
+                    },
+                    heberges: {
+                        people: '',
+                        families: '',
+                    },
+                };
+            },
+        },
+
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
     },
 
-    disabled: {
-      type: Boolean,
-      required: false,
-      default: false
-    }
-  },
+    data() {
+        return {
+            data: this.value,
+        };
+    },
 
-  data() {
-    return {
-      data: this.value
-    };
-  },
+    watch: {
+        data: {
+            handler(val) {
+                this.emitInput();
+            },
+            deep: true,
+        },
+    },
 
-  watch: {
-    data: {
-      handler(val) {
+    mounted() {
         this.emitInput();
-      },
-      deep: true
-    }
-  },
+    },
 
-  mounted() {
-    this.emitInput();
-  },
-
-  methods: {
-    emitInput() {
-      this.$emit("input", this.data);
-    }
-  }
+    methods: {
+        emitInput() {
+            this.$emit('input', this.data);
+        },
+    },
 };
 </script>
 

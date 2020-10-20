@@ -43,28 +43,25 @@
 </template>
 
 <script>
-    import PublicLayout from '#app/components/PublicLayout'
-    import PublicContainer from '#app/components/PublicLayout/PublicContainer'
-    import LandingPageHero from './LandingPageHero'
-    import LandingPageFirstSection from './LandingPageFirstSection'
-    import LandingPageSecondSection from './LandingPageSecondSection'
-    import LandingPageThirdSection from './LandingPageThirdSection'
-    import LandingPageBanner from './LandingPageBanner'
-    import LandingPageContactForm from './LandingPageContactForm'
+import PublicLayout from '#app/components/PublicLayout';
+import PublicContainer from '#app/components/PublicLayout/PublicContainer';
+import LandingPageHero from './LandingPageHero';
+import LandingPageFirstSection from './LandingPageFirstSection';
+import LandingPageSecondSection from './LandingPageSecondSection';
+import LandingPageThirdSection from './LandingPageThirdSection';
+import LandingPageBanner from './LandingPageBanner';
+import LandingPageContactForm from './LandingPageContactForm';
 
-    export default {
-        components: {
-            PublicContainer,
-            PublicLayout,
-            LandingPageHero,
-            LandingPageFirstSection,
-            LandingPageSecondSection,
-            LandingPageThirdSection,
-            LandingPageBanner,
-            LandingPageContactForm,
-        }
-    }
+export default {
+    components: {
+        PublicContainer,
+        PublicLayout,
+        LandingPageHero,
+        LandingPageFirstSection,
+        LandingPageSecondSection,
+        LandingPageThirdSection,
+        LandingPageBanner,
+        LandingPageContactForm,
+    },
+};
 </script>
-
-
-

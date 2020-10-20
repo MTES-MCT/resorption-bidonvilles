@@ -165,7 +165,7 @@ export default {
         };
 
         if (data.hasNationalPermission !== true || user.organization.location.type === 'nation') {
-            data.defaultLocation = Object.assign({}, userLocation);
+            data.defaultLocation = { ...userLocation };
             data.location = null;
         } else {
             data.defaultLocation = {
@@ -177,7 +177,7 @@ export default {
                     type: 'nation',
                 },
             };
-            data.location = Object.assign({}, userLocation);
+            data.location = { ...userLocation };
         }
 
         if (data.defaultLocation.data.type === 'nation') {
@@ -450,20 +450,17 @@ export default {
             }, null);
 
             // final object
-            return Object.assign({}, shantytown, {
+            return {
+                ...shantytown,
                 statusName,
                 statusDate,
                 statusSince: statusSince.join(' '),
                 statusDetails: statusDetails[shantytown.status],
-                fieldType: Object.assign({}, shantytown.fieldType, {
-                    color: this.fieldTypeColors[shantytown.fieldType.id],
-                }),
-                electricityType: Object.assign({}, shantytown.electricityType, {
-                    value: electricityValue,
-                }),
+                fieldType: { ...shantytown.fieldType, color: this.fieldTypeColors[shantytown.fieldType.id] },
+                electricityType: { ...shantytown.electricityType, value: electricityValue },
                 justiceStatuses,
                 totalSolutions,
-            });
+            };
         },
 
         /**

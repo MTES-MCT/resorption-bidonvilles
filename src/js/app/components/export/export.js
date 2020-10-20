@@ -119,7 +119,7 @@ export default {
             const { code, type } = this.location.data;
             let url = `${process.env.VUE_APP_API_URL}/towns/export?locationType=${encodeURIComponent(type)}&locationCode=${encodeURIComponent(code)}&closedTowns=${this.closedTowns ? '1' : '0'}`;
 
-            const options = this.availableOptions.map(({ id }) => id).filter(id => this.options[id]);
+            const options = this.availableOptions.map(({ id }) => id).filter((id) => this.options[id]);
             if (options.length > 0) {
                 url += `&options=${encodeURIComponent(options.join(','))}`;
             }

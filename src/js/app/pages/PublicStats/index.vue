@@ -17,7 +17,6 @@
                 <TrendChart class="stats-chart" :datasets="usersEvolutionDatasets" :labels="usersEvolutionLabels" :grid="{ verticalLines: true, horizontalLines: true }" :max="usersEvolutionMax" :min="0"></TrendChart>
             </div>
 
-
             <StatsSection title="Usage" class="mt-16">
                     <StatsBlock :title="numberOfExports" icon="file-download" subtitle="extractions de données réalisées" info="Les exports Excel permettent aux acteurs locaux d'utiliser et d'analyser les données afin de suivre, communiquer et optimiser les actions de résorption depuis le 15/11/2019." />
                     <StatsBlock :title="numberOfComments" icon="comment"  subtitle="commentaires créés" info="Au delà du suivi des chiffrés, les commentaires permettent de suivre et de partager des informations qualitative utiles dans une action multi-partenariale." />
@@ -37,150 +36,148 @@
 </template>
 
 <script>
-    import PublicLayout from '#app/components/PublicLayout'
-    import PublicContainer from '#app/components/PublicLayout/PublicContainer'
-    import StatsBlock from './StatsBlock'
-    import StatsSection from './StatsSection'
-    import { all as getStats } from '#helpers/api/stats';
+import PublicLayout from '#app/components/PublicLayout';
+import PublicContainer from '#app/components/PublicLayout/PublicContainer';
+import StatsBlock from './StatsBlock';
+import StatsSection from './StatsSection';
+import { all as getStats } from '#helpers/api/stats';
 
-    export default {
-        components: {
-            PublicLayout,
-            PublicContainer,
-            StatsSection,
-            StatsBlock
+export default {
+    components: {
+        PublicLayout,
+        PublicContainer,
+        StatsSection,
+        StatsBlock,
+    },
+    data() {
+        return {
+            state: null,
+            error: null,
+            stats: null,
+        };
+    },
+    created() {
+        this.load();
+    },
+    computed: {
+        numberOfDepartements() {
+            return this.stats ? this.stats.numberOfDepartements : '...';
         },
-        data() {
+
+        numberOfCollaboratorAndAssociationUsers() {
+            return this.stats ? this.stats.numberOfCollaboratorAndAssociationUsers : '...';
+        },
+
+        numberOfTerritorialCollectivities() {
+            return this.stats ? (this.stats.numberOfCollaboratorAndAssociationOrganizations.territorial_collectivity || 0) : '...';
+        },
+
+        numberOfAssociations() {
+            return this.stats ? (this.stats.numberOfCollaboratorAndAssociationOrganizations.association || 0) : '...';
+        },
+
+        numberOfPublicEstablishments() {
+            return this.stats ? (this.stats.numberOfCollaboratorAndAssociationOrganizations.public_establishment || 0) : '...';
+        },
+
+        numberOfExports() {
+            return this.stats ? this.stats.numberOfExports : '...';
+        },
+
+        numberOfComments() {
+            return this.stats ? this.stats.numberOfComments : '...';
+        },
+
+        numberOfDirectoryViews() {
+            return this.stats ? this.stats.numberOfDirectoryViews : '...';
+        },
+
+        numberOfNewUsersPerMonth() {
+            return (this.stats && this.stats.numberOfNewUsersPerMonth) || null;
+        },
+
+        usersEvolutionDatasets() {
+            if (this.numberOfNewUsersPerMonth === null) {
+                return [];
+            }
+
+            const cumulativeData = this.numberOfNewUsersPerMonth.reduce((acc, { total }, index) => (index === 0 ? [parseInt(total, 10)] : [...acc, parseInt(total, 10) + acc[acc.length - 1]]), []);
+
+            return [
+                {
+                    data: cumulativeData,
+                    smooth: true,
+                    fill: true,
+                },
+            ];
+        },
+
+        usersEvolutionMax() {
+            if (this.numberOfNewUsersPerMonth === null) {
+                return 0;
+            }
+
+            const max = this.numberOfNewUsersPerMonth.reduce((m, { total }) => Math.max(m, total), 0);
+            return Math.ceil(max / 10) * 10;
+        },
+
+        usersEvolutionLabels() {
+            if (this.numberOfNewUsersPerMonth === null) {
+                return {
+                    xLabels: [],
+                    yLabels: 10,
+                };
+            }
+
             return {
-                state: null,
-                error: null,
-                stats: null,
+                xLabels: this.numberOfNewUsersPerMonth.map(({ month }) => month),
+                yLabels: (this.usersEvolutionMax / 10) + 1,
+                yLabelsTextFormatter: (val) => val.toFixed(1),
             };
         },
-        created() {
-            this.load();
-        },
-        computed: {
-            numberOfDepartements() {
-                return this.stats ? this.stats.numberOfDepartements : '...';
-            },
 
-            numberOfCollaboratorAndAssociationUsers() {
-                return this.stats ? this.stats.numberOfCollaboratorAndAssociationUsers : '...';
-            },
-
-            numberOfTerritorialCollectivities() {
-                return this.stats ? (this.stats.numberOfCollaboratorAndAssociationOrganizations.territorial_collectivity || 0) : '...';
-            },
-
-            numberOfAssociations() {
-                return this.stats ? (this.stats.numberOfCollaboratorAndAssociationOrganizations.association || 0) : '...';
-            },
-
-            numberOfPublicEstablishments() {
-                return this.stats ? (this.stats.numberOfCollaboratorAndAssociationOrganizations.public_establishment || 0) : '...';
-            },
-
-            numberOfExports() {
-                return this.stats ? this.stats.numberOfExports : '...';
-            },
-
-            numberOfComments() {
-                return this.stats ? this.stats.numberOfComments : '...';
-            },
-
-            numberOfDirectoryViews() {
-                return this.stats ? this.stats.numberOfDirectoryViews : '...';
-            },
-
-            numberOfNewUsersPerMonth() {
-                return (this.stats && this.stats.numberOfNewUsersPerMonth) || null;
-            },
-
-            usersEvolutionDatasets() {
-                if (this.numberOfNewUsersPerMonth === null) {
-                    return [];
-                }
-
-                const cumulativeData = this.numberOfNewUsersPerMonth.reduce((acc,{ total }, index) => {
-                    return index === 0 ? [parseInt(total, 10)] : [...acc, parseInt(total, 10) + acc[acc.length - 1]];
-                }, [])
-
-                return [
-                    {
-                        data: cumulativeData,
-                        smooth: true,
-                        fill: true,
-                    },
-                ];
-            },
-
-            usersEvolutionMax() {
-                if (this.numberOfNewUsersPerMonth === null) {
-                    return 0;
-                }
-
-                const max = this.numberOfNewUsersPerMonth.reduce((m, { total }) => Math.max(m, total), 0);
-                return Math.ceil(max / 10) * 10;
-            },
-
-            usersEvolutionLabels() {
-                if (this.numberOfNewUsersPerMonth === null) {
-                    return {
-                        xLabels: [],
-                        yLabels: 10,
-                    };
-                }
-
-                return {
-                    xLabels: this.numberOfNewUsersPerMonth.map(({ month }) => month),
-                    yLabels: (this.usersEvolutionMax / 10) + 1,
-                    yLabelsTextFormatter: val => val.toFixed(1)
-                };
-            },
-
-            numberOfNewUsers() {
-                return this.stats && this.stats.numberOfNewUsersPerMonth ? this.stats.numberOfNewUsersPerMonth.slice(-1)[0] : { total: '...', month: '...' };
-            },
-
-            meanTimeBeforeCreationDeclaration() {
-                return this.stats ? (Math.round(this.stats.meanTimeBeforeCreationDeclaration.average) || '?') : '...';
-            },
-
-            meanTimeBeforeClosingDeclaration() {
-                return this.stats ? (Math.round(this.stats.meanTimeBeforeClosingDeclaration.average) || '?') : '...';
-            },
-
-            numberOfShantytownOperations() {
-                return this.stats ? this.stats.numberOfShantytownOperations : '...';
-            },
+        numberOfNewUsers() {
+            return this.stats && this.stats.numberOfNewUsersPerMonth ? this.stats.numberOfNewUsersPerMonth.slice(-1)[0] : { total: '...', month: '...' };
         },
 
-        methods: {
-            /**
+        meanTimeBeforeCreationDeclaration() {
+            return this.stats ? (Math.round(this.stats.meanTimeBeforeCreationDeclaration.average) || '?') : '...';
+        },
+
+        meanTimeBeforeClosingDeclaration() {
+            return this.stats ? (Math.round(this.stats.meanTimeBeforeClosingDeclaration.average) || '?') : '...';
+        },
+
+        numberOfShantytownOperations() {
+            return this.stats ? this.stats.numberOfShantytownOperations : '...';
+        },
+    },
+
+    methods: {
+        /**
              * Tries fetching the data from the API
              *
              * Please note that this cannot be done if the data has already been loaded
              * before.
              */
-            load() {
-                if (this.state === 'loading') {
-                    return;
-                }
+        load() {
+            if (this.state === 'loading') {
+                return;
+            }
 
-                this.state = 'loading';
-                this.error = null;
+            this.state = 'loading';
+            this.error = null;
 
-                getStats()
-                    .then(({ statistics: stats }) => {
-                        this.stats = stats;
-                        this.state = 'loaded';
-                    })
-                    .catch(({ user_message: error }) => {
-                        this.error = error;
-                        this.state = 'error';
-                    });
-            },
+            getStats()
+                .then(({ statistics: stats }) => {
+                    this.stats = stats;
+                    this.state = 'loaded';
+                })
+                .catch(({ user_message: error }) => {
+                    this.error = error;
+                    this.state = 'error';
+                });
         },
-    }
+    },
+};
 </script>

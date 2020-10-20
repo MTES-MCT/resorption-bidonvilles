@@ -59,7 +59,6 @@
                             <Checkbox checkValue="confirm" label="Je certifie que ces données personnelles ont été saisies avec mon accord" v-model="commonFields.legal" />
                         </CheckableGroup>
 
-
                         <div v-if="Object.values(errors).filter(err => err.length).length" class="bg-red-200 p-3 mb-8" >
                             Votre demande d'accès comprend des erreurs:
 
@@ -70,13 +69,11 @@
                             </ul>
                         </div>
 
-
                         <div class="flex justify-between mt-8">
 
                             <router-link to="/"><Button variant="primaryText">Annuler</Button></router-link>
                             <Button type="submit" variant="primary" :loading="loading">Envoyer</Button>
                         </div>
-
 
                     </form>
                 </ValidationObserver>
@@ -87,109 +84,108 @@
 </template>
 
 <script>
-    import { contact } from '#helpers/api/contact';
-    import { notify } from '#helpers/notificationHelper';
-    import PublicLayout from '#app/components/PublicLayout'
-    import PublicContainer from '#app/components/PublicLayout/PublicContainer'
-    import PublicEstablishmentForm from './PublicEstablishmentForm'
-    import TerritorialCollectivityForm from './TerritorialCollectivityForm'
-    import AssociationForm from './AssociationForm'
-    import AdministrationForm from './AdministrationForm'
-    import CheckableGroup from '#app/components/ui/Form/CheckableGroup';
-    import Checkbox from '#app/components/ui/Form/input/Checkbox';
+import { contact } from '#helpers/api/contact';
+import { notify } from '#helpers/notificationHelper';
+import PublicLayout from '#app/components/PublicLayout';
+import PublicContainer from '#app/components/PublicLayout/PublicContainer';
+import PublicEstablishmentForm from './PublicEstablishmentForm';
+import TerritorialCollectivityForm from './TerritorialCollectivityForm';
+import AssociationForm from './AssociationForm';
+import AdministrationForm from './AdministrationForm';
+import CheckableGroup from '#app/components/ui/Form/CheckableGroup';
+import Checkbox from '#app/components/ui/Form/input/Checkbox';
 
-    export default {
-        components: { Checkbox, CheckableGroup, PublicContainer, PublicLayout, PublicEstablishmentForm, TerritorialCollectivityForm, AdministrationForm, AssociationForm },
-        computed: {
-            isRequestAccess() {
-                return this.commonFields.request_type.includes('access-request')
-            },
-            isRequestAccessAndActor() {
-                return this.isRequestAccess && this.commonFields.is_actor
-            },
-            isPublicEstablishmentRequest() {
-                return this.isRequestAccessAndActor && this.requestAccessFields.organization_category === 'public_establishment'
-            },
-            isTerritorialCollectivityRequest() {
-                return this.isRequestAccessAndActor && this.requestAccessFields.organization_category === 'territorial_collectivity'
-            },
-            isAssociationRequest() {
-                return this.isRequestAccessAndActor && this.requestAccessFields.organization_category === 'association'
-            },
-            isAdministrationRequest() {
-                return this.isRequestAccessAndActor && this.requestAccessFields.organization_category === 'administration'
+export default {
+    components: {
+        Checkbox, CheckableGroup, PublicContainer, PublicLayout, PublicEstablishmentForm, TerritorialCollectivityForm, AdministrationForm, AssociationForm,
+    },
+    computed: {
+        isRequestAccess() {
+            return this.commonFields.request_type.includes('access-request');
+        },
+        isRequestAccessAndActor() {
+            return this.isRequestAccess && this.commonFields.is_actor;
+        },
+        isPublicEstablishmentRequest() {
+            return this.isRequestAccessAndActor && this.requestAccessFields.organization_category === 'public_establishment';
+        },
+        isTerritorialCollectivityRequest() {
+            return this.isRequestAccessAndActor && this.requestAccessFields.organization_category === 'territorial_collectivity';
+        },
+        isAssociationRequest() {
+            return this.isRequestAccessAndActor && this.requestAccessFields.organization_category === 'association';
+        },
+        isAdministrationRequest() {
+            return this.isRequestAccessAndActor && this.requestAccessFields.organization_category === 'administration';
+        },
+    },
+    methods: {
+        async submitForm() {
+            const data = {
+                ...this.commonFields,
+                legal: this.commonFields.legal.length > 0,
+                is_actor: !!this.commonFields.is_actor,
+                ...(this.isRequestAccessAndActor ? this.requestAccessFields : {}),
+                ...(this.isPublicEstablishmentRequest ? this.publicEstablishmentFields : {}),
+                ...(this.isTerritorialCollectivityRequest ? this.territorialCollectivityFields : {}),
+                ...(this.isAssociationRequest ? this.associationFields : {}),
+                ...(this.isAdministrationRequest ? this.administrationFields : {}),
+            };
+
+            this.loading = true;
+            try {
+                await contact(data);
+                this.loading = false;
+                this.$router.push('/');
+                notify({
+                    group: 'notifications',
+                    type: 'success',
+                    title: 'Succès',
+                    text: this.isRequestAccessAndActor ? 'Votre demande d\'accès a été envoyée' : 'Votre message a bien été envoyé',
+                });
+            } catch (err) {
+                this.loading = false;
+                this.error = err;
+                this.$refs.form.setErrors(err.fields);
             }
         },
-        methods: {
-          async submitForm() {
-              const data = {
-                  ...this.commonFields,
-                  legal: this.commonFields.legal.length > 0,
-                  is_actor: !!this.commonFields.is_actor,
-                  ...(this.isRequestAccessAndActor ? this.requestAccessFields: {}),
-                  ...(this.isPublicEstablishmentRequest ? this.publicEstablishmentFields: {}),
-                  ...(this.isTerritorialCollectivityRequest ? this.territorialCollectivityFields: {}),
-                  ...(this.isAssociationRequest ? this.associationFields: {}),
-                  ...(this.isAdministrationRequest ? this.administrationFields: {}),
-              }
-
-              this.loading = true
-              try {
-                  await contact(data)
-                  this.loading = false
-                  this.$router.push('/');
-                  notify({
-                      group: 'notifications',
-                      type: 'success',
-                      title: 'Succès',
-                      text: this.isRequestAccessAndActor ? 'Votre demande d\'accès a été envoyée' : 'Votre message a bien été envoyé' ,
-                  });
-
-              } catch (err) {
-                  this.loading = false
-                  this.error = err;
-                  this.$refs.form.setErrors(err.fields);
-              }
-
-          }
-        },
-        data() {
-
-          return {
-              loading: false,
-              error: null,
-              commonFields: {
-                  email: this.$route.query.email || '',
-                  first_name: '',
-                  last_name: '',
-                  request_type: [],
-                  legal: [],
-                  is_actor: null,
-                  access_request_message: '',
-              },
-              requestAccessFields: {
-                  organization_category: null,
-                  position: '',
-              },
-              publicEstablishmentFields: {
-                  organization_type: null,
-                  organization_public: null,
-              },
-              territorialCollectivityFields: {
-                  territorial_collectivity: null,
-              },
-              associationFields: {
-                  association: '',
-                  departement: '',
-                  new_association_name: '',
-                  new_association_abbreviation: ''
-              },
-              administrationFields: {
-                  organization_administration: ''
-              }
-          }
-        },
-    };
+    },
+    data() {
+        return {
+            loading: false,
+            error: null,
+            commonFields: {
+                email: this.$route.query.email || '',
+                first_name: '',
+                last_name: '',
+                request_type: [],
+                legal: [],
+                is_actor: null,
+                access_request_message: '',
+            },
+            requestAccessFields: {
+                organization_category: null,
+                position: '',
+            },
+            publicEstablishmentFields: {
+                organization_type: null,
+                organization_public: null,
+            },
+            territorialCollectivityFields: {
+                territorial_collectivity: null,
+            },
+            associationFields: {
+                association: '',
+                departement: '',
+                new_association_name: '',
+                new_association_abbreviation: '',
+            },
+            administrationFields: {
+                organization_administration: '',
+            },
+        };
+    },
+};
 </script>
 
 <style lang="scss">

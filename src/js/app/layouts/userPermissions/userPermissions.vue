@@ -4,6 +4,7 @@
 
 <script>
 import Component from './userPermissions.js';
+
 export default Component;
 </script>
 

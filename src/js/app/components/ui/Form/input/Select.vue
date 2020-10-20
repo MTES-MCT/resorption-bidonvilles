@@ -16,56 +16,56 @@
 </template>
 
 <script>
-    import filteredProps from '../../mixins/filteredProps';
-    import InputLabel from '../utils/InputLabel'
-    import InputWrapper from '../utils/InputWrapper'
-    import InputInfo from '../utils/InputInfo'
-    import InputError from '../utils/InputError'
-    import getInputClasses from '../utils/getInputClasses';
+import filteredProps from '../../mixins/filteredProps';
+import InputLabel from '../utils/InputLabel';
+import InputWrapper from '../utils/InputWrapper';
+import InputInfo from '../utils/InputInfo';
+import InputError from '../utils/InputError';
+import getInputClasses from '../utils/getInputClasses';
 
-    export default {
-        name: "Select",
-        mixins: [filteredProps],
-        props: {
-            label: {
-                type: String
-            },
-            info: {
-                type: String
-            },
-            error: {
-                type: String
-            },
-            value: {
-                type: String
-            },
-            validationName: {
-                type: String
-            },
-            rules: {
-                type: String
-            },
-            id: {
-                type: String
-            },
-            variant: {
-                type: String,
-                default: 'default'
-            },
+export default {
+    name: 'Select',
+    mixins: [filteredProps],
+    props: {
+        label: {
+            type: String,
         },
-        computed: {
-            classes() {
-                return {
-                    state: ['appearance-none', ...getInputClasses('state', this.error)],
-                    default: ['appearance-none', ...getInputClasses('default')]
-                }[this.variant]
-            }
+        info: {
+            type: String,
         },
-        components: {
-            InputWrapper,
-            InputLabel,
-            InputInfo,
-            InputError
-        }
-    }
+        error: {
+            type: String,
+        },
+        value: {
+            type: String,
+        },
+        validationName: {
+            type: String,
+        },
+        rules: {
+            type: String,
+        },
+        id: {
+            type: String,
+        },
+        variant: {
+            type: String,
+            default: 'default',
+        },
+    },
+    computed: {
+        classes() {
+            return {
+                state: ['appearance-none', ...getInputClasses('state', this.error)],
+                default: ['appearance-none', ...getInputClasses('default')],
+            }[this.variant];
+        },
+    },
+    components: {
+        InputWrapper,
+        InputLabel,
+        InputInfo,
+        InputError,
+    },
+};
 </script>

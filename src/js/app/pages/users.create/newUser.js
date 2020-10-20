@@ -140,9 +140,7 @@ export default (wording, submitFn) => ({
                             },
                         },
                     ],
-                    submit: data => submitFn(Object.assign({}, data, {
-                        legal: data.legal && data.legal.length === 1 && data.legal[0] === true,
-                    })),
+                    submit: (data) => submitFn({ ...data, legal: data.legal && data.legal.length === 1 && data.legal[0] === true }),
                 },
             ],
         };

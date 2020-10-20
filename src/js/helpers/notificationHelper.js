@@ -17,7 +17,7 @@ const DEFAULT_DURATION = 6000;
 export function notify(options) {
     return Vue.notify(Object.prototype.hasOwnProperty.call(options, 'duration')
         ? options
-        : Object.assign({}, options, { duration: DEFAULT_DURATION }));
+        : ({ ...options, duration: DEFAULT_DURATION }));
 }
 
 export default notify;

@@ -58,7 +58,7 @@ export default {
                     {
                         id: 'lastName',
                         label: 'NOM',
-                        field: user => user.last_name.toUpperCase(),
+                        field: (user) => user.last_name.toUpperCase(),
                     },
                     {
                         id: 'firstName',
@@ -160,7 +160,7 @@ export default {
                     },
                 ],
                 rows: this.users,
-                'row-style-class': row => (row.status !== 'active' && row.last_activation_link_sent_on === null ? 'userList-row userList-row--highlight' : 'userList-row'),
+                'row-style-class': (row) => (row.status !== 'active' && row.last_activation_link_sent_on === null ? 'userList-row userList-row--highlight' : 'userList-row'),
                 'sort-options': {
                     enabled: true,
                 },

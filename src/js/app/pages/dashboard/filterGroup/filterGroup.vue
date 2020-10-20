@@ -4,6 +4,7 @@
 
 <script>
 import Component from './filterGroup.js';
+
 export default Component;
 </script>
 

@@ -10,19 +10,19 @@
 </template>
 
 <script>
-    import Button from '#app/components/ui/Button'
-    import PublicContainer from '#app/components/PublicLayout/PublicContainer'
+import Button from '#app/components/ui/Button';
+import PublicContainer from '#app/components/PublicLayout/PublicContainer';
 
-    export default {
-        components: {
-            Button,
-            PublicContainer
+export default {
+    components: {
+        Button,
+        PublicContainer,
+    },
+    props: {
+        cta: {
+            type: String,
+            required: true,
         },
-        props: {
-            cta: {
-                type: String,
-                required: true
-            }
-        }
-    }
+    },
+};
 </script>

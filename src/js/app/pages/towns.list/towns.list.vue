@@ -4,6 +4,7 @@
 
 <script>
 import Component from './towns.list.js';
+
 export default Component;
 </script>
 

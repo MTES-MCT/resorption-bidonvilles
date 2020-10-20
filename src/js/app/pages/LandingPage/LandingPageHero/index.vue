@@ -8,11 +8,11 @@
 </template>
 
 <script>
-    import LandingPageContactForm from '../LandingPageContactForm'
+import LandingPageContactForm from '../LandingPageContactForm';
 
-    export default {
-        components: {
-            LandingPageContactForm
-        }
-    }
+export default {
+    components: {
+        LandingPageContactForm,
+    },
+};
 </script>

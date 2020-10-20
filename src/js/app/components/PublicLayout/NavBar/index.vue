@@ -25,61 +25,61 @@
 </template>
 
 <script>
-    import NavBarLogo from './NavBarLogo'
-    import NavBarSticky from './NavBarSticky'
-    import NavBarMobileButton from './NavBarMobileButton'
-    import NavBarMobileMenu from './NavBarMobileMenu'
-    import PublicContainer from '../PublicContainer'
-    import Button from '../../ui/Button'
+import NavBarLogo from './NavBarLogo';
+import NavBarSticky from './NavBarSticky';
+import NavBarMobileButton from './NavBarMobileButton';
+import NavBarMobileMenu from './NavBarMobileMenu';
+import PublicContainer from '../PublicContainer';
+import Button from '../../ui/Button';
 
-    export default {
-        props: {
-          stickyHeader: {
-              type: Boolean
-          }
+export default {
+    props: {
+        stickyHeader: {
+            type: Boolean,
         },
-        components: {
-            NavBarLogo,
-            NavBarSticky,
-            Button,
-            NavBarMobileMenu,
-            NavBarMobileButton,
-            PublicContainer
-        },
-        data() {
-          return {
-              scrollTop: 0,
-              menuDisplayed: false
-          }
-        },
-        methods: {
-          handleScroll() {
-              // Header is 76px but 0px when sticky
-              const navbarHeight = this.$el.offsetHeight
+    },
+    components: {
+        NavBarLogo,
+        NavBarSticky,
+        Button,
+        NavBarMobileMenu,
+        NavBarMobileButton,
+        PublicContainer,
+    },
+    data() {
+        return {
+            scrollTop: 0,
+            menuDisplayed: false,
+        };
+    },
+    methods: {
+        handleScroll() {
+            // Header is 76px but 0px when sticky
+            const navbarHeight = this.$el.offsetHeight;
 
-              this.scrollTop = window.scrollY - navbarHeight
-             },
-          openMenu() {
-              this.menuDisplayed = true
-          },
-          closeMenu() {
-              this.menuDisplayed = false
-          },
+            this.scrollTop = window.scrollY - navbarHeight;
+        },
+        openMenu() {
+            this.menuDisplayed = true;
+        },
+        closeMenu() {
+            this.menuDisplayed = false;
+        },
 
-            toggleMenu() {
-            this.menuDisplayed = !this.menuDisplayed
-            }
+        toggleMenu() {
+            this.menuDisplayed = !this.menuDisplayed;
         },
-        computed: {
-           sticky() {
-               return this.scrollTop > 200 && this.stickyHeader
-           }
+    },
+    computed: {
+        sticky() {
+            return this.scrollTop > 200 && this.stickyHeader;
         },
-        mounted() {
-            window.addEventListener('scroll', this.handleScroll);
-        },
-        destroyed() {
-            window.removeEventListener('scroll', this.handleScroll);
-        }
-    }
+    },
+    mounted() {
+        window.addEventListener('scroll', this.handleScroll);
+    },
+    destroyed() {
+        window.removeEventListener('scroll', this.handleScroll);
+    },
+};
 </script>
