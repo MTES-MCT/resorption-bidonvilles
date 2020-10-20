@@ -1,7 +1,7 @@
 // load the whole betagouv template
 import '@openfonts/fira-code_all';
 import 'simplebar/dist/simplebar.min.css';
-import '../css/index.scss';
+import '#src/css/index.scss';
 
 // import polyfills
 import 'core-js/stable';
@@ -12,6 +12,7 @@ import Vue from 'vue';
 import VueI18n from 'vue-i18n';
 import VueRouter from 'vue-router';
 import TrendChart from 'vue-trend-chart';
+import App from './App.vue';
 
 // import font-awesome
 import './icons';
@@ -126,4 +127,6 @@ Vue.createElement({
     el: '#app',
     router,
     i18n,
+    render: h => h(App),
 });
+

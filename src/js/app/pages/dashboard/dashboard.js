@@ -7,16 +7,16 @@ import { get as getConfig, getPermission } from '#helpers/api/config';
 import simplebar from 'simplebar-vue';
 import { open } from '#helpers/tabHelper';
 
-// eslint-disable-next-line
-import iconType from '/img/type.svg';
-// eslint-disable-next-line
-import iconPeople from '/img/people.svg';
-// eslint-disable-next-line
-import iconJustice from '/img/justice.svg';
-// eslint-disable-next-line
-import iconStatus from '/img/status.svg';
-// eslint-disable-next-line
-import iconOrigins from '/img/origins.svg';
+
+import iconType from '../../../../../public/img/type.svg';
+
+import iconPeople from '../../../../../public/img/people.svg';
+
+import iconJustice from '../../../../../public/img/justice.svg';
+
+import iconStatus from '../../../../../public/img/status.svg';
+
+import iconOrigins from '../../../../../public/img/origins.svg';
 
 /**
  * Returns the appropriate zoom level for the given location type

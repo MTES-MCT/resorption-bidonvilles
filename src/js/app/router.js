@@ -31,10 +31,6 @@ import Covid from '#app/pages/covid/covid.vue';
 import Changelog from '#app/pages/changelog/changelog.vue';
 import CharteEngagement from '#app/pages/charte_engagement/charte_engagement.vue';
 
-// eslint-disable-next-line
-import CGU from '/doc/CGU_Resorption_Bidonvilles.pdf';
-// eslint-disable-next-line
-import TypologieAcces from '/doc/guide_de_l_administrateur.pdf';
 
 import { logout, isLoggedIn, alreadyLoggedBefore } from '#helpers/api/user';
 import {
@@ -283,14 +279,14 @@ const router = new VueRouter({
         {
             path: '/conditions-d-utilisation',
             beforeEnter(to, from, next) {
-                window.open(CGU, '_blank');
+                window.open('/doc/CGU_Resorption_Bidonvilles.pdf');
                 next(false);
             },
         },
         {
             path: '/typologie-des-acces',
             beforeEnter(to, from, next) {
-                window.open(TypologieAcces, '_blank');
+                window.open('/doc/guide_de_l_administrateur.pdf');
                 next(false);
             },
         },
