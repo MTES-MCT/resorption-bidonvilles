@@ -1,6 +1,9 @@
 const path = require('path');
 
 module.exports = {
+    pages: {
+        index: './src/js/index.js'
+    },
     chainWebpack: (config) => {
         config.resolve.alias
             .set('#app', path.resolve(__dirname, './src/js/app/'))
