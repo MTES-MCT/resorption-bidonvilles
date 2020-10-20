@@ -14,10 +14,9 @@
 
 <script>
 import filteredProps from '../../mixins/filteredProps';
-import InputLabel from '../utils/InputLabel';
-import InputWrapper from '../utils/InputWrapper';
-import InputInfo from '../utils/InputInfo';
-import InputError from '../utils/InputError';
+import InputLabel from '../utils/InputLabel.vue';
+import InputWrapper from '../utils/InputWrapper.vue';
+import InputError from '../utils/InputError.vue';
 import getInputClasses from '../utils/getInputClasses';
 
 export default {
@@ -67,7 +66,6 @@ export default {
         InputLabel,
         InputWrapper,
         InputError,
-        InputInfo,
     },
 };
 </script>

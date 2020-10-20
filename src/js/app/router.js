@@ -1,9 +1,9 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import LandingPage from '#app/pages/LandingPage';
+import LandingPage from '#app/pages/LandingPage/index.vue';
 import SignIn from '#app/pages/signin/signin.vue';
-import Contact from '#app/pages/Contact';
+import Contact from '#app/pages/Contact/index.vue';
 import Dashboard from '#app/pages/dashboard/dashboard.vue';
 import Launcher from '#app/pages/launcher/launcher.vue';
 import TownsList from '#app/pages/towns.list/towns.list.vue';
@@ -26,7 +26,7 @@ import Statistics from '#app/pages/stats/stats.vue';
 import LegalMentions from '#app/pages/legalMentions/legalMentions.vue';
 import Directory from '#app/pages/directory/directory.vue';
 import UserActivityList from '#app/pages/userActivity.list/userActivity.list.vue';
-import PublicStats from '#app/pages/PublicStats';
+import PublicStats from '#app/pages/PublicStats/index.vue';
 import Covid from '#app/pages/covid/covid.vue';
 import Changelog from '#app/pages/changelog/changelog.vue';
 import CharteEngagement from '#app/pages/charte_engagement/charte_engagement.vue';

@@ -1,5 +1,4 @@
 <template>
-  <ClientONly
     <InputWrapper>
         <InputLabel :label="label" :info="info" />
         <ValidationProvider ref="provider" :rules="rules" :name="validationName || label" v-slot="{ errors }" :vid="id">
@@ -12,10 +11,10 @@
 <script>
 import { fr } from 'vuejs-datepicker/dist/locale';
 import getInputClasses from './Form/utils/getInputClasses';
-import InputLabel from './Form/utils/InputLabel';
-import InputWrapper from './Form/utils/InputWrapper';
-import InputInfo from './Form/utils/InputInfo';
-import InputError from './Form/utils/InputError';
+import InputLabel from './Form/utils/InputLabel.vue';
+import InputWrapper from './Form/utils/InputWrapper.vue';
+import InputInfo from './Form/utils/InputInfo.vue';
+import InputError from './Form/utils/InputError.vue';
 
 export default {
     props: {

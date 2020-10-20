@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './activationLink.js';
+import Component from './activationLink';
 
 export default Component;
 </script>

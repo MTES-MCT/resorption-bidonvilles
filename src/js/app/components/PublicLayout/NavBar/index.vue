@@ -25,12 +25,12 @@
 </template>
 
 <script>
-import NavBarLogo from './NavBarLogo';
-import NavBarSticky from './NavBarSticky';
-import NavBarMobileButton from './NavBarMobileButton';
-import NavBarMobileMenu from './NavBarMobileMenu';
-import PublicContainer from '../PublicContainer';
-import Button from '../../ui/Button';
+import NavBarLogo from './NavBarLogo.vue';
+import NavBarSticky from './NavBarSticky.vue';
+import NavBarMobileButton from './NavBarMobileButton.vue';
+import NavBarMobileMenu from './NavBarMobileMenu.vue';
+import PublicContainer from '../PublicContainer.vue';
+import Button from '../../ui/Button.vue';
 
 export default {
     props: {

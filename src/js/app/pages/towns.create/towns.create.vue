@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './towns.create.js';
+import Component from './towns.create';
 
 export default Component;
 </script>

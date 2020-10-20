@@ -8,14 +8,8 @@ import { get as getConfig, getPermission } from '#helpers/api/config';
 import { open } from '#helpers/tabHelper';
 
 import iconType from '../../../../../public/img/type.svg';
-
 import iconPeople from '../../../../../public/img/people.svg';
-
-import iconJustice from '../../../../../public/img/justice.svg';
-
 import iconStatus from '../../../../../public/img/status.svg';
-
-import iconOrigins from '../../../../../public/img/origins.svg';
 
 /**
  * Returns the appropriate zoom level for the given location type

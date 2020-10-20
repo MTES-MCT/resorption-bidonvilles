@@ -43,14 +43,14 @@
 </template>
 
 <script>
-import PublicLayout from '#app/components/PublicLayout';
-import PublicContainer from '#app/components/PublicLayout/PublicContainer';
-import LandingPageHero from './LandingPageHero';
-import LandingPageFirstSection from './LandingPageFirstSection';
-import LandingPageSecondSection from './LandingPageSecondSection';
-import LandingPageThirdSection from './LandingPageThirdSection';
-import LandingPageBanner from './LandingPageBanner';
-import LandingPageContactForm from './LandingPageContactForm';
+import PublicLayout from '#app/components/PublicLayout/index.vue';
+import PublicContainer from '#app/components/PublicLayout/PublicContainer.vue';
+import LandingPageHero from './LandingPageHero/index.vue';
+import LandingPageFirstSection from './LandingPageFirstSection/index.vue';
+import LandingPageSecondSection from './LandingPageSecondSection/index.vue';
+import LandingPageThirdSection from './LandingPageThirdSection/index.vue';
+import LandingPageBanner from './LandingPageBanner.vue';
+import LandingPageContactForm from './LandingPageContactForm.vue';
 
 export default {
     components: {

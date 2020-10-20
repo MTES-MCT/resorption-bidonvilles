@@ -12,18 +12,9 @@
         "SwitchCase": 1
       }
     ],
-    "import/no-extraneous-dependencies": 1,
-    "prefer-promise-reject-errors": 0,
-    "import/no-unresolved": [
-      "error",
-      {
-        "ignore": [
-          "#"
-        ]
-      }
-    ],
-    "max-len": "off",
-    "no-param-reassign": "warn"
+    "import/no-extraneous-dependencies": 0,
+    "import/no-cycle": 0,
+    "max-len": "off"
   },
   "env": {
     "browser": true,

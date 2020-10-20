@@ -59,17 +59,15 @@
 </template>
 
 <script>
-import InputLabel from './Form/utils/InputLabel';
-import InputWrapper from './Form/utils/InputWrapper';
-import InputInfo from './Form/utils/InputInfo';
-import InputError from './Form/utils/InputError';
+import InputLabel from './Form/utils/InputLabel.vue';
+import InputWrapper from './Form/utils/InputWrapper.vue';
+import InputError from './Form/utils/InputError.vue';
 import getInputClasses from './Form/utils/getInputClasses';
 
 export default {
     components: {
         InputLabel,
         InputWrapper,
-        InputInfo,
         InputError,
     },
     props: {
@@ -153,9 +151,8 @@ export default {
             // If user has deleted his input, delete the selected value
             if (!this.searchInput) {
                 this.onItemSelect(null);
-            }
-            // If user has changed his last input, restore to last value
-            else {
+            } else {
+                // If user has changed his last input, restore to last value
                 this.searchInput = this.getResultValue(this.value);
             }
             this.focused = false;

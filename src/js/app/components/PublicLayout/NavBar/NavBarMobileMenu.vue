@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import Menu from '#app/components/ui/Menu/Menu';
-import MenuItem from '#app/components/ui/Menu/MenuItem';
+import Menu from '#app/components/ui/Menu/Menu.vue';
+import MenuItem from '#app/components/ui/Menu/MenuItem.vue';
 
 export default {
     props: {

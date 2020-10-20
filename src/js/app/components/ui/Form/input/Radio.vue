@@ -19,7 +19,7 @@
 
 <script>
 import filteredProps from '../../mixins/filteredProps';
-import CheckableCard from '../utils/CheckableCard';
+import CheckableCard from '../utils/CheckableCard.vue';
 
 export default {
     name: 'Checkbox',

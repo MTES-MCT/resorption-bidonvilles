@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './userPermissions.js';
+import Component from './userPermissions';
 
 export default Component;
 </script>

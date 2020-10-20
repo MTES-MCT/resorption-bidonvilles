@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import Button from '#app/components/ui/Button';
-import PublicContainer from '#app/components/PublicLayout/PublicContainer';
+import Button from '#app/components/ui/Button.vue';
+import PublicContainer from '#app/components/PublicLayout/PublicContainer.vue';
 
 export default {
     components: {

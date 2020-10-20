@@ -70,8 +70,8 @@
 </template>
 
 <script>
-import LandingPageBilanBlock from './LandingPageBilanBlock';
-import Button from '#app/components/ui/Button';
+import LandingPageBilanBlock from './LandingPageBilanBlock.vue';
+import Button from '#app/components/ui/Button.vue';
 
 export default {
     components: {

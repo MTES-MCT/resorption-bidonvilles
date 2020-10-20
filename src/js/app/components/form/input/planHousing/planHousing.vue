@@ -140,7 +140,7 @@ export default {
 
     watch: {
         data: {
-            handler(val) {
+            handler() {
                 this.emitInput();
             },
             deep: true,
