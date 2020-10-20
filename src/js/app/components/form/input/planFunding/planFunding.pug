@@ -16,7 +16,7 @@
             </tr>
         </thead>
         <tbody>
-            <PlanFundingRow v-for="(funding, index) in currentFundings" :index="index" :inputMode="inputMode" :relatedYear="focusedYear" v-model="funding.data" @onremove="removeRow(index)" @input="onRowChange" :disabled="disabled"></PlanFundingRow>
+            <PlanFundingRow v-for="(funding, index) in currentFundings" :index="index" :key="index" :inputMode="inputMode" :relatedYear="focusedYear" v-model="funding.data" @onremove="removeRow(index)" @input="onRowChange" :disabled="disabled"></PlanFundingRow>
             <tr v-if="inputMode === 'default'">
                 <td colspan="5" @click="addRow" class="planFunding-addRow" v-bind:class="{ 'planFunding-addRow--disabled': disabled }">Ajouter une ligne de financement</td>
             </tr>
