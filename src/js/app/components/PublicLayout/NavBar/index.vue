@@ -22,7 +22,7 @@
                 </header>
             </PublicContainer>
         </div>
-      <NavBarMobileMenu class="fixed top-0 right-0 mt-16 z-10" v-if="menuDisplayed" :closeMenu="closeMenu" :displayLanguagePicker="displayLanguagePicker" />
+        <NavBarMobileMenu class="fixed top-0 right-0 mt-16 z-10" v-if="menuDisplayed" :closeMenu="closeMenu" :displayLanguagePicker="displayLanguagePicker" />
     </div>
 </template>
 
