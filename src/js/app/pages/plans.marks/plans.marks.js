@@ -212,7 +212,7 @@ export default {
                     },
                     lycees: {
                         type: 'number',
-                        label: 'Enfants inscrits au lycée',
+                        label: 'Enfants inscrits au lycée - formation professionnelle',
                         mandatory: false,
                         condition({ date }) {
                             return !!date;
