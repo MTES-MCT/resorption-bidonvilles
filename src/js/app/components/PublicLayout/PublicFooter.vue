@@ -12,8 +12,7 @@
                     <ul>
                         <li><router-link to="/statistiques-publiques">{{$t('footer.statistics')}}</router-link></li>
                         <li><router-link to="/mentions-legales">{{$t('footer.legal')}}</router-link></li>
-                        <li><router-link to="/typologie-des-acces"><font-awesome-icon icon="file-pdf"></font-awesome-icon>&nbsp;{{$t('footer.userAccessGuide')}}</router-link></li>
-                        <li><router-link to="/charte-d-engagement"><font-awesome-icon icon="file-pdf"></font-awesome-icon>&nbsp;{{$t('footer.userAgreement')}}</router-link></li>
+
                     </ul>
                 </div>
             </div>
