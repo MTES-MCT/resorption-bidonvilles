@@ -38,23 +38,6 @@
                 this.$i18n.locale = lang
                 localize(lang)
             },
-        },
-        computed: {
-            currentFlag() {
-                if (this.$i18n.locale === 'UK') {
-                    return "./assets/UK.svg"
-                }
-
-                if (this.$i18n.locale === 'UK') {
-                    return "./assets/FR.svg"
-                }
-
-                if (this.$i18n.locale === 'UK') {
-                    return "./assets/FR.svg"
-                }
-
-                return "./assets/FR.svg"
-            }
         }
     }
 </script>
