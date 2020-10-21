@@ -1,8 +1,8 @@
 <template>
     <div>
-        <h2 class="text-display-lg">{{$t('landingPage.thirdSection.title')}}</h2>
-        <div class="max-w-screen-sm mx-auto mt-8">
-            <div><span class="font-bold">{{$t('landingPage.thirdSection.firstParagraph.bold')}}</span> {{$t('landingPage.thirdSection.firstParagraph.normal')}}</div>
+        <div class="max-w-screen-sm mx-auto">
+            <h2 class="text-display-lg">{{$t('landingPage.thirdSection.title')}}</h2>
+            <div class=" mt-8"><span class="font-bold">{{$t('landingPage.thirdSection.firstParagraph.bold')}}</span> {{$t('landingPage.thirdSection.firstParagraph.normal')}}</div>
 
             <div class="flex flex-row items-center my-8">
                 <div class="bg-gray-500 h-px flex-1" />
@@ -27,10 +27,11 @@
             </div>
         </div>
         <div class="mt-32">
-            <h2 class="text-display-lg">
-                {{$t('landingPage.thirdSection.secondParagraph.title')}}
-            </h2>
+
             <div class="max-w-screen-sm mx-auto">
+                <h2 class="text-display-lg">
+                  {{$t('landingPage.thirdSection.secondParagraph.title')}}
+                </h2>
                 <div class="mt-4">
                     {{$t('landingPage.thirdSection.secondParagraph.body.text1')}}
                     <a class="link" href="https://www.ecologie.gouv.fr/resorption-des-campements-illicites-et-des-bidonvilles">{{$t('landingPage.thirdSection.secondParagraph.body.link1')}}</a>,
