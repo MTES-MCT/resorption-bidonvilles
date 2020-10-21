@@ -81,20 +81,20 @@
     },
     "bilan": {
       1: {
-        "text": "8 600 bénéficiaires des actions",
+        "text": "8 600 bénéficiaires des actions"
       },
       3: {
-        "text": "1 000 personnes relogées",
+        "text": "1 000 personnes relogées"
       },
       4: {
-        "text": "1 350 enfants scolarisés",
+        "text": "1 350 enfants scolarisés"
       },
       5: {
         "text": "2 040 bénéficiaires",
         "info": "d'un accompagnement santé"
       },
       6: {
-        "text": "615 contrats de travail signés",
+        "text": "615 contrats de travail signés"
       }
     },
     "cta": "Télécharger le dernier bilan",
@@ -115,7 +115,8 @@
           "text": "du Programme d’investissement d’avenir en 2019"
         },
         2: {
-          "text": "Programme “rights, citizenship and equality” de la commission européenne au premier trimestre 2020"
+          "link": "Programme “rights, citizenship and equality”",
+          "text": "de la commission européenne au premier trimestre 2020"
         },
         3: {
           "link": "Fonds d’accélération des Start-up d’État 3",

@@ -47,7 +47,7 @@
 
                     <ul class="list-disc ml-8">
                         <li><a class="link" href="https://entrepreneur-interet-general.etalab.gouv.fr/defis/2019/resorption-bidonvilles.html">{{$t('landingPage.thirdSection.secondParagraph.items.1.link')}}</a> {{$t('landingPage.thirdSection.secondParagraph.items.1.text')}}</li>
-                        <li>{{$t('landingPage.thirdSection.secondParagraph.items.2.text')}}</li>
+                        <li><a class="link" href="https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/how-to-participate/org-details/999999999/project/881989/program/31076817/details">{{$t('landingPage.thirdSection.secondParagraph.items.2.link')}}</a> {{$t('landingPage.thirdSection.secondParagraph.items.2.text')}}</li>
                         <li><a class="link" href="https://beta.gouv.fr/approche/fast/03-fast.html">{{$t('landingPage.thirdSection.secondParagraph.items.3.link')}}</a> {{$t('landingPage.thirdSection.secondParagraph.items.3.text')}}</li>
                         <li><a class="link" href="https://www.modernisation.gouv.fr/action-publique-2022/fonds-pour-la-transformation-de-laction-publique/ftap-112-millions-deuros-pour-les-19-projets-laureats">{{$t('landingPage.thirdSection.secondParagraph.items.4.link')}}</a> {{$t('landingPage.thirdSection.secondParagraph.items.4.text')}}</li>
                     </ul>
