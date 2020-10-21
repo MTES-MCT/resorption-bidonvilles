@@ -16,6 +16,7 @@ describe('Gestion des sites', () => {
                     cy.get('[data-cy-button=\'submit\']').click();
 
                     // assert
+                    cy.get('.notification-content').should('contain', 'La déclaration du site a réussi');
                     cy.checkShantytownDetails(minShantytown);
 
                     /* **********************************************************************************
