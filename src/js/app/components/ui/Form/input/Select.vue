@@ -3,12 +3,11 @@
         <InputLabel :label="label" :info="info" />
         <ValidationProvider :rules="rules" :name="validationName || label" v-slot="{ errors }" :vid="id">
             <div class="relative">
+                <InputIcon position="before" :icon="icon" />
                 <select :class="classes" @change="$emit('input', $event.target.value)" :id="id" v-bind="filteredProps">
                     <slot />
                 </select>
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                    <Icon icon="chevron-down" />
-                </div>
+                <InputIcon position="after" icon="chevron-down" />
             </div>
             <InputError>{{errors[0]}}</InputError>
         </ValidationProvider>
@@ -21,6 +20,7 @@
     import InputWrapper from '../utils/InputWrapper'
     import InputInfo from '../utils/InputInfo'
     import InputError from '../utils/InputError'
+    import InputIcon from '../utils/InputIcon'
     import getInputClasses from '../utils/getInputClasses';
 
     export default {
@@ -52,12 +52,18 @@
                 type: String,
                 default: 'default'
             },
+            icon: {
+              type: String
+            },
+
         },
         computed: {
             classes() {
+                const inputOptions = {error: this.error, prefixIcon: this.icon, suffixIcon: true};
+
                 return {
-                    state: ['appearance-none', ...getInputClasses('state', this.error)],
-                    default: ['appearance-none', ...getInputClasses('default')]
+                    state: ['appearance-none', ...getInputClasses('state', inputOptions)],
+                    default: ['appearance-none', ...getInputClasses('default', inputOptions)]
                 }[this.variant]
             }
         },
@@ -65,7 +71,8 @@
             InputWrapper,
             InputLabel,
             InputInfo,
-            InputError
+            InputError,
+            InputIcon
         }
     }
 </script>

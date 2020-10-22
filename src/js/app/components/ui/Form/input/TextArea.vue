@@ -2,12 +2,16 @@
     <InputWrapper>
         <InputLabel :label="label" :info="info" />
         <ValidationProvider :rules="rules" :name="validationName || label" v-slot="{ errors }" :vid="id">
+          <div class="relative">
+            <InputIcon position="before" :icon="prefixIcon" v-if="prefixIcon" />
             <textarea
                    :id="id"
                    @input="$emit('input', $event.target.value)"
                    v-bind="filteredProps"
                    :class="classes" />
-            <InputError>{{errors[0]}}</InputError>
+            <InputIcon position="after" :icon="suffixIcon" v-if="suffixIcon" />
+          </div>
+          <InputError>{{errors[0]}}</InputError>
         </ValidationProvider>
     </InputWrapper>
 </template>
@@ -18,6 +22,7 @@ import InputLabel from '../utils/InputLabel'
 import InputWrapper from '../utils/InputWrapper'
 import InputInfo from '../utils/InputInfo'
 import InputError from '../utils/InputError'
+import InputIcon from '../utils/InputIcon'
 import getInputClasses from '../utils/getInputClasses';
 
 export default {
@@ -53,13 +58,21 @@ export default {
             type: String,
             default: 'default'
         },
+        prefixIcon: {
+          type: String,
+        },
+        suffixIcon: {
+          type: String,
+        },
 
     },
     computed: {
         classes() {
+            const inputOptions = {error: this.error, prefixIcon: this.prefixIcon, suffixIcon: this.suffixIcon};
+
             return {
-                state: [...getInputClasses('state', this.error)],
-                default: getInputClasses('default')
+                state: [...getInputClasses('state', inputOptions)],
+                default: getInputClasses('default', inputOptions)
             }[this.variant]
         }
     },
@@ -67,7 +80,8 @@ export default {
         InputLabel,
         InputWrapper,
         InputError,
-        InputInfo
+        InputInfo,
+        InputIcon
     }
 }
 </script>

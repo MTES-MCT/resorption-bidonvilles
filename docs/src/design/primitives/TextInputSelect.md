@@ -11,3 +11,9 @@
 <TextInputSelect-WithLabelsInfo />
 <GithubLink examplePath="TextInputSelect/WithLabelsInfo.vue" />
 
+
+##  Avec icon à gauche / droite
+<TextInputSelect-WithIcon />
+<GithubLink examplePath="TextInputSelect/WithIcon.vue" />
+
+
