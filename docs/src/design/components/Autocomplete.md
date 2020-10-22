@@ -6,7 +6,6 @@
 <Autocomplete-Example />
 <GithubLink examplePath="Autocomplete/Example.vue" />
 
-
 ## Autocomplete with custom results list
 <Autocomplete-CategoryExample />
 <GithubLink examplePath="Autocomplete/CategoryExample.vue" />

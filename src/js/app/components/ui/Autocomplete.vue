@@ -25,6 +25,8 @@
                 >
                     <div v-bind="rootProps">
 
+                        <InputIcon position="before" :icon="prefixIcon" v-if="prefixIcon" />
+
                         <input
                                 ref="searchInput"
                                 v-bind="inputProps"
@@ -34,7 +36,14 @@
                                 @blur="handleBlur"
                                 v-model="searchInput"
                         />
-<!--                        <Spinner v-if="loading" />-->
+                        <InputIcon position="after" >
+                          <Spinner v-if="loading" />
+                          <div  @click="removeItem" class="cursor-pointer ">
+                          <Icon v-if="!loading && value && getResultValue(value) === searchInput" icon="times"/>
+                          </div>
+
+                        </InputIcon>
+
                         <div :class="['origin-top-left-10 absolute z-10 left-0 mt-2 w-full rounded-md shadow-lg transform transition ease-in-out duration-200', focused ? 'opacity-100' : 'opacity-0']">
                             <slot :results="results" :resultListProps="resultListProps" :resultListListeners="resultListListeners" :resultProps="resultProps" :getResultValue="getResultValue">
                                 <Menu v-if="!results.length">
@@ -64,9 +73,11 @@
     import InputInfo from './Form/utils/InputInfo'
     import InputError from './Form/utils/InputError'
     import getInputClasses from './Form/utils/getInputClasses';
+    import InputIcon from './Form/utils/InputIcon';
 
     export default {
         components: {
+          InputIcon,
             InputLabel,
             InputWrapper,
             InputInfo,
@@ -115,12 +126,17 @@
                 type: String,
                 default: 'default'
             },
+            prefixIcon: {
+              type: String
+            },
         },
         computed: {
             classes() {
+                const inputOptions = { error: this.error, prefixIcon: this.prefixIcon }
+
                 return {
-                    state: [...getInputClasses('state', this.error)],
-                    default: getInputClasses('default')
+                    state: [...getInputClasses('state', inputOptions)],
+                    default: getInputClasses('default', inputOptions)
                 }[this.variant]
             },
         },
@@ -133,6 +149,15 @@
             }
         },
         methods: {
+            removeItem() {
+
+              this.value = '';
+              this.searchInput = '';
+              this.$emit('submit', null)
+              this.$refs.provider.syncValue(null);
+              this.$refs.provider.validate();
+
+            },
             onItemSelect(newValue) {
                 // If user has selected an item, update search input
                 if (newValue) {
@@ -144,6 +169,10 @@
                 this.$refs.provider.syncValue(newValue);
                 this.$refs.provider.validate();
                 this.$refs.searchInput.blur()
+
+              console.log(this.searchInput);
+              console.log(this.value);
+              console.log();
 
             },
             handleFocus() {
