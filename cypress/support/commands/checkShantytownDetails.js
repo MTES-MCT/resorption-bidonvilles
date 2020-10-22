@@ -113,8 +113,12 @@ Cypress.Commands.add('checkShantytownDetails', (shantytown) => {
     cy.get('[data-cy-data=\'trash_evacuation\']')
         .should('contain', shantytown.trash_evacuation);
 
-    cy.get('[data-cy-data=\'owner_complaint\']')
-        .should('contain', shantytown.owner_complaint);
+    if (shantytown.owner_complaint) {
+        cy.get('[data-cy-data=\'owner_complaint\']')
+            .should('contain', shantytown.owner_complaint);
+    } else {
+        cy.get('[data-cy-data=\'owner_complaint\']').should('not.exist');
+    }
 
     if (shantytown.justice_procedure) {
         cy.get('[data-cy-data=\'justice_procedure\']')

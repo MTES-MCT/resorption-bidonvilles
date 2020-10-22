@@ -391,17 +391,13 @@ export default {
                 water_comments: this.edit.waterComments,
                 trash_evacuation: this.edit.trashEvacuation,
                 owner_complaint: this.edit.owner_complaint,
-                justice_procedure: this.edit.owner_complaint === 1 ? this.edit.justiceProcedure : undefined,
-                justice_rendered: this.edit.owner_complaint === 1
-                    && this.edit.justiceProcedure === 1 ? this.edit.justice_rendered : undefined,
-                justice_rendered_by: this.edit.owner_complaint === 1
-                    && this.edit.justiceProcedure === 1
+                justice_procedure: this.edit.justiceProcedure,
+                justice_rendered: this.edit.justiceProcedure === 1 ? this.edit.justice_rendered : undefined,
+                justice_rendered_by: this.edit.justiceProcedure === 1
                     && this.edit.justice_rendered === 1 ? this.edit.justice_rendered_by : '',
-                justice_rendered_at: this.edit.owner_complaint === 1
-                    && this.edit.justiceProcedure === 1
+                justice_rendered_at: this.edit.justiceProcedure === 1
                     && this.edit.justice_rendered === 1 ? formatDate(this.edit.justice_rendered_at) : null,
-                justice_challenged: this.edit.owner_complaint === 1
-                    && this.edit.justiceProcedure === 1
+                justice_challenged: this.edit.justiceProcedure === 1
                     && this.edit.justice_rendered === 1 ? this.edit.justice_challenged : undefined,
                 police_status: this.edit.police_status,
                 police_requested_at: ['requested', 'granted'].indexOf(this.edit.police_status) !== -1 ? formatDate(this.edit.police_requested_at) : null,

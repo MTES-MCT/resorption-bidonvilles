@@ -239,18 +239,14 @@ export default {
                                         options: yesNoValues,
                                         label: 'Existence d\'une procédure judiciaire',
                                         mandatory: true,
-                                        condition({ owner_complaint: ownerComplaint }) {
-                                            return ownerComplaint === 1;
-                                        },
                                     },
                                     justice_rendered: {
                                         type: 'radio',
                                         options: yesNoValues,
                                         label: 'Décision de justice rendue',
                                         mandatory: true,
-                                        condition({ owner_complaint: ownerComplaint, justice_procedure: justiceProcedure }) {
-                                            return ownerComplaint === 1
-                                                && justiceProcedure === 1;
+                                        condition({ justice_procedure: justiceProcedure }) {
+                                            return justiceProcedure === 1;
                                         },
                                     },
                                     justice_rendered_by: {
@@ -258,12 +254,10 @@ export default {
                                         label: 'Origine de la décision',
                                         mandatory: true,
                                         condition({
-                                            owner_complaint: ownerComplaint,
                                             justice_procedure: justiceProcedure,
                                             justice_rendered: justiceRendered,
                                         }) {
-                                            return ownerComplaint === 1
-                                                && justiceProcedure === 1
+                                            return justiceProcedure === 1
                                                 && justiceRendered === 1;
                                         },
                                     },
@@ -272,12 +266,10 @@ export default {
                                         label: 'Date de la décision',
                                         mandatory: true,
                                         condition({
-                                            owner_complaint: ownerComplaint,
                                             justice_procedure: justiceProcedure,
                                             justice_rendered: justiceRendered,
                                         }) {
-                                            return ownerComplaint === 1
-                                                && justiceProcedure === 1
+                                            return justiceProcedure === 1
                                                 && justiceRendered === 1;
                                         },
                                     },
@@ -287,12 +279,10 @@ export default {
                                         label: 'Contentieux relatif à la décision de justice',
                                         mandatory: true,
                                         condition({
-                                            owner_complaint: ownerComplaint,
                                             justice_procedure: justiceProcedure,
                                             justice_rendered: justiceRendered,
                                         }) {
-                                            return ownerComplaint === 1
-                                                && justiceProcedure === 1
+                                            return justiceProcedure === 1
                                                 && justiceRendered === 1;
                                         },
                                     },
