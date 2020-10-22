@@ -170,10 +170,6 @@ export default {
                                         label: 'Origines',
                                         description: 'Ne rien cocher si l\'information est inconnue',
                                         mandatory: false,
-                                        condition({ population_total: populationTotal }) {
-                                            return parseInt(populationTotal, 10) > 10;
-                                        },
-                                        inactiveMessage: 'Pour les sites de 10 personnes ou moins, l\'origine des habitants ne peut être précisée conformément à la réglementation relative aux données à caractère personnel',
                                     },
                                 },
                             },

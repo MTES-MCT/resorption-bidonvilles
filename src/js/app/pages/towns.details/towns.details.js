@@ -407,7 +407,7 @@ export default {
                 police_requested_at: ['requested', 'granted'].indexOf(this.edit.police_status) !== -1 ? formatDate(this.edit.police_requested_at) : null,
                 police_granted_at: ['granted'].indexOf(this.edit.police_status) !== -1 ? formatDate(this.edit.police_granted_at) : null,
                 bailiff: this.edit.bailiff,
-                social_origins: this.edit.populationTotal && this.edit.populationTotal > 10 ? this.edit.origins : null,
+                social_origins: this.edit.origins,
                 field_type: this.edit.fieldType,
                 owner_type: this.edit.ownerType,
                 owner: this.edit.owner,
