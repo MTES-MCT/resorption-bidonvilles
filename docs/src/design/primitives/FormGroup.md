@@ -7,7 +7,7 @@
 Wrapper de champs de formulaire, permet de standardiser les titres & padding/margin entre les différents inputs  
     
 
-## Example
+## Exemple
 
 <FormGroup-Example />
 <GithubLink examplePath="FormGroup/Example.vue" />

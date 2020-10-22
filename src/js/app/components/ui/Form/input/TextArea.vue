@@ -5,7 +5,7 @@
             <textarea
                    :id="id"
                    @input="$emit('input', $event.target.value)"
-                   v-bind="$props"
+                   v-bind="filteredProps"
                    :class="classes" />
             <InputError>{{errors[0]}}</InputError>
         </ValidationProvider>

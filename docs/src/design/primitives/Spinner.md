@@ -1,8 +1,8 @@
 # Spinner 
 <GithubLink componentPath="Spinner.vue" />
-<GithubLink docPath="components/Spinner.md" />
+<GithubLink docPath="primitives/Spinner.md" />
 
-# Example
+## Exemple
 
 <Spinner-Example />
 <GithubLink examplePath="Spinner/Example.vue" />

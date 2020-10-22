@@ -3,7 +3,7 @@
         <InputLabel :label="label" :info="info" />
         <ValidationProvider :rules="rules" :name="validationName || label" v-slot="{ errors }" :vid="id">
             <div class="relative">
-                <select :class="classes" v-bind="$props" @change="$emit('input', $event.target.value)" :id="id">
+                <select :class="classes" @change="$emit('input', $event.target.value)" :id="id" v-bind="filteredProps">
                     <slot />
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">

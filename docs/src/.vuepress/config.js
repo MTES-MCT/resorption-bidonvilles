@@ -34,7 +34,7 @@ module.exports = {
     lastUpdated: false,
     nav: [
       {
-        text: 'Components',
+        text: 'Composants',
         link: '/design/',
       },
       {
@@ -45,26 +45,31 @@ module.exports = {
     sidebar: {
       '/design/': [
         {
-          title: 'Primitives',
+          title: 'Fondamentaux',
           collapsable: false,
           children: [
-            'Button',
-            'Text',
-            'Icon',
-            'Link',
+            'fundamentals/Spacing',
+            'fundamentals/Grid',
+            'fundamentals/Colors',
+            'fundamentals/Typography',
           ]
         },
         {
-          title: 'Form',
+          title: 'Primitives / Form',
           collapsable: false,
           children: [
-            'form/CheckboxRadio',
-            'form/TextInputSelect',
-            'form/FormGroup'
+            'primitives/Button',
+            'primitives/Icon',
+            'primitives/Link',
+            'primitives/Spinner',
+            'primitives/TextInputSelect',
+            'primitives/CheckboxRadio',
+            'primitives/FormGroup'
           ]
         },
+
         {
-          title: 'Components',
+          title: 'Composants',
           collapsable: false,
           children: [
             'components/Autocomplete',
@@ -75,11 +80,11 @@ module.exports = {
             'components/Callout',
             'components/Notification',
             'components/Table',
-            'components/Spinner',
+
           ]
         },
         {
-          title: 'Examples',
+          title: 'Exemples',
           collapsable: false,
           children: [
             'examples/Grid',

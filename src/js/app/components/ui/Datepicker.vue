@@ -1,5 +1,4 @@
 <template>
-  <ClientONly
     <InputWrapper>
         <InputLabel :label="label" :info="info" />
         <ValidationProvider ref="provider" :rules="rules" :name="validationName || label" v-slot="{ errors }" :vid="id">

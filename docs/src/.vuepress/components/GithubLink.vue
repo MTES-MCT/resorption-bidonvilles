@@ -33,15 +33,15 @@
             },
             defaultText() {
                 if (this.examplePath) {
-                    return `View code snippet`
+                    return `Voir code`
                 }
 
                 if (this.docPath) {
-                    return `Edit Docs`
+                    return `Editer cette page`
                 }
 
                 if (this.componentPath) {
-                    return `Component Code`
+                    return `Code du composant`
                 }
             }
         }

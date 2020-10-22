@@ -50,13 +50,40 @@ module.exports = {
                 128: '32rem',
             },
             colors: {
+                // Primary palette
+                blue700: '#00006D',
                 primary: '#000091',
-                primaryDark: '#00006c',
-                secondary: '#FF6F4C',
-                secondaryDark: '#fe542a',
-                black: '#1E1E1E',
-                corail: '#FF6F4C',
-                blueFrance: '#000091',
+                blue600: '#000091',
+                blue500: '#000074',
+                blue400: '#7F7FC8',
+                blue300: '#BFBFE3',
+                blue200: '#E5E5F4',
+                blue100: '#F2F2F9',
+
+                // Corail / Secondary palette
+                orange700: '#BF5339',
+                orange600: '#FF6F4c',
+                secondary: '#FF6F4c',
+                orange500: '#CB634B',
+                orange400: '#FFB7A5',
+                orange300: '#FFDBD2',
+                orange200: '#FFF0ED',
+                orange100: '#FFF8F6',
+
+                // Red palette
+                red700: '#A9000B',
+                red600: '#E1000F',
+                red500: '#CA000D',
+                red400: '#F07F87',
+                red300: '#F7BFC3',
+                red200: '#FCE5E7',
+                red100: '#FDF2F3',
+
+                // Functional colors
+                success: '#0D6635',
+                info: '#3A55D1',
+                warning: '#FA5C00',
+                error: '#B60000',
 
                 // UI colors /  text
                 G800: '#1E1E1E',
@@ -68,12 +95,13 @@ module.exports = {
                 G300: '#E7E7E7',
                 G200: '#F0F0F0',
                 G100: '#F8F8F8',
+                black: '#1E1E1E',
 
-                // Functional colors
-                success: '#0D6635',
-                info: '#3A55D1',
-                warning: '#FA5C00',
-                error: '#B60000'
+                // Deprecated values : TO DELETE
+                primaryDark: '#00006c',
+                blueFrance: '#000091',
+                secondaryDark: '#fe542a',
+                corail: '#FF6F4C',
             },
         },
     },
