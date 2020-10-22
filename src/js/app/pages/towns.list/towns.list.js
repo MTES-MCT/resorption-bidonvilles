@@ -203,7 +203,7 @@ export default {
             return this.dashboardShantytowns.reduce((total, { populationMinors }) => total + (populationMinors || 0), 0);
         },
         justiceTotal() {
-            return this.dashboardShantytowns.filter(({ ownerComplaint }) => ownerComplaint === true).length;
+            return this.dashboardShantytowns.filter(({ justiceProcedure }) => justiceProcedure === true).length;
         },
         lastUpdate() {
             return this.dashboardShantytowns.reduce((mostRecentDate, { updatedAt }) => {
@@ -374,7 +374,9 @@ export default {
                 justiceStatuses.push({
                     label: 'Procédure en cours',
                 });
-            } else if (shantytown.ownerComplaint === true) {
+            }
+
+            if (shantytown.ownerComplaint === true) {
                 justiceStatuses.push({
                     label: 'Plainte déposée',
                 });
@@ -560,20 +562,16 @@ export default {
          */
         checkJustice(shantytown, filters) {
             return filters.some((value) => {
+                if (value === 'ownerComplaint') {
+                    return shantytown.ownerComplaint === true;
+                }
+
                 if (shantytown.justiceRendered === true) {
                     return value === 'justiceRendered';
                 }
 
                 if (shantytown.justiceProcedure === true) {
                     return value === 'justiceProcedure';
-                }
-
-                if (shantytown.ownerComplaint === true) {
-                    return value === 'ownerComplaint';
-                }
-
-                if (shantytown.ownerComplaint === false) {
-                    return value === 'none';
                 }
 
                 return value === null;
