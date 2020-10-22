@@ -120,7 +120,7 @@ Cypress.Commands.add('fillEditTown', (shantytown) => {
                 cy.wrap($el).uncheck();
             }
         });
-    } else if (shantytown.population_total >= 10) {
+    } else {
         cy.get('[data-cy-field="social_origins"]').uncheck();
     }
 
