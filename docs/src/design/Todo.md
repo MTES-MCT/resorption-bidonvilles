@@ -1,3 +1,0 @@
-# Todo
-
-- Ajouter Spinner Autocomplete

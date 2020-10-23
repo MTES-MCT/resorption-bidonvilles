@@ -52,6 +52,7 @@ module.exports = {
             'fundamentals/Grid',
             'fundamentals/Colors',
             'fundamentals/Typography',
+            'fundamentals/FormValidation',
           ]
         },
         {
@@ -91,13 +92,6 @@ module.exports = {
             'examples/Login',
             'examples/Shantytown',
             'examples/StateDesignSystem',
-          ]
-        },
-        {
-          title: 'Todo',
-          collapsable: false,
-          children: [
-            'Todo',
           ]
         }
       ],
