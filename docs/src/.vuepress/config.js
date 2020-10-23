@@ -81,6 +81,7 @@ module.exports = {
             'components/Callout',
             'components/Notification',
             'components/Table',
+            'components/Tag',
 
           ]
         },

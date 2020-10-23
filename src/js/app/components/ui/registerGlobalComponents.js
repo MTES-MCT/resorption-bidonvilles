@@ -26,6 +26,7 @@ import Autocomplete from './Autocomplete.vue';
 import Spinner from './Spinner.vue';
 import CheckableGroup from './Form/CheckableGroup.vue';
 import Datepicker from './Datepicker.vue';
+import Tag from './Tag.vue';
 
 export default function (vueInstance) {
     vueInstance.component(
@@ -111,6 +112,10 @@ export default function (vueInstance) {
     vueInstance.component(
         'DatepickerV2',
         Datepicker,
+    );
+    vueInstance.component(
+        'Tag',
+        Tag,
     );
 
     vueInstance.use(notifications);
