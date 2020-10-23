@@ -44,21 +44,23 @@
 
                         </InputIcon>
 
-                        <div :class="['origin-top-left-10 absolute z-10 left-0 mt-2 w-full rounded-md shadow-lg transform transition ease-in-out duration-200', focused ? 'opacity-100' : 'opacity-0']">
-                            <slot :results="results" :resultListProps="resultListProps" :resultListListeners="resultListListeners" :resultProps="resultProps" :getResultValue="getResultValue">
-                                <Menu v-if="!results.length">
-                                    <MenuItem>
-                                        Aucun résultats
-                                    </MenuItem>
-                                </Menu>
-                                <Menu v-else  v-bind="resultListProps" v-on="resultListListeners">
-                                    <MenuItem v-for="(result, index) in results" :key="resultProps[index].id" v-bind="resultProps[index]" :class="['cursor-pointer', resultProps[index]['aria-selected'] && 'bg-gray-100']">
-                                        <div>{{ getResultValue(result) }}</div>
-                                    </MenuItem>
-                                </Menu>
+                        <transition name="fade">
+                          <div v-if="focused && searchInput" :class="['origin-top-left-10 absolute z-10 left-0 mt-2 w-full rounded-md shadow-lg']">
+                              <slot :results="results" :resultListProps="resultListProps" :resultListListeners="resultListListeners" :resultProps="resultProps" :getResultValue="getResultValue">
+                                  <Menu v-if="!results.length ">
+                                      <MenuItem>
+                                          Aucun résultats
+                                      </MenuItem>
+                                  </Menu>
+                                  <Menu v-else  v-bind="resultListProps" v-on="resultListListeners">
+                                      <MenuItem v-for="(result, index) in results" :key="resultProps[index].id" v-bind="resultProps[index]" :class="['cursor-pointer', resultProps[index]['aria-selected'] && 'bg-gray-100']">
+                                          <div>{{ getResultValue(result) }}</div>
+                                      </MenuItem>
+                                  </Menu>
 
-                            </slot>
-                        </div>
+                              </slot>
+                          </div>
+                        </transition>
                     </div>
                 </template>
             </AutocompleteVue>
@@ -139,9 +141,11 @@
                     default: getInputClasses('default', inputOptions)
                 }[this.variant]
             },
+
         },
         data() {
             return {
+              show: true,
                 focused: false,
                 value: '',
                 searchInput: '',
@@ -159,12 +163,13 @@
 
             },
             onItemSelect(newValue) {
+              // Update local new value & Emit
+              this.value = newValue;
                 // If user has selected an item, update search input
                 if (newValue) {
                     this.searchInput = this.getResultValue(newValue)
                 }
-                // Update local new value & Emit
-                this.value = newValue;
+
                 this.$emit('submit', newValue)
                 this.$refs.provider.syncValue(newValue);
                 this.$refs.provider.validate();

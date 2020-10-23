@@ -59,9 +59,11 @@
         },
         computed: {
             inputClasses() {
+                const inputOptions = { error : this.error }
+
                 return {
-                    state: [...getInputClasses('state', this.error)],
-                    default: getInputClasses('default')
+                    state: [...getInputClasses('state', inputOptions)],
+                    default: getInputClasses('default', inputOptions)
                 }[this.variant]
             }
         },
