@@ -40,7 +40,7 @@
                     {{$t('landingPage.thirdSection.secondParagraph.body.text3')}}
                     </span>
                     {{$t('landingPage.thirdSection.secondParagraph.body.text4')}}
-                    <a class="link" href="https://beta.gouv.fr/startups/resorption-bidonvilles.html">{{$t('landingPage.thirdSection.secondParagraph.body.link2')}}</a>
+                    <a class="link" href="https://beta.gouv.fr/startups/resorption-bidonvilles.html">{{$t('landingPage.thirdSection.secondParagraph.body.link2')}}.</a>
                 </div>
 
                 <div class="mt-8">
