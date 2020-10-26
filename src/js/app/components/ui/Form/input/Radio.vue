@@ -17,42 +17,41 @@
     </div>
 </template>
 
-
-
 <script>
-    import filteredProps from '../../mixins/filteredProps';
-    import CheckableCard from '../utils/CheckableCard';
-    export default {
-        name: 'Radio',
-        mixins: [filteredProps],
-        components: {CheckableCard},
-        props: {
-            checkValue: {
-                type: [String, Boolean, Number]
-            },
-            label: {
-                type: String
-            },
-            value: {
-                type: [String, Boolean, Number]
-            },
-            info: {
-                type: String
-            },
-            variant: {
-                type: String,
-                default: 'default'
-            }
+import filteredProps from '../../mixins/filteredProps';
+import CheckableCard from '../utils/CheckableCard.vue';
+
+export default {
+    name: 'Radio',
+    mixins: [filteredProps],
+    components: { CheckableCard },
+    props: {
+        checkValue: {
+            type: [String, Boolean, Number],
         },
-        methods: {
-            onChange: function() {
-                this.$emit('input', this.checkValue);
-            }
+        label: {
+            type: String,
         },
-        computed: {
-            isChecked() {
-                return this.value === this.checkValue
-            }
-        }
-    };
+        value: {
+            type: [String, Boolean, Number],
+        },
+        info: {
+            type: String,
+        },
+        variant: {
+            type: String,
+            default: 'default',
+        },
+    },
+    methods: {
+        onChange() {
+            this.$emit('input', this.checkValue);
+        },
+    },
+    computed: {
+        isChecked() {
+            return this.value === this.checkValue;
+        },
+    },
+};
 </script>

@@ -11,20 +11,20 @@
 </template>
 
 <script>
-    export default {
-        name: "LandingPageBilanBlock",
-        props: {
-            icon: {
-                required: true
-            },
-            text: {
-                type: String,
-                required: true
-            },
-            info: {
-                type: String,
-                required: true
-            },
-        }
-    }
+export default {
+    name: 'LandingPageBilanBlock',
+    props: {
+        icon: {
+            required: true,
+        },
+        text: {
+            type: String,
+            required: true,
+        },
+        info: {
+            type: String,
+            required: true,
+        },
+    },
+};
 </script>

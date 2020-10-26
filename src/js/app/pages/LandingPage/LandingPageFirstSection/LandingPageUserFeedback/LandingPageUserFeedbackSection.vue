@@ -6,19 +6,19 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            text: {
-                type: String
-            },
-            author: {
-                type: String
-            },
-            active: {
-                type: Boolean
-            }
-        }
-    }
+export default {
+    props: {
+        text: {
+            type: String,
+        },
+        author: {
+            type: String,
+        },
+        active: {
+            type: Boolean,
+        },
+    },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -38,5 +38,3 @@
             }
     }
 </style>
-
-

@@ -1,37 +1,30 @@
 {
-    "extends": "airbnb-base",
-    "rules": {
-        "indent": [
-            "error",
-            4,
-            {
-                "SwitchCase": 1
-            }
-        ],
-        "import/no-extraneous-dependencies": false,
-        "prefer-promise-reject-errors": 0,
-        "import/no-unresolved": [
-            "error",
-            {
-                "ignore": [
-                    "#"
-                ]
-            }
-        ],
-        "max-len": "off",
-        "no-param-reassign": "warn",
-        "import/extensions": [
-            "error",
-            "never",
-            {
-                "vue": "always"
-            }
-        ]
-    },
-    "env": {
-        "browser": true
-    },
-    "globals": {
-        "App": "readonly"
-    }
+  "extends": [
+    "plugin:vue/essential",
+    "eslint:recommended",
+    "@vue/airbnb"
+  ],
+  "rules": {
+    "indent": [
+      "error",
+      4,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "import/no-extraneous-dependencies": 0,
+    "import/no-cycle": 0,
+    "max-len": "off"
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "globals": {
+    "App": "readonly"
+  },
+  "root": true,
+  "parserOptions": {
+    "ecmaVersion": 2020
+  }
 }

@@ -10,32 +10,32 @@
 </template>
 
 <script>
-    import {
-        getByCategory as getOrganizationsByCategory,
-    } from '#helpers/api/organization';
+import {
+    getByCategory as getOrganizationsByCategory,
+} from '#helpers/api/organization';
 
-    export default {
-        props: {
-            administrationName: {
-                required: true
-            },
-            administrationFunction: {
-                required: true
+export default {
+    props: {
+        administrationName: {
+            required: true,
+        },
+        administrationFunction: {
+            required: true,
 
-            }
         },
-        data() {
-            return {
-                administrationNameOptions: [],
-            }
-        },
-        async mounted() {
-            const { organizations } = await getOrganizationsByCategory('administration');
-            this.administrationNameOptions = organizations
-                .map(({ id, name }) => ({
-                    value: id,
-                    label: name,
-                }));
-        },
-    }
+    },
+    data() {
+        return {
+            administrationNameOptions: [],
+        };
+    },
+    async mounted() {
+        const { organizations } = await getOrganizationsByCategory('administration');
+        this.administrationNameOptions = organizations
+            .map(({ id, name }) => ({
+                value: id,
+                label: name,
+            }));
+    },
+};
 </script>

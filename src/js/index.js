@@ -1,7 +1,7 @@
 // load the whole betagouv template
 import '@openfonts/fira-code_all';
 import 'simplebar/dist/simplebar.min.css';
-import '../css/index.scss';
+import '#src/css/index.scss';
 
 // import polyfills
 import 'core-js/stable';
@@ -12,10 +12,11 @@ import Vue from 'vue';
 import VueI18n from 'vue-i18n';
 import VueRouter from 'vue-router';
 import TrendChart from 'vue-trend-chart';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import App from './App.vue';
 
 // import font-awesome
 import './icons';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import messages from './app/messages';
 import registerGlobalComponents from './app/components/ui/registerGlobalComponents';
 import VueMatomo from './matomo/matomo';
@@ -121,9 +122,10 @@ const i18n = new VueI18n({
 
 });
 
-Vue.createElement = obj => new Vue(obj);
+Vue.createElement = (obj) => new Vue(obj);
 Vue.createElement({
     el: '#app',
     router,
     i18n,
+    render: (h) => h(App),
 });

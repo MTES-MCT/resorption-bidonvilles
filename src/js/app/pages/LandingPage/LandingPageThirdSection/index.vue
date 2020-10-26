@@ -63,22 +63,19 @@
                     <a href="https://entrepreneur-interet-general.etalab.gouv.fr/defis/2019/resorption-bidonvilles.html"><img class="h-16 m-2" src="./assets/logo-entrepreneur-interet-general.png" /></a>
                 </div>
 
-
-
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import LandingPageBilanBlock from './LandingPageBilanBlock';
-    import Button from '#app/components/ui/Button';
+import LandingPageBilanBlock from './LandingPageBilanBlock.vue';
+import Button from '#app/components/ui/Button.vue';
 
-    export default {
-        components: {
-            LandingPageBilanBlock,
-            Button
-        }
-    }
+export default {
+    components: {
+        LandingPageBilanBlock,
+        Button,
+    },
+};
 </script>
-

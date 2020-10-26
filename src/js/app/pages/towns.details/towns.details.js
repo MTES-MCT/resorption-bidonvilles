@@ -203,7 +203,7 @@ export default {
                 this.hideAside();
             }
         },
-        hasPermission: permissionName => hasPermission(permissionName),
+        hasPermission: (permissionName) => hasPermission(permissionName),
         offsetTop(el) {
             let next = el;
             let offset = 0;
@@ -317,7 +317,7 @@ export default {
                 populationTotal: this.town.populationTotal,
                 populationCouples: this.town.populationCouples,
                 populationMinors: this.town.populationMinors,
-                origins: this.town.socialOrigins.map(origin => origin.id),
+                origins: this.town.socialOrigins.map((origin) => origin.id),
                 electricityType: this.town.electricityType.id,
                 electricityComments: this.town.electricityComments || '',
                 accessToSanitary: boolToYesNoValue(this.town.accessToSanitary),
@@ -327,7 +327,7 @@ export default {
                 trashEvacuation: boolToYesNoValue(this.town.trashEvacuation),
                 solutions: this.town.closingSolutions ? this.closingSolutions.reduce((solutions, solution) => {
                     const newSolutions = Object.assign(solutions, {});
-                    const s = this.town.closingSolutions.find(sol => sol.id === solution.id);
+                    const s = this.town.closingSolutions.find((sol) => sol.id === solution.id);
                     newSolutions[solution.id] = {
                         checked: s !== undefined,
                         peopleAffected: s && s.peopleAffected,
@@ -438,8 +438,8 @@ export default {
                 closed_with_solutions: this.edit.closedWithSolutions,
                 status: this.edit.status,
                 solutions: Object.keys(this.edit.solutions)
-                    .filter(key => this.edit.solutions[key].checked)
-                    .map(key => ({
+                    .filter((key) => this.edit.solutions[key].checked)
+                    .map((key) => ({
                         id: key,
                         peopleAffected: this.edit.solutions[key].peopleAffected ? parseInt(this.edit.solutions[key].peopleAffected, 10) : null,
                         householdsAffected: this.edit.solutions[key].householdsAffected ? parseInt(this.edit.solutions[key].householdsAffected, 10) : null,

@@ -2,7 +2,6 @@ import NavBar from '#app/layouts/navbar/navbar.vue';
 import { get as getConfig, hasPermission } from '#helpers/api/config';
 import Form from '#app/components/form/form.vue';
 import { add } from '#helpers/api/town';
-import { link } from '#helpers/api/plan';
 
 export default {
     components: {
@@ -337,30 +336,30 @@ export default {
                     },
                 },
 
-                {
-                    title: 'Dispositifs en cours sur le site',
-                    sections: [
-                        {
-                            title: 'Sélection des dispositifs',
-                            description: 'Des dispositifs sont déjà en place sur le territoire d\'implantation du site que vous venez de déclarer.',
-                            inputs: {
-                                plans: {
-                                    type: 'checkbox',
-                                    label: 'Dispositifs',
-                                    description: 'Veuillez cocher, parmi ceux listés ci-dessous, les dispositifs déployés sur le site que vous venez de déclarer',
-                                    mandatory: true,
-                                    options: [],
-                                },
-                            },
-                        },
-                    ],
-                    wording: {
-                        submit: 'Valider les dispositfs',
-                        error: 'L\'intégration du site aux dispositifs a échoué',
-                        success: 'L\'intégration du site aux dispositifs a réussi',
-                    },
-                    submit: (data, [{ town: { id: townId } }]) => Promise.all(data.plans.map(planId => link(planId, townId))),
-                },
+                // {
+                //     title: 'Dispositifs en cours sur le site',
+                //     sections: [
+                //         {
+                //             title: 'Sélection des dispositifs',
+                //             description: 'Des dispositifs sont déjà en place sur le territoire d\'implantation du site que vous venez de déclarer.',
+                //             inputs: {
+                //                 plans: {
+                //                     type: 'checkbox',
+                //                     label: 'Dispositifs',
+                //                     description: 'Veuillez cocher, parmi ceux listés ci-dessous, les dispositifs déployés sur le site que vous venez de déclarer',
+                //                     mandatory: true,
+                //                     options: [],
+                //                 },
+                //             },
+                //         },
+                //     ],
+                //     wording: {
+                //         submit: 'Valider les dispositfs',
+                //         error: 'L\'intégration du site aux dispositifs a échoué',
+                //         success: 'L\'intégration du site aux dispositifs a réussi',
+                //     },
+                //     submit: (data, [{ town: { id: townId } }]) => Promise.all(data.plans.map((planId) => link(planId, townId))),
+                // },
             ],
         };
 

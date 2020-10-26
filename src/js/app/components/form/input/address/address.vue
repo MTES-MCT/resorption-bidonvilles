@@ -7,6 +7,7 @@
 </style>
 
 <script>
-    import Component from './address.js';
-    export default Component;
+import Component from './address';
+
+export default Component;
 </script>

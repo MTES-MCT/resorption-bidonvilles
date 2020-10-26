@@ -1,7 +1,7 @@
 import AutocompleteVue from '@trevoreyre/autocomplete-vue';
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
 import * as rules from 'vee-validate/dist/rules';
-import { messages } from 'vee-validate/dist/locale/fr';
+import { messages } from 'vee-validate/dist/locale/fr.json';
 
 import notifications from 'vue-notification/dist/ssr';
 import Button from './Button.vue';

@@ -7,24 +7,24 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            title: {
-                type: [String, Number],
-                required: true
-            },
-            subtitle: {
-                type: String,
-                required: true
-            },
-            info: {
-                type: String,
-                required: false
-            },
-            icon: {
-                type: String,
-                required: false
-            }
-        }
-    }
+export default {
+    props: {
+        title: {
+            type: [String, Number],
+            required: true,
+        },
+        subtitle: {
+            type: String,
+            required: true,
+        },
+        info: {
+            type: String,
+            required: false,
+        },
+        icon: {
+            type: String,
+            required: false,
+        },
+    },
+};
 </script>

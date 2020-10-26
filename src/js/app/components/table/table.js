@@ -91,9 +91,7 @@ export default {
          * @returns {Array.<TableColumn>}
          */
         parsedColumns() {
-            return this.columns.map(column => Object.assign({}, column, {
-                isFilterable: column.filters !== undefined,
-            }));
+            return this.columns.map((column) => ({ ...column, isFilterable: column.filters !== undefined }));
         },
 
         /**
@@ -105,9 +103,7 @@ export default {
          * @returns {Object.<String,Array.<TableFilterItem>>}
          */
         checkedFilters() {
-            return Object.keys(this.parsedFilters).reduce((acc, columnId) => Object.assign({}, acc, {
-                [columnId]: this.parsedFilters[columnId].filter(({ checked }) => checked === true),
-            }), {});
+            return Object.keys(this.parsedFilters).reduce((acc, columnId) => ({ ...acc, [columnId]: this.parsedFilters[columnId].filter(({ checked }) => checked === true) }), {});
         },
 
         /**
@@ -225,21 +221,20 @@ export default {
             return this.columns.reduce((acc, column) => {
                 // columns with no filters get an empty array
                 if (column.filters === undefined) {
-                    return Object.assign({}, acc, {
-                        [column.id]: [],
-                    });
+                    return { ...acc, [column.id]: [] };
                 }
 
                 // parse every filter item of this column (basically, initialize the value of `checked`)
-                return Object.assign({}, acc, {
+                return {
+                    ...acc,
                     [column.id]: column.filters.map((filter) => {
                         if (filter.checked !== undefined) {
                             return filter;
                         }
 
-                        return Object.assign({}, filter, { checked: false });
+                        return { ...filter, checked: false };
                     }),
-                });
+                };
             }, {});
         },
 

@@ -3,7 +3,8 @@
 </template>
 
 <script>
-import Component from "./map.js";
+import Component from './map';
+
 export default Component;
 </script>
 

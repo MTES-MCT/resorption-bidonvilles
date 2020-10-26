@@ -2,7 +2,6 @@ import { get as getConfig } from '#helpers/api/config';
 
 export default {
 
-
     props: {
         /**
          * @type {PlanFundingData}
@@ -65,7 +64,6 @@ export default {
         },
     },
 
-
     data() {
         const showRealAmount = this.inputMode !== 'default' || !this.isCurrentYear();
         const allowEdition = !Number.isFinite(this.value.realAmount);
@@ -92,7 +90,6 @@ export default {
         };
     },
 
-
     watch: {
         // two-way binding
         value() {
@@ -117,7 +114,6 @@ export default {
             this.emitInput();
         },
     },
-
 
     methods: {
         /**

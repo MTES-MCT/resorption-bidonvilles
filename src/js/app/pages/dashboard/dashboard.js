@@ -1,22 +1,15 @@
+import simplebar from 'simplebar-vue';
 import NavBar from '#app/layouts/navbar/navbar.vue';
 import FilterGroup from './filterGroup/filterGroup.vue';
 import Map from '#app/components/map/map.vue';
 import Quickview from '#app/components/quickview/quickview.vue';
 import { all as fetchAll } from '#helpers/api/town';
 import { get as getConfig, getPermission } from '#helpers/api/config';
-import simplebar from 'simplebar-vue';
 import { open } from '#helpers/tabHelper';
 
-// eslint-disable-next-line
-import iconType from '/img/type.svg';
-// eslint-disable-next-line
-import iconPeople from '/img/people.svg';
-// eslint-disable-next-line
-import iconJustice from '/img/justice.svg';
-// eslint-disable-next-line
-import iconStatus from '/img/status.svg';
-// eslint-disable-next-line
-import iconOrigins from '/img/origins.svg';
+import iconType from '../../../../../public/img/type.svg';
+import iconPeople from '../../../../../public/img/people.svg';
+import iconStatus from '../../../../../public/img/status.svg';
 
 /**
  * Returns the appropriate zoom level for the given location type
@@ -112,7 +105,7 @@ export default {
                     icon: iconPeople,
                     label: 'Type de propriétaire',
                     id: 'ownerType',
-                    options: getConfig().owner_types.map(type => ({
+                    options: getConfig().owner_types.map((type) => ({
                         value: type.id,
                         label: type.label,
                         checked: true,
@@ -128,7 +121,7 @@ export default {
             }
 
             return this.filters.filter(
-                filter => !filter.permissions || filter.permissions.every(permission => this.permission[permission]),
+                (filter) => !filter.permissions || filter.permissions.every((permission) => this.permission[permission]),
             );
         },
         rendererProps() {
@@ -144,30 +137,30 @@ export default {
                 switch (filterGroup.id) {
                     case 'accessToWater': {
                         const allowed = filterGroup.options
-                            .filter(option => option.checked)
-                            .map(option => option.value);
+                            .filter((option) => option.checked)
+                            .map((option) => option.value);
 
-                        visibleTowns = visibleTowns.filter(town => allowed.indexOf(town.accessToWater) !== -1);
+                        visibleTowns = visibleTowns.filter((town) => allowed.indexOf(town.accessToWater) !== -1);
                     }
                         break;
 
                     case 'fieldType': {
                         const allowedFieldTypes = filterGroup.options
-                            .filter(option => option.checked)
-                            .map(option => option.value);
+                            .filter((option) => option.checked)
+                            .map((option) => option.value);
 
-                        visibleTowns = visibleTowns.filter(town => town.fieldType && allowedFieldTypes.indexOf(town.fieldType.id) !== -1);
+                        visibleTowns = visibleTowns.filter((town) => town.fieldType && allowedFieldTypes.indexOf(town.fieldType.id) !== -1);
                     }
                         break;
 
                     case 'population': {
                         const disallowedPopulation = filterGroup.options
-                            .filter(option => !option.checked)
-                            .map(option => option.value);
+                            .filter((option) => !option.checked)
+                            .map((option) => option.value);
 
                         disallowedPopulation.forEach((value) => {
                             if (value === null) {
-                                visibleTowns = visibleTowns.filter(town => town.populationTotal !== null);
+                                visibleTowns = visibleTowns.filter((town) => town.populationTotal !== null);
                                 return;
                             }
 
@@ -201,14 +194,14 @@ export default {
 
                     case 'status': {
                         const disallowedStatuses = filterGroup.options
-                            .filter(option => !option.checked)
-                            .map(option => option.value);
+                            .filter((option) => !option.checked)
+                            .map((option) => option.value);
 
                         disallowedStatuses.forEach((value) => {
                             if (value === 'closed') {
-                                visibleTowns = visibleTowns.filter(town => town.status === 'open');
+                                visibleTowns = visibleTowns.filter((town) => town.status === 'open');
                             } else if (value === 'opened') {
-                                visibleTowns = visibleTowns.filter(town => town.status !== 'open');
+                                visibleTowns = visibleTowns.filter((town) => town.status !== 'open');
                             }
                         });
                     }
@@ -216,10 +209,10 @@ export default {
 
                     case 'ownerType': {
                         const allowedOwnerTypes = filterGroup.options
-                            .filter(option => option.checked)
-                            .map(option => option.value);
+                            .filter((option) => option.checked)
+                            .map((option) => option.value);
 
-                        visibleTowns = visibleTowns.filter(town => town.ownerType && allowedOwnerTypes.indexOf(town.ownerType.id) !== -1);
+                        visibleTowns = visibleTowns.filter((town) => town.ownerType && allowedOwnerTypes.indexOf(town.ownerType.id) !== -1);
                     }
                         break;
 
@@ -323,7 +316,7 @@ export default {
                     const fieldTypeFilter = this.filters.filter(({ id }) => id === 'fieldType')[0];
                     fieldTypeFilter.options = [
                         // options based on field-types returned by the api
-                        ...fieldTypes.map(fieldType => ({
+                        ...fieldTypes.map((fieldType) => ({
                             id: fieldType.id,
                             value: fieldType.id,
                             label: fieldType.label,

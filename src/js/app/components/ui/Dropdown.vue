@@ -10,37 +10,36 @@
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                isOpen: false
+export default {
+    data() {
+        return {
+            isOpen: false,
+        };
+    },
+    methods: {
+        checkOutsideClick(event) {
+            if (!this.$el.contains(event.target)) {
+                this.closeMenu();
             }
         },
-        methods: {
-            checkOutsideClick(event) {
-                if (!this.$el.contains(event.target)) {
-                    this.closeMenu();
-                }
-            },
-            openMenu() {
-                this.isOpen = true
-            },
-            closeMenu() {
-                this.isOpen = false
-            },
-            toggleMenu() {
-                this.isOpen = !this.isOpen
-            }
+        openMenu() {
+            this.isOpen = true;
         },
-        mounted() {
-            // Delay listener, otherwise the check happens before the menu is rendered and close the menu immediately
-            setTimeout(() => {
-                document.addEventListener('click', this.checkOutsideClick);
-            }, 0)
-
+        closeMenu() {
+            this.isOpen = false;
         },
-        destroyed() {
-            document.removeEventListener('click', this.checkOutsideClick);
-        }
-    }
+        toggleMenu() {
+            this.isOpen = !this.isOpen;
+        },
+    },
+    mounted() {
+        // Delay listener, otherwise the check happens before the menu is rendered and close the menu immediately
+        setTimeout(() => {
+            document.addEventListener('click', this.checkOutsideClick);
+        }, 0);
+    },
+    destroyed() {
+        document.removeEventListener('click', this.checkOutsideClick);
+    },
+};
 </script>

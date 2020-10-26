@@ -39,7 +39,7 @@ export default {
         };
 
         if (hasNationalPermission !== true || userLocationType === 'nation') {
-            data.defaultLocation = Object.assign({}, userLocation);
+            data.defaultLocation = { ...userLocation };
             data.location = null;
         } else {
             data.defaultLocation = {
@@ -51,7 +51,7 @@ export default {
                     type: 'nation',
                 },
             };
-            data.location = Object.assign({}, userLocation);
+            data.location = { ...userLocation };
         }
 
         if (data.defaultLocation.data.type === 'nation') {
