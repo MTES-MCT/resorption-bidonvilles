@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
     pages: {
-        index: './src/js/index.js'
+        index: './src/js/index.js',
     },
     chainWebpack: (config) => {
         config.resolve.alias

@@ -10,14 +10,14 @@
 
 <script>
 export default {
-  props: {
-    onDelete: {
-      type: Function
+    props: {
+        onDelete: {
+            type: Function,
+        },
+        color: {
+            type: String,
+            default: 'bg-G200',
+        },
     },
-    color: {
-      type: String,
-      default: 'bg-G200'
-    }
-  }
-}
+};
 </script>

@@ -74,14 +74,14 @@ import InputLabel from './Form/utils/InputLabel.vue';
 import InputWrapper from './Form/utils/InputWrapper.vue';
 import InputError from './Form/utils/InputError.vue';
 import getInputClasses from './Form/utils/getInputClasses';
-import InputIcon from './Form/utils/InputIcon';
+import InputIcon from './Form/utils/InputIcon.vue';
 
 export default {
     components: {
-        InputIcon,
         InputLabel,
         InputWrapper,
         InputError,
+        InputIcon,
     },
     props: {
         loading: {

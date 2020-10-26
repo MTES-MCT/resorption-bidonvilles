@@ -8,23 +8,22 @@
 
 <script>
 export default {
-  props: {
-    icon: {
-      type: String
+    props: {
+        icon: {
+            type: String,
+        },
+        position: {
+            type: String,
+        },
     },
-    position: {
-      type: String
-    }
-  },
-  computed: {
-    positionClasses() {
-      if (this.position === 'after') {
-        return 'right-0 pr-3 '
-      }
+    computed: {
+        positionClasses() {
+            if (this.position === 'after') {
+                return 'right-0 pr-3 ';
+            }
 
-      return 'left-0 pl-3 '
-
-    }
-  }
-}
+            return 'left-0 pl-3 ';
+        },
+    },
+};
 </script>
