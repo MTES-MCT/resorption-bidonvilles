@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import Component from './navbar';
+import Component from "./navbar";
 
 export default Component;
 </script>
 
 <style lang="scss" scoped>
-@import './navbar.scss';
+@import "./navbar.scss";
 </style>

@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue from "vue";
 
 /**
  * Default duration of the notification, in milliseconds
@@ -15,9 +15,11 @@ const DEFAULT_DURATION = 6000;
  * @param {Object} options Please see vue-notification official documentation
  */
 export function notify(options) {
-    return Vue.notify(Object.prototype.hasOwnProperty.call(options, 'duration')
-        ? options
-        : ({ ...options, duration: DEFAULT_DURATION }));
+  return Vue.notify(
+    Object.prototype.hasOwnProperty.call(options, "duration")
+      ? options
+      : { ...options, duration: DEFAULT_DURATION }
+  );
 }
 
 export default notify;

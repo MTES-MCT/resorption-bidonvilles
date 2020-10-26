@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import Component from './modal';
+import Component from "./modal";
 
 export default Component;
 </script>
 
 <style lang="scss" scoped>
-@import './modal.scss';
+@import "./modal.scss";
 </style>

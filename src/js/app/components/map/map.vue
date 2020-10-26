@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './map';
+import Component from "./map";
 
 export default Component;
 </script>

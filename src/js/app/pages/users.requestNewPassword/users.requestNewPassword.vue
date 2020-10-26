@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import Component from './users.requestNewPassword';
+import Component from "./users.requestNewPassword";
 
 export default Component;
 </script>
 
 <style lang="scss">
-@import './users.requestNewPassword.scss';
+@import "./users.requestNewPassword.scss";
 </style>

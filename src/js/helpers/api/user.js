@@ -1,7 +1,5 @@
-import { unload as unloadConfig } from '#helpers/api/config';
-import {
-    postApi, putApi, getApi, deleteApi,
-} from '#helpers/api/main';
+import { unload as unloadConfig } from "#helpers/api/config";
+import { postApi, putApi, getApi, deleteApi } from "#helpers/api/main";
 
 /**
  * Sends a login request for the given user
@@ -17,10 +15,10 @@ import {
  * @returns {Promise}
  */
 export function login(email, password) {
-    return postApi('/signin', { email, password }).then((response) => {
-        localStorage.setItem('token', response.token);
-        return response;
-    });
+  return postApi("/signin", { email, password }).then(response => {
+    localStorage.setItem("token", response.token);
+    return response;
+  });
 }
 
 /**
@@ -29,9 +27,9 @@ export function login(email, password) {
  * @returns {Promise}
  */
 export function refreshToken() {
-    return getApi('/refreshToken').then((response) => {
-        localStorage.setItem('token', response.token);
-    });
+  return getApi("/refreshToken").then(response => {
+    localStorage.setItem("token", response.token);
+  });
 }
 
 /**
@@ -42,16 +40,16 @@ export function refreshToken() {
  * @param {Matomo} piwik
  */
 export function logout(piwik) {
-    unloadConfig();
-    localStorage.removeItem('token');
+  unloadConfig();
+  localStorage.removeItem("token");
 
-    if (piwik) {
-        piwik.resetUserId();
-        piwik.setCustomVariable(1, 'superuser', null);
-        piwik.setCustomVariable(2, 'structure', null);
-        piwik.setCustomVariable(3, 'niveau_geo', null);
-        piwik.setCustomVariable(4, 'geo_nom', null);
-    }
+  if (piwik) {
+    piwik.resetUserId();
+    piwik.setCustomVariable(1, "superuser", null);
+    piwik.setCustomVariable(2, "structure", null);
+    piwik.setCustomVariable(3, "niveau_geo", null);
+    piwik.setCustomVariable(4, "geo_nom", null);
+  }
 }
 
 /**
@@ -65,7 +63,7 @@ export function logout(piwik) {
  * @returns {boolean}
  */
 export function isLoggedIn() {
-    return localStorage.getItem('token') !== null;
+  return localStorage.getItem("token") !== null;
 }
 
 /**
@@ -74,7 +72,7 @@ export function isLoggedIn() {
  * @returns {Boolean}
  */
 export function alreadyLoggedBefore() {
-    return localStorage.getItem('logged_once') === true;
+  return localStorage.getItem("logged_once") === true;
 }
 
 /**
@@ -83,14 +81,14 @@ export function alreadyLoggedBefore() {
  * @returns {string|null}
  */
 export function getToken() {
-    return localStorage.getItem('token');
+  return localStorage.getItem("token");
 }
 
 /**
  * POST /users
  */
 export function create(data) {
-    return postApi('/users', data);
+  return postApi("/users", data);
 }
 
 /**
@@ -99,7 +97,7 @@ export function create(data) {
  * @returns {Promise}
  */
 export function me() {
-    return getApi('/me');
+  return getApi("/me");
 }
 
 /**
@@ -110,7 +108,7 @@ export function me() {
  * @returns {Promise}
  */
 export function edit(data) {
-    return postApi('/me', data);
+  return postApi("/me", data);
 }
 
 /**
@@ -121,109 +119,109 @@ export function edit(data) {
  * @returns {Promise}
  */
 export function setDefaultExport(defaultExport) {
-    return postApi('/me/default-export', {
-        export: defaultExport,
-    });
+  return postApi("/me/default-export", {
+    export: defaultExport
+  });
 }
 
 /**
  * GET /users
  */
 export function list() {
-    return getApi('/users');
+  return getApi("/users");
 }
 
 /**
  * GET /users/:id
  */
 export function get(id) {
-    return getApi(`/users/${id}`);
+  return getApi(`/users/${id}`);
 }
 
 /**
  * POST /users/:id/sendActivationLink
  */
 export function sendActivationLink(user, data) {
-    return postApi(`/users/${user}/sendActivationLink`, data);
+  return postApi(`/users/${user}/sendActivationLink`, data);
 }
 
 /**
  * POST /users/:id/denyAccess
  */
 export function denyAccess(user) {
-    return postApi(`/users/${user}/denyAccess`);
+  return postApi(`/users/${user}/denyAccess`);
 }
 
 /**
  * GET /activation-tokens/:token/check
  */
 export function checkActivationToken(token) {
-    return getApi(`/activation-tokens/${encodeURIComponent(token)}/check`);
+  return getApi(`/activation-tokens/${encodeURIComponent(token)}/check`);
 }
 
 /**
  * GET /password-tokens/:token/check
  */
 export function checkPasswordToken(token) {
-    return getApi(`/password-tokens/${encodeURIComponent(token)}/check`);
+  return getApi(`/password-tokens/${encodeURIComponent(token)}/check`);
 }
 
 /**
  * POST /users/:id/activate
  */
 export function activate(userId, data) {
-    return postApi(`/users/${userId}/activate`, data);
+  return postApi(`/users/${userId}/activate`, data);
 }
 
 /**
  * POST /users/:id/newPassword
  */
 export function setPassword(userId, data) {
-    return postApi(`/users/${userId}/newPassword`, data);
+  return postApi(`/users/${userId}/newPassword`, data);
 }
 
 /**
  * POST /users/:id/upgrade
  */
 export function upgrade(userId, data) {
-    return postApi(`/users/${userId}/upgrade`, data);
+  return postApi(`/users/${userId}/upgrade`, data);
 }
 
 /**
  * DELETE /users/:id
  */
 export function remove(userId) {
-    return deleteApi(`/users/${userId}`);
+  return deleteApi(`/users/${userId}`);
 }
 
 /**
  * POST /users/new-password
  */
 export function requestNewPassword(email) {
-    return postApi('/users/new-password', { email });
+  return postApi("/users/new-password", { email });
 }
 
 /**
  * GET /directory
  */
 export function getDirectory() {
-    return getApi('/directory');
+  return getApi("/directory");
 }
 
 /**
  * GET /organizations/search
  */
 export function autocompleteOrganization(str) {
-    return getApi(`/organizations/search?query=${encodeURIComponent(str)}`);
+  return getApi(`/organizations/search?query=${encodeURIComponent(str)}`);
 }
 
 /**
  * PUT /users/:id/charte_engagement
  */
 export function acceptCharte(userId, charteVersion) {
-    return putApi(`/users/${userId}/charte_engagement`, {
-        version_de_charte: charteVersion,
-    });
+  return putApi(`/users/${userId}/charte_engagement`, {
+    version_de_charte: charteVersion
+  });
 }
 
 /**

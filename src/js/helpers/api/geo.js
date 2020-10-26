@@ -1,4 +1,4 @@
-import { getApi } from '#helpers/api/main';
+import { getApi } from "#helpers/api/main";
 
 /**
  * Lists all departements related to a specific region
@@ -6,7 +6,7 @@ import { getApi } from '#helpers/api/main';
  * @returns {Promise}
  */
 export function getDepartementsForRegion(regionCode) {
-    return getApi(`/regions/${regionCode}/departements`);
+  return getApi(`/regions/${regionCode}/departements`);
 }
 
 /**
@@ -15,5 +15,5 @@ export function getDepartementsForRegion(regionCode) {
  * @returns {Promise}
  */
 export function getDepartementsForEpci(epciCode) {
-    return getApi(`/epci/${epciCode}/departements`);
+  return getApi(`/epci/${epciCode}/departements`);
 }

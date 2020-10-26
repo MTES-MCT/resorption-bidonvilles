@@ -7,7 +7,7 @@
 </style>
 
 <script>
-import Component from './etp';
+import Component from "./etp";
 
 export default Component;
 </script>

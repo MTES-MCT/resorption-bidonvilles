@@ -3,11 +3,11 @@
 </template>
 
 <style lang="scss">
-    @import './planFunding.scss';
+@import "./planFunding.scss";
 </style>
 
 <script>
-import Component from './planFunding';
+import Component from "./planFunding";
 
 export default Component;
 </script>

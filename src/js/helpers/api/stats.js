@@ -1,4 +1,4 @@
-import { getApi } from '#helpers/api/main';
+import { getApi } from "#helpers/api/main";
 
 /**
  * Lists all statistics
@@ -6,7 +6,7 @@ import { getApi } from '#helpers/api/main';
  * @returns {Promise}
  */
 export function all() {
-    return getApi('/stats');
+  return getApi("/stats");
 }
 
 export default all;

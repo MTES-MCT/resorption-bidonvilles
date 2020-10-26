@@ -1,4 +1,4 @@
-import { getApi } from '#helpers/api/main';
+import { getApi } from "#helpers/api/main";
 
 /**
  * Computes the unique identifier of the given feature
@@ -8,7 +8,7 @@ import { getApi } from '#helpers/api/main';
  * @returns {string}
  */
 function computeUid(feature) {
-    return `${feature.geometry.coordinates[0]}-${feature.geometry.coordinates[1]}`;
+  return `${feature.geometry.coordinates[0]}-${feature.geometry.coordinates[1]}`;
 }
 
 /**
@@ -19,17 +19,17 @@ function computeUid(feature) {
  * @returns {Array.<Feature>}
  */
 function removeDuplicates(features) {
-    const usedUids = [];
+  const usedUids = [];
 
-    return features.filter((feature) => {
-        const uid = computeUid(feature);
-        if (usedUids.indexOf(uid) !== -1) {
-            return false;
-        }
+  return features.filter(feature => {
+    const uid = computeUid(feature);
+    if (usedUids.indexOf(uid) !== -1) {
+      return false;
+    }
 
-        usedUids.push(uid);
-        return true;
-    });
+    usedUids.push(uid);
+    return true;
+  });
 }
 
 /**
@@ -39,35 +39,35 @@ function removeDuplicates(features) {
  * @param {Function} failure Failure callback
  */
 function onAutocompleteLoad(success, failure) {
-    if (this.status !== 200) {
-        failure();
-        return;
-    }
+  if (this.status !== 200) {
+    failure();
+    return;
+  }
 
-    try {
-        const { features } = JSON.parse(this.responseText);
-        success(
-            removeDuplicates(features)
-                .filter((feature) => (feature.properties && feature.properties.citycode))
-                .map((feature) => ({
-                    addressType: feature.properties.type,
-                    citycode: feature.properties.citycode,
-                    city: feature.properties.city,
-                    coordinates: feature.geometry.coordinates,
-                    id: feature.properties.id,
-                    label: `${feature.properties.label}, ${feature.properties.context}`,
-                    category: 'address',
-                    data: {
-                        citycode: feature.properties.citycode,
-                        city: feature.properties.city,
-                        label: `${feature.properties.label}, ${feature.properties.context}`,
-                        coordinates: feature.geometry.coordinates,
-                    },
-                })),
-        );
-    } catch (error) {
-        failure();
-    }
+  try {
+    const { features } = JSON.parse(this.responseText);
+    success(
+      removeDuplicates(features)
+        .filter(feature => feature.properties && feature.properties.citycode)
+        .map(feature => ({
+          addressType: feature.properties.type,
+          citycode: feature.properties.citycode,
+          city: feature.properties.city,
+          coordinates: feature.geometry.coordinates,
+          id: feature.properties.id,
+          label: `${feature.properties.label}, ${feature.properties.context}`,
+          category: "address",
+          data: {
+            citycode: feature.properties.citycode,
+            city: feature.properties.city,
+            label: `${feature.properties.label}, ${feature.properties.context}`,
+            coordinates: feature.geometry.coordinates
+          }
+        }))
+    );
+  } catch (error) {
+    failure();
+  }
 }
 
 /**
@@ -81,26 +81,26 @@ function onAutocompleteLoad(success, failure) {
  * @returns {Promise}
  */
 export function autocomplete(strSearch, limit = 5) {
-    const xhr = new XMLHttpRequest();
-    const promise = new Promise((success, failure) => {
-        const queries = [`q=${encodeURIComponent(strSearch)}`];
+  const xhr = new XMLHttpRequest();
+  const promise = new Promise((success, failure) => {
+    const queries = [`q=${encodeURIComponent(strSearch)}`];
 
-        const parsedLimit = parseInt(limit, 10);
-        if (!Number.isNaN(parsedLimit)) {
-            queries.push(`limit=${parsedLimit}`);
-        }
+    const parsedLimit = parseInt(limit, 10);
+    if (!Number.isNaN(parsedLimit)) {
+      queries.push(`limit=${parsedLimit}`);
+    }
 
-        xhr.open('GET', `https://api-adresse.data.gouv.fr/search/?${queries.join('&')}`);
-        xhr.onload = onAutocompleteLoad.bind(xhr, success, failure);
-        xhr.onerror = failure;
-        xhr.ontimeout = failure;
-        xhr.send();
-    });
-    promise.abort = () => {
-        xhr.abort();
-    };
+    xhr.open("GET", `https://api-adresse.data.gouv.fr/search/?${queries.join("&")}`);
+    xhr.onload = onAutocompleteLoad.bind(xhr, success, failure);
+    xhr.onerror = failure;
+    xhr.ontimeout = failure;
+    xhr.send();
+  });
+  promise.abort = () => {
+    xhr.abort();
+  };
 
-    return promise;
+  return promise;
 }
 
 /**
@@ -111,15 +111,17 @@ export function autocomplete(strSearch, limit = 5) {
  * @returns {Promise}
  */
 export function autocompleteLocation(strSearch) {
-    const p1 = getApi(`/locations/search?q=${encodeURIComponent(strSearch)}`);
-    const p2 = p1.then((results) => results.map((result) => ({
-        label: result.code.length === 5 ? `(${result.code.slice(0, 2)}) ${result.name}` : result.name,
-        code: result.code,
-        type: result.label,
-        locationType: result.type,
-    })));
-    p2.abort = p1.abort;
-    return p2;
+  const p1 = getApi(`/locations/search?q=${encodeURIComponent(strSearch)}`);
+  const p2 = p1.then(results =>
+    results.map(result => ({
+      label: result.code.length === 5 ? `(${result.code.slice(0, 2)}) ${result.name}` : result.name,
+      code: result.code,
+      type: result.label,
+      locationType: result.type
+    }))
+  );
+  p2.abort = p1.abort;
+  return p2;
 }
 
 /**
@@ -128,7 +130,7 @@ export function autocompleteLocation(strSearch) {
  * @returns {Promise}
  */
 export function departements() {
-    return getApi('/departements');
+  return getApi("/departements");
 }
 
 /**

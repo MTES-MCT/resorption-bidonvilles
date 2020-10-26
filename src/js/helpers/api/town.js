@@ -1,4 +1,4 @@
-import { getApi, postApi, deleteApi } from '#helpers/api/main';
+import { getApi, postApi, deleteApi } from "#helpers/api/main";
 
 /**
  * Fetches all towns from the database
@@ -9,19 +9,19 @@ import { getApi, postApi, deleteApi } from '#helpers/api/main';
  * @returns {Promise}
  */
 export function all(filters = {}, order = []) {
-    const queries = [];
+  const queries = [];
 
-    // filters
-    Object.keys(filters).forEach((filterName) => {
-        queries.push(`${filterName}=${encodeURIComponent(filters[filterName])}`);
-    });
+  // filters
+  Object.keys(filters).forEach(filterName => {
+    queries.push(`${filterName}=${encodeURIComponent(filters[filterName])}`);
+  });
 
-    // order
-    if (order.length > 0) {
-        queries.push(`order=${order.map((s) => encodeURIComponent(s)).join(',')}`);
-    }
+  // order
+  if (order.length > 0) {
+    queries.push(`order=${order.map(s => encodeURIComponent(s)).join(",")}`);
+  }
 
-    return getApi(`/towns${queries.length > 0 ? `?${queries.join('&')}` : ''}`);
+  return getApi(`/towns${queries.length > 0 ? `?${queries.join("&")}` : ""}`);
 }
 
 /**
@@ -32,7 +32,7 @@ export function all(filters = {}, order = []) {
  * @returns {Promise}
  */
 export function get(id) {
-    return getApi(`/towns/${id}`);
+  return getApi(`/towns/${id}`);
 }
 
 /**
@@ -43,15 +43,15 @@ export function get(id) {
  * @returns {Promise}
  */
 export function add(data) {
-    const formattedData = { ...data };
+  const formattedData = { ...data };
 
-    if (data.address) {
-        formattedData.coordinates = data.address.location.coordinates.join(',');
-        formattedData.citycode = data.address.address.data.citycode;
-        formattedData.address = data.address.address.label;
-    }
+  if (data.address) {
+    formattedData.coordinates = data.address.location.coordinates.join(",");
+    formattedData.citycode = data.address.address.data.citycode;
+    formattedData.address = data.address.address.label;
+  }
 
-    return postApi('/towns', formattedData);
+  return postApi("/towns", formattedData);
 }
 
 /**
@@ -63,7 +63,7 @@ export function add(data) {
  * @returns {Promise}
  */
 export function edit(id, data) {
-    return postApi(`/towns/${id}`, data);
+  return postApi(`/towns/${id}`, data);
 }
 
 /**
@@ -75,7 +75,7 @@ export function edit(id, data) {
  * @returns {Promise}
  */
 export function close(id, data) {
-    return postApi(`/towns/${id}/close`, data);
+  return postApi(`/towns/${id}/close`, data);
 }
 
 /**
@@ -86,7 +86,7 @@ export function close(id, data) {
  * @returns {Promise}
  */
 export function destroy(id) {
-    return deleteApi(`/towns/${id}`);
+  return deleteApi(`/towns/${id}`);
 }
 
 /**
@@ -98,7 +98,7 @@ export function destroy(id) {
  * @returns {Promise}
  */
 export function addComment(id, data) {
-    return postApi(`/towns/${id}/comments`, data);
+  return postApi(`/towns/${id}/comments`, data);
 }
 
 /**
@@ -110,7 +110,7 @@ export function addComment(id, data) {
  * @returns {Promise}
  */
 export function addCovidComment(id, data) {
-    return postApi(`/towns/${id}/covidComments`, data);
+  return postApi(`/towns/${id}/covidComments`, data);
 }
 
 /**
@@ -123,7 +123,7 @@ export function addCovidComment(id, data) {
  * @returns {Promise}
  */
 export function editComment(townId, commentId, comment) {
-    return postApi(`/towns/${townId}/comments/${commentId}`, comment);
+  return postApi(`/towns/${townId}/comments/${commentId}`, comment);
 }
 
 /**
@@ -136,7 +136,7 @@ export function editComment(townId, commentId, comment) {
  * @returns {Promise}
  */
 export function deleteComment(townId, commentId, message) {
-    return deleteApi(`/towns/${townId}/comments/${commentId}`, { message });
+  return deleteApi(`/towns/${townId}/comments/${commentId}`, { message });
 }
 
 /**
@@ -145,7 +145,7 @@ export function deleteComment(townId, commentId, message) {
  * @returns {Promise}
  */
 export function getRecentComments() {
-    return getApi('/comments');
+  return getApi("/comments");
 }
 
 /**

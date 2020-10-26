@@ -1,5 +1,5 @@
-import landingPage from './landingPage.json';
+import landingPage from "./landingPage.json";
 
 export default {
-    landingPage,
+  landingPage
 };

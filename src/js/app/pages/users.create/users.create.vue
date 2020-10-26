@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import Component from './users.create';
+import Component from "./users.create";
 
 export default Component;
 </script>
 
 <style lang="scss" scoped>
-@import './users.create.scss';
+@import "./users.create.scss";
 </style>

@@ -2,98 +2,95 @@
 /* eslint-disable no-console */
 
 const defaultOptions = {
-    debug: false,
-    enableLinkTracking: true,
-    requireConsent: false,
-    trackInitialView: true,
-    trackerFileName: 'piwik',
+  debug: false,
+  enableLinkTracking: true,
+  requireConsent: false,
+  trackInitialView: true,
+  trackerFileName: "piwik"
 };
 
 function loadScript(trackerScript) {
-    const scriptPromise = new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.async = true;
-        script.defer = true;
-        script.src = trackerScript;
+  const scriptPromise = new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.async = true;
+    script.defer = true;
+    script.src = trackerScript;
 
-        const head = document.head || document.getElementsByTagName('head')[0];
-        head.appendChild(script);
+    const head = document.head || document.getElementsByTagName("head")[0];
+    head.appendChild(script);
 
-        script.onload = resolve;
-        script.onerror = reject;
-    });
+    script.onload = resolve;
+    script.onerror = reject;
+  });
 
-    scriptPromise.catch((error) => {
-        const msg = `[vue-matomo] An error occurred trying to load ${error.target.src}. `
-            + 'If the file exists you may have an ad- or trackingblocker enabled.';
+  scriptPromise.catch(error => {
+    const msg = `[vue-matomo] An error occurred trying to load ${error.target.src}. `;
+    ("If the file exists you may have an ad- or trackingblocker enabled.");
 
-        console.error(msg);
-    });
+    console.error(msg);
+  });
 
-    return scriptPromise;
+  return scriptPromise;
 }
 
 function initMatomo(Vue, options) {
-    const {
-        host, siteId, trackerFileName, trackerUrl,
-    } = options;
-    const trackerEndpoint = trackerUrl || `${host}/${trackerFileName}.php`;
+  const { host, siteId, trackerFileName, trackerUrl } = options;
+  const trackerEndpoint = trackerUrl || `${host}/${trackerFileName}.php`;
 
-    const Matomo = window.Piwik.getTracker(trackerEndpoint, siteId);
+  const Matomo = window.Piwik.getTracker(trackerEndpoint, siteId);
 
-    // Assign matomo to Vue
-    Vue.prototype.$piwik = Matomo;
-    Vue.prototype.$matomo = Matomo;
+  // Assign matomo to Vue
+  Vue.prototype.$piwik = Matomo;
+  Vue.prototype.$matomo = Matomo;
 
-    if (options.requireConsent) {
-        Matomo.requireConsent();
-    }
+  if (options.requireConsent) {
+    Matomo.requireConsent();
+  }
 
-    if (options.trackInitialView) {
-        // Register first page view
-        Matomo.trackPageView();
-    }
+  if (options.trackInitialView) {
+    // Register first page view
+    Matomo.trackPageView();
+  }
 
-    if (options.enableLinkTracking) {
-        Matomo.enableLinkTracking();
-    }
+  if (options.enableLinkTracking) {
+    Matomo.enableLinkTracking();
+  }
 
-    // Track page navigations if router is specified
-    if (options.router) {
-        options.router.afterEach((to) => {
-            // Unfortunately the window location is not yet updated here
-            // We need to make our own url using the data provided by the router
-            const loc = window.location;
+  // Track page navigations if router is specified
+  if (options.router) {
+    options.router.afterEach(to => {
+      // Unfortunately the window location is not yet updated here
+      // We need to make our own url using the data provided by the router
+      const loc = window.location;
 
-            // Protocol may or may not contain a colon
-            let { protocol } = loc;
-            if (protocol.slice(-1) !== ':') {
-                protocol += ':';
-            }
+      // Protocol may or may not contain a colon
+      let { protocol } = loc;
+      if (protocol.slice(-1) !== ":") {
+        protocol += ":";
+      }
 
-            const maybeHash = options.router.mode === 'hash' ? '/#' : '';
-            const url = `${protocol}//${loc.host}${maybeHash}${to.fullPath}`;
+      const maybeHash = options.router.mode === "hash" ? "/#" : "";
+      const url = `${protocol}//${loc.host}${maybeHash}${to.fullPath}`;
 
-            if (to.meta.analyticsIgnore) {
-                return;
-            }
+      if (to.meta.analyticsIgnore) {
+        return;
+      }
 
-            if (options.debug) {
-                console.debug(`[vue-matomo] Tracking ${url}`);
-            }
+      if (options.debug) {
+        console.debug(`[vue-matomo] Tracking ${url}`);
+      }
 
-            Matomo.setCustomUrl(url);
-            Matomo.trackPageView();
-        });
-    }
+      Matomo.setCustomUrl(url);
+      Matomo.trackPageView();
+    });
+  }
 }
 
 export default function install(Vue, setupOptions = {}) {
-    const options = { ...defaultOptions, ...setupOptions };
+  const options = { ...defaultOptions, ...setupOptions };
 
-    const { host, trackerFileName } = options;
-    const trackerScript = `${host}/${trackerFileName}.js`;
+  const { host, trackerFileName } = options;
+  const trackerScript = `${host}/${trackerFileName}.js`;
 
-    loadScript(trackerScript)
-        .then(() => initMatomo(Vue, options));
+  loadScript(trackerScript).then(() => initMatomo(Vue, options));
 }

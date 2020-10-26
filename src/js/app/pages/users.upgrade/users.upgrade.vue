@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import Component from './users.upgrade';
+import Component from "./users.upgrade";
 
 export default Component;
 </script>
 
 <style lang="scss">
-@import './users.upgrade.scss';
+@import "./users.upgrade.scss";
 </style>

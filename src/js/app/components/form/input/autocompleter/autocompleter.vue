@@ -3,11 +3,11 @@
 </template>
 
 <style lang="scss">
-    @import './autocompleter.scss';
+@import "./autocompleter.scss";
 </style>
 
 <script>
-import Component from './autocompleter';
+import Component from "./autocompleter";
 
 export default Component;
 </script>

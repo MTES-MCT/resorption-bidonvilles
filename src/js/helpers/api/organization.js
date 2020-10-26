@@ -1,4 +1,4 @@
-import { getApi } from '#helpers/api/main';
+import { getApi } from "#helpers/api/main";
 
 /**
  * Lists all categories
@@ -6,7 +6,7 @@ import { getApi } from '#helpers/api/main';
  * @returns {Promise}
  */
 export function categories() {
-    return getApi('/organization-categories');
+  return getApi("/organization-categories");
 }
 
 /**
@@ -17,7 +17,7 @@ export function categories() {
  * @returns {Promise}
  */
 export function types(categoryUid) {
-    return getApi(`/organization-categories/${categoryUid}/organization-types`);
+  return getApi(`/organization-categories/${categoryUid}/organization-types`);
 }
 
 /**
@@ -29,7 +29,11 @@ export function types(categoryUid) {
  * @returns {Promise}
  */
 export function getByCategory(categoryUid, search = null) {
-    return getApi(`/organization-categories/${categoryUid}/organizations${search !== null ? `?search=${search}` : ''}`);
+  return getApi(
+    `/organization-categories/${categoryUid}/organizations${
+      search !== null ? `?search=${search}` : ""
+    }`
+  );
 }
 
 /**
@@ -40,7 +44,7 @@ export function getByCategory(categoryUid, search = null) {
  * @returns {Promise}
  */
 export function getByType(typeId) {
-    return getApi(`/organization-types/${typeId}/organizations`);
+  return getApi(`/organization-types/${typeId}/organizations`);
 }
 
 /**
@@ -51,7 +55,7 @@ export function getByType(typeId) {
  * @returns {Promise}
  */
 export function getMembers(organizationId) {
-    return getApi(`/organizations/${organizationId}/users`);
+  return getApi(`/organizations/${organizationId}/users`);
 }
 
 /**
@@ -62,12 +66,12 @@ export function getMembers(organizationId) {
  * @returns {Promise}
  */
 export function getMembersOfCategory(categoryId, regionId, departementId) {
-    let query = '';
-    if (departementId !== undefined) {
-        query = `departementId=${encodeURIComponent(departementId)}`;
-    } else if (regionId !== undefined) {
-        query = `regionId=${encodeURIComponent(regionId)}`;
-    }
+  let query = "";
+  if (departementId !== undefined) {
+    query = `departementId=${encodeURIComponent(departementId)}`;
+  } else if (regionId !== undefined) {
+    query = `regionId=${encodeURIComponent(regionId)}`;
+  }
 
-    return getApi(`/organization-categories/${categoryId}/users?${query}`);
+  return getApi(`/organization-categories/${categoryId}/users?${query}`);
 }

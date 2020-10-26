@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './plans.edit';
+import Component from "./plans.edit";
 
 export default Component;
 </script>

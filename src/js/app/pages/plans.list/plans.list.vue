@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import Component from './plans.list';
+import Component from "./plans.list";
 
 export default Component;
 </script>
 
 <style lang="scss" scoped>
-@import './plans.list.scss';
+@import "./plans.list.scss";
 </style>

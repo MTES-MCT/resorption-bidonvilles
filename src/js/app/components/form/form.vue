@@ -3,11 +3,11 @@
 </template>
 
 <style lang="scss">
-    @import './form.scss';
+@import "./form.scss";
 </style>
 
 <script>
-import Component from './form';
+import Component from "./form";
 
 export default Component;
 </script>

@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import Component from './activationLink';
+import Component from "./activationLink";
 
 export default Component;
 </script>
 
 <style lang="scss" scoped>
-@import './activationLink.scss';
+@import "./activationLink.scss";
 </style>

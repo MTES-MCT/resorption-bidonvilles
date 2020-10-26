@@ -1,5 +1,5 @@
-import { getApi, postApi } from '#helpers/api/main';
-import { refreshToken } from '#helpers/api/user';
+import { getApi, postApi } from "#helpers/api/main";
+import { refreshToken } from "#helpers/api/user";
 
 /**
  * Loaded configuration
@@ -22,7 +22,7 @@ let configuration = null;
  * @returns {boolean}
  */
 export function isLoaded() {
-    return configuration !== null;
+  return configuration !== null;
 }
 
 /**
@@ -33,13 +33,13 @@ export function isLoaded() {
  * @returns {Promise}
  */
 export function load() {
-    return getApi('/config').then((response) => {
-        // refresh the token, by the way
-        refreshToken();
+  return getApi("/config").then(response => {
+    // refresh the token, by the way
+    refreshToken();
 
-        configuration = response;
-        return response;
-    });
+    configuration = response;
+    return response;
+  });
 }
 
 /**
@@ -48,7 +48,7 @@ export function load() {
  * Should be used whenever the current user logs out
  */
 export function unload() {
-    configuration = null;
+  configuration = null;
 }
 
 /**
@@ -57,7 +57,7 @@ export function unload() {
  * @returns {Configuration|null}
  */
 export function get() {
-    return configuration;
+  return configuration;
 }
 
 /**
@@ -69,22 +69,22 @@ export function get() {
  * @returns {undefined}
  */
 export function set(property, value) {
-    if (configuration === null) {
-        return;
+  if (configuration === null) {
+    return;
+  }
+
+  const chain = property.split(".");
+  let ref = configuration;
+
+  while (chain.length > 1) {
+    if (ref === undefined) {
+      return;
     }
 
-    const chain = property.split('.');
-    let ref = configuration;
+    ref = ref[chain.shift()];
+  }
 
-    while (chain.length > 1) {
-        if (ref === undefined) {
-            return;
-        }
-
-        ref = ref[chain.shift()];
-    }
-
-    ref[chain[0]] = value;
+  ref[chain[0]] = value;
 }
 
 /**
@@ -93,22 +93,24 @@ export function set(property, value) {
  * @returns {Permission}
  */
 export function getPermission(permissionName) {
-    if (configuration === null || configuration.user === null) {
-        return null;
-    }
+  if (configuration === null || configuration.user === null) {
+    return null;
+  }
 
-    const [entity, feature] = permissionName.split('.');
-    if (!Object.prototype.hasOwnProperty.call(configuration.user.permissions, entity)
-        || !Object.prototype.hasOwnProperty.call(configuration.user.permissions[entity], feature)) {
-        return null;
-    }
+  const [entity, feature] = permissionName.split(".");
+  if (
+    !Object.prototype.hasOwnProperty.call(configuration.user.permissions, entity) ||
+    !Object.prototype.hasOwnProperty.call(configuration.user.permissions[entity], feature)
+  ) {
+    return null;
+  }
 
-    const permission = configuration.user.permissions[entity][feature];
-    if (permission.allowed !== true) {
-        return null;
-    }
+  const permission = configuration.user.permissions[entity][feature];
+  if (permission.allowed !== true) {
+    return null;
+  }
 
-    return permission;
+  return permission;
 }
 
 /**
@@ -119,10 +121,10 @@ export function getPermission(permissionName) {
  * @returns {boolean}
  */
 export function hasPermission(permissionName) {
-    const [entity, feature, data] = permissionName.split('.');
-    const permission = getPermission(`${entity}.${feature}`);
+  const [entity, feature, data] = permissionName.split(".");
+  const permission = getPermission(`${entity}.${feature}`);
 
-    return permission !== null && (data === undefined || permission[data] === true);
+  return permission !== null && (data === undefined || permission[data] === true);
 }
 
 /**
@@ -133,7 +135,7 @@ export function hasPermission(permissionName) {
  * @returns {Promise}
  */
 export function closeChangelog(version) {
-    return postApi('/changelog', { version });
+  return postApi("/changelog", { version });
 }
 
 /**
@@ -142,11 +144,11 @@ export function closeChangelog(version) {
  * @returns {Boolean}
  */
 export function hasAcceptedCharte() {
-    if (configuration === null) {
-        return false;
-    }
+  if (configuration === null) {
+    return false;
+  }
 
-    return configuration.user.charte_engagement_a_jour;
+  return configuration.user.charte_engagement_a_jour;
 }
 
 /**

@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import Component from './users.validate';
+import Component from "./users.validate";
 
 export default Component;
 </script>
 
 <style lang="scss">
-@import './users.validate.scss';
+@import "./users.validate.scss";
 </style>

@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import Component from './userPermissions';
+import Component from "./userPermissions";
 
 export default Component;
 </script>
 
 <style lang="scss">
-@import './userPermissions.scss';
+@import "./userPermissions.scss";
 </style>

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './table';
+import Component from "./table";
 
 export default Component;
 </script>

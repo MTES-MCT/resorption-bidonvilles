@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './launcher';
+import Component from "./launcher";
 
 export default Component;
 </script>

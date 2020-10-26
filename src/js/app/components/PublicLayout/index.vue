@@ -1,25 +1,25 @@
 <template>
-    <div>
-        <NavBar :stickyHeader="stickyHeader" />
-        <slot />
-        <PublicFooter />
-    </div>
+  <div>
+    <NavBar :stickyHeader="stickyHeader" />
+    <slot />
+    <PublicFooter />
+  </div>
 </template>
 
 <script>
-import NavBar from './NavBar/index.vue';
-import PublicFooter from './PublicFooter.vue';
+import NavBar from "./NavBar/index.vue";
+import PublicFooter from "./PublicFooter.vue";
 
 export default {
-    props: {
-        stickyHeader: {
-            type: Boolean,
-            default: true,
-        },
-    },
-    components: {
-        NavBar,
-        PublicFooter,
-    },
+  props: {
+    stickyHeader: {
+      type: Boolean,
+      default: true
+    }
+  },
+  components: {
+    NavBar,
+    PublicFooter
+  }
 };
 </script>

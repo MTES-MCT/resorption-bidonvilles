@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Component from './shantytownComment.list';
+import Component from "./shantytownComment.list";
 
 export default Component;
 </script>

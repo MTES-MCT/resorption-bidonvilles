@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import Component from './tableFilter';
+import Component from "./tableFilter";
 
 export default Component;
 </script>
 
 <style lang="scss" scoped>
-@import './tableFilter.scss';
+@import "./tableFilter.scss";
 </style>
