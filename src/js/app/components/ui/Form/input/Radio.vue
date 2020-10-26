@@ -1,7 +1,7 @@
 <template>
   <div :class="`radio-${variant}`">
     <!-- Card Variant -->
-    <CheckableCard v-if="variant === 'card'" :ischecked="isChecked">
+    <CheckableCard v-if="variant === 'card'" :isChecked="isChecked">
       <input
         type="radio"
         class="appearance-none"

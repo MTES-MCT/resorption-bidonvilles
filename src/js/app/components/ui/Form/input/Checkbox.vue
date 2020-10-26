@@ -1,7 +1,7 @@
 <template>
   <div :class="`checkbox-${variant}`">
     <!-- Card Variant -->
-    <CheckableCard v-if="variant === 'card'" :ischecked="isChecked">
+    <CheckableCard v-if="variant === 'card'" :isChecked="isChecked">
       <input
         type="checkbox"
         class="appearance-none"
