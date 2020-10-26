@@ -4,11 +4,6 @@
     "eslint:recommended",
     "@vue/prettier"
   ],
-  "rules": {
-    "import/no-extraneous-dependencies": 0,
-    "import/no-cycle": 0,
-    "max-len": "off"
-  },
   "env": {
     "browser": true,
     "node": true
