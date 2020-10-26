@@ -8,12 +8,10 @@ import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import 'leaflet.markercluster/dist/leaflet.markercluster';
 
-// eslint-disable-next-line
-import waterYes from '/img/water-yes.png';
-// eslint-disable-next-line
-import waterNo from '/img/water-no.png';
-// eslint-disable-next-line
-import waterNull from '/img/water-null.png';
+
+import waterYes from '../../../../../public/img/water-yes.png';
+import waterNo from '../../../../../public/img/water-no.png';
+import waterNull from '../../../../../public/img/water-null.png';
 
 const DEFAULT_VIEW = [46.7755829, 2.0497727];
 

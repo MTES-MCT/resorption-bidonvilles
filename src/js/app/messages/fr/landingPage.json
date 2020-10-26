@@ -41,17 +41,17 @@
     "title": "La résorption complète des bidonvilles,",
     "subtitle": "un objectif national",
     "data": {
-      1: {
+      "1": {
         "line1": "Plus de",
         "line2": "300 bidonvilles",
         "line3": "en France métropolitaine"
       },
-      2: {
+      "2": {
         "line1": "Plus de",
         "line2": "16 000 personnes",
         "line3": "dont 5 000 mineurs"
       },
-      3: {
+      "3": {
         "line1": "Majoritairement",
         "line2": "européens",
         "line3": "Roumains et Bulgares"
@@ -78,20 +78,24 @@
       "normal": "Ces actions sont financées à 75 % par l’État, à 15 % par les collectivités territoriales et à 10 % par des fonds privés ou européens. \nLes équipes de professionnels accompagnent les familles sur bidonville, en squat ou dans le logement sur tous les aspects : santé, logement, emploi, éducation, stabilisation et sécurisation du site."
     },
     "bilan": {
-      1: {
-        "text": "8 600 bénéficiaires des actions",
+      "1": {
+        "text": "8600 bénéficiaires"
       },
-      3: {
+      "2": {
+        "text": "17 sites résorbés",
+        "info": "+10 en 1 an"
+      },
+      "3": {
         "text": "1 000 personnes relogées",
       },
-      4: {
+      "4": {
         "text": "1 350 enfants scolarisés",
       },
-      5: {
+      "5": {
         "text": "2 040 bénéficiaires",
         "info": "d'un accompagnement santé"
       },
-      6: {
+      "6": {
         "text": "615 contrats de travail signés",
       }
     },
@@ -108,14 +112,14 @@
       },
       "items": {
         "title": "Le projet a été lauréat de plusieurs appels à projet :",
-        1: {
+        "1": {
           "link": "Entrepreneur d’intérêt général",
           "text": "du Programme d’investissement d’avenir en 2019"
         },
-        2: {
+        "2": {
           "text": "Programme “rights, citizenship and equality” de la commission européenne au premier trimestre 2020"
         },
-        3: {
+        "3": {
           "link": "Fonds d’accélération des Start-up d’État 3",
           "text": "de la DINUM en avril 2020"
         }
