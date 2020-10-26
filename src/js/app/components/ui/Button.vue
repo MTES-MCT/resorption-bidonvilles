@@ -25,10 +25,7 @@
         </slot>
       </div>
 
-      <div
-        v-if="$slots.default"
-        :class="iconPosition === 'right' ? 'mr-2' : 'ml-2'"
-      >
+      <div v-if="$slots.default" :class="iconPositionClasses">
         <slot></slot>
       </div>
     </div>
@@ -72,11 +69,15 @@ export default {
     }
   },
   computed: {
-    iconPositionClass() {
+    iconPositionClasses() {
+      if (!this.icon) {
+        return "";
+      }
+
       return {
-        left: "mr-2",
-        right: "ml-2"
-      };
+        left: "ml-2",
+        right: "mr-2"
+      }[this.iconPosition];
     },
     sizeClasses() {
       return {
