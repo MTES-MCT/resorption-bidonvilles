@@ -32,6 +32,14 @@ export default {
         },
         redirect() {
             const { user } = get();
+            this.track(user);
+            this.$router.push(getEntryPoint());
+        },
+        track(user) {
+            if (!this.$piwik) {
+                return;
+            }
+
             this.$piwik.setUserId(user.id);
             this.$piwik.setCustomVariable(
                 1,
@@ -55,7 +63,6 @@ export default {
                     ? user.organization.location[user.organization.location.type].name
                     : null,
             );
-            this.$router.push(getEntryPoint());
         },
     },
 };

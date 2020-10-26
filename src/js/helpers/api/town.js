@@ -46,8 +46,7 @@ export function add(data) {
     const formattedData = { ...data };
 
     if (data.address) {
-        ([formattedData.latitude, formattedData.longitude] = data.address.location.coordinates);
-        formattedData.city = data.address.address.data.city;
+        formattedData.coordinates = data.address.location.coordinates.join(',');
         formattedData.citycode = data.address.address.data.citycode;
         formattedData.address = data.address.address.label;
     }

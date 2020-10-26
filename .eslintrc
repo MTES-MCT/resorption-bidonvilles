@@ -26,5 +26,16 @@
   "root": true,
   "parserOptions": {
     "ecmaVersion": 2020
-  }
+  },
+    "overrides": [
+        {
+            "files": "cypress/**/*.js",
+            "globals": {
+                "Cypress": "readonly",
+                "cy": "readonly",
+                "describe": "readonly",
+                "it": "readonly"
+            }
+        }
+    ]
 }

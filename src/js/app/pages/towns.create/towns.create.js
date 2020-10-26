@@ -62,7 +62,7 @@ export default {
                                             maxlength: 35,
                                         },
                                     },
-                                    addressDetails: {
+                                    detailed_address: {
                                         type: 'text',
                                         label: 'Informations d\'accès',
                                         description: 'Saisissez ici toutes les informations qui, en plus de l\'adresse, peuvent être utiles pour l\'accès au site.',
@@ -79,17 +79,17 @@ export default {
                                         description: '1 étant le niveau de priorité le plus haut.<br/>Le niveau de priorité est un indicateur réservé aux correspondants des services de l’État.',
                                         mandatory: false,
                                     },
-                                    builtAt: {
+                                    built_at: {
                                         type: 'date',
                                         label: 'Date d\'installation du site',
                                         mandatory: true,
                                     },
-                                    declaredAt: {
+                                    declared_at: {
                                         type: 'date',
                                         label: 'Date de signalement du site',
                                         mandatory: false,
                                     },
-                                    fieldType: {
+                                    field_type: {
                                         type: 'radio',
                                         options: fieldTypes.map(({ id, label }) => ({
                                             label,
@@ -98,7 +98,7 @@ export default {
                                         label: 'Type de site',
                                         mandatory: true,
                                     },
-                                    ownerType: {
+                                    owner_type: {
                                         type: 'radio',
                                         options: ownerTypes.map(({ id, label }) => ({
                                             label,
@@ -110,7 +110,7 @@ export default {
                                     owner: {
                                         type: 'text',
                                         label: 'Identité du propriétaire',
-                                        condition({ ownerType }) {
+                                        condition({ owner_type: ownerType }) {
                                             return ownerType && ownerTypes.find(({ id }) => id === ownerType).label !== 'Inconnu';
                                         },
                                     },
@@ -119,48 +119,48 @@ export default {
                             {
                                 title: 'Habitants',
                                 inputs: {
-                                    censusStatus: {
+                                    census_status: {
                                         type: 'radio',
                                         options: censusStatuses,
                                         label: 'Statut du diagnostic social',
                                         description: 'Un diagnostic social vise à identifier les situations et besoins des familles et personnes, de repérer le contexte territorial et les acteurs en présence.',
                                         mandatory: true,
                                     },
-                                    censusConductedAt: {
+                                    census_conducted_at: {
                                         type: 'date',
                                         label: 'Date du diagnostic',
                                         mandatory: true,
-                                        condition({ censusStatus }) {
+                                        condition({ census_status: censusStatus }) {
                                             return ['scheduled', 'done'].indexOf(censusStatus) !== -1;
                                         },
                                     },
-                                    censusConductedBy: {
+                                    census_conducted_by: {
                                         type: 'text',
                                         label: 'Service ou opérateur en charge du diagnostic',
                                         mandatory: true,
-                                        condition({ censusStatus }) {
+                                        condition({ census_status: censusStatus }) {
                                             return ['scheduled', 'done'].indexOf(censusStatus) !== -1;
                                         },
                                     },
-                                    populationTotal: {
+                                    population_total: {
                                         type: 'number',
                                         label: 'Nombre de personnes',
                                         description: 'Laissez ce champ vide si l\'information est inconnue',
                                         mandatory: false,
                                     },
-                                    populationCouples: {
+                                    population_couples: {
                                         type: 'number',
                                         label: 'Nombre de ménages',
                                         description: 'Laissez ce champ vide si l\'information est inconnue',
                                         mandatory: false,
                                     },
-                                    populationMinors: {
+                                    population_minors: {
                                         type: 'number',
                                         label: 'Nombre de mineurs',
                                         description: 'Laissez ce champ vide si l\'information est inconnue',
                                         mandatory: false,
                                     },
-                                    socialOrigins: {
+                                    social_origins: {
                                         type: 'checkbox',
                                         options: socialOrigins.map(({ id, label }) => ({
                                             label,
@@ -169,7 +169,7 @@ export default {
                                         label: 'Origines',
                                         description: 'Ne rien cocher si l\'information est inconnue',
                                         mandatory: false,
-                                        condition({ populationTotal }) {
+                                        condition({ population_total: populationTotal }) {
                                             return parseInt(populationTotal, 10) > 10;
                                         },
                                         inactiveMessage: 'Pour les sites de 10 personnes ou moins, l\'origine des habitants ne peut être précisée conformément à la réglementation relative aux données à caractère personnel',
@@ -179,7 +179,7 @@ export default {
                             {
                                 title: 'Conditions de vie',
                                 inputs: {
-                                    electricityType: {
+                                    electricity_type: {
                                         type: 'radio',
                                         options: electricityTypes.map(({ id, label }) => ({
                                             label,
@@ -188,37 +188,37 @@ export default {
                                         label: 'Accès à l\'électricité',
                                         mandatory: true,
                                     },
-                                    electricityComments: {
+                                    electricity_comments: {
                                         type: 'textarea',
                                         label: 'Modalités d\'accès',
                                         description: 'Exemples : groupe électrogène, raccordement à une usine...',
                                         mandatory: false,
                                     },
-                                    accessToWater: {
+                                    access_to_water: {
                                         type: 'radio',
                                         options: yesNoValues,
                                         label: 'Accès à l\'eau',
                                         mandatory: true,
                                     },
-                                    waterComments: {
+                                    water_comments: {
                                         type: 'textarea',
                                         label: 'Modalités d\'accès',
                                         description: 'Exemples: Citerne de 100 litres remplie par les pompiers tous les jours, 3 robinets raccordés par la collectivité, borne incendie à 200 mètres...',
                                         mandatory: false,
                                     },
-                                    accessToSanitary: {
+                                    access_to_sanitary: {
                                         type: 'radio',
                                         options: yesNoValues,
                                         label: 'Accès à des toilettes',
                                         mandatory: true,
                                     },
-                                    sanitaryComments: {
+                                    sanitary_comments: {
                                         type: 'textarea',
                                         label: 'Modalités d\'accès',
                                         description: 'Exemples : 3 toilettes sèches, toilettes raccordés au réseau, un bloc sanitaire fourni par la ville...',
                                         mandatory: false,
                                     },
-                                    trashEvacuation: {
+                                    trash_evacuation: {
                                         type: 'radio',
                                         options: yesNoValues,
                                         label: 'Évacuation des déchets',
@@ -231,81 +231,93 @@ export default {
                             ? [{
                                 title: 'Procédure judiciaire d\'expulsion des occupants',
                                 inputs: {
-                                    ownerComplaint: {
+                                    owner_complaint: {
                                         type: 'radio',
                                         options: yesNoValues,
                                         label: 'Dépôt de plainte par le propriétaire',
                                         mandatory: true,
                                     },
-                                    justiceProcedure: {
+                                    justice_procedure: {
                                         type: 'radio',
                                         options: yesNoValues,
                                         label: 'Existence d\'une procédure judiciaire',
                                         mandatory: true,
-                                        condition({ ownerComplaint }) {
+                                        condition({ owner_complaint: ownerComplaint }) {
                                             return ownerComplaint === 1;
                                         },
                                     },
-                                    justiceRendered: {
+                                    justice_rendered: {
                                         type: 'radio',
                                         options: yesNoValues,
                                         label: 'Décision de justice rendue',
                                         mandatory: true,
-                                        condition({ ownerComplaint, justiceProcedure }) {
+                                        condition({ owner_complaint: ownerComplaint, justice_procedure: justiceProcedure }) {
                                             return ownerComplaint === 1
                                                 && justiceProcedure === 1;
                                         },
                                     },
-                                    justiceRenderedBy: {
+                                    justice_rendered_by: {
                                         type: 'text',
                                         label: 'Origine de la décision',
                                         mandatory: true,
-                                        condition({ ownerComplaint, justiceProcedure, justiceRendered }) {
+                                        condition({
+                                            owner_complaint: ownerComplaint,
+                                            justice_procedure: justiceProcedure,
+                                            justice_rendered: justiceRendered,
+                                        }) {
                                             return ownerComplaint === 1
                                                 && justiceProcedure === 1
                                                 && justiceRendered === 1;
                                         },
                                     },
-                                    justiceRenderedAt: {
+                                    justice_rendered_at: {
                                         type: 'date',
                                         label: 'Date de la décision',
                                         mandatory: true,
-                                        condition({ ownerComplaint, justiceProcedure, justiceRendered }) {
+                                        condition({
+                                            owner_complaint: ownerComplaint,
+                                            justice_procedure: justiceProcedure,
+                                            justice_rendered: justiceRendered,
+                                        }) {
                                             return ownerComplaint === 1
                                                 && justiceProcedure === 1
                                                 && justiceRendered === 1;
                                         },
                                     },
-                                    justiceChallenged: {
+                                    justice_challenged: {
                                         type: 'radio',
                                         options: yesNoValues,
                                         label: 'Contentieux relatif à la décision de justice',
                                         mandatory: true,
-                                        condition({ ownerComplaint, justiceProcedure, justiceRendered }) {
+                                        condition({
+                                            owner_complaint: ownerComplaint,
+                                            justice_procedure: justiceProcedure,
+                                            justice_rendered: justiceRendered,
+                                        }) {
                                             return ownerComplaint === 1
                                                 && justiceProcedure === 1
                                                 && justiceRendered === 1;
                                         },
                                     },
-                                    policeStatus: {
+                                    police_status: {
                                         type: 'radio',
                                         options: cfpValues,
                                         label: 'Concours de la force publique',
                                         mandatory: true,
                                     },
-                                    policeRequestedAt: {
+                                    police_requested_at: {
                                         type: 'date',
                                         label: 'Date de la demande du CFP',
                                         mandatory: true,
-                                        condition({ policeStatus }) {
+                                        condition({ police_status: policeStatus }) {
                                             return ['requested', 'granted'].indexOf(policeStatus) !== -1;
                                         },
                                     },
-                                    policeGrantedAt: {
+                                    police_granted_at: {
                                         type: 'date',
                                         label: 'Date d\'octroi du CFP',
                                         mandatory: true,
-                                        condition({ policeStatus }) {
+                                        condition({ police_status: policeStatus }) {
                                             return policeStatus === 'granted';
                                         },
                                     },
@@ -325,6 +337,23 @@ export default {
                         success: 'La déclaration du site a réussi',
                     },
                     submit: (data) => {
+                        const dateFields = [
+                            'built_at',
+                            'declared_at',
+                            'census_conducted_at',
+                            'justice_rendered_at',
+                            'police_requested_at',
+                            'police_granted_at',
+                        ];
+                        dateFields.forEach((field) => {
+                            const d = data[field];
+                            if (d) {
+                                Object.assign(data, {
+                                    [field]: `${d.getFullYear()}-${`${d.getMonth() + 1}`.padStart(2, '0')}-${`${d.getDate()}`.padStart(2, '0')}`,
+                                });
+                            }
+                        });
+
                         const p = add(data);
                         p.then(({ plans }) => {
                             formDefinition.steps[1].sections[0].inputs.plans.options = plans.map(({ id, name, type }) => ({

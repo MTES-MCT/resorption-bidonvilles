@@ -218,6 +218,10 @@ export default {
             const goesUp = window.pageYOffset < this.scroll;
             this.scroll = window.pageYOffset;
 
+            if (this.$refs.main === undefined || this.$refs.header === undefined) {
+                return;
+            }
+
             if (goesUp === true) {
                 if (window.pageYOffset - this.$refs.main.offsetTop <= 0) {
                     this.$refs.wrapper.classList.remove('sticky');
@@ -351,31 +355,41 @@ export default {
             const coordinates = this.edit.address && this.edit.address.location && this.edit.address.location.coordinates;
             const { address } = this.edit.address || {};
 
+            function formatDate(d) {
+                if (!d) {
+                    return null;
+                }
+
+                if (!(d instanceof Date)) {
+                    // eslint-disable-next-line no-param-reassign
+                    d = new Date(d);
+                }
+
+                return `${d.getFullYear()}-${`${d.getMonth() + 1}`.padStart(2, '0')}-${`${d.getDate()}`.padStart(2, '0')}`;
+            }
+
             edit(this.town.id, {
                 name: this.edit.name,
                 priority: this.edit.priority || null,
-                latitude: coordinates && coordinates[0],
-                longitude: coordinates && coordinates[1],
+                coordinates: coordinates.join(','),
                 city: address && address.city,
                 citycode: address && address.citycode,
                 address: address && address.label,
                 detailed_address: this.edit.detailedAddress,
-                declared_at: this.edit.declaredAt,
-                built_at: this.edit.builtAt,
-                closed_at: this.edit.closedAt,
-                status: 'open',
+                declared_at: formatDate(this.edit.declaredAt),
+                built_at: formatDate(this.edit.builtAt),
                 census_status: this.edit.census_status,
-                census_conducted_at: ['scheduled', 'done'].indexOf(this.edit.census_status) !== -1 ? this.edit.census_conducted_at : null,
+                census_conducted_at: ['scheduled', 'done'].indexOf(this.edit.census_status) !== -1 ? formatDate(this.edit.census_conducted_at) : null,
                 census_conducted_by: ['scheduled', 'done'].indexOf(this.edit.census_status) !== -1 ? this.edit.census_conducted_by : '',
-                population_total: this.edit.populationTotal,
-                population_couples: this.edit.populationCouples,
-                population_minors: this.edit.populationMinors,
+                population_total: this.edit.populationTotal || null,
+                population_couples: this.edit.populationCouples || null,
+                population_minors: this.edit.populationMinors || null,
                 electricity_type: this.edit.electricityType,
-                electricity_comments: this.hasAccessToElectricity ? this.edit.electricityComments : null,
+                electricity_comments: this.edit.electricityComments,
                 access_to_sanitary: this.edit.accessToSanitary,
                 sanitary_comments: this.edit.sanitaryComments,
                 access_to_water: this.edit.accessToWater,
-                water_comments: this.hasAccessToWater ? this.edit.waterComments : null,
+                water_comments: this.edit.waterComments,
                 trash_evacuation: this.edit.trashEvacuation,
                 owner_complaint: this.edit.owner_complaint,
                 justice_procedure: this.edit.owner_complaint === 1 ? this.edit.justiceProcedure : undefined,
@@ -386,15 +400,15 @@ export default {
                     && this.edit.justice_rendered === 1 ? this.edit.justice_rendered_by : '',
                 justice_rendered_at: this.edit.owner_complaint === 1
                     && this.edit.justiceProcedure === 1
-                    && this.edit.justice_rendered === 1 ? this.edit.justice_rendered_at : null,
+                    && this.edit.justice_rendered === 1 ? formatDate(this.edit.justice_rendered_at) : null,
                 justice_challenged: this.edit.owner_complaint === 1
                     && this.edit.justiceProcedure === 1
                     && this.edit.justice_rendered === 1 ? this.edit.justice_challenged : undefined,
                 police_status: this.edit.police_status,
-                police_requested_at: ['requested', 'granted'].indexOf(this.edit.police_status) !== -1 ? this.edit.police_requested_at : null,
-                police_granted_at: ['granted'].indexOf(this.edit.police_status) !== -1 ? this.edit.police_granted_at : null,
+                police_requested_at: ['requested', 'granted'].indexOf(this.edit.police_status) !== -1 ? formatDate(this.edit.police_requested_at) : null,
+                police_granted_at: ['granted'].indexOf(this.edit.police_status) !== -1 ? formatDate(this.edit.police_granted_at) : null,
                 bailiff: this.edit.bailiff,
-                social_origins: this.edit.origins,
+                social_origins: this.edit.populationTotal && this.edit.populationTotal > 10 ? this.edit.origins : null,
                 field_type: this.edit.fieldType,
                 owner_type: this.edit.ownerType,
                 owner: this.edit.owner,
