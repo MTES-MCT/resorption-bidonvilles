@@ -3,18 +3,25 @@
     <h2 class="text-display-lg">{{ $t("landingPage.thirdSection.title") }}</h2>
     <div class="max-w-screen-sm mx-auto mt-8">
       <div>
-        <span class="font-bold">{{ $t("landingPage.thirdSection.firstParagraph.bold") }}</span>
+        <span class="font-bold">{{
+          $t("landingPage.thirdSection.firstParagraph.bold")
+        }}</span>
         {{ $t("landingPage.thirdSection.firstParagraph.normal") }}
       </div>
 
       <div class="flex flex-row items-center my-8">
         <div class="bg-gray-500 h-px flex-1" />
-        <div class="inline-block bg-black text-white text-display-md px-4">2019</div>
+        <div class="inline-block bg-black text-white text-display-md px-4">
+          2019
+        </div>
         <div class="bg-gray-500 h-px flex-1" />
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 md:gap-x-16">
-        <LandingPageBilanBlock icon="users" :text="$t('landingPage.thirdSection.bilan.1.text')" />
+        <LandingPageBilanBlock
+          icon="users"
+          :text="$t('landingPage.thirdSection.bilan.1.text')"
+        />
         <LandingPageBilanBlock
           icon="hand-holding-medical"
           :text="$t('landingPage.thirdSection.bilan.3.text')"
@@ -59,28 +66,40 @@
             {{ $t("landingPage.thirdSection.secondParagraph.body.text3") }}
           </span>
           {{ $t("landingPage.thirdSection.secondParagraph.body.text4") }}
-          <a class="link" href="https://beta.gouv.fr/startups/resorption-bidonvilles.html">{{
-            $t("landingPage.thirdSection.secondParagraph.body.link2")
-          }}</a>
+          <a
+            class="link"
+            href="https://beta.gouv.fr/startups/resorption-bidonvilles.html"
+            >{{ $t("landingPage.thirdSection.secondParagraph.body.link2") }}</a
+          >
         </div>
 
         <div class="mt-8">
-          <div>{{ $t("landingPage.thirdSection.secondParagraph.items.title") }}</div>
+          <div>
+            {{ $t("landingPage.thirdSection.secondParagraph.items.title") }}
+          </div>
 
           <ul class="list-disc ml-8">
             <li>
               <a
                 class="link"
                 href="https://entrepreneur-interet-general.etalab.gouv.fr/defis/2019/resorption-bidonvilles.html"
-                >{{ $t("landingPage.thirdSection.secondParagraph.items.1.link") }}</a
+                >{{
+                  $t("landingPage.thirdSection.secondParagraph.items.1.link")
+                }}</a
               >
               {{ $t("landingPage.thirdSection.secondParagraph.items.1.text") }}
             </li>
-            <li>{{ $t("landingPage.thirdSection.secondParagraph.items.2.text") }}</li>
             <li>
-              <a class="link" href="https://beta.gouv.fr/approche/fast/03-fast.html">{{
-                $t("landingPage.thirdSection.secondParagraph.items.3.link")
-              }}</a>
+              {{ $t("landingPage.thirdSection.secondParagraph.items.2.text") }}
+            </li>
+            <li>
+              <a
+                class="link"
+                href="https://beta.gouv.fr/approche/fast/03-fast.html"
+                >{{
+                  $t("landingPage.thirdSection.secondParagraph.items.3.link")
+                }}</a
+              >
               {{ $t("landingPage.thirdSection.secondParagraph.items.3.text") }}
             </li>
           </ul>
@@ -103,7 +122,9 @@
           /></a>
           <a
             href="https://entrepreneur-interet-general.etalab.gouv.fr/defis/2019/resorption-bidonvilles.html"
-            ><img class="h-16 m-2" src="./assets/logo-entrepreneur-interet-general.png"
+            ><img
+              class="h-16 m-2"
+              src="./assets/logo-entrepreneur-interet-general.png"
           /></a>
         </div>
       </div>

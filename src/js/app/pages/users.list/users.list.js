@@ -88,7 +88,8 @@ export default {
                 return "National";
               }
 
-              const location = user.organization.location[user.organization.location.type];
+              const location =
+                user.organization.location[user.organization.location.type];
               if (!location) {
                 return "";
               }
@@ -158,7 +159,10 @@ export default {
 
               return {
                 icon: "flag",
-                label: `<strong>Demandé</strong> le ${App.formatDate(user.created_at, "d M y")}`
+                label: `<strong>Demandé</strong> le ${App.formatDate(
+                  user.created_at,
+                  "d M y"
+                )}`
               };
             }
           },
@@ -178,7 +182,8 @@ export default {
         },
         "search-options": {
           enabled: true,
-          placeholder: "Rechercher par utilisateur, structure, territoire, ou type d'accès"
+          placeholder:
+            "Rechercher par utilisateur, structure, territoire, ou type d'accès"
         }
       };
     }
@@ -228,7 +233,9 @@ export default {
      *
      */
     routeToUserValidation(params) {
-      const routeData = this.$router.resolve(`/nouvel-utilisateur/${params.row.id}`);
+      const routeData = this.$router.resolve(
+        `/nouvel-utilisateur/${params.row.id}`
+      );
       open(routeData.href);
     }
   }

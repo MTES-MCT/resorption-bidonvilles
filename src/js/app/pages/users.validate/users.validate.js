@@ -200,7 +200,9 @@ export default {
       this.validation.state = "loading";
       this.validation.error = null;
 
-      sendActivationLink(this.$route.params.id, { options: this.checkedOptions })
+      sendActivationLink(this.$route.params.id, {
+        options: this.checkedOptions
+      })
         .then(() => {
           this.validation.state = null;
 

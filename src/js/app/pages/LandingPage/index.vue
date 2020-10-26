@@ -25,12 +25,17 @@
     <LandingPageBanner :cta="$t('landingPage.secondBanner.cta')">
       {{ $t("landingPage.secondBanner.text") }}
     </LandingPageBanner>
-    <img class="h-128 w-full object-cover object-top" src="./assets/resorption-bidonvilles-2.jpg" />
+    <img
+      class="h-128 w-full object-cover object-top"
+      src="./assets/resorption-bidonvilles-2.jpg"
+    />
     <PublicContainer>
       <div class="max-w-screen-lg mx-auto py-20">
         <LandingPageThirdSection />
         <div class="text-center mt-40">
-          <h2 class="text-display-lg text-secondary">{{ $t("landingPage.hero.subtitle") }}</h2>
+          <h2 class="text-display-lg text-secondary">
+            {{ $t("landingPage.hero.subtitle") }}
+          </h2>
           <LandingPageContactForm class="mx-auto" />
         </div>
       </div>

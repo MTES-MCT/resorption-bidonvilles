@@ -38,8 +38,14 @@ export default {
         { name: "siao", label: "Demandes SIAO" },
         { name: "logement_social", label: "Demandes de logement social" },
         { name: "dalo", label: "Demandes DALO" },
-        { name: "accompagnes", label: "Accès à un logement accompagné / adapté" },
-        { name: "non_accompagnes", label: "Accès à un logement sans accompagnement" },
+        {
+          name: "accompagnes",
+          label: "Accès à un logement accompagné / adapté"
+        },
+        {
+          name: "non_accompagnes",
+          label: "Accès à un logement sans accompagnement"
+        },
         { name: "heberges", label: "Hébergements" }
       ]
     };
@@ -72,28 +78,42 @@ export default {
         return "Précisez les raisons de la fermeture du dispositif";
       }
 
-      return `À la fermeture du dispositif, ${remainingAudience.families} ménage${
-        remainingAudience.families > 1 ? "s" : ""
-      } (soit ${remainingAudience.total} personne${
+      return `À la fermeture du dispositif, ${
+        remainingAudience.families
+      } ménage${remainingAudience.families > 1 ? "s" : ""} (soit ${
+        remainingAudience.total
+      } personne${
         remainingAudience.total > 1 ? "s" : ""
       }) sont identifiés dans le dispositif. Merci de préciser les solutions mobilisées pour ces personnes et les raisons de la fermeture du dispositif.<br /><br />Merci de respecter les règles de confidentialité.Ne pas citer l'identité des individus (Nom, âge, sexe, origine...)`;
     },
     reachedMaxFinanceIndex() {
-      if (!this.plan || !this.plan.finances || this.plan.finances.length === 0) {
+      if (
+        !this.plan ||
+        !this.plan.finances ||
+        this.plan.finances.length === 0
+      ) {
         return true;
       }
 
       return this.currentFinanceIndex === 0;
     },
     reachedMinFinanceIndex() {
-      if (!this.plan || !this.plan.finances || this.plan.finances.length === 0) {
+      if (
+        !this.plan ||
+        !this.plan.finances ||
+        this.plan.finances.length === 0
+      ) {
         return true;
       }
 
       return this.currentFinanceIndex >= this.plan.finances.length - 1;
     },
     minYear() {
-      if (!this.plan || !this.plan.finances || this.plan.finances.length === 0) {
+      if (
+        !this.plan ||
+        !this.plan.finances ||
+        this.plan.finances.length === 0
+      ) {
         return null;
       }
 
@@ -104,7 +124,9 @@ export default {
     },
     availableEtpTypes() {
       return this.etpTypes.filter(({ uid }) =>
-        this.plan.states.some(({ etp }) => etp.some(({ type: { uid: u } }) => uid === u))
+        this.plan.states.some(({ etp }) =>
+          etp.some(({ type: { uid: u } }) => uid === u)
+        )
       );
     },
     address() {
@@ -266,12 +288,20 @@ export default {
 
     checkClosing() {
       const yearsInError = [];
-      for (let year = new Date().getFullYear(); year >= Math.max(2019, this.minYear); year -= 1) {
-        const finance = this.closingData.finances.find(({ year: y }) => y === year);
+      for (
+        let year = new Date().getFullYear();
+        year >= Math.max(2019, this.minYear);
+        year -= 1
+      ) {
+        const finance = this.closingData.finances.find(
+          ({ year: y }) => y === year
+        );
         if (
           !finance ||
           finance.data.length === 0 ||
-          finance.data.some(({ realAmount }) => realAmount === undefined || realAmount === null)
+          finance.data.some(
+            ({ realAmount }) => realAmount === undefined || realAmount === null
+          )
         ) {
           yearsInError.push(year);
         }

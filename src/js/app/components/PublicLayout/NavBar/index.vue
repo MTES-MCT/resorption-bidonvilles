@@ -10,12 +10,17 @@
 
     <div :class="sticky && 'hidden'">
       <PublicContainer>
-        <header role="navigation" class="py-4 flex flex-row justify-between items-center">
+        <header
+          role="navigation"
+          class="py-4 flex flex-row justify-between items-center"
+        >
           <NavBarLogo />
 
           <div class="hidden md:block">
             <router-link to="/connexion">
-              <Button variant="primary">{{ $t("landingPage.header.connect") }}</Button>
+              <Button variant="primary">{{
+                $t("landingPage.header.connect")
+              }}</Button>
             </router-link>
           </div>
 

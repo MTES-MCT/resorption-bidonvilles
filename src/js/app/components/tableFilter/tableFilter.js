@@ -57,7 +57,10 @@ export default {
     },
 
     checkOutsideClick(event) {
-      if (!this.$refs.container || !this.$refs.container.contains(event.target)) {
+      if (
+        !this.$refs.container ||
+        !this.$refs.container.contains(event.target)
+      ) {
         this.$emit("outside-click", event);
       }
     }

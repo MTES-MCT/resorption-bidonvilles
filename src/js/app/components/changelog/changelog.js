@@ -64,7 +64,9 @@ export default {
 
     syncCarousel() {
       const firstImage = this.$refs.carousel.firstChild;
-      firstImage.style.marginLeft = `${-1 * firstImage.offsetWidth * this.currentItemIndex}px`;
+      firstImage.style.marginLeft = `${-1 *
+        firstImage.offsetWidth *
+        this.currentItemIndex}px`;
     }
   }
 };

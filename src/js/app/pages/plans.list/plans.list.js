@@ -4,7 +4,11 @@ import "vue-good-table/dist/vue-good-table.css";
 import NavBar from "#app/layouts/navbar/navbar.vue";
 import CollectivityInput from "#app/components/form/input/collectivity/collectivity.vue";
 import { open } from "#helpers/tabHelper";
-import { get as getConfig, getPermission, hasPermission } from "#helpers/api/config";
+import {
+  get as getConfig,
+  getPermission,
+  hasPermission
+} from "#helpers/api/config";
 
 export default {
   components: {
@@ -29,7 +33,10 @@ export default {
     }
 
     const userLocation = {
-      id: userLocationType === "nation" ? null : user.organization.location[userLocationType].code,
+      id:
+        userLocationType === "nation"
+          ? null
+          : user.organization.location[userLocationType].code,
       label:
         userLocationType === "nation"
           ? "France"
@@ -37,7 +44,9 @@ export default {
       category: userLocationType,
       data: {
         code:
-          userLocationType === "nation" ? null : user.organization.location[userLocationType].code,
+          userLocationType === "nation"
+            ? null
+            : user.organization.location[userLocationType].code,
         type: userLocationType
       }
     };

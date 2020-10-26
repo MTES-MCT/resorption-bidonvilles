@@ -181,7 +181,8 @@ export default {
           inputs: {
             scolarisables: {
               type: "number",
-              label: "Parmi les mineurs, combien sont en âge d'être scolarisés ?",
+              label:
+                "Parmi les mineurs, combien sont en âge d'être scolarisés ?",
               mandatory: false,
               condition({ date }) {
                 return !!date;
@@ -393,7 +394,8 @@ export default {
             },
             nombre_bennes: {
               type: "number",
-              label: "Nombre de bennes disponibles pour le ramassage des déchets du site",
+              label:
+                "Nombre de bennes disponibles pour le ramassage des déchets du site",
               mandatory: false,
               condition({ date }) {
                 return !!date;
@@ -439,13 +441,17 @@ export default {
           let lastState = null;
 
           if (plan.states.length === 0) {
-            audienceSection.title = "Qui sont les publics ayant intégré le dispositif ?";
+            audienceSection.title =
+              "Qui sont les publics ayant intégré le dispositif ?";
             audienceSection.description =
               "Vous renseignez les indicateurs de suivi pour la première fois. Veuillez porter une attention particulière aux données que vous renseignez ci-dessous : les mises à jour ultérieures seront conditionnées par cette première déclaration.";
             audienceSection.inputs.audience.specificProps.inOnly = true;
           } else {
             [lastState] = plan.states.slice(-1);
-            const dateOfLastState = App.formatDate(lastState.date / 1000, "d/m/y");
+            const dateOfLastState = App.formatDate(
+              lastState.date / 1000,
+              "d/m/y"
+            );
 
             if (plan.in_and_out !== true) {
               audienceSection.title = `Quelles ont été les sorties du dispositif depuis la date du ${dateOfLastState} ?`;

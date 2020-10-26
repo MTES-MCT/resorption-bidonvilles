@@ -33,7 +33,11 @@ export default {
     {
       label: "Sites",
       items: [
-        { label: "Liste des sites", target: "/liste-des-sites", group: "townList" },
+        {
+          label: "Liste des sites",
+          target: "/liste-des-sites",
+          group: "townList"
+        },
         {
           label: "Déclarer un site",
           target: "/nouveau-site",
@@ -67,7 +71,11 @@ export default {
           group: "userCreation"
         },
         { label: "Statistiques", target: "/statistiques", group: "stats" },
-        { label: "Historique des activités", target: "/historique-des-activites", group: "admin" }
+        {
+          label: "Historique des activités",
+          target: "/historique-des-activites",
+          group: "admin"
+        }
       ]
     },
     {

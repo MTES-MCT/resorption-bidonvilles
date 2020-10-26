@@ -1,7 +1,11 @@
 <template>
   <div class="flex flex-row">
     <div>
-      <font-awesome-icon :icon="icon" size="2x" class="text-secondary"></font-awesome-icon>
+      <font-awesome-icon
+        :icon="icon"
+        size="2x"
+        class="text-secondary"
+      ></font-awesome-icon>
     </div>
     <div class="ml-2">
       <span class="font-bold text-display-md">{{ text }}</span>

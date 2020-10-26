@@ -109,7 +109,8 @@ export default {
         case "location":
           filter = ({ raw: { location } }) =>
             location[this.search.data.location_type] &&
-            location[this.search.data.location_type].code === this.search.data.id;
+            location[this.search.data.location_type].code ===
+              this.search.data.id;
           break;
         case "organization":
           filter = ({ id }) => id === this.search.data.id;
@@ -137,11 +138,17 @@ export default {
     },
 
     pageContent() {
-      return this.filteredOrganizations.slice(this.pageBeginning - 1, this.pageEnd);
+      return this.filteredOrganizations.slice(
+        this.pageBeginning - 1,
+        this.pageEnd
+      );
     },
 
     usersTotal() {
-      return this.filteredOrganizations.reduce((total, org) => total + org.raw.users.length, 0);
+      return this.filteredOrganizations.reduce(
+        (total, org) => total + org.raw.users.length,
+        0
+      );
     }
   },
 

@@ -274,7 +274,8 @@ const router = new VueRouter({
     {
       path: "/feedback",
       beforeEnter(to, from, next) {
-        window.location.href = "mailto:contact@resorption-bidonvilles.beta.gouv.fr";
+        window.location.href =
+          "mailto:contact@resorption-bidonvilles.beta.gouv.fr";
         next(false);
       }
     },

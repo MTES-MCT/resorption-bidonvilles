@@ -1,7 +1,9 @@
 <template>
   <div
     :class="
-      active ? 'transition duration-500 block opacity-100 visible' : 'invisible opacity-0 absolute'
+      active
+        ? 'transition duration-500 block opacity-100 visible'
+        : 'invisible opacity-0 absolute'
     "
   >
     <div class="relative text-xl feedbackText">{{ text }}</div>

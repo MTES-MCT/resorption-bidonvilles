@@ -68,7 +68,9 @@ export default {
                   { label: "Fermeture", value: "closing" }
                 ],
                 filterFn: (row, checkedItems) =>
-                  checkedItems.map(({ value }) => value).indexOf(row.rawAction) !== -1
+                  checkedItems
+                    .map(({ value }) => value)
+                    .indexOf(row.rawAction) !== -1
               }
             : {})
         }

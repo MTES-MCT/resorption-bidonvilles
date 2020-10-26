@@ -90,7 +90,10 @@ export function autocomplete(strSearch, limit = 5) {
       queries.push(`limit=${parsedLimit}`);
     }
 
-    xhr.open("GET", `https://api-adresse.data.gouv.fr/search/?${queries.join("&")}`);
+    xhr.open(
+      "GET",
+      `https://api-adresse.data.gouv.fr/search/?${queries.join("&")}`
+    );
     xhr.onload = onAutocompleteLoad.bind(xhr, success, failure);
     xhr.onerror = failure;
     xhr.ontimeout = failure;
@@ -114,7 +117,10 @@ export function autocompleteLocation(strSearch) {
   const p1 = getApi(`/locations/search?q=${encodeURIComponent(strSearch)}`);
   const p2 = p1.then(results =>
     results.map(result => ({
-      label: result.code.length === 5 ? `(${result.code.slice(0, 2)}) ${result.name}` : result.name,
+      label:
+        result.code.length === 5
+          ? `(${result.code.slice(0, 2)}) ${result.name}`
+          : result.name,
       code: result.code,
       type: result.label,
       locationType: result.type

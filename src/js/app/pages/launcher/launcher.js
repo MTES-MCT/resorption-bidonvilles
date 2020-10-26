@@ -45,9 +45,14 @@ export default {
       this.$piwik.setCustomVariable(
         2,
         "structure",
-        user.organization.type.abbreviation || user.organization.type.name_singular
+        user.organization.type.abbreviation ||
+          user.organization.type.name_singular
       );
-      this.$piwik.setCustomVariable(3, "niveau_geo", user.organization.location.type);
+      this.$piwik.setCustomVariable(
+        3,
+        "niveau_geo",
+        user.organization.location.type
+      );
       this.$piwik.setCustomVariable(
         4,
         "geo_nom",

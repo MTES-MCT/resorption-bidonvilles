@@ -13,28 +13,52 @@
         <tr>
           <th>SIAO</th>
           <td>
-            <input type="number" v-model="data.siao.families" :disabled="disabled" />
+            <input
+              type="number"
+              v-model="data.siao.families"
+              :disabled="disabled"
+            />
           </td>
           <td>
-            <input type="number" v-model="data.siao.people" :disabled="disabled" />
+            <input
+              type="number"
+              v-model="data.siao.people"
+              :disabled="disabled"
+            />
           </td>
         </tr>
         <tr>
           <th>Logement social</th>
           <td>
-            <input type="number" v-model="data.logement_social.families" :disabled="disabled" />
+            <input
+              type="number"
+              v-model="data.logement_social.families"
+              :disabled="disabled"
+            />
           </td>
           <td>
-            <input type="number" v-model="data.logement_social.people" :disabled="disabled" />
+            <input
+              type="number"
+              v-model="data.logement_social.people"
+              :disabled="disabled"
+            />
           </td>
         </tr>
         <tr>
           <th>DALO</th>
           <td>
-            <input type="number" v-model="data.dalo.families" :disabled="disabled" />
+            <input
+              type="number"
+              v-model="data.dalo.families"
+              :disabled="disabled"
+            />
           </td>
           <td>
-            <input type="number" v-model="data.dalo.people" :disabled="disabled" />
+            <input
+              type="number"
+              v-model="data.dalo.people"
+              :disabled="disabled"
+            />
           </td>
         </tr>
       </tbody>
@@ -53,10 +77,18 @@
         <tr>
           <th>Logement accompagné / adapté</th>
           <td>
-            <input type="number" v-model="data.accompagnes.families" :disabled="disabled" />
+            <input
+              type="number"
+              v-model="data.accompagnes.families"
+              :disabled="disabled"
+            />
           </td>
           <td>
-            <input type="number" v-model="data.accompagnes.people" :disabled="disabled" />
+            <input
+              type="number"
+              v-model="data.accompagnes.people"
+              :disabled="disabled"
+            />
           </td>
         </tr>
         <tr>
@@ -66,10 +98,18 @@
             <span>(social ou privé)</span>
           </th>
           <td>
-            <input type="number" v-model="data.non_accompagnes.families" :disabled="disabled" />
+            <input
+              type="number"
+              v-model="data.non_accompagnes.families"
+              :disabled="disabled"
+            />
           </td>
           <td>
-            <input type="number" v-model="data.non_accompagnes.people" :disabled="disabled" />
+            <input
+              type="number"
+              v-model="data.non_accompagnes.people"
+              :disabled="disabled"
+            />
           </td>
         </tr>
         <tr>
@@ -78,10 +118,18 @@
             <span>(hors mise à l'abri ou hébergement d'urgence)</span>
           </th>
           <td>
-            <input type="number" v-model="data.heberges.families" :disabled="disabled" />
+            <input
+              type="number"
+              v-model="data.heberges.families"
+              :disabled="disabled"
+            />
           </td>
           <td>
-            <input type="number" v-model="data.heberges.people" :disabled="disabled" />
+            <input
+              type="number"
+              v-model="data.heberges.people"
+              :disabled="disabled"
+            />
           </td>
         </tr>
       </tbody>

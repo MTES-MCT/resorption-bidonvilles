@@ -43,7 +43,9 @@ export default {
     };
   },
   async mounted() {
-    const { organizations } = await getOrganizationsByCategory("administration");
+    const { organizations } = await getOrganizationsByCategory(
+      "administration"
+    );
     this.administrationNameOptions = organizations.map(({ id, name }) => ({
       value: id,
       label: name

@@ -5,7 +5,10 @@
         <h1 class="text-display-xl">Contactez-nous</h1>
 
         <ValidationObserver ref="form" v-slot="{ handleSubmit, errors }">
-          <form class="max-w-xl mt-12" @submit.prevent="handleSubmit(submitForm)">
+          <form
+            class="max-w-xl mt-12"
+            @submit.prevent="handleSubmit(submitForm)"
+          >
             <InputGroup>
               <TextInput
                 label="Votre email"
@@ -122,13 +125,19 @@
 
             <PublicEstablishmentForm
               v-if="isPublicEstablishmentRequest"
-              :organizationType.sync="publicEstablishmentFields.organization_type"
-              :organizationTerritory.sync="publicEstablishmentFields.organization_public"
+              :organizationType.sync="
+                publicEstablishmentFields.organization_type
+              "
+              :organizationTerritory.sync="
+                publicEstablishmentFields.organization_public
+              "
               :organizationFunction.sync="requestAccessFields.position"
             />
             <TerritorialCollectivityForm
               v-if="isTerritorialCollectivityRequest"
-              :collectivityName.sync="territorialCollectivityFields.territorial_collectivity"
+              :collectivityName.sync="
+                territorialCollectivityFields.territorial_collectivity
+              "
               :collectivityFunction.sync="requestAccessFields.position"
             />
             <AssociationForm
@@ -137,11 +146,15 @@
               :associationTerritory.sync="associationFields.departement"
               :associationFunction.sync="associationFields.position"
               :newAssociationName.sync="associationFields.new_association_name"
-              :newAssociationAcronym.sync="associationFields.new_association_abbreviation"
+              :newAssociationAcronym.sync="
+                associationFields.new_association_abbreviation
+              "
             />
             <AdministrationForm
               v-if="isAdministrationRequest"
-              :administrationName.sync="administrationFields.organization_administration"
+              :administrationName.sync="
+                administrationFields.organization_administration
+              "
               :administrationFunction.sync="requestAccessFields.position"
             />
 
@@ -165,15 +178,25 @@
               Votre demande d'accès comprend des erreurs:
 
               <ul class="mt-4">
-                <li v-for="(error, inputId) in errors" :key="inputId" v-show="error.length">
-                  <router-link class="link" :to="{ hash: inputId }">{{ error[0] }}</router-link>
+                <li
+                  v-for="(error, inputId) in errors"
+                  :key="inputId"
+                  v-show="error.length"
+                >
+                  <router-link class="link" :to="{ hash: inputId }">{{
+                    error[0]
+                  }}</router-link>
                 </li>
               </ul>
             </div>
 
             <div class="flex justify-between mt-8">
-              <router-link to="/"><Button variant="primaryText">Annuler</Button></router-link>
-              <Button type="submit" variant="primary" :loading="loading">Envoyer</Button>
+              <router-link to="/"
+                ><Button variant="primaryText">Annuler</Button></router-link
+              >
+              <Button type="submit" variant="primary" :loading="loading"
+                >Envoyer</Button
+              >
             </div>
           </form>
         </ValidationObserver>
@@ -215,13 +238,15 @@ export default {
     isPublicEstablishmentRequest() {
       return (
         this.isRequestAccessAndActor &&
-        this.requestAccessFields.organization_category === "public_establishment"
+        this.requestAccessFields.organization_category ===
+          "public_establishment"
       );
     },
     isTerritorialCollectivityRequest() {
       return (
         this.isRequestAccessAndActor &&
-        this.requestAccessFields.organization_category === "territorial_collectivity"
+        this.requestAccessFields.organization_category ===
+          "territorial_collectivity"
       );
     },
     isAssociationRequest() {
@@ -244,8 +269,12 @@ export default {
         legal: this.commonFields.legal.length > 0,
         is_actor: !!this.commonFields.is_actor,
         ...(this.isRequestAccessAndActor ? this.requestAccessFields : {}),
-        ...(this.isPublicEstablishmentRequest ? this.publicEstablishmentFields : {}),
-        ...(this.isTerritorialCollectivityRequest ? this.territorialCollectivityFields : {}),
+        ...(this.isPublicEstablishmentRequest
+          ? this.publicEstablishmentFields
+          : {}),
+        ...(this.isTerritorialCollectivityRequest
+          ? this.territorialCollectivityFields
+          : {}),
         ...(this.isAssociationRequest ? this.associationFields : {}),
         ...(this.isAdministrationRequest ? this.administrationFields : {})
       };

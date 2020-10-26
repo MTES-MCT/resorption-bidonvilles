@@ -15,7 +15,8 @@ export default {
 
     const formDefinition = {
       title: "Définition d'un nouveau mot de passe",
-      description: "Le formulaire suivant vous permet de choisir un nouveau mot de passe",
+      description:
+        "Le formulaire suivant vous permet de choisir un nouveau mot de passe",
       steps: [
         {
           title: "",
@@ -45,7 +46,10 @@ export default {
             success: "Votre nouveau mot de passe a été changé"
           },
           submit: data =>
-            setPassword(this.user.id, Object.assign(data, { token: this.$route.params.token }))
+            setPassword(
+              this.user.id,
+              Object.assign(data, { token: this.$route.params.token })
+            )
         }
       ]
     };

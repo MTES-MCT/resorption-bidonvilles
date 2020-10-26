@@ -15,24 +15,29 @@ export default {
     },
 
     numberOfCollaboratorAndAssociationUsers() {
-      return this.stats ? this.stats.numberOfCollaboratorAndAssociationUsers : "...";
+      return this.stats
+        ? this.stats.numberOfCollaboratorAndAssociationUsers
+        : "...";
     },
 
     numberOfTerritorialCollectivities() {
       return this.stats
-        ? this.stats.numberOfCollaboratorAndAssociationOrganizations.territorial_collectivity || 0
+        ? this.stats.numberOfCollaboratorAndAssociationOrganizations
+            .territorial_collectivity || 0
         : "...";
     },
 
     numberOfAssociations() {
       return this.stats
-        ? this.stats.numberOfCollaboratorAndAssociationOrganizations.association || 0
+        ? this.stats.numberOfCollaboratorAndAssociationOrganizations
+            .association || 0
         : "...";
     },
 
     numberOfPublicEstablishments() {
       return this.stats
-        ? this.stats.numberOfCollaboratorAndAssociationOrganizations.public_establishment || 0
+        ? this.stats.numberOfCollaboratorAndAssociationOrganizations
+            .public_establishment || 0
         : "...";
     },
 
@@ -59,7 +64,9 @@ export default {
 
       return [
         {
-          data: this.numberOfNewUsersPerMonth.map(({ total }) => parseInt(total, 10)),
+          data: this.numberOfNewUsersPerMonth.map(({ total }) =>
+            parseInt(total, 10)
+          ),
           smooth: true,
           fill: true
         }
@@ -71,7 +78,10 @@ export default {
         return 0;
       }
 
-      const max = this.numberOfNewUsersPerMonth.reduce((m, { total }) => Math.max(m, total), 0);
+      const max = this.numberOfNewUsersPerMonth.reduce(
+        (m, { total }) => Math.max(m, total),
+        0
+      );
       return Math.ceil(max / 10) * 10;
     },
 
@@ -97,7 +107,8 @@ export default {
 
     meanTimeBeforeCreationDeclaration() {
       return this.stats
-        ? Math.round(this.stats.meanTimeBeforeCreationDeclaration.average) || "?"
+        ? Math.round(this.stats.meanTimeBeforeCreationDeclaration.average) ||
+            "?"
         : "...";
     },
 

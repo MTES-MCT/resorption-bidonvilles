@@ -228,7 +228,10 @@ export default {
     },
 
     optionsAreGrouped() {
-      return this.options && Object.prototype.hasOwnProperty.call(this.options[0], "options");
+      return (
+        this.options &&
+        Object.prototype.hasOwnProperty.call(this.options[0], "options")
+      );
     }
   },
 

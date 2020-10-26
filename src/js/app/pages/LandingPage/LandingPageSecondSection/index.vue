@@ -1,8 +1,12 @@
 <template>
   <div>
     <h2>
-      <span class="text-display-lg font-normal">{{ $t("landingPage.secondSection.title") }}</span>
-      <span class="text-display-lg block">{{ $t("landingPage.secondSection.subtitle") }}</span>
+      <span class="text-display-lg font-normal">{{
+        $t("landingPage.secondSection.title")
+      }}</span>
+      <span class="text-display-lg block">{{
+        $t("landingPage.secondSection.subtitle")
+      }}</span>
     </h2>
     <div class="mt-8 md:grid md:grid-cols-3 md:gap-16">
       <LandingPageDataBlock
@@ -25,7 +29,9 @@
     <div class="max-w-screen-sm mx-auto mt-16">
       <div>{{ $t("landingPage.secondSection.firstParagraph") }}</div>
       <div class="mt-8">
-        <span class="font-bold">{{ $t("landingPage.secondSection.secondParagraph.bold") }}</span>
+        <span class="font-bold">{{
+          $t("landingPage.secondSection.secondParagraph.bold")
+        }}</span>
         {{ $t("landingPage.secondSection.secondParagraph.normal") }}
       </div>
       <div>

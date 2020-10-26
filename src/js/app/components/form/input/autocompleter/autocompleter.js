@@ -231,7 +231,10 @@ export default {
       // regular suggestions, grouped by category
       let empty = true;
       const suggestions = this.suggestions.reduce((acc, suggestion) => {
-        if (this.allowMultiple && this.selectedIds.indexOf(suggestion.id) !== -1) {
+        if (
+          this.allowMultiple &&
+          this.selectedIds.indexOf(suggestion.id) !== -1
+        ) {
           return acc;
         }
         if (!acc[suggestion.category]) {
@@ -408,7 +411,9 @@ export default {
       } else if (event.keyCode === 13) {
         // key 'enter' (= select current suggestion)
         if (this.indexOfHighligtedItem !== null) {
-          this.selectItem(this.unselectedSuggestionsFlat[this.indexOfHighligtedItem]);
+          this.selectItem(
+            this.unselectedSuggestionsFlat[this.indexOfHighligtedItem]
+          );
           this.$refs.input.focus();
         }
       } else {
@@ -423,7 +428,10 @@ export default {
      */
     scheduleSuggestionRequest() {
       this.cancelSuggestionRequest();
-      this.suggestionRequest.timeout = setTimeout(this.requestSuggestions, DEFAULT_TIMEOUT);
+      this.suggestionRequest.timeout = setTimeout(
+        this.requestSuggestions,
+        DEFAULT_TIMEOUT
+      );
     },
 
     /**
@@ -473,7 +481,9 @@ export default {
 
       this.suggestionRequest.pending = true;
       this.suggestionRequest.promise = this.autocompleter(this.currentLabel);
-      this.suggestionRequest.promise.then(this.setSuggestions).catch(this.handleSuggestionFailure);
+      this.suggestionRequest.promise
+        .then(this.setSuggestions)
+        .catch(this.handleSuggestionFailure);
     },
 
     /**
@@ -587,7 +597,11 @@ export default {
       const refs = ["prefixIcon", "input", "suffixIcon", "suggestionContainer"];
 
       // if the click does not come from the input, reset the field
-      if (!refs.some(ref => this.$refs[ref] && this.$refs[ref].contains(event.target))) {
+      if (
+        !refs.some(
+          ref => this.$refs[ref] && this.$refs[ref].contains(event.target)
+        )
+      ) {
         this.reset();
       }
     },

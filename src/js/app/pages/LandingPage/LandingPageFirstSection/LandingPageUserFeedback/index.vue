@@ -18,9 +18,18 @@
       />
     </div>
     <div class="mt-2 text-center">
-      <LandingPageUserFeedbackBullet :onClick="() => setSection(1)" :active="active === 1" />
-      <LandingPageUserFeedbackBullet :onClick="() => setSection(2)" :active="active === 2" />
-      <LandingPageUserFeedbackBullet :onClick="() => setSection(3)" :active="active === 3" />
+      <LandingPageUserFeedbackBullet
+        :onClick="() => setSection(1)"
+        :active="active === 1"
+      />
+      <LandingPageUserFeedbackBullet
+        :onClick="() => setSection(2)"
+        :active="active === 2"
+      />
+      <LandingPageUserFeedbackBullet
+        :onClick="() => setSection(3)"
+        :active="active === 3"
+      />
     </div>
   </div>
 </template>

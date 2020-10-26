@@ -70,7 +70,10 @@ export default {
 
     let location;
     let defaultLocation;
-    if (hasNationalPermission !== true || user.organization.location.type === "nation") {
+    if (
+      hasNationalPermission !== true ||
+      user.organization.location.type === "nation"
+    ) {
       defaultLocation = { ...userLocation };
       location = null;
     } else {

@@ -89,7 +89,10 @@ export default {
 
   computed: {
     allowRealAmount() {
-      return this.inputMode === "closing" || this.focusedYear < new Date().getFullYear();
+      return (
+        this.inputMode === "closing" ||
+        this.focusedYear < new Date().getFullYear()
+      );
     },
     currentFundings() {
       const currentFundings = this.getCurrentFundings();

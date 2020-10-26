@@ -24,7 +24,9 @@ const ERRORS = {
 function handleRequestResponse(success, failure) {
   let response = null;
   try {
-    response = this.responseText ? JSON.parse(this.responseText) : this.responseText;
+    response = this.responseText
+      ? JSON.parse(this.responseText)
+      : this.responseText;
   } catch (error) {
     failure({
       user_message: "Une erreur inconnue est survenue",
@@ -204,6 +206,8 @@ export function putApi(url, data, headers) {
  */
 export function open(url) {
   return openTab(
-    `${url}${url.indexOf("?") === -1 ? "?" : "&"}accessToken=${encodeURIComponent(getToken())}`
+    `${url}${
+      url.indexOf("?") === -1 ? "?" : "&"
+    }accessToken=${encodeURIComponent(getToken())}`
   );
 }

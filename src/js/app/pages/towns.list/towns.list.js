@@ -1,5 +1,9 @@
 import { all as fetchAll } from "#helpers/api/town";
-import { get as getConfig, hasPermission, getPermission } from "#helpers/api/config";
+import {
+  get as getConfig,
+  hasPermission,
+  getPermission
+} from "#helpers/api/config";
 import { open } from "#helpers/tabHelper";
 import NavBar from "#app/layouts/navbar/navbar.vue";
 import CollectivityInput from "#app/components/form/input/collectivity/collectivity.vue";
@@ -42,7 +46,11 @@ export default {
   },
 
   data() {
-    const { field_types: fieldTypes, closing_solutions: closingSolutions, user } = getConfig();
+    const {
+      field_types: fieldTypes,
+      closing_solutions: closingSolutions,
+      user
+    } = getConfig();
     const permission = getPermission("shantytown.list");
 
     const data = {
@@ -138,14 +146,26 @@ export default {
         { label: "Inconnu", value: null, checked: false },
         { label: "Aucune", value: "none", checked: false },
         { label: "Plainte déposée", value: "ownerComplaint", checked: false },
-        { label: "Procédure en cours", value: "justiceProcedure", checked: false },
+        {
+          label: "Procédure en cours",
+          value: "justiceProcedure",
+          checked: false
+        },
         { label: "Décision rendue", value: "justiceRendered", checked: false }
       ],
 
       statusFilterItems: [
         { label: "Raison inconnue", value: "unknown", checked: false },
-        { label: "Décision de justice", value: "closed_by_justice", checked: false },
-        { label: "Décision administrative", value: "closed_by_admin", checked: false },
+        {
+          label: "Décision de justice",
+          value: "closed_by_justice",
+          checked: false
+        },
+        {
+          label: "Décision administrative",
+          value: "closed_by_admin",
+          checked: false
+        },
         { label: "Autre", value: "other", checked: false }
       ],
 
@@ -181,7 +201,10 @@ export default {
       }
     };
 
-    if (data.hasNationalPermission !== true || user.organization.location.type === "nation") {
+    if (
+      data.hasNationalPermission !== true ||
+      user.organization.location.type === "nation"
+    ) {
       data.defaultLocation = { ...userLocation };
       data.location = null;
     } else {
@@ -226,21 +249,25 @@ export default {
       );
     },
     justiceTotal() {
-      return this.dashboardShantytowns.filter(({ ownerComplaint }) => ownerComplaint === true)
-        .length;
+      return this.dashboardShantytowns.filter(
+        ({ ownerComplaint }) => ownerComplaint === true
+      ).length;
     },
     lastUpdate() {
-      return this.dashboardShantytowns.reduce((mostRecentDate, { updatedAt }) => {
-        if (mostRecentDate === null) {
-          return updatedAt;
-        }
+      return this.dashboardShantytowns.reduce(
+        (mostRecentDate, { updatedAt }) => {
+          if (mostRecentDate === null) {
+            return updatedAt;
+          }
 
-        if (updatedAt !== null && updatedAt > mostRecentDate) {
-          return updatedAt;
-        }
+          if (updatedAt !== null && updatedAt > mostRecentDate) {
+            return updatedAt;
+          }
 
-        return mostRecentDate;
-      }, null);
+          return mostRecentDate;
+        },
+        null
+      );
     },
     dashboardShantytowns() {
       return this.shantytowns
@@ -293,19 +320,31 @@ export default {
       }
 
       return this.dashboardShantytowns.filter(shantytown => {
-        if (fieldFilters.length > 0 && !this.checkFieldType(shantytown, fieldFilters)) {
+        if (
+          fieldFilters.length > 0 &&
+          !this.checkFieldType(shantytown, fieldFilters)
+        ) {
           return false;
         }
 
-        if (populationFilters.length > 0 && !this.checkPopulation(shantytown, populationFilters)) {
+        if (
+          populationFilters.length > 0 &&
+          !this.checkPopulation(shantytown, populationFilters)
+        ) {
           return false;
         }
 
-        if (justiceFilters.length > 0 && !this.checkJustice(shantytown, justiceFilters)) {
+        if (
+          justiceFilters.length > 0 &&
+          !this.checkJustice(shantytown, justiceFilters)
+        ) {
           return false;
         }
 
-        if (statusFilters.length > 0 && !this.checkStatus(shantytown, statusFilters)) {
+        if (
+          statusFilters.length > 0 &&
+          !this.checkStatus(shantytown, statusFilters)
+        ) {
           return false;
         }
 
@@ -319,13 +358,21 @@ export default {
       );
     },
     lastPage() {
-      return Math.max(0, Math.ceil(this.filteredShantytowns.length / PER_PAGE) - 1);
+      return Math.max(
+        0,
+        Math.ceil(this.filteredShantytowns.length / PER_PAGE) - 1
+      );
     },
     pageBeginning() {
-      return this.filteredShantytowns.length > 0 ? this.currentPage * PER_PAGE + 1 : 0;
+      return this.filteredShantytowns.length > 0
+        ? this.currentPage * PER_PAGE + 1
+        : 0;
     },
     pageEnd() {
-      return Math.min(this.pageBeginning - 1 + PER_PAGE, this.filteredShantytowns.length);
+      return Math.min(
+        this.pageBeginning - 1 + PER_PAGE,
+        this.filteredShantytowns.length
+      );
     },
     checkedFieldFilterItems() {
       return this.fieldFilterItems.filter(({ checked }) => checked).length;
@@ -400,7 +447,10 @@ export default {
       // justice statuses
       const justiceStatuses = [];
 
-      if (shantytown.justiceChallenged === true || shantytown.justiceRendered === true) {
+      if (
+        shantytown.justiceChallenged === true ||
+        shantytown.justiceRendered === true
+      ) {
         justiceStatuses.push({
           label: "Décision rendue",
           date: shantytown.justiceRenderedAt
@@ -482,13 +532,16 @@ export default {
       }
 
       // closing solutions
-      const totalSolutions = shantytown.closingSolutions.reduce((total, solution) => {
-        if (!solution.householdsAffected) {
-          return total;
-        }
+      const totalSolutions = shantytown.closingSolutions.reduce(
+        (total, solution) => {
+          if (!solution.householdsAffected) {
+            return total;
+          }
 
-        return (total || 0) + solution.householdsAffected;
-      }, null);
+          return (total || 0) + solution.householdsAffected;
+        },
+        null
+      );
 
       // final object
       return {
@@ -501,7 +554,10 @@ export default {
           ...shantytown.fieldType,
           color: this.fieldTypeColors[shantytown.fieldType.id]
         },
-        electricityType: { ...shantytown.electricityType, value: electricityValue },
+        electricityType: {
+          ...shantytown.electricityType,
+          value: electricityValue
+        },
         justiceStatuses,
         totalSolutions
       };

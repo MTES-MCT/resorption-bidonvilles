@@ -25,11 +25,17 @@
         </slot>
       </div>
 
-      <div v-if="$slots.default" :class="iconPosition === 'right' ? 'mr-2' : 'ml-2'">
+      <div
+        v-if="$slots.default"
+        :class="iconPosition === 'right' ? 'mr-2' : 'ml-2'"
+      >
         <slot></slot>
       </div>
     </div>
-    <div v-if="loading" class="absolute inset-0 flex justify-center items-center">
+    <div
+      v-if="loading"
+      class="absolute inset-0 flex justify-center items-center"
+    >
       <Icon icon="spinner" spin />
     </div>
   </component>
@@ -81,9 +87,12 @@ export default {
     },
     variantClasses() {
       return {
-        primary: "border-2 border-primary bg-primary text-white hover:bg-primaryDark",
-        secondary: "border-2 border-secondary bg-secondary text-white hover:bg-secondaryDark",
-        primaryOutline: "border-2 border-primary text-primary hover:bg-primary hover:text-white",
+        primary:
+          "border-2 border-primary bg-primary text-white hover:bg-primaryDark",
+        secondary:
+          "border-2 border-secondary bg-secondary text-white hover:bg-secondaryDark",
+        primaryOutline:
+          "border-2 border-primary text-primary hover:bg-primary hover:text-white",
         secondaryOutline:
           "border-2  border-secondary text-secondary hover:bg-secondary hover:text-white",
         primaryText: "text-primary hover:text-primaryDark",

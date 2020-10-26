@@ -2,7 +2,11 @@ import NavBar from "#app/layouts/navbar/navbar.vue";
 import Form from "#app/components/form/form.vue";
 import { get as getConfig, hasPermission } from "#helpers/api/config";
 import { create } from "#helpers/api/plan";
-import { getByCategory, getMembers, getMembersOfCategory } from "#helpers/api/organization";
+import {
+  getByCategory,
+  getMembers,
+  getMembersOfCategory
+} from "#helpers/api/organization";
 import { notify } from "#helpers/notificationHelper";
 import { getDepartementsForRegion } from "#helpers/api/geo";
 
@@ -121,12 +125,16 @@ export default {
                   label: "L'action se déroule dans le cadre suivant",
                   mandatory: true,
                   options: [
-                    { value: "shantytowns", label: "sur site(s) : bidonville ou squat" },
+                    {
+                      value: "shantytowns",
+                      label: "sur site(s) : bidonville ou squat"
+                    },
                     { value: "location", label: "sur terrain d'insertion" },
                     { value: "housing", label: "dans le logement" },
                     {
                       value: "other",
-                      label: "dans plusieurs lieux (hébergement, permanence, rue...)"
+                      label:
+                        "dans plusieurs lieux (hébergement, permanence, rue...)"
                     }
                   ]
                 },
@@ -171,19 +179,29 @@ export default {
                       const p = getMembersOfCategory("public_establishment");
                       const p2 = p.then(({ users }) =>
                         users
-                          .filter(({ first_name: firstName, last_name: lastName }) =>
-                            [firstName, lastName].some(value =>
-                              d
-                                .split(" ")
-                                .every(
-                                  part => value.toLowerCase().indexOf(part.toLowerCase()) !== -1
-                                )
-                            )
+                          .filter(
+                            ({ first_name: firstName, last_name: lastName }) =>
+                              [firstName, lastName].some(value =>
+                                d
+                                  .split(" ")
+                                  .every(
+                                    part =>
+                                      value
+                                        .toLowerCase()
+                                        .indexOf(part.toLowerCase()) !== -1
+                                  )
+                              )
                           )
-                          .map(({ id, first_name: firstName, last_name: lastName }) => ({
-                            id,
-                            label: `${firstName} ${lastName.toUpperCase()}`
-                          }))
+                          .map(
+                            ({
+                              id,
+                              first_name: firstName,
+                              last_name: lastName
+                            }) => ({
+                              id,
+                              label: `${firstName} ${lastName.toUpperCase()}`
+                            })
+                          )
                       );
                       p2.abort = p.abort;
 
@@ -208,10 +226,15 @@ export default {
                               d
                                 .split(" ")
                                 .every(
-                                  part => name.toLowerCase().indexOf(part.toLowerCase()) !== -1
+                                  part =>
+                                    name
+                                      .toLowerCase()
+                                      .indexOf(part.toLowerCase()) !== -1
                                 ) ||
                               (abbreviation !== null &&
-                                abbreviation.toLowerCase().indexOf(d.toLowerCase()) >= 0)
+                                abbreviation
+                                  .toLowerCase()
+                                  .indexOf(d.toLowerCase()) >= 0)
                           )
                           .map(organization => ({
                             id: organization.id,
@@ -239,7 +262,9 @@ export default {
                   options: [],
                   condition({ association }) {
                     return (
-                      association !== undefined && association.length > 0 && this.options.length > 0
+                      association !== undefined &&
+                      association.length > 0 &&
+                      this.options.length > 0
                     );
                   }
                 },
@@ -355,9 +380,9 @@ export default {
         }
 
         case "region":
-          return getDepartementsForRegion(this.user.organization.location.region.code).then(
-            ({ departements }) => departements
-          );
+          return getDepartementsForRegion(
+            this.user.organization.location.region.code
+          ).then(({ departements }) => departements);
 
         default:
           return Promise.resolve([this.user.organization.location.departement]);
@@ -365,7 +390,10 @@ export default {
     },
 
     load() {
-      if (this.loading.status === "loading" || this.loading.status === "completed") {
+      if (
+        this.loading.status === "loading" ||
+        this.loading.status === "completed"
+      ) {
         return;
       }
 

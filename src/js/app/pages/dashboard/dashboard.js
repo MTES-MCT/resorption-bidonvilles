@@ -47,7 +47,10 @@ export default {
       error: undefined,
       loading: false,
       defaultMapView: {
-        center: [user.organization.location.latitude, user.organization.location.longitude],
+        center: [
+          user.organization.location.latitude,
+          user.organization.location.longitude
+        ],
         zoom: getDefaultZoomFor(user.organization.location.type)
       },
       towns: [],
@@ -97,7 +100,11 @@ export default {
           options: [
             { value: null, label: "Inconnu", checked: true },
             { value: "-9", label: "Moins de 10 personnes", checked: true },
-            { value: "10-99", label: "Entre 10 et 99 personnes", checked: true },
+            {
+              value: "10-99",
+              label: "Entre 10 et 99 personnes",
+              checked: true
+            },
             { value: "100-", label: "100 personnes et plus", checked: true }
           ]
         },
@@ -131,7 +138,8 @@ export default {
 
       return this.filters.filter(
         filter =>
-          !filter.permissions || filter.permissions.every(permission => this.permission[permission])
+          !filter.permissions ||
+          filter.permissions.every(permission => this.permission[permission])
       );
     },
     rendererProps() {
@@ -164,7 +172,9 @@ export default {
                 .map(option => option.value);
 
               visibleTowns = visibleTowns.filter(
-                town => town.fieldType && allowedFieldTypes.indexOf(town.fieldType.id) !== -1
+                town =>
+                  town.fieldType &&
+                  allowedFieldTypes.indexOf(town.fieldType.id) !== -1
               );
             }
             break;
@@ -177,7 +187,9 @@ export default {
 
               disallowedPopulation.forEach(value => {
                 if (value === null) {
-                  visibleTowns = visibleTowns.filter(town => town.populationTotal !== null);
+                  visibleTowns = visibleTowns.filter(
+                    town => town.populationTotal !== null
+                  );
                   return;
                 }
 
@@ -191,7 +203,9 @@ export default {
                   }
 
                   if (!Number.isNaN(min) && !Number.isNaN(max)) {
-                    return town.populationTotal < min || town.populationTotal > max;
+                    return (
+                      town.populationTotal < min || town.populationTotal > max
+                    );
                   }
 
                   if (!Number.isNaN(min)) {
@@ -216,9 +230,13 @@ export default {
 
               disallowedStatuses.forEach(value => {
                 if (value === "closed") {
-                  visibleTowns = visibleTowns.filter(town => town.status === "open");
+                  visibleTowns = visibleTowns.filter(
+                    town => town.status === "open"
+                  );
                 } else if (value === "opened") {
-                  visibleTowns = visibleTowns.filter(town => town.status !== "open");
+                  visibleTowns = visibleTowns.filter(
+                    town => town.status !== "open"
+                  );
                 }
               });
             }
@@ -231,7 +249,9 @@ export default {
                 .map(option => option.value);
 
               visibleTowns = visibleTowns.filter(
-                town => town.ownerType && allowedOwnerTypes.indexOf(town.ownerType.id) !== -1
+                town =>
+                  town.ownerType &&
+                  allowedOwnerTypes.indexOf(town.ownerType.id) !== -1
               );
             }
             break;
@@ -303,7 +323,9 @@ export default {
     stretchToBottom(element) {
       const height = element.offsetHeight;
       const newHeight =
-        height + (document.body.offsetHeight - (this.absoluteOffsetTop(element) + height));
+        height +
+        (document.body.offsetHeight -
+          (this.absoluteOffsetTop(element) + height));
 
       // eslint-disable-next-line
             element.style.height = `${newHeight}px`;
@@ -334,7 +356,9 @@ export default {
           this.loading = false;
 
           // build the field-type filter
-          const fieldTypeFilter = this.filters.filter(({ id }) => id === "fieldType")[0];
+          const fieldTypeFilter = this.filters.filter(
+            ({ id }) => id === "fieldType"
+          )[0];
           fieldTypeFilter.options = [
             // options based on field-types returned by the api
             ...fieldTypes.map(fieldType => ({

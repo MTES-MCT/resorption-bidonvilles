@@ -65,8 +65,14 @@ export default {
         { value: false, label: "Non" }
       ],
       statusValues: [
-        { value: "closed_by_justice", label: "Exécution d'une décision de justice" },
-        { value: "closed_by_admin", label: "Exécution d'une décision administrative" },
+        {
+          value: "closed_by_justice",
+          label: "Exécution d'une décision de justice"
+        },
+        {
+          value: "closed_by_admin",
+          label: "Exécution d'une décision administrative"
+        },
         { value: "other", label: "Autre" },
         { value: "unknown", label: "Raison inconnue" }
       ],
@@ -96,8 +102,16 @@ export default {
       },
       covidTags: [
         { prop: "equipe_maraude", label: "Équipe de maraude", type: "warning" },
-        { prop: "equipe_sanitaire", label: "Équipe sanitaire", type: "warning" },
-        { prop: "equipe_accompagnement", label: "Équipe d'accompagnement", type: "warning" },
+        {
+          prop: "equipe_sanitaire",
+          label: "Équipe sanitaire",
+          type: "warning"
+        },
+        {
+          prop: "equipe_accompagnement",
+          label: "Équipe d'accompagnement",
+          type: "warning"
+        },
         {
           prop: "distribution_alimentaire",
           label: "Distribution d'aide alimentaire",
@@ -105,7 +119,8 @@ export default {
         },
         {
           prop: "personnes_orientees",
-          label: "Personne(s) orientée(s) vers un centre d'hébergement spécialisé (desserrement)",
+          label:
+            "Personne(s) orientée(s) vers un centre d'hébergement spécialisé (desserrement)",
           type: "error"
         },
         {
@@ -113,7 +128,11 @@ export default {
           label: "Personne(s) avec des symptômes Covid-19",
           type: "error"
         },
-        { prop: "besoin_action", label: "Besoin d'une action prioritaire", type: "error" }
+        {
+          prop: "besoin_action",
+          label: "Besoin d'une action prioritaire",
+          type: "error"
+        }
       ],
       sidePanel: null,
       commentError: null,
@@ -144,7 +163,9 @@ export default {
         case "closed_by_admin":
         case "other":
         case "unknown":
-          return this.town.closedWithSolutions === "yes" ? "résorbé" : "disparu";
+          return this.town.closedWithSolutions === "yes"
+            ? "résorbé"
+            : "disparu";
 
         default:
           return "inconnu";
@@ -187,7 +208,9 @@ export default {
         return false;
       }
 
-      const type = this.electricityTypes.find(({ id }) => id === this.edit.electricityType);
+      const type = this.electricityTypes.find(
+        ({ id }) => id === this.edit.electricityType
+      );
       return type && type.label.indexOf("Oui") !== -1; // @todo: aaaaawfuuuuulllyyyyy baaaaaaad...
     }
   },
@@ -319,9 +342,11 @@ export default {
           }
         },
         detailedAddress: this.town.addressDetails,
-        declaredAt: this.town.declaredAt !== null ? this.town.declaredAt * 1000 : null,
+        declaredAt:
+          this.town.declaredAt !== null ? this.town.declaredAt * 1000 : null,
         builtAt: this.town.builtAt !== null ? this.town.builtAt * 1000 : null,
-        closedAt: this.town.closedAt !== null ? this.town.closedAt * 1000 : null,
+        closedAt:
+          this.town.closedAt !== null ? this.town.closedAt * 1000 : null,
         status: this.town.status !== "open" ? this.town.status : null,
         fieldType: this.town.fieldType.id,
         ownerType: this.town.ownerType.id,
@@ -331,17 +356,25 @@ export default {
         justice_rendered: boolToYesNoValue(this.town.justiceRendered),
         justice_rendered_by: this.town.justiceRenderedBy,
         justice_rendered_at:
-          this.town.justiceRenderedAt !== null ? this.town.justiceRenderedAt * 1000 : null,
+          this.town.justiceRenderedAt !== null
+            ? this.town.justiceRenderedAt * 1000
+            : null,
         justice_challenged: boolToYesNoValue(this.town.justiceChallenged),
         police_status: this.town.policeStatus,
         police_requested_at:
-          this.town.policeRequestedAt !== null ? this.town.policeRequestedAt * 1000 : null,
+          this.town.policeRequestedAt !== null
+            ? this.town.policeRequestedAt * 1000
+            : null,
         police_granted_at:
-          this.town.policeGrantedAt !== null ? this.town.policeGrantedAt * 1000 : null,
+          this.town.policeGrantedAt !== null
+            ? this.town.policeGrantedAt * 1000
+            : null,
         bailiff: this.town.bailiff,
         census_status: this.town.censusStatus,
         census_conducted_at:
-          this.town.censusConductedAt !== null ? this.town.censusConductedAt * 1000 : null,
+          this.town.censusConductedAt !== null
+            ? this.town.censusConductedAt * 1000
+            : null,
         census_conducted_by: this.town.censusConductedBy,
         populationTotal: this.town.populationTotal,
         populationCouples: this.town.populationCouples,
@@ -357,7 +390,9 @@ export default {
         solutions: this.town.closingSolutions
           ? this.closingSolutions.reduce((solutions, solution) => {
               const newSolutions = Object.assign(solutions, {});
-              const s = this.town.closingSolutions.find(sol => sol.id === solution.id);
+              const s = this.town.closingSolutions.find(
+                sol => sol.id === solution.id
+              );
               newSolutions[solution.id] = {
                 checked: s !== undefined,
                 peopleAffected: s && s.peopleAffected,
@@ -380,7 +415,9 @@ export default {
 
       // send the form
       const coordinates =
-        this.edit.address && this.edit.address.location && this.edit.address.location.coordinates;
+        this.edit.address &&
+        this.edit.address.location &&
+        this.edit.address.location.coordinates;
       const { address } = this.edit.address || {};
 
       function formatDate(d) {
@@ -429,7 +466,10 @@ export default {
         water_comments: this.edit.waterComments,
         trash_evacuation: this.edit.trashEvacuation,
         owner_complaint: this.edit.owner_complaint,
-        justice_procedure: this.edit.owner_complaint === 1 ? this.edit.justiceProcedure : undefined,
+        justice_procedure:
+          this.edit.owner_complaint === 1
+            ? this.edit.justiceProcedure
+            : undefined,
         justice_rendered:
           this.edit.owner_complaint === 1 && this.edit.justiceProcedure === 1
             ? this.edit.justice_rendered
@@ -463,7 +503,9 @@ export default {
             : null,
         bailiff: this.edit.bailiff,
         social_origins:
-          this.edit.populationTotal && this.edit.populationTotal > 10 ? this.edit.origins : null,
+          this.edit.populationTotal && this.edit.populationTotal > 10
+            ? this.edit.origins
+            : null,
         field_type: this.edit.fieldType,
         owner_type: this.edit.ownerType,
         owner: this.edit.owner
@@ -603,19 +645,26 @@ export default {
         })
         .catch(response => {
           const fields = response.fields || {};
-          this.covidErrors = Object.keys(fields).reduce((acc, key) => [...acc, ...fields[key]], []);
+          this.covidErrors = Object.keys(fields).reduce(
+            (acc, key) => [...acc, ...fields[key]],
+            []
+          );
         });
     },
     formatSolution(solution) {
       const details = [];
       if (solution.householdsAffected !== null) {
         const plural = solution.householdsAffected > 1 ? "s" : "";
-        details.push(`${solution.householdsAffected} ménage${plural} concerné${plural}`);
+        details.push(
+          `${solution.householdsAffected} ménage${plural} concerné${plural}`
+        );
       }
 
       if (solution.peopleAffected !== null) {
         const plural = solution.peopleAffected > 1 ? "s" : "";
-        details.push(`${solution.peopleAffected} personne${plural} concernée${plural}`);
+        details.push(
+          `${solution.peopleAffected} personne${plural} concernée${plural}`
+        );
       }
 
       if (details.length > 0) {
@@ -625,10 +674,16 @@ export default {
       return ["aucun détail sur le nombre de ménages/personnes concernés"];
     },
     canEditComment(comment) {
-      return hasPermission("shantytown_comment.create") || comment.createdBy.id === this.userId;
+      return (
+        hasPermission("shantytown_comment.create") ||
+        comment.createdBy.id === this.userId
+      );
     },
     canDeleteComment(comment) {
-      return hasPermission("shantytown_comment.delete") || comment.createdBy.id === this.userId;
+      return (
+        hasPermission("shantytown_comment.delete") ||
+        comment.createdBy.id === this.userId
+      );
     },
     editComment(comment) {
       this.commentEdit.commentId = comment.id;
@@ -646,7 +701,9 @@ export default {
           city: this.town.city.name
         },
         author: {
-          name: `${comment.createdBy.firstName} ${comment.createdBy.lastName.toUpperCase()}`
+          name: `${
+            comment.createdBy.firstName
+          } ${comment.createdBy.lastName.toUpperCase()}`
         },
         content: comment.description
       };
@@ -659,7 +716,9 @@ export default {
       this.commentEdit.pending = true;
       this.commentEdit.error = null;
 
-      editComment(this.$route.params.id, comment.id, { description: this.commentEdit.value })
+      editComment(this.$route.params.id, comment.id, {
+        description: this.commentEdit.value
+      })
         .then(response => {
           this.town.comments.regular = response.comments;
           this.commentEdit.commentId = null;

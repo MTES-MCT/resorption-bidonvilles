@@ -75,7 +75,10 @@ export default (wording, submitFn) => ({
                   mandatory: true,
                   type: "select",
                   options: [],
-                  condition: ({ organization_category: category, organization_type: type }) =>
+                  condition: ({
+                    organization_category: category,
+                    organization_type: type
+                  }) =>
                     category === "public_establishment" && type !== undefined
                 },
                 territorial_collectivity: {
@@ -100,7 +103,9 @@ export default (wording, submitFn) => ({
                   mandatory: true,
                   type: "text",
                   condition({ organization_category: category, association }) {
-                    return category === "association" && association === "Autre";
+                    return (
+                      category === "association" && association === "Autre"
+                    );
                   }
                 },
                 newAssociationAbbreviation: {
@@ -108,7 +113,9 @@ export default (wording, submitFn) => ({
                   mandatory: false,
                   type: "text",
                   condition({ organization_category: category, association }) {
-                    return category === "association" && association === "Autre";
+                    return (
+                      category === "association" && association === "Autre"
+                    );
                   }
                 },
                 departement: {
@@ -143,7 +150,8 @@ export default (wording, submitFn) => ({
           submit: data =>
             submitFn({
               ...data,
-              legal: data.legal && data.legal.length === 1 && data.legal[0] === true
+              legal:
+                data.legal && data.legal.length === 1 && data.legal[0] === true
             })
         }
       ]
@@ -180,26 +188,30 @@ export default (wording, submitFn) => ({
     "formData.organization_type": function organizationType() {
       this.$refs.form.getInputById("organization_public").options = [];
 
-      getOrganizationsByType(this.formData.organization_type).then(({ organizations }) => {
-        this.$refs.form.getInputById("organization_public").options = organizations.map(
-          organization => {
+      getOrganizationsByType(this.formData.organization_type).then(
+        ({ organizations }) => {
+          this.$refs.form.getInputById(
+            "organization_public"
+          ).options = organizations.map(organization => {
             const level = organization.location_type;
             let label = organization[`${level}_name`];
 
             if (level === "nation") {
               label = "France";
             } else if (level === "departement") {
-              label = `${organization[`${level}_code`]} - ${organization[`${level}_name`]}`;
+              label = `${organization[`${level}_code`]} - ${
+                organization[`${level}_name`]
+              }`;
             }
 
             return {
               value: organization.id,
               label
             };
-          }
-        );
-        this.formData.organization_public = undefined;
-      });
+          });
+          this.formData.organization_public = undefined;
+        }
+      );
     }
   },
 
@@ -242,7 +254,9 @@ export default (wording, submitFn) => ({
             );
             this.formDefinition.steps[0].sections[1].inputs.organization_type.options = types
               .filter(({ numberOfOrganizations }) => numberOfOrganizations > 0)
-              .filter(({ name_singular: name }) => name !== "Gendarmerie nationale")
+              .filter(
+                ({ name_singular: name }) => name !== "Gendarmerie nationale"
+              )
               .map(({ id, name_singular: name, abbreviation }) => ({
                 value: id,
                 label: abbreviation || name
@@ -278,7 +292,8 @@ export default (wording, submitFn) => ({
                   })
                   .map(({ name, abbreviation }) => ({
                     value: name,
-                    label: abbreviation !== null ? `${abbreviation} (${name})` : name
+                    label:
+                      abbreviation !== null ? `${abbreviation} (${name})` : name
                   }))
               }
             ];

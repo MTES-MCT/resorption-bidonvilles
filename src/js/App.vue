@@ -8,7 +8,10 @@
       class="customNotifications"
     >
       <template slot="body" slot-scope="props">
-        <div :class="['vue-notification', props.item.type]" @click="props.close">
+        <div
+          :class="['vue-notification', props.item.type]"
+          @click="props.close"
+        >
           <div class="notification-icon"></div>
           <div class="notification-content">
             <div class="notification-title">{{ props.item.title }}</div>

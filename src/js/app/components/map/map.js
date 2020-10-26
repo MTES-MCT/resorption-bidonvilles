@@ -277,7 +277,9 @@ export default {
      * @returns {undefined}
      */
     setupLayersControl() {
-      const layersControl = L.control.layers(this.mapLayers, undefined, { collapsed: false });
+      const layersControl = L.control.layers(this.mapLayers, undefined, {
+        collapsed: false
+      });
 
       this.map.addControl(layersControl);
     },
@@ -510,7 +512,9 @@ export default {
     clearSearchMarker() {
       if (this.townSearchMarker !== null) {
         if (this.townSearchMarker._icon) {
-          this.townSearchMarker._icon.querySelector(".mapPin").classList.remove("mapPin--result");
+          this.townSearchMarker._icon
+            .querySelector(".mapPin")
+            .classList.remove("mapPin--result");
         }
 
         this.townSearchMarker.searchResult = false;
@@ -544,14 +548,18 @@ export default {
       this.searchMarker.addTo(this.markersGroup.search);
       this.searchMarker.setLatLng(coordinates);
 
-      this.searchMarker._icon.querySelector(".mapPin-address").innerHTML = address;
+      this.searchMarker._icon.querySelector(
+        ".mapPin-address"
+      ).innerHTML = address;
 
       let action = "add";
       if (type !== "housenumber") {
         action = "remove";
       }
 
-      this.searchMarker._icon.querySelector(".mapPin").classList[action]("mapPin--street");
+      this.searchMarker._icon
+        .querySelector(".mapPin")
+        .classList[action]("mapPin--street");
     }
   }
 };

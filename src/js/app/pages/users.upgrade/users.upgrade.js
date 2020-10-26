@@ -27,7 +27,8 @@ export default {
           {
             sections: [
               {
-                title: "Pour compléter le futur annuaire, merci de renseigner les champs suivants",
+                title:
+                  "Pour compléter le futur annuaire, merci de renseigner les champs suivants",
                 inputs: {
                   email: {
                     type: "text",
@@ -51,7 +52,8 @@ export default {
                 }
               },
               {
-                title: "Pour bénéficier de la mise à jour, merci de créer un nouveau mot de passe",
+                title:
+                  "Pour bénéficier de la mise à jour, merci de créer un nouveau mot de passe",
                 inputs: {
                   password: {
                     type: "password",

@@ -28,7 +28,8 @@ export default {
         {
           id: "life_conditions",
           label: "Conditions de vie",
-          description: ": accès à l'électricité, l'eau, toilettes, évacuation des déchets"
+          description:
+            ": accès à l'électricité, l'eau, toilettes, évacuation des déchets"
         },
         {
           id: "demographics",
@@ -83,7 +84,10 @@ export default {
     },
     availableOptions() {
       return this.existingOptions
-        .filter(({ closedTowns }) => closedTowns === undefined || this.closedTowns === closedTowns)
+        .filter(
+          ({ closedTowns }) =>
+            closedTowns === undefined || this.closedTowns === closedTowns
+        )
         .filter(({ permission }) => {
           if (permission === undefined) {
             return true;
@@ -94,7 +98,9 @@ export default {
             return false;
           }
 
-          return permission.data === null || p[`data_${permission.data}`] === true;
+          return (
+            permission.data === null || p[`data_${permission.data}`] === true
+          );
         });
     }
   },
@@ -117,11 +123,17 @@ export default {
     },
     download() {
       const { code, type } = this.location.data;
-      let url = `${process.env.VUE_APP_API_URL}/towns/export?locationType=${encodeURIComponent(
+      let url = `${
+        process.env.VUE_APP_API_URL
+      }/towns/export?locationType=${encodeURIComponent(
         type
-      )}&locationCode=${encodeURIComponent(code)}&closedTowns=${this.closedTowns ? "1" : "0"}`;
+      )}&locationCode=${encodeURIComponent(code)}&closedTowns=${
+        this.closedTowns ? "1" : "0"
+      }`;
 
-      const options = this.availableOptions.map(({ id }) => id).filter(id => this.options[id]);
+      const options = this.availableOptions
+        .map(({ id }) => id)
+        .filter(id => this.options[id]);
       if (options.length > 0) {
         url += `&options=${encodeURIComponent(options.join(","))}`;
       }

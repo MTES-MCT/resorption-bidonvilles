@@ -1,5 +1,9 @@
 import { isLoggedIn } from "#helpers/api/user";
-import { isLoaded as isConfigLoaded, hasPermission, hasAcceptedCharte } from "#helpers/api/config";
+import {
+  isLoaded as isConfigLoaded,
+  hasPermission,
+  hasAcceptedCharte
+} from "#helpers/api/config";
 import ITEMS from "./items";
 
 export default {
@@ -63,7 +67,10 @@ export default {
     },
     checkClickOutsideSidebar(event) {
       // in case of a click outside the sidebar and NOT on the "Menu" link
-      if (!this.$refs.sidebar.contains(event.target) && event.target !== this.$refs.menu) {
+      if (
+        !this.$refs.sidebar.contains(event.target) &&
+        event.target !== this.$refs.menu
+      ) {
         this.hideSidebar();
       }
     }

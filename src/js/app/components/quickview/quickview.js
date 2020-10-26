@@ -35,7 +35,9 @@ export default {
       if (this.town.builtAt !== undefined) {
         rows.push({
           label: "Date d'installation",
-          value: this.town.builtAt ? App.formatDate(this.town.builtAt) : "Inconnue"
+          value: this.town.builtAt
+            ? App.formatDate(this.town.builtAt)
+            : "Inconnue"
         });
       }
 
@@ -57,19 +59,28 @@ export default {
       if (this.town.populationTotal !== undefined) {
         rows.push({
           label: "Nombre de personnes",
-          value: this.town.populationTotal !== null ? this.town.populationTotal : "inconnu"
+          value:
+            this.town.populationTotal !== null
+              ? this.town.populationTotal
+              : "inconnu"
         });
       }
       if (this.town.populationCouples !== undefined) {
         rows.push({
           label: "Nombre de ménages",
-          value: this.town.populationCouples !== null ? this.town.populationCouples : "inconnu"
+          value:
+            this.town.populationCouples !== null
+              ? this.town.populationCouples
+              : "inconnu"
         });
       }
       if (this.town.populationMinors !== undefined) {
         rows.push({
           label: "Nombre de mineurs",
-          value: this.town.populationMinors !== null ? this.town.populationMinors : "inconnu"
+          value:
+            this.town.populationMinors !== null
+              ? this.town.populationMinors
+              : "inconnu"
         });
       }
       if (this.town.socialOrigins !== undefined) {
@@ -138,9 +149,11 @@ export default {
       };
     },
     sections() {
-      return [this.caracteristicSection, this.demographySection, this.justiceSection].filter(
-        section => section !== null
-      );
+      return [
+        this.caracteristicSection,
+        this.demographySection,
+        this.justiceSection
+      ].filter(section => section !== null);
     }
   },
   mounted() {

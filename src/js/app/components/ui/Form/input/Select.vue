@@ -67,11 +67,18 @@ export default {
   },
   computed: {
     classes() {
-      const inputOptions = { error: this.error, prefixIcon: this.icon, suffixIcon: true };
+      const inputOptions = {
+        error: this.error,
+        prefixIcon: this.icon,
+        suffixIcon: true
+      };
 
       return {
         state: ["appearance-none", ...getInputClasses("state", inputOptions)],
-        default: ["appearance-none", ...getInputClasses("default", inputOptions)]
+        default: [
+          "appearance-none",
+          ...getInputClasses("default", inputOptions)
+        ]
       }[this.variant];
     }
   },

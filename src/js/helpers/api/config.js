@@ -99,8 +99,14 @@ export function getPermission(permissionName) {
 
   const [entity, feature] = permissionName.split(".");
   if (
-    !Object.prototype.hasOwnProperty.call(configuration.user.permissions, entity) ||
-    !Object.prototype.hasOwnProperty.call(configuration.user.permissions[entity], feature)
+    !Object.prototype.hasOwnProperty.call(
+      configuration.user.permissions,
+      entity
+    ) ||
+    !Object.prototype.hasOwnProperty.call(
+      configuration.user.permissions[entity],
+      feature
+    )
   ) {
     return null;
   }
@@ -124,7 +130,9 @@ export function hasPermission(permissionName) {
   const [entity, feature, data] = permissionName.split(".");
   const permission = getPermission(`${entity}.${feature}`);
 
-  return permission !== null && (data === undefined || permission[data] === true);
+  return (
+    permission !== null && (data === undefined || permission[data] === true)
+  );
 }
 
 /**

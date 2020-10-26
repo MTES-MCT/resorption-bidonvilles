@@ -58,7 +58,8 @@ export default {
                   name: {
                     type: "text",
                     label: "Appellation du site",
-                    description: "Exemples : Entrepôt de la Poste, Rond-point du centre...",
+                    description:
+                      "Exemples : Entrepôt de la Poste, Rond-point du centre...",
                     mandatory: false,
                     specificProps: {
                       maxlength: 35
@@ -117,7 +118,8 @@ export default {
                     condition({ owner_type: ownerType }) {
                       return (
                         ownerType &&
-                        ownerTypes.find(({ id }) => id === ownerType).label !== "Inconnu"
+                        ownerTypes.find(({ id }) => id === ownerType).label !==
+                          "Inconnu"
                       );
                     }
                   }
@@ -153,19 +155,22 @@ export default {
                   population_total: {
                     type: "number",
                     label: "Nombre de personnes",
-                    description: "Laissez ce champ vide si l'information est inconnue",
+                    description:
+                      "Laissez ce champ vide si l'information est inconnue",
                     mandatory: false
                   },
                   population_couples: {
                     type: "number",
                     label: "Nombre de ménages",
-                    description: "Laissez ce champ vide si l'information est inconnue",
+                    description:
+                      "Laissez ce champ vide si l'information est inconnue",
                     mandatory: false
                   },
                   population_minors: {
                     type: "number",
                     label: "Nombre de mineurs",
-                    description: "Laissez ce champ vide si l'information est inconnue",
+                    description:
+                      "Laissez ce champ vide si l'information est inconnue",
                     mandatory: false
                   },
                   social_origins: {
@@ -200,7 +205,8 @@ export default {
                   electricity_comments: {
                     type: "textarea",
                     label: "Modalités d'accès",
-                    description: "Exemples : groupe électrogène, raccordement à une usine...",
+                    description:
+                      "Exemples : groupe électrogène, raccordement à une usine...",
                     mandatory: false
                   },
                   access_to_water: {
@@ -280,7 +286,9 @@ export default {
                           justice_rendered: justiceRendered
                         }) {
                           return (
-                            ownerComplaint === 1 && justiceProcedure === 1 && justiceRendered === 1
+                            ownerComplaint === 1 &&
+                            justiceProcedure === 1 &&
+                            justiceRendered === 1
                           );
                         }
                       },
@@ -294,7 +302,9 @@ export default {
                           justice_rendered: justiceRendered
                         }) {
                           return (
-                            ownerComplaint === 1 && justiceProcedure === 1 && justiceRendered === 1
+                            ownerComplaint === 1 &&
+                            justiceProcedure === 1 &&
+                            justiceRendered === 1
                           );
                         }
                       },
@@ -309,7 +319,9 @@ export default {
                           justice_rendered: justiceRendered
                         }) {
                           return (
-                            ownerComplaint === 1 && justiceProcedure === 1 && justiceRendered === 1
+                            ownerComplaint === 1 &&
+                            justiceProcedure === 1 &&
+                            justiceRendered === 1
                           );
                         }
                       },
@@ -324,7 +336,10 @@ export default {
                         label: "Date de la demande du CFP",
                         mandatory: true,
                         condition({ police_status: policeStatus }) {
-                          return ["requested", "granted"].indexOf(policeStatus) !== -1;
+                          return (
+                            ["requested", "granted"].indexOf(policeStatus) !==
+                            -1
+                          );
                         }
                       },
                       police_granted_at: {

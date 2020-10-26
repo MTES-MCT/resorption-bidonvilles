@@ -21,7 +21,10 @@
           </div>
           <div class="mt-4"><slot name="body" /></div>
         </div>
-        <div v-if="$slots.footer" class="bg-gray-200 px-4 py-3 sm:px-6 flex justify-end">
+        <div
+          v-if="$slots.footer"
+          class="bg-gray-200 px-4 py-3 sm:px-6 flex justify-end"
+        >
           <slot name="footer"></slot>
         </div>
       </div>
@@ -45,7 +48,11 @@ export default {
   },
   methods: {
     checkOutsideClick(event) {
-      if (this.isOpen && this.closeModal && !this.$refs.dialog.contains(event.target)) {
+      if (
+        this.isOpen &&
+        this.closeModal &&
+        !this.$refs.dialog.contains(event.target)
+      ) {
         this.closeModal();
       }
     }

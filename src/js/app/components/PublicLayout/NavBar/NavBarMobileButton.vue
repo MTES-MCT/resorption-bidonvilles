@@ -1,7 +1,12 @@
 <template>
   <!-- Mobile Menu icon-->
   <button @click="onClick" class="focus:outline-none">
-    <svg class="block h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+    <svg
+      class="block h-6 w-6"
+      stroke="currentColor"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
       <path
         stroke-linecap="round"
         stroke-linejoin="round"

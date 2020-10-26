@@ -9,7 +9,8 @@ const component = newUser(
     organizationTitle: "Structure",
     organization: "Quelle est la structure de l'utilisateur ?",
     position: "Fonction de l'utilisateur",
-    associationIsMissing: "L'association de l'utilisateur n'est pas dans cette liste",
+    associationIsMissing:
+      "L'association de l'utilisateur n'est pas dans cette liste",
     stepWording: {
       submit: "Continuer",
       error: "L'utilisateur n'a pas pu être créé",
@@ -56,7 +57,10 @@ export default {
 
   watch: Object.assign(component.watch, {
     state() {
-      if (this.state === "loaded" && this.$route.query.association_name !== undefined) {
+      if (
+        this.state === "loaded" &&
+        this.$route.query.association_name !== undefined
+      ) {
         this.formData.organization_category = "association";
         this.formData.association = this.$route.query.association_name;
         this.formData.departement = this.$route.query.association_departement;

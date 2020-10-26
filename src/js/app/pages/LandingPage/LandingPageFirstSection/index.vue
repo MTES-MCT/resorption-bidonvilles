@@ -1,6 +1,9 @@
 <template>
   <div>
-    <img class="full-width mx-auto" src="./assets/resorption-bidonvilles-dessin.png" />
+    <img
+      class="full-width mx-auto"
+      src="./assets/resorption-bidonvilles-dessin.png"
+    />
     <div class="max-w-screen-sm mx-auto mt-8">
       <LandingPageResponsiveEmbed>
         <iframe
@@ -27,7 +30,9 @@
         <div class="text-display-lg font-normal">
           {{ $t("landingPage.firstSection.context.title") }}
         </div>
-        <div class="text-display-lg">{{ $t("landingPage.firstSection.context.subtitle") }}</div>
+        <div class="text-display-lg">
+          {{ $t("landingPage.firstSection.context.subtitle") }}
+        </div>
         <div class="max-w-screen-sm mx-auto mt-4">
           <div>{{ $t("landingPage.firstSection.context.text") }}</div>
         </div>
@@ -37,7 +42,9 @@
         <LandingPageContextImage label="Avant"
           ><img src="./assets/before.jpg"
         /></LandingPageContextImage>
-        <div class="hidden md:block border-solid border-r-2 border-gray-200 m-20" />
+        <div
+          class="hidden md:block border-solid border-r-2 border-gray-200 m-20"
+        />
         <LandingPageContextImage label="Après"
           ><img src="./assets/after.jpg"
         /></LandingPageContextImage>

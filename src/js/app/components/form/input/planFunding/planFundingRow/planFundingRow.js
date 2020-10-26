@@ -64,7 +64,8 @@ export default {
   },
 
   data() {
-    const showRealAmount = this.inputMode !== "default" || !this.isCurrentYear();
+    const showRealAmount =
+      this.inputMode !== "default" || !this.isCurrentYear();
     const allowEdition = !Number.isFinite(this.value.realAmount);
 
     return {
@@ -92,7 +93,8 @@ export default {
   watch: {
     // two-way binding
     value() {
-      this.showRealAmount = this.inputMode !== "default" || !this.isCurrentYear();
+      this.showRealAmount =
+        this.inputMode !== "default" || !this.isCurrentYear();
       this.allowEdition = !Number.isFinite(this.value.realAmount);
       this.type = this.value.type;
       this.amount = this.value.amount;

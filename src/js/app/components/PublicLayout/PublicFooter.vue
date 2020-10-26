@@ -8,7 +8,9 @@
             <li><h4>Contactez l’équipe du projet</h4></li>
             <li>
               <h4>
-                <a class="underline" href="mailto:contact@resorption-bidonvilles.beta.gouv.fr"
+                <a
+                  class="underline"
+                  href="mailto:contact@resorption-bidonvilles.beta.gouv.fr"
                   >contact@resorption-bidonvilles.beta.gouv.fr</a
                 >
               </h4>
@@ -16,18 +18,24 @@
           </ul>
 
           <ul>
-            <li><router-link to="/statistiques-publiques">Statistiques</router-link></li>
-            <li><router-link to="/mentions-legales">Mentions légales</router-link></li>
+            <li>
+              <router-link to="/statistiques-publiques"
+                >Statistiques</router-link
+              >
+            </li>
+            <li>
+              <router-link to="/mentions-legales">Mentions légales</router-link>
+            </li>
             <li>
               <router-link to="/typologie-des-acces"
-                ><font-awesome-icon icon="file-pdf"></font-awesome-icon>&nbsp;Guide des accès et de
-                l'administrateur</router-link
+                ><font-awesome-icon icon="file-pdf"></font-awesome-icon
+                >&nbsp;Guide des accès et de l'administrateur</router-link
               >
             </li>
             <li>
               <router-link to="/charte-d-engagement"
-                ><font-awesome-icon icon="file-pdf"></font-awesome-icon>&nbsp;Charte d'engagement de
-                l'utilisateur</router-link
+                ><font-awesome-icon icon="file-pdf"></font-awesome-icon
+                >&nbsp;Charte d'engagement de l'utilisateur</router-link
               >
             </li>
           </ul>

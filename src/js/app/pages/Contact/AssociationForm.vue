@@ -8,12 +8,17 @@
       id="association"
     >
       <optgroup label="Autre">
-        <option value="Autre">Mon association n'est pas dans cette liste</option>
+        <option value="Autre"
+          >Mon association n'est pas dans cette liste</option
+        >
       </optgroup>
       <optgroup label="Associations connues">
-        <option v-for="item in associationNameOptions" :key="item.value" :value="item.value">{{
-          item.label
-        }}</option>
+        <option
+          v-for="item in associationNameOptions"
+          :key="item.value"
+          :value="item.value"
+          >{{ item.label }}</option
+        >
       </optgroup>
     </Select>
     <div v-if="associationName === 'Autre'">
@@ -89,7 +94,10 @@ export default {
     };
   },
   async mounted() {
-    const [{ organizations: associations }, { departements }] = await Promise.all([
+    const [
+      { organizations: associations },
+      { departements }
+    ] = await Promise.all([
       getOrganizationsByCategory("association"),
       listDepartements()
     ]);

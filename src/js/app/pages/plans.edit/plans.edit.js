@@ -108,12 +108,16 @@ export default {
                   mandatory: true,
                   disabled: true,
                   options: [
-                    { value: "shantytowns", label: "sur site(s) : bidonville ou squat" },
+                    {
+                      value: "shantytowns",
+                      label: "sur site(s) : bidonville ou squat"
+                    },
                     { value: "location", label: "sur terrain d'insertion" },
                     { value: "housing", label: "dans le logement" },
                     {
                       value: "other",
-                      label: "dans plusieurs lieux (hébergement, permanence, rue...)"
+                      label:
+                        "dans plusieurs lieux (hébergement, permanence, rue...)"
                     }
                   ]
                 },
@@ -158,19 +162,29 @@ export default {
                       const p = getMembersOfCategory("public_establishment");
                       const p2 = p.then(({ users }) =>
                         users
-                          .filter(({ first_name: firstName, last_name: lastName }) =>
-                            [firstName, lastName].some(value =>
-                              d
-                                .split(" ")
-                                .every(
-                                  part => value.toLowerCase().indexOf(part.toLowerCase()) !== -1
-                                )
-                            )
+                          .filter(
+                            ({ first_name: firstName, last_name: lastName }) =>
+                              [firstName, lastName].some(value =>
+                                d
+                                  .split(" ")
+                                  .every(
+                                    part =>
+                                      value
+                                        .toLowerCase()
+                                        .indexOf(part.toLowerCase()) !== -1
+                                  )
+                              )
                           )
-                          .map(({ id, first_name: firstName, last_name: lastName }) => ({
-                            id,
-                            label: `${firstName} ${lastName.toUpperCase()}`
-                          }))
+                          .map(
+                            ({
+                              id,
+                              first_name: firstName,
+                              last_name: lastName
+                            }) => ({
+                              id,
+                              label: `${firstName} ${lastName.toUpperCase()}`
+                            })
+                          )
                       );
                       p2.abort = p.abort;
 
@@ -269,7 +283,10 @@ export default {
                   label: plan.location.address
                 },
                 location: {
-                  coordinates: [plan.location.latitude, plan.location.longitude],
+                  coordinates: [
+                    plan.location.latitude,
+                    plan.location.longitude
+                  ],
                   zoom: 15
                 }
               }
@@ -292,12 +309,14 @@ export default {
           this.formData.contact = plan.operator_contacts[0].id;
           this.formData.finances = plan.finances.map(({ year, data }) => ({
             year,
-            data: data.map(({ type: { uid }, amount, details, realAmount }) => ({
-              type: uid,
-              amount,
-              details,
-              realAmount
-            }))
+            data: data.map(
+              ({ type: { uid }, amount, details, realAmount }) => ({
+                type: uid,
+                amount,
+                details,
+                realAmount
+              })
+            )
           }));
 
           this.plan = plan;

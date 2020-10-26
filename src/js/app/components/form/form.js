@@ -129,7 +129,8 @@ export default {
                 ...step,
                 classNames: {
                   "form-breadcrumbItem": true,
-                  "form-breadcrumbItem--current": stepIndex === this.currentStepIndex,
+                  "form-breadcrumbItem--current":
+                    stepIndex === this.currentStepIndex,
                   "form-breadcrumbItem--done": stepIndex < this.currentStepIndex
                 },
                 isSeparator: false,
@@ -229,7 +230,13 @@ export default {
 
       return Object.keys(this.errors.fields || {})
         .filter(inputId => this.inputs[inputId] !== undefined)
-        .reduce((errors, inputId) => ({ ...errors, [inputId]: this.errors.fields[inputId] }), {});
+        .reduce(
+          (errors, inputId) => ({
+            ...errors,
+            [inputId]: this.errors.fields[inputId]
+          }),
+          {}
+        );
     },
 
     /**

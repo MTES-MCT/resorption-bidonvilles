@@ -38,7 +38,10 @@ export default {
   methods: {
     load() {
       // ensure we are not already loading or loaded
-      if (this.loading.status === "loading" || this.loading.status === "loaded") {
+      if (
+        this.loading.status === "loading" ||
+        this.loading.status === "loaded"
+      ) {
         return;
       }
 
@@ -59,7 +62,8 @@ export default {
         })
         .catch(error => {
           this.loading.status = "failed";
-          this.loading.error = (error && error.user_message) || "Une erreur inconnue est survenue";
+          this.loading.error =
+            (error && error.user_message) || "Une erreur inconnue est survenue";
         })
         .then(() => {
           clearTimeout(this.loading.slowTimeout);

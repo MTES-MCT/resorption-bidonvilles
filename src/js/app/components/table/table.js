@@ -109,7 +109,9 @@ export default {
       return Object.keys(this.parsedFilters).reduce(
         (acc, columnId) => ({
           ...acc,
-          [columnId]: this.parsedFilters[columnId].filter(({ checked }) => checked === true)
+          [columnId]: this.parsedFilters[columnId].filter(
+            ({ checked }) => checked === true
+          )
         }),
         {}
       );
@@ -155,7 +157,10 @@ export default {
      * @returns {Number}
      */
     indexOfLastPage() {
-      return Math.max(0, Math.ceil(this.filteredContent.length / this.itemsPerPage) - 1);
+      return Math.max(
+        0,
+        Math.ceil(this.filteredContent.length / this.itemsPerPage) - 1
+      );
     },
 
     /**
@@ -164,7 +169,9 @@ export default {
      * @returns {Number}
      */
     indexOfFirstRowInCurrentPage() {
-      return this.filteredContent.length > 0 ? this.currentPage * this.itemsPerPage + 1 : 0;
+      return this.filteredContent.length > 0
+        ? this.currentPage * this.itemsPerPage + 1
+        : 0;
     },
 
     /**

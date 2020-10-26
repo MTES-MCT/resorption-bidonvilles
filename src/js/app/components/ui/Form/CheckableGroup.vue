@@ -1,5 +1,10 @@
 <template>
-  <ValidationProvider :rules="rules" :name="validationName || title" v-slot="{ errors }" :vid="id">
+  <ValidationProvider
+    :rules="rules"
+    :name="validationName || title"
+    v-slot="{ errors }"
+    :vid="id"
+  >
     <CheckableGroupWrapper :title="title" :info="info" :id="id">
       <div :class="'flex flex-col relative'">
         <div v-if="error" class="absolute h-full bg-error leftBorder" />

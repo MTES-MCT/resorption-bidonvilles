@@ -70,8 +70,9 @@
 
       <StatsSection title="Fréquence de mise à jour" class="mt-16">
         <template v-slot:info
-          ><span class="text-secondary"><font-awesome-icon icon="sync"/></span> La mise à jour
-          régulière des données garantissent des informations justes à tous les acteurs.</template
+          ><span class="text-secondary"><font-awesome-icon icon="sync"/></span>
+          La mise à jour régulière des données garantissent des informations
+          justes à tous les acteurs.</template
         >
         <template v-slot:default>
           <StatsBlock
@@ -125,24 +126,29 @@ export default {
     },
 
     numberOfCollaboratorAndAssociationUsers() {
-      return this.stats ? this.stats.numberOfCollaboratorAndAssociationUsers : "...";
+      return this.stats
+        ? this.stats.numberOfCollaboratorAndAssociationUsers
+        : "...";
     },
 
     numberOfTerritorialCollectivities() {
       return this.stats
-        ? this.stats.numberOfCollaboratorAndAssociationOrganizations.territorial_collectivity || 0
+        ? this.stats.numberOfCollaboratorAndAssociationOrganizations
+            .territorial_collectivity || 0
         : "...";
     },
 
     numberOfAssociations() {
       return this.stats
-        ? this.stats.numberOfCollaboratorAndAssociationOrganizations.association || 0
+        ? this.stats.numberOfCollaboratorAndAssociationOrganizations
+            .association || 0
         : "...";
     },
 
     numberOfPublicEstablishments() {
       return this.stats
-        ? this.stats.numberOfCollaboratorAndAssociationOrganizations.public_establishment || 0
+        ? this.stats.numberOfCollaboratorAndAssociationOrganizations
+            .public_establishment || 0
         : "...";
     },
 
@@ -169,7 +175,9 @@ export default {
 
       const cumulativeData = this.numberOfNewUsersPerMonth.reduce(
         (acc, { total }, index) =>
-          index === 0 ? [parseInt(total, 10)] : [...acc, parseInt(total, 10) + acc[acc.length - 1]],
+          index === 0
+            ? [parseInt(total, 10)]
+            : [...acc, parseInt(total, 10) + acc[acc.length - 1]],
         []
       );
 
@@ -187,7 +195,10 @@ export default {
         return 0;
       }
 
-      const max = this.numberOfNewUsersPerMonth.reduce((m, { total }) => Math.max(m, total), 0);
+      const max = this.numberOfNewUsersPerMonth.reduce(
+        (m, { total }) => Math.max(m, total),
+        0
+      );
       return Math.ceil(max / 10) * 10;
     },
 
@@ -214,7 +225,8 @@ export default {
 
     meanTimeBeforeCreationDeclaration() {
       return this.stats
-        ? Math.round(this.stats.meanTimeBeforeCreationDeclaration.average) || "?"
+        ? Math.round(this.stats.meanTimeBeforeCreationDeclaration.average) ||
+            "?"
         : "...";
     },
 

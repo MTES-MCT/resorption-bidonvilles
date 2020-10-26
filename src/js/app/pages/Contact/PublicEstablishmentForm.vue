@@ -8,9 +8,12 @@
       id="organization_type"
     >
       <SelectOption value="none">- Selectionner un choix -</SelectOption>
-      <SelectOption v-for="item in orgTypesOptions" :key="item.value" :value="item.value">{{
-        item.label
-      }}</SelectOption>
+      <SelectOption
+        v-for="item in orgTypesOptions"
+        :key="item.value"
+        :value="item.value"
+        >{{ item.label }}</SelectOption
+      >
     </Select>
     <Select
       label="Territoire de rattachement"
@@ -20,7 +23,11 @@
       id="organization_public"
     >
       <SelectOption>- Selectionner un choix -</SelectOption>
-      <SelectOption v-for="item in orgTerritoryOptions" :key="item.value" :value="item.value">
+      <SelectOption
+        v-for="item in orgTerritoryOptions"
+        :key="item.value"
+        :value="item.value"
+      >
         {{ item.label }}
       </SelectOption>
     </Select>
@@ -84,7 +91,9 @@ export default {
         if (level === "nation") {
           label = "France";
         } else if (level === "departement") {
-          label = `${organization[`${level}_code`]} - ${organization[`${level}_name`]}`;
+          label = `${organization[`${level}_code`]} - ${
+            organization[`${level}_name`]
+          }`;
         }
 
         return {

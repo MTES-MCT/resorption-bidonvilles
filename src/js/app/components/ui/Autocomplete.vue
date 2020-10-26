@@ -44,7 +44,9 @@
               <Spinner v-if="loading" />
               <div @click="removeItem" class="cursor-pointer ">
                 <Icon
-                  v-if="!loading && value && getResultValue(value) === searchInput"
+                  v-if="
+                    !loading && value && getResultValue(value) === searchInput
+                  "
                   icon="times"
                 />
               </div>
@@ -69,7 +71,11 @@
                       Aucun résultats
                     </MenuItem>
                   </Menu>
-                  <Menu v-else v-bind="resultListProps" v-on="resultListListeners">
+                  <Menu
+                    v-else
+                    v-bind="resultListProps"
+                    v-on="resultListListeners"
+                  >
                     <MenuItem
                       v-for="(result, index) in results"
                       :key="resultProps[index].id"
