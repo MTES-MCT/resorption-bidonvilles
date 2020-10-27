@@ -16,6 +16,9 @@
     "ecmaVersion": 2020
   },
   "ignorePatterns": ["node_modules/"],
+  "rules": {
+    "prettier/prettier": ["error", { "singleQuote": true, "printWidth": 100 }]
+  },
   "overrides": [
     {
       "files": "cypress/**/*.js",
