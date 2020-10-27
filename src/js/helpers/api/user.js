@@ -44,11 +44,14 @@ export function refreshToken() {
 export function logout(piwik) {
     unloadConfig();
     localStorage.removeItem('token');
-    piwik.resetUserId();
-    piwik.setCustomVariable(1, 'superuser', null);
-    piwik.setCustomVariable(2, 'structure', null);
-    piwik.setCustomVariable(3, 'niveau_geo', null);
-    piwik.setCustomVariable(4, 'geo_nom', null);
+
+    if (piwik) {
+        piwik.resetUserId();
+        piwik.setCustomVariable(1, 'superuser', null);
+        piwik.setCustomVariable(2, 'structure', null);
+        piwik.setCustomVariable(3, 'niveau_geo', null);
+        piwik.setCustomVariable(4, 'geo_nom', null);
+    }
 }
 
 /**

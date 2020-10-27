@@ -117,7 +117,7 @@ export default {
                                         { value: 'shantytowns', label: 'sur site(s) : bidonville ou squat' },
                                         { value: 'location', label: 'sur terrain d\'insertion' },
                                         { value: 'housing', label: 'dans le logement' },
-                                        { value: 'other', label: 'dans plusieurs lieux (hébergement, permanence, plusieurs sites...)' },
+                                        { value: 'other', label: 'dans plusieurs lieux (hébergement, permanence, rue...)' },
                                     ],
                                 },
                                 locationShantytowns: {

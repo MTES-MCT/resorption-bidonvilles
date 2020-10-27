@@ -21,7 +21,7 @@ export default {
         data.formDefinition = {
             title: '',
             descriptionTitle: 'À quoi sert le suivi ?',
-            description: 'Les indicateurs de suivi permettent d’<strong>observer l\'évolution de l\'accès au droit commun et l\'insertion</strong> du groupe de personnes accompagnées. Ces informations facilitent le pilotage local et national.<br/>Dans le cadre des bilans semestriels réalisés par la <a href="https://www.gouvernement.fr/resorption-des-bidonvilles" class="link">Dihal</a>, une actualisation des données est à effectuer <strong>fin juin et fin décembre.</strong>',
+            description: 'Les indicateurs de suivi permettent d’<strong>observer l\'évolution de l\'accès au droit commun et l\'insertion</strong> du groupe de personnes accompagnées. Ces informations facilitent le pilotage local et national.',
             steps: [
                 {
                     title: 'Dispositf',
@@ -212,7 +212,7 @@ export default {
                     },
                     lycees: {
                         type: 'number',
-                        label: 'Enfants inscrits au lycée',
+                        label: 'Enfants inscrits au lycée - formation professionnelle',
                         mandatory: false,
                         condition({ date }) {
                             return !!date;
