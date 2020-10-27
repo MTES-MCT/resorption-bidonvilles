@@ -15,6 +15,7 @@
   "parserOptions": {
     "ecmaVersion": 2020
   },
+  "ignorePatterns": ["node_modules/"],
   "overrides": [
     {
       "files": "cypress/**/*.js",

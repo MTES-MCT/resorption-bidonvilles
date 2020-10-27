@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
+    "lint": "vue-cli-service lint src cypress docs",
     "deploy": "deploy() { git fetch origin \"refs/tags/$1:refs/tags/$1\"; git checkout $1; } && deploy",
     "dev": "vue-cli-service serve --port 1234",
     "release": "release() { git reset HEAD .; rm -rf dist; echo \"\\\"$1\\\"\" > src/js/version.json; yarn build; git add dist src/js/version.json; git commit -m \"📦 Release v$1\"; git tag \"v$1\"; git push origin HEAD; git push origin \"v$1\"; } && release",
