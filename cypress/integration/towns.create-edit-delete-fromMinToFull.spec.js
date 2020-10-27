@@ -17,7 +17,7 @@ describe("Gestion des sites", () => {
             cy.get("[data-cy-button='submit']").click();
 
             // assert
-            cy.get(".notification-content").should(
+            cy.get(".vue-notification").should(
               "contain",
               "La déclaration du site a réussi"
             );
@@ -36,7 +36,7 @@ describe("Gestion des sites", () => {
               cy.get("[data-cy-field='submit']").click();
 
               // assert
-              cy.get(".notification-content").should(
+              cy.get(".vue-notification").should(
                 "contain",
                 "Le site a bien été modifié"
               );
