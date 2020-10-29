@@ -4,7 +4,7 @@
     <CheckableCard v-if="variant === 'card'" :isChecked="isChecked">
       <input
         type="checkbox"
-        class="appearance-none"
+        class="appearance-none absolute invisible"
         v-bind="filteredProps"
         :checked="isChecked"
         @change="onChange"
