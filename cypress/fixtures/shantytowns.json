@@ -68,7 +68,7 @@
         "sanitary_comments": null,
         "trash_evacuation": "Inconnu",
         "owner_complaint": "Inconnu",
-        "justice_procedure": null,
+        "justice_procedure": "Inconnu",
         "justice_rendered": null,
         "justice_rendered_by": null,
         "justice_rendered_at": null,

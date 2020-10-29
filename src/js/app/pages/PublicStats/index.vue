@@ -29,13 +29,16 @@
         <StatsBlock
           :title="numberOfNewUsers.total"
           icon="user-plus"
-          :subtitle="'nouveaux utilisateurs en ' + numberOfNewUsers.month"
+          :subtitle="
+            'nouveaux utilisateurs en ' + numberOfNewUsers.month.toLowerCase()
+          "
         />
       </StatsSection>
 
       <div v-if="numberOfNewUsersPerMonth !== null">
         <h2 class="text-display-lg text-secondary mt-16">
-          Nouveaux utilisateurs depuis {{ numberOfNewUsersPerMonth[0].month }}
+          Nombre d' utilisateurs depuis
+          {{ numberOfNewUsersPerMonth[0].month.toLowerCase() }}
         </h2>
         <TrendChart
           class="stats-chart"

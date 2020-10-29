@@ -1,8 +1,10 @@
 <template>
   <div>
-    <h2 class="text-display-lg">{{ $t("landingPage.thirdSection.title") }}</h2>
-    <div class="max-w-screen-sm mx-auto mt-8">
-      <div>
+    <div class="max-w-screen-sm mx-auto">
+      <h2 class="text-display-lg">
+        {{ $t("landingPage.thirdSection.title") }}
+      </h2>
+      <div class=" mt-8">
         <span class="font-bold">{{
           $t("landingPage.thirdSection.firstParagraph.bold")
         }}</span>
@@ -51,10 +53,11 @@
       </div>
     </div>
     <div class="mt-32">
-      <h2 class="text-display-lg">
-        {{ $t("landingPage.thirdSection.secondParagraph.title") }}
-      </h2>
       <div class="max-w-screen-sm mx-auto">
+        <h2 class="text-display-lg">
+          {{ $t("landingPage.thirdSection.secondParagraph.title") }}
+        </h2>
+
         <div class="mt-4">
           {{ $t("landingPage.thirdSection.secondParagraph.body.text1") }}
           <a
@@ -69,7 +72,7 @@
           <a
             class="link"
             href="https://beta.gouv.fr/startups/resorption-bidonvilles.html"
-            >{{ $t("landingPage.thirdSection.secondParagraph.body.link2") }}</a
+            >{{ $t("landingPage.thirdSection.secondParagraph.body.link2") }}.</a
           >
         </div>
 
@@ -90,7 +93,13 @@
               {{ $t("landingPage.thirdSection.secondParagraph.items.1.text") }}
             </li>
             <li>
-              {{ $t("landingPage.thirdSection.secondParagraph.items.2.text") }}
+              <a
+                class="link"
+                href="https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/how-to-participate/org-details/999999999/project/881989/program/31076817/details"
+                >{{
+                  $t("landingPage.thirdSection.secondParagraph.items.2.link")
+                }}</a
+              >{{ $t("landingPage.thirdSection.secondParagraph.items.2.text") }}
             </li>
             <li>
               <a
@@ -101,6 +110,16 @@
                 }}</a
               >
               {{ $t("landingPage.thirdSection.secondParagraph.items.3.text") }}
+            </li>
+            <li>
+              <a
+                class="link"
+                href="https://www.modernisation.gouv.fr/action-publique-2022/fonds-pour-la-transformation-de-laction-publique/ftap-112-millions-deuros-pour-les-19-projets-laureats"
+                >{{
+                  $t("landingPage.thirdSection.secondParagraph.items.4.link")
+                }}</a
+              >
+              {{ $t("landingPage.thirdSection.secondParagraph.items.4.text") }}
             </li>
           </ul>
         </div>

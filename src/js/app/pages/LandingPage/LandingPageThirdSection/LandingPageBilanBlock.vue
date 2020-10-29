@@ -26,8 +26,7 @@ export default {
       required: true
     },
     info: {
-      type: String,
-      required: true
+      type: String
     }
   }
 };

@@ -1,6 +1,9 @@
 <template>
   <div>
-    <NavBar :stickyHeader="stickyHeader" />
+    <NavBar
+      :stickyHeader="stickyHeader"
+      :displayLanguagePicker="displayLanguagePicker"
+    />
     <slot />
     <PublicFooter />
   </div>
@@ -15,6 +18,10 @@ export default {
     stickyHeader: {
       type: Boolean,
       default: true
+    },
+    displayLanguagePicker: {
+      type: Boolean,
+      default: false
     }
   },
   components: {

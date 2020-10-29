@@ -477,7 +477,7 @@
                                 <p v-if="town.ownerComplaint !== undefined">
                                     <strong>Dépôt de plainte par le propriétaire :</strong> <span data-cy-data="owner_complaint">{{ town.ownerComplaint === null ? 'Inconnu' : (town.ownerComplaint ? 'Oui' : 'Non') }}</span>
                                 </p>
-                                <p v-if="town.ownerComplaint && town.justiceProcedure !== undefined">
+                                <p v-if="town.justiceProcedure !== undefined">
                                     <strong>Existence d’une procédure judiciaire :</strong> <span data-cy-data="justice_procedure">{{ town.justiceProcedure === null ? 'Inconnu' : (town.justiceProcedure ? 'Oui' : 'Non') }}</span>
                                 </p>
                                 <p v-if="town.justiceProcedure && town.justiceRendered !== undefined">
@@ -717,14 +717,13 @@
                             <div class="form__group">
                                 <fieldset>
                                     <legend>Origines :</legend>
-                                    <div v-if="parseInt(edit.populationTotal, 10) > 10">
+                                    <div>
                                         <p>Ne rien cocher si l'information est inconnue</p>
                                         <div v-for="(origin, index) in socialOrigins">
                                             <input data-cy-field="social_origins" :data-cy-label="origin.label" type="checkbox" :id="'socialOrigins' + index" :value="origin.id" v-model="edit.origins">
                                             <label :for="'socialOrigins' + index" class="label-inline">{{ origin.label }}</label>
                                         </div>
                                     </div>
-                                    <p v-else class="notification warning">Pour les sites de 10 personnes ou moins, l'origine des habitants ne peut être précisée conformément à la réglementation relative aux données à caractère personnel</p>
                                 </fieldset>
                             </div>
                         </div>
@@ -852,7 +851,7 @@
                                 </div>
                             </div>
 
-                            <div class="form__group" v-if="edit.owner_complaint === 1">
+                            <div class="form__group">
                                 <label v-bind:class="{ error: fieldErrors.justice_procedure }">Procédure judiciaire en cours :</label>
                                 <p class="error" v-if="fieldErrors.justice_procedure">
                                     <ul>
@@ -865,7 +864,7 @@
                                 </div>
                             </div>
 
-                            <div class="form__group" v-if="edit.owner_complaint === 1 && edit.justiceProcedure === 1">
+                            <div class="form__group" v-if="edit.justiceProcedure === 1">
                                 <label v-bind:class="{ error: fieldErrors.justice_rendered }">Décision de justice rendue :</label>
                                 <p class="error" v-if="fieldErrors.justice_rendered">
                                     <ul>
@@ -878,7 +877,7 @@
                                 </div>
                             </div>
 
-                            <div class="form__group" v-if="edit.owner_complaint === 1 && edit.justiceProcedure === 1 && edit.justice_rendered === 1">
+                            <div class="form__group" v-if="edit.justiceProcedure === 1 && edit.justice_rendered === 1">
                                 <fieldset>
                                     <legend v-bind:class="{ error: fieldErrors.justice_rendered_by }">Origine de la décision :</legend>
                                     <p class="error" v-if="fieldErrors.justice_rendered_by">
@@ -892,7 +891,7 @@
                                 </fieldset>
                             </div>
 
-                            <div class="form__group" v-if="edit.owner_complaint === 1 && edit.justiceProcedure === 1 && edit.justice_rendered === 1">
+                            <div class="form__group" v-if="edit.justiceProcedure === 1 && edit.justice_rendered === 1">
                                 <label v-bind:class="{ error: fieldErrors.justice_rendered_at }">Date de la décision :</label>
                                 <p class="error" v-if="fieldErrors.justice_rendered_at">
                                     <ul>
@@ -902,7 +901,7 @@
                                 <datepicker data-cy-field="justice_rendered_at" :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" v-model="edit.justice_rendered_at" :full-month-name="true" :format="'dd MMMM yyyy'"></datepicker>
                             </div>
 
-                            <div class="form__group" v-if="edit.owner_complaint === 1 && edit.justiceProcedure === 1 && edit.justice_rendered === 1">
+                            <div class="form__group" v-if="edit.justiceProcedure === 1 && edit.justice_rendered === 1">
                                 <label v-bind:class="{ error: fieldErrors.justice_challenged }">Contentieux relatif à la décision de justice :</label>
                                 <p class="error" v-if="fieldErrors.justice_challenged">
                                     <ul>

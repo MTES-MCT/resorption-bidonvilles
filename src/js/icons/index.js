@@ -1,5 +1,9 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
+  faTwitterSquare,
+  faFacebookSquare
+} from "@fortawesome/free-brands-svg-icons";
+import {
   faFlag,
   faPaperPlane,
   faUnlink,
@@ -114,4 +118,6 @@ library.add(faChevronRight);
 library.add(faArrowLeft);
 library.add(faArrowRight);
 library.add(faSpinner);
+library.add(faTwitterSquare);
+library.add(faFacebookSquare);
 library.add(faSearch);

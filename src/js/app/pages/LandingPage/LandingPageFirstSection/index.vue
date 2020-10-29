@@ -15,6 +15,20 @@
       </LandingPageResponsiveEmbed>
     </div>
     <div>
+      <div class="mt-24">
+        <div class="max-w-screen-sm mx-auto">
+          <div class="text-display-lg font-normal">
+            {{ $t("landingPage.firstSection.context.title") }}
+          </div>
+          <div class="text-display-lg">
+            {{ $t("landingPage.firstSection.context.subtitle") }}
+          </div>
+          <div class="mt-4">
+            {{ $t("landingPage.firstSection.context.text") }}
+          </div>
+        </div>
+      </div>
+
       <div class="md:grid md:grid-cols-3 gap-16 mt-16">
         <LandingPageFeatureBlock icon="map-marked-alt">{{
           $t("landingPage.firstSection.features.position")
@@ -26,27 +40,23 @@
           $t("landingPage.firstSection.features.exchange")
         }}</LandingPageFeatureBlock>
       </div>
-      <div class="mt-24">
-        <div class="text-display-lg font-normal">
-          {{ $t("landingPage.firstSection.context.title") }}
-        </div>
-        <div class="text-display-lg">
-          {{ $t("landingPage.firstSection.context.subtitle") }}
-        </div>
-        <div class="max-w-screen-sm mx-auto mt-4">
-          <div>{{ $t("landingPage.firstSection.context.text") }}</div>
-        </div>
-      </div>
 
       <div class="md:flex md:flex-row mt-16">
-        <LandingPageContextImage label="Avant"
-          ><img src="./assets/before.jpg"
+        <LandingPageContextImage :label="$t('landingPage.firstSection.before')">
+          <img v-if="$i18n.locale === 'fr'" src="./assets/fr/before.jpg"/>
+          <img v-if="$i18n.locale === 'en'" src="./assets/en/before.jpg"/>
+          <img v-if="$i18n.locale === 'bg'" src="./assets/bg/before.jpg"/>
+          <img v-if="$i18n.locale === 'ro'" src="./assets/ro/before.jpg"
         /></LandingPageContextImage>
         <div
           class="hidden md:block border-solid border-r-2 border-gray-200 m-20"
         />
-        <LandingPageContextImage label="Après"
-          ><img src="./assets/after.jpg"
+        <LandingPageContextImage :label="$t('landingPage.firstSection.after')">
+          <img v-if="$i18n.locale === 'fr'" src="./assets/fr/after.jpg"/><img
+            v-if="$i18n.locale === 'en'"
+            src="./assets/en/after.jpg"/>
+          <img v-if="$i18n.locale === 'bg'" src="./assets/bg/after.jpg"/>
+          <img v-if="$i18n.locale === 'ro'" src="./assets/ro/after.jpg"
         /></LandingPageContextImage>
       </div>
       <LandingPageUserFeedback class="mt-32" />

@@ -22,15 +22,12 @@
 
         <NavBarMobileButton class="md:hidden" :onClick="toggleMenu" />
       </header>
-
-      <NavBarMobileMenu v-if="menuDisplayed" :closeMenu="closeMenu" />
     </PublicContainer>
   </div>
 </template>
 
 <script>
 import NavBarLogo from "./NavBarLogo.vue";
-import NavBarMobileMenu from "./NavBarMobileMenu.vue";
 import NavBarMobileButton from "./NavBarMobileButton.vue";
 import PublicContainer from "../PublicContainer.vue";
 import Button from "#app/components/ui/Button.vue";
@@ -44,16 +41,11 @@ export default {
     toggleMenu: {
       type: Function,
       required: true
-    },
-    closeMenu: {
-      type: Function,
-      required: true
     }
   },
   components: {
     NavBarLogo,
     Button,
-    NavBarMobileMenu,
     NavBarMobileButton,
     PublicContainer
   }

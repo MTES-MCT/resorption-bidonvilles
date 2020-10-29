@@ -5,7 +5,9 @@
         <div class="md:flex flex-row justify-between">
           <ul>
             <li><font-awesome-icon icon="envelope"></font-awesome-icon></li>
-            <li><h4>Contactez l’équipe du projet</h4></li>
+            <li>
+              <h4>{{ $t("footer.contact") }}</h4>
+            </li>
             <li>
               <h4>
                 <a
@@ -19,24 +21,14 @@
 
           <ul>
             <li>
-              <router-link to="/statistiques-publiques"
-                >Statistiques</router-link
-              >
+              <router-link to="/statistiques-publiques">{{
+                $t("footer.statistics")
+              }}</router-link>
             </li>
             <li>
-              <router-link to="/mentions-legales">Mentions légales</router-link>
-            </li>
-            <li>
-              <router-link to="/typologie-des-acces"
-                ><font-awesome-icon icon="file-pdf"></font-awesome-icon
-                >&nbsp;Guide des accès et de l'administrateur</router-link
-              >
-            </li>
-            <li>
-              <router-link to="/charte-d-engagement"
-                ><font-awesome-icon icon="file-pdf"></font-awesome-icon
-                >&nbsp;Charte d'engagement de l'utilisateur</router-link
-              >
+              <router-link to="/mentions-legales">{{
+                $t("footer.legal")
+              }}</router-link>
             </li>
           </ul>
         </div>

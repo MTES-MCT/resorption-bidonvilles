@@ -1,5 +1,5 @@
 <template>
-  <div class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg">
+  <div class="origin-top-right right-0 mt-2 w-48 rounded-md shadow-lg">
     <Menu>
       <MenuItem>
         <router-link to="/connexion">
@@ -12,25 +12,29 @@
           {{ $t("landingPage.header.contact") }}
         </router-link>
       </MenuItem>
+      <MenuItem>
+        <LanguagePicker />
+      </MenuItem>
     </Menu>
   </div>
 </template>
 
 <script>
-import Menu from "#app/components/ui/Menu/Menu.vue";
-import MenuItem from "#app/components/ui/Menu/MenuItem.vue";
+import Menu from "#app/components/ui/Menu/Menu";
+import MenuItem from "#app/components/ui/Menu/MenuItem";
+import LanguagePicker from "./LanguagePicker";
 
 export default {
   props: {
     closeMenu: {
       required: true,
       type: Function
+    },
+    displayLanguagePicker: {
+      type: Boolean
     }
   },
-  components: {
-    Menu,
-    MenuItem
-  },
+  components: { LanguagePicker, Menu, MenuItem },
   mounted() {
     // Delay listener, otherwise the check happens before the menu is rendered and close the menu immediately
     setTimeout(() => {
