@@ -5,7 +5,7 @@
   },
   "hero": {
     "title": "Acționăm pentru dizolvarea platzurilor",
-    "subtitle": "Puneți o întrebare sau solicitațiaccesul"
+    "subtitle": "Puneți o întrebare sau solicitați accesul"
   },
   "firstSection": {
     "features": {
@@ -30,7 +30,7 @@
         "author": "Orașul Poitiers"
       },
       "3": {
-        "text": "Am fost în măsură să direcționez familia unei persoane pe care o acomapaniez la o casăde solidaritate de la locația lor situata pe un platz.",
+        "text": "Am fost în măsură să direcționez familia unei persoane pe care o acomapaniez la o casă de solidaritate de la locația lor situata pe un platz.",
         "author": "Asociația din Haute-Garonne"
       }
     }
@@ -104,8 +104,8 @@
         "text1": "Platforma digitală Dizolvarea platzurilor, lansată în 2018 de",
         "link1": "Dihal",
         "text2": "face parte dintr-un obiectiv de transformare a acțiunii publice.",
-        "text3": "Les développements de la plateforme se poursuivent en lien étroit avec ses usagers.",
-        "text4": "Evoluțiile platformei continuă în strânsă colaborare cu utilizatorii săi. Doriți să aflați mai multe despre crearea proiectului? Accesați fişa proiectulu",
+        "text3": "Evoluțiile platformei continuă în strânsă colaborare cu utilizatorii săi.",
+        "text4": "Doriți să aflați mai multe despre crearea proiectului? Accesați fişa proiectulu",
         "link2": "pe site-ul oficial:  Start-Up de stat"
       },
       "items": {
