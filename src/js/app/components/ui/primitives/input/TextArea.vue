@@ -3,6 +3,7 @@
         <InputLabel :label="label" :info="info" />
         <ValidationProvider :rules="rules" :name="validationName || label" v-slot="{ errors }" :vid="id">
             <textarea
+                   :rows="rows"
                    :id="id"
                    @input="$emit('input', $event.target.value)"
                    v-bind="$props"
@@ -45,6 +46,10 @@ export default {
         },
         validationName: {
             type: String
+        },
+        rows: {
+          type: Number,
+          default: 8
         },
         id: {
             type: String

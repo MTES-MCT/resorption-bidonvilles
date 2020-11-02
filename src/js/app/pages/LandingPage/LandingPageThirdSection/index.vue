@@ -1,8 +1,8 @@
 <template>
     <div>
-        <h2 class="text-display-lg">{{$t('landingPage.thirdSection.title')}}</h2>
-        <div class="max-w-screen-sm mx-auto mt-8">
-            <div><span class="font-bold">{{$t('landingPage.thirdSection.firstParagraph.bold')}}</span> {{$t('landingPage.thirdSection.firstParagraph.normal')}}</div>
+        <div class="max-w-screen-sm mx-auto">
+            <h2 class="text-display-lg">{{$t('landingPage.thirdSection.title')}}</h2>
+            <div class=" mt-8"><span class="font-bold">{{$t('landingPage.thirdSection.firstParagraph.bold')}}</span> {{$t('landingPage.thirdSection.firstParagraph.normal')}}</div>
 
             <div class="flex flex-row items-center my-8">
                 <div class="bg-gray-500 h-px flex-1" />
@@ -27,10 +27,11 @@
             </div>
         </div>
         <div class="mt-32">
-            <h2 class="text-display-lg">
-                {{$t('landingPage.thirdSection.secondParagraph.title')}}
-            </h2>
+
             <div class="max-w-screen-sm mx-auto">
+                <h2 class="text-display-lg">
+                  {{$t('landingPage.thirdSection.secondParagraph.title')}}
+                </h2>
                 <div class="mt-4">
                     {{$t('landingPage.thirdSection.secondParagraph.body.text1')}}
                     <a class="link" href="https://www.ecologie.gouv.fr/resorption-des-campements-illicites-et-des-bidonvilles">{{$t('landingPage.thirdSection.secondParagraph.body.link1')}}</a>,
@@ -39,7 +40,7 @@
                     {{$t('landingPage.thirdSection.secondParagraph.body.text3')}}
                     </span>
                     {{$t('landingPage.thirdSection.secondParagraph.body.text4')}}
-                    <a class="link" href="https://beta.gouv.fr/startups/resorption-bidonvilles.html">{{$t('landingPage.thirdSection.secondParagraph.body.link2')}}</a>
+                    <a class="link" href="https://beta.gouv.fr/startups/resorption-bidonvilles.html">{{$t('landingPage.thirdSection.secondParagraph.body.link2')}}.</a>
                 </div>
 
                 <div class="mt-8">
@@ -47,8 +48,9 @@
 
                     <ul class="list-disc ml-8">
                         <li><a class="link" href="https://entrepreneur-interet-general.etalab.gouv.fr/defis/2019/resorption-bidonvilles.html">{{$t('landingPage.thirdSection.secondParagraph.items.1.link')}}</a> {{$t('landingPage.thirdSection.secondParagraph.items.1.text')}}</li>
-                        <li>{{$t('landingPage.thirdSection.secondParagraph.items.2.text')}}</li>
+                        <li><a class="link" href="https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/how-to-participate/org-details/999999999/project/881989/program/31076817/details">{{$t('landingPage.thirdSection.secondParagraph.items.2.link')}}</a> {{$t('landingPage.thirdSection.secondParagraph.items.2.text')}}</li>
                         <li><a class="link" href="https://beta.gouv.fr/approche/fast/03-fast.html">{{$t('landingPage.thirdSection.secondParagraph.items.3.link')}}</a> {{$t('landingPage.thirdSection.secondParagraph.items.3.text')}}</li>
+                        <li><a class="link" href="https://www.modernisation.gouv.fr/action-publique-2022/fonds-pour-la-transformation-de-laction-publique/ftap-112-millions-deuros-pour-les-19-projets-laureats">{{$t('landingPage.thirdSection.secondParagraph.items.4.link')}}</a> {{$t('landingPage.thirdSection.secondParagraph.items.4.text')}}</li>
                     </ul>
 
                 </div>

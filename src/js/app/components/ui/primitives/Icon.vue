@@ -1,5 +1,5 @@
 <template>
-    <font-awesome-icon :icon="icon" :spin="spin" />
+    <font-awesome-icon :icon="icon" :spin="spin" v-bind="$attrs" />
 </template>
 
 <script>
@@ -7,7 +7,7 @@
         name: 'Icon',
         props: {
             icon: {
-                type: String,
+                type: [String, Array],
                 required: true
             },
             spin: {
@@ -17,3 +17,5 @@
         },
     }
 </script>
+
+

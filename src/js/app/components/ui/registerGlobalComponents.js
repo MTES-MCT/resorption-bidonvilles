@@ -1,6 +1,11 @@
-import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
+import {
+    ValidationProvider, ValidationObserver, extend, localize,
+} from 'vee-validate';
 import * as rules from 'vee-validate/dist/rules';
-import { messages } from 'vee-validate/dist/locale/fr';
+import fr from 'vee-validate/dist/locale/fr';
+import en from 'vee-validate/dist/locale/en';
+import ro from 'vee-validate/dist/locale/ro';
+import bg from 'vee-validate/dist/locale/bg';
 
 import Button from './primitives/Button.vue';
 import TextInput from './primitives/input/TextInput.vue';
@@ -105,12 +110,16 @@ export default function (vueInstance) {
         ValidationObserver,
     );
 
-    // No message specified.
+    // Vee Validate (Form Validation)
+    localize({
+        en, fr, bg, ro,
+    });
 
     Object.keys(rules).forEach((rule) => {
         extend(rule, {
             ...rules[rule], // copies rule configuration
-            message: messages[rule], // assign message
         });
     });
+
+    localize('fr');
 }

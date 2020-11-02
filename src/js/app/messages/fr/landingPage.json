@@ -13,6 +13,8 @@
       "actions": "L’essentiel des actions accessible à tout moment",
       "exchange": "Des échanges facilités entre les acteurs"
     },
+    "before": "Avant",
+    "after": "Après",
     "context": {
       "title": "Résorption-bidonvilles,",
       "subtitle": "Une plateforme pour accélérer la résorption des bidonvilles",
@@ -21,15 +23,15 @@
     "feedback": {
       "1": {
         "text": "C’est super parce que vous avez l’info en ligne, vous n’êtes pas face à un tableau excel avec des codes que vous ne comprenez pas.",
-        "author": "Préfecture Seine-Saint-Denis"
+        "author": "Chargée de mission en Préfecture de Seine-Saint-Denis"
       },
       "2": {
         "text": "La plateforme a fiabilisé l’information, parce que le tableau Excel n’était pas partagé. Plus on aura des outils collaboratifs, mieux ça sera.",
-        "author": "Ville de Poitiers"
+        "author": "Responsable hygiène publique à la ville de Poitiers"
       },
       "3": {
         "text": "J’ai pu orienter la famille d’une personne que j’accompagne vers une maison des solidarités à partir de la localisation de leur bidonville.",
-        "author": "Association de Haute-Garonne"
+        "author": "Travailleur social au sein d'une association à Toulouse"
       }
     }
   },
@@ -79,20 +81,20 @@
     },
     "bilan": {
       1: {
-        "text": "8 600 bénéficiaires des actions",
+        "text": "8 600 bénéficiaires des actions"
       },
       3: {
-        "text": "1 000 personnes relogées",
+        "text": "1 000 personnes relogées"
       },
       4: {
-        "text": "1 350 enfants scolarisés",
+        "text": "1 350 enfants scolarisés"
       },
       5: {
         "text": "2 040 bénéficiaires",
         "info": "d'un accompagnement santé"
       },
       6: {
-        "text": "615 contrats de travail signés",
+        "text": "615 contrats de travail signés"
       }
     },
     "cta": "Télécharger le dernier bilan",
@@ -113,11 +115,16 @@
           "text": "du Programme d’investissement d’avenir en 2019"
         },
         2: {
-          "text": "Programme “rights, citizenship and equality” de la commission européenne au premier trimestre 2020"
+          "link": "Programme “rights, citizenship and equality”",
+          "text": "de la commission européenne au premier trimestre 2020"
         },
         3: {
           "link": "Fonds d’accélération des Start-up d’État 3",
           "text": "de la DINUM en avril 2020"
+        },
+        4: {
+          "link": "Fonds de transformation de l'action publique",
+          "text": "de la DITP en octobre 2020"
         }
       }
 
