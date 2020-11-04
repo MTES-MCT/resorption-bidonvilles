@@ -6,7 +6,7 @@ import { postApi, getApi, patchApi } from "#helpers/api/main";
  * @returns {Promise}
  */
 export function list() {
-  return getApi("/plans");
+    return getApi("/plans");
 }
 
 /**
@@ -17,7 +17,7 @@ export function list() {
  * @returns {Promise}
  */
 export async function get(id) {
-  return getApi(`/plans/${id}`);
+    return getApi(`/plans/${id}`);
 }
 
 /**
@@ -28,7 +28,7 @@ export async function get(id) {
  * @returns {Promise}
  */
 export async function create(data) {
-  return postApi("/plans", data);
+    return postApi("/plans", data);
 }
 
 /**
@@ -39,7 +39,7 @@ export async function create(data) {
  * @returns {Promise}
  */
 export async function update(id, data) {
-  return postApi(`/plans/${id}`, data);
+    return postApi(`/plans/${id}`, data);
 }
 
 /**
@@ -51,15 +51,15 @@ export async function update(id, data) {
  * @returns {Promise}
  */
 export async function addState(planId, data) {
-  return postApi(`/plans/${planId}/states`, data);
+    return postApi(`/plans/${planId}/states`, data);
 }
 
 /**
  *
  */
 export async function close(planId, data) {
-  return patchApi(`/plans/${planId}`, {
-    operation: "close",
-    data
-  });
+    return patchApi(`/plans/${planId}`, {
+        operation: "close",
+        data
+    });
 }

@@ -4,8 +4,8 @@ import ro from "./ro";
 import bg from "./bg";
 
 export default {
-  fr,
-  en,
-  ro,
-  bg
+    fr,
+    en,
+    ro,
+    bg
 };

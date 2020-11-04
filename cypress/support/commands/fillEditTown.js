@@ -10,291 +10,295 @@
  * @returns {undefined}
  */
 Cypress.Commands.add("fillEditTown", shantytown => {
-  // priority (cannot be emptied...)
-  if (shantytown.priority !== undefined && shantytown.priority !== null) {
-    cy.get("[data-cy-field='priority']").select(`${shantytown.priority}`);
-  }
-
-  // built at
-  if (shantytown.built_at) {
-    cy.get("[data-cy-field='built_at']").chooseDate(shantytown.built_at);
-  } else {
-    cy.get("[data-cy-field='built_at']").emptyDate();
-  }
-
-  // declared at
-  if (shantytown.declared_at) {
-    cy.get("[data-cy-field='declared_at']").chooseDate(shantytown.declared_at);
-  } else {
-    cy.get("[data-cy-field='declared_at']").emptyDate();
-  }
-
-  // adresse
-  if (shantytown.address) {
-    if (
-      cy.get("[data-cy-field='address'] input").eq(0).value !==
-      shantytown.address
-    ) {
-      cy.get("[data-cy-field='address']").emptyAdressAutocompleter();
-      cy.get("[data-cy-field='address'] input")
-        .eq(0)
-        .type(shantytown.address_precomplete);
-      cy.contains(shantytown.address).click();
+    // priority (cannot be emptied...)
+    if (shantytown.priority !== undefined && shantytown.priority !== null) {
+        cy.get("[data-cy-field='priority']").select(`${shantytown.priority}`);
     }
-  } else {
-    cy.get("[data-cy-field='address']").emptyAdressAutocompleter();
-  }
 
-  // name
-  if (shantytown.name) {
-    cy.get("[data-cy-field='name']").typeReplace(shantytown.name);
-  } else {
-    cy.get("[data-cy-field='name']").clear();
-  }
+    // built at
+    if (shantytown.built_at) {
+        cy.get("[data-cy-field='built_at']").chooseDate(shantytown.built_at);
+    } else {
+        cy.get("[data-cy-field='built_at']").emptyDate();
+    }
 
-  // address details
-  if (shantytown.address_details) {
-    cy.get("[data-cy-field='address_details']").typeReplace(
-      shantytown.address_details
-    );
-  } else {
-    cy.get("[data-cy-field='address_details']").clear();
-  }
+    // declared at
+    if (shantytown.declared_at) {
+        cy.get("[data-cy-field='declared_at']").chooseDate(
+            shantytown.declared_at
+        );
+    } else {
+        cy.get("[data-cy-field='declared_at']").emptyDate();
+    }
 
-  // field type
-  if (shantytown.field_type) {
-    cy.get(
-      `[data-cy-field="field_type"][data-cy-label="${shantytown.field_type}"]`
-    ).check();
-  }
+    // adresse
+    if (shantytown.address) {
+        if (
+            cy.get("[data-cy-field='address'] input").eq(0).value !==
+            shantytown.address
+        ) {
+            cy.get("[data-cy-field='address']").emptyAdressAutocompleter();
+            cy.get("[data-cy-field='address'] input")
+                .eq(0)
+                .type(shantytown.address_precomplete);
+            cy.contains(shantytown.address).click();
+        }
+    } else {
+        cy.get("[data-cy-field='address']").emptyAdressAutocompleter();
+    }
 
-  // owner type
-  if (shantytown.owner_type) {
-    cy.get(
-      `[data-cy-field="owner_type"][data-cy-label="${shantytown.owner_type}"]`
-    ).check();
-  }
+    // name
+    if (shantytown.name) {
+        cy.get("[data-cy-field='name']").typeReplace(shantytown.name);
+    } else {
+        cy.get("[data-cy-field='name']").clear();
+    }
 
-  // owner
-  if (shantytown.owner) {
-    cy.get("[data-cy-field='owner']").typeReplace(shantytown.owner);
-  } else if (shantytown.owner_type !== "Inconnu") {
-    cy.get("[data-cy-field='owner']").clear();
-  }
+    // address details
+    if (shantytown.address_details) {
+        cy.get("[data-cy-field='address_details']").typeReplace(
+            shantytown.address_details
+        );
+    } else {
+        cy.get("[data-cy-field='address_details']").clear();
+    }
 
-  // census status
-  if (shantytown.census_status) {
-    cy.get(
-      `[data-cy-field="census_status"][data-cy-label="${shantytown.census_status}"]`
-    ).check();
-  }
+    // field type
+    if (shantytown.field_type) {
+        cy.get(
+            `[data-cy-field="field_type"][data-cy-label="${shantytown.field_type}"]`
+        ).check();
+    }
 
-  // census conducted at
-  if (shantytown.census_conducted_at) {
-    cy.get("[data-cy-field='census_conducted_at']").chooseDate(
-      shantytown.census_conducted_at
-    );
-  } else if (
-    shantytown.census_status === "Prévu" ||
-    shantytown.census_status === "Réalisé"
-  ) {
-    cy.get("[data-cy-field='census_conducted_at']").emptyDate();
-  }
+    // owner type
+    if (shantytown.owner_type) {
+        cy.get(
+            `[data-cy-field="owner_type"][data-cy-label="${shantytown.owner_type}"]`
+        ).check();
+    }
 
-  // census conducted by
-  if (shantytown.census_conducted_by) {
-    cy.get("[data-cy-field='census_conducted_by']").typeReplace(
-      shantytown.census_conducted_by
-    );
-  } else if (
-    shantytown.census_status === "Prévu" ||
-    shantytown.census_status === "Réalisé"
-  ) {
-    cy.get("[data-cy-field='census_conducted_by']").clear();
-  }
+    // owner
+    if (shantytown.owner) {
+        cy.get("[data-cy-field='owner']").typeReplace(shantytown.owner);
+    } else if (shantytown.owner_type !== "Inconnu") {
+        cy.get("[data-cy-field='owner']").clear();
+    }
 
-  // population total
-  if (
-    shantytown.population_total !== undefined &&
-    shantytown.population_total !== null
-  ) {
-    cy.get("[data-cy-field='population_total']").typeReplace(
-      shantytown.population_total
-    );
-  } else {
-    cy.get("[data-cy-field='population_total']").clear();
-  }
+    // census status
+    if (shantytown.census_status) {
+        cy.get(
+            `[data-cy-field="census_status"][data-cy-label="${shantytown.census_status}"]`
+        ).check();
+    }
 
-  // population couples
-  if (
-    shantytown.population_couples !== undefined &&
-    shantytown.population_couples !== null
-  ) {
-    cy.get("[data-cy-field='population_couples']").typeReplace(
-      shantytown.population_couples
-    );
-  } else {
-    cy.get("[data-cy-field='population_couples']").clear();
-  }
+    // census conducted at
+    if (shantytown.census_conducted_at) {
+        cy.get("[data-cy-field='census_conducted_at']").chooseDate(
+            shantytown.census_conducted_at
+        );
+    } else if (
+        shantytown.census_status === "Prévu" ||
+        shantytown.census_status === "Réalisé"
+    ) {
+        cy.get("[data-cy-field='census_conducted_at']").emptyDate();
+    }
 
-  // population minors
-  if (
-    shantytown.population_minors !== undefined &&
-    shantytown.population_minors !== null
-  ) {
-    cy.get("[data-cy-field='population_minors']").typeReplace(
-      shantytown.population_minors
-    );
-  } else {
-    cy.get("[data-cy-field='population_minors']").clear();
-  }
+    // census conducted by
+    if (shantytown.census_conducted_by) {
+        cy.get("[data-cy-field='census_conducted_by']").typeReplace(
+            shantytown.census_conducted_by
+        );
+    } else if (
+        shantytown.census_status === "Prévu" ||
+        shantytown.census_status === "Réalisé"
+    ) {
+        cy.get("[data-cy-field='census_conducted_by']").clear();
+    }
 
-  // social origins
-  if (shantytown.social_origins && shantytown.social_origins.length > 0) {
-    cy.get('[data-cy-field="social_origins"]').each($el => {
-      if (shantytown.social_origins.indexOf($el.data("cy-label")) !== -1) {
-        cy.wrap($el).check();
-      } else {
-        cy.wrap($el).uncheck();
-      }
-    });
-  } else {
-    cy.get('[data-cy-field="social_origins"]').uncheck();
-  }
+    // population total
+    if (
+        shantytown.population_total !== undefined &&
+        shantytown.population_total !== null
+    ) {
+        cy.get("[data-cy-field='population_total']").typeReplace(
+            shantytown.population_total
+        );
+    } else {
+        cy.get("[data-cy-field='population_total']").clear();
+    }
 
-  // electricity type
-  if (shantytown.electricity_type) {
-    cy.get(
-      `[data-cy-field="electricity_type"][data-cy-label="${shantytown.electricity_type}"]`
-    ).check();
-  }
+    // population couples
+    if (
+        shantytown.population_couples !== undefined &&
+        shantytown.population_couples !== null
+    ) {
+        cy.get("[data-cy-field='population_couples']").typeReplace(
+            shantytown.population_couples
+        );
+    } else {
+        cy.get("[data-cy-field='population_couples']").clear();
+    }
 
-  // electricity comments
-  if (shantytown.electricity_comments) {
-    cy.get("[data-cy-field='electricity_comments']").typeReplace(
-      shantytown.electricity_comments
-    );
-  } else {
-    cy.get("[data-cy-field='electricity_comments']").clear();
-  }
+    // population minors
+    if (
+        shantytown.population_minors !== undefined &&
+        shantytown.population_minors !== null
+    ) {
+        cy.get("[data-cy-field='population_minors']").typeReplace(
+            shantytown.population_minors
+        );
+    } else {
+        cy.get("[data-cy-field='population_minors']").clear();
+    }
 
-  // access to water
-  if (shantytown.access_to_water) {
-    cy.get(
-      `[data-cy-field="access_to_water"][data-cy-label="${shantytown.access_to_water}"]`
-    ).check();
-  }
+    // social origins
+    if (shantytown.social_origins && shantytown.social_origins.length > 0) {
+        cy.get('[data-cy-field="social_origins"]').each($el => {
+            if (
+                shantytown.social_origins.indexOf($el.data("cy-label")) !== -1
+            ) {
+                cy.wrap($el).check();
+            } else {
+                cy.wrap($el).uncheck();
+            }
+        });
+    } else {
+        cy.get('[data-cy-field="social_origins"]').uncheck();
+    }
 
-  // water comments
-  if (shantytown.water_comments) {
-    cy.get("[data-cy-field='water_comments']").typeReplace(
-      shantytown.water_comments
-    );
-  } else {
-    cy.get("[data-cy-field='water_comments']").clear();
-  }
+    // electricity type
+    if (shantytown.electricity_type) {
+        cy.get(
+            `[data-cy-field="electricity_type"][data-cy-label="${shantytown.electricity_type}"]`
+        ).check();
+    }
 
-  // access to sanitary
-  if (shantytown.access_to_sanitary) {
-    cy.get(
-      `[data-cy-field="access_to_sanitary"][data-cy-label="${shantytown.access_to_sanitary}"]`
-    ).check();
-  }
+    // electricity comments
+    if (shantytown.electricity_comments) {
+        cy.get("[data-cy-field='electricity_comments']").typeReplace(
+            shantytown.electricity_comments
+        );
+    } else {
+        cy.get("[data-cy-field='electricity_comments']").clear();
+    }
 
-  // sanitary comments
-  if (shantytown.sanitary_comments) {
-    cy.get("[data-cy-field='sanitary_comments']").typeReplace(
-      shantytown.sanitary_comments
-    );
-  } else {
-    cy.get("[data-cy-field='sanitary_comments']").clear();
-  }
+    // access to water
+    if (shantytown.access_to_water) {
+        cy.get(
+            `[data-cy-field="access_to_water"][data-cy-label="${shantytown.access_to_water}"]`
+        ).check();
+    }
 
-  // trash evacuation
-  if (shantytown.trash_evacuation) {
-    cy.get(
-      `[data-cy-field="trash_evacuation"][data-cy-label="${shantytown.trash_evacuation}"]`
-    ).check();
-  }
+    // water comments
+    if (shantytown.water_comments) {
+        cy.get("[data-cy-field='water_comments']").typeReplace(
+            shantytown.water_comments
+        );
+    } else {
+        cy.get("[data-cy-field='water_comments']").clear();
+    }
 
-  // owner complaint
-  if (shantytown.owner_complaint) {
-    cy.get(
-      `[data-cy-field="owner_complaint"][data-cy-label="${shantytown.owner_complaint}"]`
-    ).check();
-  }
+    // access to sanitary
+    if (shantytown.access_to_sanitary) {
+        cy.get(
+            `[data-cy-field="access_to_sanitary"][data-cy-label="${shantytown.access_to_sanitary}"]`
+        ).check();
+    }
 
-  // justice procedure
-  if (shantytown.justice_procedure) {
-    cy.get(
-      `[data-cy-field="justice_procedure"][data-cy-label="${shantytown.justice_procedure}"]`
-    ).check();
-  }
+    // sanitary comments
+    if (shantytown.sanitary_comments) {
+        cy.get("[data-cy-field='sanitary_comments']").typeReplace(
+            shantytown.sanitary_comments
+        );
+    } else {
+        cy.get("[data-cy-field='sanitary_comments']").clear();
+    }
 
-  // justice rendered
-  if (shantytown.justice_rendered) {
-    cy.get(
-      `[data-cy-field="justice_rendered"][data-cy-label="${shantytown.justice_rendered}"]`
-    ).check();
-  }
+    // trash evacuation
+    if (shantytown.trash_evacuation) {
+        cy.get(
+            `[data-cy-field="trash_evacuation"][data-cy-label="${shantytown.trash_evacuation}"]`
+        ).check();
+    }
 
-  // justice rendered by
-  if (shantytown.justice_rendered_by) {
-    cy.get("[data-cy-field='justice_rendered_by']").typeReplace(
-      shantytown.justice_rendered_by
-    );
-  } else if (shantytown.justice_rendered === "Oui") {
-    cy.get("[data-cy-field='justice_rendered_by']").clear();
-  }
+    // owner complaint
+    if (shantytown.owner_complaint) {
+        cy.get(
+            `[data-cy-field="owner_complaint"][data-cy-label="${shantytown.owner_complaint}"]`
+        ).check();
+    }
 
-  // justice rendered at
-  if (shantytown.justice_rendered_at) {
-    cy.get("[data-cy-field='justice_rendered_at']").chooseDate(
-      shantytown.justice_rendered_at
-    );
-  } else if (shantytown.justice_rendered === "Oui") {
-    cy.get("[data-cy-field='justice_rendered_at']").emptyDate();
-  }
+    // justice procedure
+    if (shantytown.justice_procedure) {
+        cy.get(
+            `[data-cy-field="justice_procedure"][data-cy-label="${shantytown.justice_procedure}"]`
+        ).check();
+    }
 
-  // justice challenged
-  if (shantytown.justice_challenged) {
-    cy.get(
-      `[data-cy-field="justice_challenged"][data-cy-label="${shantytown.justice_challenged}"]`
-    ).check();
-  }
+    // justice rendered
+    if (shantytown.justice_rendered) {
+        cy.get(
+            `[data-cy-field="justice_rendered"][data-cy-label="${shantytown.justice_rendered}"]`
+        ).check();
+    }
 
-  // police status
-  if (shantytown.police_status) {
-    cy.get(
-      `[data-cy-field="police_status"][data-cy-label="${shantytown.police_status}"]`
-    ).check();
-  }
+    // justice rendered by
+    if (shantytown.justice_rendered_by) {
+        cy.get("[data-cy-field='justice_rendered_by']").typeReplace(
+            shantytown.justice_rendered_by
+        );
+    } else if (shantytown.justice_rendered === "Oui") {
+        cy.get("[data-cy-field='justice_rendered_by']").clear();
+    }
 
-  // police requested at
-  if (shantytown.police_requested_at) {
-    cy.get("[data-cy-field='police_requested_at']").chooseDate(
-      shantytown.police_requested_at
-    );
-  } else if (
-    shantytown.police_status === "Demandé" ||
-    shantytown.police_status === "Obtenu"
-  ) {
-    cy.get("[data-cy-field='police_requested_at']").emptyDate();
-  }
+    // justice rendered at
+    if (shantytown.justice_rendered_at) {
+        cy.get("[data-cy-field='justice_rendered_at']").chooseDate(
+            shantytown.justice_rendered_at
+        );
+    } else if (shantytown.justice_rendered === "Oui") {
+        cy.get("[data-cy-field='justice_rendered_at']").emptyDate();
+    }
 
-  // police granted at
-  if (shantytown.police_granted_at) {
-    cy.get("[data-cy-field='police_granted_at']").chooseDate(
-      shantytown.police_granted_at
-    );
-  } else if (shantytown.police_status === "Obtenu") {
-    cy.get("[data-cy-field='police_granted_at']").emptyDate();
-  }
+    // justice challenged
+    if (shantytown.justice_challenged) {
+        cy.get(
+            `[data-cy-field="justice_challenged"][data-cy-label="${shantytown.justice_challenged}"]`
+        ).check();
+    }
 
-  // bailiff
-  if (shantytown.bailiff) {
-    cy.get("[data-cy-field='bailiff']").typeReplace(shantytown.bailiff);
-  } else {
-    cy.get("[data-cy-field='bailiff']").clear();
-  }
+    // police status
+    if (shantytown.police_status) {
+        cy.get(
+            `[data-cy-field="police_status"][data-cy-label="${shantytown.police_status}"]`
+        ).check();
+    }
+
+    // police requested at
+    if (shantytown.police_requested_at) {
+        cy.get("[data-cy-field='police_requested_at']").chooseDate(
+            shantytown.police_requested_at
+        );
+    } else if (
+        shantytown.police_status === "Demandé" ||
+        shantytown.police_status === "Obtenu"
+    ) {
+        cy.get("[data-cy-field='police_requested_at']").emptyDate();
+    }
+
+    // police granted at
+    if (shantytown.police_granted_at) {
+        cy.get("[data-cy-field='police_granted_at']").chooseDate(
+            shantytown.police_granted_at
+        );
+    } else if (shantytown.police_status === "Obtenu") {
+        cy.get("[data-cy-field='police_granted_at']").emptyDate();
+    }
+
+    // bailiff
+    if (shantytown.bailiff) {
+        cy.get("[data-cy-field='bailiff']").typeReplace(shantytown.bailiff);
+    } else {
+        cy.get("[data-cy-field='bailiff']").clear();
+    }
 });

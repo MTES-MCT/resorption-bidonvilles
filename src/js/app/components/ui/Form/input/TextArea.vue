@@ -1,25 +1,33 @@
 <template>
-  <InputWrapper>
-    <InputLabel :label="label" :info="info" />
-    <ValidationProvider
-      :rules="rules"
-      :name="validationName || label"
-      v-slot="{ errors }"
-      :vid="id"
-    >
-      <div class="relative">
-        <InputIcon position="before" :icon="prefixIcon" v-if="prefixIcon" />
-        <textarea
-          :id="id"
-          @input="$emit('input', $event.target.value)"
-          v-bind="filteredProps"
-          :class="classes"
-        />
-        <InputIcon position="after" :icon="suffixIcon" v-if="suffixIcon" />
-      </div>
-      <InputError>{{ errors[0] }}</InputError>
-    </ValidationProvider>
-  </InputWrapper>
+    <InputWrapper>
+        <InputLabel :label="label" :info="info" />
+        <ValidationProvider
+            :rules="rules"
+            :name="validationName || label"
+            v-slot="{ errors }"
+            :vid="id"
+        >
+            <div class="relative">
+                <InputIcon
+                    position="before"
+                    :icon="prefixIcon"
+                    v-if="prefixIcon"
+                />
+                <textarea
+                    :id="id"
+                    @input="$emit('input', $event.target.value)"
+                    v-bind="filteredProps"
+                    :class="classes"
+                />
+                <InputIcon
+                    position="after"
+                    :icon="suffixIcon"
+                    v-if="suffixIcon"
+                />
+            </div>
+            <InputError>{{ errors[0] }}</InputError>
+        </ValidationProvider>
+    </InputWrapper>
 </template>
 
 <script>
@@ -31,64 +39,64 @@ import InputIcon from "../utils/InputIcon.vue";
 import getInputClasses from "../utils/getInputClasses";
 
 export default {
-  name: "TextArea",
-  mixins: [filteredProps],
-  props: {
-    label: {
-      type: String
+    name: "TextArea",
+    mixins: [filteredProps],
+    props: {
+        label: {
+            type: String
+        },
+        info: {
+            type: String
+        },
+        placeholder: {
+            type: String
+        },
+        type: {
+            type: String,
+            default: "text"
+        },
+        value: {
+            type: String
+        },
+        rules: {
+            type: String
+        },
+        validationName: {
+            type: String
+        },
+        id: {
+            type: String
+        },
+        variant: {
+            type: String,
+            default: "default"
+        },
+        prefixIcon: {
+            type: String
+        },
+        suffixIcon: {
+            type: String
+        }
     },
-    info: {
-      type: String
-    },
-    placeholder: {
-      type: String
-    },
-    type: {
-      type: String,
-      default: "text"
-    },
-    value: {
-      type: String
-    },
-    rules: {
-      type: String
-    },
-    validationName: {
-      type: String
-    },
-    id: {
-      type: String
-    },
-    variant: {
-      type: String,
-      default: "default"
-    },
-    prefixIcon: {
-      type: String
-    },
-    suffixIcon: {
-      type: String
-    }
-  },
-  computed: {
-    classes() {
-      const inputOptions = {
-        error: this.error,
-        prefixIcon: this.prefixIcon,
-        suffixIcon: this.suffixIcon
-      };
+    computed: {
+        classes() {
+            const inputOptions = {
+                error: this.error,
+                prefixIcon: this.prefixIcon,
+                suffixIcon: this.suffixIcon
+            };
 
-      return {
-        state: [...getInputClasses("state", inputOptions)],
-        default: getInputClasses("default", inputOptions)
-      }[this.variant];
+            return {
+                state: [...getInputClasses("state", inputOptions)],
+                default: getInputClasses("default", inputOptions)
+            }[this.variant];
+        }
+    },
+    components: {
+        InputLabel,
+        InputWrapper,
+        InputError,
+        InputIcon
     }
-  },
-  components: {
-    InputLabel,
-    InputWrapper,
-    InputError,
-    InputIcon
-  }
 };
 </script>

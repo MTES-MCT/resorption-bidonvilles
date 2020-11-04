@@ -7,11 +7,11 @@
  * @returns {undefined}
  */
 Cypress.Commands.add("typeReplace", { prevSubject: true }, (subject, str) => {
-  if (subject.value === str) {
-    return;
-  }
+    if (subject.value === str) {
+        return;
+    }
 
-  cy.wrap(subject)
-    .clear()
-    .type(str);
+    cy.wrap(subject)
+        .clear()
+        .type(str);
 });

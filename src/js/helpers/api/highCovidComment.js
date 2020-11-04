@@ -6,7 +6,7 @@ import { postApi } from "#helpers/api/main";
  * @returns {Promise}
  */
 export function create(data) {
-  return postApi("/high-covid-comments", data);
+    return postApi("/high-covid-comments", data);
 }
 
 export default create;

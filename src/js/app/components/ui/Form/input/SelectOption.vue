@@ -1,10 +1,10 @@
 <template>
-  <option v-bind="$props"><slot /></option>
+    <option v-bind="$props"><slot /></option>
 </template>
 
 <script>
 export default {
-  name: "SelectOption",
-  props: {}
+    name: "SelectOption",
+    props: {}
 };
 </script>

@@ -8,9 +8,9 @@ import { postApi } from "#helpers/api/main";
  * @returns {Promise}
  */
 export function directoryViews(organization) {
-  return postApi("/statistics/directory-views", {
-    organization
-  });
+    return postApi("/statistics/directory-views", {
+        organization
+    });
 }
 
 export default directoryViews;

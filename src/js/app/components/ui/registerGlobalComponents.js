@@ -1,9 +1,9 @@
 import AutocompleteVue from "@trevoreyre/autocomplete-vue";
 import {
-  ValidationProvider,
-  ValidationObserver,
-  extend,
-  localize
+    ValidationProvider,
+    ValidationObserver,
+    extend,
+    localize
 } from "vee-validate";
 import * as rules from "vee-validate/dist/rules";
 import fr from "vee-validate/dist/locale/fr.json";
@@ -37,50 +37,50 @@ import Datepicker from "./Datepicker.vue";
 import Tag from "./Tag.vue";
 
 export default function(vueInstance) {
-  vueInstance.component("Button", Button);
-  vueInstance.component("TextInput", TextInput);
-  vueInstance.component("TextArea", TextArea);
-  vueInstance.component("Icon", Icon);
-  vueInstance.component("Menu", Menu);
-  vueInstance.component("MenuItem", MenuItem);
-  vueInstance.component("Checkbox", Checkbox);
-  vueInstance.component("Radio", Radio);
-  vueInstance.component("Select", Select);
-  vueInstance.component("SelectOption", SelectOption);
-  vueInstance.component("FormGroup", FormGroup);
-  vueInstance.component("Dropdown", Dropdown);
-  vueInstance.component("Modal", Modal);
-  vueInstance.component("SidePanel", SidePanel);
-  vueInstance.component("CheckableGroup", CheckableGroup);
-  vueInstance.component("InputGroup", InputGroup);
-  vueInstance.component("FormParagraph", FormParagraph);
-  vueInstance.component("Callout", Callout);
-  vueInstance.component("Spinner", Spinner);
-  vueInstance.component("AutocompleteV2", Autocomplete);
-  vueInstance.component("DatepickerV2", Datepicker);
-  vueInstance.component("Tag", Tag);
+    vueInstance.component("Button", Button);
+    vueInstance.component("TextInput", TextInput);
+    vueInstance.component("TextArea", TextArea);
+    vueInstance.component("Icon", Icon);
+    vueInstance.component("Menu", Menu);
+    vueInstance.component("MenuItem", MenuItem);
+    vueInstance.component("Checkbox", Checkbox);
+    vueInstance.component("Radio", Radio);
+    vueInstance.component("Select", Select);
+    vueInstance.component("SelectOption", SelectOption);
+    vueInstance.component("FormGroup", FormGroup);
+    vueInstance.component("Dropdown", Dropdown);
+    vueInstance.component("Modal", Modal);
+    vueInstance.component("SidePanel", SidePanel);
+    vueInstance.component("CheckableGroup", CheckableGroup);
+    vueInstance.component("InputGroup", InputGroup);
+    vueInstance.component("FormParagraph", FormParagraph);
+    vueInstance.component("Callout", Callout);
+    vueInstance.component("Spinner", Spinner);
+    vueInstance.component("AutocompleteV2", Autocomplete);
+    vueInstance.component("DatepickerV2", Datepicker);
+    vueInstance.component("Tag", Tag);
 
-  vueInstance.use(notifications);
-  vueInstance.component("NotificationsGroup", NotificationsGroup);
-  vueInstance.component("ValidationProvider", ValidationProvider);
+    vueInstance.use(notifications);
+    vueInstance.component("NotificationsGroup", NotificationsGroup);
+    vueInstance.component("ValidationProvider", ValidationProvider);
 
-  vueInstance.component("ValidationObserver", ValidationObserver);
+    vueInstance.component("ValidationObserver", ValidationObserver);
 
-  vueInstance.component("AutocompleteVue", AutocompleteVue);
+    vueInstance.component("AutocompleteVue", AutocompleteVue);
 
-  // Vee Validate (Form Validation)
-  localize({
-    en,
-    fr,
-    bg,
-    ro
-  });
-
-  Object.keys(rules).forEach(rule => {
-    extend(rule, {
-      ...rules[rule] // copies rule configuration
+    // Vee Validate (Form Validation)
+    localize({
+        en,
+        fr,
+        bg,
+        ro
     });
-  });
 
-  localize("fr");
+    Object.keys(rules).forEach(rule => {
+        extend(rule, {
+            ...rules[rule] // copies rule configuration
+        });
+    });
+
+    localize("fr");
 }
