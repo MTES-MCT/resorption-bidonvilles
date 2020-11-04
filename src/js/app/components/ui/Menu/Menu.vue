@@ -1,6 +1,6 @@
 <template>
     <div
-        class="py-1 rounded-md bg-white shadow-xs"
+        class="py-1 rounded-md bg-white shadow-xs min-w-48"
         role="menu"
         aria-orientation="vertical"
         aria-labelledby="user-menu"
