@@ -5,7 +5,7 @@ export default {
          */
         title: {
             required: true,
-            type: String,
+            type: String
         },
 
         /**
@@ -13,7 +13,7 @@ export default {
          */
         content: {
             required: false,
-            type: String,
+            type: String
         },
 
         /**
@@ -24,7 +24,7 @@ export default {
         opened: {
             required: false,
             type: Boolean,
-            default: true,
+            default: true
         },
 
         /**
@@ -35,22 +35,22 @@ export default {
         icon: {
             required: false,
             type: String,
-            default: 'info-circle',
-        },
+            default: "info-circle"
+        }
     },
 
     data() {
         return {
             iconName: this.icon,
             maxHeight: null,
-            visible: this.opened !== false,
+            visible: this.opened !== false
         };
     },
 
     computed: {
         caret() {
-            return `caret-${this.visible === true ? 'up' : 'down'}`;
-        },
+            return `caret-${this.visible === true ? "up" : "down"}`;
+        }
     },
 
     mounted() {
@@ -67,8 +67,8 @@ export default {
             if (this.visible === true) {
                 this.$refs.body.style.maxHeight = `${this.maxHeight}px`;
             } else {
-                this.$refs.body.style.maxHeight = '0';
+                this.$refs.body.style.maxHeight = "0";
             }
-        },
-    },
+        }
+    }
 };

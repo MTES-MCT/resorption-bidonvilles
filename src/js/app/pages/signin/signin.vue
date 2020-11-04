@@ -3,10 +3,11 @@
 </template>
 
 <script>
-import Component from './signin.js';
+import Component from "./signin";
+
 export default Component;
 </script>
 
 <style lang="scss">
-@import './signin.scss';
+@import "./signin.scss";
 </style>

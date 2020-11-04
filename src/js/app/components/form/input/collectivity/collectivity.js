@@ -1,12 +1,10 @@
-import Autocompleter from '../autocompleter/autocompleter.vue';
-import { autocompleteLocation as autocompleter } from '#helpers/addressHelper';
+import Autocompleter from "../autocompleter/autocompleter.vue";
+import { autocompleteLocation as autocompleter } from "#helpers/addressHelper";
 
 export default {
-
     components: {
-        Autocompleter,
+        Autocompleter
     },
-
 
     props: {
         /**
@@ -17,7 +15,7 @@ export default {
             required: false,
             default() {
                 return null;
-            },
+            }
         },
 
         /**
@@ -28,7 +26,7 @@ export default {
         disabled: {
             type: Boolean,
             required: false,
-            default: false,
+            default: false
         },
 
         /**
@@ -41,10 +39,9 @@ export default {
             required: false,
             default() {
                 return {};
-            },
-        },
+            }
+        }
     },
-
 
     data() {
         return {
@@ -56,30 +53,28 @@ export default {
             /**
              * @type {Object}
              */
-            options: Object.assign({}, this.specificProps, {
+            options: {
+                ...this.specificProps,
                 showCategory: true,
                 autocompleter: (...args) => {
                     const p1 = autocompleter(...args);
-                    const p2 = p1.then(result => result.map(
-                        ({
-                            label, code, type, locationType,
-                        }) => ({
+                    const p2 = p1.then(result =>
+                        result.map(({ label, code, type, locationType }) => ({
                             id: code,
                             label,
                             category: type,
                             data: {
                                 code,
-                                type: locationType,
-                            },
-                        }),
-                    ));
+                                type: locationType
+                            }
+                        }))
+                    );
                     p2.abort = p1.abort;
                     return p2;
-                },
-            }),
+                }
+            }
         };
     },
-
 
     watch: {
         // two-way binding
@@ -87,8 +82,7 @@ export default {
             this.data = this.value !== null ? [this.value] : [];
         },
         data() {
-            this.$emit('input', this.data.length > 0 ? this.data[0] : null);
-        },
-    },
-
+            this.$emit("input", this.data.length > 0 ? this.data[0] : null);
+        }
+    }
 };

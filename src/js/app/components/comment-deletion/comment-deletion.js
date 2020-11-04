@@ -1,42 +1,41 @@
-import { deleteComment } from '#helpers/api/town';
+import { deleteComment } from "#helpers/api/town";
 
 export default {
-
     props: {
         comment: {
             type: Object,
-            required: true,
-        },
+            required: true
+        }
     },
 
     data() {
         return {
             status: null,
             error: null,
-            message: '',
+            message: ""
         };
     },
 
     computed: {
         date() {
-            return App.formatDate(this.comment.date, 'd/m/y');
+            return App.formatDate(this.comment.date, "d/m/y");
         },
         time() {
-            return App.formatDate(this.comment.date, 'h:i');
+            return App.formatDate(this.comment.date, "h:i");
         },
         address() {
             return `${this.comment.shantytown.usename}, ${this.comment.shantytown.city}`;
-        },
+        }
     },
 
     mounted() {
         setTimeout(() => {
-            document.addEventListener('click', this.checkOutsideClick);
+            document.addEventListener("click", this.checkOutsideClick);
         }, 500);
     },
 
     destroyed() {
-        document.removeEventListener('click', this.checkOutsideClick);
+        document.removeEventListener("click", this.checkOutsideClick);
     },
 
     methods: {
@@ -47,32 +46,35 @@ export default {
         },
 
         close() {
-            if (this.status === 'pending') {
+            if (this.status === "pending") {
                 return;
             }
 
-            this.$emit('close');
+            this.$emit("close");
         },
 
         deleteComment() {
-            if (this.status === 'pending') {
+            if (this.status === "pending") {
                 return;
             }
 
-            this.status = 'pending';
+            this.status = "pending";
             this.error = null;
 
-            deleteComment(this.comment.shantytown.id, this.comment.id, this.message)
+            deleteComment(
+                this.comment.shantytown.id,
+                this.comment.id,
+                this.message
+            )
                 .then(() => {
                     this.status = null;
-                    this.message = '';
-                    this.$emit('deleted');
+                    this.message = "";
+                    this.$emit("deleted");
                 })
                 .catch(({ user_message: error }) => {
                     this.status = null;
                     this.error = error;
                 });
-        },
-    },
-
+        }
+    }
 };

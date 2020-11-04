@@ -1,4 +1,4 @@
-import { getApi } from '#helpers/api/main';
+import { getApi } from "#helpers/api/main";
 
 /**
  * Computes the unique identifier of the given feature
@@ -21,7 +21,7 @@ function computeUid(feature) {
 function removeDuplicates(features) {
     const usedUids = [];
 
-    return features.filter((feature) => {
+    return features.filter(feature => {
         const uid = computeUid(feature);
         if (usedUids.indexOf(uid) !== -1) {
             return false;
@@ -48,7 +48,9 @@ function onAutocompleteLoad(success, failure) {
         const { features } = JSON.parse(this.responseText);
         success(
             removeDuplicates(features)
-                .filter(feature => (feature.properties && feature.properties.citycode))
+                .filter(
+                    feature => feature.properties && feature.properties.citycode
+                )
                 .map(feature => ({
                     addressType: feature.properties.type,
                     citycode: feature.properties.citycode,
@@ -56,14 +58,14 @@ function onAutocompleteLoad(success, failure) {
                     coordinates: feature.geometry.coordinates,
                     id: feature.properties.id,
                     label: `${feature.properties.label}, ${feature.properties.context}`,
-                    category: 'address',
+                    category: "address",
                     data: {
                         citycode: feature.properties.citycode,
                         city: feature.properties.city,
                         label: `${feature.properties.label}, ${feature.properties.context}`,
-                        coordinates: feature.geometry.coordinates,
-                    },
-                })),
+                        coordinates: feature.geometry.coordinates
+                    }
+                }))
         );
     } catch (error) {
         failure();
@@ -90,7 +92,10 @@ export function autocomplete(strSearch, limit = 5) {
             queries.push(`limit=${parsedLimit}`);
         }
 
-        xhr.open('GET', `https://api-adresse.data.gouv.fr/search/?${queries.join('&')}`);
+        xhr.open(
+            "GET",
+            `https://api-adresse.data.gouv.fr/search/?${queries.join("&")}`
+        );
         xhr.onload = onAutocompleteLoad.bind(xhr, success, failure);
         xhr.onerror = failure;
         xhr.ontimeout = failure;
@@ -112,12 +117,17 @@ export function autocomplete(strSearch, limit = 5) {
  */
 export function autocompleteLocation(strSearch) {
     const p1 = getApi(`/locations/search?q=${encodeURIComponent(strSearch)}`);
-    const p2 = p1.then(results => results.map(result => ({
-        label: result.code.length === 5 ? `(${result.code.slice(0, 2)}) ${result.name}` : result.name,
-        code: result.code,
-        type: result.label,
-        locationType: result.type,
-    })));
+    const p2 = p1.then(results =>
+        results.map(result => ({
+            label:
+                result.code.length === 5
+                    ? `(${result.code.slice(0, 2)}) ${result.name}`
+                    : result.name,
+            code: result.code,
+            type: result.label,
+            locationType: result.type
+        }))
+    );
     p2.abort = p1.abort;
     return p2;
 }
@@ -128,7 +138,7 @@ export function autocompleteLocation(strSearch) {
  * @returns {Promise}
  */
 export function departements() {
-    return getApi('/departements');
+    return getApi("/departements");
 }
 
 /**

@@ -2,40 +2,40 @@ export default {
     props: {
         log: {
             type: Object,
-            required: true,
+            required: true
         },
         error: {
             type: String,
             required: false,
-            default: null,
-        },
+            default: null
+        }
     },
 
     data() {
         return {
             dataError: this.error ? this.error : null,
-            currentItemIndex: 0,
+            currentItemIndex: 0
         };
     },
 
     watch: {
         error() {
             this.dataError = this.error ? this.error : null;
-        },
+        }
     },
 
     computed: {
         nextLabel() {
             if (this.currentItemIndex === this.log.items.length - 1) {
-                return 'Accéder à la plateforme';
+                return "Accéder à la plateforme";
             }
 
-            return 'Suite';
+            return "Suite";
         },
 
         currentItem() {
             return this.log.items[this.currentItemIndex];
-        },
+        }
     },
 
     methods: {
@@ -54,7 +54,7 @@ export default {
             this.dataError = null;
 
             if (this.currentItemIndex === this.log.items.length - 1) {
-                this.$emit('done');
+                this.$emit("done");
                 return;
             }
 
@@ -64,8 +64,9 @@ export default {
 
         syncCarousel() {
             const firstImage = this.$refs.carousel.firstChild;
-            firstImage.style.marginLeft = `${-1 * firstImage.offsetWidth * this.currentItemIndex}px`;
-        },
-    },
-
+            firstImage.style.marginLeft = `${-1 *
+                firstImage.offsetWidth *
+                this.currentItemIndex}px`;
+        }
+    }
 };

@@ -1,23 +1,22 @@
 export default {
-
     props: {
         value: {
             required: true,
-            type: Array,
+            type: Array
         },
 
         visible: {
             required: false,
             type: Boolean,
-            default: false,
-        },
+            default: false
+        }
     },
 
     data() {
         return {
             items: this.value,
             timeout: null,
-            id: null,
+            id: null
         };
     },
 
@@ -27,17 +26,24 @@ export default {
         },
 
         items() {
-            this.$emit('input', this.items);
+            this.$emit("input", this.items);
         },
 
         visible() {
             if (this.visible === true) {
-                this.timeout = setTimeout(() => document.addEventListener('click', this.checkOutsideClick), 500);
+                this.timeout = setTimeout(
+                    () =>
+                        document.addEventListener(
+                            "click",
+                            this.checkOutsideClick
+                        ),
+                    500
+                );
             } else {
                 clearTimeout(this.timeout);
-                document.removeEventListener('click', this.checkOutsideClick);
+                document.removeEventListener("click", this.checkOutsideClick);
             }
-        },
+        }
     },
 
     mounted() {
@@ -51,14 +57,16 @@ export default {
                 this.items[i].checked = false;
             }
 
-            this.$emit('clean');
+            this.$emit("clean");
         },
 
         checkOutsideClick(event) {
-            if (!this.$refs.container || !this.$refs.container.contains(event.target)) {
-                this.$emit('outside-click', event);
+            if (
+                !this.$refs.container ||
+                !this.$refs.container.contains(event.target)
+            ) {
+                this.$emit("outside-click", event);
             }
-        },
-    },
-
+        }
+    }
 };

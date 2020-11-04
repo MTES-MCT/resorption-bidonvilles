@@ -1,15 +1,12 @@
-import Input from './input/input.vue';
-import SlideNote from '#app/components/slide-note/slide-note.vue';
-import { notify } from '#helpers/notificationHelper';
+import Input from "./input/input.vue";
+import SlideNote from "#app/components/slide-note/slide-note.vue";
+import { notify } from "#helpers/notificationHelper";
 
 export default {
-
-
     components: {
         Input,
-        SlideNote,
+        SlideNote
     },
-
 
     props: {
         /**
@@ -19,7 +16,7 @@ export default {
          */
         title: {
             type: String,
-            required: false,
+            required: false
         },
 
         /**
@@ -29,7 +26,7 @@ export default {
          */
         descriptionTitle: {
             type: String,
-            required: false,
+            required: false
         },
 
         /**
@@ -39,7 +36,7 @@ export default {
          */
         description: {
             type: String,
-            required: false,
+            required: false
         },
 
         /**
@@ -49,7 +46,7 @@ export default {
          */
         steps: {
             type: Array,
-            required: true,
+            required: true
         },
 
         /**
@@ -62,10 +59,9 @@ export default {
             required: false,
             default() {
                 return {};
-            },
-        },
+            }
+        }
     },
-
 
     data() {
         return {
@@ -109,10 +105,9 @@ export default {
              *
              * @type {Array.<Object|null>}
              */
-            responses: [],
+            responses: []
         };
     },
-
 
     computed: {
         /**
@@ -125,26 +120,34 @@ export default {
          * @returns {Array.<FormBreadcrumbItem>}
          */
         breadcrumbItems() {
-            return this.steps.reduce((breadcrumb, step, stepIndex) => [
-                ...breadcrumb,
-                ...[
-                    Object.assign({}, step, {
-                        classNames: {
-                            'form-breadcrumbItem': true,
-                            'form-breadcrumbItem--current': stepIndex === this.currentStepIndex,
-                            'form-breadcrumbItem--done': stepIndex < this.currentStepIndex,
-                        },
-                        isSeparator: false,
-                        stepIndex,
-                    }),
-                    {
-                        classNames: {
-                            'form-breadcrumbSeparator': true,
-                        },
-                        isSeparator: true,
-                    },
-                ],
-            ], []).slice(0, -1);
+            return this.steps
+                .reduce(
+                    (breadcrumb, step, stepIndex) => [
+                        ...breadcrumb,
+                        ...[
+                            {
+                                ...step,
+                                classNames: {
+                                    "form-breadcrumbItem": true,
+                                    "form-breadcrumbItem--current":
+                                        stepIndex === this.currentStepIndex,
+                                    "form-breadcrumbItem--done":
+                                        stepIndex < this.currentStepIndex
+                                },
+                                isSeparator: false,
+                                stepIndex
+                            },
+                            {
+                                classNames: {
+                                    "form-breadcrumbSeparator": true
+                                },
+                                isSeparator: true
+                            }
+                        ]
+                    ],
+                    []
+                )
+                .slice(0, -1);
         },
 
         /**
@@ -171,7 +174,9 @@ export default {
          * @returns {Array.<FormSection>}
          */
         fullSections() {
-            return this.sections.filter(({ inputs }) => Object.values(inputs).some(input => this.isInputVisible(input)));
+            return this.sections.filter(({ inputs }) =>
+                Object.values(inputs).some(input => this.isInputVisible(input))
+            );
         },
 
         /**
@@ -180,8 +185,10 @@ export default {
          * @returns {Array.<Input>}
          */
         inputs() {
-            return this.currentStep.sections
-                .reduce((inputs, section) => Object.assign({}, inputs, section.inputs), {});
+            return this.currentStep.sections.reduce(
+                (inputs, section) => ({ ...inputs, ...section.inputs }),
+                {}
+            );
         },
 
         /**
@@ -190,11 +197,12 @@ export default {
          * @returns {FormStepWording}
          */
         wording() {
-            return Object.assign({
-                submit: 'Étape suivante',
-                error: 'Certaines données saisies sont incorrectes',
+            return {
+                submit: "Étape suivante",
+                error: "Certaines données saisies sont incorrectes",
                 success: null,
-            }, this.currentStep.wording || {});
+                ...(this.currentStep.wording || {})
+            };
         },
 
         /**
@@ -208,9 +216,7 @@ export default {
             const inputIds = Object.keys(this.inputs);
             return inputIds
                 .filter(id => this.isInputActive(this.inputs[id]))
-                .reduce((data, id) => Object.assign({}, data, {
-                    [id]: this.data[id],
-                }), {});
+                .reduce((data, id) => ({ ...data, [id]: this.data[id] }), {});
         },
 
         /**
@@ -225,9 +231,13 @@ export default {
 
             return Object.keys(this.errors.fields || {})
                 .filter(inputId => this.inputs[inputId] !== undefined)
-                .reduce((errors, inputId) => Object.assign({}, errors, {
-                    [inputId]: this.errors.fields[inputId],
-                }), {});
+                .reduce(
+                    (errors, inputId) => ({
+                        ...errors,
+                        [inputId]: this.errors.fields[inputId]
+                    }),
+                    {}
+                );
         },
 
         /**
@@ -248,9 +258,8 @@ export default {
          */
         submitPrefix() {
             return this.currentStep && this.currentStep.submitPrefix;
-        },
+        }
     },
-
 
     watch: {
         // two-way binding
@@ -259,9 +268,8 @@ export default {
         },
         data() {
             this.onDataChange();
-        },
+        }
     },
-
 
     methods: {
         /**
@@ -282,28 +290,30 @@ export default {
             this.pending = true;
             this.errors = null;
 
-            this.currentStep.submit(this.filteredData, this.responses)
-                .then((response) => {
+            this.currentStep
+                .submit(this.filteredData, this.responses)
+                .then(response => {
                     if (this.wording.success !== null) {
                         notify({
-                            group: 'notifications',
-                            type: 'success',
-                            title: 'Succès',
-                            text: this.wording.success,
+                            group: "notifications",
+                            type: "success",
+                            title: "Succès",
+                            text: this.wording.success
                         });
                     }
 
-                    this.$emit('stepcomplete', this.currentStepIndex, response);
+                    this.$emit("stepcomplete", this.currentStepIndex, response);
                     this.goToNextStep(response);
 
                     this.pending = false;
                     this.errors = null;
                 })
-                .catch((error) => {
+                .catch(error => {
                     this.pending = false;
                     this.errors = {
-                        main: (error && error.user_message) || 'erreur inconnue',
-                        fields: (error && error.fields) || {},
+                        main:
+                            (error && error.user_message) || "erreur inconnue",
+                        fields: (error && error.fields) || {}
                     };
                 });
         },
@@ -319,7 +329,7 @@ export default {
             this.responses.push(response);
 
             if (this.currentStepIndex >= this.steps.length - 1) {
-                this.$emit('complete', response, this.responses);
+                this.$emit("complete", response, this.responses);
                 return;
             }
 
@@ -348,7 +358,7 @@ export default {
          */
         onDataChange() {
             this.refreshId += 1;
-            this.$emit('input', this.data);
+            this.$emit("input", this.data);
         },
 
         /**
@@ -388,7 +398,11 @@ export default {
          * @returns {Boolean}
          */
         isInputDisabled(input) {
-            return this.pending === true || input.disabled === true || (input.inactiveMessage && !this.isInputActive(input));
+            return (
+                this.pending === true ||
+                input.disabled === true ||
+                (input.inactiveMessage && !this.isInputActive(input))
+            );
         },
 
         /**
@@ -404,9 +418,8 @@ export default {
             }
 
             return null;
-        },
-    },
-
+        }
+    }
 };
 
 /**

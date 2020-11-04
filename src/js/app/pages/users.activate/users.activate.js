@@ -1,53 +1,63 @@
-import { checkActivationToken, activate } from '#helpers/api/user';
-import NavBar from '#app/layouts/navbar/navbar.vue';
-import Form from '#app/components/form/form.vue';
+import { checkActivationToken, activate } from "#helpers/api/user";
+import NavBar from "#app/layouts/navbar/navbar.vue";
+import Form from "#app/components/form/form.vue";
 
 export default {
     components: {
         NavBar,
-        Form,
+        Form
     },
 
     data() {
         const formData = {
-            email: '',
+            email: ""
         };
 
         const formDefinition = {
-            title: 'Activation de votre compte utilisateur',
-            descriptionTitle: '',
-            description: 'Vous vous apprêtez à activer votre compte utilisateur, veuillez choisir votre mot de passe de connexion.',
+            title: "Activation de votre compte utilisateur",
+            descriptionTitle: "",
+            description:
+                "Vous vous apprêtez à activer votre compte utilisateur, veuillez choisir votre mot de passe de connexion.",
             steps: [
                 {
-                    title: '',
+                    title: "",
                     sections: [
                         {
-                            title: '',
+                            title: "",
                             inputs: {
                                 email: {
-                                    label: 'Votre email',
+                                    label: "Votre email",
                                     mandatory: false,
-                                    type: 'text',
-                                    disabled: true,
+                                    type: "text",
+                                    disabled: true
                                 },
                                 password: {
-                                    label: 'Définissez votre mot de passe',
-                                    description: "Votre mot de passe doit comporter au minimum 12 caractères, une majuscule, une minuscule, et un caractère non alphabétique (exemples : '.' ';' ',' '_' '!' '?', ...)<br/>Nous vous recommandons de choisir <strong>une phrase intelligible en guise de mot de passe</strong> : plus simple à retenir qu'une suite de caractères aléatoires, et plus sécurisée.",
+                                    label: "Définissez votre mot de passe",
+                                    description:
+                                        "Votre mot de passe doit comporter au minimum 12 caractères, une majuscule, une minuscule, et un caractère non alphabétique (exemples : '.' ';' ',' '_' '!' '?', ...)<br/>Nous vous recommandons de choisir <strong>une phrase intelligible en guise de mot de passe</strong> : plus simple à retenir qu'une suite de caractères aléatoires, et plus sécurisée.",
                                     mandatory: true,
-                                    type: 'password',
-                                },
-                            },
-                        },
+                                    type: "password"
+                                }
+                            }
+                        }
                     ],
                     wording: {
-                        submit: 'Activer mon compte',
-                        error: 'Votre compte n\'a pas pu être activé',
-                        success: 'Vous pouvez désormais vous connecter à la plateforme',
+                        submit: "Activer mon compte",
+                        error: "Votre compte n'a pas pu être activé",
+                        success:
+                            "Vous pouvez désormais vous connecter à la plateforme"
                     },
-                    submitPrefix: 'En cliquant sur "Activer mon compte", j\'accepte les <a href="/app.html/#/conditions-d-utilisation">conditions générales d\'utilisation</a> et de partager mes données (nom, prénom, courriel, structure et lorsque renseigné, numéro de téléphone) aux utilisateurs de la plateforme via l’annuaire',
-                    submit: data => activate(this.user.id, Object.assign(data, { token: this.$route.params.token })),
-                },
-            ],
+                    submitPrefix:
+                        'En cliquant sur "Activer mon compte", j\'accepte les <a href="/app.html/#/conditions-d-utilisation">conditions générales d\'utilisation</a> et de partager mes données (nom, prénom, courriel, structure et lorsque renseigné, numéro de téléphone) aux utilisateurs de la plateforme via l’annuaire',
+                    submit: data =>
+                        activate(
+                            this.user.id,
+                            Object.assign(data, {
+                                token: this.$route.params.token
+                            })
+                        )
+                }
+            ]
         };
 
         return {
@@ -65,7 +75,7 @@ export default {
              *
              * @type {Form},
              */
-            formDefinition,
+            formDefinition
         };
     },
 
@@ -79,22 +89,22 @@ export default {
          */
         load() {
             // loading data is forbidden if the component is already loading or loaded
-            if ([null, 'error'].indexOf(this.state) === -1) {
+            if ([null, "error"].indexOf(this.state) === -1) {
                 return;
             }
 
-            this.state = 'loading';
+            this.state = "loading";
             this.error = null;
 
             checkActivationToken(this.$route.params.token)
-                .then((user) => {
+                .then(user => {
                     this.user = user;
                     this.formData.email = user.email;
-                    this.state = 'loaded';
+                    this.state = "loaded";
                 })
                 .catch(({ user_message: error }) => {
                     this.error = error;
-                    this.state = 'error';
+                    this.state = "error";
                 });
         },
 
@@ -111,7 +121,7 @@ export default {
          *
          */
         onComplete() {
-            this.$router.push('/');
-        },
-    },
+            this.$router.push("/");
+        }
+    }
 };

@@ -1,1 +1,1 @@
-import './commands/index';
+import "./commands/index";

@@ -1,4 +1,4 @@
-import { autocomplete } from '#helpers/addressHelper';
+import { autocomplete } from "#helpers/addressHelper";
 
 /**
  * Delay before triggering an autocomplete, in milliseconds
@@ -21,16 +21,16 @@ export default {
         placeholder: String,
         autocompleteFunction: {
             type: Function,
-            default: autocomplete,
+            default: autocomplete
         },
         showMagnifier: {
             type: Boolean,
-            default: true,
+            default: true
         },
         typingMin: {
             type: Number,
-            default: TYPING_MIN,
-        },
+            default: TYPING_MIN
+        }
     },
     data() {
         return {
@@ -38,14 +38,14 @@ export default {
             typingTimeout: null,
             suggestions: [],
             filled: this.value !== null,
-            query: (this.value !== null && this.value.label) || '',
-            previousQuery: this.value !== null ? this.value.label : '',
+            query: (this.value !== null && this.value.label) || "",
+            previousQuery: this.value !== null ? this.value.label : "",
             focused: false,
-            indexOfHighlightedSuggestion: null,
+            indexOfHighlightedSuggestion: null
         };
     },
     mounted() {
-        document.addEventListener('click', this.checkOutsideClick);
+        document.addEventListener("click", this.checkOutsideClick);
     },
     beforeDestroy() {
         if (this.typingTimeout !== null) {
@@ -54,7 +54,7 @@ export default {
         }
     },
     destroyed() {
-        document.removeEventListener('click', this.checkOutsideClick);
+        document.removeEventListener("click", this.checkOutsideClick);
     },
     methods: {
         onTyping() {
@@ -69,7 +69,7 @@ export default {
             }
 
             this.filled = false;
-            this.$emit('input', null);
+            this.$emit("input", null);
             this.setSuggestions([]);
             this.indexOfHighlightedSuggestion = null;
             this.typingTimeout = setTimeout(this.autocomplete, TYPING_TIMEOUT);
@@ -85,30 +85,38 @@ export default {
             }
 
             if (this.filled === false) {
-                this.query = '';
-                this.previousQuery = '';
+                this.query = "";
+                this.previousQuery = "";
             }
 
             this.setSuggestions([]);
         },
         onNavigation(event) {
-            if (event.keyCode === 38) { // up arrow (= previous suggestion)
+            if (event.keyCode === 38) {
+                // up arrow (= previous suggestion)
                 if (this.indexOfHighlightedSuggestion - 1 < 0) {
                     this.indexOfHighlightedSuggestion = null;
                 } else {
-                    this.indexOfHighlightedSuggestion = this.indexOfHighlightedSuggestion - 1;
+                    this.indexOfHighlightedSuggestion -= 1;
                 }
-            } else if (event.keyCode === 40) { // down arrow (= next suggestion)
+            } else if (event.keyCode === 40) {
+                // down arrow (= next suggestion)
                 if (this.suggestions.length > 0) {
                     if (this.indexOfHighlightedSuggestion === null) {
                         this.indexOfHighlightedSuggestion = 0;
                     } else {
-                        this.indexOfHighlightedSuggestion = Math.min(this.suggestions.length - 1, this.indexOfHighlightedSuggestion + 1);
+                        this.indexOfHighlightedSuggestion = Math.min(
+                            this.suggestions.length - 1,
+                            this.indexOfHighlightedSuggestion + 1
+                        );
                     }
                 }
-            } else if (event.keyCode === 13) { // key 'enter' (= select current suggestion)
+            } else if (event.keyCode === 13) {
+                // key 'enter' (= select current suggestion)
                 if (this.indexOfHighlightedSuggestion !== null) {
-                    this.onSelect(this.suggestions[this.indexOfHighlightedSuggestion]);
+                    this.onSelect(
+                        this.suggestions[this.indexOfHighlightedSuggestion]
+                    );
                 }
             } else {
                 this.indexOfHighlightedSuggestion = null;
@@ -119,7 +127,7 @@ export default {
         },
         onSelect(value) {
             const { label } = value;
-            this.$emit('input', value);
+            this.$emit("input", value);
             this.setSuggestions([]);
             this.filled = true;
             this.query = label;
@@ -136,7 +144,7 @@ export default {
 
             this.pendingRequest = this.autocompleteFunction(this.query);
             this.pendingRequest
-                .then((suggestions) => {
+                .then(suggestions => {
                     if (this.focused === true) {
                         this.setSuggestions(suggestions);
                     }
@@ -158,6 +166,6 @@ export default {
             } else {
                 this.indexOfHighlightedSuggestion = null;
             }
-        },
-    },
+        }
+    }
 };

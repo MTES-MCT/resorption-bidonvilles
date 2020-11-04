@@ -1,45 +1,56 @@
-import { all as getStats } from '#helpers/api/stats';
+import { all as getStats } from "#helpers/api/stats";
 
 export default {
     data() {
         return {
             state: null,
             error: null,
-            stats: null,
+            stats: null
         };
     },
 
     computed: {
         numberOfDepartements() {
-            return this.stats ? this.stats.numberOfDepartements : '...';
+            return this.stats ? this.stats.numberOfDepartements : "...";
         },
 
         numberOfCollaboratorAndAssociationUsers() {
-            return this.stats ? this.stats.numberOfCollaboratorAndAssociationUsers : '...';
+            return this.stats
+                ? this.stats.numberOfCollaboratorAndAssociationUsers
+                : "...";
         },
 
         numberOfTerritorialCollectivities() {
-            return this.stats ? (this.stats.numberOfCollaboratorAndAssociationOrganizations.territorial_collectivity || 0) : '...';
+            return this.stats
+                ? this.stats.numberOfCollaboratorAndAssociationOrganizations
+                      .territorial_collectivity || 0
+                : "...";
         },
 
         numberOfAssociations() {
-            return this.stats ? (this.stats.numberOfCollaboratorAndAssociationOrganizations.association || 0) : '...';
+            return this.stats
+                ? this.stats.numberOfCollaboratorAndAssociationOrganizations
+                      .association || 0
+                : "...";
         },
 
         numberOfPublicEstablishments() {
-            return this.stats ? (this.stats.numberOfCollaboratorAndAssociationOrganizations.public_establishment || 0) : '...';
+            return this.stats
+                ? this.stats.numberOfCollaboratorAndAssociationOrganizations
+                      .public_establishment || 0
+                : "...";
         },
 
         numberOfExports() {
-            return this.stats ? this.stats.numberOfExports : '...';
+            return this.stats ? this.stats.numberOfExports : "...";
         },
 
         numberOfComments() {
-            return this.stats ? this.stats.numberOfComments : '...';
+            return this.stats ? this.stats.numberOfComments : "...";
         },
 
         numberOfDirectoryViews() {
-            return this.stats ? this.stats.numberOfDirectoryViews : '...';
+            return this.stats ? this.stats.numberOfDirectoryViews : "...";
         },
 
         numberOfNewUsersPerMonth() {
@@ -53,10 +64,12 @@ export default {
 
             return [
                 {
-                    data: this.numberOfNewUsersPerMonth.map(({ total }) => parseInt(total, 10)),
+                    data: this.numberOfNewUsersPerMonth.map(({ total }) =>
+                        parseInt(total, 10)
+                    ),
                     smooth: true,
-                    fill: true,
-                },
+                    fill: true
+                }
             ];
         },
 
@@ -65,7 +78,10 @@ export default {
                 return 0;
             }
 
-            const max = this.numberOfNewUsersPerMonth.reduce((m, { total }) => Math.max(m, total), 0);
+            const max = this.numberOfNewUsersPerMonth.reduce(
+                (m, { total }) => Math.max(m, total),
+                0
+            );
             return Math.ceil(max / 10) * 10;
         },
 
@@ -73,31 +89,43 @@ export default {
             if (this.numberOfNewUsersPerMonth === null) {
                 return {
                     xLabels: [],
-                    yLabels: 10,
+                    yLabels: 10
                 };
             }
 
             return {
-                xLabels: this.numberOfNewUsersPerMonth.map(({ month }) => month),
-                yLabels: (this.usersEvolutionMax / 10) + 1,
+                xLabels: this.numberOfNewUsersPerMonth.map(
+                    ({ month }) => month
+                ),
+                yLabels: this.usersEvolutionMax / 10 + 1
             };
         },
 
         numberOfNewUsers() {
-            return this.stats && this.stats.numberOfNewUsersPerMonth ? this.stats.numberOfNewUsersPerMonth.slice(-1)[0] : { total: '...', month: '...' };
+            return this.stats && this.stats.numberOfNewUsersPerMonth
+                ? this.stats.numberOfNewUsersPerMonth.slice(-1)[0]
+                : { total: "...", month: "..." };
         },
 
         meanTimeBeforeCreationDeclaration() {
-            return this.stats ? (Math.round(this.stats.meanTimeBeforeCreationDeclaration.average) || '?') : '...';
+            return this.stats
+                ? Math.round(
+                      this.stats.meanTimeBeforeCreationDeclaration.average
+                  ) || "?"
+                : "...";
         },
 
         meanTimeBeforeClosingDeclaration() {
-            return this.stats ? (Math.round(this.stats.meanTimeBeforeClosingDeclaration.average) || '?') : '...';
+            return this.stats
+                ? Math.round(
+                      this.stats.meanTimeBeforeClosingDeclaration.average
+                  ) || "?"
+                : "...";
         },
 
         numberOfShantytownOperations() {
-            return this.stats ? this.stats.numberOfShantytownOperations : '...';
-        },
+            return this.stats ? this.stats.numberOfShantytownOperations : "...";
+        }
     },
 
     created() {
@@ -112,22 +140,22 @@ export default {
          * before.
          */
         load() {
-            if (this.state === 'loading') {
+            if (this.state === "loading") {
                 return;
             }
 
-            this.state = 'loading';
+            this.state = "loading";
             this.error = null;
 
             getStats()
                 .then(({ statistics: stats }) => {
                     this.stats = stats;
-                    this.state = 'loaded';
+                    this.state = "loaded";
                 })
                 .catch(({ user_message: error }) => {
                     this.error = error;
-                    this.state = 'error';
+                    this.state = "error";
                 });
-        },
-    },
+        }
+    }
 };

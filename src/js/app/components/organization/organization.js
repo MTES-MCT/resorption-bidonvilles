@@ -1,19 +1,18 @@
 export default {
-
     props: {
         organization: {
             type: Object,
-            required: true,
-        },
+            required: true
+        }
     },
 
     mounted() {
         setTimeout(() => {
-            document.addEventListener('click', this.checkOutsideClick);
+            document.addEventListener("click", this.checkOutsideClick);
         }, 500);
     },
     destroyed() {
-        document.removeEventListener('click', this.checkOutsideClick);
+        document.removeEventListener("click", this.checkOutsideClick);
     },
 
     methods: {
@@ -23,8 +22,7 @@ export default {
             }
         },
         close() {
-            this.$emit('close');
-        },
-    },
-
+            this.$emit("close");
+        }
+    }
 };

@@ -1,22 +1,18 @@
 /* eslint-disable no-underscore-dangle */
 
-import L from 'leaflet';
-import Address from '#app/components/address/address.vue';
-import { get as getConfig } from '#helpers/api/config';
-import 'leaflet-providers';
-import 'leaflet.markercluster/dist/MarkerCluster.css';
-import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
-import 'leaflet.markercluster/dist/leaflet.markercluster';
+import L from "leaflet";
+import Address from "#app/components/address/address.vue";
+import { get as getConfig } from "#helpers/api/config";
+import "leaflet-providers";
+import "leaflet.markercluster/dist/MarkerCluster.css";
+import "leaflet.markercluster/dist/MarkerCluster.Default.css";
+import "leaflet.markercluster/dist/leaflet.markercluster";
 
-// eslint-disable-next-line
-import waterYes from '/img/water-yes.png';
-// eslint-disable-next-line
-import waterNo from '/img/water-no.png';
-// eslint-disable-next-line
-import waterNull from '/img/water-null.png';
+import waterYes from "../../../../../public/img/water-yes.png";
+import waterNo from "../../../../../public/img/water-no.png";
+import waterNull from "../../../../../public/img/water-null.png";
 
 const DEFAULT_VIEW = [46.7755829, 2.0497727];
-
 
 /* **************************************************************************************************
  * Ce composant fait apparaître une carte qui propose deux fonctionnalités distinctes :
@@ -32,11 +28,10 @@ const DEFAULT_VIEW = [46.7755829, 2.0497727];
 
 export default {
     components: {
-        Address,
+        Address
     },
 
     props: {
-
         /* *****************************
          * Options pour la liste des sites
          * ************************** */
@@ -51,7 +46,7 @@ export default {
             required: false,
             default() {
                 return [];
-            },
+            }
         },
 
         /* *****************************
@@ -66,7 +61,7 @@ export default {
         displaySearchbar: {
             type: Boolean,
             required: false,
-            default: true,
+            default: true
         },
 
         /**
@@ -77,7 +72,7 @@ export default {
         placeholder: {
             type: String,
             required: false,
-            default: 'Recherchez un lieu en saisissant une adresse',
+            default: "Recherchez un lieu en saisissant une adresse"
         },
 
         /* *****************************
@@ -94,11 +89,10 @@ export default {
             default: () => ({
                 // basically, centering on France
                 center: DEFAULT_VIEW,
-                zoom: 6,
-            }),
-        },
+                zoom: 6
+            })
+        }
     },
-
 
     data() {
         return {
@@ -116,7 +110,7 @@ export default {
              */
             markersGroup: {
                 towns: L.markerClusterGroup(),
-                search: L.markerClusterGroup(),
+                search: L.markerClusterGroup()
             },
 
             /**
@@ -168,7 +162,7 @@ export default {
              *
              * @type {Array.<FieldType>}
              */
-            fieldTypes: getConfig().field_types,
+            fieldTypes: getConfig().field_types
         };
     },
 
@@ -183,9 +177,13 @@ export default {
                 return {};
             }
 
-            return this.fieldTypes.reduce((acc, fieldType) => Object.assign(acc, {
-                [fieldType.id]: fieldType.color,
-            }), {});
+            return this.fieldTypes.reduce(
+                (acc, fieldType) =>
+                    Object.assign(acc, {
+                        [fieldType.id]: fieldType.color
+                    }),
+                {}
+            );
         },
 
         /**
@@ -195,12 +193,11 @@ export default {
          */
         mapLayers() {
             return {
-                Satellite: L.tileLayer.provider('Esri.WorldImagery'),
-                Dessin: L.tileLayer.provider('OpenStreetMap.Mapnik'),
+                Satellite: L.tileLayer.provider("Esri.WorldImagery"),
+                Dessin: L.tileLayer.provider("OpenStreetMap.Mapnik")
             };
-        },
+        }
     },
-
 
     watch: {
         /**
@@ -217,9 +214,9 @@ export default {
          */
         showAddresses() {
             if (this.showAddresses === true) {
-                document.body.setAttribute('class', 'leaflet-show-addresses');
+                document.body.setAttribute("class", "leaflet-show-addresses");
             } else {
-                document.body.setAttribute('class', '');
+                document.body.setAttribute("class", "");
             }
         },
 
@@ -234,21 +231,23 @@ export default {
                 return;
             }
 
-            const { coordinates: [lon, lat], label, addressType: type } = this.address;
+            const {
+                coordinates: [lon, lat],
+                label,
+                addressType: type
+            } = this.address;
             this.centerMap([lat, lon], 20);
 
             this.$nextTick(() => {
                 this.setSearchMarker(type, label, [lat, lon]);
             });
-        },
+        }
     },
-
 
     mounted() {
         this.createMap();
         this.syncTownMarkers();
     },
-
 
     methods: {
         /**
@@ -269,7 +268,7 @@ export default {
          * @returns {undefined}
          */
         setupZoomControl() {
-            this.map.zoomControl.setPosition('bottomright');
+            this.map.zoomControl.setPosition("bottomright");
         },
 
         /**
@@ -278,11 +277,9 @@ export default {
          * @returns {undefined}
          */
         setupLayersControl() {
-            const layersControl = L.control.layers(
-                this.mapLayers,
-                undefined,
-                { collapsed: false },
-            );
+            const layersControl = L.control.layers(this.mapLayers, undefined, {
+                collapsed: false
+            });
 
             this.map.addControl(layersControl);
         },
@@ -296,12 +293,12 @@ export default {
             const { adressToggler } = this.$refs;
             const AddressToggler = L.Control.extend({
                 options: {
-                    position: 'bottomleft',
+                    position: "bottomleft"
                 },
 
                 onAdd() {
                     return adressToggler;
-                },
+                }
             });
 
             this.map.addControl(new AddressToggler());
@@ -316,12 +313,12 @@ export default {
             const { legends } = this.$refs;
             const Legend = L.Control.extend({
                 options: {
-                    position: 'bottomleft',
+                    position: "bottomleft"
                 },
 
                 onAdd() {
                     return legends;
-                },
+                }
             });
 
             this.map.addControl(new Legend());
@@ -355,9 +352,9 @@ export default {
          * @returns {undefined}
          */
         createMap() {
-            this.map = L.map('map', {
+            this.map = L.map("map", {
                 layers: this.mapLayers.Dessin, // fond de carte par défaut
-                scrollWheelZoom: false, // interdire le zoom via la molette de la souris
+                scrollWheelZoom: false // interdire le zoom via la molette de la souris
             });
 
             this.setupMapControls();
@@ -400,7 +397,7 @@ export default {
                 return this.fieldTypeColors[town.fieldType.id];
             }
 
-            return '#cccccc';
+            return "#cccccc";
         },
 
         getTownWaterImage(town) {
@@ -422,17 +419,17 @@ export default {
          */
         createSearchMarker() {
             return L.marker(DEFAULT_VIEW, {
-                title: 'A',
+                title: "A",
                 icon: L.divIcon({
-                    className: 'leaflet-marker',
+                    className: "leaflet-marker",
                     html: `<span class="mapPin mapPin--result">
                         <span class="mapPin-wrapper">
                             <span class="mapPin-marker" style="background-color: red"></span>
                         </span>
                         <span class="mapPin-address"></span>
                     </span>`,
-                    iconAnchor: [13, 28],
-                }),
+                    iconAnchor: [13, 28]
+                })
             });
         },
 
@@ -452,7 +449,7 @@ export default {
             const marker = L.marker(coordinates, {
                 title: town.address,
                 icon: L.divIcon({
-                    className: 'leaflet-marker',
+                    className: "leaflet-marker",
                     html: `<span class="mapPin mapPin--shantytown">
                         <span class="mapPin-wrapper">
                             <span class="mapPin-water"><img src="${waterImage}" /></span>
@@ -460,11 +457,11 @@ export default {
                         </span>
                         <span class="mapPin-address">${address}</span>
                     </span>`,
-                    iconAnchor: [13, 28],
-                }),
+                    iconAnchor: [13, 28]
+                })
             });
-            marker.on('click', this.handleTownMarkerClick.bind(this, town));
-            marker.on('add', () => {
+            marker.on("click", this.handleTownMarkerClick.bind(this, town));
+            marker.on("add", () => {
                 if (marker.searchResult === true) {
                     this.markTownAsSearchResult(marker);
                 }
@@ -472,7 +469,7 @@ export default {
 
             marker.addTo(this.markersGroup.towns);
             this.townMarkers.push(marker);
-            this.hashedTownMarkers[coordinates.join(';')] = marker;
+            this.hashedTownMarkers[coordinates.join(";")] = marker;
         },
 
         /**
@@ -484,7 +481,7 @@ export default {
          * @returns {undefined}
          */
         handleTownMarkerClick(marker, event) {
-            this.$emit('town-click', marker, event);
+            this.$emit("town-click", marker, event);
         },
 
         /**
@@ -515,7 +512,9 @@ export default {
         clearSearchMarker() {
             if (this.townSearchMarker !== null) {
                 if (this.townSearchMarker._icon) {
-                    this.townSearchMarker._icon.querySelector('.mapPin').classList.remove('mapPin--result');
+                    this.townSearchMarker._icon
+                        .querySelector(".mapPin")
+                        .classList.remove("mapPin--result");
                 }
 
                 this.townSearchMarker.searchResult = false;
@@ -527,13 +526,15 @@ export default {
         },
 
         getMatchingTownMarker(coordinates) {
-            return this.hashedTownMarkers[coordinates.join(';')] || null;
+            return this.hashedTownMarkers[coordinates.join(";")] || null;
         },
 
         markTownAsSearchResult(marker) {
             this.townSearchMarker = marker;
             this.townSearchMarker.searchResult = true;
-            marker._icon.querySelector('.mapPin').classList.add('mapPin--result');
+            marker._icon
+                .querySelector(".mapPin")
+                .classList.add("mapPin--result");
         },
 
         setSearchMarker(type, address, coordinates) {
@@ -549,17 +550,20 @@ export default {
             this.searchMarker.addTo(this.markersGroup.search);
             this.searchMarker.setLatLng(coordinates);
 
+            this.searchMarker._icon.querySelector(
+                ".mapPin-address"
+            ).innerHTML = address;
 
-            this.searchMarker._icon.querySelector('.mapPin-address').innerHTML = address;
-
-            let action = 'add';
-            if (type !== 'housenumber') {
-                action = 'remove';
+            let action = "add";
+            if (type !== "housenumber") {
+                action = "remove";
             }
 
-            this.searchMarker._icon.querySelector('.mapPin').classList[action]('mapPin--street');
-        },
-    },
+            this.searchMarker._icon
+                .querySelector(".mapPin")
+                .classList[action]("mapPin--street");
+        }
+    }
 };
 
 /**

@@ -3,10 +3,11 @@
 </template>
 
 <script>
-import Component from './legalMentions.js';
+import Component from "./legalMentions";
+
 export default Component;
 </script>
 
 <style lang="scss" scoped>
-@import './legalMentions.scss';
+@import "./legalMentions.scss";
 </style>

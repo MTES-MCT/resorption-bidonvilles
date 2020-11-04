@@ -1,22 +1,15 @@
-import NavBar from '#app/layouts/navbar/navbar.vue';
-import FilterGroup from './filterGroup/filterGroup.vue';
-import Map from '#app/components/map/map.vue';
-import Quickview from '#app/components/quickview/quickview.vue';
-import { all as fetchAll } from '#helpers/api/town';
-import { get as getConfig, getPermission } from '#helpers/api/config';
-import simplebar from 'simplebar-vue';
-import { open } from '#helpers/tabHelper';
+import simplebar from "simplebar-vue";
+import NavBar from "#app/layouts/navbar/navbar.vue";
+import FilterGroup from "./filterGroup/filterGroup.vue";
+import Map from "#app/components/map/map.vue";
+import Quickview from "#app/components/quickview/quickview.vue";
+import { all as fetchAll } from "#helpers/api/town";
+import { get as getConfig, getPermission } from "#helpers/api/config";
+import { open } from "#helpers/tabHelper";
 
-// eslint-disable-next-line
-import iconType from '/img/type.svg';
-// eslint-disable-next-line
-import iconPeople from '/img/people.svg';
-// eslint-disable-next-line
-import iconJustice from '/img/justice.svg';
-// eslint-disable-next-line
-import iconStatus from '/img/status.svg';
-// eslint-disable-next-line
-import iconOrigins from '/img/origins.svg';
+import iconType from "../../../../../public/img/type.svg";
+import iconPeople from "../../../../../public/img/people.svg";
+import iconStatus from "../../../../../public/img/status.svg";
 
 /**
  * Returns the appropriate zoom level for the given location type
@@ -27,14 +20,14 @@ import iconOrigins from '/img/origins.svg';
  */
 function getDefaultZoomFor(locationType) {
     switch (locationType) {
-        case 'nation':
-        case 'region':
+        case "nation":
+        case "region":
             return 6;
 
         default:
-        case 'departement':
-        case 'epci':
-        case 'city':
+        case "departement":
+        case "epci":
+        case "city":
             return 10;
     }
 }
@@ -45,7 +38,7 @@ export default {
         FilterGroup,
         Map,
         Quickview,
-        simplebar,
+        simplebar
     },
     data() {
         const { user } = getConfig();
@@ -54,71 +47,95 @@ export default {
             error: undefined,
             loading: false,
             defaultMapView: {
-                center: [user.organization.location.latitude, user.organization.location.longitude],
-                zoom: getDefaultZoomFor(user.organization.location.type),
+                center: [
+                    user.organization.location.latitude,
+                    user.organization.location.longitude
+                ],
+                zoom: getDefaultZoomFor(user.organization.location.type)
             },
             towns: [],
             quickview: {
                 town: null,
-                originEvent: null,
+                originEvent: null
             },
-            permission: getPermission('shantytown.list'),
+            permission: getPermission("shantytown.list"),
             filters: [
                 {
-                    faIcon: 'tint',
-                    label: 'Accès à l\'eau',
-                    id: 'accessToWater',
+                    faIcon: "tint",
+                    label: "Accès à l'eau",
+                    id: "accessToWater",
                     options: [
                         {
-                            value: true, label: 'Oui', checked: true, icon: { id: 'tint', color: '00a0e3' },
+                            value: true,
+                            label: "Oui",
+                            checked: true,
+                            icon: { id: "tint", color: "00a0e3" }
                         },
                         {
-                            value: false, label: 'Non', checked: true, icon: { id: 'tint-slash', color: 'ADB9C9' },
+                            value: false,
+                            label: "Non",
+                            checked: true,
+                            icon: { id: "tint-slash", color: "ADB9C9" }
                         },
                         {
-                            value: null, label: 'Inconnu', checked: true, icon: { id: 'question', color: 'ADB9C9' },
-                        },
+                            value: null,
+                            label: "Inconnu",
+                            checked: true,
+                            icon: { id: "question", color: "ADB9C9" }
+                        }
                     ],
-                    opened: true,
+                    opened: true
                 },
                 {
                     icon: iconType,
-                    label: 'Types de site',
-                    id: 'fieldType',
+                    label: "Types de site",
+                    id: "fieldType",
                     options: [],
-                    opened: true,
+                    opened: true
                 },
                 {
                     icon: iconPeople,
-                    label: 'Nombre de personnes',
-                    id: 'population',
+                    label: "Nombre de personnes",
+                    id: "population",
                     options: [
-                        { value: null, label: 'Inconnu', checked: true },
-                        { value: '-9', label: 'Moins de 10 personnes', checked: true },
-                        { value: '10-99', label: 'Entre 10 et 99 personnes', checked: true },
-                        { value: '100-', label: '100 personnes et plus', checked: true },
-                    ],
+                        { value: null, label: "Inconnu", checked: true },
+                        {
+                            value: "-9",
+                            label: "Moins de 10 personnes",
+                            checked: true
+                        },
+                        {
+                            value: "10-99",
+                            label: "Entre 10 et 99 personnes",
+                            checked: true
+                        },
+                        {
+                            value: "100-",
+                            label: "100 personnes et plus",
+                            checked: true
+                        }
+                    ]
                 },
                 {
                     icon: iconStatus,
-                    label: 'Statut des sites',
-                    id: 'status',
+                    label: "Statut des sites",
+                    id: "status",
                     options: [
-                        { value: 'closed', label: 'Disparus', checked: false },
-                        { value: 'opened', label: 'Existants', checked: true },
-                    ],
+                        { value: "closed", label: "Disparus", checked: false },
+                        { value: "opened", label: "Existants", checked: true }
+                    ]
                 },
                 {
                     icon: iconPeople,
-                    label: 'Type de propriétaire',
-                    id: 'ownerType',
+                    label: "Type de propriétaire",
+                    id: "ownerType",
                     options: getConfig().owner_types.map(type => ({
                         value: type.id,
                         label: type.label,
-                        checked: true,
-                    })),
-                },
-            ],
+                        checked: true
+                    }))
+                }
+            ]
         };
     },
     computed: {
@@ -128,99 +145,134 @@ export default {
             }
 
             return this.filters.filter(
-                filter => !filter.permissions || filter.permissions.every(permission => this.permission[permission]),
+                filter =>
+                    !filter.permissions ||
+                    filter.permissions.every(
+                        permission => this.permission[permission]
+                    )
             );
         },
         rendererProps() {
             return {
                 towns: this.visibleTowns,
-                defaultView: this.defaultMapView,
+                defaultView: this.defaultMapView
             };
         },
         visibleTowns() {
             let visibleTowns = this.towns;
 
-            this.allowedFilters.forEach((filterGroup) => {
+            this.allowedFilters.forEach(filterGroup => {
                 switch (filterGroup.id) {
-                    case 'accessToWater': {
-                        const allowed = filterGroup.options
-                            .filter(option => option.checked)
-                            .map(option => option.value);
+                    case "accessToWater":
+                        {
+                            const allowed = filterGroup.options
+                                .filter(option => option.checked)
+                                .map(option => option.value);
 
-                        visibleTowns = visibleTowns.filter(town => allowed.indexOf(town.accessToWater) !== -1);
-                    }
+                            visibleTowns = visibleTowns.filter(
+                                town =>
+                                    allowed.indexOf(town.accessToWater) !== -1
+                            );
+                        }
                         break;
 
-                    case 'fieldType': {
-                        const allowedFieldTypes = filterGroup.options
-                            .filter(option => option.checked)
-                            .map(option => option.value);
+                    case "fieldType":
+                        {
+                            const allowedFieldTypes = filterGroup.options
+                                .filter(option => option.checked)
+                                .map(option => option.value);
 
-                        visibleTowns = visibleTowns.filter(town => town.fieldType && allowedFieldTypes.indexOf(town.fieldType.id) !== -1);
-                    }
+                            visibleTowns = visibleTowns.filter(
+                                town =>
+                                    town.fieldType &&
+                                    allowedFieldTypes.indexOf(
+                                        town.fieldType.id
+                                    ) !== -1
+                            );
+                        }
                         break;
 
-                    case 'population': {
-                        const disallowedPopulation = filterGroup.options
-                            .filter(option => !option.checked)
-                            .map(option => option.value);
+                    case "population":
+                        {
+                            const disallowedPopulation = filterGroup.options
+                                .filter(option => !option.checked)
+                                .map(option => option.value);
 
-                        disallowedPopulation.forEach((value) => {
-                            if (value === null) {
-                                visibleTowns = visibleTowns.filter(town => town.populationTotal !== null);
-                                return;
-                            }
+                            disallowedPopulation.forEach(value => {
+                                if (value === null) {
+                                    visibleTowns = visibleTowns.filter(
+                                        town => town.populationTotal !== null
+                                    );
+                                    return;
+                                }
 
-                            let [min, max] = value.split('-');
-                            min = parseInt(min, 10);
-                            max = parseInt(max, 10);
+                                let [min, max] = value.split("-");
+                                min = parseInt(min, 10);
+                                max = parseInt(max, 10);
 
-                            visibleTowns = visibleTowns.filter((town) => {
-                                if (town.populationTotal === null) {
+                                visibleTowns = visibleTowns.filter(town => {
+                                    if (town.populationTotal === null) {
+                                        return true;
+                                    }
+
+                                    if (
+                                        !Number.isNaN(min) &&
+                                        !Number.isNaN(max)
+                                    ) {
+                                        return (
+                                            town.populationTotal < min ||
+                                            town.populationTotal > max
+                                        );
+                                    }
+
+                                    if (!Number.isNaN(min)) {
+                                        return town.populationTotal < min;
+                                    }
+
+                                    if (!Number.isNaN(max)) {
+                                        return town.populationTotal > max;
+                                    }
+
                                     return true;
-                                }
-
-                                if (!Number.isNaN(min)
-                                    && !Number.isNaN(max)) {
-                                    return town.populationTotal < min || town.populationTotal > max;
-                                }
-
-                                if (!Number.isNaN(min)) {
-                                    return town.populationTotal < min;
-                                }
-
-                                if (!Number.isNaN(max)) {
-                                    return town.populationTotal > max;
-                                }
-
-                                return true;
+                                });
                             });
-                        });
-                    }
+                        }
                         break;
 
-                    case 'status': {
-                        const disallowedStatuses = filterGroup.options
-                            .filter(option => !option.checked)
-                            .map(option => option.value);
+                    case "status":
+                        {
+                            const disallowedStatuses = filterGroup.options
+                                .filter(option => !option.checked)
+                                .map(option => option.value);
 
-                        disallowedStatuses.forEach((value) => {
-                            if (value === 'closed') {
-                                visibleTowns = visibleTowns.filter(town => town.status === 'open');
-                            } else if (value === 'opened') {
-                                visibleTowns = visibleTowns.filter(town => town.status !== 'open');
-                            }
-                        });
-                    }
+                            disallowedStatuses.forEach(value => {
+                                if (value === "closed") {
+                                    visibleTowns = visibleTowns.filter(
+                                        town => town.status === "open"
+                                    );
+                                } else if (value === "opened") {
+                                    visibleTowns = visibleTowns.filter(
+                                        town => town.status !== "open"
+                                    );
+                                }
+                            });
+                        }
                         break;
 
-                    case 'ownerType': {
-                        const allowedOwnerTypes = filterGroup.options
-                            .filter(option => option.checked)
-                            .map(option => option.value);
+                    case "ownerType":
+                        {
+                            const allowedOwnerTypes = filterGroup.options
+                                .filter(option => option.checked)
+                                .map(option => option.value);
 
-                        visibleTowns = visibleTowns.filter(town => town.ownerType && allowedOwnerTypes.indexOf(town.ownerType.id) !== -1);
-                    }
+                            visibleTowns = visibleTowns.filter(
+                                town =>
+                                    town.ownerType &&
+                                    allowedOwnerTypes.indexOf(
+                                        town.ownerType.id
+                                    ) !== -1
+                            );
+                        }
                         break;
 
                     default:
@@ -228,28 +280,28 @@ export default {
             });
 
             return visibleTowns;
-        },
+        }
     },
     created() {
         this.fetchData();
     },
     mounted() {
-        window.addEventListener('resize', this.resize);
+        window.addEventListener("resize", this.resize);
     },
     beforeDestroy() {
-        window.removeEventListener('resize', this.resize);
+        window.removeEventListener("resize", this.resize);
     },
     methods: {
         sortNumber(x, y) {
-            if (x === 'inconnu' && y === 'inconnu') {
+            if (x === "inconnu" && y === "inconnu") {
                 return 0;
             }
 
-            if (x === 'inconnu') {
+            if (x === "inconnu") {
                 return -1;
             }
 
-            if (y === 'inconnu') {
+            if (y === "inconnu") {
                 return 1;
             }
 
@@ -266,13 +318,13 @@ export default {
         showQuickview(town, event) {
             this.quickview = {
                 town,
-                originEvent: event.originalEvent,
+                originEvent: event.originalEvent
             };
         },
         hideQuickview() {
             this.quickview = {
                 town: null,
-                originEvent: null,
+                originEvent: null
             };
         },
         routeToTown(params) {
@@ -289,7 +341,10 @@ export default {
         },
         stretchToBottom(element) {
             const height = element.offsetHeight;
-            const newHeight = height + (document.body.offsetHeight - (this.absoluteOffsetTop(element) + height));
+            const newHeight =
+                height +
+                (document.body.offsetHeight -
+                    (this.absoluteOffsetTop(element) + height));
 
             // eslint-disable-next-line
             element.style.height = `${newHeight}px`;
@@ -314,21 +369,23 @@ export default {
             this.error = undefined;
 
             fetchAll()
-                .then((towns) => {
+                .then(towns => {
                     const { field_types: fieldTypes } = getConfig();
 
                     this.loading = false;
 
                     // build the field-type filter
-                    const fieldTypeFilter = this.filters.filter(({ id }) => id === 'fieldType')[0];
+                    const fieldTypeFilter = this.filters.filter(
+                        ({ id }) => id === "fieldType"
+                    )[0];
                     fieldTypeFilter.options = [
                         // options based on field-types returned by the api
                         ...fieldTypes.map(fieldType => ({
                             id: fieldType.id,
                             value: fieldType.id,
                             label: fieldType.label,
-                            checked: true,
-                        })),
+                            checked: true
+                        }))
                     ];
 
                     this.towns = towns;
@@ -337,10 +394,10 @@ export default {
                         this.$refs.map.resize();
                     });
                 })
-                .catch((errors) => {
+                .catch(errors => {
                     this.error = errors.user_message;
                     this.loading = false;
                 });
-        },
-    },
+        }
+    }
 };

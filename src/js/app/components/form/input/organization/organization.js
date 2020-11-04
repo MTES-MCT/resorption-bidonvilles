@@ -1,12 +1,10 @@
-import Autocompleter from '../autocompleter/autocompleter.vue';
-import { autocompleteOrganization as autocompleter } from '#helpers/api/user';
+import Autocompleter from "../autocompleter/autocompleter.vue";
+import { autocompleteOrganization as autocompleter } from "#helpers/api/user";
 
 export default {
-
     components: {
-        Autocompleter,
+        Autocompleter
     },
-
 
     props: {
         /**
@@ -17,7 +15,7 @@ export default {
             required: false,
             default() {
                 return null;
-            },
+            }
         },
 
         /**
@@ -28,7 +26,7 @@ export default {
         disabled: {
             type: Boolean,
             required: false,
-            default: false,
+            default: false
         },
 
         /**
@@ -41,10 +39,9 @@ export default {
             required: false,
             default() {
                 return {};
-            },
-        },
+            }
+        }
     },
-
 
     data() {
         return {
@@ -56,25 +53,25 @@ export default {
             /**
              * @type {Object}
              */
-            options: Object.assign({}, this.specificProps, {
+            options: {
+                ...this.specificProps,
                 showCategory: true,
                 autocompleter: (...args) => {
                     const p1 = autocompleter(...args);
-                    const p2 = p1.then(result => result.map(
-                        r => ({
+                    const p2 = p1.then(result =>
+                        result.map(r => ({
                             id: r.id,
                             label: r.label,
                             category: r.type.label,
-                            data: r,
-                        }),
-                    ));
+                            data: r
+                        }))
+                    );
                     p2.abort = p1.abort;
                     return p2;
-                },
-            }),
+                }
+            }
         };
     },
-
 
     watch: {
         // two-way binding
@@ -82,8 +79,7 @@ export default {
             this.data = this.value !== null ? [this.value] : [];
         },
         data() {
-            this.$emit('input', this.data.length > 0 ? this.data[0] : null);
-        },
-    },
-
+            this.$emit("input", this.data.length > 0 ? this.data[0] : null);
+        }
+    }
 };

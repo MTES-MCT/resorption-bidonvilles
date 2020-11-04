@@ -1,13 +1,11 @@
-import Address from '../address/address.vue';
-import Location from '../location/location.vue';
+import Address from "../address/address.vue";
+import Location from "../location/location.vue";
 
 export default {
-
     components: {
         Address,
-        Location,
+        Location
     },
-
 
     props: {
         /**
@@ -18,7 +16,7 @@ export default {
             required: false,
             default() {
                 return null;
-            },
+            }
         },
 
         /**
@@ -32,9 +30,9 @@ export default {
             default() {
                 return {
                     address: {},
-                    location: {},
+                    location: {}
                 };
-            },
+            }
         },
 
         /**
@@ -45,10 +43,9 @@ export default {
         disabled: {
             type: Boolean,
             required: false,
-            default: false,
-        },
+            default: false
+        }
     },
-
 
     data() {
         return {
@@ -60,10 +57,9 @@ export default {
             /**
              * @type {MapView}
              */
-            location: this.value !== null ? this.value.location : undefined,
+            location: this.value !== null ? this.value.location : undefined
         };
     },
-
 
     computed: {
         /**
@@ -72,7 +68,7 @@ export default {
          * @returns {Object}
          */
         addressOptions() {
-            return Object.assign({}, this.specificProps.address);
+            return { ...this.specificProps.address };
         },
 
         /**
@@ -81,19 +77,22 @@ export default {
          * @returns {Object}
          */
         locationOptions() {
-            return Object.assign({}, this.specificProps.location, {
-                tutorial: this.address ? 'auto' : 'yes',
+            return {
+                ...this.specificProps.location,
+                tutorial: this.address ? "auto" : "yes",
                 autoHideMarker: !this.address,
                 wording: this.address
                     ? {
-                        tutorialTitle: 'Adresse détectée',
-                        tutorialDescription: 'Vous pouvez déplacer le marqueur en cliquant à l\'endroit souhaité sur la carte',
-                    }
+                          tutorialTitle: "Adresse détectée",
+                          tutorialDescription:
+                              "Vous pouvez déplacer le marqueur en cliquant à l'endroit souhaité sur la carte"
+                      }
                     : {
-                        tutorialTitle: 'Saisir une adresse',
-                        tutorialDescription: 'Veuillez saisir une adresse dans le champ de texte ci-dessus avant d\'accéder à la carte',
-                    },
-            });
+                          tutorialTitle: "Saisir une adresse",
+                          tutorialDescription:
+                              "Veuillez saisir une adresse dans le champ de texte ci-dessus avant d'accéder à la carte"
+                      }
+            };
         },
 
         /**
@@ -108,34 +107,33 @@ export default {
 
             return {
                 address: this.address,
-                location: this.location,
+                location: this.location
             };
-        },
+        }
     },
-
 
     watch: {
         // two-way binding
         value() {
             this.address = this.value !== null ? this.value.address : undefined;
-            this.location = this.value !== null ? this.value.location : undefined;
+            this.location =
+                this.value !== null ? this.value.location : undefined;
         },
         address() {
             if (this.address) {
                 const [lon, lat] = this.address.coordinates;
                 this.location = {
                     coordinates: [lat, lon],
-                    zoom: 15,
+                    zoom: 15
                 };
             }
 
-            this.$emit('input', this.data);
+            this.$emit("input", this.data);
         },
         location() {
-            this.$emit('input', this.data);
-        },
-    },
-
+            this.$emit("input", this.data);
+        }
+    }
 };
 
 /**

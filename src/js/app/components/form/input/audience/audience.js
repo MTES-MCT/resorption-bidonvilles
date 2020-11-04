@@ -1,6 +1,5 @@
 /* eslint-disable object-shorthand */
 export default {
-
     props: {
         /**
          * Value
@@ -16,28 +15,28 @@ export default {
                         households: 0,
                         people: 0,
                         women: 0,
-                        minors: 0,
+                        minors: 0
                     },
                     out_positive: {
                         households: 0,
                         people: 0,
                         women: 0,
-                        minors: 0,
+                        minors: 0
                     },
                     out_abandoned: {
                         households: 0,
                         people: 0,
                         women: 0,
-                        minors: 0,
+                        minors: 0
                     },
                     out_excluded: {
                         households: 0,
                         people: 0,
                         women: 0,
-                        minors: 0,
-                    },
+                        minors: 0
+                    }
                 };
-            },
+            }
         },
 
         /**
@@ -50,7 +49,7 @@ export default {
         inOnly: {
             type: Boolean,
             required: false,
-            default: false,
+            default: false
         },
 
         /**
@@ -63,7 +62,7 @@ export default {
         outOnly: {
             type: Boolean,
             required: false,
-            default: false,
+            default: false
         },
 
         /**
@@ -74,50 +73,77 @@ export default {
         disabled: {
             type: Boolean,
             required: false,
-            default: false,
-        },
+            default: false
+        }
     },
-
 
     data() {
         return {
-            data: this.value,
+            data: this.value
         };
     },
 
-
     watch: {
-        'data.in.households'() { this.emitInput(); },
-        'data.in.people'() { this.emitInput(); },
-        'data.in.women'() { this.emitInput(); },
-        'data.in.minors'() { this.emitInput(); },
+        "data.in.households"() {
+            this.emitInput();
+        },
+        "data.in.people"() {
+            this.emitInput();
+        },
+        "data.in.women"() {
+            this.emitInput();
+        },
+        "data.in.minors"() {
+            this.emitInput();
+        },
 
-        'data.out_positive.households'() { this.emitInput(); },
-        'data.out_positive.people'() { this.emitInput(); },
-        'data.out_positive.women'() { this.emitInput(); },
-        'data.out_positive.minors'() { this.emitInput(); },
+        "data.out_positive.households"() {
+            this.emitInput();
+        },
+        "data.out_positive.people"() {
+            this.emitInput();
+        },
+        "data.out_positive.women"() {
+            this.emitInput();
+        },
+        "data.out_positive.minors"() {
+            this.emitInput();
+        },
 
-        'data.out_abandoned.households'() { this.emitInput(); },
-        'data.out_abandoned.people'() { this.emitInput(); },
-        'data.out_abandoned.women'() { this.emitInput(); },
-        'data.out_abandoned.minors'() { this.emitInput(); },
+        "data.out_abandoned.households"() {
+            this.emitInput();
+        },
+        "data.out_abandoned.people"() {
+            this.emitInput();
+        },
+        "data.out_abandoned.women"() {
+            this.emitInput();
+        },
+        "data.out_abandoned.minors"() {
+            this.emitInput();
+        },
 
-        'data.out_excluded.households'() { this.emitInput(); },
-        'data.out_excluded.people'() { this.emitInput(); },
-        'data.out_excluded.women'() { this.emitInput(); },
-        'data.out_excluded.minors'() { this.emitInput(); },
+        "data.out_excluded.households"() {
+            this.emitInput();
+        },
+        "data.out_excluded.people"() {
+            this.emitInput();
+        },
+        "data.out_excluded.women"() {
+            this.emitInput();
+        },
+        "data.out_excluded.minors"() {
+            this.emitInput();
+        }
     },
-
 
     mounted() {
         this.emitInput();
     },
 
-
     methods: {
         emitInput() {
-            this.$emit('input', this.data);
-        },
-    },
-
+            this.$emit("input", this.data);
+        }
+    }
 };

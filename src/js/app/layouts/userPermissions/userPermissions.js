@@ -4,13 +4,12 @@
  * @const {Object.<String,String>}
  */
 const TYPES_TO_ICONS = {
-    view: 'eye',
-    edit: 'pencil-alt',
-    deny: 'times',
+    view: "eye",
+    edit: "pencil-alt",
+    deny: "times"
 };
 
 export default {
-
     props: {
         /**
          * Title of the section
@@ -19,7 +18,7 @@ export default {
          */
         title: {
             type: String,
-            required: true,
+            required: true
         },
 
         /**
@@ -29,8 +28,8 @@ export default {
          */
         items: {
             type: Array,
-            required: true,
-        },
+            required: true
+        }
     },
 
     computed: {
@@ -49,7 +48,7 @@ export default {
 
                 return [...acc, ...arr.map(this.resolveIcon)];
             }, []);
-        },
+        }
     },
 
     methods: {
@@ -61,10 +60,9 @@ export default {
          * @returns {UserPermissionParsedItem}
          */
         resolveIcon(item) {
-            return Object.assign({}, item, { icon: TYPES_TO_ICONS[item.type] });
-        },
-    },
-
+            return { ...item, icon: TYPES_TO_ICONS[item.type] };
+        }
+    }
 };
 
 /**

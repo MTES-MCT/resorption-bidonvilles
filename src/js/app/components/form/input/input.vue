@@ -3,10 +3,11 @@
 </template>
 
 <style lang="scss">
-    @import './input.scss';
+@import "./input.scss";
 </style>
 
 <script>
-    import Component from './input.js';
-    export default Component;
+import Component from "./input";
+
+export default Component;
 </script>

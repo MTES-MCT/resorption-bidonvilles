@@ -2,12 +2,28 @@
     <Dropdown>
         <template v-slot:button>
             <Button variant="primaryOutline" icon="chevron-down">
-                <img v-if="$i18n.locale === 'fr'" src="./assets/FR.svg" class="inline-block h-6" />
-                <img v-if="$i18n.locale === 'en'" src="./assets/UK.svg" class="inline-block h-6" />
-                <img v-if="$i18n.locale === 'ro'" src="./assets/RO.svg" class="inline-block h-6" />
-                <img v-if="$i18n.locale === 'bg'" src="./assets/BG.svg" class="inline-block h-6" />
-
-                <span class="uppercase">{{$i18n.locale}}</span>
+                <img
+                    v-if="$i18n.locale === 'fr'"
+                    src="./assets/FR.svg"
+                    class="inline-block h-6"
+                />
+                <img
+                    v-if="$i18n.locale === 'en'"
+                    src="./assets/UK.svg"
+                    class="inline-block h-6"
+                />
+                <img
+                    v-if="$i18n.locale === 'ro'"
+                    src="./assets/RO.svg"
+                    class="inline-block h-6"
+                />
+                <img
+                    v-if="$i18n.locale === 'bg'"
+                    src="./assets/BG.svg"
+                    class="inline-block h-6"
+                />
+                {{ " " }}
+                <span class="uppercase">{{ $i18n.locale }}</span>
             </Button>
         </template>
         <template v-slot:menu="{ closeMenu }">
@@ -30,14 +46,14 @@
 </template>
 
 <script>
-    import { localize } from 'vee-validate';
+import { localize } from "vee-validate";
 
-    export default {
-        methods: {
-            pickLang(lang) {
-                this.$i18n.locale = lang
-                localize(lang)
-            },
+export default {
+    methods: {
+        pickLang(lang) {
+            this.$i18n.locale = lang;
+            localize(lang);
         }
     }
+};
 </script>

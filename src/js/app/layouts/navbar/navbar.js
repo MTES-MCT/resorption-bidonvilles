@@ -1,11 +1,15 @@
-import { isLoggedIn } from '#helpers/api/user';
-import { isLoaded as isConfigLoaded, hasPermission, hasAcceptedCharte } from '#helpers/api/config';
-import ITEMS from './items';
+import { isLoggedIn } from "#helpers/api/user";
+import {
+    isLoaded as isConfigLoaded,
+    hasPermission,
+    hasAcceptedCharte
+} from "#helpers/api/config";
+import ITEMS from "./items";
 
 export default {
     data() {
         return {
-            isSidebarOpened: false,
+            isSidebarOpened: false
         };
     },
     computed: {
@@ -19,21 +23,23 @@ export default {
             }
 
             return this.filterItems(ITEMS.loaded);
-        },
+        }
     },
     methods: {
         filterItems(items) {
             return items
-                .map((item) => {
+                .map(item => {
                     if (item.items) {
                         return Object.assign(item, {
-                            items: item.items.filter(subitem => this.isItemAllowed(subitem)),
+                            items: item.items.filter(subitem =>
+                                this.isItemAllowed(subitem)
+                            )
                         });
                     }
 
                     return item;
                 })
-                .filter((item) => {
+                .filter(item => {
                     if (item.items) {
                         return item.items.length > 0;
                     }
@@ -43,17 +49,21 @@ export default {
         },
         isItemAllowed(item) {
             const requiredPermissions = this.$router.resolve({
-                path: item.target,
+                path: item.target
             }).route.meta.permissions;
 
             if (!requiredPermissions) {
                 return true;
             }
 
-            return requiredPermissions.every(permission => hasPermission(permission));
+            return requiredPermissions.every(permission =>
+                hasPermission(permission)
+            );
         },
         isCurrentRouteAMemberOf(group) {
-            return this.$route.matched.some(route => route.meta.group === group);
+            return this.$route.matched.some(
+                route => route.meta.group === group
+            );
         },
         showSidebar() {
             this.isSidebarOpened = true;
@@ -63,15 +73,18 @@ export default {
         },
         checkClickOutsideSidebar(event) {
             // in case of a click outside the sidebar and NOT on the "Menu" link
-            if (!this.$refs.sidebar.contains(event.target) && event.target !== this.$refs.menu) {
+            if (
+                !this.$refs.sidebar.contains(event.target) &&
+                event.target !== this.$refs.menu
+            ) {
                 this.hideSidebar();
             }
-        },
+        }
     },
     mounted() {
-        document.addEventListener('click', this.checkClickOutsideSidebar);
+        document.addEventListener("click", this.checkClickOutsideSidebar);
     },
     destroyed() {
-        document.removeEventListener('click', this.checkClickOutsideSidebar);
-    },
+        document.removeEventListener("click", this.checkClickOutsideSidebar);
+    }
 };
