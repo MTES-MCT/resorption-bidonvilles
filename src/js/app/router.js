@@ -7,6 +7,7 @@ import Contact from "#app/pages/Contact/index.vue";
 import Dashboard from "#app/pages/dashboard/dashboard.vue";
 import Launcher from "#app/pages/launcher/launcher.vue";
 import TownsList from "#app/pages/towns.list/towns.list.vue";
+import TownsListNew from "#app/pages/TownsList/TownsList.vue";
 import TownsCreate from "#app/pages/towns.create/towns.create.vue";
 import TownsDetails from "#app/pages/towns.details/towns.details.vue";
 import Me from "#app/pages/me/me.vue";
@@ -252,6 +253,14 @@ const router = new VueRouter({
             },
             path: "/liste-des-sites",
             component: TownsList,
+            beforeEnter: guardians.loadedAndUpToDate
+        },
+        {
+            meta: {
+                group: "townList"
+            },
+            path: "/liste-des-sites-2",
+            component: TownsListNew,
             beforeEnter: guardians.loadedAndUpToDate
         },
         {
