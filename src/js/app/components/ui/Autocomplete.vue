@@ -143,6 +143,10 @@ export default {
         id: {
             type: String
         },
+        inputClasses: {
+            type: Array,
+            default: () => []
+        },
         search: {
             type: Function,
             required: true
@@ -178,10 +182,11 @@ export default {
                 prefixIcon: this.prefixIcon
             };
 
-            return {
+            const defaultClasses = {
                 state: [...getInputClasses("state", inputOptions)],
                 default: getInputClasses("default", inputOptions)
             }[this.variant];
+            return [...this.inputClasses, ...defaultClasses];
         }
     },
     data() {
