@@ -1,22 +1,69 @@
 <template>
     <PrivateLayout>
-        <PrivateContainer>
-            <TownsListSearchBar
-                v-model="filters.location"
-                class="mt-12 mb-12"
-            />
+        <div class="v1">
+            <Export
+                v-if="exportIsVisible"
+                :towns="[]"
+                @close="hideExport"
+                :location="currentLocation"
+                :closedTowns="filters.status === 'close'"
+            ></Export>
+        </div>
+        <div class="bg-G100">
+            <PrivateContainer class="py-6">
+                <h1 class="text-display-sm text-center mb-4">
+                    Rechercher un site, une commune, un département... ?
+                </h1>
+                <TownsListSearchBar v-model="filters.location" />
+            </PrivateContainer>
+        </div>
+        <PrivateContainer class="pt-10">
             <TownsListHeader :search="filters.location" class="mb-12">
-                <TownsListHeaderTab
-                    :active="filters.status === 'open'"
-                    @click="filters.status = 'open'"
-                    class="mr-2"
-                    >Site existants</TownsListHeaderTab
-                >
-                <TownsListHeaderTab
-                    :active="filters.status === 'close'"
-                    @click="filters.status = 'close'"
-                    >Site fermés</TownsListHeaderTab
-                >
+                <template slot="filters">
+                    <TownsListHeaderTab
+                        :active="filters.status === 'open'"
+                        @click="filters.status = 'open'"
+                        class="mr-8"
+                        >Sites existants</TownsListHeaderTab
+                    >
+                    <TownsListHeaderTab
+                        :active="filters.status === 'close'"
+                        @click="filters.status = 'close'"
+                        >Site fermés</TownsListHeaderTab
+                    >
+                </template>
+                <template slot="title">
+                    <div class="text-display-xl mb-2">{{ title }}</div>
+                    <div>{{ populationTotal }} personnes</div>
+                    <div>
+                        {{ filteredShantytowns.length }} sites
+                        <span v-if="hasJusticePermission && justiceTotal.length"
+                            >dont {{ justiceTotal }} site(s) avec une procédure
+                            judiciaire</span
+                        >
+                    </div>
+                </template>
+                <template slot="buttons">
+                    <Button
+                        icon="file-excel"
+                        iconPosition="left"
+                        variant="primary"
+                        class="mr-6"
+                        @click="showExport"
+                        >Exporter</Button
+                    >
+                    <router-link
+                        to="/nouveau-site"
+                        v-if="hasPermission('shantytown.create')"
+                        ><Button
+                            icon="plus"
+                            iconPosition="left"
+                            variant="secondary"
+                        >
+                            Déclarer un nouveau site</Button
+                        ></router-link
+                    >
+                </template>
             </TownsListHeader>
             <TownsListFilters class="mb-8">
                 <TownsListFilter
@@ -59,7 +106,7 @@
                 v-for="shantytown in filteredShantytowns"
                 :key="shantytown.id"
                 :shantytown="shantytown"
-                class="mb-8"
+                class="mb-6"
             />
         </PrivateContainer>
     </PrivateLayout>
@@ -76,8 +123,13 @@ import TownsListHeader from "./TownsListHeader/TownsListHeader";
 import TownsListHeaderTab from "./TownsListHeader/TownsListHeaderTab";
 import TownsListFilters from "./TownsListFilters/TownsListFilters";
 import TownsListFilter from "./TownsListFilters/TownsListFilter";
-import { get as getConfig } from "#helpers/api/config";
+import {
+    get as getConfig,
+    getPermission,
+    hasPermission
+} from "#helpers/api/config";
 import { filterShantytowns } from "./filterShantytowns";
+import Export from "#app/components/export/export.vue";
 
 export default {
     components: {
@@ -88,10 +140,12 @@ export default {
         TownsListHeader,
         TownsListHeaderTab,
         TownsListFilters,
-        TownsListFilter
+        TownsListFilter,
+        Export
     },
     data() {
         const { field_types: fieldTypes } = getConfig();
+        const permission = getPermission("shantytown.list");
 
         return {
             filters: {
@@ -101,13 +155,19 @@ export default {
                 status: "open",
                 location: null
             },
+            hasNationalPermission: permission.geographic_level === "nation",
+            hasJusticePermission: permission.data_justice === true,
             shantytowns: [],
             error: null,
             state: null,
-            fieldTypes
+            fieldTypes,
+            exportIsVisible: false
         };
     },
     methods: {
+        hasPermission(...args) {
+            return hasPermission(...args);
+        },
         /**
          * Tries fetching the data from the API
          *
@@ -130,14 +190,54 @@ export default {
                 );
                 this.state = "loaded";
             });
+        },
+        showExport() {
+            setTimeout(() => {
+                this.exportIsVisible = true;
+            }, 100);
+        },
+
+        hideExport() {
+            this.exportIsVisible = false;
         }
     },
     created() {
         this.load();
     },
     computed: {
+        currentLocation() {
+            return (
+                this.filters.location || {
+                    id: null,
+                    label: "France",
+                    category: "Pays",
+                    data: {
+                        code: null,
+                        type: "nation"
+                    }
+                }
+            );
+        },
+        populationTotal() {
+            return this.filteredShantytowns.reduce(
+                (total, { populationTotal }) => total + (populationTotal || 0),
+                0
+            );
+        },
+        justiceTotal() {
+            return this.filteredShantytowns.filter(
+                ({ justiceProcedure }) => justiceProcedure === true
+            ).length;
+        },
         filteredShantytowns() {
             return filterShantytowns(this.shantytowns, this.filters);
+        },
+        title() {
+            if (this.currentLocation.code) {
+                return `${this.currentLocation.label}`;
+            }
+
+            return `Bidonvilles et squats`;
         }
     }
 };
