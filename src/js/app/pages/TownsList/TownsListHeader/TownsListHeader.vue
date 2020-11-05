@@ -1,24 +1,15 @@
 <template>
-    <div class="flex justify-between">
+    <div class="flex justify-between items-baseline">
         <div>
-            <div class="flex items-center">
-                <slot />
+            <div class="flex items-center mb-4">
+                <slot name="filters" />
             </div>
             <div>
-                <div class="text-display-lg">{{ title }}</div>
+                <slot name="title" />
             </div>
         </div>
         <div class="flex items-center">
-            <Button
-                icon="file-excel"
-                iconPosition="left"
-                variant="primaryOutline"
-                class="mr-2"
-                >Exporter</Button
-            >
-            <Button icon="plus" iconPosition="left" variant="primary">
-                Déclarer un nouveau site</Button
-            >
+            <slot name="buttons" />
         </div>
     </div>
 </template>
@@ -28,6 +19,9 @@ export default {
     props: {
         search: {
             type: Object
+        },
+        showExport: {
+            type: Function
         }
     },
     computed: {
