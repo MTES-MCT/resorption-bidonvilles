@@ -1,7 +1,7 @@
 <template>
     <Dropdown>
         <template v-slot:button>
-            <Button variant="primaryOutline" size="sm">{{ title }}</Button>
+            <Button variant="filter" size="sm">{{ title }}</Button>
         </template>
         <template v-slot:menu>
             <Menu class="p-3 py-3">
