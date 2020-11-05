@@ -30,6 +30,7 @@
                 >
                     <div v-bind="rootProps">
                         <InputIcon
+                            class="text-primary pl-6"
                             position="before"
                             :icon="prefixIcon"
                             v-if="prefixIcon"
@@ -43,11 +44,13 @@
                             @focus="handleFocus"
                             @blur="handleBlur"
                             v-model="searchInput"
+                            class="pl-12"
                         />
-                        <InputIcon position="after">
+                        <InputIcon position="after" class="pr-6">
                             <Spinner v-if="loading" />
                             <div @click="removeItem" class="cursor-pointer ">
                                 <Icon
+                                    class="text-primary text-display-sm"
                                     v-if="
                                         !loading &&
                                             value &&

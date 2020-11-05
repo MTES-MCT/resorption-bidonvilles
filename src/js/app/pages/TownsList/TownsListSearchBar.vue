@@ -1,9 +1,8 @@
 <template>
-    <div class="mx-auto max-w-screen-sm">
+    <div class="mx-auto searchbox">
         <form @submit.prevent="onSubmit">
             <AutocompleteV2
                 id="test"
-                label="Rechercher un site, une commune, un département, un arrondissement"
                 :defaultValue="result ? resultValue(result) : ''"
                 :search="search"
                 v-model="result"
@@ -11,10 +10,10 @@
                 :getResultValue="resultValue"
                 :loading="loading"
                 prefixIcon="search"
-                :inputClasses="['rounded-full']"
+                :inputClasses="['rounded-full shadow-sm']"
             />
-            <div class="-mt-6 text-right">
-                <Button variant="primaryText"
+            <div class="-mt-6 px-2 text-right">
+                <Button variant="primaryText" class="text-display-sm"
                     >Voir tous les sites de France</Button
                 >
             </div>
@@ -48,3 +47,12 @@ export default {
     }
 };
 </script>
+
+<style>
+.searchbox {
+    max-width: 500px;
+}
+.searchShadow {
+    box-shadow: 0px 0px 6px #00000033;
+}
+</style>
