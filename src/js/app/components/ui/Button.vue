@@ -89,15 +89,19 @@ export default {
         variantClasses() {
             return {
                 primary:
-                    "border-2 border-primary bg-primary text-white hover:bg-primaryDark",
+                    "rounded-sm border-2 border-primary bg-primary text-white hover:bg-primaryDark focus:outline-none",
                 secondary:
-                    "border-2 border-secondary bg-secondary text-white hover:bg-secondaryDark",
+                    "rounded-sm border-2 border-secondary bg-secondary text-white hover:bg-secondaryDark focus:outline-none",
                 primaryOutline:
-                    "border-2 border-primary text-primary hover:bg-primary hover:text-white",
+                    "rounded-sm border-2 border-primary text-primary hover:bg-primary hover:text-white focus:outline-none",
                 secondaryOutline:
-                    "border-2  border-secondary text-secondary hover:bg-secondary hover:text-white",
-                primaryText: "text-primary hover:text-primaryDark",
-                secondaryText: "text-secondary hover:text-secondaryDark"
+                    "rounded-sm border-2  border-secondary text-secondary hover:bg-secondary hover:text-white focus:outline-none",
+                primaryText:
+                    "rounded-sm text-primary hover:text-primaryDark focus:outline-none",
+                secondaryText:
+                    "rounded-sm text-secondary hover:text-secondaryDark focus:outline-none",
+                filter:
+                    "rounded border border-primary text-primary hover:bg-primary hover:text-white focus:outline-none"
             }[this.variant];
         },
         isLink() {
