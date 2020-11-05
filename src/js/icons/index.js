@@ -59,7 +59,10 @@ import {
     faChevronRight,
     faSpinner,
     faArrowLeft,
-    faSearch
+    faSearch,
+    faPlus,
+    faCheck,
+    faPen
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(faFlag);
@@ -121,3 +124,6 @@ library.add(faSpinner);
 library.add(faTwitterSquare);
 library.add(faFacebookSquare);
 library.add(faSearch);
+library.add(faPlus);
+library.add(faCheck);
+library.add(faPen);
