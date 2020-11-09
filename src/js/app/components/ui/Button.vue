@@ -97,9 +97,10 @@ export default {
                 secondaryOutline:
                     "rounded-sm border-2  border-secondary text-secondary hover:bg-secondary hover:text-white focus:outline-none",
                 primaryText:
-                    "rounded-sm text-primary hover:text-primaryDark focus:outline-none",
+                    "text-primary hover:text-primaryDark focus:outline-none",
                 secondaryText:
-                    "rounded-sm text-secondary hover:text-secondaryDark focus:outline-none",
+                    "text-secondary hover:text-secondaryDark focus:outline-none",
+                text: "focus:outline-none",
                 filter:
                     "rounded border border-primary text-primary hover:bg-primary hover:text-white focus:outline-none"
             }[this.variant];

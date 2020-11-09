@@ -35,6 +35,7 @@ import Spinner from "./Spinner.vue";
 import CheckableGroup from "./Form/CheckableGroup.vue";
 import Datepicker from "./Datepicker.vue";
 import Tag from "./Tag.vue";
+import Pagination from "./Pagination.vue";
 
 export default function(vueInstance) {
     vueInstance.component("Button", Button);
@@ -59,6 +60,7 @@ export default function(vueInstance) {
     vueInstance.component("AutocompleteV2", Autocomplete);
     vueInstance.component("DatepickerV2", Datepicker);
     vueInstance.component("Tag", Tag);
+    vueInstance.component("Pagination", Pagination);
 
     vueInstance.use(notifications);
     vueInstance.component("NotificationsGroup", NotificationsGroup);
