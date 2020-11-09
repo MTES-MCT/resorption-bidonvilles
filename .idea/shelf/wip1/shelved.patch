@@ -1,0 +1,154 @@
+Index: src/js/app/components/ui/Form/input/Checkbox.vue
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><template>\n    <div :class=\"`checkbox-${variant}`\">\n        <!-- Card Variant -->\n        <CheckableCard v-if=\"variant === 'card'\" :isChecked=\"isChecked\">\n            <input\n                type=\"checkbox\"\n                class=\"appearance-none absolute invisible\"\n                v-bind=\"filteredProps\"\n                :checked=\"isChecked\"\n                @change=\"onChange\"\n            />\n            <div>{{ label }}</div>\n        </CheckableCard>\n\n        <!-- Other Variants -->\n        <label\n            v-else\n            :class=\"[\n                'inline-flex cursor-pointer',\n                info ? 'items-start' : 'items-center'\n            ]\"\n        >\n            <input\n                type=\"checkbox\"\n                class=\"form-checkbox h-5 w-5\"\n                v-bind=\"filteredProps\"\n                :checked=\"isChecked\"\n                @change=\"onChange\"\n            />\n            <div class=\"ml-2\">\n                <div>{{ label }}</div>\n                <div v-if=\"info\" class=\"text-xs\">{{ info }}</div>\n            </div>\n        </label>\n    </div>\n</template>\n\n<script>\nimport filteredProps from \"../../mixins/filteredProps\";\nimport CheckableCard from \"../utils/CheckableCard.vue\";\n\nexport default {\n    name: \"Checkbox\",\n    mixins: [filteredProps],\n    components: { CheckableCard },\n    props: {\n        checkValue: {\n            type: [String, Boolean, Number]\n        },\n        label: {\n            type: String\n        },\n        value: {\n            type: Array\n        },\n        info: {\n            type: String\n        },\n        variant: {\n            type: String,\n            default: \"default\"\n        }\n    },\n    methods: {\n        onChange(e) {\n            let currentValue = [...this.value];\n            if (e.target.checked) {\n                currentValue.push(this.checkValue);\n            } else {\n                currentValue = currentValue.filter(\n                    item => item !== this.checkValue\n                );\n            }\n            this.$emit(\"input\", currentValue);\n        }\n    },\n    computed: {\n        isChecked() {\n            return this.value && this.value.includes(this.checkValue);\n        }\n    }\n};\n</script>\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/js/app/components/ui/Form/input/Checkbox.vue	(revision f45b7945bb928a6e9e697c2ad45f82538ea0722d)
++++ src/js/app/components/ui/Form/input/Checkbox.vue	(date 1604916922185)
+@@ -1,5 +1,5 @@
+ <template>
+-    <div :class="`checkbox-${variant}`">
++    <div :class="[`checkbox-${variant}`, ...containerClasses]">
+         <!-- Card Variant -->
+         <CheckableCard v-if="variant === 'card'" :isChecked="isChecked">
+             <input
+@@ -17,20 +17,23 @@
+             v-else
+             :class="[
+                 'inline-flex cursor-pointer',
+-                info ? 'items-start' : 'items-center'
++                info ? 'items-start' : 'items-center',
++                ...labelClasses
+             ]"
+         >
+             <input
+                 type="checkbox"
+-                class="form-checkbox h-5 w-5"
++                :class="checkboxClasses"
+                 v-bind="filteredProps"
+                 :checked="isChecked"
+                 @change="onChange"
+             />
+-            <div class="ml-2">
+-                <div>{{ label }}</div>
+-                <div v-if="info" class="text-xs">{{ info }}</div>
+-            </div>
++            <slot :isChecked="isChecked">
++                <div class="ml-2">
++                    <div>{{ label }}</div>
++                    <div v-if="info" class="text-xs">{{ info }}</div>
++                </div>
++            </slot>
+         </label>
+     </div>
+ </template>
+@@ -50,6 +53,12 @@
+         label: {
+             type: String
+         },
++        containerClasses: {
++            type: Array
++        },
++        labelClasses: {
++            type: Array
++        },
+         value: {
+             type: Array
+         },
+@@ -77,6 +86,12 @@
+     computed: {
+         isChecked() {
+             return this.value && this.value.includes(this.checkValue);
++        },
++        checkboxClasses() {
++            return {
++                default: "form-checkbox h-5 w-5",
++                invisible: "appearance-none absolute invisible"
++            }[this.variant];
+         }
+     }
+ };
+Index: src/js/app/pages/TownsList/TownsList.vue
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><template>\n    <PrivateLayout>\n        <div class=\"v1\">\n            <Export\n                v-if=\"exportIsVisible\"\n                :towns=\"[]\"\n                @close=\"hideExport\"\n                :location=\"currentLocation\"\n                :closedTowns=\"filters.status === 'close'\"\n            ></Export>\n        </div>\n        <div class=\"bg-G100\">\n            <PrivateContainer class=\"py-6\">\n                <h1 class=\"text-display-sm text-center mb-4\">\n                    Rechercher un site, une commune, un département... ?\n                </h1>\n                <TownsListSearchBar v-model=\"filters.location\" />\n            </PrivateContainer>\n        </div>\n        <PrivateContainer class=\"pt-10\">\n            <TownsListHeader :search=\"filters.location\" class=\"mb-12\">\n                <template slot=\"filters\">\n                    <TownsListHeaderTab\n                        :active=\"filters.status === 'open'\"\n                        @click=\"filters.status = 'open'\"\n                        class=\"mr-8\"\n                        >Sites existants</TownsListHeaderTab\n                    >\n                    <TownsListHeaderTab\n                        :active=\"filters.status === 'close'\"\n                        @click=\"filters.status = 'close'\"\n                        >Site fermés</TownsListHeaderTab\n                    >\n                </template>\n                <template slot=\"title\">\n                    <div class=\"text-display-xl mb-2\">{{ title }}</div>\n                    <div>{{ populationTotal }} personnes</div>\n                    <div>\n                        {{ filteredShantytowns.length }} sites\n                        <span v-if=\"hasJusticePermission && justiceTotal.length\"\n                            >dont {{ justiceTotal }} site(s) avec une procédure\n                            judiciaire</span\n                        >\n                    </div>\n                </template>\n                <template slot=\"buttons\">\n                    <Button\n                        icon=\"file-excel\"\n                        iconPosition=\"left\"\n                        variant=\"primary\"\n                        class=\"mr-6\"\n                        @click=\"showExport\"\n                        >Exporter</Button\n                    >\n                    <router-link\n                        to=\"/nouveau-site\"\n                        v-if=\"hasPermission('shantytown.create')\"\n                        ><Button\n                            icon=\"plus\"\n                            iconPosition=\"left\"\n                            variant=\"secondary\"\n                        >\n                            Déclarer un nouveau site</Button\n                        ></router-link\n                    >\n                </template>\n            </TownsListHeader>\n            <div class=\"flex items-end mb-8 justify-between\">\n                <TownsListFilters class=\"\">\n                    <TownsListFilter\n                        title=\"Nombre de personnes\"\n                        class=\"mr-2\"\n                        v-model=\"filters.population\"\n                        :options=\"[\n                            { value: null, label: 'Inconnu' },\n                            { value: '-9', label: 'Moins de 10 personnes' },\n                            {\n                                value: '10-99',\n                                label: 'Entre 10 et 99 personnes'\n                            },\n                            { value: '100-', label: 'Plus de 100 personnes' }\n                        ]\"\n                    />\n                    <TownsListFilter\n                        title=\"Type de terrain\"\n                        class=\"mr-2\"\n                        v-model=\"filters.fieldType\"\n                        :options=\"\n                            fieldTypes.map(f => ({\n                                label: f.label,\n                                value: f.id\n                            }))\n                        \"\n                    />\n                    <TownsListFilter\n                        title=\"Procédure judiciaire\"\n                        class=\"mr-2\"\n                        v-model=\"filters.justice\"\n                        :options=\"[\n                            { value: null, label: 'Inconnu' },\n                            { value: 'none', label: 'Aucune' },\n                            {\n                                value: 'ownerComplaint',\n                                label: 'Plainte déposée'\n                            },\n                            {\n                                value: 'justiceProcedure',\n                                label: 'Procédure en cours'\n                            },\n                            {\n                                value: 'justiceRendered',\n                                label: 'Décision rendue'\n                            }\n                        ]\"\n                    />\n                </TownsListFilters>\n                <Pagination\n                    :currentPage=\"currentPage\"\n                    :nbPages=\"nbPages\"\n                    :onChangePage=\"onChangePage\"\n                />\n            </div>\n\n            <TownCard\n                v-for=\"shantytown in filteredShantytownsByPage\"\n                :key=\"shantytown.id\"\n                :shantytown=\"shantytown\"\n                class=\"mb-6\"\n            />\n        </PrivateContainer>\n    </PrivateLayout>\n</template>\n\n<script>\nimport PrivateContainer from \"#app/components/PrivateLayout/PrivateContainer.vue\";\nimport PrivateLayout from \"#app/components/PrivateLayout\";\nimport { all as fetchAll } from \"#helpers/api/town\";\nimport TownCard from \"./TownCard\";\nimport enrichShantytown from \"./enrichShantytown\";\nimport TownsListSearchBar from \"./TownsListSearchBar\";\nimport TownsListHeader from \"./TownsListHeader/TownsListHeader\";\nimport TownsListHeaderTab from \"./TownsListHeader/TownsListHeaderTab\";\nimport TownsListFilters from \"./TownsListFilters/TownsListFilters\";\nimport TownsListFilter from \"./TownsListFilters/TownsListFilter\";\nimport {\n    get as getConfig,\n    getPermission,\n    hasPermission\n} from \"#helpers/api/config\";\nimport { filterShantytowns } from \"./filterShantytowns\";\nimport Export from \"#app/components/export/export.vue\";\n\nconst PER_PAGE = 10;\n\nexport default {\n    components: {\n        TownCard,\n        PrivateContainer,\n        PrivateLayout,\n        TownsListSearchBar,\n        TownsListHeader,\n        TownsListHeaderTab,\n        TownsListFilters,\n        TownsListFilter,\n        Export\n    },\n    data() {\n        const { field_types: fieldTypes } = getConfig();\n        const permission = getPermission(\"shantytown.list\");\n\n        return {\n            filters: {\n                population: [],\n                fieldType: [],\n                justice: [],\n                status: \"open\",\n                location: null\n            },\n            currentPage: 1,\n            hasNationalPermission: permission.geographic_level === \"nation\",\n            hasJusticePermission: permission.data_justice === true,\n            shantytowns: [],\n            error: null,\n            state: null,\n            fieldTypes,\n            exportIsVisible: false\n        };\n    },\n    methods: {\n        onChangePage(page) {\n            this.currentPage = page;\n        },\n        hasPermission(...args) {\n            return hasPermission(...args);\n        },\n        /**\n         * Tries fetching the data from the API\n         *\n         * Please note that this cannot be done if the data has already been loaded\n         * before.\n         */\n        load() {\n            // loading data is forbidden if the component is already loading or loaded\n            if ([null, \"error\"].indexOf(this.state) === -1) {\n                return;\n            }\n\n            this.state = \"loading\";\n            this.error = null;\n\n            fetchAll().then(shantytowns => {\n                console.log(shantytowns);\n                this.shantytowns = shantytowns.map(s =>\n                    enrichShantytown(s, this.fieldTypes)\n                );\n                this.state = \"loaded\";\n            });\n        },\n        showExport() {\n            setTimeout(() => {\n                this.exportIsVisible = true;\n            }, 100);\n        },\n\n        hideExport() {\n            this.exportIsVisible = false;\n        }\n    },\n    created() {\n        this.load();\n    },\n    computed: {\n        currentLocation() {\n            return (\n                this.filters.location || {\n                    id: null,\n                    label: \"France\",\n                    category: \"Pays\",\n                    data: {\n                        code: null,\n                        type: \"nation\"\n                    }\n                }\n            );\n        },\n        populationTotal() {\n            return this.filteredShantytowns.reduce(\n                (total, { populationTotal }) => total + (populationTotal || 0),\n                0\n            );\n        },\n        justiceTotal() {\n            return this.filteredShantytowns.filter(\n                ({ justiceProcedure }) => justiceProcedure === true\n            ).length;\n        },\n        filteredShantytowns() {\n            return filterShantytowns(this.shantytowns, this.filters);\n        },\n        filteredShantytownsByPage() {\n            return this.filteredShantytowns.slice(\n                (this.currentPage - 1) * PER_PAGE,\n                PER_PAGE * this.currentPage\n            );\n        },\n        title() {\n            if (this.currentLocation.code) {\n                return `${this.currentLocation.label}`;\n            }\n\n            return `Bidonvilles et squats`;\n        },\n        nbPages() {\n            return Math.ceil(this.filteredShantytowns.length / PER_PAGE);\n        }\n    }\n};\n</script>\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/js/app/pages/TownsList/TownsList.vue	(revision f45b7945bb928a6e9e697c2ad45f82538ea0722d)
++++ src/js/app/pages/TownsList/TownsList.vue	(date 1604917429025)
+@@ -115,6 +115,7 @@
+                     />
+                 </TownsListFilters>
+                 <Pagination
++                    v-if="nbPages > 0"
+                     :currentPage="currentPage"
+                     :nbPages="nbPages"
+                     :onChangePage="onChangePage"
+Index: src/js/app/pages/TownsList/TownsListFilters/TownsListFilter.vue
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><template>\n    <Dropdown>\n        <template v-slot:button>\n            <Button variant=\"filter\" size=\"sm\">{{ title }}</Button>\n        </template>\n        <template v-slot:menu>\n            <Menu class=\"p-3 py-3\">\n                <div\n                    v-for=\"option in options\"\n                    :key=\"option.id\"\n                    class=\"flex items-center whitespace-no-wrap text-sm\"\n                >\n                    <Checkbox\n                        :label=\"option.label\"\n                        :checkValue=\"option.value\"\n                        :value=\"value\"\n                        @input=\"$emit('input', $event)\"\n                    />\n                </div>\n\n                <Button size=\"sm\" variant=\"textPrimary\" class=\"mt-4\">\n                    Effacer\n                </Button>\n            </Menu>\n        </template>\n    </Dropdown>\n</template>\n\n<script>\nexport default {\n    props: {\n        title: {\n            type: String\n        },\n        options: {\n            type: Array\n        },\n        value: {\n            type: Array\n        }\n    }\n};\n</script>\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/js/app/pages/TownsList/TownsListFilters/TownsListFilter.vue	(revision f45b7945bb928a6e9e697c2ad45f82538ea0722d)
++++ src/js/app/pages/TownsList/TownsListFilters/TownsListFilter.vue	(date 1604917565385)
+@@ -1,24 +1,34 @@
+ <template>
+     <Dropdown>
+         <template v-slot:button>
+-            <Button variant="filter" size="sm">{{ title }}</Button>
++            <Button variant="filter" size="sm">{{
++                titleWithActiveFilters
++            }}</Button>
+         </template>
+         <template v-slot:menu>
+-            <Menu class="p-3 py-3">
++            <Menu>
+                 <div
+                     v-for="option in options"
+                     :key="option.id"
+                     class="flex items-center whitespace-no-wrap text-sm"
+                 >
+                     <Checkbox
+-                        :label="option.label"
+                         :checkValue="option.value"
+                         :value="value"
+                         @input="$emit('input', $event)"
+-                    />
++                        variant="invisible"
++                        containerClasses="w-full"
++                        labelClasses="w-full block"
++                        v-slot="{isChecked}"
++                    >
++                        <div class="flex items-center justify-between w-full  hover:bg-blue100 py-1 px-2 text-primary">
++                            <div class="flex-1">{{ option.label }}</div>
++                            <div class="ml-4" v-if="isChecked"><Icon icon="check" /></div>
++                        </div>
++                    </Checkbox>
+                 </div>
+ 
+-                <Button size="sm" variant="textPrimary" class="mt-4">
++                <Button size="sm" variant="primaryText" class="mt-2 " @click="$emit('input', [])">
+                     Effacer
+                 </Button>
+             </Menu>
+@@ -38,6 +48,15 @@
+         value: {
+             type: Array
+         }
++    },
++    computed: {
++        titleWithActiveFilters() {
++            if (!this.value.length) {
++                return this.title;
++            }
++
++            return `${this.title} (${this.value.length})`;
++        }
+     }
+ };
+ </script>
