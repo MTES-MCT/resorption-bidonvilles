@@ -1,6 +1,10 @@
 export function filterShantytowns(shantytowns, filters) {
     return shantytowns.filter(shantytown => {
-        if (filters.status !== shantytown.status) {
+        if (filters.status === "open" && shantytown.status !== "open") {
+            return false;
+        }
+
+        if (filters.status === "close" && shantytown.status === "open") {
             return false;
         }
 
