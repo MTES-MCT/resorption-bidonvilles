@@ -1,0 +1,677 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:issue" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:data" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:design" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:feat" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:feature" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:feature" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:sites" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:fix" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:hotfix" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:issue" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:refactor" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:tech" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="9b425e37-97ed-4f25-ba70-77716aabf55b" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/src/css/v2.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/css/v2.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/app/components/ui/Autocomplete.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/js/app/components/ui/Autocomplete.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/app/pages/TownsList/TownsListHeader/TownsListHeaderTab.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/js/app/pages/TownsList/TownsListHeader/TownsListHeaderTab.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/app/pages/TownsList/TownsListSearchBar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/js/app/pages/TownsList/TownsListSearchBar.vue" afterDir="false" />
+    </list>
+    <list id="77d90ca9-5e5d-4c2f-a61e-96feeb2dfaf4" name="Fix missing .vue import extension + a few errors" comment="Fix missing .vue import extension + a few errors">
+      <changelist_data name="gdestrem" email="gael.destrem@gmail.com" date="1602602683000" />
+    </list>
+    <list id="caffc2ee-4e64-49c7-91e7-1af136280339" name="Start liste des sites redesign" comment="Add TownList page" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="directory" />
+    </option>
+  </component>
+  <component name="Git.Merge.Settings">
+    <option name="BRANCH" value="develop" />
+  </component>
+  <component name="Git.Pull.Settings">
+    <option name="BRANCH" value="design-system" />
+  </component>
+  <component name="Git.Rebase.Settings">
+    <option name="OPTIONS">
+      <set>
+        <option value="INTERACTIVE" />
+      </set>
+    </option>
+    <option name="NEW_BASE" value="issue/565" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="develop" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
+    <option name="UPDATE_TYPE" value="REBASE" />
+    <option name="WARN_ABOUT_CRLF" value="false" />
+  </component>
+  <component name="GitRewordedCommitMessages">
+    <option name="onto" value="1be226fd1580451aca2326675c17638c2773a12f" />
+  </component>
+  <component name="ProjectId" id="1iooq35XdQjRJidLefiTScu1Q54" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/docs/src/design/components" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.standard" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.standard" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.standard" value="" />
+    <property name="nodejs_interpreter_path" value="wsl://UBUNTU1804@/home/gdestrem/.nvm/versions/node/v12.14.0/bin/node" />
+    <property name="nodejs_package_manager_path" value="yarn" />
+    <property name="settings.editor.selected.configurable" value="settings.javascript.linters.eslint" />
+    <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2020.2.3\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="\\wsl$\Ubuntu-18.04\home\gdestrem\workspace\action-bidonvilles\docs\src\design\components" />
+      <recent name="\\wsl$\Ubuntu-18.04\home\gdestrem\workspace\action-bidonvilles\src\js\app\pages\TownsList\TownsListFilters" />
+      <recent name="\\wsl$\Ubuntu-18.04\home\gdestrem\workspace\action-bidonvilles\src\js\app\components\PrivateLayout" />
+      <recent name="\\wsl$\Ubuntu-18.04\home\gdestrem\workspace\action-bidonvilles\src\js\app\components" />
+      <recent name="\\wsl$\Ubuntu-18.04\home\gdestrem\workspace\action-bidonvilles\src\js\app\pages\LandingPage\LandingPageFirstSection\assets\bg" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="\\wsl$\Ubuntu-18.04\home\gdestrem\workspace\action-bidonvilles\src\js\app\pages\TownsList\TownsListFilters" />
+      <recent name="\\wsl$\Ubuntu-18.04\home\gdestrem\workspace\action-bidonvilles\src\js\app\pages\TownsList\TownsListHeader" />
+      <recent name="\\wsl$\Ubuntu-18.04\home\gdestrem\workspace\action-bidonvilles" />
+      <recent name="\\wsl$\Ubuntu-18.04\home\gdestrem\workspace\action-bidonvilles\src" />
+      <recent name="\\wsl$\Ubuntu-18.04\home\gdestrem\workspace\action-bidonvilles\src\js\app\pages\LandingPage\LandingPageSecondSection\assets" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9b425e37-97ed-4f25-ba70-77716aabf55b" name="Default Changelist" comment="" />
+      <created>1602583492597</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1602583492597</updated>
+      <workItem from="1602583493655" duration="782000" />
+      <workItem from="1602585021849" duration="15189000" />
+      <workItem from="1603088809915" duration="73000" />
+      <workItem from="1603088893342" duration="29000" />
+      <workItem from="1603088930232" duration="95503000" />
+      <workItem from="1603553500240" duration="3214000" />
+      <workItem from="1603809777696" duration="23280000" />
+      <workItem from="1604495420026" duration="25710000" />
+    </task>
+    <task id="LOCAL-00038" summary="Fix components not compatible with SSR">
+      <created>1603113549757</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1603113549757</updated>
+    </task>
+    <task id="LOCAL-00039" summary="Update docs landing page">
+      <created>1603114069114</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1603114069114</updated>
+    </task>
+    <task id="LOCAL-00040" summary="[Tmp] Hide autocomplete loading">
+      <created>1603114461694</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1603114461694</updated>
+    </task>
+    <task id="LOCAL-00041" summary="Add vee-validate en/ro/bg translations">
+      <created>1603115156684</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1603115156684</updated>
+    </task>
+    <task id="LOCAL-00042" summary="Change Contact Title design + Fix Checkbox/Radio">
+      <created>1603122452656</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1603122452656</updated>
+    </task>
+    <task id="LOCAL-00043" summary="Fix Icon prop type">
+      <created>1603178072013</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1603178072013</updated>
+    </task>
+    <task id="LOCAL-00044" summary="Add vue-cli &amp; fix issues">
+      <created>1603187708811</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1603187708811</updated>
+    </task>
+    <task id="LOCAL-00045" summary="wip">
+      <created>1603188242641</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1603188242641</updated>
+    </task>
+    <task id="LOCAL-00046" summary="Add vue-cli-lint">
+      <created>1603188608987</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1603188608987</updated>
+    </task>
+    <task id="LOCAL-00047" summary="Fix automatically fixable errors">
+      <created>1603188720609</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1603188720609</updated>
+    </task>
+    <task id="LOCAL-00048" summary="Fix eslint errors">
+      <created>1603190720018</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1603190720018</updated>
+    </task>
+    <task id="LOCAL-00049" summary="(lint) Add missing keys in pug files">
+      <created>1603192162919</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1603192162919</updated>
+    </task>
+    <task id="LOCAL-00050" summary="Update config">
+      <created>1603194150830</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1603194150831</updated>
+    </task>
+    <task id="LOCAL-00051" summary="Add missing trads">
+      <created>1603194724043</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1603194724043</updated>
+    </task>
+    <task id="LOCAL-00052" summary="Remove typologie-des-acces &amp; charte d'engagement footer links">
+      <created>1603261647319</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1603261647319</updated>
+    </task>
+    <task id="LOCAL-00053" summary="Add missing link for european program">
+      <created>1603261680319</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1603261680319</updated>
+    </task>
+    <task id="LOCAL-00054" summary="Reposition landing page elements">
+      <created>1603262058906</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1603262058906</updated>
+    </task>
+    <task id="LOCAL-00055" summary="Fix feedbacks">
+      <created>1603293412037</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1603293412037</updated>
+    </task>
+    <task id="LOCAL-00056" summary="Add fundamentals section with colors/typography/spacing/grid">
+      <created>1603369489903</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1603369489903</updated>
+    </task>
+    <task id="LOCAL-00057" summary="Add prefix/suffix icon on inputs">
+      <created>1603377933113</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1603377933113</updated>
+    </task>
+    <task id="LOCAL-00058" summary="Add prefix/suffix icon on inputs">
+      <created>1603377945343</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1603377945343</updated>
+    </task>
+    <task id="LOCAL-00059" summary="Add autocomplete spinner/icon + delete button">
+      <created>1603378025402</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1603378025402</updated>
+    </task>
+    <task id="LOCAL-00060" summary="Use vue transition for autocomplete + fix datepicker">
+      <created>1603441482762</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1603441482762</updated>
+    </task>
+    <task id="LOCAL-00061" summary="Fix bulgarian translation feedbacks">
+      <created>1603444595021</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1603444595021</updated>
+    </task>
+    <task id="LOCAL-00062" summary="wip">
+      <created>1603445613378</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1603445613378</updated>
+    </task>
+    <task id="LOCAL-00063" summary="Add FormValidation page">
+      <created>1603459603134</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1603459603134</updated>
+    </task>
+    <task id="LOCAL-00064" summary="Add Tag component">
+      <created>1603461013214</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1603461013214</updated>
+    </task>
+    <task id="LOCAL-00065" summary="Fix errors in bulgarian assets">
+      <created>1603461567371</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1603461567371</updated>
+    </task>
+    <task id="LOCAL-00066" summary="Add missing assets">
+      <created>1603708469873</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1603708469874</updated>
+    </task>
+    <task id="LOCAL-00067" summary="wip">
+      <created>1603811386988</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1603811386989</updated>
+    </task>
+    <task id="LOCAL-00068" summary="wip">
+      <created>1603811534553</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1603811534553</updated>
+    </task>
+    <task id="LOCAL-00069" summary="wip">
+      <created>1603812981046</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1603812981046</updated>
+    </task>
+    <task id="LOCAL-00070" summary="wip">
+      <created>1603813855315</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1603813855315</updated>
+    </task>
+    <task id="LOCAL-00071" summary="Fix cypress/docs directories linting">
+      <created>1603814649730</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1603814649730</updated>
+    </task>
+    <task id="LOCAL-00072" summary="Start liste des sites redesign">
+      <created>1604066001543</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1604066001543</updated>
+    </task>
+    <task id="LOCAL-00073" summary="Start liste des sites redesign">
+      <created>1604066098706</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1604066098706</updated>
+    </task>
+    <task id="LOCAL-00074" summary="Add PrivateContainer component">
+      <created>1604504133806</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1604504133806</updated>
+    </task>
+    <task id="LOCAL-00075" summary="Some changes on UI components">
+      <created>1604504177940</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1604504177940</updated>
+    </task>
+    <task id="LOCAL-00076" summary="Add TownsList page">
+      <created>1604504265868</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1604504265868</updated>
+    </task>
+    <task id="LOCAL-00077" summary="Improve header design">
+      <created>1604575666716</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1604575666716</updated>
+    </task>
+    <task id="LOCAL-00078" summary="Improve Fillters design">
+      <created>1604575683051</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1604575683051</updated>
+    </task>
+    <task id="LOCAL-00079" summary="Improve searchbox">
+      <created>1604575700513</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1604575700513</updated>
+    </task>
+    <task id="LOCAL-00080" summary="Improve card design + add missing colors/icons">
+      <created>1604575724014</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1604575724014</updated>
+    </task>
+    <task id="LOCAL-00081" summary="Add pagination component">
+      <created>1604914995980</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1604914995980</updated>
+    </task>
+    <task id="LOCAL-00082" summary="wip">
+      <created>1604917550219</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1604917550219</updated>
+    </task>
+    <task id="LOCAL-00083" summary="wip">
+      <created>1604917576442</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1604917576442</updated>
+    </task>
+    <task id="LOCAL-00084" summary="Filter design">
+      <created>1604917656391</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1604917656391</updated>
+    </task>
+    <task id="LOCAL-00085" summary="wip">
+      <created>1604919110121</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1604919110121</updated>
+    </task>
+    <task id="LOCAL-00086" summary="Display pagination when nbPages &gt; 1">
+      <created>1604919257380</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1604919257380</updated>
+    </task>
+    <option name="localTasksCounter" value="87" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <MESSAGE value="Add fundamentals section with colors/typography/spacing/grid" />
+    <MESSAGE value="Add prefix/suffix icon on inputs +" />
+    <MESSAGE value="Add prefix/suffix icon on inputs" />
+    <MESSAGE value="Add autocomplete spinner/icon + delete button" />
+    <MESSAGE value="Use vue transition for autocomplete + fix datepicker" />
+    <MESSAGE value="Fix bulgarian translation feedbacks" />
+    <MESSAGE value="Add FormValidation page" />
+    <MESSAGE value="Add Tag component" />
+    <MESSAGE value="Fix errors in bulgarian assets" />
+    <MESSAGE value="Add missing assets" />
+    <MESSAGE value="Fix cypress/docs directories linting" />
+    <MESSAGE value="Start liste des sites redesign" />
+    <MESSAGE value="Add PrivateContainer component" />
+    <MESSAGE value="Some changes on UI components" />
+    <MESSAGE value="Add TownList page" />
+    <MESSAGE value="Add TownsList page" />
+    <MESSAGE value="Improve header design" />
+    <MESSAGE value="Improve Fillters design" />
+    <MESSAGE value="Improve searchbox" />
+    <MESSAGE value="Improve card design + add missing colors/icons" />
+    <MESSAGE value="Add pagination component" />
+    <MESSAGE value="Filter design" />
+    <MESSAGE value="wip" />
+    <MESSAGE value="Display pagination when nbPages &gt; 1" />
+    <MESSAGE value="Always display scrollbar" />
+    <option name="LAST_COMMIT_MESSAGE" value="Always display scrollbar" />
+    <option name="PRESELECT_EXISTING_CHANGELIST" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="1148" y="592" key="#ESLint" timestamp="1602599917684">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1148" y="592" key="#ESLint/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1602599917684" />
+    <state x="1039" y="502" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1604047240795">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1039" y="502" key="#com.intellij.fileTypes.FileTypeChooser/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1604047240795" />
+    <state x="1010" y="447" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1604047755210">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1010" y="447" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1604047755210" />
+    <state x="875" y="268" key="CommitChangelistDialog2" timestamp="1604920953400">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="875" y="268" key="CommitChangelistDialog2/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1604920953400" />
+    <state x="92" y="92" width="2376" height="1216" key="DiffContextDialog" timestamp="1604927017532">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="92" y="92" width="2376" height="1216" key="DiffContextDialog/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1604927017532" />
+    <state x="1060" y="454" key="FileChooserDialogImpl" timestamp="1603726935299">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1060" y="454" key="FileChooserDialogImpl/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1603726935299" />
+    <state x="772" y="383" key="Git.Interactive.Rebase.Dialog" timestamp="1603277056672">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="772" y="383" key="Git.Interactive.Rebase.Dialog/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1603277056672" />
+    <state x="1110" y="600" key="Git.Rebase.Log.Action.NewCommitMessage.Dialog" timestamp="1602604719818">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1110" y="600" key="Git.Rebase.Log.Action.NewCommitMessage.Dialog/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1602604719818" />
+    <state x="248" y="122" key="MergeDialog" timestamp="1604503970672">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="248" y="122" key="MergeDialog/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1604503970672" />
+    <state x="918" y="461" key="MultipleFileMergeDialog" timestamp="1604503970678">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="918" y="461" key="MultipleFileMergeDialog/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1604503970678" />
+    <state x="1011" y="402" key="RollbackChangesDialog" timestamp="1604574574739">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1011" y="402" key="RollbackChangesDialog/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1604574574739" />
+    <state x="781" y="344" key="SettingsEditor" timestamp="1602599963484">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="781" y="344" key="SettingsEditor/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1602599963484" />
+    <state x="872" y="420" key="Vcs.Push.Dialog.v2" timestamp="1604575732512">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="872" y="420" key="Vcs.Push.Dialog.v2/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1604575732512" />
+    <state x="92" y="92" width="2376" height="1216" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1604052383804">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="92" y="92" width="2376" height="1216" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1604052383804" />
+    <state x="1097" y="614" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1603458830605">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1097" y="614" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1603458830605" />
+    <state x="898" y="156" width="1092" height="1026" key="dock-window-1" timestamp="1604496508403">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="898" y="156" width="1092" height="1026" key="dock-window-1/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1604496508403" />
+    <state x="987" y="299" width="585" height="801" key="find.popup" timestamp="1604058704077">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="987" y="299" width="585" height="801" key="find.popup/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1604058704077" />
+    <state x="1028" y="412" key="git4idea.branch.GitSmartOperationDialog" timestamp="1603708440763">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1028" y="412" key="git4idea.branch.GitSmartOperationDialog/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1603708440763" />
+    <state x="1054" y="612" key="git4idea.rebase.GitUnstructuredEditor" timestamp="1603276648080">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1054" y="612" key="git4idea.rebase.GitUnstructuredEditor/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1603276648080" />
+    <state x="936" y="330" key="run.anything.popup" timestamp="1604913815775">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="936" y="330" key="run.anything.popup/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1604913815775" />
+    <state x="943" y="315" width="672" height="678" key="search.everywhere.popup" timestamp="1604919699549">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="943" y="315" width="672" height="678" key="search.everywhere.popup/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1604919699549" />
+    <state x="702" y="451" key="vcs.ApplyPatchDifferentiatedDialog" timestamp="1604917598316">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="702" y="451" key="vcs.ApplyPatchDifferentiatedDialog/0.0.2560.1400/2560.0.1920.1040@0.0.2560.1400" timestamp="1604917598316" />
+  </component>
+</project>

@@ -1,0 +1,65 @@
+Index: src/js/app/pages/TownsList/TownsListFilters/TownsListFilter.vue
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><template>\n    <Dropdown>\n        <template v-slot:button>\n            <Button variant=\"filter\" size=\"sm\">{{ title }}</Button>\n        </template>\n        <template v-slot:menu>\n            <Menu class=\"p-3 py-3\">\n                <div\n                    v-for=\"option in options\"\n                    :key=\"option.id\"\n                    class=\"flex items-center whitespace-no-wrap text-sm\"\n                >\n                    <Checkbox\n                        :label=\"option.label\"\n                        :checkValue=\"option.value\"\n                        :value=\"value\"\n                        @input=\"$emit('input', $event)\"\n                    />\n                </div>\n\n                <Button size=\"sm\" variant=\"textPrimary\" class=\"mt-4\">\n                    Effacer\n                </Button>\n            </Menu>\n        </template>\n    </Dropdown>\n</template>\n\n<script>\nexport default {\n    props: {\n        title: {\n            type: String\n        },\n        options: {\n            type: Array\n        },\n        value: {\n            type: Array\n        }\n    }\n};\n</script>\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/js/app/pages/TownsList/TownsListFilters/TownsListFilter.vue	(revision f45b7945bb928a6e9e697c2ad45f82538ea0722d)
++++ src/js/app/pages/TownsList/TownsListFilters/TownsListFilter.vue	(date 1604917252885)
+@@ -1,24 +1,34 @@
+ <template>
+     <Dropdown>
+         <template v-slot:button>
+-            <Button variant="filter" size="sm">{{ title }}</Button>
++            <Button variant="filter" size="sm">{{
++                titleWithActiveFilters
++            }}</Button>
+         </template>
+         <template v-slot:menu>
+-            <Menu class="p-3 py-3">
++            <Menu>
+                 <div
+                     v-for="option in options"
+                     :key="option.id"
+                     class="flex items-center whitespace-no-wrap text-sm"
+                 >
+                     <Checkbox
+-                        :label="option.label"
+                         :checkValue="option.value"
+                         :value="value"
+                         @input="$emit('input', $event)"
+-                    />
++                        variant="invisible"
++                        containerClasses="w-full"
++                        labelClasses="w-full block"
++                        v-slot="{isChecked}"
++                    >
++                        <div class="flex items-center justify-between w-full  hover:bg-blue100 py-1 px-2 text-primary">
++                            <div class="flex-1">{{ option.label }}</div>
++                            <div class="ml-4" v-if="isChecked"><Icon icon="check" /></div>
++                        </div>
++                    </Checkbox>
+                 </div>
+ 
+-                <Button size="sm" variant="textPrimary" class="mt-4">
++                <Button size="sm" variant="primaryText" class="mt-2 " @click="$emit('input', [])">
+                     Effacer
+                 </Button>
+             </Menu>
+@@ -38,6 +48,15 @@
+         value: {
+             type: Array
+         }
++    },
++    computed: {
++        titleWithActiveFilters() {
++            if (!this.value.length) {
++                return this.title;
++            }
++
++            return `${this.title} (${this.value.length})`;
++        }
+     }
+ };
+ </script>
