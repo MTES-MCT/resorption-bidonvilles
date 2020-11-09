@@ -1,9 +1,10 @@
 <template>
     <div
         :class="[
+            'border-b-2 pb-1',
             active
-                ? 'text-primary font-bold border-b-2 pb-1 border-primary'
-                : 'cursor-pointer pb-1'
+                ? 'text-primary font-bold border-primary'
+                : 'cursor-pointer border-transparent'
         ]"
         v-on="$listeners"
     >
