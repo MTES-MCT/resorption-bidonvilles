@@ -106,11 +106,13 @@
                     {{ formatDate(shantytown.updatedAt, "d/m/y") }}
                 </div>
                 <div>
+                    <!--   TODO: CHECK PERMISSIONS -->
                     <transition name="fade">
-                        <!--   TODO: CHECK PERMISSIONS -->
-                        <router-link :to="`site/${shantytown.id}`">
+                        <router-link
+                            v-if="isHover"
+                            :to="`site/${shantytown.id}`"
+                        >
                             <Button
-                                v-if="isHover"
                                 variant="secondaryText"
                                 icon="pen"
                                 iconPosition="left"

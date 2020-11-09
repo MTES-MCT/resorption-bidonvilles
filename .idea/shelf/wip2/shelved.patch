@@ -1,0 +1,20 @@
+Index: src/js/app/pages/TownsList/TownsListFilters/TownsListFilters.vue
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><template>\n    <div>\n        <div class=\"mb-1\">Filter par</div>\n        <div class=\"flex items-center\">\n            <slot />\n        </div>\n    </div>\n</template>\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/js/app/pages/TownsList/TownsListFilters/TownsListFilters.vue	(revision 8358473faadcb0787d30785180ca5f24583f9c08)
++++ src/js/app/pages/TownsList/TownsListFilters/TownsListFilters.vue	(date 1604917802555)
+@@ -1,8 +1,8 @@
+ <template>
+     <div>
+         <div class="mb-1">Filter par</div>
+-        <div class="flex items-center">
++<!--        <div class="flex items-center">-->
+             <slot />
+-        </div>
++<!--        </div>-->
+     </div>
+ </template>
