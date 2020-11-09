@@ -80,6 +80,7 @@ module.exports = {
             'components/SidePanel',
             'components/Callout',
             'components/Notification',
+            'components/Pagination',
             'components/Table',
             'components/Tag',
 

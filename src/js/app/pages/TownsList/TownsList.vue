@@ -65,45 +65,64 @@
                     >
                 </template>
             </TownsListHeader>
-            <TownsListFilters class="mb-8">
-                <TownsListFilter
-                    title="Nombre de personnes"
-                    class="mr-2"
-                    v-model="filters.population"
-                    :options="[
-                        { value: null, label: 'Inconnu' },
-                        { value: '-9', label: 'Moins de 10 personnes' },
-                        { value: '10-99', label: 'Entre 10 et 99 personnes' },
-                        { value: '100-', label: 'Plus de 100 personnes' }
-                    ]"
+            <div class="flex items-end mb-8 justify-between">
+                <TownsListFilters class="">
+                    <TownsListFilter
+                        title="Nombre de personnes"
+                        class="mr-2"
+                        v-model="filters.population"
+                        :options="[
+                            { value: null, label: 'Inconnu' },
+                            { value: '-9', label: 'Moins de 10 personnes' },
+                            {
+                                value: '10-99',
+                                label: 'Entre 10 et 99 personnes'
+                            },
+                            { value: '100-', label: 'Plus de 100 personnes' }
+                        ]"
+                    />
+                    <TownsListFilter
+                        title="Type de terrain"
+                        class="mr-2"
+                        v-model="filters.fieldType"
+                        :options="
+                            fieldTypes.map(f => ({
+                                label: f.label,
+                                value: f.id
+                            }))
+                        "
+                    />
+                    <TownsListFilter
+                        title="Procédure judiciaire"
+                        class="mr-2"
+                        v-model="filters.justice"
+                        :options="[
+                            { value: null, label: 'Inconnu' },
+                            { value: 'none', label: 'Aucune' },
+                            {
+                                value: 'ownerComplaint',
+                                label: 'Plainte déposée'
+                            },
+                            {
+                                value: 'justiceProcedure',
+                                label: 'Procédure en cours'
+                            },
+                            {
+                                value: 'justiceRendered',
+                                label: 'Décision rendue'
+                            }
+                        ]"
+                    />
+                </TownsListFilters>
+                <Pagination
+                    :currentPage="currentPage"
+                    :nbPages="nbPages"
+                    :onChangePage="onChangePage"
                 />
-                <TownsListFilter
-                    title="Type de terrain"
-                    class="mr-2"
-                    v-model="filters.fieldType"
-                    :options="
-                        fieldTypes.map(f => ({ label: f.label, value: f.id }))
-                    "
-                />
-                <TownsListFilter
-                    title="Procédure judiciaire"
-                    class="mr-2"
-                    v-model="filters.justice"
-                    :options="[
-                        { value: null, label: 'Inconnu' },
-                        { value: 'none', label: 'Aucune' },
-                        { value: 'ownerComplaint', label: 'Plainte déposée' },
-                        {
-                            value: 'justiceProcedure',
-                            label: 'Procédure en cours'
-                        },
-                        { value: 'justiceRendered', label: 'Décision rendue' }
-                    ]"
-                />
-            </TownsListFilters>
+            </div>
 
             <TownCard
-                v-for="shantytown in filteredShantytowns"
+                v-for="shantytown in filteredShantytownsByPage"
                 :key="shantytown.id"
                 :shantytown="shantytown"
                 class="mb-6"
@@ -131,6 +150,8 @@ import {
 import { filterShantytowns } from "./filterShantytowns";
 import Export from "#app/components/export/export.vue";
 
+const PER_PAGE = 10;
+
 export default {
     components: {
         TownCard,
@@ -155,6 +176,7 @@ export default {
                 status: "open",
                 location: null
             },
+            currentPage: 1,
             hasNationalPermission: permission.geographic_level === "nation",
             hasJusticePermission: permission.data_justice === true,
             shantytowns: [],
@@ -165,6 +187,9 @@ export default {
         };
     },
     methods: {
+        onChangePage(page) {
+            this.currentPage = page;
+        },
         hasPermission(...args) {
             return hasPermission(...args);
         },
@@ -232,12 +257,21 @@ export default {
         filteredShantytowns() {
             return filterShantytowns(this.shantytowns, this.filters);
         },
+        filteredShantytownsByPage() {
+            return this.filteredShantytowns.slice(
+                (this.currentPage - 1) * PER_PAGE,
+                PER_PAGE * this.currentPage
+            );
+        },
         title() {
             if (this.currentLocation.code) {
                 return `${this.currentLocation.label}`;
             }
 
             return `Bidonvilles et squats`;
+        },
+        nbPages() {
+            return Math.ceil(this.filteredShantytowns.length / PER_PAGE);
         }
     }
 };
