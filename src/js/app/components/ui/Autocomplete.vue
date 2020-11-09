@@ -29,38 +29,43 @@
               }"
                 >
                     <div v-bind="rootProps">
-                        <InputIcon
-                            class="text-primary pl-6"
-                            position="before"
-                            :icon="prefixIcon"
-                            v-if="prefixIcon"
-                        />
+                        <div class="relative">
+                            <InputIcon
+                                class="text-primary pl-6"
+                                position="before"
+                                :icon="prefixIcon"
+                                v-if="prefixIcon"
+                            />
 
-                        <input
-                            ref="searchInput"
-                            v-bind="inputProps"
-                            v-on="inputListeners"
-                            :class="classes"
-                            @focus="handleFocus"
-                            @blur="handleBlur"
-                            v-model="searchInput"
-                            class="pl-12"
-                        />
-                        <InputIcon position="after" class="pr-6">
-                            <Spinner v-if="loading" />
-                            <div @click="removeItem" class="cursor-pointer ">
-                                <Icon
-                                    class="text-primary text-display-sm"
-                                    v-if="
-                                        !loading &&
-                                            value &&
-                                            getResultValue(value) ===
-                                                searchInput
-                                    "
-                                    icon="times"
-                                />
-                            </div>
-                        </InputIcon>
+                            <input
+                                ref="searchInput"
+                                v-bind="inputProps"
+                                v-on="inputListeners"
+                                :class="classes"
+                                @focus="handleFocus"
+                                @blur="handleBlur"
+                                v-model="searchInput"
+                                class="pl-12"
+                            />
+                            <InputIcon position="after" class="pr-6">
+                                <Spinner v-if="loading" />
+                                <div
+                                    @click="removeItem"
+                                    class="cursor-pointer "
+                                >
+                                    <Icon
+                                        class="text-primary text-display-sm"
+                                        v-if="
+                                            !loading &&
+                                                value &&
+                                                getResultValue(value) ===
+                                                    searchInput
+                                        "
+                                        icon="times"
+                                    />
+                                </div>
+                            </InputIcon>
+                        </div>
 
                         <transition name="fade">
                             <div
@@ -105,6 +110,9 @@
                                 </slot>
                             </div>
                         </transition>
+                        <div>
+                            <slot name="extra" :removeItem="removeItem" />
+                        </div>
                     </div>
                 </template>
             </AutocompleteVue>
@@ -228,7 +236,7 @@ export default {
 
         handleBlur() {
             // If user has deleted his input, delete the selected value
-            if (!this.searchInput) {
+            if (!this.value) {
                 this.onItemSelect(null);
             } else {
                 // If user has changed his last input, restore to last value
