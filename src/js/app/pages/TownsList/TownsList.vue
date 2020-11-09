@@ -6,7 +6,7 @@
                 :towns="[]"
                 @close="hideExport"
                 :location="currentLocation"
-                :closedTowns="filters.status === 'close'"
+                :closedTowns="filters.status !== 'open'"
             ></Export>
         </div>
         <div class="bg-G100">
@@ -34,13 +34,18 @@
                 </template>
                 <template slot="title">
                     <div class="text-display-xl mb-2">{{ title }}</div>
-                    <div>{{ populationTotal }} personnes</div>
-                    <div>
-                        {{ filteredShantytowns.length }} sites
-                        <span v-if="hasJusticePermission && justiceTotal.length"
-                            >dont {{ justiceTotal }} site(s) avec une procédure
-                            judiciaire</span
-                        >
+                    <div v-if="!isLoading">
+                        <div>{{ populationTotal }} personnes</div>
+                        <div>
+                            {{ filteredShantytowns.length }} sites
+                            <span
+                                v-if="
+                                    hasJusticePermission && justiceTotal.length
+                                "
+                                >dont {{ justiceTotal }} site(s) avec une
+                                procédure judiciaire</span
+                            >
+                        </div>
                     </div>
                 </template>
                 <template slot="buttons">
@@ -65,69 +70,84 @@
                     >
                 </template>
             </TownsListHeader>
-            <div class="flex items-end mb-8 justify-between">
-                <TownsListFilters class="">
-                    <TownsListFilter
-                        title="Nombre de personnes"
-                        class="mr-2"
-                        v-model="filters.population"
-                        :options="[
-                            { value: null, label: 'Inconnu' },
-                            { value: '-9', label: 'Moins de 10 personnes' },
-                            {
-                                value: '10-99',
-                                label: 'Entre 10 et 99 personnes'
-                            },
-                            { value: '100-', label: 'Plus de 100 personnes' }
-                        ]"
+            <div v-if="!isLoading">
+                <div class="flex items-end mb-8 justify-between">
+                    <TownsListFilters class="">
+                        <TownsListFilter
+                            title="Nombre de personnes"
+                            class="mr-2"
+                            v-model="filters.population"
+                            :options="[
+                                { value: null, label: 'Inconnu' },
+                                { value: '-9', label: 'Moins de 10 personnes' },
+                                {
+                                    value: '10-99',
+                                    label: 'Entre 10 et 99 personnes'
+                                },
+                                {
+                                    value: '100-',
+                                    label: 'Plus de 100 personnes'
+                                }
+                            ]"
+                        />
+                        <TownsListFilter
+                            title="Type de terrain"
+                            class="mr-2"
+                            v-model="filters.fieldType"
+                            :options="
+                                fieldTypes.map(f => ({
+                                    label: f.label,
+                                    value: f.id
+                                }))
+                            "
+                        />
+                        <TownsListFilter
+                            title="Procédure judiciaire"
+                            class="mr-2"
+                            v-model="filters.justice"
+                            :options="[
+                                { value: null, label: 'Inconnu' },
+                                { value: 'none', label: 'Aucune' },
+                                {
+                                    value: 'ownerComplaint',
+                                    label: 'Plainte déposée'
+                                },
+                                {
+                                    value: 'justiceProcedure',
+                                    label: 'Procédure en cours'
+                                },
+                                {
+                                    value: 'justiceRendered',
+                                    label: 'Décision rendue'
+                                }
+                            ]"
+                        />
+                    </TownsListFilters>
+                    <Pagination
+                        v-if="nbPages > 1"
+                        :currentPage="currentPage"
+                        :nbPages="nbPages"
+                        :onChangePage="onChangePage"
                     />
-                    <TownsListFilter
-                        title="Type de terrain"
-                        class="mr-2"
-                        v-model="filters.fieldType"
-                        :options="
-                            fieldTypes.map(f => ({
-                                label: f.label,
-                                value: f.id
-                            }))
-                        "
-                    />
-                    <TownsListFilter
-                        title="Procédure judiciaire"
-                        class="mr-2"
-                        v-model="filters.justice"
-                        :options="[
-                            { value: null, label: 'Inconnu' },
-                            { value: 'none', label: 'Aucune' },
-                            {
-                                value: 'ownerComplaint',
-                                label: 'Plainte déposée'
-                            },
-                            {
-                                value: 'justiceProcedure',
-                                label: 'Procédure en cours'
-                            },
-                            {
-                                value: 'justiceRendered',
-                                label: 'Décision rendue'
-                            }
-                        ]"
-                    />
-                </TownsListFilters>
-                <Pagination
-                    v-if="nbPages > 1"
-                    :currentPage="currentPage"
-                    :nbPages="nbPages"
-                    :onChangePage="onChangePage"
+                </div>
+                <TownCard
+                    v-for="shantytown in filteredShantytownsByPage"
+                    :key="shantytown.id"
+                    :shantytown="shantytown"
+                    class="mb-6"
                 />
+                <div
+                    v-if="!filteredShantytowns.length"
+                    class="text-center text-G600 italic"
+                >
+                    Aucun site ne correspond à votre recherche, essayez d'autres
+                    filtres ou périmetre géographique
+                </div>
             </div>
 
-            <TownCard
-                v-for="shantytown in filteredShantytownsByPage"
-                :key="shantytown.id"
-                :shantytown="shantytown"
-                class="mb-6"
-            />
+            <div v-else class="text-center text-primary text-display-lg mt-16">
+                <Spinner />
+            </div>
         </PrivateContainer>
     </PrivateLayout>
 </template>
@@ -150,11 +170,13 @@ import {
 } from "#helpers/api/config";
 import { filterShantytowns } from "./filterShantytowns";
 import Export from "#app/components/export/export.vue";
+import Spinner from "#app/components/ui/Spinner";
 
 const PER_PAGE = 10;
 
 export default {
     components: {
+        Spinner,
         TownCard,
         PrivateContainer,
         PrivateLayout,
@@ -273,6 +295,9 @@ export default {
         },
         nbPages() {
             return Math.ceil(this.filteredShantytowns.length / PER_PAGE);
+        },
+        isLoading() {
+            return this.state === "loading";
         }
     }
 };
