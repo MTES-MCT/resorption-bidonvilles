@@ -115,7 +115,7 @@
                     />
                 </TownsListFilters>
                 <Pagination
-                    v-if="nbPages > 0"
+                    v-if="nbPages > 1"
                     :currentPage="currentPage"
                     :nbPages="nbPages"
                     :onChangePage="onChangePage"
