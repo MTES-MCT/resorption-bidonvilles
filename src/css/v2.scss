@@ -65,7 +65,7 @@
 
 @layer base {
   body {
-    @apply text-size-md font-body font-normal text-G700
+    @apply text-size-md font-body font-normal text-G700 overflow-y-scroll
   }
 }
 @layer utilities {
