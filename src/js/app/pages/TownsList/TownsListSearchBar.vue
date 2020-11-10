@@ -22,6 +22,51 @@
                     >
                 </div>
             </template>
+            <template
+                v-slot:default="{
+                    results,
+                    resultListProps,
+                    resultListListeners,
+                    resultProps,
+                    getResultValue
+                }"
+            >
+                <Menu v-if="!results.length">
+                    <MenuItem>
+                        Aucun résultats
+                    </MenuItem>
+                </Menu>
+                <Menu v-bind="resultListProps" v-on="resultListListeners">
+                    <div
+                        :key="category.label"
+                        v-for="category in getCategories(results)"
+                        class="flex flex-row border-b-2 border-G100"
+                    >
+                        <div
+                            class="px-4 py-2 w-48 text-G600 border-r-2 border-G100 text-sm text-right pr-4"
+                        >
+                            {{ category.label }}
+                        </div>
+                        <div class="flex-1">
+                            <MenuItem
+                                v-for="(r, index) in results"
+                                :key="resultProps[index].id"
+                                v-bind="resultProps[index]"
+                                :class="[
+                                    'flex flex-col cursor-pointer hover:bg-G100',
+                                    r.type === category.label
+                                        ? 'block'
+                                        : 'hidden',
+                                    resultProps[index]['aria-selected'] &&
+                                        'bg-G100'
+                                ]"
+                            >
+                                {{ getResultValue(r) }}
+                            </MenuItem>
+                        </div>
+                    </div>
+                </Menu>
+            </template>
         </AutocompleteV2>
     </div>
 </template>
@@ -33,6 +78,7 @@ export default {
         return {
             input: "test",
             result: "",
+            results: [],
             loading: false
         };
     },
@@ -43,14 +89,30 @@ export default {
         resultValue(input) {
             return input.label;
         },
+        getCategories(items) {
+            const groupBy = (items, key) =>
+                items.reduce(
+                    (result, item) => ({
+                        ...result,
+                        [item[key]]: [...(result[item[key]] || []), item]
+                    }),
+                    {}
+                );
+
+            return Object.values(groupBy(items, "type")).map(categoryItems => ({
+                label: categoryItems[0].type,
+                items: categoryItems
+            }));
+        },
         async search(input) {
             this.input = input;
 
             if (input) {
                 this.loading = true;
-                const result = await autocompleter(input);
+                this.results = await autocompleter(input);
+
                 this.loading = false;
-                return result;
+                return this.results;
             }
 
             return [];
@@ -59,11 +121,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .searchbox {
     max-width: 500px;
-}
-.searchShadow {
-    box-shadow: 0px 0px 6px #00000033;
 }
 </style>
