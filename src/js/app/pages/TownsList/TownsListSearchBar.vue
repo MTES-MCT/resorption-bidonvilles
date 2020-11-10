@@ -9,10 +9,10 @@
             :getResultValue="resultValue"
             :loading="loading"
             prefixIcon="search"
-            :inputClasses="['rounded-full shadow-sm text-sm']"
+            :inputClasses="['rounded-full shadow-sm']"
         >
             <template v-slot:extra="{ removeItem }">
-                <div class=" px-2 text-right">
+                <div class="py-1 px-2 text-right">
                     <Button
                         variant="primaryText"
                         @click="removeItem"
