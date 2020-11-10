@@ -18,7 +18,7 @@
             </PrivateContainer>
         </div>
         <PrivateContainer class="pt-10">
-            <TownsListHeader :search="filters.location" class="mb-12">
+            <TownsListHeader :search="filters.location" class="mb-6">
                 <template slot="filters">
                     <TownsListHeaderTab
                         :active="filters.status === 'open'"
@@ -71,7 +71,7 @@
                 </template>
             </TownsListHeader>
             <div v-if="!isLoading">
-                <div class="flex items-end mb-8 justify-between">
+                <div class="flex items-end mb-6 justify-between">
                     <TownsListFilters class="">
                         <TownsListFilter
                             title="Nombre de personnes"
@@ -138,7 +138,7 @@
                 />
                 <div
                     v-if="!filteredShantytowns.length"
-                    class="text-center text-G600 italic"
+                    class="text-center text-G600 italic pt-4"
                 >
                     Aucun site ne correspond à votre recherche, essayez d'autres
                     filtres ou périmetre géographique

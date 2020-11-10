@@ -1,16 +1,24 @@
 <template>
     <Dropdown>
-        <template v-slot:button>
-            <Button variant="filter" size="sm">{{
-                titleWithActiveFilters
-            }}</Button>
+        <template v-slot:button="{ isOpen }">
+            <Button
+                variant="custom"
+                size="sm"
+                :class="[
+                    'px-4 rounded focus:outline-none border border-primary  ',
+                    isOpen
+                        ? 'bg-primary text-white hover:text-white focus:text-white'
+                        : 'hover:bg-blue200 hover:text-primary text-primary'
+                ]"
+                >{{ titleWithActiveFilters }}</Button
+            >
         </template>
         <template v-slot:menu>
-            <Menu>
+            <Menu containerClasses="py-0">
                 <div
                     v-for="option in options"
                     :key="option.id"
-                    class="flex items-center whitespace-no-wrap text-sm"
+                    class="flex items-center whitespace-no-wrap text-sm menuWidth"
                 >
                     <Checkbox
                         :checkValue="option.value"
@@ -22,7 +30,7 @@
                         v-slot="{ isChecked }"
                     >
                         <div
-                            class="flex items-center justify-between w-full  hover:bg-blue100 py-1 px-2 text-primary"
+                            class="flex items-center justify-between w-full  hover:bg-blue200 py-2 px-3 text-primary"
                         >
                             <div class="flex-1">{{ option.label }}</div>
                             <div class="ml-4" v-if="isChecked">
@@ -32,14 +40,15 @@
                     </Checkbox>
                 </div>
 
-                <Button
-                    size="sm"
-                    variant="primaryText"
-                    class="mt-2 "
-                    @click="$emit('input', [])"
-                >
-                    Effacer
-                </Button>
+                <div class="px-1 py-2">
+                    <Button
+                        size="sm"
+                        variant="primaryText"
+                        @click="$emit('input', [])"
+                    >
+                        Effacer
+                    </Button>
+                </div>
             </Menu>
         </template>
     </Dropdown>
@@ -69,3 +78,9 @@ export default {
     }
 };
 </script>
+
+<style scoped="true">
+.menuWidth {
+    min-width: 220px;
+}
+</style>

@@ -1,7 +1,7 @@
 <template>
     <div class="relative">
         <div @click="toggleMenu">
-            <slot name="button" />
+            <slot name="button" :isOpen="isOpen" />
         </div>
         <div
             :class="[
