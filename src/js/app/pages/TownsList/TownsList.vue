@@ -149,7 +149,7 @@
                     class="text-center text-G600 italic pt-4"
                 >
                     Aucun site ne correspond à votre recherche, essayez d'autres
-                    filtres ou périmetre géographique
+                    filtres ou périmètre géographique
                 </div>
             </div>
 
