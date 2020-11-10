@@ -5,7 +5,7 @@
         @mouseleave="isHover = false"
     >
         <router-link :to="`site/${shantytown.id}`">
-            <div class="p-4 grid grid-cols-5 gap-8 text-sm">
+            <div class="p-4 md:grid grid-cols-5 gap-8 text-sm">
                 <div>
                     <div class="mb-1">
                         DPT {{ shantytown.departement.code }}
@@ -69,7 +69,7 @@
                     >
                         Aucune procédure judiciaire en cours
                     </div>
-                    <ul v-else class="list-disc">
+                    <ul v-else class="md:list-disc">
                         <li
                             v-for="status in shantytown.justiceStatuses"
                             :key="status.label"

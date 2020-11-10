@@ -13,11 +13,8 @@
 export default {
     props: {
         value: {
-            type: String
+            validator: prop => typeof prop === "boolean" || prop === null
         }
-    },
-    mounted() {
-        console.log(this.$props.value);
     }
 };
 </script>

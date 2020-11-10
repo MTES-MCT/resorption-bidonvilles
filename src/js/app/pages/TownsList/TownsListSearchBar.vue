@@ -41,13 +41,19 @@ export default {
             alert(this.result);
         },
         resultValue(input) {
-            console.log(input);
             return input.label;
         },
-        search(input) {
+        async search(input) {
             this.input = input;
 
-            return autocompleter(input);
+            if (input) {
+                this.loading = true;
+                const result = await autocompleter(input);
+                this.loading = false;
+                return result;
+            }
+
+            return [];
         }
     }
 };

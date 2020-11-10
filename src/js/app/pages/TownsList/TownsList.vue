@@ -53,7 +53,7 @@
                         icon="file-excel"
                         iconPosition="left"
                         variant="primary"
-                        class="mr-6"
+                        class="mr-6 mb-2 md:mb-0"
                         @click="showExport"
                         >Exporter</Button
                     >
@@ -64,6 +64,7 @@
                             icon="plus"
                             iconPosition="left"
                             variant="secondary"
+                            class="whitespace-no-wrap"
                         >
                             Déclarer un nouveau site</Button
                         ></router-link
@@ -71,7 +72,7 @@
                 </template>
             </TownsListHeader>
             <div v-if="!isLoading">
-                <div class="flex items-end mb-6 justify-between">
+                <div class="md:flex items-end mb-6 justify-between">
                     <TownsListFilters class="">
                         <TownsListFilter
                             title="Nombre de personnes"
@@ -124,6 +125,7 @@
                         />
                     </TownsListFilters>
                     <Pagination
+                        class="mt-2 md:mt-0 "
                         v-if="nbPages > 1"
                         :currentPage="currentPage"
                         :nbPages="nbPages"
@@ -232,7 +234,6 @@ export default {
             this.error = null;
 
             fetchAll().then(shantytowns => {
-                console.log(shantytowns);
                 this.shantytowns = shantytowns.map(s =>
                     enrichShantytown(s, this.fieldTypes)
                 );

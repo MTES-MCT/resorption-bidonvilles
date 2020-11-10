@@ -1,5 +1,5 @@
 <template>
-    <div class="flex justify-between items-baseline">
+    <div class="block md:flex justify-between items-baseline">
         <div>
             <div class="flex items-center mb-4">
                 <slot name="filters" />
@@ -8,7 +8,7 @@
                 <slot name="title" />
             </div>
         </div>
-        <div class="flex items-center">
+        <div class="block md:flex items-center">
             <slot name="buttons" />
         </div>
     </div>
