@@ -1,5 +1,5 @@
 <template>
-    <div class="mx-auto searchbox">
+    <div class="mx-auto searchbox -mb-6">
         <AutocompleteV2
             id="test"
             :defaultValue="result ? resultValue(result) : ''"
@@ -9,14 +9,15 @@
             :getResultValue="resultValue"
             :loading="loading"
             prefixIcon="search"
-            :inputClasses="['rounded-full shadow-sm']"
+            :inputClasses="['rounded-full shadow-sm text-sm']"
         >
             <template v-slot:extra="{ removeItem }">
                 <div class=" px-2 text-right">
                     <Button
                         variant="primaryText"
-                        class="text-display-sm"
                         @click="removeItem"
+                        size="sm"
+                        class="font-bold"
                         >Voir tous les sites de France</Button
                     >
                 </div>

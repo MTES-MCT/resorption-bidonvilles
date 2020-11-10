@@ -10,7 +10,7 @@
 
         <div
             v-if="currentPage > 1"
-            class="cursor-pointer"
+            class="cursor-pointer w-8 text-center"
             @click="() => onChangePage(1)"
         >
             1
@@ -27,7 +27,7 @@
         <div
             v-if="currentPage !== nbPages"
             @click="() => onChangePage(nbPages)"
-            class="cursor-pointer"
+            class="cursor-pointer w-8 text-center"
         >
             {{ nbPages }}
         </div>

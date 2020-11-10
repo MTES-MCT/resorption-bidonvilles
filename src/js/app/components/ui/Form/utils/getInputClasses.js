@@ -10,7 +10,7 @@ export default function getInputClasses(variant, inputOptions) {
             suffixIcon && "pr-10"
         ],
         default: [
-            "border-2 border-G200 rounded-md w-full py-2 px-4 outline-none focus:border-primary",
+            "border border-G200 rounded-md w-full py-2 px-4 outline-none focus:border-primary",
             error && "border-error",
             prefixIcon && "pl-10",
             suffixIcon && "pr-10"

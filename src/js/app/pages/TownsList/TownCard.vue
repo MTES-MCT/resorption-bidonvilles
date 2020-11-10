@@ -31,7 +31,7 @@
                             :style="
                                 `background-color: ${shantytown.fieldType.color}`
                             "
-                            class="h-4 w-4 mr-2"
+                            class="h-4 w-4 mr-2 rounded"
                         />
 
                         <span>{{ shantytown.fieldType.label }}</span>
@@ -84,18 +84,19 @@
                 </div>
 
                 <div>
+                    <TownCardIcon :value="shantytown.accessToWater" class="mb-1"
+                        >eau</TownCardIcon
+                    >
                     <TownCardIcon
                         :value="shantytown.electricityType.value"
                         class="mb-1"
-                        >Electricité:</TownCardIcon
+                        >électricité</TownCardIcon
                     >
-                    <TownCardIcon :value="shantytown.accessToWater" class="mb-1"
-                        >Accès à l'eau:</TownCardIcon
-                    >
+
                     <TownCardIcon
                         :value="shantytown.trashEvacuation"
                         class="mb-1"
-                        >Evacuation des déchets:</TownCardIcon
+                        >évac. des déchets</TownCardIcon
                     >
                 </div>
             </div>
@@ -116,7 +117,7 @@
                                 variant="secondaryText"
                                 icon="pen"
                                 iconPosition="left"
-                                class="text-display-sm"
+                                class="text-display-sm hover:underline"
                                 >Mettre à jour</Button
                             >
                         </router-link>
@@ -124,7 +125,7 @@
                     <Button
                         variant="primaryText"
                         icon="arrow-right"
-                        class="text-display-sm"
+                        class="text-display-sm hover:underline"
                         >Voir la fiche du site</Button
                     >
                 </div>
