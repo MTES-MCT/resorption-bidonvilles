@@ -54,10 +54,10 @@ export default {
             type: String
         },
         containerClasses: {
-            type: Array
+            type: [Array, String]
         },
         labelClasses: {
-            type: Array
+            type: [Array, String]
         },
         value: {
             type: Array
