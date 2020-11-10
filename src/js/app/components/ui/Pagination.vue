@@ -3,14 +3,16 @@
         <Button
             icon="chevron-left"
             iconPosition="left"
-            variant="text"
+            variant="custom"
+            size="custom"
+            class="hover:bg-G200 rounded-full px-4 py-1 mx-2 focus:outline-none "
             @click="onPrevious"
             >Précédent</Button
         >
 
         <div
             v-if="currentPage > 1"
-            class="cursor-pointer w-8 text-center"
+            class="h-8 w-8 hover:bg-G200 flex justify-center items-center rounded-full cursor-pointer"
             @click="() => onChangePage(1)"
         >
             1
@@ -27,7 +29,7 @@
         <div
             v-if="currentPage !== nbPages"
             @click="() => onChangePage(nbPages)"
-            class="cursor-pointer w-8 text-center"
+            class="h-8 w-8 hover:bg-G200 flex justify-center items-center rounded-full cursor-pointer"
         >
             {{ nbPages }}
         </div>
@@ -35,7 +37,9 @@
         <Button
             icon="chevron-right"
             iconPosition="right"
-            variant="text"
+            variant="custom"
+            size="custom"
+            class="hover:bg-G200  rounded-full px-4 py-1 mx-2  focus:outline-none"
             @click="onNext"
             >Suivant</Button
         >

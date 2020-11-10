@@ -29,7 +29,7 @@
                     <TownsListHeaderTab
                         :active="filters.status === 'close'"
                         @click="filters.status = 'close'"
-                        >Site fermés</TownsListHeaderTab
+                        >Sites fermés</TownsListHeaderTab
                     >
                 </template>
                 <template slot="title">
@@ -124,20 +124,26 @@
                             ]"
                         />
                     </TownsListFilters>
-                    <Pagination
-                        class="mt-2 md:mt-0 "
-                        v-if="nbPages > 1"
-                        :currentPage="currentPage"
-                        :nbPages="nbPages"
-                        :onChangePage="onChangePage"
-                    />
                 </div>
-                <TownCard
-                    v-for="shantytown in filteredShantytownsByPage"
-                    :key="shantytown.id"
-                    :shantytown="shantytown"
-                    class="mb-6"
-                />
+
+                <div>
+                    <TownCard
+                        v-for="shantytown in filteredShantytownsByPage"
+                        :key="shantytown.id"
+                        :shantytown="shantytown"
+                        class="mb-6 hover:border-primary"
+                    />
+                    <div class="flex flex-end mb-12">
+                        <Pagination
+                            class="mt-2 md:mt-0 ml-auto "
+                            v-if="nbPages > 1"
+                            :currentPage="currentPage"
+                            :nbPages="nbPages"
+                            :onChangePage="onChangePage"
+                        />
+                    </div>
+                </div>
+
                 <div
                     v-if="!filteredShantytowns.length"
                     class="text-center text-G600 italic pt-4"

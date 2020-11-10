@@ -1,6 +1,9 @@
 <template>
     <div
-        class="cardShadow rounded-sm cursor-pointer"
+        :class="[
+            'rounded-sm cursor-pointer border',
+            isHover ? 'border-primary ' : 'border-transparent cardShadow'
+        ]"
         @mouseenter="isHover = true"
         @mouseleave="isHover = false"
     >
@@ -19,8 +22,8 @@
                         <div>
                             {{ shantytown.addressSimple }}
                         </div>
-                        <div v-if="shantytown.addressDetails">
-                            « {{ shantytown.addressDetails }} »
+                        <div v-if="shantytown.name">
+                            « {{ shantytown.name }} »
                         </div>
                     </div>
                 </div>
