@@ -45,6 +45,7 @@
                         size="sm"
                         variant="primaryText"
                         @click="$emit('input', [])"
+                        class="hover:underline"
                     >
                         Effacer
                     </Button>
