@@ -7,7 +7,7 @@
         @mouseenter="isHover = true"
         @mouseleave="isHover = false"
     >
-        <router-link :to="`site/${shantytown.id}`">
+        <router-link :to="`site-new/${shantytown.id}`">
             <div class="p-4 md:grid grid-cols-5 gap-8 text-sm">
                 <div>
                     <div class="mb-1">
