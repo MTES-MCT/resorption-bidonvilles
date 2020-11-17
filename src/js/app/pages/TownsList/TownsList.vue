@@ -1,14 +1,13 @@
 <template>
     <PrivateLayout>
-        <div class="v1">
-            <Export
-                v-if="exportIsVisible"
-                :towns="[]"
-                @close="hideExport"
-                :location="currentLocation"
-                :closedTowns="filters.status !== 'open'"
-            ></Export>
-        </div>
+        <Export
+            v-if="exportIsVisible"
+            :towns="[]"
+            @close="hideExport"
+            :location="currentLocation"
+            :closedTowns="filters.status !== 'open'"
+        ></Export>
+
         <div class="bg-G100">
             <PrivateContainer class="py-6">
                 <h1 class="text-display-sm text-center mb-4">
@@ -177,7 +176,8 @@ import {
     hasPermission
 } from "#helpers/api/config";
 import { filterShantytowns } from "./filterShantytowns";
-import Export from "#app/components/export/export.vue";
+import Export from "#app/components/export2/Export.vue";
+// import Export from "#app/components/export/export.vue";
 import Spinner from "#app/components/ui/Spinner";
 
 const PER_PAGE = 10;
