@@ -63,7 +63,13 @@
                     </TownDetailsPanelSection>
                 </div>
                 <div class="w-1/2 bg-G200">
-                    MAP
+                    <div class="v1">
+                        <Map
+                            :display-searchbar="false"
+                            :towns="[town]"
+                            :default-view="center"
+                        ></Map>
+                    </div>
                 </div>
             </div>
         </template>
@@ -72,6 +78,7 @@
 
 <script>
 import TownDetailsPanel from "./ui/TownDetailsPanel.vue";
+import Map from "#app/components/map/map.vue";
 import TownDetailsPanelSection from "./ui/TownDetailsPanelSection.vue";
 import getSince from "./getSince";
 
@@ -81,7 +88,7 @@ export default {
             type: Object
         }
     },
-    components: { TownDetailsPanel, TownDetailsPanelSection },
+    components: { TownDetailsPanel, TownDetailsPanelSection, Map },
     methods: {
         /**
          * @see index.js
@@ -100,6 +107,14 @@ export default {
             }
 
             return "";
+        }
+    },
+    computed: {
+        center() {
+            return {
+                center: [this.town.latitude, this.town.longitude],
+                zoom: 15
+            };
         }
     }
 };
