@@ -157,7 +157,7 @@
                         <div class="sidepanel-content">
                             <div class="sidepanel-section" v-for="changelog in town.changelog">
                                 <article class="userpost userpost--changelog">
-                                    <header class="userpost-header">
+                                    <header class="userpost-header">changelog
                                         <p class="userpost-date"><time>{{ formatDate(changelog.date, 'd M y à h:i') }}</time></p>
                                         <h1 class="userpost-title">
                                             <router-link :to="`/annuaire/${changelog.author.organization.id}`">

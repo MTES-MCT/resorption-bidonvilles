@@ -1,29 +1,48 @@
 <template>
     <div>
         <div class="flex justify-end mb-6">
-            <Button variant="primaryOutline" class="mr-8"
+            <Button
+                variant="primaryOutline"
+                class="mr-8"
+                icon="ban"
+                iconPosition="left"
+                @click="$emit('openCancel')"
+                v-if="town.status === 'open'"
                 >Fermer le site</Button
             >
-            <Button variant="primary" class="mr-8"
-                >Ecrire un commentaire</Button
+            <router-link to="#newComment">
+                <Button
+                    variant="primary"
+                    class="mr-8"
+                    icon="comment"
+                    iconPosition="left"
+                    >Ecrire un commentaire</Button
+                >
+            </router-link>
+
+            <Button
+                variant="secondary"
+                class="mr-8"
+                icon="pen"
+                iconPosition="left"
+                v-if="town.status === 'open'"
+                >Mettre a jour</Button
             >
-            <Button variant="secondary" class="mr-8">Mettre a jour</Button>
         </div>
         <div>
             <div>{{ town.city.name }} ({{ town.departement.name }})</div>
             <div class="text-display-lg">
                 {{ town.addressSimple }}
-                <span v-if="town.name">« {{ town.name }} »</span>
+                <span v-if="town.name" class="text-display-xs"
+                    >« {{ town.name }} »</span
+                >
             </div>
         </div>
         <div class="flex items-center">
-            <div class="flex items-center">
-                <div class="rounded-full bg-corail h-3 w-3 mr-2" />
+            <div class="flex items-center uppercase text-sm">
+                <div class="rounded-full bg-corail h-3 w-3 mr-2 " />
                 Mis à jour le
                 {{ formatDate(town.updatedAt, "d/m/y") }}
-            </div>
-            <div class="text-red ml-6">
-                0 commentaires
             </div>
         </div>
     </div>

@@ -1,13 +1,27 @@
 <template>
     <div>
-        <div class="text-display-lg text-corail p-6 commentsZone">
-            10 commentaires
+        <div class="text-display-lg text-corail py-6">
+            {{ comments.length }} commentaires
         </div>
+        <CommentBlock
+            v-for="comment in comments"
+            :key="comment.id"
+            :comment="comment"
+        />
     </div>
 </template>
 
-<style>
-.commentsZone {
-    height: 1000px;
-}
-</style>
+<script>
+import CommentBlock from "./ui/CommentBlock";
+
+export default {
+    components: {
+        CommentBlock
+    },
+    props: {
+        comments: {
+            type: Array
+        }
+    }
+};
+</script>

@@ -1,6 +1,13 @@
 <template>
-    <div>
-        <router-link :to="to" :class="activeSection && 'text-primary'">
+    <div
+        :class="[
+            'pl-2 border-l-4 my-2',
+            activeSection
+                ? 'text-primary  border-primary'
+                : 'border-transparent'
+        ]"
+    >
+        <router-link :to="to">
             <slot />
         </router-link>
     </div>

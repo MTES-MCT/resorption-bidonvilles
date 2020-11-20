@@ -22,9 +22,19 @@
                 :activeSection="activeSection === 'judicial'"
                 >Procédure judiciaire</LeftColumnNavLink
             >
-
-            <div>
-                10 commentaires
+            <LeftColumnNavLink
+                to="#comments"
+                :activeSection="activeSection === 'comments'"
+            >
+                {{ town.comments.regular.length }}
+                commentaires</LeftColumnNavLink
+            >
+            <div
+                class="flex text-primary font-bold mt-4 cursor-pointer"
+                @click="$emit('openHistory')"
+            >
+                <Icon icon="history" />
+                <div class="ml-2">Voir l'historique des modifications</div>
             </div>
         </div>
     </div>
@@ -34,6 +44,11 @@
 import LeftColumnNavLink from "#app/pages/TownDetails/ui/LeftColumnNavLink";
 export default {
     components: { LeftColumnNavLink },
+    props: {
+        town: {
+            type: Object
+        }
+    },
     data() {
         return {
             activeSection: "characteristics"

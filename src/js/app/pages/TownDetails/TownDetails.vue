@@ -6,9 +6,13 @@
     </PrivateLayout>
     <PrivateLayout v-else>
         <PrivateContainer v-if="town" class="py-10">
-            <TownDetailsHeader :town="town" />
+            <TownDetailsHeader :town="town" v-on:openCancel="openCancel" />
             <div class="flex pt-10 ">
-                <TownDetailsLeftColumn :town="town" class="leftColumnWidth" />
+                <TownDetailsLeftColumn
+                    :town="town"
+                    class="leftColumnWidth"
+                    v-on:openHistory="openHistory"
+                />
                 <div class="flex-1">
                     <TownDetailsPanelCharacteristics
                         :town="town"
@@ -33,18 +37,52 @@
                 </div>
             </div>
         </PrivateContainer>
-        <div class="bg-orange300">
-            <PrivateContainer class="flex">
-                <div class="leftColumnWidth" />
-                <TownDetailsNewComment class="flex-1" />
+        <div class="bg-orange300 py-10">
+            <PrivateContainer class="flex items-center">
+                <div class="leftColumnWidth text-sm">
+                    <div>
+                        <Icon icon="exclamation-triangle" />
+                    </div>
+                    <div class="font-bold">
+                        Quelles sont les règles de confidentialités ?
+                    </div>
+                    <div>
+                        Merci de respecter les règles de confidentialité. Ne pas
+                        citer l’identité des individus (Nom, âge, sexe,
+                        origine…)
+                    </div>
+                </div>
+                <TownDetailsNewComment
+                    class="flex-1"
+                    v-on:submit="town.comments.regular = $event"
+                    id="newComment"
+                    :user="user"
+                />
             </PrivateContainer>
         </div>
-        <div class="bg-orange100">
-            <PrivateContainer class="flex">
+        <div class="bg-orange100" v-if="town.comments.regular.length">
+            <PrivateContainer class="flex" id="comments">
                 <div class="leftColumnWidth" />
-                <TownDetailsComments class="flex-1" />
+                <TownDetailsComments
+                    class="flex-1"
+                    :comments="town.comments.regular"
+                />
             </PrivateContainer>
         </div>
+
+        <!--  History sidebar -->
+        <TownDetailsHistorySidebar
+            :town="town"
+            v-if="historyOpen"
+            v-on:hideHistory="historyOpen = false"
+        />
+        <!--  Close Shantytown Modal -->
+        <TownDetailsCloseModal
+            :town="town"
+            v-if="closeOpen"
+            v-on:cancelCloseTown="closeOpen = false"
+            v-on:updateTown="town = $event"
+        />
     </PrivateLayout>
 </template>
 
@@ -62,9 +100,13 @@ import enrichShantytown from "#app/pages/TownsList/enrichShantytown";
 import { get as getConfig } from "#helpers/api/config";
 import TownDetailsNewComment from "./TownDetailsNewComment";
 import TownDetailsComments from "./TownDetailsComments";
+import TownDetailsHistorySidebar from "#app/pages/TownDetails/TownDetailsHistorySidebar";
+import TownDetailsCloseModal from "#app/pages/TownDetails/TownDetailsCloseModal";
 
 export default {
     components: {
+        TownDetailsCloseModal,
+        TownDetailsHistorySidebar,
         TownDetailsNewComment,
         TownDetailsComments,
         PrivateLayout,
@@ -77,19 +119,30 @@ export default {
         TownDetailsPanelJudicial
     },
     data() {
-        const { field_types: fieldTypes } = getConfig();
+        const { field_types: fieldTypes, user } = getConfig();
 
         return {
+            historyOpen: false,
+            closeOpen: false,
             error: null,
             loading: false,
             town: null,
-            fieldTypes
+            fieldTypes,
+            user
         };
     },
     created() {
         this.fetchData();
     },
     methods: {
+        openHistory() {
+            console.log("open history");
+            this.historyOpen = true;
+        },
+        openCancel() {
+            console.log("open cancel");
+            this.closeOpen = true;
+        },
         fetchData() {
             if (this.loading === true) {
                 return;
@@ -117,5 +170,7 @@ export default {
 <style scoped>
 .leftColumnWidth {
     min-width: 300px;
+    max-width: 300px;
+    @apply pr-10;
 }
 </style>
