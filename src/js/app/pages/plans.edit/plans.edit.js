@@ -228,7 +228,7 @@ export default {
                             }
                         }
                     ],
-                    submit: update
+                    submit: d => update(this.$route.params.id, d)
                 }
             ]
         };
