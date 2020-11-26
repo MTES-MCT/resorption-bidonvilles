@@ -39,6 +39,15 @@
                     <div v-if="poi.temporary_information" class="my-2">
                         {{ poi.temporary_information }}
                     </div>
+
+                    <a
+                        v-if="poi.solinum_id"
+                        class="my-2"
+                        target="_blank"
+                        :href="'https://soliguide.fr/fiche/' + poi.solinum_id"
+                    >
+                        Voir plus
+                    </a>
                 </div>
             </header>
         </simplebar>
