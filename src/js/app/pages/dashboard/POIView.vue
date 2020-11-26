@@ -44,6 +44,7 @@
                         v-if="poi.solinum_id"
                         class="my-2"
                         target="_blank"
+                        @click="trackOpenSoliguide"
                         :href="'https://soliguide.fr/fiche/' + poi.solinum_id"
                     >
                         Voir plus
@@ -76,7 +77,24 @@ export default {
     destroyed() {
         document.removeEventListener("click", this.checkOutsideClick);
     },
+    watch: {
+        active: function(isActive) {
+            if (isActive) {
+                this.trackOpenPOI();
+            }
+        }
+    },
     methods: {
+        trackOpenPOI() {
+            this.$piwik.trackEvent("POI", "Open POI", this.poi.solinum_id);
+        },
+        trackOpenSoliguide() {
+            this.$piwik.trackEvent(
+                "POI",
+                "Click See More",
+                this.poi.solinum_id
+            );
+        },
         checkOutsideClick(event) {
             if (!this.poi) {
                 return;
