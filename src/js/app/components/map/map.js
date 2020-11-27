@@ -14,6 +14,7 @@ import waterNo from "../../../../../public/img/water-no.png";
 import waterNull from "../../../../../public/img/water-null.png";
 
 const DEFAULT_VIEW = [46.7755829, 2.0497727];
+const POI_ZOOM_LEVEL = 13;
 
 /* **************************************************************************************************
  * Ce composant fait apparaître une carte qui propose deux fonctionnalités distinctes :
@@ -125,7 +126,9 @@ export default {
             markersGroup: {
                 towns: L.markerClusterGroup(),
                 search: L.markerClusterGroup(),
-                pois: L.markerClusterGroup({ disableClusteringAtZoom: 13 })
+                pois: L.markerClusterGroup({
+                    disableClusteringAtZoom: POI_ZOOM_LEVEL
+                })
             },
 
             /**
@@ -406,12 +409,12 @@ export default {
         onZoomEnd() {
             const zoomLevel = this.map.getZoom();
 
-            if (!this.poiMarkersVisible && zoomLevel > 13) {
+            if (!this.poiMarkersVisible && zoomLevel > POI_ZOOM_LEVEL) {
                 this.poiMarkersVisible = true;
                 this.pois.forEach(this.createPOIMarker);
             }
 
-            if (this.poiMarkersVisible && zoomLevel <= 13) {
+            if (this.poiMarkersVisible && zoomLevel <= POI_ZOOM_LEVEL) {
                 this.poiMarkersVisible = false;
                 this.removeAllPOIMarkers();
             }

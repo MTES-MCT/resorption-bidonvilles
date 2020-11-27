@@ -7,5 +7,5 @@ import { getApi } from "#helpers/api/main";
  * @returns {Promise}
  */
 export function all() {
-    return getApi(`/poi`);
+    return getApi(`/pois`);
 }
