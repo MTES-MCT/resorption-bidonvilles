@@ -40,7 +40,7 @@
                     </Checkbox>
                 </div>
 
-                <div class="px-1 py-2">
+                <div class="px-1 py-1 border-t ">
                     <Button
                         size="sm"
                         variant="primaryText"

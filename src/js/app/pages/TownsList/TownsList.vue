@@ -10,7 +10,7 @@
 
         <div class="bg-G100">
             <PrivateContainer class="py-6">
-                <h1 class="text-display-sm text-center mb-4">
+                <h1 class="text-display-md text-center mb-4">
                     Rechercher un site, une commune, un département... ?
                 </h1>
                 <TownsListSearchBar v-model="filters.location" />
@@ -180,7 +180,7 @@ import Export from "#app/components/export2/Export.vue";
 // import Export from "#app/components/export/export.vue";
 import Spinner from "#app/components/ui/Spinner";
 
-const PER_PAGE = 10;
+const PER_PAGE = 20;
 
 export default {
     components: {
@@ -298,7 +298,7 @@ export default {
                 return `${this.currentLocation.label}`;
             }
 
-            return `Bidonvilles et squats`;
+            return `France métropolitaine`;
         },
         nbPages() {
             return Math.ceil(this.filteredShantytowns.length / PER_PAGE);

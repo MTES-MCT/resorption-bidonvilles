@@ -10,6 +10,7 @@ import TownsList from "#app/pages/towns.list/towns.list.vue";
 import TownsListNew from "#app/pages/TownsList/TownsList.vue";
 import TownsCreate from "#app/pages/towns.create/towns.create.vue";
 import TownsDetails from "#app/pages/towns.details/towns.details.vue";
+import TownsDetailsNew from "#app/pages/TownDetails/TownDetails";
 import Me from "#app/pages/me/me.vue";
 import UserList from "#app/pages/users.list/users.list.vue";
 import UserCreate from "#app/pages/users.create/users.create.vue";
@@ -278,6 +279,14 @@ const router = new VueRouter({
             },
             path: "/site/:id",
             component: TownsDetails,
+            beforeEnter: guardians.loadedAndUpToDate
+        },
+        {
+            meta: {
+                group: "townList"
+            },
+            path: "/site-new/:id",
+            component: TownsDetailsNew,
             beforeEnter: guardians.loadedAndUpToDate
         },
         {

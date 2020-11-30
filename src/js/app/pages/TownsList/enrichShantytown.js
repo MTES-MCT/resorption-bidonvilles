@@ -6,6 +6,8 @@
  * @returns {EnrichedShantytown}
  */
 
+import policeSiren from "./assets/police_siren.svg";
+
 export default function enrichShantytown(shantytown, fieldTypes) {
     const fieldTypeColors = fieldTypes.reduce(
         (acc, fieldType) =>
@@ -31,23 +33,27 @@ export default function enrichShantytown(shantytown, fieldTypes) {
         shantytown.justiceRendered === true
     ) {
         justiceStatuses.push({
+            icon: "balance-scale",
             label: "Décision rendue",
             date: shantytown.justiceRenderedAt
         });
 
         if (shantytown.justiceChallenged === true) {
             justiceStatuses.push({
+                icon: "balance-scale",
                 label: "Contentieux"
             });
         }
     } else if (shantytown.justiceProcedure === true) {
         justiceStatuses.push({
+            icon: "balance-scale",
             label: "Procédure en cours"
         });
     }
 
     if (shantytown.ownerComplaint === true) {
         justiceStatuses.push({
+            icon: "balance-scale",
             label: "Plainte déposée"
         });
     }
@@ -55,12 +61,14 @@ export default function enrichShantytown(shantytown, fieldTypes) {
     switch (shantytown.policeStatus) {
         case "none":
             justiceStatuses.push({
+                img: policeSiren,
                 label: "Concours de la force publique non demandé"
             });
             break;
 
         case "requested":
             justiceStatuses.push({
+                img: policeSiren,
                 label: "Concours de la force publique demandé",
                 date: shantytown.policeRequestedAt
             });
@@ -68,6 +76,7 @@ export default function enrichShantytown(shantytown, fieldTypes) {
 
         case "granted":
             justiceStatuses.push({
+                img: policeSiren,
                 label: "Concours de la force publique accordé",
                 date: shantytown.policeGrantedAt
             });
@@ -75,9 +84,6 @@ export default function enrichShantytown(shantytown, fieldTypes) {
 
         default:
         case null:
-            justiceStatuses.push({
-                label: "Concours de la force publique : NC"
-            });
             break;
     }
 
@@ -105,6 +111,10 @@ export default function enrichShantytown(shantytown, fieldTypes) {
         const { years, months } = getSince(statusDate);
         if (years > 0) {
             statusSince.push(`${years} an${years > 1 ? "s" : ""}`);
+        }
+
+        if (years > 0 && months > 0) {
+            statusSince.push(`et`);
         }
 
         if (months > 0) {
