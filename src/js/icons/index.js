@@ -64,7 +64,9 @@ import {
     faCheck,
     faPen,
     faExclamationTriangle,
-    faBan
+    faBan,
+    faMale,
+    faBalanceScale
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(faFlag);
@@ -131,3 +133,5 @@ library.add(faPlus);
 library.add(faCheck);
 library.add(faPen);
 library.add(faExclamationTriangle);
+library.add(faMale);
+library.add(faBalanceScale);

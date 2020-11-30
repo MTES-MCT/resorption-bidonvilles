@@ -23,15 +23,6 @@ export default {
         showExport: {
             type: Function
         }
-    },
-    computed: {
-        title() {
-            if (this.search) {
-                return `Bidonvilles et squats : ${this.search.label}`;
-            }
-
-            return `Bidonvilles et squats`;
-        }
     }
 };
 </script>
