@@ -9,10 +9,12 @@ import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster/dist/leaflet.markercluster";
 
 import waterYes from "../../../../../public/img/water-yes.png";
+import utensils from "../../../../../public/img/utensils.png";
 import waterNo from "../../../../../public/img/water-no.png";
 import waterNull from "../../../../../public/img/water-null.png";
 
 const DEFAULT_VIEW = [46.7755829, 2.0497727];
+const POI_ZOOM_LEVEL = 13;
 
 /* **************************************************************************************************
  * Ce composant fait apparaître une carte qui propose deux fonctionnalités distinctes :
@@ -42,6 +44,19 @@ export default {
          * @type {Array.<Shantytown>}
          */
         towns: {
+            type: Array,
+            required: false,
+            default() {
+                return [];
+            }
+        },
+
+        /**
+         * Liste des points d'interets à afficher
+         *
+         * @type {Array.<poi>}
+         */
+        pois: {
             type: Array,
             required: false,
             default() {
@@ -110,7 +125,10 @@ export default {
              */
             markersGroup: {
                 towns: L.markerClusterGroup(),
-                search: L.markerClusterGroup()
+                search: L.markerClusterGroup(),
+                pois: L.markerClusterGroup({
+                    disableClusteringAtZoom: POI_ZOOM_LEVEL
+                })
             },
 
             /**
@@ -133,6 +151,20 @@ export default {
              * @type {Array.<L.Marker>}
              */
             townMarkers: [],
+
+            /**
+             * POI markers
+             *
+             * @type {Array.<L.Marker>}
+             */
+            poiMarkers: [],
+
+            /**
+             * POI markers visible
+             *
+             * @type Boolean
+             */
+            poiMarkersVisible: false,
 
             /**
              * Town markers, hashed by coordinates
@@ -205,6 +237,10 @@ export default {
          */
         towns() {
             this.syncTownMarkers();
+        },
+
+        pois() {
+            this.syncPOIMarkers();
         },
 
         /**
@@ -332,6 +368,7 @@ export default {
         setupMarkerGroups() {
             this.map.addLayer(this.markersGroup.towns);
             this.map.addLayer(this.markersGroup.search);
+            this.map.addLayer(this.markersGroup.pois);
         },
 
         /**
@@ -357,9 +394,30 @@ export default {
                 scrollWheelZoom: false // interdire le zoom via la molette de la souris
             });
 
+            this.map.on("zoomend", this.onZoomEnd);
+
             this.setupMapControls();
             this.setupMarkerGroups();
             this.setupView();
+        },
+
+        /**
+         * Affiche les points d'interet à partir d'un certain niveau de zoom
+         *
+         * @returns {undefined}
+         */
+        onZoomEnd() {
+            const zoomLevel = this.map.getZoom();
+
+            if (!this.poiMarkersVisible && zoomLevel > POI_ZOOM_LEVEL) {
+                this.poiMarkersVisible = true;
+                this.pois.forEach(this.createPOIMarker);
+            }
+
+            if (this.poiMarkersVisible && zoomLevel <= POI_ZOOM_LEVEL) {
+                this.poiMarkersVisible = false;
+                this.removeAllPOIMarkers();
+            }
         },
 
         /**
@@ -373,6 +431,18 @@ export default {
         },
 
         /**
+         * Supprime et recrée la liste des marqueurs de site
+         *
+         * @returns {undefined}
+         */
+        syncPOIMarkers() {
+            this.removeAllPOIMarkers();
+            if (this.poiMarkersVisible) {
+                this.pois.forEach(this.createPOIMarker);
+            }
+        },
+
+        /**
          * Supprime tous les marqueurs de site existants
          *
          * @returns {undefined}
@@ -381,6 +451,16 @@ export default {
             this.markersGroup.towns.clearLayers();
             this.townMarkers = [];
             this.hashedTownMarkers = {};
+        },
+
+        /**
+         * Supprime tous les marqueurs de site existants
+         *
+         * @returns {undefined}
+         */
+        removeAllPOIMarkers() {
+            this.markersGroup.pois.clearLayers();
+            this.poiMarkers = [];
         },
 
         getTownAddress(town) {
@@ -473,6 +553,37 @@ export default {
         },
 
         /**
+         * Crée un marqueur de site et l'ajoute sur la carte
+         *
+         * @param {Shantytown} town
+         *
+         * @returns {undefined}
+         */
+        createPOIMarker(poi) {
+            const { latitude, longitude } = poi;
+            const coordinates = [latitude, longitude];
+
+            const marker = L.marker(coordinates, {
+                title: poi.address,
+                icon: L.divIcon({
+                    className: "leaflet-marker",
+                    html: `<span class="mapPin mapPin--poi" >
+                        <span class="mapPin-wrapper">
+                            <img src="${utensils}" width="12" height="12"/>
+                        </span>
+                        <span class="mapPin-address">${poi.address}</span>
+                    </span>`,
+                    iconAnchor: [13, 28]
+                })
+            });
+            marker.on("click", this.handlePOIMarkerClick.bind(this, poi));
+
+            marker.addTo(this.markersGroup.pois);
+
+            this.poiMarkers.push(marker);
+        },
+
+        /**
          * Gère un clic sur un marqueur de site
          *
          * @param {L.Marker} marker
@@ -482,6 +593,18 @@ export default {
          */
         handleTownMarkerClick(marker, event) {
             this.$emit("town-click", marker, event);
+        },
+
+        /**
+         * Gère un clic sur un marqueur de point d'interet
+         *
+         * @param {L.Marker} marker
+         * @param {Event}    event
+         *
+         * @returns {undefined}
+         */
+        handlePOIMarkerClick(marker, event) {
+            this.$emit("poi-click", marker, event);
         },
 
         /**

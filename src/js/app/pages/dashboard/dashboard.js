@@ -3,13 +3,16 @@ import NavBar from "#app/layouts/navbar/navbar.vue";
 import FilterGroup from "./filterGroup/filterGroup.vue";
 import Map from "#app/components/map/map.vue";
 import Quickview from "#app/components/quickview/quickview.vue";
-import { all as fetchAll } from "#helpers/api/town";
+import POIView from "./POIView.vue";
+import { all as fetchAllTowns } from "#helpers/api/town";
+import { all as fetchAllPois } from "#helpers/api/poi";
 import { get as getConfig, getPermission } from "#helpers/api/config";
 import { open } from "#helpers/tabHelper";
 
 import iconType from "../../../../../public/img/type.svg";
 import iconPeople from "../../../../../public/img/people.svg";
 import iconStatus from "../../../../../public/img/status.svg";
+import iconPin from "../../../../../public/img/pin.svg";
 
 /**
  * Returns the appropriate zoom level for the given location type
@@ -38,6 +41,7 @@ export default {
         FilterGroup,
         Map,
         Quickview,
+        POIView,
         simplebar
     },
     data() {
@@ -54,8 +58,13 @@ export default {
                 zoom: getDefaultZoomFor(user.organization.location.type)
             },
             towns: [],
+            pois: [],
             quickview: {
                 town: null,
+                originEvent: null
+            },
+            poiview: {
+                poi: null,
                 originEvent: null
             },
             permission: getPermission("shantytown.list"),
@@ -134,6 +143,19 @@ export default {
                         label: type.label,
                         checked: true
                     }))
+                },
+                {
+                    icon: iconPin,
+                    label: "Points d'intérêts",
+                    id: "poi",
+                    options: [
+                        {
+                            value: "food_bank",
+                            label: "Distribution alimentaire",
+                            checked: true
+                        }
+                    ],
+                    opened: true
                 }
             ]
         };
@@ -155,8 +177,28 @@ export default {
         rendererProps() {
             return {
                 towns: this.visibleTowns,
+                pois: this.visiblePOIs,
                 defaultView: this.defaultMapView
             };
+        },
+        visiblePOIs() {
+            let pois = this.pois;
+
+            this.allowedFilters.forEach(filterGroup => {
+                switch (filterGroup.id) {
+                    case "poi":
+                        {
+                            pois = pois.filter(
+                                () => filterGroup.options[0].checked
+                            );
+                        }
+                        break;
+
+                    default:
+                }
+            });
+
+            return pois;
         },
         visibleTowns() {
             let visibleTowns = this.towns;
@@ -321,8 +363,20 @@ export default {
                 originEvent: event.originalEvent
             };
         },
+        showPOIView(poi, event) {
+            this.poiview = {
+                poi,
+                originEvent: event.originalEvent
+            };
+        },
         hideQuickview() {
             this.quickview = {
+                town: null,
+                originEvent: null
+            };
+        },
+        hidePOIView() {
+            this.poiview = {
                 town: null,
                 originEvent: null
             };
@@ -368,8 +422,8 @@ export default {
             this.loading = true;
             this.error = undefined;
 
-            fetchAll()
-                .then(towns => {
+            Promise.all([fetchAllTowns(), fetchAllPois()])
+                .then(([towns, pois]) => {
                     const { field_types: fieldTypes } = getConfig();
 
                     this.loading = false;
@@ -389,6 +443,7 @@ export default {
                     ];
 
                     this.towns = towns;
+                    this.pois = pois;
                     this.$nextTick(() => {
                         this.resize();
                         this.$refs.map.resize();
