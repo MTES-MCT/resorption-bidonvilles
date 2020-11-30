@@ -1,53 +1,53 @@
-import Skeleton from '#app/layouts/skeleton/skeleton.vue';
-import Table from '#app/components/table/table.vue';
-import Organization from '#app/components/organization/organization.vue';
-import OrganizationInput from '#app/components/form/input/organization/organization.vue';
-import { getDirectory } from '#helpers/api/user';
-import { directoryViews } from '#helpers/api/statistics';
-import { get as getConfig } from '#helpers/api/config';
+import Skeleton from "#app/layouts/skeleton/skeleton.vue";
+import Table from "#app/components/table/table.vue";
+import Organization from "#app/components/organization/organization.vue";
+import OrganizationInput from "#app/components/form/input/organization/organization.vue";
+import { getDirectory } from "#helpers/api/user";
+import { directoryViews } from "#helpers/api/statistics";
+import { get as getConfig } from "#helpers/api/config";
 
 export default {
     components: {
         Skeleton,
         Table,
         Organization,
-        OrganizationInput,
+        OrganizationInput
     },
 
     data() {
         return {
             organizations: [],
             columns: [
-                { id: 'organization', label: 'Structure' },
-                { id: 'location', label: 'Territoire' },
-                { id: 'role', label: 'Rôle' },
-                { id: 'contacts', label: '', icon: 'arrow-right' },
+                { id: "organization", label: "Structure" },
+                { id: "location", label: "Territoire" },
+                { id: "role", label: "Rôle" },
+                { id: "contacts", label: "", icon: "arrow-right" }
             ],
             local: getConfig().user.organization.location,
-            level: 'local',
-            search: null,
+            level: "local",
+            search: null
         };
     },
 
     computed: {
         localIsNational() {
-            return this.local.type === 'nation';
+            return this.local.type === "nation";
         },
 
         parsedOrganizations() {
             let filtered = [];
 
-            if (this.localIsNational || this.level === 'national') {
+            if (this.localIsNational || this.level === "national") {
                 filtered = this.organizations;
             } else {
-                filtered = this.organizations.filter((organization) => {
+                filtered = this.organizations.filter(organization => {
                     const a = this.local[this.local.type];
                     const b = organization.location[this.local.type];
                     return a && b && a.code === b.code;
                 });
             }
 
-            return filtered.map((organization) => {
+            return filtered.map(organization => {
                 // organization
                 let organizationName;
                 if (organization.type.abbreviation !== null) {
@@ -60,13 +60,14 @@ export default {
 
                 // location
                 let locationName;
-                if (organization.location.type === 'nation') {
-                    locationName = 'National';
+                if (organization.location.type === "nation") {
+                    locationName = "National";
                 } else {
-                    const location = organization.location[organization.location.type];
+                    const location =
+                        organization.location[organization.location.type];
                     if (!location) {
-                        locationName = '';
-                    } else if (organization.location.type === 'departement') {
+                        locationName = "";
+                    } else if (organization.location.type === "departement") {
                         locationName = `${location.name} (${location.code})`;
                     } else {
                         locationName = location.name;
@@ -78,15 +79,22 @@ export default {
                     organization: organizationName,
                     location: locationName,
                     role: `<span class="role">${organization.role}</span>`,
-                    contacts: organization.users.length > 0 ? `<span class="link">${organization.users.length} contact${organization.users.length > 1 ? 's' : ''}</span>` : '',
+                    contacts:
+                        organization.users.length > 0
+                            ? `<span class="link">${
+                                  organization.users.length
+                              } contact${
+                                  organization.users.length > 1 ? "s" : ""
+                              }</span>`
+                            : "",
                     raw: {
                         id: organization.id,
                         name: organizationName,
                         location: organization.location,
                         locationName,
                         role: organization.role,
-                        users: organization.users,
-                    },
+                        users: organization.users
+                    }
                 };
             });
         },
@@ -98,13 +106,16 @@ export default {
 
             let filter;
             switch (this.search.data.type.id) {
-                case 'user':
+                case "user":
                     filter = ({ id }) => id === this.search.data.organization;
                     break;
-                case 'location':
-                    filter = ({ raw: { location } }) => location[this.search.data.location_type] && location[this.search.data.location_type].code === this.search.data.id;
+                case "location":
+                    filter = ({ raw: { location } }) =>
+                        location[this.search.data.location_type] &&
+                        location[this.search.data.location_type].code ===
+                            this.search.data.id;
                     break;
-                case 'organization':
+                case "organization":
                     filter = ({ id }) => id === this.search.data.id;
                     break;
                 default:
@@ -119,7 +130,9 @@ export default {
                 return null;
             }
 
-            const organization = this.parsedOrganizations.find(({ id }) => id === parseInt(this.$route.params.id, 10));
+            const organization = this.parsedOrganizations.find(
+                ({ id }) => id === parseInt(this.$route.params.id, 10)
+            );
             if (organization === undefined) {
                 return null;
             }
@@ -128,12 +141,18 @@ export default {
         },
 
         pageContent() {
-            return this.filteredOrganizations.slice(this.pageBeginning - 1, this.pageEnd);
+            return this.filteredOrganizations.slice(
+                this.pageBeginning - 1,
+                this.pageEnd
+            );
         },
 
         usersTotal() {
-            return this.filteredOrganizations.reduce((total, org) => total + org.raw.users.length, 0);
-        },
+            return this.filteredOrganizations.reduce(
+                (total, org) => total + org.raw.users.length,
+                0
+            );
+        }
     },
 
     watch: {
@@ -141,7 +160,7 @@ export default {
             if (this.focusedOrganization !== null) {
                 directoryViews(this.focusedOrganization.id);
             }
-        },
+        }
     },
 
     methods: {
@@ -164,7 +183,7 @@ export default {
         },
 
         resetFocusedOrganization() {
-            this.$router.push('/annuaire');
-        },
-    },
+            this.$router.push("/annuaire");
+        }
+    }
 };

@@ -3,10 +3,11 @@
 </template>
 
 <script>
-import Component from './quickview.js';
+import Component from "./quickview";
+
 export default Component;
 </script>
 
 <style lang="scss" scoped>
-@import './quickview.scss';
+@import "./quickview.scss";
 </style>

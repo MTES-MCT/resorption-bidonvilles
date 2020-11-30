@@ -3,7 +3,8 @@
 </template>
 
 <script>
-import Component from "./slide-note.js";
+import Component from "./slide-note";
+
 export default Component;
 </script>
 

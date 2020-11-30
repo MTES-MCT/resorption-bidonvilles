@@ -1,14 +1,66 @@
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faTwitterSquare, faFacebookSquare } from '@fortawesome/free-brands-svg-icons';
+import { library } from "@fortawesome/fontawesome-svg-core";
 import {
-    faFlag, faPaperPlane, faUnlink, faUser, faUserCheck, faUserShield, faArrowRight,
-    faEye, faEyeSlash, faPencilAlt, faTimes, faMapMarkedAlt, faChartLine,
-    faComments, faEnvelope, faPlayCircle, faFileExcel, faSortDown,
-    faCaretSquareLeft, faCaretSquareRight, faCaretUp, faCaretDown, faComment, faTrashAlt,
-    faHistory, faMapPin, faFilePdf, faUsers, faUserPlus, faFileDownload, faAddressBook, faSync,
-    faInfoCircle, faList, faTable, faBookReader, faEuroSign, faPlusCircle, faIdCard,
-    faUserMd, faBriefcase, faHome, faSeedling, faQuestion, faTint, faTintSlash, faHandHoldingMedical, faMapMarkerAlt, faBook, faFileSignature, faChevronDown, faChevronLeft, faChevronRight, faSpinner, faArrowLeft,
-} from '@fortawesome/free-solid-svg-icons';
+    faTwitterSquare,
+    faFacebookSquare
+} from "@fortawesome/free-brands-svg-icons";
+import {
+    faFlag,
+    faPaperPlane,
+    faUnlink,
+    faUser,
+    faUserCheck,
+    faUserShield,
+    faArrowRight,
+    faEye,
+    faEyeSlash,
+    faPencilAlt,
+    faTimes,
+    faMapMarkedAlt,
+    faChartLine,
+    faComments,
+    faEnvelope,
+    faPlayCircle,
+    faFileExcel,
+    faSortDown,
+    faCaretSquareLeft,
+    faCaretSquareRight,
+    faCaretUp,
+    faCaretDown,
+    faComment,
+    faTrashAlt,
+    faHistory,
+    faMapPin,
+    faFilePdf,
+    faUsers,
+    faUserPlus,
+    faFileDownload,
+    faAddressBook,
+    faSync,
+    faInfoCircle,
+    faList,
+    faTable,
+    faBookReader,
+    faEuroSign,
+    faPlusCircle,
+    faIdCard,
+    faUserMd,
+    faBriefcase,
+    faHome,
+    faSeedling,
+    faQuestion,
+    faTint,
+    faTintSlash,
+    faHandHoldingMedical,
+    faMapMarkerAlt,
+    faBook,
+    faFileSignature,
+    faChevronDown,
+    faChevronLeft,
+    faChevronRight,
+    faSpinner,
+    faArrowLeft,
+    faSearch
+} from "@fortawesome/free-solid-svg-icons";
 
 library.add(faFlag);
 library.add(faChevronDown);
@@ -68,3 +120,4 @@ library.add(faArrowRight);
 library.add(faSpinner);
 library.add(faTwitterSquare);
 library.add(faFacebookSquare);
+library.add(faSearch);

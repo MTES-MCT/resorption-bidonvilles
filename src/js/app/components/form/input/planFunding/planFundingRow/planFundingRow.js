@@ -1,8 +1,6 @@
-import { get as getConfig } from '#helpers/api/config';
+import { get as getConfig } from "#helpers/api/config";
 
 export default {
-
-
     props: {
         /**
          * @type {PlanFundingData}
@@ -15,9 +13,9 @@ export default {
                     type: null,
                     amount: 0.0,
                     realAmount: null,
-                    details: '',
+                    details: ""
                 };
-            },
+            }
         },
 
         /**
@@ -28,7 +26,7 @@ export default {
         disabled: {
             type: Boolean,
             required: false,
-            default: false,
+            default: false
         },
 
         /**
@@ -38,7 +36,7 @@ export default {
          */
         index: {
             type: Number,
-            required: true,
+            required: true
         },
 
         /**
@@ -48,7 +46,7 @@ export default {
          */
         relatedYear: {
             type: Number,
-            required: true,
+            required: true
         },
 
         /**
@@ -61,13 +59,13 @@ export default {
         inputMode: {
             type: String,
             required: false,
-            default: 'default',
-        },
+            default: "default"
+        }
     },
 
-
     data() {
-        const showRealAmount = this.inputMode !== 'default' || !this.isCurrentYear();
+        const showRealAmount =
+            this.inputMode !== "default" || !this.isCurrentYear();
         const allowEdition = !Number.isFinite(this.value.realAmount);
 
         return {
@@ -88,19 +86,21 @@ export default {
             type: this.value.type,
             amount: this.value.amount,
             realAmount: showRealAmount ? this.value.realAmount : null,
-            details: this.value.details,
+            details: this.value.details
         };
     },
-
 
     watch: {
         // two-way binding
         value() {
-            this.showRealAmount = this.inputMode !== 'default' || !this.isCurrentYear();
+            this.showRealAmount =
+                this.inputMode !== "default" || !this.isCurrentYear();
             this.allowEdition = !Number.isFinite(this.value.realAmount);
             this.type = this.value.type;
             this.amount = this.value.amount;
-            this.realAmount = this.showRealAmount ? this.value.realAmount : null;
+            this.realAmount = this.showRealAmount
+                ? this.value.realAmount
+                : null;
             this.details = this.value.details;
         },
 
@@ -115,16 +115,15 @@ export default {
         },
         details() {
             this.emitInput();
-        },
+        }
     },
-
 
     methods: {
         /**
          *
          */
         isCurrentYear() {
-            return (new Date()).getFullYear() === this.relatedYear;
+            return new Date().getFullYear() === this.relatedYear;
         },
 
         /**
@@ -133,11 +132,11 @@ export default {
          * @returns {undefined}
          */
         emitInput() {
-            this.$emit('input', {
+            this.$emit("input", {
                 type: this.type,
                 amount: this.amount,
                 realAmount: this.realAmount,
-                details: this.details,
+                details: this.details
             });
         },
 
@@ -147,10 +146,9 @@ export default {
          * @returns {undefined}
          */
         remove() {
-            this.$emit('onremove');
-        },
-    },
-
+            this.$emit("onremove");
+        }
+    }
 };
 
 /**

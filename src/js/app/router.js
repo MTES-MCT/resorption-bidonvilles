@@ -1,45 +1,43 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+import Vue from "vue";
+import VueRouter from "vue-router";
 
-import LandingPage from '#app/pages/LandingPage';
-import SignIn from '#app/pages/signin/signin.vue';
-import Contact from '#app/pages/Contact';
-import Dashboard from '#app/pages/dashboard/dashboard.vue';
-import Launcher from '#app/pages/launcher/launcher.vue';
-import TownsList from '#app/pages/towns.list/towns.list.vue';
-import TownsCreate from '#app/pages/towns.create/towns.create.vue';
-import TownsDetails from '#app/pages/towns.details/towns.details.vue';
-import Me from '#app/pages/me/me.vue';
-import UserList from '#app/pages/users.list/users.list.vue';
-import UserCreate from '#app/pages/users.create/users.create.vue';
-import UserActivate from '#app/pages/users.activate/users.activate.vue';
-import UserValidate from '#app/pages/users.validate/users.validate.vue';
-import UserUpgrade from '#app/pages/users.upgrade/users.upgrade.vue';
-import UserRequestNewPassword from '#app/pages/users.requestNewPassword/users.requestNewPassword.vue';
-import UserSetNewPassword from '#app/pages/users.setNewPassword/users.setNewPassword.vue';
-import PlanList from '#app/pages/plans.list/plans.list.vue';
-import PlanCreate from '#app/pages/plans.create/plans.create.vue';
-import PlanDetails from '#app/pages/plans.details/plans.details.vue';
-import PlanEdit from '#app/pages/plans.edit/plans.edit.vue';
-import PlanMarks from '#app/pages/plans.marks/plans.marks.vue';
-import Statistics from '#app/pages/stats/stats.vue';
-import LegalMentions from '#app/pages/legalMentions/legalMentions.vue';
-import Directory from '#app/pages/directory/directory.vue';
-import UserActivityList from '#app/pages/userActivity.list/userActivity.list.vue';
-import PublicStats from '#app/pages/PublicStats';
-import Covid from '#app/pages/covid/covid.vue';
-import Changelog from '#app/pages/changelog/changelog.vue';
-import CharteEngagement from '#app/pages/charte_engagement/charte_engagement.vue';
+import LandingPage from "#app/pages/LandingPage/index.vue";
+import SignIn from "#app/pages/signin/signin.vue";
+import Contact from "#app/pages/Contact/index.vue";
+import Dashboard from "#app/pages/dashboard/dashboard.vue";
+import Launcher from "#app/pages/launcher/launcher.vue";
+import TownsList from "#app/pages/towns.list/towns.list.vue";
+import TownsCreate from "#app/pages/towns.create/towns.create.vue";
+import TownsDetails from "#app/pages/towns.details/towns.details.vue";
+import Me from "#app/pages/me/me.vue";
+import UserList from "#app/pages/users.list/users.list.vue";
+import UserCreate from "#app/pages/users.create/users.create.vue";
+import UserActivate from "#app/pages/users.activate/users.activate.vue";
+import UserValidate from "#app/pages/users.validate/users.validate.vue";
+import UserUpgrade from "#app/pages/users.upgrade/users.upgrade.vue";
+import UserRequestNewPassword from "#app/pages/users.requestNewPassword/users.requestNewPassword.vue";
+import UserSetNewPassword from "#app/pages/users.setNewPassword/users.setNewPassword.vue";
+import PlanList from "#app/pages/plans.list/plans.list.vue";
+import PlanCreate from "#app/pages/plans.create/plans.create.vue";
+import PlanDetails from "#app/pages/plans.details/plans.details.vue";
+import PlanEdit from "#app/pages/plans.edit/plans.edit.vue";
+import PlanMarks from "#app/pages/plans.marks/plans.marks.vue";
+import Statistics from "#app/pages/stats/stats.vue";
+import LegalMentions from "#app/pages/legalMentions/legalMentions.vue";
+import Directory from "#app/pages/directory/directory.vue";
+import UserActivityList from "#app/pages/userActivity.list/userActivity.list.vue";
+import PublicStats from "#app/pages/PublicStats/index.vue";
+import Covid from "#app/pages/covid/covid.vue";
+import Changelog from "#app/pages/changelog/changelog.vue";
+import CharteEngagement from "#app/pages/charte_engagement/charte_engagement.vue";
 
-// eslint-disable-next-line
-import CGU from '/doc/CGU_Resorption_Bidonvilles.pdf';
-// eslint-disable-next-line
-import TypologieAcces from '/doc/guide_de_l_administrateur.pdf';
-
-import { logout, isLoggedIn, alreadyLoggedBefore } from '#helpers/api/user';
+import { logout, isLoggedIn, alreadyLoggedBefore } from "#helpers/api/user";
 import {
-    get as getConfig, isLoaded as isConfigLoaded, hasPermission, hasAcceptedCharte,
-} from '#helpers/api/config';
+    get as getConfig,
+    isLoaded as isConfigLoaded,
+    hasPermission,
+    hasAcceptedCharte
+} from "#helpers/api/config";
 
 /**
  * This is the route towards which the user is redirected by the launcher page
@@ -107,8 +105,10 @@ function isPermitted(to) {
  * @returns {boolean}
  */
 function isUpgraded() {
-    const { user: { position } } = getConfig();
-    return position !== '';
+    const {
+        user: { position }
+    } = getConfig();
+    return position !== "";
 }
 
 /**
@@ -128,31 +128,29 @@ function hasNoPendingChangelog() {
  */
 const guardians = {
     anonymous: guard.bind(this, [
-        { checker: () => !isLoggedIn(), target: '/', saveEntryPoint: false },
+        { checker: () => !isLoggedIn(), target: "/", saveEntryPoint: false }
     ]),
-    loggedIn: guard.bind(this, [
-        { checker: isLoggedIn, target: '/connexion' },
-    ]),
+    loggedIn: guard.bind(this, [{ checker: isLoggedIn, target: "/connexion" }]),
     loaded: guard.bind(this, [
-        { checker: isLoggedIn, target: '/connexion' },
-        { checker: isConfigLoaded, target: '/launcher' },
-        { checker: isPermitted, target: '/', saveEntrypoint: false },
+        { checker: isLoggedIn, target: "/connexion" },
+        { checker: isConfigLoaded, target: "/launcher" },
+        { checker: isPermitted, target: "/", saveEntrypoint: false }
     ]),
     loadedAndUpgraded: guard.bind(this, [
-        { checker: isLoggedIn, target: '/connexion' },
-        { checker: isConfigLoaded, target: '/launcher' },
-        { checker: isPermitted, target: '/', saveEntrypoint: false },
-        { checker: hasAcceptedCharte, target: '/signature-charte-engagement' },
-        { checker: isUpgraded, target: '/mise-a-niveau' },
+        { checker: isLoggedIn, target: "/connexion" },
+        { checker: isConfigLoaded, target: "/launcher" },
+        { checker: isPermitted, target: "/", saveEntrypoint: false },
+        { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
+        { checker: isUpgraded, target: "/mise-a-niveau" }
     ]),
     loadedAndUpToDate: guard.bind(this, [
-        { checker: isLoggedIn, target: '/connexion' },
-        { checker: isConfigLoaded, target: '/launcher' },
-        { checker: isPermitted, target: '/', saveEntrypoint: false },
-        { checker: hasAcceptedCharte, target: '/signature-charte-engagement' },
-        { checker: isUpgraded, target: '/mise-a-niveau' },
-        { checker: hasNoPendingChangelog, target: '/nouvelle-version' },
-    ]),
+        { checker: isLoggedIn, target: "/connexion" },
+        { checker: isConfigLoaded, target: "/launcher" },
+        { checker: isPermitted, target: "/", saveEntrypoint: false },
+        { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
+        { checker: isUpgraded, target: "/mise-a-niveau" },
+        { checker: hasNoPendingChangelog, target: "/nouvelle-version" }
+    ])
 };
 
 /**
@@ -163,311 +161,314 @@ const guardians = {
 function home() {
     if (isLoggedIn() !== true) {
         if (alreadyLoggedBefore()) {
-            return '/connexion';
+            return "/connexion";
         }
 
-        return '/landing';
+        return "/landing";
     }
 
     if (isConfigLoaded() !== true) {
-        return '/launcher';
+        return "/launcher";
     }
 
-    return '/cartographie';
+    return "/cartographie";
 }
 
 /**
  * Obviously, the routing configuration of the whole app
  */
 const router = new VueRouter({
-    scrollBehavior: (to) => {
+    scrollBehavior: to => {
         if (to.hash) {
             return {
-                selector: to.hash,
+                selector: to.hash
             };
         }
 
         return {
             x: 0,
-            y: 0,
+            y: 0
         };
     },
     routes: [
         {
-            path: '/',
+            path: "/",
             redirect: home,
             meta: {
-                analyticsIgnore: true,
-            },
+                analyticsIgnore: true
+            }
         },
         {
-            path: '/landing',
+            path: "/landing",
             component: LandingPage,
-            beforeEnter: guardians.anonymous,
+            beforeEnter: guardians.anonymous
         },
         {
-            path: '/statistiques-publiques',
+            path: "/statistiques-publiques",
             component: PublicStats,
-            beforeEnter: guardians.anonymous,
+            beforeEnter: guardians.anonymous
         },
         {
-            path: '/connexion',
+            path: "/connexion",
             component: SignIn,
-            beforeEnter: guardians.anonymous,
+            beforeEnter: guardians.anonymous
         },
         {
-            path: '/contact',
+            path: "/contact",
             component: Contact,
-            beforeEnter: guardians.anonymous,
+            beforeEnter: guardians.anonymous
         },
         {
-            path: '/launcher',
+            path: "/launcher",
             component: Launcher,
-            beforeEnter: guardians.loggedIn,
+            beforeEnter: guardians.loggedIn
         },
         {
-            path: '/nouvelle-version',
+            path: "/nouvelle-version",
             component: Changelog,
-            beforeEnter: guardians.loadedAndUpgraded,
+            beforeEnter: guardians.loadedAndUpgraded
         },
         {
-            path: '/deconnexion',
+            path: "/deconnexion",
             beforeEnter: (to, from, next) => {
                 logout(Vue.prototype.$piwik);
-                next('/');
+                next("/");
             },
             meta: {
-                analyticsIgnore: true,
-            },
+                analyticsIgnore: true
+            }
         },
         {
             meta: {
-                group: 'townList',
+                group: "townList"
             },
-            path: '/cartographie',
+            path: "/cartographie",
             component: Dashboard,
-            beforeEnter: guardians.loadedAndUpToDate,
+            beforeEnter: guardians.loadedAndUpToDate
         },
         {
             meta: {
-                group: 'townList',
+                group: "townList"
             },
-            path: '/liste-des-sites',
+            path: "/liste-des-sites",
             component: TownsList,
-            beforeEnter: guardians.loadedAndUpToDate,
+            beforeEnter: guardians.loadedAndUpToDate
         },
         {
             meta: {
-                group: 'townCreation',
-                permissions: ['shantytown.create'],
+                group: "townCreation",
+                permissions: ["shantytown.create"]
             },
-            path: '/nouveau-site',
+            path: "/nouveau-site",
             component: TownsCreate,
-            beforeEnter: guardians.loadedAndUpToDate,
+            beforeEnter: guardians.loadedAndUpToDate
         },
         {
             meta: {
-                group: 'townList',
+                group: "townList"
             },
-            path: '/site/:id',
+            path: "/site/:id",
             component: TownsDetails,
-            beforeEnter: guardians.loadedAndUpToDate,
+            beforeEnter: guardians.loadedAndUpToDate
         },
         {
-            path: '/feedback',
+            path: "/feedback",
             beforeEnter(to, from, next) {
-                window.location.href = 'mailto:contact@resorption-bidonvilles.beta.gouv.fr';
+                window.location.href =
+                    "mailto:contact@resorption-bidonvilles.beta.gouv.fr";
                 next(false);
-            },
+            }
         },
         {
-            path: '/conditions-d-utilisation',
+            path: "/conditions-d-utilisation",
             beforeEnter(to, from, next) {
-                window.open(CGU, '_blank');
+                window.open("/doc/CGU_Resorption_Bidonvilles.pdf");
                 next(false);
-            },
+            }
         },
         {
-            path: '/typologie-des-acces',
+            path: "/typologie-des-acces",
             beforeEnter(to, from, next) {
-                window.open(TypologieAcces, '_blank');
+                window.open("/doc/guide_de_l_administrateur.pdf");
                 next(false);
-            },
+            }
         },
         {
-            path: '/charte-d-engagement',
+            path: "/charte-d-engagement",
             beforeEnter(to, from, next) {
-                const { version_charte_engagement: { fichier } } = getConfig();
-                window.open(fichier, '_blank');
+                const {
+                    version_charte_engagement: { fichier }
+                } = getConfig();
+                window.open(fichier, "_blank");
                 next(false);
-            },
+            }
         },
         {
-            path: '/mentions-legales',
-            component: LegalMentions,
+            path: "/mentions-legales",
+            component: LegalMentions
         },
         {
             meta: {
-                group: 'account',
+                group: "account"
             },
-            path: '/mon-compte',
+            path: "/mon-compte",
             component: Me,
-            beforeEnter: guardians.loadedAndUpToDate,
+            beforeEnter: guardians.loadedAndUpToDate
         },
         {
             meta: {
-                group: 'users',
-                permissions: ['user.list'],
+                group: "users",
+                permissions: ["user.list"]
             },
-            path: '/liste-des-utilisateurs',
+            path: "/liste-des-utilisateurs",
             component: UserList,
-            beforeEnter: guardians.loadedAndUpToDate,
+            beforeEnter: guardians.loadedAndUpToDate
         },
         {
             meta: {
-                group: 'userCreation',
-                permissions: ['user.create'],
+                group: "userCreation",
+                permissions: ["user.create"]
             },
-            path: '/nouvel-utilisateur',
+            path: "/nouvel-utilisateur",
             component: UserCreate,
-            beforeEnter: guardians.loadedAndUpToDate,
+            beforeEnter: guardians.loadedAndUpToDate
         },
         {
-            path: '/signature-charte-engagement',
+            path: "/signature-charte-engagement",
             component: CharteEngagement,
             beforeEnter: guard.bind(this, [
-                { checker: isLoggedIn, target: '/connexion' },
-                { checker: isConfigLoaded, target: '/launcher' },
-                { checker: isPermitted, target: '/', saveEntrypoint: false },
+                { checker: isLoggedIn, target: "/connexion" },
+                { checker: isConfigLoaded, target: "/launcher" },
+                { checker: isPermitted, target: "/", saveEntrypoint: false },
                 {
                     checker() {
                         return !hasAcceptedCharte();
                     },
-                    target: '/',
-                },
-            ]),
+                    target: "/"
+                }
+            ])
         },
         {
             meta: {
-                group: 'users',
-                permissions: ['user.activate'],
+                group: "users",
+                permissions: ["user.activate"]
             },
-            path: '/nouvel-utilisateur/:id',
+            path: "/nouvel-utilisateur/:id",
             component: UserValidate,
-            beforeEnter: guardians.loadedAndUpToDate,
+            beforeEnter: guardians.loadedAndUpToDate
         },
         {
             meta: {
-                group: 'users',
+                group: "users"
             },
-            path: '/mise-a-niveau',
+            path: "/mise-a-niveau",
             component: UserUpgrade,
-            beforeEnter: guardians.loaded,
+            beforeEnter: guardians.loaded
         },
         {
             meta: {
-                group: 'users',
+                group: "users"
             },
-            path: '/nouveau-mot-de-passe',
+            path: "/nouveau-mot-de-passe",
             component: UserRequestNewPassword,
-            beforeEnter: guardians.anonymous,
+            beforeEnter: guardians.anonymous
         },
         {
             meta: {
-                group: 'users',
+                group: "users"
             },
-            path: '/renouveler-mot-de-passe/:token',
+            path: "/renouveler-mot-de-passe/:token",
             component: UserSetNewPassword,
-            beforeEnter: guardians.anonymous,
+            beforeEnter: guardians.anonymous
         },
         {
             meta: {
-                group: 'account',
+                group: "account"
             },
-            path: '/activer-mon-compte/:token',
+            path: "/activer-mon-compte/:token",
             component: UserActivate,
-            beforeEnter: guardians.anonymous,
+            beforeEnter: guardians.anonymous
         },
         {
             meta: {
-                group: 'plans',
-                permissions: ['plan.list'],
+                group: "plans",
+                permissions: ["plan.list"]
             },
-            path: '/liste-des-dispositifs',
+            path: "/liste-des-dispositifs",
             component: PlanList,
-            beforeEnter: guardians.loadedAndUpToDate,
+            beforeEnter: guardians.loadedAndUpToDate
         },
         {
             meta: {
-                group: 'plans',
-                permissions: ['plan.create'],
+                group: "plans",
+                permissions: ["plan.create"]
             },
-            path: '/nouveau-dispositif',
+            path: "/nouveau-dispositif",
             component: PlanCreate,
-            beforeEnter: guardians.loadedAndUpToDate,
+            beforeEnter: guardians.loadedAndUpToDate
         },
         {
             meta: {
-                group: 'plans',
-                permissions: ['plan.update'],
+                group: "plans",
+                permissions: ["plan.update"]
             },
-            path: '/modifier-dispositif/:id',
+            path: "/modifier-dispositif/:id",
             component: PlanEdit,
-            beforeEnter: guardians.loadedAndUpToDate,
+            beforeEnter: guardians.loadedAndUpToDate
         },
         {
             meta: {
-                group: 'plans',
-                permissions: ['plan.read'],
+                group: "plans",
+                permissions: ["plan.read"]
             },
-            path: '/dispositif/:id',
+            path: "/dispositif/:id",
             component: PlanDetails,
-            beforeEnter: guardians.loadedAndUpToDate,
+            beforeEnter: guardians.loadedAndUpToDate
         },
         {
             meta: {
-                group: 'plans',
-                permissions: ['plan.updateMarks'],
+                group: "plans",
+                permissions: ["plan.updateMarks"]
             },
-            path: '/dispositif/:id/indicateurs',
+            path: "/dispositif/:id/indicateurs",
             component: PlanMarks,
-            beforeEnter: guardians.loadedAndUpToDate,
+            beforeEnter: guardians.loadedAndUpToDate
         },
         {
             meta: {
-                group: 'admin',
-                permissions: ['stats.read'],
+                group: "admin",
+                permissions: ["stats.read"]
             },
-            path: '/statistiques',
+            path: "/statistiques",
             component: Statistics,
-            beforeEnter: guardians.loadedAndUpToDate,
+            beforeEnter: guardians.loadedAndUpToDate
         },
         {
             meta: {
-                group: 'admin',
-                permissions: ['shantytown_comment.moderate'],
+                group: "admin",
+                permissions: ["shantytown_comment.moderate"]
             },
-            path: '/historique-des-activites',
+            path: "/historique-des-activites",
             component: UserActivityList,
-            beforeEnter: guardians.loadedAndUpToDate,
+            beforeEnter: guardians.loadedAndUpToDate
         },
         {
             meta: {
-                group: 'covid',
+                group: "covid"
             },
-            path: '/covid-19',
+            path: "/covid-19",
             component: Covid,
-            beforeEnter: guardians.loadedAndUpToDate,
+            beforeEnter: guardians.loadedAndUpToDate
         },
         {
             meta: {
-                group: 'directory',
+                group: "directory"
             },
-            path: '/annuaire/:id?',
+            path: "/annuaire/:id?",
             component: Directory,
-            beforeEnter: guardians.loadedAndUpToDate,
-        },
-    ],
+            beforeEnter: guardians.loadedAndUpToDate
+        }
+    ]
 });
 
 export { router };
@@ -482,7 +483,7 @@ export { router };
  */
 export function getEntryPoint() {
     if (entryPoint === null) {
-        return '/';
+        return "/";
     }
 
     // the entryPoint is consumed once only

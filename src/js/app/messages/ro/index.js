@@ -1,6 +1,6 @@
-import landingPage from './landingPage';
-import contactPage from './contactPage';
-import footer from './footer';
+import landingPage from "./landingPage";
+import contactPage from "./contactPage";
+import footer from "./footer";
 
 export default {
     landingPage,

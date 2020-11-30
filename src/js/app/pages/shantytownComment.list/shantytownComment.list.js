@@ -1,13 +1,13 @@
-import { VueGoodTable as Table } from 'vue-good-table';
-import { getRecentComments } from '#helpers/api/town';
-import NavBar from '#app/layouts/navbar/navbar.vue';
-import { open } from '#helpers/tabHelper';
-import 'vue-good-table/dist/vue-good-table.css';
+import { VueGoodTable as Table } from "vue-good-table";
+import { getRecentComments } from "#helpers/api/town";
+import NavBar from "#app/layouts/navbar/navbar.vue";
+import { open } from "#helpers/tabHelper";
+import "vue-good-table/dist/vue-good-table.css";
 
 export default {
     components: {
         NavBar,
-        Table,
+        Table
     },
 
     data() {
@@ -35,7 +35,7 @@ export default {
              *
              * @type {string|null}
              */
-            state: null,
+            state: null
         };
     },
 
@@ -44,24 +44,29 @@ export default {
             return {
                 columns: [
                     {
-                        id: 'comment',
-                        label: 'COMMENTAIRE',
-                        field: 'description',
+                        id: "comment",
+                        label: "COMMENTAIRE",
+                        field: "description"
                     },
                     {
-                        id: 'author',
-                        label: 'AUTEUR',
-                        field: comment => `${comment.createdBy.lastName.toUpperCase()} ${comment.createdBy.firstName} (${comment.createdBy.position} - ${comment.createdBy.organization})`,
+                        id: "author",
+                        label: "AUTEUR",
+                        field: comment =>
+                            `${comment.createdBy.lastName.toUpperCase()} ${
+                                comment.createdBy.firstName
+                            } (${comment.createdBy.position} - ${
+                                comment.createdBy.organization
+                            })`
                     },
                     {
-                        id: 'see',
-                        label: '',
-                        field: () => true,
-                    },
+                        id: "see",
+                        label: "",
+                        field: () => true
+                    }
                 ],
-                rows: this.comments,
+                rows: this.comments
             };
-        },
+        }
     },
 
     created() {
@@ -77,21 +82,21 @@ export default {
          */
         load() {
             // loading data is forbidden if the component is already loading or loaded
-            if ([null, 'error'].indexOf(this.state) === -1) {
+            if ([null, "error"].indexOf(this.state) === -1) {
                 return;
             }
 
-            this.state = 'loading';
+            this.state = "loading";
             this.error = null;
 
             getRecentComments()
                 .then(({ comments }) => {
                     this.comments = comments;
-                    this.state = 'loaded';
+                    this.state = "loaded";
                 })
                 .catch(({ user_message: error }) => {
                     this.error = error;
-                    this.state = 'error';
+                    this.state = "error";
                 });
         },
 
@@ -108,8 +113,10 @@ export default {
          *
          */
         routeToTown(params) {
-            const routeData = this.$router.resolve(`/site/${params.row.shantytown}`);
+            const routeData = this.$router.resolve(
+                `/site/${params.row.shantytown}`
+            );
             open(routeData.href);
-        },
-    },
+        }
+    }
 };

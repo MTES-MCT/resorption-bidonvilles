@@ -1,9 +1,8 @@
-import Vue from 'vue';
-import { getToken, logout } from '#helpers/api/user';
-import { router } from '#app/router';
-import { open as openTab } from '#helpers/tabHelper';
-// eslint-disable-next-line import/extensions
-import version from '#root/version.json';
+import Vue from "vue";
+import { getToken, logout } from "#helpers/api/user";
+import { router } from "#app/router";
+import { open as openTab } from "#helpers/tabHelper";
+import version from "#root/version.json";
 
 /**
  * Generic error codes
@@ -13,7 +12,7 @@ import version from '#root/version.json';
  */
 const ERRORS = {
     MISSING_TOKEN: 1,
-    EXPIRED_OR_INVALID_TOKEN: 2,
+    EXPIRED_OR_INVALID_TOKEN: 2
 };
 
 /**
@@ -25,11 +24,13 @@ const ERRORS = {
 function handleRequestResponse(success, failure) {
     let response = null;
     try {
-        response = this.responseText ? JSON.parse(this.responseText) : this.responseText;
+        response = this.responseText
+            ? JSON.parse(this.responseText)
+            : this.responseText;
     } catch (error) {
         failure({
-            user_message: 'Une erreur inconnue est survenue',
-            developer_message: 'Failed to parsed the server\'s response',
+            user_message: "Une erreur inconnue est survenue",
+            developer_message: "Failed to parsed the server's response"
         });
         return;
     }
@@ -39,22 +40,27 @@ function handleRequestResponse(success, failure) {
         return;
     }
 
-    if ((this.status / 200) < 1 || (this.status / 200) >= 1.5) {
+    if (this.status / 200 < 1 || this.status / 200 >= 1.5) {
         const errorObject = (response && response.error) || response || {};
         switch (errorObject.code) {
             // handle generic errors
             case ERRORS.MISSING_TOKEN:
             case ERRORS.EXPIRED_OR_INVALID_TOKEN:
                 logout(Vue.prototype.$piwik);
-                router.push('/');
+                router.push("/");
                 break;
 
             // for everything else, let the current component decide what's best
             default:
-                failure(errorObject.user_message ? errorObject : {
-                    user_message: 'Une erreur inconnue est survenue',
-                    developer_message: 'The server responded with an error status but did not provide error details',
-                });
+                failure(
+                    errorObject.user_message
+                        ? errorObject
+                        : {
+                              user_message: "Une erreur inconnue est survenue",
+                              developer_message:
+                                  "The server responded with an error status but did not provide error details"
+                          }
+                );
         }
 
         return;
@@ -90,28 +96,30 @@ function handleRequestFailure(callback) {
 function request(method, url, data, headers = {}) {
     const xhr = new XMLHttpRequest();
     const promise = new Promise((success, failure) => {
-        xhr.open(method, `${process.env.API_URL}${url}`);
+        xhr.open(method, `${process.env.VUE_APP_API_URL}${url}`);
 
-        Object.keys(headers).forEach((name) => {
+        Object.keys(headers).forEach(name => {
             xhr.setRequestHeader(name, headers[name]);
         });
 
-        if (!Object.prototype.hasOwnProperty.call(headers, 'x-access-token')) {
+        if (!Object.prototype.hasOwnProperty.call(headers, "x-access-token")) {
             const token = getToken();
             if (token !== null) {
-                xhr.setRequestHeader('x-access-token', token);
+                xhr.setRequestHeader("x-access-token", token);
             }
         }
 
-        xhr.setRequestHeader('x-app-version', version);
+        xhr.setRequestHeader("x-app-version", version);
 
         xhr.onload = handleRequestResponse.bind(xhr, success, failure);
         xhr.onerror = handleRequestFailure.bind(xhr, failure);
         xhr.ontimeout = handleRequestFailure.bind(xhr, failure);
 
         if (data !== undefined) {
-            if (!Object.prototype.hasOwnProperty.call(headers, 'Content-Type')) {
-                xhr.setRequestHeader('Content-Type', 'application/json');
+            if (
+                !Object.prototype.hasOwnProperty.call(headers, "Content-Type")
+            ) {
+                xhr.setRequestHeader("Content-Type", "application/json");
             }
 
             xhr.send(JSON.stringify(data));
@@ -136,7 +144,7 @@ function request(method, url, data, headers = {}) {
  * @returns {Promise}
  */
 export function getApi(url, data, headers) {
-    return request('GET', url, data, headers);
+    return request("GET", url, data, headers);
 }
 
 /**
@@ -149,7 +157,7 @@ export function getApi(url, data, headers) {
  * @returns {Promise}
  */
 export function postApi(url, data, headers) {
-    return request('POST', url, data, headers);
+    return request("POST", url, data, headers);
 }
 
 /**
@@ -162,7 +170,7 @@ export function postApi(url, data, headers) {
  * @returns {Promise}
  */
 export function deleteApi(url, data, headers) {
-    return request('DELETE', url, data, headers);
+    return request("DELETE", url, data, headers);
 }
 
 /**
@@ -175,7 +183,7 @@ export function deleteApi(url, data, headers) {
  * @returns {Promise}
  */
 export function patchApi(url, data, headers) {
-    return request('PATCH', url, data, headers);
+    return request("PATCH", url, data, headers);
 }
 
 /**
@@ -188,7 +196,7 @@ export function patchApi(url, data, headers) {
  * @returns {Promise}
  */
 export function putApi(url, data, headers) {
-    return request('PUT', url, data, headers);
+    return request("PUT", url, data, headers);
 }
 
 /**
@@ -199,5 +207,9 @@ export function putApi(url, data, headers) {
  * @param {String} url
  */
 export function open(url) {
-    return openTab(`${url}${url.indexOf('?') === -1 ? '?' : '&'}accessToken=${encodeURIComponent(getToken())}`);
+    return openTab(
+        `${url}${
+            url.indexOf("?") === -1 ? "?" : "&"
+        }accessToken=${encodeURIComponent(getToken())}`
+    );
 }

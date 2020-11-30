@@ -1,56 +1,59 @@
-import NavBar from '#app/layouts/navbar/navbar.vue';
-import Form from '#app/components/form/form.vue';
-import { me, edit } from '#helpers/api/user';
+import NavBar from "#app/layouts/navbar/navbar.vue";
+import Form from "#app/components/form/form.vue";
+import { me, edit } from "#helpers/api/user";
 
 export default {
     components: {
         NavBar,
-        Form,
+        Form
     },
     data() {
         const formData = {
-            first_name: '',
-            last_name: '',
-            password: '',
+            first_name: "",
+            last_name: "",
+            password: ""
         };
 
         const formDefinition = {
-            title: 'Modifier vos données personnelles',
-            description: 'Vous pouvez compléter votre profil d\'utilisateur et modifier votre mot de passe sur cette page.',
+            title: "Modifier vos données personnelles",
+            description:
+                "Vous pouvez compléter votre profil d'utilisateur et modifier votre mot de passe sur cette page.",
             steps: [
                 {
-                    title: '',
+                    title: "",
                     sections: [
                         {
-                            title: '',
+                            title: "",
                             inputs: {
                                 first_name: {
-                                    label: 'Votre prénom',
+                                    label: "Votre prénom",
                                     mandatory: true,
-                                    type: 'text',
+                                    type: "text"
                                 },
                                 last_name: {
-                                    label: 'Votre nom de famille',
+                                    label: "Votre nom de famille",
                                     mandatory: true,
-                                    type: 'text',
+                                    type: "text"
                                 },
                                 password: {
-                                    label: 'Mot de passe',
-                                    description: "Laissez ce champ vide si vous souhaitez conserver votre mot de passe actuel.<br/><br/>Votre mot de passe doit comporter au minimum 12 caractères, une majuscule, une minuscule, et un caractère non alphabétique (exemples : '.' ';' ',' '_' '!' '?', ...)<br/>Nous vous recommandons de choisir <strong>une phrase intelligible en guise de mot de passe</strong> : plus simple à retenir qu'une suite de caractères aléatoires, et plus sécurisée.",
+                                    label: "Mot de passe",
+                                    description:
+                                        "Laissez ce champ vide si vous souhaitez conserver votre mot de passe actuel.<br/><br/>Votre mot de passe doit comporter au minimum 12 caractères, une majuscule, une minuscule, et un caractère non alphabétique (exemples : '.' ';' ',' '_' '!' '?', ...)<br/>Nous vous recommandons de choisir <strong>une phrase intelligible en guise de mot de passe</strong> : plus simple à retenir qu'une suite de caractères aléatoires, et plus sécurisée.",
                                     mandatory: false,
-                                    type: 'password',
-                                },
-                            },
-                        },
+                                    type: "password"
+                                }
+                            }
+                        }
                     ],
                     wording: {
-                        submit: 'Modifier',
-                        error: 'Les modifications n\'ont pas été appliquées',
-                        success: 'Les modifications ont bien été prises en compte',
+                        submit: "Modifier",
+                        error: "Les modifications n'ont pas été appliquées",
+                        success:
+                            "Les modifications ont bien été prises en compte"
                     },
-                    submit: edit,
-                },
-            ],
+                    submit: edit
+                }
+            ]
         };
 
         return {
@@ -68,7 +71,7 @@ export default {
              *
              * @type {Form},
              */
-            formDefinition,
+            formDefinition
         };
     },
 
@@ -84,18 +87,17 @@ export default {
                 .then(() => {
                     this.preloading = false;
                 })
-                .catch((error) => {
+                .catch(error => {
                     this.preloadError = error.user_message;
                 });
         },
 
         fetchData() {
-            return me()
-                .then((data) => {
-                    this.formData.first_name = data.first_name;
-                    this.formData.last_name = data.last_name;
-                    this.formData.password = '';
-                });
+            return me().then(data => {
+                this.formData.first_name = data.first_name;
+                this.formData.last_name = data.last_name;
+                this.formData.password = "";
+            });
         },
 
         /**
@@ -103,6 +105,6 @@ export default {
          */
         onComplete() {
             this.preload();
-        },
-    },
+        }
+    }
 };

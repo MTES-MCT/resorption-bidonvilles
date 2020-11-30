@@ -4,7 +4,7 @@ module.exports = {
   /**
    * Ref：https://v1.vuepress.vuejs.org/config/#title
    */
-  title: 'RB Design System',
+  title: 'Design System - Résorption Bidonvilles',
   /**
    * Ref：https://v1.vuepress.vuejs.org/config/#description
    */
@@ -34,72 +34,67 @@ module.exports = {
     lastUpdated: false,
     nav: [
       {
-        text: 'Design System',
+        text: 'Composants',
         link: '/design/',
       },
       {
-        text: 'VuePress',
-        link: 'https://v1.vuepress.vuejs.org'
+        text: 'GitHub',
+        link: 'https://github.com/MTES-MCT/action-bidonvilles/tree/design-system/src/js/app/components/ui'
       }
     ],
     sidebar: {
       '/design/': [
         {
-          title: 'Primitives',
+          title: 'Fondamentaux',
           collapsable: false,
           children: [
-            'Button',
-            'Text',
-            'Icon',
-            'Link',
+            'fundamentals/Spacing',
+            'fundamentals/Grid',
+            'fundamentals/Colors',
+            'fundamentals/Typography',
+            'fundamentals/FormValidation',
           ]
         },
         {
-          title: 'Form',
+          title: 'Primitives / Form',
           collapsable: false,
           children: [
-            'form/Checkbox',
-            'form/Radio',
-            'form/Select',
-            'form/TextInput',
-            'form/FormGroup'
+            'primitives/Button',
+            'primitives/Icon',
+            'primitives/Link',
+            'primitives/Spinner',
+            'primitives/TextInputSelect',
+            'primitives/CheckboxRadio',
+            'primitives/FormGroup'
           ]
         },
+
         {
-          title: 'Components',
+          title: 'Composants',
           collapsable: false,
           children: [
+            'components/Autocomplete',
+            'components/Datepicker',
             'components/Dropdown',
             'components/Modal',
             'components/SidePanel',
             'components/Callout',
-          ]
-        },
-        {
-          title: 'Examples',
-          collapsable: false,
-          children: [
-            'examples/LoginForm',
-            'examples/UserForm',
-            'examples/TestForm',
-            'examples/ShantytownForm',
-          ]
-        },
-        {
-          title: 'TODO',
-          collapsable: false,
-          children: [
-            'todo/Autocomplete',
-            'todo/Panel',
-            'todo/Callout',
-            'todo/Notification',
-            'todo/SearchBar',
-            'todo/Table',
-            'todo/Map',
-            'todo/DatePicker',
-          ]
-        },
+            'components/Notification',
+            'components/Table',
+            'components/Tag',
 
+          ]
+        },
+        {
+          title: 'Exemples',
+          collapsable: false,
+          children: [
+            'examples/Grid',
+            'examples/Login',
+            'examples/Shantytown',
+            'examples/StateDesignSystem',
+          ]
+        }
       ],
     }
   },
@@ -109,7 +104,7 @@ module.exports = {
    */
   plugins: [
     '@vuepress/plugin-back-to-top',
-    '@vuepress/plugin-medium-zoom',
+    '@vuepress/plugin-medium-zoom'
   ],
   postcss: {
     plugins: [require('tailwindcss')('./tailwind.config.js'), require('autoprefixer')],

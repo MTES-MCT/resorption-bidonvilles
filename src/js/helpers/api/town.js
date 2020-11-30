@@ -1,4 +1,4 @@
-import { getApi, postApi, deleteApi } from '#helpers/api/main';
+import { getApi, postApi, deleteApi } from "#helpers/api/main";
 
 /**
  * Fetches all towns from the database
@@ -12,16 +12,20 @@ export function all(filters = {}, order = []) {
     const queries = [];
 
     // filters
-    Object.keys(filters).forEach((filterName) => {
-        queries.push(`${filterName}=${encodeURIComponent(filters[filterName])}`);
+    Object.keys(filters).forEach(filterName => {
+        queries.push(
+            `${filterName}=${encodeURIComponent(filters[filterName])}`
+        );
     });
 
     // order
     if (order.length > 0) {
-        queries.push(`order=${order.map(s => encodeURIComponent(s)).join(',')}`);
+        queries.push(
+            `order=${order.map(s => encodeURIComponent(s)).join(",")}`
+        );
     }
 
-    return getApi(`/towns${queries.length > 0 ? `?${queries.join('&')}` : ''}`);
+    return getApi(`/towns${queries.length > 0 ? `?${queries.join("&")}` : ""}`);
 }
 
 /**
@@ -43,15 +47,15 @@ export function get(id) {
  * @returns {Promise}
  */
 export function add(data) {
-    const formattedData = Object.assign({}, data);
+    const formattedData = { ...data };
 
     if (data.address) {
-        formattedData.coordinates = data.address.location.coordinates.join(',');
+        formattedData.coordinates = data.address.location.coordinates.join(",");
         formattedData.citycode = data.address.address.data.citycode;
         formattedData.address = data.address.address.label;
     }
 
-    return postApi('/towns', formattedData);
+    return postApi("/towns", formattedData);
 }
 
 /**
@@ -145,7 +149,7 @@ export function deleteComment(townId, commentId, message) {
  * @returns {Promise}
  */
 export function getRecentComments() {
-    return getApi('/comments');
+    return getApi("/comments");
 }
 
 /**

@@ -7,9 +7,7 @@
  */
 const DEFAULT_TIMEOUT = 200;
 
-
 export default {
-
     props: {
         /**
          * Function that can generate autocompletion suggestions
@@ -23,7 +21,7 @@ export default {
          */
         autocompleter: {
             type: Function,
-            required: true,
+            required: true
         },
 
         /**
@@ -34,7 +32,7 @@ export default {
         showCategory: {
             type: Boolean,
             required: false,
-            default: false,
+            default: false
         },
 
         /**
@@ -45,7 +43,7 @@ export default {
         allowMultiple: {
             type: Boolean,
             required: false,
-            default: false,
+            default: false
         },
 
         /**
@@ -56,7 +54,7 @@ export default {
         float: {
             type: Boolean,
             required: false,
-            default: true,
+            default: true
         },
 
         /**
@@ -70,11 +68,11 @@ export default {
             default() {
                 return {
                     // appears above the list of selected items
-                    selectedItems: 'Éléments sélectionnés',
+                    selectedItems: "Éléments sélectionnés",
                     // label for the column containing the label of each selected item
-                    label: 'Label',
+                    label: "Label"
                 };
-            },
+            }
         },
 
         /**
@@ -88,7 +86,7 @@ export default {
         createNew: {
             type: Function,
             required: false,
-            default: null,
+            default: null
         },
 
         /**
@@ -101,7 +99,7 @@ export default {
             required: false,
             default() {
                 return [];
-            },
+            }
         },
 
         /**
@@ -112,7 +110,7 @@ export default {
         disabled: {
             type: Boolean,
             required: false,
-            default: false,
+            default: false
         },
 
         /**
@@ -122,15 +120,14 @@ export default {
          */
         placeholder: {
             type: String,
-            required: false,
-        },
+            required: false
+        }
     },
 
-
     data() {
-        let label = '';
+        let label = "";
         if (!this.allowMultiple && this.value.length === 1) {
-            ([{ label }] = this.value);
+            [{ label }] = this.value;
         }
 
         return {
@@ -186,7 +183,7 @@ export default {
                 pending: false,
 
                 /** @type {String|null} */
-                error: null,
+                error: null
             },
 
             /**
@@ -196,10 +193,9 @@ export default {
              *
              * @type {Number|null}
              */
-            indexOfHighligtedItem: null,
+            indexOfHighligtedItem: null
         };
     },
-
 
     computed: {
         /**
@@ -235,7 +231,10 @@ export default {
             // regular suggestions, grouped by category
             let empty = true;
             const suggestions = this.suggestions.reduce((acc, suggestion) => {
-                if (this.allowMultiple && this.selectedIds.indexOf(suggestion.id) !== -1) {
+                if (
+                    this.allowMultiple &&
+                    this.selectedIds.indexOf(suggestion.id) !== -1
+                ) {
                     return acc;
                 }
                 if (!acc[suggestion.category]) {
@@ -249,21 +248,25 @@ export default {
 
             // extra suggestions
             if (this.createNew !== null) {
-                suggestions._ = [{
-                    id: 'new',
-                    label: `Créer "${this.currentLabel}"`,
-                    category: '',
-                    data: {},
-                    isExtra: true,
-                }];
+                suggestions._ = [
+                    {
+                        id: "new",
+                        label: `Créer "${this.currentLabel}"`,
+                        category: "",
+                        data: {},
+                        isExtra: true
+                    }
+                ];
             } else if (empty) {
-                suggestions._ = [{
-                    id: 'empty',
-                    label: 'Aucun résultat',
-                    category: '',
-                    data: {},
-                    isExtra: true,
-                }];
+                suggestions._ = [
+                    {
+                        id: "empty",
+                        label: "Aucun résultat",
+                        category: "",
+                        data: {},
+                        isExtra: true
+                    }
+                ];
             }
 
             return suggestions;
@@ -275,10 +278,13 @@ export default {
          * @returns {Array.<AutocompleteItem>}
          */
         unselectedSuggestionsFlat() {
-            return this.nonEmptyCategories.reduce((acc, category) => [
-                ...acc,
-                ...this.unselectedSuggestions[category],
-            ], []);
+            return this.nonEmptyCategories.reduce(
+                (acc, category) => [
+                    ...acc,
+                    ...this.unselectedSuggestions[category]
+                ],
+                []
+            );
         },
 
         /**
@@ -298,7 +304,7 @@ export default {
                 return true;
             }
 
-            return list[0].isExtra === true && list[0].id === 'empty';
+            return list[0].isExtra === true && list[0].id === "empty";
         },
 
         /**
@@ -315,14 +321,17 @@ export default {
                 return null;
             }
 
-            if (this.indexOfHighligtedItem >= this.unselectedSuggestionsFlat.length) {
+            if (
+                this.indexOfHighligtedItem >=
+                this.unselectedSuggestionsFlat.length
+            ) {
                 return null;
             }
 
-            return this.unselectedSuggestionsFlat[this.indexOfHighligtedItem].id;
-        },
+            return this.unselectedSuggestionsFlat[this.indexOfHighligtedItem]
+                .id;
+        }
     },
-
 
     watch: {
         // two-way binding
@@ -332,19 +341,16 @@ export default {
 
         disabled() {
             this.reset();
-        },
+        }
     },
-
 
     mounted() {
-        document.addEventListener('click', this.checkOutsideClick);
+        document.addEventListener("click", this.checkOutsideClick);
     },
-
 
     destroyed() {
-        document.removeEventListener('click', this.checkOutsideClick);
+        document.removeEventListener("click", this.checkOutsideClick);
     },
-
 
     methods: {
         /**
@@ -390,23 +396,33 @@ export default {
                 return;
             }
 
-            if (event.keyCode === 38) { // up arrow (= previous suggestion)
+            if (event.keyCode === 38) {
+                // up arrow (= previous suggestion)
                 if (this.indexOfHighligtedItem - 1 < 0) {
                     this.indexOfHighligtedItem = null;
                 } else {
-                    this.indexOfHighligtedItem = this.indexOfHighligtedItem - 1;
+                    this.indexOfHighligtedItem -= 1;
                 }
-            } else if (event.keyCode === 40) { // down arrow (= next suggestion)
+            } else if (event.keyCode === 40) {
+                // down arrow (= next suggestion)
                 if (this.unselectedSuggestionsFlat.length > 0) {
                     if (this.indexOfHighligtedItem === null) {
                         this.indexOfHighligtedItem = 0;
                     } else {
-                        this.indexOfHighligtedItem = Math.min(this.unselectedSuggestionsFlat.length - 1, this.indexOfHighligtedItem + 1);
+                        this.indexOfHighligtedItem = Math.min(
+                            this.unselectedSuggestionsFlat.length - 1,
+                            this.indexOfHighligtedItem + 1
+                        );
                     }
                 }
-            } else if (event.keyCode === 13) { // key 'enter' (= select current suggestion)
+            } else if (event.keyCode === 13) {
+                // key 'enter' (= select current suggestion)
                 if (this.indexOfHighligtedItem !== null) {
-                    this.selectItem(this.unselectedSuggestionsFlat[this.indexOfHighligtedItem]);
+                    this.selectItem(
+                        this.unselectedSuggestionsFlat[
+                            this.indexOfHighligtedItem
+                        ]
+                    );
                     this.$refs.input.focus();
                 }
             } else {
@@ -421,7 +437,10 @@ export default {
          */
         scheduleSuggestionRequest() {
             this.cancelSuggestionRequest();
-            this.suggestionRequest.timeout = setTimeout(this.requestSuggestions, DEFAULT_TIMEOUT);
+            this.suggestionRequest.timeout = setTimeout(
+                this.requestSuggestions,
+                DEFAULT_TIMEOUT
+            );
         },
 
         /**
@@ -470,7 +489,9 @@ export default {
             }
 
             this.suggestionRequest.pending = true;
-            this.suggestionRequest.promise = this.autocompleter(this.currentLabel);
+            this.suggestionRequest.promise = this.autocompleter(
+                this.currentLabel
+            );
             this.suggestionRequest.promise
                 .then(this.setSuggestions)
                 .catch(this.handleSuggestionFailure);
@@ -505,7 +526,7 @@ export default {
          * @returns {undefined}
          */
         handleSuggestionFailure(error) {
-            let errorDetails = 'erreur inconnue';
+            let errorDetails = "erreur inconnue";
             if (error && error.user_message) {
                 errorDetails = error.user_message;
             }
@@ -522,7 +543,7 @@ export default {
          * @returns {Boolean}
          */
         canLabelTriggerARequest(label) {
-            return label !== '';
+            return label !== "";
         },
 
         /**
@@ -532,11 +553,11 @@ export default {
          */
         clearLabel() {
             this.cancelSuggestionRequest();
-            this.setLabel('');
+            this.setLabel("");
 
             if (this.allowMultiple === false) {
                 this.selectedItems = [];
-                this.$emit('input', this.selectedItems);
+                this.$emit("input", this.selectedItems);
             }
         },
 
@@ -550,7 +571,7 @@ export default {
             this.$refs.input.blur();
 
             if (this.allowMultiple || this.selectedItems.length !== 1) {
-                this.setLabel('');
+                this.setLabel("");
             } else {
                 this.setLabel(this.selectedItems[0].label);
             }
@@ -584,10 +605,21 @@ export default {
          * @returns {undefined}
          */
         checkOutsideClick(event) {
-            const refs = ['prefixIcon', 'input', 'suffixIcon', 'suggestionContainer'];
+            const refs = [
+                "prefixIcon",
+                "input",
+                "suffixIcon",
+                "suggestionContainer"
+            ];
 
             // if the click does not come from the input, reset the field
-            if (!refs.some(ref => this.$refs[ref] && this.$refs[ref].contains(event.target))) {
+            if (
+                !refs.some(
+                    ref =>
+                        this.$refs[ref] &&
+                        this.$refs[ref].contains(event.target)
+                )
+            ) {
                 this.reset();
             }
         },
@@ -602,11 +634,11 @@ export default {
         selectItem(item) {
             // custom behavior for 'extra' items
             if (item.isExtra === true) {
-                if (item.id === 'empty') {
+                if (item.id === "empty") {
                     return;
                 }
 
-                if (item.id === 'new') {
+                if (item.id === "new") {
                     this.createNew(this.currentLabel);
                     this.resetSuggestions();
                 }
@@ -626,7 +658,7 @@ export default {
                 this.selectedItems.push(item);
             }
 
-            this.$emit('input', this.selectedItems);
+            this.$emit("input", this.selectedItems);
         },
 
         /**
@@ -637,13 +669,15 @@ export default {
          * @returns {undefined}
          */
         unselectItem(item) {
-            const index = this.selectedItems.findIndex(({ id }) => item.id === id);
+            const index = this.selectedItems.findIndex(
+                ({ id }) => item.id === id
+            );
             if (index === -1) {
                 return;
             }
 
             this.selectedItems.splice(index, 1);
-            this.$emit('input', this.selectedItems);
+            this.$emit("input", this.selectedItems);
         },
 
         /**
@@ -653,13 +687,15 @@ export default {
          */
         positionSpinner() {
             this.$refs.spinner.style.marginLeft = 0;
-            const maxMargin = this.$refs.input.clientWidth - this.$refs.spinner.offsetLeft - this.$refs.spinner.offsetWidth;
-            this.$refs.spinner.style.marginLeft = `${Math.min(this.$refs.measure.clientWidth, maxMargin)}px`;
-        },
-    },
-
+            const maxMargin = this.$refs.input.clientWidth;
+            this.$refs.spinner.offsetLeft - this.$refs.spinner.offsetWidth;
+            this.$refs.spinner.style.marginLeft = `${Math.min(
+                this.$refs.measure.clientWidth,
+                maxMargin
+            )}px`;
+        }
+    }
 };
-
 
 /**
  * Please note that the property 'data' is completely useless for this component itself,

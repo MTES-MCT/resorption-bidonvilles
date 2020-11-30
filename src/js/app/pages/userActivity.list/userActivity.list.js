@@ -1,16 +1,16 @@
-import { list } from '#helpers/api/userActivity';
-import NavBar from '#app/layouts/navbar/navbar.vue';
-import Table from '#app/components/table/table.vue';
-import CommentDeletion from '#app/components/comment-deletion/comment-deletion.vue';
-import SlideNote from '#app/components/slide-note/slide-note.vue';
-import { notify } from '#helpers/notificationHelper';
+import { list } from "#helpers/api/userActivity";
+import NavBar from "#app/layouts/navbar/navbar.vue";
+import Table from "#app/components/table/table.vue";
+import CommentDeletion from "#app/components/comment-deletion/comment-deletion.vue";
+import SlideNote from "#app/components/slide-note/slide-note.vue";
+import { notify } from "#helpers/notificationHelper";
 
 export default {
     components: {
         NavBar,
         Table,
         CommentDeletion,
-        SlideNote,
+        SlideNote
     },
 
     data() {
@@ -48,37 +48,42 @@ export default {
             /**
              *
              */
-            filter: 'all',
+            filter: "all"
         };
     },
 
     computed: {
         columns() {
             return [
-                { id: 'date', label: 'Date' },
-                { id: 'author', label: 'Auteur' },
-                Object.assign(
-                    { id: 'activity', label: 'Activités' },
-                    this.filter === 'shantytown'
+                { id: "date", label: "Date" },
+                { id: "author", label: "Auteur" },
+                {
+                    id: "activity",
+                    label: "Activités",
+                    ...(this.filter === "shantytown"
                         ? {
-                            filters: [
-                                { label: 'Déclaration', value: 'creation' },
-                                { label: 'Modification', value: 'update' },
-                                { label: 'Fermeture', value: 'closing' },
-                            ],
-                            filterFn: (row, checkedItems) => checkedItems.map(({ value }) => value)
-                                .indexOf(row.rawAction) !== -1,
-                        }
-                        : {},
-                ),
+                              filters: [
+                                  { label: "Déclaration", value: "creation" },
+                                  { label: "Modification", value: "update" },
+                                  { label: "Fermeture", value: "closing" }
+                              ],
+                              filterFn: (row, checkedItems) =>
+                                  checkedItems
+                                      .map(({ value }) => value)
+                                      .indexOf(row.rawAction) !== -1
+                          }
+                        : {})
+                }
             ];
         },
         filteredActivities() {
-            if (this.filter === 'all') {
+            if (this.filter === "all") {
                 return this.activities;
             }
 
-            return this.activities.filter(({ entity }) => entity === this.filter);
+            return this.activities.filter(
+                ({ entity }) => entity === this.filter
+            );
         },
         parsedActivities() {
             return this.filteredActivities.map((activity, index) => {
@@ -87,22 +92,25 @@ export default {
                     rawAction: activity.action,
                     rawDate: activity.date,
                     rawShantytown: activity.shantytown,
-                    date: App.formatDate(activity.date, 'd/m/y'),
-                    time: App.formatDate(activity.date, 'h:i'),
+                    date: App.formatDate(activity.date, "d/m/y"),
+                    time: App.formatDate(activity.date, "h:i"),
                     author: activity.author,
-                    icon: activity.entity === 'comment' ? 'comment' : 'pencil-alt',
+                    icon:
+                        activity.entity === "comment"
+                            ? "comment"
+                            : "pencil-alt",
                     shantytown: activity.shantytown.id,
-                    address: `${activity.shantytown.usename}, ${activity.shantytown.city}`,
+                    address: `${activity.shantytown.usename}, ${activity.shantytown.city}`
                 };
 
                 const shantytownActions = {
-                    creation: 'Déclaration du',
-                    update: 'Modification du',
-                    closing: 'Fermeture du',
+                    creation: "Déclaration du",
+                    update: "Modification du",
+                    closing: "Fermeture du"
                 };
 
-                if (activity.entity === 'comment') {
-                    obj.action = 'Commentaire sur le';
+                if (activity.entity === "comment") {
+                    obj.action = "Commentaire sur le";
                     obj.content = activity.content;
                     obj.comment = activity.comment_id;
                 } else {
@@ -112,7 +120,7 @@ export default {
 
                 return obj;
             });
-        },
+        }
     },
 
     created() {
@@ -128,21 +136,21 @@ export default {
          */
         load() {
             // loading data is forbidden if the component is already loading or loaded
-            if ([null, 'error'].indexOf(this.state) === -1) {
+            if ([null, "error"].indexOf(this.state) === -1) {
                 return;
             }
 
-            this.state = 'loading';
+            this.state = "loading";
             this.error = null;
 
             list()
-                .then((userActivities) => {
+                .then(userActivities => {
                     this.activities = userActivities;
-                    this.state = 'loaded';
+                    this.state = "loaded";
                 })
                 .catch(({ user_message: error }) => {
                     this.error = error;
-                    this.state = 'error';
+                    this.state = "error";
                 });
         },
 
@@ -179,7 +187,7 @@ export default {
                 shantytown: row.rawShantytown,
                 author: row.author,
                 date: row.rawDate,
-                content: row.content,
+                content: row.content
             };
             event.stopPropagation();
             return false;
@@ -200,15 +208,15 @@ export default {
             this.toBeDeleted = null;
 
             notify({
-                group: 'notifications',
-                type: 'success',
-                title: 'Commentaire supprimé',
-                text: 'L\'auteur du commentaire en a été notifié par email',
+                group: "notifications",
+                type: "success",
+                title: "Commentaire supprimé",
+                text: "L'auteur du commentaire en a été notifié par email"
             });
         },
 
         show(filter) {
             this.filter = filter;
-        },
-    },
+        }
+    }
 };

@@ -3,10 +3,11 @@
 </template>
 
 <style lang="scss">
-    @import './location.scss';
+@import "./location.scss";
 </style>
 
 <script>
-    import Component from './location.js';
-    export default Component;
+import Component from "./location";
+
+export default Component;
 </script>

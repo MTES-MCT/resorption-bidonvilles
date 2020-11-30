@@ -3,6 +3,7 @@
 </template>
 
 <script>
-import Component from './launcher.js';
+import Component from "./launcher";
+
 export default Component;
 </script>

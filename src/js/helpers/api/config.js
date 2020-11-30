@@ -1,5 +1,5 @@
-import { getApi, postApi } from '#helpers/api/main';
-import { refreshToken } from '#helpers/api/user';
+import { getApi, postApi } from "#helpers/api/main";
+import { refreshToken } from "#helpers/api/user";
 
 /**
  * Loaded configuration
@@ -33,7 +33,7 @@ export function isLoaded() {
  * @returns {Promise}
  */
 export function load() {
-    return getApi('/config').then((response) => {
+    return getApi("/config").then(response => {
         // refresh the token, by the way
         refreshToken();
 
@@ -73,7 +73,7 @@ export function set(property, value) {
         return;
     }
 
-    const chain = property.split('.');
+    const chain = property.split(".");
     let ref = configuration;
 
     while (chain.length > 1) {
@@ -97,9 +97,17 @@ export function getPermission(permissionName) {
         return null;
     }
 
-    const [entity, feature] = permissionName.split('.');
-    if (!Object.prototype.hasOwnProperty.call(configuration.user.permissions, entity)
-        || !Object.prototype.hasOwnProperty.call(configuration.user.permissions[entity], feature)) {
+    const [entity, feature] = permissionName.split(".");
+    if (
+        !Object.prototype.hasOwnProperty.call(
+            configuration.user.permissions,
+            entity
+        ) ||
+        !Object.prototype.hasOwnProperty.call(
+            configuration.user.permissions[entity],
+            feature
+        )
+    ) {
         return null;
     }
 
@@ -119,10 +127,12 @@ export function getPermission(permissionName) {
  * @returns {boolean}
  */
 export function hasPermission(permissionName) {
-    const [entity, feature, data] = permissionName.split('.');
+    const [entity, feature, data] = permissionName.split(".");
     const permission = getPermission(`${entity}.${feature}`);
 
-    return permission !== null && (data === undefined || permission[data] === true);
+    return (
+        permission !== null && (data === undefined || permission[data] === true)
+    );
 }
 
 /**
@@ -133,7 +143,7 @@ export function hasPermission(permissionName) {
  * @returns {Promise}
  */
 export function closeChangelog(version) {
-    return postApi('/changelog', { version });
+    return postApi("/changelog", { version });
 }
 
 /**

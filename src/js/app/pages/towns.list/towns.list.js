@@ -1,10 +1,14 @@
-import { all as fetchAll } from '#helpers/api/town';
-import { get as getConfig, hasPermission, getPermission } from '#helpers/api/config';
-import { open } from '#helpers/tabHelper';
-import NavBar from '#app/layouts/navbar/navbar.vue';
-import CollectivityInput from '#app/components/form/input/collectivity/collectivity.vue';
-import TableFilter from '#app/components/tableFilter/tableFilter.vue';
-import Export from '#app/components/export/export.vue';
+import { all as fetchAll } from "#helpers/api/town";
+import {
+    get as getConfig,
+    hasPermission,
+    getPermission
+} from "#helpers/api/config";
+import { open } from "#helpers/tabHelper";
+import NavBar from "#app/layouts/navbar/navbar.vue";
+import CollectivityInput from "#app/components/form/input/collectivity/collectivity.vue";
+import TableFilter from "#app/components/tableFilter/tableFilter.vue";
+import Export from "#app/components/export/export.vue";
 
 function getSince(ts) {
     const now = new Date();
@@ -15,22 +19,22 @@ function getSince(ts) {
         months = Math.max(0, now.getMonth() - then.getMonth());
     } else if (now.getFullYear() > then.getFullYear()) {
         const diff = now.getFullYear() - then.getFullYear();
-        months = ((diff - 1) * 12) + ((now.getMonth() + 12) - then.getMonth());
+        months = (diff - 1) * 12 + (now.getMonth() + 12 - then.getMonth());
     }
 
     return {
         years: Math.floor(months / 12),
-        months: months % 12,
+        months: months % 12
     };
 }
 
 const PER_PAGE = 10;
 
 const statusDetails = {
-    closed_by_justice: 'Exécution d\'une décision de justice',
-    closed_by_admin: 'Exécution d\'une décision administrative',
-    other: 'Autre',
-    unknown: 'Raison inconnue',
+    closed_by_justice: "Exécution d'une décision de justice",
+    closed_by_admin: "Exécution d'une décision administrative",
+    other: "Autre",
+    unknown: "Raison inconnue"
 };
 
 export default {
@@ -38,12 +42,16 @@ export default {
         NavBar,
         CollectivityInput,
         TableFilter,
-        Export,
+        Export
     },
 
     data() {
-        const { field_types: fieldTypes, closing_solutions: closingSolutions, user } = getConfig();
-        const permission = getPermission('shantytown.list');
+        const {
+            field_types: fieldTypes,
+            closing_solutions: closingSolutions,
+            user
+        } = getConfig();
+        const permission = getPermission("shantytown.list");
 
         const data = {
             /**
@@ -76,18 +84,28 @@ export default {
              *
              * @type {Object.<Number,String>}
              */
-            fieldTypeColors: fieldTypes.reduce((acc, fieldType) => Object.assign(acc, {
-                [fieldType.id]: fieldType.color,
-            }), {}),
+            fieldTypeColors: fieldTypes.reduce(
+                (acc, fieldType) =>
+                    Object.assign(acc, {
+                        [fieldType.id]: fieldType.color
+                    }),
+                {}
+            ),
 
             /**
              * Map of closing-solution ids and their associated label
              *
              * @type {Object.<Number,String>}
              */
-            closingSolutionNames: closingSolutions.reduce((acc, closingSolution) => Object.assign(acc, {
-                [closingSolution.id]: closingSolution.label.split('(')[0],
-            }), {}),
+            closingSolutionNames: closingSolutions.reduce(
+                (acc, closingSolution) =>
+                    Object.assign(acc, {
+                        [closingSolution.id]: closingSolution.label.split(
+                            "("
+                        )[0]
+                    }),
+                {}
+            ),
 
             /**
              * Map of census status values and labels
@@ -95,19 +113,19 @@ export default {
              * @type {Object.<String,String>}
              */
             censusStatuses: {
-                none: 'Non prévu',
-                scheduled: 'Prévu',
+                none: "Non prévu",
+                scheduled: "Prévu"
             },
 
             boolToLabel: {
-                [null]: 'inconnu',
-                [true]: 'oui',
-                [false]: 'non',
+                [null]: "inconnu",
+                [true]: "oui",
+                [false]: "non"
             },
             boolToCss: {
-                [null]: 'unknown',
-                [true]: 'yes',
-                [false]: 'no',
+                [null]: "unknown",
+                [true]: "yes",
+                [false]: "no"
             },
 
             currentPage: 0,
@@ -116,34 +134,62 @@ export default {
                 value: id,
                 label,
                 color,
-                checked: false,
+                checked: false
             })),
 
             populationFilterItems: [
-                { label: 'Inconnu', value: null, checked: false },
-                { label: 'Moins de 10 personnes', value: '-9', checked: false },
-                { label: 'Entre 10 et 99 personnes', value: '10-99', checked: false },
-                { label: 'Plus de 100 personnes', value: '100-', checked: false },
+                { label: "Inconnu", value: null, checked: false },
+                { label: "Moins de 10 personnes", value: "-9", checked: false },
+                {
+                    label: "Entre 10 et 99 personnes",
+                    value: "10-99",
+                    checked: false
+                },
+                {
+                    label: "Plus de 100 personnes",
+                    value: "100-",
+                    checked: false
+                }
             ],
 
             justiceFilterItems: [
-                { label: 'Inconnu', value: null, checked: false },
-                { label: 'Aucune', value: 'none', checked: false },
-                { label: 'Plainte déposée', value: 'ownerComplaint', checked: false },
-                { label: 'Procédure en cours', value: 'justiceProcedure', checked: false },
-                { label: 'Décision rendue', value: 'justiceRendered', checked: false },
+                { label: "Inconnu", value: null, checked: false },
+                { label: "Aucune", value: "none", checked: false },
+                {
+                    label: "Plainte déposée",
+                    value: "ownerComplaint",
+                    checked: false
+                },
+                {
+                    label: "Procédure en cours",
+                    value: "justiceProcedure",
+                    checked: false
+                },
+                {
+                    label: "Décision rendue",
+                    value: "justiceRendered",
+                    checked: false
+                }
             ],
 
             statusFilterItems: [
-                { label: 'Raison inconnue', value: 'unknown', checked: false },
-                { label: 'Décision de justice', value: 'closed_by_justice', checked: false },
-                { label: 'Décision administrative', value: 'closed_by_admin', checked: false },
-                { label: 'Autre', value: 'other', checked: false },
+                { label: "Raison inconnue", value: "unknown", checked: false },
+                {
+                    label: "Décision de justice",
+                    value: "closed_by_justice",
+                    checked: false
+                },
+                {
+                    label: "Décision administrative",
+                    value: "closed_by_admin",
+                    checked: false
+                },
+                { label: "Autre", value: "other", checked: false }
             ],
 
             currentFilter: null,
 
-            hasNationalPermission: permission.geographic_level === 'nation',
+            hasNationalPermission: permission.geographic_level === "nation",
             hasJusticePermission: permission.data_justice === true,
 
             showClosedTowns: false,
@@ -151,37 +197,55 @@ export default {
             locationTitle: null,
             defaultLocation: null,
             location: null,
-            exportIsVisible: false,
+            exportIsVisible: false
         };
 
         const userLocation = {
-            id: user.organization.location.type === 'nation' ? null : user.organization.location[user.organization.location.type].code,
-            label: user.organization.location.type === 'nation' ? 'France' : user.organization.location[user.organization.location.type].name,
+            id:
+                user.organization.location.type === "nation"
+                    ? null
+                    : user.organization.location[
+                          user.organization.location.type
+                      ].code,
+            label:
+                user.organization.location.type === "nation"
+                    ? "France"
+                    : user.organization.location[
+                          user.organization.location.type
+                      ].name,
             category: user.organization.location.type,
             data: {
-                code: user.organization.location.type === 'nation' ? null : user.organization.location[user.organization.location.type].code,
-                type: user.organization.location.type,
-            },
+                code:
+                    user.organization.location.type === "nation"
+                        ? null
+                        : user.organization.location[
+                              user.organization.location.type
+                          ].code,
+                type: user.organization.location.type
+            }
         };
 
-        if (data.hasNationalPermission !== true || user.organization.location.type === 'nation') {
-            data.defaultLocation = Object.assign({}, userLocation);
+        if (
+            data.hasNationalPermission !== true ||
+            user.organization.location.type === "nation"
+        ) {
+            data.defaultLocation = { ...userLocation };
             data.location = null;
         } else {
             data.defaultLocation = {
                 id: null,
-                label: 'France',
-                category: 'Pays',
+                label: "France",
+                category: "Pays",
                 data: {
                     code: null,
-                    type: 'nation',
-                },
+                    type: "nation"
+                }
             };
-            data.location = Object.assign({}, userLocation);
+            data.location = { ...userLocation };
         }
 
-        if (data.defaultLocation.data.type === 'nation') {
-            data.locationTitle = 'National';
+        if (data.defaultLocation.data.type === "nation") {
+            data.locationTitle = "National";
         } else {
             data.locationTitle = data.defaultLocation.label;
         }
@@ -191,44 +255,56 @@ export default {
 
     computed: {
         pageTitle() {
-            return this.showClosedTowns === true ? 'fermés' : 'existants';
+            return this.showClosedTowns === true ? "fermés" : "existants";
         },
         currentLocation() {
             return this.location || this.defaultLocation;
         },
         populationTotal() {
-            return this.dashboardShantytowns.reduce((total, { populationTotal }) => total + (populationTotal || 0), 0);
+            return this.dashboardShantytowns.reduce(
+                (total, { populationTotal }) => total + (populationTotal || 0),
+                0
+            );
         },
         minorsTotal() {
-            return this.dashboardShantytowns.reduce((total, { populationMinors }) => total + (populationMinors || 0), 0);
+            return this.dashboardShantytowns.reduce(
+                (total, { populationMinors }) =>
+                    total + (populationMinors || 0),
+                0
+            );
         },
         justiceTotal() {
-            return this.dashboardShantytowns.filter(({ justiceProcedure }) => justiceProcedure === true).length;
+            return this.dashboardShantytowns.filter(
+                ({ justiceProcedure }) => justiceProcedure === true
+            ).length;
         },
         lastUpdate() {
-            return this.dashboardShantytowns.reduce((mostRecentDate, { updatedAt }) => {
-                if (mostRecentDate === null) {
-                    return updatedAt;
-                }
+            return this.dashboardShantytowns.reduce(
+                (mostRecentDate, { updatedAt }) => {
+                    if (mostRecentDate === null) {
+                        return updatedAt;
+                    }
 
-                if (updatedAt !== null && updatedAt > mostRecentDate) {
-                    return updatedAt;
-                }
+                    if (updatedAt !== null && updatedAt > mostRecentDate) {
+                        return updatedAt;
+                    }
 
-                return mostRecentDate;
-            }, null);
+                    return mostRecentDate;
+                },
+                null
+            );
         },
         dashboardShantytowns() {
             return this.shantytowns
-                .filter((shantytown) => {
+                .filter(shantytown => {
                     if (this.showClosedTowns) {
-                        return shantytown.status !== 'open';
+                        return shantytown.status !== "open";
                     }
 
-                    return shantytown.status === 'open';
+                    return shantytown.status === "open";
                 })
-                .filter((shantytown) => {
-                    if (this.currentLocation.data.type === 'nation') {
+                .filter(shantytown => {
+                    if (this.currentLocation.data.type === "nation") {
                         return true;
                     }
 
@@ -245,29 +321,55 @@ export default {
                 });
         },
         filteredShantytowns() {
-            const fieldFilters = this.fieldFilterItems.filter(({ checked }) => checked).map(({ value }) => value);
-            const populationFilters = this.populationFilterItems.filter(({ checked }) => checked).map(({ value }) => value);
-            const justiceFilters = this.justiceFilterItems.filter(({ checked }) => checked).map(({ value }) => value);
-            const statusFilters = this.statusFilterItems.filter(({ checked }) => checked).map(({ value }) => value);
+            const fieldFilters = this.fieldFilterItems
+                .filter(({ checked }) => checked)
+                .map(({ value }) => value);
+            const populationFilters = this.populationFilterItems
+                .filter(({ checked }) => checked)
+                .map(({ value }) => value);
+            const justiceFilters = this.justiceFilterItems
+                .filter(({ checked }) => checked)
+                .map(({ value }) => value);
+            const statusFilters = this.statusFilterItems
+                .filter(({ checked }) => checked)
+                .map(({ value }) => value);
 
-            if (fieldFilters.length + populationFilters.length + justiceFilters.length + statusFilters.length === 0) {
+            if (
+                fieldFilters.length +
+                    populationFilters.length +
+                    justiceFilters.length +
+                    statusFilters.length ===
+                0
+            ) {
                 return this.dashboardShantytowns;
             }
 
-            return this.dashboardShantytowns.filter((shantytown) => {
-                if (fieldFilters.length > 0 && !this.checkFieldType(shantytown, fieldFilters)) {
+            return this.dashboardShantytowns.filter(shantytown => {
+                if (
+                    fieldFilters.length > 0 &&
+                    !this.checkFieldType(shantytown, fieldFilters)
+                ) {
                     return false;
                 }
 
-                if (populationFilters.length > 0 && !this.checkPopulation(shantytown, populationFilters)) {
+                if (
+                    populationFilters.length > 0 &&
+                    !this.checkPopulation(shantytown, populationFilters)
+                ) {
                     return false;
                 }
 
-                if (justiceFilters.length > 0 && !this.checkJustice(shantytown, justiceFilters)) {
+                if (
+                    justiceFilters.length > 0 &&
+                    !this.checkJustice(shantytown, justiceFilters)
+                ) {
                     return false;
                 }
 
-                if (statusFilters.length > 0 && !this.checkStatus(shantytown, statusFilters)) {
+                if (
+                    statusFilters.length > 0 &&
+                    !this.checkStatus(shantytown, statusFilters)
+                ) {
                     return false;
                 }
 
@@ -275,29 +377,44 @@ export default {
             });
         },
         pageContent() {
-            return this.filteredShantytowns.slice(this.currentPage * PER_PAGE, (this.currentPage * PER_PAGE) + PER_PAGE);
+            return this.filteredShantytowns.slice(
+                this.currentPage * PER_PAGE,
+                this.currentPage * PER_PAGE + PER_PAGE
+            );
         },
         lastPage() {
-            return Math.max(0, Math.ceil(this.filteredShantytowns.length / PER_PAGE) - 1);
+            return Math.max(
+                0,
+                Math.ceil(this.filteredShantytowns.length / PER_PAGE) - 1
+            );
         },
         pageBeginning() {
-            return this.filteredShantytowns.length > 0 ? (this.currentPage * PER_PAGE) + 1 : 0;
+            return this.filteredShantytowns.length > 0
+                ? this.currentPage * PER_PAGE + 1
+                : 0;
         },
         pageEnd() {
-            return Math.min(this.pageBeginning - 1 + PER_PAGE, this.filteredShantytowns.length);
+            return Math.min(
+                this.pageBeginning - 1 + PER_PAGE,
+                this.filteredShantytowns.length
+            );
         },
         checkedFieldFilterItems() {
-            return this.fieldFilterItems.filter(({ checked }) => checked).length;
+            return this.fieldFilterItems.filter(({ checked }) => checked)
+                .length;
         },
         checkedPopulationFilterItems() {
-            return this.populationFilterItems.filter(({ checked }) => checked).length;
+            return this.populationFilterItems.filter(({ checked }) => checked)
+                .length;
         },
         checkedJusticeFilterItems() {
-            return this.justiceFilterItems.filter(({ checked }) => checked).length;
+            return this.justiceFilterItems.filter(({ checked }) => checked)
+                .length;
         },
         checkedStatusFilterItems() {
-            return this.statusFilterItems.filter(({ checked }) => checked).length;
-        },
+            return this.statusFilterItems.filter(({ checked }) => checked)
+                .length;
+        }
     },
 
     created() {
@@ -310,7 +427,7 @@ export default {
         },
         filteredShantytowns() {
             this.currentPage = 0;
-        },
+        }
     },
 
     methods: {
@@ -322,21 +439,21 @@ export default {
          */
         load() {
             // loading data is forbidden if the component is already loading or loaded
-            if ([null, 'error'].indexOf(this.state) === -1) {
+            if ([null, "error"].indexOf(this.state) === -1) {
                 return;
             }
 
-            this.state = 'loading';
+            this.state = "loading";
             this.error = null;
 
             fetchAll()
-                .then((shantytowns) => {
+                .then(shantytowns => {
                     this.shantytowns = shantytowns.map(this.enrichShantytown);
-                    this.state = 'loaded';
+                    this.state = "loaded";
                 })
                 .catch(({ user_message: error }) => {
                     this.error = error;
-                    this.state = 'error';
+                    this.state = "error";
                 });
         },
 
@@ -350,63 +467,66 @@ export default {
         enrichShantytown(shantytown) {
             // electricity
             let electricityValue = true;
-            if (shantytown.electricityType.label === 'Inconnu') {
+            if (shantytown.electricityType.label === "Inconnu") {
                 electricityValue = null;
-            } else if (shantytown.electricityType.label === 'Non') {
+            } else if (shantytown.electricityType.label === "Non") {
                 electricityValue = false;
             }
 
             // justice statuses
             const justiceStatuses = [];
 
-            if (shantytown.justiceChallenged === true || shantytown.justiceRendered === true) {
+            if (
+                shantytown.justiceChallenged === true ||
+                shantytown.justiceRendered === true
+            ) {
                 justiceStatuses.push({
-                    label: 'Décision rendue',
-                    date: shantytown.justiceRenderedAt,
+                    label: "Décision rendue",
+                    date: shantytown.justiceRenderedAt
                 });
 
                 if (shantytown.justiceChallenged === true) {
                     justiceStatuses.push({
-                        label: 'Contentieux',
+                        label: "Contentieux"
                     });
                 }
             } else if (shantytown.justiceProcedure === true) {
                 justiceStatuses.push({
-                    label: 'Procédure en cours',
+                    label: "Procédure en cours"
                 });
             }
 
             if (shantytown.ownerComplaint === true) {
                 justiceStatuses.push({
-                    label: 'Plainte déposée',
+                    label: "Plainte déposée"
                 });
             }
 
             switch (shantytown.policeStatus) {
-                case 'none':
+                case "none":
                     justiceStatuses.push({
-                        label: 'Concours de la force publique non demandé',
+                        label: "Concours de la force publique non demandé"
                     });
                     break;
 
-                case 'requested':
+                case "requested":
                     justiceStatuses.push({
-                        label: 'Concours de la force publique demandé',
-                        date: shantytown.policeRequestedAt,
+                        label: "Concours de la force publique demandé",
+                        date: shantytown.policeRequestedAt
                     });
                     break;
 
-                case 'granted':
+                case "granted":
                     justiceStatuses.push({
-                        label: 'Concours de la force publique accordé',
-                        date: shantytown.policeGrantedAt,
+                        label: "Concours de la force publique accordé",
+                        date: shantytown.policeGrantedAt
                     });
                     break;
 
                 default:
                 case null:
                     justiceStatuses.push({
-                        label: 'Concours de la force publique : NC',
+                        label: "Concours de la force publique : NC"
                     });
                     break;
             }
@@ -415,26 +535,26 @@ export default {
             let statusName;
             let statusDate;
             const statusSince = [];
-            if (shantytown.status === 'open') {
+            if (shantytown.status === "open") {
                 if (shantytown.builtAt) {
-                    statusName = 'Existe';
+                    statusName = "Existe";
                     statusDate = shantytown.builtAt;
                 } else if (shantytown.declaredAt) {
-                    statusName = 'Signalé';
+                    statusName = "Signalé";
                     statusDate = shantytown.declaredAt;
                 } else {
                     statusName = null;
                     statusDate = null;
                 }
             } else {
-                statusName = 'Fermé';
+                statusName = "Fermé";
                 statusDate = shantytown.closedAt;
             }
 
             if (statusDate !== null) {
                 const { years, months } = getSince(statusDate);
                 if (years > 0) {
-                    statusSince.push(`${years} an${years > 1 ? 's' : ''}`);
+                    statusSince.push(`${years} an${years > 1 ? "s" : ""}`);
                 }
 
                 if (months > 0) {
@@ -443,29 +563,35 @@ export default {
             }
 
             // closing solutions
-            const totalSolutions = shantytown.closingSolutions.reduce((total, solution) => {
-                if (!solution.householdsAffected) {
-                    return total;
-                }
+            const totalSolutions = shantytown.closingSolutions.reduce(
+                (total, solution) => {
+                    if (!solution.householdsAffected) {
+                        return total;
+                    }
 
-                return (total || 0) + solution.householdsAffected;
-            }, null);
+                    return (total || 0) + solution.householdsAffected;
+                },
+                null
+            );
 
             // final object
-            return Object.assign({}, shantytown, {
+            return {
+                ...shantytown,
                 statusName,
                 statusDate,
-                statusSince: statusSince.join(' '),
+                statusSince: statusSince.join(" "),
                 statusDetails: statusDetails[shantytown.status],
-                fieldType: Object.assign({}, shantytown.fieldType, {
-                    color: this.fieldTypeColors[shantytown.fieldType.id],
-                }),
-                electricityType: Object.assign({}, shantytown.electricityType, {
-                    value: electricityValue,
-                }),
+                fieldType: {
+                    ...shantytown.fieldType,
+                    color: this.fieldTypeColors[shantytown.fieldType.id]
+                },
+                electricityType: {
+                    ...shantytown.electricityType,
+                    value: electricityValue
+                },
                 justiceStatuses,
-                totalSolutions,
-            });
+                totalSolutions
+            };
         },
 
         /**
@@ -535,7 +661,7 @@ export default {
          *
          */
         checkPopulation(shantytown, filters) {
-            return filters.some((value) => {
+            return filters.some(value => {
                 if (value === null) {
                     return shantytown.populationTotal === null;
                 }
@@ -544,12 +670,18 @@ export default {
                     return false;
                 }
 
-                const [min, max] = value.split('-');
-                if (min !== '' && parseInt(min, 10) > shantytown.populationTotal) {
+                const [min, max] = value.split("-");
+                if (
+                    min !== "" &&
+                    parseInt(min, 10) > shantytown.populationTotal
+                ) {
                     return false;
                 }
 
-                if (max !== '' && parseInt(max, 10) < shantytown.populationTotal) {
+                if (
+                    max !== "" &&
+                    parseInt(max, 10) < shantytown.populationTotal
+                ) {
                     return false;
                 }
 
@@ -561,17 +693,17 @@ export default {
          *
          */
         checkJustice(shantytown, filters) {
-            return filters.some((value) => {
-                if (value === 'ownerComplaint') {
+            return filters.some(value => {
+                if (value === "ownerComplaint") {
                     return shantytown.ownerComplaint === true;
                 }
 
                 if (shantytown.justiceRendered === true) {
-                    return value === 'justiceRendered';
+                    return value === "justiceRendered";
                 }
 
                 if (shantytown.justiceProcedure === true) {
-                    return value === 'justiceProcedure';
+                    return value === "justiceProcedure";
                 }
 
                 return value === null;
@@ -586,24 +718,24 @@ export default {
         },
 
         showTowns(status) {
-            if (this.showClosedTowns === (status === 'closed')) {
+            if (this.showClosedTowns === (status === "closed")) {
                 return;
             }
 
-            this.showClosedTowns = status === 'closed';
+            this.showClosedTowns = status === "closed";
             this.currentPage = 0;
             this.cleanFilters();
         },
 
         cleanFilters() {
             const filters = [
-                'fieldFilterItems',
-                'populationFilterItems',
-                'justiceFilterItems',
-                'statusFilterItems',
+                "fieldFilterItems",
+                "populationFilterItems",
+                "justiceFilterItems",
+                "statusFilterItems"
             ];
 
-            filters.forEach((filter) => {
+            filters.forEach(filter => {
                 for (let i = 0; i < this[filter].length; i += 1) {
                     this[filter][i].checked = false;
                 }
@@ -622,6 +754,6 @@ export default {
 
         hasPermission(...args) {
             return hasPermission(...args);
-        },
-    },
+        }
+    }
 };

@@ -1,9 +1,8 @@
-import PlanFundingRow from './planFundingRow/planFundingRow.vue';
+import PlanFundingRow from "./planFundingRow/planFundingRow.vue";
 
 export default {
-
     components: {
-        PlanFundingRow,
+        PlanFundingRow
     },
 
     props: {
@@ -15,7 +14,7 @@ export default {
             required: false,
             default() {
                 return [];
-            },
+            }
         },
 
         /**
@@ -26,7 +25,7 @@ export default {
         disabled: {
             type: Boolean,
             required: false,
-            default: false,
+            default: false
         },
 
         /**
@@ -37,7 +36,7 @@ export default {
         minYear: {
             type: Number,
             required: false,
-            default: null,
+            default: null
         },
 
         /**
@@ -54,10 +53,9 @@ export default {
         inputMode: {
             type: String,
             required: false,
-            default: 'default',
-        },
+            default: "default"
+        }
     },
-
 
     data() {
         return {
@@ -66,14 +64,14 @@ export default {
              *
              * @type {Number}
              */
-            maxYear: (new Date()).getFullYear(),
+            maxYear: new Date().getFullYear(),
 
             /**
              * Currently edited year
              *
              * @type {Number}
              */
-            focusedYear: (new Date()).getFullYear(),
+            focusedYear: new Date().getFullYear(),
 
             /**
              * Funding rows
@@ -83,15 +81,18 @@ export default {
             fundings: this.value.map(({ year, data }) => ({
                 year,
                 data: data.map(d => ({
-                    data: d,
-                })),
-            })),
+                    data: d
+                }))
+            }))
         };
     },
 
     computed: {
         allowRealAmount() {
-            return this.inputMode === 'closing' || this.focusedYear < (new Date()).getFullYear();
+            return (
+                this.inputMode === "closing" ||
+                this.focusedYear < new Date().getFullYear()
+            );
         },
         currentFundings() {
             const currentFundings = this.getCurrentFundings();
@@ -100,9 +101,8 @@ export default {
             }
 
             return currentFundings.data;
-        },
+        }
     },
-
 
     watch: {
         // two-way binding
@@ -110,12 +110,11 @@ export default {
             this.fundings = this.value.map(({ year, data }) => ({
                 year,
                 data: data.map(d => ({
-                    data: d,
-                })),
+                    data: d
+                }))
             }));
-        },
+        }
     },
-
 
     methods: {
         /**
@@ -141,7 +140,7 @@ export default {
             if (currentFundings === undefined) {
                 currentFundings = {
                     year: this.focusedYear,
-                    data: [],
+                    data: []
                 };
                 this.fundings.push(currentFundings);
             }
@@ -151,8 +150,8 @@ export default {
                     type: null,
                     amount: 0.0,
                     realAmount: null,
-                    details: '',
-                },
+                    details: ""
+                }
             });
             this.emitInput();
         },
@@ -193,10 +192,13 @@ export default {
          * @returns {undefined}
          */
         emitInput() {
-            this.$emit('input', this.fundings.map(({ year, data }) => ({
-                year,
-                data: data.map(({ data: d }) => d),
-            })));
+            this.$emit(
+                "input",
+                this.fundings.map(({ year, data }) => ({
+                    year,
+                    data: data.map(({ data: d }) => d)
+                }))
+            );
         },
 
         /**
@@ -219,9 +221,8 @@ export default {
             } else {
                 this.focusedYear = Math.max(this.minYear, this.focusedYear - 1);
             }
-        },
-    },
-
+        }
+    }
 };
 
 /**

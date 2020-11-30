@@ -1,19 +1,19 @@
-import { get as getConfig, getPermission } from '#helpers/api/config';
+import { get as getConfig, getPermission } from "#helpers/api/config";
 import {
     getDepartementsForRegion,
-    getDepartementsForEpci,
-} from '#helpers/api/geo';
-import { create } from '#helpers/api/highCovidComment';
-import { list } from '#helpers/api/userActivity';
-import NavBar from '#app/layouts/navbar/navbar.vue';
-import Table from '#app/components/table/table.vue';
-import SlideNote from '#app/components/slide-note/slide-note.vue';
+    getDepartementsForEpci
+} from "#helpers/api/geo";
+import { create } from "#helpers/api/highCovidComment";
+import { list } from "#helpers/api/userActivity";
+import NavBar from "#app/layouts/navbar/navbar.vue";
+import Table from "#app/components/table/table.vue";
+import SlideNote from "#app/components/slide-note/slide-note.vue";
 
 export default {
     components: {
         NavBar,
         Table,
-        SlideNote,
+        SlideNote
     },
 
     data() {
@@ -32,7 +32,7 @@ export default {
              *
              * @type {'all'|'regular'|'high'}
              */
-            filter: 'all',
+            filter: "all",
 
             /**
              * List of activities
@@ -57,9 +57,9 @@ export default {
                 pending: false,
                 error: null,
                 data: {
-                    description: '',
-                    departements: [],
-                },
+                    description: "",
+                    departements: []
+                }
             },
 
             /**
@@ -84,32 +84,61 @@ export default {
              *
              */
             covidTags: [
-                { prop: 'equipe_maraude', label: 'Équipe de maraude', type: 'warning' },
-                { prop: 'equipe_sanitaire', label: 'Équipe sanitaire', type: 'warning' },
-                { prop: 'equipe_accompagnement', label: 'Équipe d\'accompagnement', type: 'warning' },
-                { prop: 'distribution_alimentaire', label: 'Distribution d\'aide alimentaire', type: 'warning' },
-                { prop: 'personnes_orientees', label: 'Personne(s) orientée(s) vers un centre d\'hébergement spécialisé (desserrement)', type: 'error' },
-                { prop: 'personnes_avec_symptomes', label: 'Personne(s) avec des symptômes Covid-19', type: 'error' },
-                { prop: 'besoin_action', label: 'Besoin d\'une action prioritaire', type: 'error' },
-            ],
+                {
+                    prop: "equipe_maraude",
+                    label: "Équipe de maraude",
+                    type: "warning"
+                },
+                {
+                    prop: "equipe_sanitaire",
+                    label: "Équipe sanitaire",
+                    type: "warning"
+                },
+                {
+                    prop: "equipe_accompagnement",
+                    label: "Équipe d'accompagnement",
+                    type: "warning"
+                },
+                {
+                    prop: "distribution_alimentaire",
+                    label: "Distribution d'aide alimentaire",
+                    type: "warning"
+                },
+                {
+                    prop: "personnes_orientees",
+                    label:
+                        "Personne(s) orientée(s) vers un centre d'hébergement spécialisé (desserrement)",
+                    type: "error"
+                },
+                {
+                    prop: "personnes_avec_symptomes",
+                    label: "Personne(s) avec des symptômes Covid-19",
+                    type: "error"
+                },
+                {
+                    prop: "besoin_action",
+                    label: "Besoin d'une action prioritaire",
+                    type: "error"
+                }
+            ]
         };
     },
 
     computed: {
         columns() {
             return [
-                { id: 'date', label: 'Date' },
-                { id: 'author', label: 'Auteur' },
-                { id: 'activity', label: 'Activités' },
+                { id: "date", label: "Date" },
+                { id: "author", label: "Auteur" },
+                { id: "activity", label: "Activités" }
             ];
         },
         filteredActivities() {
-            if (this.filter === 'all') {
+            if (this.filter === "all") {
                 return this.activities;
             }
 
-            return this.activities.filter((activity) => {
-                if (this.filter === 'regular') {
+            return this.activities.filter(activity => {
+                if (this.filter === "regular") {
                     return activity.covid !== null;
                 }
 
@@ -122,23 +151,26 @@ export default {
                 rawAction: activity.action,
                 rawDate: activity.date,
                 rawShantytown: activity.shantytown,
-                date: App.formatDate(activity.date, 'd/m/y'),
-                time: App.formatDate(activity.date, 'h:i'),
+                date: App.formatDate(activity.date, "d/m/y"),
+                time: App.formatDate(activity.date, "h:i"),
                 author: activity.author,
-                icon: activity.entity === 'comment' ? 'comment' : 'pencil-alt',
+                icon: activity.entity === "comment" ? "comment" : "pencil-alt",
                 shantytown: activity.shantytown.id,
                 address: `${activity.shantytown.usename}, ${activity.shantytown.city}`,
-                action: 'Commentaire sur le',
+                action: "Commentaire sur le",
                 content: activity.content,
                 comment: activity.comment_id,
                 covid: activity.covid,
-                highCovid: activity.highCovid,
+                highCovid: activity.highCovid
             }));
         },
         canSubmitHighComment() {
-            return this.user.organization.location.type !== 'nation'
-                && getPermission('covid_comment.list').geographic_level !== 'nation';
-        },
+            return (
+                this.user.organization.location.type !== "nation" &&
+                getPermission("covid_comment.list").geographic_level !==
+                    "nation"
+            );
+        }
     },
 
     created() {
@@ -154,55 +186,56 @@ export default {
          */
         load() {
             // loading data is forbidden if the component is already loading or loaded
-            if ([null, 'error'].indexOf(this.state) === -1) {
+            if ([null, "error"].indexOf(this.state) === -1) {
                 return;
             }
 
-            this.state = 'loading';
+            this.state = "loading";
             this.error = null;
 
             //
             let departementsPromise;
             switch (this.user.organization.location.type) {
                 default:
-                case 'nation':
+                case "nation":
                     departementsPromise = Promise.resolve({
-                        departements: [],
+                        departements: []
                     });
                     break;
 
-                case 'region':
+                case "region":
                     departementsPromise = getDepartementsForRegion(
-                        this.user.organization.location.region.code,
+                        this.user.organization.location.region.code
                     );
                     break;
 
-                case 'epci':
+                case "epci":
                     departementsPromise = getDepartementsForEpci(
-                        this.user.organization.location.epci.code,
+                        this.user.organization.location.epci.code
                     );
                     break;
 
-                case 'departement':
-                case 'city':
+                case "departement":
+                case "city":
                     departementsPromise = Promise.resolve({
-                        departements: [this.user.organization.location.departement],
+                        departements: [
+                            this.user.organization.location.departement
+                        ]
                     });
             }
 
-            Promise.all([
-                list({ covid: '1' }),
-                departementsPromise,
-            ])
+            Promise.all([list({ covid: "1" }), departementsPromise])
                 .then(([userActivities, { departements }]) => {
                     this.activities = userActivities;
                     this.allowedDepartements = departements;
-                    this.highCovidComment.data.departements = departements.map(({ code }) => code);
-                    this.state = 'loaded';
+                    this.highCovidComment.data.departements = departements.map(
+                        ({ code }) => code
+                    );
+                    this.state = "loaded";
                 })
                 .catch(({ user_message: error }) => {
                     this.error = error;
-                    this.state = 'error';
+                    this.state = "error";
                 });
         },
 
@@ -263,9 +296,9 @@ export default {
                     this.highCovidComment.pending = false;
                     this.highCovidComment.error = {
                         message,
-                        fields,
+                        fields
                     };
                 });
-        },
-    },
+        }
+    }
 };

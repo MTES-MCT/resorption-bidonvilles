@@ -1,17 +1,19 @@
 <div class="v1">
     <div class="page--dashboard">
         <Quickview :town="quickview.town" :origin="quickview.originEvent" @outside-click="hideQuickview"></Quickview>
+        <POIView :poi="poiview.poi" :origin="poiview.originEvent" @outside-click="hidePOIView" ></POIView>
+
         <NavBar></NavBar>
 
         <section class="dashboard">
             //- filters
             <simplebar class="filters" ref="filters" data-simplebar-auto-hide="false">
-                <FilterGroup v-for="filterGroup in allowedFilters" :id="filterGroup.id" :faIcon="filterGroup.faIcon" :icon="filterGroup.icon" :label="filterGroup.label" :options="filterGroup.options" :opened="filterGroup.opened"></FilterGroup>
+                <FilterGroup v-for="filterGroup in allowedFilters" :id="filterGroup.id" :key="filterGroup.id" :faIcon="filterGroup.faIcon" :icon="filterGroup.icon" :label="filterGroup.label" :options="filterGroup.options" :opened="filterGroup.opened"></FilterGroup>
             </simplebar>
 
             //- content
             <div v-bind:style="{ width: !loading && !error ? 'auto' : 0 }" class="content" ref="main">
-                <Map v-bind="rendererProps" @town-click="showQuickview" @on-row-click="routeToTown" ref="map"></Map>
+                <Map v-bind="rendererProps" @town-click="showQuickview" @poi-click="showPOIView" @on-row-click="routeToTown" ref="map"></Map>
             </div>
 
             //- notifications

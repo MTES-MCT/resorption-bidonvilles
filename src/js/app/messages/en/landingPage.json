@@ -43,17 +43,17 @@
     "title": "Reaching slum clearance,",
     "subtitle": "a national objective",
     "data": {
-      1: {
+      "1": {
         "line1": "More than",
         "line2": "300 slums",
         "line3": "in mainland France"
       },
-      2: {
+      "2": {
         "line1": "More than",
         "line2": "16 000 people",
         "line3": "including 5,000 minors"
       },
-      3: {
+      "3": {
         "line1": "Mostly",
         "line2": "Europeans",
         "line3": "Romanian and Bulgarian citizens"
@@ -80,20 +80,20 @@
       "normal": "They have been financed 75% by the State, 15% by local authorities and 10% by private or European funds. Families living in slums have been supported in order to access to health, housing, employment, education and sanitation."
     },
     "bilan": {
-      1: {
+      "1": {
         "text": "8,600 beneficiaries of the actions"
       },
-      3: {
+      "3": {
         "text": "1,000 people re-housed"
       },
-      4: {
+      "4": {
         "text": "1,350 children in school"
       },
-      5: {
+      "5": {
         "text": "2,040 beneficiaries",
         "info": "of health support"
       },
-      6: {
+      "6": {
         "text": "615 employment contracts signed"
       }
     },
@@ -110,19 +110,19 @@
       },
       "items": {
         "title": "The project was the winner of several calls for proposals:",
-        1: {
+        "1": {
           "link": "General interest entrepreneur",
           "text": "of the Future Investment Program in 2019"
         },
-        2: {
+        "2": {
           "link": "European Commission's \"rights, citizenship and equality\" program",
           "text": "in 2020"
         },
-        3: {
+        "3": {
           "link": "State Start-up Acceleration Fund 3",
           "text": "of DINUM in April 2020"
         },
-        4: {
+        "4": {
           "link": "French policy transformation fund",
           "text": "of DITP in October 2020"
         }

@@ -1,4 +1,4 @@
-import { getApi } from '#helpers/api/main';
+import { getApi } from "#helpers/api/main";
 
 /**
  * Lists all categories
@@ -6,7 +6,7 @@ import { getApi } from '#helpers/api/main';
  * @returns {Promise}
  */
 export function categories() {
-    return getApi('/organization-categories');
+    return getApi("/organization-categories");
 }
 
 /**
@@ -29,7 +29,11 @@ export function types(categoryUid) {
  * @returns {Promise}
  */
 export function getByCategory(categoryUid, search = null) {
-    return getApi(`/organization-categories/${categoryUid}/organizations${search !== null ? `?search=${search}` : ''}`);
+    return getApi(
+        `/organization-categories/${categoryUid}/organizations${
+            search !== null ? `?search=${search}` : ""
+        }`
+    );
 }
 
 /**
@@ -62,7 +66,7 @@ export function getMembers(organizationId) {
  * @returns {Promise}
  */
 export function getMembersOfCategory(categoryId, regionId, departementId) {
-    let query = '';
+    let query = "";
     if (departementId !== undefined) {
         query = `departementId=${encodeURIComponent(departementId)}`;
     } else if (regionId !== undefined) {

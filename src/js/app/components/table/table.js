@@ -1,4 +1,4 @@
-import TableFilter from '#app/components/tableFilter/tableFilter.vue';
+import TableFilter from "#app/components/tableFilter/tableFilter.vue";
 
 /**
  * Default umber of items per page
@@ -9,7 +9,7 @@ const DEFAULT_ITEMS_PER_PAGE = 10;
 
 export default {
     components: {
-        TableFilter,
+        TableFilter
     },
 
     props: {
@@ -20,7 +20,7 @@ export default {
          */
         columns: {
             type: Array,
-            required: true,
+            required: true
         },
 
         /**
@@ -33,7 +33,7 @@ export default {
             required: false,
             default() {
                 return [];
-            },
+            }
         },
 
         /**
@@ -44,7 +44,7 @@ export default {
         emptyLabel: {
             type: String,
             required: false,
-            default: 'Aucune donnée disponible pour les filtres sélectionnés',
+            default: "Aucune donnée disponible pour les filtres sélectionnés"
         },
 
         /**
@@ -55,8 +55,8 @@ export default {
         itemsPerPage: {
             type: Number,
             required: false,
-            default: DEFAULT_ITEMS_PER_PAGE,
-        },
+            default: DEFAULT_ITEMS_PER_PAGE
+        }
     },
 
     data() {
@@ -80,7 +80,7 @@ export default {
              *
              * @type {Number}
              */
-            currentPage: 0,
+            currentPage: 0
         };
     },
 
@@ -91,8 +91,9 @@ export default {
          * @returns {Array.<TableColumn>}
          */
         parsedColumns() {
-            return this.columns.map(column => Object.assign({}, column, {
-                isFilterable: column.filters !== undefined,
+            return this.columns.map(column => ({
+                ...column,
+                isFilterable: column.filters !== undefined
             }));
         },
 
@@ -105,9 +106,15 @@ export default {
          * @returns {Object.<String,Array.<TableFilterItem>>}
          */
         checkedFilters() {
-            return Object.keys(this.parsedFilters).reduce((acc, columnId) => Object.assign({}, acc, {
-                [columnId]: this.parsedFilters[columnId].filter(({ checked }) => checked === true),
-            }), {});
+            return Object.keys(this.parsedFilters).reduce(
+                (acc, columnId) => ({
+                    ...acc,
+                    [columnId]: this.parsedFilters[columnId].filter(
+                        ({ checked }) => checked === true
+                    )
+                }),
+                {}
+            );
         },
 
         /**
@@ -120,7 +127,7 @@ export default {
             this.currentPage = 0;
 
             // eslint-disable-next-line arrow-body-style
-            return this.content.filter((row) => {
+            return this.content.filter(row => {
                 // keep the row only if the filters are matched for each column
                 return this.columns.every(({ id: columnId, filterFn }) => {
                     if (this.checkedFilters[columnId].length === 0) {
@@ -140,7 +147,7 @@ export default {
         currentPageContent() {
             return this.filteredContent.slice(
                 this.currentPage * this.itemsPerPage,
-                (this.currentPage * this.itemsPerPage) + this.itemsPerPage,
+                this.currentPage * this.itemsPerPage + this.itemsPerPage
             );
         },
 
@@ -150,7 +157,10 @@ export default {
          * @returns {Number}
          */
         indexOfLastPage() {
-            return Math.max(0, Math.ceil(this.filteredContent.length / this.itemsPerPage) - 1);
+            return Math.max(
+                0,
+                Math.ceil(this.filteredContent.length / this.itemsPerPage) - 1
+            );
         },
 
         /**
@@ -159,7 +169,9 @@ export default {
          * @returns {Number}
          */
         indexOfFirstRowInCurrentPage() {
-            return this.filteredContent.length > 0 ? (this.currentPage * this.itemsPerPage) + 1 : 0;
+            return this.filteredContent.length > 0
+                ? this.currentPage * this.itemsPerPage + 1
+                : 0;
         },
 
         /**
@@ -170,9 +182,9 @@ export default {
         indexOfLastRowInCurrentPage() {
             return Math.min(
                 this.indexOfFirstRowInCurrentPage + this.itemsPerPage - 1,
-                this.filteredContent.length,
+                this.filteredContent.length
             );
-        },
+        }
     },
 
     watch: {
@@ -197,7 +209,7 @@ export default {
             this.parsedFilters = this.parseFilters();
             this.currentFilter = null;
             this.currentPage = 0;
-        },
+        }
     },
 
     methods: {
@@ -210,7 +222,7 @@ export default {
          * @returns {undefined}
          */
         click(event, row) {
-            this.$emit('click', row, event);
+            this.$emit("click", row, event);
         },
 
         /**
@@ -225,21 +237,20 @@ export default {
             return this.columns.reduce((acc, column) => {
                 // columns with no filters get an empty array
                 if (column.filters === undefined) {
-                    return Object.assign({}, acc, {
-                        [column.id]: [],
-                    });
+                    return { ...acc, [column.id]: [] };
                 }
 
                 // parse every filter item of this column (basically, initialize the value of `checked`)
-                return Object.assign({}, acc, {
-                    [column.id]: column.filters.map((filter) => {
+                return {
+                    ...acc,
+                    [column.id]: column.filters.map(filter => {
                         if (filter.checked !== undefined) {
                             return filter;
                         }
 
-                        return Object.assign({}, filter, { checked: false });
-                    }),
-                });
+                        return { ...filter, checked: false };
+                    })
+                };
             }, {});
         },
 
@@ -282,9 +293,12 @@ export default {
          * @returns {undefined}
          */
         nextPage() {
-            this.currentPage = Math.min(this.indexOfLastPage, this.currentPage + 1);
-        },
-    },
+            this.currentPage = Math.min(
+                this.indexOfLastPage,
+                this.currentPage + 1
+            );
+        }
+    }
 };
 
 /**

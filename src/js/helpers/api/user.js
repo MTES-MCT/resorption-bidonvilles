@@ -1,7 +1,5 @@
-import { unload as unloadConfig } from '#helpers/api/config';
-import {
-    postApi, putApi, getApi, deleteApi,
-} from '#helpers/api/main';
+import { unload as unloadConfig } from "#helpers/api/config";
+import { postApi, putApi, getApi, deleteApi } from "#helpers/api/main";
 
 /**
  * Sends a login request for the given user
@@ -17,8 +15,8 @@ import {
  * @returns {Promise}
  */
 export function login(email, password) {
-    return postApi('/signin', { email, password }).then((response) => {
-        localStorage.setItem('token', response.token);
+    return postApi("/signin", { email, password }).then(response => {
+        localStorage.setItem("token", response.token);
         return response;
     });
 }
@@ -29,8 +27,8 @@ export function login(email, password) {
  * @returns {Promise}
  */
 export function refreshToken() {
-    return getApi('/refreshToken').then((response) => {
-        localStorage.setItem('token', response.token);
+    return getApi("/refreshToken").then(response => {
+        localStorage.setItem("token", response.token);
     });
 }
 
@@ -43,14 +41,14 @@ export function refreshToken() {
  */
 export function logout(piwik) {
     unloadConfig();
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
 
     if (piwik) {
         piwik.resetUserId();
-        piwik.setCustomVariable(1, 'superuser', null);
-        piwik.setCustomVariable(2, 'structure', null);
-        piwik.setCustomVariable(3, 'niveau_geo', null);
-        piwik.setCustomVariable(4, 'geo_nom', null);
+        piwik.setCustomVariable(1, "superuser", null);
+        piwik.setCustomVariable(2, "structure", null);
+        piwik.setCustomVariable(3, "niveau_geo", null);
+        piwik.setCustomVariable(4, "geo_nom", null);
     }
 }
 
@@ -65,7 +63,7 @@ export function logout(piwik) {
  * @returns {boolean}
  */
 export function isLoggedIn() {
-    return localStorage.getItem('token') !== null;
+    return localStorage.getItem("token") !== null;
 }
 
 /**
@@ -74,7 +72,7 @@ export function isLoggedIn() {
  * @returns {Boolean}
  */
 export function alreadyLoggedBefore() {
-    return localStorage.getItem('logged_once') === true;
+    return localStorage.getItem("logged_once") === true;
 }
 
 /**
@@ -83,14 +81,14 @@ export function alreadyLoggedBefore() {
  * @returns {string|null}
  */
 export function getToken() {
-    return localStorage.getItem('token');
+    return localStorage.getItem("token");
 }
 
 /**
  * POST /users
  */
 export function create(data) {
-    return postApi('/users', data);
+    return postApi("/users", data);
 }
 
 /**
@@ -99,7 +97,7 @@ export function create(data) {
  * @returns {Promise}
  */
 export function me() {
-    return getApi('/me');
+    return getApi("/me");
 }
 
 /**
@@ -110,7 +108,7 @@ export function me() {
  * @returns {Promise}
  */
 export function edit(data) {
-    return postApi('/me', data);
+    return postApi("/me", data);
 }
 
 /**
@@ -121,8 +119,8 @@ export function edit(data) {
  * @returns {Promise}
  */
 export function setDefaultExport(defaultExport) {
-    return postApi('/me/default-export', {
-        export: defaultExport,
+    return postApi("/me/default-export", {
+        export: defaultExport
     });
 }
 
@@ -130,7 +128,7 @@ export function setDefaultExport(defaultExport) {
  * GET /users
  */
 export function list() {
-    return getApi('/users');
+    return getApi("/users");
 }
 
 /**
@@ -200,14 +198,14 @@ export function remove(userId) {
  * POST /users/new-password
  */
 export function requestNewPassword(email) {
-    return postApi('/users/new-password', { email });
+    return postApi("/users/new-password", { email });
 }
 
 /**
  * GET /directory
  */
 export function getDirectory() {
-    return getApi('/directory');
+    return getApi("/directory");
 }
 
 /**
@@ -222,7 +220,7 @@ export function autocompleteOrganization(str) {
  */
 export function acceptCharte(userId, charteVersion) {
     return putApi(`/users/${userId}/charte_engagement`, {
-        version_de_charte: charteVersion,
+        version_de_charte: charteVersion
     });
 }
 

@@ -1,12 +1,10 @@
-import Autocompleter from '../autocompleter/autocompleter.vue';
-import { autocomplete as autocompleter } from '#helpers/addressHelper';
+import Autocompleter from "../autocompleter/autocompleter.vue";
+import { autocomplete as autocompleter } from "#helpers/addressHelper";
 
 export default {
-
     components: {
-        Autocompleter,
+        Autocompleter
     },
-
 
     props: {
         /**
@@ -17,7 +15,7 @@ export default {
             required: false,
             default() {
                 return null;
-            },
+            }
         },
 
         /**
@@ -28,7 +26,7 @@ export default {
         disabled: {
             type: Boolean,
             required: false,
-            default: false,
+            default: false
         },
 
         /**
@@ -41,10 +39,9 @@ export default {
             required: false,
             default() {
                 return {};
-            },
-        },
+            }
+        }
     },
-
 
     data() {
         return {
@@ -56,12 +53,9 @@ export default {
             /**
              * @type {Object}
              */
-            options: Object.assign({}, this.specificProps, {
-                autocompleter,
-            }),
+            options: { ...this.specificProps, autocompleter }
         };
     },
-
 
     watch: {
         // two-way binding
@@ -69,8 +63,7 @@ export default {
             this.data = this.value !== null ? [this.value] : [];
         },
         data() {
-            this.$emit('input', this.data.length > 0 ? this.data[0] : null);
-        },
-    },
-
+            this.$emit("input", this.data.length > 0 ? this.data[0] : null);
+        }
+    }
 };

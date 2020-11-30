@@ -3,10 +3,11 @@
 </template>
 
 <script>
-import Component from './linker.js';
+import Component from "./linker";
+
 export default Component;
 </script>
 
 <style lang="scss" scoped>
-@import './linker.scss';
+@import "./linker.scss";
 </style>

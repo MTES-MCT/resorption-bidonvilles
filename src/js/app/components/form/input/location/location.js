@@ -1,5 +1,5 @@
-import L from 'leaflet';
-import 'leaflet-providers';
+import L from "leaflet";
+import "leaflet-providers";
 
 /**
  * Default zoom
@@ -15,13 +15,10 @@ const DEFAULT_ZOOM = 6;
  */
 const FRANCE_CENTER = {
     coordinates: [46.7755829, 2.0497727],
-    zoom: DEFAULT_ZOOM,
+    zoom: DEFAULT_ZOOM
 };
 
-
 export default {
-
-
     props: {
         /**
          * Location value
@@ -33,7 +30,7 @@ export default {
             required: false,
             default() {
                 return FRANCE_CENTER;
-            },
+            }
         },
 
         /**
@@ -44,7 +41,7 @@ export default {
         tutorial: {
             type: String,
             required: false,
-            default: 'auto',
+            default: "auto"
         },
 
         /**
@@ -55,7 +52,7 @@ export default {
         autoHideMarker: {
             type: Boolean,
             required: false,
-            default: false,
+            default: false
         },
 
         /**
@@ -69,11 +66,12 @@ export default {
             default() {
                 return {
                     // appears above the list of selected items
-                    tutorialTitle: 'Sélectionner une position géographique',
+                    tutorialTitle: "Sélectionner une position géographique",
                     // label for the column containing the label of each selected item
-                    tutorialDescription: 'Positionnez le marqueur en vous déplaçant sur la carte, puis en cliquant sur la localisation désirée.',
+                    tutorialDescription:
+                        "Positionnez le marqueur en vous déplaçant sur la carte, puis en cliquant sur la localisation désirée."
                 };
-            },
+            }
         },
 
         /**
@@ -84,10 +82,9 @@ export default {
         disabled: {
             type: Boolean,
             required: false,
-            default: false,
-        },
+            default: false
+        }
     },
-
 
     data() {
         return {
@@ -124,10 +121,9 @@ export default {
              *
              * @type {Boolean}
              */
-            tutorialHasBeenClosed: false,
+            tutorialHasBeenClosed: false
         };
     },
-
 
     computed: {
         /**
@@ -140,7 +136,7 @@ export default {
 
             return {
                 coordinates: [lat, lng],
-                zoom: this.map.getZoom() || DEFAULT_ZOOM,
+                zoom: this.map.getZoom() || DEFAULT_ZOOM
             };
         },
 
@@ -152,14 +148,14 @@ export default {
         tutorialWording() {
             if (this.disabled === true) {
                 return {
-                    title: '',
-                    description: '',
+                    title: "",
+                    description: ""
                 };
             }
 
             return {
                 title: this.wording.tutorialTitle,
-                description: this.wording.tutorialDescription,
+                description: this.wording.tutorialDescription
             };
         },
 
@@ -169,10 +165,9 @@ export default {
          * @returns {Boolean}
          */
         showCloseTutorial() {
-            return !this.disabled && this.tutorial === 'auto';
-        },
+            return !this.disabled && this.tutorial === "auto";
+        }
     },
-
 
     watch: {
         value() {
@@ -197,14 +192,12 @@ export default {
             } else {
                 this.showTutorial = this.shouldShowTutorial(this.tutorial);
             }
-        },
+        }
     },
-
 
     mounted() {
         this.$nextTick(this.initialize);
     },
-
 
     methods: {
         /**
@@ -231,8 +224,8 @@ export default {
          */
         setTileLayers() {
             const layers = {
-                Satellite: L.tileLayer.provider('Esri.WorldImagery'),
-                Dessin: L.tileLayer.provider('OpenStreetMap.Mapnik'),
+                Satellite: L.tileLayer.provider("Esri.WorldImagery"),
+                Dessin: L.tileLayer.provider("OpenStreetMap.Mapnik")
             };
 
             layers.Dessin.addTo(this.map);
@@ -246,15 +239,18 @@ export default {
          */
         createMarker() {
             this.marker = L.marker(this.value.coordinates, { draggable: true });
-            this.map.addEventListener('click', (event) => {
+            this.map.addEventListener("click", event => {
                 clearTimeout(this.clickTimeout);
-                this.clickTimeout = setTimeout(this.handleClick.bind(this, event), 200);
+                this.clickTimeout = setTimeout(
+                    this.handleClick.bind(this, event),
+                    200
+                );
             });
-            this.map.addEventListener('dblclick', () => {
+            this.map.addEventListener("dblclick", () => {
                 clearTimeout(this.clickTimeout);
                 this.clickTimeout = null;
             });
-            this.marker.addEventListener('dragend', () => {
+            this.marker.addEventListener("dragend", () => {
                 this.syncMap(this.view, true);
             });
 
@@ -276,7 +272,7 @@ export default {
             this.map.setView(view.coordinates, view.zoom);
 
             if (emitInput === true) {
-                this.$emit('input', view);
+                this.$emit("input", view);
             }
 
             clearTimeout(this.clickTimeout);
@@ -340,19 +336,17 @@ export default {
          * @returns {Boolean}
          */
         shouldShowTutorial(tutorial) {
-            if (tutorial === 'no') {
+            if (tutorial === "no") {
                 return false;
             }
 
-            if (tutorial === 'yes') {
+            if (tutorial === "yes") {
                 return true;
             }
 
             return !this.tutorialHasBeenClosed;
-        },
-    },
-
-
+        }
+    }
 };
 
 /**

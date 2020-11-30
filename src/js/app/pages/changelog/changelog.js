@@ -1,6 +1,6 @@
-import NavBar from '#app/layouts/navbar/navbar.vue';
-import Changelog from '#app/components/changelog/changelog.vue';
-import { closeChangelog, get as getConfig, load } from '#helpers/api/config';
+import NavBar from "#app/layouts/navbar/navbar.vue";
+import Changelog from "#app/components/changelog/changelog.vue";
+import { closeChangelog, get as getConfig, load } from "#helpers/api/config";
 
 export default {
     data() {
@@ -8,12 +8,12 @@ export default {
 
         return {
             error: null,
-            changelog,
+            changelog
         };
     },
     components: {
         NavBar,
-        Changelog,
+        Changelog
     },
     methods: {
         markChangelogAsRead() {
@@ -21,7 +21,7 @@ export default {
                 .then(() => {
                     load()
                         .then(() => {
-                            this.$router.push('/');
+                            this.$router.push("/");
                         })
                         .catch(({ user_message: error }) => {
                             this.error = error;
@@ -30,6 +30,6 @@ export default {
                 .catch(({ user_message: error }) => {
                     this.error = error;
                 });
-        },
-    },
+        }
+    }
 };

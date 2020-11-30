@@ -1,12 +1,12 @@
-import { get as getConfig, getPermission } from '#helpers/api/config';
-import { all as fetchAll } from '#helpers/api/town';
-import Table from '#app/components/table/table.vue';
-import CollectivityInput from '#app/components/form/input/collectivity/collectivity.vue';
+import { get as getConfig, getPermission } from "#helpers/api/config";
+import { all as fetchAll } from "#helpers/api/town";
+import Table from "#app/components/table/table.vue";
+import CollectivityInput from "#app/components/form/input/collectivity/collectivity.vue";
 
 export default {
     components: {
         Table,
-        CollectivityInput,
+        CollectivityInput
     },
 
     props: {
@@ -18,7 +18,7 @@ export default {
             required: false,
             default() {
                 return [];
-            },
+            }
         },
 
         /**
@@ -29,7 +29,7 @@ export default {
         disabled: {
             type: Boolean,
             required: false,
-            default: false,
+            default: false
         },
 
         /**
@@ -40,41 +40,59 @@ export default {
         filter: {
             type: Function,
             required: false,
-            default: null,
-        },
+            default: null
+        }
     },
 
     data() {
         const { field_types: fieldTypes, user } = getConfig();
-        const permission = getPermission('shantytown.list');
+        const permission = getPermission("shantytown.list");
 
         const userLocation = {
-            id: user.organization.location.type === 'nation' ? null : user.organization.location[user.organization.location.type].code,
-            label: user.organization.location.type === 'nation' ? 'France' : user.organization.location[user.organization.location.type].name,
+            id:
+                user.organization.location.type === "nation"
+                    ? null
+                    : user.organization.location[
+                          user.organization.location.type
+                      ].code,
+            label:
+                user.organization.location.type === "nation"
+                    ? "France"
+                    : user.organization.location[
+                          user.organization.location.type
+                      ].name,
             category: user.organization.location.type,
             data: {
-                code: user.organization.location.type === 'nation' ? null : user.organization.location[user.organization.location.type].code,
-                type: user.organization.location.type,
-            },
+                code:
+                    user.organization.location.type === "nation"
+                        ? null
+                        : user.organization.location[
+                              user.organization.location.type
+                          ].code,
+                type: user.organization.location.type
+            }
         };
-        const hasNationalPermission = permission.geographic_level === 'nation';
+        const hasNationalPermission = permission.geographic_level === "nation";
 
         let location;
         let defaultLocation;
-        if (hasNationalPermission !== true || user.organization.location.type === 'nation') {
-            defaultLocation = Object.assign({}, userLocation);
+        if (
+            hasNationalPermission !== true ||
+            user.organization.location.type === "nation"
+        ) {
+            defaultLocation = { ...userLocation };
             location = null;
         } else {
             defaultLocation = {
                 id: null,
-                label: 'France',
-                category: 'Pays',
+                label: "France",
+                category: "Pays",
                 data: {
                     code: null,
-                    type: 'nation',
-                },
+                    type: "nation"
+                }
             };
-            location = Object.assign({}, userLocation);
+            location = { ...userLocation };
         }
 
         return {
@@ -82,16 +100,17 @@ export default {
             defaultLocation,
 
             columns: [
-                { id: 'checkbox', label: '' },
-                { id: 'city', label: 'Commune' },
-                { id: 'address', label: 'Adresse' },
-                { id: 'fieldType', label: 'Type de site' },
-                { id: 'people', label: 'Nombre de personnes' },
+                { id: "checkbox", label: "" },
+                { id: "city", label: "Commune" },
+                { id: "address", label: "Adresse" },
+                { id: "fieldType", label: "Type de site" },
+                { id: "people", label: "Nombre de personnes" }
             ],
 
-            fieldTypes: fieldTypes.reduce((acc, fieldType) => Object.assign({}, acc, {
-                [fieldType.id]: fieldType,
-            }), {}),
+            fieldTypes: fieldTypes.reduce(
+                (acc, fieldType) => ({ ...acc, [fieldType.id]: fieldType }),
+                {}
+            ),
 
             /**
              * Data loading status
@@ -126,12 +145,11 @@ export default {
              *
              * @type {'open'|'closed'}
              */
-            statusOfVisibleTowns: 'open',
+            statusOfVisibleTowns: "open"
         };
     },
 
     computed: {
-
         currentLocation() {
             return this.location || this.defaultLocation;
         },
@@ -139,21 +157,22 @@ export default {
         pageContent() {
             return this.towns
                 .filter(({ closedAt }) => {
-                    if (this.statusOfVisibleTowns === 'open') {
+                    if (this.statusOfVisibleTowns === "open") {
                         return closedAt === null;
                     }
                     return closedAt !== null;
                 })
-                .filter((shantytown) => {
-                    if (this.currentLocation.data.type === 'nation') {
+                .filter(shantytown => {
+                    if (this.currentLocation.data.type === "nation") {
                         return true;
                     }
 
                     const l = shantytown[this.currentLocation.data.type];
-                    return l && `${l.code}` === `${this.currentLocation.data.code}`;
+                    return (
+                        l && `${l.code}` === `${this.currentLocation.data.code}`
+                    );
                 });
-        },
-
+        }
     },
 
     watch: {
@@ -163,16 +182,14 @@ export default {
         },
 
         selectedTowns() {
-            this.$emit('input', this.selectedTowns);
-        },
+            this.$emit("input", this.selectedTowns);
+        }
     },
-
 
     mounted() {
         // on mount, try to load the list of shantytowns
         this.load();
     },
-
 
     methods: {
         /**
@@ -181,20 +198,20 @@ export default {
          * @returns {undefined}
          */
         load() {
-            if (this.status === 'loaded' || this.status === 'loading') {
+            if (this.status === "loaded" || this.status === "loading") {
                 return;
             }
 
-            this.status = 'loading';
+            this.status = "loading";
             this.loadingError = null;
 
-            fetchAll({}, ['city.asc', 'population.desc'])
-                .then((data) => {
-                    this.status = 'loaded';
+            fetchAll({}, ["city.asc", "population.desc"])
+                .then(data => {
+                    this.status = "loaded";
                     this.towns = data;
                 })
                 .catch(({ user_message: error }) => {
-                    this.status = 'error';
+                    this.status = "error";
                     this.loadingError = error;
                 });
         },
@@ -218,7 +235,7 @@ export default {
          * @returns {undefined}
          */
         toggleTown({ id: townId }, event) {
-            if (event && event.target && event.target.type === 'checkbox') {
+            if (event && event.target && event.target.type === "checkbox") {
                 return;
             }
 
@@ -232,7 +249,6 @@ export default {
             } else {
                 this.selectedTowns.push(townId);
             }
-        },
-
-    },
+        }
+    }
 };

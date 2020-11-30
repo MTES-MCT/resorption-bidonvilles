@@ -1,26 +1,29 @@
-import NavBar from '#app/layouts/navbar/navbar.vue';
-import Form from '#app/components/form/form.vue';
-import { create } from '#helpers/api/user';
-import newUser from './newUser';
+import NavBar from "#app/layouts/navbar/navbar.vue";
+import Form from "#app/components/form/form.vue";
+import { create } from "#helpers/api/user";
+import newUser from "./newUser";
 
-const component = newUser({
-    title: 'Créer un utilisateur',
-    organizationTitle: 'Structure',
-    organization: 'Quelle est la structure de l\'utilisateur ?',
-    position: 'Fonction de l\'utilisateur',
-    associationIsMissing: 'L\'association de l\'utilisateur n\'est pas dans cette liste',
-    stepWording: {
-        submit: 'Continuer',
-        error: 'L\'utilisateur n\'a pas pu être créé',
-        success: 'L\'utilisateur a bien été créé',
+const component = newUser(
+    {
+        title: "Créer un utilisateur",
+        organizationTitle: "Structure",
+        organization: "Quelle est la structure de l'utilisateur ?",
+        position: "Fonction de l'utilisateur",
+        associationIsMissing:
+            "L'association de l'utilisateur n'est pas dans cette liste",
+        stepWording: {
+            submit: "Continuer",
+            error: "L'utilisateur n'a pas pu être créé",
+            success: "L'utilisateur a bien été créé"
+        }
     },
-}, create);
+    create
+);
 
 export default {
-
     components: {
         NavBar,
-        Form,
+        Form
     },
 
     data() {
@@ -29,14 +32,18 @@ export default {
         data.formDefinition.steps[0].sections.push({
             inputs: {
                 legal: {
-                    label: '',
+                    label: "",
                     mandatory: false,
-                    type: 'checkbox',
+                    type: "checkbox",
                     options: [
-                        { value: true, label: 'Je certifie que ces données personnelles ont été saisies avec l\'accord de leur propriétaire' },
-                    ],
-                },
-            },
+                        {
+                            value: true,
+                            label:
+                                "Je certifie que ces données personnelles ont été saisies avec l'accord de leur propriétaire"
+                        }
+                    ]
+                }
+            }
         });
 
         if (this.$route.query.association_name !== undefined) {
@@ -50,12 +57,15 @@ export default {
 
     watch: Object.assign(component.watch, {
         state() {
-            if (this.state === 'loaded' && this.$route.query.association_name !== undefined) {
-                this.formData.organization_category = 'association';
+            if (
+                this.state === "loaded" &&
+                this.$route.query.association_name !== undefined
+            ) {
+                this.formData.organization_category = "association";
                 this.formData.association = this.$route.query.association_name;
                 this.formData.departement = this.$route.query.association_departement;
             }
-        },
+        }
     }),
 
     mounted() {
@@ -77,13 +87,12 @@ export default {
          */
         onComplete(user) {
             if (this.isPopup) {
-                window.opener.postMessage(user, '*');
+                window.opener.postMessage(user, "*");
                 window.close();
                 return;
             }
 
             this.$router.push(`/nouvel-utilisateur/${user.id}`);
-        },
-    }),
-
+        }
+    })
 };

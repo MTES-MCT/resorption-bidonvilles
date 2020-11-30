@@ -3,10 +3,11 @@
 </template>
 
 <style lang="scss">
-    @import './collectivity.scss';
+@import "./collectivity.scss";
 </style>
 
 <script>
-    import Component from './collectivity.js';
-    export default Component;
+import Component from "./collectivity";
+
+export default Component;
 </script>

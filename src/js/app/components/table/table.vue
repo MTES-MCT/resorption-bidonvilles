@@ -3,6 +3,7 @@
 </template>
 
 <script>
-import Component from "./table.js";
+import Component from "./table";
+
 export default Component;
 </script>

@@ -1,16 +1,16 @@
-import Datepicker from 'vuejs-datepicker';
-import { fr as datepickerFr } from 'vuejs-datepicker/dist/locale';
-import Autocompleter from './autocompleter/autocompleter.vue';
-import Address from './address/address.vue';
-import Location from './location/location.vue';
-import AddressWithLocation from './address-with-location/address-with-location.vue';
-import TownList from './townList/townList.vue';
-import PlanFunding from './planFunding/planFunding.vue';
-import PlanHousing from './planHousing/planHousing.vue';
-import Collectivity from './collectivity/collectivity.vue';
-import Organization from './organization/organization.vue';
-import Etp from './etp/etp.vue';
-import Audience from './audience/audience.vue';
+import Datepicker from "vuejs-datepicker";
+import { fr as datepickerFr } from "vuejs-datepicker/dist/locale";
+import Autocompleter from "./autocompleter/autocompleter.vue";
+import Address from "./address/address.vue";
+import Location from "./location/location.vue";
+import AddressWithLocation from "./address-with-location/address-with-location.vue";
+import TownList from "./townList/townList.vue";
+import PlanFunding from "./planFunding/planFunding.vue";
+import PlanHousing from "./planHousing/planHousing.vue";
+import Collectivity from "./collectivity/collectivity.vue";
+import Organization from "./organization/organization.vue";
+import Etp from "./etp/etp.vue";
+import Audience from "./audience/audience.vue";
 
 /**
  * Input types that accept a list of values
@@ -18,17 +18,15 @@ import Audience from './audience/audience.vue';
  * @type {Array.<string>}
  */
 const multipleValueInputs = [
-    'selectMultiple',
-    'checkbox',
-    'autocompleter',
-    'townList',
-    'planFunding',
-    'etp',
+    "selectMultiple",
+    "checkbox",
+    "autocompleter",
+    "townList",
+    "planFunding",
+    "etp"
 ];
 
 export default {
-
-
     components: {
         Datepicker,
         Autocompleter,
@@ -41,9 +39,8 @@ export default {
         Organization,
         Etp,
         Audience,
-        PlanHousing,
+        PlanHousing
     },
-
 
     props: {
         /**
@@ -53,7 +50,7 @@ export default {
          */
         id: {
             type: String,
-            required: true,
+            required: true
         },
 
         /**
@@ -63,7 +60,7 @@ export default {
          */
         mandatory: {
             type: Boolean,
-            required: true,
+            required: true
         },
 
         /**
@@ -96,7 +93,7 @@ export default {
         type: {
             type: String,
             required: false,
-            default: 'text',
+            default: "text"
         },
 
         /**
@@ -106,7 +103,7 @@ export default {
          */
         label: {
             type: String,
-            required: true,
+            required: true
         },
 
         /**
@@ -116,7 +113,7 @@ export default {
          */
         description: {
             type: String,
-            required: false,
+            required: false
         },
 
         /**
@@ -137,7 +134,7 @@ export default {
             required: false,
             default() {
                 return [];
-            },
+            }
         },
 
         /**
@@ -150,7 +147,7 @@ export default {
             required: false,
             default() {
                 return {};
-            },
+            }
         },
 
         /**
@@ -166,7 +163,7 @@ export default {
                 }
 
                 return undefined;
-            },
+            }
         },
 
         /**
@@ -177,7 +174,7 @@ export default {
         disabled: {
             type: Boolean,
             required: false,
-            default: false,
+            default: false
         },
 
         /**
@@ -190,7 +187,7 @@ export default {
             required: false,
             default() {
                 return [];
-            },
+            }
         },
 
         /**
@@ -201,31 +198,29 @@ export default {
         alertMessage: {
             type: String,
             required: false,
-            default: null,
-        },
+            default: null
+        }
     },
-
 
     data() {
         return {
             data: this.value,
-            showPassword: false, // for type 'password' only
+            showPassword: false // for type 'password' only
         };
     },
-
 
     computed: {
         props() {
             let defaultProps = {};
-            if (this.type === 'date') {
+            if (this.type === "date") {
                 defaultProps = {
                     language: datepickerFr,
                     mondayFirst: true,
                     fullMonthName: true,
-                    format: 'dd MMMM yyyy',
+                    format: "dd MMMM yyyy",
                     calendarButton: true,
-                    calendarButtonIconContent: '',
-                    clearButton: true,
+                    calendarButtonIconContent: "",
+                    clearButton: true
                 };
             }
 
@@ -233,13 +228,16 @@ export default {
         },
 
         optionsAreGrouped() {
-            return this.options && Object.prototype.hasOwnProperty.call(this.options[0], 'options');
-        },
+            return (
+                this.options &&
+                Object.prototype.hasOwnProperty.call(this.options[0], "options")
+            );
+        }
     },
 
     mounted() {
         this.$nextTick(() => {
-            this.$emit('input', this.data);
+            this.$emit("input", this.data);
         });
     },
 
@@ -249,19 +247,19 @@ export default {
             this.data = this.value;
         },
         data() {
-            this.$emit('input', this.data);
-            this.$emit('change');
+            this.$emit("input", this.data);
+            this.$emit("change");
         },
         options() {
             if (Array.isArray(this.data)) {
-                this.data = this.data.filter(v => this.options.indexOf(v) !== -1);
+                this.data = this.data.filter(
+                    v => this.options.indexOf(v) !== -1
+                );
             } else if (this.options.indexOf(this.data) === -1) {
                 this.data = undefined;
             }
-        },
-    },
-
-
+        }
+    }
 };
 
 /**

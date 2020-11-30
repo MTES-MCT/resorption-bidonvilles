@@ -1,15 +1,15 @@
-import Modal from '#app/components/modal/modal.vue';
+import Modal from "#app/components/modal/modal.vue";
 
 export default {
     props: {
         link: {
             type: String,
-            required: true,
-        },
+            required: true
+        }
     },
 
     components: {
-        Modal,
+        Modal
     },
 
     data() {
@@ -19,7 +19,7 @@ export default {
              *
              * @type {boolean}
              */
-            linkWasCopied: false,
+            linkWasCopied: false
         };
     },
 
@@ -27,7 +27,7 @@ export default {
         this.$nextTick(() => {
             try {
                 this.$refs.input.select();
-                document.execCommand('copy');
+                document.execCommand("copy");
                 this.linkWasCopied = true;
             } catch (ignore) {
                 // do nothing
@@ -37,7 +37,7 @@ export default {
 
     methods: {
         onClose() {
-            this.$emit('close');
-        },
-    },
+            this.$emit("close");
+        }
+    }
 };

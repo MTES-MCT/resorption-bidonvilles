@@ -1,9 +1,9 @@
 export default {
     mounted() {
-        document.addEventListener('click', this.checkOutsideClick);
+        document.addEventListener("click", this.checkOutsideClick);
     },
     destroyed() {
-        document.removeEventListener('click', this.checkOutsideClick);
+        document.removeEventListener("click", this.checkOutsideClick);
     },
     methods: {
         checkOutsideClick(event) {
@@ -17,7 +17,7 @@ export default {
             }
         },
         close() {
-            this.$emit('close');
-        },
-    },
+            this.$emit("close");
+        }
+    }
 };

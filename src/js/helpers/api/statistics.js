@@ -1,4 +1,4 @@
-import { postApi } from '#helpers/api/main';
+import { postApi } from "#helpers/api/main";
 
 /**
  * Registers a new directory-view event
@@ -8,8 +8,8 @@ import { postApi } from '#helpers/api/main';
  * @returns {Promise}
  */
 export function directoryViews(organization) {
-    return postApi('/statistics/directory-views', {
-        organization,
+    return postApi("/statistics/directory-views", {
+        organization
     });
 }
 

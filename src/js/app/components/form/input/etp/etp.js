@@ -1,7 +1,6 @@
-import { get as getConfig } from '#helpers/api/config';
+import { get as getConfig } from "#helpers/api/config";
 
 export default {
-
     props: {
         /**
          * Value
@@ -13,7 +12,7 @@ export default {
             required: false,
             default() {
                 return [];
-            },
+            }
         },
 
         /**
@@ -24,37 +23,33 @@ export default {
         disabled: {
             type: Boolean,
             required: false,
-            default: false,
-        },
+            default: false
+        }
     },
-
 
     data() {
         const { etp_types: types } = getConfig();
 
         return {
             rows: this.value,
-            types,
+            types
         };
     },
-
 
     computed: {
         parsedRows() {
             return this.rows.map(row => ({
                 type: row.type ? row.type : null,
-                total: parseFloat(row.total),
+                total: parseFloat(row.total)
             }));
-        },
+        }
     },
-
 
     watch: {
         parsedRows() {
             this.emitInput();
-        },
+        }
     },
-
 
     methods: {
         /**
@@ -67,7 +62,7 @@ export default {
 
             this.rows.push({
                 type: undefined,
-                total: 0,
+                total: 0
             });
             this.emitInput();
         },
@@ -94,8 +89,7 @@ export default {
          * @returns {undefined}
          */
         emitInput() {
-            this.$emit('input', this.parsedRows);
-        },
-    },
-
+            this.$emit("input", this.parsedRows);
+        }
+    }
 };

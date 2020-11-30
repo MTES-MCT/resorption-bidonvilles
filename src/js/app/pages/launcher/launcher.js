@@ -1,15 +1,15 @@
-import NavBar from '#app/layouts/navbar/navbar.vue';
-import { isLoaded as isConfigLoaded, load, get } from '#helpers/api/config';
-import { getEntryPoint } from '#app/router';
+import NavBar from "#app/layouts/navbar/navbar.vue";
+import { isLoaded as isConfigLoaded, load, get } from "#helpers/api/config";
+import { getEntryPoint } from "#app/router";
 
 export default {
     data() {
         return {
-            error: null,
+            error: null
         };
     },
     components: {
-        NavBar,
+        NavBar
     },
     mounted() {
         this.loadConfig();
@@ -26,7 +26,7 @@ export default {
                 .then(() => {
                     this.redirect();
                 })
-                .catch((response) => {
+                .catch(response => {
                     this.error = response.user_message;
                 });
         },
@@ -41,28 +41,27 @@ export default {
             }
 
             this.$piwik.setUserId(user.id);
-            this.$piwik.setCustomVariable(
-                1,
-                'superuser',
-                user.is_superuser,
-            );
+            this.$piwik.setCustomVariable(1, "superuser", user.is_superuser);
             this.$piwik.setCustomVariable(
                 2,
-                'structure',
-                user.organization.type.abbreviation || user.organization.type.name_singular,
+                "structure",
+                user.organization.type.abbreviation ||
+                    user.organization.type.name_singular
             );
             this.$piwik.setCustomVariable(
                 3,
-                'niveau_geo',
-                user.organization.location.type,
+                "niveau_geo",
+                user.organization.location.type
             );
             this.$piwik.setCustomVariable(
                 4,
-                'geo_nom',
+                "geo_nom",
                 user.organization.location[user.organization.location.type]
-                    ? user.organization.location[user.organization.location.type].name
-                    : null,
+                    ? user.organization.location[
+                          user.organization.location.type
+                      ].name
+                    : null
             );
-        },
-    },
+        }
+    }
 };

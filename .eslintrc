@@ -1,48 +1,30 @@
 {
-    "extends": "airbnb-base",
-    "rules": {
-        "indent": [
-            "error",
-            4,
-            {
-                "SwitchCase": 1
-            }
-        ],
-        "import/no-extraneous-dependencies": false,
-        "prefer-promise-reject-errors": 0,
-        "import/no-unresolved": [
-            "error",
-            {
-                "ignore": [
-                    "#"
-                ]
-            }
-        ],
-        "max-len": "off",
-        "no-param-reassign": "warn",
-        "import/extensions": [
-            "error",
-            "never",
-            {
-                "vue": "always"
-            }
-        ]
-    },
-    "env": {
-        "browser": true
-    },
-    "globals": {
-        "App": "readonly"
-    },
-    "overrides": [
-        {
-            "files": "cypress/**/*.js",
-            "globals": {
-                "Cypress": "readonly",
-                "cy": "readonly",
-                "describe": "readonly",
-                "it": "readonly"
-            }
-        }
-    ]
+  "extends": [
+    "plugin:vue/essential",
+    "eslint:recommended",
+    "@vue/prettier"
+  ],
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "globals": {
+    "App": "readonly"
+  },
+  "root": true,
+  "parserOptions": {
+    "ecmaVersion": 2020
+  },
+  "ignorePatterns": ["node_modules/"],
+  "overrides": [
+    {
+      "files": "cypress/**/*.js",
+      "globals": {
+        "Cypress": "readonly",
+        "cy": "readonly",
+        "describe": "readonly",
+        "it": "readonly"
+      }
+    }
+  ]
 }
