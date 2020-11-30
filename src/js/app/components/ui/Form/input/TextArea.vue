@@ -76,6 +76,12 @@ export default {
         },
         suffixIcon: {
             type: String
+        },
+        rows: {
+            type: String
+        },
+        cols: {
+            type: String
         }
     },
     computed: {

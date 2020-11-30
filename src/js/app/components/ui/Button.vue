@@ -15,6 +15,7 @@
         <div
             :class="[
                 'flex',
+                'items-center',
                 iconPosition === 'right' ? 'flex-row-reverse' : 'flex-row',
                 loading && 'invisible'
             ]"
