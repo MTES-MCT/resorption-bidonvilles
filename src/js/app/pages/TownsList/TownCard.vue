@@ -8,21 +8,21 @@
         @mouseleave="isHover = false"
     >
         <router-link :to="`site-new/${shantytown.id}`">
-            <div class="pt-4">
-                <div class="text-md px-4">
-                    <div class="text-primary">
-                        <span class="text-lg font-bold">
+            <div class="pt-6">
+                <div class="text-md px-6">
+                    <div class="text-primary text-display-md ">
+                        <span class="font-bold">
                             {{ shantytown.addressSimple }}
                             <span v-if="shantytown.name"
                                 >« {{ shantytown.name }} »</span
                             >
                         </span>
-                        <span>
+                        <span class="font-normal">
                             {{ shantytown.city.name }}
                         </span>
                     </div>
                 </div>
-                <div class="md:grid cardGridTemplateColumns gap-8 px-4 py-4">
+                <div class="md:grid cardGridTemplateColumns gap-10 px-6 py-4">
                     <!-- first column -->
                     <div>
                         <div class="flex items-center">
@@ -51,13 +51,15 @@
                         >
                             Population inconnue
                         </div>
-                        <div v-else class="text-md font-bold flex items-center">
+                        <div v-else class="text-lg font-bold flex items-center">
                             <div class="mr-2">
                                 {{ shantytown.populationTotal }}
                             </div>
-                            <div class="text-md">
-                                <Icon icon="male" /> <Icon icon="male" />
-                                <Icon icon="male" /> <Icon icon="male" />
+                            <div>
+                                <Icon icon="male" />{{ " " }}
+                                <Icon icon="male" />{{ " " }}
+                                <Icon icon="male" />{{ " " }}
+                                <Icon icon="male" />
                             </div>
                         </div>
                         <div
@@ -75,25 +77,18 @@
                     <!-- third column -->
                     <div>
                         <div>
-                            <TownCardIcon
-                                :value="shantytown.accessToWater"
-                                class="mb-1"
+                            <TownCardIcon :value="shantytown.accessToWater"
                                 >eau</TownCardIcon
                             >
                             <TownCardIcon
                                 :value="shantytown.electricityType.value"
-                                class="mb-1"
                                 >électricité</TownCardIcon
                             >
 
-                            <TownCardIcon
-                                :value="shantytown.trashEvacuation"
-                                class="mb-1"
+                            <TownCardIcon :value="shantytown.trashEvacuation"
                                 >évac. des déchets</TownCardIcon
                             >
-                            <TownCardIcon
-                                :value="shantytown.accessToSanitary"
-                                class="mb-1"
+                            <TownCardIcon :value="shantytown.accessToSanitary"
                                 >toilettes</TownCardIcon
                             >
                         </div>
@@ -112,13 +107,13 @@
                         </div>
                         <div v-else>
                             <div
-                                class="flex items-center flex-wrap"
+                                class="flex "
                                 v-for="status in shantytown.justiceStatuses"
                                 :key="status.label"
                             >
                                 <Icon v-if="status.icon" :icon="status.icon" />
                                 <img
-                                    class="w-5 h-4"
+                                    class="w-5 h-4 mt-1"
                                     :src="status.img"
                                     v-if="status.img"
                                 />
@@ -232,15 +227,14 @@ export default {
 
             let months;
             months = (d2.getFullYear() - d1.getFullYear()) * 12;
-            months -= d1.getMonth() + 1;
-            months += d2.getMonth();
-            months = months <= 0 ? 0 : months;
+            months += months + (d2.getMonth() - d1.getMonth());
+            months = Math.abs(months);
 
             if (months === 0) {
                 const days = Math.floor(
                     Math.abs(d1.getTime() - d2.getTime()) / (1000 * 3600 * 24)
                 );
-                const weeks = days / 7;
+                const weeks = Math.ceil(days / 7);
 
                 if (days === 0) {
                     return `Dernière actualisation aujourd'hui`;
@@ -250,8 +244,10 @@ export default {
                     return `Dernière actualisation il y a ${days} jours`;
                 }
 
-                if (weeks > 0) {
-                    return `Dernière actualisation il y a plus d'une semaine`;
+                if (weeks > 0 && months === 0) {
+                    return `Dernière actualisation il y a ${weeks} semaine${
+                        weeks > 1 ? "s" : ""
+                    }`;
                 }
             }
 
@@ -267,6 +263,6 @@ export default {
 
 <style scoped>
 .cardGridTemplateColumns {
-    grid-template-columns: 220px 220px 220px auto;
+    grid-template-columns: 160px 208px 164px auto;
 }
 </style>
