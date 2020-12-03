@@ -403,6 +403,11 @@ export default {
                 populationTotal: this.town.populationTotal,
                 populationCouples: this.town.populationCouples,
                 populationMinors: this.town.populationMinors,
+                populationMinors0To3: this.town.populationMinors0To3,
+                populationMinors3To6: this.town.populationMinors3To6,
+                populationMinors6To12: this.town.populationMinors6To12,
+                populationMinors12To16: this.town.populationMinors12To16,
+                populationMinors16To18: this.town.populationMinors16To18,
                 origins: this.town.socialOrigins.map(origin => origin.id),
                 electricityType: this.town.electricityType.id,
                 electricityComments: this.town.electricityComments || "",
@@ -460,6 +465,8 @@ export default {
                 )}-${`${d.getDate()}`.padStart(2, "0")}`;
             }
 
+            console.log("submit", this.edit);
+
             edit(this.town.id, {
                 name: this.edit.name,
                 priority: this.edit.priority || null,
@@ -484,6 +491,13 @@ export default {
                 population_total: this.edit.populationTotal || null,
                 population_couples: this.edit.populationCouples || null,
                 population_minors: this.edit.populationMinors || null,
+                population_minors_0_3: this.edit.populationMinors0To3 || null,
+                population_minors_3_6: this.edit.populationMinors3To6 || null,
+                population_minors_6_12: this.edit.populationMinors6To12 || null,
+                population_minors_12_16:
+                    this.edit.populationMinors12To16 || null,
+                population_minors_16_18:
+                    this.edit.populationMinors16To18 || null,
                 electricity_type: this.edit.electricityType,
                 electricity_comments: this.edit.electricityComments,
                 access_to_sanitary: this.edit.accessToSanitary,

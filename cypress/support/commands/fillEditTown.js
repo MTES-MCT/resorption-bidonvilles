@@ -151,6 +151,66 @@ Cypress.Commands.add("fillEditTown", shantytown => {
         cy.get("[data-cy-field='population_minors']").clear();
     }
 
+    // population minors 0-3y
+    if (
+        shantytown.population_minors_0_3 !== undefined &&
+        shantytown.population_minors_0_3 !== null
+    ) {
+        cy.get("[data-cy-field='population_minors_0_3']").typeReplace(
+            shantytown.population_minors_0_3
+        );
+    } else {
+        cy.get("[data-cy-field='population_minors_0_3']").clear();
+    }
+
+    // population minors 3-6y
+    if (
+        shantytown.population_minors_3_6 !== undefined &&
+        shantytown.population_minors_3_6 !== null
+    ) {
+        cy.get("[data-cy-field='population_minors_3_6']").typeReplace(
+            shantytown.population_minors_3_6
+        );
+    } else {
+        cy.get("[data-cy-field='population_minors_3_6']").clear();
+    }
+
+    // population minors 6-12y
+    if (
+        shantytown.population_minors_6_12 !== undefined &&
+        shantytown.population_minors_6_12 !== null
+    ) {
+        cy.get("[data-cy-field='population_minors_6_12']").typeReplace(
+            shantytown.population_minors_6_12
+        );
+    } else {
+        cy.get("[data-cy-field='population_minors_6_12']").clear();
+    }
+
+    // population minors 12-16y
+    if (
+        shantytown.population_minors_12_16 !== undefined &&
+        shantytown.population_minors_12_16 !== null
+    ) {
+        cy.get("[data-cy-field='population_minors_12_16']").typeReplace(
+            shantytown.population_minors_12_16
+        );
+    } else {
+        cy.get("[data-cy-field='population_minors_12_16']").clear();
+    }
+
+    // population minors 16-18y
+    if (
+        shantytown.population_minors_16_18 !== undefined &&
+        shantytown.population_minors_16_18 !== null
+    ) {
+        cy.get("[data-cy-field='population_minors_16_18']").typeReplace(
+            shantytown.population_minors_16_18
+        );
+    } else {
+        cy.get("[data-cy-field='population_minors_16_18']").clear();
+    }
+
     // social origins
     if (shantytown.social_origins && shantytown.social_origins.length > 0) {
         cy.get('[data-cy-field="social_origins"]').each($el => {
