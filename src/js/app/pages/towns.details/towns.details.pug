@@ -430,6 +430,21 @@
                                 <p v-if="town.populationMinors !== undefined">
                                     <strong>Nombre de mineurs :</strong> <span data-cy-data="population_minors">{{ town.populationMinors !== null ? town.populationMinors : 'inconnu' }}</span>
                                 </p>
+                                <p v-if="town.populationMinors0To3 !== undefined">
+                                    <strong>0 - 3 ans :</strong> <span data-cy-data="population_minors_0_3">{{ town.populationMinors0To3 !== null ? town.populationMinors0To3 : 'inconnu' }}</span>
+                                </p>
+                                <p v-if="town.populationMinors3To6 !== undefined">
+                                    <strong>3 - 6 ans :</strong> <span data-cy-data="population_minors_3_6">{{ town.populationMinors3To6 !== null ? town.populationMinors3To6 : 'inconnu' }}</span>
+                                </p>
+                                <p v-if="town.populationMinors6To12 !== undefined">
+                                    <strong>6 - 12 ans :</strong> <span data-cy-data="population_minors_6_12">{{ town.populationMinors6To12 !== null ? town.populationMinors6To12 : 'inconnu' }}</span>
+                                </p>
+                                <p v-if="town.populationMinors12To16 !== undefined">
+                                    <strong>12 - 16 ans :</strong> <span data-cy-data="population_minors_12_16">{{ town.populationMinors12To16 !== null ? town.populationMinors12To16 : 'inconnu' }}</span>
+                                </p>
+                                <p v-if="town.populationMinors16To18 !== undefined">
+                                    <strong>16 - 18 ans :</strong> <span data-cy-data="population_minors_16_18">{{ town.populationMinors16To18 !== null ? town.populationMinors16To18 : 'inconnu' }}</span>
+                                </p>
                                 <p v-if="town.socialOrigins !== undefined" data-cy-data="social_origins">
                                     <strong>Origines :</strong>
                                     <ul v-if="town.socialOrigins.length > 0">
@@ -711,6 +726,71 @@
                                 <p>Laissez ce champ vide si l'information est inconnue</p>
                                 <div class="input__group">
                                     <input data-cy-field="population_minors" type="number" v-model="edit.populationMinors">
+                                </div>
+                            </div>
+
+                            <div class="form__group">
+                                <label v-bind:class="{ error: fieldErrors.population_minors_0_3 }">0 - 3 ans :</label>
+                                <p class="error" v-if="fieldErrors.population_minors_0_3">
+                                    <ul>
+                                        <li v-for="error in fieldErrors.population_minors_0_3">{{ error }}</li>
+                                    </ul>
+                                </p>
+                                <p>Laissez ce champ vide si l'information est inconnue</p>
+                                <div class="input__group">
+                                    <input data-cy-field="population_minors_0_3" type="number" v-model="edit.populationMinors0To3">
+                                </div>
+                            </div>
+
+                            <div class="form__group">
+                                <label v-bind:class="{ error: fieldErrors.population_minors_3_6 }">3 - 6 ans :</label>
+                                <p class="error" v-if="fieldErrors.population_minors_3_6">
+                                    <ul>
+                                        <li v-for="error in fieldErrors.population_minors_3_6">{{ error }}</li>
+                                    </ul>
+                                </p>
+                                <p>Laissez ce champ vide si l'information est inconnue</p>
+                                <div class="input__group">
+                                    <input data-cy-field="population_minors_3_6" type="number" v-model="edit.populationMinors3To6">
+                                </div>
+                            </div>
+
+                            <div class="form__group">
+                                <label v-bind:class="{ error: fieldErrors.population_minors_6_12 }">6 - 12 ans :</label>
+                                <p class="error" v-if="fieldErrors.population_minors_6_12">
+                                    <ul>
+                                        <li v-for="error in fieldErrors.population_minors_6_12">{{ error }}</li>
+                                    </ul>
+                                </p>
+                                <p>Laissez ce champ vide si l'information est inconnue</p>
+                                <div class="input__group">
+                                    <input data-cy-field="population_minors_6_12" type="number" v-model="edit.populationMinors6To12">
+                                </div>
+                            </div>
+
+                            <div class="form__group">
+                                <label v-bind:class="{ error: fieldErrors.population_minors_12_16 }">12 - 16 ans :</label>
+                                <p class="error" v-if="fieldErrors.population_minors_12_16">
+                                    <ul>
+                                        <li v-for="error in fieldErrors.population_minors_12_16">{{ error }}</li>
+                                    </ul>
+                                </p>
+                                <p>Laissez ce champ vide si l'information est inconnue</p>
+                                <div class="input__group">
+                                    <input data-cy-field="population_minors_12_16" type="number" v-model="edit.populationMinors12To16">
+                                </div>
+                            </div>
+
+                            <div class="form__group">
+                                <label v-bind:class="{ error: fieldErrors.population_minors_16_18 }">16 - 18 ans :</label>
+                                <p class="error" v-if="fieldErrors.population_minors_16_18">
+                                    <ul>
+                                        <li v-for="error in fieldErrors.population_minors_16_18">{{ error }}</li>
+                                    </ul>
+                                </p>
+                                <p>Laissez ce champ vide si l'information est inconnue</p>
+                                <div class="input__group">
+                                    <input data-cy-field="population_minors_16_18" type="number" v-model="edit.populationMinors16To18">
                                 </div>
                             </div>
 

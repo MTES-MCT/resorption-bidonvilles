@@ -191,6 +191,31 @@ export default {
                                             "Laissez ce champ vide si l'information est inconnue",
                                         mandatory: false
                                     },
+                                    population_minors_0_3: {
+                                        type: "number",
+                                        label: "0 - 3 ans",
+                                        mandatory: false
+                                    },
+                                    population_minors_3_6: {
+                                        type: "number",
+                                        label: "3 - 6 ans",
+                                        mandatory: false
+                                    },
+                                    population_minors_6_12: {
+                                        type: "number",
+                                        label: "6 - 12 ans",
+                                        mandatory: false
+                                    },
+                                    population_minors_12_16: {
+                                        type: "number",
+                                        label: "12 - 16 ans",
+                                        mandatory: false
+                                    },
+                                    population_minors_16_18: {
+                                        type: "number",
+                                        label: "16 - 18 ans",
+                                        mandatory: false
+                                    },
                                     social_origins: {
                                         type: "checkbox",
                                         options: socialOrigins.map(
