@@ -465,8 +465,6 @@ export default {
                 )}-${`${d.getDate()}`.padStart(2, "0")}`;
             }
 
-            console.log("submit", this.edit);
-
             edit(this.town.id, {
                 name: this.edit.name,
                 priority: this.edit.priority || null,
