@@ -33,17 +33,25 @@
                 </template>
                 <template slot="title">
                     <div class="text-display-xl mb-2">{{ title }}</div>
-                    <div v-if="!isLoading">
-                        <div>{{ populationTotal }} personnes</div>
+                    <div class="flex items-center">
+                        <div class="mr-4">
+                            <img :src="locationImg" width="80" height="80" />
+                        </div>
                         <div>
-                            {{ filteredShantytowns.length }} sites
-                            <span
-                                v-if="
-                                    hasJusticePermission && justiceTotal.length
-                                "
-                                >dont {{ justiceTotal }} site(s) avec une
-                                procédure judiciaire</span
-                            >
+                            <div>
+                                <div>{{ populationTotal }} personnes</div>
+                                <div>
+                                    {{ filteredShantytowns.length }} sites
+                                    <span
+                                        v-if="
+                                            hasJusticePermission &&
+                                                justiceTotal.length
+                                        "
+                                        >dont {{ justiceTotal }} site(s) avec
+                                        une procédure judiciaire</span
+                                    >
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </template>
@@ -141,7 +149,6 @@
                                 }
                             ]"
                         />
-
                     </TownsListFilters>
                     <TownsListSort v-model="sort" class="ml-10" />
                 </div>
@@ -286,6 +293,31 @@ export default {
         this.load();
     },
     computed: {
+        locationImg() {
+            // Guadeloupe, Martinique, Guyane, Réunion, Mayotte
+            const unsupportedRegions = ["01", "02", "03", "04", "06"];
+            const locationFilter = this.filters.location;
+            const isRegion = locationFilter && locationFilter.type === "Région";
+            const isUnsupportedRegion =
+                isRegion && unsupportedRegions.includes(locationFilter.code);
+            // TODO : Remove when api will return departement
+            const isInvalidDepartement =
+                !isRegion && locationFilter && !locationFilter.departement;
+
+            if (
+                !locationFilter ||
+                isInvalidDepartement ||
+                isUnsupportedRegion
+            ) {
+                return "/img/regions/fallback.svg";
+            }
+
+            if (isRegion) {
+                return `/img/regions/${this.filters.location.code}.svg`;
+            }
+
+            return `/img/departements/${this.filters.location.departement}.svg`;
+        },
         currentLocation() {
             return (
                 this.filters.location || {
