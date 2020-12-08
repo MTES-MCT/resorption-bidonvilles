@@ -2,7 +2,7 @@ module.exports = {
     purge: {
         mode: "layers",
         layers: ["base", "components", "utilities"],
-        content: ["./src/**/*.vue"]
+        content: ["./src/**/*.vue", "./src/**/*.js"]
     },
     future: {
         removeDeprecatedGapUtilities: true,
