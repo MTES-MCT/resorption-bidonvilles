@@ -2,7 +2,7 @@
     <div
         :class="[
             'rounded-sm cursor-pointer border',
-            isHover ? 'border-primary ' : 'cardShadow'
+            isHover ? 'bg-blue100 border-transparent' : ''
         ]"
         @mouseenter="isHover = true"
         @mouseleave="isHover = false"
@@ -25,7 +25,7 @@
                 <div class="md:grid cardGridTemplateColumns gap-10 px-6 py-4">
                     <!-- first column -->
                     <div>
-                        <div class="flex items-center">
+                        <div class="flex items-center customAlign">
                             <Icon
                                 icon="map-marker-alt"
                                 class="text-lg"
@@ -36,7 +36,7 @@
                             </div>
                         </div>
                         <div class="ml-5">
-                            <div class="mt-2">
+                            <div>
                                 {{ shantytown.statusName }} depuis
                                 {{ shantytown.statusSince }}
                             </div>
@@ -57,13 +57,19 @@
                             </div>
                             <div>
                                 <Icon icon="male" />{{ " " }}
-                                <Icon icon="male" />{{ " " }}
-                                <Icon icon="male" />{{ " " }}
-                                <Icon icon="male" />
+                                <span v-if="shantytown.populationTotal >= 25">
+                                    <Icon icon="male" />{{ " " }}</span
+                                >
+                                <span v-if="shantytown.populationTotal >= 75"
+                                    ><Icon icon="male" />{{ " " }}</span
+                                >
+                                <span v-if="shantytown.populationTotal >= 100"
+                                    ><Icon icon="male"
+                                /></span>
                             </div>
                         </div>
                         <div
-                            class="mt-2 flex items-center"
+                            class="flex items-center"
                             v-for="origin in shantytown.socialOrigins"
                             :key="origin.id"
                         >
@@ -132,9 +138,7 @@
                         </div>
                     </div>
                 </div>
-                <div
-                    class="border-t flex justify-between items-center px-4 py-2"
-                >
+                <div class="flex justify-between items-center px-4 pt-4 ">
                     <Tag class="text-xs">
                         {{ lastUpdate }}
                     </Tag>
@@ -149,7 +153,7 @@
                                     variant="secondaryText"
                                     icon="pen"
                                     iconPosition="left"
-                                    class="text-display-sm hover:underline"
+                                    class="text-display-sm hover:underline -mb-1"
                                     >Mettre à jour</Button
                                 >
                             </router-link>
@@ -157,7 +161,7 @@
                         <Button
                             variant="primaryText"
                             icon="arrow-right"
-                            class="text-display-sm hover:underline"
+                            class="text-display-sm hover:underline -mb-1"
                             >Voir la fiche du site</Button
                         >
                     </div>
@@ -264,5 +268,8 @@ export default {
 <style scoped>
 .cardGridTemplateColumns {
     grid-template-columns: 160px 208px 164px auto;
+}
+.customAlign {
+    height: 30px;
 }
 </style>

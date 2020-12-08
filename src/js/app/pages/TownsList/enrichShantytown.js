@@ -28,33 +28,36 @@ export default function enrichShantytown(shantytown, fieldTypes) {
     // justice statuses
     const justiceStatuses = [];
 
-    if (
-        shantytown.justiceChallenged === true ||
-        shantytown.justiceRendered === true
-    ) {
+    if (shantytown.ownerComplaint === true) {
         justiceStatuses.push({
-            icon: "balance-scale",
-            label: "Décision rendue",
-            date: shantytown.justiceRenderedAt
+            icon: "scroll",
+            label: "Plainte déposée"
         });
+    }
 
-        if (shantytown.justiceChallenged === true) {
-            justiceStatuses.push({
-                icon: "balance-scale",
-                label: "Contentieux"
-            });
-        }
-    } else if (shantytown.justiceProcedure === true) {
+    if (
+        shantytown.justiceProcedure &&
+        !shantytown.justiceChallenged &&
+        !shantytown.justiceRendered
+    ) {
         justiceStatuses.push({
             icon: "balance-scale",
             label: "Procédure en cours"
         });
     }
 
-    if (shantytown.ownerComplaint === true) {
+    if (shantytown.justiceProcedure && shantytown.justiceRendered) {
         justiceStatuses.push({
             icon: "balance-scale",
-            label: "Plainte déposée"
+            label: "Décision rendue",
+            date: shantytown.justiceRenderedAt
+        });
+    }
+
+    if (shantytown.justiceProcedure && shantytown.justiceChallenged === true) {
+        justiceStatuses.push({
+            icon: "balance-scale",
+            label: "Contentieux"
         });
     }
 
