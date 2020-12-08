@@ -33,8 +33,27 @@ export function filterShantytowns(shantytowns, filters) {
             return false;
         }
 
+        if (
+            filters.origin.length > 0 &&
+            !checkOrigin(shantytown, filters.origin)
+        ) {
+            return false;
+        }
+
         return true;
     });
+}
+
+function checkOrigin(shantytown, filters) {
+    if (!shantytown.socialOrigins) {
+        return false;
+    }
+
+    const origins = shantytown.socialOrigins.map(origin => origin.id);
+
+    const filteredArray = origins.filter(value => filters.includes(value));
+
+    return filteredArray.length;
 }
 
 function checkLocation(shantytown, filters) {

@@ -2,7 +2,8 @@
     <div :class="['flex items-center', color]">
         <div class="mr-2 w-4">
             <Icon icon="check" v-if="value === true" />
-            <Icon icon="times" v-if="value === false || value === null" />
+            <Icon icon="times" v-if="value === false" />
+            <Icon icon="question" v-if="value === null" />
         </div>
         <slot />
     </div>

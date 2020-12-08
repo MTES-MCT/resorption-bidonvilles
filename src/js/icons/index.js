@@ -54,6 +54,7 @@ import {
     faMapMarkerAlt,
     faBook,
     faFileSignature,
+    faChevronUp,
     faChevronDown,
     faChevronLeft,
     faChevronRight,
@@ -66,7 +67,8 @@ import {
     faExclamationTriangle,
     faBan,
     faMale,
-    faBalanceScale
+    faBalanceScale,
+    faScroll
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(faFlag);
@@ -121,6 +123,7 @@ library.add(faHandHoldingMedical);
 library.add(faMapMarkerAlt);
 library.add(faBook);
 library.add(faFileSignature);
+library.add(faChevronUp);
 library.add(faChevronLeft);
 library.add(faChevronRight);
 library.add(faArrowLeft);
@@ -135,3 +138,4 @@ library.add(faPen);
 library.add(faExclamationTriangle);
 library.add(faMale);
 library.add(faBalanceScale);
+library.add(faScroll);
