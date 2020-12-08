@@ -1,5 +1,5 @@
 <template>
-    <div :class="`radio-${variant}`">
+    <div :class="[`radio-${variant}`, ...containerClasses]">
         <!-- Card Variant -->
         <CheckableCard v-if="variant === 'card'" :isChecked="isChecked">
             <input
@@ -17,20 +17,23 @@
             v-else
             :class="[
                 'inline-flex cursor-pointer',
-                info ? 'items-start' : 'items-center'
+                info ? 'items-start' : 'items-center',
+                ...labelClasses
             ]"
         >
             <input
                 type="radio"
-                class="form-checkbox h-5 w-5"
+                :class="radioClasses"
                 v-bind="filteredProps"
                 :checked="isChecked"
                 @change="onChange"
             />
-            <div class="ml-2">
-                <div>{{ label }}</div>
-                <div v-if="info" class="text-xs">{{ info }}</div>
-            </div>
+            <slot :isChecked="isChecked">
+                <div class="ml-2">
+                    <div>{{ label }}</div>
+                    <div v-if="info" class="text-xs">{{ info }}</div>
+                </div>
+            </slot>
         </label>
     </div>
 </template>
@@ -49,6 +52,12 @@ export default {
         },
         label: {
             type: String
+        },
+        containerClasses: {
+            type: [Array, String]
+        },
+        labelClasses: {
+            type: [Array, String]
         },
         value: {
             type: [String, Boolean, Number]
@@ -69,6 +78,12 @@ export default {
     computed: {
         isChecked() {
             return this.value === this.checkValue;
+        },
+        radioClasses() {
+            return {
+                default: "form-checkbox h-5 w-5",
+                invisible: "appearance-none absolute invisible"
+            }[this.variant];
         }
     }
 };

@@ -4,6 +4,8 @@
             <Button
                 variant="custom"
                 size="sm"
+                :icon="isOpen ? 'chevron-up' : 'chevron-down'"
+                iconPosition="right"
                 :class="[
                     'px-4 rounded focus:outline-none border border-primary  ',
                     isOpen

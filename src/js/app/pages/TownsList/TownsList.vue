@@ -71,7 +71,7 @@
                 </template>
             </TownsListHeader>
             <div v-if="!isLoading">
-                <div class="md:flex items-end mb-6 justify-between">
+                <div class="md:flex items-end mb-6">
                     <TownsListFilters class="">
                         <TownsListFilter
                             title="Nombre de personnes"
@@ -123,6 +123,7 @@
                             ]"
                         />
                     </TownsListFilters>
+                    <TownsListSort v-model="sort" class="ml-10" />
                 </div>
 
                 <div>
@@ -130,7 +131,7 @@
                         v-for="shantytown in filteredShantytownsByPage"
                         :key="shantytown.id"
                         :shantytown="shantytown"
-                        class="mb-6 hover:border-primary"
+                        class="mb-6"
                     />
                     <div class="flex flex-end mb-12">
                         <Pagination
@@ -179,11 +180,13 @@ import { filterShantytowns } from "./filterShantytowns";
 import Export from "#app/components/export2/Export.vue";
 // import Export from "#app/components/export/export.vue";
 import Spinner from "#app/components/ui/Spinner";
+import TownsListSort from "./TownsListSort/TownsListSort";
 
 const PER_PAGE = 20;
 
 export default {
     components: {
+        TownsListSort,
         Spinner,
         TownCard,
         PrivateContainer,
@@ -200,13 +203,16 @@ export default {
         const permission = getPermission("shantytown.list");
 
         return {
+            sort: "createdAt",
             filters: {
                 population: [],
                 fieldType: [],
                 justice: [],
+                origin: [],
                 status: "open",
                 location: null
             },
+
             currentPage: 1,
             hasNationalPermission: permission.geographic_level === "nation",
             hasJusticePermission: permission.data_justice === true,
@@ -285,7 +291,11 @@ export default {
             ).length;
         },
         filteredShantytowns() {
-            return filterShantytowns(this.shantytowns, this.filters);
+            return filterShantytowns(this.shantytowns, this.filters).sort(
+                (a, b) => {
+                    return b[this.sort] - a[this.sort];
+                }
+            );
         },
         filteredShantytownsByPage() {
             return this.filteredShantytowns.slice(
