@@ -122,6 +122,26 @@
                                 }
                             ]"
                         />
+                        <TownsListFilter
+                            title="Origine"
+                            class="mr-2"
+                            v-model="filters.origin"
+                            :options="[
+                                {
+                                    value: 1,
+                                    label: 'Français'
+                                },
+                                {
+                                    value: 2,
+                                    label: 'Union européenne'
+                                },
+                                {
+                                    value: 3,
+                                    label: 'Hors Union européenne'
+                                }
+                            ]"
+                        />
+
                     </TownsListFilters>
                     <TownsListSort v-model="sort" class="ml-10" />
                 </div>
