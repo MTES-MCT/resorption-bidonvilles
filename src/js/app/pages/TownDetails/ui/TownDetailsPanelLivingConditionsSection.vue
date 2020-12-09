@@ -1,11 +1,13 @@
 <template>
     <TownDetailsPanelSection>
-        <div class="flex">
-            <Icon :class="colorClass" :icon="icon" />
+        <div class="flex items-center">
+            <Icon :class="[colorClass, 'mr-1', 'font-bold']" :icon="icon" />
             <div>
                 <div class="flex items-center">
-                    <div class="font-bold">{{ title }} :</div>
-                    <div :class="colorClass">{{ text }}</div>
+                    <div :class="[colorClass, 'font-bold', 'mr-1']">
+                        {{ title }}:
+                    </div>
+                    <div>{{ text }}</div>
                 </div>
                 <slot />
             </div>
@@ -27,11 +29,11 @@ export default {
     },
     computed: {
         colorClass() {
-            return {
-                null: "text-G500",
-                false: "text-red",
-                true: "text-green"
-            }[this.value];
+            if (this.value === true) {
+                return "text-green";
+            }
+
+            return "text-red";
         },
         icon() {
             return {
