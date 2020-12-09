@@ -243,6 +243,8 @@ import Export from "#app/components/export2/Export.vue";
 // import Export from "#app/components/export/export.vue";
 import Spinner from "#app/components/ui/Spinner";
 import TownsListSort from "./TownsListSort/TownsListSort";
+import store from "#app/store";
+import { mapGetters } from "vuex";
 
 const PER_PAGE = 20;
 
@@ -279,9 +281,7 @@ export default {
             currentPage: 1,
             hasNationalPermission: permission.geographic_level === "nation",
             hasJusticePermission: permission.data_justice === true,
-            shantytowns: [],
-            error: null,
-            state: null,
+
             fieldTypes,
             exportIsVisible: false
         };
@@ -293,27 +293,10 @@ export default {
         hasPermission(...args) {
             return hasPermission(...args);
         },
-        /**
-         * Tries fetching the data from the API
-         *
-         * Please note that this cannot be done if the data has already been loaded
-         * before.
-         */
         load() {
-            // loading data is forbidden if the component is already loading or loaded
-            if ([null, "error"].indexOf(this.state) === -1) {
-                return;
+            if (!this.shantytowns.length) {
+                store.dispatch("fetchTowns");
             }
-
-            this.state = "loading";
-            this.error = null;
-
-            fetchAll().then(shantytowns => {
-                this.shantytowns = shantytowns.map(s =>
-                    enrichShantytown(s, this.fieldTypes)
-                );
-                this.state = "loaded";
-            });
         },
         showExport() {
             setTimeout(() => {
@@ -329,6 +312,11 @@ export default {
         this.load();
     },
     computed: {
+        ...mapGetters({
+            shantytowns: "towns",
+            isLoading: "townsLoading",
+            error: "townsError"
+        }),
         locationImg() {
             // Guadeloupe, Martinique, Guyane, Réunion, Mayotte
             const unsupportedRegions = ["01", "02", "03", "04", "06"];
@@ -400,9 +388,6 @@ export default {
         },
         nbPages() {
             return Math.ceil(this.filteredShantytowns.length / PER_PAGE);
-        },
-        isLoading() {
-            return this.state === "loading";
         }
     }
 };
