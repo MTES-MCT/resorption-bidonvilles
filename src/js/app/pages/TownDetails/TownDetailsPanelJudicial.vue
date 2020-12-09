@@ -3,45 +3,68 @@
         <template v-slot:title>Procédures judiciaires</template>
         <template v-slot:body>
             <TownDetailsPanelSection>
-                <div class="flex items-center justify-between">
-                    <div class="font-bold">
-                        Dépôt de plainte du propriétaire
+                <div class="grid grid-cols-2">
+                    <div class="flex items-center">
+                        <Icon icon="scroll" class="mr-2" />
+                        <div class="font-bold">
+                            Dépôt de plainte du propriétaire
+                        </div>
                     </div>
                     <div>{{ town.ownerComplaint ? "oui" : "non" }}</div>
                 </div>
             </TownDetailsPanelSection>
+            <div class="flex">
+                <Icon icon="balance-scale" class="mr-4 mt-5" />
+                <div class="flex-1">
+                    <TownDetailsPanelSection>
+                        <div class="grid grid-cols-2">
+                            <div class="font-bold">
+                                Existence d’une procédure judiciaire
+                            </div>
+
+                            <div class="-ml-5">
+                                {{ town.justiceProcedure ? "oui" : "non" }}
+                            </div>
+                        </div>
+                    </TownDetailsPanelSection>
+                    <TownDetailsPanelSection>
+                        <div class="grid grid-cols-2">
+                            <div class="font-bold">
+                                Décision de justice rendue
+                            </div>
+
+                            <div class="-ml-5">
+                                {{
+                                    town.justiceRenderedAt
+                                        ? `rendue le ${formatDate(
+                                              town.justiceRenderedAt,
+                                              "y/m/d"
+                                          )}`
+                                        : "non"
+                                }}
+                            </div>
+                        </div>
+                    </TownDetailsPanelSection>
+                    <TownDetailsPanelSection>
+                        <div class="grid grid-cols-2">
+                            <div class="font-bold">Contentieux</div>
+
+                            <div class="-ml-5">
+                                {{ town.justiceChallenged ? "oui" : "non" }}
+                            </div>
+                        </div>
+                    </TownDetailsPanelSection>
+                </div>
+            </div>
+
             <TownDetailsPanelSection>
-                <div class="flex items-center justify-between">
-                    <div class="font-bold">
-                        Existence d’une procédure judiciaire
+                <div class="grid grid-cols-2">
+                    <div class="flex items-center">
+                        <img :src="policeSiren" class="w-6 h-6 mr-2" />
+                        <div class="font-bold">
+                            Concours de la force publique
+                        </div>
                     </div>
-                    <div>{{ town.justiceProcedure ? "oui" : "non" }}</div>
-                </div>
-            </TownDetailsPanelSection>
-            <TownDetailsPanelSection>
-                <div class="flex items-center justify-between">
-                    <div class="font-bold">Décision de justice rendue</div>
-                    <div>
-                        {{
-                            town.justiceRenderedAt
-                                ? `rendue le ${formatDate(
-                                      town.justiceRenderedAt,
-                                      "y/m/d"
-                                  )}`
-                                : "non"
-                        }}
-                    </div>
-                </div>
-            </TownDetailsPanelSection>
-            <TownDetailsPanelSection>
-                <div class="flex items-center justify-between">
-                    <div class="font-bold">Contentieux</div>
-                    <div>{{ town.justiceChallenged ? "oui" : "non" }}</div>
-                </div>
-            </TownDetailsPanelSection>
-            <TownDetailsPanelSection>
-                <div class="flex items-center justify-between">
-                    <div class="font-bold">Concours de la force publique</div>
                     <div>{{ policeStatusLabel }}</div>
                 </div>
             </TownDetailsPanelSection>
@@ -52,6 +75,7 @@
 <script>
 import TownDetailsPanel from "./ui/TownDetailsPanel.vue";
 import TownDetailsPanelSection from "./ui/TownDetailsPanelSection.vue";
+import policeSiren from "../TownsList/assets/police_siren.svg";
 
 export default {
     props: {
@@ -69,6 +93,9 @@ export default {
     },
     components: { TownDetailsPanel, TownDetailsPanelSection },
     computed: {
+        policeSiren() {
+            return policeSiren;
+        },
         policeStatusLabel() {
             if (this.town.policeStatus === "none") {
                 return "Non demandé";
