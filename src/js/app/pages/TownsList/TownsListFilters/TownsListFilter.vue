@@ -7,7 +7,7 @@
                 :icon="isOpen ? 'chevron-up' : 'chevron-down'"
                 iconPosition="right"
                 :class="[
-                    'px-4 rounded focus:outline-none border border-primary  ',
+                    'px-4 rounded focus:outline-none border border-primary whitespace-nowrap',
                     isOpen
                         ? 'bg-primary text-white hover:text-white focus:text-white'
                         : 'hover:bg-blue200 hover:text-primary text-primary'
@@ -34,7 +34,10 @@
                         <div
                             class="flex items-center justify-between w-full  hover:bg-blue200 py-2 px-3 text-primary"
                         >
-                            <div class="flex-1">{{ option.label }}</div>
+                            <slot :label="option.label">
+                                <div class="flex-1">{{ option.label }}</div>
+                            </slot>
+
                             <div class="ml-4" v-if="isChecked">
                                 <Icon icon="check" />
                             </div>

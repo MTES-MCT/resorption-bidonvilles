@@ -40,6 +40,35 @@ export function filterShantytowns(shantytowns, filters) {
             return false;
         }
 
+        if (
+            filters.conditions.length > 0 &&
+            !checkConditions(shantytown, filters.conditions)
+        ) {
+            return false;
+        }
+
+        return true;
+    });
+}
+
+function checkConditions(shantytown, filters) {
+    return filters.some(filter => {
+        if (filter === "accessToSanitary") {
+            return !shantytown.accessToSanitary;
+        }
+
+        if (filter === "accessToWater") {
+            return !shantytown.accessToWater;
+        }
+
+        if (filter === "accessToTrash") {
+            return !shantytown.trashEvacuation;
+        }
+
+        if (filter === "accessToElectricity") {
+            return !shantytown.electricityType.value;
+        }
+
         return true;
     });
 }
