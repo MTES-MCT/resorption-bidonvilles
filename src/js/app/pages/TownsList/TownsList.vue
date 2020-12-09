@@ -33,7 +33,7 @@
                 </template>
                 <template slot="title">
                     <div class="text-display-xl mb-2">{{ title }}</div>
-                    <div class="flex items-center">
+                    <div class="flex items-center" v-if="!isLoading">
                         <div class="mr-4">
                             <img :src="locationImg" width="80" height="80" />
                         </div>
@@ -79,11 +79,11 @@
                 </template>
             </TownsListHeader>
             <div v-if="!isLoading">
-                <div class="md:flex items-end mb-6">
+                <div class="md:flex items-end mb-4 justify-between">
                     <TownsListFilters class="">
                         <TownsListFilter
                             title="Nombre de personnes"
-                            class="mr-2"
+                            class="mr-2 mb-2"
                             v-model="filters.population"
                             :options="[
                                 { value: null, label: 'Inconnu' },
@@ -100,7 +100,7 @@
                         />
                         <TownsListFilter
                             title="Type de terrain"
-                            class="mr-2"
+                            class="mr-2 mb-2"
                             v-model="filters.fieldType"
                             :options="
                                 fieldTypes.map(f => ({
@@ -111,7 +111,7 @@
                         />
                         <TownsListFilter
                             title="Procédure judiciaire"
-                            class="mr-2"
+                            class="mr-2 mb-2"
                             v-model="filters.justice"
                             :options="[
                                 { value: null, label: 'Inconnu' },
@@ -132,7 +132,7 @@
                         />
                         <TownsListFilter
                             title="Origine"
-                            class="mr-2"
+                            class="mr-2 mb-2"
                             v-model="filters.origin"
                             :options="[
                                 {
@@ -149,8 +149,43 @@
                                 }
                             ]"
                         />
+                        <TownsListFilter
+                            title="Conditions de vie"
+                            class="mr-2 mb-2"
+                            v-model="filters.conditions"
+                            :options="[
+                                {
+                                    value: 'accessToWater',
+                                    label: 'eau'
+                                },
+                                {
+                                    value: 'accessToElectricity',
+                                    label: 'électricité'
+                                },
+                                {
+                                    value: 'accessToTrash',
+                                    label: 'évac. des déchets'
+                                },
+                                {
+                                    value: 'accessToSanitary',
+                                    label: 'toilettes'
+                                }
+                            ]"
+                        >
+                            <template v-slot:default="{ label }">
+                                <div class="text-red flex items-center">
+                                    <div class="mr-2">
+                                        <Icon icon="times" />/<Icon
+                                            icon="question"
+                                            class="text-xs"
+                                        />
+                                    </div>
+                                    {{ label }}
+                                </div>
+                            </template>
+                        </TownsListFilter>
                     </TownsListFilters>
-                    <TownsListSort v-model="sort" class="ml-10" />
+                    <TownsListSort v-model="sort" class="mb-2" />
                 </div>
 
                 <div>
@@ -236,6 +271,7 @@ export default {
                 fieldType: [],
                 justice: [],
                 origin: [],
+                conditions: [],
                 status: "open",
                 location: null
             },

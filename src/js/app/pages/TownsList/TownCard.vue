@@ -37,8 +37,10 @@
                         </div>
                         <div class="ml-5">
                             <div>
-                                {{ shantytown.statusName }} depuis
-                                {{ shantytown.statusSince }}
+                                {{ shantytown.statusName }} depuis <br />
+                                <span class="font-bold">{{
+                                    shantytown.statusSince
+                                }}</span>
                             </div>
                         </div>
                     </div>
