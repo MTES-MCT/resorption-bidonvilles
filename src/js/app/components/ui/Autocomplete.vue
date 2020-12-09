@@ -205,7 +205,7 @@ export default {
             show: true,
             focused: false,
             value: "",
-            searchInput: "",
+            searchInput: this.defaultValue || "",
             results: []
         };
     },

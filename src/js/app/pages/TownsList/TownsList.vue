@@ -13,7 +13,10 @@
                 <h1 class="text-display-md text-center mb-4">
                     Rechercher un site, une commune, un département... ?
                 </h1>
-                <TownsListSearchBar v-model="filters.location" />
+                <TownsListSearchBar
+                    :value="filters.location"
+                    @input="val => updateFilters('location', val)"
+                />
             </PrivateContainer>
         </div>
         <PrivateContainer class="pt-10">
@@ -21,13 +24,13 @@
                 <template slot="filters">
                     <TownsListHeaderTab
                         :active="filters.status === 'open'"
-                        @click="filters.status = 'open'"
+                        @click="() => updateFilters('status', 'open')"
                         class="mr-8"
                         >Sites existants</TownsListHeaderTab
                     >
                     <TownsListHeaderTab
                         :active="filters.status === 'close'"
-                        @click="filters.status = 'close'"
+                        @click="() => updateFilters('status', 'close')"
                         >Sites fermés</TownsListHeaderTab
                     >
                 </template>
@@ -84,7 +87,8 @@
                         <TownsListFilter
                             title="Nombre de personnes"
                             class="mr-2 mb-2"
-                            v-model="filters.population"
+                            :value="filters.population"
+                            @input="val => updateFilters('population', val)"
                             :options="[
                                 { value: null, label: 'Inconnu' },
                                 { value: '-9', label: 'Moins de 10 personnes' },
@@ -101,7 +105,8 @@
                         <TownsListFilter
                             title="Type de terrain"
                             class="mr-2 mb-2"
-                            v-model="filters.fieldType"
+                            :value="filters.fieldType"
+                            @input="val => updateFilters('fieldType', val)"
                             :options="
                                 fieldTypes.map(f => ({
                                     label: f.label,
@@ -112,7 +117,8 @@
                         <TownsListFilter
                             title="Procédure judiciaire"
                             class="mr-2 mb-2"
-                            v-model="filters.justice"
+                            :value="filters.justice"
+                            @input="val => updateFilters('justice', val)"
                             :options="[
                                 { value: null, label: 'Inconnu' },
                                 { value: 'none', label: 'Aucune' },
@@ -133,7 +139,8 @@
                         <TownsListFilter
                             title="Origine"
                             class="mr-2 mb-2"
-                            v-model="filters.origin"
+                            :value="filters.origin"
+                            @input="val => updateFilters('origin', val)"
                             :options="[
                                 {
                                     value: 1,
@@ -152,7 +159,8 @@
                         <TownsListFilter
                             title="Conditions de vie"
                             class="mr-2 mb-2"
-                            v-model="filters.conditions"
+                            :value="filters.conditions"
+                            @input="val => updateFilters('conditions', val)"
                             :options="[
                                 {
                                     value: 'accessToWater',
@@ -185,7 +193,11 @@
                             </template>
                         </TownsListFilter>
                     </TownsListFilters>
-                    <TownsListSort v-model="sort" class="mb-2" />
+                    <TownsListSort
+                        :value="sort"
+                        @input="updateSort"
+                        class="mb-2"
+                    />
                 </div>
 
                 <div>
@@ -225,9 +237,7 @@
 <script>
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer.vue";
 import PrivateLayout from "#app/components/PrivateLayout";
-import { all as fetchAll } from "#helpers/api/town";
 import TownCard from "./TownCard";
-import enrichShantytown from "./enrichShantytown";
 import TownsListSearchBar from "./TownsListSearchBar";
 import TownsListHeader from "./TownsListHeader/TownsListHeader";
 import TownsListHeaderTab from "./TownsListHeader/TownsListHeaderTab";
@@ -240,7 +250,6 @@ import {
 } from "#helpers/api/config";
 import { filterShantytowns } from "./filterShantytowns";
 import Export from "#app/components/export2/Export.vue";
-// import Export from "#app/components/export/export.vue";
 import Spinner from "#app/components/ui/Spinner";
 import TownsListSort from "./TownsListSort/TownsListSort";
 import store from "#app/store";
@@ -267,28 +276,21 @@ export default {
         const permission = getPermission("shantytown.list");
 
         return {
-            sort: "createdAt",
-            filters: {
-                population: [],
-                fieldType: [],
-                justice: [],
-                origin: [],
-                conditions: [],
-                status: "open",
-                location: null
-            },
-
-            currentPage: 1,
             hasNationalPermission: permission.geographic_level === "nation",
             hasJusticePermission: permission.data_justice === true,
-
             fieldTypes,
             exportIsVisible: false
         };
     },
     methods: {
+        updateSort(val) {
+            store.commit("setSort", val);
+        },
+        updateFilters(filter, val) {
+            store.commit("setFilters", { ...this.filters, [filter]: val });
+        },
         onChangePage(page) {
-            this.currentPage = page;
+            store.commit("setCurrentPage", page);
         },
         hasPermission(...args) {
             return hasPermission(...args);
@@ -315,7 +317,10 @@ export default {
         ...mapGetters({
             shantytowns: "towns",
             isLoading: "townsLoading",
-            error: "townsError"
+            error: "townsError",
+            filters: "townsFilters",
+            sort: "townsSort",
+            currentPage: "townsCurrentPage"
         }),
         locationImg() {
             // Guadeloupe, Martinique, Guyane, Réunion, Mayotte

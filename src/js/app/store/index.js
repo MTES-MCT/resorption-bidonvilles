@@ -11,7 +11,18 @@ export default new Vuex.Store({
         towns: {
             data: [],
             loading: true,
-            error: null
+            error: null,
+            sort: "createdAt",
+            filters: {
+                population: [],
+                fieldType: [],
+                justice: [],
+                origin: [],
+                conditions: [],
+                status: "open",
+                location: null
+            },
+            currentPage: 1
         }
     },
     mutations: {
@@ -23,6 +34,15 @@ export default new Vuex.Store({
         },
         setError(state, err) {
             state.towns.error = err;
+        },
+        setSort(state, sort) {
+            state.towns.sort = sort;
+        },
+        setFilters(state, filters) {
+            state.towns.filters = filters;
+        },
+        setCurrentPage(state, page) {
+            state.towns.currentPage = page;
         }
     },
     actions: {
@@ -51,6 +71,15 @@ export default new Vuex.Store({
         },
         townsError: state => {
             return state.towns.error;
+        },
+        townsFilters: state => {
+            return state.towns.filters;
+        },
+        townsSort: state => {
+            return state.towns.sort;
+        },
+        townsCurrentPage: state => {
+            return state.towns.currentPage;
         }
     }
 });
