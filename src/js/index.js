@@ -21,6 +21,7 @@ import messages from "./app/messages";
 import registerGlobalComponents from "./app/components/ui/registerGlobalComponents";
 import VueMatomo from "./matomo/matomo";
 import { router } from "#app/router";
+import store from "#app/store";
 
 const MONTHS = [
     "Janvier",
@@ -140,6 +141,7 @@ Vue.createElement = obj => new Vue(obj);
 Vue.createElement({
     el: "#app",
     router,
+    store,
     i18n,
     render: h => h(App)
 });
