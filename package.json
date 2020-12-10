@@ -32,7 +32,8 @@
     "vue-axios": "^2.1.4",
     "vue-good-table": "^2.16.0",
     "vue-i18n": "^8.21.1",
-    "vue-trend-chart": "^0.15.1"
+    "vue-trend-chart": "^0.15.1",
+    "vuex": "^3.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
