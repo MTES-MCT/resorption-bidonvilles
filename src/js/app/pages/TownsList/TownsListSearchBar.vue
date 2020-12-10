@@ -2,7 +2,9 @@
     <div class="mx-auto searchbox -mb-6">
         <AutocompleteV2
             id="test"
-            :defaultValue="result ? resultValue(result) : ''"
+            :defaultValue="
+                this.$props.value ? resultValue(this.$props.value) : ''
+            "
             :search="search"
             v-model="result"
             @submit="$emit('input', $event)"
@@ -74,6 +76,11 @@
 <script>
 import { autocompleteLocation as autocompleter } from "#helpers/addressHelper";
 export default {
+    props: {
+        value: {
+            type: Object
+        }
+    },
     data() {
         return {
             input: "test",
