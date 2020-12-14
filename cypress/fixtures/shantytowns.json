@@ -23,6 +23,7 @@
         "population_minors_6_12": "3",
         "population_minors_12_16": "2",
         "population_minors_16_18": "2",
+        "minors_in_school": "8",
         "social_origins": [
             "Ressortissants français",
             "Ressortissants extracommunautaires"
@@ -69,6 +70,7 @@
         "population_minors_6_12": null,
         "population_minors_12_16": null,
         "population_minors_16_18": null,
+        "minors_in_school": null,
         "social_origins": [],
         "electricity_type": "Inconnu",
         "electricity_comments": null,

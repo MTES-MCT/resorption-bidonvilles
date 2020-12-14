@@ -169,6 +169,16 @@ Cypress.Commands.add("fillCreateTown", shantytown => {
         );
     }
 
+    // minors in school
+    if (
+        shantytown.minors_in_school !== undefined &&
+        shantytown.minors_in_school !== null
+    ) {
+        cy.get("[data-cy-field='minors_in_school']").type(
+            shantytown.minors_in_school
+        );
+    }
+
     // social origins
     if (shantytown.social_origins && shantytown.social_origins.length > 0) {
         shantytown.social_origins.forEach(label => {

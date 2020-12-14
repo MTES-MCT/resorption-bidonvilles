@@ -216,6 +216,12 @@ export default {
                                         label: "16 - 18 ans",
                                         mandatory: false
                                     },
+                                    minors_in_school: {
+                                        type: "number",
+                                        label:
+                                            "Nombre d'enfants inscrits dans un établissement scolaire",
+                                        mandatory: false
+                                    },
                                     social_origins: {
                                         type: "checkbox",
                                         options: socialOrigins.map(

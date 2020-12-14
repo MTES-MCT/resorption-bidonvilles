@@ -445,6 +445,9 @@
                                 <p v-if="town.populationMinors16To18 !== undefined">
                                     <strong>16 - 18 ans :</strong> <span data-cy-data="population_minors_16_18">{{ town.populationMinors16To18 !== null ? town.populationMinors16To18 : 'inconnu' }}</span>
                                 </p>
+                                <p v-if="town.minorsInSchool !== undefined">
+                                    <strong>Nombre d'enfants inscrits dans un établissement scolaire :</strong> <span data-cy-data="minors_in_school">{{ town.minorsInSchool !== null ? town.minorsInSchool : 'inconnu' }}</span>
+                                </p>
                                 <p v-if="town.socialOrigins !== undefined" data-cy-data="social_origins">
                                     <strong>Origines :</strong>
                                     <ul v-if="town.socialOrigins.length > 0">
@@ -791,6 +794,19 @@
                                 <p>Laissez ce champ vide si l'information est inconnue</p>
                                 <div class="input__group">
                                     <input data-cy-field="population_minors_16_18" type="number" v-model="edit.populationMinors16To18">
+                                </div>
+                            </div>
+
+                            <div class="form__group">
+                                <label v-bind:class="{ error: fieldErrors.minors_in_school }">Nombre d'enfants inscrits dans un établissement scolaire :</label>
+                                <p class="error" v-if="fieldErrors.minors_in_school">
+                                    <ul>
+                                        <li v-for="error in fieldErrors.minors_in_school">{{ error }}</li>
+                                    </ul>
+                                </p>
+                                <p>Laissez ce champ vide si l'information est inconnue</p>
+                                <div class="input__group">
+                                    <input data-cy-field="minors_in_school" type="number" v-model="edit.minorsInSchool">
                                 </div>
                             </div>
 
