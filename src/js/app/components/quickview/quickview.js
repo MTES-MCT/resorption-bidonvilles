@@ -83,6 +83,66 @@ export default {
                             : "inconnu"
                 });
             }
+            if (this.town.populationMinors0To3 !== undefined) {
+                rows.push({
+                    label: "Nombre de mineurs (0-3 ans)",
+                    value:
+                        this.town.populationMinors0To3 !== null
+                            ? this.town.populationMinors0To3
+                            : "inconnu"
+                });
+            }
+            if (this.town.populationMinors3To6 !== undefined) {
+                rows.push({
+                    label: "Nombre de mineurs (3-6 ans)",
+                    value:
+                        this.town.populationMinors3To6 !== null
+                            ? this.town.populationMinors3To6
+                            : "inconnu"
+                });
+            }
+
+            if (this.town.populationMinors6To12 !== undefined) {
+                rows.push({
+                    label: "Nombre de mineurs (6-12 ans)",
+                    value:
+                        this.town.populationMinors6To12 !== null
+                            ? this.town.populationMinors6To12
+                            : "inconnu"
+                });
+            }
+
+            if (this.town.populationMinors12To16 !== undefined) {
+                rows.push({
+                    label: "Nombre de mineurs (12-16 ans)",
+                    value:
+                        this.town.populationMinors12To16 !== null
+                            ? this.town.populationMinors12To16
+                            : "inconnu"
+                });
+            }
+
+            if (this.town.populationMinors16To18 !== undefined) {
+                rows.push({
+                    label: "Nombre de mineurs (16-18 ans)",
+                    value:
+                        this.town.populationMinors16To18 !== null
+                            ? this.town.populationMinors16To18
+                            : "inconnu"
+                });
+            }
+
+            if (this.town.minorsInSchool !== undefined) {
+                rows.push({
+                    label:
+                        "Nombre d'enfants inscrits dans un établissement scolaire",
+                    value:
+                        this.town.minorsInSchool !== null
+                            ? this.town.minorsInSchool
+                            : "inconnu"
+                });
+            }
+
             if (this.town.socialOrigins !== undefined) {
                 rows.push({
                     label: "Origines",
