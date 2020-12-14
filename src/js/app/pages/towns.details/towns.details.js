@@ -408,6 +408,7 @@ export default {
                 populationMinors6To12: this.town.populationMinors6To12,
                 populationMinors12To16: this.town.populationMinors12To16,
                 populationMinors16To18: this.town.populationMinors16To18,
+                minorsInSchool: this.town.minorsInSchool,
                 origins: this.town.socialOrigins.map(origin => origin.id),
                 electricityType: this.town.electricityType.id,
                 electricityComments: this.town.electricityComments || "",
@@ -496,6 +497,7 @@ export default {
                     this.edit.populationMinors12To16 || null,
                 population_minors_16_18:
                     this.edit.populationMinors16To18 || null,
+                minors_in_school: this.edit.minorsInSchool || null,
                 electricity_type: this.edit.electricityType,
                 electricity_comments: this.edit.electricityComments,
                 access_to_sanitary: this.edit.accessToSanitary,

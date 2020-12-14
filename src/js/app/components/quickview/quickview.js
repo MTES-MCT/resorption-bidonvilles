@@ -132,6 +132,17 @@ export default {
                 });
             }
 
+            if (this.town.minorsInSchool !== undefined) {
+                rows.push({
+                    label:
+                        "Nombre d'enfants inscrits dans un établissement scolaire",
+                    value:
+                        this.town.minorsInSchool !== null
+                            ? this.town.minorsInSchool
+                            : "inconnu"
+                });
+            }
+
             if (this.town.socialOrigins !== undefined) {
                 rows.push({
                     label: "Origines",
