@@ -110,7 +110,7 @@ export default (wording, submitFn) => ({
                                         return category === "association";
                                     }
                                 },
-                                newAssociationName: {
+                                new_association_name: {
                                     label: "Précisez le nom complet",
                                     mandatory: true,
                                     type: "text",
@@ -124,7 +124,7 @@ export default (wording, submitFn) => ({
                                         );
                                     }
                                 },
-                                newAssociationAbbreviation: {
+                                new_association_abbreviation: {
                                     label: "Précisez l'acronyme, si besoin",
                                     mandatory: false,
                                     type: "text",
