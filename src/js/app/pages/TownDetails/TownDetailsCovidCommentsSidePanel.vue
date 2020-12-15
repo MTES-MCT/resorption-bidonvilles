@@ -102,6 +102,8 @@
                             rows="10"
                             name="newComment"
                             v-model="form.newComment"
+                            rules="required"
+                            validationName="Ecrire un commentaire"
                         />
                         <div class="flex items-center justify-between">
                             <Button
@@ -110,7 +112,10 @@
                                 @click="cancelComment"
                                 >Annuler</Button
                             >
-                            <Button variant="primary" type="primary"
+                            <Button
+                                variant="primary"
+                                type="primary"
+                                :loading="loading"
                                 >Valider</Button
                             >
                         </div>
@@ -153,8 +158,8 @@ export default {
     data() {
         return {
             dateLanguage: fr,
+            loading: false,
             form: {
-                pending: false,
                 date: new Date(),
                 interventionType: [],
                 newComment: ""
@@ -180,13 +185,13 @@ export default {
             this.newComment = "";
         },
         addCovidComment() {
-            if (this.form.pending) {
+            if (this.loading) {
                 return;
             }
 
             // clean previous errors
             this.covidErrors = [];
-            this.pending = true;
+            this.loading = true;
 
             addCovidComment(this.$route.params.id, {
                 date: this.form.date,
@@ -227,11 +232,11 @@ export default {
                         date: new Date(),
                         interventionType: []
                     };
-                    this.pending = false;
+                    this.loading = false;
                 })
                 .catch(response => {
                     const fields = response.fields || {};
-                    this.pending = false;
+                    this.loading = false;
                     this.covidErrors = Object.keys(fields).reduce(
                         (acc, key) => [...acc, ...fields[key]],
                         []
@@ -241,9 +246,3 @@ export default {
     }
 };
 </script>
-
-<style>
-.scrollablePanel {
-    overflow-y: auto;
-}
-</style>
