@@ -110,7 +110,7 @@
                                 @click="cancelComment"
                                 >Annuler</Button
                             >
-                            <Button variant="primary" @click="addCovidComment"
+                            <Button variant="primary" type="primary"
                                 >Valider</Button
                             >
                         </div>
@@ -154,6 +154,7 @@ export default {
         return {
             dateLanguage: fr,
             form: {
+                pending: false,
                 date: new Date(),
                 interventionType: [],
                 newComment: ""
@@ -179,8 +180,13 @@ export default {
             this.newComment = "";
         },
         addCovidComment() {
+            if (this.form.pending) {
+                return;
+            }
+
             // clean previous errors
             this.covidErrors = [];
+            this.pending = true;
 
             addCovidComment(this.$route.params.id, {
                 date: this.form.date,
@@ -218,11 +224,14 @@ export default {
 
                     this.form = {
                         newComment: "",
+                        date: new Date(),
                         interventionType: []
                     };
+                    this.pending = false;
                 })
                 .catch(response => {
                     const fields = response.fields || {};
+                    this.pending = false;
                     this.covidErrors = Object.keys(fields).reduce(
                         (acc, key) => [...acc, ...fields[key]],
                         []

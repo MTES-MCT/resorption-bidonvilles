@@ -49,8 +49,9 @@
                 @click="$emit('openCovid')"
             >
                 <Icon icon="comment" class="mr-2" />
-                <div v-if="this.town.comments.covid.length">
-                    {{ this.town.comments.covid.length }} commentaires covid
+                <div>
+                    {{ this.town.comments.covid.length || 0 }} commentaires
+                    covid
                 </div>
             </div>
         </div>
