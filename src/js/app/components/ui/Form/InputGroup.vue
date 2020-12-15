@@ -1,7 +1,7 @@
 <template>
     <div class="mb-12">
-        <div class="text-display-xs mb-4">{{ title }}</div>
-        <div class="text-xs mb-4">{{ info }}</div>
+        <div class="font-bold mb-4">{{ title }}</div>
+        <div class="text-sm mb-4">{{ info }}</div>
         <slot />
     </div>
 </template>

@@ -39,10 +39,19 @@
             </div>
         </div>
         <div class="flex items-center">
-            <div class="flex items-center uppercase text-sm">
+            <div class="flex items-center uppercase text-sm mr-4">
                 <div class="rounded-full bg-corail h-3 w-3 mr-2 " />
                 Mis à jour le
                 {{ formatDate(town.updatedAt, "d/m/y") }}
+            </div>
+            <div
+                class="flex items-center text-red uppercase text-xs font-bold cursor-pointer"
+                @click="$emit('openCovid')"
+            >
+                <Icon icon="comment" class="mr-2" />
+                <div v-if="this.town.comments.covid.length">
+                    {{ this.town.comments.covid.length }} commentaires covid
+                </div>
             </div>
         </div>
     </div>

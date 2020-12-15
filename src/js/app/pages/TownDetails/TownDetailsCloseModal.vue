@@ -1,207 +1,250 @@
 <template>
-    <div class="v1">
-        <div class="popin">
-            <div class="popin-wrapper" ref="wrapper">
-                <div>
-                    <p class="popin-close"><span class="link" @click="closePopin"><font-awesome-icon icon="times" size="2x"></font-awesome-icon></span></p>
-                    <section>
-                        <h2>Disparition du site</h2>
-
-                        <div class="form__group">
-                            <label v-bind:class="{ error: fieldErrors.closed_at }">Date de disparition du site :</label>
-                            <p class="error" v-if="fieldErrors.closed_at">
-                            <ul>
-                                <li v-for="error in fieldErrors.closed_at">{{ error }}</li>
-                            </ul>
-                            </p>
-                            <datepicker :clear-button="true" :language="dateLanguage" :monday-first="true" :disabled-dates="{ from: new Date() }" :full-month-name="true" :format="'dd MMMM yyyy'" v-model="edit.closedAt"></datepicker>
-                        </div>
-
-                        <div class="form__group">
-                            <fieldset>
-                                <legend v-bind:class="{ error: fieldErrors.closed_with_solutions }">
-                                    <strong>Est-ce que ce site a été résorbé définitivement ? :</strong>
-                                </legend>
-                                <p class="question-info">C’est-à-dire sans réinstallation illicite et avec un accompagnement de la majorité des personnes vers des solutions pérennes</p>
-                                <p class="error" v-if="fieldErrors.closed_with_solutions">
-                                <ul>
-                                    <li v-for="error in fieldErrors.closed_with_solutions">{{ error }}</li>
-                                </ul>
-                                </p>
-
-                                <div v-for="(value, index) in closedWithSolutionsValues">
-                                    <input type="radio" name="closed_with_solutions" :id="'status' + index" :value="value.value" v-model="edit.closedWithSolutions">
-                                    <label :for="'status' + index" class="label-inline">{{ value.label }}</label>
+    <Modal :isOpen="isOpen" :closeModal="closeModal" class="modalContainer">
+        <template v-slot:title>
+            <div>Fermer le site</div>
+        </template>
+        <template v-slot:body>
+            <ValidationObserver ref="form" v-slot="{ handleSubmit }">
+                <form @submit.prevent="handleSubmit(submitClose)">
+                    <div class="scrollableContainer">
+                        <div>
+                            <div class="w-64">
+                                <div class="font-bold">
+                                    Date de la fermeture du site
                                 </div>
-                            </fieldset>
+                                <DatepickerV2
+                                    variant="town"
+                                    class=""
+                                    v-model="form.closed_at"
+                                    id="closed_at"
+                                    validationName="Date"
+                                    :disabled-dates="{ from: new Date() }"
+                                    :language="dateLanguage"
+                                    :monday-first="true"
+                                    :full-month-name="true"
+                                    :format="'dd MMMM yyyy'"
+                                    rules="required"
+                                />
+                            </div>
                         </div>
 
-                        <div class="form__group">
-                            <fieldset>
-                                <legend v-bind:class="{ error: fieldErrors.status }">
-                                    <strong>Cause de la disparition :</strong>
-                                </legend>
-                                <p class="error" v-if="fieldErrors.status">
-                                <ul>
-                                    <li v-for="error in fieldErrors.status">{{ error }}</li>
-                                </ul>
-                                </p>
-                                <div v-for="(value, index) in statusValues">
-                                    <input type="radio" name="status" :id="'status' + index" :value="value.value" v-model="edit.status">
-                                    <label :for="'status' + index" class="label-inline">{{ value.label }}</label>
+                        <div>
+                            <div class="font-bold">
+                                Est-ce que ce site a été résorbé définitivement
+                                ?
+                            </div>
+                            <div class="italic text-G600 w-192 text-sm my-2">
+                                C’est-à-dire sans réinstallation illicite et
+                                avec un accompagnement de la majorité des
+                                personnes vers des solutions pérennes
+                            </div>
+                            <CheckableGroup
+                                direction="row"
+                                id="closed_with_solutions"
+                                rules="required"
+                                validationName="Est-ce que ce site a été résorbé définitivement ?"
+                            >
+                                <Radio
+                                    :checkValue="true"
+                                    label="Oui"
+                                    v-model="form.closed_with_solutions"
+                                    variant="townCard"
+                                    class="mr-1"
+                                />
+                                <Radio
+                                    :checkValue="false"
+                                    label="Non"
+                                    variant="townCard"
+                                    v-model="form.closed_with_solutions"
+                                />
+                            </CheckableGroup>
+                        </div>
+
+                        <div>
+                            <div class="font-bold">Cause de la disparition</div>
+                            <CheckableGroup
+                                id="status"
+                                direction="vertical"
+                                rules="required"
+                                validationName="Cause de la disparition"
+                            >
+                                <Radio
+                                    variant="town"
+                                    :label="item.label"
+                                    :checkValue="item.value"
+                                    v-for="(item, index) in statusValues"
+                                    :key="index"
+                                    v-model="form.status"
+                                />
+                            </CheckableGroup>
+                        </div>
+
+                        <div>
+                            <div class="font-bold">
+                                Orientations des ménages :
+                            </div>
+                            <div
+                                v-for="(item, index) in closingSolutions"
+                                :key="item.id"
+                            >
+                                <Checkbox
+                                    variant="town"
+                                    :label="item.label"
+                                    :key="index"
+                                    :checkValue="item.id"
+                                    v-model="checkedSolutions"
+                                    id="solutions"
+                                />
+                                <div class="flex items-center ml-10">
+                                    <InlineTextInput
+                                        label="Ménages : "
+                                        type="number"
+                                        variant="town"
+                                        v-model="
+                                            form.solutions[item.id]
+                                                .householdsAffected
+                                        "
+                                        class="mr-4"
+                                    />
+                                    <InlineTextInput
+                                        label="Personnes : "
+                                        type="number"
+                                        variant="town"
+                                        v-model="
+                                            form.solutions[item.id]
+                                                .peopleAffected
+                                        "
+                                    />
                                 </div>
-                            </fieldset>
+                            </div>
                         </div>
+                    </div>
 
-                        <div class="form__group">
-                            <fieldset>
-                                <legend v-bind:class="{ error: fieldErrors.solutions }">
-                                    <strong>Orientations des ménages :</strong>
-                                </legend>
-                                <fieldset v-for="(value, index) in closingSolutions">
-                                    <legend>
-                                        <input type="checkbox" name="closingSolution" :id="'closingSolution' + index" :value="value.id" v-model="edit.solutions[value.id].checked">
-                                        <label :for="'closingSolution' + index" class="label-inline">{{ value.label }}</label>
-                                    </legend>
-                                    <div class="solution-people" v-if="edit.solutions[value.id].checked">
-                                        <p class="error" v-if="fieldErrors.solutions && fieldErrors.solutions[value.id]">
-                                        <ul>
-                                            <li v-for="error in fieldErrors.solutions[value.id]">{{ error }}</li>
-                                        </ul>
-                                        </p>
-                                        <p>Nombre de ménages concernés :<br/><input type="number" v-model="edit.solutions[value.id].householdsAffected" /></p>
-                                        <p>Nombre de personnes concernées :<br/><input type="number" v-model="edit.solutions[value.id].peopleAffected" /></p>
-                                    </div>
-                                </fieldset>
-                            </fieldset>
-                        </div>
-
-                        <div class="notification error" v-if="editError">{{ editError }}.</div>
-
-                        <div class="form__group">
-                            <button @click="submitClose" class="button">Valider</button>
-                            <button @click="closePopin" class="button secondary">Annuler</button>
-                        </div>
-                    </section>
-                </div>
-            </div>
-        </div>
-
-    </div>
+                    <div class="flex justify-end mt-8">
+                        <Button
+                            variant="primaryText"
+                            class="mr-8"
+                            @click="closeModal"
+                            type="button"
+                            >Annuler</Button
+                        >
+                        <Button
+                            variant="primary"
+                            type="primary"
+                            :loading="loading"
+                            >Valider</Button
+                        >
+                    </div>
+                </form>
+            </ValidationObserver>
+        </template>
+    </Modal>
 </template>
 
 <script>
-import Datepicker from "vuejs-datepicker";
 import { fr } from "vuejs-datepicker/dist/locale";
-import {
-    get,
-    close
-} from "#helpers/api/town";
-import {get as getConfig} from "#helpers/api/config";
+import { get, close } from "#helpers/api/town";
+import { get as getConfig } from "#helpers/api/config";
 import { notify } from "#helpers/notificationHelper";
+import InlineTextInput from "#app/components/ui/Form/input/InlineTextInput";
+import CheckableGroup from "#app/components/ui/Form/CheckableGroup";
 
 export default {
-    components: {Datepicker},
+    components: { CheckableGroup, InlineTextInput },
     props: {
+        isOpen: {
+            type: Boolean
+        },
         town: {
             type: Object
         }
     },
-    mounted() {
-        console.log(this.edit)
-    },
+
     methods: {
-        submitClose() {
+        closeModal() {
+            this.$emit("closeModal");
+        },
+        async submitClose() {
             // clean previous errors
-            this.editError = null;
-            this.fieldErrors = {};
+            this.loading = true;
+            this.error = null;
 
-            // send the form
-            close(this.town.id, {
-                closed_at: this.edit.closedAt,
-                closed_with_solutions: this.edit.closedWithSolutions,
-                status: this.edit.status,
-                solutions: Object.keys(this.edit.solutions)
-                    .filter(key => this.edit.solutions[key].checked)
-                    .map(key => ({
-                        id: key,
-                        peopleAffected: this.edit.solutions[key].peopleAffected
-                            ? parseInt(
-                                this.edit.solutions[key].peopleAffected,
-                                10
-                            )
-                            : null,
-                        householdsAffected: this.edit.solutions[key]
-                            .householdsAffected
-                            ? parseInt(
-                                this.edit.solutions[key].householdsAffected,
-                                10
-                            )
-                            : null
-                    }))
-            })
-                .then(() => {
-                    notify({
-                        group: "notifications",
-                        type: "success",
-                        title: "Site correctement fermé",
-                        text: "Le site a bien été marqué comme fermé"
-                    });
-
-                    this.loading = true;
-                    this.error = null;
-
-                    return get(this.$route.params.id)
-                        .then(town => {
-                            this.loading = false;
-                            this.$emit('updateTown', town)
-                            this.closePopin()
-                        })
-                        .catch(errors => {
-                            this.error = errors.user_message;
-                            this.loading = false;
-                        });
-                })
-                .catch(response => {
-                    this.editError = response.user_message;
-                    this.fieldErrors = response.fields || {};
+            try {
+                await close(this.town.id, {
+                    ...this.form,
+                    solutions: Object.keys(this.form.solutions)
+                        .filter(key => this.form.solutions[key].checked)
+                        .map(key => ({
+                            id: key,
+                            peopleAffected: this.form.solutions[key]
+                                .peopleAffected
+                                ? parseInt(
+                                      this.form.solutions[key].peopleAffected,
+                                      10
+                                  )
+                                : null,
+                            householdsAffected: this.form.solutions[key]
+                                .householdsAffected
+                                ? parseInt(
+                                      this.form.solutions[key]
+                                          .householdsAffected,
+                                      10
+                                  )
+                                : null
+                        }))
                 });
+            } catch (err) {
+                this.loading = false;
+                this.error = err;
+                this.$refs.form.setErrors(err.fields);
+                return;
+            }
+
+            notify({
+                group: "notifications",
+                type: "success",
+                title: "Site correctement fermé",
+                text: "Le site a bien été marqué comme fermé"
+            });
+
+            const updatedTown = await get(this.$route.params.id);
+            this.$emit("updateTown", updatedTown);
+            this.loading = false;
+            this.closeModal();
         },
         closePopin() {
-            this.$emit('cancelCloseTown')
-        },
-
+            this.$emit("cancelCloseTown");
+        }
     },
     data() {
-        const { closing_solutions: closingSolutions } = getConfig()
+        const { closing_solutions: closingSolutions } = getConfig();
 
         return {
-            edit: {
-                ...this.town,
+            loading: false,
+            error: null,
+            form: {
+                closed_at: null,
+                closed_with_solutions: null,
+                status: null,
                 solutions: this.town.closingSolutions
                     ? closingSolutions.reduce((solutions, solution) => {
-                        const newSolutions = Object.assign(solutions, {});
-                        const s = this.town.closingSolutions.find(
-                            sol => sol.id === solution.id
-                        );
-                        newSolutions[solution.id] = {
-                            checked: s !== undefined,
-                            peopleAffected: s && s.peopleAffected,
-                            householdsAffected: s && s.householdsAffected
-                        };
+                          const newSolutions = Object.assign(solutions, {});
+                          const s = this.town.closingSolutions.find(
+                              sol => sol.id === solution.id
+                          );
+                          newSolutions[solution.id] = {
+                              checked: s !== undefined,
+                              peopleAffected: s && s.peopleAffected,
+                              householdsAffected: s && s.householdsAffected
+                          };
 
-                        return newSolutions;
-                    }, {})
+                          return newSolutions;
+                      }, {})
                     : []
             },
-            editError: null,
-            closingSolutions ,
-            fieldErrors: {},
+            closingSolutions,
             dateLanguage: fr,
-            closedWithSolutionsValues: [
-                { value: true, label: "Oui" },
-                { value: false, label: "Non" }
-            ],
+            checkedSolutions: [],
             statusValues: [
                 {
                     value: "closed_by_justice",
@@ -213,9 +256,26 @@ export default {
                 },
                 { value: "other", label: "Autre" },
                 { value: "unknown", label: "Raison inconnue" }
-            ],
+            ]
+        };
+    },
+    watch: {
+        // Dirty hack as normally Checkbox works with Array
+        checkedSolutions: function(newVal) {
+            Object.keys(this.form.solutions).forEach(key => {
+                this.form.solutions[key].checked = newVal.includes(Number(key));
+            });
         }
-
     }
-}
+};
 </script>
+
+<style>
+.modalContainer {
+    z-index: 1000;
+}
+.scrollableContainer {
+    height: 700px;
+    overflow-y: auto;
+}
+</style>

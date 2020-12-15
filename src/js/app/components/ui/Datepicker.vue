@@ -8,14 +8,22 @@
             v-slot="{ errors }"
             :vid="id"
         >
-            <component
-                :is="dynamicComponent"
-                :input-class="inputClasses"
-                v-bind="$attrs"
-                v-on="$listeners"
-                :language="dateLanguage"
-                :monday-first="true"
-            ></component>
+            <div class="relative">
+                <InputIcon
+                    position="before"
+                    icon="calendar"
+                    class="z-10 text-G400"
+                />
+
+                <component
+                    :is="dynamicComponent"
+                    :input-class="inputClasses"
+                    v-bind="$attrs"
+                    v-on="$listeners"
+                    :language="dateLanguage"
+                    :monday-first="true"
+                ></component>
+            </div>
             <InputError>{{ errors[0] }}</InputError>
         </ValidationProvider>
     </InputWrapper>
@@ -25,6 +33,7 @@
 import { fr } from "vuejs-datepicker/dist/locale";
 import getInputClasses from "./Form/utils/getInputClasses";
 import InputLabel from "./Form/utils/InputLabel.vue";
+import InputIcon from "./Form/utils/InputIcon.vue";
 import InputWrapper from "./Form/utils/InputWrapper.vue";
 import InputInfo from "./Form/utils/InputInfo.vue";
 import InputError from "./Form/utils/InputError.vue";
@@ -55,7 +64,8 @@ export default {
         InputLabel,
         InputWrapper,
         InputError,
-        InputInfo
+        InputInfo,
+        InputIcon
     },
     data() {
         return {
@@ -71,11 +81,15 @@ export default {
     },
     computed: {
         inputClasses() {
-            const inputOptions = { error: this.error };
+            const inputOptions = {
+                error: this.error,
+                prefixIcon: this.variant === "town"
+            };
 
             return {
                 state: [...getInputClasses("state", inputOptions)],
-                default: getInputClasses("default", inputOptions)
+                default: getInputClasses("default", inputOptions),
+                town: getInputClasses("town", inputOptions)
             }[this.variant];
         }
     }

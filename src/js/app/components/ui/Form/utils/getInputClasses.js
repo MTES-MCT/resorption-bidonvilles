@@ -14,6 +14,10 @@ export default function getInputClasses(variant, inputOptions) {
             error && "border-error",
             prefixIcon && "pl-10",
             suffixIcon && "pr-10"
+        ],
+        town: [
+            "border-2 border-G200 py-1 px-4 w-full outline-none focus:border-primary",
+            prefixIcon && "pl-8"
         ]
     }[variant];
 }
