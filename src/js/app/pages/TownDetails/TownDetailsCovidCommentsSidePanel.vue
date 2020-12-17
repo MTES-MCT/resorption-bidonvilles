@@ -173,7 +173,7 @@ export default {
             return window.App.formatDate.apply(window, args);
         },
         cancelComment() {
-            this.newComment = "";
+            this.form.newComment = "";
         },
         addCovidComment() {
             if (this.loading) {
