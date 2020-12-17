@@ -35,7 +35,7 @@ export default {
             items: [
                 {
                     label: "Liste des sites",
-                    target: "/liste-des-sites",
+                    target: "/liste-des-sites-2",
                     group: "townList"
                 },
                 {

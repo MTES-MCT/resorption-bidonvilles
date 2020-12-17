@@ -68,7 +68,8 @@ import {
     faBan,
     faMale,
     faBalanceScale,
-    faScroll
+    faScroll,
+    faCalendar
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(faFlag);
@@ -139,3 +140,4 @@ library.add(faExclamationTriangle);
 library.add(faMale);
 library.add(faBalanceScale);
 library.add(faScroll);
+library.add(faCalendar);

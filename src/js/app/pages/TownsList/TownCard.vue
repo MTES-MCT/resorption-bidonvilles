@@ -70,16 +70,25 @@
                                 /></span>
                             </div>
                         </div>
-                        <div
-                            class="flex items-center"
-                            v-for="origin in shantytown.socialOrigins"
-                            :key="origin.id"
-                        >
-                            <img
-                                :src="socialOrigin(origin).img"
-                                class=" w-6 mr-2"
-                            />
-                            <span>{{ socialOrigin(origin).label }}</span>
+                        <div>
+                            <div
+                                v-if="!shantytown.socialOrigins.length"
+                                class="text-G600"
+                            >
+                                Origine : inconnue
+                            </div>
+                            <div
+                                class="flex items-center"
+                                v-for="origin in shantytown.socialOrigins"
+                                v-else
+                                :key="origin.id"
+                            >
+                                <img
+                                    :src="socialOrigin(origin).img"
+                                    class=" w-6 mr-2"
+                                />
+                                <span>{{ socialOrigin(origin).label }}</span>
+                            </div>
                         </div>
                     </div>
                     <!-- third column -->

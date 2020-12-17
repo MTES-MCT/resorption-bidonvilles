@@ -1,13 +1,14 @@
 <template>
-    <ValidationProvider
-        :rules="rules"
-        :name="validationName || label"
-        v-slot="{ errors }"
-        :vid="id"
-    >
-        <InputWrapper :hasErrors="!!errors.length">
-            <InputLabel :label="label" :info="info" />
-
+    <div class="flex items-center">
+        <div class="mr-2" v-if="label">
+            <div v-if="label" class="mb-2 text-sm italic">{{ label }}</div>
+        </div>
+        <ValidationProvider
+            :rules="rules"
+            :name="validationName || label"
+            v-slot="{ errors }"
+            :vid="id"
+        >
             <div class="relative">
                 <InputIcon
                     position="before"
@@ -27,26 +28,21 @@
                 />
             </div>
             <InputError>{{ errors[0] }}</InputError>
-        </InputWrapper>
-    </ValidationProvider>
+        </ValidationProvider>
+    </div>
 </template>
 
 <script>
 import filteredProps from "../../mixins/filteredProps";
-import InputLabel from "../utils/InputLabel.vue";
-import InputWrapper from "../utils/InputWrapper.vue";
 import InputError from "../utils/InputError.vue";
 import InputIcon from "../utils/InputIcon.vue";
 import getInputClasses from "../utils/getInputClasses";
 
 export default {
-    name: "TextInput",
+    name: "InlineTextInput",
     mixins: [filteredProps],
     props: {
         label: {
-            type: String
-        },
-        info: {
             type: String
         },
         placeholder: {
@@ -89,13 +85,12 @@ export default {
 
             return {
                 state: [...getInputClasses("state", inputOptions)],
-                default: getInputClasses("default", inputOptions)
+                default: getInputClasses("default", inputOptions),
+                town: getInputClasses("town", inputOptions)
             }[this.variant];
         }
     },
     components: {
-        InputLabel,
-        InputWrapper,
         InputError,
         InputIcon
     }

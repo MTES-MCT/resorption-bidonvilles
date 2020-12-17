@@ -78,6 +78,10 @@ function checkOrigin(shantytown, filters) {
         return false;
     }
 
+    if (!shantytown.socialOrigins.length && filters.includes(null)) {
+        return true;
+    }
+
     const origins = shantytown.socialOrigins.map(origin => origin.id);
 
     const filteredArray = origins.filter(value => filters.includes(value));

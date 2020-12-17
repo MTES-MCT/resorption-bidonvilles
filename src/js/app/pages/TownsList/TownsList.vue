@@ -11,7 +11,7 @@
         <div class="bg-G100">
             <PrivateContainer class="py-6">
                 <h1 class="text-display-md text-center mb-4">
-                    Rechercher un site, une commune, un département... ?
+                    Rechercher une commune, un département... ?
                 </h1>
                 <TownsListSearchBar
                     :value="filters.location"
@@ -45,14 +45,12 @@
                                 <div>{{ populationTotal }} personnes</div>
                                 <div>
                                     {{ filteredShantytowns.length }} sites
-                                    <span
-                                        v-if="
-                                            hasJusticePermission &&
-                                                justiceTotal.length
-                                        "
-                                        >dont {{ justiceTotal }} site(s) avec
-                                        une procédure judiciaire</span
-                                    >
+                                </div>
+                                <div
+                                    v-if="hasJusticePermission && justiceTotal"
+                                >
+                                    {{ justiceTotal }} site(s) avec une
+                                    procédure judiciaire
                                 </div>
                             </div>
                         </div>
@@ -85,6 +83,18 @@
                 <div class="md:flex items-end mb-4 justify-between">
                     <TownsListFilters class="">
                         <TownsListFilter
+                            title="Type de sites"
+                            class="mr-2 mb-2"
+                            :value="filters.fieldType"
+                            @input="val => updateFilters('fieldType', val)"
+                            :options="
+                                fieldTypes.map(f => ({
+                                    label: f.label,
+                                    value: f.id
+                                }))
+                            "
+                        />
+                        <TownsListFilter
                             title="Nombre de personnes"
                             class="mr-2 mb-2"
                             :value="filters.population"
@@ -103,41 +113,7 @@
                             ]"
                         />
                         <TownsListFilter
-                            title="Type de terrain"
-                            class="mr-2 mb-2"
-                            :value="filters.fieldType"
-                            @input="val => updateFilters('fieldType', val)"
-                            :options="
-                                fieldTypes.map(f => ({
-                                    label: f.label,
-                                    value: f.id
-                                }))
-                            "
-                        />
-                        <TownsListFilter
-                            title="Procédure judiciaire"
-                            class="mr-2 mb-2"
-                            :value="filters.justice"
-                            @input="val => updateFilters('justice', val)"
-                            :options="[
-                                { value: null, label: 'Inconnu' },
-                                { value: 'none', label: 'Aucune' },
-                                {
-                                    value: 'ownerComplaint',
-                                    label: 'Plainte déposée'
-                                },
-                                {
-                                    value: 'justiceProcedure',
-                                    label: 'Procédure en cours'
-                                },
-                                {
-                                    value: 'justiceRendered',
-                                    label: 'Décision rendue'
-                                }
-                            ]"
-                        />
-                        <TownsListFilter
-                            title="Origine"
+                            title="Origines"
                             class="mr-2 mb-2"
                             :value="filters.origin"
                             @input="val => updateFilters('origin', val)"
@@ -153,6 +129,10 @@
                                 {
                                     value: 3,
                                     label: 'Hors Union européenne'
+                                },
+                                {
+                                    value: null,
+                                    label: 'Inconnue'
                                 }
                             ]"
                         />
@@ -192,6 +172,28 @@
                                 </div>
                             </template>
                         </TownsListFilter>
+                        <TownsListFilter
+                            title="Procédure judiciaire"
+                            class="mr-2 mb-2"
+                            :value="filters.justice"
+                            @input="val => updateFilters('justice', val)"
+                            :options="[
+                                { value: null, label: 'Inconnu' },
+                                { value: 'none', label: 'Aucune' },
+                                {
+                                    value: 'ownerComplaint',
+                                    label: 'Plainte déposée'
+                                },
+                                {
+                                    value: 'justiceProcedure',
+                                    label: 'Procédure en cours'
+                                },
+                                {
+                                    value: 'justiceRendered',
+                                    label: 'Décision rendue'
+                                }
+                            ]"
+                        />
                     </TownsListFilters>
                     <TownsListSort
                         :value="sort"
