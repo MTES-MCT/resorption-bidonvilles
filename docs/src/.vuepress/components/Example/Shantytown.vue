@@ -14,7 +14,7 @@
                             <TextInput label="Localisation géographique" info="Saisissez ici l'adresse du site, puis précisez sa position en déplaçant le point sur la carte." rules="required" />
                             <TextInput label="Informations d'accès" info="Saisissez ici toutes les informations qui, en plus de l'adresse, peuvent être utiles pour l'accès au site." rules="required" />
                         </InputGroup>
-                        <CheckableGroup title="Niveau de priorité du site" info="1 étant le niveau de priorité le plus haut. Le niveau de priorité est un indicateur réservé aux correspondants des services de l’État." rules="required" validationName="Priorité">
+                        <CheckableGroup label="Niveau de priorité du site" info="1 étant le niveau de priorité le plus haut. Le niveau de priorité est un indicateur réservé aux correspondants des services de l’État." rules="required" validationName="Priorité">
                             <Radio checkValue="1" label="1" />
                             <Radio checkValue="2" label="2" />
                             <Radio checkValue="3" label="3" />
@@ -23,17 +23,17 @@
                             <TextInput label="Date d'installation du site" rules="required" />
                             <TextInput label="Date de signalement du site" rules="required" />
                         </InputGroup>
-                        <CheckableGroup title="Type de site" rules="required">
+                        <CheckableGroup label="Type de site" rules="required">
                             <Radio checkValue="terrain" label="Terrain" />
                             <Radio checkValue="immeuble" label="Immeuble" />
                             <Radio checkValue="unknown" label="Inconnu" />
                         </CheckableGroup>
-                        <CheckableGroup title="Type de propriétaire" rules="required">
+                        <CheckableGroup label="Type de propriétaire" rules="required">
                             <Radio checkValue="public" label="Public" />
                             <Radio checkValue="private" label="Privé" />
                             <Radio checkValue="unknown" label="Inconnu" />
                         </CheckableGroup>
-                        <CheckableGroup title="Niveau de priorité du site" info="1 étant le niveau de priorité le plus haut. Le niveau de priorité est un indicateur réservé aux correspondants des services de l’État." rules="required">
+                        <CheckableGroup label="Niveau de priorité du site" info="1 étant le niveau de priorité le plus haut. Le niveau de priorité est un indicateur réservé aux correspondants des services de l’État." rules="required">
                             <Radio checkValue="1" label="1" />
                             <Radio checkValue="2" label="2" />
                             <Radio checkValue="3" label="3" />
@@ -42,7 +42,7 @@
                 </FormGroup>
 
                 <FormGroup title="Habitants">
-                    <CheckableGroup title="Statut du diagnostic social" info="Un diagnostic social vise à identifier les situations et besoins des familles et personnes, de repérer le contexte territorial et les acteurs en présence." rules="required">
+                    <CheckableGroup label="Statut du diagnostic social" info="Un diagnostic social vise à identifier les situations et besoins des familles et personnes, de repérer le contexte territorial et les acteurs en présence." rules="required">
                         <Radio checkValue="nonprevu" label="Non prévu" />
                         <Radio checkValue="prevu" label="Prévu" />
                         <Radio checkValue="realise" label="Réalisé" />

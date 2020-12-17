@@ -1,13 +1,13 @@
 <template>
-    <InputWrapper>
-        <InputLabel :label="label" :info="info" />
-        <ValidationProvider
-            ref="provider"
-            :rules="rules"
-            :name="validationName || label"
-            v-slot="{ errors }"
-            :vid="id"
-        >
+    <ValidationProvider
+        ref="provider"
+        :rules="rules"
+        :name="validationName || label"
+        v-slot="{ errors }"
+        :vid="id"
+    >
+        <InputWrapper :hasErrors="!!errors.length">
+            <InputLabel :label="label" :info="info" />
             <AutocompleteVue
                 :search="search"
                 :default-value="defaultValue"
@@ -117,8 +117,8 @@
                 </template>
             </AutocompleteVue>
             <InputError>{{ errors[0] }}</InputError>
-        </ValidationProvider>
-    </InputWrapper>
+        </InputWrapper>
+    </ValidationProvider>
 </template>
 
 <script>
