@@ -6,89 +6,70 @@
         <template v-slot:body>
             <ValidationObserver ref="form" v-slot="{ handleSubmit }">
                 <form @submit.prevent="handleSubmit(submitClose)">
-                    <div class="scrollableContainer">
-                        <div>
-                            <div class="w-64">
-                                <div class="font-bold">
-                                    Date de la fermeture du site
-                                </div>
-                                <DatepickerV2
-                                    variant="town"
-                                    class=""
-                                    v-model="form.closed_at"
-                                    id="closed_at"
-                                    validationName="Date"
-                                    :disabled-dates="{ from: new Date() }"
-                                    :language="dateLanguage"
-                                    :monday-first="true"
-                                    :full-month-name="true"
-                                    :format="'dd MMMM yyyy'"
-                                    rules="required"
-                                />
-                            </div>
+                    <div class="scrollableContainer -mx-4 -mt-8 p-4">
+                        <div class="w-64">
+                            <DatepickerV2
+                                label="Date de la fermeture du site"
+                                class=""
+                                v-model="form.closed_at"
+                                id="closed_at"
+                                validationName="Date"
+                                :disabled-dates="{ from: new Date() }"
+                                :language="dateLanguage"
+                                :monday-first="true"
+                                :full-month-name="true"
+                                :format="'dd MMMM yyyy'"
+                                rules="required"
+                            />
                         </div>
 
-                        <div>
-                            <div class="font-bold">
-                                Est-ce que ce site a été résorbé définitivement
-                                ?
-                            </div>
-                            <div class="italic text-G600 w-192 text-sm my-2">
-                                C’est-à-dire sans réinstallation illicite et
+                        <CheckableGroup
+                            direction="row"
+                            id="closed_with_solutions"
+                            rules="required"
+                            label="Est-ce que ce site a été résorbé définitivement ?"
+                            info="C’est-à-dire sans réinstallation illicite et
                                 avec un accompagnement de la majorité des
-                                personnes vers des solutions pérennes
-                            </div>
-                            <CheckableGroup
-                                direction="row"
-                                id="closed_with_solutions"
-                                rules="required"
-                                validationName="Est-ce que ce site a été résorbé définitivement ?"
-                            >
-                                <Radio
-                                    :checkValue="true"
-                                    label="Oui"
-                                    v-model="form.closed_with_solutions"
-                                    variant="townCard"
-                                    class="mr-1"
-                                />
-                                <Radio
-                                    :checkValue="false"
-                                    label="Non"
-                                    variant="townCard"
-                                    v-model="form.closed_with_solutions"
-                                />
-                            </CheckableGroup>
-                        </div>
+                                personnes vers des solutions pérennes"
+                            validationName="Est-ce que ce site a été résorbé définitivement ?"
+                        >
+                            <Radio
+                                :checkValue="true"
+                                label="Oui"
+                                v-model="form.closed_with_solutions"
+                                variant="card"
+                                class="mr-1"
+                            />
+                            <Radio
+                                :checkValue="false"
+                                label="Non"
+                                variant="card"
+                                v-model="form.closed_with_solutions"
+                            />
+                        </CheckableGroup>
 
-                        <div>
-                            <div class="font-bold">Cause de la disparition</div>
-                            <CheckableGroup
-                                id="status"
-                                direction="vertical"
-                                rules="required"
-                                validationName="Cause de la disparition"
-                            >
-                                <Radio
-                                    variant="town"
-                                    :label="item.label"
-                                    :checkValue="item.value"
-                                    v-for="(item, index) in statusValues"
-                                    :key="index"
-                                    v-model="form.status"
-                                />
-                            </CheckableGroup>
-                        </div>
+                        <CheckableGroup
+                            label="Cause de la disparition"
+                            id="status"
+                            direction="vertical"
+                            rules="required"
+                            validationName="Cause de la disparition"
+                        >
+                            <Radio
+                                :label="item.label"
+                                :checkValue="item.value"
+                                v-for="(item, index) in statusValues"
+                                :key="index"
+                                v-model="form.status"
+                            />
+                        </CheckableGroup>
 
-                        <div>
-                            <div class="font-bold">
-                                Orientations des ménages :
-                            </div>
+                        <CheckableGroup label="Orientations des ménages :">
                             <div
                                 v-for="(item, index) in closingSolutions"
                                 :key="item.id"
                             >
                                 <Checkbox
-                                    variant="town"
                                     :label="item.label"
                                     :key="index"
                                     :checkValue="item.id"
@@ -99,7 +80,6 @@
                                     <InlineTextInput
                                         label="Ménages : "
                                         type="number"
-                                        variant="town"
                                         v-model="
                                             form.solutions[item.id]
                                                 .householdsAffected
@@ -109,7 +89,6 @@
                                     <InlineTextInput
                                         label="Personnes : "
                                         type="number"
-                                        variant="town"
                                         v-model="
                                             form.solutions[item.id]
                                                 .peopleAffected
@@ -117,7 +96,7 @@
                                     />
                                 </div>
                             </div>
-                        </div>
+                        </CheckableGroup>
                     </div>
 
                     <div class="flex justify-end mt-8">
@@ -129,7 +108,7 @@
                             >Annuler</Button
                         >
                         <Button
-                            variant="primary"
+                            variant="tertiary"
                             type="primary"
                             :loading="loading"
                             >Valider</Button
@@ -275,7 +254,8 @@ export default {
     z-index: 1000;
 }
 .scrollableContainer {
-    max-height: 650px;
+    height: 700px;
+    max-width: 800px;
     overflow-y: auto;
 }
 </style>

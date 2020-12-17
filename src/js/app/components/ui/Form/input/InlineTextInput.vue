@@ -1,6 +1,8 @@
 <template>
     <div class="flex items-center">
-        <InputLabel :label="label" :info="info" class="mr-2" />
+        <div class="mr-2" v-if="label">
+            <div v-if="label" class="mb-2 text-sm italic">{{ label }}</div>
+        </div>
         <ValidationProvider
             :rules="rules"
             :name="validationName || label"
@@ -32,7 +34,6 @@
 
 <script>
 import filteredProps from "../../mixins/filteredProps";
-import InputLabel from "../utils/InputLabel.vue";
 import InputError from "../utils/InputError.vue";
 import InputIcon from "../utils/InputIcon.vue";
 import getInputClasses from "../utils/getInputClasses";
@@ -42,9 +43,6 @@ export default {
     mixins: [filteredProps],
     props: {
         label: {
-            type: String
-        },
-        info: {
             type: String
         },
         placeholder: {
@@ -93,7 +91,6 @@ export default {
         }
     },
     components: {
-        InputLabel,
         InputError,
         InputIcon
     }

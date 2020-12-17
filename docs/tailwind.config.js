@@ -1,12 +1,12 @@
 module.exports = {
     // purge: {
-    //     mode: 'layers',
-    //     layers: ['base', 'components', 'utilities'],
-    //     content: ['./src/**/*.vue'],
+    //     mode: "layers",
+    //     layers: ["base", "components", "utilities"],
+    //     content: ["./src/**/*.vue", "./src/**/*.js"]
     // },
     // future: {
     //     removeDeprecatedGapUtilities: true,
-    //     purgeLayersByDefault: true,
+    //     purgeLayersByDefault: true
     // },
     theme: {
         fontFamily: {
@@ -100,6 +100,9 @@ module.exports = {
                 orange200: "#FFF0ED",
                 orange100: "#FFF8F6",
 
+                // Green / Tertiary palette
+                tertiary: "#00AC8C",
+
                 // Red palette
                 red700: "#A9000B",
                 red600: "#E1000F",
@@ -127,10 +130,15 @@ module.exports = {
                 G100: "#F8F8F8",
                 black: "#1E1E1E",
 
+                green: "#169B62 ",
+                red: "#D63626",
+
                 // Deprecated values : TO DELETE
+                inputHover: "#D9D9E6",
                 primaryDark: "#00006c",
                 blueFrance: "#000091",
                 secondaryDark: "#fe542a",
+                tertiaryDark: "#008068",
                 corail: "#FF6F4C"
             }
         }

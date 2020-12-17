@@ -1,13 +1,13 @@
 <template>
-    <InputWrapper>
-        <InputLabel :label="label" :info="info" />
-        <ValidationProvider
-            ref="provider"
-            :rules="rules"
-            :name="validationName || label"
-            v-slot="{ errors }"
-            :vid="id"
-        >
+    <ValidationProvider
+        ref="provider"
+        :rules="rules"
+        :name="validationName || label"
+        v-slot="{ errors }"
+        :vid="id"
+    >
+        <InputWrapper :hasErrors="!!errors.length">
+            <InputLabel :label="label" :info="info" />
             <div class="relative">
                 <InputIcon
                     position="before"
@@ -25,8 +25,8 @@
                 ></component>
             </div>
             <InputError>{{ errors[0] }}</InputError>
-        </ValidationProvider>
-    </InputWrapper>
+        </InputWrapper>
+    </ValidationProvider>
 </template>
 
 <script>
@@ -83,7 +83,7 @@ export default {
         inputClasses() {
             const inputOptions = {
                 error: this.error,
-                prefixIcon: this.variant === "town"
+                prefixIcon: this.variant === "default"
             };
 
             return {
