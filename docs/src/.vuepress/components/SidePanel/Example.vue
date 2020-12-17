@@ -1,7 +1,7 @@
 <template>
     <div>
-        <Button @click="isOpen = !isOpen">{{isOpen ? 'Close' : 'Open'}}</Button>
-        <SidePanel :isOpen="isOpen" :closePanel="closePanel">
+        <Button @click="isOpen = !isOpen" >{{isOpen ? 'Close' : 'Open'}}</Button>
+        <SidePanel :isOpen="isOpen" :closePanel="closePanel" closeClickOutside>
             <div class="text-xl">Heading</div>
         </SidePanel>
     </div>

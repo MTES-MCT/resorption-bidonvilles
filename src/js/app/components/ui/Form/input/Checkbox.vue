@@ -34,7 +34,7 @@
             />
             <slot :isChecked="isChecked">
                 <div class="ml-2">
-                    <div>{{ label }}</div>
+                    <div class="text-sm">{{ label }}</div>
                     <div v-if="info" class="text-xs">{{ info }}</div>
                 </div>
             </slot>
@@ -93,9 +93,9 @@ export default {
         },
         checkboxClasses() {
             return {
-                default: "form-checkbox h-5 w-5",
+                classic: "form-checkbox h-5 w-5",
                 invisible: "appearance-none absolute invisible",
-                town: "checkbox-town-input"
+                default: "checkbox-town-input"
             }[this.variant];
         }
     }

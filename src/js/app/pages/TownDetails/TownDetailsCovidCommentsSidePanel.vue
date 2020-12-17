@@ -24,7 +24,7 @@
                     </div>
                 </div>
 
-                <div class="text-G600 italic text-sm my-2">
+                <div class="text-G600 italic my-6">
                     Merci de préciser votre action, ses modalités, et le
                     nombrede personnes avec des symptômes.Merci de respecter les
                     règles de confidentialité. Ne pas citer l’identité des
@@ -33,9 +33,9 @@
 
                 <ValidationObserver ref="form" v-slot="{ handleSubmit }">
                     <form @submit.prevent="handleSubmit(addCovidComment)">
-                        <div class="font-bold">Date de votre intervention</div>
                         <DatepickerV2
-                            variant="town"
+                            class="w-64"
+                            label="Date de votre intervention"
                             id="closed_at"
                             validationName="Date"
                             :disabled-dates="{ from: new Date() }"
@@ -47,58 +47,49 @@
                             rules="required"
                         />
 
-                        <div class="font-bold">Préciser votre intervention</div>
-                        <CheckableGroup>
+                        <CheckableGroup label="Préciser votre intervention">
                             <Checkbox
-                                variant="town"
                                 checkValue="equipe_maraude"
                                 label="Équipe de maraude"
                                 v-model="form.interventionType"
                             />
                             <Checkbox
-                                variant="town"
                                 checkValue="equipe_sanitaire"
                                 label="Équipe sanitaire"
                                 v-model="form.interventionType"
                             />
                             <Checkbox
-                                variant="town"
                                 checkValue="equipe_accompagnement"
                                 label="Équipe d'accompagnement"
                                 v-model="form.interventionType"
                             />
                             <Checkbox
-                                variant="town"
                                 checkValue="distribution_alimentaire"
                                 label="Distribution d'aide alimentaire"
                                 v-model="form.interventionType"
                             />
                         </CheckableGroup>
 
-                        <div class="font-bold">Signaler si nécessaire</div>
-                        <CheckableGroup>
+                        <CheckableGroup label="Signaler si nécessaire">
                             <Checkbox
-                                variant="town"
                                 checkValue="personnes_orientees"
                                 label="Personne(s) orientée(s) vers un centre d'hébergement"
                                 v-model="form.interventionType"
                             />
                             <Checkbox
-                                variant="town"
                                 checkValue="personnes_avec_symptomes"
                                 label="Personne(s) avec des symptômes Covid-19"
                                 v-model="form.interventionType"
                             />
                             <Checkbox
-                                variant="town"
                                 checkValue="besoin_action"
                                 label="Besoin d'une action prioritaire"
                                 v-model="form.interventionType"
                             />
                         </CheckableGroup>
 
-                        <div class="text-display-sm">Ecrire un commentaire</div>
                         <TextArea
+                            label="Ecrire un commentaire"
                             rows="10"
                             name="newComment"
                             v-model="form.newComment"
@@ -110,7 +101,7 @@
                                 @click="cancelComment"
                                 >Annuler</Button
                             >
-                            <Button variant="primary" type="primary"
+                            <Button variant="tertiary" type="primary"
                                 >Valider</Button
                             >
                         </div>

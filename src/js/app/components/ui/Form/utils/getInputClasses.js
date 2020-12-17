@@ -9,15 +9,16 @@ export default function getInputClasses(variant, inputOptions) {
             prefixIcon && "pl-10",
             suffixIcon && "pr-10"
         ],
-        default: [
+        classic: [
             "border border-G200 rounded-md w-full py-2 px-4 outline-none focus:border-primary",
             error && "border-error",
             prefixIcon && "pl-10",
             suffixIcon && "pr-10"
         ],
-        town: [
-            "border-2 border-G200 py-1 px-4 w-full outline-none focus:border-primary",
-            prefixIcon && "pl-8"
+        default: [
+            "border-2 border-blue200 py-1 px-4 w-full outline-none focus:border-primary hover:border-inputHover",
+            prefixIcon && "pl-10",
+            suffixIcon && "pr-10"
         ]
     }[variant];
 }

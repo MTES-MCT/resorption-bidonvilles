@@ -3,6 +3,7 @@
         <Button class="m-2">default</Button>
         <Button class="m-2" variant="primary">primary</Button>
         <Button class="m-2" variant="secondary">secondary</Button>
+        <Button class="m-2" variant="tertiary">tertiary</Button>
         <Button class="m-2" variant="primaryOutline">primary outline</Button>
         <Button class="m-2" variant="secondaryOutline">secondary outline</Button>
         <Button class="m-2" variant="primaryText">primary text</Button>

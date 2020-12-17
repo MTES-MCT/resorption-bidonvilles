@@ -1,12 +1,13 @@
 <template>
-    <InputWrapper>
-        <InputLabel :label="label" :info="info" />
-        <ValidationProvider
-            :rules="rules"
-            :name="validationName || label"
-            v-slot="{ errors }"
-            :vid="id"
-        >
+    <ValidationProvider
+        :rules="rules"
+        :name="validationName || label"
+        v-slot="{ errors }"
+        :vid="id"
+    >
+        <InputWrapper :hasErrors="errors.length">
+            <InputLabel :label="label" :info="info" />
+
             <div class="relative">
                 <InputIcon position="before" :icon="icon" />
                 <select
@@ -20,8 +21,8 @@
                 <InputIcon position="after" icon="chevron-down" />
             </div>
             <InputError>{{ errors[0] }}</InputError>
-        </ValidationProvider>
-    </InputWrapper>
+        </InputWrapper>
+    </ValidationProvider>
 </template>
 
 <script>
