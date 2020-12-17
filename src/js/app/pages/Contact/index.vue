@@ -48,7 +48,7 @@
                             />
                         </InputGroup>
                         <CheckableGroup
-                            :title="$t('contactPage.requestType')"
+                            :label="$t('contactPage.requestType')"
                             :name="$t('contactPage.requestType')"
                             id="request_type"
                             direction="row"
@@ -86,7 +86,7 @@
                         </CheckableGroup>
                         <CheckableGroup
                             v-if="isRequestAccess"
-                            :title="$t('contactPage.isActor')"
+                            :label="$t('contactPage.isActor')"
                             :info="$t('contactPage.actorExample')"
                             rules="required"
                             id="access_request"
@@ -107,7 +107,7 @@
                         </CheckableGroup>
                         <CheckableGroup
                             v-if="isRequestAccessAndActor"
-                            :title="$t('contactPage.whichEstablishment')"
+                            :label="$t('contactPage.whichEstablishment')"
                             rules="required"
                             id="is_actor"
                         >
