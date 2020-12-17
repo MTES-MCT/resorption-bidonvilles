@@ -5,7 +5,7 @@
         v-slot="{ errors }"
         :vid="id"
     >
-        <InputWrapper :hasErrors="errors.length">
+        <InputWrapper :hasErrors="!!errors.length">
             <InputLabel :label="label" :info="info" />
 
             <div :class="'flex flex-col relative'">

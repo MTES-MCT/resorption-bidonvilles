@@ -6,7 +6,7 @@
         v-slot="{ errors }"
         :vid="id"
     >
-        <InputWrapper :hasErrors="errors.length">
+        <InputWrapper :hasErrors="!!errors.length">
             <InputLabel :label="label" :info="info" />
             <AutocompleteVue
                 :search="search"
