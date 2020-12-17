@@ -26,9 +26,6 @@ export default {
         formatDate(...args) {
             return window.App.formatDate.apply(window, args);
         }
-    },
-    mounted() {
-        console.log(this.comment);
     }
 };
 </script>

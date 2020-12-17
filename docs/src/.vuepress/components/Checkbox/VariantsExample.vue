@@ -1,26 +1,26 @@
 <template>
     <div>
-        <CheckableGroup class="mt-4" title="Checkbox default Vertical">
+        <CheckableGroup class="mt-4" label="Checkbox default Vertical">
             <Checkbox v-for="option in options" :checkValue="option" :label="option" v-model="checkboxValue" />
         </CheckableGroup>
 
-        <CheckableGroup class="mt-4" title="Checkbox default Row" direction="row">
+        <CheckableGroup class="mt-4" label="Checkbox default Row" direction="row">
             <Checkbox v-for="option in options" :checkValue="option" :label="option" v-model="checkboxValue" />
         </CheckableGroup>
 
-        <CheckableGroup class="mt-4" title="Radio default Vertical">
+        <CheckableGroup class="mt-4" label="Radio default Vertical">
             <Radio v-for="option in options" :checkValue="option" :label="option" v-model="checkboxValue" />
         </CheckableGroup>
 
-        <CheckableGroup class="mt-4" title="Radio default Row" direction="row">
+        <CheckableGroup class="mt-4" label="Radio default Row" direction="row">
             <Radio v-for="option in options" :checkValue="option" :label="option" v-model="checkboxValue" />
         </CheckableGroup>
 
-        <CheckableGroup class="mt-4" title="Card Vertical (Checkbox/Radio)">
+        <CheckableGroup class="mt-4" label="Card Vertical (Checkbox/Radio)">
             <Checkbox v-for="option in options" :checkValue="option" :label="option" v-model="checkboxValue" variant="card" />
         </CheckableGroup>
 
-        <CheckableGroup class="mt-4" title="Card Row (Checkbox/Radio)" direction="row" >
+        <CheckableGroup class="mt-4" label="Card Row (Checkbox/Radio)" direction="row" >
             <Checkbox v-for="option in options" :checkValue="option" :label="option" v-model="checkboxValue" variant="card" />
         </CheckableGroup>
 

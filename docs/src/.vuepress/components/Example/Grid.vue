@@ -4,14 +4,14 @@
             <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                 <div class="flex flex-wrap -mx-3">
                     <div class="w-1/2 px-3">
-                        <CheckableGroup title="Title" :error="errors.title" direction="row" rules="required">
+                        <CheckableGroup label="Title" :error="errors.title" direction="row" rules="required">
                             <Radio label="Mr" checkValue="mr" v-model="title" />
                             <Radio label="Ms" checkValue="ms" v-model="title" />
                             <Radio label="Mlle" checkValue="mlle" v-model="title" />
                         </CheckableGroup>
                     </div>
                     <div class="w-1/2 px-3">
-                        <CheckableGroup title="Test" :error="errors.test" direction="row" rules="required">
+                        <CheckableGroup label="Test" :error="errors.test" direction="row" rules="required">
                             <Checkbox label="a" checkValue="a"  v-model="test" />
                             <Checkbox label="b" checkValue="b" v-model="test" />
                             <Checkbox label="c" checkValue="c" v-model="test" />

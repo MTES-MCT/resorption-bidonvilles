@@ -6,7 +6,11 @@
     </PrivateLayout>
     <PrivateLayout v-else>
         <PrivateContainer v-if="town" class="py-10">
-            <TownDetailsHeader :town="town" v-on:openCancel="openCancel" />
+            <TownDetailsHeader
+                :town="town"
+                v-on:openCancel="openCancel"
+                v-on:openCovid="openCovid"
+            />
             <div class="flex pt-10 ">
                 <TownDetailsLeftColumn
                     :town="town"
@@ -70,17 +74,24 @@
             </PrivateContainer>
         </div>
 
-        <!--  History sidebar -->
-        <TownDetailsHistorySidebar
+        <!--  History sidepanel -->
+        <TownDetailsHistorySidePanel
             :town="town"
-            v-if="historyOpen"
-            v-on:hideHistory="historyOpen = false"
+            :isOpen="historyOpen"
+            :closePanel="() => (historyOpen = false)"
+        />
+        <!--  CovidComments sidepanel -->
+        <TownDetailsCovidCommentsSidePanel
+            :town="town"
+            :isOpen="covidOpen"
+            :closePanel="() => (covidOpen = false)"
+            v-on:updateTown="town = $event"
         />
         <!--  Close Shantytown Modal -->
         <TownDetailsCloseModal
             :town="town"
-            v-if="closeOpen"
-            v-on:cancelCloseTown="closeOpen = false"
+            :isOpen="closeOpen"
+            v-on:closeModal="closeOpen = false"
             v-on:updateTown="town = $event"
         />
     </PrivateLayout>
@@ -100,13 +111,14 @@ import enrichShantytown from "#app/pages/TownsList/enrichShantytown";
 import { get as getConfig } from "#helpers/api/config";
 import TownDetailsNewComment from "./TownDetailsNewComment";
 import TownDetailsComments from "./TownDetailsComments";
-import TownDetailsHistorySidebar from "#app/pages/TownDetails/TownDetailsHistorySidebar";
-import TownDetailsCloseModal from "#app/pages/TownDetails/TownDetailsCloseModal";
+import TownDetailsHistorySidePanel from "./TownDetailsHistorySidePanel";
+import TownDetailsCovidCommentsSidePanel from "./TownDetailsCovidCommentsSidePanel";
+import TownDetailsCloseModal from "./TownDetailsCloseModal";
 
 export default {
     components: {
         TownDetailsCloseModal,
-        TownDetailsHistorySidebar,
+        TownDetailsHistorySidePanel,
         TownDetailsNewComment,
         TownDetailsComments,
         PrivateLayout,
@@ -116,7 +128,8 @@ export default {
         TownDetailsPanelCharacteristics,
         TownDetailsPanelPeople,
         TownDetailsPanelLivingConditions,
-        TownDetailsPanelJudicial
+        TownDetailsPanelJudicial,
+        TownDetailsCovidCommentsSidePanel
     },
     data() {
         const { field_types: fieldTypes, user } = getConfig();
@@ -124,6 +137,7 @@ export default {
         return {
             historyOpen: false,
             closeOpen: false,
+            covidOpen: false,
             error: null,
             loading: false,
             town: null,
@@ -136,12 +150,13 @@ export default {
     },
     methods: {
         openHistory() {
-            console.log("open history");
             this.historyOpen = true;
         },
         openCancel() {
-            console.log("open cancel");
             this.closeOpen = true;
+        },
+        openCovid() {
+            this.covidOpen = true;
         },
         fetchData() {
             if (this.loading === true) {
@@ -155,7 +170,6 @@ export default {
                 .then(town => {
                     this.loading = false;
                     this.town = enrichShantytown(town, this.fieldTypes);
-                    console.log(this.town);
                     this.resetEdit();
                 })
                 .catch(errors => {
