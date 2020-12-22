@@ -138,23 +138,22 @@ export default {
                                 return {
                                     icon: "user-check",
                                     label: `<strong>Compte activé</strong> le ${App.formatDate(
-                                        user.activated_on,
+                                        user.user_access.used_at,
                                         "d M y"
                                     )}`
                                 };
                             }
 
-                            if (user.last_activation_link_sent_on !== null) {
+                            if (user.user_access !== null) {
                                 if (
                                     Date.now() -
-                                        user.activation_link_expires_on *
-                                            1000 >=
+                                        user.user_access.expires_at * 1000 >=
                                     0
                                 ) {
                                     return {
                                         icon: "unlink",
                                         label: `<strong>Lien expiré</strong> le ${App.formatDate(
-                                            user.activation_link_expires_on,
+                                            user.user_access.expires_at,
                                             "d M y"
                                         )}`
                                     };
@@ -163,7 +162,7 @@ export default {
                                 return {
                                     icon: "paper-plane",
                                     label: `<strong>Accès envoyé</strong> le ${App.formatDate(
-                                        user.last_activation_link_sent_on,
+                                        user.user_access.created_at,
                                         "d M y"
                                     )}`
                                 };
@@ -186,8 +185,7 @@ export default {
                 ],
                 rows: this.users,
                 "row-style-class": row =>
-                    row.status !== "active" &&
-                    row.last_activation_link_sent_on === null
+                    row.status !== "active" && row.user_access === null
                         ? "userList-row userList-row--highlight"
                         : "userList-row",
                 "sort-options": {
