@@ -116,8 +116,8 @@ export default {
             return (
                 this.user !== null &&
                 this.user.status !== "active" &&
-                this.user.activation_link_expires_on !== null &&
-                now - this.user.activation_link_expires_on * 1000 > 0
+                this.user.user_access !== null &&
+                now - this.user.user_access.expires_at * 1000 > 0
             );
         }
     },
