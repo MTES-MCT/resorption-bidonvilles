@@ -22,7 +22,9 @@
                         </span>
                     </div>
                 </div>
-                <div class="md:grid cardGridTemplateColumns gap-10 px-6 py-4">
+                <div
+                    class="md:grid print:grid cardGridTemplateColumns gap-10 px-6 py-4"
+                >
                     <!-- first column -->
                     <div>
                         <div class="flex items-center customAlign">
@@ -149,11 +151,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex justify-between items-center px-4 pt-4 ">
+                <div
+                    class="flex justify-between items-center px-4 pt-4 print:pt-0"
+                >
                     <Tag class="text-xs">
                         {{ lastUpdate }}
                     </Tag>
-                    <div>
+                    <div class="print:hidden">
                         <!--   TODO: CHECK PERMISSIONS -->
                         <transition name="fade">
                             <router-link
@@ -276,9 +280,13 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .cardGridTemplateColumns {
     grid-template-columns: 160px 208px 164px auto;
+
+    @media print {
+        grid-template-columns: 160px 208px 164px 236px;
+    }
 }
 .customAlign {
     height: 30px;
