@@ -8,7 +8,7 @@
             :closedTowns="filters.status !== 'open'"
         ></Export>
 
-        <div class="bg-G100">
+        <div class="bg-G100 print:hidden">
             <PrivateContainer class="py-6">
                 <h1 class="text-display-md text-center mb-4">
                     Rechercher une commune, un département... ?
@@ -80,8 +80,10 @@
                 </template>
             </TownsListHeader>
             <div v-if="!isLoading">
-                <div class="md:flex items-end mb-4 justify-between">
-                    <TownsListFilters class="">
+                <div
+                    class="md:flex items-end mb-4 justify-between print:hidden"
+                >
+                    <TownsListFilters>
                         <TownsListFilter
                             title="Type de sites"
                             class="mr-2 mb-2"
@@ -204,12 +206,14 @@
 
                 <div>
                     <TownCard
-                        v-for="shantytown in filteredShantytownsByPage"
+                        v-for="shantytown in printMode
+                            ? filteredShantytowns
+                            : filteredShantytownsByPage"
                         :key="shantytown.id"
                         :shantytown="shantytown"
                         class="mb-6"
                     />
-                    <div class="flex flex-end mb-12">
+                    <div class="flex flex-end mb-12 print:hidden">
                         <Pagination
                             class="mt-2 md:mt-0 ml-auto "
                             v-if="nbPages > 1"
@@ -273,6 +277,14 @@ export default {
         TownsListFilter,
         Export
     },
+    mounted() {
+        window.onbeforeprint = () => {
+            this.printMode = true;
+        };
+        window.onafterprint = () => {
+            this.printMode = false;
+        };
+    },
     data() {
         const { field_types: fieldTypes } = getConfig();
         const permission = getPermission("shantytown.list");
@@ -281,7 +293,8 @@ export default {
             hasNationalPermission: permission.geographic_level === "nation",
             hasJusticePermission: permission.data_justice === true,
             fieldTypes,
-            exportIsVisible: false
+            exportIsVisible: false,
+            printMode: false
         };
     },
     methods: {

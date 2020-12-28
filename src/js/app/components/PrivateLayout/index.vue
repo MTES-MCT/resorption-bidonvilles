@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="v1">
+        <div class="v1 print:hidden">
             <NavBar />
         </div>
         <slot />
