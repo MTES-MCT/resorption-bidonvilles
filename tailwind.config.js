@@ -75,6 +75,9 @@ module.exports = {
             ]
         },
         extend: {
+            screens: {
+                print: { raw: "print" }
+            },
             spacing: {
                 96: "24rem",
                 128: "32rem"
