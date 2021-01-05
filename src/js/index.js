@@ -99,7 +99,7 @@ Vue.use(TrendChart);
 Vue.use(VueRouter);
 Vue.use(VueI18n);
 
-if (process.env.MATOMO_ON === "true") {
+if (process.env.VUE_APP_MATOMO_ON === "true") {
     Vue.use(VueMatomo, {
         // Configure your matomo server and site by providing
         host: "https://stats.data.gouv.fr",
