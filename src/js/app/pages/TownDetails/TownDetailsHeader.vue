@@ -4,7 +4,6 @@
             <Button
                 variant="primaryOutline"
                 class="mr-8"
-                icon="ban"
                 iconPosition="left"
                 @click="$emit('openCancel')"
                 v-if="town.status === 'open'"
@@ -12,16 +11,16 @@
             >
             <router-link to="#newComment">
                 <Button
-                    variant="primary"
+                    variant="secondary"
                     class="mr-8"
                     icon="comment"
                     iconPosition="left"
-                    >Ecrire un commentaire</Button
+                    >Journal du site</Button
                 >
             </router-link>
 
             <Button
-                variant="secondary"
+                variant="primary"
                 class="mr-8"
                 icon="pen"
                 iconPosition="left"

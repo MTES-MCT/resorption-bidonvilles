@@ -22,13 +22,18 @@
                 :activeSection="activeSection === 'judicial'"
                 >Procédure judiciaire</LeftColumnNavLink
             >
-            <LeftColumnNavLink
-                to="#comments"
-                :activeSection="activeSection === 'comments'"
-            >
-                {{ town.comments.regular.length }}
-                commentaires</LeftColumnNavLink
-            >
+            <router-link to="#comments" class="text-secondary">
+                <div
+                    class="flex text-secondary font-bold mt-4 cursor-pointer"
+                    @click="$emit('openHistory')"
+                >
+                    <Icon icon="comment" />
+                    <div class="ml-2">
+                        <div>Le journal du site</div>
+                        <div>{{ town.comments.regular.length }} messages</div>
+                    </div>
+                </div>
+            </router-link>
             <div
                 class="flex text-primary font-bold mt-4 cursor-pointer"
                 @click="$emit('openHistory')"
