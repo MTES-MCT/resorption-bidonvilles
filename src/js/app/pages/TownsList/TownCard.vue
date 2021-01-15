@@ -191,6 +191,7 @@ import TownCardIcon from "./TownCardIcon";
 import flagEU from "./assets/eu.png";
 import flagFR from "./assets/fr.png";
 import flagExtraCommunautaires from "./assets/extra-communautaires.png";
+import getSince from "./getSince";
 
 export default {
     props: {
@@ -241,26 +242,17 @@ export default {
     },
     computed: {
         lastUpdate() {
-            const d2 = new Date(this.shantytown.updatedAt * 1000);
-            const d1 = new Date();
-
-            let months;
-            months = (d2.getFullYear() - d1.getFullYear()) * 12;
-            months += months + (d2.getMonth() - d1.getMonth());
-            months = Math.abs(months);
+            const { days, months, weeks } = getSince(this.shantytown.updatedAt);
 
             if (months === 0) {
-                const days = Math.floor(
-                    Math.abs(d1.getTime() - d2.getTime()) / (1000 * 3600 * 24)
-                );
-                const weeks = Math.ceil(days / 7);
-
                 if (days === 0) {
                     return `Dernière actualisation aujourd'hui`;
                 }
 
                 if (days > 0 && days < 7) {
-                    return `Dernière actualisation il y a ${days} jours`;
+                    return `Dernière actualisation il y a ${days} jour${
+                        days > 1 ? "s" : ""
+                    }`;
                 }
 
                 if (weeks > 0 && months === 0) {

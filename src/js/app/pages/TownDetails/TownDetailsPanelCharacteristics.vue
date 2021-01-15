@@ -85,7 +85,7 @@
 import TownDetailsPanel from "./ui/TownDetailsPanel.vue";
 import Map from "#app/components/map/map.vue";
 import TownDetailsPanelSection from "./ui/TownDetailsPanelSection.vue";
-import getSince from "./getSince";
+import getSince from "../TownsList/getSince";
 
 export default {
     props: {
@@ -102,13 +102,17 @@ export default {
             return window.App.formatDate.apply(window, args);
         },
         formatDateSince(date) {
-            const { years, months } = getSince(date);
+            const { days, years, months } = getSince(date);
             if (years > 0) {
                 return `${years} an${years > 1 ? "s" : ""}`;
             }
 
             if (months > 0) {
                 return `${months} mois`;
+            }
+
+            if (days > 0) {
+                return `${days} jours`;
             }
 
             return "";

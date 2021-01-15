@@ -7,6 +7,7 @@
  */
 
 import policeSiren from "./assets/police_siren.svg";
+import getSince from "./getSince";
 
 export default function enrichShantytown(shantytown, fieldTypes) {
     const fieldTypeColors = fieldTypes.reduce(
@@ -111,17 +112,22 @@ export default function enrichShantytown(shantytown, fieldTypes) {
     }
 
     if (statusDate !== null) {
-        const { years, months } = getSince(statusDate);
-        if (years > 0) {
-            statusSince.push(`${years} an${years > 1 ? "s" : ""}`);
-        }
+        const { days, years, months } = getSince(statusDate);
 
-        if (years > 0 && months > 0) {
-            statusSince.push(`et`);
-        }
+        if (years === 0 && months === 0) {
+            statusSince.push(`${days} jours`);
+        } else {
+            if (years > 0) {
+                statusSince.push(`${years} an${years > 1 ? "s" : ""}`);
+            }
 
-        if (months > 0) {
-            statusSince.push(`${months} mois`);
+            if (years > 0 && months > 0) {
+                statusSince.push(`et`);
+            }
+
+            if (months > 0) {
+                statusSince.push(`${months} mois`);
+            }
         }
     }
 
@@ -154,24 +160,6 @@ export default function enrichShantytown(shantytown, fieldTypes) {
         },
         justiceStatuses,
         totalSolutions
-    };
-}
-
-function getSince(ts) {
-    const now = new Date();
-    const then = new Date(ts * 1000);
-
-    let months = 0;
-    if (now.getFullYear() === then.getFullYear()) {
-        months = Math.max(0, now.getMonth() - then.getMonth());
-    } else if (now.getFullYear() > then.getFullYear()) {
-        const diff = now.getFullYear() - then.getFullYear();
-        months = (diff - 1) * 12 + (now.getMonth() + 12 - then.getMonth());
-    }
-
-    return {
-        years: Math.floor(months / 12),
-        months: months % 12
     };
 }
 
