@@ -24,13 +24,13 @@
                 <template slot="filters">
                     <TownsListHeaderTab
                         :active="filters.status === 'open'"
-                        @click="() => updateFilters('status', 'open')"
+                        @click="onClickOpenTab"
                         class="mr-8"
                         >Sites existants</TownsListHeaderTab
                     >
                     <TownsListHeaderTab
                         :active="filters.status === 'close'"
-                        @click="() => updateFilters('status', 'close')"
+                        @click="onClickCloseTab"
                         >Sites fermés</TownsListHeaderTab
                     >
                 </template>
@@ -200,6 +200,7 @@
                     <TownsListSort
                         :value="sort"
                         @input="updateSort"
+                        :status="filters.status"
                         class="mb-2"
                     />
                 </div>
@@ -298,6 +299,14 @@ export default {
         };
     },
     methods: {
+        onClickCloseTab() {
+            this.updateFilters("status", "close");
+            this.updateSort("closedAt");
+        },
+        onClickOpenTab() {
+            this.updateFilters("status", "open");
+            this.updateSort("builtAt");
+        },
         updateSort(val) {
             store.commit("setSort", val);
         },
