@@ -1,10 +1,10 @@
 <template>
     <div>
         <div class="text-display-lg text-corail py-6">
-            {{ comments.length }} commentaires
+            {{ comments.length }} message{{ comments.length > 1 ? "s" : "" }}
         </div>
         <CommentBlock
-            v-for="comment in comments"
+            v-for="comment in sortedComments"
             :key="comment.id"
             :comment="comment"
         />
@@ -21,6 +21,14 @@ export default {
     props: {
         comments: {
             type: Array
+        }
+    },
+    computed: {
+        sortedComments() {
+            const sortedComments = [...this.comments];
+            return sortedComments.sort((a, b) => {
+                return b.createdAt - a.createdAt;
+            });
         }
     }
 };

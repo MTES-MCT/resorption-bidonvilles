@@ -89,12 +89,12 @@
                         </CheckableGroup>
 
                         <TextArea
-                            label="Ecrire un commentaire"
+                            label="Ecrire un message"
                             rows="10"
                             name="newComment"
                             v-model="form.newComment"
                             rules="required"
-                            validationName="Ecrire un commentaire"
+                            validationName="Ecrire un message"
                         />
                         <div class="flex items-center justify-between">
                             <Button
@@ -161,7 +161,7 @@ export default {
         sortedComments() {
             const comments = [...this.town.comments.covid];
             return comments.sort((a, b) => {
-                return a.createdAt - b.createdAt;
+                return b.createdAt - a.createdAt;
             });
         }
     },
