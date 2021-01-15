@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="text-display-lg text-corail py-6">
-            <Icon icon="comment" /> Écrire un commentaire
+            <Icon icon="comment" /> Écrire un message
         </div>
         <div class="bg-white p-6">
             <div class="mb-4"><Icon icon="user" /> {{ user.first_name }}</div>
@@ -9,13 +9,13 @@
                 rows="10"
                 name="newComment"
                 v-model="newComment"
-                placeholder="Votre commentaire - Merci de respecter les règles de confidentialité."
+                placeholder="Votre message - Merci de respecter les règles de confidentialité."
             />
             <div class="flex items-center justify-between">
                 <Button variant="primaryText" @click="cancelComment"
                     >Annuler</Button
                 >
-                <Button variant="primary" @click="addComment">Valider</Button>
+                <Button variant="tertiary" @click="addComment">Valider</Button>
             </div>
         </div>
     </div>
