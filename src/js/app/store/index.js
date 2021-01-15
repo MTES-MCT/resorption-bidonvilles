@@ -12,7 +12,7 @@ export default new Vuex.Store({
             data: [],
             loading: true,
             error: null,
-            sort: "createdAt",
+            sort: "builtAt",
             filters: {
                 population: [],
                 fieldType: [],

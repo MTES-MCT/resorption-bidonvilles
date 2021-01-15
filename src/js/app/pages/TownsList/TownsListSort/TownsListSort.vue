@@ -21,7 +21,7 @@
                 <template v-slot:menu>
                     <Menu containerClasses="py-0">
                         <div
-                            v-for="option in options"
+                            v-for="option in options[status]"
                             :key="option.id"
                             class="flex items-center whitespace-no-wrap text-sm menuWidth"
                         >
@@ -56,29 +56,52 @@ export default {
     props: {
         value: {
             type: String
+        },
+        status: {
+            type: String
         }
     },
     data() {
         return {
-            options: [
-                {
-                    value: `builtAt`,
-                    label: `Date d'installation`
-                },
-                {
-                    value: `updatedAt`,
-                    label: `Date d'actualisation`
-                },
-                {
-                    value: `createdAt`,
-                    label: `Date de signalement`
-                }
-            ]
+            options: {
+                open: [
+                    {
+                        value: `builtAt`,
+                        label: `Date d'installation`
+                    },
+                    {
+                        value: `updatedAt`,
+                        label: `Date d'actualisation`
+                    },
+                    {
+                        value: `declaredAt`,
+                        label: `Date de signalement`
+                    }
+                ],
+                close: [
+                    {
+                        value: `closedAt`,
+                        label: `Date de fermeture`
+                    },
+                    {
+                        value: `builtAt`,
+                        label: `Date d'installation`
+                    },
+                    {
+                        value: `updatedAt`,
+                        label: `Date d'actualisation`
+                    },
+                    {
+                        value: `declaredAt`,
+                        label: `Date de signalement`
+                    }
+                ]
+            }
         };
     },
     computed: {
         title() {
-            const option = this.options.find(
+            const option = this.options[this.status].find(
                 option => option.value === this.value
             );
 
