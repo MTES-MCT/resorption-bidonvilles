@@ -1,6 +1,6 @@
 <template>
     <TownDetailsPanel>
-        <template v-slot:title>Procédures judiciaires</template>
+        <template v-slot:title>Procédure judiciaire</template>
         <template v-slot:body>
             <TownDetailsPanelSection>
                 <div class="grid grid-cols-2">
