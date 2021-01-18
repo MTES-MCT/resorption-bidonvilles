@@ -58,6 +58,14 @@
                 </template>
                 <template slot="buttons">
                     <Button
+                        icon="print"
+                        iconPosition="left"
+                        variant="primaryOutline"
+                        class="mr-6 mb-2 md:mb-0"
+                        @click="togglePrintModal"
+                        >Imprimer</Button
+                    >
+                    <Button
                         icon="file-excel"
                         iconPosition="left"
                         variant="primary"
@@ -312,6 +320,7 @@ export default {
         },
         updateFilters(filter, val) {
             store.commit("setFilters", { ...this.filters, [filter]: val });
+            this.onChangePage(1);
         },
         onChangePage(page) {
             store.commit("setCurrentPage", page);
@@ -332,6 +341,9 @@ export default {
 
         hideExport() {
             this.exportIsVisible = false;
+        },
+        togglePrintModal() {
+            window.print();
         }
     },
     created() {

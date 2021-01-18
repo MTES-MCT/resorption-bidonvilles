@@ -10,22 +10,30 @@
                                 <div class="font-bold">
                                     Installé depuis
                                 </div>
-                                <div>
-                                    {{ formatDateSince(town.builtAt) }}
+                                <div v-if="town.builtAt">
+                                    <div>
+                                        {{ formatDateSince(town.builtAt) }}
+                                    </div>
+                                    <div>
+                                        {{ buildAt }}
+                                    </div>
                                 </div>
-                                <div>
-                                    {{ buildAt }}
-                                </div>
+                                <div v-else>non communiquée</div>
                             </div>
                             <div>
                                 <div class="font-bold">
                                     Signalé depuis
                                 </div>
-                                <div>
-                                    {{ formatDateSince(town.declaredAt) }}
+                                <div v-if="town.declaredAt">
+                                    <div>
+                                        {{ formatDateSince(town.declaredAt) }}
+                                    </div>
+                                    <div>
+                                        {{ declaredAt }}
+                                    </div>
                                 </div>
-                                <div>
-                                    {{ declaredAt }}
+                                <div v-else>
+                                    non communiquée
                                 </div>
                             </div>
                         </div>
@@ -85,7 +93,7 @@
 import TownDetailsPanel from "./ui/TownDetailsPanel.vue";
 import Map from "#app/components/map/map.vue";
 import TownDetailsPanelSection from "./ui/TownDetailsPanelSection.vue";
-import getSince from "../TownsList/getSince";
+import formatDateSince from "../TownsList/formatDateSince";
 
 export default {
     props: {
@@ -101,22 +109,7 @@ export default {
         formatDate(...args) {
             return window.App.formatDate.apply(window, args);
         },
-        formatDateSince(date) {
-            const { days, years, months } = getSince(date);
-            if (years > 0) {
-                return `${years} an${years > 1 ? "s" : ""}`;
-            }
-
-            if (months > 0) {
-                return `${months} mois`;
-            }
-
-            if (days > 0) {
-                return `${days} jours`;
-            }
-
-            return "";
-        }
+        formatDateSince
     },
     computed: {
         buildAt() {

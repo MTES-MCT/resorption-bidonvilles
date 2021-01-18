@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="text-display-lg text-corail py-6">
+        <div class="text-display-md pb-2">
             {{ comments.length }} message{{ comments.length > 1 ? "s" : "" }}
         </div>
         <CommentBlock
