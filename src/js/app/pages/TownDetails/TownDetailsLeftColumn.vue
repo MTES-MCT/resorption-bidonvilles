@@ -30,7 +30,11 @@
                     <Icon icon="comment" />
                     <div class="ml-2">
                         <div>Le journal du site</div>
-                        <div>{{ town.comments.regular.length }} messages</div>
+                        <div>
+                            {{ town.comments.regular.length }} message{{
+                                town.comments.regular.length > 1 ? "s" : ""
+                            }}
+                        </div>
                     </div>
                 </div>
             </router-link>
