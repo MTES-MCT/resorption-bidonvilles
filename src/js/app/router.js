@@ -4,6 +4,7 @@ import VueRouter from "vue-router";
 import LandingPage from "#app/pages/LandingPage/index.vue";
 import SignIn from "#app/pages/signin/signin.vue";
 import Contact from "#app/pages/Contact/index.vue";
+import Invitation from "#app/pages/Invitation/index.vue";
 import Dashboard from "#app/pages/dashboard/dashboard.vue";
 import Launcher from "#app/pages/launcher/launcher.vue";
 import TownsList from "#app/pages/TownsList/TownsList.vue";
@@ -221,6 +222,11 @@ const router = new VueRouter({
         {
             path: "/contact",
             component: Contact,
+            beforeEnter: guardians.anonymous
+        },
+        {
+            path: "/invitation",
+            component: Invitation,
             beforeEnter: guardians.anonymous
         },
         {
