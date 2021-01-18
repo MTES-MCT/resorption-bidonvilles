@@ -35,16 +35,6 @@
                 v-if="town.status === 'open'"
                 >Fermer le site</Button
             >
-            <router-link to="#newComment">
-                <Button
-                    variant="secondary"
-                    class="mr-8"
-                    icon="comment"
-                    iconPosition="left"
-                    >Journal du site</Button
-                >
-            </router-link>
-
             <Button
                 variant="primary"
                 class="mr-8"
@@ -53,6 +43,18 @@
                 v-if="town.status === 'open'"
                 >Mettre a jour</Button
             >
+            <router-link
+                to="#newComment"
+                @click.native="scrollFix('#newComment')"
+            >
+                <Button
+                    variant="secondary"
+                    class="mr-8"
+                    icon="comment"
+                    iconPosition="left"
+                    >Journal du site</Button
+                >
+            </router-link>
         </div>
     </div>
 </template>
@@ -65,6 +67,15 @@ export default {
         }
     },
     methods: {
+        // Force scroll even if hash is already present in url
+        scrollFix(to) {
+            if (to === this.$route.hash) {
+                const el = document.getElementById(to.slice(1));
+                if (el) {
+                    window.scrollTo(0, el.offsetTop);
+                }
+            }
+        },
         /**
          * @see index.js
          */

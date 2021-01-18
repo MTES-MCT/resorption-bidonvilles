@@ -69,7 +69,8 @@ import {
     faMale,
     faBalanceScale,
     faScroll,
-    faCalendar
+    faCalendar,
+    faPrint
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(faFlag);
@@ -141,3 +142,4 @@ library.add(faMale);
 library.add(faBalanceScale);
 library.add(faScroll);
 library.add(faCalendar);
+library.add(faPrint);
