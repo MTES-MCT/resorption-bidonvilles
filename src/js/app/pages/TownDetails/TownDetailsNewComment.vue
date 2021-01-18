@@ -6,7 +6,7 @@
                 >- {{ nbComments }} message{{ nbComments > 1 ? "s" : "" }}</span
             >
         </div>
-        <div class="text-display-md py-4">
+        <div class="text-display-md pt-6 pb-4">
             Partager une info
         </div>
         <div class="bg-white p-6 customShadow">

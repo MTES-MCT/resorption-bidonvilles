@@ -80,16 +80,16 @@
                                 Origine : inconnue
                             </div>
                             <div
-                                class="flex items-center"
+                                class="flex"
                                 v-for="origin in shantytown.socialOrigins"
                                 v-else
                                 :key="origin.id"
                             >
                                 <img
                                     :src="socialOrigin(origin).img"
-                                    class=" w-6 mr-2"
+                                    class=" w-6 h-4 mr-2 mt-1"
                                 />
-                                <span>{{ socialOrigin(origin).label }}</span>
+                                <div>{{ socialOrigin(origin).label }}</div>
                             </div>
                         </div>
                     </div>
@@ -226,13 +226,13 @@ export default {
             }
 
             if (origin.id === 2) {
-                return { id: 2, label: "Européens", img: flagEU };
+                return { id: 2, label: "Union européenne", img: flagEU };
             }
 
             if (origin.id === 3) {
                 return {
                     id: 3,
-                    label: "Extra-communautaires",
+                    label: "Hors Union européenne",
                     img: flagExtraCommunautaires
                 };
             }

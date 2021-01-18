@@ -22,11 +22,12 @@
                 :activeSection="activeSection === 'judicial'"
                 >Procédure judiciaire</LeftColumnNavLink
             >
-            <router-link to="#comments" class="text-secondary">
-                <div
-                    class="flex text-secondary font-bold mt-4 cursor-pointer"
-                    @click="$emit('openHistory')"
-                >
+            <router-link
+                to="#newComment"
+                @click.native="scrollFix('#newComment')"
+                class="text-secondary"
+            >
+                <div class="flex text-secondary font-bold mt-4 cursor-pointer">
                     <Icon icon="comment" />
                     <div class="ml-2">
                         <div>Le journal du site</div>
@@ -62,6 +63,17 @@ export default {
         return {
             activeSection: "characteristics"
         };
+    },
+    methods: {
+        // Force scroll even if hash is already present in url
+        scrollFix(to) {
+            if (to === this.$route.hash) {
+                const el = document.getElementById(to.slice(1));
+                if (el) {
+                    window.scrollTo(0, el.offsetTop);
+                }
+            }
+        }
     },
     mounted() {
         const callback = entries => {

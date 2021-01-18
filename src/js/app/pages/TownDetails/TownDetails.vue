@@ -69,7 +69,7 @@
         </div>
         <div
             :class="[
-                'bg-orange100',
+                'bg-orange200',
                 town.comments.regular.length > 0 && 'pb-32'
             ]"
             v-if="town.comments.regular.length"
