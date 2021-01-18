@@ -41,7 +41,7 @@
                 </div>
             </div>
         </PrivateContainer>
-        <div class="bg-orange300 py-10">
+        <div class="bg-orange200 py-10">
             <PrivateContainer class="flex items-center">
                 <div class="leftColumnWidth text-sm">
                     <div>
@@ -51,20 +51,29 @@
                         Quelles sont les règles de confidentialités ?
                     </div>
                     <div>
-                        Merci de respecter les règles de confidentialité. Ne pas
-                        citer l’identité des individus (Nom, âge, sexe,
+                        Ne pas citer l’identité des individus (Nom, âge, sexe,
                         origine…)
                     </div>
                 </div>
                 <TownDetailsNewComment
-                    class="flex-1"
+                    :class="[
+                        'flex-1',
+                        town.comments.regular.length === 0 && 'pb-32'
+                    ]"
                     v-on:submit="town.comments.regular = $event"
                     id="newComment"
                     :user="user"
+                    :nbComments="town.comments.regular.length"
                 />
             </PrivateContainer>
         </div>
-        <div class="bg-orange100" v-if="town.comments.regular.length">
+        <div
+            :class="[
+                'bg-orange100',
+                town.comments.regular.length > 0 && 'pb-32'
+            ]"
+            v-if="town.comments.regular.length"
+        >
             <PrivateContainer class="flex" id="comments">
                 <div class="leftColumnWidth" />
                 <TownDetailsComments
