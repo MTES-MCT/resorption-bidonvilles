@@ -283,10 +283,10 @@ export default {
 
             if (goesUp === true) {
                 if (window.pageYOffset - this.$refs.main.offsetTop <= 0) {
-                    this.$refs.wrapper.classList.remove("sticky");
+                    this.$refs.wrapper.classList.remove("rb-sticky");
                 }
             } else if (window.pageYOffset > this.offsetTop(this.$refs.header)) {
-                this.$refs.wrapper.classList.add("sticky");
+                this.$refs.wrapper.classList.add("rb-sticky");
             }
         },
         formatDate: (...args) => App.formatDate(...args),
