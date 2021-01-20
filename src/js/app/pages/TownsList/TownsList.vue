@@ -313,7 +313,7 @@ export default {
         },
         onClickOpenTab() {
             this.updateFilters("status", "open");
-            this.updateSort("builtAt");
+            this.updateSort("updatedAt");
         },
         updateSort(val) {
             store.commit("setSort", val);

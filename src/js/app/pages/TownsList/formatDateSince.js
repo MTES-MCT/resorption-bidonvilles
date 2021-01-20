@@ -2,8 +2,12 @@ import getSince from "./getSince";
 
 export default function formatDateSince(date) {
     const { days, years, months } = getSince(date);
+
     if (years > 0) {
-        return `${years} an${years > 1 ? "s" : ""}`;
+        const yearsText = `${years} an${years > 1 ? "s" : ""}`;
+        return months % 12 > 0
+            ? `${yearsText} et ${months % 12} mois`
+            : yearsText;
     }
 
     if (months > 0) {
@@ -14,5 +18,5 @@ export default function formatDateSince(date) {
         return `${days} jours`;
     }
 
-    return "";
+    return "Aujourd'hui";
 }
