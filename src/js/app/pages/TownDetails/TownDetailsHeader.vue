@@ -28,11 +28,13 @@
         </div>
         <div class="flex justify-end mt-2">
             <Button
+                v-if="
+                    hasPermission('shantytown.close') && town.status === 'open'
+                "
                 variant="primaryOutline"
                 class="mr-8"
                 iconPosition="left"
                 @click="$emit('openCancel')"
-                v-if="town.status === 'open'"
                 >Fermer le site</Button
             >
             <Button
@@ -60,6 +62,8 @@
 </template>
 
 <script>
+import { hasPermission } from "#helpers/api/config";
+
 export default {
     props: {
         town: {
@@ -67,6 +71,7 @@ export default {
         }
     },
     methods: {
+        hasPermission,
         // Force scroll even if hash is already present in url
         scrollFix(to) {
             if (to === this.$route.hash) {

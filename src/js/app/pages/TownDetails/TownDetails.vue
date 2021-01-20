@@ -34,6 +34,7 @@
                         id="living_conditions"
                     />
                     <TownDetailsPanelJudicial
+                        v-if="hasJusticePermission"
                         :town="town"
                         class="mb-10"
                         id="judicial"
@@ -117,7 +118,7 @@ import TownDetailsPanelPeople from "./TownDetailsPanelPeople";
 import TownDetailsPanelLivingConditions from "./TownDetailsPanelLivingConditions";
 import TownDetailsPanelJudicial from "./TownDetailsPanelJudicial";
 import enrichShantytown from "#app/pages/TownsList/enrichShantytown";
-import { get as getConfig } from "#helpers/api/config";
+import { get as getConfig, getPermission } from "#helpers/api/config";
 import TownDetailsNewComment from "./TownDetailsNewComment";
 import TownDetailsComments from "./TownDetailsComments";
 import TownDetailsHistorySidePanel from "./TownDetailsHistorySidePanel";
@@ -141,6 +142,7 @@ export default {
         TownDetailsCovidCommentsSidePanel
     },
     data() {
+        const permission = getPermission("shantytown.list");
         const { field_types: fieldTypes, user } = getConfig();
 
         return {
@@ -151,7 +153,8 @@ export default {
             loading: false,
             town: null,
             fieldTypes,
-            user
+            user,
+            hasJusticePermission: permission.data_justice === true
         };
     },
     created() {

@@ -113,7 +113,7 @@
                         </div>
                     </div>
                     <!-- fourth column -->
-                    <div>
+                    <div v-if="hasJusticePermission">
                         <div
                             v-if="
                                 !shantytown.justiceStatuses ||
@@ -158,7 +158,6 @@
                         {{ lastUpdate }}
                     </Tag>
                     <div class="print:hidden">
-                        <!--   TODO: CHECK PERMISSIONS -->
                         <transition name="fade">
                             <router-link
                                 v-if="isHover"
@@ -197,6 +196,9 @@ export default {
     props: {
         shantytown: {
             type: Object
+        },
+        hasJusticePermission: {
+            type: Boolean
         }
     },
     data() {

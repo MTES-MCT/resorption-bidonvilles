@@ -41,6 +41,9 @@ export default new Vuex.Store({
         setFilters(state, filters) {
             state.towns.filters = filters;
         },
+        setLocation(state, location) {
+            state.towns.filters.location = location;
+        },
         setCurrentPage(state, page) {
             state.towns.currentPage = page;
         }
@@ -49,7 +52,29 @@ export default new Vuex.Store({
         async fetchTowns({ commit }) {
             commit("setLoading", true);
             try {
-                const { field_types: fieldTypes } = getConfig();
+                const { user, field_types: fieldTypes } = getConfig();
+
+                if (user.organization.location.type !== "nation") {
+                    commit("setLocation", {
+                        id:
+                            user.organization.location[
+                                user.organization.location.type
+                            ].code,
+                        label:
+                            user.organization.location[
+                                user.organization.location.type
+                            ].name,
+                        category: user.organization.location.type,
+                        data: {
+                            code:
+                                user.organization.location[
+                                    user.organization.location.type
+                                ].code,
+                            type: user.organization.location.type
+                        }
+                    });
+                }
+
                 const originalTowns = await fetchAll();
                 const towns = originalTowns.map(s =>
                     enrichShantytown(s, fieldTypes)
