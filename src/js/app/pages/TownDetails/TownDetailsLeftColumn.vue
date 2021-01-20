@@ -18,6 +18,7 @@
                 >Conditions de vie</LeftColumnNavLink
             >
             <LeftColumnNavLink
+                v-if="hasJusticePermission"
                 to="#judicial"
                 :activeSection="activeSection === 'judicial'"
                 >Procédure judiciaire</LeftColumnNavLink
@@ -57,6 +58,9 @@ export default {
     props: {
         town: {
             type: Object
+        },
+        hasJusticePermission: {
+            type: Boolean
         }
     },
     data() {
@@ -89,7 +93,8 @@ export default {
             threshold: 1.0
         });
 
-        observer.observe(document.querySelector("#judicial"));
+        this.hasJusticePermission &&
+            observer.observe(document.querySelector("#judicial"));
         observer.observe(document.querySelector("#living_conditions"));
         observer.observe(document.querySelector("#people"));
         observer.observe(document.querySelector("#characteristics"));

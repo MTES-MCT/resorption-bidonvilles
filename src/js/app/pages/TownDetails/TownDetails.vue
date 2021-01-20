@@ -13,6 +13,7 @@
             />
             <div class="flex pt-10 ">
                 <TownDetailsLeftColumn
+                    :hasJusticePermission="hasJusticePermission"
                     :town="town"
                     class="leftColumnWidth"
                     v-on:openHistory="openHistory"
