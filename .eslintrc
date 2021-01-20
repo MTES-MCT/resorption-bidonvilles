@@ -15,7 +15,9 @@
   "parserOptions": {
     "ecmaVersion": 2020
   },
-  "ignorePatterns": ["node_modules/"],
+  "ignorePatterns": [
+    "node_modules/"
+  ],
   "overrides": [
     {
       "files": "cypress/**/*.js",
@@ -24,6 +26,15 @@
         "cy": "readonly",
         "describe": "readonly",
         "it": "readonly"
+      }
+    },
+    {
+      "files": [
+        "**/__tests__/*.{j,t}s?(x)",
+        "**/tests/unit/**/*.spec.{j,t}s?(x)"
+      ],
+      "env": {
+        "jest": true
       }
     }
   ]
