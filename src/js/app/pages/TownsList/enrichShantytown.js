@@ -7,7 +7,7 @@
  */
 
 import policeSiren from "./assets/police_siren.svg";
-import getSince from "./getSince";
+import formatDateSince from "./formatDateSince";
 
 export default function enrichShantytown(shantytown, fieldTypes) {
     const fieldTypeColors = fieldTypes.reduce(
@@ -94,7 +94,6 @@ export default function enrichShantytown(shantytown, fieldTypes) {
     // status
     let statusName;
     let statusDate;
-    const statusSince = [];
     if (shantytown.status === "open") {
         if (shantytown.builtAt) {
             statusName = "Existe";
@@ -111,25 +110,7 @@ export default function enrichShantytown(shantytown, fieldTypes) {
         statusDate = shantytown.closedAt;
     }
 
-    if (statusDate !== null) {
-        const { days, years, months } = getSince(statusDate);
-
-        if (years === 0 && months === 0) {
-            statusSince.push(`${days} jours`);
-        } else {
-            if (years > 0) {
-                statusSince.push(`${years} an${years > 1 ? "s" : ""}`);
-            }
-
-            if (years > 0 && months > 0) {
-                statusSince.push(`et`);
-            }
-
-            if (months > 0) {
-                statusSince.push(`${months} mois`);
-            }
-        }
-    }
+    const statusSince = statusDate ? formatDateSince(statusDate) : "";
 
     // closing solutions
     const totalSolutions = shantytown.closingSolutions.reduce(
@@ -148,7 +129,7 @@ export default function enrichShantytown(shantytown, fieldTypes) {
         ...shantytown,
         statusName,
         statusDate,
-        statusSince: statusSince.join(" "),
+        statusSince,
         statusDetails: statusDetails[shantytown.status],
         fieldType: {
             ...shantytown.fieldType,
