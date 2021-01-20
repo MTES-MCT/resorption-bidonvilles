@@ -16,8 +16,12 @@
                 </div>
                 <div>
                     <div class="font-bold">Origine</div>
+                    <div v-if="!town.socialOrigins.length" class="text-G600">
+                        inconnue
+                    </div>
                     <div
                         class="flex items-center"
+                        v-else
                         v-for="origin in town.socialOrigins"
                         :key="origin.id"
                     >
@@ -75,13 +79,13 @@ export default {
             }
 
             if (origin.id === 2) {
-                return { id: 2, label: "Européens", img: flagEU };
+                return { id: 2, label: "Union européenne", img: flagEU };
             }
 
             if (origin.id === 3) {
                 return {
                     id: 3,
-                    label: "Extra-communautaires",
+                    label: "Hors Union européenne",
                     img: flagExtraCommunautaires
                 };
             }
