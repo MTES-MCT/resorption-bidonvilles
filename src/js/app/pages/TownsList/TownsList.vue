@@ -66,6 +66,7 @@
                         >Imprimer</Button
                     >
                     <Button
+                        v-if="hasPermission('shantytown.export')"
                         icon="file-excel"
                         iconPosition="left"
                         variant="primary"
@@ -183,6 +184,7 @@
                             </template>
                         </TownsListFilter>
                         <TownsListFilter
+                            v-if="hasJusticePermission"
                             title="Procédure judiciaire"
                             class="mr-2 mb-2"
                             :value="filters.justice"
@@ -220,6 +222,7 @@
                             : filteredShantytownsByPage"
                         :key="shantytown.id"
                         :shantytown="shantytown"
+                        :hasJusticePermission="hasJusticePermission"
                         class="mb-6"
                     />
                     <div class="flex flex-end mb-12 print:hidden">
@@ -299,7 +302,6 @@ export default {
         const permission = getPermission("shantytown.list");
 
         return {
-            hasNationalPermission: permission.geographic_level === "nation",
             hasJusticePermission: permission.data_justice === true,
             fieldTypes,
             exportIsVisible: false,
@@ -421,7 +423,7 @@ export default {
             );
         },
         title() {
-            if (this.currentLocation.code) {
+            if (this.currentLocation.label) {
                 return `${this.currentLocation.label}`;
             }
 
