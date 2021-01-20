@@ -18,6 +18,9 @@
                     <h1 class="quickview-title">
                         Point de distribution alimentaire
                     </h1>
+                    <div class="text-G600 uppercase text-sm my-2 ">
+                        source: soliguide.fr
+                    </div>
                     <h4 class="my-4" v-if="poi.name">
                         {{ poi.name }}
                     </h4>
