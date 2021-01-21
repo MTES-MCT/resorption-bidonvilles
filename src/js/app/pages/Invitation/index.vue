@@ -13,7 +13,7 @@
         </div>
         <PublicContainer class="py-4">
             <div class="max-w-xl mx-auto">
-                <div class="max-w-screen-lg mx-auto pb-8">
+                <div class="mx-auto pb-8">
                     <div class="mt-8">
                         <span class="font-bold">{{
                             $t("invitationPage.firstParagraph.bold")
@@ -64,53 +64,66 @@ export default {
     data() {
         return {
             guestList: [],
-            loading: false,
-            error: null
+            loading: false
         };
     },
     computed: {
-        isFrenchLocale() {
-            return this.$i18n.locale === "fr";
-        },
         greeter() {
             return this.$store.state.greeter;
         }
     },
     methods: {
+        isEmpty(obj) {
+            return Object.keys(obj).length === 0;
+        },
+        backHomeWithErrMsg(msg) {
+            this.$router.push("/");
+            notify({
+                group: "notifications",
+                type: "error",
+                title: "Erreur",
+                text: msg
+            });
+        },
         async sendInvitations() {
-            // Préparation du message de confirmation d'envoi des mails
-            let msg = "Invitation(s) envoyée(s) à :<br>";
-            // Préparation de l'objet data à transmettre à l'API
-            const data = {
-                guests: [],
-                greeter: this.greeter
-            };
-            this.loading = true;
-            // Ajout des destinataires au message de confirmation
-            for (const guest of this.guestList) {
-                data.guests.push({
-                    email: guest.email,
-                    first_name: guest.firstname,
-                    last_name: guest.lastname
-                });
-                msg += guest.email + "<br>";
-            }
-
-            try {
-                this.loading = true;
-                await invite(data);
+            this.loading = false;
+            if (this.guestList.length > 0) {
+                // Préparation de l'objet data à transmettre à l'API
+                const data = {
+                    // Ajout des destinataires au message de confirmation
+                    guests: this.guestList.map(
+                        ({ email, firstname, lastname }) => ({
+                            email,
+                            firstname,
+                            lastname
+                        })
+                    ),
+                    greeter: this.greeter
+                };
+                // Préparation du message de confirmation d'envoi des mails
+                const msg = [
+                    "Invitation(s) envoyée(s) à",
+                    ...this.guestList.map(({ email }) => email)
+                ].join("<br/>");
+                try {
+                    await invite(data);
+                    this.loading = false;
+                    this.$router.push("/");
+                    notify({
+                        group: "notifications",
+                        type: "success",
+                        title: "Succès",
+                        text: msg
+                    });
+                } catch (err) {
+                    this.loading = false;
+                    this.backHomeWithErrMsg(
+                        "Une erreur est survenue lors de l'envoi des invitations."
+                    );
+                }
+            } else {
                 this.loading = false;
-                this.$router.push("/");
-                notify({
-                    group: "notifications",
-                    type: "success",
-                    title: "Succès",
-                    text: msg
-                });
-            } catch (err) {
-                this.loading = false;
-                this.error = err;
-                this.$refs.form.setErrors(err.fields);
+                this.backHomeWithErrMsg("La liste des invités est vide.");
             }
         },
         omit() {
@@ -129,6 +142,19 @@ export default {
                 lastname: guest.lastname,
                 email: guest.email
             });
+        }
+    },
+    created() {
+        if (this.greeter === null || this.greeter === undefined) {
+            this.backHomeWithErrMsg(
+                "Impossible d'identifier l'utilisateur' à l'origine de l'invitation"
+            );
+        } else if (this.isEmpty(this.greeter)) {
+            this.backHomeWithErrMsg(
+                "Les données concernant l'utilisateur à l'origine de l'invitation sont introuvables"
+            );
+        } else {
+            console.log("greeter vaut " + JSON.stringify(this.greeter));
         }
     }
 };

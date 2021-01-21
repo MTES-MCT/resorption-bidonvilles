@@ -14,7 +14,7 @@
             <Button
                 class="absolute inset-0 mb-8"
                 variant="secondaryText"
-                @click="delItem(index)"
+                @click="deleteItem(index)"
             >
                 {{ $t("invitationPage.delete") }}
             </Button>
@@ -25,13 +25,19 @@
 <script>
 export default {
     name: "InvitationList",
-    props: ["guestList"],
+    props: {
+        guestList: {
+            type: Array,
+            required: false,
+            default() {
+                return [];
+            }
+        }
+    },
     methods: {
-        delItem(index) {
+        deleteItem(index) {
             this.guestList.splice(index, 1);
         }
     }
 };
 </script>
-
-<style></style>
