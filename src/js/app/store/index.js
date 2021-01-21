@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import Vue from "vue";
 import Vuex from "vuex";
 import {
@@ -12,16 +11,10 @@ import {
 } from "#helpers/api/town";
 import enrichShantytown from "#app/pages/TownsList/enrichShantytown";
 import { get as getConfig } from "#helpers/api/config";
-=======
-/* eslint-disable prettier/prettier */
-import Vue from "vue";
-import Vuex from "vuex";
->>>>>>> (641) Formulaire 'Partager vos contacts'
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-<<<<<<< HEAD
     state: {
         towns: {
             data: [],
@@ -38,7 +31,16 @@ export default new Vuex.Store({
                 location: null,
                 actors: []
             },
-            currentPage: 1
+            currentPage: 1,
+            greeter: {
+                email: "",
+                first_name: "",
+                last_name: "",
+                organization: {
+                    organization_id: 0,
+                    organization_name: ""
+                }
+            }
         },
         detailedTown: null
     },
@@ -99,6 +101,21 @@ export default new Vuex.Store({
                 if (actor !== undefined) {
                     actor.themes = themes;
                 }
+            }
+        },
+        saveGreeter(currentState, greeter) {
+            currentState.greeter = {
+                ...greeter
+            };
+        },
+        saveHost(currentState, host) {
+            let index = currentState.hosts.findIndex(
+                h => h.email == host.email
+            );
+            if (index == -1) {
+                currentState.hosts.push(host);
+            } else {
+                Vue.set(currentState.hosts, index, host);
             }
         }
     },
@@ -211,32 +228,3 @@ export default new Vuex.Store({
         }
     }
 });
-=======
-  state: {
-    greeter: {
-      email: "",
-      first_name: "",
-      last_name: "",
-      organization: {
-        organization_id: 0,
-        organization_name: ""
-      }
-    }
-  },
-  mutations: {
-    saveGreeter(currentState, greeter) {
-      currentState.greeter = {
-        ...greeter
-      };
-    },
-    saveHost(currentState, host) {
-      let index = currentState.hosts.findIndex(h => h.email == host.email);
-      if (index == -1) {
-        currentState.hosts.push(host);
-      } else {
-        Vue.set(currentState.hosts, index, host);
-      }
-    }
-  }
-});
->>>>>>> (641) Formulaire 'Partager vos contacts'
