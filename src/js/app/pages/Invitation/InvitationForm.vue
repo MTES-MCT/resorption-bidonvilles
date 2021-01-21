@@ -1,7 +1,7 @@
 <template>
     <div>
         <ValidationObserver ref="form" v-slot="{ handleSubmit, errors }">
-            <Form class="mt-2 mb-8" @submit.prevent="handleSubmit(onSubmit)">
+            <Form class="mb-8" @submit.prevent="handleSubmit(onSubmit)">
                 <InputGroup class="md:flex">
                     <TextInput
                         class="md:mr-4 md:w-1/2"
@@ -66,7 +66,6 @@ export default {
     data() {
         return {
             loading: false,
-            error: null,
             commonFields: {
                 email: this.$route.query.email || "",
                 firstname: "",
@@ -80,10 +79,11 @@ export default {
                 if (!success) {
                     return;
                 }
-                this.$emit("addGuestReq", this.commonFields);
+                this.$emit("addGuestReq", { ...this.commonFields });
                 // resetting values
-                this.commonFields.firstname = this.commonFields.lastname = this.commonFields.email =
-                    "";
+                this.commonFields.firstname = "";
+                this.commonFields.lastname = "";
+                this.commonFields.email = "";
                 // waiting until models are updated in the UI
                 this.$nextTick(() => {
                     this.$refs.form.reset();
@@ -93,5 +93,3 @@ export default {
     }
 };
 </script>
-
-<style></style>
