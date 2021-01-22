@@ -33,8 +33,8 @@
                             </section>
 
                             <section class="userInfo-section">
-                                <p class="userHistory-item" v-if="isExpired"><span><font-awesome-icon class="user-statusIcon" icon="unlink"></font-awesome-icon> <strong>Lien expiré</strong> le {{ formatDate(user.activation_link_expires_on, 'd M y') }}</span><br/>Un lien d'activation est valable {{ tokenExpiresIn }} jours<br/></p>
-                                <p class="userHistory-item" v-if="user.last_activation_link_sent_on"><span><font-awesome-icon class="user-statusIcon" icon="paper-plane"></font-awesome-icon> <strong>Accès envoyé</strong> le {{ formatDate(user.last_activation_link_sent_on, 'd M y') }}</span><br/></p>
+                                <p class="userHistory-item" v-if="isExpired"><span><font-awesome-icon class="user-statusIcon" icon="unlink"></font-awesome-icon> <strong>Lien expiré</strong> le {{ formatDate(user.user_access.expires_at, 'd M y') }}</span><br/>Un lien d'activation est valable {{ tokenExpiresIn }} jours<br/></p>
+                                <p class="userHistory-item" v-if="user.user_access !== null"><span><font-awesome-icon class="user-statusIcon" icon="paper-plane"></font-awesome-icon> <strong>Accès envoyé</strong> le {{ formatDate(user.user_access.created_at, 'd M y') }}</span><br/></p>
                                 <p class="userHistory-item"><span><font-awesome-icon class="user-statusIcon user-statusIcon--flag" icon="flag"></font-awesome-icon> <strong>Demandé</strong> le {{ formatDate(user.created_at, 'd M y') }}</span></p>
                             </section>
 
@@ -72,7 +72,7 @@
                         <p class="userValidationFooter-remove" v-if="user.status === 'active'">
                             <span @click="remove" v-if="validation.state !== 'loading'">Supprimer l'accès</span>
                         </p>
-                        <p class="userValidationFooter-deny" v-if="user.status === 'new' && !user.last_activation_link_sent_on">
+                        <p class="userValidationFooter-deny" v-if="user.status === 'new' && user.user_access === null">
                             <span @click="deny" v-if="validation.state !== 'loading'">Refuser l'accès</span>
                         </p>
                         <p class="userValidationFooter-allow" v-if="user.status === 'new'">
