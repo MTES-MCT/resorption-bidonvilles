@@ -1,5 +1,5 @@
 {
-  "title": "Neighbour, citizen, shantytown dweller... Any news? A question ? An alert?",
+  "title": "Neighbour, citizen, slum dweller... Any news? A question ? An alert?",
   "contactUs": "Contact us",
   "email": "Your email",
   "firstname": "First name",
@@ -10,7 +10,7 @@
   "requestHelp": "request help",
   "requestInfo": "request info",
   "requestAccess": "request access",
-  "isActor": "Are you involved in shantytown resorption",
+  "isActor": "Are you involved in slum resorption",
   "actorExample": "For example: a State service, an association operator, a local authority, etc.",
   "yes": "Yes",
   "no": "No",
