@@ -41,7 +41,7 @@
 
                     <div class="townList-headerRight">
                         <div class="townList-actions">
-                            <router-link v-if="hasPermission('shantytown.create')" to="/nouveau-site" class="button secondary">Déclarer un site</router-link>
+                            <router-link v-if="hasPermission('shantytown.create')" to="/nouveau-site-new" class="button secondary">Déclarer un site</router-link>
                             <a v-if="hasPermission('shantytown.export') && dashboardShantytowns.length > 0" class="button button--excel" @click="showExport"><font-awesome-icon icon="file-excel"></font-awesome-icon> &nbsp;Exporter</a>
                         </div>
 

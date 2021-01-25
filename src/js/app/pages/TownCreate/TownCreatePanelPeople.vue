@@ -1,0 +1,68 @@
+<template>
+    <FormGroup title="Habitants">
+        <FormParagraph title="Combien d'habitants vivent sur le site ?">
+            <InputPopulation v-model="input.population"></InputPopulation>
+        </FormParagraph>
+
+        <FormParagraph title="Quelle est l'origine des habitants ?">
+            <InputSocialOrigins
+                v-model="input.social_origins"
+            ></InputSocialOrigins>
+        </FormParagraph>
+
+        <FormParagraph title="Quel est le statut du diagnostic social ?">
+            <InputCensusStatus
+                v-model="input.census_status"
+            ></InputCensusStatus>
+            <div class="w-64">
+                <InputCensusConductedAt
+                    v-model="input.census_conducted_at"
+                ></InputCensusConductedAt>
+            </div>
+            <InputCensusConductedBy
+                v-model="input.census_conducted_by"
+            ></InputCensusConductedBy>
+        </FormParagraph>
+    </FormGroup>
+</template>
+
+<script>
+import InputPopulation from "./inputs/InputPopulation.vue";
+import InputSocialOrigins from "./inputs/InputSocialOrigins.vue";
+import InputCensusStatus from "./inputs/InputCensusStatus.vue";
+import InputCensusConductedAt from "./inputs/InputCensusConductedAt.vue";
+import InputCensusConductedBy from "./inputs/InputCensusConductedBy.vue";
+
+export default {
+    components: {
+        InputPopulation,
+        InputSocialOrigins,
+        InputCensusStatus,
+        InputCensusConductedAt,
+        InputCensusConductedBy
+    },
+
+    props: {
+        value: {
+            type: Object,
+            required: true
+        }
+    },
+
+    data() {
+        return {
+            input: this.value
+        };
+    },
+
+    watch: {
+        value() {
+            this.input = this.value;
+        },
+
+        input() {
+            this.$emit("input", this.input);
+        }
+    }
+};
+</script>
