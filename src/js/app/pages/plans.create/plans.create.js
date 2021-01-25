@@ -150,8 +150,9 @@ export default {
                                     type: "townList",
                                     label: "Sites concernés",
                                     description: `Merci de sélectionner les sites concernés par le dispositif.<br/>Si vous ne trouvez pas un site, vous pouvez <a href="${
-                                        this.$router.resolve("/nouveau-site")
-                                            .href
+                                        this.$router.resolve(
+                                            "/nouveau-site-new"
+                                        ).href
                                     }" clas="link">déclarer un nouveau site</a>.`,
                                     mandatory: true,
                                     condition({ locationType }) {

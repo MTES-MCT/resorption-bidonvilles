@@ -1,20 +1,10 @@
 <template>
     <div class="shadow p-5">
         <div class="text-primary text-display-lg pb-4 border-b-2">
-            {{ title }}
+            <slot name="title" />
         </div>
         <div class="pt-4">
-            <slot />
+            <slot name="body" />
         </div>
     </div>
 </template>
-
-<script>
-export default {
-    props: {
-        title: {
-            type: String
-        }
-    }
-};
-</script>

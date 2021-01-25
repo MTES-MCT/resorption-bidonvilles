@@ -40,7 +40,7 @@ export default {
                 },
                 {
                     label: "Déclarer un site",
-                    target: "/nouveau-site",
+                    target: "/nouveau-site-new",
                     group: "townCreation"
                 }
             ]
