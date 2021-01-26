@@ -24,5 +24,15 @@ export default {
         close() {
             this.$emit("close");
         }
+    },
+    computed: {
+        users() {
+            // Some users are hidden from the directory (PAF)
+            const hiddenUserIds = [255, 475, 558, 576];
+
+            return this.organization.users.filter(
+                user => !hiddenUserIds.includes(user.id)
+            );
+        }
     }
 };
