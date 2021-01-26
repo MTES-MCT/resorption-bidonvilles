@@ -13,9 +13,9 @@
                 <h1 class="primary">Rôle</h1>
                 <p style="margin: 5px 0 35px 0"><span class="role">{{ organization.role }}</span></p>
 
-                <h1>{{ organization.users.length }} contact{{ organization.users.length > 1 ? 's' : ''}}</h1>
+                <h1>{{ users.length }} contact{{ users.length > 1 ? 's' : ''}}</h1>
                 <div class="organization-users">
-                    <div v-for="user in organization.users" class="userCard">
+                    <div v-for="user in users" class="userCard">
                         <h1>{{ user.first_name }} {{ user.last_name.toUpperCase() }}</h1>
                         <h2>Fonction</h2>
                         <h3 v-bind:class="{ 'userCard-position--empty': !user.position }">{{ user.position || 'NC' }}</h3>
