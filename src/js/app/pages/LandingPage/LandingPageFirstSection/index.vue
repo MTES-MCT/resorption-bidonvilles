@@ -54,13 +54,13 @@
                         src="./assets/fr/before.jpg"/>
                     <img
                         v-if="$i18n.locale === 'en'"
-                        src="./assets/en/before.jpg"/>
+                        src="./assets/en/before.png"/>
                     <img
                         v-if="$i18n.locale === 'bg'"
-                        src="./assets/bg/before.jpg"/>
+                        src="./assets/bg/before.png"/>
                     <img
                         v-if="$i18n.locale === 'ro'"
-                        src="./assets/ro/before.jpg"
+                        src="./assets/ro/before.png"
                 /></LandingPageContextImage>
                 <div
                     class="hidden md:block border-solid border-r-2 border-gray-200 m-20"
@@ -70,15 +70,16 @@
                 >
                     <img
                         v-if="$i18n.locale === 'fr'"
-                        src="./assets/fr/after.jpg"/><img
+                        src="./assets/fr/after.jpg"/>
+                    <img
                         v-if="$i18n.locale === 'en'"
-                        src="./assets/en/after.jpg"/>
+                        src="./assets/en/after.png"/>
                     <img
                         v-if="$i18n.locale === 'bg'"
-                        src="./assets/bg/after.jpg"/>
+                        src="./assets/bg/after.png"/>
                     <img
                         v-if="$i18n.locale === 'ro'"
-                        src="./assets/ro/after.jpg"
+                        src="./assets/ro/after.png"
                 /></LandingPageContextImage>
             </div>
             <LandingPageUserFeedback class="mt-32" />
