@@ -14,11 +14,13 @@
                                     <div>
                                         {{ formatDateSince(town.builtAt) }}
                                     </div>
-                                    <div>
+                                    <div data-cy-data="built_at">
                                         {{ buildAt }}
                                     </div>
                                 </div>
-                                <div v-else>non communiquée</div>
+                                <div v-else data-cy-data="built_at">
+                                    non communiquée
+                                </div>
                             </div>
                             <div>
                                 <div class="font-bold">
@@ -28,11 +30,11 @@
                                     <div>
                                         {{ formatDateSince(town.declaredAt) }}
                                     </div>
-                                    <div>
+                                    <div data-cy-data="declared_at">
                                         {{ declaredAt }}
                                     </div>
                                 </div>
-                                <div v-else>
+                                <div v-else data-cy-data="declared_at">
                                     non communiquée
                                 </div>
                             </div>
@@ -44,7 +46,10 @@
                             <div class="font-bold">
                                 Type de site
                             </div>
-                            <div class="flex items-center">
+                            <div
+                                class="flex items-center"
+                                data-cy-data="field_type"
+                            >
                                 <Icon
                                     icon="map-marker-alt"
                                     class="text-lg mr-2"
@@ -59,7 +64,7 @@
                             <div class="font-bold">
                                 Informations d'accès
                             </div>
-                            <div>
+                            <div data-cy-data="address_details">
                                 {{ town.addressDetails }}
                             </div>
                         </div>
@@ -69,8 +74,18 @@
                             <div class="font-bold">
                                 Propriétaire
                             </div>
-                            <div>
+                            <div data-cy-data="owner_type">
                                 {{ town.ownerType.label }}
+                            </div>
+                        </div>
+                    </TownDetailsPanelSection>
+                    <TownDetailsPanelSection>
+                        <div class="grid grid-cols-2">
+                            <div class="font-bold">
+                                Nom du propriétaire
+                            </div>
+                            <div data-cy-data="owner">
+                                {{ town.owner || "non communiqué" }}
                             </div>
                         </div>
                     </TownDetailsPanelSection>

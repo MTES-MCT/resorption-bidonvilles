@@ -7,7 +7,7 @@
                     <div :class="[colorClass, 'font-bold', 'mr-1']">
                         {{ title }}:
                     </div>
-                    <div>{{ text }}</div>
+                    <div :data-cy-data="cypressName">{{ text }}</div>
                 </div>
                 <slot />
             </div>
@@ -25,6 +25,9 @@ export default {
         },
         value: {
             validator: prop => typeof prop === "boolean" || prop === null
+        },
+        cypressName: {
+            type: String
         }
     },
     computed: {

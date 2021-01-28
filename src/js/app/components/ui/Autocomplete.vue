@@ -45,7 +45,7 @@
                                 @focus="handleFocus"
                                 @blur="handleBlur"
                                 v-model="searchInput"
-                                class="pl-12"
+                                class="pl-12 pr-12"
                             />
                             <InputIcon position="after" class="pr-6">
                                 <Spinner v-if="loading" />

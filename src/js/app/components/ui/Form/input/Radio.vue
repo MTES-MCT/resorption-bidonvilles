@@ -5,6 +5,8 @@
             v-if="variant === 'card' || variant === 'townCard'"
             :variant="variant"
             :isChecked="isChecked"
+            :data-cy-field="cypressName"
+            :data-cy-label="label"
         >
             <input
                 type="radio"
@@ -72,6 +74,9 @@ export default {
         variant: {
             type: String,
             default: "default"
+        },
+        cypressName: {
+            type: String
         }
     },
     methods: {

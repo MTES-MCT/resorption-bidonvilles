@@ -4,34 +4,48 @@
         <template v-slot:body>
             <TownDetailsPanelSection>
                 <div class="flex items-center mb-4">
-                    <div class="text-display-sm mr-4">
+                    <div
+                        class="text-display-sm mr-4"
+                        data-cy-data="population_total"
+                    >
                         {{ town.populationTotal || 0 }} personnes
                     </div>
-                    <div class="text-display-sm mr-4">
+                    <div
+                        class="text-display-sm mr-4"
+                        data-cy-data="population_couples"
+                    >
                         {{ town.populationCouples || 0 }} ménages
                     </div>
-                    <div class="text-display-sm">
+                    <div
+                        class="text-display-sm"
+                        data-cy-data="population_minors"
+                    >
                         {{ town.populationMinors || 0 }} mineurs
                     </div>
                 </div>
                 <div>
                     <div class="font-bold">Origine</div>
-                    <div v-if="!town.socialOrigins.length" class="text-G600">
-                        inconnue
-                    </div>
-                    <div
-                        class="flex items-center"
-                        v-else
-                        v-for="origin in town.socialOrigins"
-                        :key="origin.id"
-                    >
-                        <img
-                            :src="socialOrigin(origin).img"
-                            class=" w-8 mr-2"
-                        />
-                        <span class="text-display-sm">{{
-                            socialOrigin(origin).label
-                        }}</span>
+                    <div data-cy-data="social_origins">
+                        <div
+                            v-if="!town.socialOrigins.length"
+                            class="text-G600"
+                        >
+                            inconnue
+                        </div>
+                        <div
+                            class="flex items-center"
+                            v-else
+                            v-for="origin in town.socialOrigins"
+                            :key="origin.id"
+                        >
+                            <img
+                                :src="socialOrigin(origin).img"
+                                class=" w-8 mr-2"
+                            />
+                            <span class="text-display-sm">{{
+                                socialOrigin(origin).label
+                            }}</span>
+                        </div>
                     </div>
                 </div>
             </TownDetailsPanelSection>
@@ -39,7 +53,9 @@
                 <div class="flex items-center justify-between">
                     <div class="w-96">
                         <div class="font-bold">Diagnostic social</div>
-                        <div>{{ socialDiagnostic }}</div>
+                        <div data-cy-data="census_status">
+                            {{ socialDiagnostic }}
+                        </div>
                     </div>
                     <div class="italic">
                         Un diagnostic social vise à identifier les situations et
@@ -75,17 +91,17 @@ export default {
         },
         socialOrigin(origin) {
             if (origin.id === 1) {
-                return { id: 1, label: "Français", img: flagFR };
+                return { id: 1, label: origin.label, img: flagFR };
             }
 
             if (origin.id === 2) {
-                return { id: 2, label: "Union européenne", img: flagEU };
+                return { id: 2, label: origin.label, img: flagEU };
             }
 
             if (origin.id === 3) {
                 return {
                     id: 3,
-                    label: "Hors Union européenne",
+                    label: origin.label,
                     img: flagExtraCommunautaires
                 };
             }
@@ -98,7 +114,7 @@ export default {
             if (this.town.censusStatus === "done") {
                 return `Réalisé le ${this.formatDate(
                     this.town.censusConductedAt,
-                    "y/m/d"
+                    "d/m/y"
                 )} par ${this.town.censusConductedBy}`;
             }
 

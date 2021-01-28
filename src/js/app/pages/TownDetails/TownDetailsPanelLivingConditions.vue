@@ -6,26 +6,34 @@
                 <TownDetailsPanelLivingConditionsSection
                     title="Accès à l’eau"
                     :value="town.accessToWater"
+                    cypressName="access_to_water"
                 >
-                    {{ town.waterComments }}
+                    <span data-cy-data="water_comments">{{
+                        town.waterComments
+                    }}</span>
                 </TownDetailsPanelLivingConditionsSection>
                 <TownDetailsPanelLivingConditionsSection
                     title="Accès aux toilettes"
                     :value="town.accessToSanitary"
-                    >{{
-                        town.sanitaryComments
-                    }}</TownDetailsPanelLivingConditionsSection
+                    cypressName="access_to_sanitary"
                 >
+                    <span data-cy-data="sanitary_comments">{{
+                        town.sanitaryComments
+                    }}</span>
+                </TownDetailsPanelLivingConditionsSection>
                 <TownDetailsPanelLivingConditionsSection
                     title="Accès à l’électricité"
                     :value="town.electricityType.value"
-                    >{{
-                        town.electricityComments
-                    }}</TownDetailsPanelLivingConditionsSection
+                    cypressName="electricity_type"
                 >
+                    <span data-cy-data="electricity_comments">{{
+                        town.electricityComments
+                    }}</span>
+                </TownDetailsPanelLivingConditionsSection>
                 <TownDetailsPanelLivingConditionsSection
                     title="Évacuation des déchets"
                     :value="town.trashEvacuation"
+                    cypressName="trash_evacuation"
                 />
             </div>
         </template>

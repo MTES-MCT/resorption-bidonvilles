@@ -1,8 +1,10 @@
 <template>
     <div>
         <div>
-            <div>{{ town.city.name }} ({{ town.departement.name }})</div>
-            <div class="text-display-lg">
+            <div data-cy-data="city">
+                {{ town.city.name }} ({{ town.departement.name }})
+            </div>
+            <div class="text-display-lg" data-cy-data="address">
                 {{ town.addressSimple }}
                 <span v-if="town.name" class="text-display-xs"
                     >« {{ town.name }} »</span
@@ -42,8 +44,8 @@
                 class="mr-8"
                 icon="pen"
                 iconPosition="left"
-                v-if="town.status === 'open'"
-                >Mettre a jour</Button
+                @click="routeToUpdate"
+                >Mettre à jour</Button
             >
             <router-link
                 to="#newComment"
@@ -86,6 +88,9 @@ export default {
          */
         formatDate(...args) {
             return window.App.formatDate.apply(window, args);
+        },
+        routeToUpdate() {
+            this.$router.push(`/site/${this.town.id}/mise-a-jour`);
         }
     }
 };
