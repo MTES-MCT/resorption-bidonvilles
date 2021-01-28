@@ -10,7 +10,9 @@
                             Dépôt de plainte du propriétaire
                         </div>
                     </div>
-                    <div>{{ town.ownerComplaint ? "oui" : "non" }}</div>
+                    <div data-cy-data="owner_complaint">
+                        {{ town.ownerComplaint ? "oui" : "non" }}
+                    </div>
                 </div>
             </TownDetailsPanelSection>
             <div class="flex">
@@ -22,7 +24,7 @@
                                 Existence d’une procédure judiciaire
                             </div>
 
-                            <div class="-ml-5">
+                            <div class="-ml-5" data-cy-data="justice_procedure">
                                 {{ town.justiceProcedure ? "oui" : "non" }}
                             </div>
                         </div>
@@ -33,12 +35,12 @@
                                 Décision de justice rendue
                             </div>
 
-                            <div class="-ml-5">
+                            <div class="-ml-5" data-cy-data="justice_rendered">
                                 {{
                                     town.justiceRenderedAt
                                         ? `rendue le ${formatDate(
                                               town.justiceRenderedAt,
-                                              "y/m/d"
+                                              "d/m/y"
                                           )}`
                                         : "non"
                                 }}
@@ -49,7 +51,10 @@
                         <div class="grid grid-cols-2">
                             <div class="font-bold">Contentieux</div>
 
-                            <div class="-ml-5">
+                            <div
+                                class="-ml-5"
+                                data-cy-data="justice_challenged"
+                            >
                                 {{ town.justiceChallenged ? "oui" : "non" }}
                             </div>
                         </div>
@@ -65,7 +70,19 @@
                             Concours de la force publique
                         </div>
                     </div>
-                    <div>{{ policeStatusLabel }}</div>
+                    <div data-cy-data="police_status">
+                        {{ policeStatusLabel }}
+                    </div>
+                </div>
+            </TownDetailsPanelSection>
+
+            <TownDetailsPanelSection>
+                <div class="grid grid-cols-2">
+                    <div class="font-bold">Nom de l'étude d'huissier</div>
+
+                    <div class="-ml-5" data-cy-data="bailiff">
+                        {{ town.bailiff || "NC" }}
+                    </div>
                 </div>
             </TownDetailsPanelSection>
         </template>
@@ -104,14 +121,14 @@ export default {
             if (this.town.policeStatus === "requested") {
                 return `Demandé le ${this.formatDate(
                     this.town.policeRequestedAt,
-                    "y/m/d"
+                    "d/m/y"
                 )}`;
             }
 
             if (this.town.policeStatus === "granted") {
-                return `Accordé le  ${this.formatDate(
+                return `Accordé le ${this.formatDate(
                     this.town.policeGrantedAt,
-                    "y/m/d"
+                    "d/m/y"
                 )}`;
             }
 

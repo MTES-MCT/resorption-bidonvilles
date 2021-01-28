@@ -47,15 +47,7 @@ export function get(id) {
  * @returns {Promise}
  */
 export function add(data) {
-    const formattedData = { ...data };
-
-    if (data.address) {
-        formattedData.coordinates = data.address.location.coordinates.join(",");
-        formattedData.citycode = data.address.address.data.citycode;
-        formattedData.address = data.address.address.label;
-    }
-
-    return postApi("/towns", formattedData);
+    return postApi("/towns", data);
 }
 
 /**

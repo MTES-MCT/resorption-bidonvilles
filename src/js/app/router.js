@@ -10,6 +10,7 @@ import TownsList from "#app/pages/towns.list/towns.list.vue";
 import TownsListNew from "#app/pages/TownsList/TownsList.vue";
 import TownsCreate from "#app/pages/towns.create/towns.create.vue";
 import TownsCreateNew from "#app/pages/TownCreate/TownCreate.vue";
+import TownsUpdate from "#app/pages/TownUpdate/TownUpdate.vue";
 import TownsDetails from "#app/pages/towns.details/towns.details.vue";
 import TownsDetailsNew from "#app/pages/TownDetails/TownDetails";
 import Me from "#app/pages/me/me.vue";
@@ -301,6 +302,14 @@ const router = new VueRouter({
             },
             path: "/site-new/:id",
             component: TownsDetailsNew,
+            beforeEnter: guardians.loadedAndUpToDate
+        },
+        {
+            meta: {
+                group: "townList"
+            },
+            path: "/site/:id/mise-a-jour",
+            component: TownsUpdate,
             beforeEnter: guardians.loadedAndUpToDate
         },
         {

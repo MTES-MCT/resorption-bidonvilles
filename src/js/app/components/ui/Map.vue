@@ -6,25 +6,45 @@
 import L from "leaflet";
 import "leaflet-providers";
 
+const DEFAULT_VIEW = [46.7755829, 2.0497727];
+
 export default {
     props: {
-        defaultView: {
-            type: Object,
-            default: () => ({
-                // basically, centering on France
-                center: [46.7755829, 2.0497727],
-                zoom: 5
-            })
+        value: {
+            type: Array,
+            required: false
+        },
+
+        zoom: {
+            type: Number,
+            required: false,
+            default: 5
         }
     },
 
     data() {
         return {
-            map: null
+            map: null,
+            marker: null,
+            clickTimeout: null
         };
     },
 
     computed: {
+        coordinates() {
+            if (this.marker === null) {
+                return undefined;
+            }
+
+            const { lat, lng } = this.marker.getLatLng();
+            return [lat, lng];
+        },
+        view() {
+            return {
+                center: this.coordinates || DEFAULT_VIEW,
+                zoom: this.zoom
+            };
+        },
         mapLayers() {
             return {
                 Satellite: L.tileLayer.provider("Esri.WorldImagery"),
@@ -33,13 +53,17 @@ export default {
         }
     },
 
-    mounted() {
-        this.createMap();
-        this.$refs.container.addEventListener("resize", this.resize);
+    watch: {
+        value() {
+            this.syncMarker();
+            this.refreshView();
+        }
     },
 
-    beforeDestroy() {
-        this.$refs.container.removeEventListener("resize", this.resize);
+    mounted() {
+        this.createMap();
+        this.syncMarker();
+        this.refreshView();
     },
 
     methods: {
@@ -47,26 +71,70 @@ export default {
             this.map = L.map("map", {
                 layers: this.mapLayers.Dessin // fond de carte par défaut
             });
-
-            this.setupView();
         },
 
-        setupView() {
-            const { center, zoom } = this.defaultView;
-            this.centerMap(center, zoom);
+        refreshView(emitInput = false) {
+            const { center, zoom } = this.view;
+            this.map.setView(center, zoom);
+
+            if (emitInput === true) {
+                this.$emit("input", this.coordinates);
+            }
         },
 
-        centerMap(coordinates, zoom) {
-            this.map.setView(coordinates, zoom);
+        syncMarker() {
+            if (this.value === undefined) {
+                this.removeMarker();
+            } else if (this.marker === null) {
+                this.createMarker();
+            } else {
+                this.marker.setLatLng(this.value);
+            }
         },
 
-        resize() {
-            console.log("!!!!!!!!!!!!!");
-            if (this.map === null) {
+        createMarker() {
+            if (this.marker !== null && this.value !== undefined) {
                 return;
             }
 
-            this.map.invalidateSize(true);
+            this.marker = L.marker(this.value, { draggable: true });
+            this.map.addEventListener("click", event => {
+                clearTimeout(this.clickTimeout);
+                this.clickTimeout = setTimeout(
+                    this.handleClick.bind(this, event),
+                    200
+                );
+            });
+            this.map.addEventListener("dblclick", () => {
+                clearTimeout(this.clickTimeout);
+                this.clickTimeout = null;
+            });
+            this.marker.addEventListener("dragend", () => {
+                this.refreshView(true);
+            });
+
+            this.marker.addTo(this.map);
+        },
+
+        removeMarker() {
+            if (this.marker === null) {
+                return;
+            }
+
+            this.marker.remove();
+            this.marker = null;
+        },
+
+        handleClick({ latlng: { lat, lng } }) {
+            if (this.marker === null) {
+                return;
+            }
+
+            this.marker.setLatLng([lat, lng]);
+            this.refreshView(true);
+
+            clearTimeout(this.clickTimeout);
+            this.clickTimeout = null;
         }
     }
 };

@@ -22,6 +22,7 @@
                     v-on="$listeners"
                     :language="dateLanguage"
                     :monday-first="true"
+                    :data-cy-field="cypressName"
                 ></component>
             </div>
             <InputError>{{ errors[0] }}</InputError>
@@ -57,6 +58,9 @@ export default {
             default: "default"
         },
         rules: {
+            type: String
+        },
+        cypressName: {
             type: String
         }
     },
