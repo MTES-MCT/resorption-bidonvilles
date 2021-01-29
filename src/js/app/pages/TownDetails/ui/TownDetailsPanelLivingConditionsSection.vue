@@ -5,7 +5,7 @@
             <div>
                 <div class="flex items-center">
                     <div :class="[colorClass, 'font-bold', 'mr-1']">
-                        {{ title }}:
+                        {{ title }} :
                     </div>
                     <div :data-cy-data="cypressName">{{ text }}</div>
                 </div>

@@ -6,7 +6,7 @@
  * @returns {undefined}
  */
 Cypress.Commands.add("emptyDate", { prevSubject: true }, subject => {
-    const clearer = cy.wrap(subject).get(".vdp-datepicker__clear-button");
+    const clearer = cy.wrap(subject).siblings("[data-cy-button='clear']");
     if (clearer) {
         clearer.click();
     }

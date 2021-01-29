@@ -11,7 +11,7 @@
                         </div>
                     </div>
                     <div data-cy-data="owner_complaint">
-                        {{ town.ownerComplaint ? "oui" : "non" }}
+                        {{ boolToStr(town.ownerComplaint) }}
                     </div>
                 </div>
             </TownDetailsPanelSection>
@@ -25,7 +25,7 @@
                             </div>
 
                             <div class="-ml-5" data-cy-data="justice_procedure">
-                                {{ town.justiceProcedure ? "oui" : "non" }}
+                                {{ boolToStr(town.justiceProcedure) }}
                             </div>
                         </div>
                     </TownDetailsPanelSection>
@@ -36,14 +36,7 @@
                             </div>
 
                             <div class="-ml-5" data-cy-data="justice_rendered">
-                                {{
-                                    town.justiceRenderedAt
-                                        ? `rendue le ${formatDate(
-                                              town.justiceRenderedAt,
-                                              "d/m/y"
-                                          )}`
-                                        : "non"
-                                }}
+                                {{ justiceRendered }}
                             </div>
                         </div>
                     </TownDetailsPanelSection>
@@ -55,7 +48,7 @@
                                 class="-ml-5"
                                 data-cy-data="justice_challenged"
                             >
-                                {{ town.justiceChallenged ? "oui" : "non" }}
+                                {{ boolToStr(town.justiceChallenged) }}
                             </div>
                         </div>
                     </TownDetailsPanelSection>
@@ -78,9 +71,14 @@
 
             <TownDetailsPanelSection>
                 <div class="grid grid-cols-2">
-                    <div class="font-bold">Nom de l'étude d'huissier</div>
+                    <div class="flex items-center">
+                        <img :src="policeSiren" class="w-6 h-6 mr-2" />
+                        <div class="font-bold">
+                            Nom de l'étude d'huissier
+                        </div>
+                    </div>
 
-                    <div class="-ml-5" data-cy-data="bailiff">
+                    <div data-cy-data="bailiff">
                         {{ town.bailiff || "NC" }}
                     </div>
                 </div>
@@ -106,10 +104,30 @@ export default {
          */
         formatDate(...args) {
             return window.App.formatDate.apply(window, args);
+        },
+
+        boolToStr(bool) {
+            if (bool === null) {
+                return "NC";
+            }
+
+            return bool ? "oui" : "non";
         }
     },
     components: { TownDetailsPanel, TownDetailsPanelSection },
     computed: {
+        justiceRendered() {
+            if (this.town.justiceRendered === null) {
+                return "NC";
+            }
+
+            return this.town.justiceRendered
+                ? `rendue le ${this.formatDate(
+                      this.town.justiceRenderedAt,
+                      "d/m/y"
+                  )}`
+                : "non";
+        },
         policeSiren() {
             return policeSiren;
         },

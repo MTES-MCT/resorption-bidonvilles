@@ -62,6 +62,7 @@
                                                     searchInput
                                         "
                                         icon="times"
+                                        data-cy-button="clear"
                                     />
                                 </div>
                             </InputIcon>
@@ -204,8 +205,10 @@ export default {
         return {
             show: true,
             focused: false,
-            value: "",
-            searchInput: this.defaultValue || "",
+            value: this.defaultValue || "",
+            searchInput: this.defaultValue
+                ? this.getResultValue(this.defaultValue)
+                : "",
             results: []
         };
     },

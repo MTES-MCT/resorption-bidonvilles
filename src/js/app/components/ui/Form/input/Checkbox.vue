@@ -7,6 +7,7 @@
             :isChecked="isChecked"
             :data-cy-field="cypressName"
             :data-cy-label="label"
+            :data-cy-checked="isChecked"
         >
             <input
                 type="checkbox"
