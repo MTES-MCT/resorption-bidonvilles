@@ -215,7 +215,49 @@ export default {
                         this.data.accessToSanitary
                     ),
                     sanitary_comments: this.data.sanitaryComments || undefined,
-                    trash_evacuation: this.boolToInt(this.data.trashEvacuation)
+                    trash_evacuation: this.boolToInt(this.data.trashEvacuation),
+                    water_potable: this.boolToInt(this.data.waterPotable),
+                    water_continuous_access: this.boolToInt(
+                        this.data.waterContinuousAccess
+                    ),
+                    water_distance: this.boolToInt(this.data.waterDistance),
+                    water_roads_to_cross: this.boolToInt(
+                        this.data.waterRoadsToCross
+                    ),
+                    water_everyone_has_access: this.boolToInt(
+                        this.data.waterEveryoneHasAccess
+                    ),
+                    water_stagnant_water: this.boolToInt(
+                        this.data.waterStagnantWater
+                    ),
+                    water_hand_wash_access: this.boolToInt(
+                        this.data.waterHandWashAccess
+                    ),
+                    water_hand_wash_access_number: 1,
+                    sanitary_number: this.data.sanitaryNumber,
+                    sanitary_insalubrious: this.boolToInt(
+                        this.data.sanitaryInsalubrious
+                    ),
+                    sanitary_on_site: this.data.sanitaryOnSite,
+                    trash_cans_on_site: 1,
+                    trash_accumulation: this.boolToInt(
+                        this.data.trashAccumulation
+                    ),
+                    trash_evacuation_regular: this.boolToInt(
+                        this.data.trashEvacuationRegular
+                    ),
+                    vermin: this.boolToInt(this.data.vermin),
+                    vermin_comments: this.data.verminComments,
+                    fire_prevention_measures: this.boolToInt(
+                        this.data.firePreventionMeasures
+                    ),
+                    fire_prevention_diagnostic: this.boolToInt(
+                        this.data.firePReventionDiagnostic
+                    ),
+                    fire_prevention_site_accessible: this.boolToInt(
+                        this.data.firePreventionSiteAccessible
+                    ),
+                    fire_prevention_comments: this.data.firePreventionComments
                 },
                 judicial: {
                     owner_complaint: this.boolToInt(this.data.ownerComplaint),
@@ -353,6 +395,7 @@ export default {
                 const [lat, lon] = this.town.location.coordinates;
 
                 const result = await this.submitFn({
+                    ...this.town.living_conditions,
                     address: this.town.location.address.label,
                     citycode: this.town.location.address.citycode,
                     name: this.town.location.name,
@@ -405,19 +448,6 @@ export default {
                         this.town.people.census_conducted_at
                     ),
                     census_conducted_by: this.town.people.census_conducted_by,
-                    access_to_water: this.town.living_conditions
-                        .access_to_water,
-                    water_comments: this.town.living_conditions.water_comments,
-                    electricity_type: this.town.living_conditions
-                        .electricity_type,
-                    electricity_comments: this.town.living_conditions
-                        .electricity_comments,
-                    access_to_sanitary: this.town.living_conditions
-                        .access_to_sanitary,
-                    sanitary_comments: this.town.living_conditions
-                        .sanitary_comments,
-                    trash_evacuation: this.town.living_conditions
-                        .trash_evacuation,
                     owner_complaint: this.town.judicial.owner_complaint,
                     justice_procedure: this.town.judicial.justice_procedure,
                     justice_rendered: this.town.judicial.justice_rendered,
