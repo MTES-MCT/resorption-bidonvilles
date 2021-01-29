@@ -44,6 +44,7 @@
                 class="mr-8"
                 icon="pen"
                 iconPosition="left"
+                v-if="town.status === 'open'"
                 @click="routeToUpdate"
                 >Mettre à jour</Button
             >
@@ -59,6 +60,16 @@
                     >Journal du site</Button
                 >
             </router-link>
+            <Button
+                v-if="hasPermission('shantytown.delete')"
+                variant="secondary"
+                class="mr-8"
+                icon="trash-alt"
+                iconPosition="left"
+                @click="$emit('deleteTown')"
+                data-cy-button="delete"
+                >Supprimer le site</Button
+            >
         </div>
     </div>
 </template>

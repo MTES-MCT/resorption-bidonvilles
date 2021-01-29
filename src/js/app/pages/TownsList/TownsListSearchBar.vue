@@ -2,9 +2,7 @@
     <div class="mx-auto searchbox -mb-6">
         <AutocompleteV2
             id="test"
-            :defaultValue="
-                this.$props.value ? resultValue(this.$props.value) : ''
-            "
+            :defaultValue="this.$props.value"
             :search="search"
             v-model="result"
             @submit="$emit('input', $event)"

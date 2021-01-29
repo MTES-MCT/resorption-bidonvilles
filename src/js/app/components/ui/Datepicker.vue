@@ -23,7 +23,17 @@
                     :language="dateLanguage"
                     :monday-first="true"
                     :data-cy-field="cypressName"
+                    ref="datepicker"
                 ></component>
+
+                <InputIcon
+                    position="after"
+                    icon="times"
+                    class="text-primary text-display-sm cursor-pointer"
+                    @click.native="clear"
+                    v-if="$attrs.value"
+                    data-cy-button="clear"
+                />
             </div>
             <InputError>{{ errors[0] }}</InputError>
         </InputWrapper>
@@ -95,6 +105,11 @@ export default {
                 default: getInputClasses("default", inputOptions),
                 town: getInputClasses("town", inputOptions)
             }[this.variant];
+        }
+    },
+    methods: {
+        clear() {
+            this.$refs.datepicker.clearDate();
         }
     }
 };

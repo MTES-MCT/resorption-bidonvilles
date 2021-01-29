@@ -2,7 +2,7 @@
     <CheckableGroup
         label=" "
         id="census_status"
-        rules="censusStatusRequired"
+        rules="required"
         validationName="Statut du diagnostic social"
     >
         <Radio
@@ -18,15 +18,6 @@
 </template>
 
 <script>
-import { extend } from "vee-validate";
-
-extend("censusStatusRequired", {
-    validate(censusStatus) {
-        return censusStatus !== undefined;
-    },
-    message: "Le statut du diagnostic social est obligatoire"
-});
-
 export default {
     props: {
         value: {
@@ -42,7 +33,7 @@ export default {
                 { value: "none", label: "Non prévu" },
                 { value: "scheduled", label: "Prévu" },
                 { value: "done", label: "Réalisé" },
-                { value: null, label: "Inconnu" }
+                { value: "null", label: "Inconnu" }
             ],
             checked: this.value
         };

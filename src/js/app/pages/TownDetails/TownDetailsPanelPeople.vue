@@ -118,7 +118,18 @@ export default {
                 )} par ${this.town.censusConductedBy}`;
             }
 
-            return "Non réalisé";
+            if (this.town.censusStatus === "scheduled") {
+                return `Prévu le ${this.formatDate(
+                    this.town.censusConductedAt,
+                    "d/m/y"
+                )} par ${this.town.censusConductedBy}`;
+            }
+
+            if (this.town.censusStatus === "none") {
+                return "Non réalisé";
+            }
+
+            return "Non communiqué";
         }
     }
 };

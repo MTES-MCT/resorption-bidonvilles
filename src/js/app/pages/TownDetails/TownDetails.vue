@@ -10,6 +10,7 @@
                 :town="town"
                 v-on:openCancel="openCancel"
                 v-on:openCovid="openCovid"
+                v-on:deleteTown="deleteTown"
             />
             <div class="flex pt-10 ">
                 <TownDetailsLeftColumn
@@ -111,7 +112,7 @@
 <script>
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
 import PrivateLayout from "#app/components/PrivateLayout";
-import { get } from "#helpers/api/town";
+import { get, destroy as deleteTown } from "#helpers/api/town";
 import TownDetailsHeader from "./TownDetailsHeader";
 import TownDetailsLeftColumn from "./TownDetailsLeftColumn";
 import TownDetailsPanelCharacteristics from "./TownDetailsPanelCharacteristics";
@@ -125,6 +126,7 @@ import TownDetailsComments from "./TownDetailsComments";
 import TownDetailsHistorySidePanel from "./TownDetailsHistorySidePanel";
 import TownDetailsCovidCommentsSidePanel from "./TownDetailsCovidCommentsSidePanel";
 import TownDetailsCloseModal from "./TownDetailsCloseModal";
+import { notify } from "#helpers/notificationHelper";
 
 export default {
     components: {
@@ -170,6 +172,29 @@ export default {
         },
         openCovid() {
             this.covidOpen = true;
+        },
+        deleteTown() {
+            if (
+                !confirm(
+                    "Êtes-vous sûr(e) de vouloir supprimer définitivement ce site ? Cette suppression est irréversible."
+                )
+            ) {
+                return;
+            }
+
+            deleteTown(this.$route.params.id)
+                .then(() => {
+                    notify({
+                        group: "notifications",
+                        type: "success",
+                        title: "Succès",
+                        text: "Le site a été supprimé définitivement de la base"
+                    });
+                    this.$router.replace("/liste-des-sites-2");
+                })
+                .catch(error => {
+                    alert(error.user_message);
+                });
         },
         fetchData() {
             if (this.loading === true) {

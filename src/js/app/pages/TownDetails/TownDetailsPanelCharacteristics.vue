@@ -79,7 +79,9 @@
                             </div>
                         </div>
                     </TownDetailsPanelSection>
-                    <TownDetailsPanelSection>
+                    <TownDetailsPanelSection
+                        v-if="town.ownerType.label !== 'Inconnu'"
+                    >
                         <div class="grid grid-cols-2">
                             <div class="font-bold">
                                 Nom du propriétaire

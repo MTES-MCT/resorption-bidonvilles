@@ -20,8 +20,6 @@ Cypress.Commands.add("checkShantytownDetails", shantytown => {
         }`
     );
 
-    // cy.get("[data-cy-data='priority']").should("contain", shantytown.priority);
-
     cy.get("[data-cy-data='built_at']").should(
         "contain",
         shantytown.built_at_plain
@@ -29,7 +27,7 @@ Cypress.Commands.add("checkShantytownDetails", shantytown => {
 
     cy.get("[data-cy-data='declared_at']").should(
         "contain",
-        shantytown.declared_at_plain || " non communiquée "
+        shantytown.declared_at_plain
     );
 
     cy.get("[data-cy-data='field_type']").should(
@@ -42,6 +40,8 @@ Cypress.Commands.add("checkShantytownDetails", shantytown => {
             "contain",
             shantytown.address_details
         );
+    } else {
+        cy.get("[data-cy-data='address_details']").should("not.exist");
     }
 
     cy.get("[data-cy-data='owner_type']").should(
@@ -49,10 +49,14 @@ Cypress.Commands.add("checkShantytownDetails", shantytown => {
         shantytown.owner_type
     );
 
-    cy.get("[data-cy-data='owner']").should(
-        "contain",
-        shantytown.owner || "Inconnu"
-    );
+    if (shantytown.owner_type !== "Inconnu") {
+        cy.get("[data-cy-data='owner']").should(
+            "contain",
+            shantytown.owner || "non communiqué"
+        );
+    } else {
+        cy.get("[data-cy-data='owner']").should("not.exist");
+    }
 
     cy.get("[data-cy-data='population_total']").should(
         "contain",
@@ -128,15 +132,13 @@ Cypress.Commands.add("checkShantytownDetails", shantytown => {
             );
         });
     } else {
-        cy.get("[data-cy-data='social_origins']").should("contain", "inconnu");
+        cy.get("[data-cy-data='social_origins']").should("contain", "inconnue");
     }
 
-    if (shantytown.census_status_plain) {
-        cy.get("[data-cy-data='census_status']").should(
-            "contain",
-            shantytown.census_status_plain
-        );
-    }
+    cy.get("[data-cy-data='census_status']").should(
+        "contain",
+        shantytown.census_status_plain
+    );
 
     cy.get("[data-cy-data='access_to_water']").should(
         "contain",
@@ -185,41 +187,25 @@ Cypress.Commands.add("checkShantytownDetails", shantytown => {
         shantytown.trash_evacuation.toLowerCase()
     );
 
-    if (shantytown.owner_complaint) {
-        cy.get("[data-cy-data='owner_complaint']").should(
-            "contain",
-            shantytown.owner_complaint.toLowerCase()
-        );
-    } else {
-        cy.get("[data-cy-data='owner_complaint']").should("not.exist");
-    }
+    cy.get("[data-cy-data='owner_complaint']").should(
+        "contain",
+        shantytown.owner_complaint_plain
+    );
 
-    if (shantytown.justice_procedure) {
-        cy.get("[data-cy-data='justice_procedure']").should(
-            "contain",
-            shantytown.justice_procedure.toLowerCase()
-        );
-    } else {
-        cy.get("[data-cy-data='justice_procedure']").should("not.exist");
-    }
+    cy.get("[data-cy-data='justice_procedure']").should(
+        "contain",
+        shantytown.justice_procedure_plain
+    );
 
-    if (shantytown.justice_rendered) {
-        cy.get("[data-cy-data='justice_rendered']").should(
-            "contain",
-            shantytown.justice_rendered_plain
-        );
-    } else {
-        cy.get("[data-cy-data='justice_rendered']").should("not.exist");
-    }
+    cy.get("[data-cy-data='justice_rendered']").should(
+        "contain",
+        shantytown.justice_rendered_plain
+    );
 
-    if (shantytown.justice_challenged) {
-        cy.get("[data-cy-data='justice_challenged']").should(
-            "contain",
-            shantytown.justice_challenged.toLowerCase()
-        );
-    } else {
-        cy.get("[data-cy-data='justice_challenged']").should("not.exist");
-    }
+    cy.get("[data-cy-data='justice_challenged']").should(
+        "contain",
+        shantytown.justice_challenged_plain
+    );
 
     cy.get("[data-cy-data='police_status']").should(
         "contain",

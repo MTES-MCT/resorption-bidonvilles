@@ -230,6 +230,10 @@ export default {
         },
 
         boolToInt(bool) {
+            if (bool === undefined) {
+                return undefined;
+            }
+
             if (bool === true) {
                 return 1;
             }
@@ -247,6 +251,22 @@ export default {
             }
 
             return undefined;
+        },
+
+        strToInt(str) {
+            if (str === "") {
+                return null;
+            }
+
+            return parseInt(str, 10);
+        },
+
+        nullableStr(str) {
+            if (str === "null") {
+                return null;
+            }
+
+            return str;
         },
 
         formatDate(d) {
@@ -290,14 +310,19 @@ export default {
                         .detailed_address,
                     owner_type: this.town.characteristics.owner_type,
                     owner: this.town.characteristics.owner,
-                    population_total: this.town.people.population
-                        .populationTotal,
-                    population_couples: this.town.people.population
-                        .populationCouples,
-                    population_minors: this.town.people.population
-                        .populationMinors,
+                    population_total: this.strToInt(
+                        this.town.people.population.populationTotal
+                    ),
+                    population_couples: this.strToInt(
+                        this.town.people.population.populationCouples
+                    ),
+                    population_minors: this.strToInt(
+                        this.town.people.population.populationMinors
+                    ),
                     social_origins: this.town.people.social_origins,
-                    census_status: this.town.people.census_status,
+                    census_status: this.nullableStr(
+                        this.town.people.census_status
+                    ),
                     census_conducted_at: this.formatDate(
                         this.town.people.census_conducted_at
                     ),
@@ -323,7 +348,9 @@ export default {
                     ),
                     justice_rendered_by: this.town.judicial.justice_rendered_by,
                     justice_challenged: this.town.judicial.justice_challenged,
-                    police_status: this.town.judicial.police_status,
+                    police_status: this.nullableStr(
+                        this.town.judicial.police_status
+                    ),
                     police_requested_at: this.formatDate(
                         this.town.judicial.police_requested_at
                     ),

@@ -54,8 +54,12 @@ export default {
             return autocomplete(str);
         },
 
-        getResultValue({ label }) {
-            return label;
+        getResultValue(value) {
+            if (typeof value === "string") {
+                return value;
+            }
+
+            return value.label;
         },
 
         submit(result) {

@@ -33,7 +33,7 @@ describe("Gestion des sites", () => {
 
                             cy.contains("Mettre à jour").click();
                             cy.fillEditTown(minShantytown);
-                            cy.get("[data-cy-field='submit']").click();
+                            cy.get("[data-cy-button='submit']").click();
 
                             // assert
                             cy.get(".vue-notification").should(
