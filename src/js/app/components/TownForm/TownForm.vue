@@ -146,6 +146,23 @@ export default {
                             this.data.populationMinors
                         )
                     },
+                    populationMinors: {
+                        populationMinors0To3: this.intToStr(
+                            this.data.populationMinors0To3
+                        ),
+                        populationMinors3To6: this.intToStr(
+                            this.data.populationMinors3To6
+                        ),
+                        populationMinors6To12: this.intToStr(
+                            this.data.populationMinors6To12
+                        ),
+                        populationMinors12To16: this.intToStr(
+                            this.data.populationMinors12To16
+                        ),
+                        populationMinors16To18: this.intToStr(
+                            this.data.populationMinors16To18
+                        )
+                    },
                     social_origins: this.data.socialOrigins
                         ? this.data.socialOrigins.map(({ id }) => id)
                         : [],
@@ -318,6 +335,21 @@ export default {
                     ),
                     population_minors: this.strToInt(
                         this.town.people.population.populationMinors
+                    ),
+                    population_minors_0_3: this.strToInt(
+                        this.town.people.populationMinors.populationMinors0To3
+                    ),
+                    population_minors_3_6: this.strToInt(
+                        this.town.people.populationMinors.populationMinors3To6
+                    ),
+                    population_minors_6_12: this.strToInt(
+                        this.town.people.populationMinors.populationMinors6To12
+                    ),
+                    population_minors_12_16: this.strToInt(
+                        this.town.people.populationMinors.populationMinors12To16
+                    ),
+                    population_minors_16_18: this.strToInt(
+                        this.town.people.populationMinors.populationMinors16To18
                     ),
                     social_origins: this.town.people.social_origins,
                     census_status: this.nullableStr(

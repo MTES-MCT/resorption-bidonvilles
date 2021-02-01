@@ -30,13 +30,6 @@ Cypress.Commands.add("fillCreateTown", shantytown => {
         );
     }
 
-    // priority
-    // if (shantytown.priority !== undefined && shantytown.priority !== null) {
-    //     cy.get(
-    //         `[data-cy-field="priority"][data-cy-label="${shantytown.priority}"]`
-    //     ).check();
-    // }
-
     // built at
     if (shantytown.built_at) {
         cy.get("[data-cy-field='built_at']").chooseDate(shantytown.built_at);
@@ -119,57 +112,57 @@ Cypress.Commands.add("fillCreateTown", shantytown => {
         );
     }
 
-    // // population minors 0-3y
-    // if (
-    //     shantytown.population_minors_0_3 !== undefined &&
-    //     shantytown.population_minors_0_3 !== null
-    // ) {
-    //     cy.get("[data-cy-field='population_minors_0_3']").type(
-    //         shantytown.population_minors_0_3
-    //     );
-    // }
+    // population minors 0-3y
+    if (
+        shantytown.population_minors_0_3 !== undefined &&
+        shantytown.population_minors_0_3 !== null
+    ) {
+        cy.get("[data-cy-field='population_minors_0_3']").type(
+            shantytown.population_minors_0_3
+        );
+    }
 
-    // // population minors 3-6y
-    // if (
-    //     shantytown.population_minors_3_6 !== undefined &&
-    //     shantytown.population_minors_3_6 !== null
-    // ) {
-    //     cy.get("[data-cy-field='population_minors_3_6']").type(
-    //         shantytown.population_minors_3_6
-    //     );
-    // }
+    // population minors 3-6y
+    if (
+        shantytown.population_minors_3_6 !== undefined &&
+        shantytown.population_minors_3_6 !== null
+    ) {
+        cy.get("[data-cy-field='population_minors_3_6']").type(
+            shantytown.population_minors_3_6
+        );
+    }
 
-    // // population minors 6-12y
-    // if (
-    //     shantytown.population_minors_6_12 !== undefined &&
-    //     shantytown.population_minors_6_12 !== null
-    // ) {
-    //     cy.get("[data-cy-field='population_minors_6_12']").type(
-    //         shantytown.population_minors_6_12
-    //     );
-    // }
+    // population minors 6-12y
+    if (
+        shantytown.population_minors_6_12 !== undefined &&
+        shantytown.population_minors_6_12 !== null
+    ) {
+        cy.get("[data-cy-field='population_minors_6_12']").type(
+            shantytown.population_minors_6_12
+        );
+    }
 
-    // // population minors 12-16y
-    // if (
-    //     shantytown.population_minors_12_16 !== undefined &&
-    //     shantytown.population_minors_12_16 !== null
-    // ) {
-    //     cy.get("[data-cy-field='population_minors_12_16']").type(
-    //         shantytown.population_minors_12_16
-    //     );
-    // }
+    // population minors 12-16y
+    if (
+        shantytown.population_minors_12_16 !== undefined &&
+        shantytown.population_minors_12_16 !== null
+    ) {
+        cy.get("[data-cy-field='population_minors_12_16']").type(
+            shantytown.population_minors_12_16
+        );
+    }
 
-    // // population minors 16-18y
-    // if (
-    //     shantytown.population_minors_16_18 !== undefined &&
-    //     shantytown.population_minors_16_18 !== null
-    // ) {
-    //     cy.get("[data-cy-field='population_minors_16_18']").type(
-    //         shantytown.population_minors_16_18
-    //     );
-    // }
+    // population minors 16-18y
+    if (
+        shantytown.population_minors_16_18 !== undefined &&
+        shantytown.population_minors_16_18 !== null
+    ) {
+        cy.get("[data-cy-field='population_minors_16_18']").type(
+            shantytown.population_minors_16_18
+        );
+    }
 
-    // // minors in school
+    // minors in school
     // if (
     //     shantytown.minors_in_school !== undefined &&
     //     shantytown.minors_in_school !== null
