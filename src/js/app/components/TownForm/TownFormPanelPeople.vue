@@ -2,6 +2,9 @@
     <FormGroup title="Habitants">
         <FormParagraph title="Combien d'habitants vivent sur le site ?">
             <InputPopulation v-model="input.population"></InputPopulation>
+            <InputPopulationMinors
+                v-model="input.populationMinors"
+            ></InputPopulationMinors>
         </FormParagraph>
 
         <FormParagraph title="Quelle est l'origine des habitants ?">
@@ -30,6 +33,7 @@
 
 <script>
 import InputPopulation from "./inputs/InputPopulation.vue";
+import InputPopulationMinors from "./inputs/InputPopulationMinors.vue";
 import InputSocialOrigins from "./inputs/InputSocialOrigins.vue";
 import InputCensusStatus from "./inputs/InputCensusStatus.vue";
 import InputCensusConductedAt from "./inputs/InputCensusConductedAt.vue";
@@ -38,6 +42,7 @@ import InputCensusConductedBy from "./inputs/InputCensusConductedBy.vue";
 export default {
     components: {
         InputPopulation,
+        InputPopulationMinors,
         InputSocialOrigins,
         InputCensusStatus,
         InputCensusConductedAt,

@@ -23,6 +23,30 @@
                         {{ town.populationMinors || 0 }} mineurs
                     </div>
                 </div>
+                <div class="flex items-center mb-4">
+                    <div class="mr-4" data-cy-data="population_minors_0_3">
+                        <span class="text-display-xs">0 - 3 ans :</span><br />{{
+                            populationMinors0To3
+                        }}
+                    </div>
+                    <div class="mr-4" data-cy-data="population_minors_3_6">
+                        <span class="text-display-xs">3 - 6 ans :</span><br />{{
+                            populationMinors3To6
+                        }}
+                    </div>
+                    <div class="mr-4" data-cy-data="population_minors_6_12">
+                        <span class="text-display-xs">6 - 12 ans :</span
+                        ><br />{{ populationMinors6To12 }}
+                    </div>
+                    <div class="mr-4" data-cy-data="population_minors_12_16">
+                        <span class="text-display-xs">12 - 16 ans :</span
+                        ><br />{{ populationMinors12To16 }}
+                    </div>
+                    <div class="mr-4" data-cy-data="population_minors_16_18">
+                        <span class="text-display-xs">16 - 18 ans :</span
+                        ><br />{{ populationMinors16To18 }}
+                    </div>
+                </div>
                 <div>
                     <div class="font-bold">Origine</div>
                     <div data-cy-data="social_origins">
@@ -107,6 +131,13 @@ export default {
             }
 
             return origin;
+        },
+        intToStr(int) {
+            if (int === undefined || int === null) {
+                return "NC";
+            }
+
+            return int;
         }
     },
     computed: {
@@ -130,6 +161,21 @@ export default {
             }
 
             return "Non communiqué";
+        },
+        populationMinors0To3() {
+            return this.intToStr(this.town.populationMinors0To3);
+        },
+        populationMinors3To6() {
+            return this.intToStr(this.town.populationMinors3To6);
+        },
+        populationMinors6To12() {
+            return this.intToStr(this.town.populationMinors6To12);
+        },
+        populationMinors12To16() {
+            return this.intToStr(this.town.populationMinors12To16);
+        },
+        populationMinors16To18() {
+            return this.intToStr(this.town.populationMinors16To18);
         }
     }
 };
