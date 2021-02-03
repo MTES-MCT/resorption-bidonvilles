@@ -2,44 +2,50 @@
     <TownDetailsPanel>
         <template v-slot:title>Conditions de vie et environnement</template>
         <template v-slot:body>
-            <div class="grid grid-cols-2">
+            <div>
                 <TownDetailsPanelLivingConditionsSection
                     title="Accès à l’eau"
                     :value="town.accessToWater"
                     cypressName="access_to_water"
-                >
-                    <span
-                        data-cy-data="water_comments"
-                        v-if="town.waterComments"
-                        >{{ town.waterComments }}</span
-                    >
-                </TownDetailsPanelLivingConditionsSection>
+                    :comments="town.waterComments"
+                    :details="details.water"
+                />
+
                 <TownDetailsPanelLivingConditionsSection
                     title="Accès aux toilettes"
                     :value="town.accessToSanitary"
                     cypressName="access_to_sanitary"
-                >
-                    <span
-                        data-cy-data="sanitary_comments"
-                        v-if="town.sanitaryComments"
-                        >{{ town.sanitaryComments }}</span
-                    >
-                </TownDetailsPanelLivingConditionsSection>
+                    :comments="town.sanitaryComments"
+                    :details="details.sanitary"
+                />
+
                 <TownDetailsPanelLivingConditionsSection
                     title="Accès à l’électricité"
                     :value="town.electricityType.value"
                     cypressName="electricity_type"
-                >
-                    <span
-                        data-cy-data="electricity_comments"
-                        v-if="town.electricityComments"
-                        >{{ town.electricityComments }}</span
-                    >
-                </TownDetailsPanelLivingConditionsSection>
+                    :comments="town.electricityComments"
+                />
+
                 <TownDetailsPanelLivingConditionsSection
                     title="Évacuation des déchets"
                     :value="town.trashEvacuation"
                     cypressName="trash_evacuation"
+                    :details="details.trash"
+                />
+
+                <TownDetailsPanelLivingConditionsSection
+                    title="Présence de nuisibles"
+                    :value="town.vermin"
+                    cypressName="vermin"
+                    :comments="town.verminComments"
+                />
+
+                <TownDetailsPanelLivingConditionsSection
+                    title="Prévention des incendies"
+                    :value="town.firePreventionMeasures"
+                    cypressName="fire_prevention_measures"
+                    :comments="town.firePreventionComments"
+                    :details="details.fire"
                 />
             </div>
         </template>
@@ -49,12 +55,18 @@
 <script>
 import TownDetailsPanel from "./ui/TownDetailsPanel.vue";
 import TownDetailsPanelLivingConditionsSection from "./ui/TownDetailsPanelLivingConditionsSection";
+import { formatLivingConditions } from "./formatLivingConditions.js";
 
 export default {
     props: {
         town: {
             type: Object
         }
+    },
+    data() {
+        return {
+            details: formatLivingConditions(this.town)
+        };
     },
     components: { TownDetailsPanelLivingConditionsSection, TownDetailsPanel }
 };
