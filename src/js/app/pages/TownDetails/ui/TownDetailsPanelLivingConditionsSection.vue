@@ -12,13 +12,47 @@
                 <slot />
             </div>
         </div>
+        <div class="ml-4">
+            <div v-if="comments">{{ comments }}</div>
+            <div
+                v-if="
+                    details &&
+                        (details.negative.length || details.positive.length)
+                "
+                class="border border-primary rounded px-8 mt-4"
+            >
+                <div class="border-b-2 border-G200 py-2 font-bold text-primary">
+                    Détail:
+                    <span v-if="details.negative.length"
+                        >{{ details.negative.length }} action{{
+                            details.negative.length > 1 ? "s" : ""
+                        }}
+                        pour améliorer l'accès</span
+                    >
+                </div>
+                <div>
+                    <TownDetailsPanelLivingConditionsDetails
+                        type="negative"
+                        :details="details.negative"
+                    />
+                    <TownDetailsPanelLivingConditionsDetails
+                        type="positive"
+                        :details="details.positive"
+                    />
+                </div>
+            </div>
+        </div>
     </TownDetailsPanelSection>
 </template>
 
 <script>
 import TownDetailsPanelSection from "./TownDetailsPanelSection";
+import TownDetailsPanelLivingConditionsDetails from "./TownDetailsPanelLivingConditionsDetails";
 export default {
-    components: { TownDetailsPanelSection },
+    components: {
+        TownDetailsPanelLivingConditionsDetails,
+        TownDetailsPanelSection
+    },
     props: {
         title: {
             type: String
@@ -28,6 +62,12 @@ export default {
         },
         cypressName: {
             type: String
+        },
+        comments: {
+            type: String
+        },
+        details: {
+            type: Array
         }
     },
     computed: {
