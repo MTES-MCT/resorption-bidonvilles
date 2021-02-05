@@ -48,7 +48,6 @@
 <script>
 import filteredProps from "../../mixins/filteredProps";
 import CheckableCard from "../utils/CheckableCard.vue";
-
 export default {
     name: "Checkbox",
     mixins: [filteredProps],
@@ -112,7 +111,6 @@ export default {
 .checkbox-town-input {
     @apply w-5 h-5 appearance-none border-2 border-G200 relative outline-none cursor-pointer;
 }
-
 .checkbox-town-input:checked {
     @apply bg-primary;
     background-image: url(./assets/check-solid.svg);
