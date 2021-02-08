@@ -108,6 +108,7 @@
                     v-model="input.fire_prevention_diagnostic"
                 ></InputFirePreventionDiagnostic>
                 <InputFirePreventionSiteAccessible
+                    class="mb-6"
                     v-model="input.fire_prevention_site_accessible"
                 ></InputFirePreventionSiteAccessible>
                 <InputFirePreventionComments

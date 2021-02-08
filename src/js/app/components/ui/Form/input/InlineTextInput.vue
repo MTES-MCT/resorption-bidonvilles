@@ -73,6 +73,9 @@ export default {
         },
         suffixIcon: {
             type: String
+        },
+        size: {
+            type: String
         }
     },
     computed: {
@@ -80,7 +83,8 @@ export default {
             const inputOptions = {
                 error: this.error,
                 prefixIcon: this.prefixIcon,
-                suffixIcon: this.suffixIcon
+                suffixIcon: this.suffixIcon,
+                size: this.size
             };
 
             return {
