@@ -5,12 +5,14 @@
         <CheckableGroup direction="row">
             <Radio
                 label="Oui"
+                type="checkbox"
                 v-model="checked"
                 :checkValue="1"
                 cypressName="trash_evacuation_regular"
             ></Radio>
             <Radio
                 label="Non"
+                type="checkbox"
                 v-model="checked"
                 :checkValue="0"
                 cypressName="trash_evacuation_regular"

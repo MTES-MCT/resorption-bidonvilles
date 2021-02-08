@@ -2,12 +2,14 @@
     <SubQuestionWrapper label="L'eau est-elle potable ?">
         <CheckableGroup direction="row">
             <Radio
+                type="checkbox"
                 label="Oui"
                 v-model="checked"
                 :checkValue="1"
                 cypressName="water_potable"
             ></Radio>
             <Radio
+                type="checkbox"
                 label="Non"
                 v-model="checked"
                 :checkValue="0"

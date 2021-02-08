@@ -6,12 +6,14 @@
             <Radio
                 label="Oui"
                 v-model="checked"
+                type="checkbox"
                 :checkValue="1"
                 cypressName="water_public_point"
             ></Radio>
             <Radio
                 label="Non"
                 v-model="checked"
+                type="checkbox"
                 :checkValue="0"
                 cypressName="water_public_point"
             ></Radio>

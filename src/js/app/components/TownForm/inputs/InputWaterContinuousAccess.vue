@@ -7,12 +7,14 @@
                 label="Oui"
                 v-model="checked"
                 :checkValue="1"
+                type="checkbox"
                 cypressName="water_continuous_access"
             ></Radio>
             <Radio
                 label="Non"
                 v-model="checked"
                 :checkValue="0"
+                type="checkbox"
                 cypressName="water_continuous_access"
             ></Radio>
         </CheckableGroup>

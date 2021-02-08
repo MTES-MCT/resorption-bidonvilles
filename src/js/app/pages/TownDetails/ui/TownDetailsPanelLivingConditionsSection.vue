@@ -35,12 +35,16 @@
                 <div>
                     <TownDetailsPanelLivingConditionsDetails
                         type="negative"
-                        :data-cy-data="cypressDetailsPrefix + '_negative'"
+                        :cypressName="
+                            cypressDetailsPrefix + '_details_negative'
+                        "
                         :details="details.negative"
                     />
                     <TownDetailsPanelLivingConditionsDetails
                         type="positive"
-                        :data-cy-data="cypressName + '_positive'"
+                        :cypressName="
+                            cypressDetailsPrefix + '_details_positive'
+                        "
                         :details="details.positive"
                     />
                 </div>
