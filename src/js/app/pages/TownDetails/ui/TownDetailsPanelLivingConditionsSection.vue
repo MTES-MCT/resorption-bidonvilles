@@ -13,7 +13,9 @@
             </div>
         </div>
         <div class="ml-4">
-            <div v-if="comments">{{ comments }}</div>
+            <div v-if="comments" :data-cy-data="cypressComments">
+                {{ comments }}
+            </div>
             <div
                 v-if="
                     details &&
@@ -33,10 +35,12 @@
                 <div>
                     <TownDetailsPanelLivingConditionsDetails
                         type="negative"
+                        :data-cy-data="cypressDetailsPrefix + '_negative'"
                         :details="details.negative"
                     />
                     <TownDetailsPanelLivingConditionsDetails
                         type="positive"
+                        :data-cy-data="cypressName + '_positive'"
                         :details="details.positive"
                     />
                 </div>
@@ -61,6 +65,12 @@ export default {
             validator: prop => typeof prop === "boolean" || prop === null
         },
         cypressName: {
+            type: String
+        },
+        cypressComments: {
+            type: String
+        },
+        cypressDetailsPrefix: {
             type: String
         },
         comments: {

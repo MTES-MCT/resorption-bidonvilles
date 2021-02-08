@@ -5,13 +5,13 @@
                 label="sur site"
                 v-model="checked"
                 :checkValue="1"
-                cypressName="sanitary_insalubrious"
+                cypressName="sanitary_on_site"
             ></Radio>
             <Radio
                 label="aux abords"
                 v-model="checked"
                 :checkValue="0"
-                cypressName="sanitary_insalubrious"
+                cypressName="sanitary_on_site"
             ></Radio>
         </CheckableGroup>
     </SubQuestionWrapper>

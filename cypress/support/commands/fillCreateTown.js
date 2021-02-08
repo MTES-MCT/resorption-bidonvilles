@@ -202,6 +202,151 @@ Cypress.Commands.add("fillCreateTown", shantytown => {
         ).myCheck();
     }
 
+    // water_potable
+    if (shantytown.water_potable) {
+        cy.get(
+            `[data-cy-field="water_potable"][data-cy-label="${shantytown.water_potable}"]`
+        ).myCheck();
+    }
+
+    // water_continuous_access
+    if (shantytown.water_continuous_access) {
+        cy.get(
+            `[data-cy-field="water_continuous_access"][data-cy-label="${shantytown.water_continuous_access}"]`
+        ).myCheck();
+    }
+
+    // water_public_point
+    if (shantytown.water_public_point) {
+        cy.get(
+            `[data-cy-field="water_public_point"][data-cy-label="${shantytown.water_public_point}"]`
+        ).myCheck();
+    }
+
+    // water_distance
+    if (shantytown.water_distance) {
+        cy.get(
+            `[data-cy-field="water_distance"][data-cy-label="${shantytown.water_distance}"]`
+        ).myCheck();
+    }
+
+    // water_roads_to_cross
+    if (shantytown.water_roads_to_cross) {
+        cy.get(
+            `[data-cy-field="water_roads_to_cross"][data-cy-label="${shantytown.water_roads_to_cross}"]`
+        ).myCheck();
+    }
+
+    // water_everyone_has_access
+    if (shantytown.water_everyone_has_access) {
+        cy.get(
+            `[data-cy-field="water_everyone_has_access"][data-cy-label="${shantytown.water_everyone_has_access}"]`
+        ).myCheck();
+    }
+
+    // water_stagnant_water
+    if (shantytown.water_stagnant_water) {
+        cy.get(
+            `[data-cy-field="water_stagnant_water"][data-cy-label="${shantytown.water_stagnant_water}"]`
+        ).myCheck();
+    }
+
+    // water_hand_wash_access
+    if (shantytown.water_hand_wash_access) {
+        cy.get(
+            `[data-cy-field="water_hand_wash_access"][data-cy-label="${shantytown.water_hand_wash_access}"]`
+        ).myCheck();
+    }
+
+    // water_hand_wash_access_number
+    // if (shantytown.water_hand_wash_access_number) {
+    //     cy.get(`[data-cy-field="water_hand_wash_access_number"][data-cy-label="${shantytown.water_hand_wash_access_number}"]`).myCheck()
+    // }
+
+    // sanitary_number
+    if (shantytown.sanitary_number) {
+        cy.get(`[data-cy-field="sanitary_number"]`).type(
+            shantytown.sanitary_number
+        );
+    }
+
+    // sanitary_insalubrious
+    if (shantytown.sanitary_insalubrious) {
+        cy.get(
+            `[data-cy-field="sanitary_insalubrious"][data-cy-label="${shantytown.sanitary_insalubrious}"]`
+        ).myCheck();
+    }
+
+    // sanitary_on_site
+    if (shantytown.sanitary_on_site) {
+        cy.get(
+            `[data-cy-field="sanitary_on_site"][data-cy-label="${shantytown.sanitary_on_site}"]`
+        ).myCheck();
+    }
+
+    // trash_cans_on_site
+    if (shantytown.trash_cans_on_site) {
+        cy.get(`[data-cy-field="trash_cans_on_site"]`).type(
+            shantytown.trash_cans_on_site
+        );
+    }
+
+    // trash_accumulation
+    if (shantytown.trash_accumulation) {
+        cy.get(
+            `[data-cy-field="trash_accumulation"][data-cy-label="${shantytown.trash_accumulation}"]`
+        ).myCheck();
+    }
+
+    // trash_evacuation_regular
+    if (shantytown.trash_evacuation_regular) {
+        cy.get(
+            `[data-cy-field="trash_evacuation_regular"][data-cy-label="${shantytown.trash_evacuation_regular}"]`
+        ).myCheck();
+    }
+
+    // vermin
+    if (shantytown.vermin) {
+        cy.get(
+            `[data-cy-field="vermin"][data-cy-label="${shantytown.vermin}"]`
+        ).myCheck();
+    }
+
+    // vermin_comments
+    if (shantytown.vermin_comments) {
+        cy.get('[data-cy-field="vermin_comments"]').type(
+            shantytown.vermin_comments
+        );
+    }
+
+    // fire_prevention_measures
+    if (shantytown.fire_prevention_measures) {
+        cy.get(
+            `[data-cy-field="fire_prevention_measures"][data-cy-label="${shantytown.fire_prevention_measures}"]`
+        ).myCheck();
+    }
+
+    // fire_prevention_diagnostic
+    if (shantytown.fire_prevention_diagnostic) {
+        cy.get(
+            `[data-cy-field="fire_prevention_diagnostic"][data-cy-label="${shantytown.fire_prevention_diagnostic}"]`
+        ).myCheck();
+    }
+
+    // fire_prevention_site_accessible
+    if (shantytown.fire_prevention_site_accessible) {
+        cy.get(
+            `[data-cy-field="fire_prevention_site_accessible"][data-cy-label="${shantytown.fire_prevention_site_accessible}"]`
+        ).myCheck();
+    }
+
+    // fire_prevention_comments
+    if (shantytown.fire_prevention_comments) {
+        cy.get(`[data-cy-field="fire_prevention_comments"]`).type(
+            shantytown.fire_prevention_comments
+        );
+    }
+
     // water comments
     if (shantytown.water_comments) {
         cy.get('[data-cy-field="water_comments"]').type(
@@ -291,10 +436,5 @@ Cypress.Commands.add("fillCreateTown", shantytown => {
         cy.get("[data-cy-field='police_granted_at']").chooseDate(
             shantytown.police_granted_at
         );
-    }
-
-    // bailiff
-    if (shantytown.bailiff) {
-        cy.get('[data-cy-field="bailiff"]').type(shantytown.bailiff);
     }
 });
