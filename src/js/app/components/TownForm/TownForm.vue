@@ -220,7 +220,7 @@ export default {
                     water_continuous_access: this.boolToInt(
                         this.data.waterContinuousAccess
                     ),
-                    water_distance: this.boolToInt(this.data.waterDistance),
+                    water_distance: this.data.waterDistance,
                     water_roads_to_cross: this.boolToInt(
                         this.data.waterRoadsToCross
                     ),
@@ -238,8 +238,8 @@ export default {
                     sanitary_insalubrious: this.boolToInt(
                         this.data.sanitaryInsalubrious
                     ),
-                    sanitary_on_site: this.data.sanitaryOnSite,
-                    trash_cans_on_site: 1,
+                    sanitary_on_site: this.boolToInt(this.data.sanitaryOnSite),
+                    trash_cans_on_site: this.data.trashCansOnSite,
                     trash_accumulation: this.boolToInt(
                         this.data.trashAccumulation
                     ),

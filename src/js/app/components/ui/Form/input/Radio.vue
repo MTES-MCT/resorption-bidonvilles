@@ -33,6 +33,9 @@
                 :class="radioClasses"
                 v-bind="filteredProps"
                 :checked="isChecked"
+                :data-cy-field="cypressName"
+                :data-cy-label="label"
+                :data-cy-checked="`${isChecked}`"
                 @change="onChange"
             />
             <slot :isChecked="isChecked">

@@ -1,6 +1,6 @@
 <template>
     <SubQuestionWrapper label="Nombre de toilettes">
-        <TextInput v-model="input" />
+        <TextInput v-model="input" cypressName="sanitary_number" />
     </SubQuestionWrapper>
 </template>
 
