@@ -63,12 +63,41 @@
         "water_stagnant_water": "Oui",
         "water_hand_wash_access": "Oui",
         "water_hand_wash_access_number": "3",
+        "water_details": {
+            "positive":[
+                "Eau potable",
+                "Accès continu, c’est-à-dire qu’il ne varie pas en qualité et quantité dans la journée et les saisons, sans limite dans le temps",
+                "Point d'eau public",
+                "Accès pour tous les habitants",
+                "1 bacs de lavage des mains"
+            ],
+            "negative": [
+                "Franchissement de rue ou route nécessaire",
+                "Eaux stagnantes autour du point de distribution"
+            ]
+        } ,
         "sanitary_number": "5",
         "sanitary_insalubrious": "Oui",
         "sanitary_on_site": "sur site",
+        "sanitary_details": {
+            "positive": [
+                "Accès sur site"
+            ],
+            "negative": [
+                "Marques de défecation à l’air libre"
+            ]
+        },
         "trash_cans_on_site": "5",
         "trash_accumulation": "Oui",
         "trash_evacuation_regular": "Oui",
+        "trash_details": {
+            "positive": [
+                "Collecte régulière des poubelles / bennes. C’est-à-dire au moins une fois par semaine, à partir d’un point de dépôt spécialement aménagé sur le site ou à proximité immédiate."
+            ],
+            "negative": [
+                "Accumulation de déchets sur le site ou aux abords."
+            ]
+        },
         "vermin": "Oui",
         "vermin_comments": "Présence de nuisibles sur le site",
         "fire_prevention_measures": "Oui",
@@ -136,12 +165,15 @@
         "water_stagnant_water": null,
         "water_hand_wash_access": null,
         "water_hand_wash_access_number": null,
+        "water_details": null ,
         "sanitary_number": null,
         "sanitary_insalubrious": null,
         "sanitary_on_site": null,
+        "sanitary_details": null,
         "trash_cans_on_site": null,
         "trash_accumulation": null,
         "trash_evacuation_regular": null,
+        "trash_details": null,
         "vermin": "Inconnu",
         "vermin_comments": null,
         "fire_prevention_measures": "Inconnu",

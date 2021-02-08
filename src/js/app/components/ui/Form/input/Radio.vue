@@ -10,7 +10,7 @@
             :data-cy-checked="`${isChecked}`"
         >
             <input
-                type="radio"
+                :type="type"
                 class="appearance-none absolute invisible"
                 v-bind="filteredProps"
                 :checked="isChecked"
@@ -29,7 +29,7 @@
             ]"
         >
             <input
-                type="radio"
+                :type="type"
                 :class="radioClasses"
                 v-bind="filteredProps"
                 :checked="isChecked"
@@ -81,11 +81,20 @@ export default {
         },
         cypressName: {
             type: String
+        },
+        // We sometimes want a fake radio (resettable when we reclick on it)
+        type: {
+            type: String,
+            default: "radio"
         }
     },
     methods: {
-        onChange() {
-            this.$emit("input", this.checkValue);
+        onChange(e) {
+            if (this.type === "checkbox") {
+                this.$emit("input", e.target.checked ? this.checkValue : null);
+            } else {
+                this.$emit("input", this.checkValue);
+            }
         }
     },
     computed: {

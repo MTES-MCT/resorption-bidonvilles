@@ -10,7 +10,7 @@
             </div>
         </div>
 
-        <ul class="list-disc ml-10">
+        <ul class="list-disc ml-10" :data-cy-data="cypressName">
             <li v-for="(item, index) in details" :key="index">
                 {{ item }}
             </li>
@@ -26,6 +26,9 @@ export default {
         },
         details: {
             type: Array
+        },
+        cypressName: {
+            type: String
         }
     }
 };

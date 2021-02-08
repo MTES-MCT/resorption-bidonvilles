@@ -388,6 +388,8 @@ export default {
                 return;
             }
 
+            console.log(this.town.living_conditions);
+
             this.loading = true;
             this.$router.replace("#top");
 

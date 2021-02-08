@@ -4,12 +4,14 @@
     >
         <CheckableGroup direction="row">
             <Radio
+                type="checkbox"
                 label="Oui"
                 v-model="checked"
                 :checkValue="1"
                 cypressName="sanitary_insalubrious"
             ></Radio>
             <Radio
+                type="checkbox"
                 label="Non"
                 v-model="checked"
                 :checkValue="0"
