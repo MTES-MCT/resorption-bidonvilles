@@ -1,14 +1,20 @@
 <template>
     <SubQuestionWrapper label="Nombre de toilettes">
-        <TextInput v-model="input" cypressName="sanitary_number" />
+        <div class="mb-8">
+            <InlineTextInput
+                v-model="input"
+                cypressName="sanitary_number"
+                size="sm"
+            />
+        </div>
     </SubQuestionWrapper>
 </template>
 
 <script>
 import SubQuestionWrapper from "#app/components/TownForm/ui/SubQuestionWrapper";
-import TextInput from "#app/components/ui/Form/input/TextInput";
+import InlineTextInput from "#app/components/ui/Form/input/InlineTextInput";
 export default {
-    components: { TextInput, SubQuestionWrapper },
+    components: { InlineTextInput, SubQuestionWrapper },
     props: {
         value: {
             type: String,
