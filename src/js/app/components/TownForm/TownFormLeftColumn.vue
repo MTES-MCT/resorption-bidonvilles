@@ -15,7 +15,7 @@
             <LeftColumnNavLink
                 to="#living_conditions"
                 :activeSection="activeSection === 'living_conditions'"
-                >Conditions de vie</LeftColumnNavLink
+                >Conditions de vie et environnement</LeftColumnNavLink
             >
             <LeftColumnNavLink
                 to="#judicial"
