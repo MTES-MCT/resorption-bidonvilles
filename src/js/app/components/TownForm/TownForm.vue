@@ -1,5 +1,5 @@
 <template>
-    <ValidationObserver ref="form" @submit.prevent="submit">
+    <ValidationObserver ref="form" @submit.prevent="submit" v-slot="{ errors }">
         <form>
             <div class="bg-G100 py-8">
                 <PrivateContainer class="flex justify-between items-baseline">
@@ -25,6 +25,12 @@
                         v-if="showInfo"
                         @close="closeInfo()"
                     ></TownFormPanelInfo>
+
+                    <TownFormErrorLog
+                        id="erreurs"
+                        class="mt-8 mb-8"
+                        :errors="errors"
+                    ></TownFormErrorLog>
 
                     <TownFormPanelLocation
                         class="mt-10"
@@ -88,6 +94,7 @@ import TownFormPanelPeople from "./TownFormPanelPeople";
 import TownFormPanelLivingConditions from "./TownFormPanelLivingConditions";
 import TownFormPanelJudicial from "./TownFormPanelJudicial";
 import TownFormLeftColumn from "./TownFormLeftColumn";
+import TownFormErrorLog from "./TownFormErrorLog";
 import { get as getConfig } from "#helpers/api/config";
 import { add, edit } from "#helpers/api/town";
 import { notify } from "#helpers/notificationHelper";
@@ -108,6 +115,7 @@ export default {
     components: {
         PrivateContainer,
         TownFormLeftColumn,
+        TownFormErrorLog,
         TownFormPanelInfo,
         TownFormPanelLocation,
         TownFormPanelCharacteristics,
@@ -321,10 +329,14 @@ export default {
         async submit() {
             const isValid = await this.$refs.form.validate();
             if (!isValid) {
+                this.$router.replace("#top", () =>
+                    this.$router.replace("#erreurs")
+                );
                 return;
             }
 
             this.loading = true;
+            this.$router.replace("#top");
 
             try {
                 const [lat, lon] = this.town.location.coordinates;
@@ -438,6 +450,7 @@ export default {
                 this.error = err;
                 this.loading = false;
                 this.$refs.form.setErrors(err.fields);
+                this.$router.replace("#erreurs");
             }
         },
 
