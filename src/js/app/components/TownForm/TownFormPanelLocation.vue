@@ -1,7 +1,7 @@
 <template>
     <div class="bg-gray-200 flex">
         <div class="p-5 flex-grow">
-            <FormParagraph title="Adresse">
+            <FormParagraph title="Adresse" showMandatoryStar="true">
                 <InputAddress
                     v-model="input.address"
                     @change="onAddressChange"

@@ -6,6 +6,7 @@
         v-model="input"
         rules="required"
         cypressName="justice_rendered_by"
+        showMandatoryStar="true"
     ></TextInput>
 </template>
 

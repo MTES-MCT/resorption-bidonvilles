@@ -6,7 +6,11 @@
         :vid="id"
     >
         <InputWrapper :hasErrors="!!errors.length">
-            <InputLabel :label="label" :info="info" />
+            <InputLabel
+                :label="label"
+                :info="info"
+                :showMandatoryStar="showMandatoryStar"
+            />
 
             <div :class="'flex flex-col relative'">
                 <div v-if="error" class="absolute h-full bg-error leftBorder" />
@@ -54,6 +58,11 @@ export default {
         },
         id: {
             type: String
+        },
+        showMandatoryStar: {
+            required: false,
+            type: Boolean,
+            default: false
         }
     },
     components: {

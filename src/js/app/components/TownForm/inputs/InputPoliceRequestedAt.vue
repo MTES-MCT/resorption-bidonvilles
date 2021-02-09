@@ -5,6 +5,7 @@
         v-model="input"
         rules="required|requestedAfterCreation:@built_at"
         data-cy-field="police_requested_at"
+        showMandatoryStar="true"
     ></DatepickerV2>
 </template>
 
