@@ -38,7 +38,7 @@
         "sanitary_comments": "Commentaire\nsur les toilettes",
         "electricity_type": "Non",
         "electricity_comments": "Commentaire\nélectrique",
-        "trash_evacuation": "Non",
+        "trash_evacuation": "Oui",
         "owner_complaint": "Oui",
         "owner_complaint_plain": "oui",
         "justice_procedure": "Oui",
@@ -67,11 +67,12 @@
             "positive":[
                 "Eau potable",
                 "Accès continu, c’est-à-dire qu’il ne varie pas en qualité et quantité dans la journée et les saisons, sans limite dans le temps",
-                "Point d'eau public",
+                "Accès situé sur site ou à moins de 20 mètres",
                 "Accès pour tous les habitants",
                 "1 bacs de lavage des mains"
             ],
             "negative": [
+                "Point d'eau public",
                 "Franchissement de rue ou route nécessaire",
                 "Eaux stagnantes autour du point de distribution"
             ]

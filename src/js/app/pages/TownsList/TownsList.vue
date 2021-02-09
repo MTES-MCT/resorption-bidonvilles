@@ -159,6 +159,10 @@
                                     label: 'eau'
                                 },
                                 {
+                                    value: 'accessToSanitary',
+                                    label: 'toilettes'
+                                },
+                                {
                                     value: 'accessToElectricity',
                                     label: 'électricité'
                                 },
@@ -166,9 +170,14 @@
                                     value: 'accessToTrash',
                                     label: 'évac. des déchets'
                                 },
+
                                 {
-                                    value: 'accessToSanitary',
-                                    label: 'toilettes'
+                                    value: 'vermin',
+                                    label: 'pres. de nuisibles'
+                                },
+                                {
+                                    value: 'firePreventionMeasures',
+                                    label: 'prev. incendie'
                                 }
                             ]"
                         >

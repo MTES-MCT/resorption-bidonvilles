@@ -37,12 +37,12 @@ export function formatLivingConditions(town) {
 
     if (town.waterPotable !== null) {
         town.waterPublicPoint &&
-            result.water.positive.push("Point d'eau public");
+            result.water.negative.push("Point d'eau public");
     }
 
     if (town.waterDistance !== null) {
         // TODO: Fix water distance type
-        town.waterDistance > 20
+        town.waterDistance <= 20
             ? result.water.positive.push(
                   "Accès situé sur site ou à moins de 20 mètres"
               )
