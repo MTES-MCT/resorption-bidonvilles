@@ -31,25 +31,25 @@
                     ></TownFormPanelLocation>
 
                     <TownFormPanelCharacteristics
-                        class="mt-10"
+                        class="mt-10 townPanelShadow"
                         id="characteristics"
                         v-model="town.characteristics"
                     ></TownFormPanelCharacteristics>
 
                     <TownFormPanelPeople
-                        class="mt-10"
+                        class="mt-10 townPanelShadow"
                         id="people"
                         v-model="town.people"
                     ></TownFormPanelPeople>
 
                     <TownFormPanelLivingConditions
-                        class="mt-10"
+                        class="mt-10 townPanelShadow"
                         id="living_conditions"
                         v-model="town.living_conditions"
                     ></TownFormPanelLivingConditions>
 
                     <TownFormPanelJudicial
-                        class="my-10"
+                        class="mt-10 townPanelShadow"
                         id="judicial"
                         v-model="town.judicial"
                     ></TownFormPanelJudicial>
@@ -58,6 +58,13 @@
         </form>
     </ValidationObserver>
 </template>
+
+<style scoped>
+.townPanelShadow {
+    box-shadow: 0 0px 20px 0 rgba(0, 0, 0, 0.1), 0 0px 0px 0 rgba(0, 0, 0, 0.06);
+    border-radius: 5px;
+}
+</style>
 
 <script>
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
