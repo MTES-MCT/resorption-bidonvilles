@@ -2,7 +2,7 @@
     <FormGroup title="Conditions de vie et environnement">
         <FormParagraph
             title="Les habitants ont-ils accès à l'eau ?"
-            showMandatoryStar="true"
+            :showMandatoryStar="true"
         >
             <InputAccessToWater
                 v-model="input.access_to_water"
@@ -14,7 +14,7 @@
 
         <FormParagraph
             title="Les habitants ont-ils accès à l'électricité ?"
-            showMandatoryStar="true"
+            :showMandatoryStar="true"
         >
             <InputElectricityType
                 v-model="input.electricity_type"
@@ -26,7 +26,7 @@
 
         <FormParagraph
             title="Les habitants ont-ils accès à des toilettes ?"
-            showMandatoryStar="true"
+            :showMandatoryStar="true"
         >
             <InputAccessToSanitary
                 v-model="input.access_to_sanitary"
@@ -38,7 +38,7 @@
 
         <FormParagraph
             title="L'évacuation des déchets est-elle organisée ?"
-            showMandatoryStar="true"
+            :showMandatoryStar="true"
         >
             <InputTrashEvacuation
                 v-model="input.trash_evacuation"

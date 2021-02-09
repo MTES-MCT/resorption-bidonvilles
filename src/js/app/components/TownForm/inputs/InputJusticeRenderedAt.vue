@@ -5,7 +5,7 @@
         id="justice_rendered_at"
         rules="required|renderedAfterInstallation:@built_at"
         data-cy-field="justice_rendered_at"
-        showMandatoryStar="true"
+        :showMandatoryStar="true"
     ></DatepickerV2>
 </template>
 

@@ -5,7 +5,7 @@
         v-model="input"
         rules="required"
         cypressName="census_conducted_by"
-        showMandatoryStar="true"
+        :showMandatoryStar="true"
     ></TextInput>
 </template>
 
