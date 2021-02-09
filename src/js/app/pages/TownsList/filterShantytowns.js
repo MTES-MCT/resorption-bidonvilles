@@ -69,6 +69,14 @@ function checkConditions(shantytown, filters) {
             return !shantytown.electricityType.value;
         }
 
+        if (filter === "vermin") {
+            return shantytown.vermin;
+        }
+
+        if (filter === "firePreventionMeasures") {
+            return !shantytown.firePreventionMeasures;
+        }
+
         return true;
     });
 }

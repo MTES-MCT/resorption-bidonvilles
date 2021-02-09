@@ -1,7 +1,7 @@
 <template>
     <TownDetailsPanelSection>
-        <div class="flex items-center">
-            <Icon :class="[colorClass, 'mr-1', 'font-bold']" :icon="icon" />
+        <div :class="[colorClass, 'flex items-center']">
+            <Icon :class="['mr-1', 'font-bold']" :icon="icon" />
             <div>
                 <div class="flex items-center">
                     <div :class="[colorClass, 'font-bold', 'mr-1']">
@@ -18,7 +18,8 @@
             </div>
             <div
                 v-if="
-                    details &&
+                    this.value &&
+                        details &&
                         (details.negative.length || details.positive.length)
                 "
                 class="border border-primary rounded px-8 mt-4"
@@ -82,21 +83,43 @@ export default {
         },
         details: {
             type: Array
+        },
+        inverted: {
+            type: Boolean
         }
     },
     computed: {
         colorClass() {
-            if (this.value === true) {
+            if (
+                this.value &&
+                this.details &&
+                this.details.negative.length > 0
+            ) {
+                return "text-secondary";
+            }
+
+            if (
+                (this.value === true && !this.inverted) ||
+                (this.value === false && this.inverted)
+            ) {
                 return "text-green";
             }
 
             return "text-red";
         },
         icon() {
+            if (
+                this.value &&
+                this.details &&
+                this.details.negative.length > 0
+            ) {
+                return "exclamation-triangle";
+            }
+
             return {
                 null: "question",
-                false: "times",
-                true: "check"
+                false: this.inverted ? "check" : "times",
+                true: this.inverted ? "times" : "check"
             }[this.value];
         },
         text() {

@@ -20,6 +20,7 @@
                     @input="$emit('input', $event.target.value)"
                     v-bind="filteredProps"
                     :class="classes"
+                    :data-cy-field="cypressName"
                 />
                 <InputIcon
                     position="after"
@@ -75,6 +76,9 @@ export default {
             type: String
         },
         size: {
+            type: String
+        },
+        cypressName: {
             type: String
         }
     },

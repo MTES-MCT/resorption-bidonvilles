@@ -45,6 +45,7 @@
                     title="Présence de nuisibles"
                     :value="town.vermin"
                     cypressName="vermin"
+                    inverted
                     cypressComments="vermin_comments"
                     cypressDetailsPrefix="vermin"
                     :comments="town.verminComments"
