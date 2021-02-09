@@ -1,6 +1,10 @@
 <template>
     <div>
-        <Icon icon="flag"></Icon>
+        <div
+            class="rounded-full inline-block bg-yellow-400 w-6 h-6 text-center text-xs align-middle leading-6"
+        >
+            <Icon icon="flag"></Icon>
+        </div>
         <span class="ml-2 font-bold">Qu'est-ce qu'un site ?</span>
         <span class="ml-2" @click="toggle"
             ><Icon :icon="togglerIcon" class="cursor-pointer"></Icon
