@@ -3,7 +3,7 @@
         label="Statut du concours de la force publique"
         id="police_status"
         rules="required"
-        showMandatoryStar="true"
+        :showMandatoryStar="true"
     >
         <Radio
             v-for="status in statuses"

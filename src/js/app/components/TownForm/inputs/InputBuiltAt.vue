@@ -4,7 +4,7 @@
         label="Date d'installation"
         v-model="input"
         rules="required"
-        showMandatoryStar="true"
+        :showMandatoryStar="true"
         :disabled-dates="{ from: new Date() }"
         cypressName="built_at"
     ></DatepickerV2>

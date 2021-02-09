@@ -4,7 +4,7 @@
         direction="horizontal"
         id="justice_challenged"
         rules="required"
-        showMandatoryStar="true"
+        :showMandatoryStar="true"
     >
         <Radio
             variant="card"

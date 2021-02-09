@@ -20,7 +20,7 @@
 
         <FormParagraph
             title="Quel est le propriétaire ?"
-            showMandatoryStar="true"
+            :showMandatoryStar="true"
             class="w-128"
         >
             <InputOwnerType

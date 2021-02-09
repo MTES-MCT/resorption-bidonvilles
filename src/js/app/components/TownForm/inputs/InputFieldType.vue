@@ -2,7 +2,7 @@
     <CheckableGroup
         label="Type de site"
         id="field_type"
-        showMandatoryStar="true"
+        :showMandatoryStar="true"
         rules="required"
     >
         <Radio
