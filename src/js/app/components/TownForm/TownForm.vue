@@ -253,10 +253,10 @@ export default {
 
         backPage() {
             if (this.mode === "create") {
-                return "/liste-des-sites-2";
+                return "/liste-des-sites";
             }
 
-            return `/site-new/${this.data.id}`;
+            return `/site/${this.data.id}`;
         }
     },
 
@@ -428,7 +428,7 @@ export default {
                     id = this.data.id;
                 }
 
-                this.$router.push(`/site-new/${id}`);
+                this.$router.push(`/site/${id}`);
 
                 notify({
                     group: "notifications",

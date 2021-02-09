@@ -75,7 +75,7 @@
                         >Exporter</Button
                     >
                     <router-link
-                        to="/nouveau-site-new"
+                        to="/nouveau-site"
                         v-if="hasPermission('shantytown.create')"
                         ><Button
                             icon="plus"

@@ -190,7 +190,7 @@ export default {
                         title: "Succès",
                         text: "Le site a été supprimé définitivement de la base"
                     });
-                    this.$router.replace("/liste-des-sites-2");
+                    this.$router.replace("/liste-des-sites");
                 })
                 .catch(error => {
                     alert(error.user_message);
