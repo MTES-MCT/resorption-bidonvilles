@@ -11,6 +11,7 @@
                 :label="label"
                 :info="info"
                 :showMandatoryStar="showMandatoryStar"
+                :id="id"
             />
             <div class="relative">
                 <InputIcon

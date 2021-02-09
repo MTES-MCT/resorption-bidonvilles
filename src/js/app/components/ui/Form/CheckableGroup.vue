@@ -9,6 +9,7 @@
             <InputLabel
                 :label="label"
                 :info="info"
+                :id="id"
                 :showMandatoryStar="showMandatoryStar"
             />
 
