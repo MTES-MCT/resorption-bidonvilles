@@ -60,29 +60,23 @@ Cypress.Commands.add("checkShantytownDetails", shantytown => {
 
     cy.get("[data-cy-data='population_total']").should(
         "contain",
-        `${
-            shantytown.population_total !== null
-                ? shantytown.population_total
-                : "0"
-        } personnes`
+        shantytown.population_total !== null
+            ? shantytown.population_total
+            : "NC"
     );
 
     cy.get("[data-cy-data='population_couples']").should(
         "contain",
-        `${
-            shantytown.population_couples !== null
-                ? shantytown.population_couples
-                : "0"
-        } ménages`
+        shantytown.population_couples !== null
+            ? shantytown.population_couples
+            : "NC"
     );
 
     cy.get("[data-cy-data='population_minors']").should(
         "contain",
-        `${
-            shantytown.population_minors !== null
-                ? shantytown.population_minors
-                : "0"
-        } mineurs`
+        shantytown.population_minors !== null
+            ? shantytown.population_minors
+            : "NC"
     );
 
     cy.get("[data-cy-data='population_minors_0_3']").should(
