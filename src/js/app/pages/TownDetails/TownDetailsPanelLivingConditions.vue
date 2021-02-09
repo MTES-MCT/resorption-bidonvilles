@@ -1,6 +1,6 @@
 <template>
     <TownDetailsPanel>
-        <template v-slot:title>Conditions de vies</template>
+        <template v-slot:title>Conditions de vie et environnement</template>
         <template v-slot:body>
             <div class="grid grid-cols-2">
                 <TownDetailsPanelLivingConditionsSection
