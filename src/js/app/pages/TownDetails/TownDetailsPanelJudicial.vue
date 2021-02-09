@@ -72,7 +72,9 @@
             <TownDetailsPanelSection>
                 <div class="grid grid-cols-2">
                     <div class="flex items-center">
-                        <img :src="policeSiren" class="w-6 h-6 mr-2" />
+                        <span class="w-6 h-6 mr-2 text-center"
+                            ><Icon icon="file"></Icon
+                        ></span>
                         <div class="font-bold">
                             Nom de l'étude d'huissier
                         </div>
