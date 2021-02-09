@@ -27,6 +27,7 @@
                     ></TownFormPanelInfo>
 
                     <TownFormPanelLocation
+                        class="mt-10"
                         v-model="town.location"
                     ></TownFormPanelLocation>
 
