@@ -1,5 +1,5 @@
 <template>
-    <FormGroup title="Conditions de vie">
+    <FormGroup title="Conditions de vie et environnement">
         <FormParagraph title="Les habitants ont-ils accès à l'eau ?">
             <InputAccessToWater
                 v-model="input.access_to_water"
