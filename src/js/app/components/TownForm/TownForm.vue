@@ -12,7 +12,7 @@
                             class="ml-5"
                             :loading="loading"
                             data-cy-button="submit"
-                            >{{ submitWording }}</Button
+                            >Valider</Button
                         >
                     </div>
                 </PrivateContainer>
