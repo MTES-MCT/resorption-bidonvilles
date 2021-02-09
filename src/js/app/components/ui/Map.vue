@@ -1,14 +1,22 @@
 <template>
-    <div id="map" class="w-full h-full" ref="container"></div>
+    <div class="w-full h-full relative">
+        <Tooltip></Tooltip>
+        <div id="map" class="w-full h-full" ref="container"></div>
+    </div>
 </template>
 
 <script>
 import L from "leaflet";
+import Tooltip from "./Map/Tooltip.vue";
 import "leaflet-providers";
 
 const DEFAULT_VIEW = [46.7755829, 2.0497727];
 
 export default {
+    components: {
+        Tooltip
+    },
+
     props: {
         value: {
             type: Array,
