@@ -90,6 +90,9 @@
                         </div>
                     </div>
                 </div>
+                <div class="text-right italic">
+                    *NC = non communiqué
+                </div>
 
                 <div>
                     <div class="font-bold">Origine</div>
