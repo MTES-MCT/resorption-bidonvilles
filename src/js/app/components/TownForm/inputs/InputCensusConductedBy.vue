@@ -1,7 +1,7 @@
 <template>
     <TextInput
         id="census_conducted_by"
-        label="Service ou opérateur en charge"
+        label="Intervenant en charge du diagnostic"
         v-model="input"
         rules="required"
         cypressName="census_conducted_by"
