@@ -55,6 +55,18 @@
                     ></TownFormPanelJudicial>
                 </div>
             </PrivateContainer>
+
+            <div class="pt-12 pb-16">
+                <PrivateContainer class="flex justify-end items-baseline">
+                    <Button variant="primaryText" @click="back">Annuler</Button>
+                    <Button
+                        class="ml-5"
+                        :loading="loading"
+                        data-cy-button="submit"
+                        >Valider</Button
+                    >
+                </PrivateContainer>
+            </div>
         </form>
     </ValidationObserver>
 </template>
