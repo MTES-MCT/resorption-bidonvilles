@@ -52,18 +52,14 @@
                 to="#newComment"
                 @click.native="scrollFix('#newComment')"
             >
-                <Button
-                    variant="secondary"
-                    class="mr-8"
-                    icon="comment"
-                    iconPosition="left"
+                <Button variant="secondary" icon="comment" iconPosition="left"
                     >Journal du site</Button
                 >
             </router-link>
             <Button
                 v-if="hasPermission('shantytown.delete')"
+                class="ml-8"
                 variant="secondary"
-                class="mr-8"
                 icon="trash-alt"
                 iconPosition="left"
                 @click="$emit('deleteTown')"
