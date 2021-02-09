@@ -1,5 +1,5 @@
 <template>
-    <div class="townDetailsPanelShadow p-5">
+    <div class="townDetailsPanelShadow py-5 px-6">
         <div class="text-primary text-display-lg">
             <slot name="title" />
         </div>
