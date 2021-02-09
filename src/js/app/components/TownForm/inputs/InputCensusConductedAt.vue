@@ -6,6 +6,7 @@
             label="Date du diagnostic"
             v-model="input"
             data-cy-field="census_conducted_at"
+            showMandatoryStar="true"
         ></DatepickerV2>
     </div>
 </template>

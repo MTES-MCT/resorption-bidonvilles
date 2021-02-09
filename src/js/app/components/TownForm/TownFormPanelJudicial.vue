@@ -2,6 +2,7 @@
     <FormGroup title="Procédure judiciaire">
         <FormParagraph
             title="Une plainte a-t-elle été déposée par le propriétaire ?"
+            showMandatoryStar="true"
         >
             <InputOwnerComplaint
                 v-model="input.owner_complaint"

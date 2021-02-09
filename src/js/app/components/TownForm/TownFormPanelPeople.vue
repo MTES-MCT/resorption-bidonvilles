@@ -13,7 +13,10 @@
             ></InputSocialOrigins>
         </FormParagraph>
 
-        <FormParagraph title="Quel est le statut du diagnostic social ?">
+        <FormParagraph
+            title="Quel est le statut du diagnostic social ?"
+            showMandatoryStar="true"
+        >
             <InputCensusStatus
                 v-model="input.census_status"
                 ref="censusStatus"

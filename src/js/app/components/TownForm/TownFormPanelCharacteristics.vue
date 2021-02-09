@@ -18,7 +18,11 @@
             ></InputDetailedAddress>
         </FormParagraph>
 
-        <FormParagraph title="Quel est le propriétaire ?" class="w-128">
+        <FormParagraph
+            title="Quel est le propriétaire ?"
+            showMandatoryStar="true"
+            class="w-128"
+        >
             <InputOwnerType
                 v-model="input.owner_type"
                 ref="ownerType"

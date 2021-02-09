@@ -1,5 +1,10 @@
 <template>
-    <CheckableGroup label="Type de site" id="field_type" rules="required">
+    <CheckableGroup
+        label="Type de site"
+        id="field_type"
+        showMandatoryStar="true"
+        rules="required"
+    >
         <Radio
             v-for="value in values"
             v-bind:key="value.id"

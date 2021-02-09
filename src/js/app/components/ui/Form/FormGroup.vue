@@ -1,5 +1,5 @@
 <template>
-    <div class="shadow p-5">
+    <div class="shadow py-5 px-6">
         <div class="text-primary text-display-lg pb-4 border-b-2">
             {{ title }}
         </div>

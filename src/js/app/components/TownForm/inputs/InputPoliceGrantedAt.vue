@@ -5,6 +5,7 @@
         id="police_granted_at"
         rules="required|grantedAfterCreation:@built_at|grantedAfterRequest:@police_requested_at"
         data-cy-field="police_granted_at"
+        showMandatoryStar="true"
     ></DatepickerV2>
 </template>
 

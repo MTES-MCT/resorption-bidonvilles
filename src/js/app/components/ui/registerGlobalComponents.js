@@ -23,6 +23,7 @@ import Select from "./Form/input/Select.vue";
 import SelectOption from "./Form/input/SelectOption.vue";
 import FormGroup from "./Form/FormGroup.vue";
 import InputGroup from "./Form/InputGroup.vue";
+import MandatoryStar from "./Form/utils/MandatoryStar.vue";
 import FormParagraph from "./Form/FormParagraph.vue";
 import Menu from "./Menu/Menu.vue";
 import MenuItem from "./Menu/MenuItem.vue";
@@ -52,6 +53,7 @@ export default function(vueInstance) {
     vueInstance.component("Select", Select);
     vueInstance.component("SelectOption", SelectOption);
     vueInstance.component("FormGroup", FormGroup);
+    vueInstance.component("MandatoryStar", MandatoryStar);
     vueInstance.component("Dropdown", Dropdown);
     vueInstance.component("Modal", Modal);
     vueInstance.component("SidePanel", SidePanel);

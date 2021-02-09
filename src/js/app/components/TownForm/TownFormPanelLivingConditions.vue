@@ -1,6 +1,9 @@
 <template>
     <FormGroup title="Conditions de vie et environnement">
-        <FormParagraph title="Les habitants ont-ils accès à l'eau ?">
+        <FormParagraph
+            title="Les habitants ont-ils accès à l'eau ?"
+            showMandatoryStar="true"
+        >
             <InputAccessToWater
                 v-model="input.access_to_water"
             ></InputAccessToWater>
@@ -9,7 +12,10 @@
             ></InputWaterComments>
         </FormParagraph>
 
-        <FormParagraph title="Les habitants ont-ils accès à l'électricité ?">
+        <FormParagraph
+            title="Les habitants ont-ils accès à l'électricité ?"
+            showMandatoryStar="true"
+        >
             <InputElectricityType
                 v-model="input.electricity_type"
             ></InputElectricityType>
@@ -18,7 +24,10 @@
             ></InputElectricityComments>
         </FormParagraph>
 
-        <FormParagraph title="Les habitants ont-ils accès à des toilettes ?">
+        <FormParagraph
+            title="Les habitants ont-ils accès à des toilettes ?"
+            showMandatoryStar="true"
+        >
             <InputAccessToSanitary
                 v-model="input.access_to_sanitary"
             ></InputAccessToSanitary>
@@ -27,7 +36,10 @@
             ></InputSanitaryComments>
         </FormParagraph>
 
-        <FormParagraph title="L'évacuation des déchets est-elle organisée ?">
+        <FormParagraph
+            title="L'évacuation des déchets est-elle organisée ?"
+            showMandatoryStar="true"
+        >
             <InputTrashEvacuation
                 v-model="input.trash_evacuation"
             ></InputTrashEvacuation>
