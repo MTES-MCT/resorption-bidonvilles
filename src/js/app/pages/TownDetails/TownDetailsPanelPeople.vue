@@ -3,50 +3,94 @@
         <template v-slot:title>Habitants</template>
         <template v-slot:body>
             <TownDetailsPanelSection>
-                <div class="flex items-center mb-4">
-                    <div
-                        class="text-display-sm mr-4"
-                        data-cy-data="population_total"
-                    >
-                        {{ town.populationTotal || 0 }} personnes
+                <div class="flex">
+                    <div class="mr-4">
+                        <Icon icon="male" class="text-xl"></Icon>
                     </div>
-                    <div
-                        class="text-display-sm mr-4"
-                        data-cy-data="population_couples"
-                    >
-                        {{ town.populationCouples || 0 }} ménages
-                    </div>
-                    <div
-                        class="text-display-sm"
-                        data-cy-data="population_minors"
-                    >
-                        {{ town.populationMinors || 0 }} mineurs
+                    <div>
+                        <div class="flex items-center mb-4">
+                            <div class="text-display-md">
+                                Personnes :
+                            </div>
+                            <div
+                                class="text-display-sm ml-2 mr-10 font-normal"
+                                data-cy-data="population_total"
+                            >
+                                {{
+                                    Number.isInteger(town.populationTotal)
+                                        ? town.populationTotal
+                                        : "NC"
+                                }}
+                            </div>
+                            <div class="text-display-md">
+                                Ménages :
+                            </div>
+                            <div
+                                class="text-display-sm ml-2 mr-10 font-normal"
+                                data-cy-data="population_couples"
+                            >
+                                {{
+                                    Number.isInteger(town.populationCouples)
+                                        ? town.populationCouples
+                                        : "NC"
+                                }}
+                            </div>
+                            <div class="text-display-md">
+                                Mineurs :
+                            </div>
+                            <div
+                                class="text-display-sm ml-2 mr-10 font-normal"
+                                data-cy-data="population_minors"
+                            >
+                                {{
+                                    Number.isInteger(town.populationMinors)
+                                        ? town.populationMinors
+                                        : "NC"
+                                }}
+                            </div>
+                        </div>
+                        <div class="flex items-center mb-4">
+                            <div
+                                class="mr-10"
+                                data-cy-data="population_minors_0_3"
+                            >
+                                <span class="text-display-xs">0 - 3 ans :</span
+                                ><br />{{ populationMinors0To3 }}
+                            </div>
+                            <div
+                                class="mr-10"
+                                data-cy-data="population_minors_3_6"
+                            >
+                                <span class="text-display-xs">3 - 6 ans :</span
+                                ><br />{{ populationMinors3To6 }}
+                            </div>
+                            <div
+                                class="mr-10"
+                                data-cy-data="population_minors_6_12"
+                            >
+                                <span class="text-display-xs">6 - 12 ans :</span
+                                ><br />{{ populationMinors6To12 }}
+                            </div>
+                            <div
+                                class="mr-10"
+                                data-cy-data="population_minors_12_16"
+                            >
+                                <span class="text-display-xs"
+                                    >12 - 16 ans :</span
+                                ><br />{{ populationMinors12To16 }}
+                            </div>
+                            <div
+                                class="mr-10"
+                                data-cy-data="population_minors_16_18"
+                            >
+                                <span class="text-display-xs"
+                                    >16 - 18 ans :</span
+                                ><br />{{ populationMinors16To18 }}
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="flex items-center mb-4">
-                    <div class="mr-4" data-cy-data="population_minors_0_3">
-                        <span class="text-display-xs">0 - 3 ans :</span><br />{{
-                            populationMinors0To3
-                        }}
-                    </div>
-                    <div class="mr-4" data-cy-data="population_minors_3_6">
-                        <span class="text-display-xs">3 - 6 ans :</span><br />{{
-                            populationMinors3To6
-                        }}
-                    </div>
-                    <div class="mr-4" data-cy-data="population_minors_6_12">
-                        <span class="text-display-xs">6 - 12 ans :</span
-                        ><br />{{ populationMinors6To12 }}
-                    </div>
-                    <div class="mr-4" data-cy-data="population_minors_12_16">
-                        <span class="text-display-xs">12 - 16 ans :</span
-                        ><br />{{ populationMinors12To16 }}
-                    </div>
-                    <div class="mr-4" data-cy-data="population_minors_16_18">
-                        <span class="text-display-xs">16 - 18 ans :</span
-                        ><br />{{ populationMinors16To18 }}
-                    </div>
-                </div>
+
                 <div>
                     <div class="font-bold">Origine</div>
                     <div data-cy-data="social_origins">
