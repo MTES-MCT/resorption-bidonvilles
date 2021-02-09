@@ -17,7 +17,7 @@
     "after": "After",
     "context": {
       "title": "Résorption-bidonvilles,",
-      "subtitle": "A platform to boost the resorption of shantytowns",
+      "subtitle": "A platform to boost the resorption of slums",
       "text": "A tool for information, sharing and steering, the platform offers a high-performance and effective solution for slum clearance. It enables the collaboration of all local stakeholders involved in the slum clearance policy."
     },
     "feedback": {
@@ -61,16 +61,16 @@
     },
     "firstParagraph": "A slum is an area that usually lacks basic services (water, electricity, waste management) and is illegally occupied by several families.",
     "secondParagraph": {
-      "bold": "The government sets a clear objective of shanty town resorption by moving away from an evacuation-centred approach to a global approach.",
+      "bold": "The government sets a clear objective of slum resorption by moving away from an evacuation-centred approach to a global approach.",
       "normal": "combining social inclusion, respect for public order and prevention of resettlement. In all the territories concerned, effective, humane and pragmatic multi-partner actions must be implemented.",
-      "link": "More about the shantytown resorption policy"
+      "link": "More about the slum resorption policy"
     },
     "video": {
-      "text": "Understanding shantytown clearance in 2 minutes"
+      "text": "Understanding slum clearance in 2 minutes"
     }
   },
   "secondBanner": {
-    "text": "Neighbour, citizen, shantytown dweller... Any news? A question ? An alert?",
+    "text": "Neighbour, citizen, slum dweller... Any news? A question ? An alert?",
     "cta": "Contact us"
   },
   "thirdSection": {
