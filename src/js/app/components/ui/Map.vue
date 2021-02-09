@@ -75,7 +75,7 @@ export default {
 
         refreshView(emitInput = false) {
             const { center, zoom } = this.view;
-            this.map.setView(center, zoom);
+            this.map.setView(center, (this.map && this.map.getZoom()) || zoom);
 
             if (emitInput === true) {
                 this.$emit("input", this.coordinates);
