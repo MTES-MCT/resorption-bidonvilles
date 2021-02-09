@@ -35,12 +35,12 @@ export default {
             items: [
                 {
                     label: "Liste des sites",
-                    target: "/liste-des-sites-2",
+                    target: "/liste-des-sites",
                     group: "townList"
                 },
                 {
                     label: "Déclarer un site",
-                    target: "/nouveau-site-new",
+                    target: "/nouveau-site",
                     group: "townCreation"
                 }
             ]
