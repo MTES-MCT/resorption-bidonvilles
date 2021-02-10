@@ -217,6 +217,9 @@ export default {
                     sanitary_comments: this.data.sanitaryComments || undefined,
                     trash_evacuation: this.boolToInt(this.data.trashEvacuation),
                     water_potable: this.boolToInt(this.data.waterPotable),
+                    water_public_point: this.boolToInt(
+                        this.data.waterPublicPoint
+                    ),
                     water_continuous_access: this.boolToInt(
                         this.data.waterContinuousAccess
                     ),
@@ -252,7 +255,7 @@ export default {
                         this.data.firePreventionMeasures
                     ),
                     fire_prevention_diagnostic: this.boolToInt(
-                        this.data.firePReventionDiagnostic
+                        this.data.firePreventionDiagnostic
                     ),
                     fire_prevention_site_accessible: this.boolToInt(
                         this.data.firePreventionSiteAccessible

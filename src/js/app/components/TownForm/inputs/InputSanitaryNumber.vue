@@ -34,8 +34,8 @@ export default {
             this.input = this.value;
         },
 
-        checked() {
-            this.$emit("input", this.value);
+        input() {
+            this.$emit("input", this.input);
         }
     }
 };
