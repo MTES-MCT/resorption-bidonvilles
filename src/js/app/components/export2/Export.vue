@@ -84,7 +84,7 @@ export default {
                 },
                 {
                     id: "address_details",
-                    label: "Informations d'accès au site",
+                    label: "Informations d'accès au site et coordonnées GPS",
                     closedTowns: false
                 },
                 {
