@@ -12,7 +12,7 @@
                 :showMandatoryStar="showMandatoryStar"
             />
 
-            <div class="relative">
+            <div class="relative" :class="width">
                 <InputIcon
                     position="before"
                     :icon="prefixIcon"
@@ -90,6 +90,11 @@ export default {
             required: false,
             type: Boolean,
             default: false
+        },
+        width: {
+            required: false,
+            type: String,
+            default: undefined
         }
     },
     computed: {

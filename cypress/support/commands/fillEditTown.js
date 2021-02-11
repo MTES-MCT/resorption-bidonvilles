@@ -218,17 +218,17 @@ Cypress.Commands.add("fillEditTown", shantytown => {
         cy.get("[data-cy-field='population_minors_16_18']").clear();
     }
 
-    // // minors in school
-    // if (
-    //     shantytown.minors_in_school !== undefined &&
-    //     shantytown.minors_in_school !== null
-    // ) {
-    //     cy.get("[data-cy-field='minors_in_school']").typeReplace(
-    //         shantytown.minors_in_school
-    //     );
-    // } else {
-    //     cy.get("[data-cy-field='minors_in_school']").clear();
-    // }
+    // minors in school
+    if (
+        shantytown.minors_in_school !== undefined &&
+        shantytown.minors_in_school !== null
+    ) {
+        cy.get("[data-cy-field='minors_in_school']").typeReplace(
+            shantytown.minors_in_school
+        );
+    } else {
+        cy.get("[data-cy-field='minors_in_school']").clear();
+    }
 
     // access to water
     if (shantytown.access_to_water) {

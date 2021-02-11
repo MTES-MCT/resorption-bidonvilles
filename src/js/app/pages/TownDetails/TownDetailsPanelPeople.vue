@@ -88,6 +88,13 @@
                                 ><br />{{ populationMinors16To18 }}
                             </div>
                         </div>
+                        <div class="flex">
+                            <div class="mr-10" data-cy-data="minors_in_school">
+                                <span class="text-display-xs"
+                                    >Inscrits en établissement scolaire :</span
+                                ><br />{{ minorsInSchool }}
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="text-right italic">
@@ -223,6 +230,9 @@ export default {
         },
         populationMinors16To18() {
             return this.intToStr(this.town.populationMinors16To18);
+        },
+        minorsInSchool() {
+            return this.intToStr(this.town.minorsInSchool);
         }
     }
 };

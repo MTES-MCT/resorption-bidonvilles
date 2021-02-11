@@ -114,6 +114,13 @@ Cypress.Commands.add("checkShantytownDetails", shantytown => {
             : "NC"
     );
 
+    cy.get("[data-cy-data='minors_in_school']").should(
+        "contain",
+        shantytown.minors_in_school !== null
+            ? shantytown.minors_in_school
+            : "NC"
+    );
+
     if (shantytown.social_origins.length > 0) {
         cy.get("[data-cy-data='social_origins'] div").should(
             "have.length",

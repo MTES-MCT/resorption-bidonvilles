@@ -188,7 +188,8 @@ export default {
                         ),
                         populationMinors16To18: this.intToStr(
                             this.data.populationMinors16To18
-                        )
+                        ),
+                        minorsInSchool: this.intToStr(this.data.minorsInSchool)
                     },
                     social_origins: this.data.socialOrigins
                         ? this.data.socialOrigins.map(({ id }) => id)
@@ -381,6 +382,9 @@ export default {
                     ),
                     population_minors_16_18: this.strToInt(
                         this.town.people.populationMinors.populationMinors16To18
+                    ),
+                    minors_in_school: this.strToInt(
+                        this.town.people.populationMinors.minorsInSchool
                     ),
                     social_origins: this.town.people.social_origins,
                     census_status: this.nullableStr(
