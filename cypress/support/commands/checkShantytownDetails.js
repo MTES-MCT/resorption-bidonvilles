@@ -58,67 +58,63 @@ Cypress.Commands.add("checkShantytownDetails", shantytown => {
         cy.get("[data-cy-data='owner']").should("not.exist");
     }
 
-    cy.get("[data-cy-data='population_total']").should(
+    cy.get("[data-cy-data='populationTotal']").should(
         "contain",
-        shantytown.population_total !== null
-            ? shantytown.population_total
-            : "NC"
+        shantytown.population_total !== null ? shantytown.population_total : "-"
     );
 
-    cy.get("[data-cy-data='population_couples']").should(
+    cy.get("[data-cy-data='populationCouples']").should(
         "contain",
         shantytown.population_couples !== null
             ? shantytown.population_couples
-            : "NC"
+            : "-"
     );
 
-    cy.get("[data-cy-data='population_minors']").should(
+    cy.get("[data-cy-data='populationMinors']").should(
         "contain",
         shantytown.population_minors !== null
             ? shantytown.population_minors
-            : "NC"
+            : "-"
     );
 
-    cy.get("[data-cy-data='population_minors_0_3']").should(
+    cy.get("[data-cy-data='populationMinors0To3']").should(
         "contain",
         shantytown.population_minors_0_3 !== null
             ? shantytown.population_minors_0_3
-            : "NC"
+            : "-"
     );
 
-    cy.get("[data-cy-data='population_minors_3_6']").should(
+    cy.get("[data-cy-data='populationMinors3To6']").should(
         "contain",
         shantytown.population_minors_3_6 !== null
             ? shantytown.population_minors_3_6
-            : "NC"
+            : "-"
     );
 
-    cy.get("[data-cy-data='population_minors_6_12']").should(
+    cy.get("[data-cy-data='populationMinors6To12']").should(
         "contain",
         shantytown.population_minors_6_12 !== null
             ? shantytown.population_minors_6_12
-            : "NC"
+            : "-"
     );
 
-    cy.get("[data-cy-data='population_minors_12_16']").should(
+    cy.get("[data-cy-data='populationMinors12To16']").should(
         "contain",
         shantytown.population_minors_12_16 !== null
             ? shantytown.population_minors_12_16
-            : "NC"
+            : "-"
     );
 
-    cy.get("[data-cy-data='population_minors_16_18']").should(
+    cy.get("[data-cy-data='populationMinors16To18']").should(
         "contain",
         shantytown.population_minors_16_18 !== null
             ? shantytown.population_minors_16_18
-            : "NC"
+            : "-"
     );
 
-    cy.get("[data-cy-data='minors_in_school']").should(
+    cy.get("[data-cy-data='minorsInSchool']").should(
         "contain",
-        shantytown.minors_in_school !== null
-            ? shantytown.minors_in_school
-            : "NC"
+        shantytown.minors_in_school !== null ? shantytown.minors_in_school : "-"
     );
 
     if (shantytown.social_origins.length > 0) {

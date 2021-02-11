@@ -55,6 +55,9 @@
                                     'bg-gray-100': colIndex === 0
                                 }"
                                 v-bind:key="colIndex"
+                                :data-cy-data="
+                                    colIndex === 0 ? section.data : undefined
+                                "
                             >
                                 {{ col[section.data] }}
                             </td>
@@ -212,7 +215,7 @@ export default {
                     "-"
                 ),
                 populationMinors16To18: this.intToStr(
-                    this.town.populationMinors16To1,
+                    this.town.populationMinors16To18,
                     "-"
                 ),
                 minorsInSchool: this.intToStr(this.town.minorsInSchool, "-")
