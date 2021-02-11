@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="mb-3 italic text-G600">
+        <div class="mb-3 text-G600">
             Le nombre de personnes sur un site est mouvant, les données fournies
             par les acteurs - même des estimations - participent à
             l'amélioration de la connaissance.
