@@ -3,7 +3,7 @@
         <div v-if="label" class="font-bold">
             {{ label }} <MandatoryStar v-if="showMandatoryStar"></MandatoryStar>
         </div>
-        <div v-if="info" class="mb-3 italic text-G600">{{ info }}</div>
+        <div v-if="info" class="mb-3 text-G600">{{ info }}</div>
     </div>
 </template>
 
