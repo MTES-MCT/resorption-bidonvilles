@@ -46,7 +46,7 @@ export default {
 
         let observer = new IntersectionObserver(callback, {
             rootMargin: "0px",
-            threshold: 1.0
+            threshold: 0.5
         });
 
         observer.observe(document.querySelector("#judicial"));
