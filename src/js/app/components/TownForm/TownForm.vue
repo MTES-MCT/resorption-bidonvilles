@@ -60,6 +60,10 @@
                         id="judicial"
                         v-model="town.judicial"
                     ></TownFormPanelJudicial>
+
+                    <div class="mt-8 text-right italic text-red font-bold">
+                        * : Réponses obligatoires
+                    </div>
                 </div>
             </PrivateContainer>
 
