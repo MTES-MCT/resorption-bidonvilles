@@ -2,7 +2,7 @@
     <SubQuestionWrapper
         label="Existe-t-il des eaux stagnantes autour du point de distribution ?"
     >
-        <CheckableGroup direction="row">
+        <CheckableGroup direction="row" withoutMargin>
             <Radio
                 label="Oui"
                 type="checkbox"

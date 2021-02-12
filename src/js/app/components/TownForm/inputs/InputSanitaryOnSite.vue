@@ -1,16 +1,16 @@
 <template>
-    <SubQuestionWrapper label="Où se situe l'accès">
-        <CheckableGroup direction="row">
+    <SubQuestionWrapper label="Les toilettes se situent-elles sur le site ?">
+        <CheckableGroup direction="row" withoutMargin>
             <Radio
                 type="checkbox"
-                label="sur site"
+                label="Oui"
                 v-model="checked"
                 :checkValue="1"
                 cypressName="sanitary_on_site"
             ></Radio>
             <Radio
                 type="checkbox"
-                label="aux abords"
+                label="Non"
                 v-model="checked"
                 :checkValue="0"
                 cypressName="sanitary_on_site"

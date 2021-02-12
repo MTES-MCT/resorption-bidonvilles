@@ -1,6 +1,9 @@
 <template>
-    <SubQuestionWrapper label="Est-ce qu'il y a des bacs de lavage des mains ?">
-        <CheckableGroup direction="row">
+    <SubQuestionWrapper
+        label="Est-ce qu'il y a des bacs de lavage des mains ?"
+        :withoutBorder="withoutBorder"
+    >
+        <CheckableGroup direction="row" withoutMargin>
             <Radio
                 label="Oui"
                 v-model="checked"
@@ -28,6 +31,9 @@ export default {
             type: Number,
             required: false,
             default: undefined
+        },
+        withoutBorder: {
+            type: Boolean
         }
     },
 

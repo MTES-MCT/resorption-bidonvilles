@@ -1,6 +1,6 @@
 <template>
     <SubQuestionWrapper label="L'eau est-elle potable ?">
-        <CheckableGroup direction="row">
+        <CheckableGroup direction="row" withoutMargin>
             <Radio
                 type="checkbox"
                 label="Oui"

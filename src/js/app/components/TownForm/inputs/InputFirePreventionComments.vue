@@ -1,7 +1,8 @@
 <template>
     <TextArea
         id="fire_prevention_comments"
-        label="Modalités d'accès"
+        label="Précisions"
+        placeholder="Votre message"
         v-model="input"
         cypressName="fire_prevention_comments"
     ></TextArea>

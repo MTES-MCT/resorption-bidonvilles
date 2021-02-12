@@ -5,6 +5,7 @@
         info="Exemples : groupe électrogène, raccordement à une usine..."
         v-model="input"
         cypressName="electricity_comments"
+        placeholder="Votre message"
     ></TextArea>
 </template>
 

@@ -1,8 +1,10 @@
 <template>
     <TextArea
         id="water_comments"
+        :rules="rules"
         label="Modalités d'accès"
-        info="Exemples : Citerne de 100 litres remplie par les pompiers tous les jours, 3 robinets raccordés par la collectivité, borne incendie à 200 mètres..."
+        info="Exemples : citerne remplie par les pompiers tous les jours, 3 robinets raccordés par la collectivité, borne incendie…"
+        placeholder="Votre message"
         v-model="input"
         cypressName="water_comments"
     ></TextArea>
@@ -15,6 +17,9 @@ export default {
             type: String,
             required: false,
             default: ""
+        },
+        rules: {
+            type: String
         }
     },
 

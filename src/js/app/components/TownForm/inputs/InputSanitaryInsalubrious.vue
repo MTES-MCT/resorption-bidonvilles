@@ -2,7 +2,7 @@
     <SubQuestionWrapper
         label="Constate-t-on des marques de défécation à l'air libre ?"
     >
-        <CheckableGroup direction="row">
+        <CheckableGroup direction="row" withoutMargin>
             <Radio
                 type="checkbox"
                 label="Oui"

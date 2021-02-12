@@ -5,6 +5,7 @@
         id="access_to_sanitary"
         validationName="Accès à des toilettes"
         rules="required"
+        :withoutMargin="true"
     >
         <Radio
             variant="card"

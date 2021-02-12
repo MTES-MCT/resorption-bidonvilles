@@ -20,13 +20,45 @@
                     v-model="input.water_everyone_has_access"
                 />
                 <InputWaterStagnantWater v-model="input.water_stagnant_water" />
-                <InputWaterHandWashAccess
-                    v-model="input.water_hand_wash_access"
-                    class="mb-6"
-                />
+                <div class="mb-6">
+                    <InputWaterHandWashAccess
+                        v-model="input.water_hand_wash_access"
+                        withoutBorder
+                    />
+                    <InputWaterHandWashNumber
+                        v-if="input.water_hand_wash_access > 0"
+                    />
+                </div>
                 <InputWaterComments
+                    :rules="input.water_public_point > 0 ? 'required' : ''"
                     v-model="input.water_comments"
                 ></InputWaterComments>
+            </div>
+        </FormParagraph>
+
+        <FormParagraph
+            title="Les habitants ont-ils accès à des toilettes ?"
+            :showMandatoryStar="true"
+        >
+            <InputAccessToSanitary
+                v-model="input.access_to_sanitary"
+            ></InputAccessToSanitary>
+            <div class="ml-12">
+                <InputSanitaryOnSite
+                    v-model="input.sanitary_on_site"
+                ></InputSanitaryOnSite>
+                <InputSanitaryNumber
+                    v-model="input.sanitary_number"
+                    :population="population"
+                ></InputSanitaryNumber>
+                <InputSanitaryInsalubrious
+                    v-model="input.sanitary_insalubrious"
+                    class="mb-6"
+                ></InputSanitaryInsalubrious>
+
+                <InputSanitaryComments
+                    v-model="input.sanitary_comments"
+                ></InputSanitaryComments>
             </div>
         </FormParagraph>
 
@@ -45,51 +77,27 @@
         </FormParagraph>
 
         <FormParagraph
-            title="Les habitants ont-ils accès à des toilettes ?"
-            :showMandatoryStar="true"
-        >
-            <InputAccessToSanitary
-                v-model="input.access_to_sanitary"
-            ></InputAccessToSanitary>
-            <div class="ml-12">
-                <InputSanitaryNumber
-                    v-model="input.sanitary_number"
-                ></InputSanitaryNumber>
-                <InputSanitaryInsalubrious
-                    v-model="input.sanitary_insalubrious"
-                ></InputSanitaryInsalubrious>
-                <InputSanitaryOnSite
-                    v-model="input.sanitary_on_site"
-                    class="mb-6"
-                ></InputSanitaryOnSite>
-                <InputSanitaryComments
-                    v-model="input.sanitary_comments"
-                ></InputSanitaryComments>
-            </div>
-        </FormParagraph>
-
-        <FormParagraph
-            title="L'évacuation des déchets est-elle organisée ?"
+            title="Le ramassage des déchets est-il organisé ?"
             :showMandatoryStar="true"
         >
             <InputTrashEvacuation
                 v-model="input.trash_evacuation"
             ></InputTrashEvacuation>
             <div class="ml-12">
-                <InputTrashCansOnSite
-                    v-model="input.trash_cans_on_site"
-                ></InputTrashCansOnSite>
-                <InputTrashAccumulation
-                    v-model="input.trash_accumulation"
-                ></InputTrashAccumulation>
                 <InputTrashEvacuationRegular
                     v-model="input.trash_evacuation_regular"
                 ></InputTrashEvacuationRegular>
+                <InputTrashAccumulation
+                    v-model="input.trash_accumulation"
+                ></InputTrashAccumulation>
+                <InputTrashCansOnSite
+                    v-model="input.trash_cans_on_site"
+                ></InputTrashCansOnSite>
             </div>
         </FormParagraph>
 
         <FormParagraph
-            title="Y a-t-il des nuisibles sur le site ou à proximité?"
+            title="Y a-t-il des nuisibles sur le site ou à proximité ?"
         >
             <InputVermin v-model="input.vermin"></InputVermin>
             <div class="ml-12">
@@ -99,7 +107,7 @@
             </div>
         </FormParagraph>
 
-        <FormParagraph title="Y a-t-il des mesures “prévention incendie” ?">
+        <FormParagraph title="Y a-t-il des mesures prévention incendie ?">
             <InputFirePreventionMeasures
                 v-model="input.fire_prevention_measures"
             ></InputFirePreventionMeasures>
@@ -108,9 +116,12 @@
                     v-model="input.fire_prevention_diagnostic"
                 ></InputFirePreventionDiagnostic>
                 <InputFirePreventionSiteAccessible
-                    class="mb-6"
                     v-model="input.fire_prevention_site_accessible"
                 ></InputFirePreventionSiteAccessible>
+                <InputFirePreventionDevices
+                    class="mb-6"
+                    v-model="input.fire_prevention_devices"
+                ></InputFirePreventionDevices>
                 <InputFirePreventionComments
                     v-model="input.fire_prevention_comments"
                 ></InputFirePreventionComments>
@@ -135,6 +146,7 @@ import InputWaterRoadsToCross from "./inputs/InputWaterRoadsToCross.vue";
 import InputWaterEveryoneHasAccess from "./inputs/InputWaterEveryoneHasAccess.vue";
 import InputWaterStagnantWater from "./inputs/InputWaterStagnantWater.vue";
 import InputWaterHandWashAccess from "./inputs/InputWaterHandWashAccess.vue";
+import InputWaterHandWashNumber from "./inputs/InputWaterHandWashNumber.vue";
 import InputSanitaryNumber from "./inputs/InputSanitaryNumber";
 import InputSanitaryInsalubrious from "./inputs/InputSanitaryInsalubrious";
 import InputSanitaryOnSite from "./inputs/InputSanitaryOnSite";
@@ -147,6 +159,7 @@ import InputFirePreventionMeasures from "./inputs/InputFirePreventionMeasures";
 import InputFirePreventionDiagnostic from "./inputs/InputFirePreventionDiagnostic";
 import InputFirePreventionSiteAccessible from "./inputs/InputFirePreventionSiteAccessible";
 import InputFirePreventionComments from "./inputs/InputFirePreventionComments";
+import InputFirePreventionDevices from "./inputs/InputFirePreventionDevices";
 
 export default {
     components: {
@@ -169,6 +182,7 @@ export default {
         InputWaterEveryoneHasAccess,
         InputWaterStagnantWater,
         InputWaterHandWashAccess,
+        InputWaterHandWashNumber,
         InputSanitaryNumber,
         InputSanitaryInsalubrious,
         InputSanitaryOnSite,
@@ -176,13 +190,17 @@ export default {
         InputVerminComments,
         InputFirePreventionMeasures,
         InputFirePreventionDiagnostic,
-        InputFirePreventionComments
+        InputFirePreventionComments,
+        InputFirePreventionDevices
     },
 
     props: {
         value: {
             type: Object,
             required: true
+        },
+        population: {
+            type: String
         }
     },
 

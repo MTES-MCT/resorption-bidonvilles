@@ -1,8 +1,8 @@
 <template>
     <SubQuestionWrapper
-        label="Est-ce qu’un diagnostic prévention incendie par le SDIS a été réalisé ?"
+        label="Est-ce qu’un diagnostic prévention incendie par le SDIS (Service départemental d'incendie et de secours) a été réalisé ?"
     >
-        <CheckableGroup direction="row">
+        <CheckableGroup direction="row" withoutMargin>
             <Radio
                 label="Oui"
                 type="checkbox"

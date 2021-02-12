@@ -2,7 +2,7 @@
     <SubQuestionWrapper
         label="Est-ce un point d'eau public ? (robinet, fontaine publique...)"
     >
-        <CheckableGroup direction="row">
+        <CheckableGroup direction="row" withoutMargin>
             <Radio
                 label="Oui"
                 v-model="checked"

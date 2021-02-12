@@ -1,28 +1,28 @@
 <template>
     <SubQuestionWrapper
-        label="L'accès nécessite-t-il un franchissement de rue ou de route ?"
+        label="Est-ce que des dispositifs spécifiques (formation, extincteurs...) ont été mises en place ?"
     >
         <CheckableGroup direction="row" withoutMargin>
             <Radio
-                label="Oui"
                 type="checkbox"
+                label="Oui"
                 v-model="checked"
                 :checkValue="1"
-                cypressName="water_roads_to_cross"
+                cypressName="fire_prevention_devices"
             ></Radio>
             <Radio
-                label="Non"
                 type="checkbox"
+                label="Non"
                 v-model="checked"
                 :checkValue="0"
-                cypressName="water_roads_to_cross"
+                cypressName="fire_prevention_devices"
             ></Radio>
         </CheckableGroup>
     </SubQuestionWrapper>
 </template>
 
 <script>
-import SubQuestionWrapper from "#app/components/TownForm/ui/SubQuestionWrapper";
+import SubQuestionWrapper from "../ui/SubQuestionWrapper";
 export default {
     components: { SubQuestionWrapper },
     props: {

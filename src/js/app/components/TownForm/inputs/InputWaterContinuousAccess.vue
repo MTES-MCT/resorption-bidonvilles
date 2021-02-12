@@ -1,8 +1,8 @@
 <template>
     <SubQuestionWrapper
-        label="L'accès est-il continu ? c'est-à-dire qu'il ne varie pas en qualité et en quantité dans la journée et les saisons, sans limite dans le temps"
+        label="L'accès est-il continu ? c'est-à-dire qu'il ne varie pas en qualité et en quantité dans la journée et les saisons, sans limite dans le temps."
     >
-        <CheckableGroup direction="row">
+        <CheckableGroup direction="row" withoutMargin>
             <Radio
                 label="Oui"
                 v-model="checked"
