@@ -1,9 +1,12 @@
 <template>
     <div
-        class="flex flex-row items-center justify-between border-b border-color-G600 py-1 text-sm"
+        :class="[
+            'flex flex-row items-center text-sm border-b border-color-G600 py-1',
+            spaceBetween ? 'justify-between' : ''
+        ]"
     >
-        <div class="max-w-2xl">{{ label }}</div>
-        <div class="-mb-8">
+        <div :class="['max-w-2xl', !spaceBetween && 'mr-4']">{{ label }}</div>
+        <div>
             <slot />
         </div>
     </div>
@@ -14,6 +17,10 @@ export default {
     props: {
         label: {
             type: String
+        },
+        spaceBetween: {
+            type: Boolean,
+            default: true
         }
     }
 };

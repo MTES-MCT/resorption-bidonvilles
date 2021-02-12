@@ -2,7 +2,7 @@
     <SubQuestionWrapper
         label="Est-ce que le site est accessible aux pompiers ?"
     >
-        <CheckableGroup direction="row">
+        <CheckableGroup direction="row" withoutMargin>
             <Radio
                 label="Oui"
                 type="checkbox"

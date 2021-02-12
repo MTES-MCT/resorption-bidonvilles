@@ -1,8 +1,8 @@
 <template>
     <SubQuestionWrapper
-        label="La collecte des poubelles / bennes est-elle réalisée de manière régulière ? (C'est-à-dire au moins une fois par semaine, à partir d'un point de dépot spécialement aménagé sur le site ou à proximité immédiate)"
+        label="La collecte des poubelles / bennes est-elle réalisée de manière régulière ? (C'est-à-dire au moins une fois par semaine, à partir d'un point de dépôt spécialement aménagé sur le site ou à proximité immédiate)"
     >
-        <CheckableGroup direction="row">
+        <CheckableGroup direction="row" withoutMargin>
             <Radio
                 label="Oui"
                 type="checkbox"

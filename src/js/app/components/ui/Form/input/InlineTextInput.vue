@@ -28,7 +28,7 @@
                     v-if="suffixIcon"
                 />
             </div>
-            <InputError>{{ errors[0] }}</InputError>
+            <InputError v-if="errors[0]">{{ errors[0] }}</InputError>
         </ValidationProvider>
     </div>
 </template>

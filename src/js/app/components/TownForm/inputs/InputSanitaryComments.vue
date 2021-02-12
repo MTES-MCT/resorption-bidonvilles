@@ -2,9 +2,10 @@
     <TextArea
         id="sanitary_comments"
         label="Modalités d'accès"
-        info="Exemples : 3 toilettes sèches, toilettes raccordées au réseau, un bloc sanitaire fourni par la ville..."
+        info="Exemples : toilettes sèches avec fosse / sèches sans fosse, chimiques, raccordées au réseau des eaux usées "
         v-model="input"
         cypressName="sanitary_comments"
+        placeholder="Votre message"
     ></TextArea>
 </template>
 

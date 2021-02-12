@@ -2,7 +2,7 @@
     <SubQuestionWrapper
         label="Constate-t-on une accumulation de déchets sur le site ou aux abords ?"
     >
-        <CheckableGroup direction="row">
+        <CheckableGroup direction="row" withoutMargin>
             <Radio
                 label="Oui"
                 type="checkbox"

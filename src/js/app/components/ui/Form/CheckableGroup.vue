@@ -5,7 +5,7 @@
         v-slot="{ errors }"
         :vid="id"
     >
-        <InputWrapper :hasErrors="!!errors.length">
+        <InputWrapper :withoutMargin="withoutMargin">
             <InputLabel
                 :label="label"
                 :info="info"
@@ -26,7 +26,7 @@
                     <slot />
                 </div>
             </div>
-            <InputError>{{ errors[0] }}</InputError>
+            <InputError v-if="errors[0]">{{ errors[0] }}</InputError>
         </InputWrapper>
     </ValidationProvider>
 </template>
@@ -59,6 +59,11 @@ export default {
         },
         id: {
             type: String
+        },
+        withoutMargin: {
+            required: false,
+            type: Boolean,
+            default: false
         },
         showMandatoryStar: {
             required: false,
@@ -98,7 +103,7 @@ export default {
             @apply mr-0 mb-0;
         }
 
-        @apply mr-4 mb-2;
+        @apply mr-4;
     }
 }
 

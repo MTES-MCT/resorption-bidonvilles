@@ -1,21 +1,18 @@
 <template>
-    <SubQuestionWrapper
-        label="Combien de poubelles / benes sont à proximité immédiate du site (moins de 100 mètres) ?"
-        withoutMargin
-    >
+    <div class="flex items-center text-sm">
+        <div class="mr-4">Nombre de bacs</div>
         <InlineTextInput
-            size="sm"
             v-model="input"
-            cypressName="trash_cans_on_site"
+            cypressName="water_hand_wash_access_number"
+            size="sm"
         />
-    </SubQuestionWrapper>
+    </div>
 </template>
 
 <script>
-import SubQuestionWrapper from "#app/components/TownForm/ui/SubQuestionWrapper";
 import InlineTextInput from "#app/components/ui/Form/input/InlineTextInput";
 export default {
-    components: { InlineTextInput, SubQuestionWrapper },
+    components: { InlineTextInput },
     props: {
         value: {
             type: String,

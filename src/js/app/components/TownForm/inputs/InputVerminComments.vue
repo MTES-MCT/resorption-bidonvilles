@@ -1,7 +1,8 @@
 <template>
     <TextArea
         id="vermin_comments"
-        label="Précision (rats, punaises de lits...)"
+        placeholder="Votre message"
+        label="Précisions (rats, punaises de lits...)"
         v-model="input"
         cypressName="vermin_comments"
     ></TextArea>

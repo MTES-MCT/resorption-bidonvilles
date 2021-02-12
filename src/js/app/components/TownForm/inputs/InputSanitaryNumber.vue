@@ -1,11 +1,18 @@
 <template>
-    <SubQuestionWrapper label="Nombre de toilettes">
-        <div class="mb-8">
+    <SubQuestionWrapper label="Nombre de toilettes" :space-between="false">
+        <div class="flex items-center">
             <InlineTextInput
                 v-model="input"
                 cypressName="sanitary_number"
                 size="sm"
+                type="number"
             />
+            <div
+                class="ml-4"
+                v-if="Number(input) > 0 && ratio && population.populationTotal"
+            >
+                Soit 1 toilette pour {{ ratio }} personnes
+            </div>
         </div>
     </SubQuestionWrapper>
 </template>
@@ -20,6 +27,9 @@ export default {
             type: String,
             required: false,
             default: ""
+        },
+        population: {
+            type: String
         }
     },
 
@@ -27,6 +37,14 @@ export default {
         return {
             input: this.value
         };
+    },
+
+    computed: {
+        ratio() {
+            return Math.floor(
+                Number(this.population.populationTotal) / Number(this.input)
+            );
+        }
     },
 
     watch: {

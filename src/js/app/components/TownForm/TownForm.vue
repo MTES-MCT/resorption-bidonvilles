@@ -53,6 +53,7 @@
                     <TownFormPanelLivingConditions
                         class="mt-10 townPanelShadow"
                         id="living_conditions"
+                        :population="town.people.population"
                         v-model="town.living_conditions"
                     ></TownFormPanelLivingConditions>
 

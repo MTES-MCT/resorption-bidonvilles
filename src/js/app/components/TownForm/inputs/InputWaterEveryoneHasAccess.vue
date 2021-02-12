@@ -1,8 +1,8 @@
 <template>
     <SubQuestionWrapper
-        label="Tous les habitants ont-ils accès aux points d'eau?"
+        label="Tous les habitants ont-ils accès aux points d'eau ?"
     >
-        <CheckableGroup direction="row">
+        <CheckableGroup direction="row" withoutMargin>
             <Radio
                 label="Oui"
                 v-model="checked"
