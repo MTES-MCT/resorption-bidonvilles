@@ -27,6 +27,7 @@
                     />
                     <InputWaterHandWashNumber
                         v-if="input.water_hand_wash_access > 0"
+                        v-model="input.water_hand_wash_access_number"
                     />
                 </div>
                 <InputWaterComments

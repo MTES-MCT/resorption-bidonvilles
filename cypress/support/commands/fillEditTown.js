@@ -335,9 +335,22 @@ Cypress.Commands.add("fillEditTown", shantytown => {
     }
 
     // water_hand_wash_access_number
-    // if (shantytown.water_hand_wash_access_number) {
-    //     cy.get(`[data-cy-field="water_hand_wash_access_number"][data-cy-label="${shantytown.water_hand_wash_access_number}"]`).myCheck()
-    // }
+    cy.get("body").then($element => {
+        if (
+            $element.find('[data-cy-field="water_hand_wash_access_number"]')
+                .length > 0
+        ) {
+            if (shantytown.water_hand_wash_access_number) {
+                cy.get(
+                    `[data-cy-field="water_hand_wash_access_number"]`
+                ).typeReplace(shantytown.water_hand_wash_access_number);
+            } else {
+                cy.get(
+                    `[data-cy-field="water_hand_wash_access_number"]`
+                ).clear();
+            }
+        }
+    });
 
     // sanitary_number
     if (shantytown.sanitary_number) {
@@ -450,6 +463,13 @@ Cypress.Commands.add("fillEditTown", shantytown => {
                 cy.wrap($el).myUncheck();
             }
         );
+    }
+
+    // fire_prevention_devices
+    if (shantytown.fire_prevention_devices) {
+        cy.get(
+            `[data-cy-field="fire_prevention_devices"][data-cy-label="${shantytown.fire_prevention_devices}"]`
+        ).myCheck();
     }
 
     // fire_prevention_comments

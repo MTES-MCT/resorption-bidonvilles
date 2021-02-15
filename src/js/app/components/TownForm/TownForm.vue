@@ -237,7 +237,8 @@ export default {
                     water_hand_wash_access: this.boolToInt(
                         this.data.waterHandWashAccess
                     ),
-                    water_hand_wash_access_number: 1,
+                    water_hand_wash_access_number: this.data
+                        .waterHandWashAccessNumber,
                     sanitary_number: this.data.sanitaryNumber,
                     sanitary_insalubrious: this.boolToInt(
                         this.data.sanitaryInsalubrious
@@ -257,6 +258,9 @@ export default {
                     ),
                     fire_prevention_diagnostic: this.boolToInt(
                         this.data.firePreventionDiagnostic
+                    ),
+                    fire_prevention_devices: this.boolToInt(
+                        this.data.firePreventionDevices
                     ),
                     fire_prevention_site_accessible: this.boolToInt(
                         this.data.firePreventionSiteAccessible
@@ -400,6 +404,16 @@ export default {
 
                 const result = await this.submitFn({
                     ...this.town.living_conditions,
+                    water_hand_wash_access_number: this.strToInt(
+                        this.town.living_conditions
+                            .water_hand_wash_access_number
+                    ),
+                    trash_cans_on_site: this.strToInt(
+                        this.town.living_conditions.trash_cans_on_site
+                    ),
+                    sanitary_number: this.strToInt(
+                        this.town.living_conditions.sanitary_number
+                    ),
                     address: this.town.location.address.label,
                     citycode: this.town.location.address.citycode,
                     name: this.town.location.name,
