@@ -194,7 +194,7 @@ export default {
                     social_origins: this.data.socialOrigins
                         ? this.data.socialOrigins.map(({ id }) => id)
                         : [],
-                    census_status: this.data.censusStatus || undefined,
+                    census_status: this.toNullableStr(this.data.censusStatus),
                     census_conducted_at: this.data.censusConductedAt
                         ? new Date(this.data.censusConductedAt * 1000)
                         : undefined,
@@ -228,7 +228,7 @@ export default {
                     justice_challenged: this.boolToInt(
                         this.data.justiceChallenged
                     ),
-                    police_status: this.data.policeStatus || undefined,
+                    police_status: this.toNullableStr(this.data.policeStatus),
                     police_requested_at: this.data.policeRequestedAt
                         ? new Date(this.data.policeRequestedAt * 1000)
                         : undefined,
@@ -312,6 +312,14 @@ export default {
             }
 
             return str;
+        },
+
+        toNullableStr(value) {
+            if (value === undefined || value === null) {
+                return "null";
+            }
+
+            return value;
         },
 
         formatDate(d) {
