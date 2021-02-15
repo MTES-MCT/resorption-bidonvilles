@@ -24,16 +24,33 @@
                 "
                 class="border border-primary rounded px-8 mt-4"
             >
-                <div class="border-b-2 border-G200 py-2 font-bold text-primary">
-                    Détail:
-                    <span v-if="details.negative.length"
-                        >{{ details.negative.length }} action{{
-                            details.negative.length > 1 ? "s" : ""
-                        }}
-                        pour améliorer l'accès</span
-                    >
+                <div
+                    class="border-b-2 border-G200 py-2 font-bold text-primary flex items-center justify-between"
+                >
+                    <div>
+                        <div v-if="details.negative.length">
+                            {{ details.negative.length }} action{{
+                                details.negative.length > 1 ? "s" : ""
+                            }}
+                            pour améliorer l'accès
+                        </div>
+                        <div v-else-if="details.positive.length">
+                            {{ details.positive.length }} action{{
+                                details.positive.length > 1 ? "s" : ""
+                            }}
+                            pour entretenir l'accès
+                        </div>
+                    </div>
+                    <div>
+                        <Button
+                            :icon="collapsed ? 'chevron-up' : 'chevron-down'"
+                            variant="primaryText"
+                            @click="collapse"
+                        />
+                    </div>
                 </div>
-                <div>
+
+                <div v-if="!collapsed">
                     <TownDetailsPanelLivingConditionsDetails
                         type="negative"
                         :cypressName="
@@ -86,6 +103,16 @@ export default {
         },
         inverted: {
             type: Boolean
+        }
+    },
+    data() {
+        return {
+            collapsed: false
+        };
+    },
+    methods: {
+        collapse() {
+            this.collapsed = !this.collapsed;
         }
     },
     computed: {

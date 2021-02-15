@@ -125,7 +125,7 @@
                             >
                             <TownCardIcon
                                 :value="shantytown.firePreventionMeasures"
-                                :details="details.fire"
+                                :details="details.firePrevention"
                                 >prev. incendie</TownCardIcon
                             >
                         </div>

@@ -58,7 +58,7 @@
                     cypressComments="fire_prevention_comments"
                     cypressDetailsPrefix="fire_prevention"
                     :comments="town.firePreventionComments"
-                    :details="details.fire"
+                    :details="details.firePrevention"
                 />
             </div>
         </template>
