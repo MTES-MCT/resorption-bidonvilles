@@ -259,9 +259,14 @@ Cypress.Commands.add("fillCreateTown", shantytown => {
     }
 
     // water_hand_wash_access_number
-    // if (shantytown.water_hand_wash_access_number) {
-    //     cy.get(`[data-cy-field="water_hand_wash_access_number"][data-cy-label="${shantytown.water_hand_wash_access_number}"]`).myCheck()
-    // }
+    if (
+        shantytown.water_hand_wash_access &&
+        shantytown.water_hand_wash_access_number
+    ) {
+        cy.get(`[data-cy-field="water_hand_wash_access_number"]`).type(
+            shantytown.water_hand_wash_access_number
+        );
+    }
 
     // sanitary_number
     if (shantytown.sanitary_number) {
@@ -337,6 +342,13 @@ Cypress.Commands.add("fillCreateTown", shantytown => {
     if (shantytown.fire_prevention_site_accessible) {
         cy.get(
             `[data-cy-field="fire_prevention_site_accessible"][data-cy-label="${shantytown.fire_prevention_site_accessible}"]`
+        ).myCheck();
+    }
+
+    // fire_prevention_devices
+    if (shantytown.fire_prevention_devices) {
+        cy.get(
+            `[data-cy-field="fire_prevention_devices"][data-cy-label="${shantytown.fire_prevention_devices}"]`
         ).myCheck();
     }
 

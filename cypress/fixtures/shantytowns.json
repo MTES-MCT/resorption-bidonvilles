@@ -69,7 +69,7 @@
                 "Accès continu, c’est-à-dire qu’il ne varie pas en qualité et quantité dans la journée et les saisons, sans limite dans le temps",
                 "Accès situé sur site ou à moins de 20 mètres",
                 "Accès pour tous les habitants",
-                "1 bacs de lavage des mains"
+                "3 bacs de lavage des mains"
             ],
             "negative": [
                 "Point d'eau public",
@@ -79,7 +79,7 @@
         } ,
         "sanitary_number": "5",
         "sanitary_insalubrious": "Oui",
-        "sanitary_on_site": "sur site",
+        "sanitary_on_site": "Oui",
         "sanitary_details": {
             "positive": [
                 "Accès sur site"
@@ -104,6 +104,7 @@
         "fire_prevention_measures": "Oui",
         "fire_prevention_diagnostic": "Oui",
         "fire_prevention_site_accessible": "Oui",
+        "fire_prevention_devices": "Oui",
         "fire_prevention_comments": "Site accessible"
     },
     "min": {
