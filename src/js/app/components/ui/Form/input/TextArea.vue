@@ -1,12 +1,13 @@
 <template>
-    <InputWrapper>
-        <InputLabel :label="label" :info="info" />
-        <ValidationProvider
-            :rules="rules"
-            :name="validationName || label"
-            v-slot="{ errors }"
-            :vid="id"
-        >
+    <ValidationProvider
+        :rules="rules"
+        :name="validationName || label"
+        v-slot="{ errors }"
+        :vid="id"
+    >
+        <InputWrapper :hasErrors="!!errors.length">
+            <InputLabel :label="label" :info="info" />
+
             <div class="relative">
                 <InputIcon
                     position="before"
@@ -18,6 +19,7 @@
                     @input="$emit('input', $event.target.value)"
                     v-bind="filteredProps"
                     :class="classes"
+                    :data-cy-field="cypressName"
                 />
                 <InputIcon
                     position="after"
@@ -26,8 +28,8 @@
                 />
             </div>
             <InputError>{{ errors[0] }}</InputError>
-        </ValidationProvider>
-    </InputWrapper>
+        </InputWrapper>
+    </ValidationProvider>
 </template>
 
 <script>
@@ -75,6 +77,15 @@ export default {
             type: String
         },
         suffixIcon: {
+            type: String
+        },
+        rows: {
+            type: String
+        },
+        cols: {
+            type: String
+        },
+        cypressName: {
             type: String
         }
     },

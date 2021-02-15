@@ -14,6 +14,7 @@ import bg from "vee-validate/dist/locale/bg";
 import notifications from "vue-notification/dist/ssr";
 import Button from "./Button.vue";
 import TextInput from "./Form/input/TextInput.vue";
+import InlineTextInput from "./Form/input/InlineTextInput.vue";
 import TextArea from "./Form/input/TextArea.vue";
 import Icon from "./Icon.vue";
 import Checkbox from "./Form/input/Checkbox.vue";
@@ -22,6 +23,7 @@ import Select from "./Form/input/Select.vue";
 import SelectOption from "./Form/input/SelectOption.vue";
 import FormGroup from "./Form/FormGroup.vue";
 import InputGroup from "./Form/InputGroup.vue";
+import MandatoryStar from "./Form/utils/MandatoryStar.vue";
 import FormParagraph from "./Form/FormParagraph.vue";
 import Menu from "./Menu/Menu.vue";
 import MenuItem from "./Menu/MenuItem.vue";
@@ -35,10 +37,13 @@ import Spinner from "./Spinner.vue";
 import CheckableGroup from "./Form/CheckableGroup.vue";
 import Datepicker from "./Datepicker.vue";
 import Tag from "./Tag.vue";
+import Pagination from "./Pagination.vue";
+import MapV2 from "./Map.vue";
 
 export default function(vueInstance) {
     vueInstance.component("Button", Button);
     vueInstance.component("TextInput", TextInput);
+    vueInstance.component("InlineTextInput", InlineTextInput);
     vueInstance.component("TextArea", TextArea);
     vueInstance.component("Icon", Icon);
     vueInstance.component("Menu", Menu);
@@ -48,6 +53,7 @@ export default function(vueInstance) {
     vueInstance.component("Select", Select);
     vueInstance.component("SelectOption", SelectOption);
     vueInstance.component("FormGroup", FormGroup);
+    vueInstance.component("MandatoryStar", MandatoryStar);
     vueInstance.component("Dropdown", Dropdown);
     vueInstance.component("Modal", Modal);
     vueInstance.component("SidePanel", SidePanel);
@@ -59,6 +65,8 @@ export default function(vueInstance) {
     vueInstance.component("AutocompleteV2", Autocomplete);
     vueInstance.component("DatepickerV2", Datepicker);
     vueInstance.component("Tag", Tag);
+    vueInstance.component("Pagination", Pagination);
+    vueInstance.component("MapV2", MapV2);
 
     vueInstance.use(notifications);
     vueInstance.component("NotificationsGroup", NotificationsGroup);

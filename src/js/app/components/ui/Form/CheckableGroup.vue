@@ -1,11 +1,18 @@
 <template>
     <ValidationProvider
         :rules="rules"
-        :name="validationName || title"
+        :name="validationName || label"
         v-slot="{ errors }"
         :vid="id"
     >
-        <CheckableGroupWrapper :title="title" :info="info" :id="id">
+        <InputWrapper :hasErrors="!!errors.length">
+            <InputLabel
+                :label="label"
+                :info="info"
+                :id="id"
+                :showMandatoryStar="showMandatoryStar"
+            />
+
             <div :class="'flex flex-col relative'">
                 <div v-if="error" class="absolute h-full bg-error leftBorder" />
                 <div
@@ -20,17 +27,18 @@
                 </div>
             </div>
             <InputError>{{ errors[0] }}</InputError>
-        </CheckableGroupWrapper>
+        </InputWrapper>
     </ValidationProvider>
 </template>
 
 <script>
 import InputError from "./utils/InputError.vue";
-import CheckableGroupWrapper from "./utils/CheckableGroupWrapper.vue";
+import InputLabel from "./utils/InputLabel.vue";
+import InputWrapper from "./utils/InputWrapper.vue";
 
 export default {
     props: {
-        title: {
+        label: {
             type: String
         },
         info: {
@@ -51,11 +59,17 @@ export default {
         },
         id: {
             type: String
+        },
+        showMandatoryStar: {
+            required: false,
+            type: Boolean,
+            default: false
         }
     },
     components: {
-        CheckableGroupWrapper,
-        InputError
+        InputError,
+        InputLabel,
+        InputWrapper
     }
 };
 </script>
@@ -69,10 +83,17 @@ export default {
 
 <style lang="scss">
 .checkableGroup--horizontalLayout {
-    .checkbox-default,
     .checkbox-card,
-    .radio-default,
     .radio-card {
+        @apply mr-1 mb-1;
+
+        &:last-child {
+            @apply mr-0;
+        }
+    }
+
+    .checkbox-default,
+    .radio-default {
         &:last-child {
             @apply mr-0 mb-0;
         }
@@ -82,9 +103,6 @@ export default {
 }
 
 .checkableGroup--verticalLayout {
-    .checkbox-default,
-    ,
-    .radio-default,
     .radio-card {
         &:last-child {
             @apply mb-0;

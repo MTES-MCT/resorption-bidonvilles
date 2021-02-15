@@ -9,7 +9,7 @@ Cypress.Commands.add(
     "emptyAdressAutocompleter",
     { prevSubject: true },
     subject => {
-        const clearer = cy.wrap(subject).get(".autocompleter-clearIcon");
+        const clearer = cy.wrap(subject).find("[data-cy-button='clear']");
         if (clearer) {
             clearer.click();
         }

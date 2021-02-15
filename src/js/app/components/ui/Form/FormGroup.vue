@@ -1,7 +1,11 @@
 <template>
-    <div>
-        <div class="text-display-lg mb-8">{{ title }}</div>
-        <slot />
+    <div class="shadow py-5 px-6">
+        <div class="text-primary text-display-lg pb-4 border-b-2">
+            {{ title }}
+        </div>
+        <div class="pt-4">
+            <slot />
+        </div>
     </div>
 </template>
 

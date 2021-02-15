@@ -1,11 +1,11 @@
 <template>
     <div class="relative">
         <div @click="toggleMenu">
-            <slot name="button" />
+            <slot name="button" :isOpen="isOpen" />
         </div>
         <div
             :class="[
-                'origin-top-left-10 absolute z-10 left-0 mt-2 w-48 rounded-md shadow-lg transform transition ease-in-out duration-200',
+                'origin-top-left-10 absolute z-10 left-0 mt-2 rounded-md shadow-lg transform transition ease-in-out duration-200',
                 isOpen ? 'opacity-100' : 'opacity-0 hidden'
             ]"
         >

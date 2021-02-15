@@ -1,13 +1,13 @@
 <template>
-    <InputWrapper>
-        <InputLabel :label="label" :info="info" />
-        <ValidationProvider
-            ref="provider"
-            :rules="rules"
-            :name="validationName || label"
-            v-slot="{ errors }"
-            :vid="id"
-        >
+    <ValidationProvider
+        ref="provider"
+        :rules="rules"
+        :name="validationName || label"
+        v-slot="{ errors }"
+        :vid="id"
+    >
+        <InputWrapper :hasErrors="!!errors.length">
+            <InputLabel :label="label" :info="info" />
             <AutocompleteVue
                 :search="search"
                 :default-value="defaultValue"
@@ -29,35 +29,44 @@
               }"
                 >
                     <div v-bind="rootProps">
-                        <InputIcon
-                            position="before"
-                            :icon="prefixIcon"
-                            v-if="prefixIcon"
-                        />
+                        <div class="relative">
+                            <InputIcon
+                                class="text-primary pl-6"
+                                position="before"
+                                :icon="prefixIcon"
+                                v-if="prefixIcon"
+                            />
 
-                        <input
-                            ref="searchInput"
-                            v-bind="inputProps"
-                            v-on="inputListeners"
-                            :class="classes"
-                            @focus="handleFocus"
-                            @blur="handleBlur"
-                            v-model="searchInput"
-                        />
-                        <InputIcon position="after">
-                            <Spinner v-if="loading" />
-                            <div @click="removeItem" class="cursor-pointer ">
-                                <Icon
-                                    v-if="
-                                        !loading &&
-                                            value &&
-                                            getResultValue(value) ===
-                                                searchInput
-                                    "
-                                    icon="times"
-                                />
-                            </div>
-                        </InputIcon>
+                            <input
+                                ref="searchInput"
+                                v-bind="inputProps"
+                                v-on="inputListeners"
+                                :class="classes"
+                                @focus="handleFocus"
+                                @blur="handleBlur"
+                                v-model="searchInput"
+                                class="pl-12 pr-12"
+                            />
+                            <InputIcon position="after" class="pr-6">
+                                <Spinner v-if="loading" />
+                                <div
+                                    @click="removeItem"
+                                    class="cursor-pointer "
+                                >
+                                    <Icon
+                                        class="text-primary text-display-sm"
+                                        v-if="
+                                            !loading &&
+                                                value &&
+                                                getResultValue(value) ===
+                                                    searchInput
+                                        "
+                                        icon="times"
+                                        data-cy-button="clear"
+                                    />
+                                </div>
+                            </InputIcon>
+                        </div>
 
                         <transition name="fade">
                             <div
@@ -102,12 +111,15 @@
                                 </slot>
                             </div>
                         </transition>
+                        <div>
+                            <slot name="extra" :removeItem="removeItem" />
+                        </div>
                     </div>
                 </template>
             </AutocompleteVue>
             <InputError>{{ errors[0] }}</InputError>
-        </ValidationProvider>
-    </InputWrapper>
+        </InputWrapper>
+    </ValidationProvider>
 </template>
 
 <script>
@@ -142,6 +154,10 @@ export default {
         },
         id: {
             type: String
+        },
+        inputClasses: {
+            type: Array,
+            default: () => []
         },
         search: {
             type: Function,
@@ -178,18 +194,21 @@ export default {
                 prefixIcon: this.prefixIcon
             };
 
-            return {
+            const defaultClasses = {
                 state: [...getInputClasses("state", inputOptions)],
                 default: getInputClasses("default", inputOptions)
             }[this.variant];
+            return [...this.inputClasses, ...defaultClasses];
         }
     },
     data() {
         return {
             show: true,
             focused: false,
-            value: "",
-            searchInput: "",
+            value: this.defaultValue || "",
+            searchInput: this.defaultValue
+                ? this.getResultValue(this.defaultValue)
+                : "",
             results: []
         };
     },
@@ -220,7 +239,7 @@ export default {
 
         handleBlur() {
             // If user has deleted his input, delete the selected value
-            if (!this.searchInput) {
+            if (!this.value) {
                 this.onItemSelect(null);
             } else {
                 // If user has changed his last input, restore to last value

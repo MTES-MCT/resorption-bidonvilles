@@ -30,13 +30,6 @@ Cypress.Commands.add("fillCreateTown", shantytown => {
         );
     }
 
-    // priority
-    if (shantytown.priority !== undefined && shantytown.priority !== null) {
-        cy.get(
-            `[data-cy-field="priority"][data-cy-label="${shantytown.priority}"]`
-        ).check();
-    }
-
     // built at
     if (shantytown.built_at) {
         cy.get("[data-cy-field='built_at']").chooseDate(shantytown.built_at);
@@ -53,14 +46,14 @@ Cypress.Commands.add("fillCreateTown", shantytown => {
     if (shantytown.field_type) {
         cy.get(
             `[data-cy-field="field_type"][data-cy-label="${shantytown.field_type}"]`
-        ).check();
+        ).myCheck();
     }
 
     // owner type
     if (shantytown.owner_type) {
         cy.get(
             `[data-cy-field="owner_type"][data-cy-label="${shantytown.owner_type}"]`
-        ).check();
+        ).myCheck();
     }
 
     // owner
@@ -72,7 +65,7 @@ Cypress.Commands.add("fillCreateTown", shantytown => {
     if (shantytown.census_status) {
         cy.get(
             `[data-cy-field="census_status"][data-cy-label="${shantytown.census_status}"]`
-        ).check();
+        ).myCheck();
     }
 
     // census conducted at
@@ -184,7 +177,7 @@ Cypress.Commands.add("fillCreateTown", shantytown => {
         shantytown.social_origins.forEach(label => {
             cy.get(
                 `[data-cy-field="social_origins"][data-cy-label="${label}"]`
-            ).check();
+            ).myCheck();
         });
     }
 
@@ -192,7 +185,7 @@ Cypress.Commands.add("fillCreateTown", shantytown => {
     if (shantytown.electricity_type) {
         cy.get(
             `[data-cy-field="electricity_type"][data-cy-label="${shantytown.electricity_type}"]`
-        ).check();
+        ).myCheck();
     }
 
     // electricity comments
@@ -206,7 +199,7 @@ Cypress.Commands.add("fillCreateTown", shantytown => {
     if (shantytown.access_to_water) {
         cy.get(
             `[data-cy-field="access_to_water"][data-cy-label="${shantytown.access_to_water}"]`
-        ).check();
+        ).myCheck();
     }
 
     // water comments
@@ -220,7 +213,7 @@ Cypress.Commands.add("fillCreateTown", shantytown => {
     if (shantytown.access_to_sanitary) {
         cy.get(
             `[data-cy-field="access_to_sanitary"][data-cy-label="${shantytown.access_to_sanitary}"]`
-        ).check();
+        ).myCheck();
     }
 
     // sanitary comments
@@ -234,28 +227,28 @@ Cypress.Commands.add("fillCreateTown", shantytown => {
     if (shantytown.trash_evacuation) {
         cy.get(
             `[data-cy-field="trash_evacuation"][data-cy-label="${shantytown.trash_evacuation}"]`
-        ).check();
+        ).myCheck();
     }
 
     // owner complaint
     if (shantytown.owner_complaint) {
         cy.get(
             `[data-cy-field="owner_complaint"][data-cy-label="${shantytown.owner_complaint}"]`
-        ).check();
+        ).myCheck();
     }
 
     // justice procedure
     if (shantytown.justice_procedure) {
         cy.get(
             `[data-cy-field="justice_procedure"][data-cy-label="${shantytown.justice_procedure}"]`
-        ).check();
+        ).myCheck();
     }
 
     // justice rendered
     if (shantytown.justice_rendered) {
         cy.get(
             `[data-cy-field="justice_rendered"][data-cy-label="${shantytown.justice_rendered}"]`
-        ).check();
+        ).myCheck();
     }
 
     // justice rendered by
@@ -276,14 +269,14 @@ Cypress.Commands.add("fillCreateTown", shantytown => {
     if (shantytown.justice_challenged) {
         cy.get(
             `[data-cy-field="justice_challenged"][data-cy-label="${shantytown.justice_challenged}"]`
-        ).check();
+        ).myCheck();
     }
 
     // police status
     if (shantytown.police_status) {
         cy.get(
             `[data-cy-field="police_status"][data-cy-label="${shantytown.police_status}"]`
-        ).check();
+        ).myCheck();
     }
 
     // police requested at

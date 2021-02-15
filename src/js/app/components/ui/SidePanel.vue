@@ -1,12 +1,20 @@
 <template>
-    <div
-        :class="[
-            'fixed z-30 top-0 right-0 full-height transform transition ease-in-out duration-500',
-            isOpen ? 'translate-x-0' : 'translate-x-full'
-        ]"
-    >
-        <div :class="['min-h-screen w-64 bg-primary text-white py-4 px-4 ']">
-            <slot />
+    <div>
+        <div
+            v-if="isOpen"
+            @click="clickBackdrop"
+            class="fixed inset-0 bg-gray-500 opacity-75 z-backdrop"
+            ref="backdrop"
+        ></div>
+        <div
+            :class="[
+                'fixed z-sidePanel top-0 bottom-0 right-0 overflow-y-auto full-height transform transition ease-in-out duration-500',
+                isOpen ? 'translate-x-0' : 'translate-x-full'
+            ]"
+        >
+            <div :class="['min-h-screen w-128 bg-white']">
+                <slot />
+            </div>
         </div>
     </div>
 </template>
@@ -26,25 +34,22 @@ export default {
         }
     },
     methods: {
-        checkOutsideClick(event) {
-            if (
-                this.isOpen &&
-                this.closeModal &&
-                !this.$refs.dialog.contains(event.target)
-            ) {
-                this.closeModal();
+        clickBackdrop() {
+            if (this.isOpen && this.closeClickOutside) {
+                this.closePanel();
             }
-        }
-    },
-    mounted() {
-        if (this.closeClickOutside) {
-            document.addEventListener("click", this.checkOutsideClick);
-        }
-    },
-    destroyed() {
-        if (this.closeClickOutside) {
-            document.removeEventListener("click", this.checkOutsideClick);
         }
     }
 };
 </script>
+
+<!-- leaftlet has a 999 index -->
+<style>
+.z-backdrop {
+    z-index: 1000;
+}
+
+.z-sidePanel {
+    z-index: 1001;
+}
+</style>

@@ -54,15 +54,28 @@ import {
     faMapMarkerAlt,
     faBook,
     faFileSignature,
+    faChevronUp,
     faChevronDown,
     faChevronLeft,
     faChevronRight,
     faSpinner,
     faArrowLeft,
-    faSearch
+    faSearch,
+    faPlus,
+    faCheck,
+    faPen,
+    faExclamationTriangle,
+    faBan,
+    faMale,
+    faBalanceScale,
+    faScroll,
+    faCalendar,
+    faPrint,
+    faFile
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(faFlag);
+library.add(faBan);
 library.add(faChevronDown);
 library.add(faPaperPlane);
 library.add(faUnlink);
@@ -113,6 +126,7 @@ library.add(faHandHoldingMedical);
 library.add(faMapMarkerAlt);
 library.add(faBook);
 library.add(faFileSignature);
+library.add(faChevronUp);
 library.add(faChevronLeft);
 library.add(faChevronRight);
 library.add(faArrowLeft);
@@ -121,3 +135,13 @@ library.add(faSpinner);
 library.add(faTwitterSquare);
 library.add(faFacebookSquare);
 library.add(faSearch);
+library.add(faPlus);
+library.add(faCheck);
+library.add(faPen);
+library.add(faExclamationTriangle);
+library.add(faMale);
+library.add(faBalanceScale);
+library.add(faScroll);
+library.add(faCalendar);
+library.add(faPrint);
+library.add(faFile);

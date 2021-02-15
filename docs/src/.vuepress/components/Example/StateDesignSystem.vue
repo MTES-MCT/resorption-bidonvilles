@@ -48,7 +48,7 @@
                             </Select>
                         </InputGroup>
 
-                        <CheckableGroup title="Vos centres d'intérets"  rules="required">
+                        <CheckableGroup label="Vos centres d'intérets"  rules="required">
                             <Checkbox checkValue="musique" label="La musique" />
                             <Checkbox checkValue="cinema" label="Le cinéma" />
                             <Checkbox checkValue="sport" label="Le sport " />

@@ -6,32 +6,45 @@
         ]"
     >
         <div class="absolute w-full h-full bg-gray-500 opacity-75"></div>
-        <div class="flex items-center justify-center min-h-screen">
+        <div
+            :class="[
+                'flex items-center justify-center min-h-screen ',
+                containerClasses
+            ]"
+        >
             <div
                 role="dialog"
                 ref="dialog"
                 aria-modal="true"
                 aria-labelledby="modal-headline"
-                class="opacity-100 z-50 max-w-xl shadow-xl overflow-hidden rounded-lg"
+                class="opacity-100 z-50 shadow-xl overflow-hidden "
             >
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div class="flex justify-between">
-                        <div class="text-display-md">
-                            <slot name="header" />
+                <div class="bg-white">
+                    <slot name="header">
+                        <div class="pt-10 px-10 pb-4 ">
+                            <div
+                                class="flex justify-between border-b border-G400"
+                            >
+                                <div class="text-display-md text-primary">
+                                    <slot name="title" />
+                                </div>
+                                <Button
+                                    variant="primaryText"
+                                    icon="times"
+                                    size="lg"
+                                    @click="closeModal"
+                                />
+                            </div>
                         </div>
-                        <Button
-                            variant="text"
-                            icon="times"
-                            @click="closeModal"
-                        />
+                    </slot>
+                    <div class="px-10 pt-6 pb-10"><slot name="body" /></div>
+
+                    <div
+                        v-if="$slots.footer"
+                        class="px-4 pb-8 sm:px-6 flex justify-end"
+                    >
+                        <slot name="footer"></slot>
                     </div>
-                    <div class="mt-4"><slot name="body" /></div>
-                </div>
-                <div
-                    v-if="$slots.footer"
-                    class="bg-gray-200 px-4 py-3 sm:px-6 flex justify-end"
-                >
-                    <slot name="footer"></slot>
                 </div>
             </div>
         </div>
@@ -50,6 +63,9 @@ export default {
         closeClickOutside: {
             type: Boolean,
             default: false
+        },
+        containerClasses: {
+            type: Array
         }
     },
     methods: {

@@ -9,6 +9,7 @@
   },
   "scripts": {
     "build": "vue-cli-service build",
+    "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint src cypress docs",
     "deploy": "deploy() { git fetch origin \"refs/tags/$1:refs/tags/$1\"; git checkout $1; } && deploy",
     "dev": "vue-cli-service serve --port 1234",
@@ -32,17 +33,20 @@
     "vue-axios": "^2.1.4",
     "vue-good-table": "^2.16.0",
     "vue-i18n": "^8.21.1",
-    "vue-trend-chart": "^0.15.1"
+    "vue-trend-chart": "^0.15.1",
+    "vuex": "^3.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.2.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-unit-jest": "~4.5.0",
     "@vue/cli-service": "^4.5.8",
     "@vue/component-compiler-utils": "^2.3.1",
     "@vue/eslint-config-airbnb": "^5.0.2",
     "@vue/eslint-config-prettier": "^6.0.0",
+    "@vue/test-utils": "^1.0.3",
     "autoprefixer": "^9.4.5",
     "eslint": "^6.7.2",
     "eslint-config-airbnb-base": "^13.1.0",

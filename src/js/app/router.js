@@ -6,9 +6,10 @@ import SignIn from "#app/pages/signin/signin.vue";
 import Contact from "#app/pages/Contact/index.vue";
 import Dashboard from "#app/pages/dashboard/dashboard.vue";
 import Launcher from "#app/pages/launcher/launcher.vue";
-import TownsList from "#app/pages/towns.list/towns.list.vue";
-import TownsCreate from "#app/pages/towns.create/towns.create.vue";
-import TownsDetails from "#app/pages/towns.details/towns.details.vue";
+import TownsList from "#app/pages/TownsList/TownsList.vue";
+import TownsCreate from "#app/pages/TownCreate/TownCreate.vue";
+import TownsUpdate from "#app/pages/TownUpdate/TownUpdate.vue";
+import TownsDetails from "#app/pages/TownDetails/TownDetails";
 import Me from "#app/pages/me/me.vue";
 import UserList from "#app/pages/users.list/users.list.vue";
 import UserCreate from "#app/pages/users.create/users.create.vue";
@@ -28,7 +29,7 @@ import Directory from "#app/pages/directory/directory.vue";
 import UserActivityList from "#app/pages/userActivity.list/userActivity.list.vue";
 import PublicStats from "#app/pages/PublicStats/index.vue";
 import Covid from "#app/pages/covid/covid.vue";
-import Changelog from "#app/pages/changelog/changelog.vue";
+import Changelog from "#app/pages/Changelog/Changelog.vue";
 import CharteEngagement from "#app/pages/charte_engagement/charte_engagement.vue";
 
 import { logout, isLoggedIn, alreadyLoggedBefore } from "#helpers/api/user";
@@ -178,11 +179,15 @@ function home() {
  * Obviously, the routing configuration of the whole app
  */
 const router = new VueRouter({
-    scrollBehavior: to => {
+    scrollBehavior: (to, from, savedPosition) => {
         if (to.hash) {
             return {
                 selector: to.hash
             };
+        }
+
+        if (savedPosition) {
+            return savedPosition;
         }
 
         return {
@@ -256,6 +261,14 @@ const router = new VueRouter({
         },
         {
             meta: {
+                group: "townList"
+            },
+            path: "/liste-des-sites",
+            component: TownsList,
+            beforeEnter: guardians.loadedAndUpToDate
+        },
+        {
+            meta: {
                 group: "townCreation",
                 permissions: ["shantytown.create"]
             },
@@ -269,6 +282,14 @@ const router = new VueRouter({
             },
             path: "/site/:id",
             component: TownsDetails,
+            beforeEnter: guardians.loadedAndUpToDate
+        },
+        {
+            meta: {
+                group: "townList"
+            },
+            path: "/site/:id/mise-a-jour",
+            component: TownsUpdate,
             beforeEnter: guardians.loadedAndUpToDate
         },
         {
