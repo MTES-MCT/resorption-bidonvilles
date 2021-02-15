@@ -75,7 +75,6 @@ export function formatLivingConditions(town) {
               );
     }
 
-    // TODO : Ajout du nombre de bacs par personnes
     if (town.waterHandWashAccess) {
         town.waterHandWashAccess
             ? result.water.positive.push(
@@ -90,6 +89,17 @@ export function formatLivingConditions(town) {
         town.sanitaryOnSite
             ? result.sanitary.positive.push("Accès sur site")
             : result.sanitary.negative.push("Accès aux abords du site.");
+    }
+
+    const sanitaryNumberPopulationRatio = Math.floor(
+        Number(town.populationTotal) / Number(town.sanitaryOnSite)
+    );
+    if (town.sanitaryNumber !== null && sanitaryNumberPopulationRatio > 0) {
+        const text = `${town.sanitaryNumber} toilettes - soit 1 toilette pour ${town.populationTotal} personnes - il est conseillé au moins 1 toilette pour 20 personnes`;
+
+        sanitaryNumberPopulationRatio < 20
+            ? result.sanitary.positive.push(text)
+            : result.sanitary.negative.push(text);
     }
 
     if (town.sanitaryInsalubrious !== null) {
@@ -134,6 +144,16 @@ export function formatLivingConditions(town) {
               );
     }
 
+    if (town.firePreventionDevices !== null) {
+        town.firePreventionDevices
+            ? result.firePrevention.positive.push(
+                  "Mesures spécifiques en place"
+              )
+            : result.firePrevention.negative.push(
+                  "Pas de mesure spécifiques (formation, extincteurs...) en place "
+              );
+    }
+
     if (town.firePreventionSiteAccessible !== null) {
         town.firePreventionSiteAccessible
             ? result.firePrevention.positive.push(
@@ -143,8 +163,6 @@ export function formatLivingConditions(town) {
                   "Site pas accessible aux pompiers"
               );
     }
-
-    // TODO : Mesures spécifiques
 
     return result;
 }
