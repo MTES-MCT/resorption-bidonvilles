@@ -381,6 +381,10 @@
                                     <td v-for="state in plan.states">{{ state.education.scolarisables === null ? 'NC' : state.education.scolarisables }}</td>
                                 </tr>
                                 <tr>
+                                    <td>Mineurs bénéficiant d'une action de médiation (3 - 18 ans)</td>
+                                    <td v-for="state in plan.states">{{ state.education.en_mediation === null ? 'NC' : state.education.en_mediation }}</td>
+                                </tr>
+                                <tr>
                                     <td>Inscrits en maternelle</td>
                                     <td v-for="state in plan.states">{{ state.education.maternelles === null ? 'NC' : state.education.maternelles }}</td>
                                 </tr>

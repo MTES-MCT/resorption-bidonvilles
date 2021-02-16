@@ -192,6 +192,15 @@ export default {
                                 return !!date;
                             }
                         },
+                        en_mediation: {
+                            type: "number",
+                            label:
+                                "Combien bénéficient d’une action de médiation (3 – 18 ans) ?",
+                            mandatory: false,
+                            condition({ date }) {
+                                return !!date;
+                            }
+                        },
                         maternelles: {
                             type: "number",
                             label: "Enfants inscrits en maternelle",
