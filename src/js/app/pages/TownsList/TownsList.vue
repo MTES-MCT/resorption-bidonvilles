@@ -345,7 +345,10 @@ export default {
             this.exportIsVisible = false;
         },
         togglePrintModal() {
-            window.print();
+            this.printMode = true;
+            setTimeout(() => {
+                window.print();
+            }, 100);
         }
     },
     created() {
