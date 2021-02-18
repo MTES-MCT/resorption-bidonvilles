@@ -96,12 +96,10 @@ export default {
                 return false;
             }
 
-            let level;
-            if (permission.geographic_level !== "local") {
-                level = permission.geographic_level;
-            } else {
-                level = this.user.organization.location.type;
-            }
+            let level =
+                permission.geographic_level !== "local"
+                    ? permission.geographic_level
+                    : this.user.organization.location.type;
 
             if (level === "nation") {
                 return true;
