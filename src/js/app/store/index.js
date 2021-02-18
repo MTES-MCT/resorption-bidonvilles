@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { all as fetchAll, get as fetchOne } from "#helpers/api/town";
+import { all as fetchAll, get as fetchOne, addActor } from "#helpers/api/town";
 import enrichShantytown from "#app/pages/TownsList/enrichShantytown";
 import { get as getConfig } from "#helpers/api/config";
 
@@ -50,6 +50,19 @@ export default new Vuex.Store({
         },
         setDetailedTown(state, town) {
             state.detailedTown = town;
+        },
+        updateShantytownActors(state, { townId, actors }) {
+            if (
+                state.detailedTown !== null &&
+                state.detailedTown.id === townId
+            ) {
+                state.detailedTown.actors = actors;
+            }
+
+            const town = state.towns.data.find(({ id }) => id === townId);
+            if (town !== undefined) {
+                town.actors = actors;
+            }
         }
     },
     actions: {
@@ -103,6 +116,11 @@ export default new Vuex.Store({
             const { field_types: fieldTypes } = getConfig();
             const town = enrichShantytown(await fetchOne(id), fieldTypes);
             commit("setDetailedTown", town);
+        },
+
+        async addTownActor({ commit }, { townId, actor }) {
+            const { actors } = await addActor(townId, actor);
+            commit("updateShantytownActors", { townId, actors });
         }
     },
     getters: {
