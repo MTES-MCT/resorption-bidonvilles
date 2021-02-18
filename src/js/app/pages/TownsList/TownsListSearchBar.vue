@@ -1,7 +1,6 @@
 <template>
     <div class="mx-auto searchbox -mb-6">
         <AutocompleteV2
-            id="test"
             :defaultValue="this.$props.value"
             :search="search"
             v-model="result"
@@ -81,16 +80,13 @@ export default {
     },
     data() {
         return {
-            input: "test",
+            input: "",
             result: "",
             results: [],
             loading: false
         };
     },
     methods: {
-        onSubmit() {
-            alert(this.result);
-        },
         resultValue(input) {
             return input.label;
         },
