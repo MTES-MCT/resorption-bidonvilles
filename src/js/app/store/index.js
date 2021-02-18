@@ -5,7 +5,8 @@ import {
     get as fetchOne,
     addActor,
     removeActor,
-    updateActorThemes
+    updateActorThemes,
+    removeActorTheme
 } from "#helpers/api/town";
 import enrichShantytown from "#app/pages/TownsList/enrichShantytown";
 import { get as getConfig } from "#helpers/api/config";
@@ -166,6 +167,11 @@ export default new Vuex.Store({
                 userId,
                 themes: updatedThemes
             });
+        },
+
+        async removeTownActorTheme({ commit }, { townId, userId, themeId }) {
+            const { themes } = await removeActorTheme(townId, userId, themeId);
+            commit("updateShantytownActorThemes", { townId, userId, themes });
         }
     },
     getters: {
