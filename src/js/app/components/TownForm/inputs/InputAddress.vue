@@ -8,7 +8,7 @@
         validationName="Adresse"
         @submit="submit"
         data-cy-field="address"
-        :defaultValue="value.label || ''"
+        :defaultValue="value"
     ></AutocompleteV2>
 </template>
 
