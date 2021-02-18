@@ -120,14 +120,13 @@
 <script>
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
 import PrivateLayout from "#app/components/PrivateLayout";
-import { get, destroy as deleteTown } from "#helpers/api/town";
+import { destroy as deleteTown } from "#helpers/api/town";
 import TownDetailsHeader from "./TownDetailsHeader";
 import TownDetailsLeftColumn from "./TownDetailsLeftColumn";
 import TownDetailsPanelCharacteristics from "./TownDetailsPanelCharacteristics";
 import TownDetailsPanelPeople from "./TownDetailsPanelPeople";
 import TownDetailsPanelLivingConditions from "./TownDetailsPanelLivingConditions";
 import TownDetailsPanelJudicial from "./TownDetailsPanelJudicial";
-import enrichShantytown from "#app/pages/TownsList/enrichShantytown";
 import { get as getConfig, getPermission } from "#helpers/api/config";
 import TownDetailsNewComment from "./TownDetailsNewComment";
 import TownDetailsComments from "./TownDetailsComments";
@@ -163,11 +162,15 @@ export default {
             covidOpen: false,
             error: null,
             loading: false,
-            town: null,
             fieldTypes,
             user,
             hasJusticePermission: permission.data_justice === true
         };
+    },
+    computed: {
+        town() {
+            return this.$store.state.detailedTown;
+        }
     },
     created() {
         this.fetchData();
@@ -206,7 +209,7 @@ export default {
                     alert(error.user_message);
                 });
         },
-        fetchData() {
+        async fetchData() {
             if (this.loading === true) {
                 return;
             }
@@ -214,17 +217,18 @@ export default {
             this.loading = true;
             this.error = null;
 
-            get(this.$route.params.id)
-                .then(town => {
-                    this.loading = false;
-                    this.town = enrichShantytown(town, this.fieldTypes);
-                })
-                .catch(errors => {
-                    this.error =
-                        (errors && errors.user_message) ||
-                        "Une erreur inconnue est survenue";
-                    this.loading = false;
-                });
+            try {
+                await this.$store.dispatch(
+                    "fetchTownDetails",
+                    this.$route.params.id
+                );
+            } catch (error) {
+                this.error =
+                    (error && error.user_message) ||
+                    "Une erreur inconnue est survenue";
+            }
+
+            this.loading = false;
         }
     }
 };
