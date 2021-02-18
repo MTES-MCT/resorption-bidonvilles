@@ -102,7 +102,7 @@ export default {
             } else {
                 level = this.user.organization.location.type;
             }
-            console.log(level);
+
             if (level === "nation") {
                 return true;
             } else if (this.user.organization.location[level] === null) {
