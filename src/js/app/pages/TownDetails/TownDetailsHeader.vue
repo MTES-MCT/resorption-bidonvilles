@@ -55,6 +55,10 @@
             <router-link
                 to="#newComment"
                 @click.native="scrollFix('#newComment')"
+                v-if="
+                    hasLocalizedPermission('shantytown_comment.list') ||
+                        hasLocalizedPermission('shantytown_comment.create')
+                "
             >
                 <Button variant="secondary" icon="comment" iconPosition="left"
                     >Journal du site</Button
