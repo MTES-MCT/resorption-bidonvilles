@@ -6,7 +6,8 @@ import {
     addActor,
     removeActor,
     updateActorThemes,
-    removeActorTheme
+    removeActorTheme,
+    inviteNewActor
 } from "#helpers/api/town";
 import enrichShantytown from "#app/pages/TownsList/enrichShantytown";
 import { get as getConfig } from "#helpers/api/config";
@@ -172,6 +173,10 @@ export default new Vuex.Store({
         async removeTownActorTheme({ commit }, { townId, userId, themeId }) {
             const { themes } = await removeActorTheme(townId, userId, themeId);
             commit("updateShantytownActorThemes", { townId, userId, themes });
+        },
+
+        inviteNewTownActor(args, { townId, email }) {
+            return inviteNewActor(townId, email);
         }
     },
     getters: {

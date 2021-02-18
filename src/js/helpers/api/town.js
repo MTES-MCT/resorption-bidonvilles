@@ -173,6 +173,13 @@ export function removeActorTheme(townId, userId, themeId) {
 }
 
 /**
+ * PUT /towns/:id/invitations
+ */
+export function inviteNewActor(townId, email) {
+    return putApi(`/towns/${townId}/invitations`, { email });
+}
+
+/**
  * @typedef {Object} Town_Data
  * @property {number} latitude,
  * @property {number} longitude,
