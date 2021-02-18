@@ -126,7 +126,11 @@ export function autocompleteLocation(strSearch) {
             code: result.code,
             type: result.label,
             locationType: result.type,
-            departement: result.departement
+            departement: result.departement,
+            data: {
+                code: result.code,
+                type: result.label
+            }
         }))
     );
     p2.abort = p1.abort;
