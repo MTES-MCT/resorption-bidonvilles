@@ -68,6 +68,11 @@ export default new Vuex.Store({
                                 user.organization.location.type
                             ].name,
                         category: user.organization.location.type,
+                        locationType: user.organization.location.type,
+                        code:
+                            user.organization.location[
+                                user.organization.location.type
+                            ].code,
                         data: {
                             code:
                                 user.organization.location[

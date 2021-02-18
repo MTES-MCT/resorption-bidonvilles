@@ -31,7 +31,8 @@
         <div class="flex justify-end mt-2">
             <Button
                 v-if="
-                    hasPermission('shantytown.close') && town.status === 'open'
+                    hasLocalizedPermission('shantytown.close') &&
+                        town.status === 'open'
                 "
                 variant="primaryOutline"
                 class="mr-8"
@@ -44,7 +45,10 @@
                 class="mr-8"
                 icon="pen"
                 iconPosition="left"
-                v-if="town.status === 'open'"
+                v-if="
+                    hasLocalizedPermission('shantytown.update') &&
+                        town.status === 'open'
+                "
                 @click="routeToUpdate"
                 >Mettre à jour</Button
             >
@@ -57,7 +61,7 @@
                 >
             </router-link>
             <Button
-                v-if="hasPermission('shantytown.delete')"
+                v-if="hasLocalizedPermission('shantytown.delete')"
                 class="ml-8"
                 variant="secondary"
                 icon="trash-alt"
@@ -71,7 +75,7 @@
 </template>
 
 <script>
-import { hasPermission } from "#helpers/api/config";
+import { get as getConfig, getPermission } from "#helpers/api/config";
 
 export default {
     props: {
@@ -79,8 +83,35 @@ export default {
             type: Object
         }
     },
+    data() {
+        const { user } = getConfig();
+        return {
+            user
+        };
+    },
     methods: {
-        hasPermission,
+        hasLocalizedPermission(permissionName) {
+            const permission = getPermission(permissionName);
+            if (permission === null) {
+                return false;
+            }
+
+            let level =
+                permission.geographic_level !== "local"
+                    ? permission.geographic_level
+                    : this.user.organization.location.type;
+
+            if (level === "nation") {
+                return true;
+            } else if (this.user.organization.location[level] === null) {
+                return false;
+            }
+
+            return (
+                this.town[level].code ===
+                this.user.organization.location[level].code
+            );
+        },
         // Force scroll even if hash is already present in url
         scrollFix(to) {
             if (to === this.$route.hash) {
