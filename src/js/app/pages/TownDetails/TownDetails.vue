@@ -27,6 +27,11 @@
                     v-on:openHistory="openHistory"
                 />
                 <div class="flex-1">
+                    <TownDetailsActorAlert
+                        v-if="isNotAnActor && actorAlertVisible"
+                        @click="actorThemesOpen = true"
+                        @close="actorAlertVisible = false"
+                    ></TownDetailsActorAlert>
                     <TownDetailsPanelCharacteristics
                         :town="town"
                         class="mb-10"
@@ -120,6 +125,11 @@
             v-on:closeModal="closeOpen = false"
             v-on:updateTown="town = $event"
         />
+        <TownDetailsActorThemes
+            v-if="actorThemesOpen"
+            :town="town"
+            @closeModal="actorThemesOpen = false"
+        />
     </PrivateLayout>
 </template>
 
@@ -138,13 +148,17 @@ import TownDetailsNewComment from "./TownDetailsNewComment";
 import TownDetailsComments from "./TownDetailsComments";
 import TownDetailsHistorySidePanel from "./TownDetailsHistorySidePanel";
 import TownDetailsCovidCommentsSidePanel from "./TownDetailsCovidCommentsSidePanel";
+import TownDetailsActorAlert from "./TownDetailsActorAlert";
 import TownDetailsCloseModal from "./TownDetailsCloseModal";
+import TownDetailsActorThemes from "./TownDetailsActorThemes";
 import { notify } from "#helpers/notificationHelper";
 import { hasPermission } from "#helpers/api/config";
 
 export default {
     components: {
+        TownDetailsActorAlert,
         TownDetailsCloseModal,
+        TownDetailsActorThemes,
         TownDetailsHistorySidePanel,
         TownDetailsNewComment,
         TownDetailsComments,
@@ -166,6 +180,8 @@ export default {
             historyOpen: false,
             closeOpen: false,
             covidOpen: false,
+            actorThemesOpen: false,
+            actorAlertVisible: true,
             error: null,
             loading: false,
             fieldTypes,
@@ -176,6 +192,9 @@ export default {
     computed: {
         town() {
             return this.$store.state.detailedTown;
+        },
+        isNotAnActor() {
+            return !this.town.actors.some(({ id }) => id === this.user.id);
         }
     },
     created() {
