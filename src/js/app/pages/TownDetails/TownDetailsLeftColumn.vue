@@ -27,6 +27,10 @@
                 to="#newComment"
                 @click.native="scrollFix('#newComment')"
                 class="text-secondary"
+                v-if="
+                    hasPermission('shantytown_comment.list') ||
+                        hasPermission('shantytown_comment.create')
+                "
             >
                 <div class="flex text-secondary font-bold mt-4 cursor-pointer">
                     <Icon icon="comment" />
@@ -53,6 +57,8 @@
 
 <script>
 import LeftColumnNavLink from "#app/pages/TownDetails/ui/LeftColumnNavLink";
+import { hasPermission } from "#helpers/api/config";
+
 export default {
     components: { LeftColumnNavLink },
     props: {
@@ -69,6 +75,7 @@ export default {
         };
     },
     methods: {
+        hasPermission,
         // Force scroll even if hash is already present in url
         scrollFix(to) {
             if (to === this.$route.hash) {
