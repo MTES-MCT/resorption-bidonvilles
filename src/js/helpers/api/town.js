@@ -145,6 +145,13 @@ export function getRecentComments() {
 }
 
 /**
+ * POST /towns/:id/actors
+ */
+export function addActor(townId, actor) {
+    return postApi(`/towns/${townId}/actors`, actor);
+}
+
+/**
  * @typedef {Object} Town_Data
  * @property {number} latitude,
  * @property {number} longitude,

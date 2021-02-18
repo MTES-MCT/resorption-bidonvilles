@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { all as fetchAll } from "#helpers/api/town";
+import { all as fetchAll, get as fetchOne } from "#helpers/api/town";
 import enrichShantytown from "#app/pages/TownsList/enrichShantytown";
 import { get as getConfig } from "#helpers/api/config";
 
@@ -23,7 +23,8 @@ export default new Vuex.Store({
                 location: null
             },
             currentPage: 1
-        }
+        },
+        detailedTown: null
     },
     mutations: {
         setLoading(state, value) {
@@ -46,6 +47,9 @@ export default new Vuex.Store({
         },
         setCurrentPage(state, page) {
             state.towns.currentPage = page;
+        },
+        setDetailedTown(state, town) {
+            state.detailedTown = town;
         }
     },
     actions: {
@@ -93,11 +97,20 @@ export default new Vuex.Store({
                 commit("setError", err);
                 commit("setLoading", false);
             }
+        },
+
+        async fetchTownDetails({ commit }, id) {
+            const { field_types: fieldTypes } = getConfig();
+            const town = enrichShantytown(await fetchOne(id), fieldTypes);
+            commit("setDetailedTown", town);
         }
     },
     getters: {
         towns: state => {
             return state.towns.data;
+        },
+        detailedTown: state => {
+            return state.detailedTown;
         },
         townsLoading: state => {
             return state.towns.loading;
