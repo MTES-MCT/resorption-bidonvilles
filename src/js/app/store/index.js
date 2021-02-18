@@ -56,7 +56,7 @@ export default new Vuex.Store({
 
                 if (
                     user.organization.location.type !== "nation" &&
-                    !user.is_admin
+                    user.role_id !== "national_admin"
                 ) {
                     commit("setLocation", {
                         id:
