@@ -1,6 +1,11 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { all as fetchAll, get as fetchOne, addActor } from "#helpers/api/town";
+import {
+    all as fetchAll,
+    get as fetchOne,
+    addActor,
+    removeActor
+} from "#helpers/api/town";
 import enrichShantytown from "#app/pages/TownsList/enrichShantytown";
 import { get as getConfig } from "#helpers/api/config";
 
@@ -120,6 +125,11 @@ export default new Vuex.Store({
 
         async addTownActor({ commit }, { townId, actor }) {
             const { actors } = await addActor(townId, actor);
+            commit("updateShantytownActors", { townId, actors });
+        },
+
+        async removeTownActor({ commit }, { townId, userId }) {
+            const { actors } = await removeActor(townId, userId);
             commit("updateShantytownActors", { townId, actors });
         }
     },

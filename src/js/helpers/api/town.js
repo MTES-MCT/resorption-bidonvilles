@@ -152,6 +152,13 @@ export function addActor(townId, actor) {
 }
 
 /**
+ * DELETE /towns/:id/actors/:user_id
+ */
+export function removeActor(townId, userId) {
+    return deleteApi(`/towns/${townId}/actors/${userId}`);
+}
+
+/**
  * @typedef {Object} Town_Data
  * @property {number} latitude,
  * @property {number} longitude,
