@@ -10,7 +10,7 @@
             <InputLabel :label="label" :info="info" />
             <AutocompleteVue
                 :search="search"
-                :default-value="defaultValue"
+                :default-value="searchInput"
                 :placeholder="placeholder"
                 :aria-label="placeholder"
                 :getResultValue="getResultValue"
@@ -164,9 +164,8 @@ export default {
             required: true
         },
         defaultValue: {
-            type: String,
-            required: false,
-            default: ""
+            type: Object,
+            required: false
         },
         placeholder: {
             type: String
@@ -205,7 +204,7 @@ export default {
         return {
             show: true,
             focused: false,
-            value: this.defaultValue || "",
+            value: this.defaultValue || {},
             searchInput: this.defaultValue
                 ? this.getResultValue(this.defaultValue)
                 : "",
