@@ -129,7 +129,7 @@ export function autocompleteLocation(strSearch) {
             departement: result.departement,
             data: {
                 code: result.code,
-                type: result.label
+                type: result.type
             }
         }))
     );
