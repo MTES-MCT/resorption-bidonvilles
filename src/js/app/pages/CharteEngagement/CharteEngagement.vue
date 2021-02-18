@@ -23,23 +23,20 @@
                     class="link"
                     href="https://www.legifrance.gouv.fr/download/pdf/circ?id=42949"
                     target="_blank"
-                    >l'instruction du 25 janvier 2018</a
+                >
+                    l'instruction du 25 janvier 2018 </a
                 >. Il s'agit pour cela de dépasser l'approche centrée sur les
                 évacuations au profit d'une
-                <strong
-                    >approche globale alliant insertion sociale, respect de
-                    l'ordre public et prévention des réinstallations.</strong
-                >
-                <br />La plateforme est au service de cette politique et
-                s'adresse à tous les acteurs impliqués : les services de l'état,
-                les DDCS, les collectivités territoriales, les associations...
+                <strong>
+                    approche globale alliant insertion sociale, respect de
+                    l'ordre public et prévention des réinstallations.
+                </strong>
             </p>
 
             <p class="mb-4">
-                <strong
-                    >Les données fournies et partagées sur la plateforme doivent
-                    être utilisées uniquement pour servir cet objectif de
-                    résorption,</strong
+                <strong>
+                    Les données partagées sur la plateforme doivent être
+                    utilisées uniquement pour servir cet objectif de résorption, </strong
                 >, ne doivent pas être nominatives ni faire référence à
                 l'origine ethnique ou culturelle des personnes et doivent
                 respecter la dignité des habitants des bidonvilles.
@@ -52,11 +49,10 @@
             </p>
 
             <div class="my-4">
-                <a class="link" :href="charte.fichier" target="_blank"
-                    >Charte d'engagement détaillée</a
-                >
+                <a class="link" :href="charte.fichier" target="_blank">
+                    Charte d'engagement détaillée
+                </a>
             </div>
-            <p>form.status:{{ form.status }}</p>
             <div class="bg-yellow-200 flex flex-row p-5 mb-8">
                 <div>
                     <Checkbox
@@ -75,10 +71,11 @@
                             class="link"
                             href="https://www.legifrance.gouv.fr/download/pdf/circ?id=42949"
                             target="_blank"
-                            >l'instruction du 25 janvier 2018</a
-                        ></strong
-                    >
-                    et pour aucun autre usage.
+                        >
+                            l'instruction du 25 janvier 2018
+                        </a>
+                    </strong>
+                    .
                 </div>
             </div>
 
@@ -91,12 +88,13 @@
                     />
                 </div>
                 <div>
-                    Je m'engage également à
-                    <strong
-                        >exploiter les informations présentes sur la plateforme
-                        exclusivement pour les besoins propres de mon
-                        organisation ; à ne pas communiquer</strong
-                    >
+                    Je m'engage à
+                    <strong>
+                        respecter la charte d'engagement, à exploiter les
+                        informations présentes sur la plateforme exclusivement
+                        pour les besoins propres de mon organisation ; à ne pas
+                        communiquer
+                    </strong>
                     sous aucune forme (orale, écrite, copie) à un tiers.
                 </div>
             </div>
@@ -108,7 +106,7 @@
 
             <div class="flex flex-row space-x-16">
                 <Button
-                    class="m-2 mt-4 flex flex-none"
+                    class="mb-4 flex flex-none"
                     variant="primaryText"
                     @click="cancel"
                 >
@@ -117,7 +115,7 @@
                 <div class="flex flex-col">
                     <div>
                         <Button
-                            class="mb-2"
+                            class="mb-4"
                             variant="primary"
                             :disabled="
                                 form.status === 'pending' ||
@@ -129,12 +127,6 @@
                         >
                             Oui, je valide mon accès
                         </Button>
-                    </div>
-                    <div class="mb-8">
-                        <strong
-                            >et j'agis pour la résorption des
-                            bidonvilles</strong
-                        >
                     </div>
                 </div>
             </div>
