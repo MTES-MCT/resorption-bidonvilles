@@ -4,7 +4,8 @@ import {
     all as fetchAll,
     get as fetchOne,
     addActor,
-    removeActor
+    removeActor,
+    updateActorThemes
 } from "#helpers/api/town";
 import enrichShantytown from "#app/pages/TownsList/enrichShantytown";
 import { get as getConfig } from "#helpers/api/config";
@@ -67,6 +68,27 @@ export default new Vuex.Store({
             const town = state.towns.data.find(({ id }) => id === townId);
             if (town !== undefined) {
                 town.actors = actors;
+            }
+        },
+        updateShantytownActorThemes(state, { townId, userId, themes }) {
+            if (
+                state.detailedTown !== null &&
+                state.detailedTown.id === townId
+            ) {
+                const actor = state.detailedTown.actors.find(
+                    ({ id }) => id === userId
+                );
+                if (actor !== undefined) {
+                    actor.themes = themes;
+                }
+            }
+
+            const town = state.towns.data.find(({ id }) => id === townId);
+            if (town !== undefined) {
+                const actor = town.actors.find(({ id }) => id === userId);
+                if (actor !== undefined) {
+                    actor.themes = themes;
+                }
             }
         }
     },
@@ -131,6 +153,19 @@ export default new Vuex.Store({
         async removeTownActor({ commit }, { townId, userId }) {
             const { actors } = await removeActor(townId, userId);
             commit("updateShantytownActors", { townId, actors });
+        },
+
+        async updateTownActorThemes({ commit }, { townId, userId, themes }) {
+            const { themes: updatedThemes } = await updateActorThemes(
+                townId,
+                userId,
+                themes
+            );
+            commit("updateShantytownActorThemes", {
+                townId,
+                userId,
+                themes: updatedThemes
+            });
         }
     },
     getters: {

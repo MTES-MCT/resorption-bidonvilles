@@ -1,4 +1,4 @@
-import { getApi, postApi, deleteApi } from "#helpers/api/main";
+import { getApi, postApi, putApi, deleteApi } from "#helpers/api/main";
 
 /**
  * Fetches all towns from the database
@@ -156,6 +156,13 @@ export function addActor(townId, actor) {
  */
 export function removeActor(townId, userId) {
     return deleteApi(`/towns/${townId}/actors/${userId}`);
+}
+
+/**
+ * PUT /towns/:id/actors/:user_id
+ */
+export function updateActorThemes(townId, userId, themes) {
+    return putApi(`/towns/${townId}/actors/${userId}`, { themes });
 }
 
 /**
