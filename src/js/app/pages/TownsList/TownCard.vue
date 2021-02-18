@@ -1,7 +1,7 @@
 <template>
     <div
         :class="[
-            'rounded-sm cursor-pointer border',
+            'rounded-sm cursor-pointer border preventPrintBreak',
             isHover ? 'bg-blue100 border-transparent' : ''
         ]"
         @mouseenter="isHover = true"
@@ -152,7 +152,7 @@
                     </div>
                 </div>
                 <div
-                    class="flex justify-between items-center px-4 pt-4 print:pt-0"
+                    class="flex justify-between items-center px-4 pt-4 print:hidden"
                 >
                     <Tag class="text-xs">
                         {{ lastUpdate }}
@@ -284,5 +284,14 @@ export default {
 }
 .customAlign {
     height: 30px;
+}
+
+.preventPrintBreak {
+    @media print {
+        // firefox
+        break-inside: avoid;
+        // webkit (chrome/brave/edge)
+        page-break-inside: avoid;
+    }
 }
 </style>

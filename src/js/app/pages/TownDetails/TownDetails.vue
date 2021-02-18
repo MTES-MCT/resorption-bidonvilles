@@ -4,6 +4,13 @@
             <Spinner />
         </div>
     </PrivateLayout>
+
+    <PrivateLayout v-else-if="error !== null">
+        <div class="text-center text-error text-primary text-display-lg mt-16">
+            {{ error }}
+        </div>
+    </PrivateLayout>
+
     <PrivateLayout v-else>
         <PrivateContainer v-if="town" class="py-10">
             <TownDetailsHeader
@@ -208,10 +215,11 @@ export default {
                 .then(town => {
                     this.loading = false;
                     this.town = enrichShantytown(town, this.fieldTypes);
-                    this.resetEdit();
                 })
                 .catch(errors => {
-                    this.error = errors.user_message;
+                    this.error =
+                        (errors && errors.user_message) ||
+                        "Une erreur inconnue est survenue";
                     this.loading = false;
                 });
         }

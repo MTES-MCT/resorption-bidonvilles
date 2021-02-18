@@ -70,6 +70,25 @@
                         </div>
                     </TownDetailsPanelSection>
                     <TownDetailsPanelSection>
+                        <div class="font-bold">
+                            Coordonnées GPS
+                        </div>
+                        <div data-cy-data="address_details">
+                            Lat {{ town.latitude }}, Long
+                            {{ town.longitude }}
+                        </div>
+                        <div>
+                            <Button
+                                variant="primaryText"
+                                icon="copy"
+                                iconPosition="left"
+                                @click="copyCoordinates"
+                                href="#"
+                                >Copier</Button
+                            >
+                        </div>
+                    </TownDetailsPanelSection>
+                    <TownDetailsPanelSection>
                         <div class="grid grid-cols-2">
                             <div class="font-bold">
                                 Propriétaire
@@ -111,6 +130,7 @@ import TownDetailsPanel from "./ui/TownDetailsPanel.vue";
 import Map from "#app/components/map/map.vue";
 import TownDetailsPanelSection from "./ui/TownDetailsPanelSection.vue";
 import formatDateSince from "../TownsList/formatDateSince";
+import { notify } from "#helpers/notificationHelper";
 
 export default {
     props: {
@@ -126,7 +146,22 @@ export default {
         formatDate(...args) {
             return window.App.formatDate.apply(window, args);
         },
-        formatDateSince
+        formatDateSince,
+        copyCoordinates() {
+            const input = document.createElement("input");
+            input.value = `${this.town.latitude},${this.town.longitude}`;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand("copy");
+            document.body.removeChild(input);
+
+            notify({
+                group: "notifications",
+                type: "success",
+                title: "Succès",
+                text: "Les coordonnées ont été copiées dans le presse-papier"
+            });
+        }
     },
     computed: {
         buildAt() {

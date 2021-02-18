@@ -3,103 +3,67 @@
         <template v-slot:title>Habitants</template>
         <template v-slot:body>
             <TownDetailsPanelSection>
-                <div class="flex">
-                    <div class="mr-4">
-                        <Icon icon="male" class="text-xl"></Icon>
-                    </div>
-                    <div>
-                        <div class="flex items-center mb-4">
-                            <div class="text-display-md">
-                                Personnes :
-                            </div>
-                            <div
-                                class="text-display-sm ml-2 mr-10 font-normal"
-                                data-cy-data="population_total"
-                            >
-                                {{
-                                    Number.isInteger(town.populationTotal)
-                                        ? town.populationTotal
-                                        : "NC"
-                                }}
-                            </div>
-                            <div class="text-display-md">
-                                Ménages :
-                            </div>
-                            <div
-                                class="text-display-sm ml-2 mr-10 font-normal"
-                                data-cy-data="population_couples"
-                            >
-                                {{
-                                    Number.isInteger(town.populationCouples)
-                                        ? town.populationCouples
-                                        : "NC"
-                                }}
-                            </div>
-                            <div class="text-display-md">
-                                Mineurs :
-                            </div>
-                            <div
-                                class="text-display-sm ml-2 mr-10 font-normal"
-                                data-cy-data="population_minors"
-                            >
-                                {{
-                                    Number.isInteger(town.populationMinors)
-                                        ? town.populationMinors
-                                        : "NC"
-                                }}
-                            </div>
-                        </div>
-                        <div class="flex items-center mb-4">
-                            <div
-                                class="mr-10"
-                                data-cy-data="population_minors_0_3"
-                            >
-                                <span class="text-display-xs">0 - 3 ans :</span
-                                ><br />{{ populationMinors0To3 }}
-                            </div>
-                            <div
-                                class="mr-10"
-                                data-cy-data="population_minors_3_6"
-                            >
-                                <span class="text-display-xs">3 - 6 ans :</span
-                                ><br />{{ populationMinors3To6 }}
-                            </div>
-                            <div
-                                class="mr-10"
-                                data-cy-data="population_minors_6_12"
-                            >
-                                <span class="text-display-xs">6 - 12 ans :</span
-                                ><br />{{ populationMinors6To12 }}
-                            </div>
-                            <div
-                                class="mr-10"
-                                data-cy-data="population_minors_12_16"
-                            >
-                                <span class="text-display-xs"
-                                    >12 - 16 ans :</span
-                                ><br />{{ populationMinors12To16 }}
-                            </div>
-                            <div
-                                class="mr-10"
-                                data-cy-data="population_minors_16_18"
-                            >
-                                <span class="text-display-xs"
-                                    >16 - 18 ans :</span
-                                ><br />{{ populationMinors16To18 }}
-                            </div>
-                        </div>
-                        <div class="flex">
-                            <div class="mr-10" data-cy-data="minors_in_school">
-                                <span class="text-display-xs"
-                                    >Inscrits en établissement scolaire :</span
-                                ><br />{{ minorsInSchool }}
-                            </div>
-                        </div>
-                    </div>
+                <div class="italic mb-4">
+                    Le nombre de personnes sur un site est mouvant, les données
+                    fournies par les acteurs, même des estimations, participent
+                    à l'amélioration de la connaissance.
                 </div>
-                <div class="text-right italic">
-                    *NC = non communiqué
-                </div>
+
+                <table class="table-fixed text-center mb-6">
+                    <thead>
+                        <tr>
+                            <td></td>
+                            <td class="border-b"></td>
+                            <td
+                                v-for="(col, colIndex) in populationHistory"
+                                class="w-24 py-2 border-b"
+                                v-bind:class="{
+                                    'font-bold': colIndex === 0,
+                                    'bg-gray-200': colIndex === 0
+                                }"
+                                v-bind:key="colIndex"
+                            >
+                                {{ col.date }}<br />{{ col.year }}
+                            </td>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr
+                            v-for="(section, index) in sections"
+                            :class="section.css"
+                            v-bind:key="index"
+                        >
+                            <td
+                                v-if="index === 0"
+                                class="align-top pr-2 text-xl"
+                                :rowspan="sections.length"
+                            >
+                                <Icon icon="male" class="mr-1"></Icon>
+                                <Icon icon="male"></Icon>
+                            </td>
+                            <td class="text-left pr-4 border-b">
+                                {{ section.title }}
+                            </td>
+                            <td
+                                v-for="(col, colIndex) in populationHistory"
+                                class="py-1 border-b"
+                                v-bind:class="{
+                                    'border-r':
+                                        colIndex > 0 ||
+                                        populationHistory.length <= 1,
+                                    'bg-gray-100': colIndex === 0
+                                }"
+                                v-bind:key="colIndex"
+                                :data-cy-data="
+                                    colIndex === 0 ? section.data : undefined
+                                "
+                            >
+                                {{ col[section.data] }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
                 <div>
                     <div class="font-bold">Origine</div>
@@ -159,6 +123,32 @@ export default {
             type: Object
         }
     },
+    data() {
+        return {
+            sections: [
+                {
+                    title: "Personnes",
+                    css: "font-bold",
+                    data: "populationTotal"
+                },
+                {
+                    title: "Ménages",
+                    css: "font-bold",
+                    data: "populationCouples"
+                },
+                { title: "Mineurs", data: "populationMinors" },
+                { title: "0 - 3 ans", data: "populationMinors0To3" },
+                { title: "3 - 6 ans", data: "populationMinors3To6" },
+                { title: "6 - 12 ans", data: "populationMinors6To12" },
+                { title: "12 - 16 ans", data: "populationMinors12To16" },
+                { title: "16 - 18 ans", data: "populationMinors16To18" },
+                {
+                    title: "Inscrits en établissement scolaire",
+                    data: "minorsInSchool"
+                }
+            ]
+        };
+    },
     components: { TownDetailsPanel, TownDetailsPanelSection },
     methods: {
         /**
@@ -186,15 +176,79 @@ export default {
 
             return origin;
         },
-        intToStr(int) {
+        intToStr(int, nullValue = "NC") {
             if (int === undefined || int === null) {
-                return "NC";
+                return nullValue;
             }
 
             return int;
         }
     },
     computed: {
+        populationHistory() {
+            const present = {
+                date: this.formatDate(this.town.updatedAt, "d B"),
+                year: this.formatDate(this.town.updatedAt, "y"),
+                populationTotal: this.intToStr(this.town.populationTotal, "-"),
+                populationCouples: this.intToStr(
+                    this.town.populationCouples,
+                    "-"
+                ),
+                populationMinors: this.intToStr(
+                    this.town.populationMinors,
+                    "-"
+                ),
+                populationMinors0To3: this.intToStr(
+                    this.town.populationMinors0To3,
+                    "-"
+                ),
+                populationMinors3To6: this.intToStr(
+                    this.town.populationMinors3To6,
+                    "-"
+                ),
+                populationMinors6To12: this.intToStr(
+                    this.town.populationMinors6To12,
+                    "-"
+                ),
+                populationMinors12To16: this.intToStr(
+                    this.town.populationMinors12To16,
+                    "-"
+                ),
+                populationMinors16To18: this.intToStr(
+                    this.town.populationMinors16To18,
+                    "-"
+                ),
+                minorsInSchool: this.intToStr(this.town.minorsInSchool, "-")
+            };
+
+            let ref = { ...present };
+            const past = this.town.changelog.reduce((acc, log, index) => {
+                const diff = log.diff.filter(({ fieldKey }) =>
+                    fieldKey.startsWith("population")
+                );
+                if (diff.length === 0) {
+                    return acc;
+                }
+
+                let date;
+                if (index < this.town.changelog.length - 1) {
+                    date = this.town.changelog[index + 1].date;
+                } else {
+                    date = this.town.createdAt;
+                }
+
+                ref.date = this.formatDate(date, "d B");
+                ref.year = this.formatDate(date, "y");
+                diff.forEach(({ fieldKey, oldValue }) => {
+                    ref[fieldKey] =
+                        oldValue === "non renseigné" ? "-" : oldValue;
+                });
+
+                return [...acc, { ...ref }];
+            }, []);
+
+            return [present, ...past];
+        },
         socialDiagnostic() {
             if (this.town.censusStatus === "done") {
                 return `Réalisé le ${this.formatDate(

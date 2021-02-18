@@ -24,18 +24,18 @@ import { router } from "#app/router";
 import store from "#app/store";
 
 const MONTHS = [
-    "Janvier",
-    "Février",
-    "Mars",
-    "Avril",
-    "Mai",
-    "Juin",
-    "Juillet",
-    "Août",
-    "Septembre",
-    "Octobre",
-    "Novembre",
-    "Décembre"
+    { long: "Janvier", short: "jan." },
+    { long: "Février", short: "fév." },
+    { long: "Mars", short: "mars" },
+    { long: "Avril", short: "avr." },
+    { long: "Mai", short: "mai" },
+    { long: "Juin", short: "juin" },
+    { long: "Juillet", short: "juil." },
+    { long: "Août", short: "août" },
+    { long: "Septembre", short: "sep." },
+    { long: "Octobre", short: "oct." },
+    { long: "Novembre", short: "nov." },
+    { long: "Décembre", short: "déc." }
 ];
 
 window.App = Object.freeze({
@@ -90,7 +90,8 @@ window.App = Object.freeze({
             .replace("y", date.getFullYear())
             .replace("h", `0${date.getHours()}`.slice(-2))
             .replace("i", `0${date.getMinutes()}`.slice(-2))
-            .replace("M", MONTHS[date.getMonth()]);
+            .replace("M", MONTHS[date.getMonth()].long)
+            .replace("B", MONTHS[date.getMonth()].short);
     }
 });
 
