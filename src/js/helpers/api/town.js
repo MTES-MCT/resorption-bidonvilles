@@ -166,6 +166,13 @@ export function updateActorThemes(townId, userId, themes) {
 }
 
 /**
+ * DELETE /towns/:id/actors/:user_id/themes/:theme_id
+ */
+export function removeActorTheme(townId, userId, themeId) {
+    return deleteApi(`/towns/${townId}/actors/${userId}/themes/${themeId}`);
+}
+
+/**
  * @typedef {Object} Town_Data
  * @property {number} latitude,
  * @property {number} longitude,
