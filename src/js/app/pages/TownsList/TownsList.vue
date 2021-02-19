@@ -207,6 +207,16 @@
                                 }
                             ]"
                         />
+                        <TownsListFilter
+                            title="Intervenants"
+                            class="mr-2 mb-2"
+                            :value="filters.actors"
+                            @input="val => updateFilters('actors', val)"
+                            :options="[
+                                { value: 'yes', label: 'Oui' },
+                                { value: 'no', label: 'Non' }
+                            ]"
+                        />
                     </TownsListFilters>
                     <TownsListSort
                         :value="sort"
