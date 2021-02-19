@@ -4,7 +4,7 @@
             <NavBar />
         </div>
         <slot />
-        <div class="object-center max-w-3xl mx-auto mx-">
+        <div class="object-center max-w-3xl mx-8 lg:mx-auto">
             <img
                 src="./assets/A_mini_bidon.png"
                 class="mx-auto my-8 max-w-sm"
@@ -165,31 +165,56 @@ export default {
     },
 
     methods: {
-        submit() {
-            if (this.form.status === "pending") {
-                return;
+        // submit() {
+        //     if (this.form.status === "pending") {
+        //         return;
+        //     }
+
+        //     this.loading = true;
+        //     this.form.status = "pending";
+        //     this.form.error = null;
+
+        //     acceptCharte(
+        //         this.user,
+        //         this.charte.version,
+        //         this.charte_agreement[0],
+        //         this.confidentiality_agreement[0]
+        //     )
+        //         .then(() => {
+        //             setConfig("user.charte_engagement_a_jour", true);
+        //             this.loading = false;
+        //             this.$router.push("/");
+        //         })
+        //         .catch(({ user_message: message }) => {
+        //             this.loading = false;
+        //             this.form.status = "error";
+        //             this.form.error = message;
+        //         });
+        // },
+        async submit() {
+            try {
+                if (this.form.status === "pending") {
+                    return;
+                }
+
+                this.loading = true;
+                this.form.status = "pending";
+                this.form.error = null;
+
+                await acceptCharte(
+                    this.user,
+                    this.charte.version,
+                    this.charte_agreement[0],
+                    this.confidentiality_agreement[0]
+                );
+                setConfig("user.charte_engagement_a_jour", true);
+                this.loading = false;
+                this.$router.push("/");
+            } catch ({ user_message: message }) {
+                this.loading = false;
+                this.form.status = "error";
+                this.form.error = message;
             }
-
-            this.loading = true;
-            this.form.status = "pending";
-            this.form.error = null;
-
-            acceptCharte(
-                this.user,
-                this.charte.version,
-                this.charte_agreement[0],
-                this.confidentiality_agreement[0]
-            )
-                .then(() => {
-                    setConfig("user.charte_engagement_a_jour", true);
-                    this.loading = false;
-                    this.$router.push("/");
-                })
-                .catch(({ user_message: message }) => {
-                    this.loading = false;
-                    this.form.status = "error";
-                    this.form.error = message;
-                });
         },
         cancel() {
             this.$router.push("/deconnexion");
