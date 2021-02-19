@@ -58,6 +58,7 @@
                         id="intervenants"
                         @click="openActorThemes"
                         @showThemesModal="openActorThemes"
+                        @showInviteActorModal="openInviteActorModal"
                     />
                 </div>
             </div>
@@ -125,10 +126,17 @@
             v-on:closeModal="closeOpen = false"
             v-on:updateTown="town = $event"
         />
+        <!--  Self themes modal -->
         <TownDetailsActorThemes
             v-if="actorThemesOpen"
             :town="town"
             @closeModal="actorThemesOpen = false"
+        />
+        <!--  Invite actor modal -->
+        <TownDetailsInviteActorModal
+            :townId="town.id"
+            :isOpen="inviteActorOpen"
+            @closeModal="inviteActorOpen = false"
         />
     </PrivateLayout>
 </template>
@@ -152,6 +160,7 @@ import TownDetailsCovidCommentsSidePanel from "./TownDetailsCovidCommentsSidePan
 import TownDetailsActorAlert from "./TownDetailsActorAlert";
 import TownDetailsCloseModal from "./TownDetailsCloseModal";
 import TownDetailsActorThemes from "./TownDetailsActorThemes";
+import TownDetailsInviteActorModal from "./TownDetailsInviteActorModal";
 import { notify } from "#helpers/notificationHelper";
 import { hasPermission } from "#helpers/api/config";
 
@@ -172,7 +181,8 @@ export default {
         TownDetailsPanelPeople,
         TownDetailsPanelLivingConditions,
         TownDetailsPanelJudicial,
-        TownDetailsCovidCommentsSidePanel
+        TownDetailsCovidCommentsSidePanel,
+        TownDetailsInviteActorModal
     },
     data() {
         const permission = getPermission("shantytown.list");
@@ -184,6 +194,7 @@ export default {
             covidOpen: false,
             actorThemesOpen: false,
             actorAlertVisible: true,
+            inviteActorOpen: false,
             error: null,
             loading: false,
             fieldTypes,
@@ -206,6 +217,9 @@ export default {
         hasPermission,
         openActorThemes() {
             this.actorThemesOpen = true;
+        },
+        openInviteActorModal() {
+            this.inviteActorOpen = true;
         },
         openHistory() {
             this.historyOpen = true;
