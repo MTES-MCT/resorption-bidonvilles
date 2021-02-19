@@ -29,7 +29,7 @@
                 <div class="flex-1">
                     <TownDetailsActorAlert
                         v-if="isNotAnActor && actorAlertVisible"
-                        @click="actorThemesOpen = true"
+                        @click="openActorThemes"
                         @close="actorAlertVisible = false"
                     ></TownDetailsActorAlert>
                     <TownDetailsPanelCharacteristics
@@ -53,7 +53,11 @@
                         class="mb-10"
                         id="judicial"
                     />
-                    <TownDetailsActorsPanel class="mb-10" id="intervenants" />
+                    <TownDetailsActorsPanel
+                        class="mb-10"
+                        id="intervenants"
+                        @click="openActorThemes"
+                    />
                 </div>
             </div>
         </PrivateContainer>
@@ -199,6 +203,9 @@ export default {
     },
     methods: {
         hasPermission,
+        openActorThemes() {
+            this.actorThemesOpen = true;
+        },
         openHistory() {
             this.historyOpen = true;
         },
