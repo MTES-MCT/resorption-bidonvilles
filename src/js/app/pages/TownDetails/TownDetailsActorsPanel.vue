@@ -16,6 +16,7 @@
                         v-if="self"
                         :actor="self"
                         :townId="town.id"
+                        @showThemesModal="$emit('showThemesModal')"
                     ></TownDetailsSelfCard>
                     <TownDetailsActorCard
                         v-for="actor in otherActors"

@@ -57,6 +57,7 @@
                         class="mb-10"
                         id="intervenants"
                         @click="openActorThemes"
+                        @showThemesModal="openActorThemes"
                     />
                 </div>
             </div>

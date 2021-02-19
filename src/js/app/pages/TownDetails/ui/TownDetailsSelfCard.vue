@@ -6,7 +6,7 @@
                 {{ actor.first_name }} {{ actor.last_name.toUpperCase() }}
             </p>
             <p>{{ actor.organization.name }}</p>
-            <div v-if="actor.themes.length > 0" class="mt-1">
+            <div class="mt-1">
                 <TownDetailsSelfTag
                     v-for="theme in actor.themes"
                     v-bind:key="theme.id"
@@ -16,6 +16,12 @@
                 >
                     {{ theme.value || themes[theme.id] }}
                 </TownDetailsSelfTag>
+                <div
+                    class="bg-white inline-block border border-primary text-primary px-3 rounded-sm cursor-pointer"
+                    @click="$emit('showThemesModal')"
+                >
+                    <Icon icon="plus" />
+                </div>
             </div>
             <div class="w-100 mt-4 text-right">
                 <p
