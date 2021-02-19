@@ -11,9 +11,13 @@
                 <p v-if="town.actors.length === 0" class="mt-2 mb-4">
                     Aucun intervenant connu sur ce site.
                 </p>
-                <div v-else class="grid grid-cols-2">
+                <div v-else class="grid grid-cols-2 mt-4">
+                    <TownDetailsSelfCard
+                        v-if="self"
+                        :actor="self"
+                    ></TownDetailsSelfCard>
                     <TownDetailsActorCard
-                        v-for="actor in town.actors"
+                        v-for="actor in otherActors"
                         v-bind:key="actor.id"
                         :actor="actor"
                     ></TownDetailsActorCard>
@@ -43,6 +47,7 @@
 <script>
 import TownDetailsPanel from "./ui/TownDetailsPanel.vue";
 import TownDetailsActorCard from "./ui/TownDetailsActorCard.vue";
+import TownDetailsSelfCard from "./ui/TownDetailsSelfCard.vue";
 import TownDetailsPanelSection from "./ui/TownDetailsPanelSection.vue";
 import { get as getConfig } from "#helpers/api/config";
 
@@ -50,7 +55,8 @@ export default {
     components: {
         TownDetailsPanel,
         TownDetailsPanelSection,
-        TownDetailsActorCard
+        TownDetailsActorCard,
+        TownDetailsSelfCard
     },
 
     data() {
@@ -63,8 +69,14 @@ export default {
         town() {
             return this.$store.state.detailedTown;
         },
+        self() {
+            return this.town.actors.find(({ id }) => id === this.user.id);
+        },
+        otherActors() {
+            return this.town.actors.filter(({ id }) => id !== this.user.id);
+        },
         isNotAnActor() {
-            return !this.town.actors.some(({ id }) => id === this.user.id);
+            return this.self === undefined;
         }
     }
 };
