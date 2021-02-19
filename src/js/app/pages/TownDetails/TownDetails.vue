@@ -53,7 +53,7 @@
                         class="mb-10"
                         id="judicial"
                     />
-                    <TownDetailsActorsPanel
+                    <TownDetailsPanelActors
                         class="mb-10"
                         id="intervenants"
                         @click="openActorThemes"
@@ -143,13 +143,13 @@ import TownDetailsPanelCharacteristics from "./TownDetailsPanelCharacteristics";
 import TownDetailsPanelPeople from "./TownDetailsPanelPeople";
 import TownDetailsPanelLivingConditions from "./TownDetailsPanelLivingConditions";
 import TownDetailsPanelJudicial from "./TownDetailsPanelJudicial";
+import TownDetailsPanelActors from "./TownDetailsPanelActors";
 import { get as getConfig, getPermission } from "#helpers/api/config";
 import TownDetailsNewComment from "./TownDetailsNewComment";
 import TownDetailsComments from "./TownDetailsComments";
 import TownDetailsHistorySidePanel from "./TownDetailsHistorySidePanel";
 import TownDetailsCovidCommentsSidePanel from "./TownDetailsCovidCommentsSidePanel";
 import TownDetailsActorAlert from "./TownDetailsActorAlert";
-import TownDetailsActorsPanel from "./TownDetailsActorsPanel";
 import TownDetailsCloseModal from "./TownDetailsCloseModal";
 import TownDetailsActorThemes from "./TownDetailsActorThemes";
 import { notify } from "#helpers/notificationHelper";
@@ -158,7 +158,7 @@ import { hasPermission } from "#helpers/api/config";
 export default {
     components: {
         TownDetailsActorAlert,
-        TownDetailsActorsPanel,
+        TownDetailsPanelActors,
         TownDetailsCloseModal,
         TownDetailsActorThemes,
         TownDetailsHistorySidePanel,
