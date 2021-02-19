@@ -10,7 +10,7 @@
                 class="mx-auto my-8 max-w-sm"
             />
             <h1 class="text-display-lg text-center mb-8">
-                Agir pour la résorption des bidonvilles
+                Agir pour résorber les bidonvilles
             </h1>
 
             <p class="mb-4">
@@ -24,8 +24,9 @@
                     href="https://www.legifrance.gouv.fr/download/pdf/circ?id=42949"
                     target="_blank"
                 >
-                    l'instruction du 25 janvier 2018 </a
-                >. Il s'agit pour cela de dépasser l'approche centrée sur les
+                    l'instruction du 25 janvier 2018.
+                </a>
+                Il s'agit pour cela de dépasser l'approche centrée sur les
                 évacuations au profit d'une
                 <strong>
                     approche globale alliant insertion sociale, respect de
@@ -36,10 +37,11 @@
             <p class="mb-4">
                 <strong>
                     Les données partagées sur la plateforme doivent être
-                    utilisées uniquement pour servir cet objectif de résorption, </strong
-                >, ne doivent pas être nominatives ni faire référence à
-                l'origine ethnique ou culturelle des personnes et doivent
-                respecter la dignité des habitants des bidonvilles.
+                    utilisées uniquement pour servir cet objectif de résorption,
+                </strong>
+                ne doivent pas être nominatives ni faire référence à l'origine
+                ethnique ou culturelle des personnes et doivent respecter la
+                dignité des habitants des bidonvilles.
             </p>
 
             <p>
@@ -57,6 +59,7 @@
                 <div>
                     <Checkbox
                         :checkValue="true"
+                        variant="classic"
                         v-model="charte_agreement"
                         :disabled="form.status === 'pending'"
                     />
@@ -83,6 +86,7 @@
                 <div>
                     <Checkbox
                         :checkValue="true"
+                        variant="classic"
                         v-model="confidentiality_agreement"
                         :disabled="form.status === 'pending'"
                     />
@@ -104,7 +108,7 @@
                 <span>{{ form.error }}</span>
             </div>
 
-            <div class="flex flex-row space-x-16">
+            <div class="flex justify-between">
                 <Button
                     class="mb-4 flex flex-none"
                     variant="primaryText"
@@ -112,23 +116,19 @@
                 >
                     Annuler
                 </Button>
-                <div class="flex flex-col">
-                    <div>
-                        <Button
-                            class="mb-4"
-                            variant="primary"
-                            :disabled="
-                                form.status === 'pending' ||
-                                    !charte_agreement.includes(true) ||
-                                    !confidentiality_agreement.includes(true)
-                            "
-                            :loading="loading"
-                            @click="submit"
-                        >
-                            Oui, je valide mon accès
-                        </Button>
-                    </div>
-                </div>
+                <Button
+                    type="primary"
+                    variant="tertiary"
+                    class="mb-4"
+                    :disabled="
+                        form.status === 'pending' ||
+                            !charte_agreement.includes(true) ||
+                            !confidentiality_agreement.includes(true)
+                    "
+                    :loading="loading"
+                    @click="submit"
+                    >Oui, je valide la charte
+                </Button>
             </div>
         </div>
     </div>
