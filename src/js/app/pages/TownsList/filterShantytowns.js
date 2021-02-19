@@ -47,6 +47,13 @@ export function filterShantytowns(shantytowns, filters) {
             return false;
         }
 
+        if (
+            filters.actors.length > 0 &&
+            !checkActors(shantytown, filters.actors)
+        ) {
+            return false;
+        }
+
         return true;
     });
 }
@@ -167,4 +174,19 @@ function checkJustice(shantytown, filters) {
 
         return value === null;
     });
+}
+
+/**
+ *
+ */
+function checkActors(shantytown, filters) {
+    if (filters.includes("yes") && shantytown.actors.length > 0) {
+        return true;
+    }
+
+    if (filters.includes("no") && shantytown.actors.length === 0) {
+        return true;
+    }
+
+    return filters.length === 0;
 }
