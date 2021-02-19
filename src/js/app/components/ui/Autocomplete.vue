@@ -204,7 +204,7 @@ export default {
         return {
             show: true,
             focused: false,
-            value: this.defaultValue || {},
+            value: this.defaultValue || null,
             searchInput: this.defaultValue
                 ? this.getResultValue(this.defaultValue)
                 : "",
@@ -213,9 +213,10 @@ export default {
     },
     methods: {
         removeItem() {
-            this.value = "";
+            this.value = null;
             this.searchInput = "";
             this.$emit("submit", null);
+            this.$emit("input", null);
             this.$refs.provider.syncValue(null);
             this.$refs.provider.validate();
         },
@@ -228,6 +229,7 @@ export default {
             }
 
             this.$emit("submit", newValue);
+            this.$emit("input", newValue);
             this.$refs.provider.syncValue(newValue);
             this.$refs.provider.validate();
             this.$refs.searchInput.blur();

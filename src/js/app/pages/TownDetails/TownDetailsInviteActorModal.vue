@@ -7,13 +7,40 @@
         <template v-slot:body>
             <ValidationObserver ref="form" @submit.prevent="submit">
                 <form>
-                    <div class="w-128 -mx-4 -mt-8 p-4">
+                    <p class="-mt-6">
+                        Favorisez la synergie entre les acteurs en invitant un
+                        intervenant. Un courriel lui sera envoyé pour l’informer
+                        de votre invitation.
+                    </p>
+                    <div class="mt-4">
+                        <p>
+                            <span class="font-bold"
+                                >L'intervenant est utilisateur de la plateforme
+                                Résorption-bidonvilles ?</span
+                            ><br />
+                            Sélectionnez-le dans cette liste
+                        </p>
+
+                        <div class="w-128">
+                            <AutocompleteV2
+                                id="user_id"
+                                label=""
+                                prefixIcon="user"
+                                :search="autocomplete"
+                                :loading="searching"
+                                :getResultValue="getResultValue"
+                                v-model="form.user"
+                                ref="autocomplete"
+                            ></AutocompleteV2>
+                        </div>
+                    </div>
+
+                    <div class="w-128">
                         <p class="mb-4">
                             <span class="font-bold"
                                 >L'intervenant n'est pas présent dans cette
                                 liste ?</span
-                            >
-                            Invitez le
+                            ><br />Invitez le
                         </p>
 
                         <TextInput
@@ -53,6 +80,7 @@
 
 <script>
 import { notify } from "#helpers/notificationHelper";
+import { findRelations } from "#helpers/api/town";
 
 export default {
     props: {
@@ -70,16 +98,57 @@ export default {
     data() {
         return {
             loading: false,
+            searching: false,
             error: null,
             form: {
+                user: null,
                 email: ""
             }
         };
     },
 
+    computed: {
+        successWording() {
+            if (this.form.user && this.form.user.id) {
+                return "L'intervenant a bien été ajouté et notifié par courriel";
+            }
+
+            return "L'invitation a bien été envoyée";
+        }
+    },
+
     methods: {
         closeModal() {
+            this.resetForm();
             this.$emit("closeModal");
+        },
+
+        resetForm() {
+            this.error = null;
+            this.$refs.form.reset();
+            this.$refs.autocomplete.removeItem();
+            this.form.email = "";
+        },
+
+        async autocomplete(query) {
+            if (!query || query.length < 3) {
+                return Promise.resolve([]);
+            }
+
+            this.searching = true;
+            const { relations } = await findRelations(this.townId, query);
+            this.searching = false;
+
+            return relations;
+        },
+
+        getResultValue(user) {
+            if (!user || !user.first_name) {
+                return "";
+            }
+
+            return `${user.first_name} ${user.last_name.toUpperCase()} - ${user
+                .organization.abbreviation || user.organization.name}`;
         },
 
         async submit() {
@@ -92,17 +161,13 @@ export default {
             this.$refs.form.reset();
 
             try {
-                await this.$store.dispatch("inviteNewTownActor", {
-                    townId: this.townId,
-                    email: this.form.email
-                });
-                this.form.email = "";
+                await this.dispatch();
 
                 notify({
                     group: "notifications",
                     type: "success",
                     title: "Succès",
-                    text: "L'invitation a bien été envoyée"
+                    text: this.successWording
                 });
 
                 this.closeModal();
@@ -117,6 +182,22 @@ export default {
             }
 
             this.loading = false;
+        },
+
+        dispatch() {
+            if (this.form.user && this.form.user.id) {
+                return this.$store.dispatch("addTownActor", {
+                    townId: this.townId,
+                    actor: {
+                        user_id: this.form.user.id
+                    }
+                });
+            }
+
+            return this.$store.dispatch("inviteNewTownActor", {
+                townId: this.townId,
+                email: this.form.email
+            });
         }
     }
 };
