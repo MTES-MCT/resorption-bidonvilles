@@ -16,12 +16,13 @@
                 >
                     {{ theme.value || themes[theme.id] }}
                 </TownDetailsSelfTag>
-                <div
+
+                <Tooltip
+                    text="Cliquez ici pour modifier vos champs d'intervention"
                     class="bg-white inline-block border border-primary text-primary px-3 rounded-sm cursor-pointer"
-                    @click="$emit('showThemesModal')"
-                >
-                    <Icon icon="plus" />
-                </div>
+                    @click.native="$emit('showThemesModal')"
+                    ><Icon icon="plus" />
+                </Tooltip>
             </div>
             <div class="w-100 mt-4 text-right">
                 <p
