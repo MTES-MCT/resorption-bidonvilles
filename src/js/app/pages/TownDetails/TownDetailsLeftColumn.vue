@@ -23,6 +23,11 @@
                 :activeSection="activeSection === 'judicial'"
                 >Procédure judiciaire</LeftColumnNavLink
             >
+            <LeftColumnNavLink
+                to="#intervenants"
+                :activeSection="activeSection === 'intervenants'"
+                >Intervenants</LeftColumnNavLink
+            >
             <router-link
                 to="#newComment"
                 @click.native="scrollFix('#newComment')"
@@ -96,6 +101,7 @@ export default {
             threshold: 0.5
         });
 
+        observer.observe(document.querySelector("#intervenants"));
         this.hasJusticePermission &&
             observer.observe(document.querySelector("#judicial"));
         observer.observe(document.querySelector("#living_conditions"));
