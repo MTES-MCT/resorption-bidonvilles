@@ -7,8 +7,8 @@
             this.disabled && 'opacity-50 cursor-not-allowed'
         ]"
         :disabled="disabled || loading"
-        :href="isLink ? (disabled ? null : href) : null"
-        :is="isLink ? 'a' : 'button'"
+        :to="isLink ? (disabled ? null : href) : null"
+        :is="isLink ? 'router-link' : 'button'"
         :type="isLink ? null : type"
         @click="onClick"
     >
