@@ -180,6 +180,13 @@ export function inviteNewActor(townId, email) {
 }
 
 /**
+ * GET /towns/:id/relations
+ */
+export function findRelations(townId, query) {
+    return getApi(`/towns/${townId}/relations?q=${encodeURIComponent(query)}`);
+}
+
+/**
  * @typedef {Object} Town_Data
  * @property {number} latitude,
  * @property {number} longitude,

@@ -8,9 +8,13 @@
                     n'accompagnez pas l'ensemble des habitants du site.
                 </div>
 
-                <p v-if="town.actors.length === 0" class="mt-2 mb-4">
-                    Aucun intervenant connu sur ce site.
-                </p>
+                <div v-if="town.actors.length === 0" class="mt-2 mb-4">
+                    <p>Aucun intervenant connu sur ce site.</p>
+                    <TownDetailsInviteActorButton
+                        class="-ml-4"
+                        @showInviteActorModal="$emit('showInviteActorModal')"
+                    />
+                </div>
                 <div v-else class="grid grid-cols-2 mt-4">
                     <TownDetailsSelfCard
                         v-if="self"
@@ -23,14 +27,9 @@
                         v-bind:key="actor.id"
                         :actor="actor"
                     ></TownDetailsActorCard>
-                    <div class="p-4">
-                        <span
-                            class="bg-white inline-block border border-primary text-primary px-3 py-1 rounded-sm cursor-pointer font-bold"
-                            @click="$emit('showInviteActorModal')"
-                            ><Icon icon="plus" class="mr-1" /> Inviter un autre
-                            intervenant</span
-                        >
-                    </div>
+                    <TownDetailsInviteActorButton
+                        @showInviteActorModal="$emit('showInviteActorModal')"
+                    />
                 </div>
 
                 <InfoBanner
@@ -59,6 +58,7 @@ import TownDetailsPanel from "./ui/TownDetailsPanel.vue";
 import TownDetailsActorCard from "./ui/TownDetailsActorCard.vue";
 import TownDetailsSelfCard from "./ui/TownDetailsSelfCard.vue";
 import TownDetailsPanelSection from "./ui/TownDetailsPanelSection.vue";
+import TownDetailsInviteActorButton from "./ui/TownDetailsInviteActorButton.vue";
 import { get as getConfig } from "#helpers/api/config";
 
 export default {
@@ -66,7 +66,8 @@ export default {
         TownDetailsPanel,
         TownDetailsPanelSection,
         TownDetailsActorCard,
-        TownDetailsSelfCard
+        TownDetailsSelfCard,
+        TownDetailsInviteActorButton
     },
 
     data() {
