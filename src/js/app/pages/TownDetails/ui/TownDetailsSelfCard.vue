@@ -10,6 +10,9 @@
                 <TownDetailsSelfTag
                     v-for="theme in actor.themes"
                     v-bind:key="theme.id"
+                    :townId="townId"
+                    :userId="actor.id"
+                    :themeId="theme.id"
                 >
                     {{ theme.value || themes[theme.id] }}
                 </TownDetailsSelfTag>
