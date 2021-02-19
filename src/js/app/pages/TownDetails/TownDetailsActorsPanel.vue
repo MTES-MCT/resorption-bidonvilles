@@ -15,6 +15,7 @@
                     <TownDetailsSelfCard
                         v-if="self"
                         :actor="self"
+                        :townId="town.id"
                     ></TownDetailsSelfCard>
                     <TownDetailsActorCard
                         v-for="actor in otherActors"
