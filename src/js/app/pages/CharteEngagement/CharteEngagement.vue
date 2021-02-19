@@ -159,8 +159,7 @@ export default {
                 status: null,
                 error: null
             },
-            loading: false,
-            checkboxValue: []
+            loading: false
         };
     },
 
