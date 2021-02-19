@@ -8,6 +8,7 @@ import {
     faPaperPlane,
     faUnlink,
     faUser,
+    faUserCircle,
     faUserCheck,
     faUserShield,
     faArrowRight,
@@ -105,6 +106,7 @@ library.add(faHistory);
 library.add(faMapPin);
 library.add(faFilePdf);
 library.add(faUsers);
+library.add(faUserCircle);
 library.add(faUserPlus);
 library.add(faFileDownload);
 library.add(faAddressBook);

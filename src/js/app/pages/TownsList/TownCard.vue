@@ -150,6 +150,42 @@
                             </div>
                         </div>
                     </div>
+                    <!-- fifth column -->
+                    <div class="flex">
+                        <div
+                            v-bind:class="{
+                                'text-G600': shantytown.actors.length === 0,
+                                'text-primary': shantytown.actors.length > 0,
+                                'font-bold': shantytown.actors.length > 0
+                            }"
+                        >
+                            <span><Icon icon="user-circle"/></span>
+                        </div>
+                        <div class="ml-2 flex-grow">
+                            <span
+                                v-if="shantytown.actors.length === 0"
+                                class="text-G600"
+                            >
+                                Aucun intervenant</span
+                            >
+                            <span v-else class="text-primary font-bold"
+                                >{{ shantytown.actors.length }} intervenant{{
+                                    shantytown.actors.length > 1 ? "s" : ""
+                                }}</span
+                            >
+                            <ul
+                                v-if="shantytown.actors.length > 0"
+                                class="text-primary"
+                            >
+                                <li
+                                    v-for="actor in mergedActors"
+                                    v-bind:key="actor.id"
+                                >
+                                    - {{ actor.name }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
                 <div
                     class="flex justify-between items-center px-4 pt-4 print:hidden"
@@ -246,6 +282,20 @@ export default {
         isOpen() {
             return this.shantytown.status === "open";
         },
+        mergedActors() {
+            return Object.values(
+                this.shantytown.actors.reduce((acc, actor) => {
+                    if (acc[actor.organization.id] !== undefined) {
+                        return acc;
+                    }
+
+                    return {
+                        ...acc,
+                        [actor.organization.id]: actor.organization
+                    };
+                }, {})
+            );
+        },
         lastUpdate() {
             const { days, months, weeks } = getSince(this.shantytown.updatedAt);
 
@@ -279,10 +329,10 @@ export default {
 
 <style scoped lang="scss">
 .cardGridTemplateColumns {
-    grid-template-columns: 160px 208px 164px auto;
+    grid-template-columns: 160px 208px 164px 200px auto;
 
     @media print {
-        grid-template-columns: 160px 208px 164px 236px;
+        grid-template-columns: 160px 208px 164px 200px 236px;
     }
 }
 .customAlign {
