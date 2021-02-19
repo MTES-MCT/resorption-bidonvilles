@@ -2,7 +2,16 @@
     <TownDetailsPanel>
         <template v-slot:title>Intervenants</template>
         <template v-slot:body>
-            <p>Aucun intervenant connu sur ce site.</p>
+            <p v-if="town.actors.length === 0">
+                Aucun intervenant connu sur ce site.
+            </p>
+            <div v-else class="grid grid-cols-2">
+                <TownDetailsActorCard
+                    v-for="actor in town.actors"
+                    v-bind:key="actor.id"
+                    :actor="actor"
+                ></TownDetailsActorCard>
+            </div>
 
             <InfoBanner
                 v-if="isNotAnActor"
@@ -26,9 +35,15 @@
 
 <script>
 import TownDetailsPanel from "./ui/TownDetailsPanel.vue";
+import TownDetailsActorCard from "./ui/TownDetailsActorCard.vue";
 import { get as getConfig } from "#helpers/api/config";
 
 export default {
+    components: {
+        TownDetailsPanel,
+        TownDetailsActorCard
+    },
+
     data() {
         const { user } = getConfig();
         return {
@@ -42,9 +57,6 @@ export default {
         isNotAnActor() {
             return !this.town.actors.some(({ id }) => id === this.user.id);
         }
-    },
-    components: {
-        TownDetailsPanel
     }
 };
 </script>
