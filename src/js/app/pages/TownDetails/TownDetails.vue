@@ -53,6 +53,7 @@
                         class="mb-10"
                         id="judicial"
                     />
+                    <TownDetailsActorsPanel class="mb-10" id="intervenants" />
                 </div>
             </div>
         </PrivateContainer>
@@ -149,6 +150,7 @@ import TownDetailsComments from "./TownDetailsComments";
 import TownDetailsHistorySidePanel from "./TownDetailsHistorySidePanel";
 import TownDetailsCovidCommentsSidePanel from "./TownDetailsCovidCommentsSidePanel";
 import TownDetailsActorAlert from "./TownDetailsActorAlert";
+import TownDetailsActorsPanel from "./TownDetailsActorsPanel";
 import TownDetailsCloseModal from "./TownDetailsCloseModal";
 import TownDetailsActorThemes from "./TownDetailsActorThemes";
 import { notify } from "#helpers/notificationHelper";
@@ -157,6 +159,7 @@ import { hasPermission } from "#helpers/api/config";
 export default {
     components: {
         TownDetailsActorAlert,
+        TownDetailsActorsPanel,
         TownDetailsCloseModal,
         TownDetailsActorThemes,
         TownDetailsHistorySidePanel,
