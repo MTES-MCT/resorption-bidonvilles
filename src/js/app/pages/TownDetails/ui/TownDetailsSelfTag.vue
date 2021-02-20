@@ -2,16 +2,18 @@
     <div
         class="bg-white inline-block border border-primary text-primary px-3 mr-2 mb-2 rounded-lg"
     >
-        <slot />
-        <span class="ml-2 align-middle">
-            <Icon
-                v-if="!loading"
-                class="cursor-pointer"
-                icon="times"
-                @click.native="remove"
-            />
-            <Icon v-else icon="spinner" spin />
-        </span>
+        <p class="flex items-center">
+            <slot />
+            <span class="ml-2 align-middle">
+                <Icon
+                    v-if="!loading"
+                    class="cursor-pointer"
+                    icon="times"
+                    @click.native="remove"
+                />
+                <Icon v-else icon="spinner" spin />
+            </span>
+        </p>
     </div>
 </template>
 
