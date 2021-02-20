@@ -19,9 +19,12 @@
 
                 <Tooltip
                     text="Cliquez ici pour modifier vos champs d'intervention"
-                    class="bg-white inline-block border border-primary text-primary px-3 rounded-sm cursor-pointer"
                     @click.native="$emit('showThemesModal')"
-                    ><Icon icon="plus" />
+                    ><Button
+                        variant="primaryOutlineAlt"
+                        icon="plus"
+                        size="sm"
+                    ></Button>
                 </Tooltip>
             </div>
             <div class="w-100 mt-4 text-right">
