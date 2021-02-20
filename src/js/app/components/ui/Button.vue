@@ -99,6 +99,8 @@ export default {
                     "rounded-sm border-2 border-primary text-primary hover:bg-primary hover:text-white focus:outline-none",
                 secondaryOutline:
                     "rounded-sm border-2  border-secondary text-secondary hover:bg-secondary hover:text-white focus:outline-none",
+                primaryOutlineAlt:
+                    "bg-white rounded-sm border-2 border-primary text-primary hover:bg-primary hover:text-white focus:outline-none",
                 primaryText:
                     "text-primary hover:text-primaryDark focus:outline-none",
                 secondaryText:
