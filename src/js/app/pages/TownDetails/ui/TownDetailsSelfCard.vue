@@ -21,6 +21,7 @@
                     text="Cliquez ici pour modifier vos champs d'intervention"
                     @click.native="$emit('showThemesModal')"
                     ><Button
+                        class="leading-3"
                         variant="primaryOutlineAlt"
                         icon="plus"
                         size="sm"

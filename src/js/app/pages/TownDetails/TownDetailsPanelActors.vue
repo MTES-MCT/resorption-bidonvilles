@@ -27,9 +27,16 @@
                         v-bind:key="actor.id"
                         :actor="actor"
                     ></TownDetailsActorCard>
-                    <TownDetailsInviteActorButton
-                        @showInviteActorModal="$emit('showInviteActorModal')"
-                    />
+                    <div class="p-4">
+                        <Button
+                            class="font-bold"
+                            variant="primaryOutlineAlt"
+                            icon="plus"
+                            iconPosition="left"
+                            @click="$emit('showInviteActorModal')"
+                            >Inviter un autre intervenant</Button
+                        >
+                    </div>
                 </div>
 
                 <InfoBanner
@@ -58,7 +65,6 @@ import TownDetailsPanel from "./ui/TownDetailsPanel.vue";
 import TownDetailsActorCard from "./ui/TownDetailsActorCard.vue";
 import TownDetailsSelfCard from "./ui/TownDetailsSelfCard.vue";
 import TownDetailsPanelSection from "./ui/TownDetailsPanelSection.vue";
-import TownDetailsInviteActorButton from "./ui/TownDetailsInviteActorButton.vue";
 import { get as getConfig } from "#helpers/api/config";
 
 export default {
@@ -66,8 +72,7 @@ export default {
         TownDetailsPanel,
         TownDetailsPanelSection,
         TownDetailsActorCard,
-        TownDetailsSelfCard,
-        TownDetailsInviteActorButton
+        TownDetailsSelfCard
     },
 
     data() {
