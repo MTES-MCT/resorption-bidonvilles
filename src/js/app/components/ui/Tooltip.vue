@@ -1,6 +1,8 @@
 <template>
     <div class="has-tooltip inline-block">
-        <div class="tooltip mt-10 ml-5 bg-yellow-200 text-black py-4 px-6">
+        <div
+            class="tooltip mt-10 ml-5 bg-yellow-200 shadow-md text-black py-4 px-6"
+        >
             {{ text }}
         </div>
         <slot />
