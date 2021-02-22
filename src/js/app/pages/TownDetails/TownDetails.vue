@@ -51,10 +51,7 @@
                 </div>
             </div>
         </PrivateContainer>
-        <div
-            class="bg-orange200 py-10"
-            v-if="hasPermission('shantytown_comment.create')"
-        >
+        <div class="bg-orange200 py-10">
             <PrivateContainer class="flex items-center">
                 <div class="leftColumnWidth text-sm">
                     <div>
@@ -83,13 +80,10 @@
         <div
             :class="[
                 'bg-orange200',
-                !hasPermission('shantytown_comment.create') && 'pt-10',
+                'pt-10',
                 town.comments.regular.length > 0 && 'pb-32'
             ]"
-            v-if="
-                hasPermission('shantytown_comment.list') &&
-                    town.comments.regular.length
-            "
+            v-if="town.comments.regular.length"
         >
             <PrivateContainer class="flex" id="comments">
                 <div class="leftColumnWidth" />
