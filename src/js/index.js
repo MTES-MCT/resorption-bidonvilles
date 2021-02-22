@@ -1,3 +1,5 @@
+import "./env.js";
+
 // load the whole betagouv template
 import "@openfonts/fira-code_all";
 import "simplebar/dist/simplebar.min.css";
@@ -101,7 +103,7 @@ Vue.use(TrendChart);
 Vue.use(VueRouter);
 Vue.use(VueI18n);
 
-if (process.env.VUE_APP_MATOMO_ON === "true") {
+if (RB_ENV.VUE_APP_MATOMO_ON === "true") {
     Vue.use(VueMatomo, {
         // Configure your matomo server and site by providing
         host: "https://stats.data.gouv.fr",

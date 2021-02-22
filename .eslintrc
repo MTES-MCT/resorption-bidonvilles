@@ -1,39 +1,39 @@
 {
-  "extends": [
-    "plugin:vue/essential",
-    "eslint:recommended",
-    "@vue/prettier"
-  ],
-  "env": {
-    "browser": true,
-    "node": true
-  },
-  "globals": {
-    "App": "readonly"
-  },
-  "root": true,
-  "parserOptions": {
-    "ecmaVersion": 2020
-  },
-  "ignorePatterns": ["node_modules/", "dist/"],
-  "overrides": [
-    {
-      "files": "cypress/**/*.js",
-      "globals": {
-        "Cypress": "readonly",
-        "cy": "readonly",
-        "describe": "readonly",
-        "it": "readonly"
-      }
+    "extends": [
+        "plugin:vue/essential",
+        "eslint:recommended",
+        "@vue/prettier"
+    ],
+    "env": {
+        "browser": true,
+        "node": true
     },
-    {
-        "files": [
-            "**/__tests__/*.{j,t}s?(x)",
-            "**/tests/unit/**/*.spec.{j,t}s?(x)"
-        ],
-        "env": {
-            "jest": true
+    "globals": {
+        "App": "readonly"
+    },
+    "root": true,
+    "parserOptions": {
+        "ecmaVersion": 2020
+    },
+    "ignorePatterns": [
+        "node_modules/",
+        "dist/"
+    ],
+    "overrides": [
+        {
+            "files": "cypress/**/*.js",
+            "globals": {
+                "Cypress": "readonly",
+                "cy": "readonly",
+                "describe": "readonly",
+                "it": "readonly"
+            }
+        },
+        {
+            "files": "src/**/*.js",
+            "globals": {
+                "RB_ENV": "readonly"
+            }
         }
-    }
-  ]
+    ]
 }
