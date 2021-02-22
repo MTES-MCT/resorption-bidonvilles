@@ -17,6 +17,30 @@
                 v-model="newComment"
                 placeholder="Votre commentaire - Merci de respecter les règles de confidentialité."
             />
+            <div
+                class="flex ml-4"
+                v-if="['local_admin', 'national_admin'].includes(user.role_id)"
+            >
+                <div class="text-sm mr-4">
+                    <Icon icon="lock" class="text-red" />
+                    Je souhaite réserver ce message à mes collègues en
+                    Préfecture et DDCS
+                </div>
+                <CheckableGroup direction="horizontal" id="private_comments">
+                    <Radio
+                        label="Oui"
+                        v-model="isPrivate"
+                        :checkValue="true"
+                        cypressName="private_comments"
+                    ></Radio>
+                    <Radio
+                        label="Non"
+                        v-model="isPrivate"
+                        :checkValue="false"
+                        cypressName="private_comments"
+                    ></Radio>
+                </CheckableGroup>
+            </div>
             <div class="flex items-center justify-between">
                 <Button variant="primaryText" @click="cancelComment"
                     >Annuler</Button
@@ -28,7 +52,6 @@
 </template>
 
 <script>
-import { hasPermission } from "#helpers/api/config";
 import { addComment as apiAddComment } from "#helpers/api/town";
 
 export default {
@@ -36,7 +59,8 @@ export default {
         return {
             commentError: null,
             commentErrors: {},
-            newComment: ""
+            newComment: "",
+            isPrivate: false
         };
     },
     props: {
@@ -52,16 +76,13 @@ export default {
             this.newComment = "";
         },
         addComment() {
-            if (!hasPermission("shantytown_comment.create")) {
-                return;
-            }
-
             // clean previous errors
             this.commentError = null;
             this.commentErrors = {};
 
             apiAddComment(this.$route.params.id, {
-                description: this.newComment
+                description: this.newComment,
+                private: this.isPrivate
             })
                 .then(response => {
                     this.$emit("submit", response.comments);

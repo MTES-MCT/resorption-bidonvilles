@@ -27,10 +27,6 @@
                 to="#newComment"
                 @click.native="scrollFix('#newComment')"
                 class="text-secondary"
-                v-if="
-                    hasPermission('shantytown_comment.list') ||
-                        hasPermission('shantytown_comment.create')
-                "
             >
                 <div class="flex text-secondary font-bold mt-4 cursor-pointer">
                     <Icon icon="comment" />

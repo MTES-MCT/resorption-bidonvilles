@@ -5,6 +5,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import {
     faFlag,
+    faLock,
     faPaperPlane,
     faUnlink,
     faUser,
@@ -147,3 +148,4 @@ library.add(faCalendar);
 library.add(faPrint);
 library.add(faFile);
 library.add(faCopy);
+library.add(faLock);
