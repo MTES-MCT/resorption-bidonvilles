@@ -29,13 +29,12 @@
                 v-on:addGuestReq="addGuestToList($event)"
             ></InvitationForm>
             <InvitationList v-bind:guestList="guestList"></InvitationList>
-            <div class="flex justify-end space-x-8">
+            <div class="flex justify-end space-x-8 -mt-4">
                 <Button variant="primaryText" @click="omit">{{
                     $t("invitationPage.cancel")
                 }}</Button>
                 <Button
                     variant="primary"
-                    size="lg"
                     :loading="loading"
                     v-if="this.guestList.length > 0"
                     @click="sendInvitations"
