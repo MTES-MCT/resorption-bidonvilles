@@ -6,6 +6,7 @@
                 cypressName="sanitary_number"
                 size="sm"
                 type="number"
+                class="w-16"
             />
             <div
                 class="ml-4"
@@ -29,7 +30,7 @@ export default {
             default: ""
         },
         population: {
-            type: String
+            type: Object
         }
     },
 

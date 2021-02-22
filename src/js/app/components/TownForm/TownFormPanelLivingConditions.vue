@@ -8,7 +8,7 @@
                 v-model="input.access_to_water"
             ></InputAccessToWater>
 
-            <div class="ml-12">
+            <div class="ml-12" v-if="input.access_to_water === 1">
                 <InputWaterPotable v-model="input.water_potable" />
                 <InputWaterContinuousAccess
                     v-model="input.water_continuous_access"
@@ -20,16 +20,19 @@
                     v-model="input.water_everyone_has_access"
                 />
                 <InputWaterStagnantWater v-model="input.water_stagnant_water" />
-                <div class="mb-6">
+                <div class="">
                     <InputWaterHandWashAccess
                         v-model="input.water_hand_wash_access"
                         withoutBorder
                     />
                     <InputWaterHandWashNumber
                         v-if="input.water_hand_wash_access > 0"
+                        :population="population"
                         v-model="input.water_hand_wash_access_number"
                     />
                 </div>
+            </div>
+            <div class="ml-12 mt-6">
                 <InputWaterComments
                     :rules="input.water_public_point > 0 ? 'required' : ''"
                     v-model="input.water_comments"
@@ -44,7 +47,7 @@
             <InputAccessToSanitary
                 v-model="input.access_to_sanitary"
             ></InputAccessToSanitary>
-            <div class="ml-12">
+            <div class="ml-12" v-if="input.access_to_sanitary === 1">
                 <InputSanitaryOnSite
                     v-model="input.sanitary_on_site"
                 ></InputSanitaryOnSite>
@@ -56,7 +59,8 @@
                     v-model="input.sanitary_insalubrious"
                     class="mb-6"
                 ></InputSanitaryInsalubrious>
-
+            </div>
+            <div class="ml-12 mt-6">
                 <InputSanitaryComments
                     v-model="input.sanitary_comments"
                 ></InputSanitaryComments>
@@ -84,7 +88,7 @@
             <InputTrashEvacuation
                 v-model="input.trash_evacuation"
             ></InputTrashEvacuation>
-            <div class="ml-12">
+            <div class="ml-12" v-if="input.trash_evacuation === 1">
                 <InputTrashEvacuationRegular
                     v-model="input.trash_evacuation_regular"
                 ></InputTrashEvacuationRegular>
@@ -112,7 +116,7 @@
             <InputFirePreventionMeasures
                 v-model="input.fire_prevention_measures"
             ></InputFirePreventionMeasures>
-            <div class="ml-12">
+            <div class="ml-12" v-if="input.fire_prevention_measures === 1">
                 <InputFirePreventionDiagnostic
                     v-model="input.fire_prevention_diagnostic"
                 ></InputFirePreventionDiagnostic>
@@ -120,9 +124,10 @@
                     v-model="input.fire_prevention_site_accessible"
                 ></InputFirePreventionSiteAccessible>
                 <InputFirePreventionDevices
-                    class="mb-6"
                     v-model="input.fire_prevention_devices"
                 ></InputFirePreventionDevices>
+            </div>
+            <div class="ml-12 mt-6">
                 <InputFirePreventionComments
                     v-model="input.fire_prevention_comments"
                 ></InputFirePreventionComments>
@@ -201,7 +206,7 @@ export default {
             required: true
         },
         population: {
-            type: String
+            type: Object
         }
     },
 
