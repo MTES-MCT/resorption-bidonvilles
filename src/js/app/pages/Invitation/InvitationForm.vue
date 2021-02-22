@@ -1,6 +1,6 @@
 <template>
     <div>
-        <ValidationObserver ref="form" v-slot="{ handleSubmit, errors }">
+        <ValidationObserver ref="form" v-slot="{ handleSubmit }">
             <Form class="mb-8" @submit.prevent="handleSubmit(onSubmit)">
                 <InputGroup class="md:flex">
                     <TextInput
@@ -29,29 +29,12 @@
                         rules="required|email"
                     />
                 </InputGroup>
-                <div
-                    v-if="
-                        Object.values(errors).filter(err => err.length).length
-                    "
-                    class="bg-red-200 p-3 mb-8"
-                >
-                    {{ $t("contactPage.error") }}
-
-                    <ul class="mt-4">
-                        <li
-                            v-for="(error, inputId) in errors"
-                            :key="inputId"
-                            v-show="error.length"
-                        >
-                            <router-link class="link" :to="{ hash: inputId }">{{
-                                error[0]
-                            }}</router-link>
-                        </li>
-                    </ul>
-                </div>
 
                 <div class="flex">
-                    <Button type="submit" variant="primary" size="sm"
+                    <Button
+                        type="submit"
+                        variant="primary"
+                        class="mb-8 -mt-8 md:-mt-12"
                         >{{ $t("invitationPage.add") }}
                     </Button>
                 </div>
