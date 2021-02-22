@@ -362,10 +362,7 @@ export default {
                 // Si l'utilisateur a demandé un accès, on route vers le formulaire d'invitation
                 if (this.isRequestAccessAndActor) {
                     const greeter = {
-                        email: result.email,
-                        first_name: result.first_name,
-                        last_name: result.last_name,
-                        organization_name: result.organization.name
+                        email: result.email
                     };
                     this.$store.commit("saveGreeter", greeter);
                     this.$router.push("/invitation");
