@@ -96,7 +96,7 @@ function handleRequestFailure(callback) {
 function request(method, url, data, headers = {}) {
     const xhr = new XMLHttpRequest();
     const promise = new Promise((success, failure) => {
-        xhr.open(method, `${process.env.VUE_APP_API_URL}${url}`);
+        xhr.open(method, `${RB_ENV.VUE_APP_API_URL}${url}`);
 
         Object.keys(headers).forEach(name => {
             xhr.setRequestHeader(name, headers[name]);
