@@ -254,7 +254,7 @@ export default {
     z-index: 1000;
 }
 .scrollableContainer {
-    height: 500px;
+    max-height: 60vh;
     max-width: 800px;
     overflow-y: auto;
 }
