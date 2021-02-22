@@ -20,7 +20,9 @@
                 v-if="
                     this.value &&
                         details &&
-                        (details.negative.length || details.positive.length)
+                        (details.negative.length ||
+                            details.positive.length ||
+                            details.unknown.length)
                 "
                 class="border border-primary rounded px-8 mt-4"
             >
@@ -39,6 +41,12 @@
                                 details.positive.length > 1 ? "s" : ""
                             }}
                             pour entretenir l'accès
+                        </div>
+                        <div v-else-if="details.unknown.length">
+                            {{ details.unknown.length }} information{{
+                                details.unknown.length > 1 ? "s" : ""
+                            }}
+                            non renseignées
                         </div>
                     </div>
                     <div>
@@ -64,6 +72,11 @@
                             cypressDetailsPrefix + '_details_positive'
                         "
                         :details="details.positive"
+                    />
+                    <TownDetailsPanelLivingConditionsDetails
+                        type="unknown"
+                        :cypressName="cypressDetailsPrefix + '_details_unknown'"
+                        :details="details.unknown"
                     />
                 </div>
             </div>
@@ -109,6 +122,9 @@ export default {
         return {
             collapsed: false
         };
+    },
+    mounted() {
+        console.log(this.details);
     },
     methods: {
         collapse() {

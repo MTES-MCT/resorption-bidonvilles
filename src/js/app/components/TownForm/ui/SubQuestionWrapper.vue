@@ -1,12 +1,13 @@
 <template>
     <div
         :class="[
-            'flex flex-row items-center text-sm border-b border-color-G600 py-1',
-            spaceBetween ? 'justify-between' : ''
+            'flex flex-row items-center  py-1',
+            spaceBetween ? 'justify-between' : '',
+            withoutBorder ? '' : 'border-b border-color-G600'
         ]"
     >
         <div :class="['max-w-2xl', !spaceBetween && 'mr-4']">{{ label }}</div>
-        <div>
+        <div class="flex-shrink-0">
             <slot />
         </div>
     </div>
@@ -21,6 +22,10 @@ export default {
         spaceBetween: {
             type: Boolean,
             default: true
+        },
+        withoutBorder: {
+            type: Boolean,
+            default: false
         }
     }
 };

@@ -5,7 +5,14 @@
             v-model="input"
             cypressName="water_hand_wash_access_number"
             size="sm"
+            class="w-16"
         />
+        <div
+            class="ml-4"
+            v-if="Number(input) > 0 && ratio && population.populationTotal"
+        >
+            Soit 1 bac pour {{ ratio }} personnes
+        </div>
     </div>
 </template>
 
@@ -18,6 +25,9 @@ export default {
             type: String,
             required: false,
             default: ""
+        },
+        population: {
+            type: Object
         }
     },
 
@@ -25,6 +35,14 @@ export default {
         return {
             input: this.value
         };
+    },
+
+    computed: {
+        ratio() {
+            return Math.floor(
+                Number(this.population.populationTotal) / Number(this.input)
+            );
+        }
     },
 
     watch: {

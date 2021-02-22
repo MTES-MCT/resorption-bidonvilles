@@ -3,10 +3,22 @@
         <div class="flex items-center">
             <Icon
                 :class="['mr-1', 'mb-1', 'font-bold', 'text-G600']"
-                :icon="type === 'positive' ? 'check' : 'exclamation-triangle'"
+                :icon="
+                    {
+                        positive: 'check',
+                        negative: 'exclamation-triangle',
+                        unknown: 'question'
+                    }[type]
+                "
             />
             <div class="font-bold">
-                {{ type === "positive" ? "À entretenir" : "À améliorer" }}
+                {{
+                    {
+                        positive: "À entretenir",
+                        negative: "À améliorer",
+                        unknown: "Non renseigné"
+                    }[type]
+                }}
             </div>
         </div>
 

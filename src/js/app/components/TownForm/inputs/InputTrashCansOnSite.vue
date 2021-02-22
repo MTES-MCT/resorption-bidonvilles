@@ -6,6 +6,7 @@
         <InlineTextInput
             size="sm"
             v-model="input"
+            class="w-16"
             cypressName="trash_cans_on_site"
         />
     </SubQuestionWrapper>
