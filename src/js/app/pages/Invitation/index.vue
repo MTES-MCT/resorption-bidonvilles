@@ -26,10 +26,10 @@
                 </div>
             </div>
             <InvitationForm
-                v-on:addGuestReq="addGuestToList($event)"
+                :guestList="guestList"
+                v-on:add-guest-req="addGuestToList($event)"
             ></InvitationForm>
-            <InvitationList v-bind:guestList="guestList"></InvitationList>
-            <div class="flex justify-end space-x-8 -mt-4">
+            <div class="flex justify-end space-x-8">
                 <Button variant="primaryText" @click="omit">{{
                     $t("invitationPage.cancel")
                 }}</Button>
@@ -51,18 +51,22 @@ import { notify } from "#helpers/notificationHelper";
 import PublicLayout from "#app/components/PublicLayout/index.vue";
 import PublicContainer from "#app/components/PublicLayout/PublicContainer.vue";
 import InvitationForm from "./InvitationForm.vue";
-import InvitationList from "./InvitationList";
 
 export default {
     components: {
         PublicContainer,
         PublicLayout,
-        InvitationForm,
-        InvitationList
+        InvitationForm
     },
     data() {
         return {
-            guestList: [],
+            guestList: [
+                {
+                    firstname: "",
+                    lastname: "",
+                    email: ""
+                }
+            ],
             loading: false
         };
     },
@@ -135,11 +139,11 @@ export default {
                 text: "A bientôt."
             });
         },
-        addGuestToList(guest) {
-            this.guestList.push({
-                firstname: guest.firstname,
-                lastname: guest.lastname,
-                email: guest.email
+        addGuestToList() {
+            this.list.push({
+                firstname: "",
+                lastname: "",
+                email: ""
             });
         }
     },
