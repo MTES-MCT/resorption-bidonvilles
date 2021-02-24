@@ -1,6 +1,6 @@
 <template>
     <SubQuestionWrapper
-        label="Est-ce que des dispositifs spécifiques (formation, extincteurs...) ont été mises en place ?"
+        label="Est-ce que des dispositifs spécifiques (formation, extincteurs...) ont été mis en place ?"
     >
         <CheckableGroup direction="row" withoutMargin>
             <Radio

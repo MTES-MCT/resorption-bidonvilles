@@ -3,28 +3,19 @@
         <div class="flex items-center">
             <Icon
                 :class="['mr-1', 'mb-1', 'font-bold', 'text-G600']"
-                :icon="
-                    {
-                        positive: 'check',
-                        negative: 'exclamation-triangle',
-                        unknown: 'question'
-                    }[type]
-                "
+                :icon="icon"
             />
             <div class="font-bold">
-                {{
-                    {
-                        positive: "À entretenir",
-                        negative: "À améliorer",
-                        unknown: "Non renseigné"
-                    }[type]
-                }}
+                {{ wording }}
             </div>
         </div>
 
         <ul class="list-disc ml-10" :data-cy-data="cypressName">
             <li v-for="(item, index) in details" :key="index">
-                {{ item }}
+                {{ item.text }}
+                <span class="italic">{{
+                    item.info ? `- ${item.info}` : ""
+                }}</span>
             </li>
         </ul>
     </div>
@@ -41,6 +32,22 @@ export default {
         },
         cypressName: {
             type: String
+        }
+    },
+    computed: {
+        icon() {
+            return {
+                positive: "check",
+                negative: "exclamation-triangle",
+                unknown: "question"
+            }[this.type];
+        },
+        wording() {
+            return {
+                positive: "À entretenir",
+                negative: "À améliorer",
+                unknown: "Non renseigné"
+            }[this.type];
         }
     }
 };

@@ -30,24 +30,34 @@
                     class="border-b-2 border-G200 py-2 font-bold text-primary flex items-center justify-between"
                 >
                     <div>
-                        <div v-if="details.negative.length">
+                        <span v-if="details.negative.length">
                             {{ details.negative.length }} action{{
                                 details.negative.length > 1 ? "s" : ""
                             }}
                             pour améliorer l'accès
-                        </div>
-                        <div v-else-if="details.positive.length">
+                        </span>
+                        <span v-else-if="details.positive.length">
                             {{ details.positive.length }} action{{
                                 details.positive.length > 1 ? "s" : ""
                             }}
                             pour entretenir l'accès
-                        </div>
-                        <div v-else-if="details.unknown.length">
+                        </span>
+                        <span
+                            v-if="
+                                details.unknown.length &&
+                                    (details.negative.length ||
+                                        details.positive.length)
+                            "
+                            >et</span
+                        >
+                        <span v-if="details.unknown.length">
                             {{ details.unknown.length }} information{{
                                 details.unknown.length > 1 ? "s" : ""
                             }}
-                            non renseignées
-                        </div>
+                            non renseignée{{
+                                details.unknown.length > 1 ? "s" : ""
+                            }}
+                        </span>
                     </div>
                     <div>
                         <Button
@@ -122,9 +132,6 @@ export default {
         return {
             collapsed: false
         };
-    },
-    mounted() {
-        console.log(this.details);
     },
     methods: {
         collapse() {
