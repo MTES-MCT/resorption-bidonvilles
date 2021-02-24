@@ -14,7 +14,7 @@ export default {
             validator: prop => typeof prop === "boolean" || prop === null
         },
         details: {
-            type: Array
+            type: Object
         },
         inverted: {
             type: Boolean

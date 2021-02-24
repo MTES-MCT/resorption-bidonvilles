@@ -19,7 +19,7 @@ export default {
     components: { InlineTextInput, SubQuestionWrapper },
     props: {
         value: {
-            type: String,
+            type: [String, Number],
             required: false,
             default: ""
         }

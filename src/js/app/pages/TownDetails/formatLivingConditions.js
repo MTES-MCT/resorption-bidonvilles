@@ -57,7 +57,6 @@ export function formatLivingConditions(town) {
     // Distance du point d'eau
     const wordingWaterDistance = "Accès situé sur site ou à moins de 20 mètres";
     if (town.waterDistance !== null) {
-        // TODO: Fix water distance type
         town.waterDistance <= 20
             ? result.water.positive.push({ text: wordingWaterDistance })
             : result.water.negative.push({
@@ -115,7 +114,6 @@ export function formatLivingConditions(town) {
                       Number(town.waterHandWashAccessNumber)
               )
             : null;
-    console.log("water ratio", waterHandWashAccessPopulationRatio);
     const wordingRatio = waterHandWashAccessPopulationRatio
         ? ` - soit 1 bac de lavage pour ${waterHandWashAccessPopulationRatio} personnes`
         : "";

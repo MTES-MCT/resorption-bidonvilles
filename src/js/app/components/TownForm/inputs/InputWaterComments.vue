@@ -33,7 +33,6 @@ export default {
     },
 
     data() {
-        console.log(this.rules);
         return {
             input: this.value
         };
