@@ -12,15 +12,12 @@
 
 <script>
 import { extend } from "vee-validate";
+import { required } from "vee-validate/dist/rules";
 
 extend("waterComments", {
-    validate(value) {
-        return {
-            required: true,
-            valid: ["", null, undefined].indexOf(value) === -1
-        };
-    },
-    message: "Le champ est obligatoire lorsque le point d'eau est public."
+    ...required,
+    message:
+        "Le champ modalités d'accès a l'eau est obligatoire si le point d'eau est public"
 });
 
 export default {
@@ -36,6 +33,7 @@ export default {
     },
 
     data() {
+        console.log(this.rules);
         return {
             input: this.value
         };

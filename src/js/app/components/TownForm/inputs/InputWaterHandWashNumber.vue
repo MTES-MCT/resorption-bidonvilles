@@ -1,5 +1,5 @@
 <template>
-    <div class="flex items-center text-sm">
+    <div class="flex items-center">
         <div class="mr-4">Nombre de bacs</div>
         <InlineTextInput
             v-model="input"

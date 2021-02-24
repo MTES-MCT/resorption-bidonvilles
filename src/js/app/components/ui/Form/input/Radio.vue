@@ -40,7 +40,7 @@
             />
             <slot :isChecked="isChecked">
                 <div class="ml-2">
-                    <div class="text-sm">{{ label }}</div>
+                    <div>{{ label }}</div>
                     <div v-if="info" class="text-xs">{{ info }}</div>
                 </div>
             </slot>
