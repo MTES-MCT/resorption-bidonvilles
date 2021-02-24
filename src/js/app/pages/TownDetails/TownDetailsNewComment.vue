@@ -21,7 +21,7 @@
                 <Button variant="primaryText" @click="cancelComment"
                     >Annuler</Button
                 >
-                <Button variant="primary" @click="addComment">Valider</Button>
+                <Button variant="tertiary" @click="addComment">Valider</Button>
             </div>
         </div>
     </div>
