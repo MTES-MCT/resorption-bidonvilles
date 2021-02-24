@@ -158,13 +158,13 @@
                         {{ lastUpdate }}
                     </Tag>
                     <div class="print:hidden">
-                        <transition name="fade">
+                        <transition name="fade" v-if="isOpen">
                             <router-link
                                 v-if="isHover"
-                                :to="`site/${shantytown.id}`"
+                                :to="`site/${shantytown.id}/mise-a-jour`"
                             >
                                 <Button
-                                    variant="secondaryText"
+                                    variant="primaryText"
                                     icon="pen"
                                     iconPosition="left"
                                     class="text-display-sm hover:underline -mb-1"
@@ -243,6 +243,9 @@ export default {
         }
     },
     computed: {
+        isOpen() {
+            return this.shantytown.status === "open";
+        },
         lastUpdate() {
             const { days, months, weeks } = getSince(this.shantytown.updatedAt);
 
