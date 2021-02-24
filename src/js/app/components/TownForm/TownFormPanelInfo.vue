@@ -10,13 +10,12 @@
             ><Icon :icon="togglerIcon" class="cursor-pointer"></Icon
         ></span>
         <transition name="toggle" mode="out-in">
-            <div class="bg-yellow-200 text-sm p-6 mt-2 flex" v-if="visible">
-                Un site est un bidonville, squat ou immeuble bâti occupé de
-                manière informelle à des fins d'habitation par plusieurs
-                familles ou personnes. Il se caractérise généralement par
-                l'absence de services de base : eau, électricité, gestion des
-                déchets. La plateforme permet de recenser tous les sites,
-                quelque soit l'origine des personnes et leur nombre.
+            <div class="bg-yellow-200 p-6 mt-2 flex" v-if="visible">
+                Un site est un bidonville ou squat occupé de manière informelle
+                à des fins d'habitation par plusieurs familles ou personnes, les
+                services de base (eau, électricité, gestion des déchets…) y sont
+                généralement absents. Tous les sites, quelque soit l'origine et
+                le nombre des personnes, peuvent être renseignés.
             </div>
         </transition>
     </div>
