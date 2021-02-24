@@ -122,7 +122,7 @@ export default {
             type: String
         },
         details: {
-            type: Array
+            type: Object
         },
         inverted: {
             type: Boolean
