@@ -488,6 +488,20 @@ const router = new VueRouter({
             path: "/annuaire/:id?",
             component: Directory,
             beforeEnter: guardians.loadedAndUpToDate
+        },
+        {
+            path: "/fiches-hebergement-logement-adapte",
+            beforeEnter(to, from, next) {
+                window.open("/doc/fiches-hebergement-logement-adapte.pdf");
+                next(false);
+            }
+        },
+        {
+            path: "/fiche-bidonvilles-maraudes",
+            beforeEnter(to, from, next) {
+                window.open("/doc/fiche-bidonvilles-maraudes.pdf");
+                next(false);
+            }
         }
     ]
 });

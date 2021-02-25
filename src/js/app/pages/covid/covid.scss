@@ -81,5 +81,18 @@
     .switch {
         margin-top: 50px;
     }
+
+    .headerWithPdfLinks {
+        text-align: right;
+        margin-bottom: 20px;
+
+        > .button {
+            margin-left: 15px;
+        }
+
+        > a {
+            vertical-align: middle;
+        }
+    }
 }
 
