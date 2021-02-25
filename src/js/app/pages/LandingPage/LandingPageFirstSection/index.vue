@@ -5,8 +5,8 @@
             src="./assets/resorption-bidonvilles-dessin.png"
         />
         <!-- Section provisoire pour events du 9/3/2021 -->
-        <EventNewPlatform></EventNewPlatform>
-        <EventTutorial></EventTutorial>
+        <EventNewPlatform v-if="$i18n.locale === 'fr'"></EventNewPlatform>
+        <EventTutorial v-if="$i18n.locale === 'fr'"></EventTutorial>
         <!-- Fin de la section provisoire pour event du 9/3/2021 -->
         <div class="max-w-screen-sm mx-auto mt-8">
             <LandingPageResponsiveEmbed>
