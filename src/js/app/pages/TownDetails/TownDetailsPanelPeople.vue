@@ -159,17 +159,17 @@ export default {
         },
         socialOrigin(origin) {
             if (origin.id === 1) {
-                return { id: 1, label: origin.label, img: flagFR };
+                return { id: 1, label: "Français", img: flagFR };
             }
 
             if (origin.id === 2) {
-                return { id: 2, label: origin.label, img: flagEU };
+                return { id: 2, label: "Union européenne", img: flagEU };
             }
 
             if (origin.id === 3) {
                 return {
                     id: 3,
-                    label: origin.label,
+                    label: "Hors Union européenne",
                     img: flagExtraCommunautaires
                 };
             }

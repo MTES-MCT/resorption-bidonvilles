@@ -16,10 +16,16 @@
                     <div class="font-bold mt-2">{{ location.label }}</div>
                 </div>
                 <div class="ml-16">
-                    <Button variant="primaryOutline" @click="close">
+                    <Button variant="primaryText" @click="close">
                         Annuler</Button
                     >
-                    <Button @click="download" class="ml-6">Exporter</Button>
+                    <Button
+                        @click="download"
+                        class="ml-6"
+                        icon="file-excel"
+                        iconPosition="left"
+                        >Exporter</Button
+                    >
                 </div>
             </div>
         </template>

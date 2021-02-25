@@ -24,6 +24,10 @@
         //- state: loaded
         <section v-if="state === 'loaded'" class="section section-white">
             <div class="container">
+                <header class="headerWithPdfLinks">
+                    <router-link to="/fiches-hebergement-logement-adapte" class="link"><font-awesome-icon icon="file-pdf"></font-awesome-icon> &nbsp;Fiches hébergement et logement adapté</router-link>&emsp;
+                    <router-link to="/fiche-bidonvilles-maraudes" class="link"><font-awesome-icon icon="file-pdf"></font-awesome-icon> &nbsp;Fiche bidonvilles et maraudes</router-link>
+                </header>
                 <header>
                     <div>
                         <hgroup>
