@@ -98,6 +98,10 @@ export default {
             required: false,
             type: String,
             default: undefined
+        },
+        disabled: {
+            required: false,
+            type: String
         }
     },
     computed: {
