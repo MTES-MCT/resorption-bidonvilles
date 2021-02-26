@@ -5,8 +5,13 @@
         class="invitation"
     >
         <div class="bg-corail full-width text-center py-8">
-            <div class="max-w-3xl mx-auto">
-                <h1 class="text-display-lg text-white ">
+            <div class="mx-6 max-w-3xl md:mx-auto">
+                <h1
+                    class="text-display-md
+                           text-white 
+                           md:text-white 
+                           md:text-display-lg"
+                >
                     {{ $t("invitationPage.title") }}
                 </h1>
             </div>
@@ -26,13 +31,16 @@
                 </div>
             </div>
             <InvitationForm
-                :guestList="guestList"
-                v-on:add-guest-req="addGuestToList($event)"
+                v-on:addGuestReq="addGuestToList($event)"
             ></InvitationForm>
-            <div class="flex justify-end space-x-8">
-                <Button variant="primaryText" @click="omit">{{
-                    $t("invitationPage.cancel")
-                }}</Button>
+            <InvitationCardStack
+                v-bind:guestList="guestList"
+                @delete-guest="deleteGuest"
+            ></InvitationCardStack>
+            <div class="flex justify-end space-x-8 mt-8">
+                <Button variant="primaryText" :loading="loading" @click="omit">
+                    {{ $t("invitationPage.cancel") }}
+                </Button>
                 <Button
                     variant="primary"
                     :loading="loading"
@@ -51,22 +59,18 @@ import { notify } from "#helpers/notificationHelper";
 import PublicLayout from "#app/components/PublicLayout/index.vue";
 import PublicContainer from "#app/components/PublicLayout/PublicContainer.vue";
 import InvitationForm from "./InvitationForm.vue";
+import InvitationCardStack from "./InvitationCardStack";
 
 export default {
     components: {
         PublicContainer,
         PublicLayout,
-        InvitationForm
+        InvitationForm,
+        InvitationCardStack
     },
     data() {
         return {
-            guestList: [
-                {
-                    firstname: "",
-                    lastname: "",
-                    email: ""
-                }
-            ],
+            guestList: [],
             loading: false
         };
     },
@@ -139,12 +143,15 @@ export default {
                 text: "A bientôt."
             });
         },
-        addGuestToList() {
-            this.list.push({
-                firstname: "",
-                lastname: "",
-                email: ""
+        addGuestToList(guest) {
+            this.guestList.push({
+                firstname: guest.firstname,
+                lastname: guest.lastname,
+                email: guest.email
             });
+        },
+        deleteGuest(index) {
+            this.guestList.splice(index, 1);
         }
     },
     created() {
@@ -156,8 +163,6 @@ export default {
             this.backHomeWithErrMsg(
                 "Les données concernant l'utilisateur à l'origine de l'invitation sont introuvables"
             );
-        } else {
-            console.log("greeter vaut " + JSON.stringify(this.greeter));
         }
     }
 };
