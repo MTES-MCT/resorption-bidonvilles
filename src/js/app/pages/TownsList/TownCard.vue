@@ -53,7 +53,7 @@
                             v-if="shantytown.populationTotal === null"
                             class="font-bold"
                         >
-                            Population inconnue
+                            Population : inconnu
                         </div>
                         <div v-else class="text-lg font-bold flex items-center">
                             <div class="mr-2">
@@ -77,7 +77,7 @@
                                 v-if="!shantytown.socialOrigins.length"
                                 class="text-G600"
                             >
-                                Origine : inconnue
+                                Origine : inconnu
                             </div>
                             <div
                                 class="flex"

@@ -72,7 +72,7 @@
                             v-if="!town.socialOrigins.length"
                             class="text-G600"
                         >
-                            inconnue
+                            inconnu
                         </div>
                         <div
                             class="flex items-center"
