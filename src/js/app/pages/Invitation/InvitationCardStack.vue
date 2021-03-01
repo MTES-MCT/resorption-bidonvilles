@@ -1,7 +1,7 @@
 <template>
-    <div class="flex flex-col md:flex-wrap md:flex-row mt-2 justify-center">
+    <div class="grid grid-cols-1 grid-col-dense md:grid-cols-3 xl:grid-cols-4">
         <div v-for="(guest, index) in this.guestList" v-bind:key="index">
-            <div class="max-w-xl md:mr-1 p-2">
+            <div class="pb-2 md:mr-4 md:mb-4">
                 <div class="shadow-lg">
                     <div
                         class="px-4 py-4 bg-white border-1 border-gray-200 font-bold"

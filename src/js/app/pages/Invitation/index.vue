@@ -17,7 +17,7 @@
             </div>
         </div>
         <PublicContainer class="py-4">
-            <div class="max-w-xl mx-auto">
+            <div class="mx-auto">
                 <div class="mx-auto pb-8">
                     <div class="mt-8">
                         <span class="font-bold">{{
