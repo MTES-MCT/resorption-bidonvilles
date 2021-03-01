@@ -11,7 +11,11 @@
             >
                 <div class="text-primary">
                     <div class="text-display-md text-primary">
-                        Exporter les sites existants
+                        {{
+                            closedTowns
+                                ? "Exporter les sites fermés"
+                                : "Exporter les sites existants"
+                        }}
                     </div>
                     <div class="font-bold mt-2">{{ location.label }}</div>
                 </div>
@@ -82,12 +86,6 @@ export default {
     data() {
         return {
             existingOptions: [
-                {
-                    id: "priority",
-                    label: "Priorité",
-                    description: "(1, 2, 3)",
-                    closedTowns: false
-                },
                 {
                     id: "address_details",
                     label: "Informations d'accès au site et coordonnées GPS",
