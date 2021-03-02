@@ -2,35 +2,35 @@
     <div>
         <ValidationObserver ref="form" v-slot="{ handleSubmit }">
             <Form class="mb-2" @submit.prevent="handleSubmit(onSubmit)">
-                <InputGroup class="md:flex">
+                <InputGroup class="md:flex md:justify-center">
                     <TextInput
-                        class="md:mr-4 md:w-1/2"
+                        class="md:mr-4 md:w-1/4"
                         :label="$t('invitationPage.firstname')"
                         v-model="commonFields.firstname"
                         id="first_name"
                         name="Prénom"
-                        rules="required"
+                        rules="required|max:50"
                     />
                     <TextInput
-                        class="md:mr-4 md:w-1/2"
+                        class="md:mr-4 md:w-1/4"
                         :label="$t('invitationPage.lastname')"
                         v-model="commonFields.lastname"
                         id="last_name"
                         name="Nom de famille"
-                        rules="required"
+                        rules="required|max:50"
                     />
                     <TextInput
-                        class="md:w-1/2"
+                        class="md:w-1/4"
                         :label="$t('invitationPage.email')"
                         v-model="commonFields.email"
                         id="email"
                         name="Email"
                         validationName="Email"
-                        rules="required|email"
+                        rules="required|max:125|email"
                     />
                 </InputGroup>
 
-                <div class="flex">
+                <div class="flex flex-row-reverse">
                     <Button
                         type="submit"
                         variant="primary"
