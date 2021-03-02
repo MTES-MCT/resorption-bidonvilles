@@ -268,6 +268,13 @@ Cypress.Commands.add("fillCreateTown", shantytown => {
         );
     }
 
+    // access to sanitary
+    if (shantytown.access_to_sanitary) {
+        cy.get(
+            `[data-cy-field="access_to_sanitary"][data-cy-label="${shantytown.access_to_sanitary}"]`
+        ).myCheck();
+    }
+
     // sanitary_number
     if (shantytown.sanitary_number) {
         cy.get(`[data-cy-field="sanitary_number"]`).type(
@@ -286,6 +293,13 @@ Cypress.Commands.add("fillCreateTown", shantytown => {
     if (shantytown.sanitary_on_site) {
         cy.get(
             `[data-cy-field="sanitary_on_site"][data-cy-label="${shantytown.sanitary_on_site}"]`
+        ).myCheck();
+    }
+
+    // trash evacuation
+    if (shantytown.trash_evacuation) {
+        cy.get(
+            `[data-cy-field="trash_evacuation"][data-cy-label="${shantytown.trash_evacuation}"]`
         ).myCheck();
     }
 
@@ -366,25 +380,11 @@ Cypress.Commands.add("fillCreateTown", shantytown => {
         );
     }
 
-    // access to sanitary
-    if (shantytown.access_to_sanitary) {
-        cy.get(
-            `[data-cy-field="access_to_sanitary"][data-cy-label="${shantytown.access_to_sanitary}"]`
-        ).myCheck();
-    }
-
     // sanitary comments
     if (shantytown.sanitary_comments) {
         cy.get('[data-cy-field="sanitary_comments"]').type(
             shantytown.sanitary_comments
         );
-    }
-
-    // trash evacuation
-    if (shantytown.trash_evacuation) {
-        cy.get(
-            `[data-cy-field="trash_evacuation"][data-cy-label="${shantytown.trash_evacuation}"]`
-        ).myCheck();
     }
 
     // owner complaint
@@ -448,5 +448,10 @@ Cypress.Commands.add("fillCreateTown", shantytown => {
         cy.get("[data-cy-field='police_granted_at']").chooseDate(
             shantytown.police_granted_at
         );
+    }
+
+    // bailiff
+    if (shantytown.bailiff) {
+        cy.get('[data-cy-field="bailiff"]').type(shantytown.bailiff);
     }
 });

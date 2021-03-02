@@ -117,19 +117,19 @@ Cypress.Commands.add("checkShantytownDetails", shantytown => {
         shantytown.minors_in_school !== null ? shantytown.minors_in_school : "-"
     );
 
-    if (shantytown.social_origins.length > 0) {
+    if (shantytown.social_origins_details.length > 0) {
         cy.get("[data-cy-data='social_origins'] div").should(
             "have.length",
-            shantytown.social_origins.length
+            shantytown.social_origins_details.length
         );
-        shantytown.social_origins.forEach(label => {
+        shantytown.social_origins_details.forEach(label => {
             cy.get("[data-cy-data='social_origins'] div").should(
                 "contain",
                 label
             );
         });
     } else {
-        cy.get("[data-cy-data='social_origins']").should("contain", "inconnue");
+        cy.get("[data-cy-data='social_origins']").should("contain", "inconnu");
     }
 
     cy.get("[data-cy-data='census_status']").should(
@@ -288,6 +288,40 @@ Cypress.Commands.add("checkShantytownDetails", shantytown => {
         cy.get("[data-cy-data='vermin_comments']").should("not.exist");
     }
 
+    if (shantytown.fire_details && shantytown.fire_details.positive) {
+        cy.get(`[data-cy-data='fire_prevention_details_positive']`)
+            .children()
+            .should("have.length", shantytown.fire_details.positive.length);
+
+        shantytown.fire_details.positive.forEach((item, i) => {
+            cy.get(
+                `[data-cy-data='fire_prevention_details_positive'] li:nth-child(${i +
+                    1})`
+            ).should("contain", shantytown.fire_details.positive[i]);
+        });
+    } else {
+        cy.get("[data-cy-data='fire_prevention_details_positive']").should(
+            "not.exist"
+        );
+    }
+
+    if (shantytown.fire_details && shantytown.fire_details.negative) {
+        cy.get(`[data-cy-data='fire_prevention_details_negative']`)
+            .children()
+            .should("have.length", shantytown.fire_details.negative.length);
+
+        shantytown.fire_details.negative.forEach((item, i) => {
+            cy.get(
+                `[data-cy-data='fire_prevention_details_negative'] li:nth-child(${i +
+                    1})`
+            ).should("contain", shantytown.fire_details.negative[i]);
+        });
+    } else {
+        cy.get("[data-cy-data='fire_prevention_details_negative']").should(
+            "not.exist"
+        );
+    }
+
     cy.get("[data-cy-data='fire_prevention_measures']").should(
         "contain",
         shantytown.fire_prevention_measures.toLowerCase()
@@ -327,9 +361,8 @@ Cypress.Commands.add("checkShantytownDetails", shantytown => {
         shantytown.police_status_plain
     );
 
-    // TODO: Investigate why
-    // cy.get("[data-cy-data='bailiff']").should(
-    //     "contain",
-    //     shantytown.bailiff || "NC"
-    // );
+    cy.get("[data-cy-data='bailiff']").should(
+        "contain",
+        shantytown.bailiff || "NC"
+    );
 });

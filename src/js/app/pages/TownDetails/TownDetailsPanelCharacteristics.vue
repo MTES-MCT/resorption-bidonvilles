@@ -73,7 +73,7 @@
                         <div class="font-bold">
                             Coordonnées GPS
                         </div>
-                        <div data-cy-data="address_details">
+                        <div data-cy-data="address_gps">
                             Lat {{ town.latitude }}, Long
                             {{ town.longitude }}
                         </div>

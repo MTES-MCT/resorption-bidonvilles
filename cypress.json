@@ -1,4 +1,6 @@
 {
     "baseUrl": "http://localhost:1234",
-    "pluginsFile": false
+    "pluginsFile": false,
+    "video": false,
+    "numTestsKeptInMemory": 0
 }
