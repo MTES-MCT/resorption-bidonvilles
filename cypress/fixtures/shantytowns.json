@@ -32,6 +32,7 @@
             "Ressortissants français",
             "Ressortissants extracommunautaires"
         ],
+        "social_origins_details": ["Français", "Hors Union européenne"],
         "access_to_water": "Oui",
         "water_comments": "Commentaire\nmouillé",
         "access_to_sanitary": "Oui",
@@ -64,43 +65,48 @@
         "water_hand_wash_access": "Oui",
         "water_hand_wash_access_number": "3",
         "water_details": {
-            "positive":[
+            "positive": [
                 "Eau potable",
                 "Accès continu, c’est-à-dire qu’il ne varie pas en qualité et quantité dans la journée et les saisons, sans limite dans le temps",
                 "Accès situé sur site ou à moins de 20 mètres",
                 "Accès pour tous les habitants",
-                "3 bacs de lavage des mains"
+                "3 bacs de lavage des mains - soit 1 bac de lavage pour 10 personnes - il est conseillé au moins 1 bac de lavage pour 20 personnes"
             ],
             "negative": [
                 "Point d'eau public",
                 "Franchissement de rue ou route nécessaire",
                 "Eaux stagnantes autour du point de distribution"
             ]
-        } ,
+        },
         "sanitary_number": "5",
         "sanitary_insalubrious": "Oui",
         "sanitary_on_site": "Oui",
         "sanitary_details": {
             "positive": [
-                "Accès sur site"
+                "Accès sur site",
+                "5 toilettes - soit 1 toilette pour 6 personnes - il est conseillé au moins 1 toilette pour 20 personnes"
             ],
-            "negative": [
-                "Marques de défecation à l’air libre"
-            ]
+            "negative": ["Marques de défecation à l’air libre"]
         },
         "trash_cans_on_site": "5",
         "trash_accumulation": "Oui",
         "trash_evacuation_regular": "Oui",
         "trash_details": {
             "positive": [
-                "Collecte régulière des poubelles / bennes. C’est-à-dire au moins une fois par semaine, à partir d’un point de dépôt spécialement aménagé sur le site ou à proximité immédiate."
+                "5 poubelles / bennes sont à proximité immédiate du site (moins de 100 mètres) - soit 1 pour 6 personnes",
+                "Collecte régulière des poubelles / bennes. C’est-à-dire au moins une fois par semaine, à partir d’un point de dépôt spécialement aménagé sur le site ou à proximité immédiate"
             ],
-            "negative": [
-                "Accumulation de déchets sur le site ou aux abords."
-            ]
+            "negative": ["Accumulation de déchets sur le site ou aux abords"]
         },
         "vermin": "Oui",
         "vermin_comments": "Présence de nuisibles sur le site",
+        "fire_details": {
+            "positive": [
+                "Diagnostic prévention incendie par le SDIS réalisé",
+                "Mesures spécifiques en place",
+                "Site accessible aux pompiers"
+            ]
+        },
         "fire_prevention_measures": "Oui",
         "fire_prevention_diagnostic": "Oui",
         "fire_prevention_site_accessible": "Oui",
@@ -136,6 +142,7 @@
         "population_minors_16_18": null,
         "minors_in_school": null,
         "social_origins": [],
+        "social_origins_details": [],
         "access_to_water": "Inconnu",
         "water_comments": null,
         "access_to_sanitary": "Inconnu",
@@ -167,7 +174,7 @@
         "water_stagnant_water": null,
         "water_hand_wash_access": null,
         "water_hand_wash_access_number": null,
-        "water_details": null ,
+        "water_details": null,
         "sanitary_number": null,
         "sanitary_insalubrious": null,
         "sanitary_on_site": null,

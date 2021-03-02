@@ -34,7 +34,12 @@
             </div>
             <div class="ml-12 mt-6">
                 <InputWaterComments
-                    :rules="input.water_public_point > 0 ? 'required' : ''"
+                    :rules="
+                        input.access_to_water === 1 &&
+                        input.water_public_point > 0
+                            ? 'required'
+                            : ''
+                    "
                     v-model="input.water_comments"
                 ></InputWaterComments>
             </div>
