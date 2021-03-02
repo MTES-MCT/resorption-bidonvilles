@@ -39,19 +39,13 @@
                     Les données exportées par défaut
                 </div>
                 <ul>
-                    <li>- Localisation : département, commune, adresse</li>
+                    <li>- Localisation</li>
                     <li>
-                        - Site : type de site (terrain / bâti), date
-                        d’installation, date de signalement
+                        - Caractéristiques du site
                     </li>
                     <li>
-                        - Habitants : nombre de personnes, mineurs, ménages et
-                        origines
+                        - Habitants
                     </li>
-                    <li v-if="closedTowns">
-                        - Orientations des ménages après la fermeture
-                    </li>
-                    <li>- Date de la dernière mise à jour</li>
                 </ul>
             </div>
             <div class="mt-4">
@@ -93,24 +87,19 @@ export default {
                 },
                 {
                     id: "owner",
-                    label: "Propriétaire",
-                    description: ": type et identité"
+                    label: "Propriétaire"
                 },
                 {
                     id: "life_conditions",
-                    label: "Conditions de vie",
-                    description:
-                        ": accès à l'électricité, l'eau, toilettes, évacuation des déchets"
+                    label: "Conditions de vie"
                 },
                 {
                     id: "demographics",
-                    label: "Diagnostic",
-                    description: ": statut, date, et service en charge"
+                    label: "Diagnostic"
                 },
                 {
                     id: "justice",
                     label: "Procédures judiciaires",
-                    description: ": statut et date des étapes",
                     permission: {
                         entity: "shantytown",
                         feature: "export",
