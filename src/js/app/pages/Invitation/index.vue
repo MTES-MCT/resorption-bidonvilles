@@ -17,7 +17,7 @@
             </div>
         </div>
         <PublicContainer class="py-4">
-            <div class="mx-auto">
+            <div class="max-w-xl mx-auto">
                 <div class="mx-auto pb-8">
                     <div class="mt-8">
                         <span class="font-bold">{{
@@ -33,6 +33,14 @@
             <InvitationForm
                 v-on:addGuestReq="addGuestToList($event)"
             ></InvitationForm>
+            <div
+                v-if="this.guestList.length > 0"
+                class="text-display-md text-primary md:mb-8"
+            >
+                Personne{{ this.guestList.length > 1 ? "s" : "" }} invitée{{
+                    this.guestList.length > 1 ? "s" : ""
+                }}
+            </div>
             <InvitationCardStack
                 v-bind:guestList="guestList"
                 @delete-guest="deleteGuest"
