@@ -55,10 +55,11 @@ export function formatLivingConditions(town) {
     }
 
     // Distance du point d'eau
-    const wordingWaterDistance = "Accès situé sur site ou à moins de 20 mètres";
     if (town.waterDistance !== null) {
-        town.waterDistance <= 20
-            ? result.water.positive.push({ text: wordingWaterDistance })
+        town.waterDistance === "0-20"
+            ? result.water.positive.push({
+                  text: "Accès situé sur site ou à moins de 20 mètres"
+              })
             : result.water.negative.push({
                   text: "Accès situé à plus de 20 mètres"
               });

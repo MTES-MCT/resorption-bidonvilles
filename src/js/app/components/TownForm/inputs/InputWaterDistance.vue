@@ -4,28 +4,28 @@
             <Radio
                 label="sur site ou à moins de 20 mètres"
                 v-model="checked"
-                :checkValue="0"
+                checkValue="0-20"
                 type="checkbox"
                 cypressName="water_distance"
             ></Radio>
             <Radio
                 label="entre 20 et 50 mètres du site"
                 v-model="checked"
-                :checkValue="20"
+                checkValue="20-50"
                 type="checkbox"
                 cypressName="water_distance"
             ></Radio>
             <Radio
                 label="entre 50 et 100 mètres du site"
                 v-model="checked"
-                :checkValue="50"
+                checkValue="50-100"
                 type="checkbox"
                 cypressName="water_distance"
             ></Radio>
             <Radio
                 label="à plus de 100 mètres du site"
                 v-model="checked"
-                :checkValue="100"
+                checkValue="100+"
                 type="checkbox"
                 cypressName="water_distance"
             ></Radio>
