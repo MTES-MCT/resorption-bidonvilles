@@ -327,22 +327,17 @@ Cypress.Commands.add("fillEditTown", shantytown => {
         }
 
         // water_hand_wash_access_number
-        cy.get("body").then($element => {
-            if (
-                $element.find('[data-cy-field="water_hand_wash_access_number"]')
-                    .length > 0
-            ) {
-                if (shantytown.water_hand_wash_access_number) {
-                    cy.get(
-                        `[data-cy-field="water_hand_wash_access_number"]`
-                    ).typeReplace(shantytown.water_hand_wash_access_number);
-                } else {
-                    cy.get(
-                        `[data-cy-field="water_hand_wash_access_number"]`
-                    ).clear();
-                }
+        if (shantytown.water_hand_wash_access) {
+            if (shantytown.water_hand_wash_access_number) {
+                cy.get(
+                    `[data-cy-field="water_hand_wash_access_number"]`
+                ).typeReplace(shantytown.water_hand_wash_access_number);
+            } else {
+                cy.get(
+                    `[data-cy-field="water_hand_wash_access_number"]`
+                ).clear();
             }
-        });
+        }
     }
 
     // water comments
