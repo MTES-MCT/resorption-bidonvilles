@@ -404,10 +404,13 @@ export default {
 
                 const result = await this.submitFn({
                     ...this.town.living_conditions,
-                    water_hand_wash_access_number: this.strToInt(
-                        this.town.living_conditions
-                            .water_hand_wash_access_number
-                    ),
+                    water_hand_wash_access_number: this.town.living_conditions
+                        .water_hand_wash_access
+                        ? this.strToInt(
+                              this.town.living_conditions
+                                  .water_hand_wash_access_number
+                          )
+                        : null,
                     trash_cans_on_site: this.strToInt(
                         this.town.living_conditions.trash_cans_on_site
                     ),
