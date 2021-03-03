@@ -9,16 +9,16 @@
                 <form>
                     <p class="-mt-6">
                         Favorisez la synergie entre les acteurs en invitant un
-                        intervenant. Un courriel lui sera envoyé pour l’informer
-                        de votre invitation.
+                        intervenant, un courriel lui sera envoyé.
                     </p>
                     <div class="mt-4">
                         <p>
                             <span class="font-bold"
-                                >L'intervenant est utilisateur de la plateforme
-                                Résorption-bidonvilles ?</span
+                                >L'intervenant est-il un utilisateur de la
+                                plateforme Résorption-bidonvilles ?</span
                             ><br />
-                            Sélectionnez-le dans cette liste
+                            Cherchez le nom de la personne en tapant au minimum
+                            les premières lettre de son nom ou prénom
                         </p>
 
                         <div class="w-128">
@@ -40,7 +40,7 @@
                             <span class="font-bold"
                                 >L'intervenant n'est pas présent dans cette
                                 liste ?</span
-                            ><br />Invitez le
+                            ><br />Saisissez son courriel pour l'inviter
                         </p>
 
                         <TextInput
