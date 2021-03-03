@@ -36,7 +36,7 @@
                     </div>
 
                     <div class="w-128">
-                        <p class="mb-4">
+                        <p class="mb-2">
                             <span class="font-bold"
                                 >L'intervenant n'est pas présent dans cette
                                 liste ?</span
