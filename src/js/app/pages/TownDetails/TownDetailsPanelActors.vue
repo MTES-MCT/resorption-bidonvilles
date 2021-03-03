@@ -10,10 +10,14 @@
 
                 <div v-if="town.actors.length === 0" class="mt-2 mb-4">
                     <p>Aucun intervenant connu sur ce site.</p>
-                    <TownDetailsInviteActorButton
-                        class="-ml-4"
-                        @showInviteActorModal="$emit('showInviteActorModal')"
-                    />
+                    <Button
+                        class="font-bold mt-4 mb-2"
+                        variant="primaryOutlineAlt"
+                        icon="plus"
+                        iconPosition="left"
+                        @click="$emit('showInviteActorModal')"
+                        >Inviter un autre intervenant</Button
+                    >
                 </div>
                 <div v-else class="grid grid-cols-2 mt-4">
                     <TownDetailsSelfCard
