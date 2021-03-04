@@ -87,10 +87,7 @@ export default {
     data() {
         const { actor_themes: themes, user } = getConfig();
         const actor = this.town.actors.find(({ id }) => id === user.id);
-        let value = [];
-        if (actor !== undefined) {
-            value = actor.themes;
-        }
+        let value = actor !== undefined ? actor.themes : [];
         const autre = value.find(({ id }) => id === "autre");
 
         return {
