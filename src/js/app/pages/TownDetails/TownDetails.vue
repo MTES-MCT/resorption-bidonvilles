@@ -133,7 +133,7 @@
             v-on:updateTown="town = $event"
         />
         <!--  Self themes modal -->
-        <TownDetailsActorThemes
+        <TownDetailsActorThemesModal
             v-if="actorThemesOpen"
             :town="town"
             @closeModal="actorThemesOpen = false"
@@ -165,7 +165,7 @@ import TownDetailsHistorySidePanel from "./TownDetailsHistorySidePanel";
 import TownDetailsCovidCommentsSidePanel from "./TownDetailsCovidCommentsSidePanel";
 import TownDetailsActorAlert from "./TownDetailsActorAlert";
 import TownDetailsCloseModal from "./TownDetailsCloseModal";
-import TownDetailsActorThemes from "./TownDetailsActorThemes";
+import TownDetailsActorThemesModal from "./TownDetailsActorThemesModal";
 import TownDetailsInviteActorModal from "./TownDetailsInviteActorModal";
 import { notify } from "#helpers/notificationHelper";
 import { hasPermission } from "#helpers/api/config";
@@ -175,7 +175,7 @@ export default {
         TownDetailsActorAlert,
         TownDetailsPanelActors,
         TownDetailsCloseModal,
-        TownDetailsActorThemes,
+        TownDetailsActorThemesModal,
         TownDetailsHistorySidePanel,
         TownDetailsNewComment,
         TownDetailsComments,
