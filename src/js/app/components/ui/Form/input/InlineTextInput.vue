@@ -20,6 +20,7 @@
                     @input="$emit('input', $event.target.value)"
                     v-bind="filteredProps"
                     :class="classes"
+                    :data-cy-field="cypressName"
                 />
                 <InputIcon
                     position="after"
@@ -27,7 +28,7 @@
                     v-if="suffixIcon"
                 />
             </div>
-            <InputError>{{ errors[0] }}</InputError>
+            <InputError v-if="errors[0]">{{ errors[0] }}</InputError>
         </ValidationProvider>
     </div>
 </template>
@@ -49,7 +50,7 @@ export default {
             type: String
         },
         type: {
-            type: String,
+            type: [String, Number],
             default: "text"
         },
         validationName: {
@@ -59,7 +60,7 @@ export default {
             type: String
         },
         value: {
-            type: String
+            type: [String, Number]
         },
         id: {
             type: String
@@ -73,6 +74,12 @@ export default {
         },
         suffixIcon: {
             type: String
+        },
+        size: {
+            type: String
+        },
+        cypressName: {
+            type: String
         }
     },
     computed: {
@@ -80,7 +87,8 @@ export default {
             const inputOptions = {
                 error: this.error,
                 prefixIcon: this.prefixIcon,
-                suffixIcon: this.suffixIcon
+                suffixIcon: this.suffixIcon,
+                size: this.size
             };
 
             return {

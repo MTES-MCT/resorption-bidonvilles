@@ -117,19 +117,19 @@ Cypress.Commands.add("checkShantytownDetails", shantytown => {
         shantytown.minors_in_school !== null ? shantytown.minors_in_school : "-"
     );
 
-    if (shantytown.social_origins.length > 0) {
+    if (shantytown.social_origins_details.length > 0) {
         cy.get("[data-cy-data='social_origins'] div").should(
             "have.length",
-            shantytown.social_origins.length
+            shantytown.social_origins_details.length
         );
-        shantytown.social_origins.forEach(label => {
+        shantytown.social_origins_details.forEach(label => {
             cy.get("[data-cy-data='social_origins'] div").should(
                 "contain",
                 label
             );
         });
     } else {
-        cy.get("[data-cy-data='social_origins']").should("contain", "inconnue");
+        cy.get("[data-cy-data='social_origins']").should("contain", "inconnu");
     }
 
     cy.get("[data-cy-data='census_status']").should(
@@ -151,6 +151,34 @@ Cypress.Commands.add("checkShantytownDetails", shantytown => {
         cy.get("[data-cy-data='water_comments']").should("not.exist");
     }
 
+    if (shantytown.water_details && shantytown.water_details.positive) {
+        cy.get(`[data-cy-data='water_details_positive']`)
+            .children()
+            .should("have.length", shantytown.water_details.positive.length);
+
+        shantytown.water_details.positive.forEach((item, i) => {
+            cy.get(
+                `[data-cy-data='water_details_positive'] li:nth-child(${i + 1})`
+            ).should("contain", shantytown.water_details.positive[i]);
+        });
+    } else {
+        cy.get("[data-cy-data='water_details_positive']").should("not.exist");
+    }
+
+    if (shantytown.water_details && shantytown.water_details.negative) {
+        cy.get(`[data-cy-data='water_details_negative']`)
+            .children()
+            .should("have.length", shantytown.water_details.negative.length);
+
+        shantytown.water_details.negative.forEach((item, i) => {
+            cy.get(
+                `[data-cy-data='water_details_negative'] li:nth-child(${i + 1})`
+            ).should("contain", shantytown.water_details.negative[i]);
+        });
+    } else {
+        cy.get("[data-cy-data='water_details_negative']").should("not.exist");
+    }
+
     cy.get("[data-cy-data='access_to_sanitary']").should(
         "contain",
         shantytown.access_to_sanitary.toLowerCase()
@@ -163,6 +191,40 @@ Cypress.Commands.add("checkShantytownDetails", shantytown => {
         );
     } else {
         cy.get("[data-cy-data='sanitary_comments']").should("not.exist");
+    }
+
+    if (shantytown.sanitary_details && shantytown.sanitary_details.positive) {
+        cy.get(`[data-cy-data='sanitary_details_positive']`)
+            .children()
+            .should("have.length", shantytown.sanitary_details.positive.length);
+
+        shantytown.sanitary_details.positive.forEach((item, i) => {
+            cy.get(
+                `[data-cy-data='sanitary_details_positive'] li:nth-child(${i +
+                    1})`
+            ).should("contain", shantytown.sanitary_details.positive[i]);
+        });
+    } else {
+        cy.get("[data-cy-data='sanitary_details_positive']").should(
+            "not.exist"
+        );
+    }
+
+    if (shantytown.sanitary_details && shantytown.sanitary_details.negative) {
+        cy.get(`[data-cy-data='sanitary_details_negative']`)
+            .children()
+            .should("have.length", shantytown.sanitary_details.negative.length);
+
+        shantytown.sanitary_details.negative.forEach((item, i) => {
+            cy.get(
+                `[data-cy-data='sanitary_details_negative'] li:nth-child(${i +
+                    1})`
+            ).should("contain", shantytown.sanitary_details.negative[i]);
+        });
+    } else {
+        cy.get("[data-cy-data='sanitary_details_negative']").should(
+            "not.exist"
+        );
     }
 
     cy.get("[data-cy-data='electricity_type']").should(
@@ -183,6 +245,96 @@ Cypress.Commands.add("checkShantytownDetails", shantytown => {
         "contain",
         shantytown.trash_evacuation.toLowerCase()
     );
+
+    if (shantytown.trash_details && shantytown.trash_details.positive) {
+        cy.get(`[data-cy-data='trash_details_positive']`)
+            .children()
+            .should("have.length", shantytown.trash_details.positive.length);
+
+        shantytown.trash_details.positive.forEach((item, i) => {
+            cy.get(
+                `[data-cy-data='trash_details_positive'] li:nth-child(${i + 1})`
+            ).should("contain", shantytown.trash_details.positive[i]);
+        });
+    } else {
+        cy.get("[data-cy-data='trash_details_positive']").should("not.exist");
+    }
+
+    if (shantytown.trash_details && shantytown.trash_details.negative) {
+        cy.get(`[data-cy-data='trash_details_negative']`)
+            .children()
+            .should("have.length", shantytown.trash_details.negative.length);
+
+        shantytown.trash_details.negative.forEach((item, i) => {
+            cy.get(
+                `[data-cy-data='trash_details_negative'] li:nth-child(${i + 1})`
+            ).should("contain", shantytown.trash_details.negative[i]);
+        });
+    } else {
+        cy.get("[data-cy-data='trash_details_negative']").should("not.exist");
+    }
+
+    cy.get("[data-cy-data='vermin']").should(
+        "contain",
+        shantytown.vermin.toLowerCase()
+    );
+
+    if (shantytown.vermin_comments) {
+        cy.get("[data-cy-data='vermin_comments']").should(
+            "contain",
+            shantytown.vermin_comments
+        );
+    } else {
+        cy.get("[data-cy-data='vermin_comments']").should("not.exist");
+    }
+
+    if (shantytown.fire_details && shantytown.fire_details.positive) {
+        cy.get(`[data-cy-data='fire_prevention_details_positive']`)
+            .children()
+            .should("have.length", shantytown.fire_details.positive.length);
+
+        shantytown.fire_details.positive.forEach((item, i) => {
+            cy.get(
+                `[data-cy-data='fire_prevention_details_positive'] li:nth-child(${i +
+                    1})`
+            ).should("contain", shantytown.fire_details.positive[i]);
+        });
+    } else {
+        cy.get("[data-cy-data='fire_prevention_details_positive']").should(
+            "not.exist"
+        );
+    }
+
+    if (shantytown.fire_details && shantytown.fire_details.negative) {
+        cy.get(`[data-cy-data='fire_prevention_details_negative']`)
+            .children()
+            .should("have.length", shantytown.fire_details.negative.length);
+
+        shantytown.fire_details.negative.forEach((item, i) => {
+            cy.get(
+                `[data-cy-data='fire_prevention_details_negative'] li:nth-child(${i +
+                    1})`
+            ).should("contain", shantytown.fire_details.negative[i]);
+        });
+    } else {
+        cy.get("[data-cy-data='fire_prevention_details_negative']").should(
+            "not.exist"
+        );
+    }
+
+    cy.get("[data-cy-data='fire_prevention_measures']").should(
+        "contain",
+        shantytown.fire_prevention_measures.toLowerCase()
+    );
+
+    if (shantytown.fire_prevention_comments) {
+        cy.get("[data-cy-data='fire_prevention_comments']").should(
+            "contain",
+            shantytown.fire_prevention_comments
+        );
+    } else {
+        cy.get("[data-cy-data='fire_prevention_comments']").should("not.exist");
+    }
 
     cy.get("[data-cy-data='owner_complaint']").should(
         "contain",

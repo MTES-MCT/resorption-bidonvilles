@@ -1,6 +1,6 @@
 // Common classes between TextInput / TextArea / Select
 export default function getInputClasses(variant, inputOptions) {
-    const { error, prefixIcon, suffixIcon } = inputOptions;
+    const { error, prefixIcon, suffixIcon, size } = inputOptions;
 
     return {
         state: [
@@ -17,6 +17,7 @@ export default function getInputClasses(variant, inputOptions) {
         ],
         default: [
             "border-2 border-blue200 py-1 px-4 w-full outline-none focus:border-primary hover:border-inputHover",
+            size === "sm" ? "text-xs" : "",
             prefixIcon && "pl-10",
             suffixIcon && "pr-10"
         ]

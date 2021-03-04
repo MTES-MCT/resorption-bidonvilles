@@ -1,5 +1,5 @@
 <template>
-    <div class="mb-6 relative">
+    <div :class="['relative', withoutMargin ? '' : 'mb-6']">
         <div
             v-if="hasErrors"
             class="absolute inputWrapper-error w-1 h-full bg-red600"
@@ -13,6 +13,11 @@ export default {
     props: {
         hasErrors: {
             type: Boolean
+        },
+        withoutMargin: {
+            required: false,
+            type: Boolean,
+            default: false
         }
     }
 };

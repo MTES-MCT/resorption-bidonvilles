@@ -1,11 +1,10 @@
 <template>
     <TextArea
-        id="sanitary_comments"
-        label="Modalités d'accès"
-        info="Exemples : toilettes sèches avec fosse / sèches sans fosse, chimiques, raccordées au réseau des eaux usées "
-        v-model="input"
-        cypressName="sanitary_comments"
+        id="vermin_comments"
         placeholder="Votre message"
+        label="Précisions (rats, punaises de lits...)"
+        v-model="input"
+        cypressName="vermin_comments"
     ></TextArea>
 </template>
 

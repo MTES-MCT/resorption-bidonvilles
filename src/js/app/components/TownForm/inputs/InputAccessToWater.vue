@@ -5,6 +5,7 @@
         id="access_to_water"
         validationName="Accès à l'eau"
         rules="required"
+        :withoutMargin="true"
     >
         <Radio
             variant="card"

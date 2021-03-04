@@ -53,7 +53,7 @@
                             v-if="shantytown.populationTotal === null"
                             class="font-bold"
                         >
-                            Population inconnue
+                            Population : inconnu
                         </div>
                         <div v-else class="text-lg font-bold flex items-center">
                             <div class="mr-2">
@@ -77,7 +77,7 @@
                                 v-if="!shantytown.socialOrigins.length"
                                 class="text-G600"
                             >
-                                Origine : inconnue
+                                Origine : inconnu
                             </div>
                             <div
                                 class="flex"
@@ -96,19 +96,37 @@
                     <!-- third column -->
                     <div>
                         <div>
-                            <TownCardIcon :value="shantytown.accessToWater"
+                            <TownCardIcon
+                                :value="shantytown.accessToWater"
+                                :details="details.water"
                                 >eau</TownCardIcon
+                            >
+                            <TownCardIcon
+                                :value="shantytown.accessToSanitary"
+                                :details="details.sanitary"
+                                >toilettes</TownCardIcon
                             >
                             <TownCardIcon
                                 :value="shantytown.electricityType.value"
                                 >électricité</TownCardIcon
                             >
 
-                            <TownCardIcon :value="shantytown.trashEvacuation"
+                            <TownCardIcon
+                                :value="shantytown.trashEvacuation"
+                                :details="details.trash"
                                 >évac. des déchets</TownCardIcon
                             >
-                            <TownCardIcon :value="shantytown.accessToSanitary"
-                                >toilettes</TownCardIcon
+
+                            <TownCardIcon
+                                :value="shantytown.vermin"
+                                :details="details.vermin"
+                                inverted
+                                >pres. de nuisibles</TownCardIcon
+                            >
+                            <TownCardIcon
+                                :value="shantytown.firePreventionMeasures"
+                                :details="details.firePrevention"
+                                >prev. incendie</TownCardIcon
                             >
                         </div>
                     </div>
@@ -191,6 +209,7 @@ import flagEU from "./assets/eu.png";
 import flagFR from "./assets/fr.png";
 import flagExtraCommunautaires from "./assets/extra-communautaires.png";
 import getSince from "./getSince";
+import { formatLivingConditions } from "#app/pages/TownDetails/formatLivingConditions";
 
 export default {
     props: {
@@ -203,7 +222,8 @@ export default {
     },
     data() {
         return {
-            isHover: false
+            isHover: false,
+            details: formatLivingConditions(this.shantytown)
         };
     },
     components: {
