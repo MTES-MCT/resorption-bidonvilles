@@ -11,12 +11,12 @@
                 v-slot="{ errors }"
             >
                 <form>
-                    <div class="scrollableContainer w-128 -mx-4 -mt-8 p-4">
+                    <div class="modalWrapper w-128 -mx-4 -mt-8 p-4">
                         <ValidationProvider vid="user_id"></ValidationProvider>
                         <ValidationProvider vid="themes"></ValidationProvider>
 
                         <CheckableGroup
-                            direction="vertical"
+                            direction="horizontal"
                             label="Quels sont vos champs d'intervention sur ce site ?"
                             validationName="Champs d'intervention"
                         >
@@ -185,9 +185,10 @@ export default {
 };
 </script>
 
-<style>
-.scrollableContainer {
-    height: 500px;
+<style scoped>
+.modalWrapper {
+    min-height: 50vh;
+    max-height: 70vh;
     max-width: 800px;
     overflow-y: auto;
 }
