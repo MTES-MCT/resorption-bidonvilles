@@ -131,6 +131,7 @@ export default {
                         text: msg
                     });
                 } catch (err) {
+                    // TODO: Récupérer les messages d'erreur de l'API pour avoir plus de détail
                     this.loading = false;
                     this.backHomeWithErrMsg(
                         "Une erreur est survenue lors de l'envoi des invitations."
