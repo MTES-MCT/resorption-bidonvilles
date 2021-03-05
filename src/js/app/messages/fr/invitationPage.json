@@ -14,5 +14,6 @@
   },
   "secondParagraph": {
     "normal": "Un mail sera envoyé aux personnes indiquées et leurs coordonnées seront utilisées exclusivement par l'équipe de Résorption-Bidonvilles."
-  }
+  },
+  "error": "Votre demande comprend des erreurs:"
 }
