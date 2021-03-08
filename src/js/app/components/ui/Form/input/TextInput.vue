@@ -90,18 +90,6 @@ export default {
             required: false,
             type: Boolean,
             default: false
-        },
-        size: {
-            type: String
-        },
-        width: {
-            required: false,
-            type: String,
-            default: undefined
-        },
-        disabled: {
-            required: false,
-            type: String
         }
     },
     computed: {
