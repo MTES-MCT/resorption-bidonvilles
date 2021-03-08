@@ -39,6 +39,8 @@ import Datepicker from "./Datepicker.vue";
 import Tag from "./Tag.vue";
 import Pagination from "./Pagination.vue";
 import MapV2 from "./Map.vue";
+import InfoBanner from "./InfoBanner.vue";
+import Tooltip from "./Tooltip.vue";
 
 export default function(vueInstance) {
     vueInstance.component("Button", Button);
@@ -67,6 +69,8 @@ export default function(vueInstance) {
     vueInstance.component("Tag", Tag);
     vueInstance.component("Pagination", Pagination);
     vueInstance.component("MapV2", MapV2);
+    vueInstance.component("InfoBanner", InfoBanner);
+    vueInstance.component("Tooltip", Tooltip);
 
     vueInstance.use(notifications);
     vueInstance.component("NotificationsGroup", NotificationsGroup);

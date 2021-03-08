@@ -218,9 +218,16 @@ export function autocompleteOrganization(str) {
 /**
  * PUT /users/:id/charte_engagement
  */
-export function acceptCharte(userId, charteVersion) {
+export function acceptCharte(
+    userId,
+    charteVersion,
+    charteAgreement,
+    confidentialityAgreement
+) {
     return putApi(`/users/${userId}/charte_engagement`, {
-        version_de_charte: charteVersion
+        version_de_charte: charteVersion,
+        charte_agreement: charteAgreement,
+        confidentiality_agreement: confidentialityAgreement
     });
 }
 

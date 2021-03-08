@@ -1,4 +1,4 @@
-import { getApi, postApi, deleteApi } from "#helpers/api/main";
+import { getApi, postApi, putApi, deleteApi } from "#helpers/api/main";
 
 /**
  * Fetches all towns from the database
@@ -142,6 +142,48 @@ export function deleteComment(townId, commentId, message) {
  */
 export function getRecentComments() {
     return getApi("/comments");
+}
+
+/**
+ * POST /towns/:id/actors
+ */
+export function addActor(townId, actor) {
+    return postApi(`/towns/${townId}/actors`, actor);
+}
+
+/**
+ * DELETE /towns/:id/actors/:user_id
+ */
+export function removeActor(townId, userId) {
+    return deleteApi(`/towns/${townId}/actors/${userId}`);
+}
+
+/**
+ * PUT /towns/:id/actors/:user_id
+ */
+export function updateActorThemes(townId, userId, themes) {
+    return putApi(`/towns/${townId}/actors/${userId}`, { themes });
+}
+
+/**
+ * DELETE /towns/:id/actors/:user_id/themes/:theme_id
+ */
+export function removeActorTheme(townId, userId, themeId) {
+    return deleteApi(`/towns/${townId}/actors/${userId}/themes/${themeId}`);
+}
+
+/**
+ * PUT /towns/:id/invitations
+ */
+export function inviteNewActor(townId, email) {
+    return putApi(`/towns/${townId}/invitations`, { email });
+}
+
+/**
+ * GET /towns/:id/relations
+ */
+export function findRelations(townId, query) {
+    return getApi(`/towns/${townId}/relations?q=${encodeURIComponent(query)}`);
 }
 
 /**

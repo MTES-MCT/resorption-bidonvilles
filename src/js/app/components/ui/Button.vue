@@ -7,8 +7,8 @@
             this.disabled && 'opacity-50 cursor-not-allowed'
         ]"
         :disabled="disabled || loading"
-        :href="isLink ? (disabled ? null : href) : null"
-        :is="isLink ? 'a' : 'button'"
+        :to="isLink ? (disabled ? null : href) : null"
+        :is="isLink ? 'router-link' : 'button'"
         :type="isLink ? null : type"
         @click="onClick"
     >
@@ -99,6 +99,8 @@ export default {
                     "rounded-sm border-2 border-primary text-primary hover:bg-primary hover:text-white focus:outline-none",
                 secondaryOutline:
                     "rounded-sm border-2  border-secondary text-secondary hover:bg-secondary hover:text-white focus:outline-none",
+                primaryOutlineAlt:
+                    "bg-white rounded-sm border border-primary text-primary hover:bg-primary hover:text-white focus:outline-none",
                 primaryText:
                     "text-primary hover:text-primaryDark focus:outline-none",
                 secondaryText:

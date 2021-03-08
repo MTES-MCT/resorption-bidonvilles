@@ -23,14 +23,15 @@
                 :activeSection="activeSection === 'judicial'"
                 >Procédure judiciaire</LeftColumnNavLink
             >
+            <LeftColumnNavLink
+                to="#intervenants"
+                :activeSection="activeSection === 'intervenants'"
+                >Intervenants</LeftColumnNavLink
+            >
             <router-link
                 to="#newComment"
                 @click.native="scrollFix('#newComment')"
                 class="text-secondary"
-                v-if="
-                    hasPermission('shantytown_comment.list') ||
-                        hasPermission('shantytown_comment.create')
-                "
             >
                 <div class="flex text-secondary font-bold mt-4 cursor-pointer">
                     <Icon icon="comment" />
@@ -100,6 +101,7 @@ export default {
             threshold: 0.5
         });
 
+        observer.observe(document.querySelector("#intervenants"));
         this.hasJusticePermission &&
             observer.observe(document.querySelector("#judicial"));
         observer.observe(document.querySelector("#living_conditions"));

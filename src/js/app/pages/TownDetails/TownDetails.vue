@@ -27,6 +27,11 @@
                     v-on:openHistory="openHistory"
                 />
                 <div class="flex-1">
+                    <TownDetailsActorAlert
+                        v-if="isNotAnActor && actorAlertVisible"
+                        @click="openActorThemes"
+                        @close="actorAlertVisible = false"
+                    ></TownDetailsActorAlert>
                     <TownDetailsPanelCharacteristics
                         :town="town"
                         class="mb-10"
@@ -48,13 +53,17 @@
                         class="mb-10"
                         id="judicial"
                     />
+                    <TownDetailsPanelActors
+                        class="mb-10"
+                        id="intervenants"
+                        @click="openActorThemes"
+                        @showThemesModal="openActorThemes"
+                        @showInviteActorModal="openInviteActorModal"
+                    />
                 </div>
             </div>
         </PrivateContainer>
-        <div
-            class="bg-orange200 py-10"
-            v-if="hasPermission('shantytown_comment.create')"
-        >
+        <div class="bg-orange200 py-10">
             <PrivateContainer class="flex items-center">
                 <div class="leftColumnWidth text-sm">
                     <div>
@@ -83,13 +92,10 @@
         <div
             :class="[
                 'bg-orange200',
-                !hasPermission('shantytown_comment.create') && 'pt-10',
+                'pt-10',
                 town.comments.regular.length > 0 && 'pb-32'
             ]"
-            v-if="
-                hasPermission('shantytown_comment.list') &&
-                    town.comments.regular.length
-            "
+            v-if="town.comments.regular.length"
         >
             <PrivateContainer class="flex" id="comments">
                 <div class="leftColumnWidth" />
@@ -120,32 +126,50 @@
             v-on:closeModal="closeOpen = false"
             v-on:updateTown="town = $event"
         />
+        <!--  Self themes modal -->
+        <TownDetailsActorThemesModal
+            v-if="actorThemesOpen"
+            :town="town"
+            @closeModal="actorThemesOpen = false"
+        />
+        <!--  Invite actor modal -->
+        <TownDetailsInviteActorModal
+            :townId="town.id"
+            :isOpen="inviteActorOpen"
+            @closeModal="inviteActorOpen = false"
+        />
     </PrivateLayout>
 </template>
 
 <script>
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
 import PrivateLayout from "#app/components/PrivateLayout";
-import { get, destroy as deleteTown } from "#helpers/api/town";
+import { destroy as deleteTown } from "#helpers/api/town";
 import TownDetailsHeader from "./TownDetailsHeader";
 import TownDetailsLeftColumn from "./TownDetailsLeftColumn";
 import TownDetailsPanelCharacteristics from "./TownDetailsPanelCharacteristics";
 import TownDetailsPanelPeople from "./TownDetailsPanelPeople";
 import TownDetailsPanelLivingConditions from "./TownDetailsPanelLivingConditions";
 import TownDetailsPanelJudicial from "./TownDetailsPanelJudicial";
-import enrichShantytown from "#app/pages/TownsList/enrichShantytown";
+import TownDetailsPanelActors from "./TownDetailsPanelActors";
 import { get as getConfig, getPermission } from "#helpers/api/config";
 import TownDetailsNewComment from "./TownDetailsNewComment";
 import TownDetailsComments from "./TownDetailsComments";
 import TownDetailsHistorySidePanel from "./TownDetailsHistorySidePanel";
 import TownDetailsCovidCommentsSidePanel from "./TownDetailsCovidCommentsSidePanel";
+import TownDetailsActorAlert from "./TownDetailsActorAlert";
 import TownDetailsCloseModal from "./TownDetailsCloseModal";
+import TownDetailsActorThemesModal from "./TownDetailsActorThemesModal";
+import TownDetailsInviteActorModal from "./TownDetailsInviteActorModal";
 import { notify } from "#helpers/notificationHelper";
 import { hasPermission } from "#helpers/api/config";
 
 export default {
     components: {
+        TownDetailsActorAlert,
+        TownDetailsPanelActors,
         TownDetailsCloseModal,
+        TownDetailsActorThemesModal,
         TownDetailsHistorySidePanel,
         TownDetailsNewComment,
         TownDetailsComments,
@@ -157,7 +181,8 @@ export default {
         TownDetailsPanelPeople,
         TownDetailsPanelLivingConditions,
         TownDetailsPanelJudicial,
-        TownDetailsCovidCommentsSidePanel
+        TownDetailsCovidCommentsSidePanel,
+        TownDetailsInviteActorModal
     },
     data() {
         const permission = getPermission("shantytown.list");
@@ -167,19 +192,35 @@ export default {
             historyOpen: false,
             closeOpen: false,
             covidOpen: false,
+            actorThemesOpen: false,
+            actorAlertVisible: true,
+            inviteActorOpen: false,
             error: null,
             loading: false,
-            town: null,
             fieldTypes,
             user,
             hasJusticePermission: permission.data_justice === true
         };
+    },
+    computed: {
+        town() {
+            return this.$store.state.detailedTown;
+        },
+        isNotAnActor() {
+            return !this.town.actors.some(({ id }) => id === this.user.id);
+        }
     },
     created() {
         this.fetchData();
     },
     methods: {
         hasPermission,
+        openActorThemes() {
+            this.actorThemesOpen = true;
+        },
+        openInviteActorModal() {
+            this.inviteActorOpen = true;
+        },
         openHistory() {
             this.historyOpen = true;
         },
@@ -212,7 +253,7 @@ export default {
                     alert(error.user_message);
                 });
         },
-        fetchData() {
+        async fetchData() {
             if (this.loading === true) {
                 return;
             }
@@ -220,17 +261,18 @@ export default {
             this.loading = true;
             this.error = null;
 
-            get(this.$route.params.id)
-                .then(town => {
-                    this.loading = false;
-                    this.town = enrichShantytown(town, this.fieldTypes);
-                })
-                .catch(errors => {
-                    this.error =
-                        (errors && errors.user_message) ||
-                        "Une erreur inconnue est survenue";
-                    this.loading = false;
-                });
+            try {
+                await this.$store.dispatch(
+                    "fetchTownDetails",
+                    this.$route.params.id
+                );
+            } catch (error) {
+                this.error =
+                    (error && error.user_message) ||
+                    "Une erreur inconnue est survenue";
+            }
+
+            this.loading = false;
         }
     }
 };

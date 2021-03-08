@@ -32,7 +32,7 @@
             >
                 <Menu v-if="!results.length">
                     <MenuItem>
-                        Aucun résultats
+                        Aucun résultat
                     </MenuItem>
                 </Menu>
                 <Menu v-bind="resultListProps" v-on="resultListListeners">
