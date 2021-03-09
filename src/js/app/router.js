@@ -209,7 +209,7 @@ const router = new VueRouter({
             beforeEnter: guardians.anonymous
         },
         {
-            path: "/statistiques-publiques",
+            path: "/stats",
             component: PublicStats,
             beforeEnter: guardians.anonymous
         },
