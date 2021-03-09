@@ -4,10 +4,7 @@
             class="full-width mx-auto"
             src="./assets/resorption-bidonvilles-dessin.png"
         />
-        <!-- Section provisoire pour events du 9/3/2021 -->
-        <EventNewPlatform v-if="$i18n.locale === 'fr'"></EventNewPlatform>
         <EventTutorial v-if="$i18n.locale === 'fr'"></EventTutorial>
-        <!-- Fin de la section provisoire pour event du 9/3/2021 -->
         <div class="max-w-screen-sm mx-auto mt-8">
             <LandingPageResponsiveEmbed>
                 <iframe
@@ -96,7 +93,6 @@ import LandingPageFeatureBlock from "#app/pages/LandingPage/LandingPageFirstSect
 import LandingPageContextImage from "#app/pages/LandingPage/LandingPageFirstSection/LandingPageContextImage.vue";
 import LandingPageUserFeedback from "./LandingPageUserFeedback/index.vue";
 import LandingPageResponsiveEmbed from "../LandingPageResponsiveEmbed.vue";
-import EventNewPlatform from "../LandingPageEvents/EventNewPlatform.vue";
 import EventTutorial from "../LandingPageEvents/EventTutorial";
 
 export default {
@@ -105,7 +101,6 @@ export default {
         LandingPageFeatureBlock,
         LandingPageUserFeedback,
         LandingPageResponsiveEmbed,
-        EventNewPlatform,
         EventTutorial
     }
 };
