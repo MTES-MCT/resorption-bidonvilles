@@ -1,6 +1,11 @@
 <template>
     <PublicLayout :stickyHeader="false">
-        <PublicContainer class="py-16">
+        <PublicContainer class="py-16" v-if="state === 'loading'">
+            <div class="text-center text-primary text-display-lg mt-16 h-96">
+                <Spinner />
+            </div>
+        </PublicContainer>
+        <PublicContainer class="py-16" v-else>
             <div>
                 <h1 class="text-display-xl">Statistiques</h1>
                 <div>
@@ -37,15 +42,29 @@
                     "
                 />
             </StatsSection>
-            <div>
-                <h2 class="text-display-lg text-secondary mt-16">
+
+            <div v-if="numberOfNewUsersPerMonth !== null">
+                <h2 class="text-display-lg text-secondary mt-16 mb-4">
+                    Nombre d'utilisateurs depuis
+                    {{ numberOfNewUsersPerMonth[0].month.toLowerCase() }}
+                </h2>
+                <div class="chartWrapper">
+                    <LineChart
+                        :chartData="usersEvolutionDatasets"
+                        height="200px"
+                    />
+                </div>
+            </div>
+
+            <div class="mt-32">
+                <h2 class="text-display-lg text-secondary mb-4">
                     Nombre d'utilisateurs par semaine
                 </h2>
                 <div>
                     <iframe
                         id="widgetIframe"
                         width="100%"
-                        height="350"
+                        height="260"
                         src="https://stats.data.gouv.fr/index.php?module=Widgetize&action=iframe&forceView=1&viewDataTable=graphEvolution&disableLink=0&widget=1&moduleToWidgetize=VisitsSummary&actionToWidgetize=getEvolutionGraph&idSite=86&period=week&date=yesterday&disableLink=1&widget=1&segment=pageUrl%3D@https%25253A%25252F%25252Fresorption-bidonvilles.beta.gouv.fr%25252F%252523%25252Fcartographie"
                         scrolling="yes"
                         frameborder="0"
@@ -53,21 +72,6 @@
                         marginwidth="0"
                     ></iframe>
                 </div>
-            </div>
-
-            <div v-if="numberOfNewUsersPerMonth !== null">
-                <h2 class="text-display-lg text-secondary mt-16">
-                    Nombre d' utilisateurs depuis
-                    {{ numberOfNewUsersPerMonth[0].month.toLowerCase() }}
-                </h2>
-                <TrendChart
-                    class="stats-chart"
-                    :datasets="usersEvolutionDatasets"
-                    :labels="usersEvolutionLabels"
-                    :grid="{ verticalLines: true, horizontalLines: true }"
-                    :max="usersEvolutionMax"
-                    :min="0"
-                ></TrendChart>
             </div>
 
             <StatsSection title="Usage" class="mt-16">
@@ -127,13 +131,15 @@ import PublicContainer from "#app/components/PublicLayout/PublicContainer.vue";
 import StatsBlock from "./StatsBlock.vue";
 import StatsSection from "./StatsSection.vue";
 import { all as getStats } from "#helpers/api/stats";
+import LineChart from "./LineChart";
 
 export default {
     components: {
         PublicLayout,
         PublicContainer,
         StatsSection,
-        StatsBlock
+        StatsBlock,
+        LineChart
     },
     data() {
         return {
@@ -145,6 +151,7 @@ export default {
     created() {
         this.load();
     },
+
     computed: {
         numberOfDepartements() {
             return this.stats ? this.stats.numberOfDepartements : "...";
@@ -206,41 +213,14 @@ export default {
                 []
             );
 
-            return [
-                {
-                    data: cumulativeData,
-                    smooth: true,
-                    fill: true
-                }
-            ];
-        },
-
-        usersEvolutionMax() {
-            if (this.numberOfNewUsersPerMonth === null) {
-                return 0;
-            }
-
-            const max = this.numberOfNewUsersPerMonth.reduce(
-                (m, { total }) => Math.max(m, total),
-                0
-            );
-            return Math.ceil(max / 10) * 10;
-        },
-
-        usersEvolutionLabels() {
-            if (this.numberOfNewUsersPerMonth === null) {
-                return {
-                    xLabels: [],
-                    yLabels: 10
-                };
-            }
-
             return {
-                xLabels: this.numberOfNewUsersPerMonth.map(
-                    ({ month }) => month
-                ),
-                yLabels: this.usersEvolutionMax / 10 + 1,
-                yLabelsTextFormatter: val => val.toFixed(1)
+                labels: this.numberOfNewUsersPerMonth.map(({ month }) => month),
+                datasets: [
+                    {
+                        data: cumulativeData,
+                        label: "Nombre d'utilisateurs"
+                    }
+                ]
             };
         },
 
@@ -298,3 +278,10 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+.chartWrapper {
+    max-height: 300px;
+    position: relative;
+}
+</style>
