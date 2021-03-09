@@ -186,9 +186,8 @@ export default {
     },
     computed: {
         populationHistory() {
-            const present = {
-                date: this.formatDate(this.town.updatedAt, "d B"),
-                year: this.formatDate(this.town.updatedAt, "y"),
+            // valeurs présentes
+            let ref = {
                 populationTotal: this.intToStr(this.town.populationTotal, "-"),
                 populationCouples: this.intToStr(
                     this.town.populationCouples,
@@ -221,33 +220,65 @@ export default {
                 minorsInSchool: this.intToStr(this.town.minorsInSchool, "-")
             };
 
-            let ref = { ...present };
-            const past = this.town.changelog.reduce((acc, log, index) => {
-                const diff = log.diff.filter(({ fieldKey }) =>
-                    fieldKey.startsWith("population")
-                );
-                if (diff.length === 0) {
-                    return acc;
-                }
-
-                let date;
-                if (index < this.town.changelog.length - 1) {
-                    date = this.town.changelog[index + 1].date;
-                } else {
-                    date = this.town.createdAt;
-                }
-
-                ref.date = this.formatDate(date, "d B");
-                ref.year = this.formatDate(date, "y");
-                diff.forEach(({ fieldKey, oldValue }) => {
-                    ref[fieldKey] =
-                        oldValue === "non renseigné" ? "-" : oldValue;
+            // on traite le changelog pour n'y conserver que les étapes qui contiennent au moins un changement sur les champs de population
+            const entries = this.town.changelog
+                .map(entry => {
+                    return {
+                        ...entry,
+                        diff: entry.diff.filter(
+                            ({ fieldKey }) =>
+                                fieldKey.startsWith("population") ||
+                                fieldKey === "minorsInSchool"
+                        )
+                    };
+                })
+                .filter(({ diff }) => {
+                    return diff.length > 0;
                 });
 
-                return [...acc, { ...ref }];
-            }, []);
+            // s'il n'y a jamais eu de changement sur les champs de population, on a une seule entrée dans l'historique, à savoir les valeurs présentes, à la date de déclaration du site sur la plateforme
+            if (entries.length === 0) {
+                return [
+                    {
+                        ...ref,
+                        date: this.formatDate(this.town.createdAt, "d B"),
+                        year: this.formatDate(this.town.createdAt, "y")
+                    }
+                ];
+            }
 
-            return [present, ...past];
+            // s'il y a eu au moins une modification
+            return [
+                // la première entrée dans l'historique correspond aux valeurs présentes, à la date de dernière modification
+                {
+                    ...ref,
+                    date: this.formatDate(entries[0].date, "d B"),
+                    year: this.formatDate(entries[0].date, "y")
+                },
+
+                // puis on ajoute une entrée dans l'historique pour chaque entrée dans le changelog
+                ...entries.map(({ diff, index }) => {
+                    // on reconstitue l'état "old" à ajouter dans l'historique
+                    diff.forEach(({ fieldKey, oldValue }) => {
+                        ref[fieldKey] =
+                            oldValue === "non renseigné" ? "-" : oldValue;
+                    });
+
+                    // la date associée à cet état "old" est soit la date de l'entrée suivante dans le changelog s'il y en a une, soit la date de déclaration du site
+                    let date;
+                    if (index < entries.length - 1) {
+                        ({ date } = entries[index + 1]);
+                    } else {
+                        date = this.town.createdAt;
+                    }
+
+                    return {
+                        ...ref,
+                        date: this.formatDate(date, "d B"),
+                        year: this.formatDate(date, "y")
+                    };
+                })
+            ];
         },
         socialDiagnostic() {
             if (this.town.censusStatus === "done") {

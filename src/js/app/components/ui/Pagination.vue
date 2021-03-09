@@ -6,6 +6,7 @@
             variant="custom"
             size="custom"
             class="hover:bg-G200 rounded-full px-4 py-1 mx-2 focus:outline-none "
+            :disabled="currentPage === 1"
             @click="onPrevious"
             >Précédent</Button
         >
@@ -39,6 +40,7 @@
             iconPosition="right"
             variant="custom"
             size="custom"
+            :disabled="currentPage === nbPages"
             class="hover:bg-G200  rounded-full px-4 py-1 mx-2  focus:outline-none"
             @click="onNext"
             >Suivant</Button

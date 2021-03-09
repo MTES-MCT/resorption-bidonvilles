@@ -245,14 +245,17 @@
                         :hasJusticePermission="hasJusticePermission"
                         class="mb-6"
                     />
-                    <div class="flex flex-end mb-12 print:hidden">
+                    <div
+                        class="flex flex-col items-end mb-12 print:hidden mt-2"
+                    >
                         <Pagination
-                            class="mt-2 md:mt-0 ml-auto "
+                            class="md:mt-0 mb-2"
                             v-if="nbPages > 1"
                             :currentPage="currentPage"
                             :nbPages="nbPages"
                             :onChangePage="onChangePage"
                         />
+                        <div class="pr-6 text-G600">{{ elementsOnPage }}</div>
                     </div>
                 </div>
 
@@ -454,6 +457,15 @@ export default {
         },
         nbPages() {
             return Math.ceil(this.filteredShantytowns.length / PER_PAGE);
+        },
+        elementsOnPage() {
+            const start = (this.currentPage - 1) * PER_PAGE + 1;
+            const end =
+                this.currentPage < this.nbPages
+                    ? start + PER_PAGE - 1
+                    : start + (this.filteredShantytowns.length % PER_PAGE) - 1;
+
+            return `${start} - ${end} sur ${this.filteredShantytowns.length}`;
         }
     }
 };
