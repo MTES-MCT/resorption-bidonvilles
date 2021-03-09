@@ -257,7 +257,7 @@ export default {
                 },
 
                 // puis on ajoute une entrée dans l'historique pour chaque entrée dans le changelog
-                ...entries.map(({ diff, index }) => {
+                ...entries.map(({ diff }, index) => {
                     // on reconstitue l'état "old" à ajouter dans l'historique
                     diff.forEach(({ fieldKey, oldValue }) => {
                         ref[fieldKey] =
