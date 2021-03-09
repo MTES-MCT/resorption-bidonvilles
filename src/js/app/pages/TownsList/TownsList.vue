@@ -459,11 +459,11 @@ export default {
             return Math.ceil(this.filteredShantytowns.length / PER_PAGE);
         },
         elementsOnPage() {
-            const start = (this.currentPage - 1) * PER_PAGE;
+            const start = (this.currentPage - 1) * PER_PAGE + 1;
             const end =
                 this.currentPage < this.nbPages
-                    ? start + PER_PAGE
-                    : start + (this.filteredShantytowns.length % PER_PAGE);
+                    ? start + PER_PAGE - 1
+                    : start + (this.filteredShantytowns.length % PER_PAGE) - 1;
 
             return `${start} - ${end} sur ${this.filteredShantytowns.length}`;
         }
