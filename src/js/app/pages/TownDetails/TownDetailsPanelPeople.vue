@@ -223,8 +223,10 @@ export default {
 
             let ref = { ...present };
             const past = this.town.changelog.reduce((acc, log, index) => {
-                const diff = log.diff.filter(({ fieldKey }) =>
-                    fieldKey.startsWith("population")
+                const diff = log.diff.filter(
+                    ({ fieldKey }) =>
+                        fieldKey.startsWith("population") ||
+                        fieldKey === "minorsInSchool"
                 );
                 if (diff.length === 0) {
                     return acc;
