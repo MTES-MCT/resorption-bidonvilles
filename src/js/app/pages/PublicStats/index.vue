@@ -37,6 +37,23 @@
                     "
                 />
             </StatsSection>
+            <div>
+                <h2 class="text-display-lg text-secondary mt-16">
+                    Nombre d'utilisateurs par semaine
+                </h2>
+                <div>
+                    <iframe
+                        id="widgetIframe"
+                        width="100%"
+                        height="350"
+                        src="https://stats.data.gouv.fr/index.php?module=Widgetize&action=iframe&forceView=1&viewDataTable=graphEvolution&disableLink=0&widget=1&moduleToWidgetize=VisitsSummary&actionToWidgetize=getEvolutionGraph&idSite=86&period=week&date=yesterday&disableLink=1&widget=1&segment=pageUrl%3D@https%25253A%25252F%25252Fresorption-bidonvilles.beta.gouv.fr%25252F%252523%25252Fcartographie"
+                        scrolling="yes"
+                        frameborder="0"
+                        marginheight="0"
+                        marginwidth="0"
+                    ></iframe>
+                </div>
+            </div>
 
             <div v-if="numberOfNewUsersPerMonth !== null">
                 <h2 class="text-display-lg text-secondary mt-16">
@@ -253,7 +270,6 @@ export default {
             return this.stats ? this.stats.numberOfShantytownOperations : "...";
         }
     },
-
     methods: {
         /**
          * Tries fetching the data from the API
