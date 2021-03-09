@@ -13,35 +13,35 @@
                 </div>
             </div>
 
-            <StatsSection class="mt-16" title="Utilisateurs">
-                <StatsBlock
-                    :title="numberOfDepartements"
-                    icon="flag"
-                    subtitle="départements de France métropolitaine"
-                    info="Soit tous les départements concernés par le phénomène de squats ou bidonvilles."
+            <h2 class="text-display-lg text-secondary">{{ title }}</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 mt-16">
+                <PieChart
+                    class="mb-16 md:mb-0 md:mr-16"
+                    :chartData="organizationRepartitionData"
+                    :options="{
+                        legend: {
+                            position: 'bottom'
+                        },
+                        maintainAspectRatio: false
+                    }"
                 />
-                <StatsBlock
-                    :title="numberOfCollaboratorAndAssociationUsers"
-                    icon="users"
-                    subtitle="utilisateurs institutionnels et associatifs"
-                    :info="
-                        numberOfPublicEstablishments +
-                            ' services de l\'État, ' +
-                            numberOfTerritorialCollectivities +
-                            ' collectivités territoriales, ' +
-                            numberOfAssociations +
-                            ' associations'
-                    "
-                />
-                <StatsBlock
-                    :title="numberOfNewUsers.total"
-                    icon="user-plus"
-                    :subtitle="
-                        'nouveaux utilisateurs en ' +
-                            numberOfNewUsers.month.toLowerCase()
-                    "
-                />
-            </StatsSection>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                    <StatsBlock
+                        :title="numberOfDepartements"
+                        icon="flag"
+                        subtitle="départements de France métropolitaine"
+                        info="Soit tous les départements concernés par le phénomène de squats ou bidonvilles."
+                    />
+                    <StatsBlock
+                        :title="numberOfNewUsers.total"
+                        icon="user-plus"
+                        :subtitle="
+                            'nouveaux utilisateurs en ' +
+                                numberOfNewUsers.month.toLowerCase()
+                        "
+                    />
+                </div>
+            </div>
 
             <div v-if="numberOfNewUsersPerMonth !== null">
                 <h2 class="text-display-lg text-secondary mt-16 mb-4">
@@ -50,8 +50,9 @@
                 </h2>
                 <div class="chartWrapper">
                     <LineChart
-                        :chartData="usersEvolutionDatasets"
-                        height="200px"
+                        :chartData="usersEvolutionData"
+                        :options="{ maintainAspectRatio: false }"
+                        height="250px"
                     />
                 </div>
             </div>
@@ -132,6 +133,7 @@ import StatsBlock from "./StatsBlock.vue";
 import StatsSection from "./StatsSection.vue";
 import { all as getStats } from "#helpers/api/stats";
 import LineChart from "./LineChart";
+import PieChart from "./PieChart";
 
 export default {
     components: {
@@ -139,7 +141,8 @@ export default {
         PublicContainer,
         StatsSection,
         StatsBlock,
-        LineChart
+        LineChart,
+        PieChart
     },
     data() {
         return {
@@ -200,7 +203,7 @@ export default {
             return (this.stats && this.stats.numberOfNewUsersPerMonth) || null;
         },
 
-        usersEvolutionDatasets() {
+        usersEvolutionData() {
             if (this.numberOfNewUsersPerMonth === null) {
                 return [];
             }
@@ -217,8 +220,30 @@ export default {
                 labels: this.numberOfNewUsersPerMonth.map(({ month }) => month),
                 datasets: [
                     {
+                        backgroundColor: ["#000091"],
                         data: cumulativeData,
                         label: "Nombre d'utilisateurs"
+                    }
+                ]
+            };
+        },
+
+        organizationRepartitionData() {
+            return {
+                labels: [
+                    "services de l'État",
+                    "collectivités territoriales",
+                    "associations"
+                ],
+                datasets: [
+                    {
+                        backgroundColor: ["#000091", "#00AC8C", "#FF6F4C"],
+                        data: [
+                            this.numberOfPublicEstablishments,
+                            this.numberOfTerritorialCollectivities,
+                            this.numberOfAssociations
+                        ],
+                        label: "utilisateurs institutionnels et associatifs"
                     }
                 ]
             };
