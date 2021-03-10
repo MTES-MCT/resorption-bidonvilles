@@ -373,7 +373,7 @@ const router = new VueRouter({
             },
             path: "/nouvel-utilisateur/:id",
             component: UserValidate,
-            beforeEnter: guardians.writeDisabled
+            beforeEnter: guardians.loadedAndUpToDate
         },
         {
             meta: {
