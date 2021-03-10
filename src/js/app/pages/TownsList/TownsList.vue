@@ -65,28 +65,28 @@
                         @click="togglePrintModal"
                         >Imprimer</Button
                     >
-                    <Button
-                        v-if="hasPermission('shantytown.export')"
-                        icon="file-excel"
-                        iconPosition="left"
-                        variant="primary"
-                        class="mr-6 mb-2 md:mb-0"
-                        :disabled="filteredShantytowns.length === 0"
-                        @click="showExport"
-                        >Exporter</Button
-                    >
-                    <router-link
-                        to="/nouveau-site"
-                        v-if="hasPermission('shantytown.create')"
-                        ><Button
-                            icon="plus"
-                            iconPosition="left"
-                            variant="secondary"
-                            class="whitespace-no-wrap"
-                        >
-                            Déclarer un nouveau site</Button
-                        ></router-link
-                    >
+                    <!--                    <Button-->
+                    <!--                        v-if="hasPermission('shantytown.export')"-->
+                    <!--                        icon="file-excel"-->
+                    <!--                        iconPosition="left"-->
+                    <!--                        variant="primary"-->
+                    <!--                        class="mr-6 mb-2 md:mb-0"-->
+                    <!--                        :disabled="filteredShantytowns.length === 0"-->
+                    <!--                        @click="showExport"-->
+                    <!--                        >Exporter</Button-->
+                    <!--                    >-->
+                    <!--                    <router-link-->
+                    <!--                        to="/nouveau-site"-->
+                    <!--                        v-if="hasPermission('shantytown.create')"-->
+                    <!--                        ><Button-->
+                    <!--                            icon="plus"-->
+                    <!--                            iconPosition="left"-->
+                    <!--                            variant="secondary"-->
+                    <!--                            class="whitespace-no-wrap"-->
+                    <!--                        >-->
+                    <!--                            Déclarer un nouveau site</Button-->
+                    <!--                        ></router-link-->
+                    <!--                    >-->
                 </template>
             </TownsListHeader>
             <div v-if="!isLoading">

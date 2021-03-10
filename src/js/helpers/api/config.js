@@ -152,11 +152,12 @@ export function closeChangelog(version) {
  * @returns {Boolean}
  */
 export function hasAcceptedCharte() {
-    if (configuration === null) {
-        return false;
-    }
-
-    return configuration.user.charte_engagement_a_jour;
+    return true;
+    // if (configuration === null) {
+    //     return false;
+    // }
+    //
+    // return configuration.user.charte_engagement_a_jour;
 }
 
 /**

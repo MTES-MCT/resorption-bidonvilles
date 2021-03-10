@@ -151,7 +151,8 @@ const guardians = {
         { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
         { checker: isUpgraded, target: "/mise-a-niveau" },
         { checker: hasNoPendingChangelog, target: "/nouvelle-version" }
-    ])
+    ]),
+    writeDisabled: guard.bind(this, [{ checker: () => false, target: "/" }])
 };
 
 /**
@@ -274,7 +275,7 @@ const router = new VueRouter({
             },
             path: "/nouveau-site",
             component: TownsCreate,
-            beforeEnter: guardians.loadedAndUpToDate
+            beforeEnter: guardians.writeDisabled
         },
         {
             meta: {
@@ -334,7 +335,7 @@ const router = new VueRouter({
             },
             path: "/mon-compte",
             component: Me,
-            beforeEnter: guardians.loadedAndUpToDate
+            beforeEnter: guardians.writeDisabled
         },
         {
             meta: {
@@ -352,7 +353,7 @@ const router = new VueRouter({
             },
             path: "/nouvel-utilisateur",
             component: UserCreate,
-            beforeEnter: guardians.loadedAndUpToDate
+            beforeEnter: guardians.writeDisabled
         },
         {
             path: "/signature-charte-engagement",
@@ -376,7 +377,7 @@ const router = new VueRouter({
             },
             path: "/nouvel-utilisateur/:id",
             component: UserValidate,
-            beforeEnter: guardians.loadedAndUpToDate
+            beforeEnter: guardians.writeDisabled
         },
         {
             meta: {
@@ -426,7 +427,7 @@ const router = new VueRouter({
             },
             path: "/nouveau-dispositif",
             component: PlanCreate,
-            beforeEnter: guardians.loadedAndUpToDate
+            beforeEnter: guardians.writeDisabled
         },
         {
             meta: {
@@ -435,7 +436,7 @@ const router = new VueRouter({
             },
             path: "/modifier-dispositif/:id",
             component: PlanEdit,
-            beforeEnter: guardians.loadedAndUpToDate
+            beforeEnter: guardians.writeDisabled
         },
         {
             meta: {
