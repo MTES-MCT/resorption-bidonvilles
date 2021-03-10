@@ -291,7 +291,7 @@ const router = new VueRouter({
             },
             path: "/site/:id/mise-a-jour",
             component: TownsUpdate,
-            beforeEnter: guardians.loadedAndUpToDate
+            beforeEnter: guardians.writeDisabled
         },
         {
             path: "/feedback",
@@ -393,7 +393,7 @@ const router = new VueRouter({
             },
             path: "/nouveau-mot-de-passe",
             component: UserRequestNewPassword,
-            beforeEnter: guardians.anonymous
+            beforeEnter: guardians.writeDisabled
         },
         {
             meta: {
@@ -401,7 +401,7 @@ const router = new VueRouter({
             },
             path: "/renouveler-mot-de-passe/:token",
             component: UserSetNewPassword,
-            beforeEnter: guardians.anonymous
+            beforeEnter: guardians.writeDisabled
         },
         {
             meta: {
@@ -409,7 +409,7 @@ const router = new VueRouter({
             },
             path: "/activer-mon-compte/:token",
             component: UserActivate,
-            beforeEnter: guardians.anonymous
+            beforeEnter: guardians.writeDisabled
         },
         {
             meta: {
@@ -454,7 +454,7 @@ const router = new VueRouter({
             },
             path: "/dispositif/:id/indicateurs",
             component: PlanMarks,
-            beforeEnter: guardians.loadedAndUpToDate
+            beforeEnter: guardians.writeDisabled
         },
         {
             meta: {
