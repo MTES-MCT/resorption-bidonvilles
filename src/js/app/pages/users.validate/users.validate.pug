@@ -53,7 +53,7 @@
                             <UserPermissions v-if="hasPermissionsFor('national')" title="À l'échelle nationale" :items="permission.national_permissions"></UserPermissions>
                             <UserPermissions v-if="hasPermissionsFor('local')" title="Sur le territoire d'intervention" :items="permission.local_permissions"></UserPermissions>
 
-                            <div v-if="options.length > 0">
+                            <div v-if="options.length > 0 && user.status === 'active'">
                                 <h1 class="userPermissions-sectionTitle">Options</h1>
                                 <p v-if="!user.organization.active">Pour cette structure, je souhaite :</p>
                                 <ul class="userOptionsList">
@@ -67,23 +67,6 @@
                     </div>
 
                     <div class="userValidation-error notification error" v-if="validation.error">{{ validation.error }}</div>
-
-                    <footer class="userValidationFooter">
-                        <p class="userValidationFooter-remove" v-if="user.status === 'active'">
-                            <span @click="remove" v-if="validation.state !== 'loading'">Supprimer l'accès</span>
-                        </p>
-                        <p class="userValidationFooter-deny" v-if="user.status === 'new' && user.user_access === null">
-                            <span @click="deny" v-if="validation.state !== 'loading'">Refuser l'accès</span>
-                        </p>
-                        <p class="userValidationFooter-allow" v-if="user.status === 'new'">
-                            <button class="button" @click="validate" :disabled="validation.state === 'loading'" :readonly="validation.state === 'loading'">
-                                <img  v-if="validation.state === 'loading'" src="/img/spinner_light.svg" width="20" />
-                                <span v-else>Envoyer un accès</span>
-                            </button>
-                            <br/>
-                            <span>L'utilisateur va recevoir<br/>un mail avec un lien d'activation</span>
-                        </p>
-                    </footer>
                 </section>
             </div>
         </section>

@@ -212,20 +212,20 @@
                         {{ lastUpdate }}
                     </Tag>
                     <div class="print:hidden">
-                        <transition name="fade" v-if="isOpen">
-                            <router-link
-                                v-if="isHover"
-                                :to="`site/${shantytown.id}/mise-a-jour`"
-                            >
-                                <Button
-                                    variant="primaryText"
-                                    icon="pen"
-                                    iconPosition="left"
-                                    class="text-display-sm hover:underline -mb-1"
-                                    >Mettre à jour</Button
-                                >
-                            </router-link>
-                        </transition>
+                        <!--                        <transition name="fade" v-if="isOpen">-->
+                        <!--                            <router-link-->
+                        <!--                                v-if="isHover"-->
+                        <!--                                :to="`site/${shantytown.id}/mise-a-jour`"-->
+                        <!--                            >-->
+                        <!--                                <Button-->
+                        <!--                                    variant="primaryText"-->
+                        <!--                                    icon="pen"-->
+                        <!--                                    iconPosition="left"-->
+                        <!--                                    class="text-display-sm hover:underline -mb-1"-->
+                        <!--                                    >Mettre à jour</Button-->
+                        <!--                                >-->
+                        <!--                            </router-link>-->
+                        <!--                        </transition>-->
                         <Button
                             variant="primaryText"
                             icon="arrow-right"
