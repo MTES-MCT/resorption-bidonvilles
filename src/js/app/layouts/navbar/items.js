@@ -37,12 +37,12 @@ export default {
                     label: "Liste des sites",
                     target: "/liste-des-sites",
                     group: "townList"
-                },
-                {
-                    label: "Déclarer un site",
-                    target: "/nouveau-site",
-                    group: "townCreation"
                 }
+                // {
+                //     label: "Déclarer un site",
+                //     target: "/nouveau-site",
+                //     group: "townCreation"
+                // }
             ]
         },
         {
@@ -51,11 +51,11 @@ export default {
                 {
                     label: "Liste des dispositifs",
                     target: "/liste-des-dispositifs"
-                },
-                {
-                    label: "Déclarer un dispositif",
-                    target: "/nouveau-dispositif"
                 }
+                // {
+                //     label: "Déclarer un dispositif",
+                //     target: "/nouveau-dispositif"
+                // }
             ]
         },
         {
@@ -71,11 +71,11 @@ export default {
                     target: "/liste-des-utilisateurs",
                     group: "users"
                 },
-                {
-                    label: "Créer un utilisateur",
-                    target: "/nouvel-utilisateur",
-                    group: "userCreation"
-                },
+                // {
+                //     label: "Créer un utilisateur",
+                //     target: "/nouvel-utilisateur",
+                //     group: "userCreation"
+                // },
                 {
                     label: "Statistiques",
                     target: "/statistiques",
@@ -91,11 +91,11 @@ export default {
         {
             label: "Mon compte",
             items: [
-                {
-                    label: "Gérer mon compte",
-                    target: "/mon-compte",
-                    group: "me"
-                },
+                // {
+                //     label: "Gérer mon compte",
+                //     target: "/mon-compte",
+                //     group: "me"
+                // },
                 { label: "Déconnexion", target: "/deconnexion" }
             ]
         },
