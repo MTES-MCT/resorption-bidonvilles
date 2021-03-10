@@ -31,6 +31,7 @@ import PublicStats from "#app/pages/PublicStats/index.vue";
 import Covid from "#app/pages/covid/covid.vue";
 import Changelog from "#app/pages/Changelog/Changelog.vue";
 import CharteEngagement from "#app/pages/CharteEngagement/CharteEngagement.vue";
+import ReadonlyError from "#app/pages/ReadonlyError/ReadonlyError.vue";
 
 import { logout, isLoggedIn, alreadyLoggedBefore } from "#helpers/api/user";
 import {
@@ -148,7 +149,9 @@ const guardians = {
         { checker: isUpgraded, target: "/mise-a-niveau" },
         { checker: hasNoPendingChangelog, target: "/nouvelle-version" }
     ]),
-    writeDisabled: guard.bind(this, [{ checker: () => false, target: "/" }])
+    writeDisabled: guard.bind(this, [
+        { checker: () => false, target: "/operation-impossible" }
+    ])
 };
 
 /**
@@ -229,6 +232,10 @@ const router = new VueRouter({
             path: "/nouvelle-version",
             component: Changelog,
             beforeEnter: guardians.loadedAndUpgraded
+        },
+        {
+            path: "/operation-impossible",
+            component: ReadonlyError
         },
         {
             path: "/deconnexion",
