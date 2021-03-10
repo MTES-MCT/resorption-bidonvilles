@@ -21,12 +21,10 @@
         </div>
     </div>
 
-    <div class="bg-red text-white w-full py-4 flex items-center">
-        <div class="container flex itens-center">
-            <div>
-                <div class="text-display-md text-white"><Icon icon="exclamation-triangle" /> Perturbation du service</div>
-                <div>Nos serveurs ont été touchés par un incendie survenu chez notre hébergeur de données OVH. Nous avons temporairement mis en place une version dégradée du site depuis une sauvegarde antérieure. Nous mettons tout en œuvre pour restaurer nos services le plus rapidement possible.</div>
-            </div>
+    <div class="bg-orange300 w-full py-4 flex items-center" v-if="!hideAlert">
+        <div class="container flex items-center">
+            <Icon icon="exclamation-triangle" class="text-display-lg mr-4 text-primary" />
+            <div>La plateforme fonctionne partiellement. Il est impossible de modifier les informations. <span class="font-bold">Les données visibles datent du 14 janvier 2021</span>. Retour à la normale prévue la semaine du 22 mars. Merci de votre patience.</div>
         </div>
     </div>
 </header>
