@@ -53,7 +53,7 @@
                             <UserPermissions v-if="hasPermissionsFor('national')" title="À l'échelle nationale" :items="permission.national_permissions"></UserPermissions>
                             <UserPermissions v-if="hasPermissionsFor('local')" title="Sur le territoire d'intervention" :items="permission.local_permissions"></UserPermissions>
 
-                            <div v-if="options.length > 0">
+                            <div v-if="options.length > 0 && user.status === 'active'">
                                 <h1 class="userPermissions-sectionTitle">Options</h1>
                                 <p v-if="!user.organization.active">Pour cette structure, je souhaite :</p>
                                 <ul class="userOptionsList">
