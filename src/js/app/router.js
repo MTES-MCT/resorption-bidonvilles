@@ -106,10 +106,7 @@ function isPermitted(to) {
  * @returns {boolean}
  */
 function isUpgraded() {
-    const {
-        user: { position }
-    } = getConfig();
-    return position !== "";
+    return true;
 }
 
 /**
@@ -118,8 +115,7 @@ function isUpgraded() {
  * @returns {boolean}
  */
 function hasNoPendingChangelog() {
-    const { changelog } = getConfig();
-    return changelog === null;
+    return true;
 }
 
 /**
