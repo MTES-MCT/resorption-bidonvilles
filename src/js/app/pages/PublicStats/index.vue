@@ -61,17 +61,12 @@
                 <h2 class="text-display-lg text-secondary mb-4">
                     Nombre d'utilisateurs par semaine
                 </h2>
-                <div>
-                    <iframe
-                        id="widgetIframe"
-                        width="100%"
-                        height="260"
-                        src="https://stats.data.gouv.fr/index.php?module=Widgetize&action=iframe&forceView=1&viewDataTable=graphEvolution&disableLink=0&widget=1&moduleToWidgetize=VisitsSummary&actionToWidgetize=getEvolutionGraph&idSite=86&period=week&date=yesterday&disableLink=1&widget=1&segment=pageUrl%3D@https%25253A%25252F%25252Fresorption-bidonvilles.beta.gouv.fr%25252F%252523%25252Fcartographie"
-                        scrolling="yes"
-                        frameborder="0"
-                        marginheight="0"
-                        marginwidth="0"
-                    ></iframe>
+                <div class="chartWrapper">
+                    <LineChart
+                        :chartData="matomoStats"
+                        :options="{ maintainAspectRatio: false }"
+                        height="250px"
+                    />
                 </div>
             </div>
 
@@ -148,7 +143,8 @@ export default {
         return {
             state: null,
             error: null,
-            stats: null
+            stats: null,
+            matomoStats: null
         };
     },
     created() {
@@ -220,7 +216,7 @@ export default {
                 labels: this.numberOfNewUsersPerMonth.map(({ month }) => month),
                 datasets: [
                     {
-                        backgroundColor: ["#000091"],
+                        // backgroundColor: ["#000091"],
                         data: cumulativeData,
                         label: "Nombre d'utilisateurs"
                     }
@@ -276,6 +272,52 @@ export default {
         }
     },
     methods: {
+        async getMatomoStats() {
+            const getLastSunday = d => {
+                const t = new Date(d);
+                t.setDate(t.getDate() - t.getDay());
+                return t;
+            };
+
+            const getDate = (d, delta) => {
+                const t = new Date(d);
+                t.setDate(t.getDate() - delta);
+                return t;
+            };
+
+            const fetchStatsData = async date => {
+                const res = await fetch(
+                    `https://stats.data.gouv.fr/index.php?module=API&method=VisitsSummary.getUniqueVisitors&idSite=86&period=week&date=${date}&format=JSON&&segment=pageUrl%3D@https%25253A%25252F%25252Fresorption-bidonvilles.beta.gouv.fr%25252F%252523%25252Fcartographie&token_auth=1174bbc62ff88f708958feb3e1a0192c`
+                );
+                const result = await res.json();
+                return result.value;
+            };
+
+            const lastSunday = getLastSunday(new Date());
+
+            // Build an array of dates from the last 2 months : ["2021-01-03", "2021-01-10", ...]
+            const last2MonthsWeeklyDates = await Promise.all(
+                [0, 7, 14, 21, 28, 35, 42, 49, 56, 63].reverse().map(delta =>
+                    getDate(lastSunday, delta)
+                        .toISOString()
+                        .slice(0, 10)
+                )
+            );
+
+            const data = await Promise.all(
+                last2MonthsWeeklyDates.map(fetchStatsData)
+            );
+
+            this.matomoStats = {
+                labels: last2MonthsWeeklyDates,
+                datasets: [
+                    {
+                        data,
+                        label: "Nombre d'utilisateurs par semaine"
+                    }
+                ]
+            };
+        },
         /**
          * Tries fetching the data from the API
          *
@@ -289,6 +331,8 @@ export default {
 
             this.state = "loading";
             this.error = null;
+
+            this.getMatomoStats();
 
             getStats()
                 .then(({ statistics: stats }) => {
