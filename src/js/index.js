@@ -11,7 +11,6 @@ import "regenerator-runtime/runtime";
 import Vue from "vue";
 import VueI18n from "vue-i18n";
 import VueRouter from "vue-router";
-import TrendChart from "vue-trend-chart";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import App from "./App.vue";
 
@@ -97,7 +96,6 @@ window.App = Object.freeze({
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
-Vue.use(TrendChart);
 Vue.use(VueRouter);
 Vue.use(VueI18n);
 
