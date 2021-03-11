@@ -13,24 +13,32 @@
                 </div>
             </div>
 
-            <h2 class="text-display-lg text-secondary">{{ title }}</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 mt-16">
-                <PieChart
-                    class="mb-16 md:mb-0 md:mr-16"
-                    :chartData="organizationRepartitionData"
-                    :options="{
-                        legend: {
-                            position: 'bottom'
-                        },
-                        maintainAspectRatio: false
-                    }"
-                />
+            <h2 class="text-display-lg text-secondary mt-16">
+                Répartition des utilisateurs
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 mt-4">
+                <div>
+                    <PieChart
+                        class="mb-16 md:mb-0 md:mr-16"
+                        height="250px"
+                        :chartData="organizationRepartitionData"
+                        :options="{
+                            legend: {
+                                position: 'right',
+                                align: 'start',
+                                labels: {
+                                    generateLabels
+                                }
+                            },
+                            maintainAspectRatio: false
+                        }"
+                    />
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
                     <StatsBlock
                         :title="numberOfDepartements"
                         icon="flag"
                         subtitle="départements de France métropolitaine"
-                        info="Soit tous les départements concernés par le phénomène de squats ou bidonvilles."
                     />
                     <StatsBlock
                         :title="numberOfNewUsers.total"
@@ -45,8 +53,7 @@
 
             <div v-if="numberOfNewUsersPerMonth !== null">
                 <h2 class="text-display-lg text-secondary mt-16 mb-4">
-                    Nombre d'utilisateurs depuis
-                    {{ numberOfNewUsersPerMonth[0].month.toLowerCase() }}
+                    Nombre d'utilisateurs
                 </h2>
                 <div class="chartWrapper">
                     <LineChart
@@ -57,7 +64,7 @@
                 </div>
             </div>
 
-            <div class="mt-32">
+            <div class="mt-16">
                 <h2 class="text-display-lg text-secondary mb-4">
                     Nombre d'utilisateurs par semaine
                 </h2>
@@ -103,16 +110,16 @@
                     <StatsBlock
                         :title="meanTimeBeforeCreationDeclaration"
                         subtitle="jours entre l'installation d'un bidonville ou squat et sa déclaration"
-                        info="En moyenne, depuis le 01/09/2019."
+                        info="Médiane depuis le 01/09/2019."
                     />
                     <StatsBlock
                         :title="meanTimeBeforeClosingDeclaration"
                         subtitle="jours entre la fermeture du site et sa déclaration"
-                        info="En moyenne, depuis le 01/09/2019."
+                        info="Médiane depuis le 01/09/2019."
                     />
                     <StatsBlock
                         :title="numberOfShantytownOperations"
-                        subtitle="bidonvilles ou squats mis à jour"
+                        subtitle="mises à jour de bidonvilles et squats"
                         info="Toutes opérations confondues : création, modification, fermeture"
                     />
                 </template>
@@ -156,30 +163,31 @@ export default {
             return this.stats ? this.stats.numberOfDepartements : "...";
         },
 
-        numberOfCollaboratorAndAssociationUsers() {
+        numberOfTerritorialCollectivitieUsers() {
             return this.stats
                 ? this.stats.numberOfCollaboratorAndAssociationUsers
-                : "...";
-        },
-
-        numberOfTerritorialCollectivities() {
-            return this.stats
-                ? this.stats.numberOfCollaboratorAndAssociationOrganizations
                       .territorial_collectivity || 0
                 : "...";
         },
 
-        numberOfAssociations() {
+        numberOfAssociationUsers() {
             return this.stats
-                ? this.stats.numberOfCollaboratorAndAssociationOrganizations
+                ? this.stats.numberOfCollaboratorAndAssociationUsers
                       .association || 0
                 : "...";
         },
 
-        numberOfPublicEstablishments() {
+        numberOfPublicEstablishmentUsers() {
             return this.stats
-                ? this.stats.numberOfCollaboratorAndAssociationOrganizations
+                ? this.stats.numberOfCollaboratorAndAssociationUsers
                       .public_establishment || 0
+                : "...";
+        },
+
+        numberOfAdministrationUsers() {
+            return this.stats
+                ? this.stats.numberOfCollaboratorAndAssociationUsers
+                      .administration || 0
                 : "...";
         },
 
@@ -216,7 +224,7 @@ export default {
                 labels: this.numberOfNewUsersPerMonth.map(({ month }) => month),
                 datasets: [
                     {
-                        // backgroundColor: ["#000091"],
+                        backgroundColor: ["#E5E5F4"],
                         data: cumulativeData,
                         label: "Nombre d'utilisateurs"
                     }
@@ -229,15 +237,22 @@ export default {
                 labels: [
                     "services de l'État",
                     "collectivités territoriales",
-                    "associations"
+                    "associations",
+                    "administration"
                 ],
                 datasets: [
                     {
-                        backgroundColor: ["#000091", "#00AC8C", "#FF6F4C"],
+                        backgroundColor: [
+                            "#169B62",
+                            "#5770BE",
+                            "#FF8D7E",
+                            "#6A6A6A"
+                        ],
                         data: [
-                            this.numberOfPublicEstablishments,
-                            this.numberOfTerritorialCollectivities,
-                            this.numberOfAssociations
+                            this.numberOfPublicEstablishmentUsers,
+                            this.numberOfTerritorialCollectivitieUsers,
+                            this.numberOfAssociationUsers,
+                            this.numberOfAdministrationUsers
                         ],
                         label: "utilisateurs institutionnels et associatifs"
                     }
@@ -272,6 +287,26 @@ export default {
         }
     },
     methods: {
+        // Generate custom labels for user repartition
+        generateLabels(chart) {
+            const data = chart.data;
+            if (data.labels.length && data.datasets.length) {
+                return data.labels.map(function(label, i) {
+                    // We get the value of the current label
+                    const value = chart.config.data.datasets[0].data[i];
+                    const background =
+                        chart.config.data.datasets[0].backgroundColor[i];
+
+                    return {
+                        text: label + " : " + value,
+                        index: i,
+                        fillStyle: background
+                    };
+                });
+            } else {
+                return [];
+            }
+        },
         async getMatomoStats() {
             const getLastSunday = d => {
                 const t = new Date(d);
@@ -287,7 +322,7 @@ export default {
 
             const fetchStatsData = async date => {
                 const res = await fetch(
-                    `https://stats.data.gouv.fr/index.php?module=API&method=VisitsSummary.getUniqueVisitors&idSite=86&period=week&date=${date}&format=JSON&&segment=pageUrl%3D@https%25253A%25252F%25252Fresorption-bidonvilles.beta.gouv.fr%25252F%252523%25252Fcartographie&token_auth=1174bbc62ff88f708958feb3e1a0192c`
+                    `https://stats.data.gouv.fr/index.php?module=API&method=VisitsSummary.getUniqueVisitors&idSite=86&period=week&date=${date}&format=JSON&&segment=pageUrl%3D@https%25253A%25252F%25252Fresorption-bidonvilles.beta.gouv.fr%25252F%252523%25252Fcartographie`
                 );
                 const result = await res.json();
                 return result.value;
@@ -296,13 +331,16 @@ export default {
             const lastSunday = getLastSunday(new Date());
 
             // Build an array of dates from the last 2 months : ["2021-01-03", "2021-01-10", ...]
-            const last2MonthsWeeklyDates = await Promise.all(
-                [0, 7, 14, 21, 28, 35, 42, 49, 56, 63].reverse().map(delta =>
+            const last2MonthsWeeklyDates = Array.from(
+                Array(10),
+                (_, i) => i * 7
+            )
+                .reverse()
+                .map(delta =>
                     getDate(lastSunday, delta)
                         .toISOString()
                         .slice(0, 10)
-                )
-            );
+                );
 
             const data = await Promise.all(
                 last2MonthsWeeklyDates.map(fetchStatsData)
@@ -312,6 +350,7 @@ export default {
                 labels: last2MonthsWeeklyDates,
                 datasets: [
                     {
+                        backgroundColor: ["#E5E5F4"],
                         data,
                         label: "Nombre d'utilisateurs par semaine"
                     }
