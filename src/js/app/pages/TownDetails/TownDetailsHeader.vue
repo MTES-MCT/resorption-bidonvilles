@@ -12,6 +12,20 @@
             </div>
         </div>
         <div class="flex items-center">
+            <div
+                v-if="this.closedOrResorbed"
+                class="flex items-center uppercase text-sm text-secondary font-bold mr-4"
+            >
+                <Icon icon="lock" class="mr-2" />
+                <div v-if="this.isClosed">
+                    Fermé le
+                    {{ formatDate(town.closedAt, "d/m/y") }}
+                </div>
+                <div v-else-if="this.isResorbed">
+                    Résorbé le
+                    {{ formatDate(town.closedAt, "d/m/y") }}
+                </div>
+            </div>
             <div class="flex items-center uppercase text-sm mr-4">
                 <div class="rounded-full bg-corail h-3 w-3 mr-2 " />
                 Mis à jour le
@@ -133,6 +147,21 @@ export default {
         },
         routeToUpdate() {
             this.$router.push(`/site/${this.town.id}/mise-a-jour`);
+        }
+    },
+    computed: {
+        isClosed() {
+            return this.town.closedAt && this.town.closedWithSolutions !== "yes"
+                ? true
+                : false;
+        },
+        isResorbed() {
+            return this.town.closedAt && this.town.closedWithSolutions === "yes"
+                ? true
+                : false;
+        },
+        closedOrResorbed() {
+            return this.isClosed || this.isResorbed;
         }
     }
 };

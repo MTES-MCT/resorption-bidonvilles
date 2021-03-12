@@ -22,6 +22,14 @@
                         </span>
                     </div>
                 </div>
+                <!-- Site fermé ou résorbé ? -->
+                <div class="px-6" v-if="this.isClosed">
+                    Fermé le {{ formatDate(shantytown.closedAt, "d/m/y") }}
+                </div>
+                <div class="px-6" v-else-if="this.isResorbed">
+                    Résorbé le {{ formatDate(shantytown.closedAt, "d/m/y") }}
+                </div>
+                <!-- Fin site fermé ou résorbé ? -->
                 <div
                     class="md:grid print:grid cardGridTemplateColumns gap-10 px-6 py-4"
                 >
@@ -342,6 +350,18 @@ export default {
             }
 
             return "Dernière actualisation il y a plus d'un an";
+        },
+        isClosed() {
+            return this.shantytown.closedAt &&
+                this.shantytown.closedWithSolutions !== "yes"
+                ? true
+                : false;
+        },
+        isResorbed() {
+            return this.shantytown.closedAt &&
+                this.shantytown.closedWithSolutions === "yes"
+                ? true
+                : false;
         }
     }
 };
