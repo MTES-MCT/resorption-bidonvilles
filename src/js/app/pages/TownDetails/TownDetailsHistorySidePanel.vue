@@ -22,8 +22,16 @@
                     </div>
                 </div>
             </div>
-
             <div>
+                <!-- Date de fermeture du site -->
+                <TownDetailsHistoryCard
+                    v-if="town.closedAt"
+                    :author="town.updatedBy"
+                    :when="town.closedAt"
+                    :title="titles.closing.label"
+                    :color="titles.closing.color"
+                ></TownDetailsHistoryCard>
+                <!-- Fin date de fermeture du site -->
                 <div class="text-sm font-bold my-4">
                     {{ town.changelog.length }} modification{{
                         town.changelog.length > 1 ? "s" : ""
@@ -76,13 +84,23 @@
                         </div>
                     </div>
                 </div>
+                <!-- Date de création du site -->
+                <TownDetailsHistoryCard
+                    :author="town.createdBy"
+                    :when="town.createdAt"
+                    :title="titles.declaring.label"
+                    :color="titles.declaring.color"
+                ></TownDetailsHistoryCard>
+                <!-- Fin date de création du site -->
             </div>
         </div>
     </SidePanel>
 </template>
 
 <script>
+import TownDetailsHistoryCard from "./TownDetailsHistoryCard";
 export default {
+    components: { TownDetailsHistoryCard },
     props: {
         town: {
             type: Object
@@ -94,7 +112,20 @@ export default {
             type: Function
         }
     },
-
+    data() {
+        return {
+            titles: {
+                closing: {
+                    label: "Fermeture du site",
+                    color: "text-secondary"
+                },
+                declaring: {
+                    label: "Déclaration du site",
+                    color: "text-primary"
+                }
+            }
+        };
+    },
     methods: {
         /**
          * @see index.js
