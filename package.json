@@ -23,6 +23,8 @@
     "@fortawesome/free-solid-svg-icons": "^5.10.2",
     "@fortawesome/vue-fontawesome": "^0.1.6",
     "@openfonts/fira-code_all": "^1.44.2",
+    "@sentry/tracing": "^6.2.2",
+    "@sentry/vue": "^6.2.2",
     "@trevoreyre/autocomplete-vue": "^2.2.0",
     "axios": "^0.18.0",
     "chart.js": "^2.9.4",
