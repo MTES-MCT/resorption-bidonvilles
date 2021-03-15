@@ -16,6 +16,16 @@ if (process.env.VUE_APP_SENTRY_RELEASE) {
         dsn: process.env.VUE_APP_SENTRY,
         integrations: [new Integrations.BrowserTracing()],
 
+        // Use this hook to scrub sensitive data sent to Sentry
+        // if some sensitive data has been send, it's also possible to scrub data afterwards
+        // https://docs.sentry.io/platforms/javascript/data-management/sensitive-data/#scrubbing-data
+        // https://docs.sentry.io/product/data-management-settings/server-side-scrubbing/
+        beforeSend(event, hint) {
+            // Check what's send to sentry
+            console.log("[Debug] Sentry event", { event, hint });
+            return event;
+        },
+
         // Set tracesSampleRate to 1.0 to capture 100%
         // of transactions for performance monitoring.
         // We recommend adjusting this value in production
