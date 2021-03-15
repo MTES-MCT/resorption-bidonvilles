@@ -10,6 +10,7 @@ import { Integrations } from "@sentry/tracing";
 if (process.env.VUE_APP_SENTRY) {
     Sentry.init({
         Vue,
+        release: `rb-front@${process.env.VUE_APP_VERSION}`,
         dsn: process.env.VUE_APP_SENTRY,
         integrations: [new Integrations.BrowserTracing()],
 
