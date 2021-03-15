@@ -14,9 +14,8 @@
         <div class="flex items-center">
             <div
                 v-if="this.closedOrResorbed"
-                class="flex items-center uppercase text-sm text-secondary font-bold mr-4"
+                class="flex items-center uppercase text-sm mr-4"
             >
-                <Icon icon="lock" class="mr-2" />
                 <div v-if="this.isClosed">
                     Fermé le
                     {{ formatDate(town.closedAt, "d/m/y") }}
