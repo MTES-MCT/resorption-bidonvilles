@@ -7,12 +7,12 @@ import * as Sentry from "@sentry/vue";
 import { Integrations } from "@sentry/tracing";
 
 // Sentry should be loaded as soon as possible
-if (process.env.VUE_APP_SENTRY) {
+if (process.env.VUE_APP_SENTRY_RELEASE) {
     Sentry.init({
         Vue,
-        // TODO : Sentry is only enabled for production env, we might use it for different envs
+        // Sentry is only enabled for production env atm, we should differentiate envs if we use it for preprod/staging
         environment: "production",
-        release: `rb-front@${process.env.VUE_APP_VERSION}`,
+        release: process.env.VUE_APP_SENTRY_RELEASE,
         dsn: process.env.VUE_APP_SENTRY,
         integrations: [new Integrations.BrowserTracing()],
 
