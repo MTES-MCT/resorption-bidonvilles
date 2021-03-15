@@ -2,13 +2,29 @@
 import "@openfonts/fira-code_all";
 import "simplebar/dist/simplebar.min.css";
 import "#src/css/index.scss";
+import Vue from "vue";
+import * as Sentry from "@sentry/vue";
+import { Integrations } from "@sentry/tracing";
+
+// Sentry should be loaded as soon as possible
+if (process.env.VUE_APP_SENTRY) {
+    Sentry.init({
+        Vue,
+        dsn: process.env.VUE_APP_SENTRY,
+        integrations: [new Integrations.BrowserTracing()],
+
+        // Set tracesSampleRate to 1.0 to capture 100%
+        // of transactions for performance monitoring.
+        // We recommend adjusting this value in production
+        tracesSampleRate: 1.0
+    });
+}
 
 // import polyfills
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 
-// import vue
-import Vue from "vue";
+// Import vue libs
 import VueI18n from "vue-i18n";
 import VueRouter from "vue-router";
 import TrendChart from "vue-trend-chart";
