@@ -62,6 +62,13 @@ export default {
                       ].name
                     : null
             );
+
+            const departement = user.organization.location.departement || null;
+            this.$piwik.setCustomVariable(
+                5,
+                "departement_nom",
+                departement ? departement.name : null
+            );
         }
     }
 };
