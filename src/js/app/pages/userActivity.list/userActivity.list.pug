@@ -67,6 +67,9 @@
                         </span>
 
                         <div v-if="props.row.content !== undefined" class="userActivity-content" v-html="props.row.content"></div>
+                        <div v-if="props.row.comment !== undefined" class="userActivity-remove">
+                            <span class="link" @click="confirmCommentDeletion(props.row, $event)"><font-awesome-icon icon="trash-alt"></font-awesome-icon> Supprimer</span>
+                        </div>
 
                         <p v-if="props.row.diff" v-for="diff in props.row.diff" class="changelog">
                             <span class="changelog-name">{{ diff.field }} :</span><br/>

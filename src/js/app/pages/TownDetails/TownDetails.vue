@@ -27,11 +27,11 @@
                     v-on:openHistory="openHistory"
                 />
                 <div class="flex-1">
-                    <!--                    <TownDetailsActorAlert-->
-                    <!--                        v-if="isNotAnActor && actorAlertVisible"-->
-                    <!--                        @click="openActorThemes"-->
-                    <!--                        @close="actorAlertVisible = false"-->
-                    <!--                    ></TownDetailsActorAlert>-->
+                    <TownDetailsActorAlert
+                        v-if="isNotAnActor && actorAlertVisible"
+                        @click="openActorThemes"
+                        @close="actorAlertVisible = false"
+                    ></TownDetailsActorAlert>
                     <TownDetailsPanelCharacteristics
                         :town="town"
                         class="mb-10"
@@ -53,42 +53,42 @@
                         class="mb-10"
                         id="judicial"
                     />
-                    <!--                    <TownDetailsPanelActors-->
-                    <!--                        class="mb-10"-->
-                    <!--                        id="intervenants"-->
-                    <!--                        @click="openActorThemes"-->
-                    <!--                        @showThemesModal="openActorThemes"-->
-                    <!--                        @showInviteActorModal="openInviteActorModal"-->
-                    <!--                    />-->
+                    <TownDetailsPanelActors
+                        class="mb-10"
+                        id="intervenants"
+                        @click="openActorThemes"
+                        @showThemesModal="openActorThemes"
+                        @showInviteActorModal="openInviteActorModal"
+                    />
                 </div>
             </div>
         </PrivateContainer>
-        <!--        <div class="bg-orange200 py-10">-->
-        <!--            <PrivateContainer class="flex items-center">-->
-        <!--                <div class="leftColumnWidth text-sm">-->
-        <!--                    <div>-->
-        <!--                        <Icon icon="exclamation-triangle" />-->
-        <!--                    </div>-->
-        <!--                    <div class="font-bold">-->
-        <!--                        Quelles sont les règles de confidentialités ?-->
-        <!--                    </div>-->
-        <!--                    <div>-->
-        <!--                        Ne pas citer l’identité des individus (Nom, âge, sexe,-->
-        <!--                        origine…)-->
-        <!--                    </div>-->
-        <!--                </div>-->
-        <!--                <TownDetailsNewComment-->
-        <!--                    :class="[-->
-        <!--                        'flex-1',-->
-        <!--                        town.comments.regular.length === 0 && 'pb-32'-->
-        <!--                    ]"-->
-        <!--                    v-on:submit="town.comments.regular = $event"-->
-        <!--                    id="newComment"-->
-        <!--                    :user="user"-->
-        <!--                    :nbComments="town.comments.regular.length"-->
-        <!--                />-->
-        <!--            </PrivateContainer>-->
-        <!--        </div>-->
+        <div class="bg-orange200 py-10">
+            <PrivateContainer class="flex items-center">
+                <div class="leftColumnWidth text-sm">
+                    <div>
+                        <Icon icon="exclamation-triangle" />
+                    </div>
+                    <div class="font-bold">
+                        Quelles sont les règles de confidentialités ?
+                    </div>
+                    <div>
+                        Ne pas citer l’identité des individus (Nom, âge, sexe,
+                        origine…)
+                    </div>
+                </div>
+                <TownDetailsNewComment
+                    :class="[
+                        'flex-1',
+                        town.comments.regular.length === 0 && 'pb-32'
+                    ]"
+                    v-on:submit="town.comments.regular = $event"
+                    id="newComment"
+                    :user="user"
+                    :nbComments="town.comments.regular.length"
+                />
+            </PrivateContainer>
+        </div>
         <div
             :class="[
                 'bg-orange200',
@@ -151,13 +151,13 @@ import TownDetailsPanelCharacteristics from "./TownDetailsPanelCharacteristics";
 import TownDetailsPanelPeople from "./TownDetailsPanelPeople";
 import TownDetailsPanelLivingConditions from "./TownDetailsPanelLivingConditions";
 import TownDetailsPanelJudicial from "./TownDetailsPanelJudicial";
-// import TownDetailsPanelActors from "./TownDetailsPanelActors";
+import TownDetailsPanelActors from "./TownDetailsPanelActors";
 import { get as getConfig, getPermission } from "#helpers/api/config";
-// import TownDetailsNewComment from "./TownDetailsNewComment";
+import TownDetailsNewComment from "./TownDetailsNewComment";
 import TownDetailsComments from "./TownDetailsComments";
 import TownDetailsHistorySidePanel from "./TownDetailsHistorySidePanel";
 import TownDetailsCovidCommentsSidePanel from "./TownDetailsCovidCommentsSidePanel";
-// import TownDetailsActorAlert from "./TownDetailsActorAlert";
+import TownDetailsActorAlert from "./TownDetailsActorAlert";
 import TownDetailsCloseModal from "./TownDetailsCloseModal";
 import TownDetailsActorThemesModal from "./TownDetailsActorThemesModal";
 import TownDetailsInviteActorModal from "./TownDetailsInviteActorModal";
@@ -166,12 +166,12 @@ import { hasPermission } from "#helpers/api/config";
 
 export default {
     components: {
-        // TownDetailsActorAlert,
-        // TownDetailsPanelActors,
+        TownDetailsActorAlert,
+        TownDetailsPanelActors,
         TownDetailsCloseModal,
         TownDetailsActorThemesModal,
         TownDetailsHistorySidePanel,
-        // TownDetailsNewComment,
+        TownDetailsNewComment,
         TownDetailsComments,
         PrivateLayout,
         PrivateContainer,

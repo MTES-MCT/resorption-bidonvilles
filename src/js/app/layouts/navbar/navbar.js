@@ -7,7 +7,6 @@ import {
 import ITEMS from "./items";
 
 export default {
-    props: ["hideAlert"],
     data() {
         return {
             isSidebarOpened: false
