@@ -1,16 +1,6 @@
 <div class="v1">
     <div class="page--withMargin">
-        <NavBar :hideAlert="true"></NavBar>
+        <NavBar></NavBar>
         <Form v-bind="formDefinition" v-model="formData" @complete="onComplete"></Form>
-        <div class="bg-orange300 py-4 flex items-center mx-auto">
-            <div class="container flex items-center">
-                <Icon icon="exclamation-triangle" class="text-display-xl mr-4 text-primary" />
-                <div>
-                    <div class="text-display-md text-primary mb-2">Attention, version dégradée de la plateforme</div>
-                    <div class="mb-2">La plateforme fonctionne partiellement. <span class="font-bold">Les données visibles datent du 14 janvier 2021. Il est impossible de modifier les informations.</span> Cela fait suite à <a href="https://www.lemonde.fr/societe/article/2021/03/10/a-strasbourg-un-important-incendie-sur-le-site-de-l-entreprise-ovh-classe-seveso_6072548_3224.html">l’incendie chez notre hébergeur</a>.</div>
-                    <div>Notre équipe technique est mobilisée. <span class="font-bold">Retour à la normale prévue la semaine du 22 mars.</span> Nous vous tiendrons informés de la remise en ligne complète par mail. Toutes nos excuses pour le désagrément et merci de votre patience.</div>
-                </div>
-            </div>
-        </div>
     </div>
 </div>

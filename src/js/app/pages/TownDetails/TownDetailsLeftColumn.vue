@@ -29,9 +29,8 @@
                 >Intervenants</LeftColumnNavLink
             >
             <router-link
-                v-if="town.comments.regular.length > 0"
-                to="#comments"
-                @click.native="scrollFix('#comments')"
+                to="#newComment"
+                @click.native="scrollFix('#newComment')"
                 class="text-secondary"
             >
                 <div class="flex text-secondary font-bold mt-4 cursor-pointer">

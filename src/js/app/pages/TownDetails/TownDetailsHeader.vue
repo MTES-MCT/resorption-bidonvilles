@@ -28,53 +28,53 @@
                 </div>
             </div>
         </div>
-        <!--        <div class="flex justify-end mt-2">-->
-        <!--            <Button-->
-        <!--                v-if="-->
-        <!--                    hasLocalizedPermission('shantytown.close') &&-->
-        <!--                        town.status === 'open'-->
-        <!--                "-->
-        <!--                variant="primaryOutline"-->
-        <!--                class="mr-8"-->
-        <!--                iconPosition="left"-->
-        <!--                @click="$emit('openCancel')"-->
-        <!--                >Fermer le site</Button-->
-        <!--            >-->
-        <!--            <Button-->
-        <!--                variant="primary"-->
-        <!--                class="mr-8"-->
-        <!--                icon="pen"-->
-        <!--                iconPosition="left"-->
-        <!--                v-if="-->
-        <!--                    hasLocalizedPermission('shantytown.update') &&-->
-        <!--                        town.status === 'open'-->
-        <!--                "-->
-        <!--                @click="routeToUpdate"-->
-        <!--                >Mettre à jour</Button-->
-        <!--            >-->
-        <!--            <router-link-->
-        <!--                to="#newComment"-->
-        <!--                @click.native="scrollFix('#newComment')"-->
-        <!--                v-if="-->
-        <!--                    hasLocalizedPermission('shantytown_comment.list') ||-->
-        <!--                        hasLocalizedPermission('shantytown_comment.create')-->
-        <!--                "-->
-        <!--            >-->
-        <!--                <Button variant="secondary" icon="comment" iconPosition="left"-->
-        <!--                    >Journal du site</Button-->
-        <!--                >-->
-        <!--            </router-link>-->
-        <!--            <Button-->
-        <!--                v-if="hasLocalizedPermission('shantytown.delete')"-->
-        <!--                class="ml-8"-->
-        <!--                variant="secondary"-->
-        <!--                icon="trash-alt"-->
-        <!--                iconPosition="left"-->
-        <!--                @click="$emit('deleteTown')"-->
-        <!--                data-cy-button="delete"-->
-        <!--                >Supprimer le site</Button-->
-        <!--            >-->
-        <!--        </div>-->
+        <div class="flex justify-end mt-2">
+            <Button
+                v-if="
+                    hasLocalizedPermission('shantytown.close') &&
+                        town.status === 'open'
+                "
+                variant="primaryOutline"
+                class="mr-8"
+                iconPosition="left"
+                @click="$emit('openCancel')"
+                >Fermer le site</Button
+            >
+            <Button
+                variant="primary"
+                class="mr-8"
+                icon="pen"
+                iconPosition="left"
+                v-if="
+                    hasLocalizedPermission('shantytown.update') &&
+                        town.status === 'open'
+                "
+                @click="routeToUpdate"
+                >Mettre à jour</Button
+            >
+            <router-link
+                to="#newComment"
+                @click.native="scrollFix('#newComment')"
+                v-if="
+                    hasLocalizedPermission('shantytown_comment.list') ||
+                        hasLocalizedPermission('shantytown_comment.create')
+                "
+            >
+                <Button variant="secondary" icon="comment" iconPosition="left"
+                    >Journal du site</Button
+                >
+            </router-link>
+            <Button
+                v-if="hasLocalizedPermission('shantytown.delete')"
+                class="ml-8"
+                variant="secondary"
+                icon="trash-alt"
+                iconPosition="left"
+                @click="$emit('deleteTown')"
+                data-cy-button="delete"
+                >Supprimer le site</Button
+            >
+        </div>
     </div>
 </template>
 

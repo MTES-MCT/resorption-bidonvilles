@@ -238,37 +238,6 @@
                             </ul>
                         </div>
 
-                        <div
-                            class="bg-orange300 p-4 flex items-center mx-auto w-full"
-                        >
-                            <div class="container flex items-center">
-                                <Icon
-                                    icon="exclamation-triangle"
-                                    class="text-display-xl mr-4 text-primary"
-                                />
-                                <div>
-                                    <div
-                                        class="text-display-md text-primary mb-2"
-                                    >
-                                        Attention
-                                    </div>
-                                    <div class="mb-2">
-                                        La plateforme Résorption-bidonvilles est
-                                        indisponible depuis le 10 mars 2021
-                                        suite à
-                                        <a
-                                            href="https://www.lemonde.fr/societe/article/2021/03/10/a-strasbourg-un-important-incendie-sur-le-site-de-l-entreprise-ovh-classe-seveso_6072548_3224.html"
-                                            target="_blank"
-                                            >un incendie chez notre hébergeur</a
-                                        >. Les demandes d’accès à la plateforme
-                                        ne pourront être traitées qu'à partir de
-                                        la semaine du 22 mars 2021. Merci de
-                                        votre patience.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="flex justify-between mt-8">
                             <router-link to="/"
                                 ><Button variant="primaryText">{{

@@ -31,7 +31,6 @@ import PublicStats from "#app/pages/PublicStats/index.vue";
 import Covid from "#app/pages/covid/covid.vue";
 import Changelog from "#app/pages/Changelog/Changelog.vue";
 import CharteEngagement from "#app/pages/CharteEngagement/CharteEngagement.vue";
-import ReadonlyError from "#app/pages/ReadonlyError/ReadonlyError.vue";
 
 import { logout, isLoggedIn, alreadyLoggedBefore } from "#helpers/api/user";
 import {
@@ -107,7 +106,10 @@ function isPermitted(to) {
  * @returns {boolean}
  */
 function isUpgraded() {
-    return true;
+    const {
+        user: { position }
+    } = getConfig();
+    return position !== "";
 }
 
 /**
@@ -116,7 +118,8 @@ function isUpgraded() {
  * @returns {boolean}
  */
 function hasNoPendingChangelog() {
-    return true;
+    const { changelog } = getConfig();
+    return changelog === null;
 }
 
 /**
@@ -148,9 +151,6 @@ const guardians = {
         { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
         { checker: isUpgraded, target: "/mise-a-niveau" },
         { checker: hasNoPendingChangelog, target: "/nouvelle-version" }
-    ]),
-    writeDisabled: guard.bind(this, [
-        { checker: () => false, target: "/operation-impossible" }
     ])
 };
 
@@ -234,10 +234,6 @@ const router = new VueRouter({
             beforeEnter: guardians.loadedAndUpgraded
         },
         {
-            path: "/operation-impossible",
-            component: ReadonlyError
-        },
-        {
             path: "/deconnexion",
             beforeEnter: (to, from, next) => {
                 logout(Vue.prototype.$piwik);
@@ -278,7 +274,7 @@ const router = new VueRouter({
             },
             path: "/nouveau-site",
             component: TownsCreate,
-            beforeEnter: guardians.writeDisabled
+            beforeEnter: guardians.loadedAndUpToDate
         },
         {
             meta: {
@@ -294,7 +290,7 @@ const router = new VueRouter({
             },
             path: "/site/:id/mise-a-jour",
             component: TownsUpdate,
-            beforeEnter: guardians.writeDisabled
+            beforeEnter: guardians.loadedAndUpToDate
         },
         {
             path: "/feedback",
@@ -338,7 +334,7 @@ const router = new VueRouter({
             },
             path: "/mon-compte",
             component: Me,
-            beforeEnter: guardians.writeDisabled
+            beforeEnter: guardians.loadedAndUpToDate
         },
         {
             meta: {
@@ -356,7 +352,7 @@ const router = new VueRouter({
             },
             path: "/nouvel-utilisateur",
             component: UserCreate,
-            beforeEnter: guardians.writeDisabled
+            beforeEnter: guardians.loadedAndUpToDate
         },
         {
             path: "/signature-charte-engagement",
@@ -396,7 +392,7 @@ const router = new VueRouter({
             },
             path: "/nouveau-mot-de-passe",
             component: UserRequestNewPassword,
-            beforeEnter: guardians.writeDisabled
+            beforeEnter: guardians.anonymous
         },
         {
             meta: {
@@ -404,7 +400,7 @@ const router = new VueRouter({
             },
             path: "/renouveler-mot-de-passe/:token",
             component: UserSetNewPassword,
-            beforeEnter: guardians.writeDisabled
+            beforeEnter: guardians.anonymous
         },
         {
             meta: {
@@ -412,7 +408,7 @@ const router = new VueRouter({
             },
             path: "/activer-mon-compte/:token",
             component: UserActivate,
-            beforeEnter: guardians.writeDisabled
+            beforeEnter: guardians.anonymous
         },
         {
             meta: {
@@ -430,7 +426,7 @@ const router = new VueRouter({
             },
             path: "/nouveau-dispositif",
             component: PlanCreate,
-            beforeEnter: guardians.writeDisabled
+            beforeEnter: guardians.loadedAndUpToDate
         },
         {
             meta: {
@@ -439,7 +435,7 @@ const router = new VueRouter({
             },
             path: "/modifier-dispositif/:id",
             component: PlanEdit,
-            beforeEnter: guardians.writeDisabled
+            beforeEnter: guardians.loadedAndUpToDate
         },
         {
             meta: {
@@ -457,7 +453,7 @@ const router = new VueRouter({
             },
             path: "/dispositif/:id/indicateurs",
             component: PlanMarks,
-            beforeEnter: guardians.writeDisabled
+            beforeEnter: guardians.loadedAndUpToDate
         },
         {
             meta: {
