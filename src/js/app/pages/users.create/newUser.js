@@ -49,6 +49,11 @@ export default (wording, submitFn) => ({
                                     label: "Courriel",
                                     mandatory: true,
                                     type: "text"
+                                },
+                                phone: {
+                                    label: "Téléphone (facultatif)",
+                                    mandatory: false,
+                                    type: "text"
                                 }
                             }
                         },

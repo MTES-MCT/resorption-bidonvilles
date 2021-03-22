@@ -29,7 +29,11 @@
                                     <h2>{{ user.organization.name }}</h2>
                                 </hgroup>
 
-                                <p>{{ user.position }}<br/><span class="email">{{ user.email }}</span></p>
+                                <p>
+                                    <span>{{ user.position }}</span><br/>
+                                    <span class="email">{{ user.email }}</span><br/>
+                                    <span class="phone">{{ user.phone }}</span>
+                                </p>
                             </section>
 
                             <section class="userInfo-section">
