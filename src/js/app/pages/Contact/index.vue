@@ -46,6 +46,12 @@
                                 name="Nom de famille"
                                 rules="required"
                             />
+                            <TextInput
+                                :rows="8"
+                                :label="$t('contactPage.phone')"
+                                v-model="commonFields.phone"
+                                id="phone"
+                            />
                         </InputGroup>
                         <CheckableGroup
                             :label="$t('contactPage.requestType')"
@@ -195,7 +201,6 @@
                                 requestAccessFields.position
                             "
                         />
-
                         <TextArea
                             :rows="8"
                             :label="$t('contactPage.message')"
@@ -274,9 +279,11 @@ import AdministrationForm from "./AdministrationForm.vue";
 import CheckableGroup from "#app/components/ui/Form/CheckableGroup.vue";
 import Checkbox from "#app/components/ui/Form/input/Checkbox.vue";
 import SocialShare from "#app/pages/Contact/SocialShare";
+import TextInput from "#app/components/ui/Form/input/TextInput";
 
 export default {
     components: {
+        TextInput,
         SocialShare,
         Checkbox,
         CheckableGroup,
@@ -375,6 +382,7 @@ export default {
             error: null,
             commonFields: {
                 email: this.$route.query.email || "",
+                phone: "",
                 first_name: "",
                 last_name: "",
                 request_type: [],

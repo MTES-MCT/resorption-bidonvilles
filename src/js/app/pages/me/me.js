@@ -35,6 +35,11 @@ export default {
                                     mandatory: true,
                                     type: "text"
                                 },
+                                phone: {
+                                    label: "Téléphone",
+                                    mandatory: false,
+                                    type: "text"
+                                },
                                 password: {
                                     label: "Mot de passe",
                                     description:
@@ -96,6 +101,7 @@ export default {
             return me().then(data => {
                 this.formData.first_name = data.first_name;
                 this.formData.last_name = data.last_name;
+                this.formData.phone = data.phone;
                 this.formData.password = "";
             });
         },
