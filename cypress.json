@@ -1,5 +1,6 @@
 {
-    "baseUrl": "http://localhost:1234",
+    "projectId": "dyzf1o",
+    "baseUrl": "https://resorption-bidonvilles.localhost",
     "pluginsFile": false,
     "video": false,
     "numTestsKeptInMemory": 0
