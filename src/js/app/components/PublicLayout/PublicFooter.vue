@@ -35,6 +35,11 @@
                             }}
                         </li>
                         <li>
+                            {{
+                                $t("footer.RGAA")
+                            }}
+                        </li>
+                        <li>
                             <router-link to="/mentions-legales">{{
                                 $t("footer.legal")
                             }}</router-link>
