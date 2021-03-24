@@ -4,10 +4,10 @@
     "description": "Frontend de Résorption Bidonvilles",
     "scripts": {
         "dev": "vue-cli-service serve --port 80",
-        "build": "docker exec rb_frontend yarn vue-cli-service build",
+        "build": "vue-cli-service build",
+        "lint": "docker exec rb_frontend yarn vue-cli-service lint src cypress docs",
         "test": "cypress run",
         "test:unit": "docker exec rb_frontend yarn vue-cli-service test:unit",
-        "lint": "docker exec rb_frontend yarn vue-cli-service lint src cypress docs",
         "setup": "husky install"
     },
     "main": "./dist/index.html",
