@@ -352,16 +352,16 @@ export default {
             return "Dernière actualisation il y a plus d'un an";
         },
         isClosed() {
-            return this.shantytown.closedAt &&
+            return (
+                this.shantytown.closedAt &&
                 this.shantytown.closedWithSolutions !== "yes"
-                ? true
-                : false;
+            );
         },
         isResorbed() {
-            return this.shantytown.closedAt &&
+            return (
+                this.shantytown.closedAt &&
                 this.shantytown.closedWithSolutions === "yes"
-                ? true
-                : false;
+            );
         }
     }
 };

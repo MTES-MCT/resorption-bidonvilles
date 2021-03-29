@@ -154,13 +154,13 @@ export default {
                 ? true
                 : false;
         },
-        isResorbed() {
+        isResolved() {
             return this.town.closedAt && this.town.closedWithSolutions === "yes"
                 ? true
                 : false;
         },
         closedOrResorbed() {
-            return this.isClosed || this.isResorbed;
+            return this.isClosed || this.isResolved;
         }
     }
 };
