@@ -1,25 +1,25 @@
 <template>
-    <div>
-        <div class="text-md font-bold my-4" :class="color">
-            {{ title }}
+    <div class="py-4 border-b-2 border-G600">
+        <div class="text-sm text-G600">
+            {{ formatDate(when, "d M y à h:i") }}
         </div>
-        <div class="pb-4 border-b-2 border-G200">
-            <div class="text-sm text-G600">
-                {{ formatDate(when, "d M y à h:i") }}
-            </div>
-            <div class="text-primary">
-                <router-link :to="`/annuaire/${author.id} `">
-                    <div class="flex items-center">
-                        <font-awesome-icon
-                            icon="user"
-                            class="w-8 text-md"
-                        ></font-awesome-icon>
-                        <div class="font-bold ml-2">
-                            {{ author.first_name }}
-                            {{ author.last_name }}
-                        </div>
+        <div class="text-primary">
+            <router-link :to="`/annuaire/${author.id} `">
+                <div class="flex items-center">
+                    <font-awesome-icon
+                        icon="user"
+                        class="w-8 text-md"
+                    ></font-awesome-icon>
+                    <div class="font-bold ml-2">
+                        {{ author.first_name }}
+                        {{ author.last_name }}
                     </div>
-                </router-link>
+                </div>
+            </router-link>
+        </div>
+        <div>
+            <div class="changelogContent my-2">
+                <div class="text-green">{{ title }}</div>
             </div>
         </div>
     </div>
@@ -34,11 +34,8 @@ export default {
         title: {
             type: String
         },
-        color: {
-            type: String
-        },
         when: {
-            type: undefined
+            type: String
         }
     },
     methods: {
