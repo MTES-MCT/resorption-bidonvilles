@@ -26,7 +26,7 @@
                 <div class="px-6" v-if="this.isClosed">
                     Fermé le {{ formatDate(shantytown.closedAt, "d/m/y") }}
                 </div>
-                <div class="px-6" v-else-if="this.isResorbed">
+                <div class="px-6" v-else-if="this.isSolved">
                     Résorbé le {{ formatDate(shantytown.closedAt, "d/m/y") }}
                 </div>
                 <!-- Fin site fermé ou résorbé ? -->
@@ -357,7 +357,7 @@ export default {
                 this.shantytown.closedWithSolutions !== "yes"
             );
         },
-        isResorbed() {
+        isSolved() {
             return (
                 this.shantytown.closedAt &&
                 this.shantytown.closedWithSolutions === "yes"

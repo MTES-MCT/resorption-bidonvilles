@@ -13,14 +13,14 @@
         </div>
         <div class="flex items-center">
             <div
-                v-if="this.closedOrResorbed"
+                v-if="this.closedOrSolved"
                 class="flex items-center uppercase text-sm mr-4"
             >
                 <div v-if="this.isClosed">
                     Fermé le
                     {{ formatDate(town.closedAt, "d/m/y") }}
                 </div>
-                <div v-else-if="this.isResorbed">
+                <div v-else-if="this.isSolved">
                     Résorbé le
                     {{ formatDate(town.closedAt, "d/m/y") }}
                 </div>
@@ -150,17 +150,17 @@ export default {
     },
     computed: {
         isClosed() {
-            return this.town.closedAt && this.town.closedWithSolutions !== "yes"
-                ? true
-                : false;
+            return (
+                this.town.closedAt && this.town.closedWithSolutions !== "yes"
+            );
         },
-        isResolved() {
-            return this.town.closedAt && this.town.closedWithSolutions === "yes"
-                ? true
-                : false;
+        isSolved() {
+            return (
+                this.town.closedAt && this.town.closedWithSolutions === "yes"
+            );
         },
-        closedOrResorbed() {
-            return this.isClosed || this.isResolved;
+        closedOrSolved() {
+            return this.isClosed || this.isSolved;
         }
     }
 };
