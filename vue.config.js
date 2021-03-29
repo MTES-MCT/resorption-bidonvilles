@@ -12,16 +12,20 @@ module.exports = {
 
     configureWebpack: {
         plugins: [
-            new SentryPlugin({
-                authToken:
-                    "13dc3d0b5cd94173b25d34ba54e7975365bbc073218a4b1aa17fe5a35fa26bb2",
-                release: process.env.VUE_APP_SENTRY_RELEASE,
-                org: "resorption-bidonvilles",
-                project: "resorption-bidonvilles",
+            ...(process.env.VUE_APP_SENTRY_SOURCEMAP_AUTHKEY
+                ? [
+                      new SentryPlugin({
+                          authToken:
+                              process.env.VUE_APP_SENTRY_SOURCEMAP_AUTHKEY,
+                          release: process.env.VUE_APP_SENTRY_RELEASE,
+                          org: "resorption-bidonvilles",
+                          project: "resorption-bidonvilles",
 
-                // webpack specific configuration
-                include: "./dist"
-            })
+                          // webpack specific configuration
+                          include: "./dist"
+                      })
+                  ]
+                : [])
         ]
     },
 
