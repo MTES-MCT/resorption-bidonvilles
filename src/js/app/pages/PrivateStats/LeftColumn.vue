@@ -1,0 +1,32 @@
+<template>
+    <div>
+        <h1 class="text-display-md mb-4">
+            Statistiques
+        </h1>
+
+        <div class="h-96 overflow-scroll">
+            <div>
+                <LeftColumnLink :to="`/statistiques/`"
+                    >France métropolitaine</LeftColumnLink
+                >
+            </div>
+            <div v-for="option in departements" :key="option.code">
+                <LeftColumnLink :to="`/statistiques/${option.code}`"
+                    >{{ option.code }} - {{ option.name }}</LeftColumnLink
+                >
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+import LeftColumnLink from "#app/pages/PrivateStats/LeftColumnLink";
+export default {
+    components: { LeftColumnLink },
+    props: {
+        departements: {
+            type: Array
+        }
+    }
+};
+</script>
