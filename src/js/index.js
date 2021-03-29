@@ -7,7 +7,7 @@ import * as Sentry from "@sentry/vue";
 import { Integrations } from "@sentry/tracing";
 
 // Sentry should be loaded as soon as possible
-if (process.env.VUE_APP_SENTRY_RELEASE) {
+if (process.env.VUE_APP_SENTRY) {
     Sentry.init({
         Vue,
         // Sentry is only enabled for production env atm, we should differentiate envs if we use it for preprod/staging
