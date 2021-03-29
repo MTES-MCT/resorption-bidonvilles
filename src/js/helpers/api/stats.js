@@ -5,8 +5,8 @@ import { getApi } from "#helpers/api/main";
  *
  * @returns {Promise}
  */
-export function all() {
-    return getApi("/stats");
+export function all(departement) {
+    return getApi(`/stats${departement ? `?departement=${departement}` : ""}`);
 }
 
 export default all;
