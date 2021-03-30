@@ -4,7 +4,7 @@
 `action-bidonvilles` est le frontend de *Résorption-bidonvilles*, une application construite avec VueJS et testée avec Cypress.
 
 ## 👨🏼‍🏫 Préambule
-Le frontend de *Résorption-bidonvilles* est publié sous la forme d'images Docker versionnées et accessibles publiquement sur Docker Hub à l'adresse suivante : [https://hub.docker.com/r/resorptionbidonvilles/frontend/tags](https://hub.docker.com/r/resorptionbidonvilles/api/tags).
+Le frontend de *Résorption-bidonvilles* est publié sous la forme d'images Docker versionnées et accessibles publiquement sur Docker Hub à l'adresse suivante : [https://hub.docker.com/r/resorptionbidonvilles/frontend/tags](https://hub.docker.com/r/resorptionbidonvilles/frontend/tags).
 
 Le présent dépôt permet de travailler sur les sources localement via un container Docker puis de builder une image finale à publier sur Docker Hub.
 Si vous souhaitez déployer une instance de *Résorption-bidonvilles*, veuillez vous référer aux instructions du dépôt [resorption-bidonvilles-deploy](https://github.com/MTES-MCT/resorption-bidonvilles-deploy).
