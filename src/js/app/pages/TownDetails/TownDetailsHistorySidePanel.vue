@@ -5,7 +5,7 @@
         :closeClickOutside="true"
     >
         <div class="  px-8 ">
-            <div class="border-b-2 border-G600 py-4">
+            <div class="border-b-2 border-G200 py-4">
                 <div class="flex justify-end">
                     <Button
                         variant="primaryText"
@@ -30,7 +30,10 @@
                     title="Fermeture du site"
                 ></TownDetailsHistoryCard>
                 <!-- Fin date de fermeture du site -->
-                <div class="text-sm font-bold mt-4">
+                <div
+                    class="text-sm font-bold mt-4"
+                    v-bind:class="{ 'mb-4': town.changelog.length < 1 }"
+                >
                     {{
                         town.changelog.length > 1
                             ? town.changelog.length
@@ -38,7 +41,6 @@
                     }}
                     modification{{ town.changelog.length > 1 ? "s" : "" }}
                 </div>
-
                 <div v-for="changelog in town.changelog" :key="changelog.id">
                     <div class="py-4 border-b-2 border-G200">
                         <div class="text-sm text-G600">
@@ -116,18 +118,6 @@ export default {
          */
         formatDate(...args) {
             return window.App.formatDate.apply(window, args);
-        }
-    },
-    computed: {
-        isLastItem() {
-            return (
-                this.index !==
-                (Array.isArray(this.town.changelog)
-                    ? this.town.changelog
-                    : Object.keys(this.town.changelog)
-                ).length -
-                    1
-            );
         }
     }
 };

@@ -1,5 +1,5 @@
 <template>
-    <div class="py-4 border-b-2 border-G600">
+    <div class="py-4 border-t-2 border-b-2 border-G600">
         <div class="text-sm text-G600">
             {{ formatDate(when, "d M y à h:i") }}
         </div>
@@ -35,7 +35,7 @@ export default {
             type: String
         },
         when: {
-            type: String
+            type: [String, Number]
         }
     },
     methods: {
@@ -45,9 +45,6 @@ export default {
         formatDate(...args) {
             return window.App.formatDate.apply(window, args);
         }
-    },
-    data() {
-        return {};
     }
 };
 </script>
