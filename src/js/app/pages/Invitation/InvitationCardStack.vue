@@ -14,12 +14,6 @@
                         {{ guest.email }}
                     </div>
                     <div class="p-4 bg-white border-gray-200 text-right">
-                        <!-- Button
-                            size="sm"
-                            variant="secondary"
-                            @click="deleteItem(index)"
-                            >Supprimer</Button
-                        > -->
                         <Button
                             class="m-2"
                             variant="primaryText"

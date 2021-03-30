@@ -2,25 +2,25 @@
     <div>
         <ValidationObserver ref="form" v-slot="{ handleSubmit, errors }">
             <Form class="mb-2" @submit.prevent="handleSubmit(onSubmit)">
-                <InputGroup class="md:flex md:justify-center">
+                <div class="md:flex md:justify-between">
                     <TextInput
-                        class="md:mr-6 md:w-1/4"
-                        :label="$t('invitationPage.first_name')"
+                        class="md:mr-6 md:w-1/3"
+                        :label="$t('invitationPage.firstname')"
                         v-model="commonFields.first_name"
                         id="first_name"
                         name="Prénom"
                         rules="required|max:50"
                     />
                     <TextInput
-                        class="md:mr-6 md:w-1/4"
-                        :label="$t('invitationPage.last_name')"
+                        class="md:mr-6 md:w-1/3"
+                        :label="$t('invitationPage.lastname')"
                         v-model="commonFields.last_name"
                         id="last_name"
                         name="Nom de famille"
                         rules="required|max:50"
                     />
                     <TextInput
-                        class="md:w-1/4"
+                        class="md:w-1/3"
                         :label="$t('invitationPage.email')"
                         v-model="commonFields.email"
                         id="email"
@@ -28,12 +28,12 @@
                         validationName="Email"
                         rules="required|max:125|email"
                     />
-                </InputGroup>
+                </div>
                 <div
                     v-if="
                         Object.values(errors).filter(err => err.length).length
                     "
-                    class="bg-red200 justify-items-center -mt-4 md:-mt-8 p-3 mb-16"
+                    class="bg-red200 justify-items-center md:mt-2 p-3 mb-8"
                 >
                     {{ $t("contactPage.error") }}
 
@@ -50,11 +50,8 @@
                     </ul>
                 </div>
 
-                <div class="flex flex-row-reverse">
-                    <Button
-                        type="submit"
-                        variant="primary"
-                        class="mb-8 -mt-8 md:-mt-12"
+                <div class="text-right">
+                    <Button type="submit" variant="primary" class="mb-8"
                         >{{ $t("invitationPage.add") }}
                     </Button>
                 </div>
