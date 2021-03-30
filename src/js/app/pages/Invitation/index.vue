@@ -45,8 +45,36 @@
                 v-bind:guestList="guestList"
                 @delete-guest="deleteGuest"
             ></InvitationCardStack>
+            <div
+                v-if="error !== null"
+                class="bg-red200 justify-items-center md:mt-2 p-3 mb-8"
+            >
+                <strong>{{ error }}</strong>
+
+                <ul
+                    class="ml-4 list-disc"
+                    v-if="Object.keys(errors).length > 0"
+                >
+                    <li
+                        v-for="(error, inputId) in errors"
+                        :key="inputId"
+                        class="mt-4"
+                    >
+                        {{ error.label }} :
+                        <ul>
+                            <li
+                                v-for="(message, messageId) in error.messages"
+                                :key="messageId"
+                            >
+                                - {{ message }}
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
             <div class="flex justify-end space-x-8 mt-8 mb-8">
-                <Button variant="primaryText" :loading="loading" @click="omit">
+                <Button variant="primaryText" v-if="!loading" @click="omit">
                     {{ $t("invitationPage.cancel") }}
                 </Button>
                 <Button
@@ -79,12 +107,50 @@ export default {
     data() {
         return {
             guestList: [],
-            loading: false
+            loading: false,
+            error: null,
+            fieldErrors: {}
         };
     },
     computed: {
         greeter() {
             return this.$store.state.greeter;
+        },
+        errors() {
+            const labels = {
+                "greeter.email":
+                    "Courriel de l'utilisateur à l'origine de l'invitation",
+                guests: "Liste des invité(e)s",
+                email: "Courriel",
+                first_name: "Prénom",
+                last_name: "Nom de famille"
+            };
+
+            function getLabel(key) {
+                if (labels[key] !== undefined) {
+                    return labels[key];
+                }
+
+                const match = key.match(/^guests\[([0-9]+)\]\.(.+)$/i);
+                if (match === null) {
+                    return "Champ inconnu";
+                }
+
+                return `${getLabel(match[2])} de l'invité(e) n°${parseInt(
+                    match[1],
+                    10
+                ) + 1}`;
+            }
+
+            return Object.keys(this.fieldErrors).reduce((acc, key) => {
+                return {
+                    ...acc,
+                    [key]: {
+                        label: getLabel(key),
+                        messages: this.fieldErrors[key]
+                    }
+                };
+            }, {});
         }
     },
     methods: {
@@ -101,45 +167,52 @@ export default {
             });
         },
         async sendInvitations() {
-            this.loading = false;
-            if (this.guestList.length > 0) {
-                // Préparation de l'objet data à transmettre à l'API
-                const data = {
-                    // Ajout des destinataires au message de confirmation
-                    guests: this.guestList.map(
-                        ({ email, first_name, last_name }) => ({
-                            email,
-                            first_name,
-                            last_name
-                        })
-                    ),
-                    greeter: this.greeter
-                };
-                // Préparation du message de confirmation d'envoi des mails
-                const msg = [
-                    "Invitation(s) envoyée(s) à",
-                    ...this.guestList.map(({ email }) => email)
-                ].join("<br/>");
-                try {
-                    await invite(data);
-                    this.loading = false;
-                    this.$router.push("/");
-                    notify({
-                        group: "notifications",
-                        type: "success",
-                        title: "Succès",
-                        text: msg
-                    });
-                } catch (err) {
-                    // TODO: Récupérer les messages d'erreur de l'API pour avoir plus de détail
-                    this.loading = false;
-                    this.backHomeWithErrMsg(
-                        "Une erreur est survenue lors de l'envoi des invitations."
-                    );
-                }
-            } else {
+            if (this.loading !== false) {
+                return;
+            }
+
+            // Préparation de l'objet data à transmettre à l'API
+            const data = {
+                // Ajout des destinataires au message de confirmation
+                guests: this.guestList.map(
+                    ({ email, first_name, last_name }) => ({
+                        email,
+                        first_name,
+                        last_name
+                    })
+                ),
+                greeter: this.greeter
+            };
+
+            // Préparation du message de confirmation d'envoi des mails
+            const msg = [
+                "Invitation(s) envoyée(s) à",
+                ...this.guestList.map(({ email }) => email)
+            ].join("<br/>");
+
+            this.loading = true;
+            this.error = null;
+            this.fieldErrors = {};
+
+            try {
+                await invite(data);
                 this.loading = false;
-                this.backHomeWithErrMsg("La liste des invités est vide.");
+                this.$router.push("/");
+                notify({
+                    group: "notifications",
+                    type: "success",
+                    title: "Succès",
+                    text: msg
+                });
+            } catch (err) {
+                this.loading = false;
+
+                this.error =
+                    "Une erreur est survenue lors de l'envoi des invitations.";
+                if (err && err.user_message) {
+                    this.error = err.user_message;
+                    this.fieldErrors = err.fields || {};
+                }
             }
         },
         omit() {

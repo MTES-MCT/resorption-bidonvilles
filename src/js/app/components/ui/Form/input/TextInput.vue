@@ -90,12 +90,16 @@ export default {
             required: false,
             type: Boolean,
             default: false
+        },
+        width: {
+            required: false,
+            type: String,
+            default: undefined
         }
     },
     computed: {
         classes() {
             const inputOptions = {
-                size: this.size,
                 error: this.error,
                 prefixIcon: this.prefixIcon,
                 suffixIcon: this.suffixIcon
