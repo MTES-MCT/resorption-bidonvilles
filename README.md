@@ -19,7 +19,7 @@ Si vous souhaitez déployer une instance de *Résorption-bidonvilles*, veuillez 
 
 ## 🔌 Initialisation
 Une fois le dépôt clôné sur votre machine et les dépendances ci-dessus installées, vous devez configurer vos hooks git via Husky avec la commande suivante :
-`yarn prepare` ou `npm prepare`
+`yarn setup`
 
 C'est tout !
 
