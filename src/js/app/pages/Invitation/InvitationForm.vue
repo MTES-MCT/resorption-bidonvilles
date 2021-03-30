@@ -5,16 +5,16 @@
                 <InputGroup class="md:flex md:justify-center">
                     <TextInput
                         class="md:mr-6 md:w-1/4"
-                        :label="$t('invitationPage.firstname')"
-                        v-model="commonFields.firstname"
+                        :label="$t('invitationPage.first_name')"
+                        v-model="commonFields.first_name"
                         id="first_name"
                         name="Prénom"
                         rules="required|max:50"
                     />
                     <TextInput
                         class="md:mr-6 md:w-1/4"
-                        :label="$t('invitationPage.lastname')"
-                        v-model="commonFields.lastname"
+                        :label="$t('invitationPage.last_name')"
+                        v-model="commonFields.last_name"
                         id="last_name"
                         name="Nom de famille"
                         rules="required|max:50"
@@ -71,8 +71,8 @@ export default {
             loading: false,
             commonFields: {
                 email: "",
-                firstname: "",
-                lastname: ""
+                first_name: "",
+                last_name: ""
             }
         };
     },
@@ -84,8 +84,8 @@ export default {
                 }
                 this.$emit("addGuestReq", { ...this.commonFields });
                 // resetting values
-                this.commonFields.firstname = "";
-                this.commonFields.lastname = "";
+                this.commonFields.first_name = "";
+                this.commonFields.last_name = "";
                 this.commonFields.email = "";
                 // waiting until models are updated in the UI
                 this.$nextTick(() => {
