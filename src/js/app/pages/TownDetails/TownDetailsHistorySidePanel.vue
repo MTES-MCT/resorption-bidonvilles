@@ -35,7 +35,7 @@
                     v-bind:class="{ 'mb-4': town.changelog.length < 1 }"
                 >
                     {{
-                        town.changelog.length > 1
+                        town.changelog.length >= 1
                             ? town.changelog.length
                             : "Aucune"
                     }}
