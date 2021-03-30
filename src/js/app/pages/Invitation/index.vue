@@ -45,7 +45,7 @@
                 v-bind:guestList="guestList"
                 @delete-guest="deleteGuest"
             ></InvitationCardStack>
-            <div class="flex justify-end space-x-8 mt-8">
+            <div class="flex justify-end space-x-8 mt-8 mb-8">
                 <Button variant="primaryText" :loading="loading" @click="omit">
                     {{ $t("invitationPage.cancel") }}
                 </Button>
