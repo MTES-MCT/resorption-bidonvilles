@@ -8,7 +8,7 @@
                     <div
                         class="px-4 py-4 pb-2 bg-white border-1 border-gray-200 font-bold"
                     >
-                        {{ guest.firstname }} {{ guest.lastname }}
+                        {{ guest.first_name }} {{ guest.last_name }}
                     </div>
                     <div class="p-4 pt-0 bg-white border-b border-gray-200">
                         {{ guest.email }}

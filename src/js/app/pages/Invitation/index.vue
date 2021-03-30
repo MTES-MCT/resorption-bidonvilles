@@ -107,10 +107,10 @@ export default {
                 const data = {
                     // Ajout des destinataires au message de confirmation
                     guests: this.guestList.map(
-                        ({ email, firstname, lastname }) => ({
+                        ({ email, first_name, last_name }) => ({
                             email,
-                            firstname,
-                            lastname
+                            first_name,
+                            last_name
                         })
                     ),
                     greeter: this.greeter
@@ -154,8 +154,8 @@ export default {
         },
         addGuestToList(guest) {
             this.guestList.push({
-                firstname: guest.firstname,
-                lastname: guest.lastname,
+                first_name: guest.first_name,
+                last_name: guest.last_name,
                 email: guest.email
             });
         },
