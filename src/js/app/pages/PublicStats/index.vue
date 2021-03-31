@@ -208,14 +208,22 @@ export default {
         },
 
         usersEvolutionData() {
-            if (this.numberOfNewUsersPerMonth === null) {
+            if (
+                this.numberOfNewUsersPerMonth === null ||
+                this.stats.numberOfUsersOnJune2020 === null
+            ) {
                 return [];
             }
+
+            const initialValue = parseInt(
+                this.stats.numberOfUsersOnJune2020,
+                10
+            );
 
             const cumulativeData = this.numberOfNewUsersPerMonth.reduce(
                 (acc, { total }, index) =>
                     index === 0
-                        ? [parseInt(total, 10)]
+                        ? [parseInt(total, 10) + initialValue]
                         : [...acc, parseInt(total, 10) + acc[acc.length - 1]],
                 []
             );
