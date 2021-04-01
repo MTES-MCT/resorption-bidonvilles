@@ -42,6 +42,13 @@
                             height="250px"
                         />
                     </div>
+                    <div>
+                        <LineChart
+                            :chartData="shantytownsTotalEvolutionData"
+                            :options="{ maintainAspectRatio: false }"
+                            height="250px"
+                        />
+                    </div>
                 </div>
             </div>
         </PrivateContainer>
@@ -57,10 +64,12 @@ import KeyMetric from "#app/pages/PrivateStats/KeyMetric";
 import { all } from "#helpers/api/stats";
 import Spinner from "#app/components/ui/Spinner";
 import BarChart from "#app/pages/PrivateStats/BarChart";
+import LineChart from "#app/pages/PrivateStats/LineChart";
 
 export default {
     components: {
         BarChart,
+        LineChart,
         Spinner,
         LeftColumn,
         PrivateContainer,
@@ -135,6 +144,53 @@ export default {
                             parseInt(d.total, 10)
                         ),
                         label: "Nombre de nouveaux bidonvilles"
+                    }
+                ]
+            };
+        },
+        shantytownsTotalEvolutionData() {
+            if (
+                this.stats.numberOfNewShantytownsPerMonth === null ||
+                this.stats.numberOfClosedShantytownsPerMonth === null
+            ) {
+                return [];
+            }
+
+            const initialValue = parseInt(
+                this.stats.numberOfShantytownsOnJune2019,
+                10
+            );
+
+            const cumulativeData = this.stats.numberOfNewShantytownsPerMonth.reduce(
+                (acc, obj, index) => {
+                    const monthDiff =
+                        parseInt(
+                            this.stats.numberOfNewShantytownsPerMonth[index]
+                                .total,
+                            10
+                        ) -
+                        parseInt(
+                            this.stats.numberOfClosedShantytownsPerMonth[index]
+                                .total,
+                            10
+                        );
+
+                    return index === 0
+                        ? [initialValue + monthDiff]
+                        : [...acc, monthDiff + acc[acc.length - 1]];
+                },
+                []
+            );
+
+            return {
+                labels: this.stats.numberOfNewShantytownsPerMonth.map(
+                    ({ month }) => month
+                ),
+                datasets: [
+                    {
+                        backgroundColor: "#169B62",
+                        data: cumulativeData,
+                        label: "Nombre total de bidonvilles"
                     }
                 ]
             };
