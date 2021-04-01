@@ -4,7 +4,7 @@
             <div v-if="!stats">
                 <Spinner />
             </div>
-            <div class="flex" v-else>
+            <div class="flex">
                 <LeftColumn :departements="departements" />
                 <div class="pt-8 ml-32 flex-1">
                     <div class="text-display-lg text-primary">
@@ -13,7 +13,7 @@
                         >
                         {{ territory.name }}
                     </div>
-                    <div class="grid grid-cols-5 gap-8 mt-8">
+                    <div class="grid grid-cols-5 gap-8 mt-8 mb-16">
                         <KeyMetric
                             :value="stats.numberOfPeople || 0"
                             label="habitants"
@@ -35,6 +35,13 @@
                             label="utilisateurs"
                         />
                     </div>
+                    <div>
+                        <BarChart
+                            :chartData="shantytownsEvolutionData"
+                            :options="{ maintainAspectRatio: false }"
+                            height="250px"
+                        />
+                    </div>
                 </div>
             </div>
         </PrivateContainer>
@@ -49,9 +56,11 @@ import LeftColumn from "#app/pages/PrivateStats/LeftColumn";
 import KeyMetric from "#app/pages/PrivateStats/KeyMetric";
 import { all } from "#helpers/api/stats";
 import Spinner from "#app/components/ui/Spinner";
+import BarChart from "#app/pages/PrivateStats/BarChart";
 
 export default {
     components: {
+        BarChart,
         Spinner,
         LeftColumn,
         PrivateContainer,
@@ -91,6 +100,44 @@ export default {
             );
 
             return territory || { name: "France métropolitaine" };
+        },
+
+        shantytownsEvolutionData() {
+            if (
+                this.stats.numberOfResorbedShantytownsPerMonth === null ||
+                this.stats.numberOfNewShantytownsPerMonth === null ||
+                this.stats.numberOfClosedShantytownsPerMonth === null
+            ) {
+                return [];
+            }
+            return {
+                labels: this.stats.numberOfNewShantytownsPerMonth.map(
+                    ({ month }) => month
+                ),
+                datasets: [
+                    {
+                        backgroundColor: "#169B62",
+                        data: this.stats.numberOfResorbedShantytownsPerMonth.map(
+                            d => parseInt(d.total, 10)
+                        ),
+                        label: "Nombre de bidonvilles résorbés"
+                    },
+                    {
+                        backgroundColor: "#FF8D7E",
+                        data: this.stats.numberOfClosedShantytownsPerMonth.map(
+                            d => parseInt(d.total, 10)
+                        ),
+                        label: "Nombre de bidonvilles fermés"
+                    },
+                    {
+                        backgroundColor: "#5770BE",
+                        data: this.stats.numberOfNewShantytownsPerMonth.map(d =>
+                            parseInt(d.total, 10)
+                        ),
+                        label: "Nombre de nouveaux bidonvilles"
+                    }
+                ]
+            };
         }
     },
     watch: {
