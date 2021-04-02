@@ -21,26 +21,6 @@
                             {{ shantytown.city.name }}
                         </span>
                     </div>
-                    <div
-                        v-if="
-                            shantytown.closedAt &&
-                                shantytown.closedWithSolutions === 'yes'
-                        "
-                        class="text-md"
-                    >
-                        Résorbé le
-                        {{ formatDate(shantytown.closedAt, "d M y") }}
-                    </div>
-                    <div
-                        v-else-if="
-                            shantytown.closedAt &&
-                                shantytown.closedWithSolutions !== 'yes'
-                        "
-                        class="text-md"
-                    >
-                        Fermé le
-                        {{ formatDate(shantytown.closedAt, "d M y") }}
-                    </div>
                 </div>
                 <!-- Site fermé ou résorbé ? -->
                 <div class="px-6" v-if="this.isClosed">
