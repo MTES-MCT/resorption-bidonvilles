@@ -1,6 +1,7 @@
 import NavBar from "#app/layouts/navbar/navbar.vue";
 import { isLoaded as isConfigLoaded, load, get } from "#helpers/api/config";
 import { getEntryPoint } from "#app/router";
+import * as Sentry from "@sentry/vue";
 
 export default {
     data() {
@@ -36,6 +37,8 @@ export default {
             this.$router.push(getEntryPoint());
         },
         track(user) {
+            Sentry.setUser({ id: user.id });
+
             if (!this.$piwik) {
                 return;
             }
@@ -61,6 +64,13 @@ export default {
                           user.organization.location.type
                       ].name
                     : null
+            );
+
+            const departement = user.organization.location.departement || null;
+            this.$piwik.setCustomVariable(
+                5,
+                "departement_code",
+                departement ? departement.code : null
             );
         }
     }

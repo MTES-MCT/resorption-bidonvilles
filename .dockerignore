@@ -1,0 +1,13 @@
+.DS_Store
+.git*
+.husky
+cypress
+dist
+docs
+node_modules
+.dockerignore
+.env*
+cypress.json
+Dockerfile
+LICENSE
+README.md

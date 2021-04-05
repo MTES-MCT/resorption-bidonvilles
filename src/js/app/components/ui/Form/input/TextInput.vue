@@ -91,9 +91,6 @@ export default {
             type: Boolean,
             default: false
         },
-        size: {
-            type: String
-        },
         width: {
             required: false,
             type: String,
@@ -103,7 +100,6 @@ export default {
     computed: {
         classes() {
             const inputOptions = {
-                size: this.size,
                 error: this.error,
                 prefixIcon: this.prefixIcon,
                 suffixIcon: this.suffixIcon

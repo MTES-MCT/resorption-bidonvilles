@@ -12,6 +12,19 @@
             </div>
         </div>
         <div class="flex items-center">
+            <div
+                v-if="this.closedOrSolved"
+                class="flex items-center uppercase text-sm mr-4"
+            >
+                <div v-if="this.isClosed">
+                    Fermé le
+                    {{ formatDate(town.closedAt, "d/m/y") }}
+                </div>
+                <div v-else-if="this.isSolved">
+                    Résorbé le
+                    {{ formatDate(town.closedAt, "d/m/y") }}
+                </div>
+            </div>
             <div class="flex items-center uppercase text-sm mr-4">
                 <div class="rounded-full bg-corail h-3 w-3 mr-2 " />
                 Mis à jour le
@@ -133,6 +146,21 @@ export default {
         },
         routeToUpdate() {
             this.$router.push(`/site/${this.town.id}/mise-a-jour`);
+        }
+    },
+    computed: {
+        isClosed() {
+            return (
+                this.town.closedAt && this.town.closedWithSolutions !== "yes"
+            );
+        },
+        isSolved() {
+            return (
+                this.town.closedAt && this.town.closedWithSolutions === "yes"
+            );
+        },
+        closedOrSolved() {
+            return this.isClosed || this.isSolved;
         }
     }
 };

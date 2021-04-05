@@ -31,7 +31,16 @@ export default new Vuex.Store({
                 location: null,
                 actors: []
             },
-            currentPage: 1
+            currentPage: 1,
+            greeter: {
+                email: "",
+                first_name: "",
+                last_name: "",
+                organization: {
+                    organization_id: 0,
+                    organization_name: ""
+                }
+            }
         },
         detailedTown: null
     },
@@ -92,6 +101,21 @@ export default new Vuex.Store({
                 if (actor !== undefined) {
                     actor.themes = themes;
                 }
+            }
+        },
+        saveGreeter(currentState, greeter) {
+            currentState.greeter = {
+                ...greeter
+            };
+        },
+        saveHost(currentState, host) {
+            let index = currentState.hosts.findIndex(
+                h => h.email == host.email
+            );
+            if (index == -1) {
+                currentState.hosts.push(host);
+            } else {
+                Vue.set(currentState.hosts, index, host);
             }
         }
     },

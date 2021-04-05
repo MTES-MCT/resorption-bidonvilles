@@ -25,7 +25,7 @@
 
                     <ul>
                         <li>
-                            <router-link to="/statistiques-publiques">{{
+                            <router-link to="/stats">{{
                                 $t("footer.statistics")
                             }}</router-link>
                         </li>

@@ -46,6 +46,12 @@
                                 name="Nom de famille"
                                 rules="required"
                             />
+                            <TextInput
+                                :rows="8"
+                                :label="$t('contactPage.phone')"
+                                v-model="commonFields.phone"
+                                id="phone"
+                            />
                         </InputGroup>
                         <CheckableGroup
                             :label="$t('contactPage.requestType')"
@@ -195,7 +201,6 @@
                                 requestAccessFields.position
                             "
                         />
-
                         <TextArea
                             :rows="8"
                             :label="$t('contactPage.message')"
@@ -219,7 +224,7 @@
                                 Object.values(errors).filter(err => err.length)
                                     .length
                             "
-                            class="bg-red-200 p-3 mb-8"
+                            class="bg-red200 p-3 mb-8"
                         >
                             {{ $t("contactPage.error") }}
 
@@ -274,9 +279,11 @@ import AdministrationForm from "./AdministrationForm.vue";
 import CheckableGroup from "#app/components/ui/Form/CheckableGroup.vue";
 import Checkbox from "#app/components/ui/Form/input/Checkbox.vue";
 import SocialShare from "#app/pages/Contact/SocialShare";
+import TextInput from "#app/components/ui/Form/input/TextInput";
 
 export default {
     components: {
+        TextInput,
         SocialShare,
         Checkbox,
         CheckableGroup,
@@ -348,12 +355,20 @@ export default {
                     ? this.administrationFields
                     : {})
             };
-
             this.loading = true;
             try {
-                await contact(data);
+                const result = await contact(data);
                 this.loading = false;
-                this.$router.push("/");
+                // Si l'utilisateur a demandé un accès, on route vers le formulaire d'invitation
+                if (this.isRequestAccessAndActor) {
+                    const greeter = {
+                        email: result.email
+                    };
+                    this.$store.commit("saveGreeter", greeter);
+                    this.$router.push("/invitation");
+                } else {
+                    this.$router.push("/");
+                }
                 notify({
                     group: "notifications",
                     type: "success",
@@ -375,6 +390,7 @@ export default {
             error: null,
             commonFields: {
                 email: this.$route.query.email || "",
+                phone: "",
                 first_name: "",
                 last_name: "",
                 request_type: [],

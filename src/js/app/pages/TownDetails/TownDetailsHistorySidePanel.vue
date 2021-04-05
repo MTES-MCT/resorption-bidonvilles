@@ -14,7 +14,6 @@
                         @click="closePanel"
                     />
                 </div>
-
                 <div class="flex items-center text-primary">
                     <Icon icon="history" class="mr-2 " />
                     <div class="text-display-md text-primary">
@@ -22,67 +21,86 @@
                     </div>
                 </div>
             </div>
-
             <div>
-                <div class="text-sm font-bold my-4">
-                    {{ town.changelog.length }} modification{{
-                        town.changelog.length > 1 ? "s" : ""
-                    }}
-                </div>
-
+                <!-- Date de fermeture du site -->
+                <TownDetailsHistoryCard
+                    v-if="town.closedAt"
+                    :author="town.updatedBy"
+                    :when="town.closedAt"
+                    title="Fermeture du site"
+                ></TownDetailsHistoryCard>
+                <!-- Fin date de fermeture du site -->
                 <div
-                    v-for="changelog in town.changelog"
-                    :key="changelog.id"
-                    class="py-4 border-b-2 border-G200"
+                    class="text-sm font-bold mt-4"
+                    v-bind:class="{ 'mb-4': town.changelog.length < 1 }"
                 >
-                    <div class="text-sm text-G600">
-                        {{ formatDate(changelog.date, "d M y à h:i") }}
-                    </div>
+                    {{
+                        town.changelog.length >= 1
+                            ? town.changelog.length
+                            : "Aucune"
+                    }}
+                    modification{{ town.changelog.length > 1 ? "s" : "" }}
+                </div>
+                <div v-for="changelog in town.changelog" :key="changelog.id">
+                    <div class="py-4 border-b-2 border-G200">
+                        <div class="text-sm text-G600">
+                            {{ formatDate(changelog.date, "d M y à h:i") }}
+                        </div>
 
-                    <div class="text-primary">
-                        <router-link
-                            :to="
-                                `/annuaire/${changelog.author.organization.id}`
-                            "
-                        >
-                            <div class="flex items-center">
-                                <font-awesome-icon
-                                    icon="user"
-                                    class="w-8 text-md"
-                                ></font-awesome-icon>
-                                <div class="font-bold ml-2">
-                                    {{ changelog.author.first_name }}
-                                    {{ changelog.author.last_name }}
+                        <div class="text-primary">
+                            <router-link
+                                :to="
+                                    `/annuaire/${changelog.author.organization.id}`
+                                "
+                            >
+                                <div class="flex items-center">
+                                    <font-awesome-icon
+                                        icon="user"
+                                        class="w-8 text-md"
+                                    ></font-awesome-icon>
+                                    <div class="font-bold ml-2">
+                                        {{ changelog.author.first_name }}
+                                        {{ changelog.author.last_name }}
+                                    </div>
                                 </div>
-                            </div>
-                        </router-link>
-                    </div>
-                    <div>
-                        <div
-                            v-for="diff in changelog.diff"
-                            :key="diff.field"
-                            class="changelogContent my-2"
-                        >
-                            <div class="text-green">{{ diff.field }}</div>
-                            <div>
-                                <span class="line-through">{{
-                                    diff.oldValue || "non renseigné"
-                                }}</span>
-                                <span
-                                    >,
-                                    {{ diff.newValue || "non renseigné" }}
-                                </span>
+                            </router-link>
+                        </div>
+                        <div>
+                            <div
+                                v-for="diff in changelog.diff"
+                                :key="diff.field"
+                                class="changelogContent my-2"
+                            >
+                                <div class="text-green">{{ diff.field }}</div>
+                                <div>
+                                    <span class="line-through">{{
+                                        diff.oldValue || "non renseigné"
+                                    }}</span>
+                                    <span
+                                        >,
+                                        {{ diff.newValue || "non renseigné" }}
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <!-- Date de création du site -->
+                <TownDetailsHistoryCard
+                    :author="town.createdBy"
+                    :when="town.createdAt"
+                    title="Déclaration du site"
+                ></TownDetailsHistoryCard>
+                <!-- Fin date de création du site -->
             </div>
         </div>
     </SidePanel>
 </template>
 
 <script>
+import TownDetailsHistoryCard from "./TownDetailsHistoryCard";
 export default {
+    components: { TownDetailsHistoryCard },
     props: {
         town: {
             type: Object
@@ -94,7 +112,6 @@ export default {
             type: Function
         }
     },
-
     methods: {
         /**
          * @see index.js
