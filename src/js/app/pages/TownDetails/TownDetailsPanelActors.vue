@@ -44,7 +44,7 @@
                 </div>
 
                 <InfoBanner
-                    v-if="isNotAnActor"
+                    v-if="isNotAnActor && !town.closedAt"
                     icon="flag"
                     buttonLabel="J'interviens sur ce site"
                     @click="$emit('click')"
