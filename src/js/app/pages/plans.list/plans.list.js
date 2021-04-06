@@ -110,7 +110,7 @@ export default {
                 { id: "name", label: "Nom du dispositif" },
                 { id: "departement", label: "Dpt" },
                 { id: "location", label: "Lieu" },
-                { id: "government", label: "Service de l'état" },
+                { id: "government", label: "Pilote" },
                 { id: "operator", label: "Opérateur" }
             ];
         },
