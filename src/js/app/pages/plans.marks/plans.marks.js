@@ -203,7 +203,7 @@ export default {
                         },
                         maternelles: {
                             type: "number",
-                            label: "Enfants inscrits en maternelle",
+                            label: "Enfants scolarisés en maternelle",
                             mandatory: false,
                             condition({ date }) {
                                 return !!date;
@@ -211,7 +211,7 @@ export default {
                         },
                         elementaires: {
                             type: "number",
-                            label: "Enfants inscrits en élémentaire",
+                            label: "Enfants scolarisés en élémentaire",
                             mandatory: false,
                             condition({ date }) {
                                 return !!date;
@@ -219,7 +219,7 @@ export default {
                         },
                         colleges: {
                             type: "number",
-                            label: "Enfants inscrits au collège",
+                            label: "Enfants scolarisés au collège",
                             mandatory: false,
                             condition({ date }) {
                                 return !!date;
@@ -228,7 +228,7 @@ export default {
                         lycees: {
                             type: "number",
                             label:
-                                "Enfants inscrits au lycée - formation professionnelle",
+                                "Enfants scolarisés au lycée - formation professionnelle",
                             mandatory: false,
                             condition({ date }) {
                                 return !!date;
