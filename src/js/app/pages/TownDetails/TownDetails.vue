@@ -28,7 +28,7 @@
                 />
                 <div class="flex-1">
                     <TownDetailsActorAlert
-                        v-if="isNotAnActor && actorAlertVisible"
+                        v-if="isNotAnActor && actorAlertVisible && !town.closedAt"
                         @click="openActorThemes"
                         @close="actorAlertVisible = false"
                     ></TownDetailsActorAlert>
