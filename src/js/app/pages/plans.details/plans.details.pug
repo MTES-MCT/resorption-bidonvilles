@@ -155,7 +155,7 @@
 
                         <article class="block">
                             <div class="dataSection-line">
-                                <p class="data"><span class="data-label">Service de l'état</span><br/><router-link :to="`/annuaire/${plan.government_contacts[0].organization.id}`" class="user">{{ plan.government_contacts[0].first_name }} {{ plan.government_contacts[0].last_name.toUpperCase() }}<br/>{{ plan.government_contacts[0].organization.name }}</router-link></p>
+                                <p class="data"><span class="data-label">Pilote</span><br/><router-link :to="`/annuaire/${plan.government_contacts[0].organization.id}`" class="user">{{ plan.government_contacts[0].first_name }} {{ plan.government_contacts[0].last_name.toUpperCase() }}<br/>{{ plan.government_contacts[0].organization.name }}</router-link></p>
                             </div>
                             <div class="dataSection-line">
                                 <p class="data"><span class="data-label">Opérateur ou service en charge</span><br/><router-link :to="`/annuaire/${plan.operator_contacts[0].organization.id}`" class="user">{{ plan.operator_contacts[0].first_name }} {{ plan.operator_contacts[0].last_name.toUpperCase() }}<br/>{{ plan.operator_contacts[0].organization.name }}</router-link></p>

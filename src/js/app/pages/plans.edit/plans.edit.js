@@ -164,7 +164,7 @@ export default {
                                 government: {
                                     type: "autocompleter",
                                     label:
-                                        "Personne au service de l'état en charge du pilotage",
+                                        "Pilote",
                                     mandatory: true,
                                     specificProps: {
                                         autocompleter: d => {
