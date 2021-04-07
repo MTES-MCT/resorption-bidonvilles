@@ -163,7 +163,7 @@ export default {
         download() {
             const { code, type } = this.location.data;
             let url = `${
-                process.env.VUE_APP_API_URL
+                window.RB_ENV.VUE_APP_API_URL
             }/towns/export?locationType=${encodeURIComponent(
                 type
             )}&locationCode=${encodeURIComponent(code)}&closedTowns=${
