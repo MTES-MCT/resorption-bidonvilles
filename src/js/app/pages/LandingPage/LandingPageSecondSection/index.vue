@@ -73,16 +73,20 @@
                 {{ $t("landingPage.secondSection.video.text") }}
             </div>
             <div class="md:w-1/2 md:mr-16 bg-gray-500">
-                <LandingPageResponsiveEmbed>
+                <!-- <LandingPageResponsiveEmbed>
                     <iframe
                         src="https://www.dailymotion.com/embed/video/x7mf87e"
                         allowfullscreen
                         allow="autoplay; fullscreen"
                     >
                     </iframe>
-                </LandingPageResponsiveEmbed>
+                </LandingPageResponsiveEmbed> -->
+                <video controls>
+                    <source src="./assets/rb_connaitre_partager_agir_720.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video> 
             </div>
-            <div class="hidden md:blockw-1/2 text-display-lg">
+            <div class="hidden md:block w-1/2 text-display-lg">
                 {{ $t("landingPage.secondSection.video.text") }}
             </div>
         </div>

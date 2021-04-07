@@ -6,14 +6,18 @@
         />
         <EventTutorial v-if="$i18n.locale === 'fr'"></EventTutorial>
         <div class="max-w-screen-sm mx-auto mt-8">
-            <LandingPageResponsiveEmbed>
+            <!-- <LandingPageResponsiveEmbed>
                 <iframe
                     src="https://www.youtube.com/embed/AAD0QoOzIHM?modestbranding=1&autohide=1&showinfo=0"
                     frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen
                 ></iframe>
-            </LandingPageResponsiveEmbed>
+            </LandingPageResponsiveEmbed> -->
+             <video controls>
+                <source src="./assets/video_landing_720_no_sound.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video> 
         </div>
         <div>
             <div class="mt-24">
