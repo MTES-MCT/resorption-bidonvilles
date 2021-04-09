@@ -8,7 +8,7 @@
         <div class="max-w-screen-sm mx-auto mt-8">
              <video controls>
                 <source src="./assets/video_landing_720_no_sound.mp4" type="video/mp4">
-                Your browser does not support the video tag.
+                Votre navigateur ne supporte pas la balise video.
             </video> 
         </div>
         <div>

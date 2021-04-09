@@ -75,7 +75,7 @@
             <div class="md:w-1/2 md:mr-16 bg-gray-500">
                 <video controls>
                     <source src="./assets/rb_connaitre_partager_agir_720.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
+                    Votre navigateur ne supporte pas la balise video.
                 </video> 
             </div>
             <div class="hidden md:block w-1/2 text-display-lg">
