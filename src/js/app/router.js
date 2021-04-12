@@ -120,7 +120,7 @@ function isUpgraded() {
  */
 function hasNoPendingChangelog() {
     const { changelog } = getConfig();
-    return changelog === null;
+    return !changelog || changelog.length === 0;
 }
 
 /**
