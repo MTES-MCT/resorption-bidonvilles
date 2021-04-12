@@ -52,6 +52,10 @@ export default {
                 });
         },
         computeTotal(sectionId) {
+            if (!this.stats.numberOfShantytownOperations[sectionId]) {
+                return 0;
+            }
+
             return this.stats.numberOfShantytownOperations[sectionId].reduce(
                 (sum, { total }) => sum + parseInt(total, 10),
                 0
