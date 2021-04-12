@@ -9,13 +9,13 @@ import * as Sentry from "@sentry/vue";
 import { Integrations } from "@sentry/tracing";
 
 // Sentry should be loaded as soon as possible
-if (process.env.VUE_APP_SENTRY) {
+if (window.RB_ENV.VUE_APP_SENTRY) {
     Sentry.init({
         Vue,
         // Sentry is only enabled for production env atm, we should differentiate envs if we use it for preprod/staging
         environment: "production",
-        release: process.env.VUE_APP_SENTRY_RELEASE,
-        dsn: process.env.VUE_APP_SENTRY,
+        release: window.RB_ENV.VUE_APP_SENTRY_RELEASE,
+        dsn: window.RB_ENV.VUE_APP_SENTRY,
         integrations: [new Integrations.BrowserTracing()],
 
         // Use this hook to scrub sensitive data sent to Sentry
