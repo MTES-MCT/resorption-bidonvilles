@@ -13,7 +13,7 @@
                         >
                         {{ territory.name }}
                     </div>
-                    <div class="grid grid-cols-5 gap-8 mt-8 mb-16">
+                    <div class="grid grid-cols-6 gap-8 mt-8 mb-16">
                         <KeyMetric
                             :value="stats.numberOfPeople || 0"
                             label="habitants"
@@ -34,21 +34,45 @@
                             :value="stats.numberOfUsers || 0"
                             label="utilisateurs"
                         />
+                        <KeyMetric
+                            :value="
+                                stats.averageCompletionPercentage
+                                    ? (
+                                          stats.averageCompletionPercentage *
+                                          100
+                                      ).toFixed(2) + '%'
+                                    : 0
+                            "
+                            label="completion"
+                        />
                     </div>
                     <div>
                         <BarChart
                             :chartData="shantytownsEvolutionData"
                             :options="{ maintainAspectRatio: false }"
-                            height="250px"
+                            :height="250"
                         />
                     </div>
-                    <div>
+                    <div class="mt-16">
                         <LineChart
                             :chartData="shantytownsTotalEvolutionData"
                             :options="{ maintainAspectRatio: false }"
-                            height="250px"
+                            :height="250"
                         />
                     </div>
+                    <div class="mt-16">
+                        <div class="chartWrapper">
+                            <LineChart
+                                :chartData="matomoStats"
+                                :options="{ maintainAspectRatio: false }"
+                                :height="250"
+                            />
+                        </div>
+                    </div>
+                    <CreditsRepartition
+                        class="mt-16"
+                        :credits="stats.numberOfCreditsPerYear"
+                    />
                 </div>
             </div>
         </PrivateContainer>
@@ -65,9 +89,11 @@ import { all } from "#helpers/api/stats";
 import Spinner from "#app/components/ui/Spinner";
 import BarChart from "#app/pages/PrivateStats/BarChart";
 import LineChart from "#app/pages/PrivateStats/LineChart";
+import CreditsRepartition from "#app/pages/PrivateStats/CreditsRepartition";
 
 export default {
     components: {
+        CreditsRepartition,
         BarChart,
         LineChart,
         Spinner,
@@ -82,6 +108,7 @@ export default {
     methods: {
         loadData() {
             console.log("loadData", this.$route.params.code);
+            this.getMatomoStats();
             all(this.$route.params.code)
                 .then(({ statistics: stats }) => {
                     this.stats = stats;
@@ -91,6 +118,62 @@ export default {
                     this.fetching = false;
                     this.error = userMessage;
                 });
+        },
+        async getMatomoStats() {
+            const getLastSunday = d => {
+                const t = new Date(d);
+                t.setDate(t.getDate() - t.getDay());
+                return t;
+            };
+
+            const getDate = (d, delta) => {
+                const t = new Date(d);
+                t.setDate(t.getDate() - delta);
+                return t;
+            };
+
+            const fetchStatsData = async date => {
+                const segment = `segment=pageUrl%3D@https%25253A%25252F%25252Fresorption-bidonvilles.beta.gouv.fr%25252F%252523%25252Fcartographie${
+                    this.$route.params.code
+                        ? `;customVariableName5==departement_code;customVariableValue5==${this.$route.params.code}`
+                        : ""
+                }`;
+
+                const url = `https://stats.data.gouv.fr/index.php?module=API&method=VisitsSummary.getUniqueVisitors&idSite=86&period=week&date=${date}&format=JSON&${segment}`;
+
+                const res = await fetch(url);
+                const result = await res.json();
+                return result.value;
+            };
+
+            const lastSunday = getLastSunday(new Date());
+
+            // Build an array of dates from the last 2 months : ["2021-01-03", "2021-01-10", ...]
+            const last2MonthsWeeklyDates = Array.from(
+                Array(10),
+                (_, i) => i * 7
+            )
+                .reverse()
+                .map(delta =>
+                    getDate(lastSunday, delta)
+                        .toISOString()
+                        .slice(0, 10)
+                );
+
+            const data = await Promise.all(
+                last2MonthsWeeklyDates.map(fetchStatsData)
+            );
+
+            this.matomoStats = {
+                labels: last2MonthsWeeklyDates,
+                datasets: [
+                    {
+                        backgroundColor: ["#E5E5F4"],
+                        data,
+                        label: "Nombre d'utilisateurs par semaine"
+                    }
+                ]
+            };
         }
     },
     data() {
@@ -99,6 +182,7 @@ export default {
         return {
             departements: config.departements,
             stats: null,
+            matomoStats: null,
             fetching: true
         };
     },
@@ -148,6 +232,7 @@ export default {
                 ]
             };
         },
+
         shantytownsTotalEvolutionData() {
             if (
                 this.stats.numberOfNewShantytownsPerMonth === null ||
@@ -188,7 +273,7 @@ export default {
                 ),
                 datasets: [
                     {
-                        backgroundColor: "#169B62",
+                        backgroundColor: "#E5E5F4",
                         data: cumulativeData,
                         label: "Nombre total de bidonvilles"
                     }
