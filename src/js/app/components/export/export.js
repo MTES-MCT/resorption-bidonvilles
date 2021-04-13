@@ -1,5 +1,6 @@
 import { open } from "#helpers/api/main";
 import { getPermission } from "#helpers/api/config";
+import { VUE_APP_API_URL } from "#src/js/env.js";
 
 export default {
     props: {
@@ -127,9 +128,7 @@ export default {
         },
         download() {
             const { code, type } = this.location.data;
-            let url = `${
-                RB_ENV.VUE_APP_API_URL
-            }/towns/export?locationType=${encodeURIComponent(
+            let url = `${VUE_APP_API_URL}/towns/export?locationType=${encodeURIComponent(
                 type
             )}&locationCode=${encodeURIComponent(code)}&closedTowns=${
                 this.closedTowns ? "1" : "0"
