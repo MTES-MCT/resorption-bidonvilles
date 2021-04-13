@@ -73,7 +73,7 @@
                 {{ $t("landingPage.secondSection.video.text") }}
             </div>
             <div class="md:w-1/2 md:mr-16 bg-gray-500">
-                <video controls>
+                <video poster="./assets/poster_rb_connaitre_partager_agir.png" controls>
                     <source src="./assets/rb_connaitre_partager_agir_720.mp4" type="video/mp4">
                     Votre navigateur ne supporte pas la balise video.
                 </video> 

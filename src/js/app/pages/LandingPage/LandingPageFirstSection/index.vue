@@ -6,7 +6,7 @@
         />
         <EventTutorial v-if="$i18n.locale === 'fr'"></EventTutorial>
         <div class="max-w-screen-sm mx-auto mt-8">
-             <video controls>
+             <video poster="./assets/poster_rb_landing.png" controls>
                 <source src="./assets/video_landing_720_no_sound.mp4" type="video/mp4">
                 Votre navigateur ne supporte pas la balise video.
             </video> 
