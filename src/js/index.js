@@ -1,5 +1,3 @@
-import "./env.js";
-
 // load the whole betagouv template
 import "@openfonts/fira-code_all";
 import "simplebar/dist/simplebar.min.css";
@@ -8,14 +6,21 @@ import Vue from "vue";
 import * as Sentry from "@sentry/vue";
 import { Integrations } from "@sentry/tracing";
 
+import {
+    VUE_APP_SENTRY_ON,
+    VUE_APP_SENTRY,
+    VUE_APP_SENTRY_RELEASE,
+    VUE_APP_MATOMO_ON
+} from "#src/js/env.js";
+
 // Sentry should be loaded as soon as possible
-if (process.env.VUE_APP_SENTRY) {
+if (VUE_APP_SENTRY_ON === "true") {
     Sentry.init({
         Vue,
         // Sentry is only enabled for production env atm, we should differentiate envs if we use it for preprod/staging
         environment: "production",
-        release: process.env.VUE_APP_SENTRY_RELEASE,
-        dsn: process.env.VUE_APP_SENTRY,
+        release: VUE_APP_SENTRY_RELEASE,
+        dsn: VUE_APP_SENTRY,
         integrations: [new Integrations.BrowserTracing()],
 
         // Use this hook to scrub sensitive data sent to Sentry
@@ -171,7 +176,7 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 Vue.use(VueRouter);
 Vue.use(VueI18n);
 
-if (RB_ENV.VUE_APP_MATOMO_ON === "true") {
+if (VUE_APP_MATOMO_ON === "true") {
     Vue.use(VueMatomo, {
         // Configure your matomo server and site by providing
         host: "https://stats.data.gouv.fr",

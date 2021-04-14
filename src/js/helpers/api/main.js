@@ -3,6 +3,7 @@ import { getToken, logout } from "#helpers/api/user";
 import { router } from "#app/router";
 import { open as openTab } from "#helpers/tabHelper";
 import version from "#root/version.json";
+import { VUE_APP_API_URL } from "#src/js/env.js";
 
 /**
  * Generic error codes
@@ -96,7 +97,7 @@ function handleRequestFailure(callback) {
 function request(method, url, data, headers = {}) {
     const xhr = new XMLHttpRequest();
     const promise = new Promise((success, failure) => {
-        xhr.open(method, `${RB_ENV.VUE_APP_API_URL}${url}`);
+        xhr.open(method, `${VUE_APP_API_URL}${url}`);
 
         Object.keys(headers).forEach(name => {
             xhr.setRequestHeader(name, headers[name]);
