@@ -80,7 +80,8 @@ module.exports = {
             },
             spacing: {
                 96: "24rem",
-                128: "32rem"
+                128: "32rem",
+                256: "64rem"
             },
             colors: {
                 // Primary palette
