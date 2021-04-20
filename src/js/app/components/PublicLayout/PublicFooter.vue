@@ -24,6 +24,11 @@
                     </ul>
 
                     <ul>
+                        <li v-if="$i18n.locale === 'fr'">
+                            <router-link to="/conditions-d-utilisation">{{
+                                $t("footer.cgus")
+                            }}</router-link>
+                        </li>
                         <li>
                             <router-link to="/stats">{{
                                 $t("footer.statistics")
