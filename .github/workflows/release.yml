@@ -60,6 +60,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: resorptionbidonvilles/frontend:latest,resorptionbidonvilles/frontend:${{ steps.tag.outputs.new_tag }}
+          tags: resorptionbidonvilles/frontend:latest,resorptionbidonvilles/frontend:v${{ steps.version.outputs.new_tag }}
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
