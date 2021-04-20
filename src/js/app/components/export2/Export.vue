@@ -70,6 +70,7 @@
 import { open } from "#helpers/api/main";
 import { getPermission } from "#helpers/api/config";
 import Checkbox from "#app/components/ui/Form/input/Checkbox";
+import { VUE_APP_API_URL } from "#src/js/env.js";
 
 export default {
     components: { Checkbox },
@@ -162,9 +163,7 @@ export default {
     methods: {
         download() {
             const { code, type } = this.location.data;
-            let url = `${
-                window.RB_ENV.VUE_APP_API_URL
-            }/towns/export?locationType=${encodeURIComponent(
+            let url = `${VUE_APP_API_URL}/towns/export?locationType=${encodeURIComponent(
                 type
             )}&locationCode=${encodeURIComponent(code)}&closedTowns=${
                 this.closedTowns ? "1" : "0"

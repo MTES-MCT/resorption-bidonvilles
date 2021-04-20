@@ -120,7 +120,7 @@ function isUpgraded() {
  */
 function hasNoPendingChangelog() {
     const { changelog } = getConfig();
-    return changelog === null;
+    return !changelog || changelog.length === 0;
 }
 
 /**
@@ -309,7 +309,7 @@ const router = new VueRouter({
         {
             path: "/conditions-d-utilisation",
             beforeEnter(to, from, next) {
-                window.open("/doc/CGU_Resorption_Bidonvilles.pdf");
+                window.open("/doc/CGU_2021_04_08.pdf");
                 next(false);
             }
         },

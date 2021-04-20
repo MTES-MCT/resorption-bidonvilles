@@ -9,54 +9,35 @@
                                 Des nouveautés sont disponibles sur la
                                 plateforme
                             </div>
-                            <div class="text-secondary">
-                                {{ changelog.date }}
-                            </div>
                         </div>
                     </div>
                 </template>
 
                 <template v-slot:body>
-                    <div class="flex justify-between">
-                        <div class="w-128 mr-8">
+                    <div class="modalWrapper w-256">
+                        <div class="text-secondary">
+                            {{ currentItem.date }}
+                        </div>
+                        <h1 class="text-xl font-bold">
+                            {{ currentItem.title }}
+                        </h1>
+                        <div
+                            class="changelogModalDescription"
+                            v-html="currentItem.description"
+                        ></div>
+                        <div class="text-center mt-6">
                             <img
+                                class="inline-block"
                                 :src="currentItem.image"
                                 :alt="currentItem.title"
                             />
-                            <div class="text-center">
-                                <span
-                                    v-for="(item, index) in changelog.items"
-                                    v-bind:key="index"
-                                    class="inline-block bg-gray-500 w-2 h-2 mx-1 rounded"
-                                    v-bind:class="{
-                                        'bg-primary': index === currentItemIndex
-                                    }"
-                                ></span>
-                            </div>
                         </div>
-                        <div class="w-128 pt-2">
-                            <header class="text-gray-500 bold">
-                                <p>
-                                    <span class="text-primary">{{
-                                        currentItemIndex + 1
-                                    }}</span>
-                                    / {{ changelog.items.length }}
-                                </p>
-                                <h1 class="text-primary bold">
-                                    {{ currentItem.title }}
-                                </h1>
-                            </header>
-                            <div
-                                class="description"
-                                v-html="currentItem.description"
-                            ></div>
+                        <div
+                            v-if="error !== null"
+                            class="bg-red300 text-error bold p-3 mt-4"
+                        >
+                            {{ error }}
                         </div>
-                    </div>
-                    <div
-                        v-if="error !== null"
-                        class="bg-red300 text-error bold p-3 mt-4"
-                    >
-                        {{ error }}
                     </div>
                     <div class="flex justify-between mt-8">
                         <div>
@@ -72,10 +53,7 @@
                             <Button
                                 variant="primary"
                                 @click="nextItem"
-                                v-if="
-                                    currentItemIndex <
-                                        changelog.items.length - 1
-                                "
+                                v-if="currentItemIndex < changelog.length - 1"
                                 >Suivant</Button
                             >
                             <Button
@@ -94,8 +72,16 @@
 </template>
 
 <style>
-.description p {
-    margin-top: 1rem;
+.changelogModalDescription > p {
+    margin-top: 1em;
+}
+</style>
+<style scoped>
+.modalWrapper {
+    min-height: 50vh;
+    max-height: 60vh;
+    max-width: 800px;
+    overflow: hidden;
 }
 </style>
 
@@ -118,7 +104,7 @@ export default {
     },
     computed: {
         currentItem() {
-            return this.changelog.items[this.currentItemIndex];
+            return this.changelog[this.currentItemIndex];
         }
     },
     components: {
@@ -134,7 +120,7 @@ export default {
             this.currentItemIndex -= 1;
         },
         nextItem() {
-            if (this.currentItemIndex === this.changelog.items.length - 1) {
+            if (this.currentItemIndex === this.changelog.length - 1) {
                 return;
             }
 
@@ -148,7 +134,7 @@ export default {
             this.pending = true;
             this.error = null;
 
-            closeChangelog(this.changelog.app_version)
+            closeChangelog(this.changelog.slice(-1)[0].app_version)
                 .then(() => {
                     load()
                         .then(() => {

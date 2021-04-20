@@ -1,9 +1,7 @@
 name: release
 
 on:
-  push:
-    branches:
-      - 'master'
+  workflow_dispatch:
 
 jobs:
   build-docker-image:
@@ -12,11 +10,44 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: '0'
-      - name: Bump version and push tag
-        id: tag
-        uses: hennejg/github-tag-action@v4.2.4
+      - name: Compute the new version number
+        id: version
+        uses: anothrNick/github-tag-action@1.34.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
+          RELEASE_BRANCHES: 'develop'
+          DRY_RUN: true
+          WITH_V: false
+      - name: Update version in package.json
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: package.json
+          field: version
+          value: ${{ steps.version.outputs.new_tag }}
+      - name: Commit change in package.json
+        run: |
+          git config --local user.email "admin@resorption-bidonvilles.beta.gouv.fr"
+          git config --local user.name "GitHub Action"
+          git commit -m "📦 Release v${{ steps.version.outputs.new_tag }}" -a
+          git tag v${{ steps.version.outputs.new_tag }}
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+          tags: true
+      - name: Merge develop into master
+        uses: devmasx/merge-branch@v1.3.1
+        with:
+          github_token: ${{ github.token }}
+          type: now
+          from_branch: develop
+          target_branch: master
+      - uses: actions/checkout@v2
+        with:
+          ref: 'master'
+          fetch-depth: '0'
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
       - name: Login to DockerHub

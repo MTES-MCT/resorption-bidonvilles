@@ -28,12 +28,6 @@
                 "describe": "readonly",
                 "it": "readonly"
             }
-        },
-        {
-            "files": "src/**/*.js",
-            "globals": {
-                "RB_ENV": "readonly"
-            }
         }
     ]
 }
