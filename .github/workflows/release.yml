@@ -12,11 +12,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: '0'
-      - name: Bump version and push tag
-        id: tag
-        uses: hennejg/github-tag-action@v4.2.4
+      - uses: jpb06/bump-package@v2.1.2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          major-keywords: breaking
+          minor-keywords: feat,minor
+          patch-keywords: fix,chore,word
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
       - name: Login to DockerHub
