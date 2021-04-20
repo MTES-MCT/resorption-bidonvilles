@@ -1,5 +1,7 @@
 const path = require("path");
 const SentryPlugin = require("@sentry/webpack-plugin");
+const { DefinePlugin } = require("webpack");
+const { version } = require("./package.json");
 
 const { VUE_APP_SENTRY_RELEASE } = require("./src/js/env.js");
 
@@ -27,7 +29,10 @@ module.exports = {
                           include: "./dist"
                       })
                   ]
-                : [])
+                : []),
+            new DefinePlugin({
+                "process.env.APP_VERSION": JSON.stringify(version)
+            })
         ]
     },
 
