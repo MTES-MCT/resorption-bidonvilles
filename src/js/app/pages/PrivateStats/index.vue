@@ -6,7 +6,7 @@
             </div>
             <div class="flex">
                 <LeftColumn :departements="departements" />
-                <div class="pt-8 ml-32 flex-1">
+                <div class="pt-8 ml-32 flex-1 pb-32">
                     <div class="text-display-lg text-primary">
                         <span v-if="territory.code"
                             >{{ territory.code }} -</span
@@ -46,6 +46,9 @@
                             label="completion"
                         />
                     </div>
+                    <h2 class="text-display-md text-primary mb-4 mt-16">
+                        Suivi des des sites
+                    </h2>
                     <div>
                         <BarChart
                             :chartData="shantytownsEvolutionData"
@@ -60,7 +63,16 @@
                             :height="250"
                         />
                     </div>
-                    <div class="mt-16">
+                    <h2 class="text-display-md text-primary  mt-16 mb-4">
+                        Suivi des dispositifs
+                    </h2>
+                    <CreditsRepartition
+                        :credits="stats.numberOfCreditsPerYear"
+                    />
+                    <h2 class="text-display-md text-primary mb-4 mt-16">
+                        Suivi plateforme
+                    </h2>
+                    <div>
                         <div class="chartWrapper">
                             <LineChart
                                 :chartData="matomoStats"
@@ -69,10 +81,6 @@
                             />
                         </div>
                     </div>
-                    <CreditsRepartition
-                        class="mt-16"
-                        :credits="stats.numberOfCreditsPerYear"
-                    />
                 </div>
             </div>
         </PrivateContainer>
@@ -248,15 +256,24 @@ export default {
 
             const cumulativeData = this.stats.numberOfNewShantytownsPerMonth.reduce(
                 (acc, obj, index) => {
+                    const newShantytowns = this.stats
+                        .numberOfNewShantytownsPerMonth[index];
+                    const closedShantytowns = this.stats
+                        .numberOfClosedShantytownsPerMonth[index];
+                    const resorbedShantytowns = this.stats
+                        .numberOfResorbedShantytownsPerMonth[index];
+
                     const monthDiff =
                         parseInt(
-                            this.stats.numberOfNewShantytownsPerMonth[index]
-                                .total,
+                            newShantytowns ? newShantytowns.total : 0,
                             10
                         ) -
                         parseInt(
-                            this.stats.numberOfClosedShantytownsPerMonth[index]
-                                .total,
+                            closedShantytowns ? closedShantytowns.total : 0,
+                            10
+                        ) -
+                        parseInt(
+                            resorbedShantytowns ? resorbedShantytowns.total : 0,
                             10
                         );
 
