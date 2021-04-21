@@ -24,7 +24,6 @@ import PlanCreate from "#app/pages/plans.create/plans.create.vue";
 import PlanDetails from "#app/pages/plans.details/plans.details.vue";
 import PlanEdit from "#app/pages/plans.edit/plans.edit.vue";
 import PlanMarks from "#app/pages/plans.marks/plans.marks.vue";
-import Statistics from "#app/pages/stats/stats.vue";
 import PrivateStats from "#app/pages/PrivateStats/index.vue";
 import LegalMentions from "#app/pages/legalMentions/legalMentions.vue";
 import Directory from "#app/pages/directory/directory.vue";
@@ -464,16 +463,11 @@ const router = new VueRouter({
         },
         {
             path: "/statistiques/:code?",
-            component: PrivateStats,
-            beforeEnter: guardians.loadedAndUpToDate
-        },
-        {
             meta: {
                 group: "admin",
                 permissions: ["stats.read"]
             },
-            path: "/statistiques_old",
-            component: Statistics,
+            component: PrivateStats,
             beforeEnter: guardians.loadedAndUpToDate
         },
         {
