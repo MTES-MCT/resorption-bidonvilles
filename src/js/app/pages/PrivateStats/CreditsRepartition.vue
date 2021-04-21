@@ -1,5 +1,5 @@
 <template>
-    <div class="flex align-center justify-center">
+    <div class="flex align-center">
         <Button
             class="self-center"
             @click="onPrev"
