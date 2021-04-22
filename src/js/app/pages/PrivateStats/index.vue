@@ -13,7 +13,7 @@
                         >
                         {{ territory.name }}
                     </div>
-                    <div class="grid grid-cols-6 gap-8 mt-8 mb-16">
+                    <div class="grid grid-cols-6 gap-8 mt-8 mb-16" v-if="stats">
                         <KeyMetric
                             :value="stats.numberOfPeople || 0"
                             label="habitants"
@@ -46,34 +46,38 @@
                             label="completion"
                         />
                     </div>
+
                     <h2 class="text-display-md text-primary mb-4 mt-16">
                         Suivi des des sites
                     </h2>
-                    <div>
+                    <div v-if="stats">
                         <BarChart
                             :chartData="shantytownsEvolutionData"
                             :options="{ maintainAspectRatio: false }"
                             :height="250"
                         />
                     </div>
-                    <div class="mt-16">
+                    <div class="mt-16" v-if="stats">
                         <LineChart
                             :chartData="shantytownsTotalEvolutionData"
                             :options="{ maintainAspectRatio: false }"
                             :height="250"
                         />
                     </div>
+
                     <h2 class="text-display-md text-primary  mt-16 mb-4">
                         Suivi des dispositifs
                     </h2>
                     <CreditsRepartition
                         :credits="stats.numberOfCreditsPerYear"
                     />
+
                     <h2 class="text-display-md text-primary mb-4 mt-16">
                         Suivi plateforme
                     </h2>
                     <div>
-                        <div class="chartWrapper">
+                        <Spinner v-if="!matomoStats" />
+                        <div class="chartWrapper" v-else>
                             <LineChart
                                 :chartData="matomoStats"
                                 :options="{ maintainAspectRatio: false }"
