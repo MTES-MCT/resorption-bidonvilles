@@ -115,7 +115,6 @@ export default {
     },
     methods: {
         loadData() {
-            console.log("loadData", this.$route.params.code);
             this.getMatomoStats();
             all(this.$route.params.code)
                 .then(({ statistics: stats }) => {
@@ -300,7 +299,6 @@ export default {
     },
     watch: {
         "$route.params.code": function() {
-            console.log("changeRoute", this.$route.params.code);
             this.loadData();
         }
     }
