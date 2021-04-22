@@ -1,6 +1,6 @@
 {
   "name": "action-bidonvilles",
-  "version": "0.15.2",
+  "version": "0.15.3",
   "description": "Frontend de Résorption Bidonvilles",
   "scripts": {
     "dev": "vue-cli-service serve --port 80",
@@ -38,6 +38,7 @@
     "@babel/core": "^7.2.2",
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.2.0",
+    "@vue/cli-plugin-babel": "^4.5.12",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-unit-jest": "~4.5.0",
     "@vue/cli-service": "^4.5.8",
