@@ -54,19 +54,33 @@
                         <h2 class="text-display-md text-primary mb-4 mt-16">
                             Suivi des des sites
                         </h2>
-
                         <div v-if="stats">
                             <BarChart
                                 :chartData="shantytownsEvolutionData"
-                                :options="{ maintainAspectRatio: false }"
+                                :options="{
+                                    maintainAspectRatio: false,
+                                    scales: {
+                                        yAxes: [
+                                            { ticks: { beginAtZero: true } }
+                                        ]
+                                    }
+                                }"
                                 :height="250"
                             />
                             <LineChart
                                 :chartData="shantytownsTotalEvolutionData"
-                                :options="{ maintainAspectRatio: false }"
+                                :options="{
+                                    maintainAspectRatio: false,
+                                    scales: {
+                                        yAxes: [
+                                            { ticks: { beginAtZero: true } }
+                                        ]
+                                    }
+                                }"
                                 :height="250"
                             />
                         </div>
+
                         <Spinner v-else />
                     </div>
 
@@ -90,7 +104,14 @@
                             <div class="chartWrapper" v-else>
                                 <LineChart
                                     :chartData="matomoStats"
-                                    :options="{ maintainAspectRatio: false }"
+                                    :options="{
+                                        maintainAspectRatio: false,
+                                        scales: {
+                                            yAxes: [
+                                                { ticks: { beginAtZero: true } }
+                                            ]
+                                        }
+                                    }"
                                     :height="250"
                                 />
                             </div>
