@@ -3,7 +3,7 @@
         <Button
             class="self-center"
             @click="onPrev"
-            :disabled="year === 2020"
+            :disabled="year === 2016"
             icon="chevron-left"
             variant="primaryText"
         />
