@@ -1,10 +1,10 @@
 <template>
-    <div>
+    <div class="leftContainer">
         <h1 class="text-display-md mb-4">
             Statistiques
         </h1>
 
-        <div class="h-96 overflow-scroll">
+        <div>
             <div>
                 <LeftColumnLink :to="`/statistiques/`"
                     >France métropolitaine</LeftColumnLink
@@ -30,3 +30,12 @@ export default {
     }
 };
 </script>
+
+<style>
+.leftContainer {
+    position: sticky;
+    top: 48px;
+    height: calc(100vh - 100px);
+    overflow-y: scroll;
+}
+</style>
