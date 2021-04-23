@@ -10,40 +10,50 @@
         <table class="table-auto credits-table">
             <thead class="font-bold">
                 <tr>
-                    <td>Origine des financements ({{ year }})</td>
-                    <td>Montant</td>
+                    <td>Origine des financements {{ year }}</td>
+                    <td class="text-right w-64">Montant</td>
                 </tr>
             </thead>
             <tbody>
                 <tr v-if="credits[year]">
                     <td>Financements étatiques hors crédits dédiés</td>
-                    <td>
+                    <td class="text-right w-64">
                         {{ formatValue(credits[year].etatique) }}
                     </td>
                 </tr>
                 <tr v-if="credits[year]">
                     <td>Crédits dédiés à la résorption des bidonvilles</td>
-                    <td>{{ formatValue(credits[year].dedie) }}</td>
+                    <td class="text-right w-64">
+                        {{ formatValue(credits[year].dedie) }}
+                    </td>
                 </tr>
                 <tr v-if="credits[year]">
                     <td>Cofinancement collectivité territoriale</td>
-                    <td>{{ formatValue(credits[year].collectivite) }}</td>
+                    <td class="text-right w-64">
+                        {{ formatValue(credits[year].collectivite) }}
+                    </td>
                 </tr>
                 <tr v-if="credits[year]">
                     <td>Financements privés</td>
-                    <td>{{ formatValue(credits[year].prive) }}</td>
+                    <td class="text-right w-64">
+                        {{ formatValue(credits[year].prive) }}
+                    </td>
                 </tr>
                 <tr v-if="credits[year]">
                     <td>Financements européens</td>
-                    <td>{{ formatValue(credits[year].europe) }}</td>
+                    <td class="text-right w-64">
+                        {{ formatValue(credits[year].europe) }}
+                    </td>
                 </tr>
                 <tr v-if="credits[year]">
                     <td>Autre</td>
-                    <td>{{ formatValue(credits[year].autre) }}</td>
+                    <td class="text-right w-64">
+                        {{ formatValue(credits[year].autre) }}
+                    </td>
                 </tr>
                 <tr class="font-bold">
                     <td>Total</td>
-                    <td>{{ formatValue(total) }}</td>
+                    <td class="text-right w-64">{{ formatValue(total) }}</td>
                 </tr>
             </tbody>
         </table>
