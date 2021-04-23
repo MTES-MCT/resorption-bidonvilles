@@ -1,9 +1,6 @@
 <template>
     <PrivateLayout>
         <PrivateContainer class="py-4">
-            <div v-if="!stats">
-                <Spinner />
-            </div>
             <div class="flex">
                 <LeftColumn :departements="departements" />
                 <div class="pt-8 ml-32 flex-1 pb-32">
@@ -13,76 +10,90 @@
                         >
                         {{ territory.name }}
                     </div>
-                    <div class="grid grid-cols-6 gap-8 mt-8 mb-16" v-if="stats">
-                        <KeyMetric
-                            :value="stats.numberOfPeople || 0"
-                            label="habitants"
-                        />
-                        <KeyMetric
-                            :value="stats.numberOfShantytown || 0"
-                            label="sites"
-                        />
-                        <KeyMetric
-                            :value="stats.numberOfResorbedShantytown || 0"
-                            label="résorptions"
-                        />
-                        <KeyMetric
-                            :value="stats.numberOfPlans || 0"
-                            label="dispositifs"
-                        />
-                        <KeyMetric
-                            :value="stats.numberOfUsers || 0"
-                            label="utilisateurs"
-                        />
-                        <KeyMetric
-                            :value="
-                                stats.averageCompletionPercentage
-                                    ? (
-                                          stats.averageCompletionPercentage *
-                                          100
-                                      ).toFixed(2) + '%'
-                                    : 0
-                            "
-                            label="completion"
-                        />
-                    </div>
-
-                    <h2 class="text-display-md text-primary mb-4 mt-16">
-                        Suivi des des sites
-                    </h2>
-                    <div v-if="stats">
-                        <BarChart
-                            :chartData="shantytownsEvolutionData"
-                            :options="{ maintainAspectRatio: false }"
-                            :height="250"
-                        />
-                    </div>
-                    <div class="mt-16" v-if="stats">
-                        <LineChart
-                            :chartData="shantytownsTotalEvolutionData"
-                            :options="{ maintainAspectRatio: false }"
-                            :height="250"
-                        />
-                    </div>
-
-                    <h2 class="text-display-md text-primary  mt-16 mb-4">
-                        Suivi des dispositifs
-                    </h2>
-                    <CreditsRepartition
-                        :credits="stats.numberOfCreditsPerYear"
-                    />
-
-                    <h2 class="text-display-md text-primary mb-4 mt-16">
-                        Suivi plateforme
-                    </h2>
                     <div>
-                        <Spinner v-if="!matomoStats" />
-                        <div class="chartWrapper" v-else>
-                            <LineChart
-                                :chartData="matomoStats"
+                        <div
+                            class="grid grid-cols-6 gap-8 mt-8 mb-16"
+                            v-if="stats"
+                        >
+                            <KeyMetric
+                                :value="stats.numberOfPeople || 0"
+                                label="habitants"
+                            />
+                            <KeyMetric
+                                :value="stats.numberOfShantytown || 0"
+                                label="sites"
+                            />
+                            <KeyMetric
+                                :value="stats.numberOfResorbedShantytown || 0"
+                                label="résorptions"
+                            />
+                            <KeyMetric
+                                :value="stats.numberOfPlans || 0"
+                                label="dispositifs"
+                            />
+                            <KeyMetric
+                                :value="stats.numberOfUsers || 0"
+                                label="utilisateurs"
+                            />
+                            <KeyMetric
+                                :value="
+                                    stats.averageCompletionPercentage
+                                        ? (
+                                              stats.averageCompletionPercentage *
+                                              100
+                                          ).toFixed(2) + '%'
+                                        : 0
+                                "
+                                label="completion"
+                            />
+                        </div>
+                        <Spinner v-else />
+                    </div>
+
+                    <div>
+                        <h2 class="text-display-md text-primary mb-4 mt-16">
+                            Suivi des des sites
+                        </h2>
+
+                        <div v-if="stats">
+                            <BarChart
+                                :chartData="shantytownsEvolutionData"
                                 :options="{ maintainAspectRatio: false }"
                                 :height="250"
                             />
+                            <LineChart
+                                :chartData="shantytownsTotalEvolutionData"
+                                :options="{ maintainAspectRatio: false }"
+                                :height="250"
+                            />
+                        </div>
+                        <Spinner v-else />
+                    </div>
+
+                    <div>
+                        <h2 class="text-display-md text-primary  mt-16 mb-4">
+                            Suivi des dispositifs
+                        </h2>
+                        <CreditsRepartition
+                            v-if="stats"
+                            :credits="stats.numberOfCreditsPerYear"
+                        />
+                        <Spinner v-else />
+                    </div>
+
+                    <div>
+                        <h2 class="text-display-md text-primary mb-4 mt-16">
+                            Suivi plateforme
+                        </h2>
+                        <div>
+                            <Spinner v-if="!matomoStats" />
+                            <div class="chartWrapper" v-else>
+                                <LineChart
+                                    :chartData="matomoStats"
+                                    :options="{ maintainAspectRatio: false }"
+                                    :height="250"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
