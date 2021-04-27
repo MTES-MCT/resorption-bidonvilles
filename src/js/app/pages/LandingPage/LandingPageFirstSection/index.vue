@@ -6,10 +6,13 @@
         />
         <EventTutorial v-if="$i18n.locale === 'fr'"></EventTutorial>
         <div class="max-w-screen-sm mx-auto mt-8">
-             <video poster="./assets/poster_rb_landing.png" controls>
-                <source src="./assets/video_landing_720_no_sound.mp4" type="video/mp4">
+            <video poster="./assets/poster_rb_landing.png" controls>
+                <source
+                    src="./assets/video_landing_720_no_sound.mp4"
+                    type="video/mp4"
+                />
                 Votre navigateur ne supporte pas la balise video.
-            </video> 
+            </video>
         </div>
         <div>
             <div class="mt-24">
@@ -88,7 +91,6 @@
 import LandingPageFeatureBlock from "#app/pages/LandingPage/LandingPageFirstSection/LandingPageFeatureBlock.vue";
 import LandingPageContextImage from "#app/pages/LandingPage/LandingPageFirstSection/LandingPageContextImage.vue";
 import LandingPageUserFeedback from "./LandingPageUserFeedback/index.vue";
-import LandingPageResponsiveEmbed from "../LandingPageResponsiveEmbed.vue";
 import EventTutorial from "../LandingPageEvents/EventTutorial";
 
 export default {
@@ -96,7 +98,6 @@ export default {
         LandingPageContextImage,
         LandingPageFeatureBlock,
         LandingPageUserFeedback,
-        LandingPageResponsiveEmbed,
         EventTutorial
     }
 };

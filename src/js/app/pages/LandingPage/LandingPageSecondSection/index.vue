@@ -73,10 +73,16 @@
                 {{ $t("landingPage.secondSection.video.text") }}
             </div>
             <div class="md:w-1/2 md:mr-16 bg-gray-500">
-                <video poster="./assets/poster_rb_connaitre_partager_agir.png" controls>
-                    <source src="./assets/rb_connaitre_partager_agir_720.mp4" type="video/mp4">
+                <video
+                    poster="./assets/poster_rb_connaitre_partager_agir.png"
+                    controls
+                >
+                    <source
+                        src="./assets/rb_connaitre_partager_agir_720.mp4"
+                        type="video/mp4"
+                    />
                     Votre navigateur ne supporte pas la balise video.
-                </video> 
+                </video>
             </div>
             <div class="hidden md:block w-1/2 text-display-lg">
                 {{ $t("landingPage.secondSection.video.text") }}
@@ -87,12 +93,10 @@
 
 <script>
 import LandingPageDataBlock from "./LandingPageDataBlock.vue";
-import LandingPageResponsiveEmbed from "../LandingPageResponsiveEmbed.vue";
 
 export default {
     components: {
-        LandingPageDataBlock,
-        LandingPageResponsiveEmbed
+        LandingPageDataBlock
     }
 };
 </script>
