@@ -16,6 +16,12 @@ Si vous souhaitez déployer une instance de *Résorption-bidonvilles*, veuillez 
   - husky
   - lint-staged
   - cypress
+- Sous Linux, penser à ajouter à la variable d'environnement PATH le chemin d'accès aux packages installés globalement par yarn:
+
+```bash
+# Accès aux packages installés globalement avec yarn
+export PATH="$PATH:`yarn global bin`"
+```
 
 ## 🔌 Initialisation
 Une fois le dépôt clôné sur votre machine et les dépendances ci-dessus installées, vous devez configurer vos hooks git via Husky avec la commande suivante :
