@@ -22,6 +22,7 @@ Si vous souhaitez déployer une instance de *Résorption-bidonvilles*, veuillez 
 # Accès aux packages installés globalement avec yarn
 export PATH="$PATH:`yarn global bin`"
 ```
+- Inclure la ligne évoquée ci-dessus dans le fichier de personnalisation du shell permet de rendre la modification pérenne et de n'avoir pas à la ressaisir avant chaque utilisation. On peut par exemple enregistrer la ligne dans le fichier *~/.bashrc*.
 
 ## 🔌 Initialisation
 Une fois le dépôt clôné sur votre machine et les dépendances ci-dessus installées, vous devez configurer vos hooks git via Husky avec la commande suivante :
