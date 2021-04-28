@@ -4,6 +4,7 @@
             :defaultValue="this.$props.value"
             :search="search"
             v-model="result"
+            @blur="data => $emit('blur', data)"
             @submit="$emit('input', $event)"
             :getResultValue="resultValue"
             :loading="loading"
@@ -30,11 +31,6 @@
                     getResultValue
                 }"
             >
-                <Menu v-if="!results.length">
-                    <MenuItem>
-                        Aucun résultat
-                    </MenuItem>
-                </Menu>
                 <Menu v-bind="resultListProps" v-on="resultListListeners">
                     <div
                         :key="category.label"

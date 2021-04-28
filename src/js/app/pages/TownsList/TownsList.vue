@@ -11,11 +11,11 @@
         <div class="bg-G100 print:hidden">
             <PrivateContainer class="py-6">
                 <h1 class="text-display-md text-center mb-4">
-                    Rechercher une commune, un département... ?
+                    Rechercher un site, une commune, un département... ?
                 </h1>
                 <TownsListSearchBar
                     :value="filters.location"
-                    @input="val => updateFilters('location', val)"
+                    @blur="handleSearchBlur"
                 />
             </PrivateContainer>
         </div>
@@ -332,6 +332,13 @@ export default {
         };
     },
     methods: {
+        handleSearchBlur(data) {
+            store.commit("setFilters", {
+                ...this.filters,
+                location: data.value,
+                search: data.search
+            });
+        },
         onClickCloseTab() {
             this.updateFilters("status", "close");
             this.updateSort("closedAt");
