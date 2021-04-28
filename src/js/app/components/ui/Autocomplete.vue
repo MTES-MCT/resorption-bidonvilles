@@ -247,6 +247,7 @@ export default {
                 this.searchInput = this.getResultValue(this.value);
             }
             this.focused = false;
+            this.$emit("blur", { value: this.value, search: this.searchInput });
         }
     }
 };

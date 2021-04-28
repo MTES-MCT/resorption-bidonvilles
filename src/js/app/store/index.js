@@ -29,7 +29,8 @@ export default new Vuex.Store({
                 conditions: [],
                 status: "open",
                 location: null,
-                actors: []
+                actors: [],
+                search: ''
             },
             currentPage: 1
         },
