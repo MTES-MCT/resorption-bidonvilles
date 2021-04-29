@@ -40,7 +40,7 @@
                                 <p class="userHistory-item" v-if="isExpired"><span><font-awesome-icon class="user-statusIcon" icon="unlink"></font-awesome-icon> <strong>Lien expiré</strong> le {{ formatDate(user.user_access.expires_at, 'd M y') }}</span><br/>Un lien d'activation est valable {{ tokenExpiresIn }} jours<br/></p>
                                 <template v-if="user.user_access !== null">
                                     <p class="userHistory-item"><span><font-awesome-icon class="user-statusIcon" icon="paper-plane"></font-awesome-icon> <strong>Accès envoyé</strong> le {{ formatDate(user.user_access.created_at, 'd M y') }}</span><br/></p>
-                                    <p class="userHistory-item"><span><font-awesome-icon class="user-statusIcon" icon="check"></font-awesome-icon> par {{ user.user_access.sent_by.first_name }} {{ user.user_access.sent_by.last_name }}</span><br/></p>
+                                    <p class="userHistory-item"><span><font-awesome-icon class="user-statusIcon" icon="check"></font-awesome-icon> <strong>Par</strong> {{ user.user_access.sent_by.first_name }} {{ user.user_access.sent_by.last_name }}</span><br/></p>
                                 </template>
                                 <p class="userHistory-item"><span><font-awesome-icon class="user-statusIcon user-statusIcon--flag" icon="flag"></font-awesome-icon> <strong>Demandé</strong> le {{ formatDate(user.created_at, 'd M y') }}</span></p>
                             </section>
