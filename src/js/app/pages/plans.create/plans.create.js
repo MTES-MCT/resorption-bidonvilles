@@ -181,8 +181,7 @@ export default {
                             inputs: {
                                 government: {
                                     type: "autocompleter",
-                                    label:
-                                        "Pilote",
+                                    label: "Pilote",
                                     mandatory: true,
                                     specificProps: {
                                         autocompleter: d => {
