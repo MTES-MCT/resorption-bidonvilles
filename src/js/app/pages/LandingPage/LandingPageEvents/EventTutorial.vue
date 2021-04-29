@@ -23,8 +23,8 @@
                 >
                     <Button class="my-2" variant="secondary">S'inscrire</Button>
                 </a>
-                <p class="text-sm font-bold">Les jeudi à 10h</p>
-                <p class="text-sm font-bold">et vendredi à 14h - 45 min</p>
+                <p class="text-sm font-bold">Les lundi à 14h</p>
+                <p class="text-sm font-bold">et jeudi à 10h - 45 min</p>
             </div>
         </div>
     </div>
