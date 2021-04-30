@@ -27,9 +27,7 @@
                     <div v-if="poi.address">
                         {{ poi.address }}
                     </div>
-                    <div v-if="poi.description" class="my-2">
-                        {{ poi.description }}
-                    </div>
+                    <div v-if="poi.description" class="my-2" v-html="poi.description" />
                     <div v-if="poi.entity.phone" class="my-2">
                         Tel: {{ poi.entity.phone }}
                     </div>
