@@ -435,25 +435,29 @@ export default {
                 ({ justiceProcedure }) => justiceProcedure === true
             ).length;
         },
-        filteredShantytowns() {
-            switch (this.sort) {
-                case "cityName":
-                    return filterShantytowns(
-                        this.shantytowns,
-                        this.filters
-                    ).sort((a, b) => {
-                        if (a.cityName == b.cityName) return 0;
-                        if (a.cityName < b.cityName) return -1;
-                        if (a.cityName > b.cityName) return 1;
-                    });
-                default:
-                    return filterShantytowns(
-                        this.shantytowns,
-                        this.filters
-                    ).sort((a, b) => {
-                        return b[this.sort] - a[this.sort];
-                    });
+        sortFn() {
+            if (this.sort === "cityName") {
+                return (a, b) => {
+                    if (a.city.name < b.city.name) {
+                        return -1;
+                    }
+
+                    if (a.city.name > b.city.name) {
+                        return 1;
+                    }
+
+                    return 0;
+                };
             }
+
+            return (a, b) => {
+                return b[this.sort] - a[this.sort];
+            };
+        },
+        filteredShantytowns() {
+            return filterShantytowns(this.shantytowns, this.filters).sort(
+                this.sortFn
+            );
         },
         filteredShantytownsByPage() {
             return this.filteredShantytowns.slice(
