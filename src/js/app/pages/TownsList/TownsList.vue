@@ -334,11 +334,11 @@ export default {
     methods: {
         onClickCloseTab() {
             this.updateFilters("status", "close");
-            this.updateSort("closedAt");
+            this.updateSort("cityName");
         },
         onClickOpenTab() {
             this.updateFilters("status", "open");
-            this.updateSort("updatedAt");
+            this.updateSort("cityName");
         },
         updateSort(val) {
             store.commit("setSort", val);
@@ -436,11 +436,24 @@ export default {
             ).length;
         },
         filteredShantytowns() {
-            return filterShantytowns(this.shantytowns, this.filters).sort(
-                (a, b) => {
-                    return b[this.sort] - a[this.sort];
-                }
-            );
+            switch (this.sort) {
+                case "cityName":
+                    return filterShantytowns(
+                        this.shantytowns,
+                        this.filters
+                    ).sort((a, b) => {
+                        if (a.cityName == b.cityName) return 0;
+                        if (a.cityName < b.cityName) return -1;
+                        if (a.cityName > b.cityName) return 1;
+                    });
+                default:
+                    return filterShantytowns(
+                        this.shantytowns,
+                        this.filters
+                    ).sort((a, b) => {
+                        return b[this.sort] - a[this.sort];
+                    });
+            }
         },
         filteredShantytownsByPage() {
             return this.filteredShantytowns.slice(

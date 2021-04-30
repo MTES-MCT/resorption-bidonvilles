@@ -20,7 +20,7 @@ export default new Vuex.Store({
             data: [],
             loading: true,
             error: null,
-            sort: "updatedAt",
+            sort: "cityName",
             filters: {
                 population: [],
                 fieldType: [],
