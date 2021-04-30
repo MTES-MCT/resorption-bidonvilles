@@ -27,15 +27,19 @@
                     <div v-if="poi.address">
                         {{ poi.address }}
                     </div>
-                    <div v-if="poi.description" class="my-2" v-html="poi.description" />
+                    <div
+                        v-if="poi.description"
+                        class="my-2"
+                        v-html="poi.description"
+                    />
                     <div v-if="poi.entity.phone" class="my-2">
                         Tel: {{ poi.entity.phone }}
                     </div>
                     <div v-if="poi.entity.email" class="my-2">
                         Email: {{ poi.entity.email }}
                     </div>
-                    <div v-if="poi.language" class="my-2">
-                        Langue: {{ poi.languages.join(', ') }}
+                    <div v-if="poi.languages" class="my-2">
+                        Langue: {{ poi.languages.join(", ") }}
                     </div>
                     <a
                         v-if="poi.lieu_id"
@@ -86,11 +90,7 @@ export default {
             this.$piwik.trackEvent("POI", "Open POI", this.poi.lieu_id);
         },
         trackOpenSoliguide() {
-            this.$piwik.trackEvent(
-                "POI",
-                "Click See More",
-                this.poi.lieu_id
-            );
+            this.$piwik.trackEvent("POI", "Click See More", this.poi.lieu_id);
         },
         checkOutsideClick(event) {
             if (!this.poi) {
