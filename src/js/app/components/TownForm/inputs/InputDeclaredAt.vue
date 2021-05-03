@@ -3,7 +3,8 @@
         id="declared_at"
         label="Date de signalement"
         v-model="input"
-        rules="declaredAfterInstallation:@built_at"
+        :showMandatoryStar="true"
+        rules="declaredAfterInstallation:@built_at|required"
         :disabled-dates="{ to: this.disableBefore, from: new Date() }"
         cypressName="declared_at"
     ></DatepickerV2>
