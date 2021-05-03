@@ -27,28 +27,26 @@
                     <div v-if="poi.address">
                         {{ poi.address }}
                     </div>
-                    <div v-if="poi.phone" class="my-2">
-                        Tel: {{ poi.phone }}
+                    <div
+                        v-if="poi.description"
+                        class="my-2"
+                        v-html="poi.description"
+                    />
+                    <div v-if="poi.entity.phone" class="my-2">
+                        Tel: {{ poi.entity.phone }}
                     </div>
-                    <div v-if="poi.email" class="my-2">
-                        Email: {{ poi.email }}
+                    <div v-if="poi.entity.email" class="my-2">
+                        Email: {{ poi.entity.email }}
                     </div>
-                    <div v-if="poi.language" class="my-2">
-                        Langue: {{ poi.language }}
+                    <div v-if="poi.languages" class="my-2">
+                        Langue: {{ poi.languages.join(", ") }}
                     </div>
-                    <div v-if="poi.temporarily_closed" class="my-2">
-                        {{ poi.temporarily_closed }}
-                    </div>
-                    <div v-if="poi.temporary_information" class="my-2">
-                        {{ poi.temporary_information }}
-                    </div>
-
                     <a
-                        v-if="poi.solinum_id"
+                        v-if="poi.lieu_id"
                         class="my-2"
                         target="_blank"
                         @click="trackOpenSoliguide"
-                        :href="'https://soliguide.fr/fiche/' + poi.solinum_id"
+                        :href="'https://soliguide.fr/fiche/' + poi.lieu_id"
                     >
                         Voir plus
                     </a>
@@ -89,14 +87,10 @@ export default {
     },
     methods: {
         trackOpenPOI() {
-            this.$piwik.trackEvent("POI", "Open POI", this.poi.solinum_id);
+            this.$piwik.trackEvent("POI", "Open POI", this.poi.lieu_id);
         },
         trackOpenSoliguide() {
-            this.$piwik.trackEvent(
-                "POI",
-                "Click See More",
-                this.poi.solinum_id
-            );
+            this.$piwik.trackEvent("POI", "Click See More", this.poi.lieu_id);
         },
         checkOutsideClick(event) {
             if (!this.poi) {

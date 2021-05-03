@@ -1,6 +1,6 @@
 {
   "name": "action-bidonvilles",
-  "version": "0.15.3",
+  "version": "0.16.0",
   "description": "Frontend de Résorption Bidonvilles",
   "scripts": {
     "dev": "vue-cli-service serve --port 80",
