@@ -66,6 +66,10 @@ export default {
             options: {
                 open: [
                     {
+                        value: `cityName`,
+                        label: `Commune`
+                    },
+                    {
                         value: `builtAt`,
                         label: `Date d'installation`
                     },
@@ -79,6 +83,10 @@ export default {
                     }
                 ],
                 close: [
+                    {
+                        value: `cityName`,
+                        label: `Commune`
+                    },
                     {
                         value: `closedAt`,
                         label: `Date de fermeture`

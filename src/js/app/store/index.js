@@ -20,7 +20,7 @@ export default new Vuex.Store({
             data: [],
             loading: true,
             error: null,
-            sort: "updatedAt",
+            sort: "cityName",
             filters: {
                 population: [],
                 fieldType: [],
@@ -31,15 +31,15 @@ export default new Vuex.Store({
                 location: null,
                 actors: []
             },
-            currentPage: 1,
-            greeter: {
-                email: "",
-                first_name: "",
-                last_name: "",
-                organization: {
-                    organization_id: 0,
-                    organization_name: ""
-                }
+            currentPage: 1
+        },
+        greeter: {
+            email: "",
+            first_name: "",
+            last_name: "",
+            organization: {
+                organization_id: 0,
+                organization_name: ""
             }
         },
         detailedTown: null
