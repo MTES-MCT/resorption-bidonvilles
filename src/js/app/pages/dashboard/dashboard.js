@@ -422,7 +422,7 @@ export default {
             this.loading = true;
             this.error = undefined;
 
-            Promise.all([fetchAllTowns(), fetchAllPois()])
+            Promise.all([fetchAllTowns(), fetchAllPois().catch(() => [])])
                 .then(([towns, pois]) => {
                     const { field_types: fieldTypes } = getConfig();
 

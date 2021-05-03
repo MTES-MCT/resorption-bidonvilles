@@ -560,8 +560,8 @@ export default {
          * @returns {undefined}
          */
         createPOIMarker(poi) {
-            const { latitude, longitude } = poi;
-            const coordinates = [latitude, longitude];
+            // Longitude/latitudes returned by soliguide are in the wrong order
+            const coordinates = poi.location.coordinates.reverse();
 
             const marker = L.marker(coordinates, {
                 title: poi.address,
