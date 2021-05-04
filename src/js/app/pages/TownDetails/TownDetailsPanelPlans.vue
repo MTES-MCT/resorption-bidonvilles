@@ -16,10 +16,10 @@
                             Mené par
                             <router-link
                                 class="link"
-                                :to="'/annuaire/' + plan.organization.id"
+                                :to="'/annuaire/' + plan.operator.id"
                                 >{{
-                                    plan.organization.abbreviation ||
-                                        plan.organization.name
+                                    plan.operator.abbreviation ||
+                                        plan.operator.name
                                 }}</router-link
                             >
                         </div>
