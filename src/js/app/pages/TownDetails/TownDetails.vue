@@ -39,6 +39,12 @@
                         class="mb-10"
                         id="characteristics"
                     />
+                    <TownDetailsPanelPlans
+                        v-if="town.plans.length"
+                        :town="town"
+                        class="mb-10"
+                        id="plans"
+                    />
                     <TownDetailsPanelPeople
                         :town="town"
                         class="mb-10"
@@ -153,6 +159,7 @@ import TownDetailsPanelCharacteristics from "./TownDetailsPanelCharacteristics";
 import TownDetailsPanelPeople from "./TownDetailsPanelPeople";
 import TownDetailsPanelLivingConditions from "./TownDetailsPanelLivingConditions";
 import TownDetailsPanelJudicial from "./TownDetailsPanelJudicial";
+import TownDetailsPanelPlans from "./TownDetailsPanelPlans";
 import TownDetailsPanelActors from "./TownDetailsPanelActors";
 import { get as getConfig, getPermission } from "#helpers/api/config";
 import TownDetailsNewComment from "./TownDetailsNewComment";
@@ -183,6 +190,7 @@ export default {
         TownDetailsPanelPeople,
         TownDetailsPanelLivingConditions,
         TownDetailsPanelJudicial,
+        TownDetailsPanelPlans,
         TownDetailsCovidCommentsSidePanel,
         TownDetailsInviteActorModal
     },

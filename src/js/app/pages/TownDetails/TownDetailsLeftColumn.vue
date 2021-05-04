@@ -8,6 +8,12 @@
                 >Caractéristiques du site</LeftColumnNavLink
             >
             <LeftColumnNavLink
+                v-if="town.plans.length"
+                to="#plans"
+                :activeSection="activeSection === 'plans'"
+                >Dispositifs</LeftColumnNavLink
+            >
+            <LeftColumnNavLink
                 to="#people"
                 :activeSection="activeSection === 'people'"
                 >Habitants</LeftColumnNavLink
@@ -102,6 +108,10 @@ export default {
         });
 
         observer.observe(document.querySelector("#intervenants"));
+        if (this.town.plans.length) {
+            observer.observe(document.querySelector("#plans"));
+        }
+
         this.hasJusticePermission &&
             observer.observe(document.querySelector("#judicial"));
         observer.observe(document.querySelector("#living_conditions"));
