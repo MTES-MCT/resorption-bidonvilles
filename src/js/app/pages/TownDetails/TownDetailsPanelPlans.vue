@@ -2,7 +2,10 @@
     <TownDetailsPanel>
         <template v-slot:title>Dispositifs</template>
         <template v-slot:body>
-            <TownDetailsPanelSection v-for="plan in town.plans" :key="plan.plan_id">
+            <TownDetailsPanelSection
+                v-for="plan in town.plans"
+                :key="plan.plan_id"
+            >
                 <div class="flex">
                     <div class="w-2/3">
                         <div class="font-bold mb-2">
