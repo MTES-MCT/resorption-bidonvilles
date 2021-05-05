@@ -22,7 +22,7 @@
         <PrivateContainer class="pt-10">
             <FundingRequestBanner
                 v-if="
-                    isPrefOrDdets == true && isItTimeToDisplayBanner() == true
+                    isPrefOrDdets === true && isItTimeToDisplayBanner() === true
                 "
             >
             </FundingRequestBanner>
