@@ -1,5 +1,5 @@
 <template>
-    <div class="flex items-stretch border-solid mb-8">
+    <div class="flex items-stretch border-solid mb-8" v-if="shouldBeVisible">
         <Button
             icon="external-link-alt"
             class="justify-self-start"
@@ -19,3 +19,22 @@
         </div>
     </div>
 </template>
+
+<script>
+import { isOrgaPrefOrDdets } from "#helpers/api/config";
+
+export default {
+    data() {
+        return {
+            isPrefOrDdets: isOrgaPrefOrDdets()
+        };
+    },
+
+    computed: {
+        shouldBeVisible() {
+            const deadlineDate = new Date("2021-05-22");
+            return this.isPrefOrDdets === true && deadlineDate - new Date() > 0;
+        }
+    }
+};
+</script>
