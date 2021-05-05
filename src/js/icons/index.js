@@ -74,7 +74,8 @@ import {
     faCalendar,
     faPrint,
     faFile,
-    faCopy
+    faCopy,
+    faExternalLinkAlt
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(faFlag);
@@ -151,3 +152,4 @@ library.add(faPrint);
 library.add(faFile);
 library.add(faCopy);
 library.add(faLock);
+library.add(faExternalLinkAlt);

@@ -120,6 +120,26 @@ export function getPermission(permissionName) {
 }
 
 /**
+ * Returns true if the user's organization is a pref or a ddets, false otherwise
+ *
+ * @returns {true|false}
+ */
+export function isOrgaPrefOrDdets() {
+    if (configuration === null || configuration.user === null) {
+        return null;
+    }
+    const typeOrgaPrefDdets = [
+        "Préfecture de département",
+        "Direction Départementale de la Cohésion Sociale / Direction Départementale de la Cohésion Sociale et de la Protection des Populations",
+        "Préfecture de région",
+        "Direction Départementale des Territoires / Direction Départementale des Territoires et de la Mer"
+    ];
+    const organizationTypeName =
+        configuration.user.organization.type.name_singular;
+    return typeOrgaPrefDdets.includes(organizationTypeName);
+}
+
+/**
  * Checks if the current user has a specific permission
  *
  * @param {String} permission
