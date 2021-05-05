@@ -20,12 +20,8 @@
             </PrivateContainer>
         </div>
         <PrivateContainer class="pt-10">
-            <FundingRequestBanner
-                v-if="
-                    isPrefOrDdets === true && isItTimeToDisplayBanner() === true
-                "
-            >
-            </FundingRequestBanner>
+            <FundingRequestBanner></FundingRequestBanner>
+
             <TownsListHeader :search="filters.location" class="mb-6">
                 <template slot="filters">
                     <TownsListHeaderTab
@@ -284,7 +280,7 @@
 <script>
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer.vue";
 import PrivateLayout from "#app/components/PrivateLayout";
-import FundingRequestBanner from "./FundingRequestBanner";
+import FundingRequestBanner from "#app/components/FundingRequestBanner";
 import TownCard from "./TownCard";
 import TownsListSearchBar from "./TownsListSearchBar";
 import TownsListHeader from "./TownsListHeader/TownsListHeader";
@@ -293,7 +289,6 @@ import TownsListFilters from "./TownsListFilters/TownsListFilters";
 import TownsListFilter from "./TownsListFilters/TownsListFilter";
 import {
     get as getConfig,
-    isOrgaPrefOrDdets,
     getPermission,
     hasPermission
 } from "#helpers/api/config";
@@ -331,13 +326,11 @@ export default {
     },
     data() {
         const { field_types: fieldTypes } = getConfig();
-        const isPrefOrDdets = isOrgaPrefOrDdets();
         const permission = getPermission("shantytown.list");
 
         return {
             hasJusticePermission: permission.data_justice === true,
             fieldTypes,
-            isPrefOrDdets,
             exportIsVisible: false,
             printMode: false
         };
@@ -383,10 +376,6 @@ export default {
             setTimeout(() => {
                 window.print();
             }, 100);
-        },
-        isItTimeToDisplayBanner() {
-            const deadlineDate = "2021-05-22";
-            return new Date(deadlineDate) - new Date() < 0 ? false : true;
         }
     },
     created() {
