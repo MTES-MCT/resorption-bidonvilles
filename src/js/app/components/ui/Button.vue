@@ -7,8 +7,9 @@
             this.disabled && 'opacity-50 cursor-not-allowed'
         ]"
         :disabled="disabled || loading"
-        :to="isLink ? (disabled ? null : href) : null"
-        :is="isLink ? 'router-link' : 'button'"
+        :to="isLink && isInternalLink ? (disabled ? null : href) : null"
+        :href="isLink && !isInternalLink ? (disabled ? null : href) : null"
+        :is="isLink ? (isInternalLink ? 'router-link' : 'a') : 'button'"
         :type="isLink ? null : type"
         @click="onClick"
     >
@@ -114,6 +115,9 @@ export default {
         },
         isLink() {
             return this.href !== undefined;
+        },
+        isInternalLink() {
+            return this.isLink && this.href.slice(0, 1)[0] === "/";
         }
     },
     methods: {

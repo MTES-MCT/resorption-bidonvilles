@@ -2,9 +2,11 @@
     <div class="flex items-stretch border-solid mb-8" v-if="shouldBeVisible">
         <Button
             icon="external-link-alt"
-            class="justify-self-start"
+            class="justify-self-start px-4 py-2"
             variant="specialEvent"
             iconPosition="left"
+            target="blank"
+            href="https://www.demarches-simplifiees.fr/"
             >Faire une demande de crédits 2021</Button
         >
         <div class="justify-self-start ml-4 mt-2 italic">
