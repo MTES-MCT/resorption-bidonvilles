@@ -115,7 +115,7 @@ function checkOrigin(shantytown, filters) {
 function checkSearch(shantytown, search) {
     return (
         !!shantytown.name?.match(new RegExp(search, "ig")) ||
-        !!shantytown.addressSimple?.match(new RegExp(search, "ig"))
+        !!shantytown.address?.match(new RegExp(search, "ig"))
     );
 }
 
