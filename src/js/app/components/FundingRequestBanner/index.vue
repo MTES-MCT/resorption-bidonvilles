@@ -6,7 +6,7 @@
             variant="specialEvent"
             iconPosition="left"
             target="blank"
-            href="https://www.demarches-simplifiees.fr/"
+            href="https://www.demarches-simplifiees.fr/commencer/credits-resorption-bidonvilles-2021"
             >Faire une demande de crédits 2021</Button
         >
         <div class="justify-self-start ml-4 mt-2 italic">
