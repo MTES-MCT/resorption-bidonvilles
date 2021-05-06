@@ -3,15 +3,31 @@
         id="built_at"
         label="Date d'installation"
         v-model="input"
-        :disabled-dates="{ from: new Date() }"
+        rules="declaredBeforeDeclaration:@declared_at"
+        :disabled-dates="{ from: this.disableAfter || new Date() }"
         cypressName="built_at"
     ></DatepickerV2>
 </template>
 
 <script>
+import { extend } from "vee-validate";
+
+extend("declaredBeforeDeclaration", {
+    params: ["target"],
+    validate(builtAt, { target: declaredAt }) {
+        return builtAt <= declaredAt;
+    },
+    message:
+        "La date d'installation doit être antérieure à la date de déclaration"
+});
 export default {
     props: {
         value: {
+            type: Date,
+            required: false
+        },
+
+        disableAfter: {
             type: Date,
             required: false
         }
