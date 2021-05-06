@@ -29,43 +29,41 @@
               }"
                 >
                     <div v-bind="rootProps">
-                        <div class="relative">
-                            <InputIcon
-                                class="text-primary pl-6"
-                                position="before"
-                                :icon="prefixIcon"
-                                v-if="prefixIcon"
-                            />
+                        <div class="flex">
+                            <div class="relative flex-1">
+                                <InputIcon
+                                    class="text-primary pl-6"
+                                    position="before"
+                                    :icon="prefixIcon"
+                                    v-if="prefixIcon"
+                                />
 
-                            <input
-                                ref="searchInput"
-                                v-bind="inputProps"
-                                v-on="inputListeners"
-                                :class="classes"
-                                @focus="handleFocus"
-                                @blur="handleBlur"
-                                v-model="searchInput"
-                                class="pl-12 pr-12"
-                            />
-                            <InputIcon position="after" class="pr-6">
-                                <Spinner v-if="loading" />
-                                <div
-                                    @click="removeItem"
-                                    class="cursor-pointer "
-                                >
-                                    <Icon
-                                        class="text-primary text-display-sm"
-                                        v-if="
-                                            !loading &&
-                                                value &&
-                                                getResultValue(value) ===
-                                                    searchInput
-                                        "
-                                        icon="times"
-                                        data-cy-button="clear"
-                                    />
-                                </div>
-                            </InputIcon>
+                                <input
+                                    ref="searchInput"
+                                    v-bind="inputProps"
+                                    v-on="inputListeners"
+                                    :class="classes"
+                                    @focus="handleFocus"
+                                    @blur="handleBlur"
+                                    v-model="searchInput"
+                                    class="pl-12 pr-12"
+                                />
+                                <InputIcon position="after" class="pr-6">
+                                    <Spinner v-if="loading" />
+                                    <div
+                                        @click="removeItem"
+                                        class="cursor-pointer"
+                                        v-else-if="!loading && !!searchInput"
+                                    >
+                                        <Icon
+                                            class="text-primary text-display-sm"
+                                            icon="times"
+                                            data-cy-button="clear"
+                                        />
+                                    </div>
+                                </InputIcon>
+                            </div>
+                            <slot name="cta" />
                         </div>
 
                         <transition name="fade">
@@ -219,6 +217,7 @@ export default {
             this.$emit("input", null);
             this.$refs.provider.syncValue(null);
             this.$refs.provider.validate();
+            this.$emit("blur", { value: null, search: "" });
         },
         onItemSelect(newValue) {
             // Update local new value & Emit
