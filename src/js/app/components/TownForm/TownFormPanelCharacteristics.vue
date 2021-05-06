@@ -5,7 +5,10 @@
             class="w-128"
         >
             <div class="w-64">
-                <InputBuiltAt v-model="input.built_at"></InputBuiltAt>
+                <InputBuiltAt
+                    v-model="input.built_at"
+                    :disableAfter="input.declared_at"
+                ></InputBuiltAt>
                 <InputDeclaredAt
                     v-model="input.declared_at"
                     :disableBefore="input.built_at"
