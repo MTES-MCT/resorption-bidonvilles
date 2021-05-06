@@ -15,7 +15,7 @@
             <a
                 class="link"
                 target="_blank"
-                href="https://www.demarches-simplifiees.fr/"
+                href="https://www.demarches-simplifiees.fr/commencer/credits-resorption-bidonvilles-2021"
                 >démarches simplifiées</a
             >.
         </div>
