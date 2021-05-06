@@ -456,8 +456,12 @@ export default {
             );
         },
         title() {
-            if (this.currentLocation.label) {
-                return `${this.currentLocation.label}`;
+            if (this.filters.location) {
+                return `${this.filters.location.label}`;
+            }
+
+            if (this.filters.search) {
+                return `« ${this.filters.search} »`;
             }
 
             return `France métropolitaine`;
