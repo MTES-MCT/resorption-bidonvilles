@@ -23,8 +23,8 @@
                         <span class="font-bold">{{
                             $t("invitationPage.firstParagraph.bold")
                         }}</span>
-                        {{ $t("invitationPage.firstParagraph.normal") }}
-                        <span>{{
+                        {{ $t("invitationPage.firstParagraph.normal") }}<br />
+                        <span class="italic">{{
                             $t("invitationPage.secondParagraph.normal")
                         }}</span>
                     </div>
