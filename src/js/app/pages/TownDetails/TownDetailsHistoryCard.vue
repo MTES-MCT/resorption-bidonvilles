@@ -4,7 +4,7 @@
             {{ formatDate(when, "d M y à h:i") }}
         </div>
         <div class="text-primary">
-            <router-link :to="`/annuaire/${author.id} `">
+            <router-link :to="`/annuaire/${author.organization.id} `">
                 <div class="flex items-center">
                     <font-awesome-icon
                         icon="user"
