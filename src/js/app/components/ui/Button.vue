@@ -7,8 +7,9 @@
             this.disabled && 'opacity-50 cursor-not-allowed'
         ]"
         :disabled="disabled || loading"
-        :to="isLink ? (disabled ? null : href) : null"
-        :is="isLink ? 'router-link' : 'button'"
+        :to="isLink && isInternalLink ? (disabled ? null : href) : null"
+        :href="isLink && !isInternalLink ? (disabled ? null : href) : null"
+        :is="isLink ? (isInternalLink ? 'router-link' : 'a') : 'button'"
         :type="isLink ? null : type"
         @click="onClick"
     >
@@ -95,6 +96,8 @@ export default {
                     "rounded-sm border-2 border-secondary bg-secondary text-white hover:bg-secondaryDark focus:outline-none",
                 tertiary:
                     "rounded-sm border-2 border-tertiary bg-tertiary text-white hover:bg-tertiaryDark hover:border-tertiaryDark focus:outline-none",
+                specialEvent:
+                    "rounded-sm bg-yellow text-black hover:bg-yellowDark focus:outline-none",
                 primaryOutline:
                     "rounded-sm border-2 border-primary text-primary hover:bg-primary hover:text-white focus:outline-none",
                 secondaryOutline:
@@ -112,6 +115,9 @@ export default {
         },
         isLink() {
             return this.href !== undefined;
+        },
+        isInternalLink() {
+            return this.isLink && this.href.slice(0, 1)[0] === "/";
         }
     },
     methods: {

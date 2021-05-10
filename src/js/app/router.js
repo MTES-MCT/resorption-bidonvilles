@@ -267,14 +267,6 @@ const router = new VueRouter({
         },
         {
             meta: {
-                group: "townList"
-            },
-            path: "/liste-des-sites",
-            component: TownsList,
-            beforeEnter: guardians.loadedAndUpToDate
-        },
-        {
-            meta: {
                 group: "townCreation",
                 permissions: ["shantytown.create"]
             },

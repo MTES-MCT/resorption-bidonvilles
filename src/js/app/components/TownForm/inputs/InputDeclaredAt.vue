@@ -3,24 +3,14 @@
         id="declared_at"
         label="Date de signalement"
         v-model="input"
-        rules="declaredAfterInstallation:@built_at"
+        :showMandatoryStar="true"
+        rules="required"
         :disabled-dates="{ to: this.disableBefore, from: new Date() }"
         cypressName="declared_at"
     ></DatepickerV2>
 </template>
 
 <script>
-import { extend } from "vee-validate";
-
-extend("declaredAfterInstallation", {
-    params: ["target"],
-    validate(declaredAt, { target: builtAt }) {
-        return declaredAt >= builtAt;
-    },
-    message:
-        "La date de signalement doit être ultérieure à la date d'installation"
-});
-
 export default {
     props: {
         value: {

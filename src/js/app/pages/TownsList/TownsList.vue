@@ -20,6 +20,8 @@
             </PrivateContainer>
         </div>
         <PrivateContainer class="pt-10">
+            <FundingRequestBanner></FundingRequestBanner>
+
             <TownsListHeader :search="filters.location" class="mb-6">
                 <template slot="filters">
                     <TownsListHeaderTab
@@ -278,6 +280,7 @@
 <script>
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer.vue";
 import PrivateLayout from "#app/components/PrivateLayout";
+import FundingRequestBanner from "#app/components/FundingRequestBanner";
 import TownCard from "./TownCard";
 import TownsListSearchBar from "./TownsListSearchBar";
 import TownsListHeader from "./TownsListHeader/TownsListHeader";
@@ -303,6 +306,7 @@ export default {
         TownsListSort,
         Spinner,
         TownCard,
+        FundingRequestBanner,
         PrivateContainer,
         PrivateLayout,
         TownsListSearchBar,

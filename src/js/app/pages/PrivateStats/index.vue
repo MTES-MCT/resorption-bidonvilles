@@ -26,6 +26,7 @@
                             <KeyMetric
                                 :value="stats.numberOfResorbedShantytown || 0"
                                 label="résorptions"
+                                info="depuis janv. 2019"
                             />
                             <KeyMetric
                                 :value="stats.numberOfPlans || 0"
