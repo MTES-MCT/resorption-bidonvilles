@@ -136,7 +136,7 @@ module.exports = {
 
                 green: "#169B62 ",
                 red: "#D63626",
-                yellow: "#FEFA00",
+                yellowBanner: "#FEFA00",
                 yellowDark: "#DBD704",
 
                 // Deprecated values : TO DELETE
