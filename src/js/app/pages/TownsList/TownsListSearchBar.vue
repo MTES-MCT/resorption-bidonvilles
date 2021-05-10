@@ -11,6 +11,7 @@
                 :loading="loading"
                 prefixIcon="search"
                 :inputClasses="['rounded-full shadow-sm w-64']"
+                placeholder="Adresse, nom d’un site, ville…"
             >
                 <template v-slot:cta>
                     <Button class="rounded-full ml-2" size="sm"
