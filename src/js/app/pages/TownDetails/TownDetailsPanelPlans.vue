@@ -11,7 +11,7 @@
                         <div class="font-bold mb-2">
                             Dispositif « {{ plan.name }} »
                         </div>
-                        <div class="mb-2">{{ plan.goals }}</div>
+                        <Tag v-for="(topic, index) in plan.topics" :key="index" class="mr-2 mb-2">{{ topic }}</Tag>
                         <div class="font-bold">
                             Mené par
                             <router-link
