@@ -1,7 +1,5 @@
 <template>
-    <div
-        :class="[color, 'inline-flex text-sm px-4 py-1 flex-row items-center']"
-    >
+    <div :class="['inline-flex text-sm', variantClasses]">
         <slot />
         <span class="ml-2 cursor-pointer" @click="onDelete" v-if="onDelete">
             <Icon icon="times" />
@@ -15,9 +13,17 @@ export default {
         onDelete: {
             type: Function
         },
-        color: {
+        variant: {
             type: String,
-            default: "bg-G200"
+            default: 'default'
+        }
+    },
+    computed: {
+        variantClasses() {
+            return {
+                default: "px-4 py-1 flex-row items-center bg-G200",
+                primary: "bg-blue100 text-primary px-3 mr-2 mb-2 rounded-lg"
+            }[this.variant];
         }
     }
 };

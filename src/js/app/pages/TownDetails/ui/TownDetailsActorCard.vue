@@ -15,19 +15,19 @@
                 >
             </p>
             <div v-if="actor.themes.length > 0" class="mt-4">
-                <TownDetailsActorTag
+                <Tag
+                    variant="primary"
                     v-for="theme in actor.themes"
                     v-bind:key="theme.id"
                 >
                     {{ theme.value || themes[theme.id] }}
-                </TownDetailsActorTag>
+                </Tag>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import TownDetailsActorTag from "./TownDetailsActorTag.vue";
 import { get as getConfig } from "#helpers/api/config";
 
 export default {
@@ -42,9 +42,6 @@ export default {
         return {
             themes
         };
-    },
-    components: {
-        TownDetailsActorTag
     }
 };
 </script>
