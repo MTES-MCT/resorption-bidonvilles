@@ -13,6 +13,14 @@ export function filterShantytowns(shantytowns, filters) {
         }
 
         if (
+            !filters.location &&
+            filters.search &&
+            !checkSearch(shantytown, filters.search)
+        ) {
+            return false;
+        }
+
+        if (
             filters.fieldType.length > 0 &&
             !checkFieldType(shantytown, filters.fieldType)
         ) {
@@ -102,6 +110,13 @@ function checkOrigin(shantytown, filters) {
     const filteredArray = origins.filter(value => filters.includes(value));
 
     return filteredArray.length;
+}
+
+function checkSearch(shantytown, search) {
+    return (
+        !!shantytown.name?.match(new RegExp(search, "ig")) ||
+        !!shantytown.address?.match(new RegExp(search, "ig"))
+    );
 }
 
 function checkLocation(shantytown, filters) {

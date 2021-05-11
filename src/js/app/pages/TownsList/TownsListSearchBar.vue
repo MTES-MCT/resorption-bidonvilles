@@ -1,72 +1,76 @@
 <template>
-    <div class="mx-auto searchbox -mb-6">
-        <AutocompleteV2
-            :defaultValue="this.$props.value"
-            :search="search"
-            v-model="result"
-            @submit="$emit('input', $event)"
-            :getResultValue="resultValue"
-            :loading="loading"
-            prefixIcon="search"
-            :inputClasses="['rounded-full shadow-sm']"
-        >
-            <template v-slot:extra="{ removeItem }">
-                <div class="py-1 px-2 text-right">
-                    <Button
-                        variant="primaryText"
-                        @click="removeItem"
-                        size="sm"
-                        class="font-bold"
-                        >Voir tous les sites de France</Button
-                    >
-                </div>
-            </template>
-            <template
-                v-slot:default="{
-                    results,
-                    resultListProps,
-                    resultListListeners,
-                    resultProps,
-                    getResultValue
-                }"
+    <div class="-mb-6 flex flex-1 justify-center">
+        <div class="searchbox">
+            <AutocompleteV2
+                :defaultValue="this.$props.value"
+                :search="search"
+                v-model="result"
+                @blur="data => $emit('blur', data)"
+                @submit="$emit('input', $event)"
+                :getResultValue="resultValue"
+                :loading="loading"
+                prefixIcon="search"
+                :inputClasses="['rounded-full shadow-sm w-64']"
+                placeholder="Adresse, nom d’un site, ville…"
             >
-                <Menu v-if="!results.length">
-                    <MenuItem>
-                        Aucun résultat
-                    </MenuItem>
-                </Menu>
-                <Menu v-bind="resultListProps" v-on="resultListListeners">
-                    <div
-                        :key="category.label"
-                        v-for="category in getCategories(results)"
-                        class="flex flex-row border-b-2 border-G100"
+                <template v-slot:cta>
+                    <Button class="rounded-full ml-2" size="sm"
+                        >Rechercher</Button
                     >
-                        <div
-                            class="px-4 py-2 w-48 text-G600 border-r-2 border-G100 text-sm text-right pr-4"
+                </template>
+                <template v-slot:extra="{ removeItem }">
+                    <div class="py-1 text-right">
+                        <Button
+                            variant="primaryText"
+                            @click="removeItem"
+                            size="sm"
+                            class="font-bold"
+                            >Voir tous les sites de France</Button
                         >
-                            {{ category.label }}
-                        </div>
-                        <div class="flex-1">
-                            <MenuItem
-                                v-for="(r, index) in results"
-                                :key="resultProps[index].id"
-                                v-bind="resultProps[index]"
-                                :class="[
-                                    'flex flex-col cursor-pointer hover:bg-G100',
-                                    r.type === category.label
-                                        ? 'block'
-                                        : 'hidden',
-                                    resultProps[index]['aria-selected'] &&
-                                        'bg-G100'
-                                ]"
-                            >
-                                {{ getResultValue(r) }}
-                            </MenuItem>
-                        </div>
                     </div>
-                </Menu>
-            </template>
-        </AutocompleteV2>
+                </template>
+                <template
+                    v-slot:default="{
+                        results,
+                        resultListProps,
+                        resultListListeners,
+                        resultProps,
+                        getResultValue
+                    }"
+                >
+                    <Menu v-bind="resultListProps" v-on="resultListListeners">
+                        <div
+                            :key="category.label"
+                            v-for="category in getCategories(results)"
+                            class="flex flex-row border-b-2 border-G100"
+                        >
+                            <div
+                                class="px-4 py-2 w-48 text-G600 border-r-2 border-G100 text-sm text-right pr-4"
+                            >
+                                {{ category.label }}
+                            </div>
+                            <div class="flex-1">
+                                <MenuItem
+                                    v-for="(r, index) in results"
+                                    :key="resultProps[index].id"
+                                    v-bind="resultProps[index]"
+                                    :class="[
+                                        'flex flex-col cursor-pointer hover:bg-G100',
+                                        r.type === category.label
+                                            ? 'block'
+                                            : 'hidden',
+                                        resultProps[index]['aria-selected'] &&
+                                            'bg-G100'
+                                    ]"
+                                >
+                                    {{ getResultValue(r) }}
+                                </MenuItem>
+                            </div>
+                        </div>
+                    </Menu>
+                </template>
+            </AutocompleteV2>
+        </div>
     </div>
 </template>
 
@@ -125,5 +129,6 @@ export default {
 <style scoped>
 .searchbox {
     max-width: 500px;
+    min-width: 500px;
 }
 </style>
