@@ -8,7 +8,7 @@
         ]"
         :disabled="disabled || loading"
         :to="isLink && isInternalLink ? (disabled ? null : href) : null"
-        :href="isLink && !isInternalLink ? (disabled ? null : href) : null"
+        :href="href"
         :is="isLink ? (isInternalLink ? 'router-link' : 'a') : 'button'"
         :type="isLink ? null : type"
         @click="onClick"
