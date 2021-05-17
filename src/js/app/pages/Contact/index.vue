@@ -361,12 +361,16 @@ export default {
                 this.loading = false;
                 // Si l'utilisateur a demandé un accès, on route vers le formulaire d'invitation
                 if (this.isRequestAccessAndActor) {
+                    this.$piwik?.trackEvent("Contact", "Demande d'accès");
+
                     const greeter = {
                         email: result.email
                     };
                     this.$store.commit("saveGreeter", greeter);
                     this.$router.push("/invitation");
                 } else {
+                    this.$piwik?.trackEvent("Contact", "Demande d'information");
+
                     this.$router.push("/");
                 }
                 notify({

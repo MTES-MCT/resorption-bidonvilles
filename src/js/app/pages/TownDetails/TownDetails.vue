@@ -220,6 +220,9 @@ export default {
             return !this.town.actors.some(({ id }) => id === this.user.id);
         }
     },
+    mounted() {
+        this.$piwik?.trackEvent("Site", "Visite page site", this.$route.params.id);
+    },
     created() {
         this.fetchData();
     },

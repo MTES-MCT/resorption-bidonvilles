@@ -172,6 +172,12 @@ export default {
                                 : null
                         }))
                 });
+
+                this.$piwik?.trackEvent(
+                    "Site",
+                    "Fermeture site",
+                    this.form.closed_with_solutions
+                );
             } catch (err) {
                 this.loading = false;
                 this.error = err;

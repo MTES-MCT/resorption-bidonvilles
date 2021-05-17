@@ -337,6 +337,8 @@ export default {
     },
     methods: {
         handleSearchBlur(data) {
+            this.$piwik?.trackEvent("Liste des sites", "Recherche");
+
             store.commit("setFilters", {
                 ...this.filters,
                 location: data.value,
@@ -382,6 +384,7 @@ export default {
             this.printMode = true;
             setTimeout(() => {
                 window.print();
+                this.$piwik?.trackEvent("Impression", "Impression liste des sites");
             }, 100);
         }
     },
