@@ -210,6 +210,8 @@ export default {
                 )
             })
                 .then(response => {
+                    this.$piwik?.trackEvent("Commentaire", "Création commentaire Covid", this.town.id);
+
                     this.$emit("updateTown", {
                         ...this.town,
                         comments: {

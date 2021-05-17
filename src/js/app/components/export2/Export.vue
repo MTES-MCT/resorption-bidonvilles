@@ -174,6 +174,7 @@ export default {
             }
 
             open(url);
+            this.$piwik?.trackEvent("Export", "Export sites");
         },
         close() {
             this.$emit("close");

@@ -87,6 +87,7 @@ export default {
                 private: this.isPrivate
             })
                 .then(response => {
+                    this.$piwik?.trackEvent("Commentaire", "Création commentaire", this.town.id);
                     this.$emit("submit", response.comments);
                     this.newComment = "";
                 })
