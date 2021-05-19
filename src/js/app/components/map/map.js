@@ -661,6 +661,7 @@ export default {
         },
 
         setSearchMarker(type, address, coordinates) {
+            this.$piwik?.trackEvent("Cartographie", "Recherche");
             this.clearSearchMarker();
 
             // check if there is a marker existing at that exact address
