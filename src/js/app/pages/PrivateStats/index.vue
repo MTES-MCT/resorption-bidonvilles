@@ -86,6 +86,29 @@
                     </div>
 
                     <div>
+                        <h2 class="text-display-md text-primary mb-4 mt-16">
+                            Nombre d'habitants en bidonvilles
+                        </h2>
+
+                        <div v-if="stats">
+                            <LineChart
+                                :chartData="populationTotalEvolutionData"
+                                :options="{
+                                    maintainAspectRatio: false,
+                                    scales: {
+                                        yAxes: [
+                                            { ticks: { beginAtZero: false } }
+                                        ]
+                                    }
+                                }"
+                                :height="250"
+                            />
+                        </div>
+
+                        <Spinner v-else />
+                    </div>
+
+                    <div>
                         <h2 class="text-display-md text-primary  mt-16 mb-4">
                             Suivi des dispositifs
                         </h2>
@@ -329,6 +352,25 @@ export default {
                         backgroundColor: "#E5E5F4",
                         data: cumulativeData,
                         label: "Nombre total de bidonvilles"
+                    }
+                ]
+            };
+        },
+
+        populationTotalEvolutionData() {
+            if (this.stats.populationTotal === null) {
+                return [];
+            }
+
+            return {
+                labels: this.stats.populationTotal.map(({ month }) => month),
+                datasets: [
+                    {
+                        backgroundColor: "#E5E5F4",
+                        data: this.stats.populationTotal.map(
+                            ({ total }) => total
+                        ),
+                        label: "Nombre d'habitants"
                     }
                 ]
             };
