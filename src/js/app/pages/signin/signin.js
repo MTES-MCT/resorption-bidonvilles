@@ -46,6 +46,7 @@ export default {
     },
     methods: {
         onComplete() {
+            this.$piwik?.trackEvent("Login", "Connection");
             window.localStorage.setItem("logged_once", true);
             this.$router.push({ path: "/" });
         }

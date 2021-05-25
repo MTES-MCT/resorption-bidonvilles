@@ -456,7 +456,7 @@ const router = new VueRouter({
         {
             path: "/statistiques/:code?",
             meta: {
-                group: "admin",
+                group: "stats",
                 permissions: ["stats.read"]
             },
             component: PrivateStats,

@@ -15,7 +15,7 @@ export default {
         },
         variant: {
             type: String,
-            default: 'default'
+            default: "default"
         }
     },
     computed: {

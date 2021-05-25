@@ -36,7 +36,7 @@ if (VUE_APP_SENTRY_ON === "true") {
         // Set tracesSampleRate to 1.0 to capture 100%
         // of transactions for performance monitoring.
         // We recommend adjusting this value in production
-        tracesSampleRate: 1.0,
+        tracesSampleRate: 0.1,
         // Ignore common sentry errors
         // https://docs.sentry.io/platforms/javascript/configuration/filtering/#decluttering-sentry
         ignoreErrors: [

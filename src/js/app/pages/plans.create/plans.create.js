@@ -479,6 +479,7 @@ export default {
                 title: "Dispositif correctement déclaré",
                 text: "Le dispositif a bien été ajouté en base de données"
             });
+            this.$piwik?.trackEvent("Dispositif", "Création dispositif");
 
             this.$router.push(`/dispositif/${id}`);
         }

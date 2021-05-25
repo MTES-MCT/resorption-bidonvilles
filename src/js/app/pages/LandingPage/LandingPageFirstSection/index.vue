@@ -4,7 +4,7 @@
             class="full-width mx-auto"
             src="./assets/resorption-bidonvilles-dessin.png"
         />
-        <EventTutorial v-if="$i18n.locale === 'fr'"></EventTutorial>
+        <LandingEventBanner v-if="$i18n.locale === 'fr'" />
         <div class="max-w-screen-sm mx-auto mt-8">
             <video poster="./assets/poster_rb_landing.png" controls>
                 <source
@@ -91,14 +91,14 @@
 import LandingPageFeatureBlock from "#app/pages/LandingPage/LandingPageFirstSection/LandingPageFeatureBlock.vue";
 import LandingPageContextImage from "#app/pages/LandingPage/LandingPageFirstSection/LandingPageContextImage.vue";
 import LandingPageUserFeedback from "./LandingPageUserFeedback/index.vue";
-import EventTutorial from "../LandingPageEvents/EventTutorial";
+import LandingEventBanner from "../LandingEventBanner";
 
 export default {
     components: {
         LandingPageContextImage,
         LandingPageFeatureBlock,
         LandingPageUserFeedback,
-        EventTutorial
+        LandingEventBanner
     }
 };
 </script>

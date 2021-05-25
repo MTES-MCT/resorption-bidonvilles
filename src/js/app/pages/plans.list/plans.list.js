@@ -3,7 +3,7 @@ import { list } from "#helpers/api/plan";
 import "vue-good-table/dist/vue-good-table.css";
 import NavBar from "#app/layouts/navbar/navbar.vue";
 import CollectivityInput from "#app/components/form/input/collectivity/collectivity.vue";
-import FundingRequestBanner from "#app/components/FundingRequestBanner";
+import EventBannerPlatform from "#app/components/EventBannerPlatform";
 import { open } from "#helpers/tabHelper";
 import {
     get as getConfig,
@@ -16,7 +16,7 @@ export default {
         NavBar,
         Table,
         CollectivityInput,
-        FundingRequestBanner
+        EventBannerPlatform
     },
 
     data() {

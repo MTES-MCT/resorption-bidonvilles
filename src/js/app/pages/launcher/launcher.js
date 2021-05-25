@@ -24,11 +24,12 @@ export default {
 
             this.error = null;
             load()
+                .catch(response => {
+                    console.log("Error while loading", response);
+                    this.error = response.user_message;
+                })
                 .then(() => {
                     this.redirect();
-                })
-                .catch(response => {
-                    this.error = response.user_message;
                 });
         },
         redirect() {
@@ -44,27 +45,26 @@ export default {
             }
 
             this.$piwik.setUserId(user.id);
-            this.$piwik.setCustomVariable(1, "superuser", user.is_superuser);
-            this.$piwik.setCustomVariable(
-                2,
-                "structure",
-                user.organization.type.abbreviation ||
-                    user.organization.type.name_singular
-            );
-            this.$piwik.setCustomVariable(
-                3,
-                "niveau_geo",
-                user.organization.location.type
-            );
-            this.$piwik.setCustomVariable(
-                4,
-                "geo_nom",
-                user.organization.location[user.organization.location.type]
-                    ? user.organization.location[
-                          user.organization.location.type
-                      ].name
-                    : null
-            );
+
+            const location =
+                user.organization.location[user.organization.location.type];
+
+            // Convert user's data to a easily parsable string:
+            // ie: superuser:false,is_admin:false,role:association,org_category:association,org_location_type:departement,org_location_name:Gironde,org_location_code:33
+            const userData = JSON.stringify({
+                superuser: user.is_superuser,
+                is_admin: user.is_admin,
+                role: user.role_id,
+                org_category: user.organization.category.uid,
+                org_location_type: user.organization.location.type,
+                org_location_name: location?.name,
+                org_location_code: location?.code
+            })
+                .replaceAll('"', "")
+                .replaceAll("{", "")
+                .replaceAll("}", "");
+
+            this.$piwik.setCustomVariable(1, "user", userData);
 
             const departement = user.organization.location.departement || null;
             this.$piwik.setCustomVariable(
