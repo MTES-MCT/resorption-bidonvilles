@@ -77,7 +77,7 @@ export default {
                     group: "userCreation"
                 },
                 {
-                    label: "Statistiques",
+                    label: "Tableau de bord",
                     target: "/statistiques",
                     group: "stats"
                 },
