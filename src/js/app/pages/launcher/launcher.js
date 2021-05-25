@@ -24,11 +24,11 @@ export default {
 
             this.error = null;
             load()
-                .then(() => {
-                    this.redirect();
-                })
                 .catch(response => {
                     this.error = response.user_message;
+                })
+                .then(() => {
+                    this.redirect();
                 });
         },
         redirect() {
@@ -58,9 +58,12 @@ export default {
                 org_location_type: user.organization.location.type,
                 org_location_name: location?.name,
                 org_location_code: location?.code
-            }).replaceAll('"', '').replaceAll('{', '').replaceAll('}', '')
+            })
+                .replaceAll('"', "")
+                .replaceAll("{", "")
+                .replaceAll("}", "");
 
-            this.$piwik.setCustomVariables(1, "user", userData)
+            this.$piwik.setCustomVariable(1, "user", userData);
 
             const departement = user.organization.location.departement || null;
             this.$piwik.setCustomVariable(
