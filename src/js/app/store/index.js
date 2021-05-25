@@ -30,7 +30,7 @@ export default new Vuex.Store({
                 status: "open",
                 location: null,
                 actors: [],
-                search: ''
+                search: ""
             },
             currentPage: 1
         },
