@@ -209,7 +209,10 @@ export default {
                 .then(() => {
                     this.validation.state = null;
 
-                    this.$piwik?.trackEvent("Admin", "Approuver accès");
+                    this.$piwik?.trackEvent(
+                        "Demande d'accès",
+                        "Approuver accès"
+                    );
 
                     notify({
                         group: "notifications",
@@ -241,7 +244,7 @@ export default {
                 .then(() => {
                     this.validation.state = null;
 
-                    this.$piwik?.trackEvent("Admin", "Refuser accès");
+                    this.$piwik?.trackEvent("Demande d'accès", "Refuser accès");
                     notify({
                         group: "notifications",
                         type: "success",
