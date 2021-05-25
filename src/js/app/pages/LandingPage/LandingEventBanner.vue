@@ -1,10 +1,11 @@
 <template>
     <div
+        v-if="shouldBeVisible"
         class="full-width h-auto mx-auto mt-8 mb-16 bg-orange300 rounded-lg overflow-hidden"
     >
         <div class="lg:flex items-center">
             <div class="lg:flex-shrink-0 justify-center">
-                <img class="h-48 m-4" src="../assets/Webinar.jpeg" alt="" />
+                <img class="h-48 m-4" src="./assets/Webinar.jpeg" alt="" />
             </div>
             <div class="flex-shrink-0 lg:flex-shrink px-8 py-2 lg:py-8 lg:px-4">
                 <div class="tracking-wide text-display-md text-primary">
@@ -36,3 +37,13 @@
         </div>
     </div>
 </template>
+
+<script>
+export default {
+    computed: {
+        shouldBeVisible() {
+            return new Date() < new Date("2021-06-01");
+        }
+    }
+};
+</script>
