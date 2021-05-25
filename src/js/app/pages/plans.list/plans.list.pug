@@ -36,7 +36,7 @@
                 </header>
 
                 <div class="container plansList-body">
-                    <FundingRequestBanner></FundingRequestBanner>
+                    <EventBannerPlatform></EventBannerPlatform>
                     <CollectivityInput class="planList-search" v-model="location"></CollectivityInput>
 
                     <Table :columns="columns" :content="pageContent" :emptyLabel="'Aucun dispositif sur ce territoire'" @click="routeToPlan">
