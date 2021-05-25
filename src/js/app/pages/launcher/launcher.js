@@ -25,6 +25,7 @@ export default {
             this.error = null;
             load()
                 .catch(response => {
+                    console.log("Error while loading", response);
                     this.error = response.user_message;
                 })
                 .then(() => {
