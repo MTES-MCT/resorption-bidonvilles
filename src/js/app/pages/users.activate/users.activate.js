@@ -50,7 +50,10 @@ export default {
                     submitPrefix:
                         'En cliquant sur "Activer mon compte", j\'accepte les <a href="/#/conditions-d-utilisation">conditions générales d\'utilisation</a> et de partager mes données (nom, prénom, courriel, structure et lorsque renseigné, numéro de téléphone) aux utilisateurs de la plateforme via l’annuaire',
                     submit: data => {
-                        this.$piwik?.trackEvent("Login", "Création compte");
+                        this.$piwik?.trackEvent(
+                            "Demande d'accès",
+                            "Création compte"
+                        );
                         return activate(
                             this.user.id,
                             Object.assign(data, {
