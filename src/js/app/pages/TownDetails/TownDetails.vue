@@ -90,7 +90,7 @@
                         'flex-1',
                         town.comments.regular.length === 0 && 'pb-32'
                     ]"
-                    v-on:submit="town.comments.regular = $event"
+                    v-on:submit="handleNewComment($event)"
                     id="newComment"
                     :user="user"
                     :nbComments="town.comments.regular.length"
@@ -246,6 +246,14 @@ export default {
         },
         openCovid() {
             this.covidOpen = true;
+        },
+        handleNewComment(comments) {
+            this.$piwik?.trackEvent(
+                "Commentaire",
+                "Création commentaire",
+                this.town.id
+            );
+            this.town.comments.regular = comments;
         },
         deleteTown() {
             if (
