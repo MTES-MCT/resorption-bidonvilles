@@ -384,7 +384,10 @@ export default {
             this.printMode = true;
             setTimeout(() => {
                 window.print();
-                this.$piwik?.trackEvent("Impression", "Impression liste des sites");
+                this.$piwik?.trackEvent(
+                    "Impression",
+                    "Impression liste des sites"
+                );
             }, 100);
         }
     },

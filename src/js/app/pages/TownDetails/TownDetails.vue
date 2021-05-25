@@ -221,7 +221,11 @@ export default {
         }
     },
     mounted() {
-        this.$piwik?.trackEvent("Site", "Visite page site", this.$route.params.id);
+        this.$piwik?.trackEvent(
+            "Site",
+            "Visite page site",
+            this.$route.params.id
+        );
     },
     created() {
         this.fetchData();

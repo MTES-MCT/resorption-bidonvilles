@@ -525,7 +525,11 @@ export default {
                 text: "Le dispositif a bien été mis à jour"
             });
 
-            this.$piwik?.trackEvent("Dispositif", "Mise à jour indicateurs", this.$route.params.id);
+            this.$piwik?.trackEvent(
+                "Dispositif",
+                "Mise à jour indicateurs",
+                this.$route.params.id
+            );
 
             this.$router.push(`/dispositif/${this.$route.params.id}`);
         }

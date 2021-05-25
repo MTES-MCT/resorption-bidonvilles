@@ -186,7 +186,11 @@ export default {
 
         dispatch() {
             if (this.form.user && this.form.user.id) {
-                this.$piwik?.trackEvent("Intervenant", "Déclaration intervenant", this.townId);
+                this.$piwik?.trackEvent(
+                    "Intervenant",
+                    "Déclaration intervenant",
+                    this.townId
+                );
                 return this.$store.dispatch("addTownActor", {
                     townId: this.townId,
                     actor: {
@@ -195,7 +199,11 @@ export default {
                 });
             }
 
-            this.$piwik?.trackEvent("Intervenant", "Invitation intevernant", this.townId);
+            this.$piwik?.trackEvent(
+                "Intervenant",
+                "Invitation intevernant",
+                this.townId
+            );
             return this.$store.dispatch("inviteNewTownActor", {
                 townId: this.townId,
                 email: this.form.email
