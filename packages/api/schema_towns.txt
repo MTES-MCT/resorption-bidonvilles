@@ -1,0 +1,138 @@
+@startuml
+
+title Base de données Action Bidonvilles
+
+note "Toutes les tables disposent des champs created_at et updated_at" as Note1
+
+class regions {
+    #code: varchar[2]
+    +name: varchar[255] - not null - <<UK>>
+}
+
+class departements {
+    #code: varchar[3]
+    +name: varchar[255] - not null - <<UK>>
+    +latitude: double[2, 15] - not null
+    +longitude: double[2, 15] - not null
+}
+
+class epci {
+    #code: varchar[9]
+    +name: varchar[255] - not null
+}
+
+class cities {
+    #code: varchar[5]
+    +name: varchar[255] - not null
+}
+
+class field_types {
+    #field_type_id: identity
+    +label: varchar[255] - not null - <<UK>>
+    +color: varchar[255] = 'cccccc' - not null
+}
+
+class owner_types {
+    #owner_type_id: identity
+    +label: varchar[255] - not null - <<UK>>
+}
+
+class social_origins {
+    #social_origin_id: identity
+    +label: varchar[255] - not null - <<UK>>
+}
+
+class users {
+    #user_id: identity
+    +email: varchar[255] - not null - <<UK>>
+    +password: text - null
+    +salt: varchar[255] - not null
+    +first_name: varchar[255] - not null
+    +last_name: varchar[255] - not null
+    +company: varchar[255] - not null
+    +default_export: text - null
+    +active: bool = false - not null
+}
+
+note right of users: an active user MUST have a set password
+
+class shantytowns {
+    #shantytown_id: identity
+    +status: varchar[255] = 'open' - not null
+    +closed_at: datetime - null
+    +latitude: double[2, 15] - not null
+    +longitude: double[2, 15] - not null
+    +latitude: double[2, 15] - not null
+    +longitude: double[2, 15] - not null
+    +built_at: date - null
+    +population_total: unsigned int - null
+    +population_couples: unsigned int - null
+    +population_minors: unsigned int - null
+    +access_to_electricity: bool - null
+    +access_to_water: bool - null
+    +trash_evacuation: bool - null
+    +justice_procedure: bool - null
+    +justice_redenred: bool - null
+    +justice_challenged: bool - null
+    +priority: int = 4 - not null
+    +owner: varchar[255] - null
+    +declared_at: date - null
+    +census_status: enum - null
+    +census_conducted_at: date - null
+    +census_conducted_by: varchar[255] - null
+    +justice_rendered_by: varchar[255] - null
+    +justice_rendered_at: date - null
+    +police_status: enum - null
+    +police_requested_at: date - null
+    +police_granted_at: date - null
+    +bailiff: varchar[255] - null
+    +owner_complaint: bool - null
+}
+
+note top of shantytowns: closed_at cannot be set prior to built_at\nclosed_at must be set if the status is not 'open'\npriority is an int between 1 and 4
+
+class shantytown_comments {
+    #shantytown_comment_id: identity
+    +description: text - not null
+}
+
+class closing_solutions {
+    #closing_solution_id: identity
+    +label: varchar[255] - not null - <<UK>>
+}
+
+class shantytown_closing_solutions {
+    +number_of_people_affected: int - null
+    +number_of_households_affected: int - null
+}
+
+class roles {
+    #role_id: identity
+    +name: varchar[255] - not null
+}
+
+class permissions {
+    #permission_id: identity
+    +type: varchar[255] - not null
+    +name: varchar[255] - not null
+}
+
+regions "1" -down- "0..N" departements
+departements "1" -down- "0..N" cities
+epci "1" -right- "0..N" cities
+cities "1" - "0..N" cities: > est un arrondissement de
+departements "0..1" -right- "0..N" users
+roles "1" -down- "0..N" users
+roles "0..N" -up- "0..N" permissions
+users "1" -down- "0..N" shantytowns
+users "0..1" -down- "0..N" shantytowns
+cities "1" -right- "0..N" shantytowns
+field_types "1" -up- "0..N" shantytowns
+owner_types "1" -up- "0..N" shantytowns
+social_origins "0..N" -left- "0..N" shantytowns
+users "1" - "0..N" shantytown_comments
+shantytown_comments "1" -left- "0..N" shantytowns
+closing_solutions "0..N" -left- "0..N" shantytowns
+(closing_solutions, shantytowns) .. shantytown_closing_solutions
+
+@enduml
