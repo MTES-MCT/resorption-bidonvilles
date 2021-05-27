@@ -139,66 +139,6 @@ export default {
 
     data() {
         return {
-            // Données de test
-            regional_datas: [
-                { code: 3, region: "Guyane", sites: 1 },
-                { code: 11, region: "Île-de-France", sites: 179 },
-                { code: 24, region: "Centre-Val de Loire", sites: 6 },
-                { code: 27, region: "Bourgogne-Franche-Comté", sites: 1 },
-                { code: 28, region: "Normandie", sites: 13 },
-                { code: 32, region: "Hauts-de-France", sites: 114 },
-                { code: 44, region: "Grand Est", sites: 2 },
-                { code: 52, region: "Pays de la Loire", sites: 62 },
-                { code: 53, region: "Bretagne", sites: 5 },
-                { code: 75, region: "Nouvelle-Aquitaine", sites: 166 },
-                { code: 76, region: "Occitanie", sites: 86 },
-                { code: 84, region: "Auvergne-Rhône-Alpes", sites: 83 },
-                { code: 93, region: "Provence-Alpes-Côte d'Azur", sites: 56 }
-            ],
-
-            // Données départementales
-            departemental_datas: [
-                { code: 5, departement: "Hautes-Alpes", sites: 1 },
-                { code: 6, departement: "Alpes-Maritimes", sites: 4 },
-                { code: 13, departement: "Bouches-du-Rhône", sites: 36 },
-                { code: 14, departement: "Calvados", sites: 13 },
-                { code: 21, departement: "Côte-d'Or", sites: 1 },
-                { code: 26, departement: "Drôme", sites: 2 },
-                { code: 30, departement: "Gard", sites: 1 },
-                { code: 31, departement: "Haute-Garonne", sites: 67 },
-                { code: 33, departement: "Gironde", sites: 164 },
-                { code: 34, departement: "Hérault", sites: 13 },
-                { code: 35, departement: "Ille-et-Vilaine", sites: 5 },
-                { code: 36, departement: "Indre", sites: 1 },
-                { code: 37, departement: "Indre-et-Loire", sites: 1 },
-                { code: 38, departement: "Isère", sites: 27 },
-                { code: 41, departement: "Loir-et-Cher", sites: 1 },
-                { code: 44, departement: "Loire-Atlantique", sites: 53 },
-                { code: 45, departement: "Loiret", sites: 3 },
-                { code: 49, departement: "Maine-et-Loire", sites: 8 },
-                { code: 57, departement: "Moselle", sites: 2 },
-                { code: 59, departement: "Nord", sites: 89 },
-                { code: 62, departement: "Pas-de-Calais", sites: 25 },
-                { code: 63, departement: "Puy-de-Dôme", sites: 7 },
-                { code: 66, departement: "Pyrénées-Orientales", sites: 5 },
-                { code: 69, departement: "Rhône", sites: 39 },
-                { code: 74, departement: "Haute-Savoie", sites: 8 },
-                { code: 75, departement: "Paris", sites: 1 },
-                { code: 77, departement: "Seine-et-Marne", sites: 15 },
-                { code: 78, departement: "Yvelines", sites: 9 },
-                { code: 83, departement: "Var", sites: 5 },
-                { code: 84, departement: "Vaucluse", sites: 10 },
-                { code: 85, departement: "Vendée", sites: 1 },
-                { code: 86, departement: "Vienne", sites: 1 },
-                { code: 87, departement: "Haute-Vienne", sites: 1 },
-                { code: 91, departement: "Essonne", sites: 31 },
-                { code: 92, departement: "Hauts-de-Seine", sites: 6 },
-                { code: 93, departement: "Seine-Saint-Denis", sites: 50 },
-                { code: 94, departement: "Val-de-Marne", sites: 41 },
-                { code: 95, departement: "Val-d'Oise", sites: 26 },
-                { code: 973, departement: "Guyane", sites: 1 }
-            ],
-
             /**
              * La couche régionale
              *
