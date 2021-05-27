@@ -178,7 +178,10 @@ export default {
             return {
                 towns: this.visibleTowns,
                 pois: this.visiblePOIs,
-                defaultView: this.defaultMapView
+                defaultView: this.defaultMapView,
+                regions: this.getRegionsFromTowns(),
+                departements: this.getDeptsFromTowns(),
+                cities: this.getCitiesFromTowns()
             };
         },
         visiblePOIs() {
@@ -453,6 +456,80 @@ export default {
                     this.error = errors.user_message;
                     this.loading = false;
                 });
+        },
+
+        getNbreOfOpenSites(entity, code) {
+            return this.towns.reduce((n, town) => {
+                return n + (town.closedAt === null && entity == code);
+            }, 0);
+        },
+
+        getNbreOfOpenSitesByRegion(code) {
+            return this.towns.reduce((n, town) => {
+                return n + (town.closedAt === null && town.region.code == code);
+            }, 0);
+        },
+
+        getNbreOfOpenSitesByDept(code) {
+            return this.towns.reduce((n, town) => {
+                return (
+                    n +
+                    (town.closedAt === null && town.departement.code == code)
+                );
+            }, 0);
+        },
+
+        getNbreOfOpenSitesByCity(code) {
+            return this.towns.reduce((n, town) => {
+                return n + (town.closedAt === null && town.city.code == code);
+            }, 0);
+        },
+
+        getRegionsFromTowns() {
+            const regions = [];
+            this.towns.forEach(town => {
+                regions.push({
+                    code: town.region.code,
+                    region: town.region.name,
+                    sites: this.getNbreOfOpenSitesByRegion(town.region.code)
+                });
+            });
+            const uniqueRegionsAsStrings = new Set(regions.map(JSON.stringify));
+            const uniqueRegionsAsStringsArray = Array.from(
+                uniqueRegionsAsStrings
+            );
+            return uniqueRegionsAsStringsArray.map(JSON.parse);
+        },
+
+        getDeptsFromTowns() {
+            const depts = [];
+            this.towns.forEach(town => {
+                depts.push({
+                    code: town.departement.code,
+                    departement: town.departement.name,
+                    sites: this.getNbreOfOpenSitesByDept(town.departement.code)
+                });
+            });
+            const uniqueDeptsAsStrings = new Set(depts.map(JSON.stringify));
+            const uniqueDeptsAsStringsArray = Array.from(uniqueDeptsAsStrings);
+            4;
+            return uniqueDeptsAsStringsArray.map(JSON.parse);
+        },
+
+        getCitiesFromTowns() {
+            const cities = [];
+            this.towns.forEach(town => {
+                cities.push({
+                    code: town.city.code,
+                    city: town.city.name,
+                    sites: this.getNbreOfOpenSitesByCity(town.city.code)
+                });
+            });
+            const uniqueCitiesAsStrings = new Set(cities.map(JSON.stringify));
+            const uniqueCitiesAsStringsArray = Array.from(
+                uniqueCitiesAsStrings
+            );
+            return uniqueCitiesAsStringsArray.map(JSON.parse);
         }
     }
 };
