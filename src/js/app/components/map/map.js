@@ -147,14 +147,14 @@ export default {
              *
              * @type {L.geoJSON}
              */
-            regionalLayer: L.geoJSON(),
+            regionalLayer: L.geoJSON(regions),
 
             /**
              * La couche départementale
              *
              * @type {L.geoJSON}
              */
-            departementalLayer: L.geoJSON(),
+            departementalLayer: L.geoJSON(departements),
 
             /**
              * La carte
@@ -776,65 +776,55 @@ export default {
          *------------------------------------------------------------------------*/
         // Fonction de chargement des données geoJson régionales
         loadRegionalData() {
-            const autoAdd = this.map.hasLayer(this.regionalLayer);
-            this.map.removeLayer(this.regionalLayer);
+            this.regionalLayer.getLayers().forEach((layer) => {
+                if (layer instanceof L.Marker) {
+                    layer.remove();
+                    return;
+                }
 
-            this.regionalLayer = new L.geoJSON(regions, {
-                onEachFeature: this.regionsOnEachFeature
+                // Calcul de la position du marqueur
+                // On utilise la méthode pointOnFeature(), qui garantit que le point soit dans le polygone, plutôt que centroid()
+                const { feature } = layer;
+                const markerPosition = pointOnFeature(feature);
+                // Création du marqueur à partir de la long et lat retournées par pointOnFeature()
+                const lon = markerPosition.geometry.coordinates[0];
+                const lat = markerPosition.geometry.coordinates[1];
+                this.circleWithText(
+                    [lat, lon],
+                    this.numberOfShantytownsBy.regions[feature.properties.code] || 0,
+                    20,
+                    3,
+                    "region",
+                ).addTo(this.regionalLayer);
             });
-            if (autoAdd === true) {
-                this.map.addLayer(this.regionalLayer);
-                console.log('refresh des régions');
-            }
-        },
-
-        regionsOnEachFeature(feature) {
-            // Calcul de la position du marqueur
-            // On utilise la méthode pointOnFeature(), qui garantit que le point soit dans le polygone, plutôt que centroid()
-            const markerPosition = pointOnFeature(feature);
-            // Création du marqueur à partir de la long et lat retournées par pointOnFeature()
-            const lon = markerPosition.geometry.coordinates[0];
-            const lat = markerPosition.geometry.coordinates[1];
-            this.circleWithText(
-                [lat, lon],
-                this.numberOfShantytownsBy.regions[feature.properties.code] || 0,
-                20,
-                3,
-                "region",
-            ).addTo(this.regionalLayer);
-            console.log('ajout d\'une région');
         },
 
         // Fonction de chargement des données geoJson départementales
         loadDepartementalData() {
-            const autoAdd = this.map.hasLayer(this.departementalLayer);
-            this.map.removeLayer(this.departementalLayer);
+            this.departementalLayer.getLayers().forEach((layer) => {
+                if (layer instanceof L.Marker) {
+                    layer.remove();
+                    return;
+                }
 
-            this.departementalLayer = new L.geoJSON(departements, {
-                onEachFeature: this.departementsOnEachFeature
+                // Calcul de la position du marqueur
+                // On utilise la méthode pointOnFeature(), qui garantit que le point soit dans le polygone, plutôt que centroid()
+                const { feature } = layer;
+                const markerPosition = pointOnFeature(feature);
+                // Création du marqueur à partir de la long et lat retournées par pointOnFeature()
+                const lon = markerPosition.geometry.coordinates[0];
+                const lat = markerPosition.geometry.coordinates[1];
+
+                const nbSites = this.numberOfShantytownsBy.departements[feature.properties.code] || 0;
+                const siteLabel = nbSites > 1 ? "sites" : "site";
+                this.circleWithText(
+                    [lat, lon],
+                    `<div><strong>${feature.properties.nom}</strong><br/>${nbSites} ${siteLabel}</div>`,
+                    45,
+                    3,
+                    "dept"
+                ).addTo(this.departementalLayer);
             });
-            if (autoAdd === true) {
-                this.map.addLayer(this.departementalLayer);
-            }
-        },
-
-        departementsOnEachFeature(feature) {
-            // Calcul de la position du marqueur
-            // On utilise la méthode pointOnFeature(), qui garantit que le point soit dans le polygone, plutôt que centroid()
-            const markerPosition = pointOnFeature(feature);
-            // Création du marqueur à partir de la long et lat retournées par pointOnFeature()
-            const lon = markerPosition.geometry.coordinates[0];
-            const lat = markerPosition.geometry.coordinates[1];
-
-            const nbSites = this.numberOfShantytownsBy.departements[feature.properties.code] || 0;
-            const siteLabel = nbSites > 1 ? "sites" : "site";
-            this.circleWithText(
-                [lat, lon],
-                `<div><strong>${feature.properties.nom}</strong><br/>${nbSites} ${siteLabel}</div>`,
-                45,
-                3,
-                "dept"
-            ).addTo(this.departementalLayer);
         },
 
         showRegionalLayer() {
@@ -842,14 +832,12 @@ export default {
             this.hideTownsLayer();
 
             if (!this.map.hasLayer(this.regionalLayer)) {
-                console.log('montrer régions');
                 this.map.addLayer(this.regionalLayer);
             }
         },
 
         hideRegionalLayer() {
             if (this.map.hasLayer(this.regionalLayer)) {
-                console.log('cacher régions');
                 this.map.removeLayer(this.regionalLayer);
             }
         },
@@ -859,14 +847,12 @@ export default {
             this.hideTownsLayer();
 
             if (!this.map.hasLayer(this.departementalLayer)) {
-                console.log('montrer départements');
                 this.map.addLayer(this.departementalLayer);
             }
         },
 
         hideDepartementalLayer() {
             if (this.map.hasLayer(this.departementalLayer)) {
-                console.log('cacher départements');
                 this.map.removeLayer(this.departementalLayer);
             }
         },
