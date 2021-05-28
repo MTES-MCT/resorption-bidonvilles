@@ -243,13 +243,13 @@ export default {
 
             /**
              * Total of shantytowns per region and departement
-             * 
+             *
              * @type {Object}
              */
             numberOfShantytownsBy: {
                 regions: {}, // sera rempli avec un objet du type : { "01": 0, "02": 0, ..., "11": 0 }
                 departements: {} // sera rempli avec un objet du type : { "01": 0, "02": 0, ..., "92": 0 }
-            },
+            }
         };
     },
 
@@ -340,27 +340,31 @@ export default {
 
     methods: {
         countNumberOfTowns() {
-            this.numberOfShantytownsBy = this.towns
-                .reduce(
-                    (acc, { closedAt, departement, region }) => {
-                        if (closedAt !== null) {
-                            return acc;
-                        }
-
-                        if (acc.departements[departement.code] === undefined) {
-                            acc.departements[departement.code] = 0;
-                        }
-
-                        if (acc.regions[region.code] === undefined) {
-                            acc.regions[region.code] = 0;
-                        }
-
-                        acc.departements[departement.code] += 1;
-                        acc.regions[region.code] += 1;
+            this.numberOfShantytownsBy = this.towns.reduce(
+                (acc, { closedAt, departement, region, city }) => {
+                    if (closedAt !== null) {
                         return acc;
-                    },
-                    { regions: {}, departements: {} }
-                );
+                    }
+
+                    if (acc.departements[departement.code] === undefined) {
+                        acc.departements[departement.code] = 0;
+                    }
+
+                    if (acc.regions[region.code] === undefined) {
+                        acc.regions[region.code] = 0;
+                    }
+
+                    if (acc.cities[city.code] === undefined) {
+                        acc.cities[city.code] = 0;
+                    }
+
+                    acc.departements[departement.code] += 1;
+                    acc.regions[region.code] += 1;
+                    acc.cities[city.code] += 1;
+                    return acc;
+                },
+                { regions: {}, departements: {}, cities: {} }
+            );
         },
 
         /**
@@ -488,10 +492,13 @@ export default {
             const zoomLevel = this.map.getZoom();
 
             if (zoomLevel <= REGION_MAX_ZOOM_LEVEL) {
+                console.log(`Niveau de zoom régional: ${zoomLevel}`);
                 this.showRegionalLayer();
             } else if (zoomLevel <= DEPT_MAX_ZOOM_LEVEL) {
+                console.log(`Niveau de zoom départemental: ${zoomLevel}`);
                 this.showDepartementalLayer();
             } else {
+                console.log(`Niveau de zoom détaillé: ${zoomLevel}`);
                 this.showTownsLayer();
             }
 
@@ -776,7 +783,7 @@ export default {
          *------------------------------------------------------------------------*/
         // Fonction de chargement des données geoJson régionales
         loadRegionalData() {
-            this.regionalLayer.getLayers().forEach((layer) => {
+            this.regionalLayer.getLayers().forEach(layer => {
                 if (layer instanceof L.Marker) {
                     layer.remove();
                     return;
@@ -790,18 +797,21 @@ export default {
                 const lon = markerPosition.geometry.coordinates[0];
                 const lat = markerPosition.geometry.coordinates[1];
                 this.circleWithText(
+                    this.map,
                     [lat, lon],
-                    this.numberOfShantytownsBy.regions[feature.properties.code] || 0,
+                    this.numberOfShantytownsBy.regions[
+                        feature.properties.code
+                    ] || 0,
                     20,
                     3,
-                    "region",
+                    "region"
                 ).addTo(this.regionalLayer);
             });
         },
 
         // Fonction de chargement des données geoJson départementales
         loadDepartementalData() {
-            this.departementalLayer.getLayers().forEach((layer) => {
+            this.departementalLayer.getLayers().forEach(layer => {
                 if (layer instanceof L.Marker) {
                     layer.remove();
                     return;
@@ -815,9 +825,13 @@ export default {
                 const lon = markerPosition.geometry.coordinates[0];
                 const lat = markerPosition.geometry.coordinates[1];
 
-                const nbSites = this.numberOfShantytownsBy.departements[feature.properties.code] || 0;
+                const nbSites =
+                    this.numberOfShantytownsBy.departements[
+                        feature.properties.code
+                    ] || 0;
                 const siteLabel = nbSites > 1 ? "sites" : "site";
                 this.circleWithText(
+                    this.map,
                     [lat, lon],
                     `<div><strong>${feature.properties.nom}</strong><br/>${nbSites} ${siteLabel}</div>`,
                     45,
@@ -867,7 +881,7 @@ export default {
             this.removeAllTownMarkers();
         },
 
-        circleWithText(latLng, txt, radius, borderWidth, circleClass) {
+        circleWithText(map, latLng, txt, radius, borderWidth, circleClass) {
             const size = radius * 2;
             const style =
                 'style="width: ' +
@@ -893,6 +907,17 @@ export default {
             });
             const marker = L.marker(latLng, {
                 icon: icon
+            }).on("click", function(e) {
+                if (map.getZoom() <= REGION_MAX_ZOOM_LEVEL) {
+                    // Nous sommes au niveau régional, un clic affiche le niveau départemental
+                    map.setView(
+                        e.target.getLatLng(),
+                        REGION_MAX_ZOOM_LEVEL + 1
+                    );
+                } else if (map.getZoom() <= DEPT_MAX_ZOOM_LEVEL) {
+                    // nous sommes au niveau départemental, un clic affiche le niveau des communes
+                    map.setView(e.target.getLatLng(), DEPT_MAX_ZOOM_LEVEL + 1);
+                }
             });
             return marker;
         }
