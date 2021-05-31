@@ -1,5 +1,5 @@
 {
-  "name": "action-bidonvilles",
+  "name": "@resorptionbidonvilles/frontend",
   "version": "0.18.2",
   "description": "Frontend de Résorption Bidonvilles",
   "scripts": {
