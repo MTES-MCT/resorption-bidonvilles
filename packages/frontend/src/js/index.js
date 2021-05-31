@@ -4,7 +4,7 @@ import "simplebar/dist/simplebar.min.css";
 import "#src/css/index.scss";
 import Vue from "vue";
 import * as Sentry from "@sentry/vue";
-import { Integrations } from "@sentry/tracing";
+import { Integrations } from "@sentry/tracing" 
 
 import {
     VUE_APP_SENTRY_ON,
@@ -18,7 +18,7 @@ if (VUE_APP_SENTRY_ON === "true") {
     Sentry.init({
         Vue,
         // Sentry is only enabled for production env atm, we should differentiate envs if we use it for preprod/staging
-        environment: "production",
+        environment: 'production',
         release: VUE_APP_SENTRY_RELEASE,
         dsn: VUE_APP_SENTRY,
         integrations: [new Integrations.BrowserTracing()],

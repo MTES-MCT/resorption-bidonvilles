@@ -18,8 +18,6 @@ Si vous souhaitez déployer une instance de *Résorption-bidonvilles*, veuillez 
 Une fois le dépôt clôné sur votre machine :
 - installez les dépendances (vous n'avez besoin que des devDependencies sur votre machine mais yarn ne permet pas de faire ce filtre) :
 `yarn install`
-- configurer vos hooks git via Husky avec la commande suivante :
-`yarn setup`
 
 C'est tout !
 

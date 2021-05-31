@@ -55,6 +55,7 @@
     "json-loader": "^0.5.7",
     "leaflet": "^1.3.4",
     "leaflet-providers": "^1.5.0",
+    "lint-staged": "^11.0.0",
     "prettier": "^1.19.1",
     "pug": "^2.0.3",
     "pug-plain-loader": "^1.0.0",
@@ -77,11 +78,6 @@
     "vue": "./node_modules/vue/dist/vue.common.js"
   },
   "license": "AGPL-3.0-or-later",
-  "lint-staged": {
-    "*.{js,jsx,vue}": [
-      "docker exec rb_frontend yarn vue-cli-service lint"
-    ]
-  },
   "sass": {
     "includePaths": [
       "./node_modules"

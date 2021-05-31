@@ -2,10 +2,11 @@ require('module-alias/register');
 const Sentry = require('@sentry/node');
 const Tracing = require('@sentry/tracing');
 const packageJSON = require('../package.json');
+
 const config = require('./config.js');
 
 const app = require('#server/app');
- 
+
 app.start().then((expressApp) => {
     if (config.sentry.dsn) {
         Sentry.init({

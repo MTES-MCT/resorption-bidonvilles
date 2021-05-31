@@ -13,7 +13,6 @@ Si vous souhaitez déployer une instance de *Résorption-bidonvilles*, veuillez 
 - le dépôt [resorption-bidonvilles-deploy](https://github.com/MTES-MCT/resorption-bidonvilles-deploy), correctement installé et configuré
 - nodejs
 - les packages npm suivants, installés globalement (`yarn global add ...` ou `npm install --global`) :
-  - husky
   - lint-staged
   - cypress
 - Sous Linux, penser à ajouter à la variable d'environnement PATH le chemin d'accès aux packages installés globalement par yarn:
@@ -23,12 +22,6 @@ Si vous souhaitez déployer une instance de *Résorption-bidonvilles*, veuillez 
 export PATH="$PATH:`yarn global bin`"
 ```
 - Inclure la ligne évoquée ci-dessus dans le fichier de personnalisation du shell permet de rendre la modification pérenne et de n'avoir pas à la ressaisir avant chaque utilisation. On peut par exemple enregistrer la ligne dans le fichier *~/.bashrc*.
-
-## 🔌 Initialisation
-Une fois le dépôt clôné sur votre machine et les dépendances ci-dessus installées, vous devez configurer vos hooks git via Husky avec la commande suivante :
-`yarn setup`
-
-C'est tout !
 
 ## 🙇🏼 Contributeur(ices)
 
