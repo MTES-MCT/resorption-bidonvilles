@@ -248,7 +248,8 @@ export default {
              */
             numberOfShantytownsBy: {
                 regions: {}, // sera rempli avec un objet du type : { "01": 0, "02": 0, ..., "11": 0 }
-                departements: {} // sera rempli avec un objet du type : { "01": 0, "02": 0, ..., "92": 0 }
+                departements: {}, // sera rempli avec un objet du type : { "01": 0, "02": 0, ..., "92": 0 }
+                cities: {} // sera rempli avec un objet du type : { "01": 0, "02": 0, ..., "92": 0 }
             }
         };
     },
