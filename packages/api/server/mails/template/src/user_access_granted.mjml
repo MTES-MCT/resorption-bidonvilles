@@ -14,13 +14,13 @@
                 </mj-text>
                 <mj-include path='./common/hello.mjml' />
                 <mj-text>
-                    Nous avons le plaisir de vous informer que votre accès à la plateforme <a href="{{var:frontURL}}" class="link font-italic">Résorption-bidonvilles</a> a été ouvert par l’administrateur·rice local {{var:adminFirstName}} {{var:adminLastName}}.
+                    Nous avons le plaisir de vous informer que votre accès à la plateforme <a href="{{var:frontURL}}" class="link font-italic">Résorption-bidonvilles</a> a été ouvert par l’administrateur·rice local {{var:adminName}}.
                 </mj-text>
-                <mj-button mj-class="button-primary" href="{{var: activationLink}}">
+                <mj-button mj-class="button-primary" href="{{var:activationURL}}">
                     Activer mon compte
                 </mj-button>
                 <mj-text mj-class="text-primary pb-4">
-                    Attention, le lien est valable 7 jours jusqu'au {{var:dateExp}}
+                    Attention, le lien est valable 7 jours jusqu'au {{var:activationURLExpDate}}
                 </mj-text>
                 <mj-text>
                     Pour utiliser et prendre en main rapidement la plateforme, vous pouvez participer à une session de formation personnalisée :
