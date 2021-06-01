@@ -1,0 +1,37 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Bienvenue sur la plateforme Résorption-bidonvilles</mj-title>
+        <mj-include path='./common/attributes.mjml' />
+        <mj-include path='./common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='./common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class='text-primary text-display'>
+                    Bienvenue sur la plateforme Résorption-bidonvilles !
+                </mj-text>
+                <mj-text mj-class='text-primary text-lg pb-4'>
+                    Vous avez maintenant le rôle d’administrateur local sur votre territoire !
+                </mj-text>
+                <mj-include path='./common/hello.mjml' />
+                <mj-text mj-class="pb-4">
+                    Nous sommes heureux de vous compter parmi les administrateurs·rices de la plateforme <a href="{{var:frontURL}}" class="link font-italic">Résorption-bidonvilles</a>.
+                </mj-text>
+                <mj-text>
+                    Vous trouverez dans ce mail toutes les informations dont vous avez besoin pour vous accompagner dans l’utilisation de la plateforme et pour comprendre votre rôle.
+                </mj-text>
+                <mj-button mj-class="button-secondary" padding="1rem 0 0 0" href="{{var:adminGuideURL}}">
+                    Accéder à mon guide administrateur
+                </mj-button>
+                <mj-include path="./common/connect_cta.mjml" />
+                <mj-text>
+                    Pour prendre en main rapidement la plateforme et vous guider dans ce rôle, merci de contacter votre interlocutrice Annie Rasatandrianombana <a href="mailto:annie.rasatandrianombana@dihal.gouv.fr" class="link">annie.rasatandrianombana@dihal.gouv.fr</a> ou au 01 40 81 80 39.
+                </mj-text>
+            </mj-column>
+        </mj-section>
+
+        <mj-include path='./common/footer.mjml' />
+    </mj-body>
+</mjml>

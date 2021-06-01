@@ -1,0 +1,45 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Signalez votre intervention</mj-title>
+        <mj-include path='./common/attributes.mjml' />
+        <mj-include path='./common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='./common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class='text-primary text-display pb-4'>
+                    Et si vous faisiez connaître votre intervention sur un site aux autres acteurs ?
+                </mj-text>
+                <mj-include path='./common/hello.mjml' />
+                <mj-text mj-class="pb-4">
+                    Vous utilisez la plateforme <a href="{{var:frontURL}}" class="link font-italic">Résorption-bidonvilles</a> depuis un mois.
+                </mj-text>
+                <mj-text mj-class="text-secondary font-bold pb-4">
+                    Avez-vous utilisé les fonctionnalités  “J’interviens sur ce site” et "Le journal du site” ?
+                </mj-text>
+                <mj-text>
+                    N’attendez plus et contribuez à une meilleure coordination et circulation de l'information.
+                </mj-text>
+                <mj-text>
+                    Dès à présent,
+                </mj-text>
+                <mj-text>
+                    ➔ Valorisez votre présence sur un site et facilitez la mise en réseau des acteurs en vous déclarant intervenant sur un site.
+                </mj-text>
+                <mj-text mj-class="pb-4">
+                    ➔ Partagez sur le journal de bord les informations que vous y avez recueillies lors de votre passage sur un site à tous les intervenants sur ce lieu.
+                </mj-text>
+
+                <mj-image src='{{var:backUrl}}/assets/mails/rb_features.jpg' />
+
+                <mj-text mj-class="font-bold">Le partage d’information entre tous les acteurs est essentiel pour accélérer la résorption des bidonvilles.</mj-text>
+                <mj-include path="./common/connect_cta.mjml" />
+                <mj-include path="./common/contact_interlocutor.mjml" />
+            </mj-column>
+        </mj-section>
+
+        <mj-include path='./common/footer.mjml' />
+    </mj-body>
+</mjml>

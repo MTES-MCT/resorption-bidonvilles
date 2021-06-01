@@ -1,0 +1,30 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Demande d'accès en attente depuis 10 jours</mj-title>
+        <mj-include path='./common/attributes.mjml' />
+        <mj-include path='./common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='./common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class='text-primary text-display pb-4'>
+                    Rappel, une demande d’accès à la plateforme Résorption-bidonvilles est en attente de votre action
+                </mj-text>
+                <mj-include path='./common/hello.mjml' />
+                <mj-text mj-class="pb-4">
+                    Une demande d’accès à la plateforme <a href="{{var:frontURL}}" class="font-italic link">Résorption-bidonvilles</a> est en attente depuis 10 jours. Nous vous rappelons qu’il est important d’y répondre rapidement.
+                </mj-text>
+                <mj-text>
+                    Nous vous invitons à <a href="{{var:adminURL}}" class="font-bold link">vous rendre sur l’onglet administration de la plateforme</a> pour ouvrir et paramétrer l’accès.
+                </mj-text>
+                <mj-include path="./common/connect_cta.mjml" />
+                <mj-include path="./common/admin_access_request_info.mjml" />
+                <mj-include path="./common/contact_interlocutor.mjml" />
+            </mj-column>
+        </mj-section>
+
+        <mj-include path='./common/footer.mjml' />
+    </mj-body>
+</mjml>

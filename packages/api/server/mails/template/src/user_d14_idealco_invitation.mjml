@@ -1,0 +1,40 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Restez informé·e et rejoignez notre groupe IdealCo</mj-title>
+        <mj-include path='./common/attributes.mjml' />
+        <mj-include path='./common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='./common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class='text-primary text-display pb-4'>
+                    Vous êtes invité·e à rejoindre le groupe IdealCo de la plateforme Résorption-bidonvilles
+                </mj-text>
+                <mj-include path='./common/hello.mjml' />
+                <mj-text mj-class="pb-4">
+                    Nous sommes heureux de vous compter parmi les utilisateurs·rices de la plateforme <a href="{{var:frontURL}}" class="link font-italic">Résorption-bidonvilles</a>.
+                </mj-text>
+                <mj-text>
+                    ➔ Pour être informé des dernières nouveautés de la plateforme,
+                </mj-text>
+                <mj-text>
+                    ➔ Connaître les bonnes pratiques d’utilisation,
+                </mj-text>
+                <mj-text mj-class="pb-4">
+                    ➔ Participer à nos évènements...
+                </mj-text>
+                <mj-text mj-class="text-primary font-bold">
+                    Rejoignez notre communauté sur IdealCo !
+                </mj-text>
+                <mj-button mj-class="button-secondary" href="{{var:idealcoURL}}">
+                    Devenir membre
+                </mj-button>
+                <mj-include path="./common/contact_interlocutor3.mjml" />
+            </mj-column>
+        </mj-section>
+
+        <mj-include path='./common/footer.mjml' />
+    </mj-body>
+</mjml>

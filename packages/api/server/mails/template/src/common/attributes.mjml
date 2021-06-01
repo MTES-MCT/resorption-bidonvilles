@@ -1,0 +1,24 @@
+<mj-attributes>
+    <mj-all font-familly="Arial, sans-serif" font-size="16px" line-height="1.5em" font-weight="400"/>
+    <mj-section padding="0 0 16px 0" />
+    <mj-text padding="0" />
+    <!-- background -->
+    <mj-class name='bg-white' background-color='#FFFFFF'/>
+    <!-- text-colors -->
+    <mj-class name='text-primary' color="#000091" />
+    <mj-class name='text-secondary' color="#FF6F4c"/>
+    <!-- buttons -->
+    <mj-class name='button-primary' background-color="#000091" color="#FFFFFF" padding="2rem 0"/>
+    <mj-class name='button-secondary' background-color="#FF6F4c" color="#FFFFFF" padding="2rem 0"/>
+    <!-- text-size -->
+    <mj-class name='text-lg' font-size="1.25rem" line-height="1.5rem" font-weight="700" />
+    <mj-class name='text-display' font-size="2rem" line-height="2rem" font-weight="700" />
+    <!-- font-options -->
+    <mj-class name='font-bold' font-weight='bold'/>
+    <mj-class name='font-italic' font-style='italic'/>
+    <!-- padding -->
+    <mj-class name='pb-4' padding-bottom="1rem" />
+    <mj-class name='pb-8' padding-bottom="2rem" />
+    <mj-class name='py-8' padding="2rem 0" />
+    <mj-class name='link' color="#000091" />
+</mj-attributes>
