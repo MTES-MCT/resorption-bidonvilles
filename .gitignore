@@ -1,5 +1,5 @@
 node_modules
-.cache
 .DS_Store
-cypress/videos
 .idea
+.vscode
+lerna-debug.log
