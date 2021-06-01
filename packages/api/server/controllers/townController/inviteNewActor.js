@@ -26,7 +26,7 @@ module.exports = () => async (req, res, next) => {
     try {
         await triggerActorInvitedAlert(req.shantytown, req.user, req.body.email);
     } catch (error) {
-        console.log(error);
+        // ignore
     }
 
     return res.status(204).send({});

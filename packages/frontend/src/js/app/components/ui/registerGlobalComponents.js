@@ -5,6 +5,7 @@ import {
     extend,
     localize
 } from "vee-validate";
+/*eslint import/namespace: ['error', { allowComputed: true }]*/
 import * as rules from "vee-validate/dist/rules";
 import fr from "vee-validate/dist/locale/fr.json";
 import en from "vee-validate/dist/locale/en";

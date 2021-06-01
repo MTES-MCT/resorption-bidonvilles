@@ -40,7 +40,6 @@ module.exports = models => async (req, res, next) => {
                 mailService.PRESERVE_RECIPIENT,
             );
         } catch (error) {
-            console.log(error);
             // ignore
         }
     }

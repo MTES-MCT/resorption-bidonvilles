@@ -41,6 +41,7 @@ module.exports = {
         sentryErrorHandlers(app);
 
         app.listen(port, () => {
+            // eslint-disable-next-line no-console
             console.log(`Server is now running on port ${port}! :)`);
         });
 
@@ -50,8 +51,10 @@ module.exports = {
 
         try {
             await agenda.start();
+            // eslint-disable-next-line no-console
             console.log('Set scheduled jobs up');
         } catch (error) {
+            // eslint-disable-next-line no-console
             console.log('Failed settings up scheduled jobs');
         }
 

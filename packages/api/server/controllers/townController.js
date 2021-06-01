@@ -210,6 +210,7 @@ module.exports = (models) => {
                         await triggerShantytownCreationAlert(town, req.user);
                     }
                 } catch (err) {
+                    // eslint-disable-next-line no-console
                     console.log(`Error with shantytown creation slack webhook : ${err.message}`);
                 }
 
@@ -352,6 +353,7 @@ module.exports = (models) => {
                         await triggerShantytownCloseAlert(updatedTown, req.user);
                     }
                 } catch (err) {
+                    // eslint-disable-next-line no-console
                     console.log(`Error with shantytown close slack webhook : ${err.message}`);
                 }
 
