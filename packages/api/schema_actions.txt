@@ -1,0 +1,130 @@
+@startuml
+
+page 5x20
+title Base de données Action Bidonvilles
+
+class fundings {
+    #funding_id: identity
+    +year: int - not null
+    +amount: double[12,2] - not null
+    +details: varchar[255] - null
+}
+
+class funding_types {
+    #funding_type_id: identity
+    +label: varchar[255] - not null - <<UK>>
+}
+
+class plans {
+    #plan_id: identity
+    +name: varchar[255] - null
+    +started_at: datetime - not null
+    +ended_at: date - null
+}
+
+class accompagnement_social {
+    +households_affected: unsigned int - null
+    +people_affected: unsigned int - null
+    +children_schoolable: unsigned int - null
+    +households_who_got_housing_with_help: unsigned int - null
+    +households_who_got_housing_without_help: unsigned int - null
+    +households_who_were_hosted: unsigned int - null
+    +children_schooled: unsigned int - null
+    +people_accessing_health: unsigned int - null
+    +people_helped_for_employment: unsigned int - null
+    +people_who_got_employment: unsigned int - null
+    +households_domiciled: unsigned int - null
+    +people_included: unsigned int - null
+    +people_successfully_helped: unsigned int - null
+    +people_excluded: unsigned int - null
+    +people_who_resigned: unsigned int - null
+    +average_duration: int - null
+    +comment: text - null
+}
+
+class espace_insertion {
+    +households_affected: unsigned int - null
+    +people_affected: unsigned int - null
+    +children_schoolable: unsigned int - null
+    +households_who_got_housing_with_help: unsigned int - null
+    +households_who_got_housing_without_help: unsigned int - null
+    +households_who_were_hosted: unsigned int - null
+    +children_schooled: unsigned int - null
+    +people_accessing_health: unsigned int - null
+    +people_helped_for_employment: unsigned int - null
+    +people_who_got_employment: unsigned int - null
+    +households_domiciled: unsigned int - null
+    +people_included: unsigned int - null
+    +people_successfully_helped: unsigned int - null
+    +people_excluded: unsigned int - null
+    +people_who_resigned: unsigned int - null
+    +average_duration: int - null
+    +comment: text - null
+}
+
+class accompagnement_emploi {
+    +households_affected: unsigned int - null
+    +people_affected: unsigned int - null
+    +people_pole_emploi: unsigned int - null
+    +people_mission_locale: unsigned int - null
+    +people_with_bank_account: unsigned int - null
+    +people_trainee: unsigned int - null
+}
+
+class diagnostic_social {
+    +households: unsigned int - null
+    +people: unsigned int - null
+    +european_people: unsigned int - null
+    +french_people: unsigned int - null
+    +non_european_people: unsigned int - null
+    +children_schoolable: unsigned int - null
+}
+
+class accompagnement_scolaire {
+    +households_affected: unsigned int - null
+    +people_affected: unsigned int - null
+    +young_kids: unsigned int - null
+    +other_kids: unsigned int - null
+    +schooled_kids: unsigned int - null
+    +households_domiciled: unsigned int - null
+}
+
+class accompagnement_sanitaire {
+    +households_affected: unsigned int - null
+    +people_affected: unsigned int - null
+    +people_asking_for_cmu: unsigned int - null
+    +people_with_cmu: unsigned int - null
+}
+
+class protection_enfance {
+    +minors_with_admin_procedure: unsigned int - null
+    +minors_with_justice_procedure: unsigned int - null
+}
+
+class ngo {
+    #ngo_id: identity
+    +name: varchar[255] - not null - <<UK>>
+}
+
+fundings "0..N" -down- "1" funding_types
+plans "0..N" - "1" departements: "         "
+plans "0..N" -up- "1" ngo
+plans "1" -left- "0..N" fundings: "         "
+ngo "0..1" -right- "0..N" users: "             "
+plans "1" -down- "1..N" plan_details: "             "
+plan_details "0..N" -right- "0..1" shantytowns: "             "
+accompagnement_social -up-> plan_details
+espace_insertion -up-> plan_details
+accompagnement_emploi -up-> plan_details
+diagnostic_social -up-> plan_details
+accompagnement_scolaire -up-> plan_details
+accompagnement_sanitaire -up-> plan_details
+protection_enfance -up-> plan_details
+
+' for layout only:
+espace_insertion -[hidden]up-> accompagnement_social
+accompagnement_scolaire -[hidden]up-> accompagnement_social
+accompagnement_sanitaire -[hidden]up-> accompagnement_social
+protection_enfance -[hidden]up-> accompagnement_social
+
+@enduml

@@ -1,0 +1,86 @@
+{
+  "name": "@resorptionbidonvilles/api",
+  "version": "0.3.2",
+  "description": "API d'Action Bidonvilles",
+  "main": "server/index.js",
+  "repository": "git+https://github.com/MTES-MCT/action-bidonvilles.git",
+  "author": {
+    "name": "Anis Safine Laget",
+    "email": "anis@users.noreply.github.com"
+  },
+  "license": "AGPL-3.0-or-later",
+  "dependencies": {
+    "@sentry/node": "^6.2.2",
+    "@sentry/tracing": "^6.2.2",
+    "@slack/webhook": "^5.0.3",
+    "agenda": "^3.1.0",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "escape-html": "^1.0.3",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-utils": "^1.4.1",
+    "exceljs": "^2.0.1",
+    "express": "^4.16.4",
+    "express-validator": "^6.6.1",
+    "js-yaml": "^3.13.1",
+    "jsonwebtoken": "^8.4.0",
+    "lodash": "^4.17.21",
+    "mixin-deep": "^1.3.2",
+    "module-alias": "^2.2.0",
+    "neat-csv": "^4.0.0",
+    "node-mailjet": "^3.3.1",
+    "nodemon": "^1.18.9",
+    "pg": "^8.0",
+    "pg-hstore": "^2.3.2",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2",
+    "semver": "^6.3.0",
+    "sequelize": "^5.0.0",
+    "sequelize-cli": "^5.4.0",
+    "sequelize-mock": "^0.10.2",
+    "sequelize-temporal": "^1.0.6",
+    "set-value": "^2.0.1",
+    "validator": "^11.1.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "chai-http": "^4.2.1",
+    "chai-subset": "^1.6.0",
+    "eslint": "^5.10.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "husky": "^1.2.0",
+    "lint-staged": "^8.1.0",
+    "mocha": "^6.0.2",
+    "proxyquire": "^2.1.0",
+    "rewiremock": "^3.13.9",
+    "sequelize-test-helpers": "^1.0.10",
+    "sinon": "^7.2.7",
+    "sinon-chai": "^3.3.0",
+    "sinon-express-mock": "^2.1.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "yarn test"
+    }
+  },
+  "lint-staged": {
+    "server/**/*.js": [
+      "eslint"
+    ]
+  },
+  "scripts": {
+    "db:create": "docker exec rb_api yarn sequelize db:migrate && yarn sequelize db:seed:all",
+    "dev": "nodemon server/index.js",
+    "test": "mocha --recursive --require ./test/bootstrap.js --bail",
+    "test:unit": "yarn test --invert --grep '.*server/models.*'",
+    "test:integration": "yarn test --grep '.*server/models.*'"
+  },
+  "_moduleAliases": {
+    "#server": "./server",
+    "#db": "./db",
+    "#fixtures": "./test/fixtures",
+    "#test": "./test"
+  }
+}
