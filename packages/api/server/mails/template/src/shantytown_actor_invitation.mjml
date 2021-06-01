@@ -14,10 +14,10 @@
                 </mj-text>
                 <mj-include path='./common/hello.mjml' />
                 <mj-text mj-class="pb-4">
-                    {{var:inviterFirstName}} {{var:inviterLastName}} vous a invité à rejoindre la communauté des acteurs de terrain sur la plateforme Résorption-bidonvilles en valorisant votre intervention sur le site <a href="{{var:siteURL}}">{{var:siteAddress}}</a>.
+                    {{var:inviterName}} vous a invité à rejoindre la communauté des acteurs de terrain sur la plateforme Résorption-bidonvilles en valorisant votre intervention sur le site <a href="{{var:siteURL}}">{{var:siteAddress}}</a>.
                 </mj-text>
                 <mj-text>
-                    Dès maintenant rejoignez {{var:inviterFirstName}} {{var:inviterLastName}} sur la plateforme et signalez votre intervention :
+                    Dès maintenant rejoignez {{var:inviterName}} sur la plateforme et signalez votre intervention :
                 </mj-text>
                 <mj-include path="./common/contact_cta.mjml" />
                 <mj-include path="./common/connect_cta.mjml" />

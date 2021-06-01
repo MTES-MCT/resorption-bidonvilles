@@ -14,10 +14,10 @@
                 </mj-text>
                 <mj-include path='./common/hello.mjml' />
                 <mj-text mj-class="pb-4">
-                    Nous sommes heureux de vous informer que {{var:userFirstName}} {{var:userLastName}} vient d’activer son accès à la plateforme <a href="{{var:frontURL}}" class="link font-italic">Résorption-bidonvilles</a>. Cette personne est désormais utilisatrice de l’outil numérique d’information, de partage et de coordination des acteurs de la résorption des bidonvilles.
+                    Nous sommes heureux de vous informer que {{var:userName}} vient d’activer son accès à la plateforme <a href="{{var:frontURL}}" class="link font-italic">Résorption-bidonvilles</a>. Cette personne est désormais utilisatrice de l’outil numérique d’information, de partage et de coordination des acteurs de la résorption des bidonvilles.
                 </mj-text>
-                <mj-include path="./common/formation_text.mjml" />
-                <mj-include path="./common/formation_cta_me.mjml" />
+                <mj-include path="./common/formation_text_other.mjml" />
+                <mj-include path="./common/formation_cta_other.mjml" />
                 <mj-include path="./common/contact_interlocutor2.mjml" />
             </mj-column>
         </mj-section>
