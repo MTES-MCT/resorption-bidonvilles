@@ -15,10 +15,10 @@ import { extend } from "vee-validate";
 extend("declaredBeforeDeclaration", {
     params: ["target"],
     validate(builtAt, { target: declaredAt }) {
-        return builtAt <= declaredAt;
+        return !declaredAt || builtAt <= declaredAt;
     },
     message:
-        "La date d'installation doit être antérieure à la date de déclaration"
+        "La date d'installation doit être antérieure à la date de signalement"
 });
 export default {
     props: {
