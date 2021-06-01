@@ -21,7 +21,19 @@ jobs:
           RELEASE_BRANCHES: 'develop'
           DRY_RUN: true
           WITH_V: false
-      - name: Update version in package.json
+      - name: Update version in api package.json
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: packages/api/package.json
+          field: version
+          value: ${{ steps.version.outputs.new_tag }}
+      - name: Update version in frontend package.json
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: packages/frontend/package.json
+          field: version
+          value: ${{ steps.version.outputs.new_tag }}
+      - name: Update version in root package.json
         uses: jossef/action-set-json-field@v1
         with:
           file: package.json
