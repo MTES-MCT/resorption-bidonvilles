@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 
 import L from "leaflet";
+import pointOnFeature from "@turf/point-on-feature";
 import Address from "#app/components/address/address.vue";
 import { get as getConfig } from "#helpers/api/config";
 import "leaflet-providers";
@@ -13,8 +14,14 @@ import utensils from "../../../../../public/img/utensils.png";
 import waterNo from "../../../../../public/img/water-no.png";
 import waterNull from "../../../../../public/img/water-null.png";
 
+// données tirées de https://rawgit.com/gregoiredavid/france-geojson/
+import departements from "/src/geojson/departements.json";
+import regions from "/src/geojson/regions.json";
+
 const DEFAULT_VIEW = [46.7755829, 2.0497727];
 const POI_ZOOM_LEVEL = 13;
+const REGION_MAX_ZOOM_LEVEL = 8;
+const DEPT_MAX_ZOOM_LEVEL = 10;
 
 /* **************************************************************************************************
  * Ce composant fait apparaître une carte qui propose deux fonctionnalités distinctes :
@@ -57,6 +64,30 @@ export default {
          * @type {Array.<poi>}
          */
         pois: {
+            type: Array,
+            required: false,
+            default() {
+                return [];
+            }
+        },
+
+        regions: {
+            type: Array,
+            required: false,
+            default() {
+                return [];
+            }
+        },
+
+        departements: {
+            type: Array,
+            required: false,
+            default() {
+                return [];
+            }
+        },
+
+        cities: {
             type: Array,
             required: false,
             default() {
@@ -111,6 +142,20 @@ export default {
 
     data() {
         return {
+            /**
+             * La couche régionale
+             *
+             * @type {L.geoJSON}
+             */
+            regionalLayer: L.geoJSON(regions),
+
+            /**
+             * La couche départementale
+             *
+             * @type {L.geoJSON}
+             */
+            departementalLayer: L.geoJSON(departements),
+
             /**
              * La carte
              *
@@ -194,7 +239,18 @@ export default {
              *
              * @type {Array.<FieldType>}
              */
-            fieldTypes: getConfig().field_types
+            fieldTypes: getConfig().field_types,
+
+            /**
+             * Total of shantytowns per region and departement
+             *
+             * @type {Object}
+             */
+            numberOfShantytownsBy: {
+                regions: {}, // sera rempli avec un objet du type : { "01": 0, "02": 0, ..., "11": 0 }
+                departements: {}, // sera rempli avec un objet du type : { "01": 0, "02": 0, ..., "92": 0 }
+                cities: {} // sera rempli avec un objet du type : { "01": 0, "02": 0, ..., "92": 0 }
+            }
         };
     },
 
@@ -232,11 +288,10 @@ export default {
     },
 
     watch: {
-        /**
-         * Met à jour la liste des marqueurs de site
-         */
         towns() {
-            this.syncTownMarkers();
+            this.countNumberOfTowns();
+            this.loadRegionalData();
+            this.loadDepartementalData();
         },
 
         pois() {
@@ -282,10 +337,37 @@ export default {
 
     mounted() {
         this.createMap();
-        this.syncTownMarkers();
     },
 
     methods: {
+        countNumberOfTowns() {
+            this.numberOfShantytownsBy = this.towns.reduce(
+                (acc, { closedAt, departement, region, city }) => {
+                    if (closedAt !== null) {
+                        return acc;
+                    }
+
+                    if (acc.departements[departement.code] === undefined) {
+                        acc.departements[departement.code] = 0;
+                    }
+
+                    if (acc.regions[region.code] === undefined) {
+                        acc.regions[region.code] = 0;
+                    }
+
+                    if (acc.cities[city.code] === undefined) {
+                        acc.cities[city.code] = 0;
+                    }
+
+                    acc.departements[departement.code] += 1;
+                    acc.regions[region.code] += 1;
+                    acc.cities[city.code] += 1;
+                    return acc;
+                },
+                { regions: {}, departements: {}, cities: {} }
+            );
+        },
+
         /**
          * Initialise tous les contrôles de la carte
          *
@@ -399,6 +481,7 @@ export default {
             this.setupMapControls();
             this.setupMarkerGroups();
             this.setupView();
+            this.onZoomEnd();
         },
 
         /**
@@ -409,12 +492,21 @@ export default {
         onZoomEnd() {
             const zoomLevel = this.map.getZoom();
 
+            if (zoomLevel <= REGION_MAX_ZOOM_LEVEL) {
+                console.log(`Niveau de zoom régional: ${zoomLevel}`);
+                this.showRegionalLayer();
+            } else if (zoomLevel <= DEPT_MAX_ZOOM_LEVEL) {
+                console.log(`Niveau de zoom départemental: ${zoomLevel}`);
+                this.showDepartementalLayer();
+            } else {
+                console.log(`Niveau de zoom détaillé: ${zoomLevel}`);
+                this.showTownsLayer();
+            }
+
             if (!this.poiMarkersVisible && zoomLevel > POI_ZOOM_LEVEL) {
                 this.poiMarkersVisible = true;
                 this.pois.forEach(this.createPOIMarker);
-            }
-
-            if (this.poiMarkersVisible && zoomLevel <= POI_ZOOM_LEVEL) {
+            } else if (this.poiMarkersVisible && zoomLevel <= POI_ZOOM_LEVEL) {
                 this.poiMarkersVisible = false;
                 this.removeAllPOIMarkers();
             }
@@ -661,7 +753,6 @@ export default {
         },
 
         setSearchMarker(type, address, coordinates) {
-            this.$piwik?.trackEvent("Cartographie", "Recherche");
             this.clearSearchMarker();
 
             // check if there is a marker existing at that exact address
@@ -686,7 +777,154 @@ export default {
             this.searchMarker._icon
                 .querySelector(".mapPin")
                 .classList[action]("mapPin--street");
+        },
+
+        /*------------------------------------------------------------------------*
+         | DEBUT DES METHODES REQUISES POUR LA GESTION DES COUCHES DEPT ET REGION |
+         *------------------------------------------------------------------------*/
+        // Fonction de chargement des données geoJson régionales
+        loadRegionalData() {
+            this.regionalLayer.getLayers().forEach(layer => {
+                if (layer instanceof L.Marker) {
+                    layer.remove();
+                    return;
+                }
+
+                // Calcul de la position du marqueur
+                // On utilise la méthode pointOnFeature(), qui garantit que le point soit dans le polygone, plutôt que centroid()
+                const { feature } = layer;
+                const markerPosition = pointOnFeature(feature);
+                // Création du marqueur à partir de la long et lat retournées par pointOnFeature()
+                const lon = markerPosition.geometry.coordinates[0];
+                const lat = markerPosition.geometry.coordinates[1];
+                this.circleWithText(
+                    this.map,
+                    [lat, lon],
+                    this.numberOfShantytownsBy.regions[
+                        feature.properties.code
+                    ] || 0,
+                    20,
+                    3,
+                    "region"
+                ).addTo(this.regionalLayer);
+            });
+        },
+
+        // Fonction de chargement des données geoJson départementales
+        loadDepartementalData() {
+            this.departementalLayer.getLayers().forEach(layer => {
+                if (layer instanceof L.Marker) {
+                    layer.remove();
+                    return;
+                }
+
+                // Calcul de la position du marqueur
+                // On utilise la méthode pointOnFeature(), qui garantit que le point soit dans le polygone, plutôt que centroid()
+                const { feature } = layer;
+                const markerPosition = pointOnFeature(feature);
+                // Création du marqueur à partir de la long et lat retournées par pointOnFeature()
+                const lon = markerPosition.geometry.coordinates[0];
+                const lat = markerPosition.geometry.coordinates[1];
+
+                const nbSites =
+                    this.numberOfShantytownsBy.departements[
+                        feature.properties.code
+                    ] || 0;
+                const siteLabel = nbSites > 1 ? "sites" : "site";
+                this.circleWithText(
+                    this.map,
+                    [lat, lon],
+                    `<div><strong>${feature.properties.nom}</strong><br/>${nbSites} ${siteLabel}</div>`,
+                    45,
+                    3,
+                    "dept"
+                ).addTo(this.departementalLayer);
+            });
+        },
+
+        showRegionalLayer() {
+            this.hideDepartementalLayer();
+            this.hideTownsLayer();
+
+            if (!this.map.hasLayer(this.regionalLayer)) {
+                this.map.addLayer(this.regionalLayer);
+            }
+        },
+
+        hideRegionalLayer() {
+            if (this.map.hasLayer(this.regionalLayer)) {
+                this.map.removeLayer(this.regionalLayer);
+            }
+        },
+
+        showDepartementalLayer() {
+            this.hideRegionalLayer();
+            this.hideTownsLayer();
+
+            if (!this.map.hasLayer(this.departementalLayer)) {
+                this.map.addLayer(this.departementalLayer);
+            }
+        },
+
+        hideDepartementalLayer() {
+            if (this.map.hasLayer(this.departementalLayer)) {
+                this.map.removeLayer(this.departementalLayer);
+            }
+        },
+
+        showTownsLayer() {
+            this.hideRegionalLayer();
+            this.hideDepartementalLayer();
+            this.syncTownMarkers();
+        },
+
+        hideTownsLayer() {
+            this.removeAllTownMarkers();
+        },
+
+        circleWithText(map, latLng, txt, radius, borderWidth, circleClass) {
+            const size = radius * 2;
+            const style =
+                'style="width: ' +
+                size +
+                "px; height: " +
+                size +
+                "px; border-width: " +
+                borderWidth +
+                'px;"';
+            const iconSize = size + borderWidth * 2;
+            const icon = L.divIcon({
+                html:
+                    '<span class="' +
+                    "circle " +
+                    circleClass +
+                    '" ' +
+                    style +
+                    ">" +
+                    txt +
+                    "</span>",
+                className: "",
+                iconSize: [iconSize, iconSize]
+            });
+            const marker = L.marker(latLng, {
+                icon: icon
+            }).on("click", function(e) {
+                if (map.getZoom() <= REGION_MAX_ZOOM_LEVEL) {
+                    // Nous sommes au niveau régional, un clic affiche le niveau départemental
+                    map.setView(
+                        e.target.getLatLng(),
+                        REGION_MAX_ZOOM_LEVEL + 1
+                    );
+                } else if (map.getZoom() <= DEPT_MAX_ZOOM_LEVEL) {
+                    // nous sommes au niveau départemental, un clic affiche le niveau des communes
+                    map.setView(e.target.getLatLng(), DEPT_MAX_ZOOM_LEVEL + 1);
+                }
+            });
+            return marker;
         }
+        /*----------------------------------------------------------------------*
+         | FIN DES METHODES REQUISES POUR LA GESTION DES COUCHES DEPT ET REGION |
+         *----------------------------------------------------------------------*/
     }
 };
 
