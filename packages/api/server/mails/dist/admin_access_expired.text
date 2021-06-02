@@ -1,0 +1,25 @@
+En savoir plus sur une demande d’accès non activée
+Bonjour {{var:recipientName}},
+Vous avez ouvert un accès à la plateforme Résorption-bidonvilles
+[{{var:frontUrl}}] à {{var:userName}} le {{var:activationUrlSentDate}}. Cette
+personne n’a pas activé son accès dans le délai des 7 jours, son lien est
+dorénavant expiré.
+Nous vous invitons à prendre contact avec elle pour comprendre la raison de
+cette non-activation et si nécessaire, lui envoyer un nouveau lien d’activation
+depuis votre onglet administration de la plateforme [{{var:adminUrl}}].
+
+Me connecter [{{var:connexionUrl}}]
+
+Pour toute question, votre interlocutrice Annie Rasatandrianombana se tient à
+votre disposition : annie.rasatandrianombana@dihal.gouv.fr
+[annie.rasatandrianombana@dihal.gouv.fr] ou au 01 40 81 80 39.
+
+Cordialement,
+L'équipe Résorption-bidonvilles,
+
+
+
+Résorption-bidonvilles
+Agir pour résorber les bidonvilles
+contact@resorption-bidonvilles.beta.gouv.fr
+[contact@resorption-bidonvilles.beta.gouv.fr]

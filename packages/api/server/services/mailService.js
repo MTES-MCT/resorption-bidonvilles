@@ -1,5 +1,9 @@
 /* eslint-disable import/no-dynamic-require */
 /* eslint-disable global-require */
+const fs = require('fs');
+const path = require('path');
+const { frontUrl, backUrl } = require('#server/config');
+
 const { send: sendMail } = require('#server/utils/mail');
 const { testEmail } = require('#server/config');
 
@@ -19,7 +23,11 @@ module.exports = {
      *
      * @returns {Promise}
      */
-    send(templateName, recipient, sender = null, templateArgs, preserveRecipient = true) {
+    send(templateName, options) {
+        const {
+            recipient, sender = null, preserveRecipient = true, templateArgs, variables,
+        } = options;
+
         let finalRecipient = recipient;
         if (testEmail && !preserveRecipient) {
             finalRecipient = {
@@ -29,11 +37,24 @@ module.exports = {
             };
         }
 
-        const templateFn = require(`#server/mails/${templateName}`);
+        const htmlContent = fs.readFileSync(path.join(__dirname, '../mails/dist', `${templateName}.html`));
+        const textContent = fs.readFileSync(path.join(__dirname, '../mails/dist', `${templateName}.text`));
+        const subject = fs.readFileSync(path.join(__dirname, '../mails/dist', `${templateName}.subject.text`));
 
         return sendMail(
             finalRecipient,
-            templateFn.apply(this, templateArgs),
+            {
+                HTMLPart: htmlContent.toString(),
+                TextPart: textContent.toString(),
+                Subject: subject.toString(),
+                TemplateLanguage: true,
+                Variables: {
+                    frontUrl,
+                    backUrl,
+                    recipientName: `${recipient.first_name} ${recipient.last_name}`,
+                    ...variables,
+                },
+            },
             sender,
         );
     },

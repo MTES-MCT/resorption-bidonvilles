@@ -1,0 +1,28 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Faites connaître la plateforme !</mj-title>
+        <mj-include path='common/attributes.mjml' />
+        <mj-include path='common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class='text-primary text-display pb-4'>
+                    Tous vos partenaires concernés par la résorption des bidonvilles sont-ils sur la plateforme ?
+                </mj-text>
+                <mj-include path='common/hello.mjml' />
+                <mj-text>
+                    Et si vous faisiez connaître à vos partenaires la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a> ? Comme vous, si elles ont accès, elles pourront utiliser cet outil numérique de travail collaboratif pour accélérer la résorption des bidonvilles.
+                </mj-text>
+                <mj-button mj-class="button-secondary" href="{{var:invitationUrl}}">
+                    Inviter un·e partenaire à rejoindre la plateforme Résorption-bidonvilles
+                </mj-button>
+                <mj-include path="common/contact_interlocutor2.mjml" />
+            </mj-column>
+        </mj-section>
+
+        <mj-include path='common/footer.mjml' />
+    </mj-body>
+</mjml>

@@ -1,3 +1,0 @@
-<mj-button mj-class="button-secondary" href="{{var:contactURL}}">
-    Demander mon accès
-</mj-button>
