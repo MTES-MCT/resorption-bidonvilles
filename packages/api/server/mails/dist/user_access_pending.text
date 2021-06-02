@@ -1,0 +1,29 @@
+Activer votre lien d’accès à la plateforme Résorption-bidonvilles avant
+expiration
+Bonjour {{var:recipientName}},
+Sauf erreur de notre part, vous n’avez pas encore activé votre lien d’accès à la
+plateforme Résorption-bidonvilles [{{var:frontUrl}}].
+Nous vous invitons à l'activer dès maintenant.
+Le lien expirera dans 48h.
+
+Activer mon compte [{{var: activationUrl}}]
+
+Pour toute question, votre interlocutrice Annie Rasatandrianombana se tient à
+votre disposition : annie.rasatandrianombana@dihal.gouv.fr
+[annie.rasatandrianombana@dihal.gouv.fr] ou au 01 40 81 80 39.
+
+Pour l’accompagner à prendre en main la plateforme, vous pouvez l’inviter à
+s’inscrire à l’une de nos sessions de formation personnalisées en lui
+transmettant ce lien :
+
+M'inscrire à une session de formation [{{var:formationUrl}}]
+
+Cordialement,
+L'équipe Résorption-bidonvilles,
+
+
+
+Résorption-bidonvilles
+Agir pour résorber les bidonvilles
+contact@resorption-bidonvilles.beta.gouv.fr
+[contact@resorption-bidonvilles.beta.gouv.fr]

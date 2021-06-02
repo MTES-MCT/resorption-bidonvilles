@@ -1,0 +1,31 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Votre lien est expiré</mj-title>
+        <mj-include path='common/attributes.mjml' />
+        <mj-include path='common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class='text-primary text-display pb-4'>
+                    Expiration de votre lien d’accès à la plateforme Résorption-bidonvilles
+                </mj-text>
+                <mj-include path='common/hello.mjml' />
+                <mj-text mj-class="pb-4">
+                    Votre lien d’accès à la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a> a expiré.
+                </mj-text>
+                <mj-text mj-class="text-primary text-lg pb-4">
+                    Bonne nouvelle, il n’est pas trop tard !
+                </mj-text>
+                <mj-text>
+                    Dès maintenant, participez à une session de formation personnalisée pour utiliser et prendre en main rapidement la plateforme :
+                </mj-text>
+                <mj-include path='common/formation_cta_me.mjml' />
+            </mj-column>
+        </mj-section>
+
+        <mj-include path='common/footer.mjml' />
+    </mj-body>
+</mjml>

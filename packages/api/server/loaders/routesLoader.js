@@ -564,4 +564,16 @@ module.exports = (app) => {
         middlewares.appVersion.sync,
         controllers.userActivity.list,
     );
+
+    app.get(
+        '/admin',
+        (req, res, next) => {
+            console.log('hey');
+            next();
+        },
+        // middlewares.auth.authenticate,
+        // middlewares.charte.check,
+        // middlewares.appVersion.sync,
+        controllers.admin.updateUser,
+    );
 };

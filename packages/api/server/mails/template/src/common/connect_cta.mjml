@@ -1,3 +1,0 @@
-<mj-button mj-class="button-primary" href="{{var:connectURL}}">
-    Me connecter
-</mj-button>
