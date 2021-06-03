@@ -612,24 +612,42 @@ module.exports = database => ({
             const obj = {
                 month: toFormat(d, 'M Y'),
                 total: 0,
+                totalLivingInTownsBiggerThan10: 0,
+                totalEU: 0,
+                totalEULivingInTownsBiggerThan10: 0,
             };
             result[`${d.getFullYear()}-${d.getMonth()}`] = obj;
             resultArr.push(obj);
         }
 
         /**
-         * @param {Number} population Total à rajouter
-         * @param {String} fromStr Date à partir de laquelle il faut augmenter la population (inclus)
-         * @param {String} toStr Date jusqu'à laquelle il faut augmenter la population (exclus : si la date
-         *                       est en Février, le mois de Février est ignoré)
+         * @param {Number}     population Total à rajouter
+         * @param {Array|null} origins Liste des nationalités des habitants (ou NULL si inconnu)
+         * @param {String}     fromStr Date à partir de laquelle il faut augmenter la population (inclus)
+         * @param {String}     toStr Date jusqu'à laquelle il faut augmenter la population (exclus :
+         *                           si la date est en Février, le mois de Février est ignoré)
          */
-        function addPopulation(population, fromStr, toStr) {
+        function addPopulation(population, origins, fromStr, toStr) {
             const from = getMonthlyDate(fromStr);
             const to = toStr ? getMonthlyDate(toStr) : max;
 
             const d = new Date(from < min ? min : from);
+            const europeanOnly = origins && origins.length === 1 && origins[0] === 'european';
             while (d < to && d < max) {
-                result[`${d.getFullYear()}-${d.getMonth()}`].total += population;
+                const row = result[`${d.getFullYear()}-${d.getMonth()}`];
+
+                row.total += population;
+                if (europeanOnly) {
+                    row.totalEU += population;
+                }
+
+                if (population >= 10) {
+                    row.totalLivingInTownsBiggerThan10 += population;
+                    if (europeanOnly) {
+                        row.totalEULivingInTownsBiggerThan10 += population;
+                    }
+                }
+
                 d.setMonth(d.getMonth() + 1);
             }
         }
@@ -639,6 +657,7 @@ module.exports = database => ({
             `SELECT
             t2.shantytown_id,
             t2.population_total,
+            t2.origins,
             t2.closed_at,
             CASE WHEN t2.asc_rank = '1' THEN t2.opened_at ELSE t2.input_date END AS "ref_date"
         FROM
@@ -646,6 +665,7 @@ module.exports = database => ({
             SELECT
                 t.shantytown_id,
                 t.population_total,
+                t.origins,
                 t.input_date,
                 COALESCE(s.built_at, s.declared_at) AS "opened_at",
                 s.closed_at AS "closed_at",
@@ -660,18 +680,24 @@ module.exports = database => ({
                     SELECT
                         s.shantytown_id,
                         population_total,
+                        array_agg(sco.uid) AS origins,
                         COALESCE(s.updated_at, s.created_at) AS "input_date"
-                    FROM
-                        shantytowns s
+                    FROM shantytowns s
+                    LEFT JOIN shantytown_origins so ON so.fk_shantytown = s.shantytown_id
+                    LEFT JOIN social_origins sco ON so.fk_social_origin = sco.social_origin_id
+                    GROUP BY s.shantytown_id
                 )
                 UNION
                 (
                     SELECT
                         s.shantytown_id,
                         population_total,
+                        array_agg(sco.uid) AS origins,
                         COALESCE(s.updated_at, s.created_at) AS "input_date"
-                    FROM
-                        "ShantytownHistories" s
+                    FROM "ShantytownHistories" s
+                    LEFT JOIN "ShantytownOriginHistories" so ON so.fk_shantytown = s.hid
+                    LEFT JOIN social_origins sco ON so.fk_social_origin = sco.social_origin_id
+                    GROUP BY s.hid
                 )
             ) t
             LEFT JOIN shantytowns s ON t.shantytown_id = s.shantytown_id
@@ -691,7 +717,7 @@ module.exports = database => ({
         // on traite chaque ligne une par une
         for (let i = 0; i < rows.length; i += 1) {
             const {
-                shantytown_id, population_total, closed_at, ref_date,
+                shantytown_id, population_total, origins, closed_at, ref_date,
             } = rows[i];
             const next = rows[i + 1];
 
@@ -703,14 +729,14 @@ module.exports = database => ({
 
             // nous sommes sur la dernière saisie pour ce site alors on remplit jusqu'au mois de fermeture
             if (!next || next.shantytown_id !== shantytown_id) {
-                addPopulation(population_total, ref_date, closed_at);
+                addPopulation(population_total, origins, ref_date, closed_at);
                 // eslint-disable-next-line no-continue
                 continue;
             }
 
             // nous ne sommes pas sur la dernière saisie pour ce site alors on remplit du mois de cette
             // saisie jusqu'au mois de la saisie suivante
-            addPopulation(population_total, ref_date, next.ref_date);
+            addPopulation(population_total, origins, ref_date, next.ref_date);
         }
 
         return resultArr;
