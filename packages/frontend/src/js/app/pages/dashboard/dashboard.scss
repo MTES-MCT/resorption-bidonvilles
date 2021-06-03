@@ -90,50 +90,29 @@
     }
 
     .circle {
-        border-color: rgba(194, 221, 167, 0.8);
-        background: rgba(144, 221, 103, 0.8);
+        border-color: rgba(181, 226, 140, 0.6);
+        background-color: rgba(158, 199, 134, 0.8);
+        background-clip: padding-box;
         display: table-cell;
         text-align: center;
         vertical-align: middle;
         border-radius: 50%;
         border-style: solid;
-        border-width: medium;
-        // font-weight: bold;
+        border-width: 5px;
+        font-family: Arial, Helvetica, sans-serif;
         color: black;
     }
 
     .circle.region {
-        /* background: rgba(0, 57, 128, 0.2); */
-        /* border-color: #3388FF; */
         font-size: 16px;
     }
 
     .circle.dept {
-        // background: rgba(0, 57, 128, 0.2);
-        // border-color:darkslategray;
         font-size: 10px;
-        // color: white;
     }
 
-    .circle {
-        background: rgba(0, 57, 128, 0.2);
-        border-color: #3388FF;
-        display: table-cell;
-        text-align: center;
-        vertical-align: middle;
-        border-radius: 50%;
-        border-style: solid;
-        font-weight: bold;
-        color: white;
-    }
-    
-    .circle.region {
-        font-size: 16px;
-    }
-    
-    .circle.dept {
+    .circle.city {
         font-size: 10px;
-      }
-    
+    }    
 }
 

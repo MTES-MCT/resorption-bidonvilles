@@ -14,14 +14,15 @@ import utensils from "../../../../../public/img/utensils.png";
 import waterNo from "../../../../../public/img/water-no.png";
 import waterNull from "../../../../../public/img/water-null.png";
 
-// données tirées de https://rawgit.com/gregoiredavid/france-geojson/
+// données tirées de https://github.com/gregoiredavid/france-geojson
 import departements from "/src/geojson/departements.json";
 import regions from "/src/geojson/regions.json";
 
 const DEFAULT_VIEW = [46.7755829, 2.0497727];
 const POI_ZOOM_LEVEL = 13;
-const REGION_MAX_ZOOM_LEVEL = 8;
-const DEPT_MAX_ZOOM_LEVEL = 10;
+const REGION_MAX_ZOOM_LEVEL = 7;
+const DEPT_MAX_ZOOM_LEVEL = 11;
+const CITY_MAX_ZOOM_LEVEL = 13;
 
 /* **************************************************************************************************
  * Ce composant fait apparaître une carte qui propose deux fonctionnalités distinctes :
@@ -155,6 +156,13 @@ export default {
              * @type {L.geoJSON}
              */
             departementalLayer: L.geoJSON(departements),
+
+            /**
+             * La couche communal
+             *
+             * @type {L.layerGroup}
+             */
+            cityLayer: L.layerGroup(),
 
             /**
              * La carte
@@ -292,6 +300,7 @@ export default {
             this.countNumberOfTowns();
             this.loadRegionalData();
             this.loadDepartementalData();
+            this.loadCityData();
         },
 
         pois() {
@@ -342,32 +351,44 @@ export default {
     methods: {
         countNumberOfTowns() {
             this.numberOfShantytownsBy = this.towns.reduce(
-                (acc, { closedAt, departement, region, city }) => {
-                    if (closedAt !== null) {
+                (acc, obj) => {
+                    if (obj.closedAt !== null) {
                         return acc;
                     }
 
-                    if (acc.departements[departement.code] === undefined) {
-                        acc.departements[departement.code] = 0;
+                    if (acc.departements[obj.departement.code] === undefined) {
+                        acc.departements[obj.departement.code] = 0;
                     }
 
-                    if (acc.regions[region.code] === undefined) {
-                        acc.regions[region.code] = 0;
+                    if (acc.regions[obj.region.code] === undefined) {
+                        acc.regions[obj.region.code] = 0;
                     }
 
-                    if (acc.cities[city.code] === undefined) {
-                        acc.cities[city.code] = 0;
+                    const cityCode = obj.city.main || obj.city.code;
+                    if (acc.cities[cityCode] === undefined) {
+                        acc.cities[cityCode] = {};
+                        acc.cities[cityCode].sites = 0;
+                        acc.cities[cityCode].code = cityCode;
                     }
 
-                    acc.departements[departement.code] += 1;
-                    acc.regions[region.code] += 1;
-                    acc.cities[city.code] += 1;
+                    if (
+                        acc.cities[cityCode].name === undefined &&
+                        !obj.city.main
+                    ) {
+                        acc.cities[cityCode].name = obj.city.name;
+                        acc.cities[cityCode].latitude = obj.city.latitude;
+                        acc.cities[cityCode].longitude = obj.city.longitude;
+                    }
+
+                    acc.departements[obj.departement.code] += 1;
+                    acc.regions[obj.region.code] += 1;
+                    acc.cities[cityCode].sites += 1;
+
                     return acc;
                 },
                 { regions: {}, departements: {}, cities: {} }
             );
         },
-
         /**
          * Initialise tous les contrôles de la carte
          *
@@ -498,6 +519,9 @@ export default {
             } else if (zoomLevel <= DEPT_MAX_ZOOM_LEVEL) {
                 console.log(`Niveau de zoom départemental: ${zoomLevel}`);
                 this.showDepartementalLayer();
+            } else if (zoomLevel <= CITY_MAX_ZOOM_LEVEL) {
+                console.log(`Niveau de zoom communal: ${zoomLevel}`);
+                this.showCityLayer();
             } else {
                 console.log(`Niveau de zoom détaillé: ${zoomLevel}`);
                 this.showTownsLayer();
@@ -779,9 +803,6 @@ export default {
                 .classList[action]("mapPin--street");
         },
 
-        /*------------------------------------------------------------------------*
-         | DEBUT DES METHODES REQUISES POUR LA GESTION DES COUCHES DEPT ET REGION |
-         *------------------------------------------------------------------------*/
         // Fonction de chargement des données geoJson régionales
         loadRegionalData() {
             this.regionalLayer.getLayers().forEach(layer => {
@@ -807,6 +828,11 @@ export default {
                     3,
                     "region"
                 ).addTo(this.regionalLayer);
+                this.regionalLayer.setStyle({
+                    color: "white",
+                    weight: 8,
+                    opacity: 1
+                });
             });
         },
 
@@ -839,11 +865,43 @@ export default {
                     3,
                     "dept"
                 ).addTo(this.departementalLayer);
+                this.departementalLayer.setStyle({
+                    color: "white",
+                    weight: 8,
+                    opacity: 1
+                });
             });
+        },
+
+        // Fonction de chargement des marqueurs par commune
+        loadCityData() {
+            // On crée les marqueurs
+            const citiesMarkers = [];
+            for (var key of Object.keys(this.numberOfShantytownsBy.cities)) {
+                const siteLabel =
+                    this.numberOfShantytownsBy.cities[key].sites > 1
+                        ? "sites"
+                        : "site";
+                citiesMarkers.push(
+                    this.circleWithText(
+                        this.map,
+                        [
+                            this.numberOfShantytownsBy.cities[key].latitude,
+                            this.numberOfShantytownsBy.cities[key].longitude
+                        ],
+                        `<div>${this.numberOfShantytownsBy.cities[key].name}<br/>${this.numberOfShantytownsBy.cities[key].sites} ${siteLabel}</div>`,
+                        35,
+                        3,
+                        "city"
+                    )
+                );
+            }
+            this.cityLayer = L.layerGroup(citiesMarkers);
         },
 
         showRegionalLayer() {
             this.hideDepartementalLayer();
+            this.hideCityLayer();
             this.hideTownsLayer();
 
             if (!this.map.hasLayer(this.regionalLayer)) {
@@ -859,6 +917,7 @@ export default {
 
         showDepartementalLayer() {
             this.hideRegionalLayer();
+            this.hideCityLayer();
             this.hideTownsLayer();
 
             if (!this.map.hasLayer(this.departementalLayer)) {
@@ -872,9 +931,26 @@ export default {
             }
         },
 
+        showCityLayer() {
+            this.hideRegionalLayer();
+            this.hideDepartementalLayer();
+            this.hideTownsLayer();
+
+            if (!this.map.hasLayer(this.cityLayer)) {
+                this.map.addLayer(this.cityLayer);
+            }
+        },
+
+        hideCityLayer() {
+            if (this.map.hasLayer(this.cityLayer)) {
+                this.map.removeLayer(this.cityLayer);
+            }
+        },
+
         showTownsLayer() {
             this.hideRegionalLayer();
             this.hideDepartementalLayer();
+            this.hideCityLayer();
             this.syncTownMarkers();
         },
 
@@ -922,9 +998,6 @@ export default {
             });
             return marker;
         }
-        /*----------------------------------------------------------------------*
-         | FIN DES METHODES REQUISES POUR LA GESTION DES COUCHES DEPT ET REGION |
-         *----------------------------------------------------------------------*/
     }
 };
 
