@@ -12,15 +12,11 @@ const {
     generateAccessTokenFor, hashPassword, getPasswordResetLink,
     getExpiracyDateForActivationTokenCreatedAt,
 } = require('#server/utils/auth');
-const {
-    send: sendMail,
-    PRESERVE_RECIPIENT,
-} = require('#server/services/mailService');
 const permissionsDescription = require('#server/permissions_description');
 const accessRequestService = require('#server/services/accessRequest/accessRequestService');
-
-const MAIL_TEMPLATES = {};
-MAIL_TEMPLATES.new_password = require('#server/mails/new_password');
+const {
+    sendUserNewPassword,
+} = require('#server/mails/mails');
 
 const { auth: authConfig } = require('#server/config');
 const { sequelize } = require('#db/models');
@@ -911,7 +907,7 @@ module.exports = models => ({
         if (user !== null) {
             try {
                 const resetLink = getPasswordResetLink(user);
-                await sendMail('new_password', user, null, [user, resetLink], PRESERVE_RECIPIENT);
+                await sendUserNewPassword(user, { variables: { resetLink } });
             } catch (error) {
                 res.status(500).send({
                     error: {

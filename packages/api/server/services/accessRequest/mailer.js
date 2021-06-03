@@ -1,122 +1,76 @@
-const mailService = require('#server/services/mailService');
+const {
+    sendAdminNewRequestNotification,
+    sendAdminRequestPendingReminder1,
+    sendAdminRequestPendingReminder2,
+    sendAdminAccessActivated,
+    sendAdminAccessExpired,
+    sendUserAccessRequestConfirmation,
+    sendUserAccessGranted,
+    sendUserAccessDenied,
+    sendUserAccessPending,
+    sendUserAccessExpired,
+    sendUserAccessActivatedWelcome,
+} = require('#server/mails/mails');
 
 module.exports = {
     toAdmin: {
-        newRequestNotification(admins, user) {
+        newRequestNotification(admins) {
             return Promise.all(
-                admins.map(admin => mailService.send(
-                    'access_request/admin/new_request_notification',
-                    admin,
-                    user,
-                    [user],
-                    !mailService.PRESERVE_RECIPIENT,
-                )),
+                admins.map(admin => sendAdminNewRequestNotification(admin)),
             );
         },
 
-        firstRequestPendingNotification(admins, user) {
+        firstRequestPendingNotification(admins) {
             return Promise.all(
-                admins.map(admin => mailService.send(
-                    'access_request/admin/request_pending_reminder_1',
-                    admin,
-                    user,
-                    [user],
-                    !mailService.PRESERVE_RECIPIENT,
-                )),
+                admins.map(admin => sendAdminRequestPendingReminder1(admin)),
             );
         },
 
-        secondRequestPendingNotification(admins, user) {
+        secondRequestPendingNotification(admins) {
             return Promise.all(
-                admins.map(admin => mailService.send(
-                    'access_request/admin/request_pending_reminder_2',
-                    admin,
-                    user,
-                    [user],
-                    !mailService.PRESERVE_RECIPIENT,
-                )),
+                admins.map(admin => sendAdminRequestPendingReminder2(admin)),
+
             );
         },
 
         accessExpired(admin, user, submitDate) {
-            return mailService.send(
-                'access_request/admin/access_expired',
-                admin,
-                user,
-                [user, submitDate],
-                !mailService.PRESERVE_RECIPIENT,
-            );
+            return sendAdminAccessExpired(admin, { variables: { adminName: `${user.first_name} ${user.last_name}`, submitDate } });
         },
 
         accessActivated(admin, user) {
-            return mailService.send(
-                'access_request/admin/access_activated',
-                admin,
-                user,
-                [user],
-                !mailService.PRESERVE_RECIPIENT,
-            );
+            return sendAdminAccessActivated(admin, { variables: { adminName: `${user.first_name} ${user.last_name}` } });
         },
     },
 
     toUser: {
         newRequestConfirmation(user) {
-            return mailService.send(
-                'access_request/user/access_request_confirmation',
-                user,
-                null,
-                [user],
-                mailService.PRESERVE_RECIPIENT,
-            );
+            return sendUserAccessRequestConfirmation(user);
         },
 
         accessDenied(user, admin) {
-            return mailService.send(
-                'access_request/user/access_denied',
-                user,
-                admin,
-                [user, admin],
-                mailService.PRESERVE_RECIPIENT,
-            );
+            // TODO: Fix date
+            return sendUserAccessDenied(user, { variables: { adminName: `${admin.first_name} ${admin.last_name}` } });
         },
 
         accessGranted(user, admin, activationLink, expiracyDate) {
-            return mailService.send(
-                'access_request/user/access_granted',
-                user,
-                admin,
-                [admin, activationLink, expiracyDate],
-                mailService.PRESERVE_RECIPIENT,
-            );
+            return sendUserAccessGranted(user, { variables: { adminName: `${admin.first_name} ${admin.last_name}`, activationUrl: activationLink, expiracyDate } });
         },
 
         accessPending(user, admin, activationLink, expiracyDate) {
-            return mailService.send(
-                'access_request/user/access_pending',
-                user,
-                admin,
-                [activationLink, expiracyDate],
-                mailService.PRESERVE_RECIPIENT,
-            );
+            return sendUserAccessPending(user, {
+                variables: {
+                    activationUrl: activationLink,
+                    expiracyDate,
+                    admin,
+                },
+            });
         },
 
         accessExpired(user, admin, expiracyDate) {
-            return mailService.send(
-                'access_request/user/access_expired',
-                user,
-                admin,
-                [expiracyDate],
-                mailService.PRESERVE_RECIPIENT,
-            );
+            return sendUserAccessExpired(user, { variables: { admin, expiracyDate } });
         },
         accessActivated(user) {
-            return mailService.send(
-                'access_request/user/access_activated_welcome',
-                user,
-                null,
-                [],
-                mailService.PRESERVE_RECIPIENT,
-            );
+            return sendUserAccessActivatedWelcome(user);
         },
     },
 };

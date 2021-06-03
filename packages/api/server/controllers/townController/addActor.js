@@ -1,6 +1,8 @@
 
 const { sequelize } = require('#db/models');
-const mailService = require('#server/services/mailService');
+const {
+    sendUserShantytownActorNotification,
+} = require('#server/mails/mails');
 
 module.exports = models => async (req, res, next) => {
     let actors;
@@ -29,16 +31,11 @@ module.exports = models => async (req, res, next) => {
     // if the actor is not the current user, send a notification by mail
     if (req.body.user.id !== req.user.id) {
         try {
-            await mailService.send(
-                'shantytown_actors/notification',
-                req.body.user,
-                null,
-                [
-                    req.user,
-                    req.shantytown,
-                ],
-                mailService.PRESERVE_RECIPIENT,
-            );
+            sendUserShantytownActorNotification(req.body.user, {
+                variables: {
+                    inviterName: `${req.user.first_name} ${req.user.last_name}`,
+                },
+            });
         } catch (error) {
             // ignore
         }

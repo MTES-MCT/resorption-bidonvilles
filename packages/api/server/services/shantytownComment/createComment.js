@@ -4,8 +4,9 @@ const shantytownCommentModel = require('#server/models/shantytownComment');
 const shantytownModel = require('#server/models/shantytownModel')(sequelize);
 const slackUtils = require('#server/utils/slack');
 const userModel = require('#server/models/userModel')(sequelize);
-const mailService = require('#server/services/mailService');
-
+const {
+    sendUserNewComment,
+} = require('#server/mails/mails');
 const ServiceError = require('#server/errors/ServiceError');
 
 /**
@@ -50,7 +51,7 @@ module.exports = async (comment, shantytown, author) => {
         if (watchers.length > 0) {
             const serializedComment = await shantytownCommentModel.findOne(commentId);
             await Promise.all(
-                watchers.map(user => mailService.send('new_comment', user, undefined, [shantytown, serializedComment], !mailService.PRESERVE_RECIPIENT)),
+                watchers.map(user => sendUserNewComment(user, shantytown, serializedComment)),
             );
         }
     } catch (error) {

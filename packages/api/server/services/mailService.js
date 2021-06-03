@@ -14,18 +14,12 @@ module.exports = {
      * Sends one of the email templates stored in `/mails`
      *
      * @param {string}  templateName Name of the email template (may be a path, without trailing .js)
-     * @param {User}    recipient    Recipient of the email
-     * @param {User}    [sender]     Sender of the email (used for reply-to)
-     * @param {Array}   templateArgs Arguments to be passed to the email template
-     * @param {Boolean} [preserveRecipient=true] Wether the email should be sent to the original
-     *                                           recipient or not (if false, the email is sent to
-     *                                           the test email set in configuration, if any)
-     *
+     * @param {Object}  options Name of the email template (may be a path, without trailing .js)
      * @returns {Promise}
      */
     send(templateName, options) {
         const {
-            recipient, sender = null, preserveRecipient = true, templateArgs, variables,
+            recipient, sender = null, preserveRecipient = true, variables,
         } = options;
 
         let finalRecipient = recipient;

@@ -1,3 +1,5 @@
+const { toString: dateToString } = require('#server/utils/date');
+
 const {
     sendAdminNewRequestNotification,
     sendAdminRequestPendingReminder1,
@@ -17,6 +19,11 @@ const {
     sendUserIdealcoInvitation,
     sendUserFeatures,
     sendUserShare,
+    sendUserShantytownActorNotification,
+    sendUserNewComment,
+    sendAdminContactMessage,
+    sendUserCommentDeletion,
+    sendUserNewPassword,
 } = require('#server/mails/mails');
 
 module.exports = () => ({
@@ -29,23 +36,68 @@ module.exports = () => ({
             const activationUrl = 'https://activation.example';
             const activationUrlSentDate = new Date();
 
+            await sendAdminAccessActivated(recipient, {
+                variables: userName,
+            });
+            await sendAdminAccessExpired(recipient, {
+                variables: {
+                    userName, activationUrlSentDate,
+                },
+            });
+            await sendAdminContactMessage(req.body.user, {
+                variables: {
+                    message: {
+                        last_name: 'Doe',
+                        first_name: 'John',
+                        access_request_message: 'Hey',
+                    },
+                    date: dateToString(new Date()),
+                },
+            });
             await sendAdminNewRequestNotification(recipient);
             await sendAdminRequestPendingReminder1(recipient);
             await sendAdminRequestPendingReminder2(recipient);
-            await sendAdminAccessActivated(recipient, userName);
-            await sendAdminAccessExpired(recipient, userName, activationUrlSentDate);
-            await sendUserAccessRequestConfirmation(recipient);
-            await sendUserAccessGranted(recipient, adminName, activationUrl);
-            await sendUserAccessDenied(recipient, adminName, activationUrlSentDate);
-            await sendUserAccessPending(recipient, activationUrl);
-            await sendUserAccessExpired(recipient);
-            await sendUserPlatformInvitation(recipient, inviterName);
-            await sendUserDemoInvitation(recipient);
-            await sendUserAccessActivatedWelcome(recipient);
-            await sendUserShantytownActorInvitation(recipient, inviterName);
             await sendAdminWelcome(recipient);
-            await sendUserIdealcoInvitation(recipient);
+            await sendUserDemoInvitation(recipient);
+            await sendUserPlatformInvitation(recipient, { variables: inviterName });
+            await sendUserShantytownActorInvitation(recipient, { variables: inviterName });
+            await sendUserShantytownActorNotification(req.body.user, {
+                variables: {
+                    inviterName,
+                },
+            });
+            await sendUserAccessActivatedWelcome(recipient);
+            await sendUserAccessDenied(recipient, { variables: { adminName, activationUrlSentDate } });
+            await sendUserAccessExpired(recipient);
+            await sendUserAccessGranted(recipient, { variables: { adminName, activationUrl } });
+            await sendUserAccessPending(recipient, { variables: { activationUrl } });
+            await sendUserAccessRequestConfirmation(recipient);
+            await sendUserCommentDeletion(req.body.user, {
+                variables: {
+                    town: {
+                        usename: 'a shantytown',
+                        city: {
+                            name: 'city',
+                        },
+                    },
+                    comment: {
+                        createdAt: dateToString(new Date()),
+                        description: 'original message',
+                    },
+                    message: 'reason why message has been deleted',
+                },
+            });
             await sendUserFeatures(recipient);
+            await sendUserIdealcoInvitation(recipient);
+            await sendUserNewComment(recipient);
+            await sendUserNewPassword(req.body.user, {
+                variables: {
+                    link: {
+                        link: 'aresetlink',
+                        expiracyDate: dateToString(new Date(), true),
+                    },
+                },
+            });
             await sendUserShare(recipient);
 
 

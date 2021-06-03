@@ -1,0 +1,45 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Un de vos commentaires a été supprimé</mj-title>
+        <mj-include path='common/attributes.mjml' />
+        <mj-include path='common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class="pb-4">Bonjour,</mj-text>
+                <mj-text mj-class="pb-4">
+                    Votre commentaire ci-dessous a été supprimé par un administrateur.
+                </mj-text>
+                <mj-text>
+                    La raison mentionnée par celui-ci est :
+                </mj-text>
+                <mj-text mj-class="pb-4">
+                    "{{var:message}}".
+                </mj-text>
+                <mj-text>
+                    "{{var:comment.description}}".
+                </mj-text>
+                <mj-text mj-class="pb-4">Écrit le {{var:messageDate}}, concernant le site : {{var:town.usename}}, {{var:town.city.name}}</mj-text>
+                <mj-text>
+                    Pour rappel, conformément à la réglementation relative aux données à caractère personnel, un commentaire doit :
+                </mj-text>
+                <mj-text>
+                    - être neutre et factuel ;
+                </mj-text>
+                <mj-text>
+                    - ne pas collecter des données personnelles (nom, condamnation judiciaire...) de personnes ou groupes, porter une attention particulière aux personnes habitant ou issues d'un bidonville ;
+                </mj-text>
+                <mj-text mj-class="pb-4">
+                    - ne doit pas être subjectif, insultant ou inapproprié
+                </mj-text>
+                <mj-text>
+                    Merci de votre compréhension,
+                </mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-include path='common/footer.mjml' />
+    </mj-body>
+</mjml>
