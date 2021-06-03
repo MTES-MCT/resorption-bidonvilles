@@ -641,7 +641,7 @@ module.exports = (database) => {
         },
 
         delete: planId => database.query(
-            'DELETE FROM plans WHERE plan_id = :planId',
+            'DELETE FROM plans2 WHERE plan_id = :planId',
             {
                 replacements: {
                     planId,
