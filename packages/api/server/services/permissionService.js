@@ -64,9 +64,16 @@ module.exports = {
                             permissionLevel = 'region';
                             break;
 
-                        // pour tout utilisateur en-dessous du niveau régional, une permission "local" se traduit en permission "départementale"
+                        // pour tout utilisateur en-dessous du niveau régional :
+                        // une permission "local" se traduit :
+                        // - pour de la lecture en permission "départementale"
+                        // - pour de l'écriture en permission "locale"
                         default:
-                            permissionLevel = 'departement';
+                            if (['listPrivate', 'list', 'export', 'read', 'access'].includes(feature)) {
+                                permissionLevel = 'departement';
+                            } else {
+                                permissionLevel = user.organization.location.type;
+                            }
                     }
                 } else {
                     permissionLevel = user.permissions.shantytown.export.geographic_level;
@@ -77,7 +84,12 @@ module.exports = {
                     return false;
                 }
 
-                return location[permissionLevel].code === user.organization.location[permissionLevel].code;
+                const codes = [location[permissionLevel].code];
+                if (permissionLevel === 'city' && location[permissionLevel].main) {
+                    codes.push(location[permissionLevel].main);
+                }
+
+                return codes.includes(user.organization.location[permissionLevel].code);
             },
         }),
     }),
@@ -104,9 +116,16 @@ module.exports = {
                             permissionLevel = user.organization.location.type;
                             break;
 
-                        // pour tout utilisateur en-dessous du niveau régional, une permission "local" se traduit en permission "départementale"
+                        // pour tout utilisateur en-dessous du niveau régional
+                        // une permission "local" se traduit en :
+                        // - permission "départementale" pour une permission de lecture
+                        // - permission "locale" pour une permission d'écriture
                         default:
-                            permissionLevel = 'departement';
+                            if (['listPrivate', 'list', 'export', 'read', 'access'].includes(feature)) {
+                                permissionLevel = 'departement';
+                            } else {
+                                permissionLevel = user.organization.location.type;
+                            }
                     }
                 }
 

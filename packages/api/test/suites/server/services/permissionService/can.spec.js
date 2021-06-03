@@ -51,6 +51,7 @@ describe.only('PermissionService', () => {
                 user: location.nation(),
                 requested: location.nation(),
                 expected: true,
+                feature: 'update',
             },
             // region
             {
@@ -58,18 +59,21 @@ describe.only('PermissionService', () => {
                 user: location.region(),
                 requested: location.city(),
                 expected: true,
+                feature: 'update',
             },
             {
                 test: 'l\'utilisateur est de niveau régional et demande une permission sur une ville d\'une autre région, retourne false',
                 user: location.region(),
                 requested: location.city({ region: { code: '99' } }),
                 expected: false,
+                feature: 'update',
             },
             {
                 test: 'l\'utilisateur est de niveau régional et demande une permission au niveau national, retourne false',
                 user: location.region(),
                 requested: location.nation(),
                 expected: false,
+                feature: 'update',
             },
             // departement
             {
@@ -77,24 +81,28 @@ describe.only('PermissionService', () => {
                 user: location.departement(),
                 requested: location.city(),
                 expected: true,
+                feature: 'update',
             },
             {
                 test: 'l\'utilisateur est de niveau départemental et demande une permission sur une ville d\'un autre département, retourne false',
                 user: location.departement(),
                 requested: location.city({ departement: { code: '99' } }),
                 expected: false,
+                feature: 'update',
             },
             {
                 test: 'l\'utilisateur est de niveau départemental et demande une permission au niveau régional, retourne false',
                 user: location.departement(),
                 requested: location.region(),
                 expected: false,
+                feature: 'update',
             },
             {
                 test: 'l\'utilisateur est de niveau départemental et demande une permission au niveau national, retourne false',
                 user: location.departement(),
                 requested: location.nation(),
                 expected: false,
+                feature: 'update',
             },
             // epci
             {
@@ -102,30 +110,42 @@ describe.only('PermissionService', () => {
                 user: location.epci(),
                 requested: location.city(),
                 expected: true,
+                feature: 'update',
             },
             {
-                test: 'l\'utilisateur est de niveau epci et demande une permission au niveau départemental, retourne true',
+                test: 'l\'utilisateur est de niveau epci et demande une permission de lecture au niveau départemental, retourne true',
                 user: location.epci(),
                 requested: location.departement(),
                 expected: true,
+                feature: 'list',
             },
             {
-                test: 'l\'utilisateur est de niveau epci et demande une permission sur une ville d\'un autre département, retourne false',
+                test: 'l\'utilisateur est de niveau epci et demande une permission d\'écriture au niveau départemental, retourne false',
                 user: location.epci(),
-                requested: location.city({ departement: { code: '99' } }),
+                requested: location.departement(),
                 expected: false,
+                feature: 'update',
+            },
+            {
+                test: 'l\'utilisateur est de niveau epci et demande une permission sur une ville d\'un autre epci, retourne false',
+                user: location.epci(),
+                requested: location.city({ epci: { code: '99' } }),
+                expected: false,
+                feature: 'update',
             },
             {
                 test: 'l\'utilisateur est de niveau epci et demande une permission au niveau régional, retourne false',
                 user: location.epci(),
                 requested: location.region(),
                 expected: false,
+                feature: 'update',
             },
             {
                 test: 'l\'utilisateur est de niveau epci et demande une permission au niveau national, retourne false',
                 user: location.epci(),
                 requested: location.nation(),
                 expected: false,
+                feature: 'update',
             },
             // city
             {
@@ -133,50 +153,68 @@ describe.only('PermissionService', () => {
                 user: location.city(),
                 requested: location.district(),
                 expected: true,
+                feature: 'update',
             },
             {
                 test: 'l\'utilisateur est de niveau communal et demande une permission sur sa ville, retourne true',
                 user: location.city(),
                 requested: location.city(),
                 expected: true,
+                feature: 'update',
             },
             {
-                test: 'l\'utilisateur est de niveau communal et demande une permission au niveau départemental, retourne true',
+                test: 'l\'utilisateur est de niveau communal et demande une permission de lecture au niveau départemental, retourne true',
                 user: location.city(),
                 requested: location.departement(),
                 expected: true,
+                feature: 'list',
             },
             {
-                test: 'l\'utilisateur est de niveau communal et demande une permission sur une ville d\'un autre département, retourne false',
+                test: 'l\'utilisateur est de niveau communal et demande une permission d\'écriture au niveau départemental, retourne false',
                 user: location.city(),
-                requested: location.city({ departement: { code: '99' } }),
+                requested: location.departement(),
                 expected: false,
+                feature: 'update',
+            },
+            {
+                test: 'l\'utilisateur est de niveau communal et demande une permission sur une autre ville, retourne false',
+                user: location.city(),
+                requested: location.city({ city: { code: '99' } }),
+                expected: false,
+                feature: 'update',
             },
             {
                 test: 'l\'utilisateur est de niveau communal et demande une permission au niveau régional, retourne false',
                 user: location.city(),
                 requested: location.region(),
                 expected: false,
+                feature: 'update',
             },
             {
-                test: 'l\'utilisateur est de niveau v et demande une permission au niveau national, retourne false',
+                test: 'l\'utilisateur est de niveau communal et demande une permission au niveau national, retourne false',
                 user: location.city(),
                 requested: location.nation(),
                 expected: false,
+                feature: 'update',
             },
         ];
 
         dataset.forEach(({
-            test, user: userLocation, requested: requestedLocation, expected,
+            test, user: userLocation, requested: requestedLocation, expected, feature,
         }) => {
             it(`Si la permission est autorisée au niveau local et que ${test}`, () => {
                 expect(
                     can(createUser({
-                        permissions: { shantytown: { list: { geographic_level: 'local' } } },
+                        permissions: {
+                            shantytown: {
+                                list: { geographic_level: 'local' },
+                                update: { geographic_level: 'local' },
+                            },
+                        },
                         organization: {
                             location: userLocation,
                         },
-                    })).do('list', 'shantytown').on(requestedLocation),
+                    })).do(feature, 'shantytown').on(requestedLocation),
                 ).to.be.eql(expected);
             });
         });

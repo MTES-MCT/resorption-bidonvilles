@@ -131,7 +131,16 @@ describe.only('PermissionService', () => {
             ).to.be.eql({ statement: 'regions.code IN (:where_region)', replacements: { where_region: ['11'] } });
         });
 
-        it('Si l\'utilisateur dispose de la permission demandée au niveau local et qu\'il est de niveau communal, retourne son département', () => {
+        it('Si l\'utilisateur dispose de la permission demandée au niveau local, qu\'il s\'agit d\'une permission d\'écriture, et qu\'il est de niveau communal, retourne sa commune', () => {
+            expect(
+                where().can(createUser({
+                    permissions: { shantytown: { update: { allowed: true, geographic_level: 'local' } } },
+                    organization: { location: location.city() },
+                })).do('update', 'shantytown'),
+            ).to.be.eql({ statement: 'cities.code IN (:where_city) OR cities.fk_main IN (:where_city)', replacements: { where_city: ['75056'] } });
+        });
+
+        it('Si l\'utilisateur dispose de la permission demandée au niveau local, qu\'il s\'agit d\'une permission de lecture, et qu\'il est de niveau communal, retourne son département', () => {
             expect(
                 where().can(createUser({
                     permissions: { shantytown: { list: { allowed: true, geographic_level: 'local' } } },
