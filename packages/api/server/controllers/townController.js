@@ -8,7 +8,7 @@ const {
 } = require('#db/models');
 const { fromTsToFormat: tsToString, toFormat: dateToString } = require('#server/utils/date');
 const { createExport } = require('#server/utils/excel');
-const { send: sendMail, PRESERVE_RECIPIENT } = require('#server/services/mailService');
+const { sendUserCommentDeletion } = require('#server/mails/mails');
 const { triggerShantytownCloseAlert, triggerShantytownCreationAlert } = require('#server/utils/slack');
 const { slack: slackConfig } = require('#server/config');
 
@@ -477,7 +477,14 @@ module.exports = (models) => {
             }
 
             try {
-                await sendMail('comment_deletion', author, req.user, [town, comment, message, req.user], PRESERVE_RECIPIENT);
+                await sendUserCommentDeletion(author, {
+                    variables: {
+                        town,
+                        comment,
+                        message,
+                        user: req.user,
+                    },
+                });
             } catch (error) {
                 // ignore
             }

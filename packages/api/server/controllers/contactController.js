@@ -2,16 +2,23 @@ const userService = require('#server/services/userService');
 const accessRequestService = require('#server/services/accessRequest/accessRequestService');
 
 const {
-    send: sendMail,
     PRESERVE_RECIPIENT,
 } = require('#server/services/mailService');
+
+const { sendAdminContactMessage } = require('#server/mails/mails');
 
 const sendEmailNewContactMessageToAdmins = async (data, models, contact) => {
     const admins = await models.user.getNationalAdmins();
 
     for (let i = 0; i < admins.length; i += 1) {
-        // eslint-disable-next-line no-await-in-loop
-        await sendMail('contact_message', admins[i], contact, [data, new Date()], !PRESERVE_RECIPIENT);
+        sendAdminContactMessage(admins[i], {
+            variables: {
+                contact,
+                data,
+                date: new Date(),
+            },
+            preserveRecipient: !PRESERVE_RECIPIENT,
+        });
     }
 };
 

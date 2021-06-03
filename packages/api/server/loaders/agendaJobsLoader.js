@@ -1,5 +1,7 @@
 const accessRequestService = require('#server/services/accessRequest/accessRequestService');
-const mailService = require('#server/services/mailService');
+const {
+    sendUserDemoInvitation,
+} = require('#server/mails/mails');
 
 module.exports = (agenda) => {
     agenda.define(
@@ -38,13 +40,7 @@ module.exports = (agenda) => {
         'demo_invitation',
         (job) => {
             const { user } = job.attrs.data;
-            mailService.send(
-                'demo_invitation',
-                user,
-                null,
-                [],
-                mailService.PRESERVE_RECIPIENT,
-            );
+            sendUserDemoInvitation(user);
         },
     );
 };
