@@ -630,7 +630,7 @@ module.exports = (database) => {
 
         findOne: async (user, id) => {
             const rows = await query(user, 'read', {
-                plan_id: id,
+                id,
             });
 
             if (rows.length === 1) {
