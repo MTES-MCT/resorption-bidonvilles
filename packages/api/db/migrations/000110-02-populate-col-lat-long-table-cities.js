@@ -14,15 +14,9 @@ function fillCitiesWithLatitudelongitude() {
             separator: ';',
         },
     )
-        .then(async (cities) => {
-            for (let i = 0; i < cities.length; i += 100) {
-                /* eslint-disable no-await-in-loop */
-                await Promise.all(
-                    cities.slice(i, i + 100).map(city => sequelize.query(`UPDATE "cities" SET latitude = ${city.latitude},  longitude = ${city.longitude} WHERE code = '${city.code}'`)),
-                );
-            }
-            return cities;
-        });
+        .then(cities => Promise.all(
+            cities.map(city => sequelize.query(`UPDATE "cities" SET latitude = ${city.latitude},  longitude = ${city.longitude} WHERE code = '${city.code}'`)),
+        ));
 }
 
 module.exports = {

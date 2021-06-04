@@ -13,7 +13,6 @@
     "@sentry/node": "^6.2.2",
     "@sentry/tracing": "^6.2.2",
     "@slack/webhook": "^5.0.3",
-    "@turf/point-on-feature": "^6.3.0",
     "agenda": "^3.1.0",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",

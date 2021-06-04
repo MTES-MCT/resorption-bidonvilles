@@ -72,30 +72,6 @@ export default {
             }
         },
 
-        regions: {
-            type: Array,
-            required: false,
-            default() {
-                return [];
-            }
-        },
-
-        departements: {
-            type: Array,
-            required: false,
-            default() {
-                return [];
-            }
-        },
-
-        cities: {
-            type: Array,
-            required: false,
-            default() {
-                return [];
-            }
-        },
-
         /* *****************************
          * Options de la searchbar
          * ************************** */
@@ -352,7 +328,7 @@ export default {
         countNumberOfTowns() {
             this.numberOfShantytownsBy = this.towns.reduce(
                 (acc, obj) => {
-                    if (obj.closedAt !== null) {
+                    if (obj.closedAt != null) {
                         return acc;
                     }
 
@@ -364,25 +340,19 @@ export default {
                         acc.regions[obj.region.code] = 0;
                     }
 
-                    const cityCode = obj.city.main || obj.city.code;
-                    if (acc.cities[cityCode] === undefined) {
-                        acc.cities[cityCode] = {};
-                        acc.cities[cityCode].sites = 0;
-                        acc.cities[cityCode].code = cityCode;
-                    }
-
-                    if (
-                        acc.cities[cityCode].name === undefined &&
-                        !obj.city.main
-                    ) {
-                        acc.cities[cityCode].name = obj.city.name;
-                        acc.cities[cityCode].latitude = obj.city.latitude;
-                        acc.cities[cityCode].longitude = obj.city.longitude;
+                    if (acc.cities[obj.city.code] === undefined) {
+                        acc.cities[obj.city.code] = {};
+                        acc.cities[obj.city.code].sites = 0;
+                        acc.cities[obj.city.code].code = obj.city.code;
+                        acc.cities[obj.city.code].name = obj.city.name;
+                        acc.cities[obj.city.code].latitude = obj.city.latitude;
+                        acc.cities[obj.city.code].longitude =
+                            obj.city.longitude;
                     }
 
                     acc.departements[obj.departement.code] += 1;
                     acc.regions[obj.region.code] += 1;
-                    acc.cities[cityCode].sites += 1;
+                    acc.cities[obj.city.code].sites += 1;
 
                     return acc;
                 },
@@ -514,16 +484,12 @@ export default {
             const zoomLevel = this.map.getZoom();
 
             if (zoomLevel <= REGION_MAX_ZOOM_LEVEL) {
-                console.log(`Niveau de zoom régional: ${zoomLevel}`);
                 this.showRegionalLayer();
             } else if (zoomLevel <= DEPT_MAX_ZOOM_LEVEL) {
-                console.log(`Niveau de zoom départemental: ${zoomLevel}`);
                 this.showDepartementalLayer();
             } else if (zoomLevel <= CITY_MAX_ZOOM_LEVEL) {
-                console.log(`Niveau de zoom communal: ${zoomLevel}`);
                 this.showCityLayer();
             } else {
-                console.log(`Niveau de zoom détaillé: ${zoomLevel}`);
                 this.showTownsLayer();
             }
 
@@ -877,7 +843,8 @@ export default {
         loadCityData() {
             // On crée les marqueurs
             const citiesMarkers = [];
-            for (var key of Object.keys(this.numberOfShantytownsBy.cities)) {
+            // for (var key of Object.keys(this.numberOfShantytownsBy.cities)) {
+            Object.keys(this.numberOfShantytownsBy.cities).forEach(key => {
                 const siteLabel =
                     this.numberOfShantytownsBy.cities[key].sites > 1
                         ? "sites"
@@ -886,8 +853,10 @@ export default {
                     this.circleWithText(
                         this.map,
                         [
-                            this.numberOfShantytownsBy.cities[key].latitude,
-                            this.numberOfShantytownsBy.cities[key].longitude
+                            this.numberOfShantytownsBy.cities[key].latitude ||
+                                "50.3984",
+                            this.numberOfShantytownsBy.cities[key].longitude ||
+                                "2.0211"
                         ],
                         `<div>${this.numberOfShantytownsBy.cities[key].name}<br/>${this.numberOfShantytownsBy.cities[key].sites} ${siteLabel}</div>`,
                         35,
@@ -895,7 +864,7 @@ export default {
                         "city"
                     )
                 );
-            }
+            });
             this.cityLayer = L.layerGroup(citiesMarkers);
         },
 
