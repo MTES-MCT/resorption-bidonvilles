@@ -66,13 +66,13 @@ module.exports = {
 
                         // pour tout utilisateur en-dessous du niveau régional :
                         // une permission "local" se traduit :
-                        // - pour de la lecture en permission "départementale"
                         // - pour de l'écriture en permission "locale"
+                        // - pour de la lecture en permission "départementale"
                         default:
-                            if (['listPrivate', 'list', 'export', 'read', 'access'].includes(feature)) {
-                                permissionLevel = 'departement';
-                            } else {
+                            if (permission.write) {
                                 permissionLevel = user.organization.location.type;
+                            } else {
+                                permissionLevel = 'departement';
                             }
                     }
                 } else {
@@ -118,13 +118,13 @@ module.exports = {
 
                         // pour tout utilisateur en-dessous du niveau régional
                         // une permission "local" se traduit en :
-                        // - permission "départementale" pour une permission de lecture
                         // - permission "locale" pour une permission d'écriture
+                        // - permission "départementale" pour une permission de lecture
                         default:
-                            if (['listPrivate', 'list', 'export', 'read', 'access'].includes(feature)) {
-                                permissionLevel = 'departement';
-                            } else {
+                            if (permission.write) {
                                 permissionLevel = user.organization.location.type;
+                            } else {
+                                permissionLevel = 'departement';
                             }
                     }
                 }

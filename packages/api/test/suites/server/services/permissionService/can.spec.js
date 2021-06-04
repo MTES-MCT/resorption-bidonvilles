@@ -33,7 +33,7 @@ describe.only('PermissionService', () => {
         it('Si la permission est allowed=false pour l\'utilisateur, retourne false', () => {
             expect(
                 can(createUser({
-                    permissions: { shantytown: { list: { allowed: false } } },
+                    permissions: { shantytown: { list: { allowed: false, write: false } } },
                 })).do('list', 'shantytown').on(location.city()),
             ).to.be.false;
         });
@@ -207,8 +207,8 @@ describe.only('PermissionService', () => {
                     can(createUser({
                         permissions: {
                             shantytown: {
-                                list: { geographic_level: 'local' },
-                                update: { geographic_level: 'local' },
+                                list: { geographic_level: 'local', write: false },
+                                update: { geographic_level: 'local', write: true },
                             },
                         },
                         organization: {
@@ -222,7 +222,7 @@ describe.only('PermissionService', () => {
         it('Si la permission est de niveau `own` mais que le dispositif est null, lance une exception', () => {
             expect(
                 () => can(createUser({
-                    permissions: { plan: { list: { geographic_level: 'own' } } },
+                    permissions: { plan: { list: { geographic_level: 'own', write: false } } },
                 })).do('list', 'plan').on(location.nation(), null),
             ).to.throw('Le dispositif est obligatoire pour une permission de type `own`');
         });
@@ -230,7 +230,7 @@ describe.only('PermissionService', () => {
         it('Si la permission est de niveau `own` pour la feature `update` et que le dispositif n\'a pas de pilote, retourne false', () => {
             expect(
                 can(createUser({
-                    permissions: { plan: { update: { geographic_level: 'own' } } },
+                    permissions: { plan: { update: { geographic_level: 'own', write: true } } },
                 })).do('update', 'plan').on(location.nation(), {}),
             ).to.be.false;
         });
@@ -238,7 +238,7 @@ describe.only('PermissionService', () => {
         it('Si la permission est de niveau `own` pour la feature `update` et que l\'utilisateur est le pilote du dispositif, retourne true', () => {
             expect(
                 can(createUser({
-                    permissions: { plan: { update: { geographic_level: 'own' } } },
+                    permissions: { plan: { update: { geographic_level: 'own', write: true } } },
                 })).do('update', 'plan').on(location.nation(), createPlan()),
             ).to.be.true;
         });
@@ -247,7 +247,7 @@ describe.only('PermissionService', () => {
             expect(
                 can(createUser({
                     id: 3,
-                    permissions: { plan: { update: { geographic_level: 'own' } } },
+                    permissions: { plan: { update: { geographic_level: 'own', write: true } } },
                 })).do('update', 'plan').on(location.nation(), createPlan()),
             ).to.be.false;
         });
@@ -255,7 +255,7 @@ describe.only('PermissionService', () => {
         it('Si la permission est de niveau `own` pour la feature `updateMarks` et que le dispositif n\'a pas d\'opérateur, retourne false', () => {
             expect(
                 can(createUser({
-                    permissions: { plan: { updateMarks: { geographic_level: 'own' } } },
+                    permissions: { plan: { updateMarks: { geographic_level: 'own', write: true } } },
                 })).do('updateMarks', 'plan').on(location.nation(), {}),
             ).to.be.false;
         });
@@ -263,7 +263,7 @@ describe.only('PermissionService', () => {
         it('Si la permission est de niveau `own` pour la feature `updateMarks` et que l\'utilisateur est un opérateur du dispositif, retourne true', () => {
             expect(
                 can(createUser({
-                    permissions: { plan: { updateMarks: { geographic_level: 'own' } } },
+                    permissions: { plan: { updateMarks: { geographic_level: 'own', write: true } } },
                 })).do('updateMarks', 'plan').on(location.nation(), createPlan()),
             ).to.be.true;
         });
@@ -274,7 +274,7 @@ describe.only('PermissionService', () => {
                     organization: {
                         id: 3,
                     },
-                    permissions: { plan: { updateMarks: { geographic_level: 'own' } } },
+                    permissions: { plan: { updateMarks: { geographic_level: 'own', write: true } } },
                 })).do('updateMarks', 'plan').on(location.nation(), createPlan()),
             ).to.be.false;
         });
@@ -285,7 +285,7 @@ describe.only('PermissionService', () => {
                 organization: {
                     id: 666,
                 },
-                permissions: { plan: { list: { geographic_level: 'own' } } },
+                permissions: { plan: { list: { geographic_level: 'own', write: false } } },
             });
 
             expect(
@@ -301,7 +301,7 @@ describe.only('PermissionService', () => {
                 organization: {
                     id: 666,
                 },
-                permissions: { plan: { list: { geographic_level: 'own' } } },
+                permissions: { plan: { list: { geographic_level: 'own', write: false } } },
             });
 
             expect(
@@ -317,7 +317,7 @@ describe.only('PermissionService', () => {
                 organization: {
                     id: 666,
                 },
-                permissions: { plan: { list: { geographic_level: 'own' } } },
+                permissions: { plan: { list: { geographic_level: 'own', write: false } } },
             });
 
             expect(

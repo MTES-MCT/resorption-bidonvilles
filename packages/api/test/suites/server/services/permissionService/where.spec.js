@@ -32,7 +32,7 @@ describe.only('PermissionService', () => {
         it('Si l\'utilisateur est défini mais la permission demandée est set à allowed=false, lance une exception', () => {
             expect(
                 () => where().can(createUser({
-                    permissions: { shantytown: { list: { allowed: false } } },
+                    permissions: { shantytown: { list: { allowed: false, write: false } } },
                 })).do('list', 'shantytown'),
             ).to.throw('L\'utilisateur ne dispose pas de la permission shantytown.list');
         });
@@ -46,7 +46,7 @@ describe.only('PermissionService', () => {
         it('Si l\'utilisateur dispose de la permission demandée au niveau régional et qu\'il est de niveau communal, retourne sa région', () => {
             expect(
                 where().can(createUser({
-                    permissions: { shantytown: { list: { allowed: true, geographic_level: 'region' } } },
+                    permissions: { shantytown: { list: { allowed: true, geographic_level: 'region', write: false } } },
                     organization: { location: location.city() },
                 })).do('list', 'shantytown'),
             ).to.be.eql({ statement: 'regions.code IN (:where_region)', replacements: { where_region: ['11'] } });
@@ -55,7 +55,7 @@ describe.only('PermissionService', () => {
         it('Si l\'utilisateur dispose de la permission demandée au niveau régional et qu\'il est de niveau national, lance une exception', () => {
             expect(
                 () => where().can(createUser({
-                    permissions: { shantytown: { list: { allowed: true, geographic_level: 'region' } } },
+                    permissions: { shantytown: { list: { allowed: true, geographic_level: 'region', write: false } } },
                 })).do('list', 'shantytown'),
             ).to.throw('Impossible d\'accorder une permission régionale à un utilisateur national');
         });
@@ -63,7 +63,7 @@ describe.only('PermissionService', () => {
         it('Si l\'utilisateur dispose de la permission demandée au niveau départemental et qu\'il est de niveau communal, retourne son département', () => {
             expect(
                 where().can(createUser({
-                    permissions: { shantytown: { list: { allowed: true, geographic_level: 'departement' } } },
+                    permissions: { shantytown: { list: { allowed: true, geographic_level: 'departement', write: false } } },
                     organization: { location: location.city() },
                 })).do('list', 'shantytown'),
             ).to.be.eql({ statement: 'departements.code IN (:where_departement)', replacements: { where_departement: ['92'] } });
@@ -72,7 +72,7 @@ describe.only('PermissionService', () => {
         it('Si l\'utilisateur dispose de la permission demandée au niveau départemental et qu\'il est de niveau régional, lance une exception', () => {
             expect(
                 () => where().can(createUser({
-                    permissions: { shantytown: { list: { allowed: true, geographic_level: 'departement' } } },
+                    permissions: { shantytown: { list: { allowed: true, geographic_level: 'departement', write: false } } },
                     organization: { location: location.region() },
                 })).do('list', 'shantytown'),
             ).to.throw('Impossible d\'accorder une permission départementale à un utilisateur non rattaché à un département');
@@ -81,7 +81,7 @@ describe.only('PermissionService', () => {
         it('Si l\'utilisateur dispose de la permission demandée au niveau intercommunal et qu\'il est de niveau intercommunal, retourne son epci', () => {
             expect(
                 where().can(createUser({
-                    permissions: { shantytown: { list: { allowed: true, geographic_level: 'epci' } } },
+                    permissions: { shantytown: { list: { allowed: true, geographic_level: 'epci', write: false } } },
                     organization: { location: location.city() },
                 })).do('list', 'shantytown'),
             ).to.be.eql({ statement: 'epci.code IN (:where_epci)', replacements: { where_epci: ['200054781'] } });
@@ -90,7 +90,7 @@ describe.only('PermissionService', () => {
         it('Si l\'utilisateur dispose de la permission demandée au niveau intercommunal et qu\'il est de niveau départemental, lance une exception', () => {
             expect(
                 () => where().can(createUser({
-                    permissions: { shantytown: { list: { allowed: true, geographic_level: 'epci' } } },
+                    permissions: { shantytown: { list: { allowed: true, geographic_level: 'epci', write: false } } },
                     organization: { location: location.departement() },
                 })).do('list', 'shantytown'),
             ).to.throw('Impossible d\'accorder une permission intercommunale à un utilisateur non rattaché à une epci');
@@ -99,7 +99,7 @@ describe.only('PermissionService', () => {
         it('Si l\'utilisateur dispose de la permission demandée au niveau communal et qu\'il est de niveau communal, retourne sa commune', () => {
             expect(
                 where().can(createUser({
-                    permissions: { shantytown: { list: { allowed: true, geographic_level: 'city' } } },
+                    permissions: { shantytown: { list: { allowed: true, geographic_level: 'city', write: false } } },
                     organization: { location: location.city() },
                 })).do('list', 'shantytown'),
             ).to.be.eql({ statement: 'cities.code IN (:where_city) OR cities.fk_main IN (:where_city)', replacements: { where_city: ['75056'] } });
@@ -108,7 +108,7 @@ describe.only('PermissionService', () => {
         it('Si l\'utilisateur dispose de la permission demandée au niveau communal et qu\'il est de niveau intercommunal, lance une exception', () => {
             expect(
                 () => where().can(createUser({
-                    permissions: { shantytown: { list: { allowed: true, geographic_level: 'city' } } },
+                    permissions: { shantytown: { list: { allowed: true, geographic_level: 'city', write: false } } },
                     organization: { location: location.epci() },
                 })).do('list', 'shantytown'),
             ).to.throw('Impossible d\'accorder une permission communale à un utilisateur non rattaché à une commune');
@@ -117,7 +117,7 @@ describe.only('PermissionService', () => {
         it('Si l\'utilisateur dispose de la permission demandée au niveau local et qu\'il est de niveau national, retourne null', () => {
             expect(
                 where().can(createUser({
-                    permissions: { shantytown: { list: { allowed: true, geographic_level: 'local' } } },
+                    permissions: { shantytown: { list: { allowed: true, geographic_level: 'local', write: false } } },
                 })).do('list', 'shantytown'),
             ).to.be.eql(null);
         });
@@ -125,7 +125,7 @@ describe.only('PermissionService', () => {
         it('Si l\'utilisateur dispose de la permission demandée au niveau local et qu\'il est de niveau régional, retourne sa région', () => {
             expect(
                 where().can(createUser({
-                    permissions: { shantytown: { list: { allowed: true, geographic_level: 'local' } } },
+                    permissions: { shantytown: { list: { allowed: true, geographic_level: 'local', write: false } } },
                     organization: { location: location.region() },
                 })).do('list', 'shantytown'),
             ).to.be.eql({ statement: 'regions.code IN (:where_region)', replacements: { where_region: ['11'] } });
@@ -134,7 +134,7 @@ describe.only('PermissionService', () => {
         it('Si l\'utilisateur dispose de la permission demandée au niveau local, qu\'il s\'agit d\'une permission d\'écriture, et qu\'il est de niveau communal, retourne sa commune', () => {
             expect(
                 where().can(createUser({
-                    permissions: { shantytown: { update: { allowed: true, geographic_level: 'local' } } },
+                    permissions: { shantytown: { update: { allowed: true, geographic_level: 'local', write: true } } },
                     organization: { location: location.city() },
                 })).do('update', 'shantytown'),
             ).to.be.eql({ statement: 'cities.code IN (:where_city) OR cities.fk_main IN (:where_city)', replacements: { where_city: ['75056'] } });
@@ -143,7 +143,7 @@ describe.only('PermissionService', () => {
         it('Si l\'utilisateur dispose de la permission demandée au niveau local, qu\'il s\'agit d\'une permission de lecture, et qu\'il est de niveau communal, retourne son département', () => {
             expect(
                 where().can(createUser({
-                    permissions: { shantytown: { list: { allowed: true, geographic_level: 'local' } } },
+                    permissions: { shantytown: { list: { allowed: true, geographic_level: 'local', write: false } } },
                     organization: { location: location.city() },
                 })).do('list', 'shantytown'),
             ).to.be.eql({ statement: 'departements.code IN (:where_departement)', replacements: { where_departement: ['92'] } });
@@ -152,7 +152,7 @@ describe.only('PermissionService', () => {
         it('Si l\'utilisateur dispose de la permission demandée au niveau own, et que l\'entité n\'est pas plan, lance une exception', () => {
             expect(
                 () => where().can(createUser({
-                    permissions: { shantytown: { update: { allowed: true, geographic_level: 'own' } } },
+                    permissions: { shantytown: { update: { allowed: true, geographic_level: 'own', write: true } } },
                 })).do('update', 'shantytown'),
             ).to.throw('Impossible d\'accorder une permission de niveau `own` à l\'entité `shantytown`');
         });
@@ -160,7 +160,7 @@ describe.only('PermissionService', () => {
         it('Si l\'utilisateur dispose de la permission demandée au niveau own, retourne un filtre sur les managers et operators', () => {
             expect(
                 where().can(createUser({
-                    permissions: { plan: { list: { allowed: true, geographic_level: 'own' } } },
+                    permissions: { plan: { list: { allowed: true, geographic_level: 'own', write: false } } },
                 })).do('list', 'plan'),
             ).to.be.eql({ statement: '(plan_managers && ARRAY[:where_managers]) OR (plan_operators && ARRAY[:where_managers])', replacements: { where_managers: [2] } });
         });
@@ -168,7 +168,7 @@ describe.only('PermissionService', () => {
         it('Si l\'utilisateur dispose de la permission demandée au niveau epci pour l\'entité plan, lance une exception', () => {
             expect(
                 () => where().can(createUser({
-                    permissions: { plan: { list: { allowed: true, geographic_level: 'epci' } } },
+                    permissions: { plan: { list: { allowed: true, geographic_level: 'epci', write: false } } },
                     organization: { location: location.city() },
                 })).do('list', 'plan'),
             ).to.throw('Impossible d\'accorder une permission de niveau `epci` à l\'entité `plan`');
@@ -177,7 +177,7 @@ describe.only('PermissionService', () => {
         it('Si l\'utilisateur dispose de la permission demandée au niveau city pour l\'entité plan, lance une exception', () => {
             expect(
                 () => where().can(createUser({
-                    permissions: { plan: { list: { allowed: true, geographic_level: 'city' } } },
+                    permissions: { plan: { list: { allowed: true, geographic_level: 'city', write: false } } },
                     organization: { location: location.city() },
                 })).do('list', 'plan'),
             ).to.throw('Impossible d\'accorder une permission de niveau `city` à l\'entité `plan`');
@@ -186,7 +186,7 @@ describe.only('PermissionService', () => {
         it('Si l\'utilisateur dispose de la permission demandée à un niveau inconnu, lance une exception', () => {
             expect(
                 () => where().can(createUser({
-                    permissions: { shantytown: { list: { allowed: true, geographic_level: 'whatever' } } },
+                    permissions: { shantytown: { list: { allowed: true, geographic_level: 'whatever', write: false } } },
                 })).do('list', 'shantytown'),
             ).to.throw('Niveau de permission inconnu');
         });
