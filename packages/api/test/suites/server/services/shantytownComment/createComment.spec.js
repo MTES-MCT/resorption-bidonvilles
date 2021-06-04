@@ -106,9 +106,12 @@ describe.only('services/shantytownComment', () => {
 
             it('envoie une notification mail', () => {
                 expect(dependencies.sendMail.callCount).to.be.eql(3);
-                expect(dependencies.sendMail).to.have.been.calledWithExactly('new_comment', output.watchers[0], undefined, [input.shantytown, output.comment], false);
-                expect(dependencies.sendMail).to.have.been.calledWithExactly('new_comment', output.watchers[1], undefined, [input.shantytown, output.comment], false);
-                expect(dependencies.sendMail).to.have.been.calledWithExactly('new_comment', output.watchers[2], undefined, [input.shantytown, output.comment], false);
+                expect(dependencies.sendMail).to.have.been.calledWithExactly('new_comment',
+                    { recipient: output.watchers[0], variables: { shantytown: input.shantytown, comment: output.comment } });
+                expect(dependencies.sendMail).to.have.been.calledWithExactly('new_comment',
+                    { recipient: output.watchers[1], variables: { shantytown: input.shantytown, comment: output.comment } });
+                expect(dependencies.sendMail).to.have.been.calledWithExactly('new_comment',
+                    { recipient: output.watchers[2], variables: { shantytown: input.shantytown, comment: output.comment } });
             });
 
             it('collecte et retourne la liste des commentaires actualisés', async () => {
