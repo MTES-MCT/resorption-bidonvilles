@@ -1,3 +1,4 @@
+const { toString: dateToString } = require('#server/utils/date');
 const {
     sendAdminNewRequestNotification,
     sendAdminRequestPendingReminder1,
@@ -29,16 +30,22 @@ module.exports = {
         secondRequestPendingNotification(admins) {
             return Promise.all(
                 admins.map(admin => sendAdminRequestPendingReminder2(admin)),
-
             );
         },
 
         accessExpired(admin, user, submitDate) {
-            return sendAdminAccessExpired(admin, { variables: { adminName: `${user.first_name} ${user.last_name}`, submitDate } });
+            return sendAdminAccessExpired(admin, {
+                variables: {
+                    userName: `${user.first_name} ${user.last_name}`,
+                    activationUrlSentDate: dateToString(submitDate),
+                },
+            });
         },
 
         accessActivated(admin, user) {
-            return sendAdminAccessActivated(admin, { variables: { adminName: `${user.first_name} ${user.last_name}` } });
+            return sendAdminAccessActivated(admin, {
+                variables: { userName: `${user.first_name} ${user.last_name}` },
+            });
         },
     },
 
@@ -48,26 +55,36 @@ module.exports = {
         },
 
         accessDenied(user, admin) {
-            // TODO: Fix date
-            return sendUserAccessDenied(user, { variables: { adminName: `${admin.first_name} ${admin.last_name}` } });
-        },
-
-        accessGranted(user, admin, activationLink, expiracyDate) {
-            return sendUserAccessGranted(user, { variables: { adminName: `${admin.first_name} ${admin.last_name}`, activationUrl: activationLink, expiracyDate } });
-        },
-
-        accessPending(user, admin, activationLink, expiracyDate) {
-            return sendUserAccessPending(user, {
+            // TODO: Fix date : it should be when activationCreated
+            const requestDate = new Date();
+            return sendUserAccessDenied(user, {
                 variables: {
-                    activationUrl: activationLink,
-                    expiracyDate,
-                    admin,
+                    adminName: `${admin.first_name} ${admin.last_name}`,
+                    requestDate,
                 },
             });
         },
 
-        accessExpired(user, admin, expiracyDate) {
-            return sendUserAccessExpired(user, { variables: { admin, expiracyDate } });
+        accessGranted(user, admin, activationLink, expiracyDate) {
+            return sendUserAccessGranted(user, {
+                variables: {
+                    adminName: `${admin.first_name} ${admin.last_name}`,
+                    activationUrl: activationLink,
+                    activationUrlExpDate: expiracyDate,
+                },
+            });
+        },
+
+        accessPending(user, admin, activationLink) {
+            return sendUserAccessPending(user, {
+                variables: {
+                    activationUrl: activationLink,
+                },
+            });
+        },
+
+        accessExpired(user) {
+            return sendUserAccessExpired(user);
         },
         accessActivated(user) {
             return sendUserAccessActivatedWelcome(user);

@@ -1,0 +1,17 @@
+Cher administrateur,
+Vous avez reçu un nouveau message de contact
+Merci
+
+Date du message : {{var:message.created_at}}
+{{var:message.last_name}} {{var:message.first_name}}
+{{var:message.access_request_message}}
+
+Cordialement,
+L'équipe Résorption-bidonvilles,
+
+
+
+Résorption-bidonvilles
+Agir pour résorber les bidonvilles
+contact@resorption-bidonvilles.beta.gouv.fr
+[contact@resorption-bidonvilles.beta.gouv.fr]

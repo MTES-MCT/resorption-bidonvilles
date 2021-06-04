@@ -14,7 +14,7 @@
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
-                    Vous avez effectué une demande d’accès à la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a> le {{var:activationUrlSentDate}}. L’administrateur·rice local de votre territoire {{adminName}} n’a pas donné suite à votre demande.
+                    Vous avez effectué une demande d’accès à la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a> le {{var:requestDate}}. L’administrateur·rice local de votre territoire {{var:adminName}} n’a pas donné suite à votre demande.
                 </mj-text>
                 <mj-text>
                     Vous pouvez contacter cette personne par retour de ce mail pour de plus amples informations.
