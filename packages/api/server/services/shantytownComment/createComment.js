@@ -51,7 +51,7 @@ module.exports = async (comment, shantytown, author) => {
         if (watchers.length > 0) {
             const serializedComment = await shantytownCommentModel.findOne(commentId);
             await Promise.all(
-                watchers.map(user => sendUserNewComment(user, shantytown, serializedComment)),
+                watchers.map(user => sendUserNewComment(user, { variables: { shantytown, comment: serializedComment } })),
             );
         }
     } catch (error) {

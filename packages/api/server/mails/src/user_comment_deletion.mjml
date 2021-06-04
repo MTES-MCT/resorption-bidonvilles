@@ -22,7 +22,7 @@
                 <mj-text>
                     "{{var:comment.description}}".
                 </mj-text>
-                <mj-text mj-class="pb-4">Écrit le {{var:messageDate}}, concernant le site : {{var:town.usename}}, {{var:town.city.name}}</mj-text>
+                <mj-text mj-class="pb-4">Écrit le {{var:comment.created_at}}, concernant le site : {{var:town.usename}}, {{var:town.city.name}}</mj-text>
                 <mj-text>
                     Pour rappel, conformément à la réglementation relative aux données à caractère personnel, un commentaire doit :
                 </mj-text>

@@ -1,0 +1,24 @@
+Bonjour,
+Un nouveau message a été publié par {{var:comment.createdBy.firstName}}
+{{var:comment.createdBy.lastName}} ({{var:comment.createdBy.organization}}) sur
+le site situé {{var:shantytown.addressSimple}}
+({{var:shantytown.departement.name}}).
+
+Voir le message [{{var:messageUrl}}]
+
+Contacter {{var:comment.createdBy.firstName}} {{var:comment.createdBy.lastName}}
+[{{var:annuaireUrl}}]
+
+En tant qu’intervenant·e sur ce site, vous êtes informé·e en temps réel de tout
+nouveau message.
+
+
+Cordialement,
+L'équipe Résorption-bidonvilles,
+
+
+
+Résorption-bidonvilles
+Agir pour résorber les bidonvilles
+contact@resorption-bidonvilles.beta.gouv.fr
+[contact@resorption-bidonvilles.beta.gouv.fr]

@@ -22,6 +22,8 @@ module.exports = {
             recipient, sender = null, preserveRecipient = true, variables,
         } = options;
 
+        console.log(variables);
+
         let finalRecipient = recipient;
         if (testEmail && !preserveRecipient) {
             finalRecipient = {

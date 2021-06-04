@@ -7,7 +7,12 @@ const {
 
 module.exports = () => async (req, res, next) => {
     try {
-        sendUserShantytownActorInvitation({ email: req.body.email }, { variables: { inviterName: `${req.user.first_name} ${req.user.last_name}` } });
+        await sendUserShantytownActorInvitation({ email: req.body.email }, {
+            variables: {
+                inviterName: `${req.user.first_name} ${req.user.last_name}`,
+                shantytown: req.shantytown,
+            },
+        });
     } catch (error) {
         res.status(500).send({
             user_message: 'Une erreur est survenue lors de l\'envoi du courriel',

@@ -22,7 +22,7 @@
                 <mj-text>
                     Le lien expirera dans 48h.
                 </mj-text>
-                <mj-button mj-class="button-primary" href="{{var: activationUrl}}">
+                <mj-button mj-class="button-primary" href="{{var:activationUrl}}">
                     Activer mon compte
                 </mj-button>
                 <mj-include path="common/contact_interlocutor.mjml"/>

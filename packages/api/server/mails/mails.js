@@ -1,8 +1,5 @@
-const {
-    send: sendMail,
-} = require('#server/services/mailService');
+const { send: sendMail } = require('#server/services/mailService');
 const { frontUrl } = require('#server/config');
-
 
 const generateTrackingUTM = require('./generateTrackingUTM');
 
@@ -11,7 +8,8 @@ const connexionUrl = `${frontUrl}/connexion`;
 const contactUrl = `${frontUrl}/contact`;
 // Redirect from logged to admin doesnt preserve utm
 const adminUrl = `${frontUrl}/connexion`;
-const guideAdminUrl = `${frontUrl}/connexion`;
+const adminGuideUrl = `${frontUrl}/connexion`;
+const userGuideUrl = `${frontUrl}/connexion`;
 const invitationUrl = '';
 const idealcoUrl = 'https://www.idealco.fr/campagne/?utm_campaign=g-386-3036d540';
 
@@ -21,7 +19,6 @@ const USER_CAMPAIGN = 'utilisateur-email';
 const INVITE_CAMPAIGN = 'invite-email';
 
 const backUrl = 'https://api.preprod.resorption-bidonvilles.beta.gouv.fr';
-
 
 module.exports = {
     /**
@@ -53,7 +50,10 @@ module.exports = {
     sendAdminRequestPendingReminder1: (recipient, options = {}) => {
         const { preserveRecipient } = options;
 
-        const utm = generateTrackingUTM(ADMIN_CAMPAIGN, 'nouvelle-demande-acces-3j');
+        const utm = generateTrackingUTM(
+            ADMIN_CAMPAIGN,
+            'nouvelle-demande-acces-3j',
+        );
 
         return sendMail('admin_request_pending_reminder_1', {
             recipient,
@@ -74,8 +74,10 @@ module.exports = {
     sendAdminRequestPendingReminder2: (recipient, options = {}) => {
         const { preserveRecipient } = options;
 
-
-        const utm = generateTrackingUTM(ADMIN_CAMPAIGN, 'nouvelle-demande-acces-10j');
+        const utm = generateTrackingUTM(
+            ADMIN_CAMPAIGN,
+            'nouvelle-demande-acces-10j',
+        );
 
         return sendMail('admin_request_pending_reminder_2', {
             recipient,
@@ -95,7 +97,6 @@ module.exports = {
    */
     sendAdminAccessActivated: (recipient, options = {}) => {
         const { preserveRecipient, variables } = options;
-
 
         const utm = generateTrackingUTM(ADMIN_CAMPAIGN, 'acces-active');
 
@@ -119,7 +120,6 @@ module.exports = {
     sendAdminAccessExpired: (recipient, options = {}) => {
         const { variables, preserveRecipient } = options;
 
-
         const utm = generateTrackingUTM(ADMIN_CAMPAIGN, 'acces-expire');
 
         return sendMail('admin_access_expired', {
@@ -127,9 +127,10 @@ module.exports = {
             variables: {
                 recipientName: `${recipient.first_name} ${recipient.last_name}`,
                 userName: variables.userName,
-                activationUrlSentDate: variables.activationUrlSentDate.toDateString(),
+                activationUrlSentDate: variables.activationUrlSentDate,
                 frontUrl: `${frontUrl}?${utm}`,
                 adminUrl: `${adminUrl}?${utm}`,
+                connexionUrl,
                 backUrl,
             },
             preserveRecipient,
@@ -142,7 +143,10 @@ module.exports = {
     sendUserAccessRequestConfirmation: (recipient, options = {}) => {
         const { preserveRecipient } = options;
 
-        const utm = generateTrackingUTM(REQUESTER_CAMPAIGN, 'confirmation-demande-acces');
+        const utm = generateTrackingUTM(
+            REQUESTER_CAMPAIGN,
+            'confirmation-demande-acces',
+        );
 
         return sendMail('user_access_request_confirmation', {
             recipient,
@@ -161,7 +165,6 @@ module.exports = {
     sendUserAccessGranted: (recipient, options = {}) => {
         const { variables, preserveRecipient } = options;
 
-
         const utm = generateTrackingUTM(REQUESTER_CAMPAIGN, 'activer-mon-compte');
 
         return sendMail('user_access_granted', {
@@ -173,6 +176,7 @@ module.exports = {
                 backUrl,
                 formationUrl,
                 activationUrl: variables.activationUrl,
+                activationUrlExpDate: variables.activationUrlExpDate,
             },
             preserveRecipient,
         });
@@ -194,7 +198,7 @@ module.exports = {
                 adminName: variables.adminName,
                 frontUrl: `${frontUrl}?${utm}`,
                 backUrl,
-                activationUrlSentDate: variables.activationUrlSentDate.toDateString(),
+                requestDate: variables.requestDate,
             },
             preserveRecipient,
         });
@@ -207,13 +211,17 @@ module.exports = {
     sendUserAccessPending: (recipient, options = {}) => {
         const { variables, preserveRecipient } = options;
 
-        const utm = generateTrackingUTM(REQUESTER_CAMPAIGN, 'activer-mon-compte-48h');
+        const utm = generateTrackingUTM(
+            REQUESTER_CAMPAIGN,
+            'activer-mon-compte-48h',
+        );
 
         return sendMail('user_access_pending', {
             recipient,
             variables: {
                 recipientName: `${recipient.first_name} ${recipient.last_name}`,
                 activationUrl: variables.activationUrl,
+                formationUrl,
                 frontUrl: `${frontUrl}?${utm}`,
                 backUrl,
             },
@@ -228,7 +236,10 @@ module.exports = {
     sendUserAccessExpired: (recipient, options = {}) => {
         const { preserveRecipient } = options;
 
-        const utm = generateTrackingUTM(REQUESTER_CAMPAIGN, 'nouvelle-demande-acces');
+        const utm = generateTrackingUTM(
+            REQUESTER_CAMPAIGN,
+            'acces-expire',
+        );
 
         return sendMail('user_access_expired', {
             recipient,
@@ -255,6 +266,7 @@ module.exports = {
             recipient,
             variables: {
                 recipientName: `${recipient.first_name} ${recipient.last_name}`,
+                userGuideUrl,
                 frontUrl: `${frontUrl}?${utm}`,
                 backUrl,
                 formationUrl,
@@ -286,7 +298,6 @@ module.exports = {
             preserveRecipient,
         });
     },
-
 
     /**
    * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
@@ -323,6 +334,8 @@ module.exports = {
             variables: {
                 recipientName: `${recipient.first_name} ${recipient.last_name}`,
                 inviterName: variables.inviterName,
+                siteUrl: `${frontUrl}/site/${variables.shantytown.id}?${utm}`,
+                siteAddress: variables.shantytown.address,
                 connexionUrl,
                 contactUrl,
                 backUrl,
@@ -332,11 +345,10 @@ module.exports = {
         });
     },
 
-
     /**
-     * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
-     * @param {Object} options
-     */
+   * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
+   * @param {Object} options
+   */
     sendUserShantytownActorNotification: (recipient, options = {}) => {
         const { variables, preserveRecipient } = options;
 
@@ -347,6 +359,8 @@ module.exports = {
             variables: {
                 recipientName: `${recipient.first_name} ${recipient.last_name}`,
                 inviterName: variables.inviterName,
+                siteUrl: `${frontUrl}/site/${variables.shantytown.id}?${utm}`,
+                siteAddress: variables.shantytown.address,
                 connexionUrl,
                 contactUrl,
                 backUrl,
@@ -370,7 +384,7 @@ module.exports = {
             variables: {
                 recipientName: `${recipient.first_name} ${recipient.last_name}`,
                 connexionUrl,
-                guideAdminUrl,
+                adminGuideUrl,
                 backUrl,
                 frontUrl: `${frontUrl}?${utm}`,
             },
@@ -381,7 +395,7 @@ module.exports = {
     /**
    * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
    * @param {Object} options
-     */
+   */
     sendUserIdealcoInvitation: (recipient, options = {}) => {
         const { preserveRecipient } = options;
 
@@ -402,7 +416,7 @@ module.exports = {
     /**
    * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
    * @param {Object} options
-     */
+   */
     sendUserFeatures: (recipient, options = {}) => {
         const { preserveRecipient } = options;
 
@@ -423,7 +437,7 @@ module.exports = {
     /**
    * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
    * @param {Object} options
-     */
+   */
     sendUserShare: (recipient, options = {}) => {
         const { preserveRecipient } = options;
 
@@ -433,7 +447,6 @@ module.exports = {
             recipient,
             variables: {
                 recipientName: `${recipient.first_name} ${recipient.last_name}`,
-                connexionUrl,
                 invitationUrl,
                 backUrl,
                 frontUrl: `${frontUrl}?${utm}`,
@@ -443,15 +456,15 @@ module.exports = {
     },
 
     /**
-     * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
-     * @param {Object} options
-     */
+   * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
+   * @param {Object} options
+   */
     sendUserNewComment: (recipient, options = {}) => {
         const { variables, preserveRecipient } = options;
 
         const utm = generateTrackingUTM(USER_CAMPAIGN, 'nouveau-commentaire');
 
-        return sendMail('user_new_password', {
+        return sendMail('user_new_comment', {
             recipient,
             variables: {
                 recipientName: `${recipient.first_name} ${recipient.last_name}`,
@@ -459,15 +472,17 @@ module.exports = {
                 frontUrl: `${frontUrl}?${utm}`,
                 shantytown: variables.shantytown,
                 comment: variables.comment,
+                annuaireUrl: 'todo',
+                messageUrl: 'todo',
             },
             preserveRecipient,
         });
     },
 
     /**
-     * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
-     * @param {Object} options
-     */
+   * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
+   * @param {Object} options
+   */
     sendUserNewPassword: (recipient, options = {}) => {
         const { variables, preserveRecipient } = options;
 
@@ -486,39 +501,38 @@ module.exports = {
     },
 
     /**
-     * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
-     * @param {Object} options
-     */
+   * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
+   * @param {Object} options
+   */
     sendAdminContactMessage: (recipient, options = {}) => {
         const { variables, preserveRecipient } = options;
         const utm = generateTrackingUTM(USER_CAMPAIGN, 'nouveau-mot-de-passe');
 
-        return sendMail('user_new_password', {
+        return sendMail('admin_contact_message', {
             recipient,
             variables: {
                 backUrl,
                 frontUrl: `${frontUrl}?${utm}`,
-                recipientName: `${recipient.first_name} ${recipient.last_name}`,
-                contact: variables.contact,
-                data: variables.date,
-                date: variables.data,
+                message: variables.message,
             },
             preserveRecipient,
         });
     },
 
     /**
-     * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
-     * @param {Object} options
-     */
+   * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
+   * @param {Object} options
+   */
     sendUserCommentDeletion: (recipient, options = {}) => {
         const { variables, preserveRecipient } = options;
         const utm = generateTrackingUTM(USER_CAMPAIGN, 'suppression-commentaire');
 
-        return sendMail('user_new_password', {
+        return sendMail('user_comment_deletion', {
             recipient,
             variables: {
-                ...variables,
+                town: variables.town,
+                comment: variables.comment,
+                message: variables.message,
                 backUrl,
                 frontUrl: `${frontUrl}?${utm}`,
                 recipientName: `${recipient.first_name} ${recipient.last_name}`,
@@ -526,6 +540,4 @@ module.exports = {
             preserveRecipient,
         });
     },
-
-
 };
