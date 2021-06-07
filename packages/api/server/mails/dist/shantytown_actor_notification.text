@@ -7,8 +7,6 @@ intervention sur le site {{var:siteAddress}} [{{var:siteUrl}}].
 Dès maintenant rejoignez {{var:inviterName}} sur la plateforme et signalez votre
 intervention :
 
-Demander mon accès [{{var:contactUrl}}]
-
 Me connecter [{{var:connexionUrl}}]
 
 La plateforme Résorption-bidonvilles en 3 questions
