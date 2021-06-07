@@ -159,34 +159,60 @@ module.exports = database => ({
         return result.length === 1 ? result[0] : null;
     },
 
-    create: (name, abbreviation = null, type, region = null, departement = null, epci = null, city = null, active = false, transaction = undefined) => database.query(
-        `INSERT INTO
+    create: async (name, abbreviation = null, type, region = null, departement = null, epci = null, city = null, active = false, argTransaction = undefined) => {
+        let transaction = argTransaction;
+        if (transaction === undefined) {
+            transaction = await database.transaction();
+        }
+
+        const response = await database.query(
+            `INSERT INTO
             organizations(name, abbreviation, fk_type, fk_region, fk_departement, fk_epci, fk_city, active)
         VALUES
             (:name, :abbreviation, :type, :region, :departement, :epci, :city, :active)
         RETURNING organization_id AS id`,
-        {
-            replacements: {
-                name,
-                abbreviation,
-                type,
-                region,
-                departement,
-                epci,
-                city,
-                active,
+            {
+                replacements: {
+                    name,
+                    abbreviation,
+                    type,
+                    region,
+                    departement,
+                    epci,
+                    city,
+                    active,
+                },
+                transaction,
             },
-            transaction,
-        },
-    ),
+        );
+        await database.query(
+            'REFRESH MATERIALIZED VIEW localized_organizations',
+            {
+                transaction,
+            },
+        );
 
-    activate(organizationId, transaction = undefined) {
-        return database.query('UPDATE organizations SET active = TRUE WHERE organization_id = :organizationId', {
+        return response;
+    },
+
+    async activate(organizationId, argTransaction = undefined) {
+        let transaction = argTransaction;
+        if (transaction === undefined) {
+            transaction = await database.transaction();
+        }
+
+        const response = await database.query('UPDATE organizations SET active = TRUE WHERE organization_id = :organizationId', {
             replacements: {
                 organizationId,
             },
             transaction,
         });
+        await database.query('REFRESH MATERIALIZED VIEW localized_organizations',
+            {
+                transaction,
+            });
+
+        return response;
     },
 
     getName(organization) {
