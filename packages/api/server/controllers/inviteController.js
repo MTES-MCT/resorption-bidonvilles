@@ -1,5 +1,5 @@
 
-const { sendUserInvitation } = require('#server/mails/mails');
+const { sendUserPlatformInvitation } = require('#server/mails/mails');
 const { triggerPeopleInvitedAlert } = require('#server/utils/slack');
 const { slack: slackConfig } = require('#server/config');
 
@@ -13,7 +13,7 @@ const sendEmailsInvitations = async (guests, greeter) => {
 
         try {
             // eslint-disable-next-line no-await-in-loop
-            await sendUserInvitation(guest, {
+            await sendUserPlatformInvitation(guest, {
                 variables: {
                     guest,
                     greeter,
