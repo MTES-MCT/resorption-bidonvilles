@@ -27,7 +27,7 @@ module.exports = {
    * @param {Object} options
    */
     sendAdminNewRequestNotification: (recipient, options = {}) => {
-        const { preserveRecipient } = options;
+        const { preserveRecipient = false } = options;
 
         const utm = generateTrackingUTM(ADMIN_CAMPAIGN, 'nouvelle-demande-acces');
 
@@ -49,7 +49,7 @@ module.exports = {
    * @param {Object} options
    */
     sendAdminRequestPendingReminder1: (recipient, options = {}) => {
-        const { preserveRecipient } = options;
+        const { preserveRecipient = false } = options;
 
         const utm = generateTrackingUTM(
             ADMIN_CAMPAIGN,
@@ -73,7 +73,7 @@ module.exports = {
    * @param {Object} options
    */
     sendAdminRequestPendingReminder2: (recipient, options = {}) => {
-        const { preserveRecipient } = options;
+        const { preserveRecipient = false } = options;
 
         const utm = generateTrackingUTM(
             ADMIN_CAMPAIGN,
@@ -97,7 +97,7 @@ module.exports = {
    * @param {Object} options
    */
     sendAdminAccessActivated: (recipient, options = {}) => {
-        const { preserveRecipient, variables } = options;
+        const { preserveRecipient = false, variables } = options;
 
         const utm = generateTrackingUTM(ADMIN_CAMPAIGN, 'acces-active');
 
@@ -119,7 +119,7 @@ module.exports = {
    * @param {Object} options
    */
     sendAdminAccessExpired: (recipient, options = {}) => {
-        const { variables, preserveRecipient } = options;
+        const { variables, preserveRecipient = false } = options;
 
         const utm = generateTrackingUTM(ADMIN_CAMPAIGN, 'acces-expire');
 
@@ -461,7 +461,7 @@ module.exports = {
    * @param {Object} options
    */
     sendUserNewComment: (recipient, options = {}) => {
-        const { variables, preserveRecipient } = options;
+        const { variables, preserveRecipient = false } = options;
 
         const utm = generateTrackingUTM(USER_CAMPAIGN, 'nouveau-commentaire');
 
@@ -506,7 +506,7 @@ module.exports = {
    * @param {Object} options
    */
     sendAdminContactMessage: (recipient, options = {}) => {
-        const { variables, preserveRecipient } = options;
+        const { variables, preserveRecipient = false } = options;
         const utm = generateTrackingUTM(USER_CAMPAIGN, 'nouveau-mot-de-passe');
 
         return mailService.send('admin_contact_message', {
