@@ -811,21 +811,27 @@ export default {
                 // Création du marqueur à partir de la long et lat retournées par pointOnFeature()
                 const lon = markerPosition.geometry.coordinates[0];
                 const lat = markerPosition.geometry.coordinates[1];
-                this.circleWithText(
-                    this.map,
-                    [lat, lon],
+                const nbSites =
                     this.numberOfShantytownsBy.regions[
                         feature.properties.code
-                    ] || 0,
-                    20,
-                    3,
-                    "region"
-                ).addTo(this.regionalLayer);
-                this.regionalLayer.setStyle({
-                    color: "white",
-                    weight: 8,
-                    opacity: 1
-                });
+                    ] || 0;
+                if (nbSites > 0) {
+                    this.circleWithText(
+                        this.map,
+                        [lat, lon],
+                        this.numberOfShantytownsBy.regions[
+                            feature.properties.code
+                        ] || 0,
+                        20,
+                        3,
+                        "region"
+                    ).addTo(this.regionalLayer);
+                    this.regionalLayer.setStyle({
+                        color: "white",
+                        weight: 8,
+                        opacity: 1
+                    });
+                }
             });
         },
 
@@ -850,19 +856,21 @@ export default {
                         feature.properties.code
                     ] || 0;
                 const siteLabel = nbSites > 1 ? "sites" : "site";
-                this.circleWithText(
-                    this.map,
-                    [lat, lon],
-                    `<div><strong>${feature.properties.nom}</strong><br/>${nbSites} ${siteLabel}</div>`,
-                    45,
-                    3,
-                    "dept"
-                ).addTo(this.departementalLayer);
-                this.departementalLayer.setStyle({
-                    color: "white",
-                    weight: 8,
-                    opacity: 1
-                });
+                if (nbSites > 0) {
+                    this.circleWithText(
+                        this.map,
+                        [lat, lon],
+                        `<div><strong>${feature.properties.nom}</strong><br/>${nbSites} ${siteLabel}</div>`,
+                        45,
+                        3,
+                        "dept"
+                    ).addTo(this.departementalLayer);
+                    this.departementalLayer.setStyle({
+                        color: "white",
+                        weight: 8,
+                        opacity: 1
+                    });
+                }
             });
         },
 
