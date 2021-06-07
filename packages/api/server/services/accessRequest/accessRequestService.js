@@ -173,6 +173,7 @@ module.exports = {
         await Promise.all([
             sendEmail.toAdmin.accessActivated(user.user_access.sent_by, user),
             sendEmail.toUser.accessActivated(user),
+            scheduleEvent.toUser.accessActivatedOnboarding(user.id),
         ]);
 
         await Promise.all([

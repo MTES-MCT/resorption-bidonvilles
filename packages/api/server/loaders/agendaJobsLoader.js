@@ -1,6 +1,10 @@
 const accessRequestService = require('#server/services/accessRequest/accessRequestService');
 const {
     sendUserDemoInvitation,
+    sendUserIdealcoInvitation,
+    sendUserFeatures,
+    sendUserShare,
+    sendUserReview,
 } = require('#server/mails/mails');
 
 module.exports = (agenda) => {
@@ -41,6 +45,38 @@ module.exports = (agenda) => {
         (job) => {
             const { user } = job.attrs.data;
             sendUserDemoInvitation(user);
+        },
+    );
+
+    agenda.define(
+        'idealco_invitation',
+        (job) => {
+            const { user } = job.attrs.data;
+            sendUserIdealcoInvitation(user);
+        },
+    );
+
+    agenda.define(
+        'user_features',
+        (job) => {
+            const { user } = job.attrs.data;
+            sendUserFeatures(user);
+        },
+    );
+
+    agenda.define(
+        'user_share',
+        (job) => {
+            const { user } = job.attrs.data;
+            sendUserShare(user);
+        },
+    );
+
+    agenda.define(
+        'user_review',
+        (job) => {
+            const { user } = job.attrs.data;
+            sendUserReview(user);
         },
     );
 };
