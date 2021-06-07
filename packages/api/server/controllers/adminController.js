@@ -24,6 +24,7 @@ const {
     sendAdminContactMessage,
     sendUserCommentDeletion,
     sendUserNewPassword,
+    sendUserReview,
 } = require('#server/mails/mails');
 
 module.exports = () => ({
@@ -39,6 +40,8 @@ module.exports = () => ({
             const inviterName = 'Inviter Doe';
             const activationUrl = 'https://activation.example';
             const activationUrlSentDate = new Date();
+
+            await sendUserReview(recipient);
 
             await sendAdminAccessActivated(recipient, {
                 variables: {

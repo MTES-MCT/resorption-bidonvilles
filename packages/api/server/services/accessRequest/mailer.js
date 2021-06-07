@@ -57,7 +57,7 @@ module.exports = {
         accessDenied(user, admin) {
             return sendUserAccessDenied(user, {
                 variables: {
-                    adminName: `${admin.first_name} ${admin.last_name}`
+                    adminName: `${admin.first_name} ${admin.last_name}`,
                 },
             });
         },
