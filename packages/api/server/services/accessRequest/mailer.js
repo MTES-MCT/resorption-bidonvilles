@@ -55,12 +55,9 @@ module.exports = {
         },
 
         accessDenied(user, admin) {
-            // TODO: Fix date : it should be when activationCreated
-            const requestDate = new Date();
             return sendUserAccessDenied(user, {
                 variables: {
-                    adminName: `${admin.first_name} ${admin.last_name}`,
-                    requestDate,
+                    adminName: `${admin.first_name} ${admin.last_name}`
                 },
             });
         },
