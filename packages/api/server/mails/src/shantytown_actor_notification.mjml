@@ -19,7 +19,6 @@
                 <mj-text>
                     Dès maintenant rejoignez {{var:inviterName}} sur la plateforme et signalez votre intervention :
                 </mj-text>
-                <mj-include path="common/contact_cta.mjml" />
                 <mj-include path="common/connect_cta.mjml" />
                 <mj-text mj-class="text-primary font-bold pb-4">
                     La plateforme Résorption-bidonvilles en 3 questions
