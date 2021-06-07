@@ -1,6 +1,6 @@
 <mjml>
     <mj-head>
-        <mj-title>[Résorption-bidonvilles] - Invitation à partager votre intervention</mj-title>
+        <mj-title>[Résorption-bidonvilles] - Découvrez la plateforme Résorption-bidonvilles</mj-title>
         <mj-include path='common/attributes.mjml' />
         <mj-include path='common/styles.mjml' />
     </mj-head>
@@ -20,7 +20,6 @@
                     Dès maintenant rejoignez {{var:inviterName}} sur la plateforme et signalez votre intervention :
                 </mj-text>
                 <mj-include path="common/contact_cta.mjml" />
-                <mj-include path="common/connect_cta.mjml" />
                 <mj-text mj-class="text-primary font-bold pb-4">
                     La plateforme Résorption-bidonvilles en 3 questions
                 </mj-text>
