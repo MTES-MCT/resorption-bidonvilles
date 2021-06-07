@@ -12,6 +12,7 @@ const adminGuideUrl = `${frontUrl}/connexion`;
 const userGuideUrl = `${frontUrl}/connexion`;
 const invitationUrl = '';
 const idealcoUrl = 'https://www.idealco.fr/campagne/?utm_campaign=g-386-3036d540';
+const surveyUrl = 'https://app.evalandgo.com/s/index.php?id=JTk4ciU5MXAlOUUlQUU%3D&a=JTk2cCU5N2slOUElQjA%3D';
 
 const ADMIN_CAMPAIGN = 'admin-email';
 const REQUESTER_CAMPAIGN = 'demandeur-email';
@@ -535,6 +536,27 @@ module.exports = {
                 message: variables.message,
                 backUrl,
                 frontUrl: `${frontUrl}?${utm}`,
+                recipientName: `${recipient.first_name} ${recipient.last_name}`,
+            },
+            preserveRecipient,
+        });
+    },
+
+    /**
+     * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
+     * @param {Object} options
+     */
+    sendUserReview: (recipient, options = {}) => {
+        const { preserveRecipient } = options;
+        const utm = generateTrackingUTM(USER_CAMPAIGN, 'avis-utilisateur');
+
+        return mailService.send('user_review', {
+            recipient,
+            variables: {
+                surveyUrl,
+                backUrl,
+                frontUrl: `${frontUrl}?${utm}`,
+                connexionUrl,
                 recipientName: `${recipient.first_name} ${recipient.last_name}`,
             },
             preserveRecipient,

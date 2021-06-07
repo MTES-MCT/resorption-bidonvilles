@@ -1,0 +1,33 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Votre avis nous intéresse !</mj-title>
+        <mj-include path='common/attributes.mjml' />
+        <mj-include path='common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class='text-primary text-display pb-4'>
+                    Vous utilisez la plateforme Résorption-bidonvilles depuis trois mois, votre avis nous intéresse !
+                </mj-text>
+                <mj-include path='common/hello.mjml' />
+                <mj-text>
+                    Vous utilisez la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a> depuis trois mois. Donnez-nous votre avis d’utilisateur et d’utilisatrice en répondant à ce court <a href="{{var:surveyUrl}}" class="link">questionnaire</a>.
+                </mj-text>
+                <mj-button mj-class="button-secondary" href="{{var:surveyUrl}}">
+                    Contribuez à améliorer la plateforme en 5 questions
+                </mj-button>
+                <mj-button mj-class="button-primary" href="{{var:connexionUrl}}" padding="0 0 2rem 0" >
+                    Connectez-vous pour participer à la résorption des bidonvilles
+                </mj-button>
+                <mj-text mj-class="pb-4">
+                    La plateforme est développée avec et pour les utilisateurs, n'hésitez pas à nous contacter pour toute remarque ou suggestion.
+                </mj-text>
+                <mj-include path="common/contact_interlocutor.mjml" />
+            </mj-column>
+        </mj-section>
+        <mj-include path='common/footer.mjml' />
+    </mj-body>
+</mjml>
