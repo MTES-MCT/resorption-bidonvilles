@@ -67,7 +67,7 @@ module.exports = {
                 variables: {
                     adminName: `${admin.first_name} ${admin.last_name}`,
                     activationUrl: activationLink,
-                    activationUrlExpDate: expiracyDate,
+                    activationUrlExpDate: dateToString(expiracyDate),
                 },
             });
         },
