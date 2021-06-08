@@ -1,7 +1,11 @@
 # ====
 # Development
 # ====
-FROM node:15.11-slim AS development
+FROM node:16.3-slim AS development
+
+RUN apt-get update || : && apt-get install -y \
+    python \
+    build-essential
 
 RUN mkdir -p /home/node/app/ && chown node:node /home/node/app/
 
@@ -16,7 +20,11 @@ RUN yarn install --silent && yarn cache clean
 # ====
 # Production (build)
 # ====
-FROM node:15.11-slim AS build
+FROM node:16.3-slim AS build
+
+RUN apt-get update || : && apt-get install -y \
+    python \
+    build-essential
 
 RUN mkdir /home/node/app/ && chown node:node /home/node/app/
 
