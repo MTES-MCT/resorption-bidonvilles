@@ -355,7 +355,7 @@ export default {
         countNumberOfTowns() {
             this.numberOfShantytownsBy = this.towns.reduce(
                 (acc, obj) => {
-                    if (obj.closedAt != null) {
+                    if (obj.closedAt !== null) {
                         return acc;
                     }
 
@@ -888,10 +888,8 @@ export default {
                     this.circleWithText(
                         this.map,
                         [
-                            this.numberOfShantytownsBy.cities[key].latitude ||
-                                "50.3984",
-                            this.numberOfShantytownsBy.cities[key].longitude ||
-                                "2.0211"
+                            this.numberOfShantytownsBy.cities[key].latitude,
+                            this.numberOfShantytownsBy.cities[key].longitude
                         ],
                         `<div>${this.numberOfShantytownsBy.cities[key].name}<br/>${this.numberOfShantytownsBy.cities[key].sites} ${siteLabel}</div>`,
                         35,
