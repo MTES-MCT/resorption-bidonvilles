@@ -1,6 +1,6 @@
 Vous êtes invité·e à partager votre intervention sur le site
 {{var:siteAddress}}.
-Bonjour {{var:recipientName}},
+Bonjour,
 {{var:inviterName}} vous a invité à rejoindre la communauté des acteurs de
 terrain sur la plateforme Résorption-bidonvilles en valorisant votre
 intervention sur le site {{var:siteAddress}} [{{var:siteUrl}}].
