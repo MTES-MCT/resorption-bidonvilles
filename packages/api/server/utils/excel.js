@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const Excel = require('exceljs/modern.nodejs');
+const Excel = require('exceljs');
 const { assetsSrc } = require('#server/config');
 const { toFormat: dateToString } = require('#server/utils/date');
 

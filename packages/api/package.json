@@ -20,7 +20,7 @@
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.16.0",
     "eslint-utils": "^1.4.1",
-    "exceljs": "^2.0.1",
+    "exceljs": "^4.2.1",
     "express": "^4.16.4",
     "express-validator": "^6.6.1",
     "js-yaml": "^3.13.1",
