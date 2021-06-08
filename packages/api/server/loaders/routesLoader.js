@@ -11,6 +11,10 @@ const validators = require('#server/middlewares/validators');
 module.exports = (app) => {
     app.use('/assets', express.static(path.resolve(__dirname, '../../assets')));
 
+    app.get(
+        '/',
+        (req, res) => res.status(200).send('Bienvenue sur l\'API de Résorption Bidonvilles'),
+    );
     app.post(
         '/signin',
         controllers.user.signin,
