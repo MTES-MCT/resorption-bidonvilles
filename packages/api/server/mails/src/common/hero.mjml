@@ -1,1 +1,5 @@
-<mj-image src='{{var:backUrl}}/assets/mails/hero.jpg' />
+<mj-section>
+    <mj-column>
+        <mj-image src='{{var:backUrl}}/assets/mails/hero.jpg' />
+    </mj-column>
+</mj-section>
