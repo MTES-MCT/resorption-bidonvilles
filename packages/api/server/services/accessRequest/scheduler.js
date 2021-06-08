@@ -4,40 +4,52 @@ module.exports = {
     scheduleEvent: {
         async accessRequestIsPending(userId) {
             await Promise.all([
-                agenda.schedule('in 3 days', 'access_request_pending_1st', {
+                // 3 days
+                agenda.schedule('in 30 seconds', 'access_request_pending_1st', {
                     userId,
                 }),
 
-                agenda.schedule('in 10 days', 'access_request_pending_2nd', {
+                // 10 days
+                agenda.schedule('in 1 minute', 'access_request_pending_2nd', {
                     userId,
                 }),
             ]);
         },
 
         async accessPending(accessId) {
-            await agenda.schedule('in 5 days', 'access_is_pending', {
+            // 5 days
+            await agenda.schedule('in 30 seconds', 'access_is_pending', {
                 accessId,
             });
         },
 
         async accessExpired(accessId) {
-            await agenda.schedule('in 8 days', 'access_is_expired', {
+            // 8 days
+            await agenda.schedule('in 1 minute', 'access_is_expired', {
                 accessId,
             });
         },
 
-        async accessActivatedOnboarding(userId) {
-            await agenda.schedule('in 14 days', 'idealco_invitation', {
-                userId,
+        async accessActivatedOnboarding(user) {
+            // 7 days
+            await agenda.schedule('in 30 seconds', 'demo_invitation', {
+                user,
             });
-            await agenda.schedule('in 30 days', 'user_features', {
-                userId,
+            // 14 days
+            await agenda.schedule('in 30 seconds', 'idealco_invitation', {
+                user,
             });
-            await agenda.schedule('in 60 days', 'user_share', {
-                userId,
+            // 30 days
+            await agenda.schedule('in 30 seconds', 'user_features', {
+                user,
             });
-            await agenda.schedule('in 90 days', 'user_review', {
-                userId,
+            // 60 days
+            await agenda.schedule('in 30 seconds', 'user_share', {
+                user,
+            });
+            // 90 days
+            await agenda.schedule('in 30 seconds', 'user_review', {
+                user,
             });
         },
     },

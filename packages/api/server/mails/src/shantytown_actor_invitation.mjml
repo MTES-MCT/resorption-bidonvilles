@@ -12,7 +12,7 @@
                 <mj-text mj-class='text-primary text-display pb-4'>
                     Vous êtes invité·e à partager votre intervention sur le site {{var:siteAddress}}.
                 </mj-text>
-                <mj-include path='common/hello.mjml' />
+                <mj-text mj-class="pb-4">Bonjour,</mj-text>
                 <mj-text mj-class="pb-4">
                     {{var:inviterName}} vous a invité à rejoindre la communauté des acteurs de terrain sur la plateforme Résorption-bidonvilles en valorisant votre intervention sur le site <a href="{{var:siteUrl}}">{{var:siteAddress}}</a>.
                 </mj-text>

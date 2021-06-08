@@ -15,8 +15,7 @@ const sendEmailsInvitations = async (guests, greeter) => {
             // eslint-disable-next-line no-await-in-loop
             await sendUserPlatformInvitation(guest, {
                 variables: {
-                    guest,
-                    greeter,
+                    inviterName: `${greeter.first_name} ${greeter.last_name}`,
                 },
             });
         } catch (err) {
