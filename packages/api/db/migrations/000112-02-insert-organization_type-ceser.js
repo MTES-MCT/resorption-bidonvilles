@@ -41,6 +41,12 @@ module.exports = {
                 {
                     transaction,
                 },
+            ))
+            .then(() => queryInterface.sequelize.query(
+                'REFRESH MATERIALIZED VIEW localized_organizations',
+                {
+                    transaction,
+                },
             )),
     ),
 
@@ -53,6 +59,12 @@ module.exports = {
         )
             .then(() => queryInterface.sequelize.query(
                 'DELETE FROM organization_types WHERE abbreviation = \'CESER\'',
+                {
+                    transaction,
+                },
+            ))
+            .then(() => queryInterface.sequelize.query(
+                'REFRESH MATERIALIZED VIEW localized_organizations',
                 {
                     transaction,
                 },
