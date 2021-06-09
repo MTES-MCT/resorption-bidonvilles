@@ -3,6 +3,8 @@ Bonjour {{var:recipientName}},
 Nous avons le plaisir de vous informer que votre accès à la plateforme
 Résorption-bidonvilles [{{var:frontUrl}}] a été ouvert par l’administrateur·rice
 local·e {{var:adminName}}.
+Vous pouvez dès maintenant rejoindre la communauté des acteurs·rices de la
+résorption des bidonvilles en activant votre accès via le lien ci-dessous.
 
 Activer mon compte [{{var:activationUrl}}]
 
@@ -14,7 +16,7 @@ M'inscrire à une session de formation [{{var:formationUrl}}]
 
 Pour toute question, votre interlocutrice Annie Rasatandrianombana se tient à
 votre disposition : annie.rasatandrianombana@dihal.gouv.fr
-[annie.rasatandrianombana@dihal.gouv.fr]
+[annie.rasatandrianombana@dihal.gouv.fr].
 
 Cordialement,
 L'équipe Résorption-bidonvilles.

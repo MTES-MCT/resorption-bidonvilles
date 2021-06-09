@@ -13,8 +13,11 @@
                     Activer votre compte pour accéder à la plateforme <span class="font-italic">Résorption-bidonvilles</span>
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
-                <mj-text>
+                <mj-text mj-class="pb-4">
                     Nous avons le plaisir de vous informer que votre accès à la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a> a été ouvert par l’administrateur·rice local·e {{var:adminName}}.
+                </mj-text>
+                <mj-text>
+                    Vous pouvez dès maintenant rejoindre la communauté des acteurs·rices de la résorption des bidonvilles en activant votre accès via le lien ci-dessous.
                 </mj-text>
                 <mj-button mj-class="button-primary" href="{{var:activationUrl}}">
                     Activer mon compte
