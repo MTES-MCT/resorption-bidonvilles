@@ -15,8 +15,8 @@ import waterNo from "../../../../../public/img/water-no.png";
 import waterNull from "../../../../../public/img/water-null.png";
 
 // données tirées de https://github.com/gregoiredavid/france-geojson
-import departements from "/src/geojson/departements.json";
-import regions from "/src/geojson/regions.json";
+import departements from "#src/geojson/departements.json";
+import regions from "#src/geojson/regions.json";
 
 const DEFAULT_VIEW = [46.7755829, 2.0497727];
 const POI_ZOOM_LEVEL = 13;
