@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 
 import L from "leaflet";
+import pointOnFeature from "@turf/point-on-feature";
 import Address from "#app/components/address/address.vue";
 import { get as getConfig } from "#helpers/api/config";
 import "leaflet-providers";
@@ -13,8 +14,15 @@ import utensils from "../../../../../public/img/utensils.png";
 import waterNo from "../../../../../public/img/water-no.png";
 import waterNull from "../../../../../public/img/water-null.png";
 
+// données tirées de https://github.com/gregoiredavid/france-geojson
+import departements from "/src/geojson/departements.json";
+import regions from "/src/geojson/regions.json";
+
 const DEFAULT_VIEW = [46.7755829, 2.0497727];
 const POI_ZOOM_LEVEL = 13;
+const REGION_MAX_ZOOM_LEVEL = 7;
+const DEPT_MAX_ZOOM_LEVEL = 11;
+const CITY_MAX_ZOOM_LEVEL = 13;
 
 /* **************************************************************************************************
  * Ce composant fait apparaître une carte qui propose deux fonctionnalités distinctes :
@@ -112,6 +120,27 @@ export default {
     data() {
         return {
             /**
+             * La couche régionale
+             *
+             * @type {L.geoJSON}
+             */
+            regionalLayer: L.geoJSON(regions),
+
+            /**
+             * La couche départementale
+             *
+             * @type {L.geoJSON}
+             */
+            departementalLayer: L.geoJSON(departements),
+
+            /**
+             * La couche communal
+             *
+             * @type {L.layerGroup}
+             */
+            cityLayer: L.layerGroup(),
+
+            /**
              * La carte
              *
              * @type {L.Map}
@@ -194,7 +223,45 @@ export default {
              *
              * @type {Array.<FieldType>}
              */
-            fieldTypes: getConfig().field_types
+            fieldTypes: getConfig().field_types,
+
+            /**
+             * Total of shantytowns per region and departement
+             *
+             * @type {Object}
+             */
+            numberOfShantytownsBy: {
+                regions: {}, // sera rempli avec un objet du type : { "01": 0, "02": 0, ..., "11": 0 }
+                departements: {}, // sera rempli avec un objet du type : { "01": 0, "02": 0, ..., "92": 0 }
+                cities: {} /* sera rempli avec un objet du type :   
+                                                                    {
+                                                                        "01": 
+                                                                            {
+                                                                                sites = 0, 
+                                                                                code = , 
+                                                                                name = , 
+                                                                                latitude = , 
+                                                                                longitude = 
+                                                                            },
+                                                                        "02":   
+                                                                            {
+                                                                                sites = 0, 
+                                                                                code = , 
+                                                                                name = , 
+                                                                                latitude = , 
+                                                                                longitude = 
+                                                                            }, 
+                                                                        ...,
+                                                                        "92": 
+                                                                            {
+                                                                                sites = 0, 
+                                                                                code = , 
+                                                                                name = , 
+                                                                                latitude = , 
+                                                                                longitude = 
+                                                                            }
+                                                                    } */
+            }
         };
     },
 
@@ -232,11 +299,11 @@ export default {
     },
 
     watch: {
-        /**
-         * Met à jour la liste des marqueurs de site
-         */
         towns() {
-            this.syncTownMarkers();
+            this.countNumberOfTowns();
+            this.loadRegionalData();
+            this.loadDepartementalData();
+            this.loadCityData();
         },
 
         pois() {
@@ -282,10 +349,43 @@ export default {
 
     mounted() {
         this.createMap();
-        this.syncTownMarkers();
     },
 
     methods: {
+        countNumberOfTowns() {
+            this.numberOfShantytownsBy = this.towns.reduce(
+                (acc, obj) => {
+                    if (obj.closedAt !== null) {
+                        return acc;
+                    }
+
+                    if (acc.departements[obj.departement.code] === undefined) {
+                        acc.departements[obj.departement.code] = 0;
+                    }
+
+                    if (acc.regions[obj.region.code] === undefined) {
+                        acc.regions[obj.region.code] = 0;
+                    }
+
+                    if (acc.cities[obj.city.code] === undefined) {
+                        acc.cities[obj.city.code] = {};
+                        acc.cities[obj.city.code].sites = 0;
+                        acc.cities[obj.city.code].code = obj.city.code;
+                        acc.cities[obj.city.code].name = obj.city.name;
+                        acc.cities[obj.city.code].latitude = obj.city.latitude;
+                        acc.cities[obj.city.code].longitude =
+                            obj.city.longitude;
+                    }
+
+                    acc.departements[obj.departement.code] += 1;
+                    acc.regions[obj.region.code] += 1;
+                    acc.cities[obj.city.code].sites += 1;
+
+                    return acc;
+                },
+                { regions: {}, departements: {}, cities: {} }
+            );
+        },
         /**
          * Initialise tous les contrôles de la carte
          *
@@ -399,6 +499,7 @@ export default {
             this.setupMapControls();
             this.setupMarkerGroups();
             this.setupView();
+            this.onZoomEnd();
         },
 
         /**
@@ -409,12 +510,20 @@ export default {
         onZoomEnd() {
             const zoomLevel = this.map.getZoom();
 
+            if (zoomLevel <= REGION_MAX_ZOOM_LEVEL) {
+                this.showRegionalLayer();
+            } else if (zoomLevel <= DEPT_MAX_ZOOM_LEVEL) {
+                this.showDepartementalLayer();
+            } else if (zoomLevel <= CITY_MAX_ZOOM_LEVEL) {
+                this.showCityLayer();
+            } else {
+                this.showTownsLayer();
+            }
+
             if (!this.poiMarkersVisible && zoomLevel > POI_ZOOM_LEVEL) {
                 this.poiMarkersVisible = true;
                 this.pois.forEach(this.createPOIMarker);
-            }
-
-            if (this.poiMarkersVisible && zoomLevel <= POI_ZOOM_LEVEL) {
+            } else if (this.poiMarkersVisible && zoomLevel <= POI_ZOOM_LEVEL) {
                 this.poiMarkersVisible = false;
                 this.removeAllPOIMarkers();
             }
@@ -686,6 +795,211 @@ export default {
             this.searchMarker._icon
                 .querySelector(".mapPin")
                 .classList[action]("mapPin--street");
+        },
+
+        // Fonction de chargement des données geoJson régionales
+        loadRegionalData() {
+            this.regionalLayer.getLayers().forEach(layer => {
+                if (layer instanceof L.Marker) {
+                    layer.remove();
+                    return;
+                }
+
+                // Calcul de la position du marqueur
+                // On utilise la méthode pointOnFeature(), qui garantit que le point soit dans le polygone, plutôt que centroid()
+                const { feature } = layer;
+                const markerPosition = pointOnFeature(feature);
+                // Création du marqueur à partir de la long et lat retournées par pointOnFeature()
+                const lon = markerPosition.geometry.coordinates[0];
+                const lat = markerPosition.geometry.coordinates[1];
+                const nbSites =
+                    this.numberOfShantytownsBy.regions[
+                        feature.properties.code
+                    ] || 0;
+                if (nbSites > 0) {
+                    this.circleWithText(
+                        this.map,
+                        [lat, lon],
+                        this.numberOfShantytownsBy.regions[
+                            feature.properties.code
+                        ] || 0,
+                        20,
+                        3,
+                        "region"
+                    ).addTo(this.regionalLayer);
+                    this.regionalLayer.setStyle({
+                        color: "white",
+                        weight: 8,
+                        opacity: 1
+                    });
+                }
+            });
+        },
+
+        // Fonction de chargement des données geoJson départementales
+        loadDepartementalData() {
+            this.departementalLayer.getLayers().forEach(layer => {
+                if (layer instanceof L.Marker) {
+                    layer.remove();
+                    return;
+                }
+
+                // Calcul de la position du marqueur
+                // On utilise la méthode pointOnFeature(), qui garantit que le point soit dans le polygone, plutôt que centroid()
+                const { feature } = layer;
+                const markerPosition = pointOnFeature(feature);
+                // Création du marqueur à partir de la long et lat retournées par pointOnFeature()
+                const lon = markerPosition.geometry.coordinates[0];
+                const lat = markerPosition.geometry.coordinates[1];
+
+                const nbSites =
+                    this.numberOfShantytownsBy.departements[
+                        feature.properties.code
+                    ] || 0;
+                const siteLabel = nbSites > 1 ? "sites" : "site";
+                if (nbSites > 0) {
+                    this.circleWithText(
+                        this.map,
+                        [lat, lon],
+                        `<div><strong>${feature.properties.nom}</strong><br/>${nbSites} ${siteLabel}</div>`,
+                        45,
+                        3,
+                        "dept"
+                    ).addTo(this.departementalLayer);
+                    this.departementalLayer.setStyle({
+                        color: "white",
+                        weight: 8,
+                        opacity: 1
+                    });
+                }
+            });
+        },
+
+        // Fonction de chargement des marqueurs par commune
+        loadCityData() {
+            // On crée les marqueurs
+            const citiesMarkers = [];
+            // for (var key of Object.keys(this.numberOfShantytownsBy.cities)) {
+            Object.keys(this.numberOfShantytownsBy.cities).forEach(key => {
+                const siteLabel =
+                    this.numberOfShantytownsBy.cities[key].sites > 1
+                        ? "sites"
+                        : "site";
+                citiesMarkers.push(
+                    this.circleWithText(
+                        this.map,
+                        [
+                            this.numberOfShantytownsBy.cities[key].latitude,
+                            this.numberOfShantytownsBy.cities[key].longitude
+                        ],
+                        `<div>${this.numberOfShantytownsBy.cities[key].name}<br/>${this.numberOfShantytownsBy.cities[key].sites} ${siteLabel}</div>`,
+                        35,
+                        3,
+                        "city"
+                    )
+                );
+            });
+            this.cityLayer = L.layerGroup(citiesMarkers);
+        },
+
+        showRegionalLayer() {
+            this.hideDepartementalLayer();
+            this.hideCityLayer();
+            this.hideTownsLayer();
+
+            if (!this.map.hasLayer(this.regionalLayer)) {
+                this.map.addLayer(this.regionalLayer);
+            }
+        },
+
+        hideRegionalLayer() {
+            if (this.map.hasLayer(this.regionalLayer)) {
+                this.map.removeLayer(this.regionalLayer);
+            }
+        },
+
+        showDepartementalLayer() {
+            this.hideRegionalLayer();
+            this.hideCityLayer();
+            this.hideTownsLayer();
+
+            if (!this.map.hasLayer(this.departementalLayer)) {
+                this.map.addLayer(this.departementalLayer);
+            }
+        },
+
+        hideDepartementalLayer() {
+            if (this.map.hasLayer(this.departementalLayer)) {
+                this.map.removeLayer(this.departementalLayer);
+            }
+        },
+
+        showCityLayer() {
+            this.hideRegionalLayer();
+            this.hideDepartementalLayer();
+            this.hideTownsLayer();
+
+            if (!this.map.hasLayer(this.cityLayer)) {
+                this.map.addLayer(this.cityLayer);
+            }
+        },
+
+        hideCityLayer() {
+            if (this.map.hasLayer(this.cityLayer)) {
+                this.map.removeLayer(this.cityLayer);
+            }
+        },
+
+        showTownsLayer() {
+            this.hideRegionalLayer();
+            this.hideDepartementalLayer();
+            this.hideCityLayer();
+            this.syncTownMarkers();
+        },
+
+        hideTownsLayer() {
+            this.removeAllTownMarkers();
+        },
+
+        circleWithText(map, latLng, txt, radius, borderWidth, circleClass) {
+            const size = radius * 2;
+            const style =
+                'style="width: ' +
+                size +
+                "px; height: " +
+                size +
+                "px; border-width: " +
+                borderWidth +
+                'px;"';
+            const iconSize = size + borderWidth * 2;
+            const icon = L.divIcon({
+                html:
+                    '<span class="' +
+                    "circle " +
+                    circleClass +
+                    '" ' +
+                    style +
+                    ">" +
+                    txt +
+                    "</span>",
+                className: "",
+                iconSize: [iconSize, iconSize]
+            });
+            const marker = L.marker(latLng, {
+                icon: icon
+            }).on("click", function(e) {
+                if (map.getZoom() <= REGION_MAX_ZOOM_LEVEL) {
+                    // Nous sommes au niveau régional, un clic affiche le niveau départemental
+                    map.setView(
+                        e.target.getLatLng(),
+                        REGION_MAX_ZOOM_LEVEL + 1
+                    );
+                } else if (map.getZoom() <= DEPT_MAX_ZOOM_LEVEL) {
+                    // nous sommes au niveau départemental, un clic affiche le niveau des communes
+                    map.setView(e.target.getLatLng(), DEPT_MAX_ZOOM_LEVEL + 1);
+                }
+            });
+            return marker;
         }
     }
 };
