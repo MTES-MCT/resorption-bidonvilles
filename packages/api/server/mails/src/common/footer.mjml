@@ -3,8 +3,8 @@
         <mj-text>
             Cordialement,
         </mj-text>
-        <mj-text>
-            L'équipe <mj-text mj-class="font-italic">Résorption-bidonvilles</mj-text>,
+        <mj-text mj-class="pb-4">
+            L'équipe <span class="font-italic">Résorption-bidonvilles</span>.
         </mj-text>
 
         <mj-image src="{{var:backUrl}}/assets/mails/marianne.png" width="40" height="15" padding="0" align="left" />

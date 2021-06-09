@@ -10,11 +10,11 @@
         <mj-section>
             <mj-column>
                 <mj-text mj-class='text-primary text-display pb-4'>
-                    Activer votre compte pour accéder à la plateforme Résorption-bidonvilles
+                    Activer votre compte pour accéder à la plateforme <span class="font-italic">Résorption-bidonvilles</span>
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text>
-                    Nous avons le plaisir de vous informer que votre accès à la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a> a été ouvert par l’administrateur·rice local {{var:adminName}}.
+                    Nous avons le plaisir de vous informer que votre accès à la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a> a été ouvert par l’administrateur·rice local·e {{var:adminName}}.
                 </mj-text>
                 <mj-button mj-class="button-primary" href="{{var:activationUrl}}">
                     Activer mon compte
@@ -26,7 +26,7 @@
                     Pour utiliser et prendre en main rapidement la plateforme, vous pouvez participer à une session de formation personnalisée :
                 </mj-text>
                 <mj-include path="common/formation_cta_me.mjml" />
-                <mj-include path="common/contact_interlocutor.mjml" />
+                <mj-include path="common/contact_interlocutor_user.mjml" />
             </mj-column>
         </mj-section>
 

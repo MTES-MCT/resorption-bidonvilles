@@ -10,7 +10,7 @@
         <mj-section>
             <mj-column>
                 <mj-text mj-class='text-primary text-display'>
-                    Bienvenue sur la plateforme Résorption-bidonvilles !
+                    Bienvenue sur la plateforme <span class="font-italic">Résorption-bidonvilles</span> !
                 </mj-text>
                 <mj-text mj-class='text-primary text-lg pb-4'>
                     Vous avez maintenant le rôle d’administrateur local sur votre territoire !

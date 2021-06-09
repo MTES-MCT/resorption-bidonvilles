@@ -14,34 +14,13 @@
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
-                    {{var:inviterName}} vous a invité à rejoindre la communauté des acteurs de terrain sur la plateforme Résorption-bidonvilles en valorisant votre intervention sur le site <a href="{{var:siteUrl}}">{{var:siteAddress}}</a>.
+                    {{var:inviterName}} vous a invité à rejoindre la communauté des acteurs de terrain sur la plateforme <span class="font-italic">Résorption-bidonvilles</span> en valorisant votre intervention sur le site <a href="{{var:siteUrl}}">{{var:siteAddress}}</a>.
                 </mj-text>
                 <mj-text>
-                    Dès maintenant rejoignez {{var:inviterName}} sur la plateforme et signalez votre intervention :
+                    Dès maintenant connectez-vous et rejoignez {{var:inviterName}} en tant qu’intervenant. Ainsi, vous recevrez en temps réel les messages transmis par les autres acteurs du site.
                 </mj-text>
                 <mj-include path="common/connect_cta.mjml" />
-                <mj-text mj-class="text-primary font-bold pb-4">
-                    La plateforme Résorption-bidonvilles en 3 questions
-                </mj-text>
-                <mj-text mj-class="text-primary font-bold">
-                    1. Qu'est-ce que c’est ?
-                </mj-text>
-                <mj-text mj-class="pb-4">
-                    C'est une plateforme numérique dont l'objectif est d'accélérer la résorption des bidonvilles et faciliter l'insertion de ses habitants ; un outil collaboratif pour s'informer et agir.
-                </mj-text>
-                <mj-text mj-class="text-primary font-bold">
-                    2. À qui s'adresse-t-elle ?
-                </mj-text>
-                <mj-text mj-class="pb-4">
-                    À tous les acteurs de terrain concernés : les services de l'État, les DDETS, les collectivités territoriales, les associations...
-                </mj-text>
-                <mj-text mj-class="text-primary font-bold">
-                    3. Quels sont vos bénéfices à l’utiliser ?
-                </mj-text>
-                <mj-text mj-class="pb-4">
-                    La plateforme vous permet de piloter et de suivre en temps réel la situation et les actions sur votre territoire, de partager vos actions, de contacter les intervenants sur un bidonville ou un squat. Une meilleure circulation de l'information qui permet aux acteurs d'agir mieux et plus rapidement auprès des habitants.
-                </mj-text>
-                <mj-include path="common/contact_interlocutor3.mjml" />
+                <mj-include path="common/contact_interlocutor_user.mjml" />
             </mj-column>
         </mj-section>
 

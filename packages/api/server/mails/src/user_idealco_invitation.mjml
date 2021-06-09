@@ -10,7 +10,7 @@
         <mj-section>
             <mj-column>
                 <mj-text mj-class='text-primary text-display pb-4'>
-                    Vous êtes invité·e à rejoindre le groupe IdealCo de la plateforme Résorption-bidonvilles
+                    Vous êtes invité·e à rejoindre le groupe IdealCo de la plateforme <span class="font-italic">Résorption-bidonvilles</span>
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
@@ -31,7 +31,7 @@
                 <mj-button mj-class="button-secondary" href="{{var:idealcoUrl}}">
                     Devenir membre
                 </mj-button>
-                <mj-include path="common/contact_interlocutor3.mjml" />
+                <mj-include path="common/contact_interlocutor_user.mjml" />
             </mj-column>
         </mj-section>
 

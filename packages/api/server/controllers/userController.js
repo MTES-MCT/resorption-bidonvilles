@@ -6,6 +6,7 @@ const validate = require('#server/controllers/userController/helpers/validate');
 const userService = require('#server/services/userService');
 const { triggerNewUserAlert } = require('#server/utils/slack');
 const { slack: slackConfig } = require('#server/config');
+const { toString: dateToString } = require('#server/utils/date');
 
 const {
     generateAccessTokenFor, hashPassword, getPasswordResetLink,
@@ -902,7 +903,15 @@ module.exports = models => ({
         if (user !== null) {
             try {
                 const resetLink = getPasswordResetLink(user);
-                await sendUserNewPassword(user, { variables: { link: resetLink } });
+                await sendUserNewPassword(user, {
+                    variables: {
+                        link: {
+                            link: resetLink.link,
+                            expiracyDate: dateToString(resetLink.expiracyDate, true),
+
+                        },
+                    },
+                });
             } catch (error) {
                 res.status(500).send({
                     error: {
