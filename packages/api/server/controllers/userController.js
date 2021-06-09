@@ -675,6 +675,7 @@ module.exports = models => ({
                 await triggerNewUserAlert(user);
             }
         } catch (err) {
+            // eslint-disable-next-line no-console
             console.log(`Error with new user webhook : ${err.message}`);
         }
 

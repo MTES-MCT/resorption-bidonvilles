@@ -8,6 +8,7 @@
     "lerna": "^4.0.0"
   },
   "scripts": {
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint:all": "lerna run lint:all"
   }
 }

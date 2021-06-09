@@ -35,7 +35,7 @@
                             v-model="form.autre"
                         ></TextInput>
 
-                        <p class="bg-red200 p-6 mb-6" v-if="error !== null">
+                        <div class="bg-red200 p-6 mb-6" v-if="error !== null">
                             <strong>{{ error }}</strong>
                             <ul class="mt-4">
                                 <li
@@ -45,7 +45,7 @@
                                     {{ error[0] }}
                                 </li>
                             </ul>
-                        </p>
+                        </div>
                     </div>
 
                     <div class="flex justify-end mt-8">
