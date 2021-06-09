@@ -19,7 +19,7 @@ module.exports = {
      */
     send(templateName, options) {
         const {
-            recipient, sender = null, preserveRecipient = true, variables,
+            recipient, sender = null, preserveRecipient = true, variables, replyTo = null,
         } = options;
 
         let finalRecipient = recipient;
@@ -50,6 +50,7 @@ module.exports = {
                 },
             },
             sender,
+            replyTo,
         );
     },
 };

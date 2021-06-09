@@ -34,7 +34,7 @@
 
                 <mj-image src='{{var:backUrl}}/assets/mails/rb_features.jpg' />
 
-                <mj-text mj-class="font-bold">Le partage d’information entre tous les acteurs est essentiel pour accélérer la résorption des bidonvilles.</mj-text>
+                <mj-text mj-class="font-bold">Le partage d’information entre tous les acteurs·rices est essentiel pour accélérer la résorption des bidonvilles.</mj-text>
                 <mj-include path="common/connect_cta.mjml" />
                 <mj-include path="common/contact_interlocutor_user.mjml" />
             </mj-column>

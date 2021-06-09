@@ -20,7 +20,7 @@
                     Nous sommes heureux de vous compter parmi les administrateurs·rices de la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a>.
                 </mj-text>
                 <mj-text>
-                    Vous trouverez dans ce mail toutes les informations dont vous avez besoin pour vous accompagner dans l’utilisation de la plateforme et pour comprendre votre rôle.
+                    Vous trouverez dans ce courriel toutes les informations dont vous avez besoin pour vous accompagner dans l’utilisation de la plateforme et pour comprendre votre rôle.
                 </mj-text>
                 <mj-button mj-class="button-secondary" padding="1rem 0 0 0" href="{{var:adminGuideUrl}}">
                     Accéder à mon guide administrateur

@@ -14,7 +14,7 @@
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text>
-                    Et si vous faisiez connaître à vos partenaires la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a> ? Comme vous, si elles ont accès, elles pourront utiliser cet outil numérique de travail collaboratif pour accélérer la résorption des bidonvilles.
+                    Et si vous faisiez connaître à vos partenaires la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a> ? Comme vous, si ils ont accès, ils pourront utiliser cet outil numérique de travail collaboratif pour accélérer la résorption des bidonvilles.
                 </mj-text>
                 <mj-button mj-class="button-secondary" href="{{var:invitationUrl}}">
                     Inviter un·e partenaire à rejoindre la plateforme Résorption-bidonvilles
@@ -22,7 +22,7 @@
                 <mj-text mj-class="text-primary text-lg">
                     Vous souhaitez favoriser l’utilisation de la plateforme sur votre territoire ?
                 </mj-text>
-                <mj-text mj-class="text-primary text-lg">
+                <mj-text mj-class="text-primary text-lg pb-4">
                     Vous souhaitez promouvoir l’outil auprès de vos partenaires ?
                 </mj-text>
                 <mj-text>Contactez votre interlocutrice Annie Rasatandrianombana <a href="mailto:annie.rasatandrianombana@dihal.gouv.fr" class="link">annie.rasatandrianombana@dihal.gouv.fr</a></mj-text>

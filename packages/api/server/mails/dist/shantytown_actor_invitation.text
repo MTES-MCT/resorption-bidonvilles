@@ -1,9 +1,8 @@
-Vous êtes invité·e à partager votre intervention sur le site
-{{var:siteAddress}}.
+Vous êtes invité·e à partager votre intervention sur le site {{var:siteAddress}}
 Bonjour,
 {{var:inviterName}} vous a invité à rejoindre la communauté des acteurs de
-terrain sur la plateforme Résorption-bidonvilles en valorisant votre
-intervention sur le site {{var:siteAddress}}.
+terrain sur la plateforme Résorption-bidonvilles [{{var:frontUrl}}] en
+valorisant votre intervention sur le site {{var:siteAddress}}.
 Dès maintenant rejoignez {{var:inviterName}} sur la plateforme et signalez votre
 intervention :
 
