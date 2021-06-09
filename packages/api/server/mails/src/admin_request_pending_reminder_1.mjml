@@ -19,7 +19,9 @@
                 <mj-text>
                     Nous vous invitons à <a href="{{var:adminUrl}}" class="font-bold link">vous rendre sur l’onglet administration de la plateforme</a> pour ouvrir et paramétrer l’accès.
                 </mj-text>
-                <mj-include path="common/connect_cta.mjml" />
+                <mj-button mj-class="button-primary" href="{{var:connexionUrl}}">
+                    Traiter la demande
+                </mj-button>
                 <mj-include path="common/admin_access_request_info.mjml" />
                 <mj-include path="common/contact_interlocutor_admin.mjml" />
             </mj-column>

@@ -3,8 +3,8 @@ Bonjour {{var:recipientName}},
 Vous avez effectué une demande d’accès à la plateforme Résorption-bidonvilles
 [{{var:frontUrl}}]. L’administrateur·rice local·e de votre territoire
 {{var:adminName}} n’a pas donné suite à votre demande.
-Vous pouvez contacter cette personne par retour de ce mail pour de plus amples
-informations.
+Vous pouvez contacter cette personne par retour de ce courriel pour de plus
+amples informations.
 
 Cordialement,
 L'équipe Résorption-bidonvilles.

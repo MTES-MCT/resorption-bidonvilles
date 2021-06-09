@@ -2,9 +2,9 @@ Tous vos partenaires concernés par la résorption des bidonvilles sont-ils sur 
 plateforme ?
 Bonjour {{var:recipientName}},
 Et si vous faisiez connaître à vos partenaires la plateforme
-Résorption-bidonvilles [{{var:frontUrl}}] ? Comme vous, si elles ont accès,
-elles pourront utiliser cet outil numérique de travail collaboratif pour
-accélérer la résorption des bidonvilles.
+Résorption-bidonvilles [{{var:frontUrl}}] ? Comme vous, si ils ont accès, ils
+pourront utiliser cet outil numérique de travail collaboratif pour accélérer la
+résorption des bidonvilles.
 
 Inviter un·e partenaire à rejoindre la plateforme Résorption-bidonvilles
 [{{var:invitationUrl}}]

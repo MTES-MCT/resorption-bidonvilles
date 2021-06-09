@@ -5,10 +5,10 @@ Vous avez ouvert un accès à la plateforme Résorption-bidonvilles
 personne n’a pas activé son accès dans le délai des 7 jours, son lien est
 dorénavant expiré.
 Nous vous invitons à prendre contact avec elle pour comprendre la raison de
-cette non-activation et si nécessaire, lui envoyer un nouveau lien d’activation
+cette non-activation et, si nécessaire, lui envoyer un nouveau lien d’activation
 depuis votre onglet administration de la plateforme [{{var:adminUrl}}].
 
-Me connecter [{{var:connexionUrl}}]
+Envoyer un nouveau lien [{{var:connexionUrl}}]
 
 Pour toute question, votre interlocutrice Annie Rasatandrianombana se tient à
 votre disposition : annie.rasatandrianombana@dihal.gouv.fr

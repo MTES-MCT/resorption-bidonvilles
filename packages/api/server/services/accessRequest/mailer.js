@@ -1,4 +1,6 @@
 const { toString: dateToString } = require('#server/utils/date');
+const { frontUrl } = require('#server/config');
+
 const {
     sendAdminNewRequestNotification,
     sendAdminRequestPendingReminder1,
@@ -11,40 +13,42 @@ const {
     sendUserAccessPending,
     sendUserAccessExpired,
     sendUserAccessActivatedWelcome,
+    formatName,
 } = require('#server/mails/mails');
 
 module.exports = {
     toAdmin: {
-        newRequestNotification(admins) {
+        newRequestNotification(admins, user) {
             return Promise.all(
-                admins.map(admin => sendAdminNewRequestNotification(admin)),
+                admins.map(admin => sendAdminNewRequestNotification(admin, { variables: `${frontUrl}/liste-des-utilisateurs/${user.id}` })),
             );
         },
 
-        firstRequestPendingNotification(admins) {
+        firstRequestPendingNotification(admins, user) {
             return Promise.all(
-                admins.map(admin => sendAdminRequestPendingReminder1(admin)),
+                admins.map(admin => sendAdminRequestPendingReminder1(admin, { variables: `${frontUrl}/liste-des-utilisateurs/${user.id}` })),
             );
         },
 
-        secondRequestPendingNotification(admins) {
+        secondRequestPendingNotification(admins, user) {
             return Promise.all(
-                admins.map(admin => sendAdminRequestPendingReminder2(admin)),
+                admins.map(admin => sendAdminRequestPendingReminder2(admin, { variables: `${frontUrl}/liste-des-utilisateurs/${user.id}` })),
             );
         },
 
         accessExpired(admin, user, submitDate) {
             return sendAdminAccessExpired(admin, {
                 variables: {
-                    userName: `${user.first_name} ${user.last_name}`,
+                    userName: formatName(user.first_name, user.last_name),
                     activationUrlSentDate: dateToString(submitDate),
+                    adminUrl: `${frontUrl}/liste-des-utilisateurs/${user.id}`,
                 },
             });
         },
 
         accessActivated(admin, user) {
             return sendAdminAccessActivated(admin, {
-                variables: { userName: `${user.first_name} ${user.last_name}` },
+                variables: { userName: formatName(user.first_name, user.last_name) },
             });
         },
     },
@@ -57,15 +61,16 @@ module.exports = {
         accessDenied(user, admin) {
             return sendUserAccessDenied(user, {
                 variables: {
-                    adminName: `${admin.first_name} ${admin.last_name}`,
+                    adminName: formatName(admin.first_name, admin.last_name),
                 },
+                replyTo: admin,
             });
         },
 
         accessGranted(user, admin, activationLink, expiracyDate) {
             return sendUserAccessGranted(user, {
                 variables: {
-                    adminName: `${admin.first_name} ${admin.last_name}`,
+                    adminName: formatName(admin.first_name, admin.last_name),
                     activationUrl: activationLink,
                     activationUrlExpDate: dateToString(expiracyDate, true),
                 },

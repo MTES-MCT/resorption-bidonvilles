@@ -17,9 +17,11 @@
                     Vous avez ouvert un accès à la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a> à {{var:userName}} le {{var:activationUrlSentDate}}. Cette personne n’a pas activé son accès dans le délai des 7 jours, son lien est dorénavant expiré.
                 </mj-text>
                 <mj-text>
-                    Nous vous invitons à prendre contact avec elle pour comprendre la raison de cette non-activation et si nécessaire, lui envoyer un nouveau lien d’activation depuis <a href="{{var:adminUrl}}" class="link font-bold">votre onglet administration de la plateforme</a>.
+                    Nous vous invitons à prendre contact avec elle pour comprendre la raison de cette non-activation et, si nécessaire, lui envoyer un nouveau lien d’activation depuis <a href="{{var:adminUrl}}" class="link font-bold">votre onglet administration de la plateforme</a>.
                 </mj-text>
-                <mj-include path="common/connect_cta.mjml" />
+                <mj-button mj-class="button-primary" href="{{var:connexionUrl}}">
+                    Envoyer un nouveau lien
+                </mj-button>
                 <mj-include path="common/contact_interlocutor_admin.mjml" />
             </mj-column>
         </mj-section>

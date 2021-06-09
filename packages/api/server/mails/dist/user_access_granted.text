@@ -1,4 +1,4 @@
-Activer votre compte pour accéder à la plateforme Résorption-bidonvilles
+Activez votre compte pour accéder à la plateforme Résorption-bidonvilles
 Bonjour {{var:recipientName}},
 Nous avons le plaisir de vous informer que votre accès à la plateforme
 Résorption-bidonvilles [{{var:frontUrl}}] a été ouvert par l’administrateur·rice
@@ -8,7 +8,7 @@ résorption des bidonvilles en activant votre accès via le lien ci-dessous.
 
 Activer mon compte [{{var:activationUrl}}]
 
-Attention, le lien est valable 7 jours jusqu'au {{var:activationUrlExpDate}}
+Attention, le lien est valable 7 jours jusqu'au {{var:activationUrlExpDate}}.
 Pour utiliser et prendre en main rapidement la plateforme, vous pouvez
 participer à une session de formation personnalisée :
 

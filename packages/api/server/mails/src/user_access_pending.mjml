@@ -10,7 +10,7 @@
         <mj-section>
             <mj-column>
                 <mj-text mj-class='text-primary text-display pb-4'>
-                    Activer votre lien d’accès à la plateforme <span class="font-italic">Résorption-bidonvilles</span> avant expiration
+                    Activez votre lien d’accès à la plateforme <span class="font-italic">Résorption-bidonvilles</span> avant expiration
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
