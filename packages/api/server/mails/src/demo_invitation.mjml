@@ -10,17 +10,17 @@
         <mj-section>
             <mj-column>
                 <mj-text mj-class='text-primary text-display pb-4'>
-                    Participez à une session de formation de la plateforme Résorption-bidonvilles
+                    Participez à une session de formation de la plateforme <span class="font-italic">Résorption-bidonvilles</span>
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
                     Vous venez de rejoindre les utilisateurs·rices de la plateforme <a href="{{var:frontUrl}}" class="link font-italic font-underline">Résorption-bidonvilles</a>.
                 </mj-text>
                 <mj-text>
-                    Pour vous accompagner dans son utilisation, nous proposons des sessions de formation personnalisées. <span class="font-bold text-primary">En 45 minutes, vous saurez prendre en main la plateforme et l’utiliser en fonction de vos besoins.</span> Nous profiterons également de ce temps d’échange pour répondre à toutes vos questions.
+                    Pour vous accompagner dans son utilisation, nous proposons des sessions de formation personnalisée. <span class="font-bold text-primary">En 45 minutes, vous saurez prendre en main la plateforme et l’utiliser en fonction de vos besoins.</span> Nous profiterons également de ce temps d’échange pour répondre à toutes vos questions.
                 </mj-text>
                 <mj-include path='common/formation_cta_me.mjml' />
-                <mj-include path='common/contact_interlocutor3.mjml' />
+                <mj-include path='common/contact_interlocutor_user.mjml' />
             </mj-column>
         </mj-section>
 

@@ -10,7 +10,7 @@
         <mj-section>
             <mj-column>
                 <mj-text mj-class='text-primary text-display pb-4'>
-                    Rappel, une demande d’accès à la plateforme Résorption-bidonvilles est en attente de votre action
+                    Rappel, une demande d’accès à la plateforme <span class="font-italic">Résorption-bidonvilles</span> est en attente de votre action
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
@@ -21,7 +21,7 @@
                 </mj-text>
                 <mj-include path="common/connect_cta.mjml" />
                 <mj-include path="common/admin_access_request_info.mjml" />
-                <mj-include path="common/contact_interlocutor.mjml" />
+                <mj-include path="common/contact_interlocutor_admin.mjml" />
             </mj-column>
         </mj-section>
 

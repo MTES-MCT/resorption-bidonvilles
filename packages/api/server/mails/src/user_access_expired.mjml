@@ -10,7 +10,7 @@
         <mj-section>
             <mj-column>
                 <mj-text mj-class='text-primary text-display pb-4'>
-                    Expiration de votre lien d’accès à la plateforme Résorption-bidonvilles
+                    Expiration de votre lien d’accès à la plateforme <span class="font-italic">Résorption-bidonvilles</span>
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
@@ -20,9 +20,8 @@
                     Bonne nouvelle, il n’est pas trop tard !
                 </mj-text>
                 <mj-text>
-                    Dès maintenant, participez à une session de formation personnalisée pour utiliser et prendre en main rapidement la plateforme :
+                    Nous vous invitons à prendre contact avec Annie Rasatandrianombana pour recevoir un nouveau lien : <a class="link" href="mailto:annie.rasatandrianombana@dihal.gouv.fr">annie.rasatandrianombana@dihal.gouv.fr</a>.
                 </mj-text>
-                <mj-include path='common/formation_cta_me.mjml' />
             </mj-column>
         </mj-section>
 

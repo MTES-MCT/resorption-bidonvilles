@@ -10,7 +10,7 @@
         <mj-section>
             <mj-column>
                 <mj-text mj-class='text-primary text-display pb-4'>
-                    Vous utilisez la plateforme Résorption-bidonvilles depuis trois mois, votre avis nous intéresse !
+                    Vous utilisez la plateforme <span class="font-italic">Résorption-bidonvilles</span> depuis trois mois, votre avis nous intéresse !
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text>
@@ -19,13 +19,13 @@
                 <mj-button mj-class="button-secondary" href="{{var:surveyUrl}}">
                     Contribuez à améliorer la plateforme en 5 questions
                 </mj-button>
-                <mj-button mj-class="button-primary" href="{{var:connexionUrl}}" padding="0 0 2rem 0" >
-                    Connectez-vous pour participer à la résorption des bidonvilles
-                </mj-button>
                 <mj-text mj-class="pb-4">
                     La plateforme est développée avec et pour les utilisateurs, n'hésitez pas à nous contacter pour toute remarque ou suggestion.
                 </mj-text>
-                <mj-include path="common/contact_interlocutor.mjml" />
+                <mj-include path="common/contact_interlocutor_user.mjml" />
+                <mj-button mj-class="button-primary" href="{{var:connexionUrl}}" padding="0 0 2rem 0" >
+                    Me connecter
+                </mj-button>
             </mj-column>
         </mj-section>
         <mj-include path='common/footer.mjml' />

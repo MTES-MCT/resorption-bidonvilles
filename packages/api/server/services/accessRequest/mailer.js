@@ -67,15 +67,16 @@ module.exports = {
                 variables: {
                     adminName: `${admin.first_name} ${admin.last_name}`,
                     activationUrl: activationLink,
-                    activationUrlExpDate: dateToString(expiracyDate),
+                    activationUrlExpDate: dateToString(expiracyDate, true),
                 },
             });
         },
 
-        accessPending(user, admin, activationLink) {
+        accessPending(user, admin, activationLink, expiracyDate) {
             return sendUserAccessPending(user, {
                 variables: {
                     activationUrl: activationLink,
+                    activationUrlExpDate: dateToString(expiracyDate, true),
                 },
             });
         },

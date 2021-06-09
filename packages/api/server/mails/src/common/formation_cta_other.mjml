@@ -1,3 +1,1 @@
-<mj-button mj-class="button-secondary" href="{{var:formationUrl}}">
-    S'inscrire à une session de formation
-</mj-button>
+<mj-text mj-class="pb-4"><a href="{{var:formationUrl}}" class="link">{{var:formationUrl}}</a></mj-text>

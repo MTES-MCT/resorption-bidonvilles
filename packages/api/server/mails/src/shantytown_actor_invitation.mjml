@@ -14,14 +14,14 @@
                 </mj-text>
                 <mj-text mj-class="pb-4">Bonjour,</mj-text>
                 <mj-text mj-class="pb-4">
-                    {{var:inviterName}} vous a invité à rejoindre la communauté des acteurs de terrain sur la plateforme Résorption-bidonvilles en valorisant votre intervention sur le site <a href="{{var:siteUrl}}">{{var:siteAddress}}</a>.
+                    {{var:inviterName}} vous a invité à rejoindre la communauté des acteurs de terrain sur la plateforme <span class="font-italic">Résorption-bidonvilles</span> en valorisant votre intervention sur le site {{var:siteAddress}}.
                 </mj-text>
                 <mj-text>
                     Dès maintenant rejoignez {{var:inviterName}} sur la plateforme et signalez votre intervention :
                 </mj-text>
                 <mj-include path="common/contact_cta.mjml" />
                 <mj-text mj-class="text-primary font-bold pb-4">
-                    La plateforme Résorption-bidonvilles en 3 questions
+                    La plateforme <span class="font-italic">Résorption-bidonvilles</span> en 3 questions
                 </mj-text>
                 <mj-text mj-class="text-primary font-bold">
                     1. Qu'est-ce que c’est ?
@@ -41,7 +41,7 @@
                 <mj-text mj-class="pb-4">
                     La plateforme vous permet de piloter et de suivre en temps réel la situation et les actions sur votre territoire, de partager vos actions, de contacter les intervenants sur un bidonville ou un squat. Une meilleure circulation de l'information qui permet aux acteurs d'agir mieux et plus rapidement auprès des habitants.
                 </mj-text>
-                <mj-include path="common/contact_interlocutor3.mjml" />
+                <mj-include path="common/contact_interlocutor_user.mjml" />
             </mj-column>
         </mj-section>
 

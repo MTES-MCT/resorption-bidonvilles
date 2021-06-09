@@ -10,7 +10,7 @@
         <mj-section>
             <mj-column>
                 <mj-text mj-class='text-primary text-display pb-4'>
-                    Une nouvelle demande d’accès à la plateforme Résorption-bidonvilles est en attente de votre action
+                    Une nouvelle demande d’accès à la plateforme <span class="font-italic">Résorption-bidonvilles</span> est en attente de votre action
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
@@ -25,7 +25,7 @@
                     Pour accompagner l’utilisateur dans sa prise en main de l’outil, vous pouvez lui proposer de s’inscrire à l’une de nos sessions de formation personnalisée en lui transmettant ce lien :
                 </mj-text>
                 <mj-include path="common/formation_cta_other.mjml" />
-                <mj-include path="common/contact_interlocutor.mjml" />
+                <mj-include path="common/contact_interlocutor_admin.mjml" />
             </mj-column>
         </mj-section>
 

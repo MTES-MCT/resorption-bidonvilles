@@ -10,7 +10,7 @@
         <mj-section>
             <mj-column>
                 <mj-text mj-class='text-primary text-display pb-4'>
-                    Bienvenue sur la plateforme Résorption-bidonvilles !
+                    Bienvenue sur la plateforme <span class="font-italic">Résorption-bidonvilles</span> !
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
@@ -24,10 +24,10 @@
                 </mj-button>
                 <mj-include path='common/formation_cta_me.mjml' />
                 <mj-text>
-                    Connectez vous dès maintenant:
+                    Connectez vous dès maintenant à la plateforme <span class="font-italic">Résorption-bidonvilles</span> :
                 </mj-text>
                 <mj-include path="common/connect_cta.mjml" />
-                <mj-include path="common/contact_interlocutor.mjml" />
+                <mj-include path="common/contact_interlocutor_user.mjml" />
             </mj-column>
         </mj-section>
 
