@@ -244,7 +244,7 @@ module.exports = () => async (req, res, next) => {
                     longitude: req.body.longitude,
                     address: req.body.address,
                     address_details: req.body.detailed_address,
-                    built_at: req.body.built_at,
+                    built_at: req.body.built_at || null,
                     population_total: req.body.population_total,
                     population_couples: req.body.population_couples,
                     population_minors: req.body.population_minors,

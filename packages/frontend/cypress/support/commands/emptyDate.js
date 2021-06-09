@@ -6,8 +6,14 @@
  * @returns {undefined}
  */
 Cypress.Commands.add("emptyDate", { prevSubject: true }, subject => {
-    const clearer = cy.wrap(subject).siblings("[data-cy-button='clear']");
-    if (clearer) {
-        clearer.click();
-    }
+    return cy
+        .wrap(subject)
+        .find("input")
+        .then(input => {
+            if (input[0].value !== "") {
+                cy.wrap(subject)
+                    .siblings("[data-cy-button='clear']")
+                    .click();
+            }
+        });
 });
