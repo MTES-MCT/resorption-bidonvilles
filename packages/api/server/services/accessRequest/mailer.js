@@ -20,19 +20,19 @@ module.exports = {
     toAdmin: {
         newRequestNotification(admins, user) {
             return Promise.all(
-                admins.map(admin => sendAdminNewRequestNotification(admin, { variables: `${frontUrl}/liste-des-utilisateurs/${user.id}` })),
+                admins.map(admin => sendAdminNewRequestNotification(admin, { variables: { adminUrl: `${frontUrl}/nouvel-utilisateur/${user.id}` } })),
             );
         },
 
         firstRequestPendingNotification(admins, user) {
             return Promise.all(
-                admins.map(admin => sendAdminRequestPendingReminder1(admin, { variables: `${frontUrl}/liste-des-utilisateurs/${user.id}` })),
+                admins.map(admin => sendAdminRequestPendingReminder1(admin, { variables: { adminUrl: `${frontUrl}/nouvel-utilisateur/${user.id}` } })),
             );
         },
 
         secondRequestPendingNotification(admins, user) {
             return Promise.all(
-                admins.map(admin => sendAdminRequestPendingReminder2(admin, { variables: `${frontUrl}/liste-des-utilisateurs/${user.id}` })),
+                admins.map(admin => sendAdminRequestPendingReminder2(admin, { variables: { adminUrl: `${frontUrl}/nouvel-utilisateur/${user.id}` } })),
             );
         },
 
@@ -41,7 +41,7 @@ module.exports = {
                 variables: {
                     userName: formatName(user.first_name, user.last_name),
                     activationUrlSentDate: dateToString(submitDate),
-                    adminUrl: `${frontUrl}/liste-des-utilisateurs/${user.id}`,
+                    adminUrl: `${frontUrl}/nouvel-utilisateur/${user.id}`,
                 },
             });
         },
