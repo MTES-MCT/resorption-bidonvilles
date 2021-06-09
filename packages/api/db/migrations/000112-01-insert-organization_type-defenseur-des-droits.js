@@ -35,6 +35,12 @@ module.exports = {
                     },
                     transaction,
                 },
+            ))
+            .then(() => queryInterface.sequelize.query(
+                'REFRESH MATERIALIZED VIEW localized_organizations',
+                {
+                    transaction,
+                },
             )),
     ),
 
@@ -54,6 +60,12 @@ module.exports = {
                     replacements: {
                         name: 'Défenseur des droits',
                     },
+                    transaction,
+                },
+            ))
+            .then(() => queryInterface.sequelize.query(
+                'REFRESH MATERIALIZED VIEW localized_organizations',
+                {
                     transaction,
                 },
             )),

@@ -989,14 +989,17 @@ export default {
                 icon: icon
             }).on("click", function(e) {
                 if (map.getZoom() <= REGION_MAX_ZOOM_LEVEL) {
-                    // Nous sommes au niveau régional, un clic affiche le niveau départemental
+                    // Nous sommes au-delà du niveau régional, un clic affiche le niveau régional
                     map.setView(
                         e.target.getLatLng(),
                         REGION_MAX_ZOOM_LEVEL + 1
                     );
                 } else if (map.getZoom() <= DEPT_MAX_ZOOM_LEVEL) {
-                    // nous sommes au niveau départemental, un clic affiche le niveau des communes
+                    // nous sommes au niveau régional, un clic affiche le niveau des départements
                     map.setView(e.target.getLatLng(), DEPT_MAX_ZOOM_LEVEL + 1);
+                } else if (map.getZoom() <= CITY_MAX_ZOOM_LEVEL) {
+                    // nous sommes au niveau départemental, un clic affiche le niveau des communes
+                    map.setView(e.target.getLatLng(), CITY_MAX_ZOOM_LEVEL + 1);
                 }
             });
             return marker;
