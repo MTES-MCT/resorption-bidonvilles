@@ -1,11 +1,12 @@
 {
   "name": "@resorptionbidonvilles/frontend",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Frontend de Résorption Bidonvilles",
   "scripts": {
     "dev": "vue-cli-service serve --port 80",
     "build": "vue-cli-service build",
-    "lint": "docker exec rb_frontend yarn vue-cli-service lint src cypress docs",
+    "lint": "eslint --max-warnings=0 --ext .js,.vue",
+    "lint:all": "eslint --max-warnings=0 --ext .js,.vue src cypress docs",
     "test": "cypress run",
     "test:unit": "docker exec rb_frontend yarn vue-cli-service test:unit",
     "setup": "husky install"
@@ -21,6 +22,7 @@
     "@sentry/vue": "^6.2.2",
     "@sentry/webpack-plugin": "^1.14.2",
     "@trevoreyre/autocomplete-vue": "^2.2.0",
+    "@turf/point-on-feature": "^6.3.0",
     "axios": "^0.21.1",
     "chart.js": "^2.9.4",
     "core-js": "^3.6.5",
@@ -39,19 +41,17 @@
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.2.0",
     "@vue/cli-plugin-babel": "^4.5.12",
-    "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-unit-jest": "~4.5.0",
     "@vue/cli-service": "^4.5.8",
     "@vue/component-compiler-utils": "^2.3.1",
-    "@vue/eslint-config-airbnb": "^5.0.2",
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/test-utils": "^1.0.3",
     "autoprefixer": "^9.4.5",
     "eslint": "^6.7.2",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-prettier": "^3.1.3",
-    "eslint-plugin-vue": "^6.2.2",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-vue": "^7.10.0",
     "json-loader": "^0.5.7",
     "leaflet": "^1.3.4",
     "leaflet-providers": "^1.5.0",
@@ -70,12 +70,10 @@
     "vue-template-compiler": "^2.5.21",
     "vuejs-datepicker": "^1.5.4"
   },
-  "alias": {
-    "#helpers": "./src/js/helpers",
-    "#app": "./src/js/app",
-    "#root": "./src/js",
-    "#src": "./src/",
-    "vue": "./node_modules/vue/dist/vue.common.js"
+  "lint-staged": {
+    "{src,cypress,public}/**/*.{js,jsx,vue}": [
+      "yarn lint"
+    ]
   },
   "license": "AGPL-3.0-or-later",
   "sass": {

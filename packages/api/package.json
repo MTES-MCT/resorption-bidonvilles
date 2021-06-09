@@ -1,6 +1,6 @@
 {
   "name": "@resorptionbidonvilles/api",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "API d'Action Bidonvilles",
   "main": "server/index.js",
   "repository": "git+https://github.com/MTES-MCT/action-bidonvilles.git",
@@ -67,7 +67,7 @@
   },
   "lint-staged": {
     "server/**/*.js": [
-      "eslint"
+      "yarn lint"
     ]
   },
   "scripts": {
@@ -75,7 +75,9 @@
     "dev": "nodemon server/index.js",
     "test": "mocha --recursive --require ./test/bootstrap.js --bail",
     "test:unit": "yarn test --invert --grep '.*server/models.*'",
-    "test:integration": "yarn test --grep '.*server/models.*'"
+    "test:integration": "yarn test --grep '.*server/models.*'",
+    "lint": "eslint  --max-warnings=0",
+    "lint:all": "eslint  --max-warnings=0 server"
   },
   "_moduleAliases": {
     "#server": "./server",

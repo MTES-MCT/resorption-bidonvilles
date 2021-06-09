@@ -349,6 +349,8 @@ function serializeShantytown(town, permission) {
             code: town.cityCode,
             name: town.cityName,
             main: town.cityMain,
+            latitude: town.cityLatitude,
+            longitude: town.cityLongitude,
         },
         epci: {
             code: town.epciCode,
@@ -562,6 +564,8 @@ const SQL = {
         'cities.code': 'cityCode',
         'cities.name': 'cityName',
         'cities.fk_main': 'cityMain',
+        'cities.latitude': 'cityLatitude',
+        'cities.longitude': 'cityLongitude',
         'epci.code': 'epciCode',
         'epci.name': 'epciName',
         'departements.code': 'departementCode',

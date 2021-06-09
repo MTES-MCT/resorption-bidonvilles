@@ -33,6 +33,7 @@ const sendSlackNotifications = async (guests, greeter) => {
             // eslint-disable-next-line no-await-in-loop
             await triggerPeopleInvitedAlert(guests[i], greeter, "via le formulaire de demande d'accès");
         } catch (err) {
+            // eslint-disable-next-line no-console
             console.log(`Error with invited people webhook : ${err.message}`);
         }
     }

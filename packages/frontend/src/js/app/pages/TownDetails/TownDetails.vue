@@ -161,7 +161,11 @@ import TownDetailsPanelLivingConditions from "./TownDetailsPanelLivingConditions
 import TownDetailsPanelJudicial from "./TownDetailsPanelJudicial";
 import TownDetailsPanelPlans from "./TownDetailsPanelPlans";
 import TownDetailsPanelActors from "./TownDetailsPanelActors";
-import { get as getConfig, getPermission } from "#helpers/api/config";
+import {
+    get as getConfig,
+    hasPermission,
+    getPermission
+} from "#helpers/api/config";
 import TownDetailsNewComment from "./TownDetailsNewComment";
 import TownDetailsComments from "./TownDetailsComments";
 import TownDetailsHistorySidePanel from "./TownDetailsHistorySidePanel";
@@ -171,7 +175,6 @@ import TownDetailsCloseModal from "./TownDetailsCloseModal";
 import TownDetailsActorThemesModal from "./TownDetailsActorThemesModal";
 import TownDetailsInviteActorModal from "./TownDetailsInviteActorModal";
 import { notify } from "#helpers/notificationHelper";
-import { hasPermission } from "#helpers/api/config";
 
 export default {
     components: {

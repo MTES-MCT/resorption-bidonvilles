@@ -2,7 +2,8 @@
     "extends": [
         "plugin:vue/essential",
         "eslint:recommended",
-        "@vue/prettier"
+        "@vue/prettier",
+        "plugin:import/recommended"
     ],
     "env": {
         "browser": true,
@@ -19,14 +20,43 @@
         "node_modules/",
         "dist/"
     ],
+    "settings": {
+        "import/resolver": {
+            "alias": {
+                "map": [
+                    [
+                        "#helpers",
+                        "./src/js/helpers"
+                    ],
+                    [
+                        "#app",
+                        "./src/js/app"
+                    ],
+                    [
+                        "#src",
+                        "./src"
+                    ]
+                ],
+                "extensions": [
+                    ".js",
+                    ".json",
+                    ".vue"
+                ]
+            }
+        }
+    },
     "overrides": [
         {
-            "files": "cypress/**/*.js",
+            "files": [
+                "cypress/**/*.js",
+                "src/**/__tests__/*.js"
+            ],
             "globals": {
                 "Cypress": "readonly",
                 "cy": "readonly",
                 "describe": "readonly",
-                "it": "readonly"
+                "it": "readonly",
+                "expect": "readonly"
             }
         }
     ]
