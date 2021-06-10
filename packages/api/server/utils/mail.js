@@ -1,7 +1,10 @@
 const nodeMailjet = require('node-mailjet');
 const { mail: mailConfig, frontUrl } = require('#server/config');
 
-const mailjet = nodeMailjet.connect(mailConfig.publicKey, mailConfig.privateKey);
+const mailjet = nodeMailjet.connect(
+    mailConfig.publicKey || 'unknown',
+    mailConfig.privateKey || 'unknown',
+);
 
 module.exports = {
     generateUserSignature(user) {

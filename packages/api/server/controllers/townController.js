@@ -961,7 +961,7 @@ module.exports = (models) => {
                 },
                 updatedAt: {
                     title: 'Site mis à jour le',
-                    data: ({ updatedAt }) => (updatedAt ? new Date(updatedAt * 1000) : ''),
+                    data: ({ updatedAt }) => (updatedAt ? tsToString(updatedAt, 'd/m/Y à h:i') : ''),
                     width: COLUMN_WIDTHS.SMALL,
                 },
                 comments: {
