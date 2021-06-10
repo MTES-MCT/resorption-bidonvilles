@@ -17,7 +17,7 @@
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
-                    Nous sommes heureux de vous compter parmi les administrateurs·rices de la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a>.
+                    Nous sommes heureux de vous compter parmi les administrateurs et administratices de la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a>.
                 </mj-text>
                 <mj-text>
                     Vous trouverez dans ce courriel toutes les informations dont vous avez besoin pour vous accompagner dans l’utilisation de la plateforme et pour comprendre votre rôle.

@@ -1,6 +1,7 @@
 const { toString: dateToString } = require('#server/utils/date');
 
 const {
+    formatName,
     sendAdminNewRequestNotification,
     sendAdminRequestPendingReminder1,
     sendAdminRequestPendingReminder2,
@@ -30,28 +31,32 @@ const {
 module.exports = () => ({
     async updateUser(req, res, next) {
         try {
+            const frontUrl = 'https://preprod.resorption-bidonvilles.beta.gouv.fr/#';
+
             const recipient = {
                 first_name: 'Gael',
                 last_name: 'Destrem',
                 email: 'gael.destrem@gmail.com',
             };
-            const userName = 'John Doe';
-            const adminName = 'Admin Doe';
-            const inviterName = 'Inviter Doe';
+            const userName = formatName('John', 'Doe');
+            const adminName = formatName('Admin', 'Doe');
+            const inviterName = formatName('Inviter', 'Doe');
             const activationUrl = 'https://activation.example';
+            const adminUrl = `${frontUrl}/liste-des-utilisateurs`;
             const activationUrlSentDate = new Date();
 
             // await sendUserReview(recipient);
             //
             // await sendAdminAccessActivated(recipient, {
             //     variables: {
-            //         userName
+            //         userName: formatName('John', 'Doe'),
             //     },
             // });
             // await sendAdminAccessExpired(recipient, {
             //     variables: {
-            //         userName,
+            //         userName: formatName('John', 'Doe'),
             //         activationUrlSentDate: dateToString(activationUrlSentDate),
+            //         adminUrl,
             //     },
             // });
             // await sendAdminContactMessage(recipient, {
@@ -64,19 +69,20 @@ module.exports = () => ({
             //         },
             //     },
             // });
-            // await sendAdminNewRequestNotification(recipient);
-            // await sendAdminRequestPendingReminder1(recipient);
-            // await sendAdminRequestPendingReminder2(recipient);
-            await sendAdminWelcome(recipient);
+            // await sendAdminNewRequestNotification(recipient, { variables: { adminUrl } });
+            // await sendAdminRequestPendingReminder1(recipient, { variables: { adminUrl } });
+            // await sendAdminRequestPendingReminder2(recipient, { variables: { adminUrl } });
+            // await sendAdminWelcome(recipient);
             // await sendUserDemoInvitation(recipient);
             // await sendUserPlatformInvitation(recipient, { variables: { inviterName } });
-            // await sendUserShantytownActorInvitation(recipient, { variables: { inviterName, shantytown: { id: 'test', address: 'test' } } });
-            // await sendUserShantytownActorNotification(recipient, { variables: { inviterName, shantytown: { id: 'test', address: 'test' } } });
+            // await sendUserShantytownActorInvitation(recipient, { variables: { inviterName, shantytown: { id: 'test', addressSimple: 'address', name: 'test' } } });
+            // await sendUserShantytownActorNotification(recipient, { variables: { inviterName, shantytown: { id: 'test', addressSimple: 'address', name: 'test' } } });
+
             // await sendUserAccessActivatedWelcome(recipient);
             // await sendUserAccessDenied(recipient, { variables: { adminName, requestDate: dateToString(new Date()) } });
             // await sendUserAccessExpired(recipient);
             // await sendUserAccessGranted(recipient, { variables: { adminName, activationUrl, activationUrlExpDate: dateToString(new Date(), true) } });
-            // await sendUserAccessPending(recipient, { variables: { activationUrl } });
+            await sendUserAccessPending(recipient, { variables: { activationUrl, activationUrlExpDate: dateToString(new Date(), true) } });
             // await sendUserAccessRequestConfirmation(recipient);
             // await sendUserCommentDeletion(recipient, {
             //     variables: {
@@ -114,14 +120,14 @@ module.exports = () => ({
             //         },
             //     },
             // });
-            await sendUserNewPassword(recipient, {
-                variables: {
-                    link: {
-                        link: 'aresetlink',
-                        expiracyDate: dateToString(new Date(), true),
-                    },
-                },
-            });
+            // await sendUserNewPassword(recipient, {
+            //     variables: {
+            //         link: {
+            //             link: 'aresetlink',
+            //             expiracyDate: dateToString(new Date(), true),
+            //         },
+            //     },
+            // });
             // await sendUserShare(recipient);
 
             return res.status(200).send();

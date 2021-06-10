@@ -10,7 +10,7 @@
         <mj-section>
             <mj-column>
                 <mj-text mj-class='text-primary text-display pb-4'>
-                    Vous êtes invité·e à partager votre intervention sur le site {{var:siteAddress}}
+                    Nous vous invitons à partager votre intervention sur le site {{var:siteAddress}}
                 </mj-text>
                 <mj-text mj-class="pb-4">Bonjour,</mj-text>
                 <mj-text mj-class="pb-4">

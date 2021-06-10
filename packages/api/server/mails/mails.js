@@ -1,5 +1,7 @@
 const mailService = require('#server/services/mailService');
-const { frontUrl, backUrl } = require('#server/config');
+// const { frontUrl, backUrl } = require('#server/config');
+const frontUrl = 'https://preprod.resorption-bidonvilles.beta.gouv.fr/#';
+const backUrl = 'https://api.preprod.resorption-bidonvilles.beta.gouv.fr';
 
 const generateTrackingUTM = require('./generateTrackingUTM');
 
@@ -17,7 +19,7 @@ const REQUESTER_CAMPAIGN = 'demandeur-email';
 const USER_CAMPAIGN = 'utilisateur-email';
 const INVITE_CAMPAIGN = 'invite-email';
 
-const formatName = (firstName, lastName) => `${firstName} ${lastName.toUpperCase()}`;
+const formatName = (firstName, lastName) => `${firstName.charAt(0).toUpperCase() + firstName.slice(1)} ${lastName.toUpperCase()}`;
 
 module.exports = {
     formatName,

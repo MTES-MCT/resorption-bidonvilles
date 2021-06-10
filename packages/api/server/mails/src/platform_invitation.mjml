@@ -10,7 +10,7 @@
         <mj-section>
             <mj-column>
                 <mj-text mj-class='text-primary text-display pb-4'>
-                    Vous êtes invité·e à rejoindre les utilisateurs·rices de la plateforme <span class="font-italic">Résorption-bidonvilles</span>
+                    Un de vos partenaires vous invite à rejoindre la plateforme <span class="font-italic">Résorption-bidonvilles</span>
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text>
@@ -20,7 +20,7 @@
                     {{var:inviterName}} vous invite à la découvrir.
                 </mj-text>
                 <mj-text>
-                    <a href="{{var:frontUrl}}" class="link font-italic font-underline">Résorption-bidonvilles</a> est un outil numérique de travail collaboratif pour accélérer la résorption des bidonvilles. Il s’adresse à tous les acteurs·rices de terrain : les services de l’État, les DDETS, les collectivités territoriales, les opérateurs...
+                    <a href="{{var:frontUrl}}" class="link font-italic font-underline">Résorption-bidonvilles</a> est un outil numérique de travail collaboratif pour accélérer la résorption des bidonvilles. Il s’adresse à l'ensemble des actrices et acteurs de terrain : les services de l’État, les DDETS, les collectivités territoriales, les opérateurs...
                 </mj-text>
                 <mj-button mj-class="button-primary" href="{{var:contactUrl}}">
                     Demander mon accès

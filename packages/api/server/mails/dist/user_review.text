@@ -2,8 +2,8 @@ Vous utilisez la plateforme Résorption-bidonvilles depuis trois mois, votre avi
 nous intéresse !
 Bonjour {{var:recipientName}},
 Vous utilisez la plateforme Résorption-bidonvilles [{{var:frontUrl}}] depuis
-trois mois. Donnez-nous votre avis d’utilisateur et d’utilisatrice en répondant
-à ce court questionnaire [{{var:surveyUrl}}].
+trois mois. Donnez-nous votre avis en répondant à ce court questionnaire
+[{{var:surveyUrl}}].
 
 Contribuez à améliorer la plateforme en 5 questions [{{var:surveyUrl}}]
 
@@ -16,7 +16,7 @@ votre disposition : annie.rasatandrianombana@dihal.gouv.fr
 Me connecter [{{var:connexionUrl}}]
 
 Cordialement,
-L'équipe Résorption-bidonvilles.
+L'équipe Résorption-bidonvilles
 
 
 
@@ -24,3 +24,4 @@ Résorption-bidonvilles
 Agir pour résorber les bidonvilles
 contact@resorption-bidonvilles.beta.gouv.fr
 [contact@resorption-bidonvilles.beta.gouv.fr]
+Développé par la Dihal [https://www.gouvernement.fr/resorption-des-bidonvilles]

@@ -1,11 +1,13 @@
-Vous êtes invité·e à partager votre intervention sur le site {{var:siteAddress}}
+Un de vos partenaires vous invite à partager votre intervention sur le site
+{{var:siteAddress}}
 Bonjour {{var:recipientName}},
-{{var:inviterName}} vous a invité à rejoindre la communauté des acteurs·rices de
-terrain sur la plateforme Résorption-bidonvilles [{{var:frontUrl}}] en
-valorisant votre intervention sur le site {{var:siteAddress}} [{{var:siteUrl}}].
-Dès maintenant connectez-vous et rejoignez {{var:inviterName}} en tant
-qu’intervenant·e. Ainsi, vous recevrez en temps réel les messages transmis par
-les autres acteurs du site.
+{{var:inviterName}} vous a invité à rejoindre la communauté des actrices et
+acteurs de terrain sur la plateforme Résorption-bidonvilles [{{var:frontUrl}}]
+en valorisant votre intervention sur le site {{var:siteAddress}}
+[{{var:siteUrl}}].
+Dès maintenant connectez-vous et rejoignez {{var:inviterName}} sur la
+plateforme. Ainsi, vous recevrez en temps réel les messages transmis par les
+autres acteurs du site.
 
 Me connecter [{{var:connexionUrl}}]
 
@@ -14,7 +16,7 @@ votre disposition : annie.rasatandrianombana@dihal.gouv.fr
 [annie.rasatandrianombana@dihal.gouv.fr].
 
 Cordialement,
-L'équipe Résorption-bidonvilles.
+L'équipe Résorption-bidonvilles
 
 
 
@@ -22,3 +24,4 @@ Résorption-bidonvilles
 Agir pour résorber les bidonvilles
 contact@resorption-bidonvilles.beta.gouv.fr
 [contact@resorption-bidonvilles.beta.gouv.fr]
+Développé par la Dihal [https://www.gouvernement.fr/resorption-des-bidonvilles]
