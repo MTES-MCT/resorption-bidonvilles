@@ -114,11 +114,11 @@ export default {
     },
     computed: {
         greeter() {
-            return this.$store.state.greeter;
+            return this.$route.query.email;
         },
         errors() {
             const labels = {
-                "greeter.email":
+                greeter:
                     "Courriel de l'utilisateur à l'origine de l'invitation",
                 guests: "Liste des invité(e)s",
                 email: "Courriel",
@@ -154,9 +154,6 @@ export default {
         }
     },
     methods: {
-        isEmpty(obj) {
-            return Object.keys(obj).length === 0;
-        },
         backHomeWithErrMsg(msg) {
             this.$router.push("/");
             notify({
@@ -237,13 +234,9 @@ export default {
         }
     },
     created() {
-        if (this.greeter === null || this.greeter === undefined) {
+        if (!this.greeter) {
             this.backHomeWithErrMsg(
                 "Impossible d'identifier l'utilisateur' à l'origine de l'invitation"
-            );
-        } else if (this.isEmpty(this.greeter)) {
-            this.backHomeWithErrMsg(
-                "Les données concernant l'utilisateur à l'origine de l'invitation sont introuvables"
             );
         }
     }
