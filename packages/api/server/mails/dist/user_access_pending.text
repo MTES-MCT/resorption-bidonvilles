@@ -1,5 +1,5 @@
-Activez votre lien d’accès à la plateforme Résorption-bidonvilles avant
-expiration
+Activez votre compte pour accéder à la plateforme Résorption-bidonvilles avant
+expiration du lien
 Bonjour {{var:recipientName}},
 Sauf erreur de notre part, vous n’avez pas encore activé votre lien d’accès à la
 plateforme Résorption-bidonvilles [{{var:frontUrl}}].
@@ -12,13 +12,13 @@ Pour toute question, votre interlocutrice Annie Rasatandrianombana se tient à
 votre disposition : annie.rasatandrianombana@dihal.gouv.fr
 [annie.rasatandrianombana@dihal.gouv.fr].
 
-Pour utiliser et prendre en main rapidement la plateforme, vous pouvez
-participer à une session de formation personnalisée :
+Pour prendre en main rapidement la plateforme, participez à une session de
+formation personnalisée.
 
 M'inscrire à une session de formation [{{var:formationUrl}}]
 
 Cordialement,
-L'équipe Résorption-bidonvilles.
+L'équipe Résorption-bidonvilles
 
 
 
@@ -26,3 +26,4 @@ Résorption-bidonvilles
 Agir pour résorber les bidonvilles
 contact@resorption-bidonvilles.beta.gouv.fr
 [contact@resorption-bidonvilles.beta.gouv.fr]
+Développé par la Dihal [https://www.gouvernement.fr/resorption-des-bidonvilles]

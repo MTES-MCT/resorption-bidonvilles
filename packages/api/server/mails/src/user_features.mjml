@@ -10,7 +10,7 @@
         <mj-section>
             <mj-column>
                 <mj-text mj-class='text-primary text-display pb-4'>
-                    Et si vous faisiez connaître votre intervention sur un site aux autres acteurs ?
+                    Et si vous partagiez votre intervention sur un site aux actrices et acteurs ?
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
@@ -34,7 +34,7 @@
 
                 <mj-image src='{{var:backUrl}}/assets/mails/rb_features.jpg' />
 
-                <mj-text mj-class="font-bold">Le partage d’information entre tous les acteurs·rices est essentiel pour accélérer la résorption des bidonvilles.</mj-text>
+                <mj-text mj-class="font-bold">Le partage d’information entre tous les partenaires est essentiel pour accélérer la résorption des bidonvilles.</mj-text>
                 <mj-include path="common/connect_cta.mjml" />
                 <mj-include path="common/contact_interlocutor_user.mjml" />
             </mj-column>
