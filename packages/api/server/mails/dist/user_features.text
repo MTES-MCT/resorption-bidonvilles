@@ -1,4 +1,4 @@
-Et si vous faisiez connaître votre intervention sur un site aux autres acteurs ?
+Et si vous partagiez votre intervention sur un site aux actrices et acteurs ?
 Bonjour {{var:recipientName}},
 Vous utilisez la plateforme Résorption-bidonvilles [{{var:frontUrl}}] depuis un
 mois.
@@ -14,8 +14,8 @@ lors de votre passage sur un site à tous les intervenants sur ce lieu.
 
 
 
-Le partage d’information entre tous les acteurs·rices est essentiel pour
-accélérer la résorption des bidonvilles.
+Le partage d’information entre tous les partenaires est essentiel pour accélérer
+la résorption des bidonvilles.
 
 Me connecter [{{var:connexionUrl}}]
 
@@ -24,7 +24,7 @@ votre disposition : annie.rasatandrianombana@dihal.gouv.fr
 [annie.rasatandrianombana@dihal.gouv.fr].
 
 Cordialement,
-L'équipe Résorption-bidonvilles.
+L'équipe Résorption-bidonvilles
 
 
 
@@ -32,3 +32,4 @@ Résorption-bidonvilles
 Agir pour résorber les bidonvilles
 contact@resorption-bidonvilles.beta.gouv.fr
 [contact@resorption-bidonvilles.beta.gouv.fr]
+Développé par la Dihal [https://www.gouvernement.fr/resorption-des-bidonvilles]

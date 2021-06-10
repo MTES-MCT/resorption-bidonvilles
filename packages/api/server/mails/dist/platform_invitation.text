@@ -1,12 +1,12 @@
-Vous êtes invité·e à rejoindre les utilisateurs·rices de la plateforme
+Un de vos partenaires vous invite à rejoindre la plateforme
 Résorption-bidonvilles
 Bonjour {{var:recipientName}},
 Connaissez-vous la plateforme Résorption-bidonvilles [{{var:frontUrl}}] ?
 {{var:inviterName}} vous invite à la découvrir.
 Résorption-bidonvilles [{{var:frontUrl}}] est un outil numérique de travail
-collaboratif pour accélérer la résorption des bidonvilles. Il s’adresse à tous
-les acteurs·rices de terrain : les services de l’État, les DDETS, les
-collectivités territoriales, les opérateurs...
+collaboratif pour accélérer la résorption des bidonvilles. Il s’adresse à
+l'ensemble des actrices et acteurs de terrain : les services de l’État, les
+DDETS, les collectivités territoriales, les opérateurs...
 
 Demander mon accès [{{var:contactUrl}}]
 
@@ -20,7 +20,7 @@ votre disposition : annie.rasatandrianombana@dihal.gouv.fr
 [annie.rasatandrianombana@dihal.gouv.fr].
 
 Cordialement,
-L'équipe Résorption-bidonvilles.
+L'équipe Résorption-bidonvilles
 
 
 
@@ -28,3 +28,4 @@ Résorption-bidonvilles
 Agir pour résorber les bidonvilles
 contact@resorption-bidonvilles.beta.gouv.fr
 [contact@resorption-bidonvilles.beta.gouv.fr]
+Développé par la Dihal [https://www.gouvernement.fr/resorption-des-bidonvilles]

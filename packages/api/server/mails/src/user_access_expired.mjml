@@ -17,7 +17,7 @@
                     Votre lien d’accès à la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a> a expiré.
                 </mj-text>
                 <mj-text mj-class="text-primary text-lg pb-4">
-                    Bonne nouvelle, il n’est pas trop tard !
+                    Bonne nouvelle, vous pouvez demander un nouveau lien !
                 </mj-text>
                 <mj-text>
                     Nous vous invitons à prendre contact avec Annie Rasatandrianombana pour recevoir un nouveau lien : <a class="link" href="mailto:annie.rasatandrianombana@dihal.gouv.fr">annie.rasatandrianombana@dihal.gouv.fr</a>.

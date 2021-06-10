@@ -14,10 +14,10 @@
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
-                    Nous avons le plaisir de vous informer que votre accès à la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a> a été ouvert par l’administrateur·rice local·e {{var:adminName}}.
+                    Nous avons le plaisir de vous informer que votre accès à la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a> a été ouvert par une personne administratrice locale sur votre territoire :  {{var:adminName}}.
                 </mj-text>
                 <mj-text>
-                    Vous pouvez dès maintenant rejoindre la communauté des acteurs·rices de la résorption des bidonvilles en activant votre accès via le lien ci-dessous.
+                    Vous pouvez dès maintenant rejoindre la communauté des acteurs et actrices de la résorption des bidonvilles en cliquant sur le bouton ci-dessous.
                 </mj-text>
                 <mj-button mj-class="button-primary" href="{{var:activationUrl}}">
                     Activer mon compte
@@ -26,7 +26,7 @@
                     Attention, le lien est valable 7 jours jusqu'au {{var:activationUrlExpDate}}.
                 </mj-text>
                 <mj-text>
-                    Pour utiliser et prendre en main rapidement la plateforme, vous pouvez participer à une session de formation personnalisée :
+                    Pour prendre en main rapidement la plateforme, participez à une session de formation personnalisée.
                 </mj-text>
                 <mj-include path="common/formation_cta_me.mjml" />
                 <mj-include path="common/contact_interlocutor_user.mjml" />
