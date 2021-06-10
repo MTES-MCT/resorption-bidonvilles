@@ -238,7 +238,6 @@ module.exports = {
         return mailService.send('shantytown_actor_invitation', {
             recipient,
             variables: {
-                recipientName: formatName(recipient.first_name, recipient.last_name),
                 inviterName: variables.inviterName,
                 siteUrl: `${frontUrl}/site/${variables.shantytown.id}?${utm}`,
                 siteAddress: `${variables.shantytown.addressSimple}${variables.shantytown.name ? ` « ${variables.shantytown.name} »` : ''}`,
