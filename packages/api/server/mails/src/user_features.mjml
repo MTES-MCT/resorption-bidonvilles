@@ -10,7 +10,7 @@
         <mj-section>
             <mj-column>
                 <mj-text mj-class='text-primary text-display pb-4'>
-                    Et si vous partagiez votre intervention sur un site aux actrices et acteurs ?
+                    Et si vous partagiez votre intervention sur un site aux acteurs et actrices ?
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">

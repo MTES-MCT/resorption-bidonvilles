@@ -24,7 +24,7 @@
                 </mj-button>
                 <mj-include path="common/admin_access_request_info.mjml" />
                 <mj-text>
-                    Pour accompagner l’utilisateur·rice dans sa prise en main de l’outil, vous pouvez lui proposer de s’inscrire à l’une de nos sessions de formation personnalisée en lui transmettant ce lien :
+                    Pour accompagner ce partenaire dans sa prise en main de l’outil, vous pouvez lui proposer de s’inscrire à l’une de nos sessions de formation personnalisée en lui transmettant ce lien :
                 </mj-text>
                 <mj-include path="common/formation_cta_other.mjml" />
                 <mj-include path="common/contact_interlocutor_admin.mjml" />

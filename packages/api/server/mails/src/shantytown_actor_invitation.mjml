@@ -10,7 +10,7 @@
         <mj-section>
             <mj-column>
                 <mj-text mj-class='text-primary text-display pb-4'>
-                    Nous vous invitons à partager votre intervention sur le site {{var:siteAddress}}
+                    Un de vos partenaire vous invite à partager sur le site {{var:siteAddress}}
                 </mj-text>
                 <mj-text mj-class="pb-4">Bonjour,</mj-text>
                 <mj-text mj-class="pb-4">
@@ -39,7 +39,7 @@
                     3. Quels sont vos bénéfices à l’utiliser ?
                 </mj-text>
                 <mj-text mj-class="pb-4">
-                    La plateforme vous permet de piloter et de suivre en temps réel la situation et les actions sur votre territoire, de partager vos actions, de contacter les intervenants sur un bidonville ou un squat. Une meilleure circulation de l'information qui permet aux acteurs d'agir mieux et plus rapidement auprès des habitants.
+                    La plateforme vous permet de piloter et de suivre en temps réel la situation et les actions sur votre territoire, de partager vos actions, de contacter les personnes intervenant sur un bidonville ou un squat. Une meilleure circulation entre tous les partenaires est essentielle pour accélérer la résorption des bidonvilles au profit des bénéficiaires vivants en bidonvilles.
                 </mj-text>
                 <mj-include path="common/contact_interlocutor_user.mjml" />
             </mj-column>
