@@ -1,8 +1,8 @@
 Un de vos partenaires vous invite à partager votre intervention sur le site
 {{var:siteAddress}}
 Bonjour {{var:recipientName}},
-{{var:inviterName}} vous a invité à rejoindre la communauté des actrices et
-acteurs de terrain sur la plateforme Résorption-bidonvilles [{{var:frontUrl}}]
+{{var:inviterName}} vous a invité à rejoindre la communauté des acteurs et
+actrices de terrain sur la plateforme Résorption-bidonvilles [{{var:frontUrl}}]
 en valorisant votre intervention sur le site {{var:siteAddress}}
 [{{var:siteUrl}}].
 Dès maintenant connectez-vous et rejoignez {{var:inviterName}} sur la

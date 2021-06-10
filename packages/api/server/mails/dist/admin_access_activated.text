@@ -1,4 +1,4 @@
-Une nouvelle personne utilisatrice de la plateforme !
+Une nouvelle personne a rejoint la plateforme
 Bonjour {{var:recipientName}},
 Nous sommes heureux de vous informer que {{var:userName}} vient d’activer son
 accès à la plateforme Résorption-bidonvilles [{{var:frontUrl}}]. Cette personne
@@ -10,7 +10,7 @@ transmettant ce lien :
 {{var:formationUrl}} [{{var:formationUrl}}]
 Vous souhaitez favoriser l’utilisation de la plateforme sur votre territoire ?
 Vous souhaitez promouvoir l’outil auprès de vos partenaires ?
-Contactez votre interlocutrice Annie Rasatandrianombana
+Contactez votre interlocutrice Annie Rasatandrianombana :
 annie.rasatandrianombana@dihal.gouv.fr [annie.rasatandrianombana@dihal.gouv.fr]
 ou au 01 40 81 80 39.
 
