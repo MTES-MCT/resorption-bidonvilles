@@ -34,15 +34,6 @@ export default new Vuex.Store({
             },
             currentPage: 1
         },
-        greeter: {
-            email: "",
-            first_name: "",
-            last_name: "",
-            organization: {
-                organization_id: 0,
-                organization_name: ""
-            }
-        },
         detailedTown: null
     },
     mutations: {
@@ -103,11 +94,6 @@ export default new Vuex.Store({
                     actor.themes = themes;
                 }
             }
-        },
-        saveGreeter(currentState, greeter) {
-            currentState.greeter = {
-                ...greeter
-            };
         },
         saveHost(currentState, host) {
             let index = currentState.hosts.findIndex(
