@@ -152,6 +152,12 @@ module.exports = (app) => {
         controllers.user.remove,
     );
     app.post(
+        '/users/:id/local-admin',
+        middlewares.auth.authenticate,
+        middlewares.auth.isSuperAdmin,
+        controllers.user.upgradeLocalAdmin,
+    );
+    app.post(
         '/users/new-password',
         controllers.user.requestNewPassword,
     );
@@ -567,17 +573,5 @@ module.exports = (app) => {
         },
         middlewares.appVersion.sync,
         controllers.userActivity.list,
-    );
-
-    app.get(
-        '/admin',
-        (req, res, next) => {
-            console.log('hey');
-            next();
-        },
-        // middlewares.auth.authenticate,
-        // middlewares.charte.check,
-        // middlewares.appVersion.sync,
-        controllers.admin.updateUser,
     );
 };

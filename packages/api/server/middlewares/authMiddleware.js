@@ -67,6 +67,16 @@ module.exports = (models) => {
 
     const authMiddleware = {};
 
+    authMiddleware.isSuperAdmin = (req, res, next) => {
+        if (req.user.role_id !== 'national_admin') {
+            return res.status(400).send({
+                user_message: 'Vous n\'avez pas les permissions pour accéder à cette route',
+            });
+        }
+
+        return next();
+    };
+
     authMiddleware.authenticate = async (req, res, next, respond = true) => {
         try {
             const user = await authenticate(req);

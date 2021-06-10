@@ -91,6 +91,11 @@
                             <span>L'utilisateur va recevoir<br/>un mail avec un lien d'activation</span>
                         </p>
                     </footer>
+
+                    <div v-if="loggedUser.role_id === 'national_admin' && user.role_id !== 'local_admin'" class="mt-16">
+                        <div>Options d'administration</div>
+                        <button class="button" @click="upgradeLocalAdmin">Accorder les droits d'administrateur local</button>
+                    </div>
                 </section>
             </div>
         </section>

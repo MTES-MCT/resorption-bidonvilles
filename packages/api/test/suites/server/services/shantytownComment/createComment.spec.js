@@ -109,7 +109,7 @@ describe.only('services/shantytownComment', () => {
                 const messageUrl = 'undefined/site/1#newComment';
                 const frontUrl = 'undefined?pk_campaign=utilisateur-email&pk_kwd=nouveau-commentaire';
                 const backUrl = undefined;
-                const recipientName = 'Jean Dupont';
+                const recipientName = 'Jean DUPONT';
 
                 expect(dependencies.sendMail.callCount).to.be.eql(3);
                 expect(dependencies.sendMail).to.have.been.calledWithExactly('user_new_comment',

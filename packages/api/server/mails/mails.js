@@ -1,7 +1,5 @@
 const mailService = require('#server/services/mailService');
-// const { frontUrl, backUrl } = require('#server/config');
-const frontUrl = 'https://preprod.resorption-bidonvilles.beta.gouv.fr/#';
-const backUrl = 'https://api.preprod.resorption-bidonvilles.beta.gouv.fr';
+const { frontUrl, backUrl } = require('#server/config');
 
 const generateTrackingUTM = require('./generateTrackingUTM');
 
