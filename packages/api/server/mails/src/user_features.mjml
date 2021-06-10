@@ -10,7 +10,7 @@
         <mj-section>
             <mj-column>
                 <mj-text mj-class='text-primary text-display pb-4'>
-                    Et si vous partagiez votre intervention sur un site aux acteurs et actrices ?
+                    Et si vous partagiez votre intervention sur un site aux autres acteurs et actrices ?
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
@@ -26,10 +26,10 @@
                     Dès à présent,
                 </mj-text>
                 <mj-text>
-                    ➔ Valorisez votre présence sur un site et facilitez la mise en réseau des acteurs en vous déclarant intervenant sur un site.
+                    ➔ Valorisez votre présence sur un site et facilitez la mise en réseau des acteurs et actrices en vous déclarant intervenant sur un site.
                 </mj-text>
                 <mj-text mj-class="pb-4">
-                    ➔ Partagez sur le journal du site les informations que vous y avez recueillies lors de votre passage sur un site à tous les intervenants sur ce lieu.
+                    ➔ Partagez sur le journal du site les informations que vous y avez recueillies lors de votre passage sur un site à tous les intervenantes et intervenants sur ce lieu.
                 </mj-text>
 
                 <mj-image src='{{var:backUrl}}/assets/mails/rb_features.jpg' />

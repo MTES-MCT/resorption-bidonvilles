@@ -17,7 +17,7 @@
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
-                    Nous sommes heureux de vous compter parmi les administrateurs et administratices de la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a>.
+                    Nous sommes heureux de vous compter parmi les administrateurs et administratrices de la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a>.
                 </mj-text>
                 <mj-text>
                     Vous trouverez dans ce courriel toutes les informations dont vous avez besoin pour vous accompagner dans l’utilisation de la plateforme et pour comprendre votre rôle.
@@ -27,7 +27,7 @@
                 </mj-button>
                 <mj-include path="common/connect_cta.mjml" />
                 <mj-text>
-                    Pour prendre en main rapidement la plateforme et vous guider dans ce rôle, merci de contacter votre interlocutrice Annie Rasatandrianombana <a href="mailto:annie.rasatandrianombana@dihal.gouv.fr" class="link">annie.rasatandrianombana@dihal.gouv.fr</a> ou au 01 40 81 80 39.
+                    Pour prendre en main rapidement la plateforme et vous guider dans ce rôle, merci de contacter votre interlocutrice Annie Rasatandrianombana : <a href="mailto:annie.rasatandrianombana@dihal.gouv.fr" class="link">annie.rasatandrianombana@dihal.gouv.fr</a> ou 01 40 81 80 39.
                 </mj-text>
             </mj-column>
         </mj-section>

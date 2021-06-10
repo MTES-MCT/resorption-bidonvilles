@@ -14,13 +14,13 @@
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text>
-                    Connaissez-vous la plateforme <a href="{{var:frontUrl}}" class="link font-italic font-underline">Résorption-bidonvilles</a> ?
+                    Connaissez-vous la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a> ?
                 </mj-text>
                 <mj-text mj-class="pb-4">
                     {{var:inviterName}} vous invite à la découvrir.
                 </mj-text>
                 <mj-text>
-                    <a href="{{var:frontUrl}}" class="link font-italic font-underline">Résorption-bidonvilles</a> est un outil numérique de travail collaboratif pour accélérer la résorption des bidonvilles. Il s’adresse à l'ensemble des acteurs et actrices de terrain : les services de l’État, les DDETS, les collectivités territoriales, les opérateurs...
+                    <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a> est un outil numérique de travail collaboratif pour accélérer la résorption des bidonvilles. Il s’adresse à l'ensemble des acteurs et actrices de terrain : les services de l’État, les DDETS, les collectivités territoriales, les opérateurs...
                 </mj-text>
                 <mj-button mj-class="button-primary" href="{{var:contactUrl}}">
                     Demander mon accès
