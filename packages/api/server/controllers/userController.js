@@ -861,7 +861,7 @@ module.exports = models => ({
         } catch (error) {
             res.status(500).send({
                 error: {
-                    user_message: 'Une erreur est survenue lors de la suppression du compte de la base de données',
+                    user_message: 'Une erreur est survenue lors de la mise à jour du compte',
                     developer_message: error.message,
                 },
             });

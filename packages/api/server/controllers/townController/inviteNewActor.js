@@ -2,6 +2,7 @@
 const { triggerActorInvitedAlert } = require('#server/utils/slack');
 const {
     sendUserShantytownActorInvitation,
+    formatName,
 } = require('#server/mails/mails');
 
 
@@ -9,7 +10,7 @@ module.exports = () => async (req, res, next) => {
     try {
         await sendUserShantytownActorInvitation({ email: req.body.email }, {
             variables: {
-                inviterName: `${req.user.first_name} ${req.user.last_name}`,
+                inviterName: formatName(req.user.first_name, req.user.last_name),
                 shantytown: req.shantytown,
             },
         });
