@@ -20,7 +20,7 @@
                     Contribuez à améliorer la plateforme en 5 questions
                 </mj-button>
                 <mj-text mj-class="pb-4">
-                    La plateforme est développée avec et pour les utilisateurs·rices, n'hésitez pas à nous contacter pour toute remarque ou suggestion.
+                    La plateforme est développée avec et pour les utilisateurs et utilisatrices, n’hésitez pas à nous contacter pour toute remarque ou suggestion.
                 </mj-text>
                 <mj-include path="common/contact_interlocutor_user.mjml" />
                 <mj-button mj-class="button-primary" href="{{var:connexionUrl}}">

@@ -16,7 +16,7 @@
                 <mj-button href="{{var:messageUrl}}" mj-class="button-primary">Voir le message</mj-button><br/>
                 <mj-button href="{{var:annuaireUrl}}" mj-class="button-secondary" padding="0 0 2rem 0">Contacter {{var:comment.createdBy.firstName}} {{var:comment.createdBy.lastName}}</mj-button>
                 <mj-text mj-class="pb-4">
-                    En tant qu’intervenant·e sur ce site, vous êtes informé·e en temps réel de tout nouveau message.<br/>
+                    En tant que personne intervenant sur ce site, vous êtes informé(e) en temps réel de tout nouveau message.<br/>
                 </mj-text>
             </mj-column>
         </mj-section>

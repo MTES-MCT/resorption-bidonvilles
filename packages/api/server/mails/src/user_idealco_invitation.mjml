@@ -1,6 +1,6 @@
 <mjml>
     <mj-head>
-        <mj-title>[Résorption-bidonvilles] - Restez informé et rejoignez notre groupe IdealCo</mj-title>
+        <mj-title>[Résorption-bidonvilles] - Restez informé(e) et rejoignez notre groupe IdealCo</mj-title>
         <mj-include path='common/attributes.mjml' />
         <mj-include path='common/styles.mjml' />
     </mj-head>

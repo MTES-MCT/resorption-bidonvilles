@@ -9,8 +9,8 @@ Voir le message [{{var:messageUrl}}]
 Contacter {{var:comment.createdBy.firstName}} {{var:comment.createdBy.lastName}}
 [{{var:annuaireUrl}}]
 
-En tant qu’intervenant·e sur ce site, vous êtes informé·e en temps réel de tout
-nouveau message.
+En tant que personne intervenant sur ce site, vous êtes informé(e) en temps réel
+de tout nouveau message.
 
 
 Cordialement,
