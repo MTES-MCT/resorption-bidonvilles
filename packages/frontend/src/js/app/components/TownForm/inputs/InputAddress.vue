@@ -7,6 +7,7 @@
         :getResultValue="getResultValue"
         validationName="Adresse"
         @submit="submit"
+        rules="required"
         data-cy-field="address"
         :defaultValue="value"
     ></AutocompleteV2>
