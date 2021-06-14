@@ -1,0 +1,18 @@
+Suivi de votre demande d’accès
+Bonjour {{var:recipientName}},
+Vous avez effectué une demande d’accès à la plateforme Résorption-bidonvilles
+[{{var:frontUrl}}]. La personne administratrice locale sur votre territoire
+{{var:adminName}} n’a pas donné suite à votre demande.
+Vous pouvez contacter cette personne par retour de ce courriel pour de plus
+amples informations.
+
+Cordialement,
+L'équipe Résorption-bidonvilles
+
+
+
+Résorption-bidonvilles
+Agir pour résorber les bidonvilles
+contact@resorption-bidonvilles.beta.gouv.fr
+[contact@resorption-bidonvilles.beta.gouv.fr]
+Développé par la Dihal [https://www.gouvernement.fr/resorption-des-bidonvilles]

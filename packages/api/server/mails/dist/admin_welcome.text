@@ -1,0 +1,28 @@
+Bienvenue sur la plateforme Résorption-bidonvilles !
+Vous avez maintenant le rôle d’administrateur local sur votre territoire !
+Bonjour {{var:recipientName}},
+Nous sommes heureux de vous compter parmi les administrateurs et
+administratrices de la plateforme Résorption-bidonvilles [{{var:frontUrl}}].
+Vous trouverez dans ce courriel toutes les informations dont vous avez besoin
+pour vous accompagner dans l’utilisation de la plateforme et pour comprendre
+votre rôle.
+
+Accéder à mon guide administrateur [{{var:adminGuideUrl}}]
+
+Me connecter [{{var:connexionUrl}}]
+
+Pour prendre en main rapidement la plateforme et vous guider dans ce rôle, merci
+de contacter votre interlocutrice Annie Rasatandrianombana :
+annie.rasatandrianombana@dihal.gouv.fr [annie.rasatandrianombana@dihal.gouv.fr]
+ou 01 40 81 80 39.
+
+Cordialement,
+L'équipe Résorption-bidonvilles
+
+
+
+Résorption-bidonvilles
+Agir pour résorber les bidonvilles
+contact@resorption-bidonvilles.beta.gouv.fr
+[contact@resorption-bidonvilles.beta.gouv.fr]
+Développé par la Dihal [https://www.gouvernement.fr/resorption-des-bidonvilles]

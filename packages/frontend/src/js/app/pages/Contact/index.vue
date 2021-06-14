@@ -365,12 +365,9 @@ export default {
                         "Demande d'accès",
                         "Demande d'accès"
                     );
-
-                    const greeter = {
-                        email: result.email
-                    };
-                    this.$store.commit("saveGreeter", greeter);
-                    this.$router.push("/invitation");
+                    this.$router.push(
+                        `/invitation?email=${encodeURIComponent(result.email)}`
+                    );
                 } else {
                     this.$piwik?.trackEvent("Contact", "Demande d'information");
 

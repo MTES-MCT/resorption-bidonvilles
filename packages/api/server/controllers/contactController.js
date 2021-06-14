@@ -1,17 +1,25 @@
+const { toString: dateToString } = require('#server/utils/date');
+
 const userService = require('#server/services/userService');
 const accessRequestService = require('#server/services/accessRequest/accessRequestService');
 
-const {
-    send: sendMail,
-    PRESERVE_RECIPIENT,
-} = require('#server/services/mailService');
+const { sendAdminContactMessage } = require('#server/mails/mails');
 
-const sendEmailNewContactMessageToAdmins = async (data, models, contact) => {
+const sendEmailNewContactMessageToAdmins = async (data, models, message) => {
     const admins = await models.user.getNationalAdmins();
 
     for (let i = 0; i < admins.length; i += 1) {
-        // eslint-disable-next-line no-await-in-loop
-        await sendMail('contact_message', admins[i], contact, [data, new Date()], !PRESERVE_RECIPIENT);
+        sendAdminContactMessage(admins[i], {
+            variables: {
+                message: {
+                    created_at: dateToString(new Date()),
+                    last_name: message.last_name,
+                    first_name: message.first_name,
+                    access_request_message: message.access_request_message,
+                },
+            },
+            preserveRecipient: false,
+        });
     }
 };
 
@@ -27,10 +35,13 @@ module.exports = models => ({
                 first_name: req.body.first_name,
                 email: req.body.email,
                 phone: req.body.phone,
-                organization: req.body.organization_full ? req.body.organization_full.id : null,
+                organization: req.body.organization_full
+                    ? req.body.organization_full.id
+                    : null,
                 new_association: req.body.new_association === true,
                 new_association_name: req.body.new_association_name || null,
-                new_association_abbreviation: req.body.new_association_abbreviation || null,
+                new_association_abbreviation:
+          req.body.new_association_abbreviation || null,
                 departement: req.body.departement || null,
                 position: req.body.position,
                 access_request_message: req.body.access_request_message,
@@ -53,9 +64,9 @@ module.exports = models => ({
         // contact request
         try {
             await sendEmailNewContactMessageToAdmins(req.body, models, {
-                email: req.body.email,
                 last_name: req.body.last_name,
                 first_name: req.body.first_name,
+                access_request_message: req.body.access_request_message,
             });
         } catch (err) {
             // ignore

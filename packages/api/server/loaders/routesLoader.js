@@ -152,6 +152,12 @@ module.exports = (app) => {
         controllers.user.remove,
     );
     app.post(
+        '/users/:id/local-admin',
+        middlewares.auth.authenticate,
+        middlewares.auth.isSuperAdmin,
+        controllers.user.upgradeLocalAdmin,
+    );
+    app.post(
         '/users/new-password',
         controllers.user.requestNewPassword,
     );

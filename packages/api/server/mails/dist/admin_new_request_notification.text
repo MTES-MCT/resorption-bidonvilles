@@ -1,0 +1,35 @@
+Une nouvelle demande d’accès à la plateforme Résorption-bidonvilles est en
+attente de votre action
+Bonjour {{var:recipientName}},
+Vous avez reçu une nouvelle demande d’accès à la plateforme
+Résorption-bidonvilles [{{var:frontUrl}}].
+Nous vous invitons à vous rendre sur l’onglet administration de la plateforme
+[{{var:adminUrl}}] pour ouvrir et paramétrer l’accès. Une réponse est souhaitée
+sous 7 jours.
+
+Traiter la demande [{{var:connexionUrl}}]
+
+1er cas : vous souhaitez valider la demande, cliquez sur “Envoyer un accès”
+2e cas : vous souhaitez refuser la demande, cliquez sur “Refuser l’accès” et en
+parallèle, envoyez un courriel à la personne pour expliquer les motifs de ce
+refus
+Nous attirons votre attention sur le point de vigilance suivant : ne jamais
+ouvrir l’accès si vous avez un doute sur l’identité de la personne.
+Pour accompagner ce partenaire dans sa prise en main de l’outil, vous pouvez lui
+proposer de s’inscrire à l’une de nos sessions de formation personnalisée en lui
+transmettant ce lien :
+{{var:formationUrl}} [{{var:formationUrl}}]
+Pour toute question, votre interlocutrice Annie Rasatandrianombana se tient à
+votre disposition : annie.rasatandrianombana@dihal.gouv.fr
+[annie.rasatandrianombana@dihal.gouv.fr] ou 01 40 81 80 39.
+
+Cordialement,
+L'équipe Résorption-bidonvilles
+
+
+
+Résorption-bidonvilles
+Agir pour résorber les bidonvilles
+contact@resorption-bidonvilles.beta.gouv.fr
+[contact@resorption-bidonvilles.beta.gouv.fr]
+Développé par la Dihal [https://www.gouvernement.fr/resorption-des-bidonvilles]

@@ -195,6 +195,13 @@ export function remove(userId) {
 }
 
 /**
+ * POST /users/:id/local-admin
+ */
+export function upgradeLocalAdmin(userId) {
+    return postApi(`/users/${userId}/local-admin`);
+}
+
+/**
  * POST /users/new-password
  */
 export function requestNewPassword(email) {

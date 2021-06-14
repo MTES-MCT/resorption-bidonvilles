@@ -226,8 +226,7 @@ const router = new VueRouter({
         },
         {
             path: "/invitation",
-            component: Invitation,
-            beforeEnter: guardians.anonymous
+            component: Invitation
         },
         {
             path: "/launcher",

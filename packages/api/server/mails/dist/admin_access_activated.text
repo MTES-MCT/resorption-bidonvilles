@@ -1,0 +1,26 @@
+Une nouvelle personne a rejoint la plateforme
+Bonjour {{var:recipientName}},
+Nous sommes heureux de vous informer que {{var:userName}} vient d’activer son
+accès à la plateforme Résorption-bidonvilles [{{var:frontUrl}}]. Cette personne
+est désormais utilisatrice de l’outil numérique d’information, de partage et de
+coordination des acteurs de la résorption des bidonvilles.
+Pour l’accompagner à prendre en main la plateforme, vous pouvez l’inviter à
+s’inscrire à l’une de nos sessions de formation personnalisées en lui
+transmettant ce lien :
+{{var:formationUrl}} [{{var:formationUrl}}]
+Vous souhaitez favoriser l’utilisation de la plateforme sur votre territoire ?
+Vous souhaitez promouvoir l’outil auprès de vos partenaires ?
+Contactez votre interlocutrice Annie Rasatandrianombana :
+annie.rasatandrianombana@dihal.gouv.fr [annie.rasatandrianombana@dihal.gouv.fr]
+ou au 01 40 81 80 39.
+
+Cordialement,
+L'équipe Résorption-bidonvilles
+
+
+
+Résorption-bidonvilles
+Agir pour résorber les bidonvilles
+contact@resorption-bidonvilles.beta.gouv.fr
+[contact@resorption-bidonvilles.beta.gouv.fr]
+Développé par la Dihal [https://www.gouvernement.fr/resorption-des-bidonvilles]

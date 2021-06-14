@@ -1,0 +1,36 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Bienvenue sur la plateforme Résorption-bidonvilles</mj-title>
+        <mj-include path='common/attributes.mjml' />
+        <mj-include path='common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class='text-primary text-display pb-4'>
+                    Bienvenue sur la plateforme <span class="font-italic">Résorption-bidonvilles</span> !
+                </mj-text>
+                <mj-include path='common/hello.mjml' />
+                <mj-text mj-class="pb-4">
+                    Nous sommes heureux de vous compter parmi les utilisateurs et utilisatrices de la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a>.
+                </mj-text>
+                <mj-text>
+                    Pour prendre en main rapidement la plateforme, téléchargez le court guide de l’utilisateur et participez à une session de formation personnalisée, nous répondrons à toutes vos questions.
+                </mj-text>
+                <mj-button mj-class="button-secondary" padding="1rem 0 0 0" href="{{var:userGuideUrl}}">
+                    Télécharger mon guide utilisateur
+                </mj-button>
+                <mj-include path='common/formation_cta_me.mjml' />
+                <mj-text>
+                    Connectez-vous dès maintenant à la plateforme <span class="font-italic">Résorption-bidonvilles</span> :
+                </mj-text>
+                <mj-include path="common/connect_cta.mjml" />
+                <mj-include path="common/contact_interlocutor_user.mjml" />
+            </mj-column>
+        </mj-section>
+
+        <mj-include path='common/footer.mjml' />
+    </mj-body>
+</mjml>

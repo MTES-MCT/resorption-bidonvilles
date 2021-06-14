@@ -761,6 +761,17 @@ module.exports = (database) => {
         return response[0][0].user_id;
     };
 
+    model.upgradeLocalAdmin = async (userId) => {
+        await database.query(
+            'UPDATE USERS SET fk_role = \'local_admin\' where user_id = :userId',
+            {
+                replacements: {
+                    userId,
+                },
+            },
+        );
+    };
+
     model.getAdminsFor = async (user) => {
         let localAdmins = null;
         if (user.organization.location.departement !== null) {

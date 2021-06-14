@@ -25,6 +25,24 @@ module.exports = {
                 accessId,
             });
         },
+
+        async accessActivatedOnboarding(user) {
+            await agenda.schedule('in 7 days', 'demo_invitation', {
+                user,
+            });
+            await agenda.schedule('in 14 days', 'idealco_invitation', {
+                user,
+            });
+            await agenda.schedule('in 30 days', 'user_features', {
+                user,
+            });
+            await agenda.schedule('in 60 days', 'user_share', {
+                user,
+            });
+            await agenda.schedule('in 90 days', 'user_review', {
+                user,
+            });
+        },
     },
 
     cancelEvent: {

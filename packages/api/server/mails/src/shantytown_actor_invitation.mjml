@@ -1,0 +1,50 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Découvrez la plateforme Résorption-bidonvilles</mj-title>
+        <mj-include path='common/attributes.mjml' />
+        <mj-include path='common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class='text-primary text-display pb-4'>
+                    Un de vos partenaire vous invite à partager sur le site {{var:siteAddress}}
+                </mj-text>
+                <mj-text mj-class="pb-4">Bonjour,</mj-text>
+                <mj-text mj-class="pb-4">
+                    {{var:inviterName}} vous a invité à rejoindre la communauté des acteurs de terrain sur la plateforme <a href="{{var:frontUrl}}" class="font-italic link">Résorption-bidonvilles</a> en valorisant votre intervention sur le site {{var:siteAddress}}.
+                </mj-text>
+                <mj-text>
+                    Dès maintenant rejoignez {{var:inviterName}} sur la plateforme et signalez votre intervention :
+                </mj-text>
+                <mj-include path="common/contact_cta.mjml" />
+                <mj-text mj-class="text-primary font-bold pb-4">
+                    La plateforme <span class="font-italic">Résorption-bidonvilles</span> en 3 questions
+                </mj-text>
+                <mj-text mj-class="text-primary font-bold">
+                    1. Qu'est-ce que c’est ?
+                </mj-text>
+                <mj-text mj-class="pb-4">
+                    C'est une plateforme numérique dont l'objectif est d'accélérer la résorption des bidonvilles et faciliter l'insertion de ses habitants ; un outil collaboratif pour s'informer et agir.
+                </mj-text>
+                <mj-text mj-class="text-primary font-bold">
+                    2. À qui s'adresse-t-elle ?
+                </mj-text>
+                <mj-text mj-class="pb-4">
+                    À tous les acteurs de terrain concernés : les services de l'État, les DDETS, les collectivités territoriales, les associations...
+                </mj-text>
+                <mj-text mj-class="text-primary font-bold">
+                    3. Quels sont vos bénéfices à l’utiliser ?
+                </mj-text>
+                <mj-text mj-class="pb-4">
+                    La plateforme vous permet de piloter et de suivre en temps réel la situation et les actions sur votre territoire, de partager vos actions, de contacter les personnes intervenant sur un bidonville ou un squat. Une meilleure circulation entre tous les partenaires est essentielle pour accélérer la résorption des bidonvilles au profit des bénéficiaires vivants en bidonvilles.
+                </mj-text>
+                <mj-include path="common/contact_interlocutor_user.mjml" />
+            </mj-column>
+        </mj-section>
+
+        <mj-include path='common/footer.mjml' />
+    </mj-body>
+</mjml>

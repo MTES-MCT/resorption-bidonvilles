@@ -1,0 +1,5 @@
+<mj-section>
+    <mj-column>
+        <mj-image src='{{var:backUrl}}/assets/mails/hero.jpg' padding="0" />
+    </mj-column>
+</mj-section>

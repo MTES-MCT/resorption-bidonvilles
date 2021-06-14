@@ -1,21 +1,19 @@
 
-const mailService = require('#server/services/mailService');
 const { triggerActorInvitedAlert } = require('#server/utils/slack');
+const {
+    sendUserShantytownActorInvitation,
+    formatName,
+} = require('#server/mails/mails');
+
 
 module.exports = () => async (req, res, next) => {
     try {
-        await mailService.send(
-            'shantytown_actors/invitation',
-            {
-                email: req.body.email,
+        await sendUserShantytownActorInvitation({ email: req.body.email }, {
+            variables: {
+                inviterName: formatName(req.user.first_name, req.user.last_name),
+                shantytown: req.shantytown,
             },
-            null,
-            [
-                req.user,
-                req.shantytown,
-            ],
-            mailService.PRESERVE_RECIPIENT,
-        );
+        });
     } catch (error) {
         res.status(500).send({
             user_message: 'Une erreur est survenue lors de l\'envoi du courriel',
