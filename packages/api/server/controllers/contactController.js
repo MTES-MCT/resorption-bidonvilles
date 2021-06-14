@@ -3,8 +3,6 @@ const { toString: dateToString } = require('#server/utils/date');
 const userService = require('#server/services/userService');
 const accessRequestService = require('#server/services/accessRequest/accessRequestService');
 
-const { PRESERVE_RECIPIENT } = require('#server/services/mailService');
-
 const { sendAdminContactMessage } = require('#server/mails/mails');
 
 const sendEmailNewContactMessageToAdmins = async (data, models, message) => {
@@ -20,7 +18,7 @@ const sendEmailNewContactMessageToAdmins = async (data, models, message) => {
                     access_request_message: message.access_request_message,
                 },
             },
-            preserveRecipient: !PRESERVE_RECIPIENT,
+            preserveRecipient: false,
         });
     }
 };
@@ -66,7 +64,6 @@ module.exports = models => ({
         // contact request
         try {
             await sendEmailNewContactMessageToAdmins(req.body, models, {
-                email: req.body.email,
                 last_name: req.body.last_name,
                 first_name: req.body.first_name,
                 access_request_message: req.body.access_request_message,

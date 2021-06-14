@@ -763,7 +763,12 @@ module.exports = (database) => {
 
     model.upgradeLocalAdmin = async (userId) => {
         await database.query(
-            `UPDATE USERS SET fk_role = 'local_admin' where user_id = ${userId}`,
+            'UPDATE USERS SET fk_role = \'local_admin\' where user_id = :userId',
+            {
+                replacements: {
+                    userId,
+                },
+            },
         );
     };
 

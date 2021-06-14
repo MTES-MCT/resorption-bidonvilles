@@ -92,7 +92,7 @@
                         </p>
                     </footer>
 
-                    <div v-if="loggedUser.role_id === 'national_admin' && user.role_id !== 'local_admin'" class="mt-16">
+                    <div v-if="loggedUser.role_id === 'national_admin' && !user.role_id" class="mt-16">
                         <div>Options d'administration</div>
                         <button class="button" @click="upgradeLocalAdmin">Accorder les droits d'administrateur local</button>
                     </div>

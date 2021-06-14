@@ -481,10 +481,17 @@ module.exports = (models) => {
             try {
                 await sendUserCommentDeletion(author, {
                     variables: {
-                        town,
-                        comment,
+                        town: {
+                            usename: town.usename,
+                            city: {
+                                name: town.city.name,
+                            },
+                        },
+                        comment: {
+                            description: comment.description,
+                            created_at: tsToString(comment.createdAt, 'd/m/Y'),
+                        },
                         message,
-                        user: req.user,
                     },
                 });
             } catch (error) {

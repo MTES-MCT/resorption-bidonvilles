@@ -2,9 +2,11 @@ Bonjour,
 Votre commentaire ci-dessous a été supprimé par un administrateur.
 La raison mentionnée par celui-ci est :
 "{{var:message}}".
+
 "{{var:comment.description}}".
 Écrit le {{var:comment.created_at}}, concernant le site : {{var:town.usename}},
 {{var:town.city.name}}
+
 Pour rappel, conformément à la réglementation relative aux données à caractère
 personnel, un commentaire doit :
 - être neutre et factuel ;

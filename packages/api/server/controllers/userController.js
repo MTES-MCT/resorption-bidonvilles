@@ -875,16 +875,18 @@ module.exports = models => ({
         try {
             const user = await models.user.findOne(req.params.id);
 
-            await models.user.upgradeLocalAdmin(req.params.id);
-            await sendAdminWelcome(user);
+            if (user) {
+                await models.user.upgradeLocalAdmin(req.params.id);
+                await sendAdminWelcome(user);
+            }
         } catch (error) {
             res.status(500).send({
                 error: {
-                    user_message: 'Une erreur est survenue lors de la suppression du compte de la base de données',
+                    user_message: 'Une erreur est survenue lors de la mise à jour du compte',
                     developer_message: error.message,
                 },
             });
-            next(error);
+            return next(error);
         }
 
         return res.status(200).send({});
