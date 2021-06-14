@@ -97,7 +97,7 @@
                                     maintainAspectRatio: false,
                                     scales: {
                                         yAxes: [
-                                            { ticks: { beginAtZero: false } }
+                                            { ticks: { beginAtZero: true } }
                                         ]
                                     }
                                 }"

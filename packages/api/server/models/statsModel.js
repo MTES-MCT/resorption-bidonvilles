@@ -598,8 +598,8 @@ module.exports = database => ({
         }
 
         // on définit les bornes autour desquelles on veut l'évolution de la population, à savoir :
-        // du 1er Mai 2019 au mois précédent (inclus)
-        const min = new Date(2019, 4, 1, 0, 0, 0, 0); // 1er Mai 2019
+        // du 1er Mars 2021 au mois précédent (inclus)
+        const min = new Date(2021, 2, 1, 0, 0, 0, 0); // 1er Mars 2021
         const max = getMonthlyDate(new Date());
         max.setMonth(max.getMonth() + 1);
 
