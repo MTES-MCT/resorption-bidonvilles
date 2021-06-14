@@ -25,5 +25,14 @@
   "send": "Envoyer",
   "cancel": "Annuler",
   "error": "Votre demande comprend des erreurs:",
-  "share": "Partager cette page"
+  "share": "Partager cette page",
+  "referral": {
+      "question": "Comment avez-vous connu la plateforme Résorption-bidonvilles ?",
+      "dihalEvent": "Lors d'un évènement de la Dihal",
+      "newsletter": "Une newsletter",
+      "socialNetwork": "Réseaux sociaux (LinkedIn, Twitter, Ideal co...)",
+      "wordOfMouth": "Bouche à oreille / recommandation",
+      "onlineSearch": "Une recherche internet",
+      "other": "Autre (champ à saisir)"
+  }
 }

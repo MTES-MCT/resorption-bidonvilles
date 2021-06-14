@@ -16,8 +16,10 @@ const sendEmailNewContactMessageToAdmins = async (data, models, contact) => {
 };
 
 module.exports = models => ({
-    async contact(req, res) {
-        const { request_type, is_actor } = req.body;
+    async contact(req, res, next) {
+        const {
+            request_type, is_actor, referral, referral_other,
+        } = req.body;
 
         // user creation
         if (request_type.includes('access-request') && is_actor) {
@@ -43,8 +45,15 @@ module.exports = models => ({
             try {
                 const user = await models.user.findOne(result.id, { extended: true });
                 await accessRequestService.handleNewAccessRequest(user);
+                if (referral) {
+                    await models.contactFormReferral.create({
+                        reason: referral,
+                        reason_other: referral_other || null,
+                        fk_user: user.id,
+                    });
+                }
             } catch (err) {
-                // ignore
+                next(err);
             }
 
             return res.status(200).send(result);
@@ -57,8 +66,14 @@ module.exports = models => ({
                 last_name: req.body.last_name,
                 first_name: req.body.first_name,
             });
+            if (referral) {
+                await models.contactFormReferral.create({
+                    reason: referral,
+                    reason_other: referral_other || null,
+                });
+            }
         } catch (err) {
-            // ignore
+            next(err);
         }
 
         return res.status(200).send();
