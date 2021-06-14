@@ -105,10 +105,37 @@ describe.only('services/shantytownComment', () => {
             });
 
             it('envoie une notification mail', () => {
+                const annuaireUrl = 'undefined/annuaire/2?pk_campaign=utilisateur-email&pk_kwd=nouveau-commentaire';
+                const messageUrl = 'undefined/site/1#newComment';
+                const frontUrl = 'undefined?pk_campaign=utilisateur-email&pk_kwd=nouveau-commentaire';
+                const backUrl = undefined;
+                const recipientName = 'Jean DUPONT';
+
                 expect(dependencies.sendMail.callCount).to.be.eql(3);
-                expect(dependencies.sendMail).to.have.been.calledWithExactly('new_comment', output.watchers[0], undefined, [input.shantytown, output.comment], false);
-                expect(dependencies.sendMail).to.have.been.calledWithExactly('new_comment', output.watchers[1], undefined, [input.shantytown, output.comment], false);
-                expect(dependencies.sendMail).to.have.been.calledWithExactly('new_comment', output.watchers[2], undefined, [input.shantytown, output.comment], false);
+                expect(dependencies.sendMail).to.have.been.calledWithExactly('user_new_comment',
+                    {
+                        recipient: output.watchers[0],
+                        variables: {
+                            shantytown: input.shantytown, comment: output.comment, annuaireUrl, messageUrl, backUrl, recipientName, frontUrl,
+                        },
+                        preserveRecipient: false,
+                    });
+                expect(dependencies.sendMail).to.have.been.calledWithExactly('user_new_comment',
+                    {
+                        recipient: output.watchers[1],
+                        variables: {
+                            shantytown: input.shantytown, comment: output.comment, annuaireUrl, messageUrl, backUrl, recipientName, frontUrl,
+                        },
+                        preserveRecipient: false,
+                    });
+                expect(dependencies.sendMail).to.have.been.calledWithExactly('user_new_comment',
+                    {
+                        recipient: output.watchers[2],
+                        variables: {
+                            shantytown: input.shantytown, comment: output.comment, annuaireUrl, messageUrl, backUrl, recipientName, frontUrl,
+                        },
+                        preserveRecipient: false,
+                    });
             });
 
             it('collecte et retourne la liste des commentaires actualisés', async () => {

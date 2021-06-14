@@ -1,0 +1,29 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Invitation à partager votre intervention</mj-title>
+        <mj-include path='common/attributes.mjml' />
+        <mj-include path='common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class='text-primary text-display pb-4'>
+                    Un de vos partenaires vous invite à partager votre intervention sur le site {{var:siteAddress}}
+                </mj-text>
+                <mj-include path='common/hello.mjml' />
+                <mj-text mj-class="pb-4">
+                    {{var:inviterName}} vous a invité à rejoindre la communauté des acteurs et actrices de terrain sur la plateforme <a href="{{var:frontUrl}}" class="font-italic link">Résorption-bidonvilles</a> en valorisant votre intervention sur le site <a href="{{var:siteUrl}}" class="link">{{var:siteAddress}}</a>.
+                </mj-text>
+                <mj-text>
+                    Dès maintenant connectez-vous et rejoignez {{var:inviterName}} sur la plateforme. Ainsi, vous recevrez en temps réel les messages transmis par les autres acteurs du site.
+                </mj-text>
+                <mj-include path="common/connect_cta.mjml" />
+                <mj-include path="common/contact_interlocutor_user.mjml" />
+            </mj-column>
+        </mj-section>
+
+        <mj-include path='common/footer.mjml' />
+    </mj-body>
+</mjml>

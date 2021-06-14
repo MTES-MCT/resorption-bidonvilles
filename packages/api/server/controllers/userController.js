@@ -1,26 +1,23 @@
 const semver = require('semver');
 const jwt = require('jsonwebtoken');
-const agenda = require('#server/loaders/agendaLoader')();
 const sanitize = require('#server/controllers/userController/helpers/sanitize');
 const checkPassword = require('#server/controllers/userController/helpers/checkPassword');
 const validate = require('#server/controllers/userController/helpers/validate');
 const userService = require('#server/services/userService');
 const { triggerNewUserAlert } = require('#server/utils/slack');
 const { slack: slackConfig } = require('#server/config');
+const { toString: dateToString } = require('#server/utils/date');
 
 const {
     generateAccessTokenFor, hashPassword, getPasswordResetLink,
     getExpiracyDateForActivationTokenCreatedAt,
 } = require('#server/utils/auth');
-const {
-    send: sendMail,
-    PRESERVE_RECIPIENT,
-} = require('#server/services/mailService');
 const permissionsDescription = require('#server/permissions_description');
 const accessRequestService = require('#server/services/accessRequest/accessRequestService');
-
-const MAIL_TEMPLATES = {};
-MAIL_TEMPLATES.new_password = require('#server/mails/new_password');
+const {
+    sendUserNewPassword,
+    sendAdminWelcome,
+} = require('#server/mails/mails');
 
 const { auth: authConfig } = require('#server/config');
 const { sequelize } = require('#db/models');
@@ -679,10 +676,6 @@ module.exports = models => ({
             console.log(`Error with new user webhook : ${err.message}`);
         }
 
-        await agenda.schedule('in 7 days', 'demo_invitation', {
-            user,
-        });
-
         return res.status(200).send({});
     },
 
@@ -868,11 +861,32 @@ module.exports = models => ({
         } catch (error) {
             res.status(500).send({
                 error: {
-                    user_message: 'Une erreur est survenue lors de la suppression du compte de la base de données',
+                    user_message: 'Une erreur est survenue lors de la mise à jour du compte',
                     developer_message: error.message,
                 },
             });
             next(error);
+        }
+
+        return res.status(200).send({});
+    },
+
+    async upgradeLocalAdmin(req, res, next) {
+        try {
+            const user = await models.user.findOne(req.params.id);
+
+            if (user) {
+                await models.user.upgradeLocalAdmin(req.params.id);
+                await sendAdminWelcome(user);
+            }
+        } catch (error) {
+            res.status(500).send({
+                error: {
+                    user_message: 'Une erreur est survenue lors de la mise à jour du compte',
+                    developer_message: error.message,
+                },
+            });
+            return next(error);
         }
 
         return res.status(200).send({});
@@ -911,7 +925,15 @@ module.exports = models => ({
         if (user !== null) {
             try {
                 const resetLink = getPasswordResetLink(user);
-                await sendMail('new_password', user, null, [user, resetLink], PRESERVE_RECIPIENT);
+                await sendUserNewPassword(user, {
+                    variables: {
+                        link: {
+                            link: resetLink.link,
+                            expiracyDate: dateToString(resetLink.expiracyDate, true),
+
+                        },
+                    },
+                });
             } catch (error) {
                 res.status(500).send({
                     error: {

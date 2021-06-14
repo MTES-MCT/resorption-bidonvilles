@@ -4,7 +4,8 @@ import FilterGroup from "./filterGroup/filterGroup.vue";
 import Map from "#app/components/map/map.vue";
 import Quickview from "#app/components/quickview/quickview.vue";
 import POIView from "./POIView.vue";
-import { all as fetchAllTowns } from "#helpers/api/town";
+import store from "#app/store";
+import { mapGetters } from "vuex";
 import { all as fetchAllPois } from "#helpers/api/poi";
 import { get as getConfig, getPermission } from "#helpers/api/config";
 import { open } from "#helpers/tabHelper";
@@ -57,7 +58,6 @@ export default {
                 ],
                 zoom: getDefaultZoomFor(user.organization.location.type)
             },
-            towns: [],
             pois: [],
             quickview: {
                 town: null,
@@ -161,6 +161,9 @@ export default {
         };
     },
     computed: {
+        ...mapGetters({
+            towns: "towns"
+        }),
         allowedFilters() {
             if (!this.permission) {
                 return [];
@@ -422,8 +425,13 @@ export default {
             this.loading = true;
             this.error = undefined;
 
-            Promise.all([fetchAllTowns(), fetchAllPois().catch(() => [])])
-                .then(([towns, pois]) => {
+            Promise.all([
+                this.towns.length === 0
+                    ? store.dispatch("fetchTowns")
+                    : Promise.resolve(),
+                fetchAllPois().catch(() => [])
+            ])
+                .then(([, pois]) => {
                     const { field_types: fieldTypes } = getConfig();
 
                     this.loading = false;
@@ -442,7 +450,6 @@ export default {
                         }))
                     ];
 
-                    this.towns = towns;
                     this.pois = pois;
                     this.$nextTick(() => {
                         this.resize();

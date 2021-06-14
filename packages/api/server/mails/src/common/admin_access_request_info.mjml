@@ -1,0 +1,9 @@
+<mj-text>
+    <span style="font-weight:bold">1er cas</span> : vous souhaitez valider la demande, cliquez sur “Envoyer un accès”
+</mj-text>
+<mj-text mj-class="pb-4">
+    <span style="font-weight:bold">2e cas</span> : vous souhaitez refuser la demande, cliquez sur “Refuser l’accès” et en parallèle, envoyez un courriel à la personne pour expliquer les motifs de ce refus
+</mj-text>
+<mj-text mj-class="pb-4">
+    Nous attirons votre attention sur le point de vigilance suivant : ne jamais ouvrir l’accès si vous avez un doute sur l’identité de la personne.
+</mj-text>

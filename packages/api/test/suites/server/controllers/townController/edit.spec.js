@@ -29,10 +29,12 @@ const otherModels = {
     ownerType: require('#server/models/ownerTypeModel')({}),
     geo: require('#server/models/geoModel')({}),
 };
+const queryStub = sinon.stub();
 const rewiredStubs = {
     '#db/models': {
         sequelize: Object.assign({}, sequelize, {
             transaction: (cb => cb()),
+            query: queryStub,
         }),
         Shantytown: {
             findOne: sinon.stub(),
@@ -54,6 +56,8 @@ describe.only('townController.edit()', () => {
 
     let reqArg = {};
     beforeEach(() => {
+        queryStub.onCall(0).returns([[{ hid: 1 }]]);
+
         reqArg = {
             user: {
                 id: 42,
@@ -94,14 +98,37 @@ describe.only('townController.edit()', () => {
                 population_minors_6_12: null,
                 population_minors_12_16: null,
                 population_minors_16_18: null,
+                minors_in_school: null,
                 social_origins: [],
                 electricity_type: 1,
                 electricity_comments: null,
                 access_to_water: null,
                 access_to_sanitary: null,
                 sanitary_comments: null,
+                sanitary_insalubrious: null,
+                sanitary_number: null,
+                sanitary_on_site: null,
                 water_comments: null,
+                water_continuous_access: null,
+                water_distance: null,
+                water_everyone_has_access: null,
+                water_hand_wash_access: null,
+                water_hand_wash_access_number: null,
+                water_potable: null,
+                water_public_point: null,
+                water_roads_to_cross: null,
+                water_stagnant_water: null,
                 trash_evacuation: null,
+                trash_evacuation_regular: null,
+                trash_accumulation: null,
+                trash_cans_on_site: null,
+                vermin: null,
+                vermin_comments: null,
+                fire_prevention_comments: null,
+                fire_prevention_devices: null,
+                fire_prevention_diagnostic: null,
+                fire_prevention_measures: null,
+                fire_prevention_site_accessible: null,
                 owner_complaint: null,
                 justice_rendered_at: null,
                 justice_rendered_by: null,
@@ -142,6 +169,7 @@ describe.only('townController.edit()', () => {
     });
 
     afterEach(() => {
+        queryStub.reset();
         Object.keys(diStubs).forEach((key) => {
             Object.keys(diStubs[key]).forEach((method) => {
                 diStubs[key][method].restore();
@@ -156,7 +184,7 @@ describe.only('townController.edit()', () => {
     describe('if the user does not have justice permission', () => {
         it('maintains the previous value of justice entries', async () => {
             // setup (overly complicated, as expected...)
-            const values = {
+            const mock = {
                 ownerComplaint: true,
                 justiceProcedure: true,
                 justiceRendered: true,
@@ -168,10 +196,6 @@ describe.only('townController.edit()', () => {
                 policeGrantedAt: (new Date()).getTime(),
                 bailiff: 'Huissier',
             };
-            const mock = new models.Shantytown();
-            Object.keys(values).forEach((key) => {
-                mock[key] = values[key];
-            });
             rewiredStubs['#db/models'].Shantytown.findOne.withArgs({
                 where: {
                     shantytown_id: reqArg.params.id,
@@ -182,50 +206,76 @@ describe.only('townController.edit()', () => {
 
             // execute
             await edit(req, res, sinon.stub());
-            expect(mock.update).to.have.been.calledWithMatch(
+            expect(queryStub).to.have.been.calledWith(
+                sinon.match.any,
                 {
-                    builtAt: new Date(625273200000),
-                    declaredAt: null,
-                    latitude: 49.414964,
-                    longitude: 2.817893,
-                    city: '60159',
-                    address: 'Rue Roger Couttolenc 60200 Compiègne, 60, Oise, Hauts-de-France',
-                    name: null,
-                    addressDetails: null,
-                    fieldType: 1,
-                    ownerType: 1,
-                    owner: null,
-                    censusStatus: null,
-                    censusConductedAt: null,
-                    censusConductedBy: null,
-                    populationTotal: null,
-                    populationCouples: null,
-                    populationMinors: null,
-                    populationMinors0To3: null,
-                    populationMinors3To6: null,
-                    populationMinors6To12: null,
-                    populationMinors12To16: null,
-                    populationMinors16To18: null,
-                    electricityType: 1,
-                    electricityComments: null,
-                    accessToWater: null,
-                    accessToSanitary: null,
-                    sanitaryComments: null,
-                    waterComments: null,
-                    trashEvacuation: null,
-
-                    ownerComplaint: mock.ownerComplaint,
-                    justiceProcedure: mock.justiceProcedure,
-                    justiceRendered: mock.justiceRendered,
-                    justiceRenderedBy: mock.justiceRenderedBy,
-                    justiceRenderedAt: mock.justiceRenderedAt,
-                    justiceChallenged: mock.justiceChallenged,
-                    policeStatus: mock.policeStatus,
-                    policeRequestedAt: mock.policeRequestedAt,
-                    policeGrantedAt: mock.policeGrantedAt,
-                    bailiff: mock.bailiff,
-
-                    updatedBy: reqArg.user.id,
+                    transaction: undefined,
+                    replacements: {
+                        id: req.params.id,
+                        built_at: new Date(625273200000),
+                        declared_at: null,
+                        latitude: 49.414964,
+                        longitude: 2.817893,
+                        fk_city: '60159',
+                        address: 'Rue Roger Couttolenc 60200 Compiègne, 60, Oise, Hauts-de-France',
+                        name: null,
+                        address_details: null,
+                        fk_field_type: 1,
+                        fk_owner_type: 1,
+                        owner: null,
+                        census_status: null,
+                        census_conducted_at: null,
+                        census_conducted_by: null,
+                        population_total: null,
+                        population_couples: null,
+                        population_minors: null,
+                        population_minors_0_3: null,
+                        population_minors_3_6: null,
+                        population_minors_6_12: null,
+                        population_minors_12_16: null,
+                        population_minors_16_18: null,
+                        minors_in_school: null,
+                        fk_electricity_type: 1,
+                        electricity_comments: null,
+                        access_to_water: null,
+                        access_to_sanitary: null,
+                        sanitary_comments: null,
+                        sanitary_insalubrious: null,
+                        sanitary_number: null,
+                        sanitary_on_site: null,
+                        water_comments: null,
+                        water_continuous_access: null,
+                        water_distance: null,
+                        water_everyone_has_access: null,
+                        water_hand_wash_access: null,
+                        water_hand_wash_access_number: null,
+                        water_potable: null,
+                        water_public_point: null,
+                        water_roads_to_cross: null,
+                        water_stagnant_water: null,
+                        trash_evacuation: null,
+                        trash_evacuation_regular: null,
+                        trash_accumulation: null,
+                        trash_cans_on_site: null,
+                        vermin: null,
+                        vermin_comments: null,
+                        fire_prevention_comments: null,
+                        fire_prevention_devices: null,
+                        fire_prevention_diagnostic: null,
+                        fire_prevention_measures: null,
+                        fire_prevention_site_accessible: null,
+                        owner_complaint: mock.ownerComplaint,
+                        justice_procedure: mock.justiceProcedure,
+                        justice_rendered: mock.justiceRendered,
+                        justice_rendered_by: mock.justiceRenderedBy,
+                        justice_rendered_at: mock.justiceRenderedAt,
+                        justice_challenged: mock.justiceChallenged,
+                        police_status: mock.policeStatus,
+                        police_requested_at: mock.policeRequestedAt,
+                        police_granted_at: mock.policeGrantedAt,
+                        bailiff: mock.bailiff,
+                        updated_by: reqArg.user.id,
+                    },
                 },
             );
         });
@@ -233,12 +283,11 @@ describe.only('townController.edit()', () => {
 
     describe('Access to sanitary', () => {
         it('Should update correctly accessToSanitary and sanitaryComments fields', async () => {
-            const mock = new models.Shantytown();
             rewiredStubs['#db/models'].Shantytown.findOne.withArgs({
                 where: {
                     shantytown_id: reqArg.params.id,
                 },
-            }).resolves(mock);
+            }).resolves({});
             reqArg.body = { ...reqArg.body, access_to_sanitary: true, sanitary_comments: 'test' };
             const req = mockReq(reqArg);
             const res = mockRes();
@@ -246,37 +295,76 @@ describe.only('townController.edit()', () => {
             // execute
             await edit(req, res, sinon.stub());
 
-            expect(mock.update).to.have.been.calledWithMatch(
+            expect(queryStub).to.have.been.calledWith(
+                sinon.match.any,
                 {
-                    builtAt: new Date(625273200000),
-                    declaredAt: null,
-                    latitude: 49.414964,
-                    longitude: 2.817893,
-                    city: '60159',
-                    address: 'Rue Roger Couttolenc 60200 Compiègne, 60, Oise, Hauts-de-France',
-                    name: null,
-                    addressDetails: null,
-                    fieldType: 1,
-                    ownerType: 1,
-                    owner: null,
-                    censusStatus: null,
-                    censusConductedAt: null,
-                    censusConductedBy: null,
-                    populationTotal: null,
-                    populationCouples: null,
-                    populationMinors: null,
-                    populationMinors0To3: null,
-                    populationMinors3To6: null,
-                    populationMinors6To12: null,
-                    populationMinors12To16: null,
-                    populationMinors16To18: null,
-                    electricityType: 1,
-                    electricityComments: null,
-                    accessToWater: null,
-                    sanitaryComments: 'test',
-                    accessToSanitary: true,
-                    waterComments: null,
-                    trashEvacuation: null,
+                    transaction: undefined,
+                    replacements: {
+                        id: req.params.id,
+                        built_at: new Date(625273200000),
+                        declared_at: null,
+                        latitude: 49.414964,
+                        longitude: 2.817893,
+                        fk_city: '60159',
+                        address: 'Rue Roger Couttolenc 60200 Compiègne, 60, Oise, Hauts-de-France',
+                        name: null,
+                        address_details: null,
+                        fk_field_type: 1,
+                        fk_owner_type: 1,
+                        owner: null,
+                        census_status: null,
+                        census_conducted_at: null,
+                        census_conducted_by: null,
+                        population_total: null,
+                        population_couples: null,
+                        population_minors: null,
+                        population_minors_0_3: null,
+                        population_minors_3_6: null,
+                        population_minors_6_12: null,
+                        population_minors_12_16: null,
+                        population_minors_16_18: null,
+                        minors_in_school: null,
+                        fk_electricity_type: 1,
+                        electricity_comments: null,
+                        access_to_water: null,
+                        access_to_sanitary: true,
+                        sanitary_comments: 'test',
+                        sanitary_insalubrious: null,
+                        sanitary_number: null,
+                        sanitary_on_site: null,
+                        water_comments: null,
+                        water_continuous_access: null,
+                        water_distance: null,
+                        water_everyone_has_access: null,
+                        water_hand_wash_access: null,
+                        water_hand_wash_access_number: null,
+                        water_potable: null,
+                        water_public_point: null,
+                        water_roads_to_cross: null,
+                        water_stagnant_water: null,
+                        trash_evacuation: null,
+                        trash_evacuation_regular: null,
+                        trash_accumulation: null,
+                        trash_cans_on_site: null,
+                        vermin: null,
+                        vermin_comments: null,
+                        fire_prevention_comments: null,
+                        fire_prevention_devices: null,
+                        fire_prevention_diagnostic: null,
+                        fire_prevention_measures: null,
+                        fire_prevention_site_accessible: null,
+                        owner_complaint: undefined,
+                        justice_procedure: undefined,
+                        justice_rendered: undefined,
+                        justice_rendered_by: undefined,
+                        justice_rendered_at: undefined,
+                        justice_challenged: undefined,
+                        police_status: undefined,
+                        police_requested_at: undefined,
+                        police_granted_at: undefined,
+                        bailiff: undefined,
+                        updated_by: reqArg.user.id,
+                    },
                 },
             );
         });

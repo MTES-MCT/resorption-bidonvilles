@@ -1,0 +1,40 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Votre lien expire dans 48h</mj-title>
+        <mj-include path='common/attributes.mjml' />
+        <mj-include path='common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class='text-primary text-display pb-4'>
+                    Activez votre compte pour accéder à la plateforme <span class="font-italic">Résorption-bidonvilles</span> avant expiration du lien
+                </mj-text>
+                <mj-include path='common/hello.mjml' />
+                <mj-text mj-class="pb-4">
+                    Sauf erreur de notre part, vous n’avez pas encore activé votre lien d’accès à la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a>.
+                </mj-text>
+                <mj-text>
+                    Nous vous invitons à l'activer dès maintenant.
+                </mj-text>
+                <mj-text mj-class="font-bold">
+                    Le lien expirera dans 48h ({{var:activationUrlExpDate}}).
+                </mj-text>
+                <mj-button mj-class="button-primary" href="{{var:activationUrl}}">
+                    Activer mon compte
+                </mj-button>
+                <mj-include path="common/contact_interlocutor_user.mjml"/>
+            </mj-column>
+        </mj-section>
+        <mj-section>
+            <mj-column>
+                <mj-text>Pour prendre en main rapidement la plateforme, participez à une session de formation personnalisée.</mj-text>
+                <mj-include path="common/formation_cta_me.mjml" />
+            </mj-column>
+        </mj-section>
+
+        <mj-include path='common/footer.mjml' />
+    </mj-body>
+</mjml>

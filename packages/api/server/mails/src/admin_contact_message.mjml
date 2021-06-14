@@ -1,0 +1,30 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Vous avez reçu un nouveau message de contact</mj-title>
+        <mj-include path='common/attributes.mjml' />
+        <mj-include path='common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class='pb-4'>
+                    Cher administrateur,
+                </mj-text>
+                <mj-text mj-class="pb-4">
+                    Vous avez reçu un nouveau message de contact
+                </mj-text>
+                <mj-text>
+                    Merci
+                </mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-section mj-class="pb-4">
+            <mj-column padding="1rem" background-color="#dddddd">
+                <mj-text mj-class="pb-4">Date du message : {{var:message.created_at}}</mj-text>
+                <mj-text>{{var:message.last_name}} {{var:message.first_name}}</mj-text>
+                <mj-text>{{var:message.access_request_message}}</mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-include path='common/footer.mjml' />
+    </mj-body>
+</mjml>

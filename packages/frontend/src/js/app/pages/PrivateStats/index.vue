@@ -53,7 +53,7 @@
 
                     <div>
                         <h2 class="text-display-md text-primary mb-4 mt-16">
-                            Suivi des des sites
+                            Suivi des sites
                         </h2>
                         <div v-if="stats">
                             <BarChart
@@ -97,7 +97,7 @@
                                     maintainAspectRatio: false,
                                     scales: {
                                         yAxes: [
-                                            { ticks: { beginAtZero: false } }
+                                            { ticks: { beginAtZero: true } }
                                         ]
                                     }
                                 }"
@@ -362,15 +362,62 @@ export default {
                 return [];
             }
 
+            const {
+                total,
+                totalEU,
+                totalLivingInTownsBiggerThan10,
+                totalEULivingInTownsBiggerThan10
+            } = this.stats.populationTotal.reduce(
+                (
+                    acc,
+                    {
+                        total,
+                        totalEU,
+                        totalLivingInTownsBiggerThan10,
+                        totalEULivingInTownsBiggerThan10
+                    }
+                ) => {
+                    acc.total.push(total);
+                    acc.totalEU.push(totalEU);
+                    acc.totalLivingInTownsBiggerThan10.push(
+                        totalLivingInTownsBiggerThan10
+                    );
+                    acc.totalEULivingInTownsBiggerThan10.push(
+                        totalEULivingInTownsBiggerThan10
+                    );
+                    return acc;
+                },
+                {
+                    total: [],
+                    totalEU: [],
+                    totalLivingInTownsBiggerThan10: [],
+                    totalEULivingInTownsBiggerThan10: []
+                }
+            );
             return {
                 labels: this.stats.populationTotal.map(({ month }) => month),
                 datasets: [
                     {
                         backgroundColor: "#E5E5F4",
-                        data: this.stats.populationTotal.map(
-                            ({ total }) => total
-                        ),
+                        data: total,
                         label: "Nombre d'habitants"
+                    },
+                    {
+                        backgroundColor: "#5770BE",
+                        data: totalEU,
+                        label: "Nombre de ressortissants UE"
+                    },
+                    {
+                        backgroundColor: "#FF8D7E",
+                        data: totalLivingInTownsBiggerThan10,
+                        label:
+                            "Nombre total d'habitants vivant dans des sites de 10 personnes ou plus"
+                    },
+                    {
+                        backgroundColor: "#169B62",
+                        data: totalEULivingInTownsBiggerThan10,
+                        label:
+                            "Nombre de ressortissants UE vivant dans des sites de 10 personnes ou plus"
                     }
                 ]
             };

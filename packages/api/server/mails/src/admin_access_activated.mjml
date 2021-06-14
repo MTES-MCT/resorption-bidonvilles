@@ -1,0 +1,33 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Une personne a activé son compte</mj-title>
+        <mj-include path='common/attributes.mjml' />
+        <mj-include path='common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class='text-primary text-display pb-4'>
+                    Une nouvelle personne a rejoint la plateforme
+                </mj-text>
+                <mj-include path='common/hello.mjml' />
+                <mj-text mj-class="pb-4">
+                    Nous sommes heureux de vous informer que {{var:userName}} vient d’activer son accès à la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a>. Cette personne est désormais utilisatrice de l’outil numérique d’information, de partage et de coordination des acteurs de la résorption des bidonvilles.
+                </mj-text>
+                <mj-include path="common/formation_text_other.mjml" />
+                <mj-include path="common/formation_cta_other.mjml" />
+                <mj-text mj-class="text-primary text-lg">
+                    Vous souhaitez favoriser l’utilisation de la plateforme sur votre territoire ?
+                </mj-text>
+                <mj-text mj-class="text-primary text-lg pb-4">
+                    Vous souhaitez promouvoir l’outil auprès de vos partenaires ?
+                </mj-text>
+                <mj-text>Contactez votre interlocutrice Annie Rasatandrianombana : <a href="mailto:annie.rasatandrianombana@dihal.gouv.fr" class="link">annie.rasatandrianombana@dihal.gouv.fr</a> ou au 01 40 81 80 39.</mj-text>
+            </mj-column>
+        </mj-section>
+
+        <mj-include path='common/footer.mjml' />
+    </mj-body>
+</mjml>

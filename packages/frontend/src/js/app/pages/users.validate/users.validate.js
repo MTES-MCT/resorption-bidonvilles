@@ -1,5 +1,11 @@
 import { VueGoodTable as Table } from "vue-good-table";
-import { get, sendActivationLink, denyAccess, remove } from "#helpers/api/user";
+import {
+    get,
+    sendActivationLink,
+    denyAccess,
+    remove,
+    upgradeLocalAdmin
+} from "#helpers/api/user";
 import UserPermissions from "#app/layouts/userPermissions/userPermissions.vue";
 import "vue-good-table/dist/vue-good-table.css";
 import NavBar from "#app/layouts/navbar/navbar.vue";
@@ -16,13 +22,17 @@ export default {
     },
 
     data() {
-        let activationTokenExpiresIn;
-        ({
-            permissions_description: permissions,
-            activation_token_expires_in: activationTokenExpiresIn
-        } = getConfig());
+        const {
+            permissions_description,
+            activation_token_expires_in: activationTokenExpiresIn,
+            user: loggedUser
+        } = getConfig();
+
+        permissions = permissions_description;
 
         return {
+            loggedUser,
+
             /**
              * @type {User}
              */
@@ -258,6 +268,24 @@ export default {
                     this.validation.state = null;
                     this.validation.error = error;
                 });
+        },
+
+        async upgradeLocalAdmin() {
+            if (this.validation.state === "loading") {
+                return;
+            }
+
+            // eslint-disable-next-line no-alert
+            if (
+                !window.confirm(
+                    "Êtes-vous sûr de vouloir passer cet utilisateur administrateur local ?"
+                )
+            ) {
+                return;
+            }
+
+            await upgradeLocalAdmin(this.$route.params.id);
+            window.location.reload();
         },
 
         /**

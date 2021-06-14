@@ -1,0 +1,3 @@
+<mj-text mj-class="pb-4">
+    Bonjour {{var:recipientName}},
+</mj-text>

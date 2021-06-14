@@ -5,7 +5,7 @@ const userModel = require('#server/models/userModel')(sequelize);
 
 module.exports = [
 
-    body('greeter.email')
+    body('greeter')
         .trim()
         .notEmpty().bail().withMessage('Le courriel de la personne a l\'initiative de l\'invitation doit être renseigné')
         .isEmail().bail().withMessage('Le courriel de la personne a l\'initiative de l\'invitation n\'est pas valide')
