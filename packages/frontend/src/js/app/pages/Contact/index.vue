@@ -211,6 +211,7 @@
                         <CheckableGroup
                             v-if="isFrenchLocale"
                             :label="$t('contactPage.referral.question')"
+                            id="referral"
                         >
                             <Radio
                                 v-model="commonFields.referral"
@@ -252,6 +253,7 @@
                                     variant="card"
                                 />
                                 <TextInput
+                                    id="referral_other"
                                     class="ml-4 flex-1"
                                     v-model="commonFields.referral_other"
                                     v-if="commonFields.referral === 'other'"

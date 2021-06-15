@@ -27,6 +27,23 @@ module.exports = newUser(
         body('access_request_message')
             .trim()
             .notEmpty().withMessage('Vous devez préciser votre message'),
+
+        body('referral')
+            .optional({ nullable: true })
+            .isString()
+            .trim()
+            .custom((value) => {
+                if (value && !['dihal_event', 'newsletter', 'social_network', 'word_of_mouth', 'online_search', 'other'].includes(value)) {
+                    throw new Error('Une erreur est survenue lors de la vérification des données');
+                }
+
+                return true;
+            }),
+
+        body('referral_other')
+            .optional()
+            .isString()
+            .trim(),
     ],
 
     (value, { req }) => req.body.is_actor === true && req.body.request_type.includes('access-request'),

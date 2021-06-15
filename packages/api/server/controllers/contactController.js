@@ -18,8 +18,10 @@ const sendEmailNewContactMessageToAdmins = async (data, models, contact) => {
 module.exports = models => ({
     async contact(req, res, next) {
         const {
-            request_type, is_actor, referral, referral_other,
+            request_type, is_actor, referral,
         } = req.body;
+
+        const referral_other = referral === 'other' && req.body.referral_other ? req.body.referral_other : null;
 
         // user creation
         if (request_type.includes('access-request') && is_actor) {
@@ -48,7 +50,7 @@ module.exports = models => ({
                 if (referral) {
                     await models.contactFormReferral.create({
                         reason: referral,
-                        reason_other: referral_other || null,
+                        reason_other: referral_other,
                         fk_user: user.id,
                     });
                 }
@@ -69,7 +71,7 @@ module.exports = models => ({
             if (referral) {
                 await models.contactFormReferral.create({
                     reason: referral,
-                    reason_other: referral_other || null,
+                    reason_other: referral_other,
                 });
             }
         } catch (err) {
