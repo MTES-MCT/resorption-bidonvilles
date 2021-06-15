@@ -9,10 +9,11 @@ const {
 const { fromTsToFormat: tsToString, toFormat: dateToString } = require('#server/utils/date');
 const { createExport } = require('#server/utils/excel');
 const { sendUserCommentDeletion } = require('#server/mails/mails');
-const { triggerShantytownCloseAlert, triggerShantytownCreationAlert } = require('#server/utils/slack');
+const { triggerShantytownCloseAlert } = require('#server/utils/slack');
 const { getDepartementWatchers } = require('#server/models/userModel')(sequelize);
-const { sendUserShantytownDeclared, sendUserShantytownClosed } = require('#server/mails/mails');
+const { sendUserShantytownClosed } = require('#server/mails/mails');
 const { slack: slackConfig } = require('#server/config');
+const shantytownService = require('#server/services/shantytown');
 
 function fromGeoLevelToTableName(geoLevel) {
     switch (geoLevel) {
@@ -107,137 +108,8 @@ module.exports = (models) => {
 
         async create(req, res, next) {
             try {
-                let town;
-                await sequelize.transaction(async (transaction) => {
-                    const baseTown = {
-                        name: req.body.name,
-                        latitude: req.body.latitude,
-                        longitude: req.body.longitude,
-                        address: req.body.address,
-                        addressDetails: req.body.detailed_address,
-                        builtAt: req.body.built_at,
-                        populationTotal: req.body.population_total,
-                        populationCouples: req.body.population_couples,
-                        populationMinors: req.body.population_minors,
-                        populationMinors0To3: req.body.population_minors_0_3,
-                        populationMinors3To6: req.body.population_minors_3_6,
-                        populationMinors6To12: req.body.population_minors_6_12,
-                        populationMinors12To16: req.body.population_minors_12_16,
-                        populationMinors16To18: req.body.population_minors_16_18,
-                        minorsInSchool: req.body.minors_in_school,
-                        electricityType: req.body.electricity_type,
-                        electricityComments: req.body.electricity_comments,
-                        accessToSanitary: req.body.access_to_sanitary,
-                        sanitaryComments: req.body.sanitary_comments,
-                        accessToWater: req.body.access_to_water,
-                        waterComments: req.body.water_comments,
-                        trashEvacuation: req.body.trash_evacuation,
-                        fieldType: req.body.field_type,
-                        ownerType: req.body.owner_type,
-                        city: req.body.citycode,
-                        createdBy: req.user.id,
-                        owner: req.body.owner,
-                        declaredAt: req.body.declared_at,
-                        censusStatus: req.body.census_status,
-                        censusConductedAt: req.body.census_conducted_at,
-                        censusConductedBy: req.body.census_conducted_by,
-                        // New fields
-                        // Water
-                        waterPotable: req.body.water_potable,
-                        waterContinuousAccess: req.body.water_continuous_access,
-                        waterPublicPoint: req.body.water_public_point,
-                        waterDistance: req.body.water_distance,
-                        waterRoadsToCross: req.body.water_roads_to_cross,
-                        waterEveryoneHasAccess: req.body.water_everyone_has_access,
-                        waterStagnantWater: req.body.water_stagnant_water,
-                        waterHandWashAccess: req.body.water_hand_wash_access,
-                        waterHandWashAccessNumber: req.body.water_hand_wash_access_number,
-                        // Sanitary
-                        sanitaryNumber: req.body.sanitary_number,
-                        sanitaryInsalubrious: req.body.sanitary_insalubrious,
-                        sanitaryOnSite: req.body.sanitary_on_site,
-                        // Trash
-                        trashCansOnSite: req.body.trash_cans_on_site,
-                        trashAccumulation: req.body.trash_accumulation,
-                        trashEvacuationRegular: req.body.trash_evacuation_regular,
-                        // Vermin
-                        vermin: req.body.vermin,
-                        verminComments: req.body.vermin_comments,
-                        // Fire prevention
-                        firePreventionMeasures: req.body.fire_prevention_measures,
-                        firePreventionDiagnostic: req.body.fire_prevention_diagnostic,
-                        firePreventionSiteAccessible: req.body.fire_prevention_site_accessible,
-                        firePreventionDevices: req.body.fire_prevention_devices,
-                        firePreventionComments: req.body.fire_prevention_comments,
-
-                    };
-
-                    town = await ShantyTowns.create(
-                        Object.assign(
-                            {},
-                            baseTown,
-                            req.user.permissions.shantytown.create.data_justice === true
-                                ? {
-                                    ownerComplaint: req.body.owner_complaint,
-                                    justiceProcedure: req.body.justice_procedure,
-                                    justiceRendered: req.body.justice_rendered,
-                                    justiceRenderedBy: req.body.justice_rendered_by,
-                                    justiceRenderedAt: req.body.justice_rendered_at,
-                                    justiceChallenged: req.body.justice_challenged,
-                                    policeStatus: req.body.police_status,
-                                    policeRequestedAt: req.body.police_requested_at,
-                                    policeGrantedAt: req.body.police_granted_at,
-                                    bailiff: req.body.bailiff,
-                                }
-                                : {},
-                        ),
-                        {
-                            transaction,
-                        },
-                    );
-
-                    if (req.body.social_origins.length > 0) {
-                        await town.setSocialOrigins(
-                            req.body.social_origins,
-                            {
-                                transaction,
-                            },
-                        );
-                    }
-                });
-
-                // Send a slack alert, if it fails, do nothing
-                try {
-                    if (slackConfig && slackConfig.new_shantytown) {
-                        await triggerShantytownCreationAlert(town, req.user);
-                    }
-                } catch (err) {
-                    // eslint-disable-next-line no-console
-                    console.log(`Error with shantytown creation slack webhook : ${err.message}`);
-                }
-
-                // Send a notification to all users of the related departement
-                try {
-                    const watchers = await getDepartementWatchers(req.body.city.departement.code);
-                    watchers
-                        .filter(({ user_id }) => user_id !== req.user.id) // do not send an email to the user who created the town
-                        .forEach((watcher) => {
-                            sendUserShantytownDeclared(watcher, {
-                                variables: {
-                                    departement: req.body.city.departement,
-                                    shantytown: town,
-                                    creator: req.user,
-                                },
-                                preserveRecipient: false,
-                            });
-                        });
-                } catch (error) {
-                    // ignore
-                }
-
                 return res.status(200).send({
-                    town,
-                    plans: [],
+                    town: await shantytownService.create(req.body, req.user),
                 });
             } catch (e) {
                 res.status(500).send({
