@@ -22,6 +22,7 @@ module.exports = models => ({
         } = req.body;
 
         const referral_other = referral === 'other' && req.body.referral_other ? req.body.referral_other : null;
+        const referral_word_of_mouth = referral === 'word_of_mouth' && req.body.referral_word_of_mouth ? req.body.referral_word_of_mouth : null;
 
         // user creation
         if (request_type.includes('access-request') && is_actor) {
@@ -51,6 +52,7 @@ module.exports = models => ({
                     await models.contactFormReferral.create({
                         reason: referral,
                         reason_other: referral_other,
+                        reason_word_of_mouth: referral_word_of_mouth,
                         fk_user: user.id,
                     });
                 }
@@ -72,6 +74,7 @@ module.exports = models => ({
                 await models.contactFormReferral.create({
                     reason: referral,
                     reason_other: referral_other,
+                    reason_word_of_mouth: referral_word_of_mouth,
                 });
             }
         } catch (err) {

@@ -34,6 +34,7 @@
       "wordOfMouth": "Bouche à oreille / recommandation",
       "onlineSearch": "Une recherche internet",
       "other": "Autre (champ à saisir)",
-      "otherPlaceholder":  "Autre"
+      "otherQuestion":  "Autre ?",
+      "wordOfMouthQuestion": "Qui vous a recommandé la plateforme ?"
   }
 }

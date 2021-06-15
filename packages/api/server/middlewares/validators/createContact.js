@@ -44,6 +44,11 @@ module.exports = newUser(
             .optional()
             .isString()
             .trim(),
+
+        body('referral_word_of_mouth')
+            .optional()
+            .isString()
+            .trim(),
     ],
 
     (value, { req }) => req.body.is_actor === true && req.body.request_type.includes('access-request'),

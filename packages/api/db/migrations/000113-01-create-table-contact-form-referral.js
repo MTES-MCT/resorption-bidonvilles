@@ -20,6 +20,11 @@ module.exports = {
                     allowNull: true,
                     defaultValue: null,
                 },
+                reason_word_of_mouth: {
+                    type: Sequelize.STRING,
+                    allowNull: true,
+                    defaultValue: null,
+                },
                 fk_user: {
                     type: Sequelize.INTEGER,
                     allowNull: true,

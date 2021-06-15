@@ -245,26 +245,29 @@
                                 :label="$t('contactPage.referral.onlineSearch')"
                                 variant="card"
                             />
-                            <div class="flex">
-                                <Radio
-                                    v-model="commonFields.referral"
-                                    checkValue="other"
-                                    :label="$t('contactPage.referral.other')"
-                                    variant="card"
-                                />
-                                <TextInput
-                                    id="referral_other"
-                                    class="ml-4 flex-1"
-                                    v-model="commonFields.referral_other"
-                                    v-if="commonFields.referral === 'other'"
-                                    :placeholder="
-                                        $t(
-                                            'contactPage.referral.otherPlaceholder'
-                                        )
-                                    "
-                                />
-                            </div>
+                            <Radio
+                                v-model="commonFields.referral"
+                                checkValue="other"
+                                :label="$t('contactPage.referral.other')"
+                                variant="card"
+                            />
                         </CheckableGroup>
+
+                        <TextInput
+                            id="referral_other"
+                            v-model="commonFields.referral_other"
+                            v-if="commonFields.referral === 'other'"
+                            :label="$t('contactPage.referral.otherQuestion')"
+                        />
+
+                        <TextInput
+                            id="referral_word_of_mouth"
+                            v-model="commonFields.referral_word_of_mouth"
+                            v-if="commonFields.referral === 'word_of_mouth'"
+                            :label="
+                                $t('contactPage.referral.wordOfMouthQuestion')
+                            "
+                        />
 
                         <CheckableGroup
                             validationName="Accord"
@@ -464,7 +467,8 @@ export default {
                 is_actor: null,
                 access_request_message: "",
                 referral: null,
-                referral_other: ""
+                referral_other: "",
+                referral_word_of_mouth: ""
             },
             requestAccessFields: {
                 organization_category: null,
