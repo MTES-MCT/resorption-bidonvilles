@@ -10,6 +10,8 @@ const { fromTsToFormat: tsToString, toFormat: dateToString } = require('#server/
 const { createExport } = require('#server/utils/excel');
 const { sendUserCommentDeletion } = require('#server/mails/mails');
 const { triggerShantytownCloseAlert, triggerShantytownCreationAlert } = require('#server/utils/slack');
+const { getDepartementWatchers } = require('#server/models/userModel')(sequelize);
+const { sendUserShantytownDeclared, sendUserShantytownClosed } = require('#server/mails/mails');
 const { slack: slackConfig } = require('#server/config');
 
 function fromGeoLevelToTableName(geoLevel) {
@@ -214,6 +216,25 @@ module.exports = (models) => {
                     console.log(`Error with shantytown creation slack webhook : ${err.message}`);
                 }
 
+                // Send a notification to all users of the related departement
+                try {
+                    const watchers = await getDepartementWatchers(req.body.city.departement.code);
+                    watchers
+                        .filter(({ user_id }) => user_id !== req.user.id) // do not send an email to the user who created the town
+                        .forEach((watcher) => {
+                            sendUserShantytownDeclared(watcher, {
+                                variables: {
+                                    departement: req.body.city.departement,
+                                    shantytown: town,
+                                    creator: req.user,
+                                },
+                                preserveRecipient: false,
+                            });
+                        });
+                } catch (error) {
+                    // ignore
+                }
+
                 return res.status(200).send({
                     town,
                     plans: [],
@@ -357,6 +378,25 @@ module.exports = (models) => {
                     console.log(`Error with shantytown close slack webhook : ${err.message}`);
                 }
 
+                // Send a notification to all users of the related departement
+                try {
+                    const { departement } = await models.geo.getLocation('city', town.city);
+                    const watchers = await getDepartementWatchers(departement.code);
+                    watchers
+                        .filter(({ user_id }) => user_id !== req.user.id) // do not send an email to the user who closed the town
+                        .forEach((watcher) => {
+                            sendUserShantytownClosed(watcher, {
+                                variables: {
+                                    departement,
+                                    shantytown: town,
+                                    editor: req.user,
+                                },
+                                preserveRecipient: false,
+                            });
+                        });
+                } catch (ignore) {
+                    // ignore
+                }
 
                 return res.status(200).send(town);
             } catch (e) {
