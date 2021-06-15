@@ -53,12 +53,13 @@ module.exports = {
         getDepts(queryInterface, Sequelize),
         getOrganizationTypeCodeFromAbbreviation(['DDETS', 'DRETS']),
     ]).then((data) => {
+        // Création des organisations de type DRETS et DDETS
         const regions = [...data[0]];
         const depts = [...data[1]];
         const orgaTypes = { ...data[2].orgaTypes };
 
         if (Object.keys(orgaTypes).length === 0) {
-            throw new Error('Organisazations types DDETS and DRETS are needed to populate organizations table');
+            throw new Error('Organizations types DDETS and DRETS are needed to populate organizations table');
         } else if (!Object.keys(orgaTypes).includes('DRETS')) {
             throw new Error('Can\'t populate organizations with DRETS if DRETS organization\'s type doesn\'t exist');
         } else if (!Object.keys(orgaTypes).includes('DDETS')) {
@@ -72,7 +73,7 @@ module.exports = {
             return queryInterface.sequelize.transaction(
                 transaction => Promise.all([
                     regions.forEach(async (region) => {
-                        queryInterface.sequelize.query(
+                        await queryInterface.sequelize.query(
                             `INSERT INTO
                                 organizations (name, abbreviation, active, fk_type, fk_region)
                             VALUES
@@ -90,7 +91,7 @@ module.exports = {
                         );
                     }),
                     depts.forEach(async (dept) => {
-                        queryInterface.sequelize.query(
+                        await queryInterface.sequelize.query(
                             `INSERT INTO
                                 organizations (name, abbreviation, active, fk_type, fk_departement)
                             VALUES
