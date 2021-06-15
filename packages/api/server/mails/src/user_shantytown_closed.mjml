@@ -1,0 +1,30 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Un site a été fermé en {{var:departementName}}</mj-title>
+        <mj-include path='common/attributes.mjml' />
+        <mj-include path='common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class='text-primary text-display pb-4'>
+                    Un site a été fermé en {{var:departementName}}
+                </mj-text>
+                <mj-include path='common/hello.mjml' />
+                <mj-text>
+                    Un site a été fermé aujourd’hui à {{var:hour}} sur la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a> par {{var:editorName}} :
+                </mj-text>
+                <mj-text mj-class="pb-4"><a href="{{var:townUrl}}" class="link">{{var:townFullAddress}}</a></mj-text>
+                <mj-text>Pour en savoir plus sur la fermeture de ce site, connectez-vous dès à présent à la plateforme.</mj-text>
+                <mj-button mj-class="button-primary" href="{{var:connexionUrl}}">
+                    Me connecter et voir le site
+                </mj-button>
+                <mj-text mj-class="pb-4">Le partage d’information entre tous les partenaires est essentiel pour accélérer la résorption des bidonvilles.</mj-text>
+                <mj-text mj-class="pb-4">Ce mail a été envoyé à tous les utilisateurs et utilisatrices de votre département.</mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-include path='common/footer.mjml' />
+    </mj-body>
+</mjml>
