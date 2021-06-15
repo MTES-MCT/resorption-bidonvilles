@@ -37,7 +37,8 @@
         <PublicContainer>
             <div class="max-w-screen-lg mx-auto py-20">
                 <LandingPageThirdSection />
-                <div class="text-center mt-40">
+                <LandingPageNewsletter v-if="$i18n.locale === 'fr'" />
+                <div class="text-center mt-24">
                     <h2 class="text-display-lg text-secondary">
                         {{ $t("landingPage.hero.subtitle") }}
                     </h2>
@@ -74,6 +75,7 @@ import LandingPageThirdSection from "./LandingPageThirdSection/index.vue";
 import LandingPageBanner from "./LandingPageBanner.vue";
 import LandingPageContactForm from "./LandingPageContactForm.vue";
 import CreditWrapper from "./CreditWrapper.vue";
+import LandingPageNewsletter from "./LandingPageNewsletter.vue";
 
 export default {
     components: {
@@ -85,7 +87,8 @@ export default {
         LandingPageSecondSection,
         LandingPageThirdSection,
         LandingPageBanner,
-        LandingPageContactForm
+        LandingPageContactForm,
+        LandingPageNewsletter
     }
 };
 </script>
