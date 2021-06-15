@@ -33,6 +33,7 @@
       "socialNetwork": "Réseaux sociaux (LinkedIn, Twitter, Ideal co...)",
       "wordOfMouth": "Bouche à oreille / recommandation",
       "onlineSearch": "Une recherche internet",
-      "other": "Autre (champ à saisir)"
+      "other": "Autre (champ à saisir)",
+      "otherPlaceholder":  "Autre"
   }
 }

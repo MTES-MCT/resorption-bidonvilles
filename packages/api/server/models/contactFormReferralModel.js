@@ -10,9 +10,9 @@ module.exports = database => ({
                 reason_other,
                 fk_user
             ) VALUES (
-              :reason,
-              :reason_other,
-              :fk_user
+                :reason,
+                :reason_other,
+                :fk_user
             ) RETURNING contact_form_referral_id AS id`, {
                 replacements: {
                     reason,

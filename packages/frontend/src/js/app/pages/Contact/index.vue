@@ -255,6 +255,11 @@
                                     class="ml-4 flex-1"
                                     v-model="commonFields.referral_other"
                                     v-if="commonFields.referral === 'other'"
+                                    :placeholder="
+                                        $t(
+                                            'contactPage.referral.otherPlaceholder'
+                                        )
+                                    "
                                 />
                             </div>
                         </CheckableGroup>
