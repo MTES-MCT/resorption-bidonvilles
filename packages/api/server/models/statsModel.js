@@ -597,9 +597,11 @@ module.exports = database => ({
             return d;
         }
 
-        // on définit les bornes autour desquelles on veut l'évolution de la population, à savoir :
-        // du 1er Mars 2021 au mois précédent (inclus)
-        const min = new Date(2021, 2, 1, 0, 0, 0, 0); // 1er Mars 2021
+        // on définit les bornes autour de squelles on veut l'évolution de la population, à savoir :
+        // pour les habitants : du 1er Mai 2019 au mois précédent (inclus)
+        // pour les habitants UE : du 1er Mars 2021 au mois précédent (inclus)
+        const min = new Date(2019, 4, 1, 0, 0, 0, 0); // 1er Mai 2019
+        const ueMin = new Date(2021, 2, 1, 0, 0, 0, 0); // 1er Mars 2021
         const max = getMonthlyDate(new Date());
         max.setMonth(max.getMonth() + 1);
 
@@ -637,13 +639,13 @@ module.exports = database => ({
                 const row = result[`${d.getFullYear()}-${d.getMonth()}`];
 
                 row.total += population;
-                if (europeanOnly) {
+                if (europeanOnly && d >= ueMin) {
                     row.totalEU += population;
                 }
 
                 if (population >= 10) {
                     row.totalLivingInTownsBiggerThan10 += population;
-                    if (europeanOnly) {
+                    if (europeanOnly && d >= ueMin) {
                         row.totalEULivingInTownsBiggerThan10 += population;
                     }
                 }
