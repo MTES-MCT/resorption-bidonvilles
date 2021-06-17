@@ -12,7 +12,9 @@
             href="https://email.developpement-durable.gouv.fr/users/subscribe/js_id/5n4i/id/1"
             >{{ $t("landingPage.newsletter.cta") }}</Button
         >
-        <div class="grid grid-cols-1 md:grid-cols-3 text-left gap-8 md:gap-32 mt-16">
+        <div
+            class="grid grid-cols-1 md:grid-cols-3 text-left gap-8 md:gap-32 mt-16"
+        >
             <div v-for="newsletter in newsletters" :key="newsletter.link">
                 <div class="capitalize text-primary font-bold">
                     {{
