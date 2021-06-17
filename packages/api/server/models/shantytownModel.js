@@ -1472,21 +1472,21 @@ module.exports = (database) => {
                 : {},
         );
 
-        await Promise.all([
-            database.query(
-                `UPDATE shantytowns
-                    SET
-                        ${Object.keys(updatedTown).map(column => `${column} = :${column}`).join(', ')}
-                    WHERE shantytown_id = :id`,
-                {
-                    replacements: Object.assign(updatedTown, {
-                        id: shantytownId,
-                    }),
-                    transaction,
-                },
-            ),
+        await database.query(
+            `UPDATE shantytowns
+                SET
+                    ${Object.keys(updatedTown).map(column => `${column} = :${column}`).join(', ')}
+                WHERE shantytown_id = :id`,
+            {
+                replacements: Object.assign(updatedTown, {
+                    id: shantytownId,
+                }),
+                transaction,
+            },
+        );
 
-            database.query(
+        if (Array.isArray(data.social_origins)) {
+            await database.query(
                 'DELETE FROM shantytown_origins WHERE fk_shantytown = :id',
                 {
                     replacements: {
@@ -1494,10 +1494,7 @@ module.exports = (database) => {
                     },
                     transaction,
                 },
-            ),
-        ]);
-
-        if (data.social_origins && data.social_origins.length > 0) {
+            );
             await database.query(
                 `INSERT INTO
                         shantytown_origins(fk_shantytown, fk_social_origin)
