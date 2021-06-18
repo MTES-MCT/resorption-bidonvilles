@@ -9,6 +9,14 @@
             </div>
         </PublicContainer>
 
+        <PublicContainer>
+            <div class="pt-4">
+                <div class="max-w-screen-lg mx-auto pb-20">
+                    <LandingTutorialBanner v-if="$i18n.locale === 'fr'" />
+                </div>
+            </div>
+        </PublicContainer>
+
         <LandingPageBanner :cta="$t('landingPage.firstBanner.cta')">
             {{ $t("landingPage.firstBanner.text") }}
         </LandingPageBanner>
@@ -76,6 +84,7 @@ import LandingPageBanner from "./LandingPageBanner.vue";
 import LandingPageContactForm from "./LandingPageContactForm.vue";
 import CreditWrapper from "./CreditWrapper.vue";
 import LandingPageNewsletter from "./LandingPageNewsletter.vue";
+import LandingTutorialBanner from "./LandingTutorialBanner";
 
 export default {
     components: {
@@ -88,7 +97,8 @@ export default {
         LandingPageThirdSection,
         LandingPageBanner,
         LandingPageContactForm,
-        LandingPageNewsletter
+        LandingPageNewsletter,
+        LandingTutorialBanner
     }
 };
 </script>

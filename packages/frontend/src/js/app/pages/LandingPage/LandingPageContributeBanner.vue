@@ -24,7 +24,7 @@
                     >En savoir plus</a
                 >
             </div>
-            <div class="px-8 py-2 lg:p-8">
+            <div class="flex-shrink-0 px-8 py-2 lg:p-8">
                 <a
                     href="https://eur-lex.europa.eu/legal-content/FR-EN/TXT/?from=EN&uri=CELEX%3A32021H0319%2801%29"
                     target="_blank"
