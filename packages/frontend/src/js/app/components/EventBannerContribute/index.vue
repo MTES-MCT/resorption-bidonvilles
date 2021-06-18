@@ -1,26 +1,31 @@
 <template>
     <div class="flex items-stretch border-solid mb-8" v-if="shouldBeVisible">
         <Button
-            icon="calendar-alt"
             class="justify-self-start px-4 py-4"
             variant="specialEvent"
-            iconPosition="left"
             target="blank"
-            href="https://hello.idealco.fr/inscription-formation-resorptionbidonvilles/"
-            >S’inscrire au webinaire du 31 mai</Button
+            href="https://www.demarches-simplifiees.fr/commencer/contributions-cadre-europeen-roms"
+            >Contribuer à la démarche</Button
         >
         <div class="justify-self-start ml-4 mt-2 italic">
             <div class="font-bold">
-                Instruction du 25 janvier 2018 sur la résorption des
-                bidonvilles, où en est-on 3 ans après ?
-            </div>
-            <div>
-                Bilan d’étape lundi 31 mai de 15h à 16h30.
+                Contribuez à la préparation de la stratégie française en réponse
+                au
                 <a
                     class="link"
                     target="_blank"
-                    href="https://hello.idealco.fr/inscription-formation-resorptionbidonvilles/"
-                    >Informations et inscription </a
+                    href="https://eur-lex.europa.eu/legal-content/FR-EN/TXT/?from=EN&uri=CELEX%3A32021H0319%2801%29"
+                >
+                    cadre européen 2020-2030 pour l'&laquo;inclusion des
+                    Roms&raquo;</a
+                >
+            </div>
+            <div>
+                <a
+                    class="link"
+                    target="_blank"
+                    href="https://www.gouvernement.fr/la-dihal-va-lancer-une-concertation-interministerielle-pour-l-elaboration-d-une-strategie-nationale"
+                    >En savoir plus</a
                 >.
             </div>
         </div>
@@ -31,7 +36,7 @@
 export default {
     computed: {
         shouldBeVisible() {
-            return new Date() < new Date("2021-08-01");
+            return new Date() < new Date("2021-09-01");
         }
     }
 };

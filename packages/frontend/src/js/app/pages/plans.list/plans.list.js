@@ -4,6 +4,7 @@ import "vue-good-table/dist/vue-good-table.css";
 import NavBar from "#app/layouts/navbar/navbar.vue";
 import CollectivityInput from "#app/components/form/input/collectivity/collectivity.vue";
 import EventBannerPlatform from "#app/components/EventBannerPlatform";
+import EventBannerContribute from "#app/components/EventBannerContribute";
 import { open } from "#helpers/tabHelper";
 import {
     get as getConfig,
@@ -16,7 +17,8 @@ export default {
         NavBar,
         Table,
         CollectivityInput,
-        EventBannerPlatform
+        EventBannerPlatform,
+        EventBannerContribute
     },
 
     data() {
