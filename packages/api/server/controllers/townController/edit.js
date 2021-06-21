@@ -3,14 +3,19 @@ const { sequelize } = require('#db/models');
 const shantytownModel = require('#server/models/shantytownModel')(sequelize);
 
 module.exports = () => async (req, res, next) => {
-    let town = await shantytownModel.findOne(req.user, req.params.id);
+    let town;
+    try {
+        town = await shantytownModel.findOne(req.user, req.params.id);
+    } catch (error) {
+        res.status(500).send({
+            user_message: 'Une erreur de lecture en base de données est survenue',
+        });
+        return next(error);
+    }
 
     if (town === null) {
-        return res.status(400).send({
-            error: {
-                developer_message: `Tried to update unknown town of id #${req.params.id}`,
-                user_message: `Le site d'identifiant ${req.params.id} n'existe pas : mise à jour impossible`,
-            },
+        return res.status(404).send({
+            user_message: `Le site d'identifiant ${req.params.id} n'existe pas : mise à jour impossible`,
         });
     }
 
@@ -94,10 +99,7 @@ module.exports = () => async (req, res, next) => {
         return res.status(200).send(town);
     } catch (e) {
         res.status(500).send({
-            error: {
-                developer_message: e.message,
-                user_message: 'Une erreur est survenue dans l\'enregistrement du site en base de données',
-            },
+            user_message: 'Une erreur est survenue dans l\'enregistrement du site en base de données',
         });
         return next(e);
     }
