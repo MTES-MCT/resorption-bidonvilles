@@ -1,3 +1,4 @@
+const closeTown = require('./closeTown');
 const createContact = require('./createContact');
 const createTown = require('./createTown');
 const createUser = require('./createUser');
@@ -12,6 +13,7 @@ const invite = require('./invite');
 const createShantytownComment = require('./shantytownComment/create');
 
 module.exports = {
+    closeTown,
     createContact,
     createTown,
     editTown,

@@ -365,6 +365,8 @@ module.exports = (app) => {
         (...args) => middlewares.auth.checkPermissions(['shantytown.close'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
+        validators.closeTown,
+        middlewares.validation,
         controllers.town.close,
     );
     app.delete(

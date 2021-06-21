@@ -1436,7 +1436,7 @@ module.exports = (database) => {
         ];
         const { commonData, justiceData } = Object.keys(data).reduce(
             (acc, key) => {
-                if (key === 'social_origins') { // ignore social_origins, they are a special case
+                if (['social_origins', 'closing_solutions'].includes(key)) { // ignore social_origins, they are a special case
                     return acc;
                 }
 
@@ -1495,11 +1495,28 @@ module.exports = (database) => {
                     transaction,
                 },
             );
+
+            if (data.social_origins.length > 0) {
+                await database.query(
+                    `INSERT INTO
+                            shantytown_origins(fk_shantytown, fk_social_origin)
+                        VALUES
+                            ${data.social_origins.map(() => '(?, ?)').join(', ')}`,
+                    {
+                        replacements: data.social_origins.reduce((arr, origin) => [
+                            ...arr,
+                            shantytownId,
+                            origin,
+                        ], []),
+                        transaction,
+                    },
+                );
+            }
+        }
+
+        if (Array.isArray(data.closing_solutions)) {
             await database.query(
-                `INSERT INTO
-                        shantytown_origins(fk_shantytown, fk_social_origin)
-                    VALUES
-                        ${data.social_origins.map(id => `(:id, ${id})`).join(', ')}`,
+                'DELETE FROM shantytown_closing_solutions WHERE fk_shantytown = :id',
                 {
                     replacements: {
                         id: shantytownId,
@@ -1507,6 +1524,25 @@ module.exports = (database) => {
                     transaction,
                 },
             );
+
+            if (data.closing_solutions.length > 0) {
+                await database.query(
+                    `INSERT INTO
+                            shantytown_closing_solutions(fk_shantytown, fk_closing_solution, number_of_people_affected, number_of_households_affected)
+                        VALUES
+                            ${data.closing_solutions.map(() => '(?, ?, ?, ?)').join(', ')}`,
+                    {
+                        replacements: data.closing_solutions.reduce((arr, solution) => [
+                            ...arr,
+                            shantytownId,
+                            solution.id,
+                            solution.people_affected,
+                            solution.households_affected,
+                        ], []),
+                        transaction,
+                    },
+                );
+            }
         }
 
         if (argTransaction === undefined) {

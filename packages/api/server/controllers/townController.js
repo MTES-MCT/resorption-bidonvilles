@@ -1,9 +1,7 @@
 const validator = require('validator');
-const cleanParams = require('./townController/helpers/cleanParams');
 const {
     sequelize,
     Shantytown: ShantyTowns,
-    ClosingSolution,
     Stats_Exports,
 } = require('#db/models');
 const { fromTsToFormat: tsToString, toFormat: dateToString } = require('#server/utils/date');
@@ -123,126 +121,24 @@ module.exports = (models) => {
         },
 
         async close(req, res, next) {
-            const {
-                status,
-                closedAt,
-                solutions,
-                closedWithSolutions,
-            } = cleanParams(req.body);
-
-            const now = Date.now();
-            const fieldErrors = {};
-            const error = addError.bind(this, fieldErrors);
-
-            const closingSolutions = await ClosingSolution.findAll();
-
-            // validate the status
-            if (status === null) {
-                error('status', 'La cause de fermeture du site est obligatoire');
-            } else if (['open', 'closed_by_justice', 'closed_by_admin', 'other', 'unknown'].indexOf(status) === -1) {
-                error('status', 'La cause de fermeture du site fournie n\'est pas reconnue');
-            }
-
-            // validate closed with solutions
-            if (closedWithSolutions === null) {
-                error('closed_with_solutions', 'Ce champ est obligatoire');
-            }
-
-            // validate the closed-at date
-            if (status !== 'open') {
-                const timestamp = new Date(closedAt).getTime();
-
-                if (!closedAt || Number.isNaN(timestamp)) {
-                    error('closed_at', 'La date fournie n\'est pas reconnue');
-                } else if (timestamp >= now) {
-                    error('closed_at', 'La date de fermeture du site ne peut pas être future');
-                }
-            }
-
-            // validate the list of solutions
-            const solutionErrors = {};
-            solutions.forEach((solution) => {
-                if (closingSolutions.some(s => s.id === solution.id) === false) {
-                    addError(solutionErrors, solution.id, `Le dispositif d'identifiant ${solution.id} n'existe pas`);
-                }
-
-                if (solution.peopleAffected !== null) {
-                    if (Number.isNaN(solution.peopleAffected)) {
-                        addError(solutionErrors, solution.id, 'Le nombre de personnes concernées par le dispositif est invalide');
-                    } else if (solution.peopleAffected <= 0) {
-                        addError(solutionErrors, solution.id, 'Le nombre de personnes concernées par le dispositif doit être positif');
-                    }
-                }
-
-                if (solution.householdsAffected !== null) {
-                    if (Number.isNaN(solution.householdsAffected)) {
-                        addError(solutionErrors, solution.id, 'Le nombre de ménages concernés par le dispositif est invalide');
-                    } else if (solution.householdsAffected <= 0) {
-                        addError(solutionErrors, solution.id, 'Le nombre de ménages concernés par le dispositif doit être positif');
-                    }
-                }
-            });
-
-            if (Object.keys(solutionErrors).length > 0) {
-                fieldErrors.solutions = solutionErrors;
-            }
-
-            // check errors
-            if (Object.keys(fieldErrors).length > 0) {
-                return res.status(400).send({
-                    error: {
-                        developer_message: 'The submitted data contains errors',
-                        user_message: 'Certaines données sont invalides',
-                        fields: fieldErrors,
-                    },
-                });
-            }
-
-            // check if the town exists
-            const town = await ShantyTowns.findOne({
-                where: {
-                    shantytown_id: req.params.id,
-                },
-            });
-
-            if (town === null) {
-                return res.status(400).send({
-                    error: {
-                        developer_message: `Tried to close unknown town of id #${req.params.id}`,
-                        user_message: `Le site d'identifiant ${req.params.id} n'existe pas : fermeture impossible`,
-                    },
-                });
-            }
-
             // close the town
             try {
-                await sequelize.transaction(async (transaction) => {
-                    await town.update({
-                        status,
-                        closedAt,
-                        closedWithSolutions: closedWithSolutions === true ? 'yes' : 'no',
-                        updatedBy: req.user.id,
-                    }, {
-                        transaction,
-                    });
+                await models.shantytown.update(
+                    req.user,
+                    req.body.shantytown.id,
+                    {
+                        closed_at: req.body.closed_at,
+                        closed_with_solutions: req.body.closed_with_solutions,
+                        status: req.body.status,
+                        closing_solutions: req.body.solutions,
+                    },
+                );
 
-                    await Promise.all(
-                        solutions.map(solution => town.addClosingSolution(solution.id, {
-                            transaction,
-                            through: {
-                                peopleAffected: solution.peopleAffected,
-                                householdsAffected: solution.householdsAffected,
-                            },
-                        })),
-                    );
-                });
+                const updatedTown = await models.shantytown.findOne(req.user, req.body.shantytown.id);
 
                 // Send a slack alert, if it fails, do nothing
                 try {
                     if (slackConfig && slackConfig.close_shantytown) {
-                        const updatedTown = {
-                            ...town.dataValues, status, closedAt, closedWithSolutions, updatedBy: req.user.id, solutions,
-                        };
                         await triggerShantytownCloseAlert(updatedTown, req.user);
                     }
                 } catch (err) {
@@ -252,7 +148,7 @@ module.exports = (models) => {
 
                 // Send a notification to all users of the related departement
                 try {
-                    const { departement } = await models.geo.getLocation('city', town.city);
+                    const { departement } = req.body.shantytown;
                     const watchers = await getDepartementWatchers(departement.code);
                     watchers
                         .filter(({ user_id }) => user_id !== req.user.id) // do not send an email to the user who closed the town
@@ -260,7 +156,7 @@ module.exports = (models) => {
                             sendUserShantytownClosed(watcher, {
                                 variables: {
                                     departement,
-                                    shantytown: town,
+                                    shantytown: updatedTown,
                                     editor: req.user,
                                 },
                                 preserveRecipient: false,
@@ -270,7 +166,7 @@ module.exports = (models) => {
                     // ignore
                 }
 
-                return res.status(200).send(town);
+                return res.status(200).send(updatedTown);
             } catch (e) {
                 res.status(500).send({
                     error: {
