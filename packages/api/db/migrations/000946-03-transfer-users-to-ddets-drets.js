@@ -103,6 +103,27 @@ async function updateFkOrganizationInUserTable(record, transaction) {
     );
 }
 
+/**
+ *
+ * @param {*} record an object containing old and new values to build the queryString
+ * @returns sequelize.query result: a result array [and an object containing metadata]
+ */
+async function updateFkOrganizationInStatDirectoryViewsTable(record, transaction) {
+    return sequelize.query(
+        `   UPDATE stat_directory_views
+            SET organization = :organization_new_code
+            WHERE organization = :organization_old_code`,
+        {
+            transaction,
+            replacements:
+                {
+                    organization_new_code: record.new_orga_id,
+                    organization_old_code: record.old_orga_id,
+                },
+        },
+    );
+}
+
 module.exports = {
     up: queryInterface => Promise.all([
         getOrganizationsCorrespondence(queryInterface, 'region', 'up'),
@@ -111,10 +132,16 @@ module.exports = {
         .then(data => queryInterface.sequelize.transaction(
             transaction => Promise.all([
                 data[0].forEach(async (record) => {
+                    // Mise à jour du code organisation des utilisateurs Direccte en DRETS
                     await updateFkOrganizationInUserTable(record, transaction);
+                    // Mise à jour du code Direccte en DRETS dans la table stat_directory_views
+                    await updateFkOrganizationInStatDirectoryViewsTable(record, transaction);
                 }),
                 data[1].forEach(async (record) => {
+                    // Mise à jour du code organisation des utilisateurs DDCS / DDCSPP en DDETS
                     await updateFkOrganizationInUserTable(record, transaction);
+                    // Mise à jour du code DDCS / DDCSPP en DDETS dans la table stat_directory_views
+                    await updateFkOrganizationInStatDirectoryViewsTable(record, transaction);
                 }),
             ]),
         )),
@@ -126,10 +153,17 @@ module.exports = {
         .then(data => queryInterface.sequelize.transaction(
             transaction => Promise.all([
                 data[0].forEach(async (record) => {
+                    // Mise à jour du code organisation des utilisateurs DRETS en Direccte
                     await updateFkOrganizationInUserTable(record, transaction);
+                    // Mise à jour du code DRETS en Direccte dans la table stat_directory_views
+                    await updateFkOrganizationInStatDirectoryViewsTable(record, transaction);
+                    // Suppression de l'organisation de type Direccte
                 }),
                 data[1].forEach(async (record) => {
+                    // Mise à jour du code organisation des utilisateurs DDETS en DDCS / DDCSPP
                     await updateFkOrganizationInUserTable(record, transaction);
+                    // Mise à jour du code DDETS en DDCS / DDCSPP dans la table stat_directory_views
+                    await updateFkOrganizationInStatDirectoryViewsTable(record, transaction);
                 }),
             ]),
         )),
