@@ -1,14 +1,17 @@
 <template>
     <div class="flex items-stretch border-solid mb-8" v-if="shouldBeVisible">
         <Button
-            class="justify-self-start px-4 py-4"
+            icon="external-link-alt"
+            class="justify-self-start flex-shrink-0 px-4 py-6"
+            size="lg"
             variant="specialEvent"
+            iconPosition="left"
             target="blank"
             href="https://www.demarches-simplifiees.fr/commencer/contributions-cadre-europeen-roms"
-            >Contribuer à la démarche</Button
+            >Je contribue</Button
         >
-        <div class="justify-self-start ml-4 mt-2 italic">
-            <div class="font-bold">
+        <div class="justify-self-start ml-4 mt-2">
+            <div class="font-bold text-display-sm">
                 Contribuez à la préparation de la stratégie française en réponse
                 au
                 <a

@@ -101,7 +101,8 @@ export default {
                 tertiary:
                     "rounded-sm border-2 border-tertiary bg-tertiary text-white hover:bg-tertiaryDark hover:border-tertiaryDark focus:outline-none",
                 specialEvent:
-                    "rounded-sm bg-yellowBanner text-black hover:bg-yellowDark focus:outline-none",
+                    "rounded-sm bg-yellow-200 text-black hover:bg-yellowBanner focus:outline-none",
+                // "rounded-sm bg-yellowBanner text-black hover:bg-yellowDark focus:outline-none",
                 primaryOutline:
                     "rounded-sm border-2 border-primary text-primary hover:bg-primary hover:text-white focus:outline-none",
                 secondaryOutline:
