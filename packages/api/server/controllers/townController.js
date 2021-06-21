@@ -7,10 +7,9 @@ const {
 const { fromTsToFormat: tsToString, toFormat: dateToString } = require('#server/utils/date');
 const { createExport } = require('#server/utils/excel');
 const { sendUserCommentDeletion } = require('#server/mails/mails');
-const { triggerShantytownCloseAlert } = require('#server/utils/slack');
-const { getDepartementWatchers } = require('#server/models/userModel')(sequelize);
-const { sendUserShantytownClosed } = require('#server/mails/mails');
-const { slack: slackConfig } = require('#server/config');
+const slackUtils = require('#server/utils/slack');
+const userModel = require('#server/models/userModel')(sequelize);
+const mails = require('#server/mails/mails');
 const shantytownService = require('#server/services/shantytown');
 
 function fromGeoLevelToTableName(geoLevel) {
@@ -138,9 +137,7 @@ module.exports = (models) => {
 
                 // Send a slack alert, if it fails, do nothing
                 try {
-                    if (slackConfig && slackConfig.close_shantytown) {
-                        await triggerShantytownCloseAlert(updatedTown, req.user);
-                    }
+                    await slackUtils.triggerShantytownCloseAlert(updatedTown, req.user);
                 } catch (err) {
                     // eslint-disable-next-line no-console
                     console.log(`Error with shantytown close slack webhook : ${err.message}`);
@@ -149,11 +146,11 @@ module.exports = (models) => {
                 // Send a notification to all users of the related departement
                 try {
                     const { departement } = req.body.shantytown;
-                    const watchers = await getDepartementWatchers(departement.code);
+                    const watchers = await userModel.getDepartementWatchers(departement.code);
                     watchers
                         .filter(({ user_id }) => user_id !== req.user.id) // do not send an email to the user who closed the town
                         .forEach((watcher) => {
-                            sendUserShantytownClosed(watcher, {
+                            mails.sendUserShantytownClosed(watcher, {
                                 variables: {
                                     departement,
                                     shantytown: updatedTown,
@@ -170,7 +167,6 @@ module.exports = (models) => {
             } catch (e) {
                 res.status(500).send({
                     error: {
-                        developer_message: e.message,
                         user_message: 'Une erreur est survenue dans l\'enregistrement du site en base de données',
                     },
                 });
