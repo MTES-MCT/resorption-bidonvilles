@@ -297,6 +297,7 @@ module.exports = () => async (req, res, next) => {
                     census_conducted_at: req.body.census_conducted_at,
                     census_conducted_by: req.body.census_conducted_by,
                     updated_by: req.user.id,
+                    updated_at: new Date(),
                 },
                 req.user.permissions.shantytown.update.data_justice === true
                     ? {
