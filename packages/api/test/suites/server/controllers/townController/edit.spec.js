@@ -8,7 +8,7 @@ const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const rewiremock = require('rewiremock/node');
-const { sequelize, dataTypes } = require('sequelize-test-helpers');
+const { sequelize } = require('sequelize-test-helpers');
 
 const { mockReq, mockRes } = require('sinon-express-mock');
 
@@ -20,11 +20,6 @@ chai.use(sinonChai);
  * FIXTURES
  * *********************************************************************************************** */
 
-const models = {
-    Shantytown: rewiremock.proxy('#db/models/shantytowns', {
-        'sequelize-temporal': model => model,
-    })(sequelize, dataTypes),
-};
 const otherModels = {
     ownerType: require('#server/models/ownerTypeModel')({}),
     geo: require('#server/models/geoModel')({}),
@@ -55,7 +50,13 @@ describe.only('townController.edit()', () => {
      * **************** */
 
     let reqArg = {};
+    let now;
+    let clock;
     beforeEach(() => {
+        // stub time
+        now = new Date();
+        clock = sinon.useFakeTimers(now.getTime());
+
         queryStub.onCall(0).returns([[{ hid: 1 }]]);
 
         reqArg = {
@@ -169,6 +170,7 @@ describe.only('townController.edit()', () => {
     });
 
     afterEach(() => {
+        clock.restore();
         queryStub.reset();
         Object.keys(diStubs).forEach((key) => {
             Object.keys(diStubs[key]).forEach((method) => {
@@ -275,6 +277,7 @@ describe.only('townController.edit()', () => {
                         police_granted_at: mock.policeGrantedAt,
                         bailiff: mock.bailiff,
                         updated_by: reqArg.user.id,
+                        updated_at: now,
                     },
                 },
             );
@@ -364,6 +367,7 @@ describe.only('townController.edit()', () => {
                         police_granted_at: undefined,
                         bailiff: undefined,
                         updated_by: reqArg.user.id,
+                        updated_at: now,
                     },
                 },
             );
