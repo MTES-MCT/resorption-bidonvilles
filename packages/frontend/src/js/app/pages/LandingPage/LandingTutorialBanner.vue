@@ -6,7 +6,7 @@
             <div class="lg:flex-shrink-0 justify-center">
                 <img
                     class="m-4 h-40"
-                    src="./assets/linkedin-sales-solutions-1LyBcHrH4J8-unsplash-BD.jpg"
+                    src="./assets/formation-personalisee.jpg"
                     alt=""
                 />
             </div>

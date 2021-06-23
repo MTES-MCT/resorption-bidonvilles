@@ -7,7 +7,7 @@
             <div class="lg:flex-shrink-0 justify-center">
                 <img
                     class="m-4 h-40"
-                    src="./assets/ernesto-velazquez-0Uyvgcnl83g-unsplash-BD.jpg"
+                    src="./assets/appel-a-contribution-inclusion-roms.jpg"
                     alt=""
                 />
             </div>
@@ -26,7 +26,7 @@
             </div>
             <div class="flex-shrink-0 px-8 py-2 lg:p-8">
                 <a
-                    href="https://eur-lex.europa.eu/legal-content/FR-EN/TXT/?from=EN&uri=CELEX%3A32021H0319%2801%29"
+                    href="https://www.demarches-simplifiees.fr/commencer/contributions-cadre-europeen-roms"
                     target="_blank"
                 >
                     <Button class="my-2" size="md" variant="primary"
@@ -36,7 +36,7 @@
                     >
                 </a>
                 <p class="text-sm font-bold">Dès maintenant</p>
-                <p class="text-sm font-bold">jusqu'en spetembre 2021</p>
+                <p class="text-sm font-bold">jusqu'en septembre 2021</p>
             </div>
         </div>
     </div>
@@ -45,7 +45,7 @@
 export default {
     computed: {
         shouldBeVisible() {
-            return new Date() < new Date("2021-08-31");
+            return new Date() < new Date("2021-09-01");
         }
     }
 };
