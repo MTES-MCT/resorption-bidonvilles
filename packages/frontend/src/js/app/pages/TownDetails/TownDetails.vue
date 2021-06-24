@@ -74,16 +74,17 @@
         <div class="bg-orange200 py-10">
             <PrivateContainer class="flex items-center">
                 <div class="leftColumnWidth text-sm">
-                    <div>
-                        <Icon icon="exclamation-triangle" />
-                    </div>
-                    <div class="font-bold">
-                        Quelles sont les règles de confidentialités ?
-                    </div>
-                    <div>
-                        Ne pas citer l’identité des individus (Nom, âge, sexe,
-                        origine…)
-                    </div>
+                    <TownDetailsNewCommentLeftColumn
+                        class="mb-4"
+                        icon="info-circle"
+                        title="À qui sont destinés les messages ?"
+                        description='À tous les acteurs du site. Un mail est automatiquement envoyé aux personnes signalées "intervenant sur ce site" et également aux acteurs en DDETS et Préfecture.'
+                    ></TownDetailsNewCommentLeftColumn>
+                    <TownDetailsNewCommentLeftColumn
+                        icon="exclamation-triangle"
+                        title="Quelles sont les règles de confidentialités ?"
+                        description="Ne pas citer l’identité des individus (Nom, âge, sexe, origine…)"
+                    ></TownDetailsNewCommentLeftColumn>
                 </div>
                 <TownDetailsNewComment
                     :class="[
@@ -168,6 +169,7 @@ import {
 } from "#helpers/api/config";
 import TownDetailsNewComment from "./TownDetailsNewComment";
 import TownDetailsComments from "./TownDetailsComments";
+import TownDetailsNewCommentLeftColumn from "./TownDetailsNewCommentLeftColumn";
 import TownDetailsHistorySidePanel from "./TownDetailsHistorySidePanel";
 import TownDetailsCovidCommentsSidePanel from "./TownDetailsCovidCommentsSidePanel";
 import TownDetailsActorAlert from "./TownDetailsActorAlert";
@@ -195,7 +197,8 @@ export default {
         TownDetailsPanelJudicial,
         TownDetailsPanelPlans,
         TownDetailsCovidCommentsSidePanel,
-        TownDetailsInviteActorModal
+        TownDetailsInviteActorModal,
+        TownDetailsNewCommentLeftColumn
     },
     data() {
         const permission = getPermission("shantytown.list");
