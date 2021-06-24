@@ -13,7 +13,6 @@ module.exports = {
                 reason: {
                     type: Sequelize.ENUM('dihal_event', 'newsletter', 'social_network', 'word_of_mouth', 'online_search', 'other'),
                     allowNull: false,
-                    defaultValue: 'other',
                 },
                 reason_other: {
                     type: Sequelize.STRING,
