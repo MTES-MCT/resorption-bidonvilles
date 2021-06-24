@@ -1,9 +1,9 @@
 <template>
     <div class="bg-yellow-200 px-4 flex items-center justify-between">
-        <div>
+        <div class="flex items-center">
             <div
                 v-if="icon"
-                class="rounded-full inline-block bg-yellow-400 w-6 h-6 text-center text-xs align-middle leading-6"
+                class="rounded-full bg-yellow-400 w-6 h-6 text-center text-xs leading-6"
             >
                 <Icon :icon="icon"></Icon>
             </div>
