@@ -8,7 +8,6 @@
         </div>
         <Button
             variant="primary"
-            class="py-2 px-4"
             href="https://email.developpement-durable.gouv.fr/users/subscribe/js_id/5n4i/id/1"
             >{{ $t("landingPage.newsletter.cta") }}</Button
         >

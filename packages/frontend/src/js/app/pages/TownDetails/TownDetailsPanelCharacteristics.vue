@@ -84,6 +84,7 @@
                                 iconPosition="left"
                                 @click="copyCoordinates"
                                 href="#"
+                                :padding="false"
                                 >Copier</Button
                             >
                         </div>
