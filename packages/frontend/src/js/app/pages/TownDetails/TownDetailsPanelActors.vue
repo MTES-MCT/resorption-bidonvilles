@@ -16,9 +16,12 @@
                                 >Vous intervenez sur ce site ?</span
                             >
                             Faites le savoir à la communauté.<br />
-                            Vous recevrez en temps réel les messages du
-                            <router-link class="link" to="#newComment"
-                                >journal du site</router-link
+                            <span class="font-bold"
+                                >Vous recevrez en temps réel par mail les
+                                messages du
+                                <router-link class="link" to="#newComment"
+                                    >journal du site</router-link
+                                >.</span
                             >
                         </p>
                     </template>

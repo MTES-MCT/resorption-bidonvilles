@@ -14,11 +14,11 @@
                 >
                 <span class="ml-2">Faites le savoir à la communauté.</span
                 ><br />
-                <span class="ml-4"
-                    >Vous recevrez en temps réel les messages du
+                <span class="ml-4 font-bold"
+                    >Vous recevrez en temps réel par mail les messages du
                     <router-link class="link" to="#newComment"
                         >journal du site</router-link
-                    ></span
+                    >.</span
                 >
             </p>
         </template>
