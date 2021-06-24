@@ -21,6 +21,14 @@
                                 >
                             </h4>
                         </li>
+                        <li class="mt-2" v-if="$i18n.locale === 'fr'">
+                            <a
+                                href="https://email.developpement-durable.gouv.fr/users/subscribe/js_id/5n4i/id/1"
+                                class="underline"
+                            >
+                                {{ $t("footer.newsletter") }}
+                            </a>
+                        </li>
                     </ul>
 
                     <ul>
