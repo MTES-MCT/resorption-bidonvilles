@@ -30,7 +30,7 @@ module.exports = newUser(
 
         body('referral')
             .optional({ nullable: true })
-            .isString()
+            .isString().bail().withMessage('Le champ "Comment avez-vous connu la plateforme Résorption-bidonvilles ?" est invalide')
             .trim()
             .custom((value) => {
                 if (value && !['dihal_event', 'newsletter', 'social_network', 'word_of_mouth', 'online_search', 'other'].includes(value)) {
@@ -40,14 +40,31 @@ module.exports = newUser(
                 return true;
             }),
 
+        body('referral')
+            .customSanitizer(value => value || null),
+
         body('referral_other')
-            .optional()
-            .isString()
+            .customSanitizer((value, { req }) => {
+                if (req.body.referral !== 'other') {
+                    return null;
+                }
+
+                return value;
+            })
+            .optional({ nullable: true })
+            .isString().bail().withMessage('Le champ "Autre ?" est invalide')
             .trim(),
 
         body('referral_word_of_mouth')
-            .optional()
-            .isString()
+            .customSanitizer((value, { req }) => {
+                if (req.body.referral !== 'word_of_mouth') {
+                    return null;
+                }
+
+                return value;
+            })
+            .optional({ nullable: true })
+            .isString().bail().withMessage('Le champ "Qui vous a recommandé la plateforme ?" est invalide')
             .trim(),
     ],
 
