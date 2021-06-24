@@ -1,7 +1,7 @@
 <template>
     <Modal :isOpen="true" :closeModal="closeModal" class="modalContainer">
         <template v-slot:title>
-            <div>J'interviens ici</div>
+            <div>J'interviens sur ce site</div>
         </template>
 
         <template v-slot:body>
