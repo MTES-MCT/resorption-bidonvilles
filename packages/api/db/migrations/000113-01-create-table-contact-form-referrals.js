@@ -2,7 +2,7 @@ module.exports = {
 
     up: (queryInterface, Sequelize) => queryInterface.sequelize.transaction(
         transaction => queryInterface.createTable(
-            'contact_form_referral',
+            'contact_form_referrals',
             {
                 contact_form_referral_id: {
                     type: Sequelize.INTEGER,
@@ -36,7 +36,7 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-                'contact_form_referral',
+                'contact_form_referrals',
                 ['fk_user'],
                 {
                     type: 'foreign key',
@@ -54,13 +54,13 @@ module.exports = {
 
     down: queryInterface => queryInterface.sequelize.transaction(
         transaction => queryInterface.removeConstraint(
-            'contact_form_referral',
+            'contact_form_referrals',
             'fk_contact_form_referral_user',
             {
                 transaction,
             },
         )
-            .then(() => queryInterface.dropTable('contact_form_referral', { transaction })),
+            .then(() => queryInterface.dropTable('contact_form_referrals', { transaction })),
     ),
 
 };

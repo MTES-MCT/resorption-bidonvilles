@@ -6,7 +6,7 @@ module.exports = database => ({
         fk_user = null,
     }, transaction = undefined) {
         const result = await database.query(
-            `INSERT INTO contact_form_referral(
+            `INSERT INTO contact_form_referrals(
                 reason,
                 reason_other,
                 reason_word_of_mouth,
