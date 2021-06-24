@@ -1,7 +1,7 @@
 export const june2021 = {
     date: new Date(2021, 5, 1),
     title:
-        "Retour sur le webinaire « Instruction du 25 janvier 2018, où en est-on 3 ans après ? »",
+        "Retour sur le webinaire «&#8239;Instruction du 25 janvier 2018, où en est-on 3 ans après ? »",
     link:
         "https://r.assets.developpement-durable.gouv.fr/mk/mr/yOIv8Ic1ygkMerOSJ6yQCEOf2bvtS4B6Ze3fRXP5bZ9gSAoRh71ATQwcAGT3bvYyrEdu_7kHQwypO3sATtPUcuviTzLx_F2dtO9gMYiOUiEDv7KgO0WGG-CdIwNbTy8AYg"
 };

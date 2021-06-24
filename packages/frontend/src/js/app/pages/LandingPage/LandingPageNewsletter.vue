@@ -3,7 +3,7 @@
         <h2 class="text-display-lg text-primary">
             {{ $t("landingPage.newsletter.title") }}
         </h2>
-        <div class="mb-4">
+        <div class="mb-4 max-w-screen-sm mx-auto">
             {{ $t("landingPage.newsletter.text") }}
         </div>
         <Button
@@ -12,7 +12,7 @@
             >{{ $t("landingPage.newsletter.cta") }}</Button
         >
         <div
-            class="grid grid-cols-1 md:grid-cols-3 text-left gap-8 md:gap-32 mt-16"
+            class="grid grid-cols-1 md:grid-cols-3 text-left gap-8 md:gap-32 mt-6"
         >
             <div v-for="newsletter in newsletters" :key="newsletter.link">
                 <div class="capitalize text-primary font-bold">
@@ -23,7 +23,7 @@
                         })
                     }}
                 </div>
-                <div>{{ newsletter.title }}</div>
+                <div v-html="newsletter.title"></div>
                 <a :href="newsletter.link" class="link">
                     {{ $t("landingPage.newsletter.link") }}</a
                 >
