@@ -27,14 +27,14 @@
   "error": "Votre demande comprend des erreurs:",
   "share": "Partager cette page",
   "referral": {
-      "question": "Comment avez-vous connu la plateforme Résorption-bidonvilles ?",
-      "dihalEvent": "Lors d'un évènement de la Dihal",
-      "newsletter": "Une newsletter",
-      "socialNetwork": "Réseaux sociaux (LinkedIn, Twitter, Ideal co...)",
-      "wordOfMouth": "Bouche à oreille / recommandation",
-      "onlineSearch": "Une recherche internet",
-      "other": "Autre (champ à saisir)",
-      "otherQuestion":  "Autre ?",
-      "wordOfMouthQuestion": "Qui vous a recommandé la plateforme ?"
+    "question": "Comment avez-vous connu la plateforme Résorption-bidonvilles ?",
+    "dihalEvent": "Lors d'un évènement de la Dihal",
+    "newsletter": "Une newsletter",
+    "socialNetwork": "Réseaux sociaux (LinkedIn, Twitter, Ideal co...)",
+    "wordOfMouth": "Bouche à oreille / recommandation",
+    "onlineSearch": "Une recherche internet",
+    "other": "Autre",
+    "otherQuestion": "Pouvez-vous préciser comment vous avez connu la plateforme ?",
+    "wordOfMouthQuestion": "Qui vous a recommandé la plateforme ?"
   }
 }
