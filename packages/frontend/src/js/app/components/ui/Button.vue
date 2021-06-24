@@ -68,6 +68,10 @@ export default {
         disabled: {
             type: Boolean,
             default: false
+        },
+        padding: {
+            type: Boolean,
+            default: true
         }
     },
     computed: {
@@ -83,9 +87,9 @@ export default {
         },
         sizeClasses() {
             return {
-                sm: `text-sm ${this.isLink ? "" : "py-1 px-2"}`,
-                md: `text-md ${this.isLink ? "" : "py-2 px-4"}`,
-                lg: `text-lg ${this.isLink ? "" : "py-2 px-4"}`
+                sm: `text-sm ${this.padding === true ? "py-1 px-2" : ""}`,
+                md: `text-md ${this.padding === true ? "py-2 px-4" : ""}`,
+                lg: `text-lg ${this.padding === true ? "py-2 px-4" : ""}`
             }[this.size];
         },
         variantClasses() {
@@ -97,7 +101,7 @@ export default {
                 tertiary:
                     "rounded-sm border-2 border-tertiary bg-tertiary text-white hover:bg-tertiaryDark hover:border-tertiaryDark focus:outline-none",
                 specialEvent:
-                    "rounded-sm bg-yellowBanner text-black hover:bg-yellowDark focus:outline-none",
+                    "rounded-sm bg-yellow-200 text-black hover:bg-yellow-400 focus:outline-none",
                 primaryOutline:
                     "rounded-sm border-2 border-primary text-primary hover:bg-primary hover:text-white focus:outline-none",
                 secondaryOutline:

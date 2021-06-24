@@ -27,6 +27,45 @@ module.exports = newUser(
         body('access_request_message')
             .trim()
             .notEmpty().withMessage('Vous devez préciser votre message'),
+
+        body('referral')
+            .optional({ nullable: true })
+            .isString().bail().withMessage('Le champ "Comment avez-vous connu la plateforme Résorption-bidonvilles ?" est invalide')
+            .trim()
+            .custom((value) => {
+                if (value && !['dihal_event', 'newsletter', 'social_network', 'word_of_mouth', 'online_search', 'other'].includes(value)) {
+                    throw new Error('Une erreur est survenue lors de la vérification des données');
+                }
+
+                return true;
+            }),
+
+        body('referral')
+            .customSanitizer(value => value || null),
+
+        body('referral_other')
+            .customSanitizer((value, { req }) => {
+                if (req.body.referral !== 'other') {
+                    return null;
+                }
+
+                return value;
+            })
+            .optional({ nullable: true })
+            .isString().bail().withMessage('Le champ "Autre ?" est invalide')
+            .trim(),
+
+        body('referral_word_of_mouth')
+            .customSanitizer((value, { req }) => {
+                if (req.body.referral !== 'word_of_mouth') {
+                    return null;
+                }
+
+                return value;
+            })
+            .optional({ nullable: true })
+            .isString().bail().withMessage('Le champ "Qui vous a recommandé la plateforme ?" est invalide')
+            .trim(),
     ],
 
     (value, { req }) => req.body.is_actor === true && req.body.request_type.includes('access-request'),

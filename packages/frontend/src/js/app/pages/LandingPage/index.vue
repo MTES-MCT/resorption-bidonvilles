@@ -8,7 +8,13 @@
                 </div>
             </div>
         </PublicContainer>
-
+        <PublicContainer>
+            <div class="pt-4">
+                <div class="max-w-screen-lg mx-auto pb-20">
+                    <LandingTutorialBanner v-if="$i18n.locale === 'fr'" />
+                </div>
+            </div>
+        </PublicContainer>
         <LandingPageBanner :cta="$t('landingPage.firstBanner.cta')">
             {{ $t("landingPage.firstBanner.text") }}
         </LandingPageBanner>
@@ -18,13 +24,11 @@
                 src="./assets/resorption-bidonvilles-1.jpg"
             />
         </CreditWrapper>
-
         <PublicContainer>
             <div class="max-w-screen-lg mx-auto py-20">
                 <LandingPageSecondSection />
             </div>
         </PublicContainer>
-
         <LandingPageBanner :cta="$t('landingPage.secondBanner.cta')">
             {{ $t("landingPage.secondBanner.text") }}
         </LandingPageBanner>
@@ -37,7 +41,8 @@
         <PublicContainer>
             <div class="max-w-screen-lg mx-auto py-20">
                 <LandingPageThirdSection />
-                <div class="text-center mt-40">
+                <LandingPageNewsletter v-if="$i18n.locale === 'fr'" />
+                <div class="text-center mt-24">
                     <h2 class="text-display-lg text-secondary">
                         {{ $t("landingPage.hero.subtitle") }}
                     </h2>
@@ -45,7 +50,6 @@
                 </div>
             </div>
         </PublicContainer>
-
         <CreditWrapper credit="© Ville de Strasbourg">
             <div class="grid grid-cols-3 w-full gap-0">
                 <img
@@ -74,6 +78,8 @@ import LandingPageThirdSection from "./LandingPageThirdSection/index.vue";
 import LandingPageBanner from "./LandingPageBanner.vue";
 import LandingPageContactForm from "./LandingPageContactForm.vue";
 import CreditWrapper from "./CreditWrapper.vue";
+import LandingPageNewsletter from "./LandingPageNewsletter.vue";
+import LandingTutorialBanner from "./LandingTutorialBanner";
 
 export default {
     components: {
@@ -85,7 +91,9 @@ export default {
         LandingPageSecondSection,
         LandingPageThirdSection,
         LandingPageBanner,
-        LandingPageContactForm
+        LandingPageContactForm,
+        LandingPageNewsletter,
+        LandingTutorialBanner
     }
 };
 </script>

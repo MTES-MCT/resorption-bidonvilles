@@ -4,32 +4,39 @@
             class="full-width mx-auto"
             src="./assets/resorption-bidonvilles-dessin.png"
         />
-        <LandingEventBanner v-if="$i18n.locale === 'fr'" />
-        <LandingTutorialBanner v-if="$i18n.locale === 'fr'" />
-        <div class="max-w-screen-sm mx-auto mt-8">
-            <video poster="./assets/poster_rb_landing.png" controls>
-                <source
-                    src="./assets/video_landing_720_no_sound.mp4"
-                    type="video/mp4"
-                />
-                Votre navigateur ne supporte pas la balise video.
-            </video>
-        </div>
-        <div>
-            <div class="mt-24">
-                <div class="max-w-screen-sm mx-auto">
-                    <div class="text-display-lg font-normal">
-                        {{ $t("landingPage.firstSection.context.title") }}
-                    </div>
-                    <div class="text-display-lg">
-                        {{ $t("landingPage.firstSection.context.subtitle") }}
-                    </div>
-                    <div class="mt-4">
-                        {{ $t("landingPage.firstSection.context.text") }}
-                    </div>
+        <div class="mt-24">
+            <div class="max-w-screen-sm mx-auto">
+                <div class="text-display-lg font-normal">
+                    {{ $t("landingPage.firstSection.context.title") }}
+                </div>
+                <div class="text-display-lg">
+                    {{ $t("landingPage.firstSection.context.subtitle") }}
+                </div>
+                <div class="mt-4">
+                    {{ $t("landingPage.firstSection.context.text") }}
                 </div>
             </div>
+        </div>
+        <LandingEventBanner v-if="$i18n.locale === 'fr'" />
+        <div class="mt-20 md:flex md:flex-row items-center">
+            <div class="block md:hidden mb-4 text-display-lg">
+                {{ $t("landingPage.firstSection.video.text") }}
+            </div>
+            <div class="md:w-1/2 md:mr-16 bg-gray-500">
+                <video poster="./assets/poster_video_landing.png" controls>
+                    <source
+                        src="./assets/video_landing_720_no_sound.mp4"
+                        type="video/mp4"
+                    />
+                    Votre navigateur ne supporte pas la balise video.
+                </video>
+            </div>
+            <div class="hidden md:block w-1/2 text-display-lg">
+                {{ $t("landingPage.firstSection.video.text") }}
+            </div>
+        </div>
 
+        <div>
             <div class="md:grid md:grid-cols-3 gap-16 mt-16">
                 <LandingPageFeatureBlock icon="map-marked-alt">{{
                     $t("landingPage.firstSection.features.position")
@@ -93,15 +100,13 @@ import LandingPageFeatureBlock from "#app/pages/LandingPage/LandingPageFirstSect
 import LandingPageContextImage from "#app/pages/LandingPage/LandingPageFirstSection/LandingPageContextImage.vue";
 import LandingPageUserFeedback from "./LandingPageUserFeedback/index.vue";
 import LandingEventBanner from "../LandingEventBanner";
-import LandingTutorialBanner from "../LandingTutorialBanner";
 
 export default {
     components: {
         LandingPageContextImage,
         LandingPageFeatureBlock,
         LandingPageUserFeedback,
-        LandingEventBanner,
-        LandingTutorialBanner
+        LandingEventBanner
     }
 };
 </script>

@@ -136,8 +136,6 @@ module.exports = {
 
                 green: "#169B62 ",
                 red: "#D63626",
-                yellowBanner: "#FEFA00",
-                yellowDark: "#DBD704",
 
                 // Deprecated values : TO DELETE
                 inputHover: "#D9D9E6",

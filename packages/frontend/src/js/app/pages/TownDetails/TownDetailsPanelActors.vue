@@ -3,6 +3,30 @@
         <template v-slot:title>Intervenants</template>
         <template v-slot:body>
             <TownDetailsPanelSection>
+                <InfoBanner
+                    v-if="isNotAnActor && !town.closedAt"
+                    icon="flag"
+                    buttonLabel="J'interviens sur ce site"
+                    @click="$emit('click')"
+                    class="mt-2 mb-4 py-2"
+                >
+                    <template v-slot:body>
+                        <p class="ml-4">
+                            <span class="font-bold"
+                                >Vous intervenez sur ce site ?</span
+                            >
+                            Faites le savoir à la communauté.<br />
+                            <span class="font-bold"
+                                >Vous recevrez en temps réel par mail les
+                                messages du
+                                <router-link class="link" to="#newComment"
+                                    >journal du site</router-link
+                                >.</span
+                            >
+                        </p>
+                    </template>
+                </InfoBanner>
+
                 <div class="italic mb-2">
                     Votre intervention mérite d'être signalée même si vous
                     n'accompagnez pas l'ensemble des habitants du site.
@@ -42,23 +66,6 @@
                         >
                     </div>
                 </div>
-
-                <InfoBanner
-                    v-if="isNotAnActor && !town.closedAt"
-                    icon="flag"
-                    buttonLabel="J'interviens sur ce site"
-                    @click="$emit('click')"
-                    class="mt-2 py-2"
-                >
-                    <template v-slot:body>
-                        <p class="ml-2 inline-block">
-                            <span class="font-bold"
-                                >Vous intervenez sur ce site ?</span
-                            >
-                            Faites le savoir à la communauté.
-                        </p>
-                    </template>
-                </InfoBanner>
             </TownDetailsPanelSection>
         </template>
     </TownDetailsPanel>

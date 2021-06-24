@@ -17,7 +17,7 @@
     "after": "Après",
     "context": {
       "title": "Résorption-bidonvilles,",
-      "subtitle": "Une plateforme pour accélérer la résorption des bidonvilles",
+      "subtitle": "Un accélérateur de la résorption des bidonvilles",
       "text": "Outil d’information, de partage et de pilotage, la plateforme offre une solution performante et efficace pour la résorption des bidonvilles. Elle permet de créer une véritable dynamique collaborative, au sein d’un territoire, entre les acteurs engagés vers l’objectif de résorption."
     },
     "feedback": {
@@ -33,6 +33,9 @@
         "text": "J’ai pu orienter la famille d’une personne que j’accompagne vers une maison des solidarités à partir de la localisation de leur bidonville.",
         "author": "Travailleur social au sein d'une association à Toulouse"
       }
+    },
+    "video": {
+      "text": "Découvrir la plateforme Résorption-bidonvilles en 1 min"
     }
   },
   "firstBanner": {
@@ -137,5 +140,11 @@
   "contactForm": {
     "email": "Votre email",
     "cta": "Nous contacter"
+  },
+  "newsletter": {
+      "title": "Abonnez-vous à notre lettre d'information mensuelle",
+      "text": "Vous souhaitez être informé des nouveautés de la plateforme, des évènements, des bonnes pratiques de terrain et de l’actualité sur le sujet des bidonvilles ? Abonnez-vous !",
+      "cta": "Je m'abonne",
+      "link": "Voir la lettre"
   }
 }

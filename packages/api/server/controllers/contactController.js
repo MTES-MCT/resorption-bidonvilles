@@ -24,8 +24,10 @@ const sendEmailNewContactMessageToAdmins = async (data, models, message) => {
 };
 
 module.exports = models => ({
-    async contact(req, res) {
-        const { request_type, is_actor } = req.body;
+    async contact(req, res, next) {
+        const {
+            request_type, is_actor, referral, referral_other, referral_word_of_mouth,
+        } = req.body;
 
         // user creation
         if (request_type.includes('access-request') && is_actor) {
@@ -54,8 +56,17 @@ module.exports = models => ({
             try {
                 const user = await models.user.findOne(result.id, { extended: true });
                 await accessRequestService.handleNewAccessRequest(user);
+
+                if (referral !== null) {
+                    await models.contactFormReferral.create({
+                        reason: referral,
+                        reason_other: referral_other,
+                        reason_word_of_mouth: referral_word_of_mouth,
+                        fk_user: user.id,
+                    });
+                }
             } catch (err) {
-                // ignore
+                next(err);
             }
 
             return res.status(200).send(result);
@@ -68,8 +79,16 @@ module.exports = models => ({
                 first_name: req.body.first_name,
                 access_request_message: req.body.access_request_message,
             });
+
+            if (referral !== null) {
+                await models.contactFormReferral.create({
+                    reason: referral,
+                    reason_other: referral_other,
+                    reason_word_of_mouth: referral_word_of_mouth,
+                });
+            }
         } catch (err) {
-            // ignore
+            next(err);
         }
 
         return res.status(200).send();
