@@ -88,15 +88,18 @@
                 {{ $t("landingPage.secondSection.video.text") }}
             </div>
         </div>
+        <LandingPageContributeBanner v-if="$i18n.locale === 'fr'" />
     </div>
 </template>
 
 <script>
 import LandingPageDataBlock from "./LandingPageDataBlock.vue";
+import LandingPageContributeBanner from "../LandingPageContributeBanner.vue";
 
 export default {
     components: {
-        LandingPageDataBlock
+        LandingPageDataBlock,
+        LandingPageContributeBanner
     }
 };
 </script>
