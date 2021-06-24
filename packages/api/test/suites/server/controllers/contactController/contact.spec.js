@@ -111,7 +111,7 @@ describe.only('contactController.contact()', () => {
             };
             res = mockRes();
 
-            await controller.contact(req, res);
+            await controller.contact(req, res, sinon.stub());
 
             // It should send a message to all national admins and ensure that it returns a 200
             expect(res.status).to.have.been.calledOnceWith(200);
@@ -132,7 +132,7 @@ describe.only('contactController.contact()', () => {
             };
             res = mockRes();
 
-            await controller.contact(req, res);
+            await controller.contact(req, res, sinon.stub());
 
             // It should send a message to all national admins and ensure that it returns a 200
             expect(res.status).to.have.been.calledOnceWith(200);
@@ -185,7 +185,7 @@ describe.only('contactController.contact()', () => {
             };
             res = mockRes();
 
-            await controller.contact(req, res);
+            await controller.contact(req, res, sinon.stub());
 
             // It should send a message to all admins and ensure that it returns a 200
             expect(createUserStub).to.have.been.calledOnceWith({
@@ -254,7 +254,7 @@ describe.only('contactController.contact()', () => {
             };
             res = mockRes();
 
-            await controller.contact(req, res);
+            await controller.contact(req, res, sinon.stub());
 
             // It should send a message to all admins and ensure that it returns a 200
             expect(createUserStub).to.have.been.calledOnceWith({
@@ -315,7 +315,7 @@ describe.only('contactController.contact()', () => {
             };
             res = mockRes();
 
-            await controller.contact(req, res);
+            await controller.contact(req, res, sinon.stub());
 
             // It should send a message to all admins and ensure that it returns a 200
             expect(createUserStub).to.have.been.calledOnceWith({
@@ -383,7 +383,7 @@ describe.only('contactController.contact()', () => {
             };
             res = mockRes();
 
-            await controller.contact(req, res);
+            await controller.contact(req, res, sinon.stub());
 
             // It should send a message to all admins and ensure that it returns a 200
             expect(createUserStub).to.have.been.calledOnceWith({
@@ -450,7 +450,7 @@ describe.only('contactController.contact()', () => {
             };
             res = mockRes();
 
-            await controller.contact(req, res);
+            await controller.contact(req, res, sinon.stub());
 
             // It should send a message to all admins and ensure that it returns a 200
             expect(createUserStub).to.have.been.calledOnceWith({
