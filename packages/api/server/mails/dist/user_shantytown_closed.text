@@ -1,4 +1,4 @@
-Un site a été fermé en {{var:departementName}}
+{{var:departementName}} - Un site a été fermé
 Bonjour {{var:recipientName}},
 Un site a été fermé aujourd’hui à {{var:hour}} sur la plateforme
 Résorption-bidonvilles [{{var:frontUrl}}] par {{var:editorName}} :
