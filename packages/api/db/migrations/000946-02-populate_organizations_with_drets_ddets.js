@@ -48,9 +48,9 @@ async function getOrganizationTypeCodeFromAbbreviation(abbrev) {
 }
 
 module.exports = {
-    up: (queryInterface, Sequelize) => Promise.all([
-        getRegions(queryInterface, Sequelize),
-        getDepts(queryInterface, Sequelize),
+    up: queryInterface => Promise.all([
+        getRegions(),
+        getDepts(),
         getOrganizationTypeCodeFromAbbreviation(['DDETS', 'DRETS']),
     ]).then((data) => {
         // Création des organisations de type DRETS et DDETS
@@ -97,6 +97,7 @@ module.exports = {
                             VALUES
                                 (:organame, :abbreviation, TRUE, :fk_type, :fk_departement)`,
                             {
+                                transaction,
                                 replacements:
                                     {
                                         organame: `Direction Départementale de l'Emploi, du Travail et des Solidarités - ${dept.name}`,
@@ -119,13 +120,13 @@ module.exports = {
                     // Suppression des organizations de type DRETS et DDETS
                     'DELETE FROM organizations WHERE fk_type IN (:fk_type_drets, :fk_type_ddets)',
                     {
+                        transaction,
                         replacements:
                             {
                                 fk_type_drets: data.orgaTypes.DRETS,
                                 fk_type_ddets: data.orgaTypes.DDETS,
                             },
                     },
-                    transaction,
                 ),
             ]),
         )),
