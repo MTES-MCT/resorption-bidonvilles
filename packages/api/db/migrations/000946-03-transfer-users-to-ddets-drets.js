@@ -234,21 +234,21 @@ module.exports = {
     ])
         .then(data => queryInterface.sequelize.transaction(
             transaction => Promise.all([
-                data[0].forEach(async (record) => {
+                data[0].forEach((record) => {
                     // Mise à jour du code organisation des utilisateurs Direccte en DRETS
-                    await updateFkOrganizationInUserTable(record, transaction);
+                    updateFkOrganizationInUserTable(record, transaction);
                 }),
                 data[1].forEach(async (record) => {
                     // Mise à jour du code organisation des utilisateurs DDCS / DDCSPP en DDETS
-                    await updateFkOrganizationInUserTable(record, transaction);
+                    updateFkOrganizationInUserTable(record, transaction);
                 }),
                 data[2].forEach(async (record) => {
                     // Mise à jour du code Direccte en DRETS dans la table stat_directory_views
-                    await updateFkOrganizationInStatDirectoryViewsTable(record, transaction);
+                    updateFkOrganizationInStatDirectoryViewsTable(record, transaction);
                 }),
                 data[3].forEach(async (record) => {
                     // Mise à jour du code DDCS / DDCSPP en DDETS dans la table stat_directory_views
-                    await updateFkOrganizationInStatDirectoryViewsTable(record, transaction);
+                    updateFkOrganizationInStatDirectoryViewsTable(record, transaction);
                 }),
                 // Suppression des organisations de types DDCS / DDCSPP et Direccte
                 queryInterface.sequelize.query(
@@ -322,8 +322,8 @@ module.exports = {
             } else {
                 queryInterface.sequelize.transaction(
                     transaction => Promise.all([
-                        regions.forEach(async (region) => {
-                            await queryInterface.sequelize.query(
+                        regions.forEach((region) => {
+                            queryInterface.sequelize.query(
                                 `INSERT INTO
                                     organizations (name, abbreviation, active, fk_type, fk_region)
                                 VALUES
@@ -340,8 +340,8 @@ module.exports = {
                                 },
                             );
                         }),
-                        depts.forEach(async (dept) => {
-                            await queryInterface.sequelize.query(
+                        depts.forEach((dept) => {
+                            queryInterface.sequelize.query(
                                 `INSERT INTO
                                     organizations (name, abbreviation, active, fk_type, fk_departement)
                                 VALUES

@@ -72,8 +72,8 @@ module.exports = {
         } else {
             return queryInterface.sequelize.transaction(
                 transaction => Promise.all([
-                    regions.forEach(async (region) => {
-                        await queryInterface.sequelize.query(
+                    regions.forEach((region) => {
+                        queryInterface.sequelize.query(
                             `INSERT INTO
                                 organizations (name, abbreviation, active, fk_type, fk_region)
                             VALUES
@@ -90,8 +90,8 @@ module.exports = {
                             },
                         );
                     }),
-                    depts.forEach(async (dept) => {
-                        await queryInterface.sequelize.query(
+                    depts.forEach((dept) => {
+                        queryInterface.sequelize.query(
                             `INSERT INTO
                                 organizations (name, abbreviation, active, fk_type, fk_departement)
                             VALUES
@@ -114,20 +114,15 @@ module.exports = {
     }),
 
     down: queryInterface => getOrganizationTypeCodeFromAbbreviation(['DDETS', 'DRETS'])
-        .then(data => queryInterface.sequelize.transaction(
-            transaction => Promise.all([
-                queryInterface.sequelize.query(
-                    // Suppression des organizations de type DRETS et DDETS
-                    'DELETE FROM organizations WHERE fk_type IN (:fk_type_drets, :fk_type_ddets)',
+        .then(data => queryInterface.sequelize.query(
+            // Suppression des organizations de type DRETS et DDETS
+            'DELETE FROM organizations WHERE fk_type IN (:fk_type_drets, :fk_type_ddets)',
+            {
+                replacements:
                     {
-                        transaction,
-                        replacements:
-                            {
-                                fk_type_drets: data.orgaTypes.DRETS,
-                                fk_type_ddets: data.orgaTypes.DDETS,
-                            },
+                        fk_type_drets: data.orgaTypes.DRETS,
+                        fk_type_ddets: data.orgaTypes.DDETS,
                     },
-                ),
-            ]),
+            },
         )),
 };
