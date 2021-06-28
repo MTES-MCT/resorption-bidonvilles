@@ -320,7 +320,7 @@ module.exports = {
             } else if (Object.keys(depts).length < 1) {
                 throw new Error('departements table is empty - unable to create DDCS / DDCSPP');
             } else {
-                return queryInterface.sequelize.transaction(
+                queryInterface.sequelize.transaction(
                     transaction => Promise.all([
                         regions.forEach(async (region) => {
                             await queryInterface.sequelize.query(
@@ -360,55 +360,59 @@ module.exports = {
                         }),
                     ]),
                 );
+                queryInterface.sequelize.transaction(
+                    () => Promise.all([
+                        // Récupérer les tables de correspondance anciennes structures / nouvelles structures
+                        getOrganizationsCorrespondence(queryInterface, 'organizations', 'region', 'down'),
+                        getOrganizationsCorrespondence(queryInterface, 'organizations', 'departement', 'down'),
+                        getOrganizationsCorrespondence(queryInterface, 'statistiques', 'region', 'down'),
+                        getOrganizationsCorrespondence(queryInterface, 'statistiques', 'departement', 'down'),
+                    ])
+                        .then((res) => {
+                            console.log('======================');
+                            console.log('Entrée dans le then...');
+                            console.log('======================');
+                            console.log(res[0]);
+                            console.log(res[1]);
+                            console.log(res[2]);
+                            console.log(res[3]);
+                        }),
+                );
+                // .then(data => queryInterface.sequelize.transaction(
+                //     transaction => Promise.all([
+                //         data[0].forEach(async (record) => {
+                //             // Mise à jour du code organisation des utilisateurs DRETS en Direccte
+                //             await updateFkOrganizationInUserTable(record, transaction);
+                //         }),
+                //         data[1].forEach(async (record) => {
+                //             // Mise à jour du code organisation des utilisateurs DDETS en DDCS / DDCSPP
+                //             await updateFkOrganizationInUserTable(record, transaction);
+                //         }),
+                //         data[2].forEach(async (record) => {
+                //             // Mise à jour du code DDETS en DDCS / DDCSPP dans la table stat_directory_views
+                //             await updateFkOrganizationInStatDirectoryViewsTable(record, transaction);
+                //         }),
+                //         data[3].forEach(async (record) => {
+                //             // Mise à jour du code DRETS en Direccte dans la table stat_directory_views
+                //             await updateFkOrganizationInStatDirectoryViewsTable(record, transaction);
+                //         }),
+                //         // Suppression des organisations de types DRETS et DDETS
+                //         queryInterface.sequelize.query(
+                //             'DELETE FROM organizations WHERE fk_type IN (SELECT organization_type_id FROM organization_types WHERE UPPER(abbreviation) IN (\'DRETS\', \'DDETS\'))',
+                //             {
+                //                 transaction,
+                //             },
+                //         ),
+                //         // Suppression des types d'organisations DRETS et DDETS
+                //         queryInterface.sequelize.query(
+                //             'DELETE FROM organization_types WHERE UPPER(abbreviation) IN (\'DRETS\', \'DDETS\')',
+                //             {
+                //                 transaction,
+                //             },
+                //         ),
+                //     ]),
+                // )),
+                // );
             }
-        })
-        .then(
-            Promise.all([
-                // Récupérer les tables de correspondance anciennes structures / nouvelles structures
-                getOrganizationsCorrespondence(queryInterface, 'organizations', 'region', 'down'),
-                getOrganizationsCorrespondence(queryInterface, 'organizations', 'departement', 'down'),
-                getOrganizationsCorrespondence(queryInterface, 'statistiques', 'region', 'down'),
-                getOrganizationsCorrespondence(queryInterface, 'statistiques', 'departement', 'down'),
-            ])
-                .then((data) => {
-                    console.log(data[0]);
-                    console.log(data[1]);
-                    console.log(data[2]);
-                    console.log(data[3]);
-                }),
-            // .then(data => queryInterface.sequelize.transaction(
-            //     transaction => Promise.all([
-            //         data[0].forEach(async (record) => {
-            //             // Mise à jour du code organisation des utilisateurs DRETS en Direccte
-            //             await updateFkOrganizationInUserTable(record, transaction);
-            //         }),
-            //         data[1].forEach(async (record) => {
-            //             // Mise à jour du code organisation des utilisateurs DDETS en DDCS / DDCSPP
-            //             await updateFkOrganizationInUserTable(record, transaction);
-            //         }),
-            //         data[2].forEach(async (record) => {
-            //             // Mise à jour du code DDETS en DDCS / DDCSPP dans la table stat_directory_views
-            //             await updateFkOrganizationInStatDirectoryViewsTable(record, transaction);
-            //         }),
-            //         data[3].forEach(async (record) => {
-            //             // Mise à jour du code DRETS en Direccte dans la table stat_directory_views
-            //             await updateFkOrganizationInStatDirectoryViewsTable(record, transaction);
-            //         }),
-            //         // Suppression des organisations de types DRETS et DDETS
-            //         queryInterface.sequelize.query(
-            //             'DELETE FROM organizations WHERE fk_type IN (SELECT organization_type_id FROM organization_types WHERE UPPER(abbreviation) IN (\'DRETS\', \'DDETS\'))',
-            //             {
-            //                 transaction,
-            //             },
-            //         ),
-            //         // Suppression des types d'organisations DRETS et DDETS
-            //         queryInterface.sequelize.query(
-            //             'DELETE FROM organization_types WHERE UPPER(abbreviation) IN (\'DRETS\', \'DDETS\')',
-            //             {
-            //                 transaction,
-            //             },
-            //         ),
-            //     ]),
-            // )),
-        ),
+        }),
 };
