@@ -25,26 +25,26 @@ function getDepts() {
  * Gets DRETS and DRETS organization type codes
  */
 async function getOrganizationTypeCodeFromAbbreviation(abbrev) {
-    const mainTypes = await sequelize.query(`SELECT
-                                    organization_type_id,
-                                    abbreviation
-                            FROM
-                                    organization_types
-                            WHERE
-                                    abbreviation in (:abbreviation)`,
-    {
-        type: sequelize.QueryTypes.SELECT,
-        replacements: {
-            abbreviation: abbrev,
+    const mainTypes = await sequelize.query(
+        `SELECT
+                organization_type_id,
+                abbreviation
+        FROM
+                organization_types
+        WHERE
+                abbreviation in (:abbreviation)`,
+        {
+            type: sequelize.QueryTypes.SELECT,
+            replacements: {
+                abbreviation: abbrev,
+            },
         },
-    });
-    const data = {
-        orgaTypes: {},
-    };
-    mainTypes.forEach((orgaType) => {
-        data.orgaTypes[orgaType.abbreviation] = orgaType.organization_type_id;
-    });
-    return data;
+    );
+
+    return mainTypes.reduce((orgatypes, { abbreviation, organization_type_id }) => ({
+        ...orgatypes,
+        [abbreviation]: organization_type_id,
+    }), {});
 }
 
 module.exports = {
@@ -52,11 +52,8 @@ module.exports = {
         getRegions(),
         getDepts(),
         getOrganizationTypeCodeFromAbbreviation(['DDETS', 'DRETS']),
-    ]).then((data) => {
+    ]).then(([regions, depts, orgaTypes]) => {
         // Création des organisations de type DRETS et DDETS
-        const regions = [...data[0]];
-        const depts = [...data[1]];
-        const orgaTypes = { ...data[2].orgaTypes };
 
         if (Object.keys(orgaTypes).length === 0) {
             throw new Error('Organizations types DDETS and DRETS are needed to populate organizations table');
@@ -84,7 +81,7 @@ module.exports = {
                                     {
                                         organame: `Direction Régionale de l'Emploi, du Travail et des Solidarités - ${region.name}`,
                                         abbreviation: `DRETS - ${region.name}`,
-                                        fk_type: data[2].orgaTypes.DRETS,
+                                        fk_type: orgaTypes.DRETS,
                                         fk_region: region.code,
                                     },
                             },
@@ -102,7 +99,7 @@ module.exports = {
                                     {
                                         organame: `Direction Départementale de l'Emploi, du Travail et des Solidarités - ${dept.name}`,
                                         abbreviation: `DDETS - ${dept.name}`,
-                                        fk_type: data[2].orgaTypes.DDETS,
+                                        fk_type: orgaTypes.DDETS,
                                         fk_departement: dept.code,
                                     },
                             },
@@ -114,14 +111,14 @@ module.exports = {
     }),
 
     down: queryInterface => getOrganizationTypeCodeFromAbbreviation(['DDETS', 'DRETS'])
-        .then(data => queryInterface.sequelize.query(
+        .then(orgaTypes => queryInterface.sequelize.query(
             // Suppression des organizations de type DRETS et DDETS
             'DELETE FROM organizations WHERE fk_type IN (:fk_type_drets, :fk_type_ddets)',
             {
                 replacements:
                     {
-                        fk_type_drets: data.orgaTypes.DRETS,
-                        fk_type_ddets: data.orgaTypes.DDETS,
+                        fk_type_drets: orgaTypes.DRETS,
+                        fk_type_ddets: orgaTypes.DDETS,
                     },
             },
         )),
