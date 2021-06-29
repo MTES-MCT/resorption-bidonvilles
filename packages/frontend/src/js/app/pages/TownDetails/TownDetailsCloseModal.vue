@@ -143,6 +143,13 @@ export default {
         closeModal() {
             this.$emit("closeModal");
         },
+        formatDate(d) {
+            const year = d.getFullYear();
+            const month = `${d.getMonth() + 1}`.padStart(2, "0");
+            const day = `${d.getDate()}`.padStart(2, "0");
+
+            return `${year}-${month}-${day}`;
+        },
         async submitClose() {
             // clean previous errors
             this.loading = true;
@@ -151,6 +158,7 @@ export default {
             try {
                 await close(this.town.id, {
                     ...this.form,
+                    closed_at: this.formatDate(this.form.closed_at),
                     solutions: Object.keys(this.form.solutions)
                         .filter(key => this.form.solutions[key].checked)
                         .map(key => ({

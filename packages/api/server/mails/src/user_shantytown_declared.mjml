@@ -1,0 +1,31 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] {{var:departementName}} - Un nouveau site a été déclaré</mj-title>
+        <mj-include path='common/attributes.mjml' />
+        <mj-include path='common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class='text-primary text-display pb-4'>
+                    {{var:departementName}} - Un nouveau site a été déclaré
+                </mj-text>
+                <mj-include path='common/hello.mjml' />
+                <mj-text>
+                    Un nouveau site a été déclaré aujourd’hui à {{var:hour}} sur la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a> par {{var:creatorName}} :
+                </mj-text>
+                <mj-text mj-class="pb-4"><a href="{{var:townUrl}}" class="link">{{var:townFullAddress}}</a></mj-text>
+                <mj-text mj-class="font-bold">Connaissez-vous ce site ? Avez-vous effectué des actions sur ce site ?</mj-text>
+                <mj-text mj-class="pb-4">Connectez-vous dès maintenant à la plateforme et participez à la résorption des bidonvilles en partageant les changements dont vous auriez eu connaissance.</mj-text>
+                <mj-button mj-class="button-primary" href="{{var:connexionUrl}}">
+                    Me connecter et voir le site
+                </mj-button>
+                <mj-text mj-class="pb-4">Le partage d’information entre tous les partenaires est essentiel pour accélérer la résorption des bidonvilles.</mj-text>
+                <mj-text mj-class="pb-4 font-italic">Ce mail a été envoyé à tous les utilisateurs et utilisatrices de votre département.</mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-include path='common/footer.mjml' />
+    </mj-body>
+</mjml>

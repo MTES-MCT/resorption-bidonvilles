@@ -30,6 +30,7 @@
                     <TownFormErrorLog
                         id="erreurs"
                         class="mt-8 mb-8"
+                        :mainError="mainError"
                         :errors="errors"
                     ></TownFormErrorLog>
 
@@ -131,7 +132,7 @@ export default {
         const { field_types: fieldTypes, user } = getConfig();
 
         return {
-            error: null,
+            mainError: null,
             loading: false,
             showInfo: true,
             town: {
@@ -397,6 +398,7 @@ export default {
             }
 
             this.loading = true;
+            this.mainError = null;
             this.$router.replace("#top");
 
             try {
@@ -507,15 +509,20 @@ export default {
                     text: this.successNotificationWording
                 });
             } catch (err) {
-                if (!err.fields) {
-                    console.log(err);
-                    return;
+                this.loading = false;
+
+                if (err && err.fields) {
+                    this.$refs.form.setErrors(err.fields);
                 }
 
-                this.error = err;
-                this.loading = false;
-                this.$refs.form.setErrors(err.fields);
+                if (err && err.user_message) {
+                    this.mainError =
+                        (err && err.user_message) ||
+                        "Une erreur inconnue est survenue";
+                }
+
                 this.$router.replace("#erreurs");
+                return;
             }
         },
 

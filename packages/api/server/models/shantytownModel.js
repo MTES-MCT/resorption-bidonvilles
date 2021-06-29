@@ -883,25 +883,25 @@ module.exports = (database) => {
         return serializedTowns.ordered;
     }
 
-    return {
-        serializeComment,
+    const methods = {};
+    methods.serializeComment = serializeComment;
 
-        findAll: (user, filters = [], feature = 'list', order = undefined) => query(filters, order, user, feature),
+    methods.findAll = (user, filters = [], feature = 'list', order = undefined) => query(filters, order, user, feature);
 
-        findOne: async (user, shantytownId) => {
-            const towns = await query(
-                [{ shantytown_id: shantytownId }],
-                undefined,
-                user,
-                'read',
-                true, // include changelog
-            );
-            return towns.length === 1 ? towns[0] : null;
-        },
+    methods.findOne = async (user, shantytownId) => {
+        const towns = await query(
+            [{ shantytown_id: shantytownId }],
+            undefined,
+            user,
+            'read',
+            true, // include changelog
+        );
+        return towns.length === 1 ? towns[0] : null;
+    };
 
-        createCovidComment: async (user, shantytownId, data) => database.transaction(async (transaction) => {
-            const [[{ id }]] = await database.query(
-                `INSERT INTO
+    methods.createCovidComment = async (user, shantytownId, data) => database.transaction(async (transaction) => {
+        const [[{ id }]] = await database.query(
+            `INSERT INTO
                         shantytown_comments(
                             description,
                             fk_shantytown,
@@ -909,18 +909,18 @@ module.exports = (database) => {
                         )
                     VALUES (:description, :shantytownId, :createdBy)
                     RETURNING shantytown_comment_id AS id`,
-                {
-                    replacements: {
-                        shantytownId,
-                        description: data.description,
-                        createdBy: user.id,
-                    },
-                    transaction,
+            {
+                replacements: {
+                    shantytownId,
+                    description: data.description,
+                    createdBy: user.id,
                 },
-            );
+                transaction,
+            },
+        );
 
-            return database.query(
-                `INSERT INTO
+        return database.query(
+            `INSERT INTO
                         shantytown_covid_comments(
                             fk_comment,
                             date,
@@ -946,33 +946,33 @@ module.exports = (database) => {
                             :besoin_action,
                             :created_by
                         )`,
-                {
-                    replacements: Object.assign({
-                        id,
-                        created_by: user.id,
-                    }, data),
-                    transaction,
-                },
-            );
-        }),
+            {
+                replacements: Object.assign({
+                    id,
+                    created_by: user.id,
+                }, data),
+                transaction,
+            },
+        );
+    });
 
-        getComments,
+    methods.getComments = getComments;
 
-        getHistory: async (user, permission) => {
-            // apply geographic level permission
-            const where = [];
-            const highCovidWhere = [];
-            const replacements = {};
-            if (user.permissions[permission.entity][permission.feature].geographic_level !== 'nation'
+    methods.getHistory = async (user, permission) => {
+        // apply geographic level permission
+        const where = [];
+        const highCovidWhere = [];
+        const replacements = {};
+        if (user.permissions[permission.entity][permission.feature].geographic_level !== 'nation'
                 && user.organization.location.type !== 'nation') {
-                where.push(`${fromGeoLevelToTableName(user.organization.location.type)}.code = :locationCode`);
-                highCovidWhere.push('d2.code = :locationCode');
-                replacements.locationCode = user.organization.location[user.organization.location.type].code;
-            }
+            where.push(`${fromGeoLevelToTableName(user.organization.location.type)}.code = :locationCode`);
+            highCovidWhere.push('d2.code = :locationCode');
+            replacements.locationCode = user.organization.location[user.organization.location.type].code;
+        }
 
-            // perform query
-            const activities = await database.query(
-                `
+        // perform query
+        const activities = await database.query(
+            `
                 SELECT
                     activities.*,
                     author.first_name AS author_first_name,
@@ -1103,104 +1103,452 @@ module.exports = (database) => {
                 LEFT JOIN users author ON activities.author_id = author.user_id
                 ORDER BY activities.date ASC
                 `,
-                {
-                    type: database.QueryTypes.SELECT,
-                    replacements,
-                },
-            );
+            {
+                type: database.QueryTypes.SELECT,
+                replacements,
+            },
+        );
 
-            const previousVersions = {};
-            const highCovidComments = {};
+        const previousVersions = {};
+        const highCovidComments = {};
 
-            return activities
-                .map((activity) => {
-                    const o = {
-                        date: activity.date.getTime() / 1000,
-                        author: {
-                            name: `${activity.author_first_name} ${activity.author_last_name.toUpperCase()}`,
-                            organization: activity.author_organization,
-                        },
-                        shantytown: {
-                            id: activity.id,
-                            usename: getUsenameOf(activity),
-                            city: activity.cityName,
-                            departement: activity.departement,
-                        },
-                        entity: activity.entity,
-                    };
+        return activities
+            .map((activity) => {
+                const o = {
+                    date: activity.date.getTime() / 1000,
+                    author: {
+                        name: `${activity.author_first_name} ${activity.author_last_name.toUpperCase()}`,
+                        organization: activity.author_organization,
+                    },
+                    shantytown: {
+                        id: activity.id,
+                        usename: getUsenameOf(activity),
+                        city: activity.cityName,
+                        departement: activity.departement,
+                    },
+                    entity: activity.entity,
+                };
 
-                    // ====== COMMENTS
-                    if (activity.entity === 'comment') {
-                        if (activity.highCommentId !== 0 && highCovidComments[activity.highCommentId] !== undefined) {
-                            highCovidComments[activity.highCommentId].highCovid.departements.push({
+                // ====== COMMENTS
+                if (activity.entity === 'comment') {
+                    if (activity.highCommentId !== 0 && highCovidComments[activity.highCommentId] !== undefined) {
+                        highCovidComments[activity.highCommentId].highCovid.departements.push({
+                            code: activity.highCommentDptCode,
+                            name: activity.highCommentDptName,
+                        });
+                        return null;
+                    }
+
+                    const comment = Object.assign(o, {
+                        action: 'creation',
+                        comment_id: activity.comment_id,
+                        content: activity.content,
+                        covid: activity.isCovid && activity.highCommentDptName === null ? {
+                            date: activity.covid_date.getTime() / 1000,
+                            equipe_maraude: activity.equipe_maraude,
+                            equipe_sanitaire: activity.equipe_sanitaire,
+                            equipe_accompagnement: activity.equipe_accompagnement,
+                            distribution_alimentaire: activity.distribution_alimentaire,
+                            personnes_orientees: activity.personnes_orientees,
+                            personnes_avec_symptomes: activity.personnes_avec_symptomes,
+                            besoin_action: activity.besoin_action,
+                        } : null,
+                        highCovid: activity.highCommentId !== 0 ? {
+                            departements: [{
                                 code: activity.highCommentDptCode,
                                 name: activity.highCommentDptName,
-                            });
+                            }],
+                        } : null,
+                    });
+
+                    if (activity.highCommentId !== 0) {
+                        highCovidComments[activity.highCommentId] = comment;
+                    }
+
+                    return comment;
+                }
+
+                // ====== SHANTYTOWNS
+                const previousVersion = previousVersions[activity.id] || null;
+                const serializedShantytown = serializeShantytown(activity, user.permissions.shantytown.list);
+                previousVersions[activity.id] = serializedShantytown;
+
+                let action;
+                if (previousVersion === null) {
+                    action = 'creation';
+                } else {
+                    o.shantytown.usename = getUsenameOf(previousVersion);
+
+                    if (previousVersion.closedAt === null && activity.closedAt !== null) {
+                        action = 'closing';
+                    } else {
+                        const diff = getDiff(previousVersion, serializedShantytown);
+                        if (diff.length === 0) {
                             return null;
                         }
 
-                        const comment = Object.assign(o, {
-                            action: 'creation',
-                            comment_id: activity.comment_id,
-                            content: activity.content,
-                            covid: activity.isCovid && activity.highCommentDptName === null ? {
-                                date: activity.covid_date.getTime() / 1000,
-                                equipe_maraude: activity.equipe_maraude,
-                                equipe_sanitaire: activity.equipe_sanitaire,
-                                equipe_accompagnement: activity.equipe_accompagnement,
-                                distribution_alimentaire: activity.distribution_alimentaire,
-                                personnes_orientees: activity.personnes_orientees,
-                                personnes_avec_symptomes: activity.personnes_avec_symptomes,
-                                besoin_action: activity.besoin_action,
-                            } : null,
-                            highCovid: activity.highCommentId !== 0 ? {
-                                departements: [{
-                                    code: activity.highCommentDptCode,
-                                    name: activity.highCommentDptName,
-                                }],
-                            } : null,
+                        return Object.assign(o, {
+                            action: 'update',
+                            diff,
                         });
-
-                        if (activity.highCommentId !== 0) {
-                            highCovidComments[activity.highCommentId] = comment;
-                        }
-
-                        return comment;
                     }
+                }
 
-                    // ====== SHANTYTOWNS
-                    const previousVersion = previousVersions[activity.id] || null;
-                    const serializedShantytown = serializeShantytown(activity, user.permissions.shantytown.list);
-                    previousVersions[activity.id] = serializedShantytown;
-
-                    let action;
-                    if (previousVersion === null) {
-                        action = 'creation';
-                    } else {
-                        o.shantytown.usename = getUsenameOf(previousVersion);
-
-                        if (previousVersion.closedAt === null && activity.closedAt !== null) {
-                            action = 'closing';
-                        } else {
-                            const diff = getDiff(previousVersion, serializedShantytown);
-                            if (diff.length === 0) {
-                                return null;
-                            }
-
-                            return Object.assign(o, {
-                                action: 'update',
-                                diff,
-                            });
-                        }
-                    }
-
-                    return Object.assign(o, {
-                        action,
-                    });
-                })
-                .filter(activity => activity !== null)
-                .reverse();
-        },
-
+                return Object.assign(o, {
+                    action,
+                });
+            })
+            .filter(activity => activity !== null)
+            .reverse();
     };
+
+    methods.update = async (editor, shantytownId, data, argTransaction = undefined) => {
+        let transaction = argTransaction;
+        if (transaction === undefined) {
+            transaction = await database.transaction();
+        }
+
+        // save the current state of the shantytown
+        const [[{ hid }]] = await database.query(
+            `INSERT INTO
+                    "ShantytownHistories"(
+                        shantytown_id,
+                        status,
+                        name,
+                        latitude,
+                        longitude,
+                        address,
+                        address_details,
+                        fk_city,
+                        built_at,
+                        declared_at,
+                        closed_at,
+                        fk_field_type,
+                        owner,
+                        fk_owner_type,
+                        census_status,
+                        census_conducted_at,
+                        census_conducted_by,
+                        justice_rendered_by,
+                        population_total,
+                        population_couples,
+                        population_minors,
+                        population_minors_0_3,
+                        population_minors_3_6,
+                        population_minors_6_12,
+                        population_minors_12_16,
+                        population_minors_16_18,
+                        minors_in_school,
+                        fk_electricity_type,
+                        electricity_comments,
+                        access_to_water,
+                        water_comments,
+                        water_potable,
+                        water_continuous_access,
+                        water_public_point,
+                        water_distance,
+                        water_roads_to_cross,
+                        water_everyone_has_access,
+                        water_stagnant_water,
+                        water_hand_wash_access,
+                        water_hand_wash_access_number,
+                        trash_evacuation,
+                        trash_cans_on_site,
+                        trash_accumulation,
+                        trash_evacuation_regular,
+                        vermin,
+                        vermin_comments,
+                        fire_prevention_measures,
+                        fire_prevention_diagnostic,
+                        fire_prevention_site_accessible,
+                        fire_prevention_devices,
+                        fire_prevention_comments,
+                        access_to_sanitary,
+                        sanitary_comments,
+                        sanitary_number,
+                        sanitary_insalubrious,
+                        sanitary_on_site,
+                        owner_complaint,
+                        justice_procedure,
+                        justice_rendered,
+                        justice_rendered_at,
+                        justice_challenged,
+                        police_status,
+                        police_requested_at,
+                        police_granted_at,
+                        bailiff,
+                        closed_with_solutions,
+                        created_at,
+                        created_by,
+                        updated_at,
+                        updated_by,
+                        "archivedAt"
+                    )
+                SELECT
+                    shantytown_id,
+                    status,
+                    name,
+                    latitude,
+                    longitude,
+                    address,
+                    address_details,
+                    fk_city,
+                    built_at,
+                    declared_at,
+                    closed_at,
+                    fk_field_type,
+                    owner,
+                    fk_owner_type,
+                    census_status::text::"enum_ShantytownHistories_census_status",
+                    census_conducted_at,
+                    census_conducted_by,
+                    justice_rendered_by,
+                    population_total,
+                    population_couples,
+                    population_minors,
+                    population_minors_0_3,
+                    population_minors_3_6,
+                    population_minors_6_12,
+                    population_minors_12_16,
+                    population_minors_16_18,
+                    minors_in_school,
+                    fk_electricity_type,
+                    electricity_comments,
+                    access_to_water,
+                    water_comments,
+                    water_potable,
+                    water_continuous_access,
+                    water_public_point,
+                    water_distance::text::"enum_ShantytownHistories_water_distance",
+                    water_roads_to_cross,
+                    water_everyone_has_access,
+                    water_stagnant_water,
+                    water_hand_wash_access,
+                    water_hand_wash_access_number,
+                    trash_evacuation,
+                    trash_cans_on_site,
+                    trash_accumulation,
+                    trash_evacuation_regular,
+                    vermin,
+                    vermin_comments,
+                    fire_prevention_measures,
+                    fire_prevention_diagnostic,
+                    fire_prevention_site_accessible,
+                    fire_prevention_devices,
+                    fire_prevention_comments,
+                    access_to_sanitary,
+                    sanitary_comments,
+                    sanitary_number,
+                    sanitary_insalubrious,
+                    sanitary_on_site,
+                    owner_complaint,
+                    justice_procedure,
+                    justice_rendered,
+                    justice_rendered_at,
+                    justice_challenged,
+                    police_status::text::"enum_ShantytownHistories_police_status",
+                    police_requested_at,
+                    police_granted_at,
+                    bailiff,
+                    closed_with_solutions,
+                    created_at,
+                    created_by,
+                    updated_at,
+                    updated_by,
+                    NOW()
+                FROM shantytowns WHERE shantytown_id = :id
+                RETURNING hid`,
+            {
+                replacements: {
+                    id: shantytownId,
+                },
+                transaction,
+            },
+        );
+
+        await Promise.all([
+            database.query(
+                `INSERT INTO
+                        "ShantytownOriginHistories"(
+                            fk_shantytown,
+                            fk_social_origin,
+                            created_at,
+                            updated_at,
+                            "archivedAt"
+                        )
+                    SELECT
+                        :hid,
+                        fk_social_origin,
+                        created_at,
+                        updated_at,
+                        NOW()
+                    FROM shantytown_origins WHERE fk_shantytown = :id`,
+                {
+                    replacements: {
+                        hid,
+                        id: shantytownId,
+                    },
+                    transaction,
+                },
+            ),
+            database.query(
+                `INSERT INTO
+                        "ShantytownClosingSolutionHistories"(
+                            fk_shantytown,
+                            fk_closing_solution,
+                            number_of_people_affected,
+                            number_of_households_affected,
+                            created_at,
+                            updated_at,
+                            "archivedAt"
+                        )
+                    SELECT
+                        :hid,
+                        fk_closing_solution,
+                        number_of_people_affected,
+                        number_of_households_affected,
+                        created_at,
+                        updated_at,
+                        NOW()
+                    FROM shantytown_closing_solutions WHERE fk_shantytown = :id`,
+                {
+                    replacements: {
+                        hid,
+                        id: shantytownId,
+                    },
+                    transaction,
+                },
+            ),
+        ]);
+
+        // now, update the shantytown
+        const justiceKeys = [
+            'owner_complaint',
+            'justice_procedure',
+            'justice_rendered',
+            'justice_rendered_at',
+            'justice_rendered_by',
+            'justice_challenged',
+            'police_status',
+            'police_requested_at',
+            'police_granted_at',
+            'bailiff',
+        ];
+        const { commonData, justiceData } = Object.keys(data).reduce(
+            (acc, key) => {
+                if (['social_origins', 'closing_solutions'].includes(key)) { // ignore social_origins, they are a special case
+                    return acc;
+                }
+
+                if (justiceKeys.includes(key)) {
+                    return {
+                        commonData: acc.commonData,
+                        justiceData: {
+                            ...acc.justiceData,
+                            [key]: data[key],
+                        },
+                    };
+                }
+
+                return {
+                    commonData: {
+                        ...acc.commonData,
+                        [key]: data[key],
+                    },
+                    justiceData: acc.justiceData,
+                };
+            },
+            { commonData: {}, justiceData: {} },
+        );
+
+        const updatedTown = Object.assign(
+            commonData,
+            {
+                updated_by: editor.id,
+                updated_at: new Date(),
+            },
+            editor.permissions.shantytown.update.data_justice === true
+                ? justiceData
+                : {},
+        );
+
+        await database.query(
+            `UPDATE shantytowns
+                SET
+                    ${Object.keys(updatedTown).map(column => `${column} = :${column}`).join(', ')}
+                WHERE shantytown_id = :id`,
+            {
+                replacements: Object.assign(updatedTown, {
+                    id: shantytownId,
+                }),
+                transaction,
+            },
+        );
+
+        if (Array.isArray(data.social_origins)) {
+            await database.query(
+                'DELETE FROM shantytown_origins WHERE fk_shantytown = :id',
+                {
+                    replacements: {
+                        id: shantytownId,
+                    },
+                    transaction,
+                },
+            );
+
+            if (data.social_origins.length > 0) {
+                await database.query(
+                    `INSERT INTO
+                            shantytown_origins(fk_shantytown, fk_social_origin)
+                        VALUES
+                            ${data.social_origins.map(() => '(?, ?)').join(', ')}`,
+                    {
+                        replacements: data.social_origins.reduce((arr, origin) => [
+                            ...arr,
+                            shantytownId,
+                            origin,
+                        ], []),
+                        transaction,
+                    },
+                );
+            }
+        }
+
+        if (Array.isArray(data.closing_solutions)) {
+            await database.query(
+                'DELETE FROM shantytown_closing_solutions WHERE fk_shantytown = :id',
+                {
+                    replacements: {
+                        id: shantytownId,
+                    },
+                    transaction,
+                },
+            );
+
+            if (data.closing_solutions.length > 0) {
+                await database.query(
+                    `INSERT INTO
+                            shantytown_closing_solutions(fk_shantytown, fk_closing_solution, number_of_people_affected, number_of_households_affected)
+                        VALUES
+                            ${data.closing_solutions.map(() => '(?, ?, ?, ?)').join(', ')}`,
+                    {
+                        replacements: data.closing_solutions.reduce((arr, solution) => [
+                            ...arr,
+                            shantytownId,
+                            solution.id,
+                            solution.people_affected,
+                            solution.households_affected,
+                        ], []),
+                        transaction,
+                    },
+                );
+            }
+        }
+
+        if (argTransaction === undefined) {
+            await transaction.commit();
+        }
+    };
+
+    return methods;
 };

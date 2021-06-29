@@ -1,0 +1,25 @@
+{{var:departementName}} - Un site a été fermé
+Bonjour {{var:recipientName}},
+Un site a été fermé aujourd’hui à {{var:hour}} sur la plateforme
+Résorption-bidonvilles [{{var:frontUrl}}] par {{var:editorName}} :
+{{var:townFullAddress}} [{{var:townUrl}}]
+Pour en savoir plus sur la fermeture de ce site, connectez-vous dès à présent à
+la plateforme.
+
+Me connecter et voir le site [{{var:connexionUrl}}]
+
+Le partage d’information entre tous les partenaires est essentiel pour accélérer
+la résorption des bidonvilles.
+Ce mail a été envoyé à tous les utilisateurs et utilisatrices de votre
+département.
+
+Cordialement,
+L'équipe Résorption-bidonvilles
+
+
+
+Résorption-bidonvilles
+Agir pour résorber les bidonvilles
+contact@resorption-bidonvilles.beta.gouv.fr
+[contact@resorption-bidonvilles.beta.gouv.fr]
+Développé par la Dihal [https://www.gouvernement.fr/resorption-des-bidonvilles]

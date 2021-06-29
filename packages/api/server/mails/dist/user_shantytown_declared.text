@@ -1,0 +1,26 @@
+{{var:departementName}} - Un nouveau site a été déclaré
+Bonjour {{var:recipientName}},
+Un nouveau site a été déclaré aujourd’hui à {{var:hour}} sur la plateforme
+Résorption-bidonvilles [{{var:frontUrl}}] par {{var:creatorName}} :
+{{var:townFullAddress}} [{{var:townUrl}}]
+Connaissez-vous ce site ? Avez-vous effectué des actions sur ce site ?
+Connectez-vous dès maintenant à la plateforme et participez à la résorption des
+bidonvilles en partageant les changements dont vous auriez eu connaissance.
+
+Me connecter et voir le site [{{var:connexionUrl}}]
+
+Le partage d’information entre tous les partenaires est essentiel pour accélérer
+la résorption des bidonvilles.
+Ce mail a été envoyé à tous les utilisateurs et utilisatrices de votre
+département.
+
+Cordialement,
+L'équipe Résorption-bidonvilles
+
+
+
+Résorption-bidonvilles
+Agir pour résorber les bidonvilles
+contact@resorption-bidonvilles.beta.gouv.fr
+[contact@resorption-bidonvilles.beta.gouv.fr]
+Développé par la Dihal [https://www.gouvernement.fr/resorption-des-bidonvilles]
