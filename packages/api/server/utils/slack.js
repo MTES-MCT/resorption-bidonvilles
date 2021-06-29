@@ -7,6 +7,10 @@ const formatUsername = user => `${user.first_name} ${user.last_name} `;
 const formatTownLink = (townID, text) => `<${frontUrl}/site/${townID}|${text}>`;
 
 async function triggerShantytownCloseAlert(town, user) {
+    if (!slack || !slack.close_shantytown) {
+        return;
+    }
+
     const shantytownCloseAlert = new IncomingWebhook(slack.close_shantytown);
 
     const address = formatAddress(town);

@@ -1,121 +1,57 @@
-// ut tools
-const { expect } = require('chai');
+const chai = require('chai');
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
+const { serialized: generateUser } = require('#test/utils/user');
 
-const db = global.db();
-const {
-    findAll,
-    findOne,
-} = require('#server/models/shantytownModel')(db);
+const { sequelize } = require('#db/models');
+const { update } = require('#server/models/shantytownModel')(sequelize);
 
-const fixtures = require('#fixtures/server/models/shantytownModel.fixtures');
+const { expect } = chai;
+chai.use(sinonChai);
 
-// tests
-describe('[/server/models] shantytownModel', () => {
-    const allPermissions = [
-        'declaredAt',
-        'builtAt',
-        'closedAt',
-        'address',
-        'addressDetails',
-        'populationTotal',
-        'populationCouples',
-        'populationMinors',
-        'electricityType',
-        'accessToWater',
-        'trashEvacuation',
-        'owner',
-        'censusStatus',
-        'censusConductedBy',
-        'censusConductedAt',
-        'ownerComplaint',
-        'justiceProcedure',
-        'justiceRendered',
-        'justiceRenderedAt',
-        'justiceRenderedBy',
-        'justiceChallenged',
-        'policeStatus',
-        'policeRequestedAt',
-        'policeGrantedAt',
-        'bailiff',
-        'socialOrigins',
-        'comments',
-        'closingSolutions',
-        'fieldType',
-        'ownerType',
-        'actions',
-        'updatedAt',
-    ];
-
-    before(async () => {
-        await db.authenticate();
+describe.only('shantytownModel.update()', () => {
+    const dependencies = {
+        query: undefined,
+    };
+    beforeEach(() => {
+        dependencies.query = sinon.stub(sequelize, 'query');
+    });
+    afterEach(() => {
+        Object.values(dependencies).forEach(stub => stub && stub.restore());
     });
 
-    after(async () => {
-        await db.close();
-    });
-
-    beforeEach(async () => {
-        await Promise.all([
-            db.query('SELECT truncate_tables(\'fabnum\')'),
-            db.query('SELECT reset_sequences()'),
-        ]);
-    });
-
-    describe('.findAll()', () => {
-        describe('if the database is empty', () => {
-            it('it returns an empty array', async () => {
-                const towns = await findAll();
-                expect(towns).to.eql([]);
-            });
-        });
-
-        describe('if the database is not empty', () => {
-            beforeEach(async () => {
-                await global.insertFixtures(db, fixtures.findAll.inputs);
+    describe('Si l\'utilisateur n\'a pas la permission de modifier les données judiciaires', () => {
+        it('la requête SQL ne touche pas ces colonnes', async () => {
+            const editor = generateUser({
+                permissions: {
+                    shantytown: {
+                        update: { allowed: true, data_justice: false },
+                    },
+                },
             });
 
-            describe('if all permissions are passed', () => {
-                it('it returns all towns from the database, with all details', async () => {
-                    const towns = await findAll(allPermissions);
-                    expect(towns).to.eql(fixtures.findAll.outputWithAllPermissions);
-                });
-            });
+            dependencies.query.onCall(0).resolves([[1]]);
 
-            describe('if no permissions are passed', () => {
-                it('it returns all towns from the database, without details', async () => {
-                    const towns = await findAll();
-                    expect(towns).to.eql(fixtures.findAll.outputWithNoPermissions);
-                });
-            });
-        });
-    });
+            await update(editor, 1, {
+                owner_complaint: true,
+                justice_procedure: true,
+                justice_rendered: true,
+                justice_rendered_at: new Date(),
+                justice_rendered_by: 'TGI',
+                justice_challenged: true,
+                police_status: 'granted',
+                police_requested_at: new Date(),
+                police_granted_at: new Date(),
+                bailiff: 'Huissier',
+            }, {});
 
-    describe('.findOne()', () => {
-        describe('if the id matches an existing town', () => {
-            beforeEach(async () => {
-                await global.insertFixtures(db, fixtures.findOne.inputs);
-            });
-
-            describe('if all permissions are passed', () => {
-                it('it returns the proper town from the database, with all details', async () => {
-                    const town = await findOne(1, allPermissions);
-                    expect(town).to.eql(fixtures.findOne.outputWithAllPermissions);
-                });
-            });
-
-            describe('if no permissions are passed', () => {
-                it('it returns the proper town from the database, without details', async () => {
-                    const towns = await findOne(1);
-                    expect(towns).to.eql(fixtures.findOne.outputWithNoPermissions);
-                });
-            });
-        });
-
-        describe('if the id does not match an existing town', () => {
-            it('it returns null', async () => {
-                const town = await findOne(1);
-                expect(town).to.be.null;
-            });
+            const args = dependencies.query.getCalls()[3].args[0];
+            [
+                'owner_complaint', 'justice_procedure', 'justice_rendered', 'justice_rendered_at',
+                'justice_rendered_by', 'justice_challenged', 'police_status', 'police_requested_at',
+                'police_granted_at', 'bailiff',
+            ].forEach(key => expect(args).to.not.have.string(key));
+            expect(dependencies.query).to.have.been.called;
         });
     });
 });

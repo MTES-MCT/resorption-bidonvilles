@@ -1,18 +1,16 @@
 const validator = require('validator');
-const cleanParams = require('./townController/helpers/cleanParams');
 const {
     sequelize,
     Shantytown: ShantyTowns,
-    ClosingSolution,
     Stats_Exports,
 } = require('#db/models');
 const { fromTsToFormat: tsToString, toFormat: dateToString } = require('#server/utils/date');
 const { createExport } = require('#server/utils/excel');
 const { sendUserCommentDeletion } = require('#server/mails/mails');
-const { triggerShantytownCloseAlert, triggerShantytownCreationAlert } = require('#server/utils/slack');
-const { getDepartementWatchers } = require('#server/models/userModel')(sequelize);
-const { sendUserShantytownDeclared, sendUserShantytownClosed } = require('#server/mails/mails');
-const { slack: slackConfig } = require('#server/config');
+const slackUtils = require('#server/utils/slack');
+const userModel = require('#server/models/userModel')(sequelize);
+const mails = require('#server/mails/mails');
+const shantytownService = require('#server/services/shantytown');
 
 function fromGeoLevelToTableName(geoLevel) {
     switch (geoLevel) {
@@ -107,137 +105,8 @@ module.exports = (models) => {
 
         async create(req, res, next) {
             try {
-                let town;
-                await sequelize.transaction(async (transaction) => {
-                    const baseTown = {
-                        name: req.body.name,
-                        latitude: req.body.latitude,
-                        longitude: req.body.longitude,
-                        address: req.body.address,
-                        addressDetails: req.body.detailed_address,
-                        builtAt: req.body.built_at,
-                        populationTotal: req.body.population_total,
-                        populationCouples: req.body.population_couples,
-                        populationMinors: req.body.population_minors,
-                        populationMinors0To3: req.body.population_minors_0_3,
-                        populationMinors3To6: req.body.population_minors_3_6,
-                        populationMinors6To12: req.body.population_minors_6_12,
-                        populationMinors12To16: req.body.population_minors_12_16,
-                        populationMinors16To18: req.body.population_minors_16_18,
-                        minorsInSchool: req.body.minors_in_school,
-                        electricityType: req.body.electricity_type,
-                        electricityComments: req.body.electricity_comments,
-                        accessToSanitary: req.body.access_to_sanitary,
-                        sanitaryComments: req.body.sanitary_comments,
-                        accessToWater: req.body.access_to_water,
-                        waterComments: req.body.water_comments,
-                        trashEvacuation: req.body.trash_evacuation,
-                        fieldType: req.body.field_type,
-                        ownerType: req.body.owner_type,
-                        city: req.body.citycode,
-                        createdBy: req.user.id,
-                        owner: req.body.owner,
-                        declaredAt: req.body.declared_at,
-                        censusStatus: req.body.census_status,
-                        censusConductedAt: req.body.census_conducted_at,
-                        censusConductedBy: req.body.census_conducted_by,
-                        // New fields
-                        // Water
-                        waterPotable: req.body.water_potable,
-                        waterContinuousAccess: req.body.water_continuous_access,
-                        waterPublicPoint: req.body.water_public_point,
-                        waterDistance: req.body.water_distance,
-                        waterRoadsToCross: req.body.water_roads_to_cross,
-                        waterEveryoneHasAccess: req.body.water_everyone_has_access,
-                        waterStagnantWater: req.body.water_stagnant_water,
-                        waterHandWashAccess: req.body.water_hand_wash_access,
-                        waterHandWashAccessNumber: req.body.water_hand_wash_access_number,
-                        // Sanitary
-                        sanitaryNumber: req.body.sanitary_number,
-                        sanitaryInsalubrious: req.body.sanitary_insalubrious,
-                        sanitaryOnSite: req.body.sanitary_on_site,
-                        // Trash
-                        trashCansOnSite: req.body.trash_cans_on_site,
-                        trashAccumulation: req.body.trash_accumulation,
-                        trashEvacuationRegular: req.body.trash_evacuation_regular,
-                        // Vermin
-                        vermin: req.body.vermin,
-                        verminComments: req.body.vermin_comments,
-                        // Fire prevention
-                        firePreventionMeasures: req.body.fire_prevention_measures,
-                        firePreventionDiagnostic: req.body.fire_prevention_diagnostic,
-                        firePreventionSiteAccessible: req.body.fire_prevention_site_accessible,
-                        firePreventionDevices: req.body.fire_prevention_devices,
-                        firePreventionComments: req.body.fire_prevention_comments,
-
-                    };
-
-                    town = await ShantyTowns.create(
-                        Object.assign(
-                            {},
-                            baseTown,
-                            req.user.permissions.shantytown.create.data_justice === true
-                                ? {
-                                    ownerComplaint: req.body.owner_complaint,
-                                    justiceProcedure: req.body.justice_procedure,
-                                    justiceRendered: req.body.justice_rendered,
-                                    justiceRenderedBy: req.body.justice_rendered_by,
-                                    justiceRenderedAt: req.body.justice_rendered_at,
-                                    justiceChallenged: req.body.justice_challenged,
-                                    policeStatus: req.body.police_status,
-                                    policeRequestedAt: req.body.police_requested_at,
-                                    policeGrantedAt: req.body.police_granted_at,
-                                    bailiff: req.body.bailiff,
-                                }
-                                : {},
-                        ),
-                        {
-                            transaction,
-                        },
-                    );
-
-                    if (req.body.social_origins.length > 0) {
-                        await town.setSocialOrigins(
-                            req.body.social_origins,
-                            {
-                                transaction,
-                            },
-                        );
-                    }
-                });
-
-                // Send a slack alert, if it fails, do nothing
-                try {
-                    if (slackConfig && slackConfig.new_shantytown) {
-                        await triggerShantytownCreationAlert(town, req.user);
-                    }
-                } catch (err) {
-                    // eslint-disable-next-line no-console
-                    console.log(`Error with shantytown creation slack webhook : ${err.message}`);
-                }
-
-                // Send a notification to all users of the related departement
-                try {
-                    const watchers = await getDepartementWatchers(req.body.city.departement.code);
-                    watchers
-                        .filter(({ user_id }) => user_id !== req.user.id) // do not send an email to the user who created the town
-                        .forEach((watcher) => {
-                            sendUserShantytownDeclared(watcher, {
-                                variables: {
-                                    departement: req.body.city.departement,
-                                    shantytown: town,
-                                    creator: req.user,
-                                },
-                                preserveRecipient: false,
-                            });
-                        });
-                } catch (error) {
-                    // ignore
-                }
-
                 return res.status(200).send({
-                    town,
-                    plans: [],
+                    town: await shantytownService.create(req.body, req.user),
                 });
             } catch (e) {
                 res.status(500).send({
@@ -251,128 +120,24 @@ module.exports = (models) => {
         },
 
         async close(req, res, next) {
-            const {
-                status,
-                closedAt,
-                solutions,
-                closedWithSolutions,
-            } = cleanParams(req.body);
-
-            const now = Date.now();
-            const fieldErrors = {};
-            const error = addError.bind(this, fieldErrors);
-
-            const closingSolutions = await ClosingSolution.findAll();
-
-            // validate the status
-            if (status === null) {
-                error('status', 'La cause de fermeture du site est obligatoire');
-            } else if (['open', 'closed_by_justice', 'closed_by_admin', 'other', 'unknown'].indexOf(status) === -1) {
-                error('status', 'La cause de fermeture du site fournie n\'est pas reconnue');
-            }
-
-            // validate closed with solutions
-            if (closedWithSolutions === null) {
-                error('closed_with_solutions', 'Ce champ est obligatoire');
-            }
-
-            // validate the closed-at date
-            if (status !== 'open') {
-                const timestamp = new Date(closedAt).getTime();
-
-                if (!closedAt || Number.isNaN(timestamp)) {
-                    error('closed_at', 'La date fournie n\'est pas reconnue');
-                } else if (timestamp >= now) {
-                    error('closed_at', 'La date de fermeture du site ne peut pas être future');
-                }
-            }
-
-            // validate the list of solutions
-            const solutionErrors = {};
-            solutions.forEach((solution) => {
-                if (closingSolutions.some(s => s.id === solution.id) === false) {
-                    addError(solutionErrors, solution.id, `Le dispositif d'identifiant ${solution.id} n'existe pas`);
-                }
-
-                if (solution.peopleAffected !== null) {
-                    if (Number.isNaN(solution.peopleAffected)) {
-                        addError(solutionErrors, solution.id, 'Le nombre de personnes concernées par le dispositif est invalide');
-                    } else if (solution.peopleAffected <= 0) {
-                        addError(solutionErrors, solution.id, 'Le nombre de personnes concernées par le dispositif doit être positif');
-                    }
-                }
-
-                if (solution.householdsAffected !== null) {
-                    if (Number.isNaN(solution.householdsAffected)) {
-                        addError(solutionErrors, solution.id, 'Le nombre de ménages concernés par le dispositif est invalide');
-                    } else if (solution.householdsAffected <= 0) {
-                        addError(solutionErrors, solution.id, 'Le nombre de ménages concernés par le dispositif doit être positif');
-                    }
-                }
-            });
-
-            if (Object.keys(solutionErrors).length > 0) {
-                fieldErrors.solutions = solutionErrors;
-            }
-
-            // check errors
-            if (Object.keys(fieldErrors).length > 0) {
-                return res.status(400).send({
-                    error: {
-                        developer_message: 'The submitted data contains errors',
-                        user_message: 'Certaines données sont invalides',
-                        fields: fieldErrors,
-                    },
-                });
-            }
-
-            // check if the town exists
-            const town = await ShantyTowns.findOne({
-                where: {
-                    shantytown_id: req.params.id,
-                },
-            });
-
-            if (town === null) {
-                return res.status(400).send({
-                    error: {
-                        developer_message: `Tried to close unknown town of id #${req.params.id}`,
-                        user_message: `Le site d'identifiant ${req.params.id} n'existe pas : fermeture impossible`,
-                    },
-                });
-            }
-
             // close the town
             try {
-                await sequelize.transaction(async (transaction) => {
-                    await town.update({
-                        status,
-                        closedAt,
-                        closedWithSolutions: closedWithSolutions === true ? 'yes' : 'no',
-                        updatedBy: req.user.id,
-                    }, {
-                        transaction,
-                    });
+                await models.shantytown.update(
+                    req.user,
+                    req.body.shantytown.id,
+                    {
+                        closed_at: req.body.closed_at,
+                        closed_with_solutions: req.body.closed_with_solutions,
+                        status: req.body.status,
+                        closing_solutions: req.body.solutions,
+                    },
+                );
 
-                    await Promise.all(
-                        solutions.map(solution => town.addClosingSolution(solution.id, {
-                            transaction,
-                            through: {
-                                peopleAffected: solution.peopleAffected,
-                                householdsAffected: solution.householdsAffected,
-                            },
-                        })),
-                    );
-                });
+                const updatedTown = await models.shantytown.findOne(req.user, req.body.shantytown.id);
 
                 // Send a slack alert, if it fails, do nothing
                 try {
-                    if (slackConfig && slackConfig.close_shantytown) {
-                        const updatedTown = {
-                            ...town.dataValues, status, closedAt, closedWithSolutions, updatedBy: req.user.id, solutions,
-                        };
-                        await triggerShantytownCloseAlert(updatedTown, req.user);
-                    }
+                    await slackUtils.triggerShantytownCloseAlert(updatedTown, req.user);
                 } catch (err) {
                     // eslint-disable-next-line no-console
                     console.log(`Error with shantytown close slack webhook : ${err.message}`);
@@ -380,15 +145,15 @@ module.exports = (models) => {
 
                 // Send a notification to all users of the related departement
                 try {
-                    const { departement } = await models.geo.getLocation('city', town.city);
-                    const watchers = await getDepartementWatchers(departement.code);
+                    const { departement } = req.body.shantytown;
+                    const watchers = await userModel.getDepartementWatchers(departement.code);
                     watchers
                         .filter(({ user_id }) => user_id !== req.user.id) // do not send an email to the user who closed the town
                         .forEach((watcher) => {
-                            sendUserShantytownClosed(watcher, {
+                            mails.sendUserShantytownClosed(watcher, {
                                 variables: {
                                     departement,
-                                    shantytown: town,
+                                    shantytown: updatedTown,
                                     editor: req.user,
                                 },
                                 preserveRecipient: false,
@@ -398,11 +163,10 @@ module.exports = (models) => {
                     // ignore
                 }
 
-                return res.status(200).send(town);
+                return res.status(200).send(updatedTown);
             } catch (e) {
                 res.status(500).send({
                     error: {
-                        developer_message: e.message,
                         user_message: 'Une erreur est survenue dans l\'enregistrement du site en base de données',
                     },
                 });
