@@ -202,7 +202,11 @@ export default {
             const fetchStatsData = async date => {
                 const segment = `segment=customVariableValue1==false,customVariableValue1=@${encodeURIComponent(
                     "superuser:false"
-                )}`;
+                )}${
+                    this.$route.params.code
+                        ? `;customVariableName5==departement_code;customVariableValue5==${this.$route.params.code}`
+                        : ""
+                }`;
 
                 const url = `https://stats.data.gouv.fr/index.php?module=API&method=VisitsSummary.getUniqueVisitors&idSite=86&period=week&date=${date}&format=JSON&${segment}`;
 
