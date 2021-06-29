@@ -1,3 +1,4 @@
+const moment = require('moment');
 const mailService = require('#server/services/mailService');
 const { frontUrl, backUrl } = require('#server/config');
 
@@ -519,7 +520,6 @@ module.exports = {
         });
     },
 
-
     /**
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
@@ -536,6 +536,60 @@ module.exports = {
                 frontUrl: `${frontUrl}?${utm}`,
                 connexionUrl: `${connexionUrl}?${utm}`,
                 recipientName: formatName(recipient.first_name, recipient.last_name),
+            },
+            preserveRecipient,
+        });
+    },
+
+    /**
+     * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
+     * @param {Object} options
+     */
+    sendUserShantytownDeclared: (recipient, options = {}) => {
+        const { variables, preserveRecipient } = options;
+        const utm = {
+            regular: generateTrackingUTM(USER_CAMPAIGN, `dep${variables.departement.code}-nouveau-site`),
+            connexion: generateTrackingUTM(USER_CAMPAIGN, `dep${variables.departement.code}-nouveau-site-connexion`),
+        };
+
+        return mailService.send('user_shantytown_declared', {
+            recipient,
+            variables: {
+                recipientName: formatName(recipient.first_name, recipient.last_name),
+                departementName: variables.departement.name,
+                hour: moment(variables.shantytown.createdAt).utcOffset(2).format('HH:mm'),
+                creatorName: formatName(variables.creator.first_name, variables.creator.last_name),
+                townFullAddress: variables.shantytown.address,
+                frontUrl: `${frontUrl}?${utm.regular}`,
+                connexionUrl: `${connexionUrl}?${utm.connexion}`,
+                townUrl: `${frontUrl}/site/${variables.shantytown.id}?${utm.regular}`,
+            },
+            preserveRecipient,
+        });
+    },
+
+    /**
+     * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
+     * @param {Object} options
+     */
+    sendUserShantytownClosed: (recipient, options = {}) => {
+        const { variables, preserveRecipient } = options;
+        const utm = {
+            regular: generateTrackingUTM(USER_CAMPAIGN, `dep${variables.departement.code}-site-ferme`),
+            connexion: generateTrackingUTM(USER_CAMPAIGN, `dep${variables.departement.code}-site-ferme-connexion`),
+        };
+
+        return mailService.send('user_shantytown_closed', {
+            recipient,
+            variables: {
+                recipientName: formatName(recipient.first_name, recipient.last_name),
+                departementName: variables.departement.name,
+                hour: moment(variables.shantytown.closedAt).utcOffset(2).format('HH:mm'),
+                editorName: formatName(variables.editor.first_name, variables.editor.last_name),
+                townFullAddress: variables.shantytown.address,
+                frontUrl: `${frontUrl}?${utm.regular}`,
+                connexionUrl: `${connexionUrl}?${utm.connexion}`,
+                townUrl: `${frontUrl}/site/${variables.shantytown.id}?${utm.regular}`,
             },
             preserveRecipient,
         });

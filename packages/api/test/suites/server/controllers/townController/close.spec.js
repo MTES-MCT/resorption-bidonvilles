@@ -1,177 +1,184 @@
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const { mockReq, mockRes } = require('sinon-express-mock');
-const { makeMockModels } = require('sequelize-test-helpers');
 const proxyquire = require('proxyquire');
-const sequelize = require('sequelize');
+const { mockReq, mockRes } = require('sinon-express-mock');
+const { serialized: generateUser } = require('#test/utils/user');
+const { default: generateWatcher } = require('#test/utils/shantytownWatcher');
 
-const mockShantytownModel = {
-    findOne: sinon.stub(),
-    findAll: sinon.stub(),
-};
-
-const mockClosingSolution = {
-    findOne: sinon.stub(),
-    findAll: sinon.stub(),
-};
-
-const mockModels = Object.assign(
-    makeMockModels({
-        Shantytown: mockShantytownModel,
-        ClosingSolution: mockClosingSolution,
-    }),
-    {
-        sequelize: Object.assign({
-            query: sinon.stub(),
-            transaction: cb => cb(),
-        }, sequelize),
-    },
-);
-
+const { sequelize } = require('#db/models');
+const models = require('#server/models')(sequelize);
+const userModel = require('#server/models/userModel')(sequelize);
+const slackUtils = require('#server/utils/slack');
+const mails = require('#server/mails/mails');
 
 const { close } = proxyquire('#server/controllers/townController', {
-    '#db/models': mockModels,
-
-})({});
+    '#server/models/userModel': () => userModel,
+})(models);
 
 const { expect } = chai;
 chai.use(sinonChai);
-let httpRes;
-let httpReq;
 
-describe.only('.close()', () => {
-    it('should success if params are valid and closed_with_solutions is false', async () => {
-        const randomId = global.generate('number');
-        const town = {
-            id: randomId,
-            update: sinon.stub(),
-        };
-        const fakePermissions = [global.generate('string'), global.generate('string')];
-        httpReq = mockReq({
-            params: {
-                id: randomId,
-            },
-            user: {
-                id: randomId,
-                permissions: {
-                    data: fakePermissions,
+describe.only('townController.close()', () => {
+    const dependencies = {
+        shantytownUpdate: undefined,
+        shantytownFindOne: undefined,
+        triggerShantytownCloseAlert: undefined,
+        getDepartementWatchers: undefined,
+        sendUserShantytownClosed: undefined,
+    };
+    beforeEach(() => {
+        dependencies.shantytownUpdate = sinon.stub(models.shantytown, 'update');
+        dependencies.shantytownFindOne = sinon.stub(models.shantytown, 'findOne');
+        dependencies.triggerShantytownCloseAlert = sinon.stub(slackUtils, 'triggerShantytownCloseAlert');
+        dependencies.getDepartementWatchers = sinon.stub(userModel, 'getDepartementWatchers');
+        dependencies.sendUserShantytownClosed = sinon.stub(mails, 'sendUserShantytownClosed');
+    });
+    afterEach(() => {
+        Object.values(dependencies).forEach(stub => stub && stub.restore());
+    });
+
+    describe('Avec un input valide', () => {
+        let input;
+        let output;
+        let res;
+        beforeEach(async () => {
+            input = {
+                params: { id: 1 },
+
+                body: {
+                    closed_at: new Date(2021, 0, 1, 12, 0, 0, 0),
+                    closed_with_solutions: true,
+                    status: 'closed_by_justice',
+                    solutions: [
+                        { id: 1, people_affected: 10, households_affected: 5 },
+                        { id: 2, people_affected: 20, households_affected: 10 },
+                    ],
+
+                    shantytown: {
+                        id: 1,
+                        departement: {
+                            name: 'Yvelines',
+                            code: '78',
+                        },
+                        closedAt: null,
+                    }, // @todo: remplacer par une donnée générée via utils/shantytown dès que cet utils sera mergé dans develop...
                 },
-            },
-            body: {
-                closed_at: (new Date(2000, 0, 1)).toString(),
-                closed_with_solutions: false,
-                solutions: [{ id: '1', peopleAffected: 1, households_affected: 1 }],
-                status: 'closed_by_admin',
-            },
+
+                user: generateUser(),
+            };
+
+            output = {
+                watchers: [
+                    generateWatcher(),
+                    generateWatcher({ user_id: 3 }),
+                    generateWatcher({ user_id: 4 }),
+                ],
+                shantytown: {
+                    id: 1,
+                    departement: {
+                        name: 'Yvelines',
+                        code: '78',
+                    },
+                    closedAt: input.body.closed_at.getTime() / 1000,
+                }, // @todo: remplacer par une donnée générée via utils/shantytown dès que cet utils sera mergé dans develop...
+            };
+
+            dependencies.getDepartementWatchers
+                .withArgs('78')
+                .resolves(output.watchers);
+            dependencies.shantytownFindOne
+                .withArgs(input.user, 1)
+                .resolves(output.shantytown);
+
+            res = mockRes();
+            await close(mockReq(input), res);
         });
-        httpRes = mockRes();
-        mockClosingSolution.findAll.resolves([{
-            id: 1,
-            label: 'Whatever 1',
-        },
-        {
-            id: 2,
-            label: 'Whatever 2',
-        }]);
-        mockShantytownModel.findOne.resolves(town);
 
-        await close(httpReq, httpRes);
+        it('met à jour le site', async () => {
+            expect(dependencies.shantytownUpdate).to.have.been.calledOnceWithExactly(
+                input.user,
+                1,
+                {
+                    closed_at: input.body.closed_at,
+                    closed_with_solutions: input.body.closed_with_solutions,
+                    status: input.body.status,
+                    closing_solutions: input.body.solutions,
+                },
+            );
+        });
 
-        expect(town.update).to.have.been.calledWithMatch({
-            status: 'closed_by_admin',
-            closedAt: httpReq.body.closed_at,
-            closedWithSolutions: 'no',
-            updatedBy: httpReq.user.id,
+        it('envoie une alerte Slack', () => {
+            expect(dependencies.triggerShantytownCloseAlert).to.have.been.calledOnce;
+        });
+
+        it('envoie une notification mél à tous les watchers, excepté l\'utilisateur courant', () => {
+            expect(dependencies.sendUserShantytownClosed).to.have.been.calledWith(
+                output.watchers[1],
+                sinon.match.any,
+            );
+            expect(dependencies.sendUserShantytownClosed).to.have.been.calledWith(
+                output.watchers[2],
+                sinon.match.any,
+            );
+            expect(dependencies.sendUserShantytownClosed).to.have.been.callCount(2);
+        });
+
+        it('répond une 200', () => {
+            expect(res.status).to.have.been.calledOnceWith(200);
+        });
+
+        it('retourne le site en question mis à jour', () => {
+            expect(res.send).to.have.been.calledOnceWith(output.shantytown);
         });
     });
-    it('should success if params are valid and closed_with_solutions is true', async () => {
-        const randomId = global.generate('number');
-        const town = {
-            id: randomId,
-            update: sinon.stub(),
-        };
-        const fakePermissions = [global.generate('string'), global.generate('string')];
-        httpReq = mockReq({
-            params: {
-                id: randomId,
-            },
-            user: {
-                id: randomId,
-                permissions: {
-                    data: fakePermissions,
+
+    describe('En cas de dysfonctionnement de la requête de mise à jour du site', () => {
+        let res;
+        let next;
+        beforeEach(async () => {
+            const input = {
+                params: { id: 1 },
+
+                body: {
+                    closed_at: new Date(2021, 0, 1, 12, 0, 0, 0),
+                    closed_with_solutions: true,
+                    status: 'closed_by_justice',
+                    solutions: [
+                        { id: 1, people_affected: 10, households_affected: 5 },
+                        { id: 2, people_affected: 20, households_affected: 10 },
+                    ],
+
+                    shantytown: {
+                        id: 1,
+                        departement: {
+                            name: 'Yvelines',
+                            code: '78',
+                        },
+                        closedAt: null,
+                    }, // @todo: remplacer par une donnée générée via utils/shantytown dès que cet utils sera mergé dans develop...
                 },
-            },
-            body: {
-                closed_at: (new Date(2000, 0, 1)).toString(),
-                closed_with_solutions: true,
-                solutions: [{ id: '1', peopleAffected: 1, households_affected: 1 }],
-                status: 'closed_by_admin',
-            },
-        });
-        httpRes = mockRes();
-        mockClosingSolution.findAll.resolves([{
-            id: 1,
-            label: 'Whatever 1',
-        },
-        {
-            id: 2,
-            label: 'Whatever 2',
-        }]);
-        mockShantytownModel.findOne.resolves(town);
 
-        await close(httpReq, httpRes);
+                user: generateUser(),
+            };
 
-        expect(town.update).to.have.been.calledWithMatch({
-            status: 'closed_by_admin',
-            closedAt: httpReq.body.closed_at,
-            closedWithSolutions: 'yes',
-            updatedBy: httpReq.user.id,
+            dependencies.shantytownUpdate.rejects(new Error('Une erreur'));
+
+            res = mockRes();
+            next = sinon.stub();
+            await close(mockReq(input), res, next);
         });
-    });
-    it.only('should fails if params is missing closed_with_solutions', async () => {
-        const randomId = global.generate('number');
-        const town = {
-            id: randomId,
-            update: sinon.stub(),
-        };
-        const fakePermissions = [global.generate('string'), global.generate('string')];
-        httpReq = mockReq({
-            params: {
-                id: randomId,
-            },
-            user: {
-                id: randomId,
-                permissions: {
-                    data: fakePermissions,
+
+        it('répond une 500', () => {
+            expect(res.status).to.have.been.calledOnceWith(500);
+        });
+
+        it('retourne un message d\'erreur générique', () => {
+            expect(res.send).to.have.been.calledOnceWith({
+                error: {
+                    user_message: 'Une erreur est survenue dans l\'enregistrement du site en base de données',
                 },
-            },
-            body: {
-                closed_at: (new Date(2000, 0, 1)).toString(),
-                solutions: [{ id: '1', peopleAffected: 1, households_affected: 1 }],
-                status: 'closed_by_admin',
-            },
-        });
-        httpRes = mockRes();
-        mockClosingSolution.findAll.resolves([{
-            id: 1,
-            label: 'Whatever 1',
-        },
-        {
-            id: 2,
-            label: 'Whatever 2',
-        }]);
-        mockShantytownModel.findOne.resolves(town);
-
-        await close(httpReq, httpRes);
-
-        expect(httpRes.status).to.have.been.calledOnceWith(400);
-        expect(httpRes.send).to.have.been.calledWithMatch({
-            error: {
-                developer_message: 'The submitted data contains errors',
-                user_message: 'Certaines données sont invalides',
-                fields: { closed_with_solutions: ['Ce champ est obligatoire'] },
-            },
+            });
         });
     });
 });

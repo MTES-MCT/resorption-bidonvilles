@@ -849,5 +849,25 @@ module.exports = (database) => {
         },
     );
 
+    model.getDepartementWatchers = async departementCode => database.query(
+        `SELECT
+            u.user_id,
+            u.email,
+            u.first_name,
+            u.last_name
+        FROM localized_organizations lo
+        LEFT JOIN users u ON u.fk_organization = lo.organization_id
+        WHERE
+            (lo.location_type != 'region' AND lo.departement_code = :departementCode)
+            AND u.fk_status = 'active'
+            AND lo.active = TRUE`,
+        {
+            type: database.QueryTypes.SELECT,
+            replacements: {
+                departementCode,
+            },
+        },
+    );
+
     return model;
 };

@@ -192,6 +192,10 @@ module.exports = database => ({
             },
         );
 
+        if (argTransaction === undefined) {
+            await transaction.commit();
+        }
+
         return response;
     },
 
@@ -211,6 +215,10 @@ module.exports = database => ({
             {
                 transaction,
             });
+
+        if (argTransaction === undefined) {
+            await transaction.commit();
+        }
 
         return response;
     },

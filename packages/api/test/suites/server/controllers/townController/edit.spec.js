@@ -1,376 +1,320 @@
-/* eslint-disable global-require */
-
-/* **************************************************************************************************
- * TOOLS
- * *********************************************************************************************** */
-
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const rewiremock = require('rewiremock/node');
-const { sequelize } = require('sequelize-test-helpers');
-
+const proxyquire = require('proxyquire');
 const { mockReq, mockRes } = require('sinon-express-mock');
+const { serialized: generateUser } = require('#test/utils/user');
+
+const { sequelize } = require('#db/models');
+const shantytownModel = require('#server/models/shantytownModel')(sequelize);
+
+const edit = proxyquire('#server/controllers/townController/edit', {
+    '#server/models/shantytownModel': () => shantytownModel,
+})();
 
 const { expect } = chai;
 chai.use(sinonChai);
 
-
-/* **************************************************************************************************
- * FIXTURES
- * *********************************************************************************************** */
-
-const otherModels = {
-    ownerType: require('#server/models/ownerTypeModel')({}),
-    geo: require('#server/models/geoModel')({}),
-};
-const queryStub = sinon.stub();
-const rewiredStubs = {
-    '#db/models': {
-        sequelize: Object.assign({}, sequelize, {
-            transaction: (cb => cb()),
-            query: queryStub,
-        }),
-        Shantytown: {
-            findOne: sinon.stub(),
-        },
-    },
-};
-const diStubs = {};
-const edit = rewiremock.proxy('#server/controllers/townController/edit', rewiredStubs)(diStubs);
-
-
-/* **************************************************************************************************
- * TESTS
- * *********************************************************************************************** */
-
 describe.only('townController.edit()', () => {
-    /* *******************
-     * Common resources
-     * **************** */
-
-    let reqArg = {};
-    let now;
-    let clock;
+    const dependencies = {
+        update: undefined,
+        findOne: undefined,
+    };
     beforeEach(() => {
-        // stub time
-        now = new Date();
-        clock = sinon.useFakeTimers(now.getTime());
+        dependencies.update = sinon.stub(shantytownModel, 'update');
+        dependencies.findOne = sinon.stub(shantytownModel, 'findOne');
+    });
+    afterEach(() => {
+        Object.values(dependencies).forEach(stub => stub && stub.restore());
+    });
 
-        queryStub.onCall(0).returns([[{ hid: 1 }]]);
+    describe('Si les requêtes en base de données fonctionnent correctement', () => {
+        let input;
+        let output;
+        let res;
+        beforeEach(async () => {
+            input = {
+                params: { id: 1 },
 
-        reqArg = {
-            user: {
-                id: 42,
-                permissions: {
-                    shantytown: {
-                        update: {
-                            allowed: true,
-                            geographic_level: 'nation',
-                            data_justice: false,
-                        },
+                body: {
+                    name: 'Name',
+                    latitude: 46.1390023,
+                    longitude: -2.435937,
+                    address: 'Rue de la Defense 92130 Issy-les-Moulineaux, 92, Hauts-de-Seine, Île-de-France',
+                    address_details: 'Détails',
+                    built_at: new Date(),
+                    social_origins: [1, 2],
+                    population_total: 100,
+                    population_couples: 50,
+                    population_minors: 25,
+                    population_minors_0_3: 10,
+                    population_minors_3_6: 10,
+                    population_minors_6_12: 3,
+                    population_minors_12_16: 1,
+                    population_minors_16_18: 1,
+                    minors_in_school: 20,
+                    fk_electricity_type: 1,
+                    electricity_comments: 'Commentaires',
+                    access_to_sanitary: true,
+                    sanitary_comments: 'Commentaires',
+                    sanitary_number: 2,
+                    sanitary_insalubrious: true,
+                    sanitary_on_site: 1,
+                    access_to_water: true,
+                    water_comments: 'Commentaires',
+                    water_potable: true,
+                    water_continuous_access: true,
+                    water_public_point: true,
+                    water_distance: '0-20',
+                    water_roads_to_cross: true,
+                    water_everyone_has_access: true,
+                    water_stagnant_water: true,
+                    water_hand_wash_access: true,
+                    water_hand_wash_access_number: true,
+                    trash_evacuation: true,
+                    trash_cans_on_site: 2,
+                    trash_accumulation: true,
+                    trash_evacuation_regular: true,
+                    vermin: true,
+                    vermin_comments: 'Commentaires',
+                    fire_prevention_measures: true,
+                    fire_prevention_diagnostic: true,
+                    fire_prevention_site_accessible: true,
+                    fire_prevention_devices: true,
+                    fire_prevention_comments: 'Commentaires',
+                    fk_field_type: 1,
+                    fk_owner_type: 1,
+                    fk_city: '92062',
+                    owner: 'Nom de propriétaire',
+                    declared_at: new Date(),
+                    census_status: 'done',
+                    census_conducted_at: new Date(),
+                    census_conducted_by: 'Opérateur',
+                    owner_complaint: true,
+                    justice_procedure: true,
+                    justice_rendered: true,
+                    justice_rendered_at: new Date(),
+                    justice_rendered_by: 'TGI',
+                    justice_challenged: true,
+                    police_status: 'granted',
+                    police_requested_at: new Date(),
+                    police_granted_at: new Date(),
+                    bailiff: 'Huissier',
+                },
+
+                user: generateUser(),
+            };
+
+            output = {
+                // @todo: remplacer par une donnée générée via utils/shantytown dès que cet utils sera mergé dans develop...
+                shantytown: {
+                    id: 1,
+                    name: null,
+                    departement: {
+                        name: 'Yvelines',
+                        code: '78',
                     },
                 },
-            },
-            params: {
-                id: 42,
-            },
+                updatedShantytown: {
+                    id: 1,
+                    name: 'name',
+                    departement: {
+                        name: 'Yvelines',
+                        code: '78',
+                    },
+                },
+            };
 
-            body: {
-                built_at: new Date(625273200000),
-                declared_at: null,
-                latitude: 49.414964,
-                longitude: 2.817893,
-                citycode: '60159',
-                address: 'Rue Roger Couttolenc 60200 Compiègne, 60, Oise, Hauts-de-France',
-                name: null,
-                detailed_address: null,
-                field_type: 1,
-                owner_type: 1,
-                owner: null,
-                census_status: null,
-                census_conducted_at: null,
-                census_conducted_by: null,
-                population_total: null,
-                population_couples: null,
-                population_minors: null,
-                population_minors_0_3: null,
-                population_minors_3_6: null,
-                population_minors_6_12: null,
-                population_minors_12_16: null,
-                population_minors_16_18: null,
-                minors_in_school: null,
-                social_origins: [],
-                electricity_type: 1,
-                electricity_comments: null,
-                access_to_water: null,
-                access_to_sanitary: null,
-                sanitary_comments: null,
-                sanitary_insalubrious: null,
-                sanitary_number: null,
-                sanitary_on_site: null,
-                water_comments: null,
-                water_continuous_access: null,
-                water_distance: null,
-                water_everyone_has_access: null,
-                water_hand_wash_access: null,
-                water_hand_wash_access_number: null,
-                water_potable: null,
-                water_public_point: null,
-                water_roads_to_cross: null,
-                water_stagnant_water: null,
-                trash_evacuation: null,
-                trash_evacuation_regular: null,
-                trash_accumulation: null,
-                trash_cans_on_site: null,
-                vermin: null,
-                vermin_comments: null,
-                fire_prevention_comments: null,
-                fire_prevention_devices: null,
-                fire_prevention_diagnostic: null,
-                fire_prevention_measures: null,
-                fire_prevention_site_accessible: null,
-                owner_complaint: null,
-                justice_rendered_at: null,
-                justice_rendered_by: null,
-                police_status: null,
-                police_requested_at: null,
-                police_granted_at: null,
-                bailiff: null,
-                closed_at: null,
-            },
-        };
+            dependencies.findOne
+                .withArgs(input.user, 1)
+                .onCall(0)
+                .resolves(output.shantytown);
 
-        diStubs.ownerType = sinon.stub(otherModels.ownerType);
-        diStubs.ownerType.findOne.withArgs(1).resolves({
-            id: 1,
-            label: 'Inconnu',
+            dependencies.findOne
+                .withArgs(input.user, 1)
+                .onCall(1)
+                .resolves(output.updatedShantytown);
+
+            res = mockRes();
+            await edit(mockReq(input), res);
         });
 
-        diStubs.geo = sinon.stub(otherModels.geo);
-        diStubs.geo.getLocation.withArgs('city', '60159').resolves({
-            type: 'city',
-            region: {
-                code: '32',
-                name: 'Hauts-de-France',
-            },
-            departement: {
-                code: '60',
-                name: 'Oise',
-            },
-            epci: {
-                code: '200067965',
-                name: 'CA de la Région de Compiègne et de la Basse Automne',
-            },
-            city: {
-                code: '60159',
-                name: 'Compiègne',
-            },
+        it('met à jour le site', async () => {
+            expect(dependencies.update).to.have.been.calledOnceWithExactly(
+                input.user,
+                1,
+                {
+                    name: input.body.name,
+                    latitude: input.body.latitude,
+                    longitude: input.body.longitude,
+                    address: input.body.address,
+                    address_details: input.body.detailed_address,
+                    built_at: input.body.built_at,
+                    social_origins: input.body.social_origins,
+                    population_total: input.body.population_total,
+                    population_couples: input.body.population_couples,
+                    population_minors: input.body.population_minors,
+                    population_minors_0_3: input.body.population_minors_0_3,
+                    population_minors_3_6: input.body.population_minors_3_6,
+                    population_minors_6_12: input.body.population_minors_6_12,
+                    population_minors_12_16: input.body.population_minors_12_16,
+                    population_minors_16_18: input.body.population_minors_16_18,
+                    minors_in_school: input.body.minors_in_school,
+                    fk_electricity_type: input.body.electricity_type,
+                    electricity_comments: input.body.electricity_comments,
+                    access_to_sanitary: input.body.access_to_sanitary,
+                    sanitary_comments: input.body.sanitary_comments,
+                    sanitary_number: input.body.sanitary_number,
+                    sanitary_insalubrious: input.body.sanitary_insalubrious,
+                    sanitary_on_site: input.body.sanitary_on_site,
+                    access_to_water: input.body.access_to_water,
+                    water_comments: input.body.water_comments,
+                    water_potable: input.body.water_potable,
+                    water_continuous_access: input.body.water_continuous_access,
+                    water_public_point: input.body.water_public_point,
+                    water_distance: input.body.water_distance,
+                    water_roads_to_cross: input.body.water_roads_to_cross,
+                    water_everyone_has_access: input.body.water_everyone_has_access,
+                    water_stagnant_water: input.body.water_stagnant_water,
+                    water_hand_wash_access: input.body.water_hand_wash_access,
+                    water_hand_wash_access_number: input.body.water_hand_wash_access_number,
+                    trash_evacuation: input.body.trash_evacuation,
+                    trash_cans_on_site: input.body.trash_cans_on_site,
+                    trash_accumulation: input.body.trash_accumulation,
+                    trash_evacuation_regular: input.body.trash_evacuation_regular,
+                    vermin: input.body.vermin,
+                    vermin_comments: input.body.vermin_comments,
+                    fire_prevention_measures: input.body.fire_prevention_measures,
+                    fire_prevention_diagnostic: input.body.fire_prevention_diagnostic,
+                    fire_prevention_site_accessible: input.body.fire_prevention_site_accessible,
+                    fire_prevention_devices: input.body.fire_prevention_devices,
+                    fire_prevention_comments: input.body.fire_prevention_comments,
+                    fk_field_type: input.body.field_type,
+                    fk_owner_type: input.body.owner_type,
+                    fk_city: input.body.citycode,
+                    owner: input.body.owner,
+                    declared_at: input.body.declared_at,
+                    census_status: input.body.census_status,
+                    census_conducted_at: input.body.census_conducted_at,
+                    census_conducted_by: input.body.census_conducted_by,
+                    owner_complaint: input.body.owner_complaint,
+                    justice_procedure: input.body.justice_procedure,
+                    justice_rendered: input.body.justice_rendered,
+                    justice_rendered_at: input.body.justice_rendered_at,
+                    justice_rendered_by: input.body.justice_rendered_by,
+                    justice_challenged: input.body.justice_challenged,
+                    police_status: input.body.police_status,
+                    police_requested_at: input.body.police_requested_at,
+                    police_granted_at: input.body.police_granted_at,
+                    bailiff: input.body.bailiff,
+                },
+            );
+        });
+
+        it('répond une 200', () => {
+            expect(res.status).to.have.been.calledOnceWith(200);
+        });
+
+        it('retourne le site en question mis à jour', () => {
+            expect(dependencies.findOne).to.have.been.calledAfter(dependencies.update);
+            expect(res.send).to.have.been.calledOnceWith(output.updatedShantytown);
         });
     });
 
-    afterEach(() => {
-        clock.restore();
-        queryStub.reset();
-        Object.keys(diStubs).forEach((key) => {
-            Object.keys(diStubs[key]).forEach((method) => {
-                diStubs[key][method].restore();
+    describe('En cas d\'erreur dans le checkout du site', () => {
+        let res;
+        let next;
+        let error;
+        beforeEach(async () => {
+            const input = {
+                params: { id: 1 },
+                body: {},
+                user: generateUser(),
+            };
+
+            error = new Error('Une erreur');
+
+            dependencies.findOne.rejects(error);
+
+            res = mockRes();
+            next = sinon.stub();
+            await edit(mockReq(input), res, next);
+        });
+
+        it('répond une 500', () => {
+            expect(res.status).to.have.been.calledOnceWith(500);
+        });
+
+        it('retourne un message d\'erreur générique', () => {
+            expect(res.send).to.have.been.calledOnceWith({
+                user_message: 'Une erreur de lecture en base de données est survenue',
+            });
+        });
+
+        it('appelle next() avec l\'erreur en question', () => {
+            expect(next).to.have.been.calledOnceWith(error);
+        });
+    });
+
+    describe('Si le site n\'existe pas en base de données', () => {
+        let res;
+        beforeEach(async () => {
+            const input = {
+                params: { id: 1 },
+                body: {},
+                user: generateUser(),
+            };
+
+            dependencies.findOne.withArgs(input.user, 1).resolves(null);
+
+            res = mockRes();
+            await edit(mockReq(input), res);
+        });
+
+        it('répond une 404', () => {
+            expect(res.status).to.have.been.calledOnceWith(404);
+        });
+
+        it('retourne un message d\'erreur générique', () => {
+            expect(res.send).to.have.been.calledOnceWith({
+                user_message: 'Le site d\'identifiant 1 n\'existe pas : mise à jour impossible',
             });
         });
     });
 
-
-    /* *******************
-     * Success case
-     * **************** */
-    describe('if the user does not have justice permission', () => {
-        it('maintains the previous value of justice entries', async () => {
-            // setup (overly complicated, as expected...)
-            const mock = {
-                ownerComplaint: true,
-                justiceProcedure: true,
-                justiceRendered: true,
-                justiceRenderedBy: 'TGI de Versailles',
-                justiceRenderedAt: (new Date()).getTime(),
-                justiceChallenged: true,
-                policeStatus: 'granted',
-                policeRequestedAt: (new Date()).getTime(),
-                policeGrantedAt: (new Date()).getTime(),
-                bailiff: 'Huissier',
+    describe('Si une erreur survient lors de la mise à jour', () => {
+        let res;
+        let next;
+        let error;
+        beforeEach(async () => {
+            const input = {
+                params: { id: 1 },
+                body: {},
+                user: generateUser(),
             };
-            rewiredStubs['#db/models'].Shantytown.findOne.withArgs({
-                where: {
-                    shantytown_id: reqArg.params.id,
-                },
-            }).resolves(mock);
-            const req = mockReq(reqArg);
-            const res = mockRes();
 
-            // execute
-            await edit(req, res, sinon.stub());
-            expect(queryStub).to.have.been.calledWith(
-                sinon.match.any,
-                {
-                    transaction: undefined,
-                    replacements: {
-                        id: req.params.id,
-                        built_at: new Date(625273200000),
-                        declared_at: null,
-                        latitude: 49.414964,
-                        longitude: 2.817893,
-                        fk_city: '60159',
-                        address: 'Rue Roger Couttolenc 60200 Compiègne, 60, Oise, Hauts-de-France',
-                        name: null,
-                        address_details: null,
-                        fk_field_type: 1,
-                        fk_owner_type: 1,
-                        owner: null,
-                        census_status: null,
-                        census_conducted_at: null,
-                        census_conducted_by: null,
-                        population_total: null,
-                        population_couples: null,
-                        population_minors: null,
-                        population_minors_0_3: null,
-                        population_minors_3_6: null,
-                        population_minors_6_12: null,
-                        population_minors_12_16: null,
-                        population_minors_16_18: null,
-                        minors_in_school: null,
-                        fk_electricity_type: 1,
-                        electricity_comments: null,
-                        access_to_water: null,
-                        access_to_sanitary: null,
-                        sanitary_comments: null,
-                        sanitary_insalubrious: null,
-                        sanitary_number: null,
-                        sanitary_on_site: null,
-                        water_comments: null,
-                        water_continuous_access: null,
-                        water_distance: null,
-                        water_everyone_has_access: null,
-                        water_hand_wash_access: null,
-                        water_hand_wash_access_number: null,
-                        water_potable: null,
-                        water_public_point: null,
-                        water_roads_to_cross: null,
-                        water_stagnant_water: null,
-                        trash_evacuation: null,
-                        trash_evacuation_regular: null,
-                        trash_accumulation: null,
-                        trash_cans_on_site: null,
-                        vermin: null,
-                        vermin_comments: null,
-                        fire_prevention_comments: null,
-                        fire_prevention_devices: null,
-                        fire_prevention_diagnostic: null,
-                        fire_prevention_measures: null,
-                        fire_prevention_site_accessible: null,
-                        owner_complaint: mock.ownerComplaint,
-                        justice_procedure: mock.justiceProcedure,
-                        justice_rendered: mock.justiceRendered,
-                        justice_rendered_by: mock.justiceRenderedBy,
-                        justice_rendered_at: mock.justiceRenderedAt,
-                        justice_challenged: mock.justiceChallenged,
-                        police_status: mock.policeStatus,
-                        police_requested_at: mock.policeRequestedAt,
-                        police_granted_at: mock.policeGrantedAt,
-                        bailiff: mock.bailiff,
-                        updated_by: reqArg.user.id,
-                        updated_at: now,
-                    },
-                },
-            );
+            error = new Error('Une erreur');
+
+            dependencies.findOne.withArgs(input.user, 1).onCall(0).resolves({});
+            dependencies.update.rejects(error);
+
+            res = mockRes();
+            next = sinon.stub();
+            await edit(mockReq(input), res, next);
         });
-    });
 
-    describe('Access to sanitary', () => {
-        it('Should update correctly accessToSanitary and sanitaryComments fields', async () => {
-            rewiredStubs['#db/models'].Shantytown.findOne.withArgs({
-                where: {
-                    shantytown_id: reqArg.params.id,
-                },
-            }).resolves({});
-            reqArg.body = { ...reqArg.body, access_to_sanitary: true, sanitary_comments: 'test' };
-            const req = mockReq(reqArg);
-            const res = mockRes();
+        it('répond une 500', () => {
+            expect(res.status).to.have.been.calledOnceWith(500);
+        });
 
-            // execute
-            await edit(req, res, sinon.stub());
+        it('retourne un message d\'erreur générique', () => {
+            expect(res.send).to.have.been.calledOnceWith({
+                user_message: 'Une erreur est survenue dans l\'enregistrement du site en base de données',
+            });
+        });
 
-            expect(queryStub).to.have.been.calledWith(
-                sinon.match.any,
-                {
-                    transaction: undefined,
-                    replacements: {
-                        id: req.params.id,
-                        built_at: new Date(625273200000),
-                        declared_at: null,
-                        latitude: 49.414964,
-                        longitude: 2.817893,
-                        fk_city: '60159',
-                        address: 'Rue Roger Couttolenc 60200 Compiègne, 60, Oise, Hauts-de-France',
-                        name: null,
-                        address_details: null,
-                        fk_field_type: 1,
-                        fk_owner_type: 1,
-                        owner: null,
-                        census_status: null,
-                        census_conducted_at: null,
-                        census_conducted_by: null,
-                        population_total: null,
-                        population_couples: null,
-                        population_minors: null,
-                        population_minors_0_3: null,
-                        population_minors_3_6: null,
-                        population_minors_6_12: null,
-                        population_minors_12_16: null,
-                        population_minors_16_18: null,
-                        minors_in_school: null,
-                        fk_electricity_type: 1,
-                        electricity_comments: null,
-                        access_to_water: null,
-                        access_to_sanitary: true,
-                        sanitary_comments: 'test',
-                        sanitary_insalubrious: null,
-                        sanitary_number: null,
-                        sanitary_on_site: null,
-                        water_comments: null,
-                        water_continuous_access: null,
-                        water_distance: null,
-                        water_everyone_has_access: null,
-                        water_hand_wash_access: null,
-                        water_hand_wash_access_number: null,
-                        water_potable: null,
-                        water_public_point: null,
-                        water_roads_to_cross: null,
-                        water_stagnant_water: null,
-                        trash_evacuation: null,
-                        trash_evacuation_regular: null,
-                        trash_accumulation: null,
-                        trash_cans_on_site: null,
-                        vermin: null,
-                        vermin_comments: null,
-                        fire_prevention_comments: null,
-                        fire_prevention_devices: null,
-                        fire_prevention_diagnostic: null,
-                        fire_prevention_measures: null,
-                        fire_prevention_site_accessible: null,
-                        owner_complaint: undefined,
-                        justice_procedure: undefined,
-                        justice_rendered: undefined,
-                        justice_rendered_by: undefined,
-                        justice_rendered_at: undefined,
-                        justice_challenged: undefined,
-                        police_status: undefined,
-                        police_requested_at: undefined,
-                        police_granted_at: undefined,
-                        bailiff: undefined,
-                        updated_by: reqArg.user.id,
-                        updated_at: now,
-                    },
-                },
-            );
+        it('appelle next() avec l\'erreur en question', () => {
+            expect(next).to.have.been.calledOnceWith(error);
         });
     });
 });

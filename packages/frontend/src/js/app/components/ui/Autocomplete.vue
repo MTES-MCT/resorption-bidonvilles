@@ -209,6 +209,9 @@ export default {
             results: []
         };
     },
+    mounted() {
+        this.$refs.provider.syncValue(this.value);
+    },
     methods: {
         removeItem() {
             this.value = null;
