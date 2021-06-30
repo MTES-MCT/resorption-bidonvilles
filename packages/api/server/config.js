@@ -19,6 +19,7 @@ const config = {
         mongo_address: `mongodb://${process.env.RB_API_MONGO_USERNAME}:${process.env.RB_API_MONGO_PASSWORD}@rb_database_agenda`,
     },
     slack: {},
+    mattermost: {},
     sentry: {
         dsn: process.env.RB_API_SENTRY_DSN || '',
     },
@@ -30,6 +31,13 @@ while (process.env[`RB_API_SLACK_WEBHOOK_${webhookIndex}`]) {
     const [name, url] = process.env[`RB_API_SLACK_WEBHOOK_${webhookIndex}`].split(';');
     config.slack[name] = url;
     webhookIndex += 1;
+}
+
+let mmWebhookIndex = 1;
+while (process.env[`RB_API_MATTERMOST_WEBHOOK_${mmWebhookIndex}`]) {
+    const [name, url] = process.env[`RB_API_MATTERMOST_WEBHOOK_${mmWebhookIndex}`].split(';');
+    config.mattermost[name] = url;
+    mmWebhookIndex += 1;
 }
 
 module.exports = config;

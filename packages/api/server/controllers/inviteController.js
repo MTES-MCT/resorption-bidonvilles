@@ -1,7 +1,7 @@
 
 const { formatName, sendUserPlatformInvitation } = require('#server/mails/mails');
-const { triggerPeopleInvitedAlert } = require('#server/utils/slack');
-const { slack: slackConfig } = require('#server/config');
+const { triggerPeopleInvitedAlert } = require('#server/utils/mattermost');
+const { mattermost: mattermostConfig } = require('#server/config');
 
 const sendEmailsInvitations = async (guests, greeter) => {
     for (let i = 0; i < guests.length; i += 1) {
@@ -24,23 +24,22 @@ const sendEmailsInvitations = async (guests, greeter) => {
     }
 };
 
-const sendSlackNotifications = async (guests, greeter) => {
-    if (!slackConfig || !slackConfig.invite_people) {
+const sendMattermostNotifications = async (guests, greeter) => {
+    if (!mattermostConfig || !mattermostConfig.invite_people) {
         return;
     }
 
     for (let i = 0; i < guests.length; i += 1) {
-        // Send a slack alert, if it fails, do nothing
+        // Send a mattermost alert, if it fails, do nothing
         try {
             // eslint-disable-next-line no-await-in-loop
             await triggerPeopleInvitedAlert(guests[i], greeter, "via le formulaire de demande d'accès");
         } catch (err) {
             // eslint-disable-next-line no-console
-            console.log(`Error with invited people webhook : ${err.message}`);
+            console.log(`Error with invited people mattermost webhook : ${err.message}`);
         }
     }
 };
-
 
 module.exports = () => ({
     async invite(req, res, next) {
@@ -60,9 +59,9 @@ module.exports = () => ({
             return next(err);
         }
 
-        // Send a slack alert for each guest
+        // Send a mattermost alert for each guest
         try {
-            await sendSlackNotifications(guests, greeter);
+            await sendMattermostNotifications(guests, greeter);
         } catch (err) {
             // ignore
         }
