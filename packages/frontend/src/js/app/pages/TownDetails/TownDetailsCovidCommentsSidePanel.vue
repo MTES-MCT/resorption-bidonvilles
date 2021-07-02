@@ -229,6 +229,9 @@ export default {
                         date: new Date(),
                         interventionType: []
                     };
+                    this.$nextTick(() => {
+                        this.$refs.form.reset();
+                    });
                     this.loading = false;
                 })
                 .catch(response => {
