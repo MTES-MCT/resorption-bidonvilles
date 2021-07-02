@@ -905,9 +905,10 @@ module.exports = (database) => {
                         shantytown_comments(
                             description,
                             fk_shantytown,
-                            created_by
+                            created_by,
+                            private
                         )
-                    VALUES (:description, :shantytownId, :createdBy)
+                    VALUES (:description, :shantytownId, :createdBy, false)
                     RETURNING shantytown_comment_id AS id`,
             {
                 replacements: {
