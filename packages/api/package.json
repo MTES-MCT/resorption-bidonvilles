@@ -12,7 +12,6 @@
   "dependencies": {
     "@sentry/node": "^6.2.2",
     "@sentry/tracing": "^6.2.2",
-    "@slack/webhook": "^5.0.3",
     "agenda": "^3.1.0",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",

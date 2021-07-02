@@ -2,7 +2,8 @@ const { sequelize } = require('#db/models');
 
 const shantytownCommentModel = require('#server/models/shantytownComment');
 const shantytownModel = require('#server/models/shantytownModel')(sequelize);
-const slackUtils = require('#server/utils/slack');
+const { triggerNewComment } = require('#server/utils/mattermost');
+
 const userModel = require('#server/models/userModel')(sequelize);
 const {
     sendUserNewComment,
@@ -30,9 +31,11 @@ module.exports = async (comment, shantytown, author) => {
         throw new ServiceError('insert_failed', error);
     }
 
-    // on tente d'envoyer une notification slack
+    // on tente d'envoyer une notification Mattermost
     try {
-        await slackUtils.triggerNewComment(comment.description, shantytown, author);
+        // eslint-disable-next-line no-console
+        console.log('Avant insertion commentaire');
+        await triggerNewComment(comment.description, shantytown, author);
     } catch (error) {
         // ignore
     }

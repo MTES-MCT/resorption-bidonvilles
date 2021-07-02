@@ -1,7 +1,7 @@
 
 const { formatName, sendUserPlatformInvitation } = require('#server/mails/mails');
 const { triggerPeopleInvitedAlert } = require('#server/utils/mattermost');
-const { mattermost: mattermostConfig } = require('#server/config');
+const { mattermost } = require('#server/config');
 
 const sendEmailsInvitations = async (guests, greeter) => {
     for (let i = 0; i < guests.length; i += 1) {
@@ -25,7 +25,7 @@ const sendEmailsInvitations = async (guests, greeter) => {
 };
 
 const sendMattermostNotifications = async (guests, greeter) => {
-    if (!mattermostConfig || !mattermostConfig.invite_people) {
+    if (!mattermost) {
         return;
     }
 
@@ -36,7 +36,7 @@ const sendMattermostNotifications = async (guests, greeter) => {
             await triggerPeopleInvitedAlert(guests[i], greeter, "via le formulaire de demande d'accès");
         } catch (err) {
             // eslint-disable-next-line no-console
-            console.log(`Error with invited people mattermost webhook : ${err.message}`);
+            console.log(`Error with invited people mattermost webhook : ${Object.entries(err.message).flat()}`);
         }
     }
 };
