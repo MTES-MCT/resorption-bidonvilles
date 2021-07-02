@@ -200,10 +200,11 @@ export default {
                 text: "Le site a bien été marqué comme fermé"
             });
 
-            const updatedTown = await get(this.$route.params.id);
-            this.$emit("updateTown", updatedTown);
             this.loading = false;
             this.closeModal();
+
+            const updatedTown = await get(this.$route.params.id);
+            await this.$store.dispatch("setDetailedTown", updatedTown);
         },
         closePopin() {
             this.$emit("cancelCloseTown");

@@ -32,7 +32,10 @@
                 </div>
 
                 <ValidationObserver ref="form" v-slot="{ handleSubmit }">
-                    <form @submit.prevent="handleSubmit(addCovidComment)">
+                    <form
+                        @submit.prevent="handleSubmit(addCovidComment)"
+                        ref="form"
+                    >
                         <DatepickerV2
                             class="w-64"
                             label="Date de votre intervention"
@@ -209,20 +212,24 @@ export default {
                     "besoin_action"
                 )
             })
-                .then(response => {
+                .then(async response => {
                     this.$piwik?.trackEvent(
                         "Commentaire",
                         "Création commentaire Covid",
                         this.town.id
                     );
 
-                    this.$emit("updateTown", {
-                        ...this.town,
-                        comments: {
-                            ...this.town.comments,
-                            covid: response
-                        }
-                    });
+                    try {
+                        await this.$store.dispatch("setDetailedTown", {
+                            ...this.town,
+                            comments: {
+                                ...this.town.comments,
+                                covid: response
+                            }
+                        });
+                    } catch (ignore) {
+                        //
+                    }
 
                     this.form = {
                         newComment: "",
