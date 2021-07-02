@@ -33,8 +33,6 @@ module.exports = async (comment, shantytown, author) => {
 
     // on tente d'envoyer une notification Mattermost
     try {
-        // eslint-disable-next-line no-console
-        console.log('Avant insertion commentaire');
         await triggerNewComment(comment.description, shantytown, author);
     } catch (error) {
         // ignore
