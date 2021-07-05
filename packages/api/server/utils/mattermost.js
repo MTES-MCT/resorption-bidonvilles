@@ -244,10 +244,10 @@ async function triggerPeopleInvitedAlert(guest, greeter, msg) {
 }
 
 module.exports = {
-    triggerShantytownCloseAlert, // Ok
-    triggerShantytownCreationAlert, // Ok
-    triggerNewUserAlert, // Ok
-    triggerActorInvitedAlert, // Ok
-    triggerPeopleInvitedAlert, // PAS Ok
-    triggerNewComment, // Pas Ok
+    triggerShantytownCloseAlert,
+    triggerShantytownCreationAlert,
+    triggerNewUserAlert,
+    triggerActorInvitedAlert,
+    triggerPeopleInvitedAlert,
+    triggerNewComment,
 };
