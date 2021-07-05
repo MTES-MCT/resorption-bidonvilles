@@ -137,6 +137,7 @@
         <TownDetailsActorThemesModal
             v-if="actorThemesOpen"
             :town="town"
+            :variant="actorThemesVariant"
             @closeModal="actorThemesOpen = false"
         />
         <!--  Invite actor modal -->
@@ -207,6 +208,7 @@ export default {
             closeOpen: false,
             covidOpen: false,
             actorThemesOpen: false,
+            actorThemesVariant: "default",
             actorAlertVisible: true,
             inviteActorOpen: false,
             error: null,
@@ -230,14 +232,19 @@ export default {
             "Visite page site",
             this.$route.params.id
         );
+
+        if (this.$route.query.action === "new_actor") {
+            this.openActorThemes("detailed");
+        }
     },
     created() {
         this.fetchData();
     },
     methods: {
         hasPermission,
-        openActorThemes() {
+        openActorThemes(variant = "default") {
             this.actorThemesOpen = true;
+            this.actorThemesVariant = variant;
         },
         openInviteActorModal() {
             this.inviteActorOpen = true;

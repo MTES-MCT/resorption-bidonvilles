@@ -1,17 +1,24 @@
 <template>
     <Modal :isOpen="true" :closeModal="closeModal" class="modalContainer">
         <template v-slot:title>
-            <div>J'interviens sur ce site</div>
+            <div>{{ title }}</div>
         </template>
 
         <template v-slot:body>
+            <div class="-mt-8">
+                {{ town.addressSimple }}
+                <span v-if="town.name" class="text-display-xs"
+                    >« {{ town.name }} »</span
+                >
+            </div>
+
             <ValidationObserver
                 ref="form"
                 @submit.prevent="submit"
                 v-slot="{ errors }"
             >
                 <form>
-                    <div class="modalWrapper w-128 -mx-4 -mt-8 p-4">
+                    <div class="modalWrapper w-128 -mx-4 p-4">
                         <ValidationProvider vid="user_id"></ValidationProvider>
                         <ValidationProvider vid="themes"></ValidationProvider>
 
@@ -79,6 +86,11 @@ export default {
             type: Object,
             required: true
         },
+        // possible values: "default" and "detailed"
+        variant: {
+            type: String,
+            default: "default"
+        },
         isOpen: {
             type: Boolean
         }
@@ -104,6 +116,12 @@ export default {
     },
 
     computed: {
+        title() {
+            return this.variant === "default"
+                ? "J'interviens sur ce site"
+                : "Confirmez-vous intervenir sur ce site ?";
+        },
+
         themeIds() {
             return Object.keys(this.themes).filter(id => id !== "autre");
         },
