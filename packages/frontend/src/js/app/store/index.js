@@ -60,6 +60,13 @@ export default new Vuex.Store({
         },
         setDetailedTown(state, town) {
             state.detailedTown = town;
+
+            const index = state.towns.data.findIndex(
+                ({ id }) => id === town.id
+            );
+            if (index >= 0) {
+                state.towns.data[index] = town;
+            }
         },
         updateShantytownActors(state, { townId, actors }) {
             if (
@@ -189,6 +196,10 @@ export default new Vuex.Store({
 
         inviteNewTownActor(args, { townId, email }) {
             return inviteNewActor(townId, email);
+        },
+
+        setDetailedTown({ commit }, town) {
+            commit("setDetailedTown", town);
         }
     },
     getters: {

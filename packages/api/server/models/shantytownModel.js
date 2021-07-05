@@ -402,7 +402,13 @@ function serializeShantytown(town, permission) {
             id: town.ownerTypeId,
             label: town.ownerTypeLabel,
         },
-        socialOrigins: [],
+        socialOrigins: town.socialOrigins.map((socialOrigin) => {
+            const [id, label] = socialOrigin.split('|');
+            return {
+                id: parseInt(id, 10),
+                label,
+            };
+        }),
         comments: {
             regular: [],
             covid: [],
@@ -596,12 +602,30 @@ const SQL = {
 };
 
 function getBaseSql(table, whereClause = null, order = null) {
-    return `SELECT
-        ${Object.keys(SQL.selection).map(key => `${key} AS "${SQL.selection[key]}"`).join(',')}
-    FROM "${table}" AS shantytowns
-    ${SQL.joins.map(({ table: t, on }) => `LEFT JOIN ${t} ON ${on}`).join('\n')}
-    ${whereClause !== null ? `WHERE ${whereClause}` : ''}
-    ${order !== null ? `ORDER BY ${order}` : ''}`;
+    const tables = {
+        shantytowns: table === 'regular' ? 'shantytowns' : 'ShantytownHistories',
+        shantytown_origins: table === 'regular' ? 'shantytown_origins' : 'ShantytownOriginHistories',
+        origin_foreign_key: table === 'regular' ? 'shantytown_id' : 'hid',
+    };
+
+    return `
+        WITH
+            shantytown_computed_origins AS (SELECT
+                shantytown_id AS fk_shantytown,
+                string_to_array(array_to_string(array_agg(soo.social_origin_id::VARCHAR || '|' || soo.label), ','), ',') AS origins
+            FROM "${tables.shantytowns}" s
+            LEFT JOIN "${tables.shantytown_origins}" so ON so.fk_shantytown = s.${tables.origin_foreign_key}
+            LEFT JOIN social_origins soo ON so.fk_social_origin = soo.social_origin_id
+            GROUP BY s.shantytown_id)
+        SELECT
+            ${Object.keys(SQL.selection).map(key => `${key} AS "${SQL.selection[key]}"`).join(',')},
+            sco.origins AS "socialOrigins"
+        FROM "${tables.shantytowns}" AS shantytowns
+        ${SQL.joins.map(({ table: t, on }) => `LEFT JOIN ${t} ON ${on}`).join('\n')}
+        LEFT JOIN shantytown_computed_origins sco ON sco.fk_shantytown = shantytowns.shantytown_id
+        ${whereClause !== null ? `WHERE ${whereClause}` : ''}
+        ${order !== null ? `ORDER BY ${order}` : ''}
+    `;
 }
 
 module.exports = (database) => {
@@ -710,7 +734,7 @@ module.exports = (database) => {
 
         const towns = await database.query(
             getBaseSql(
-                'shantytowns',
+                'regular',
                 where.length > 0 ? whereClause : null,
                 order.join(', '),
             ),
@@ -742,7 +766,7 @@ module.exports = (database) => {
             promises.push(
                 database.query(
                     getBaseSql(
-                        'ShantytownHistories',
+                        'history',
                         where.length > 0 ? whereClause : null,
                         ['shantytowns.shantytown_id ASC', 'shantytowns."archivedAt" ASC'].join(', '),
                     ),
@@ -755,22 +779,6 @@ module.exports = (database) => {
         } else {
             promises.push(Promise.resolve(undefined));
         }
-
-        promises.push(
-            database.query(
-                `SELECT
-                    shantytown_origins.fk_shantytown AS "shantytownId",
-                    social_origins.social_origin_id AS "socialOriginId",
-                    social_origins.label AS "socialOriginLabel"
-                FROM shantytown_origins
-                LEFT JOIN social_origins ON shantytown_origins.fk_social_origin = social_origins.social_origin_id
-                WHERE shantytown_origins.fk_shantytown IN (:ids)`,
-                {
-                    type: database.QueryTypes.SELECT,
-                    replacements: { ids: Object.keys(serializedTowns.hash) },
-                },
-            ),
-        );
 
         promises.push(getComments(user, Object.keys(serializedTowns.hash), false));
         promises.push(getComments(user, Object.keys(serializedTowns.hash), true));
@@ -804,7 +812,7 @@ module.exports = (database) => {
             ),
         );
 
-        const [history, socialOrigins, comments, covidComments, closingSolutions, actors, plans] = await Promise.all(promises);
+        const [history, comments, covidComments, closingSolutions, actors, plans] = await Promise.all(promises);
 
         if (history !== undefined && history.length > 0) {
             const serializedHistory = history.map(h => serializeShantytown(h, user.permissions.shantytown[feature]));
@@ -844,15 +852,6 @@ module.exports = (database) => {
         }
 
         // @todo: move the serialization of these entities to their own model component
-        if (socialOrigins !== undefined) {
-            socialOrigins.forEach((socialOrigin) => {
-                serializedTowns.hash[socialOrigin.shantytownId].socialOrigins.push({
-                    id: socialOrigin.socialOriginId,
-                    label: socialOrigin.socialOriginLabel,
-                });
-            });
-        }
-
         Object.keys(serializedTowns.hash).forEach((shantytownId) => {
             serializedTowns.hash[shantytownId].comments.regular = comments[shantytownId];
             serializedTowns.hash[shantytownId].comments.covid = covidComments[shantytownId];
@@ -905,9 +904,10 @@ module.exports = (database) => {
                         shantytown_comments(
                             description,
                             fk_shantytown,
-                            created_by
+                            created_by,
+                            private
                         )
-                    VALUES (:description, :shantytownId, :createdBy)
+                    VALUES (:description, :shantytownId, :createdBy, false)
                     RETURNING shantytown_comment_id AS id`,
             {
                 replacements: {

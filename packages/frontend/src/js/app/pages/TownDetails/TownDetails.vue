@@ -126,14 +126,12 @@
             :town="town"
             :isOpen="covidOpen"
             :closePanel="() => (covidOpen = false)"
-            v-on:updateTown="town = $event"
         />
         <!--  Close Shantytown Modal -->
         <TownDetailsCloseModal
             :town="town"
             :isOpen="closeOpen"
             v-on:closeModal="closeOpen = false"
-            v-on:updateTown="town = $event"
         />
         <!--  Self themes modal -->
         <TownDetailsActorThemesModal

@@ -11,48 +11,60 @@
                         {{ territory.name }}
                     </div>
                     <div>
-                        <div
-                            class="grid grid-cols-6 gap-8 mt-8 mb-16"
-                            v-if="stats"
-                        >
-                            <KeyMetric
-                                :value="stats.numberOfPeople || 0"
-                                label="habitants"
-                            />
-                            <KeyMetric
-                                :value="stats.numberOfShantytown || 0"
-                                label="sites"
-                            />
-                            <KeyMetric
-                                :value="stats.numberOfResorbedShantytown || 0"
-                                label="résorptions"
-                                info="depuis janv. 2019"
-                            />
-                            <KeyMetric
-                                :value="stats.numberOfPlans || 0"
-                                label="dispositifs"
-                            />
-                            <KeyMetric
-                                :value="stats.numberOfUsers || 0"
-                                label="utilisateurs"
-                            />
-                            <KeyMetric
-                                :value="
-                                    stats.averageCompletionPercentage
-                                        ? (
-                                              stats.averageCompletionPercentage *
-                                              100
-                                          ).toFixed(2) + '%'
-                                        : 0
-                                "
-                                label="completion"
-                            />
+                        <div v-if="stats" class="mt-8">
+                            <div class="grid grid-cols-6 gap-8 mb-4">
+                                <KeyMetric
+                                    :value="stats.numberOfPeople || 0"
+                                    label="habitants"
+                                />
+                                <KeyMetric
+                                    :value="stats.numberOfShantytown || 0"
+                                    label="sites"
+                                />
+                                <KeyMetric
+                                    :value="
+                                        stats.numberOfResorbedShantytown || 0
+                                    "
+                                    label="résorptions"
+                                    info="depuis janv. 2019"
+                                />
+                                <KeyMetric
+                                    :value="stats.numberOfPlans || 0"
+                                    label="dispositifs"
+                                />
+                                <KeyMetric
+                                    :value="stats.numberOfUsers || 0"
+                                    label="utilisateurs"
+                                />
+                                <KeyMetric
+                                    :value="
+                                        stats.averageCompletionPercentage
+                                            ? (
+                                                  stats.averageCompletionPercentage *
+                                                  100
+                                              ).toFixed(2) + '%'
+                                            : 0
+                                    "
+                                    label="completion"
+                                />
+                            </div>
+                            <div class="text-sm">
+                                <span class="font-bold">Site résorbé : </span
+                                >une solution pérenne en logement ou hébergement
+                                a été mise en place pour 66 % des habitants du
+                                site
+                            </div>
+                            <div class="text-sm">
+                                <span class="font-bold">Complétion : </span
+                                >pourcentage d'informations renseignées sur la
+                                fiche d'un site
+                            </div>
                         </div>
                         <Spinner v-else />
                     </div>
 
                     <div>
-                        <h2 class="text-display-md text-primary mb-4 mt-16">
+                        <h2 class="text-display-md text-primary mb-4 mt-8">
                             Suivi des sites
                         </h2>
                         <div v-if="stats">
