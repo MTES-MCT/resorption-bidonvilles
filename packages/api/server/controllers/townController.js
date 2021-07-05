@@ -7,7 +7,7 @@ const {
 const { fromTsToFormat: tsToString, toFormat: dateToString } = require('#server/utils/date');
 const { createExport } = require('#server/utils/excel');
 const { sendUserCommentDeletion } = require('#server/mails/mails');
-const { triggerShantytownCloseAlert } = require('#server/utils/mattermost');
+const mattermostUtils = require('#server/utils/mattermost');
 const userModel = require('#server/models/userModel')(sequelize);
 const mails = require('#server/mails/mails');
 const shantytownService = require('#server/services/shantytown');
@@ -137,7 +137,7 @@ module.exports = (models) => {
 
                 // Send a mattermost alert, if it fails, do nothing
                 try {
-                    await triggerShantytownCloseAlert(updatedTown, req.user);
+                    await mattermostUtils.triggerShantytownCloseAlert(updatedTown, req.user);
                 } catch (err) {
                     // eslint-disable-next-line no-console
                     console.log(`Error with shantytown close mattermost webhook : ${err.message}`);

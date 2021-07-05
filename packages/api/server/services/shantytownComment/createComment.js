@@ -2,7 +2,7 @@ const { sequelize } = require('#db/models');
 
 const shantytownCommentModel = require('#server/models/shantytownComment');
 const shantytownModel = require('#server/models/shantytownModel')(sequelize);
-const { triggerNewComment } = require('#server/utils/mattermost');
+const mattermostUtils = require('#server/utils/mattermost');
 
 const userModel = require('#server/models/userModel')(sequelize);
 const {
@@ -33,7 +33,7 @@ module.exports = async (comment, shantytown, author) => {
 
     // on tente d'envoyer une notification Mattermost
     try {
-        await triggerNewComment(comment.description, shantytown, author);
+        await mattermostUtils.triggerNewComment(comment.description, shantytown, author);
     } catch (error) {
         // ignore
     }
