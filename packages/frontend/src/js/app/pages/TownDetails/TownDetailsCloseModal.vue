@@ -28,9 +28,7 @@
                             id="closed_with_solutions"
                             rules="required"
                             label="Est-ce que ce site a été résorbé définitivement ?"
-                            info="C’est-à-dire sans réinstallation illicite et
-                                avec un accompagnement de la majorité des
-                                personnes vers des solutions pérennes"
+                            info="Un site est considéré comme résorbé si une solution pérenne en logement ou hébergement est mise en place pour 66 % des habitants du site."
                             validationName="Est-ce que ce site a été résorbé définitivement ?"
                         >
                             <Radio
