@@ -45,7 +45,12 @@
                 <Button variant="primaryText" @click="cancelComment"
                     >Annuler</Button
                 >
-                <Button variant="tertiary" @click="addComment">Valider</Button>
+                <Button
+                    variant="tertiary"
+                    @click="addComment"
+                    :loading="loading"
+                    >Valider</Button
+                >
             </div>
         </div>
     </div>
@@ -61,7 +66,8 @@ export default {
             commentError: null,
             commentErrors: {},
             newComment: "",
-            isPrivate: false
+            isPrivate: false,
+            loading: false
         };
     },
     props: {
@@ -77,23 +83,24 @@ export default {
         cancelComment() {
             this.newComment = "";
         },
-        addComment() {
+        async addComment() {
             // clean previous errors
             this.commentError = null;
             this.commentErrors = {};
+            this.loading = true;
 
-            apiAddComment(this.$route.params.id, {
-                description: this.newComment,
-                private: this.isPrivate
-            })
-                .then(response => {
-                    this.$emit("submit", response.comments);
-                    this.newComment = "";
-                })
-                .catch(response => {
-                    this.commentError = response.user_message;
-                    this.commentErrors = response.fields || {};
+            try {
+                const response = await apiAddComment(this.$route.params.id, {
+                    description: this.newComment,
+                    private: this.isPrivate
                 });
+                this.$emit("submit", response.comments);
+                this.newComment = "";
+            } catch (response) {
+                this.commentError = response.user_message;
+                this.commentErrors = response.fields || {};
+            }
+            this.loading = false;
         }
     }
 };
