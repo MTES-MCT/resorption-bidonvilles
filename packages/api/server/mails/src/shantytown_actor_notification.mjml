@@ -1,6 +1,6 @@
 <mjml>
     <mj-head>
-        <mj-title>[Résorption-bidonvilles] - Invitation à partager votre intervention</mj-title>
+        <mj-title>[Résorption-bidonvilles] - Invitation à confirmer votre intervention</mj-title>
         <mj-include path='common/attributes.mjml' />
         <mj-include path='common/styles.mjml' />
     </mj-head>
@@ -10,16 +10,18 @@
         <mj-section>
             <mj-column>
                 <mj-text mj-class='text-primary text-display pb-4'>
-                    Un de vos partenaires vous invite à partager votre intervention sur le site {{var:siteAddress}}
+                    Vous êtes invité·e à confirmer votre intervention sur le site {{var:siteAddress}}
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
-                    {{var:inviterName}} vous a invité à rejoindre la communauté des acteurs et actrices de terrain sur la plateforme <a href="{{var:frontUrl}}" class="font-italic link">Résorption-bidonvilles</a> en valorisant votre intervention sur le site <a href="{{var:siteUrl}}" class="link">{{var:siteAddress}}</a>.
+                    {{var:inviterName}} vous a invité·e à valoriser votre intervention sur le site <a href="{{var:siteUrl}}" class="link">{{var:siteAddress}}</a> sur la plateforme <a href="{{var:frontUrl}}" class="font-italic link">Résorption-bidonvilles</a>.
                 </mj-text>
                 <mj-text>
-                    Dès maintenant connectez-vous et rejoignez {{var:inviterName}} sur la plateforme. Ainsi, vous recevrez en temps réel les messages transmis par les autres acteurs du site.
+                    Dès maintenant connectez-vous pour confirmer votre intervention sur ce site. Ainsi, vous rejoindrez {{var:inviterName}} et recevrez en temps réel les messages transmis par les autres acteurs et actrices du site.
                 </mj-text>
-                <mj-include path="common/connect_cta.mjml" />
+                <mj-button mj-class="button-primary" href="{{var:actionUrl}}">
+                    Confirmer mon intervention
+                </mj-button>
                 <mj-include path="common/contact_interlocutor_user.mjml" />
             </mj-column>
         </mj-section>
