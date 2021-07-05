@@ -135,6 +135,16 @@ function replace(mapping, queryInterface, transaction) {
                 transaction,
             },
         ),
+        queryInterface.sequelize.query(
+            'UPDATE permissions SET fk_organization = :to_id WHERE fk_organization = :from_id',
+            {
+                replacements: {
+                    from_id,
+                    to_id: mapping[from_id],
+                },
+                transaction,
+            },
+        ),
     ]).flat();
 }
 
