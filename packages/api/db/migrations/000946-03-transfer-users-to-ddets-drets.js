@@ -228,7 +228,10 @@ module.exports = {
                     [orgaTypes['DDCS / DDCSPP'], orgaTypes.Direccte],
                     queryInterface,
                     transaction,
-                )),
+                ))
+                .then(() => queryInterface.sequelize.query('REFRESH MATERIALIZED VIEW localized_organizations', {
+                    transaction,
+                })),
         )),
 
     down: queryInterface => createDDCSAndDireccte(queryInterface)
@@ -237,6 +240,9 @@ module.exports = {
             transaction => Promise.all([
                 ...replace(ddets_to_ddcs, queryInterface, transaction),
                 ...replace(drets_to_direccte, queryInterface, transaction),
-            ]),
+            ])
+                .then(() => queryInterface.sequelize.query('REFRESH MATERIALIZED VIEW localized_organizations', {
+                    transaction,
+                })),
         )),
 };

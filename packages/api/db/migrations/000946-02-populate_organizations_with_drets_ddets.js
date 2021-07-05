@@ -88,19 +88,27 @@ module.exports = {
                     },
                 );
             }),
-        ]),
+        ])
+            .then(() => queryInterface.sequelize.query('REFRESH MATERIALIZED VIEW localized_organizations', {
+                transaction,
+            })),
     )),
 
     down: queryInterface => getOrganizationTypeCodeFromAbbreviation(['DDETS', 'DRETS'])
-        .then(orgaTypes => queryInterface.sequelize.query(
-            // Suppression des organizations de type DRETS et DDETS
-            'DELETE FROM organizations WHERE fk_type IN (:fk_type_drets, :fk_type_ddets)',
-            {
-                replacements:
-                    {
+        .then(orgaTypes => queryInterface.sequelize.transaction(
+            transaction => queryInterface.sequelize.query(
+                // Suppression des organizations de type DRETS et DDETS
+                'DELETE FROM organizations WHERE fk_type IN (:fk_type_drets, :fk_type_ddets)',
+                {
+                    transaction,
+                    replacements: {
                         fk_type_drets: orgaTypes.DRETS,
                         fk_type_ddets: orgaTypes.DDETS,
                     },
-            },
+                },
+            )
+                .then(() => queryInterface.sequelize.query('REFRESH MATERIALIZED VIEW localized_organizations', {
+                    transaction,
+                })),
         )),
 };
