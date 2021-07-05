@@ -167,8 +167,14 @@ export default new Vuex.Store({
         },
 
         async addTownActor({ commit }, { townId, actor }) {
-            const { actors } = await addActor(townId, actor);
-            commit("updateShantytownActors", { townId, actors });
+            const response = await addActor(townId, actor);
+
+            if (response && response.actors) {
+                commit("updateShantytownActors", {
+                    townId,
+                    actors: response.actors
+                });
+            }
         },
 
         async removeTownActor({ commit }, { townId, userId }) {

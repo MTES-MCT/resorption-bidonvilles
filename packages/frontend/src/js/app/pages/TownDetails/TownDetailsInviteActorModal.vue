@@ -110,7 +110,7 @@ export default {
     computed: {
         successWording() {
             if (this.form.user && this.form.user.id) {
-                return "L'intervenant a bien été ajouté et notifié par courriel";
+                return "L'intervenant a bien été notifié par courriel";
             }
 
             return "L'invitation a bien été envoyée";
