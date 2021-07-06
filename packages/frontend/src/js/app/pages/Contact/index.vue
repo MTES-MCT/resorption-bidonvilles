@@ -51,6 +51,7 @@
                                 :label="$t('contactPage.phone')"
                                 v-model="commonFields.phone"
                                 id="phone"
+                                rules="required"
                             />
                         </InputGroup>
                         <CheckableGroup
