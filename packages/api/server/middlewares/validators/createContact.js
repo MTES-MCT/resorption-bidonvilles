@@ -66,6 +66,10 @@ module.exports = newUser(
             .optional({ nullable: true })
             .isString().bail().withMessage('Le champ "Qui vous a recommandé la plateforme ?" est invalide')
             .trim(),
+
+        body('phone')
+            .trim()
+            .notEmpty().withMessage('Vous devez préciser votre téléphone'),
     ],
 
     (value, { req }) => req.body.is_actor === true && req.body.request_type.includes('access-request'),
