@@ -8,9 +8,8 @@ const {
 module.exports = models => async (req, res, next) => {
     // if the actor to be added is the current user, proceed
     if (req.body.user.id === req.user.id) {
-        let actors;
         try {
-            actors = await sequelize.transaction(async (transaction) => {
+            const actors = await sequelize.transaction(async (transaction) => {
                 await models.shantytownActor.addActor(
                     req.shantytown.id,
                     req.body.user.id,
@@ -24,16 +23,16 @@ module.exports = models => async (req, res, next) => {
                     transaction,
                 );
             });
+
+            return res.status(201).send({
+                actors: actors.map(models.shantytownActor.serializeActor),
+            });
         } catch (error) {
             res.status(500).send({
                 user_message: 'Une erreur est survenue lors de l\'écriture en base de données',
             });
             return next(error);
         }
-
-        return res.status(201).send({
-            actors: actors.map(models.shantytownActor.serializeActor),
-        });
     }
 
     // otherwise, just send an email
