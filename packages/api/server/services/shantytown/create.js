@@ -2,8 +2,8 @@ const {
     sequelize,
     Shantytown: ShantyTowns,
 } = require('#db/models');
-const { slack: slackConfig } = require('#server/config');
-const { triggerShantytownCreationAlert } = require('#server/utils/slack');
+const { mattermost } = require('#server/config');
+const { triggerShantytownCreationAlert } = require('#server/utils/mattermost');
 const { getDepartementWatchers } = require('#server/models/userModel')(sequelize);
 const { sendUserShantytownDeclared } = require('#server/mails/mails');
 
@@ -107,14 +107,14 @@ module.exports = async (townData, user) => {
         }
     });
 
-    // Send a slack alert, if it fails, do nothing
+    // Send a Mattermost alert, if it fails, do nothing
     try {
-        if (slackConfig && slackConfig.new_shantytown) {
+        if (mattermost) {
             await triggerShantytownCreationAlert(town, user);
         }
     } catch (err) {
         // eslint-disable-next-line no-console
-        console.log(`Error with shantytown creation slack webhook : ${err.message}`);
+        console.log(`Error with shantytown creation Mattermost webhook : ${err.message}`);
     }
 
     // Send a notification to all users of the related departement

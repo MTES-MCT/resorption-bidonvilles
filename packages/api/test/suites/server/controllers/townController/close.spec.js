@@ -9,7 +9,7 @@ const { default: generateWatcher } = require('#test/utils/shantytownWatcher');
 const { sequelize } = require('#db/models');
 const models = require('#server/models')(sequelize);
 const userModel = require('#server/models/userModel')(sequelize);
-const slackUtils = require('#server/utils/slack');
+const mattermostUtils = require('#server/utils/mattermost');
 const mails = require('#server/mails/mails');
 
 const { close } = proxyquire('#server/controllers/townController', {
@@ -30,7 +30,7 @@ describe.only('townController.close()', () => {
     beforeEach(() => {
         dependencies.shantytownUpdate = sinon.stub(models.shantytown, 'update');
         dependencies.shantytownFindOne = sinon.stub(models.shantytown, 'findOne');
-        dependencies.triggerShantytownCloseAlert = sinon.stub(slackUtils, 'triggerShantytownCloseAlert');
+        dependencies.triggerShantytownCloseAlert = sinon.stub(mattermostUtils, 'triggerShantytownCloseAlert');
         dependencies.getDepartementWatchers = sinon.stub(userModel, 'getDepartementWatchers');
         dependencies.sendUserShantytownClosed = sinon.stub(mails, 'sendUserShantytownClosed');
     });
@@ -108,7 +108,7 @@ describe.only('townController.close()', () => {
             );
         });
 
-        it('envoie une alerte Slack', () => {
+        it('envoie une alerte Mattermost', () => {
             expect(dependencies.triggerShantytownCloseAlert).to.have.been.calledOnce;
         });
 

@@ -4,8 +4,8 @@ const sanitize = require('#server/controllers/userController/helpers/sanitize');
 const checkPassword = require('#server/controllers/userController/helpers/checkPassword');
 const validate = require('#server/controllers/userController/helpers/validate');
 const userService = require('#server/services/userService');
-const { triggerNewUserAlert } = require('#server/utils/slack');
-const { slack: slackConfig } = require('#server/config');
+const { triggerNewUserAlert } = require('#server/utils/mattermost');
+const { mattermost } = require('#server/config');
 const { toString: dateToString } = require('#server/utils/date');
 
 const {
@@ -666,9 +666,9 @@ module.exports = models => ({
             return next(error);
         }
 
-        // Send a slack alert, if it fails, do nothing
+        // Send a Matermost alert, if it fails, do nothing
         try {
-            if (slackConfig && slackConfig.new_user) {
+            if (mattermost) {
                 await triggerNewUserAlert(user);
             }
         } catch (err) {

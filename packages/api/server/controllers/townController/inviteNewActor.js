@@ -1,5 +1,5 @@
 
-const { triggerActorInvitedAlert } = require('#server/utils/slack');
+const { triggerActorInvitedAlert } = require('#server/utils/mattermost');
 const {
     sendUserShantytownActorInvitation,
     formatName,

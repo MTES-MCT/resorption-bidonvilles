@@ -94,9 +94,9 @@ module.exports = database => ({
         const rows = await database.query(
             `
             SELECT COUNT(*) from users
-            LEFT JOIN organizations on users.fk_organization = organizations.organization_id
+            LEFT JOIN localized_organizations on users.fk_organization = localized_organizations.organization_id
             WHERE fk_status = 'active'
-            ${departement ? `AND fk_departement = '${departement}'` : ''}
+            ${departement ? `AND departement_code = '${departement}'` : ''}
             `,
             {
                 type: database.QueryTypes.SELECT,
