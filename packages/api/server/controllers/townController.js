@@ -379,6 +379,10 @@ module.exports = (models) => {
                         query: `${fromGeoLevelToTableName(location.type)}.code`,
                         value: location[location.type].code,
                     },
+                    location_main: {
+                        query: `${fromGeoLevelToTableName(location.type)}.fk_main`,
+                        value: location[location.type].code,
+                    },
                 });
             }
 
