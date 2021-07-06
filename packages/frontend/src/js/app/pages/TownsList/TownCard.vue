@@ -2,13 +2,21 @@
     <div
         :class="[
             'rounded-sm cursor-pointer border preventPrintBreak',
-            isHover ? 'bg-blue100 border-transparent' : ''
+            isHover ? 'bg-blue200 border-transparent' : ''
         ]"
         @mouseenter="isHover = true"
         @mouseleave="isHover = false"
     >
         <router-link :to="`site/${shantytown.id}`">
-            <div class="pt-6">
+            <div class="-mt-1">
+                <Tag
+                    :class="[
+                        'text-xs mb-4 mx-6 uppercase text-primary',
+                        isHover ? 'shadow-md' : ''
+                    ]"
+                >
+                    {{ lastUpdate }}
+                </Tag>
                 <div class="text-md px-6">
                     <div class="text-primary text-display-md ">
                         <span class="font-bold">
@@ -213,12 +221,7 @@
                         </div>
                     </div>
                 </div>
-                <div
-                    class="flex justify-between items-center px-4 pt-4 print:hidden"
-                >
-                    <Tag class="text-xs">
-                        {{ lastUpdate }}
-                    </Tag>
+                <div class="flex justify-end px-4 pt-4 print:hidden">
                     <div class="print:hidden">
                         <transition name="fade" v-if="isOpen">
                             <router-link
