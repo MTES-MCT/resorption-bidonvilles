@@ -332,27 +332,27 @@ export default {
 
             if (months === 0) {
                 if (days === 0) {
-                    return `Dernière actualisation aujourd'hui`;
+                    return `Dernière mise à jour aujourd'hui`;
                 }
 
                 if (days > 0 && days < 7) {
-                    return `Dernière actualisation il y a ${days} jour${
+                    return `Dernière mise à jour il y a ${days} jour${
                         days > 1 ? "s" : ""
                     }`;
                 }
 
                 if (weeks > 0 && months === 0) {
-                    return `Dernière actualisation il y a ${weeks} semaine${
+                    return `Dernière mise à jour il y a ${weeks} semaine${
                         weeks > 1 ? "s" : ""
                     }`;
                 }
             }
 
             if (months < 12) {
-                return `Dernière actualisation il y a ${months} mois`;
+                return `Dernière mise à jour il y a ${months} mois`;
             }
 
-            return "Dernière actualisation il y a plus d'un an";
+            return "Dernière mise à jour il y a plus d'un an";
         },
         isClosed() {
             return (
