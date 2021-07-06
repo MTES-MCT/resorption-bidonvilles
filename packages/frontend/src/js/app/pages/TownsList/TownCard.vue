@@ -8,7 +8,7 @@
         @mouseleave="isHover = false"
     >
         <router-link :to="`site/${shantytown.id}`">
-            <div class="-mt-1">
+            <div class="-mt-1 print:mt-0">
                 <Tag
                     :class="[
                         'text-xs mb-4 mx-6 uppercase text-primary',
