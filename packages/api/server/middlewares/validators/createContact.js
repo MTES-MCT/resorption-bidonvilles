@@ -68,8 +68,9 @@ module.exports = newUser(
             .trim(),
 
         body('phone')
+            .isString().bail().withMessage('Le numéro de téléphone n\'est pas reconnu')
             .trim()
-            .notEmpty().withMessage('Vous devez préciser votre téléphone'),
+            .notEmpty().bail().withMessage('Vous devez préciser votre téléphone'),
     ],
 
     (value, { req }) => req.body.is_actor === true && req.body.request_type.includes('access-request'),
