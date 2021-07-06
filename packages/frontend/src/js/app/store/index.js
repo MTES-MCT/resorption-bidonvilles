@@ -168,7 +168,8 @@ export default new Vuex.Store({
 
         async addTownActor({ commit }, { townId, actor }) {
             const response = await addActor(townId, actor);
-// response.actors is not defined when an actor other than the connected user is added (we send an email to get his confirmation instead)
+
+            // response.actors is not defined when an actor other than the connected user is added (we send an email to get his confirmation instead)
             if (response && response.actors) {
                 commit("updateShantytownActors", {
                     townId,
