@@ -9,7 +9,7 @@ const { expect } = chai;
 const { sequelize } = require('#db/models');
 const shantytownCommentModel = require('#server/models/shantytownComment');
 const shantytownModel = require('#server/models/shantytownModel')(sequelize);
-const slackUtils = require('#server/utils/slack');
+const mattermostUtils = require('#server/utils/mattermost');
 const userModel = require('#server/models/userModel')(sequelize);
 const mailService = require('#server/services/mailService');
 const ServiceError = require('#server/errors/ServiceError');
@@ -35,7 +35,7 @@ describe.only('services/shantytownComment', () => {
         dependencies.createComment = sinon.stub(shantytownCommentModel, 'create');
         dependencies.findOneComment = sinon.stub(shantytownCommentModel, 'findOne');
         dependencies.getComments = sinon.stub(shantytownModel, 'getComments');
-        dependencies.triggerNewComment = sinon.stub(slackUtils, 'triggerNewComment');
+        dependencies.triggerNewComment = sinon.stub(mattermostUtils, 'triggerNewComment');
         dependencies.getShantytownWatchers = sinon.stub(userModel, 'getShantytownWatchers');
         dependencies.sendMail = sinon.stub(mailService, 'send');
     });
@@ -96,7 +96,7 @@ describe.only('services/shantytownComment', () => {
                 });
             });
 
-            it('envoie une notification slack', () => {
+            it('envoie une notification mattermost', () => {
                 expect(dependencies.triggerNewComment).to.have.been.calledOnceWith(
                     'description',
                     input.shantytown,
@@ -174,7 +174,7 @@ describe.only('services/shantytownComment', () => {
             });
         });
 
-        describe('si la notification slack échoue', () => {
+        describe('si la notification mattermost échoue', () => {
             const comment = { description: 'description', private: true };
             const user = fakeUser();
             const nativeError = new Error('une erreur');

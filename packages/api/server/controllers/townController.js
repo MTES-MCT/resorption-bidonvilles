@@ -7,7 +7,7 @@ const {
 const { fromTsToFormat: tsToString, toFormat: dateToString } = require('#server/utils/date');
 const { createExport } = require('#server/utils/excel');
 const { sendUserCommentDeletion } = require('#server/mails/mails');
-const slackUtils = require('#server/utils/slack');
+const mattermostUtils = require('#server/utils/mattermost');
 const userModel = require('#server/models/userModel')(sequelize);
 const mails = require('#server/mails/mails');
 const shantytownService = require('#server/services/shantytown');
@@ -135,12 +135,12 @@ module.exports = (models) => {
 
                 const updatedTown = await models.shantytown.findOne(req.user, req.body.shantytown.id);
 
-                // Send a slack alert, if it fails, do nothing
+                // Send a mattermost alert, if it fails, do nothing
                 try {
-                    await slackUtils.triggerShantytownCloseAlert(updatedTown, req.user);
+                    await mattermostUtils.triggerShantytownCloseAlert(updatedTown, req.user);
                 } catch (err) {
                     // eslint-disable-next-line no-console
-                    console.log(`Error with shantytown close slack webhook : ${err.message}`);
+                    console.log(`Error with shantytown close mattermost webhook : ${err.message}`);
                 }
 
                 // Send a notification to all users of the related departement
