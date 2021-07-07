@@ -4,6 +4,8 @@ Merci
 
 Date du message : {{var:message.created_at}}
 {{var:message.last_name}} {{var:message.first_name}}
+{{var:message.email}}
+{{var:message.phone}}
 {{var:message.access_request_message}}
 
 Cordialement,

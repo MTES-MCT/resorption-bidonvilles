@@ -74,7 +74,7 @@ module.exports = {
      * @param {Object} options
      */
     sendAdminContactMessage: (recipient, options = {}) => {
-        const { variables, preserveRecipient = false } = options;
+        const { variables, preserveRecipient = false, replyTo } = options;
 
         return mailService.send('admin_contact_message', {
             recipient,
@@ -83,6 +83,7 @@ module.exports = {
                 message: variables.message,
             },
             preserveRecipient,
+            replyTo,
         });
     },
 
