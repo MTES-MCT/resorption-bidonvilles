@@ -374,16 +374,21 @@ module.exports = (models) => {
             ];
 
             if (location.type !== 'nation') {
-                filters.push({
+                const locationFilters = {
                     location: {
                         query: `${fromGeoLevelToTableName(location.type)}.code`,
                         value: location[location.type].code,
                     },
-                    location_main: {
+                };
+
+                if (location.type === 'city') {
+                    locationFilters.location_main = {
                         query: `${fromGeoLevelToTableName(location.type)}.fk_main`,
                         value: location[location.type].code,
-                    },
-                });
+                    };
+                }
+
+                filters.push(locationFilters);
             }
 
             let shantytowns;
