@@ -74,7 +74,7 @@ module.exports = {
      * @param {Object} options
      */
     sendAdminContactMessage: (recipient, options = {}) => {
-        const { variables, preserveRecipient = false } = options;
+        const { variables, preserveRecipient = false, replyTo } = options;
 
         return mailService.send('admin_contact_message', {
             recipient,
@@ -83,6 +83,7 @@ module.exports = {
                 message: variables.message,
             },
             preserveRecipient,
+            replyTo,
         });
     },
 
@@ -264,8 +265,8 @@ module.exports = {
                 recipientName: formatName(recipient.first_name, recipient.last_name),
                 inviterName: variables.inviterName,
                 siteUrl: `${frontUrl}/site/${variables.shantytown.id}?${utm}`,
+                actionUrl: `${frontUrl}/site/${variables.shantytown.id}?${utm}&action=new_actor`,
                 siteAddress: `${variables.shantytown.addressSimple}${variables.shantytown.name ? ` « ${variables.shantytown.name} »` : ''}`,
-                connexionUrl: `${frontUrl}/site/${variables.shantytown.id}?${utm}`,
                 contactUrl,
                 backUrl,
                 frontUrl: `${frontUrl}?${utm}`,
