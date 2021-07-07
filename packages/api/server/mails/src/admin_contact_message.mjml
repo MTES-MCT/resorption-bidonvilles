@@ -22,6 +22,8 @@
             <mj-column padding="1rem" background-color="#dddddd">
                 <mj-text mj-class="pb-4">Date du message : {{var:message.created_at}}</mj-text>
                 <mj-text>{{var:message.last_name}} {{var:message.first_name}}</mj-text>
+                <mj-text>{{var:message.email}}</mj-text>
+                <mj-text>{{var:message.phone}}</mj-text>
                 <mj-text>{{var:message.access_request_message}}</mj-text>
             </mj-column>
         </mj-section>

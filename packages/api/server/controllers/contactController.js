@@ -5,7 +5,7 @@ const accessRequestService = require('#server/services/accessRequest/accessReque
 
 const { sendAdminContactMessage } = require('#server/mails/mails');
 
-const sendEmailNewContactMessageToAdmins = async (data, models, message) => {
+const sendEmailNewContactMessageToAdmins = async (models, message) => {
     const admins = await models.user.getNationalAdmins();
 
     for (let i = 0; i < admins.length; i += 1) {
@@ -13,12 +13,15 @@ const sendEmailNewContactMessageToAdmins = async (data, models, message) => {
             variables: {
                 message: {
                     created_at: dateToString(new Date()),
-                    last_name: message.last_name,
-                    first_name: message.first_name,
-                    access_request_message: message.access_request_message,
+                    ...message,
                 },
             },
             preserveRecipient: false,
+            replyTo: {
+                email: message.email,
+                last_name: message.last_name,
+                first_name: message.first_name,
+            },
         });
     }
 };
@@ -74,7 +77,9 @@ module.exports = models => ({
 
         // contact request
         try {
-            await sendEmailNewContactMessageToAdmins(req.body, models, {
+            await sendEmailNewContactMessageToAdmins(models, {
+                email: req.body.email,
+                phone: req.body.phone,
                 last_name: req.body.last_name,
                 first_name: req.body.first_name,
                 access_request_message: req.body.access_request_message,
