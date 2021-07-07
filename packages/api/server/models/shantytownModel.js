@@ -402,7 +402,7 @@ function serializeShantytown(town, permission) {
             id: town.ownerTypeId,
             label: town.ownerTypeLabel,
         },
-        socialOrigins: town.socialOrigins.map((socialOrigin) => {
+        socialOrigins: (town.socialOrigins || []).map((socialOrigin) => {
             const [id, label] = socialOrigin.split('|');
             return {
                 id: parseInt(id, 10),
