@@ -2,13 +2,21 @@
     <div
         :class="[
             'rounded-sm cursor-pointer border preventPrintBreak',
-            isHover ? 'bg-blue100 border-transparent' : ''
+            isHover ? 'bg-blue200 border-transparent' : ''
         ]"
         @mouseenter="isHover = true"
         @mouseleave="isHover = false"
     >
         <router-link :to="`site/${shantytown.id}`">
-            <div class="pt-6">
+            <div class="-mt-1 print:mt-0">
+                <Tag
+                    :class="[
+                        'text-xs mb-4 mx-6 uppercase text-primary',
+                        isHover ? 'shadow-md' : ''
+                    ]"
+                >
+                    {{ lastUpdate }}
+                </Tag>
                 <div class="text-md px-6">
                     <div class="text-primary text-display-md ">
                         <span class="font-bold">
@@ -213,12 +221,7 @@
                         </div>
                     </div>
                 </div>
-                <div
-                    class="flex justify-between items-center px-4 pt-4 print:hidden"
-                >
-                    <Tag class="text-xs">
-                        {{ lastUpdate }}
-                    </Tag>
+                <div class="flex justify-end px-4 pt-4 print:hidden">
                     <div class="print:hidden">
                         <transition name="fade" v-if="isOpen">
                             <router-link
@@ -329,27 +332,27 @@ export default {
 
             if (months === 0) {
                 if (days === 0) {
-                    return `Dernière actualisation aujourd'hui`;
+                    return `Dernière mise à jour aujourd'hui`;
                 }
 
                 if (days > 0 && days < 7) {
-                    return `Dernière actualisation il y a ${days} jour${
+                    return `Dernière mise à jour il y a ${days} jour${
                         days > 1 ? "s" : ""
                     }`;
                 }
 
                 if (weeks > 0 && months === 0) {
-                    return `Dernière actualisation il y a ${weeks} semaine${
+                    return `Dernière mise à jour il y a ${weeks} semaine${
                         weeks > 1 ? "s" : ""
                     }`;
                 }
             }
 
             if (months < 12) {
-                return `Dernière actualisation il y a ${months} mois`;
+                return `Dernière mise à jour il y a ${months} mois`;
             }
 
-            return "Dernière actualisation il y a plus d'un an";
+            return "Dernière mise à jour il y a plus d'un an";
         },
         isClosed() {
             return (
