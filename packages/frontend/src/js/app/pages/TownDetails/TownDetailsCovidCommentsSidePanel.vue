@@ -213,7 +213,7 @@ export default {
                 )
             })
                 .then(async response => {
-                    this.$piwik?.trackEvent(
+                    this.$trackMatomoEvent(
                         "Commentaire",
                         "Création commentaire Covid",
                         this.town.id

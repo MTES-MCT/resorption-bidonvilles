@@ -186,7 +186,7 @@ export default {
 
         dispatch() {
             if (this.form.user && this.form.user.id) {
-                this.$piwik?.trackEvent(
+                this.$trackMatomoEvent(
                     "Intervenant",
                     "Déclaration intervenant",
                     this.townId
@@ -199,7 +199,7 @@ export default {
                 });
             }
 
-            this.$piwik?.trackEvent(
+            this.$trackMatomoEvent(
                 "Intervenant",
                 "Invitation intevernant",
                 this.townId

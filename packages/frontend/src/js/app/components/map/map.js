@@ -233,32 +233,32 @@ export default {
             numberOfShantytownsBy: {
                 regions: {}, // sera rempli avec un objet du type : { "01": 0, "02": 0, ..., "11": 0 }
                 departements: {}, // sera rempli avec un objet du type : { "01": 0, "02": 0, ..., "92": 0 }
-                cities: {} /* sera rempli avec un objet du type :   
+                cities: {} /* sera rempli avec un objet du type :
                                                                     {
-                                                                        "01": 
+                                                                        "01":
                                                                             {
-                                                                                sites = 0, 
-                                                                                code = , 
-                                                                                name = , 
-                                                                                latitude = , 
-                                                                                longitude = 
+                                                                                sites = 0,
+                                                                                code = ,
+                                                                                name = ,
+                                                                                latitude = ,
+                                                                                longitude =
                                                                             },
-                                                                        "02":   
+                                                                        "02":
                                                                             {
-                                                                                sites = 0, 
-                                                                                code = , 
-                                                                                name = , 
-                                                                                latitude = , 
-                                                                                longitude = 
-                                                                            }, 
+                                                                                sites = 0,
+                                                                                code = ,
+                                                                                name = ,
+                                                                                latitude = ,
+                                                                                longitude =
+                                                                            },
                                                                         ...,
-                                                                        "92": 
+                                                                        "92":
                                                                             {
-                                                                                sites = 0, 
-                                                                                code = , 
-                                                                                name = , 
-                                                                                latitude = , 
-                                                                                longitude = 
+                                                                                sites = 0,
+                                                                                code = ,
+                                                                                name = ,
+                                                                                latitude = ,
+                                                                                longitude =
                                                                             }
                                                                     } */
             }
@@ -770,7 +770,7 @@ export default {
         },
 
         setSearchMarker(type, address, coordinates) {
-            this.$piwik?.trackEvent("Cartographie", "Recherche");
+            this.$trackMatomoEvent("Cartographie", "Recherche");
             this.clearSearchMarker();
 
             // check if there is a marker existing at that exact address

@@ -525,7 +525,7 @@ export default {
                 text: "Le dispositif a bien été mis à jour"
             });
 
-            this.$piwik?.trackEvent(
+            this.$trackMatomoEvent(
                 "Dispositif",
                 "Mise à jour indicateurs",
                 this.$route.params.id

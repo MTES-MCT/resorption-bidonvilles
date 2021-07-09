@@ -343,7 +343,7 @@ export default {
     },
     methods: {
         handleSearchBlur(data) {
-            this.$piwik?.trackEvent("Liste des sites", "Recherche");
+            this.$trackMatomoEvent("Liste des sites", "Recherche");
 
             store.commit("setFilters", {
                 ...this.filters,
@@ -390,7 +390,7 @@ export default {
             this.printMode = true;
             setTimeout(() => {
                 window.print();
-                this.$piwik?.trackEvent(
+                this.$trackMatomoEvent(
                     "Impression",
                     "Impression liste des sites"
                 );

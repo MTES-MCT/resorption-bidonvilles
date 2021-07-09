@@ -528,11 +528,11 @@ export default {
 
         submitFn(data) {
             if (this.mode === "create") {
-                this.$piwik?.trackEvent("Site", "Création site");
+                this.$trackMatomoEvent("Site", "Création site");
                 return add(data);
             }
 
-            this.$piwik?.trackEvent("Site", "Mise à jour site");
+            this.$trackMatomoEvent("Site", "Mise à jour site");
             return edit(this.data.id, data);
         }
     }
