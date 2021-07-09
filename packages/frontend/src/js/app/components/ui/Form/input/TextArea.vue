@@ -6,7 +6,11 @@
         :vid="id"
     >
         <InputWrapper :hasErrors="!!errors.length">
-            <InputLabel :label="label" :info="info" />
+            <InputLabel
+                :label="label"
+                :info="info"
+                :showMandatoryStar="showMandatoryStar"
+            />
 
             <div class="relative">
                 <InputIcon
@@ -87,7 +91,12 @@ export default {
         },
         cypressName: {
             type: String
-        }
+        },
+        showMandatoryStar: {
+            required: false,
+            type: Boolean,
+            default: false
+        },
     },
     computed: {
         classes() {

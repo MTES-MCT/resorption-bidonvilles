@@ -98,6 +98,7 @@
                             v-model="form.newComment"
                             rules="required"
                             validationName="Ecrire un message"
+                            :showMandatoryStar="true"
                         />
                         <div class="flex items-center justify-between">
                             <Button
