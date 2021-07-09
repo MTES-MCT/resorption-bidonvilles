@@ -22,7 +22,7 @@ export default {
         variantClasses() {
             return {
                 default: "px-4 py-1 flex-row items-center bg-blue200",
-                withoutBackground: "px-4 py-1 flex-row items-center",
+                withoutBackground: "px-3 mr-2 mb-2",
                 primary: "bg-blue100 text-primary px-3 mr-2 mb-2 rounded-lg"
             }[this.variant];
         }
