@@ -40,7 +40,7 @@ export default {
         },
         track(user) {
             Sentry.setUser({ id: user.id });
-            setCustomVariables(user)
+            setCustomVariables(user);
         }
     }
 };
