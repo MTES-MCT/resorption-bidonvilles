@@ -50,6 +50,22 @@ describe.only('townController.createCovidComment()', () => {
             label: 'Le champ "Distribution d\'aide alimentaire"',
             badFormat: global.generate().not('boolean'),
         },
+        action_mediation_sante: {
+            label: 'Le champ "Action de médiation en santé"',
+            badFormat: global.generate().not('boolean'),
+        },
+        sensibilisation_vaccination: {
+            label: 'Le champ "Sensibilisation à la vaccination"',
+            badFormat: global.generate().not('boolean'),
+        },
+        equipe_mobile_depistage: {
+            label: 'Le champ "Equipe mobile de dépistage"',
+            badFormat: global.generate().not('boolean'),
+        },
+        equipe_mobile_vaccination: {
+            label: 'Le champ "Equipe mobile de vaccination"',
+            badFormat: global.generate().not('boolean'),
+        },
         personnes_orientees: {
             label: 'Le champ "Personne(s) orientée(s) vers un centre d\'hébergement spécialisé (desserrement)"',
             badFormat: global.generate().not('boolean'),
@@ -83,6 +99,10 @@ describe.only('townController.createCovidComment()', () => {
                 equipe_sanitaire: true,
                 equipe_accompagnement: true,
                 distribution_alimentaire: true,
+                action_mediation_sante: true,
+                sensibilisation_vaccination: true,
+                equipe_mobile_depistage: true,
+                equipe_mobile_vaccination: true,
                 personnes_orientees: true,
                 personnes_avec_symptomes: true,
                 besoin_action: true,

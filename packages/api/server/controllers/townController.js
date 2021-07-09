@@ -460,6 +460,10 @@ module.exports = (models) => {
                 equipe_sanitaire: 'Équipe sanitaire',
                 equipe_accompagnement: 'Équipe d\'accompagnement',
                 distribution_alimentaire: 'Distribution d\'aide alimentaire',
+                action_mediation_sante: 'Action de médiation en santé',
+                sensibilisation_vaccination: 'Sensibilisation à la vaccination',
+                equipe_mobile_depistage: 'Équipe mobile de dépistage',
+                equipe_mobile_vaccination: 'Équipe mobile de vaccination',
                 personnes_orientees: 'Personne(s) orientée(s) vers un centre d\'hébergement spécialisé (desserrement)',
                 personnes_avec_symptomes: 'Personnes avec des symptômes Covid-19',
                 besoin_action: 'Besoin d\'une action prioritaire',
@@ -1372,7 +1376,7 @@ module.exports = (models) => {
 
                 ['equipe_maraude', 'equipe_sanitaire', 'equipe_accompagnement',
                     'distribution_alimentaire', 'personnes_orientees', 'personnes_avec_symptomes',
-                    'besoin_action']
+                    'besoin_action', 'action_mediation_sante', 'sensibilisation_vaccination', 'equipe_mobile_depistage', 'equipe_mobile_vaccination']
                     .forEach((name) => {
                         sanitizedBody[name] = typeof body[name] === 'boolean' ? body[name] : null;
                     });
@@ -1389,6 +1393,10 @@ module.exports = (models) => {
                 equipe_sanitaire: 'Le champ "Équipe sanitaire"',
                 equipe_accompagnement: 'Le champ "Équipe d\'accompagnement"',
                 distribution_alimentaire: 'Le champ "Distribution d\'aide alimentaire"',
+                action_mediation_sante: 'Action de médiation en santé',
+                sensibilisation_vaccination: 'Sensibilisation à la vaccination',
+                equipe_mobile_depistage: 'Équipe mobile de dépistage',
+                equipe_mobile_vaccination: 'Équipe mobile de vaccination',
                 personnes_orientees: 'Le champ "Personne(s) orientée(s) vers un centre d\'hébergement spécialisé (desserrement)"',
                 personnes_avec_symptomes: 'Le champ "Personnes avec des symptômes Covid-19"',
                 besoin_action: 'Le champ "Besoin d\'une action prioritaire"',
