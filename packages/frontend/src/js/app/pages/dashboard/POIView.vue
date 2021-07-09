@@ -87,10 +87,10 @@ export default {
     },
     methods: {
         trackOpenPOI() {
-            this.$piwik.trackEvent("POI", "Open POI", this.poi.lieu_id);
+            this.$trackMatomoEvent("POI", "Open POI", this.poi.lieu_id);
         },
         trackOpenSoliguide() {
-            this.$piwik.trackEvent("POI", "Click See More", this.poi.lieu_id);
+            this.$trackMatomoEvent("POI", "Click See More", this.poi.lieu_id);
         },
         checkOutsideClick(event) {
             if (!this.poi) {

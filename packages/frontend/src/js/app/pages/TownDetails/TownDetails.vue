@@ -227,7 +227,7 @@ export default {
         }
     },
     mounted() {
-        this.$piwik?.trackEvent(
+        this.$trackMatomoEvent(
             "Site",
             "Visite page site",
             this.$route.params.id
@@ -259,7 +259,7 @@ export default {
             this.covidOpen = true;
         },
         handleNewComment(comments) {
-            this.$piwik?.trackEvent(
+            this.$trackMatomoEvent(
                 "Commentaire",
                 "Création commentaire",
                 this.town.id
