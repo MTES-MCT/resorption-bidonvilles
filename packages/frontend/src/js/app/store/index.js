@@ -34,7 +34,12 @@ export default new Vuex.Store({
             },
             currentPage: 1
         },
-        detailedTown: null
+        detailedTown: null,
+        greeter: {
+            first_name: "",
+            last_name: "",
+            email: ""
+        }
     },
     mutations: {
         setLoading(state, value) {
@@ -100,6 +105,17 @@ export default new Vuex.Store({
                 if (actor !== undefined) {
                     actor.themes = themes;
                 }
+            }
+        },
+        setGreeter(state, { first_name, last_name, email }) {
+            if (first_name !== null) {
+                state.greeter.first_name = first_name;
+            }
+            if (last_name !== null) {
+                state.greeter.last_name = last_name;
+            }
+            if (email !== null) {
+                state.greeter.email = email;
             }
         },
         saveHost(currentState, host) {
@@ -230,6 +246,9 @@ export default new Vuex.Store({
         },
         townsCurrentPage: state => {
             return state.towns.currentPage;
+        },
+        greeter: state => {
+            return state.greeter;
         }
     }
 });

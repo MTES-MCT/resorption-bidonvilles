@@ -114,7 +114,7 @@ export default {
     },
     computed: {
         greeter() {
-            return this.$route.query.email;
+            return this.$store.state.greeter;
         },
         errors() {
             const labels = {
@@ -234,7 +234,7 @@ export default {
         }
     },
     created() {
-        if (!this.greeter) {
+        if (!this.$store.state.greeter.email) {
             this.backHomeWithErrMsg(
                 "Impossible d'identifier l'utilisateur' à l'origine de l'invitation"
             );

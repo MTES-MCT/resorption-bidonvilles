@@ -32,10 +32,12 @@ module.exports = models => ({
             request_type, is_actor, referral, referral_other, referral_word_of_mouth,
         } = req.body;
 
+        let result = {};
+
         // user creation
         if (request_type.includes('access-request') && is_actor) {
             // create the user
-            const result = await userService.create({
+            result = await userService.create({
                 last_name: req.body.last_name,
                 first_name: req.body.first_name,
                 email: req.body.email,
@@ -46,7 +48,7 @@ module.exports = models => ({
                 new_association: req.body.new_association === true,
                 new_association_name: req.body.new_association_name || null,
                 new_association_abbreviation:
-          req.body.new_association_abbreviation || null,
+                    req.body.new_association_abbreviation || null,
                 departement: req.body.departement || null,
                 position: req.body.position,
                 access_request_message: req.body.access_request_message,
@@ -77,6 +79,14 @@ module.exports = models => ({
 
         // contact request
         try {
+            result = {
+                first_name: req.body.first_name,
+                last_name: req.body.last_name,
+                email: req.body.email,
+                phone: req.body.phone,
+                access_request_message: req.body.access_request_message,
+            };
+
             await sendEmailNewContactMessageToAdmins(models, {
                 email: req.body.email,
                 phone: req.body.phone,
@@ -96,6 +106,6 @@ module.exports = models => ({
             next(err);
         }
 
-        return res.status(200).send();
+        return res.status(200).send(result);
     },
 });

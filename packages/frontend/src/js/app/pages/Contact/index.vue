@@ -422,20 +422,21 @@ export default {
             try {
                 const result = await contact(data);
                 this.loading = false;
-                // Si l'utilisateur a demandé un accès, on route vers le formulaire d'invitation
                 if (this.isRequestAccessAndActor) {
                     this.$piwik?.trackEvent(
                         "Demande d'accès",
                         "Demande d'accès"
                     );
-                    this.$router.push(
-                        `/invitation?email=${encodeURIComponent(result.email)}`
-                    );
                 } else {
                     this.$piwik?.trackEvent("Contact", "Demande d'information");
-
-                    this.$router.push("/");
                 }
+                this.$store.commit("setGreeter", {
+                    first_name: result.first_name,
+                    last_name: result.last_name,
+                    email: result.email
+                });
+                this.$router.push("/invitation");
+
                 notify({
                     group: "notifications",
                     type: "success",
