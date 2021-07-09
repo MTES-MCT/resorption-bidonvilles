@@ -35,23 +35,21 @@ module.exports = {
         const textContent = fs.readFileSync(path.join(__dirname, '../mails/dist', `${templateName}.text`));
         const subject = fs.readFileSync(path.join(__dirname, '../mails/dist', `${templateName}.subject.text`));
 
-        console.log('send mail');
-
-        // return sendMail(
-        //     finalRecipient,
-        //     {
-        //         HTMLPart: htmlContent.toString(),
-        //         TextPart: textContent.toString(),
-        //         Subject: subject.toString(),
-        //         TemplateLanguage: true,
-        //         Variables: {
-        //             frontUrl,
-        //             backUrl,
-        //             recipientName: `${recipient.first_name} ${recipient.last_name}`,
-        //             ...variables,
-        //         },
-        //     },
-        //     replyTo,
-        // );
+        return sendMail(
+            finalRecipient,
+            {
+                HTMLPart: htmlContent.toString(),
+                TextPart: textContent.toString(),
+                Subject: subject.toString(),
+                TemplateLanguage: true,
+                Variables: {
+                    frontUrl,
+                    backUrl,
+                    recipientName: `${recipient.first_name} ${recipient.last_name}`,
+                    ...variables,
+                },
+            },
+            replyTo,
+        );
     },
 };

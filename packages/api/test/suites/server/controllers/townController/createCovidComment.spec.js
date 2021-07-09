@@ -59,11 +59,11 @@ describe.only('townController.createCovidComment()', () => {
             badFormat: global.generate().not('boolean'),
         },
         equipe_mobile_depistage: {
-            label: 'Le champ "Equipe mobile de dépistage"',
+            label: 'Le champ "Équipe mobile de dépistage"',
             badFormat: global.generate().not('boolean'),
         },
         equipe_mobile_vaccination: {
-            label: 'Le champ "Equipe mobile de vaccination"',
+            label: 'Le champ "Équipe mobile de vaccination"',
             badFormat: global.generate().not('boolean'),
         },
         personnes_orientees: {

@@ -55,4 +55,4 @@ export default [
         label: "Besoin d'une action prioritaire",
         type: "error"
     }
-]
+];
