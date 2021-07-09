@@ -52,23 +52,23 @@
 
                         <CheckableGroup label="Préciser votre intervention">
                             <Checkbox
-                                checkValue="equipe_maraude"
-                                label="Équipe de maraude"
+                                checkValue="action_mediation_sante"
+                                label="Action de médiation en santé"
                                 v-model="form.interventionType"
                             />
                             <Checkbox
-                                checkValue="equipe_sanitaire"
-                                label="Équipe sanitaire"
+                                checkValue="sensibilisation_vaccination"
+                                label="Sensibilisation à la vaccination"
                                 v-model="form.interventionType"
                             />
                             <Checkbox
-                                checkValue="equipe_accompagnement"
-                                label="Équipe d'accompagnement"
+                                checkValue="equipe_mobile_depistage"
+                                label="Équipe mobile de dépistage"
                                 v-model="form.interventionType"
                             />
                             <Checkbox
-                                checkValue="distribution_alimentaire"
-                                label="Distribution d'aide alimentaire"
+                                checkValue="equipe_mobile_vaccination"
+                                label="Équipe mobile de vaccination"
                                 v-model="form.interventionType"
                             />
                         </CheckableGroup>
@@ -202,6 +202,18 @@ export default {
                 ),
                 distribution_alimentaire: this.form.interventionType.includes(
                     "distribution_alimentaire"
+                ),
+                action_mediation_sante: this.form.interventionType.includes(
+                    "action_mediation_sante"
+                ),
+                equipe_mobile_depistage: this.form.interventionType.includes(
+                    "equipe_mobile_depistage"
+                ),
+                equipe_mobile_vaccination: this.form.interventionType.includes(
+                    "equipe_mobile_vaccination"
+                ),
+                sensibilisation_vaccination: this.form.interventionType.includes(
+                    "sensibilisation_vaccination"
                 ),
                 personnes_orientees: this.form.interventionType.includes(
                     "personnes_orientees"
