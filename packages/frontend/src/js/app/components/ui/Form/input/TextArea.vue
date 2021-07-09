@@ -96,7 +96,7 @@ export default {
             required: false,
             type: Boolean,
             default: false
-        },
+        }
     },
     computed: {
         classes() {

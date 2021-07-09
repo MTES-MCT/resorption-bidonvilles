@@ -3,7 +3,10 @@
         <div class="text-G600 text-sm mb-1">
             {{ formatDate(comment.createdAt, "d M y à h:i") }}
         </div>
-        <div class="text-G600 text-sm mb-1" v-if="comment.covid && comment.covid.date">
+        <div
+            class="text-G600 text-sm mb-1"
+            v-if="comment.covid && comment.covid.date"
+        >
             Date de l'intervention:
             {{ formatDate(comment.covid.date, "d M y à h:i") }}
         </div>
