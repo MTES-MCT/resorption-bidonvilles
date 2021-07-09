@@ -29,6 +29,10 @@
                         "./src/js/helpers"
                     ],
                     [
+                        "#matomo",
+                        "./src/js/matomo"
+                    ],
+                    [
                         "#app",
                         "./src/js/app"
                     ],
