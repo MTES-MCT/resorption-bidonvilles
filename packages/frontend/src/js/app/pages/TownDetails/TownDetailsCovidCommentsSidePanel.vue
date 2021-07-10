@@ -191,18 +191,6 @@ export default {
             addCovidComment(this.$route.params.id, {
                 date: this.form.date,
                 description: this.form.newComment,
-                equipe_maraude: this.form.interventionType.includes(
-                    "equipe_maraude"
-                ),
-                equipe_sanitaire: this.form.interventionType.includes(
-                    "equipe_sanitaire"
-                ),
-                equipe_accompagnement: this.form.interventionType.includes(
-                    "equipe_accompagnement"
-                ),
-                distribution_alimentaire: this.form.interventionType.includes(
-                    "distribution_alimentaire"
-                ),
                 action_mediation_sante: this.form.interventionType.includes(
                     "action_mediation_sante"
                 ),
