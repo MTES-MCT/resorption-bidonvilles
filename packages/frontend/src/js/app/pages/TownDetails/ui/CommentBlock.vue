@@ -59,8 +59,8 @@ export default {
     },
     computed: {
         covidTags: function() {
-            if (!this.comment) {
-                return;
+            if (!this.comment || !this.comment.covid) {
+                return [];
             }
 
             return covidTags.filter(t => {
