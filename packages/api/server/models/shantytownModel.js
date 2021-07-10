@@ -932,10 +932,6 @@ module.exports = (database) => {
                         shantytown_covid_comments(
                             fk_comment,
                             date,
-                            equipe_maraude,
-                            equipe_sanitaire,
-                            equipe_accompagnement,
-                            distribution_alimentaire,
                             action_mediation_sante,
                             sensibilisation_vaccination,
                             equipe_mobile_depistage,
@@ -949,10 +945,6 @@ module.exports = (database) => {
                         (
                             :id,
                             :date,
-                            :equipe_maraude,
-                            :equipe_sanitaire,
-                            :equipe_accompagnement,
-                            :distribution_alimentaire,
                             :action_mediation_sante,
                             :sensibilisation_vaccination,
                             :equipe_mobile_depistage,

@@ -1374,8 +1374,7 @@ module.exports = (models) => {
                     description: typeof body.description === 'string' ? validator.trim(body.description) : null,
                 };
 
-                ['equipe_maraude', 'equipe_sanitaire', 'equipe_accompagnement',
-                    'distribution_alimentaire', 'personnes_orientees', 'personnes_avec_symptomes',
+                ['personnes_orientees', 'personnes_avec_symptomes',
                     'besoin_action', 'action_mediation_sante', 'sensibilisation_vaccination', 'equipe_mobile_depistage', 'equipe_mobile_vaccination']
                     .forEach((name) => {
                         sanitizedBody[name] = typeof body[name] === 'boolean' ? body[name] : null;
@@ -1389,10 +1388,6 @@ module.exports = (models) => {
             // validate input
             const labels = {
                 date: 'La date',
-                equipe_maraude: 'Le champ "Équipe de maraude"',
-                equipe_sanitaire: 'Le champ "Équipe sanitaire"',
-                equipe_accompagnement: 'Le champ "Équipe d\'accompagnement"',
-                distribution_alimentaire: 'Le champ "Distribution d\'aide alimentaire"',
                 action_mediation_sante: 'Le champ "Action de médiation en santé"',
                 sensibilisation_vaccination: 'Le champ "Sensibilisation à la vaccination"',
                 equipe_mobile_depistage: 'Le champ "Équipe mobile de dépistage"',
