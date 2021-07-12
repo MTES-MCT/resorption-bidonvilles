@@ -1,6 +1,6 @@
 <mjml>
     <mj-head>
-        <mj-title>[Résorption-bidonvilles] - Nouvelle demande d'accès</mj-title>
+        <mj-title>[Résorption-bidonvilles] - Vous avez reçu une nouvelle demande d'accès à la plateforme de {{var:userName}}, {{var:orgName}}</mj-title>
         <mj-include path='common/attributes.mjml' />
         <mj-include path='common/styles.mjml' />
     </mj-head>
