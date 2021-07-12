@@ -25,12 +25,12 @@ function loadScript(trackerScript) {
     });
 }
 
-export function setCustomVariables(user) {
-    if (!this || !this.$piwik) {
+export function setCustomVariables($piwik, user) {
+    if (!$piwik) {
         return;
     }
 
-    this.$piwik.setUserId(user.id);
+    $piwik.setUserId(user.id);
 
     const location =
         user.organization.location[user.organization.location.type];
@@ -50,28 +50,28 @@ export function setCustomVariables(user) {
         .replaceAll("{", "")
         .replaceAll("}", "");
 
-    this.$piwik.setCustomVariable(1, "user", userData);
+    $piwik.setCustomVariable(1, "user", userData);
 
     const departement = user.organization.location.departement || null;
-    this.$piwik.setCustomVariable(
+    $piwik.setCustomVariable(
         5,
         "departement_code",
         departement ? departement.code : null
     );
 }
 
-function trackEvent(eventCategory, eventName, eventArgs) {
-    if (!this.piwik) {
+function trackEvent($piwik, eventCategory, eventName, eventArgs) {
+    if (!$piwik) {
         return;
     }
 
     const { user } = getConfig();
 
     if (user) {
-        setCustomVariables(user);
+        setCustomVariables($piwik, user);
     }
 
-    this.$piwik.trackEvent(eventCategory, eventName, eventArgs);
+    $piwik.trackEvent(eventCategory, eventName, eventArgs);
 }
 
 function initMatomo(Vue, options) {
@@ -83,7 +83,7 @@ function initMatomo(Vue, options) {
     // Assign matomo to Vue
     Vue.prototype.$piwik = Matomo;
     Vue.prototype.$matomo = Matomo;
-    Vue.prototype.$trackMatomoEvent = trackEvent;
+    Vue.prototype.$trackMatomoEvent = trackEvent.bind(window, Matomo);
 
     if (options.requireConsent) {
         Matomo.requireConsent();
