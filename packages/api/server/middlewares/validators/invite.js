@@ -4,7 +4,6 @@ const { sequelize } = require('#db/models');
 const userModel = require('#server/models/userModel')(sequelize);
 
 module.exports = [
-
     body('greeter.email')
         .trim()
         .notEmpty().bail().withMessage('Le courriel de la personne a l\'initiative de l\'invitation doit être renseigné')
@@ -17,6 +16,17 @@ module.exports = [
             yahoo_remove_subaddress: false,
             icloud_remove_subaddress: false,
         }),
+
+    body('greeter.first_name')
+        .isString().bail().withMessage('Le prénom de la peersonne à l\'initiative de l\'invitation est invalide')
+        .trim()
+        .notEmpty().bail().withMessage('Le prénom de la peersonne à l\'initiative de l\'invitation est obligatoire'),
+
+    body('greeter.last_name')
+        .isString().bail().withMessage('Le nom de la peersonne à l\'initiative de l\'invitation est invalide')
+        .trim()
+        .notEmpty().bail().withMessage('Le nom de la peersonne à l\'initiative de l\'invitation est obligatoire'),
+
     body('guests')
         .customSanitizer((value) => {
             if (value === undefined || value === null) {
