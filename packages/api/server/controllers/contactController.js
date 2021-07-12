@@ -74,7 +74,11 @@ module.exports = models => ({
                 next(err);
             }
 
-            return res.status(200).send(result);
+            return res.status(200).send({
+                first_name: result.first_name,
+                last_name: result.last_name,
+                email: result.email,
+            });
         }
 
         // contact request
@@ -83,8 +87,6 @@ module.exports = models => ({
                 first_name: req.body.first_name,
                 last_name: req.body.last_name,
                 email: req.body.email,
-                phone: req.body.phone,
-                access_request_message: req.body.access_request_message,
             };
 
             await sendEmailNewContactMessageToAdmins(models, {
