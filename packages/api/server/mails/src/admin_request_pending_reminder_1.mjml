@@ -1,6 +1,6 @@
 <mjml>
     <mj-head>
-        <mj-title>[Résorption-bidonvilles] - Demande d'accès en attente depuis 3 jours de {{var:userName}}, {{var:orgName}} </mj-title>
+        <mj-title>[Résorption-bidonvilles] - Demande d'accès en attente depuis 3 jours de {{var:userName}}</mj-title>
         <mj-include path='common/attributes.mjml' />
         <mj-include path='common/styles.mjml' />
     </mj-head>
