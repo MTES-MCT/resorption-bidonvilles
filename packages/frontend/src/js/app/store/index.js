@@ -35,11 +35,7 @@ export default new Vuex.Store({
             currentPage: 1
         },
         detailedTown: null,
-        greeter: {
-            first_name: "",
-            last_name: "",
-            email: ""
-        }
+        greeter: null
     },
     mutations: {
         setLoading(state, value) {
@@ -107,16 +103,8 @@ export default new Vuex.Store({
                 }
             }
         },
-        setGreeter(state, { first_name, last_name, email }) {
-            if (first_name !== null) {
-                state.greeter.first_name = first_name;
-            }
-            if (last_name !== null) {
-                state.greeter.last_name = last_name;
-            }
-            if (email !== null) {
-                state.greeter.email = email;
-            }
+        setGreeter(state, greeter) {
+            state.greeter = greeter;
         },
         saveHost(currentState, host) {
             let index = currentState.hosts.findIndex(

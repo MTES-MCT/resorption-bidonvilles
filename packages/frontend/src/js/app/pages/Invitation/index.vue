@@ -234,11 +234,14 @@ export default {
         }
     },
     created() {
-        if (!this.$store.state.greeter.email) {
+        if (!this.$store.state.greeter) {
             this.backHomeWithErrMsg(
                 "Impossible d'identifier l'utilisateur' à l'origine de l'invitation"
             );
         }
+    },
+    unmounted() {
+        this.$store.commit("setGreeter", null);
     }
 };
 </script>
