@@ -1,4 +1,4 @@
-import { list } from "#helpers/api/userActivity";
+import { listRegular } from "#helpers/api/userActivity";
 import NavBar from "#app/layouts/navbar/navbar.vue";
 import Table from "#app/components/table/table.vue";
 import CommentDeletion from "#app/components/comment-deletion/comment-deletion.vue";
@@ -143,7 +143,7 @@ export default {
             this.state = "loading";
             this.error = null;
 
-            list()
+            listRegular()
                 .then(userActivities => {
                     this.activities = userActivities;
                     this.state = "loaded";
