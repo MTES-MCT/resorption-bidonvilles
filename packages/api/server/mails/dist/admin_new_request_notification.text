@@ -1,5 +1,5 @@
-Une nouvelle demande d’accès à la plateforme Résorption-bidonvilles est en
-attente de votre action
+Vous avez reçu une nouvelle demande d'accès à la plateforme
+Résorption-bidonvilles de {{var:userName}}, {{var:orgName}}
 Bonjour {{var:recipientName}},
 Vous avez reçu une nouvelle demande d’accès à la plateforme
 Résorption-bidonvilles [{{var:frontUrl}}].

@@ -1,5 +1,5 @@
-Rappel, une demande d’accès à la plateforme Résorption-bidonvilles est en
-attente de votre action
+Vous avez reçu une nouvelle demande d'accès à la plateforme
+Résorption-bidonvilles de {{var:userName}}, {{var:orgName}}
 Bonjour {{var:recipientName}},
 Une demande d’accès à la plateforme Résorption-bidonvilles [{{var:frontUrl}}]
 est en attente depuis 3 jours. Nous vous rappelons qu’il est important d’y
