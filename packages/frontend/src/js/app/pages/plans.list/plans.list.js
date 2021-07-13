@@ -5,6 +5,7 @@ import NavBar from "#app/layouts/navbar/navbar.vue";
 import CollectivityInput from "#app/components/form/input/collectivity/collectivity.vue";
 import EventBannerPlatform from "#app/components/EventBannerPlatform";
 import EventBannerContribute from "#app/components/EventBannerContribute";
+import EventBannerVaccination from "#app/components/EventBannerVaccination";
 import { open } from "#helpers/tabHelper";
 import {
     get as getConfig,
@@ -18,7 +19,8 @@ export default {
         Table,
         CollectivityInput,
         EventBannerPlatform,
-        EventBannerContribute
+        EventBannerContribute,
+        EventBannerVaccination
     },
 
     data() {
