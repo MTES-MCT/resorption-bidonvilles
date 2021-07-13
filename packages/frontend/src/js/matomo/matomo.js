@@ -65,7 +65,7 @@ function trackEvent($piwik, eventCategory, eventName, eventArgs) {
         return;
     }
 
-    const { user } = getConfig();
+    const { user } = getConfig() || {};
 
     if (user) {
         setCustomVariables($piwik, user);
