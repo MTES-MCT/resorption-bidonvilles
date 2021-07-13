@@ -14,7 +14,8 @@
             <div class="flex-shrink-0 lg:flex-shrink px-8 py-2 lg:py-8 lg:px-4">
                 <div class="tracking-wide text-display-md text-primary">
                     Webinaire sur les enjeux de la campagne de sensibilisation
-                    et de vaccination dans les bidonvilles
+                    et de vaccination dans les bidonvilles - lundi 19 juillet de
+                    14h à 15h
                 </div>
                 <div class="mt-2">
                     En partenariat avec la Direction Générale de la Santé, la

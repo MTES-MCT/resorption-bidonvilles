@@ -4,6 +4,7 @@
             class="full-width mx-auto"
             src="./assets/resorption-bidonvilles-dessin.png"
         />
+        <LandingEventBanner v-if="$i18n.locale === 'fr'" />
         <div class="mt-24">
             <div class="max-w-screen-sm mx-auto">
                 <div class="text-display-lg font-normal">
@@ -17,7 +18,6 @@
                 </div>
             </div>
         </div>
-        <LandingEventBanner v-if="$i18n.locale === 'fr'" />
         <div class="mt-20 md:flex md:flex-row items-center">
             <div class="block md:hidden mb-4 text-display-lg">
                 {{ $t("landingPage.firstSection.video.text") }}
