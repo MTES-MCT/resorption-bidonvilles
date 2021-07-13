@@ -21,9 +21,11 @@
         <mj-section mj-class="pb-4">
             <mj-column padding="1rem" background-color="#dddddd">
                 <mj-text mj-class="pb-4">Date du message : {{var:message.created_at}}</mj-text>
+                <mj-text mj-class="pb-4">Objet : {{var:message.objet}}</mj-text>
                 <mj-text>{{var:message.last_name}} {{var:message.first_name}}</mj-text>
                 <mj-text>{{var:message.email}}</mj-text>
-                <mj-text>{{var:message.phone}}</mj-text>
+                <mj-text mj-class="pb-4">{{var:message.phone}}</mj-text>
+                <mj-text>Message :</mj-text>
                 <mj-text>{{var:message.access_request_message}}</mj-text>
             </mj-column>
         </mj-section>

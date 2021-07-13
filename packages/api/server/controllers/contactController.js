@@ -26,6 +26,18 @@ const sendEmailNewContactMessageToAdmins = async (models, message) => {
     }
 };
 
+// Convert request-type to a message objet for the contact mail
+// ie: [help, report] becomes "Aider - Signaler"
+function getObjetForContactMessage(requestType) {
+    const types = {
+        help: 'Aider',
+        report: 'Signaler',
+        'help-request': "Demander de l'aide",
+        'info-request': 'Demander des infos',
+    };
+    return requestType.map(type => types[type]).join(' - ');
+}
+
 module.exports = models => ({
     async contact(req, res, next) {
         const {
@@ -83,6 +95,7 @@ module.exports = models => ({
                 last_name: req.body.last_name,
                 first_name: req.body.first_name,
                 access_request_message: req.body.access_request_message,
+                objet: getObjetForContactMessage(req.body.request_type),
             });
 
             if (referral !== null) {
