@@ -84,7 +84,7 @@ export default {
             type: String
         },
         rows: {
-            type: String
+            type: [String, Array]
         },
         cols: {
             type: String
