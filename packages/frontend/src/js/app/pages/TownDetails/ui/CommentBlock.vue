@@ -3,6 +3,13 @@
         <div class="text-G600 text-sm mb-1">
             {{ formatDate(comment.createdAt, "d M y à h:i") }}
         </div>
+        <div
+            class="text-G600 text-sm mb-1"
+            v-if="comment.covid && comment.covid.date"
+        >
+            Date de l'intervention:
+            {{ formatDate(comment.covid.date, "d M y à h:i") }}
+        </div>
         <div v-if="comment.private" class="font-bold">
             <Icon icon="lock" class="text-red" />
             Message réservé aux membres de la préfecture et DDCS de votre
@@ -13,11 +20,29 @@
             {{ comment.createdBy.lastName }} -
             {{ comment.createdBy.organization }}
         </div>
-        <div class="ml-5">{{ comment.description }}</div>
+        <div class="ml-5">
+            <div class="flex flex-wrap">
+                <Tag
+                    v-for="tag in covidTags"
+                    :key="tag.prop"
+                    variant="withoutBackground"
+                    :class="[
+                        'inline-block',
+                        'mr-2',
+                        'mb-2',
+                        tag.type === 'warning' ? 'bg-orange300' : 'bg-red300'
+                    ]"
+                    >{{ tag.label }}</Tag
+                >
+            </div>
+            <div>{{ comment.description }}</div>
+        </div>
     </div>
 </template>
 
 <script>
+import covidTags from "#app/pages/covid/covidTags";
+
 export default {
     props: {
         comment: {
@@ -30,6 +55,17 @@ export default {
          */
         formatDate(...args) {
             return window.App.formatDate.apply(window, args);
+        }
+    },
+    computed: {
+        covidTags: function() {
+            if (!this.comment || !this.comment.covid) {
+                return [];
+            }
+
+            return covidTags.filter(t => {
+                return !!this.comment.covid[t.prop];
+            });
         }
     }
 };

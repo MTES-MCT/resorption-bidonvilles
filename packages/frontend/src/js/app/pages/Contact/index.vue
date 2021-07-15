@@ -424,7 +424,7 @@ export default {
                 this.loading = false;
                 // Si l'utilisateur a demandé un accès, on route vers le formulaire d'invitation
                 if (this.isRequestAccessAndActor) {
-                    this.$piwik?.trackEvent(
+                    this.$trackMatomoEvent(
                         "Demande d'accès",
                         "Demande d'accès"
                     );
@@ -432,7 +432,7 @@ export default {
                         `/invitation?email=${encodeURIComponent(result.email)}`
                     );
                 } else {
-                    this.$piwik?.trackEvent("Contact", "Demande d'information");
+                    this.$trackMatomoEvent("Contact", "Demande d'information");
 
                     this.$router.push("/");
                 }

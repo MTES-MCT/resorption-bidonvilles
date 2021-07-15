@@ -5,24 +5,26 @@
     >
         <div class="lg:flex items-center">
             <div class="lg:flex-shrink-0 justify-center">
-                <img class="h-48 m-4" src="./assets/Webinar.jpeg" alt="" />
+                <img
+                    class="h-48 m-4"
+                    src="./assets/banniere_vaccin.png"
+                    alt=""
+                />
             </div>
             <div class="flex-shrink-0 lg:flex-shrink px-8 py-2 lg:py-8 lg:px-4">
                 <div class="tracking-wide text-display-md text-primary">
-                    Instruction du 25 janvier 2018 sur la résorption des
-                    bidonvilles, où en est-on 3 ans après ?
+                    Webinaire sur les enjeux de la campagne de sensibilisation
+                    et de vaccination dans les bidonvilles - lundi 19 juillet de
+                    14h à 15h
                 </div>
                 <div class="mt-2">
-                    Un bilan d'étape organisé par la Dihal où 3 acteurs
-                    livreront également leurs analyses.
-                </div>
-                <div class="mt-2 text-md">
-                    Informations et inscription :
-                    <a
-                        class="text-primary"
-                        href="https://hello.idealco.fr/inscription-formation-resorptionbidonvilles/"
-                        >https://hello.idealco.fr/inscription-formation-resorptionbidonvilles/</a
-                    >
+                    En partenariat avec la Direction Générale de la Santé, la
+                    Dihal rassemble associations, services de l’État et
+                    collectivités territoriales pour échanger et partager sur
+                    les enjeux, les bonnes pratiques et l'usage de la plateforme
+                    <span class="font-italic">Résorption-bidonvilles</span> dans
+                    le cadre de la campagne de sensibilisation et de
+                    vaccination.
                 </div>
             </div>
             <div class="px-8 py-2 lg:p-8">
@@ -32,7 +34,7 @@
                 >
                     <Button class="my-2" variant="secondary">S'inscrire</Button>
                 </a>
-                <p class="text-sm font-bold">Lundi 31 mai de 15h à 16h30</p>
+                <p class="text-sm font-bold">Lundi 19 juillet de 14h à 15h</p>
             </div>
         </div>
     </div>
@@ -42,7 +44,7 @@
 export default {
     computed: {
         shouldBeVisible() {
-            return new Date() < new Date("2021-06-01");
+            return new Date() < new Date("2021-07-20");
         }
     }
 };

@@ -179,7 +179,7 @@ export default {
                         }))
                 });
 
-                this.$piwik?.trackEvent(
+                this.$trackMatomoEvent(
                     "Site",
                     "Fermeture site",
                     this.form.closed_with_solutions

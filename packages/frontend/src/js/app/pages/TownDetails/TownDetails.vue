@@ -87,31 +87,21 @@
                     ></TownDetailsNewCommentLeftColumn>
                 </div>
                 <TownDetailsNewComment
-                    :class="[
-                        'flex-1',
-                        town.comments.regular.length === 0 && 'pb-32'
-                    ]"
+                    :class="['flex-1', comments.length === 0 && 'pb-32']"
                     v-on:submit="handleNewComment($event)"
                     id="newComment"
                     :user="user"
-                    :nbComments="town.comments.regular.length"
+                    :nbComments="comments.length"
                 />
             </PrivateContainer>
         </div>
         <div
-            :class="[
-                'bg-orange200',
-                'pt-10',
-                town.comments.regular.length > 0 && 'pb-32'
-            ]"
-            v-if="town.comments.regular.length"
+            :class="['bg-orange200', 'pt-10', comments.length > 0 && 'pb-32']"
+            v-if="comments.length"
         >
             <PrivateContainer class="flex" id="comments">
                 <div class="leftColumnWidth" />
-                <TownDetailsComments
-                    class="flex-1"
-                    :comments="town.comments.regular"
-                />
+                <TownDetailsComments class="flex-1" :comments="comments" />
             </PrivateContainer>
         </div>
 
@@ -219,6 +209,16 @@ export default {
         };
     },
     computed: {
+        comments() {
+            if (!this.town) {
+                return [];
+            }
+
+            return [
+                ...this.town.comments.regular,
+                ...this.town.comments.covid
+            ].sort((a, b) => b.createdAt - a.createdAt);
+        },
         town() {
             return this.$store.state.detailedTown;
         },
@@ -227,7 +227,7 @@ export default {
         }
     },
     mounted() {
-        this.$piwik?.trackEvent(
+        this.$trackMatomoEvent(
             "Site",
             "Visite page site",
             this.$route.params.id
@@ -259,7 +259,7 @@ export default {
             this.covidOpen = true;
         },
         handleNewComment(comments) {
-            this.$piwik?.trackEvent(
+            this.$trackMatomoEvent(
                 "Commentaire",
                 "Création commentaire",
                 this.town.id

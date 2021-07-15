@@ -39,7 +39,10 @@
 export default {
     computed: {
         shouldBeVisible() {
-            return new Date() < new Date("2021-09-01");
+            return (
+                new Date() < new Date("2021-09-01") &&
+                new Date() > new Date("2021-07-19")
+            );
         }
     }
 };

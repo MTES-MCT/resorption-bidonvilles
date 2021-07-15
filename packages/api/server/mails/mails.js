@@ -101,6 +101,8 @@ module.exports = {
             recipient,
             variables: {
                 recipientName: formatName(recipient.first_name, recipient.last_name),
+                userName: variables.userName,
+                orgName: variables.orgName,
                 frontUrl: `${frontUrl}?${utm}`,
                 adminUrl: `${variables.adminUrl}?${utm}`,
                 connexionUrl: `${variables.adminUrl}?${utm}`,
@@ -126,6 +128,8 @@ module.exports = {
             recipient,
             variables: {
                 recipientName: formatName(recipient.first_name, recipient.last_name),
+                userName: variables.userName,
+                orgName: variables.orgName,
                 frontUrl: `${frontUrl}?${utm}`,
                 adminUrl: `${variables.adminUrl}?${utm}`,
                 connexionUrl: `${variables.adminUrl}?${utm}`,
@@ -150,6 +154,8 @@ module.exports = {
             recipient,
             variables: {
                 recipientName: formatName(recipient.first_name, recipient.last_name),
+                userName: variables.userName,
+                orgName: variables.orgName,
                 frontUrl: `${frontUrl}?${utm}`,
                 adminUrl: `${variables.adminUrl}?${utm}`,
                 connexionUrl: `${variables.adminUrl}?${utm}`,

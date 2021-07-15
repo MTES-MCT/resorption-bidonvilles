@@ -219,7 +219,7 @@ export default {
                 .then(() => {
                     this.validation.state = null;
 
-                    this.$piwik?.trackEvent(
+                    this.$trackMatomoEvent(
                         "Demande d'accès",
                         "Approuver accès"
                     );
@@ -254,7 +254,7 @@ export default {
                 .then(() => {
                     this.validation.state = null;
 
-                    this.$piwik?.trackEvent("Demande d'accès", "Refuser accès");
+                    this.$trackMatomoEvent("Demande d'accès", "Refuser accès");
                     notify({
                         group: "notifications",
                         type: "success",

@@ -34,20 +34,20 @@ describe.only('townController.createCovidComment()', () => {
             label: 'La date',
             badFormat: global.generate().not('stringdate'),
         },
-        equipe_maraude: {
-            label: 'Le champ "Équipe de maraude"',
+        action_mediation_sante: {
+            label: 'Le champ "Action de médiation en santé"',
             badFormat: global.generate().not('boolean'),
         },
-        equipe_sanitaire: {
-            label: 'Le champ "Équipe sanitaire"',
+        sensibilisation_vaccination: {
+            label: 'Le champ "Sensibilisation à la vaccination"',
             badFormat: global.generate().not('boolean'),
         },
-        equipe_accompagnement: {
-            label: 'Le champ "Équipe d\'accompagnement"',
+        equipe_mobile_depistage: {
+            label: 'Le champ "Équipe mobile de dépistage"',
             badFormat: global.generate().not('boolean'),
         },
-        distribution_alimentaire: {
-            label: 'Le champ "Distribution d\'aide alimentaire"',
+        equipe_mobile_vaccination: {
+            label: 'Le champ "Équipe mobile de vaccination"',
             badFormat: global.generate().not('boolean'),
         },
         personnes_orientees: {
@@ -79,10 +79,10 @@ describe.only('townController.createCovidComment()', () => {
             },
             body: {
                 date: (new Date(2000, 0, 1)).toString(),
-                equipe_maraude: true,
-                equipe_sanitaire: true,
-                equipe_accompagnement: true,
-                distribution_alimentaire: true,
+                action_mediation_sante: true,
+                sensibilisation_vaccination: true,
+                equipe_mobile_depistage: true,
+                equipe_mobile_vaccination: true,
                 personnes_orientees: true,
                 personnes_avec_symptomes: true,
                 besoin_action: true,

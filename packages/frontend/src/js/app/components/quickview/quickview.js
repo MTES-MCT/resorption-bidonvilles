@@ -218,7 +218,7 @@ export default {
         }
     },
     mounted() {
-        this.$piwik?.trackEvent("Cartographie", "Click sur site");
+        this.$trackMatomoEvent("Cartographie", "Click sur site");
         document.addEventListener("click", this.checkOutsideClick);
     },
     destroyed() {
@@ -243,7 +243,7 @@ export default {
             }
         },
         showTown() {
-            this.$piwik?.trackEvent("Cartographie", "Redirection page site");
+            this.$trackMatomoEvent("Cartographie", "Redirection page site");
 
             const routerData = this.$router.resolve(`/site/${this.town.id}`);
             open(routerData.href);

@@ -206,6 +206,8 @@ if (VUE_APP_MATOMO_ON === "true") {
         // Default: false
         debug: true
     });
+} else {
+    Vue.prototype.$trackMatomoEvent = () => {};
 }
 
 // Register styleguide components

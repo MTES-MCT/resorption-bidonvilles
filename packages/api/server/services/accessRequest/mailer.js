@@ -20,19 +20,37 @@ module.exports = {
     toAdmin: {
         newRequestNotification(admins, user) {
             return Promise.all(
-                admins.map(admin => sendAdminNewRequestNotification(admin, { variables: { adminUrl: `${frontUrl}/nouvel-utilisateur/${user.id}` } })),
+                admins.map(admin => sendAdminNewRequestNotification(admin, {
+                    variables: {
+                        adminUrl: `${frontUrl}/nouvel-utilisateur/${user.id}`,
+                        userName: formatName(user.first_name, user.last_name),
+                        orgName: user.organization.abbreviation || user.organization.name,
+                    },
+                })),
             );
         },
 
         firstRequestPendingNotification(admins, user) {
             return Promise.all(
-                admins.map(admin => sendAdminRequestPendingReminder1(admin, { variables: { adminUrl: `${frontUrl}/nouvel-utilisateur/${user.id}` } })),
+                admins.map(admin => sendAdminRequestPendingReminder1(admin, {
+                    variables: {
+                        adminUrl: `${frontUrl}/nouvel-utilisateur/${user.id}`,
+                        userName: formatName(user.first_name, user.last_name),
+                        orgName: user.organization.abbreviation || user.organization.name,
+                    },
+                })),
             );
         },
 
         secondRequestPendingNotification(admins, user) {
             return Promise.all(
-                admins.map(admin => sendAdminRequestPendingReminder2(admin, { variables: { adminUrl: `${frontUrl}/nouvel-utilisateur/${user.id}` } })),
+                admins.map(admin => sendAdminRequestPendingReminder2(admin, {
+                    variables: {
+                        adminUrl: `${frontUrl}/nouvel-utilisateur/${user.id}`,
+                        userName: formatName(user.first_name, user.last_name),
+                        orgName: user.organization.abbreviation || user.organization.name,
+                    },
+                })),
             );
         },
 

@@ -3,9 +3,11 @@ Vous avez reçu un nouveau message de contact
 Merci
 
 Date du message : {{var:message.created_at}}
+Objet : {{var:message.objet}}
 {{var:message.last_name}} {{var:message.first_name}}
 {{var:message.email}}
 {{var:message.phone}}
+Message :
 {{var:message.access_request_message}}
 
 Cordialement,

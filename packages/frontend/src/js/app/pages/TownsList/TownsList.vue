@@ -22,6 +22,7 @@
         <PrivateContainer class="pt-10">
             <EventBannerPlatform></EventBannerPlatform>
             <EventBannerContribute></EventBannerContribute>
+            <EventBannerVaccination></EventBannerVaccination>
 
             <TownsListHeader :search="filters.location" class="mb-6">
                 <template slot="filters">
@@ -283,6 +284,7 @@ import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer.vue
 import PrivateLayout from "#app/components/PrivateLayout";
 import EventBannerPlatform from "#app/components/EventBannerPlatform";
 import EventBannerContribute from "#app/components/EventBannerContribute";
+import EventBannerVaccination from "#app/components/EventBannerVaccination";
 import TownCard from "./TownCard";
 import TownsListSearchBar from "./TownsListSearchBar";
 import TownsListHeader from "./TownsListHeader/TownsListHeader";
@@ -310,6 +312,7 @@ export default {
         TownCard,
         EventBannerPlatform,
         EventBannerContribute,
+        EventBannerVaccination,
         PrivateContainer,
         PrivateLayout,
         TownsListSearchBar,
@@ -340,7 +343,7 @@ export default {
     },
     methods: {
         handleSearchBlur(data) {
-            this.$piwik?.trackEvent("Liste des sites", "Recherche");
+            this.$trackMatomoEvent("Liste des sites", "Recherche");
 
             store.commit("setFilters", {
                 ...this.filters,
@@ -387,7 +390,7 @@ export default {
             this.printMode = true;
             setTimeout(() => {
                 window.print();
-                this.$piwik?.trackEvent(
+                this.$trackMatomoEvent(
                     "Impression",
                     "Impression liste des sites"
                 );
