@@ -114,7 +114,11 @@ export default {
     },
     computed: {
         greeter() {
-            return this.$route.query.email;
+            return {
+                email: this.$route.query.email,
+                first_name: this.$route.query.first_name,
+                last_name: this.$route.query.last_name
+            };
         },
         errors() {
             const labels = {
