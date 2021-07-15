@@ -43,8 +43,7 @@ const sendMattermostNotifications = async (guests, greeter) => {
 
 module.exports = () => ({
     async invite(req, res, next) {
-        const { greeter_full: greeter } = req;
-        const { guests } = req.body;
+        const { greeter, guests } = req.body;
 
         // Send an email to each guest
         try {
