@@ -120,6 +120,9 @@ export default {
                 last_name: this.$route.query.last_name
             };
         },
+        inviteFrom() {
+            return this.$route.query.from;
+        },
         errors() {
             const labels = {
                 greeter:
@@ -182,7 +185,8 @@ export default {
                         last_name
                     })
                 ),
-                greeter: this.greeter
+                greeter: this.greeter,
+                invite_from: this.inviteFrom
             };
 
             // Préparation du message de confirmation d'envoi des mails
