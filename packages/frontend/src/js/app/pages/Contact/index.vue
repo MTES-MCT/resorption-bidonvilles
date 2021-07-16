@@ -427,21 +427,24 @@ export default {
                 // Create a user and send an email to admins
                 await contact(data);
                 this.loading = false;
+                let from = null;
 
                 if (this.isRequestAccessAndActor) {
                     this.$trackMatomoEvent(
                         "Demande d'accès",
                         "Demande d'accès"
                     );
+                    from = "access_request";
                 } else {
                     this.$trackMatomoEvent("Contact", "Demande d'information");
+                    from = "contact_others";
                 }
                 this.$router.push(
                     `/invitation?email=${encodeURIComponent(
                         this.commonFields.email
                     )}&first_name=${this.commonFields.first_name}&last_name=${
                         this.commonFields.last_name
-                    }`
+                    }&from=${from}`
                 );
 
                 notify({
