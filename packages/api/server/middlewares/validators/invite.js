@@ -5,6 +5,11 @@ const userModel = require('#server/models/userModel')(sequelize);
 
 module.exports = [
 
+    body('invite_from')
+        .isString().bail().withMessage('L\'origine de l\'invitation est invalide')
+        .trim()
+        .notEmpty().bail().withMessage('L\'origine de l\'invitation est obligatoire'),
+
     body('greeter.email')
         .trim()
         .notEmpty().bail().withMessage('Le courriel de la personne a l\'initiative de l\'invitation doit être renseigné')
@@ -19,14 +24,14 @@ module.exports = [
         }),
 
     body('greeter.first_name')
-        .isString().bail().withMessage('Le prénom de la peersonne à l\'initiative de l\'invitation est invalide')
+        .isString().bail().withMessage('Le prénom de la personne à l\'initiative de l\'invitation est invalide')
         .trim()
-        .notEmpty().bail().withMessage('Le prénom de la peersonne à l\'initiative de l\'invitation est obligatoire'),
+        .notEmpty().bail().withMessage('Le prénom de la personne à l\'initiative de l\'invitation est obligatoire'),
 
     body('greeter.last_name')
-        .isString().bail().withMessage('Le nom de la peersonne à l\'initiative de l\'invitation est invalide')
+        .isString().bail().withMessage('Le nom de la personne à l\'initiative de l\'invitation est invalide')
         .trim()
-        .notEmpty().bail().withMessage('Le nom de la peersonne à l\'initiative de l\'invitation est obligatoire'),
+        .notEmpty().bail().withMessage('Le nom de la personne à l\'initiative de l\'invitation est obligatoire'),
 
     body('guests')
         .customSanitizer((value) => {
