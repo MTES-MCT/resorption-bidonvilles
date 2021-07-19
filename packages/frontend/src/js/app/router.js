@@ -499,6 +499,13 @@ const router = new VueRouter({
                 window.open("/doc/fiche-bidonvilles-maraudes.pdf");
                 next(false);
             }
+        },
+        {
+            path: "/covid-19-recommandations-vaccination",
+            beforeEnter(to, from, next) {
+                window.open("/doc/covid-19-recommandations-vaccination.pdf");
+                next(false);
+            }
         }
     ]
 });
