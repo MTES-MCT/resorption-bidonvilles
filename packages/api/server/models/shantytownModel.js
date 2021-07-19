@@ -966,16 +966,34 @@ module.exports = (database) => {
 
     methods.getComments = getComments;
 
-    methods.getHistory = async (user, permission) => {
-        // apply geographic level permission
+    methods.getHistory = async (shantytownListPermission, location) => {
+        // apply geographic level restrictions
         const where = [];
         const highCovidWhere = [];
         const replacements = {};
-        if (user.permissions[permission.entity][permission.feature].geographic_level !== 'nation'
-                && user.organization.location.type !== 'nation') {
-            where.push(`${fromGeoLevelToTableName(user.organization.location.type)}.code = :locationCode`);
-            highCovidWhere.push('d2.code = :locationCode');
-            replacements.locationCode = user.organization.location[user.organization.location.type].code;
+        if (location.type !== 'nation') {
+            // sites et commentaires sites
+            where.push(`${fromGeoLevelToTableName(location.type)}.code = :locationCode`);
+            replacements.locationCode = location[location.type].code;
+
+            // commentaires covid dits "territoire"
+            switch (location.type) {
+                case 'region':
+                    highCovidWhere.push('d2.fk_region = :locationCode');
+                    break;
+
+                case 'departement':
+                    highCovidWhere.push('d2.code = :locationCode');
+                    break;
+
+                case 'epci':
+                case 'city':
+                    highCovidWhere.push('d2.code = :departementCode');
+                    replacements.departementCode = location.departement.code;
+                    break;
+
+                default:
+            }
         }
 
         // perform query
@@ -1198,7 +1216,7 @@ module.exports = (database) => {
 
                 // ====== SHANTYTOWNS
                 const previousVersion = previousVersions[activity.id] || null;
-                const serializedShantytown = serializeShantytown(activity, user.permissions.shantytown.list);
+                const serializedShantytown = serializeShantytown(activity, shantytownListPermission);
                 previousVersions[activity.id] = serializedShantytown;
 
                 let action;

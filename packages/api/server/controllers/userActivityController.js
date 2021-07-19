@@ -1,12 +1,12 @@
 module.exports = models => ({
     async regular(req, res, next) {
         try {
-            const permission = {
-                entity: 'shantytown_comment',
-                feature: 'moderate',
-            };
-
-            return res.status(200).send(await models.shantytown.getHistory(req.user, permission));
+            return res.status(200).send(
+                await models.shantytown.getHistory(
+                    req.user.permissions.shantytown.list,
+                    req.body.location,
+                ),
+            );
         } catch (error) {
             res.status(500).send({
                 error: {
@@ -20,16 +20,15 @@ module.exports = models => ({
 
     async covid(req, res, next) {
         try {
-            const permission = {
-                entity: 'covid_comment',
-                feature: 'list',
-            };
-            let results = await models.shantytown.getHistory(req.user, permission);
+            let results = await models.shantytown.getHistory(
+                req.user.permissions.shantytown.list,
+                req.user.organization.location,
+            );
 
             results = results.filter(({ covid, highCovid }) => (covid !== null && covid !== undefined) || (highCovid !== null && highCovid !== undefined));
 
             let allowedDepartements = null;
-            if (req.user.permissions[permission.entity][permission.feature].geographic_level !== 'nation') {
+            if (req.user.permissions.covid_comment.list.geographic_level !== 'nation') {
                 switch (req.user.organization.location.type) {
                     case 'nation':
                         break;
