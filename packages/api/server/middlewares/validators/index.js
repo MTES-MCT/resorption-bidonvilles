@@ -11,6 +11,7 @@ const removeShantytownActorTheme = require('./shantytownActors/removeShantytownA
 const inviteShantytownActor = require('./shantytownActors/inviteShantytownActor');
 const invite = require('./invite');
 const createShantytownComment = require('./shantytownComment/create');
+const activityList = require('./activity/list');
 
 module.exports = {
     closeTown,
@@ -30,4 +31,7 @@ module.exports = {
         createShantytownComment,
     },
     invite,
+    activity: {
+        list: activityList,
+    },
 };

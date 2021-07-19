@@ -533,8 +533,11 @@ module.exports = (app) => {
     app.get(
         '/activities',
         middlewares.auth.authenticate,
+        (...args) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
+        validators.activity.list,
+        middlewares.validation,
         controllers.userActivity.regular,
     );
 
