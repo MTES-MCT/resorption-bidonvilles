@@ -15,7 +15,7 @@
                 rows="5"
                 name="newComment"
                 v-model="newComment"
-                placeholder="Votre commentaire - Merci de respecter les règles de confidentialité."
+                placeholder="Partagez votre passage sur le site, le contexte sanitaire, la situation des habitants, difficultés rencontrées lors de votre intervention…"
             />
             <div
                 class="flex ml-4"
