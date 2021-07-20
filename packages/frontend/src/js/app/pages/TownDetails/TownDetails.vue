@@ -78,7 +78,7 @@
                         class="mb-4"
                         icon="info-circle"
                         title="À qui sont destinés les messages ?"
-                        description='À tous les acteurs du site. Un mail est automatiquement envoyé aux personnes signalées "intervenant sur ce site" et également aux acteurs en DDETS et Préfecture.'
+                        description="À tous les acteurs du site. Un mail est automatiquement envoyé aux personnes signalées « intervenant sur ce site», aux acteurs en DDETS, Préfecture et la Dihal."
                     ></TownDetailsNewCommentLeftColumn>
                     <TownDetailsNewCommentLeftColumn
                         icon="exclamation-triangle"
