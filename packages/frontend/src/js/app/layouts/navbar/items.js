@@ -83,8 +83,8 @@ export default {
                 },
                 {
                     label: "Historique des activités",
-                    target: "/historique-des-activites",
-                    group: "admin"
+                    target: "/activites",
+                    group: "history"
                 }
             ]
         },
