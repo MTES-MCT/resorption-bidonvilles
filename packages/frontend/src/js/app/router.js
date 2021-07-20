@@ -32,6 +32,7 @@ import PublicStats from "#app/pages/PublicStats/index.vue";
 import Covid from "#app/pages/covid/covid.vue";
 import Changelog from "#app/pages/Changelog/Changelog.vue";
 import CharteEngagement from "#app/pages/CharteEngagement/CharteEngagement.vue";
+import History from "#app/pages/History/History.vue";
 
 import { logout, isLoggedIn, alreadyLoggedBefore } from "#helpers/api/user";
 import {
@@ -459,6 +460,14 @@ const router = new VueRouter({
                 permissions: ["stats.read"]
             },
             component: PrivateStats,
+            beforeEnter: guardians.loadedAndUpToDate
+        },
+        {
+            path: "/activites",
+            meta: {
+                group: "history"
+            },
+            component: History,
             beforeEnter: guardians.loadedAndUpToDate
         },
         {
