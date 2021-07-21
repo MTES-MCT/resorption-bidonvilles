@@ -98,6 +98,7 @@
                             v-model="form.newComment"
                             rules="required"
                             validationName="Ecrire un message"
+                            placeholder="Partagez votre passage sur le site, le contexte sanitaire, la situation des habitants, difficultés rencontrées lors de votre intervention…"
                             :showMandatoryStar="true"
                         />
                         <div class="flex items-center justify-between">
