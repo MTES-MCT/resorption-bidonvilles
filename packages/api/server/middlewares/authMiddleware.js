@@ -103,8 +103,8 @@ module.exports = (models) => {
         }
     };
 
-    authMiddleware.checkPermissions = (requiredPermissions, req, res, next, respond = true) => {
-        if (!req.user || !req.user.permissions || !requiredPermissions) {
+    function checkPermissions(mode, permissions, req, res, next, respond) {
+        if (!req.user || !req.user.permissions || !permissions) {
             res.status(500).send({
                 error: {
                     code: 4,
@@ -120,7 +120,7 @@ module.exports = (models) => {
             return;
         }
 
-        if (!requiredPermissions.every(permission => hasPermission(req.user.permissions, permission))) {
+        if (!permissions[mode](permission => hasPermission(req.user.permissions, permission))) {
             res.status(400).send({
                 error: {
                     code: 5,
@@ -139,7 +139,11 @@ module.exports = (models) => {
         if (respond === true) {
             next();
         }
-    };
+    }
+
+    authMiddleware.checkPermissions = (permissions, req, res, next, respond = true) => checkPermissions('every', permissions, req, res, next, respond);
+
+    authMiddleware.checkOneOrMorePermissions = (permissions, req, res, next, respond = true) => checkPermissions('some', permissions, req, res, next, respond);
 
     return authMiddleware;
 };

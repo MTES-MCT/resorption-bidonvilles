@@ -1,9 +1,25 @@
 module.exports = models => ({
     async regular(req, res, next) {
         try {
+            const permissions = {
+                'shantytown.list': null,
+                'shantytown_comment.list': null,
+                'shantytown_comment.listPrivate': null,
+            };
+            if (req.user.isAllowedTo('list', 'shantytown')) {
+                permissions['shantytown.list'] = req.user.permissions.shantytown.list;
+            }
+            if (req.user.isAllowedTo('list', 'shantytown_comment')) {
+                permissions['shantytown_comment.list'] = req.user.permissions.shantytown_comment.list;
+            }
+            if (req.user.isAllowedTo('listPrivate', 'shantytown_comment')) {
+                permissions['shantytown_comment.listPrivate'] = req.user.permissions.shantytown_comment.listPrivate;
+            }
+
             return res.status(200).send(
                 await models.shantytown.getHistory(
-                    req.user.permissions.shantytown.list,
+                    req.user.organization.location,
+                    permissions,
                     req.body.location,
                 ),
             );

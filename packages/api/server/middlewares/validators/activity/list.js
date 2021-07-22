@@ -3,6 +3,22 @@ const { query } = require('express-validator');
 const { sequelize } = require('#db/models');
 const geoModel = require('#server/models/geoModel')(sequelize);
 
+function hasNationalPermission(user) {
+    const { permissions } = user;
+    let has = false;
+    if (user.isAllowedTo('list', 'shantytown')) {
+        has = has || permissions.shantytown.list.geographic_level === 'nation';
+    }
+    if (user.isAllowedTo('list', 'shantytown_comment')) {
+        has = has || permissions.shantytown_comment.list.geographic_level === 'nation';
+    }
+    if (user.isAllowedTo('listPrivate', 'shantytown_comment')) {
+        has = has || permissions.shantytown_comment.listPrivate.geographic_level === 'nation';
+    }
+
+    return has;
+}
+
 module.exports = [
     query('location')
         .optional({ nullable: true })
@@ -24,10 +40,8 @@ module.exports = [
             }
 
             // on vérifie que l'utilisateur a les droits pour accéder à ce périmètre géographique
-            if (req.user.permissions.shantytown.list.geographic_level !== 'nation'
-                && location.type !== 'nation'
-                && (!location[req.user.organization.location.type]
-                    || location[req.user.organization.location.type].code !== req.user.organization.location[req.user.organization.location.type].code)) {
+            if (!hasNationalPermission(req.user) && (!location[req.user.organization.location.type]
+                || location[req.user.organization.location.type].code !== req.user.organization.location[req.user.organization.location.type].code)) {
                 throw new Error('Vous n\'avez pas les droits suffisants pour accéder à ces données sur ce territoire');
             }
 
@@ -40,7 +54,7 @@ module.exports = [
     query('location')
         .customSanitizer((value, { req }) => {
             if (!value) {
-                if (req.user.permissions.shantytown.list.geographic_level === 'nation') {
+                if (hasNationalPermission(req.user)) {
                     req.body.location = geoModel.getLocation('nation');
                 } else {
                     req.body.location = req.user.organization.location;
