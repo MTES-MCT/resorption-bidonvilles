@@ -28,7 +28,7 @@ const sendMattermostNotifications = async (guests, greeter, invite_from) => {
     if (!mattermost) {
         return;
     }
-    let from = 'via une source non identifiable';
+    let from = null;
     // invite_from is initialized in pages/Contact/index.vue or in api/server/amils/mails.js (see sendUserShare)
     if (invite_from === 'access_request') {
         from = "via le formulaire de demande d'accès";
