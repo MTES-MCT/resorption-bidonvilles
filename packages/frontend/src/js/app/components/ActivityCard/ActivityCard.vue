@@ -6,7 +6,7 @@
     >
         <div :class="classes.column">
             <ActivityCardIcon
-                :color="color"
+                :color="colors.bg"
                 :activity="activity"
                 class="mr-4 flex-shrink-0"
             ></ActivityCardIcon>
@@ -36,7 +36,6 @@
                 :is="bodyComponent"
                 :activity="activity"
                 :variant="variant"
-                :color="color"
                 class="mt-4"
             ></component>
 
@@ -94,19 +93,32 @@ export default {
     },
 
     computed: {
-        color() {
+        colors() {
             if (this.activity.entity === "shantytown") {
                 if (this.activity.action === "update") {
-                    return "info";
+                    return {
+                        text: "text-info",
+                        bg: "bg-info"
+                    };
                 } else if (this.activity.action === "closing") {
-                    return "G600";
+                    return {
+                        text: "text-G600",
+                        bg: "bg-G600"
+                    };
                 }
 
                 // ouverture de site
-                return "black";
+                return {
+                    text: "text-black",
+                    bg: "bg-black"
+                };
             }
 
-            return "orange600";
+            // création de commentaire
+            return {
+                text: "text-orange600",
+                bg: "bg-orange600"
+            };
         },
         // eslint-disable-next-line vue/return-in-computed-property
         title() {
@@ -150,7 +162,7 @@ export default {
         classes() {
             return {
                 title: {
-                    [`text-${this.color} font-bold mt-2`]: true,
+                    [`${this.colors.text} font-bold mt-2`]: true,
                     "inline-block": this.variant === "small"
                 },
                 author: {

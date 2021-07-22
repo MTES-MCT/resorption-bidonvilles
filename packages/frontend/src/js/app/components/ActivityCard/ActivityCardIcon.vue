@@ -1,7 +1,7 @@
 <template>
     <aside
         :class="
-            `text-xl w-10 h-10 leading-10 rounded-full text-white text-center bg-${color}`
+            `text-xl w-10 h-10 leading-10 rounded-full text-white text-center ${color}`
         "
     >
         <Icon :icon="icon"></Icon>

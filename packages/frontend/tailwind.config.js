@@ -2,8 +2,7 @@ module.exports = {
     purge: {
         mode: "layers",
         layers: ["base", "components", "utilities"],
-        content: ["./src/**/*.vue", "./src/**/*.js"],
-        safelist: ["bg-G600", "bg-orange600", "bg-info"]
+        content: ["./src/**/*.vue", "./src/**/*.js"]
     },
     future: {
         removeDeprecatedGapUtilities: true,
