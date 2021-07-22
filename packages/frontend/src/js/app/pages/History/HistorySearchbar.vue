@@ -8,6 +8,7 @@
             class="mt-4"
             :allowShowAll="false"
             v-model="location"
+            placeholder="Nom d'une commune, département..."
         ></GeoSearchbar>
     </div>
 </template>

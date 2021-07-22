@@ -11,7 +11,7 @@
                 :loading="loading"
                 prefixIcon="search"
                 :inputClasses="['rounded-full shadow-sm w-64']"
-                placeholder="Adresse, nom d’un site, ville…"
+                :placeholder="placeholder"
                 ref="autocomplete"
             >
                 <template v-slot:cta>
@@ -85,6 +85,11 @@ export default {
         allowShowAll: {
             type: Boolean,
             default: true
+        },
+        placeholder: {
+            type: String,
+            default: "Adresse, nom d’un site, ville…",
+            required: false
         }
     },
     data() {
