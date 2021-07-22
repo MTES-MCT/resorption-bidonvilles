@@ -23,7 +23,7 @@
                         activity.author.name
                     }}</Link>
                 </p>
-                <p>
+                <p v-if="activity.shantytown.id">
                     site :
                     <Link :to="`/site/${activity.shantytown.id}`"
                         >{{ activity.shantytown.usename }},
@@ -48,6 +48,7 @@
                     class="text-display-sm hover:underline"
                     :padding="false"
                     :href="link"
+                    v-if="activity.shantytown.id"
                     ><span v-if="variant !== 'small' || moreIsHover">{{
                         seeMoreWording
                     }}</span></Button
@@ -115,6 +116,13 @@ export default {
             }
 
             // création de commentaire
+            if (this.activity.covid || this.activity.highCovid) {
+                return {
+                    text: "text-error",
+                    bg: "bg-error"
+                };
+            }
+
             return {
                 text: "text-orange600",
                 bg: "bg-orange600"
@@ -133,6 +141,10 @@ export default {
                     return "Fermeture d'un site";
 
                 case "creation-comment":
+                    if (this.activity.covid || this.activity.highCovid) {
+                        return "Nouveau message Covid-19";
+                    }
+
                     return "Nouveau message";
             }
         },
@@ -162,6 +174,10 @@ export default {
         // eslint-disable-next-line vue/return-in-computed-property
         link() {
             if (this.activity.entity === "comment") {
+                if (this.activity.highCovid) {
+                    return "/covid-19";
+                }
+
                 return `/site/${this.activity.shantytown.id}#message${this.activity.comment_id}`;
             }
 
