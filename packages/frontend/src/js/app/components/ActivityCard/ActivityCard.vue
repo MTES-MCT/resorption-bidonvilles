@@ -30,6 +30,14 @@
                         {{ activity.shantytown.city.name }}</Link
                     >
                 </p>
+                <p v-if="activity.highCovid">
+                    territoire(s) :
+                    {{
+                        activity.highCovid.departements
+                            .map(({ name }) => name)
+                            .join(", ")
+                    }}
+                </p>
             </header>
 
             <component
@@ -48,7 +56,6 @@
                     class="text-display-sm hover:underline"
                     :padding="false"
                     :href="link"
-                    v-if="activity.shantytown.id"
                     ><span v-if="variant !== 'small' || moreIsHover">{{
                         seeMoreWording
                     }}</span></Button
@@ -167,6 +174,10 @@ export default {
         seeMoreWording() {
             if (this.activity.entity === "shantytown") {
                 return "Voir la fiche du site";
+            }
+
+            if (this.activity.highCovid) {
+                return "Voir les messages Covid-19";
             }
 
             return "Voir le message";
