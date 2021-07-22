@@ -440,8 +440,7 @@ export default {
                         this.commonFields.email
                     )}&first_name=${encodeURIComponent(
                         this.commonFields.first_name
-                    )}
-                    &last_name=${encodeURIComponent(
+                    )}&last_name=${encodeURIComponent(
                         this.commonFields.last_name
                     )}&from=${from}`
                 );
