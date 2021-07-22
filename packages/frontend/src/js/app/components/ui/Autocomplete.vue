@@ -218,10 +218,19 @@ export default {
             results: []
         };
     },
+    watch: {
+        defaultValue() {
+            this.setValue(this.defaultValue);
+        }
+    },
     mounted() {
         this.$refs.provider.syncValue(this.value);
     },
     methods: {
+        setValue(value) {
+            this.value = value || null;
+            this.searchInput = value ? this.getResultValue(value) : "";
+        },
         removeItem() {
             this.value = null;
             this.searchInput = "";

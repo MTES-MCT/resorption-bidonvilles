@@ -1,17 +1,23 @@
 <template>
-    <div class="flex">
-        <ActivityCardIcon
-            :color="color"
-            :activity="activity"
-            class="mr-4 flex-shrink-0"
-        ></ActivityCardIcon>
+    <div
+        class="flex"
+        @mouseenter="moreIsHover = true"
+        @mouseleave="moreIsHover = false"
+    >
+        <div :class="classes.column">
+            <ActivityCardIcon
+                :color="color"
+                :activity="activity"
+                class="mr-4 flex-shrink-0"
+            ></ActivityCardIcon>
+        </div>
 
-        <div class="flex-grow">
+        <div class="flex-grow" :class="classes.column">
             <header>
-                <h1 :class="`text-${color} font-bold leading-10`">
+                <h1 :class="classes.title">
                     {{ title }}
                 </h1>
-                <p>
+                <p :class="classes.author">
                     par :
                     <Link :to="`/annuaire/${activity.author.organization}`">{{
                         activity.author.name
@@ -29,6 +35,7 @@
             <component
                 :is="bodyComponent"
                 :activity="activity"
+                :variant="variant"
                 :color="color"
                 class="mt-4"
             ></component>
@@ -42,7 +49,9 @@
                     class="text-display-sm hover:underline"
                     :padding="false"
                     :href="`/site/${activity.shantytown.id}`"
-                    >{{ seeMoreWording }}</Button
+                    ><span v-if="variant !== 'small' || moreIsHover">{{
+                        seeMoreWording
+                    }}</span></Button
                 >
             </footer>
         </div>
@@ -70,7 +79,18 @@ export default {
         activity: {
             type: Object,
             required: true
+        },
+        variant: {
+            type: String, // either "normal" or "small"
+            default: "normal",
+            required: false
         }
+    },
+
+    data() {
+        return {
+            moreIsHover: false
+        };
     },
 
     computed: {
@@ -126,6 +146,20 @@ export default {
             }
 
             return "Voir le message";
+        },
+        classes() {
+            return {
+                title: {
+                    [`text-${this.color} font-bold mt-2`]: true,
+                    "inline-block": this.variant === "small"
+                },
+                author: {
+                    "inline-block ml-2": this.variant === "small"
+                },
+                column: {
+                    "border-b py-2": this.variant === "small"
+                }
+            };
         }
     },
 

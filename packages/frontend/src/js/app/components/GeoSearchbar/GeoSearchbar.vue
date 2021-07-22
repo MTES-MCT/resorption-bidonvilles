@@ -12,6 +12,7 @@
                 prefixIcon="search"
                 :inputClasses="['rounded-full shadow-sm w-64']"
                 placeholder="Adresse, nom d’un site, ville…"
+                ref="autocomplete"
             >
                 <template v-slot:cta>
                     <Button class="rounded-full ml-2" size="sm"
@@ -125,6 +126,9 @@ export default {
             }
 
             return [];
+        },
+        setValue(value) {
+            return this.$refs.autocomplete.setValue(value);
         }
     }
 };

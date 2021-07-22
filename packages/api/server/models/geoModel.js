@@ -66,6 +66,10 @@ module.exports = (database) => {
                 },
             );
 
+            if (region === undefined) {
+                return null;
+            }
+
             return {
                 type: 'region',
                 region: {
@@ -92,6 +96,10 @@ module.exports = (database) => {
                     replacements: { code },
                 },
             );
+
+            if (departement === undefined) {
+                return null;
+            }
 
             return {
                 type: 'departement',
@@ -126,6 +134,10 @@ module.exports = (database) => {
                     replacements: { code },
                 },
             );
+
+            if (epci === undefined) {
+                return null;
+            }
 
             return {
                 type: 'epci',
@@ -165,6 +177,10 @@ module.exports = (database) => {
                     replacements: { code },
                 },
             );
+
+            if (city === undefined) {
+                return null;
+            }
 
             return {
                 type: 'city',

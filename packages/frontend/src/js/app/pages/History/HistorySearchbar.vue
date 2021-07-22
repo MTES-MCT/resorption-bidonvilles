@@ -27,16 +27,14 @@ export default {
                 return store.state.activities.filters.location;
             },
             set(value) {
+                if (value) {
+                    store.commit("saveLocation", value);
+                }
+
                 store.commit("setActivityLocationFilter", value);
+                this.$emit("locationChange");
             }
         }
     }
 };
 </script>
-
-<style scoped>
-.searchbox {
-    max-width: 500px;
-    min-width: 500px;
-}
-</style>

@@ -5,7 +5,11 @@
     >
         <template>
             <header>
-                <img :src="townImg" alt="Résorption-bidonvilles" /><br />
+                <img
+                    :src="townImg"
+                    alt="Résorption-bidonvilles"
+                    class="w-64"
+                /><br />
                 <h1 class="text-xl font-bold">Oups !</h1>
             </header>
             <p class="mt-6 text-red text-lg">
