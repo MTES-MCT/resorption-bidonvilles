@@ -36,8 +36,21 @@ module.exports = models => ({
 
     async covid(req, res, next) {
         try {
+            const permissions = {
+                'shantytown.list': false,
+                'shantytown_comment.list': null,
+                'shantytown_comment.listPrivate': null,
+            };
+            if (req.user.isAllowedTo('list', 'shantytown_comment')) {
+                permissions['shantytown_comment.list'] = req.user.permissions.shantytown_comment.list;
+            }
+            if (req.user.isAllowedTo('listPrivate', 'shantytown_comment')) {
+                permissions['shantytown_comment.listPrivate'] = req.user.permissions.shantytown_comment.listPrivate;
+            }
+
             let results = await models.shantytown.getHistory(
-                req.user.permissions.shantytown.list,
+                req.user.organization.location,
+                permissions,
                 req.user.organization.location,
             );
 
