@@ -140,6 +140,9 @@ export default {
         },
         "$route.params.locationCode"() {
             this.load();
+        },
+        activities() {
+            store.commit("setActivitiesPage", 1);
         }
     },
     mounted() {
