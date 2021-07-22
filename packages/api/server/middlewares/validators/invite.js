@@ -11,8 +11,9 @@ module.exports = [
         .notEmpty().bail().withMessage('L\'origine de l\'invitation est obligatoire')
         .custom((value) => {
             if (!['access_request', 'contact_others', 'push_mail'].includes(value)) {
-                throw new Error('Le paramètre de requête indiquant l\'origine de l\'invitation doit être fourni');
+                throw new Error('L\'origine de l\'invitation est invalide');
             }
+            return true;
         }),
 
     body('greeter.email')
