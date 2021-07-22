@@ -1,22 +1,47 @@
 <template>
     <div class="flex">
-        <aside
-            class="text-xl w-10 h-10 rounded-full text-white text-center mr-4 bg-primary"
-        >
-            <Icon :icon="icon"></Icon>
-        </aside>
+        <ActivityCardIcon
+            :color="color"
+            :activity="activity"
+            class="mr-4 flex-shrink-0"
+        ></ActivityCardIcon>
+
         <div class="flex-grow">
-            <component :is="bodyComponent" :activity="activity"></component>
+            <header>
+                <h1 :class="`text-${color} font-bold leading-10`">
+                    {{ title }}
+                </h1>
+                <p>
+                    par :
+                    <Link :to="`/annuaire/${activity.author.organization}`">{{
+                        activity.author.name
+                    }}</Link>
+                </p>
+                <p>
+                    site :
+                    <Link :to="`/site/${activity.shantytown.id}`"
+                        >{{ activity.shantytown.usename }},
+                        {{ activity.shantytown.city.name }}</Link
+                    >
+                </p>
+            </header>
+
+            <component
+                :is="bodyComponent"
+                :activity="activity"
+                :color="color"
+                class="mt-4"
+            ></component>
 
             <footer class="flex justify-between pt-2">
-                <span class="text-G500">{{
-                    formatDateSinceActivity(activity.date)
-                }}</span>
+                <span class="text-G500">{{ formatDate(activity.date) }}</span>
                 <Button
                     variant="primaryText"
                     icon="arrow-right"
+                    iconPosition="left"
                     class="text-display-sm hover:underline"
                     :padding="false"
+                    :href="`/site/${activity.shantytown.id}`"
                     >{{ seeMoreWording }}</Button
                 >
             </footer>
@@ -25,7 +50,8 @@
 </template>
 
 <script>
-import formatDateSinceActivity from "#app/pages/TownsList/formatDateSinceActivity";
+import formatDate from "./utils/formatDate";
+import ActivityCardIcon from "./ActivityCardIcon.vue";
 import ActivityCardBodyShantytownCreated from "./ActivityCardBody/ActivityCardBodyShantytownCreated.vue";
 import ActivityCardBodyShantytownUpdated from "./ActivityCardBody/ActivityCardBodyShantytownUpdated.vue";
 import ActivityCardBodyShantytownClosed from "./ActivityCardBody/ActivityCardBodyShantytownClosed.vue";
@@ -33,6 +59,7 @@ import ActivityCardBodyCommentCreated from "./ActivityCardBody/ActivityCardBodyC
 
 export default {
     components: {
+        ActivityCardIcon,
         ActivityCardBodyShantytownCreated,
         ActivityCardBodyShantytownUpdated,
         ActivityCardBodyShantytownClosed,
@@ -47,26 +74,39 @@ export default {
     },
 
     computed: {
-        type() {
-            return `${this.activity.action}-${this.activity.entity}`;
-        },
-        icon() {
+        color() {
             if (this.activity.entity === "shantytown") {
-                return "map-marker-alt";
+                if (this.activity.action === "update") {
+                    return "info";
+                } else if (this.activity.action === "closing") {
+                    return "G600";
+                }
+
+                // ouverture de site
+                return "black";
             }
 
-            return "comment";
+            return "orange600";
         },
-        seeMoreWording() {
-            if (this.activity.entity === "shantytown") {
-                return "Voir le site";
-            }
+        // eslint-disable-next-line vue/return-in-computed-property
+        title() {
+            switch (`${this.activity.action}-${this.activity.entity}`) {
+                case "creation-shantytown":
+                    return "Nouveau site";
 
-            return "Voir le commentaire";
+                case "update-shantytown":
+                    return "Site modifié";
+
+                case "closing-shantytown":
+                    return "Fermeture d'un site";
+
+                case "creation-comment":
+                    return "Nouveau message";
+            }
         },
         // eslint-disable-next-line vue/return-in-computed-property
         bodyComponent() {
-            switch (this.type) {
+            switch (`${this.activity.action}-${this.activity.entity}`) {
                 case "creation-shantytown":
                     return ActivityCardBodyShantytownCreated;
 
@@ -79,11 +119,18 @@ export default {
                 case "creation-comment":
                     return ActivityCardBodyCommentCreated;
             }
+        },
+        seeMoreWording() {
+            if (this.activity.entity === "shantytown") {
+                return "Voir la fiche du site";
+            }
+
+            return "Voir le message";
         }
     },
 
     methods: {
-        formatDateSinceActivity
+        formatDate
     }
 };
 </script>

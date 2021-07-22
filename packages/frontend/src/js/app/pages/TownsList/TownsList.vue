@@ -13,7 +13,7 @@
                 <h1 class="text-display-md text-center mb-4">
                     Rechercher un site, une commune, un département... ?
                 </h1>
-                <TownsListSearchBar
+                <GeoSearchbar
                     :value="filters.location"
                     @blur="handleSearchBlur"
                 />
@@ -98,7 +98,7 @@
                     class="md:flex items-end mb-4 justify-between print:hidden"
                 >
                     <TownsListFilters>
-                        <TownsListFilter
+                        <CustomFilter
                             title="Type de sites"
                             class="mr-2 mb-2"
                             :value="filters.fieldType"
@@ -110,7 +110,7 @@
                                 }))
                             "
                         />
-                        <TownsListFilter
+                        <CustomFilter
                             title="Nombre de personnes"
                             class="mr-2 mb-2"
                             :value="filters.population"
@@ -128,7 +128,7 @@
                                 }
                             ]"
                         />
-                        <TownsListFilter
+                        <CustomFilter
                             title="Origines"
                             class="mr-2 mb-2"
                             :value="filters.origin"
@@ -152,7 +152,7 @@
                                 }
                             ]"
                         />
-                        <TownsListFilter
+                        <CustomFilter
                             title="Conditions de vie"
                             class="mr-2 mb-2"
                             :value="filters.conditions"
@@ -196,8 +196,8 @@
                                     {{ label }}
                                 </div>
                             </template>
-                        </TownsListFilter>
-                        <TownsListFilter
+                        </CustomFilter>
+                        <CustomFilter
                             v-if="hasJusticePermission"
                             title="Procédure judiciaire"
                             class="mr-2 mb-2"
@@ -220,7 +220,7 @@
                                 }
                             ]"
                         />
-                        <TownsListFilter
+                        <CustomFilter
                             title="Intervenants"
                             class="mr-2 mb-2"
                             :value="filters.actors"
@@ -231,10 +231,10 @@
                             ]"
                         />
                     </TownsListFilters>
-                    <TownsListSort
+                    <Sort
                         :value="sort"
                         @input="updateSort"
-                        :status="filters.status"
+                        :options="sortOptions[filters.status]"
                         class="mb-2"
                     />
                 </div>
@@ -286,11 +286,10 @@ import EventBannerPlatform from "#app/components/EventBannerPlatform";
 import EventBannerContribute from "#app/components/EventBannerContribute";
 import EventBannerVaccination from "#app/components/EventBannerVaccination";
 import TownCard from "./TownCard";
-import TownsListSearchBar from "./TownsListSearchBar";
+import GeoSearchbar from "#app/components/GeoSearchbar/GeoSearchbar.vue";
 import TownsListHeader from "./TownsListHeader/TownsListHeader";
 import TownsListHeaderTab from "./TownsListHeader/TownsListHeaderTab";
 import TownsListFilters from "./TownsListFilters/TownsListFilters";
-import TownsListFilter from "./TownsListFilters/TownsListFilter";
 import {
     get as getConfig,
     getPermission,
@@ -299,7 +298,6 @@ import {
 import { filterShantytowns } from "./filterShantytowns";
 import Export from "#app/components/export2/Export.vue";
 import Spinner from "#app/components/ui/Spinner";
-import TownsListSort from "./TownsListSort/TownsListSort";
 import store from "#app/store";
 import { mapGetters } from "vuex";
 
@@ -307,7 +305,6 @@ const PER_PAGE = 20;
 
 export default {
     components: {
-        TownsListSort,
         Spinner,
         TownCard,
         EventBannerPlatform,
@@ -315,11 +312,10 @@ export default {
         EventBannerVaccination,
         PrivateContainer,
         PrivateLayout,
-        TownsListSearchBar,
+        GeoSearchbar,
         TownsListHeader,
         TownsListHeaderTab,
         TownsListFilters,
-        TownsListFilter,
         Export
     },
     mounted() {
@@ -338,7 +334,49 @@ export default {
             hasJusticePermission: permission.data_justice === true,
             fieldTypes,
             exportIsVisible: false,
-            printMode: false
+            printMode: false,
+            sortOptions: {
+                open: [
+                    {
+                        value: `cityName`,
+                        label: `Commune`
+                    },
+                    {
+                        value: `builtAt`,
+                        label: `Date d'installation`
+                    },
+                    {
+                        value: `updatedAt`,
+                        label: `Date d'actualisation`
+                    },
+                    {
+                        value: `declaredAt`,
+                        label: `Date de signalement`
+                    }
+                ],
+                close: [
+                    {
+                        value: `cityName`,
+                        label: `Commune`
+                    },
+                    {
+                        value: `closedAt`,
+                        label: `Date de fermeture`
+                    },
+                    {
+                        value: `builtAt`,
+                        label: `Date d'installation`
+                    },
+                    {
+                        value: `updatedAt`,
+                        label: `Date d'actualisation`
+                    },
+                    {
+                        value: `declaredAt`,
+                        label: `Date de signalement`
+                    }
+                ]
+            }
         };
     },
     methods: {

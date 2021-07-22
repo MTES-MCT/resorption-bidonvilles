@@ -12,9 +12,14 @@ import {
 import enrichShantytown from "#app/pages/TownsList/enrichShantytown";
 import { get as getConfig } from "#helpers/api/config";
 
+import activities from "./modules/activities";
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+    modules: {
+        activities
+    },
     state: {
         towns: {
             data: [],

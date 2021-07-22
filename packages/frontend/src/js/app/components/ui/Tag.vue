@@ -23,7 +23,8 @@ export default {
             return {
                 default: "px-4 py-1 flex-row items-center bg-blue200",
                 withoutBackground: "px-3 mr-2 mb-2",
-                primary: "bg-blue100 text-primary px-3 mr-2 mb-2 rounded-lg"
+                primary: "bg-blue100 text-primary px-3 mr-2 mb-2 rounded-lg",
+                date: "bg-blue100 text-primary uppercase px-2 py-1"
             }[this.variant];
         }
     }

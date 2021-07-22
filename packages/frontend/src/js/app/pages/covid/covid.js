@@ -120,7 +120,7 @@ export default {
                 author: activity.author,
                 icon: activity.entity === "comment" ? "comment" : "pencil-alt",
                 shantytown: activity.shantytown.id,
-                address: `${activity.shantytown.usename}, ${activity.shantytown.city}`,
+                address: `${activity.shantytown.usename}, ${activity.shantytown.city.name}`,
                 action: "Commentaire sur le",
                 content: activity.content,
                 comment: activity.comment_id,

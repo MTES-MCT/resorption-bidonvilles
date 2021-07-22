@@ -19,7 +19,7 @@
                     >
                 </template>
                 <template v-slot:extra="{ removeItem }">
-                    <div class="py-1 text-right">
+                    <div class="py-1 text-right" v-if="allowShowAll">
                         <Button
                             variant="primaryText"
                             @click="removeItem"
@@ -80,6 +80,10 @@ export default {
     props: {
         value: {
             type: Object
+        },
+        allowShowAll: {
+            type: Boolean,
+            default: true
         }
     },
     data() {

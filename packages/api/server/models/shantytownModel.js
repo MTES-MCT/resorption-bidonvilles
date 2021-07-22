@@ -1165,8 +1165,22 @@ module.exports = (database) => {
                     shantytown: {
                         id: activity.id,
                         usename: getUsenameOf(activity),
-                        city: activity.cityName,
-                        departement: activity.departement,
+                        city: {
+                            code: activity.cityCode,
+                            name: activity.cityName,
+                        },
+                        epci: {
+                            code: activity.epciCode,
+                            name: activity.epciName,
+                        },
+                        departement: {
+                            code: activity.departementCode,
+                            name: activity.departementName,
+                        },
+                        region: {
+                            code: activity.regionCode,
+                            name: activity.regionName,
+                        },
                     },
                     entity: activity.entity,
                 };

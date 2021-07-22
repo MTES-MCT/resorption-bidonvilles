@@ -1,11 +1,11 @@
 <template>
-    <p><span class="font-bold">Message :</span> {{ activity.content }}</p>
+    <ActivityCard :activity="item"></ActivityCard>
 </template>
 
 <script>
-module.exports = {
+export default {
     props: {
-        activity: {
+        item: {
             type: Object,
             required: true
         }
