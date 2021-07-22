@@ -15,7 +15,7 @@
                     Formation personnalisée
                 </div>
                 <p class="mt-2 text-md">
-                    Prenez en main rapidement la plateforme
+                    En 45 minutes, prenez en main rapidement la plateforme
                     <em>Résorption-bidonvilles</em> grâce à une présentation
                     personnalisée. Nous répondrons à toutes vos questions.
                 </p>
@@ -29,8 +29,6 @@
                         >Je m'inscris</Button
                     >
                 </a>
-                <p class="text-sm font-bold">Les lundi à 14h</p>
-                <p class="text-sm font-bold">et jeudi à 10h - 45 min</p>
             </div>
         </div>
     </div>
