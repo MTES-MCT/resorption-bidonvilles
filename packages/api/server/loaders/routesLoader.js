@@ -537,7 +537,7 @@ module.exports = (app) => {
     app.get(
         '/activities',
         middlewares.auth.authenticate,
-        (...args) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
+        (...args) => middlewares.auth.checkOneOrMorePermissions(['shantytown.list', 'shantytown_comment.list', 'shantytown_comment.listPrivate'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         validators.activity.list,
