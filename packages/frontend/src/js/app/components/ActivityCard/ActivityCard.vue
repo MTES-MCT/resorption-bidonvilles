@@ -47,7 +47,7 @@
                     iconPosition="left"
                     class="text-display-sm hover:underline"
                     :padding="false"
-                    :href="`/site/${activity.shantytown.id}`"
+                    :href="link"
                     ><span v-if="variant !== 'small' || moreIsHover">{{
                         seeMoreWording
                     }}</span></Button
@@ -158,6 +158,14 @@ export default {
             }
 
             return "Voir le message";
+        },
+        // eslint-disable-next-line vue/return-in-computed-property
+        link() {
+            if (this.activity.entity === "comment") {
+                return `/site/${this.activity.shantytown.id}#message${this.activity.comment_id}`;
+            }
+
+            return `/site/${this.activity.shantytown.id}`;
         },
         classes() {
             return {
