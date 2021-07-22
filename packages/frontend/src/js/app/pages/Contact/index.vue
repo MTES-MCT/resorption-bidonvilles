@@ -26,7 +26,6 @@
                     >
                         <InputGroup>
                             <TextInput
-                                :showMandatoryStar="true"
                                 :label="$t('contactPage.email')"
                                 v-model="commonFields.email"
                                 id="email"
@@ -34,7 +33,6 @@
                                 rules="required|email"
                             />
                             <TextInput
-                                :showMandatoryStar="true"
                                 :label="$t('contactPage.firstname')"
                                 v-model="commonFields.first_name"
                                 id="first_name"
@@ -42,7 +40,6 @@
                                 rules="required"
                             />
                             <TextInput
-                                :showMandatoryStar="true"
                                 :label="$t('contactPage.lastname')"
                                 v-model="commonFields.last_name"
                                 id="last_name"
@@ -50,7 +47,6 @@
                                 rules="required"
                             />
                             <TextInput
-                                :showMandatoryStar="true"
                                 :rows="8"
                                 :label="$t('contactPage.phone')"
                                 v-model="commonFields.phone"
@@ -442,9 +438,12 @@ export default {
                 this.$router.push(
                     `/invitation?email=${encodeURIComponent(
                         this.commonFields.email
-                    )}&first_name=${this.commonFields.first_name}&last_name=${
+                    )}&first_name=${encodeURIComponent(
+                        this.commonFields.first_name
+                    )}
+                    &last_name=${encodeURIComponent(
                         this.commonFields.last_name
-                    }&from=${from}`
+                    )}&from=${from}`
                 );
 
                 notify({
