@@ -1004,7 +1004,7 @@ module.exports = (database) => {
             appliedLocation = null;
         } else if (location.type === 'nation') {
             if (permissions['shantytown.list'].geographic_level !== 'nation') {
-                appliedLocation = userLocation;
+                appliedLocation = userLocation.type !== 'nation' ? userLocation : undefined;
             }
         } else {
             appliedLocation = localLocation;
@@ -1023,7 +1023,7 @@ module.exports = (database) => {
             appliedLocation = null;
         } else if (location.type === 'nation') {
             if (permissions['shantytown_comment.list'].geographic_level !== 'nation') {
-                appliedLocation = userLocation;
+                appliedLocation = userLocation.type !== 'nation' ? userLocation : undefined;
             }
         } else {
             appliedLocation = localLocation;
@@ -1042,7 +1042,7 @@ module.exports = (database) => {
             appliedLocation = null;
         } else if (location.type === 'nation') {
             if (permissions['shantytown_comment.listPrivate'].geographic_level !== 'nation') {
-                appliedLocation = userLocation;
+                appliedLocation = userLocation.type !== 'nation' ? userLocation : undefined;
             }
         } else {
             appliedLocation = localLocation;
