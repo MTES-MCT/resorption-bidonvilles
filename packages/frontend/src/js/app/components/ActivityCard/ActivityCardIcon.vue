@@ -30,6 +30,11 @@ export default {
                 return "map-marker-alt";
             }
 
+            // commentaires
+            if (this.activity.covid || this.activity.highCovid) {
+                return "exclamation";
+            }
+
             return "comment";
         }
     }
