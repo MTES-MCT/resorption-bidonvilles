@@ -22,18 +22,12 @@
         </div>
         <div class="ml-5">
             <div class="flex flex-wrap">
-                <Tag
+                <CovidTag
                     v-for="tag in covidTags"
                     :key="tag.prop"
-                    variant="withoutBackground"
-                    :class="[
-                        'inline-block',
-                        'mr-2',
-                        'mb-2',
-                        tag.type === 'warning' ? 'bg-orange300' : 'bg-red300'
-                    ]"
-                    >{{ tag.label }}</Tag
-                >
+                    :class="['mr-2', 'mb-2']"
+                    :tag="tag"
+                />
             </div>
             <div>{{ comment.description }}</div>
         </div>
@@ -41,9 +35,13 @@
 </template>
 
 <script>
+import CovidTag from "#app/components/CovidTag/CovidTag.vue";
 import covidTags from "#app/pages/covid/covidTags";
 
 export default {
+    components: {
+        CovidTag
+    },
     props: {
         comment: {
             type: Object
