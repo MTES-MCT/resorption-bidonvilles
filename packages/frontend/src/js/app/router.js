@@ -471,7 +471,8 @@ const router = new VueRouter({
         {
             path: "/activites",
             meta: {
-                group: "history"
+                group: "history",
+                permissions: ["shantytown.list"]
             },
             component: History,
             beforeEnter: guardians.loadedAndUpToDate

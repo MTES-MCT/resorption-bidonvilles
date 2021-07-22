@@ -42,6 +42,7 @@
                                     ref="searchInput"
                                     v-bind="inputProps"
                                     v-on="inputListeners"
+                                    :disabled="disabled"
                                     :class="classes"
                                     @focus="handleFocus"
                                     @blur="handleBlur"
@@ -110,7 +111,11 @@
                             </div>
                         </transition>
                         <div>
-                            <slot name="extra" :removeItem="removeItem" />
+                            <slot
+                                name="extra"
+                                :searchInput="searchInput"
+                                :removeItem="removeItem"
+                            />
                         </div>
                     </div>
                 </template>
@@ -182,6 +187,10 @@ export default {
         },
         prefixIcon: {
             type: String
+        },
+        disabled: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {

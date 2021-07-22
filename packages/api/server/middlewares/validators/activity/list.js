@@ -10,7 +10,7 @@ module.exports = [
         .trim()
         .custom(async (value, { req }) => {
             // on vérifie que le périmètre géographique demandé existe
-            const { type, code } = value.split(',');
+            const [type, code] = value.split(',');
 
             let location;
             try {

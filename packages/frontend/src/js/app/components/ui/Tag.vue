@@ -25,7 +25,8 @@ export default {
                 withoutBackground: "px-3 mr-2 mb-2",
                 primary: "bg-blue100 text-primary px-3 mr-2 mb-2 rounded-lg",
                 highlight:
-                    "bg-yellow-200 py-1 px-3 uppercase text-xs text-primary"
+                    "bg-yellow-200 py-1 px-3 uppercase text-xs text-primary",
+                date: "bg-blue100 text-primary uppercase px-2 py-1"
             }[this.variant];
         }
     }
