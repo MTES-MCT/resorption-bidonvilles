@@ -471,6 +471,10 @@ module.exports = (app) => {
         controllers.geo.search,
     );
     app.get(
+        '/locations/:type/:code?',
+        controllers.geo.get,
+    );
+    app.get(
         '/cities/search',
         middlewares.auth.authenticate,
         middlewares.appVersion.sync,

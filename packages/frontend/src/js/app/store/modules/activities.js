@@ -55,6 +55,9 @@ export default {
     },
 
     getters: {
+        activities(state) {
+            return state.items;
+        },
         activitiesLoading(state) {
             return state.loading;
         },

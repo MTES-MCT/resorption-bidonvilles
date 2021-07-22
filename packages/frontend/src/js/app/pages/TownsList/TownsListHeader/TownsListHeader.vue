@@ -1,15 +1,15 @@
 <template>
-    <div class="block md:flex justify-between items-baseline">
-        <div>
-            <div class="flex items-center mb-4 print:hidden">
+    <div>
+        <div class="md:flex justify-between items-baseline print:hidden mb-4">
+            <div class="md:flex items-center">
                 <slot name="filters" />
             </div>
             <div>
-                <slot name="title" />
+                <slot name="buttons" />
             </div>
         </div>
-        <div class="block md:flex items-center print:hidden">
-            <slot name="buttons" />
+        <div>
+            <slot name="title" />
         </div>
     </div>
 </template>

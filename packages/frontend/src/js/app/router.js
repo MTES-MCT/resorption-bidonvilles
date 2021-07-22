@@ -472,6 +472,15 @@ const router = new VueRouter({
             beforeEnter: guardians.loadedAndUpToDate
         },
         {
+            path: "/activites/:locationType/:locationCode?",
+            meta: {
+                group: "history",
+                permissions: ["shantytown.list"]
+            },
+            component: History,
+            beforeEnter: guardians.loadedAndUpToDate
+        },
+        {
             meta: {
                 group: "admin",
                 permissions: ["shantytown_comment.moderate"]

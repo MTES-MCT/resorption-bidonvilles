@@ -1,9 +1,12 @@
 <template>
     <div>
-        <p>
-            <span class="font-bold">Champ(s) modifié(s) :</span> {{ fieldList }}
+        <p :class="{ '-mt-4': isSmall }">
+            <span :class="{ 'font-bold': !isSmall }"
+                >Champ(s) modifié(s) :</span
+            >
+            {{ fieldList }}
         </p>
-        <div class="mt-2">
+        <div class="mt-2" v-if="variant !== 'small'">
             <Button
                 variant="text"
                 :icon="toggleIcon"
@@ -37,6 +40,11 @@ export default {
         activity: {
             type: Object,
             required: true
+        },
+        variant: {
+            // voir "ActivityCard.vue"
+            type: String,
+            required: true
         }
     },
 
@@ -47,6 +55,9 @@ export default {
     },
 
     computed: {
+        isSmall() {
+            return this.variant === "small";
+        },
         fieldList() {
             return this.activity.diff.map(({ field }) => field).join(", ");
         },

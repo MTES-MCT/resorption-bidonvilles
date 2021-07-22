@@ -1,6 +1,6 @@
 <template>
     <PrivateLayout>
-        <HistorySearchbar></HistorySearchbar>
+        <HistorySearchbar @locationChange="onLocationChange"></HistorySearchbar>
 
         <div>
             <HistoryLoader v-if="loading"></HistoryLoader>
@@ -10,20 +10,29 @@
             </HistoryError>
 
             <PrivateContainer v-else class="py-6">
-                <h1 class="text-display-xl">Dernières activités</h1>
+                <h1 class="text-display-lg">
+                    Dernières activités à
+                    <span class="text-primary">{{ locationName }}</span>
+                </h1>
                 <HistoryFilterBar class="mb-6"></HistoryFilterBar>
 
-                <HistoryCardGroup
-                    v-for="(group, index) in currentPageGroups"
-                    :date="group.date"
-                    :items="group.items"
-                    :key="index"
-                    class="mb-4"
-                ></HistoryCardGroup>
+                <div v-if="activities.length > 0">
+                    <HistoryCardGroup
+                        v-for="(group, index) in currentPageGroups"
+                        :date="group.date"
+                        :items="group.items"
+                        :key="index"
+                        class="mb-4"
+                    ></HistoryCardGroup>
 
-                <HistoryPagination
-                    class="mt-10 -mr-6 flex justify-end"
-                ></HistoryPagination>
+                    <HistoryPagination
+                        class="mt-10 -mr-6 flex justify-end"
+                    ></HistoryPagination>
+                </div>
+
+                <div v-else>
+                    <HistoryEmpty></HistoryEmpty>
+                </div>
             </PrivateContainer>
         </div>
     </PrivateLayout>
@@ -38,9 +47,11 @@ import HistoryError from "./HistoryError.vue";
 import HistoryFilterBar from "./HistoryFilterBar.vue";
 import HistoryPagination from "./HistoryPagination.vue";
 import HistoryCardGroup from "./HistoryCardGroup.vue";
+import HistoryEmpty from "./HistoryEmpty.vue";
 
 import store from "#app/store";
 import { mapGetters } from "vuex";
+import { get as getConfig, getPermission } from "#helpers/api/config";
 
 export default {
     components: {
@@ -51,13 +62,20 @@ export default {
         HistoryError,
         HistoryFilterBar,
         HistoryPagination,
-        HistoryCardGroup
+        HistoryCardGroup,
+        HistoryEmpty
+    },
+    data() {
+        return {
+            locationName: "Inconnu"
+        };
     },
     computed: {
         ...mapGetters({
             loading: "activitiesLoading",
             error: "activitiesError",
-            activities: "activitiesFilteredItems"
+            activities: "activitiesFilteredItems",
+            locations: "locations"
         }),
         currentPageItems() {
             const { itemsPerPage, currentPage } = store.state.activities;
@@ -97,14 +115,106 @@ export default {
             }
 
             return groups;
+        },
+        locationType() {
+            return this.$route.params.locationType;
+        },
+        locationCode() {
+            return this.$route.params.locationCode;
+        },
+        defaultPath() {
+            const { user } = getConfig();
+            const { geographic_level } = getPermission("shantytown.list");
+            if (geographic_level === "nation") {
+                return "/activites/nation";
+            }
+
+            const { location } = user.organization;
+            return `/activites/${location.type}/${location[location.type]
+                ?.code || ""}`;
+        }
+    },
+    watch: {
+        "$route.params.locationType"() {
+            this.load();
+        },
+        "$route.params.locationCode"() {
+            this.load();
         }
     },
     mounted() {
         this.load();
     },
     methods: {
-        load() {
-            store.dispatch("fetchActivities");
+        async load() {
+            // on réécrit l'URL si l'accès se fait par "/activites"
+            if (!this.locationType) {
+                this.$router.replace(this.defaultPath);
+                return;
+            }
+
+            // on fetch les activités
+            if (store.state.activities.items.length === 0) {
+                store.dispatch("fetchActivities");
+            }
+
+            // on fetch le nom de la location, si elle n'est pas déjà dans le store
+            // nécessaire pour l'affichage dans la UI et la barre de recherche
+            if (this.locationType !== "nation") {
+                if (!this.locations[this.locationType]?.[this.locationCode]) {
+                    // @todo: gérer une éventuelle erreur ici
+                    await store.dispatch("fetchLocation", {
+                        type: this.locationType,
+                        code: this.locationCode
+                    });
+                }
+            }
+
+            // on remplit la barre de recherche
+            if (
+                this.locationType === "nation" ||
+                this.$route.path === this.defaultPath
+            ) {
+                store.commit("setActivityLocationFilter", null);
+            } else {
+                store.commit(
+                    "setActivityLocationFilter",
+                    this.locations[this.locationType][this.locationCode]
+                );
+            }
+
+            this.locationName = this.getLocationName();
+        },
+
+        getLocationName() {
+            if (this.locationType === "nation") {
+                return "France métropolitaine";
+            }
+
+            return (
+                this.locations[this.locationType]?.[this.locationCode]?.label ||
+                "Inconnu"
+            );
+        },
+
+        onLocationChange() {
+            // on redirige vers la bonne URL (ce qui automatiquement relancera un load() via les watchers)
+            const { location } = store.state.activities.filters;
+            if (location === null) {
+                this.routeTo("/activites/nation");
+            } else {
+                const { type, code } = location.data;
+                this.routeTo(`/activites/${type}/${code}`);
+            }
+        },
+
+        routeTo(path) {
+            // on évite de réécrire l'URL si on est déjà sur la bonne
+            if (this.$route.path === path) {
+                return;
+            }
+
+            this.$router.replace(path);
         }
     }
 };
