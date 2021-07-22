@@ -11,7 +11,7 @@
 
             <PrivateContainer v-else class="py-6">
                 <h1 class="text-display-lg">
-                    Dernières activités à
+                    Dernières activités -
                     <span class="text-primary">{{ locationName }}</span>
                 </h1>
                 <HistoryFilterBar class="mb-6"></HistoryFilterBar>
