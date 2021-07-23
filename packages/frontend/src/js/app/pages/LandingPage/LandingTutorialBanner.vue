@@ -20,7 +20,7 @@
                     personnalisée. Nous répondrons à toutes vos questions.
                 </p>
             </div>
-            <div class="flex-shrink-0 px-8 py-2 lg:p-8">
+            <div class="lg:mt-6 flex-shrink-0 px-8 py-2 lg:p-8">
                 <a
                     href="https://app.evalandgo.com/s/index.php?a=JTk2cCU5N2slOUElQjA=&id=JTk4ayU5QW4lOTYlQUY="
                     target="_blank"
