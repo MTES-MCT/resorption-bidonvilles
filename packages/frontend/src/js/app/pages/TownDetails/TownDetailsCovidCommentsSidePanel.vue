@@ -182,7 +182,6 @@ export default {
             this.$nextTick(() => {
                 this.$refs.form.reset();
             });
-            this.closePanel();
         },
         addCovidComment() {
             if (this.loading) {
