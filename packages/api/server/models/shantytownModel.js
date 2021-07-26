@@ -1057,18 +1057,14 @@ module.exports = (database) => {
         switch (location.type) {
             case 'region':
                 where.high_covid_comments.push('d2.fk_region = :locationCode');
-                replacements.locationCode = location.code;
+                replacements.locationCode = location.region.code;
                 break;
 
             case 'departement':
-                where.high_covid_comments.push('d2.code = :locationCode');
-                replacements.locationCode = location.code;
-                break;
-
             case 'epci':
             case 'city':
-                where.high_covid_comments.push('d2.code = :departementCode');
-                replacements.departementCode = location.departement.code;
+                where.high_covid_comments.push('d2.code = :locationCode');
+                replacements.locationCode = location.departement.code;
                 break;
 
             default:
