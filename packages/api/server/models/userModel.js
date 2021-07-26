@@ -548,7 +548,7 @@ module.exports = (database) => {
 
             const allowedProperties = [
                 'first_name', 'last_name', 'position', 'phone', 'password', 'defaultExport', 'fk_status',
-                'last_version', 'last_changelog', 'charte_engagement_signee',
+                'last_version', 'last_changelog', 'charte_engagement_signee', 'last_access',
             ];
             const propertiesToColumns = {
                 first_name: 'first_name',
@@ -561,6 +561,7 @@ module.exports = (database) => {
                 last_version: 'last_version',
                 last_changelog: 'last_changelog',
                 charte_engagement_signee: 'charte_engagement_signee',
+                last_access: 'last_access',
             };
             const setClauses = [];
             const replacements = {};

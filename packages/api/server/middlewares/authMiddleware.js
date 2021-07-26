@@ -54,6 +54,11 @@ module.exports = (models) => {
 
         Sentry.setUser({ id: user.id });
 
+        const now = new Date();
+        await models.user.update(user.id, {
+            last_access: now,
+        });
+
         return user;
     }
 
