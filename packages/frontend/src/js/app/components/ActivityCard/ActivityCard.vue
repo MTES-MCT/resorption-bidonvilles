@@ -52,7 +52,7 @@
                 <Button
                     variant="primaryText"
                     icon="arrow-right"
-                    iconPosition="left"
+                    iconPosition="right"
                     class="text-display-sm hover:underline"
                     :padding="false"
                     :href="link"
