@@ -10,7 +10,7 @@
             </HistoryError>
 
             <PrivateContainer v-else class="py-6">
-                <h1 class="text-display-lg">
+                <h1 class="text-display-lg mb-2">
                     Dernières activités -
                     <span class="text-primary">{{ locationName }}</span>
                 </h1>
