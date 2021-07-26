@@ -329,9 +329,13 @@ export default {
             };
 
             const fetchStatsData = async date => {
-                const res = await fetch(
-                    `https://stats.data.gouv.fr/index.php?module=API&method=VisitsSummary.getUniqueVisitors&idSite=86&period=week&date=${date}&format=JSON&&segment=pageUrl%3D@https%25253A%25252F%25252Fresorption-bidonvilles.beta.gouv.fr%25252F%252523%25252Fcartographie`
-                );
+                const segment = `segment=customVariableValue1==false,customVariableValue1=@${encodeURIComponent(
+                    "superuser:false"
+                )}`;
+
+                const url = `https://stats.data.gouv.fr/index.php?module=API&method=VisitsSummary.getUniqueVisitors&idSite=86&period=week&date=${date}&format=JSON&${segment}`;
+                const res = await fetch(url);
+
                 const result = await res.json();
                 return result.value;
             };
