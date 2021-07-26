@@ -36,12 +36,12 @@ export default {
 
     computed: {
         covidTags: function() {
-            if (!this.activity.covid) {
+            if (!this.activity.comment || !this.activity.comment.covid) {
                 return [];
             }
 
             return covidTags.filter(t => {
-                return !!this.activity.covid[t.prop];
+                return !!this.activity.comment.covid[t.prop];
             });
         }
     }

@@ -1,9 +1,15 @@
 <template>
     <div
         class="flex"
-        @mouseenter="moreIsHover = true"
-        @mouseleave="moreIsHover = false"
+        @mouseenter="isHover = true"
+        @mouseleave="isHover = false"
     >
+        <ActivityCardModerationModal
+            v-if="activity.comment"
+            ref="moderationModal"
+            :activity="activity"
+        />
+
         <div :class="classes.column">
             <ActivityCardIcon
                 :color="colors.bg"
@@ -49,29 +55,43 @@
 
             <footer class="flex justify-between pt-2">
                 <span class="text-G500">{{ formatDate(activity.date) }}</span>
-                <Button
-                    variant="primaryText"
-                    icon="arrow-right"
-                    iconPosition="right"
-                    class="text-display-sm hover:underline"
-                    :padding="false"
-                    :href="link"
-                    ><span v-if="variant !== 'small' || moreIsHover">{{
-                        seeMoreWording
-                    }}</span></Button
-                >
+                <div>
+                    <Button
+                        variant="secondaryText"
+                        icon="trash-alt"
+                        iconPosition="left"
+                        class="text-display-sm mr-4"
+                        :padding="false"
+                        v-if="showModerationButton && isHover"
+                        @click="openModerationModal"
+                        >Supprimer le commentaire</Button
+                    >
+                    <Button
+                        variant="primaryText"
+                        icon="arrow-right"
+                        iconPosition="right"
+                        class="text-display-sm hover:underline"
+                        :padding="false"
+                        :href="link"
+                        ><span v-if="variant !== 'small' || isHover">{{
+                            seeMoreWording
+                        }}</span></Button
+                    >
+                </div>
             </footer>
         </div>
     </div>
 </template>
 
 <script>
+import { get as getConfig, getPermission } from "#helpers/api/config";
 import formatDate from "./utils/formatDate";
 import ActivityCardIcon from "./ActivityCardIcon.vue";
 import ActivityCardBodyShantytownCreated from "./ActivityCardBody/ActivityCardBodyShantytownCreated.vue";
 import ActivityCardBodyShantytownUpdated from "./ActivityCardBody/ActivityCardBodyShantytownUpdated.vue";
 import ActivityCardBodyShantytownClosed from "./ActivityCardBody/ActivityCardBodyShantytownClosed.vue";
 import ActivityCardBodyCommentCreated from "./ActivityCardBody/ActivityCardBodyCommentCreated.vue";
+import ActivityCardModerationModal from "./ActivityCardModerationModal.vue";
 
 export default {
     components: {
@@ -79,7 +99,8 @@ export default {
         ActivityCardBodyShantytownCreated,
         ActivityCardBodyShantytownUpdated,
         ActivityCardBodyShantytownClosed,
-        ActivityCardBodyCommentCreated
+        ActivityCardBodyCommentCreated,
+        ActivityCardModerationModal
     },
 
     props: {
@@ -95,8 +116,12 @@ export default {
     },
 
     data() {
+        const { user } = getConfig();
+
         return {
-            moreIsHover: false
+            user,
+            permission: getPermission("shantytown_comment.moderate"),
+            isHover: false
         };
     },
 
@@ -123,7 +148,10 @@ export default {
             }
 
             // création de commentaire
-            if (this.activity.covid || this.activity.highCovid) {
+            if (
+                (this.activity.comment && this.activity.comment.covid) ||
+                this.activity.highCovid
+            ) {
                 return {
                     text: "text-error",
                     bg: "bg-error"
@@ -148,7 +176,11 @@ export default {
                     return "Fermeture d'un site";
 
                 case "creation-comment":
-                    if (this.activity.covid || this.activity.highCovid) {
+                    if (
+                        (this.activity.comment &&
+                            this.activity.comment.covid) ||
+                        this.activity.highCovid
+                    ) {
                         return "Nouveau message Covid-19";
                     }
 
@@ -207,11 +239,47 @@ export default {
                     "border-b py-2": this.variant === "small"
                 }
             };
+        },
+        showModerationButton() {
+            // on vérifie que l'activité en question est modérable (= un commentaire ou un commentaire COVID non territoire)
+            if (
+                this.activity.entity !== "comment" ||
+                this.activity.highCovid ||
+                this.variant === "small"
+            ) {
+                return false;
+            }
+
+            // on vérifie que l'utilisateur a le droit de modérer
+            if (this.permission === null || !this.permission.allowed) {
+                return false;
+            }
+
+            if (
+                this.permission.geographic_level === "nation" ||
+                this.user.organization.location.type === "nation"
+            ) {
+                return true;
+            }
+
+            // on vérifie qu'il a le droit de modérer spécifiquement ce commentaire
+            const locationType =
+                this.user.organization.location.type === "region"
+                    ? "region"
+                    : "departement";
+
+            return (
+                this.activity.shantytown[locationType].code ===
+                this.user.organization.location[locationType].code
+            );
         }
     },
 
     methods: {
-        formatDate
+        formatDate,
+        openModerationModal() {
+            this.$refs.moderationModal.open();
+        }
     }
 };
 </script>
