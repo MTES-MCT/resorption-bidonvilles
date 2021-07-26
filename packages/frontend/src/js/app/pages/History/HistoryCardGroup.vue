@@ -2,7 +2,7 @@
     <div class="flex flex-1 justify-between">
         <HistoryDateColumn
             :date="date"
-            class="w-48 pr-4 mr-4 mt-4 border-r-4"
+            class="w-48 pr-4 mr-4 mt-4 border-r-4 border-blue100"
         ></HistoryDateColumn>
         <HistoryCardsColumn
             :items="items"
