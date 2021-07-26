@@ -16,7 +16,11 @@
                 </h1>
                 <HistoryFilterBar class="mb-6"></HistoryFilterBar>
 
-                <div v-if="activities.length > 0">
+                <div v-if="activities.length > 0" ref="body">
+                    <HistoryPagination
+                        class="mb-6 -mr-6 flex justify-end"
+                    ></HistoryPagination>
+
                     <HistoryCardGroup
                         v-for="(group, index) in currentPageGroups"
                         :date="group.date"
@@ -27,6 +31,7 @@
 
                     <HistoryPagination
                         class="mt-10 -mr-6 flex justify-end"
+                        @change="scrollToTop"
                     ></HistoryPagination>
                 </div>
 
@@ -218,6 +223,10 @@ export default {
             }
 
             this.$router.replace(path);
+        },
+
+        scrollToTop() {
+            this.$refs.body.scrollIntoView();
         }
     }
 };
