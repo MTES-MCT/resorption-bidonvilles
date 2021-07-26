@@ -1,5 +1,5 @@
 <template>
-    <div ref="container">
+    <div>
         <Pagination
             :currentPage="currentPage"
             :nbPages="nbPages"
@@ -26,7 +26,7 @@ export default {
     methods: {
         onChangePage(page) {
             store.commit("setActivitiesPage", page);
-            this.$refs.container.scrollIntoView();
+            this.$emit("change");
         }
     }
 };
