@@ -27,7 +27,6 @@ import PlanMarks from "#app/pages/plans.marks/plans.marks.vue";
 import PrivateStats from "#app/pages/PrivateStats/index.vue";
 import LegalMentions from "#app/pages/legalMentions/legalMentions.vue";
 import Directory from "#app/pages/directory/directory.vue";
-import UserActivityList from "#app/pages/userActivity.list/userActivity.list.vue";
 import PublicStats from "#app/pages/PublicStats/index.vue";
 import Covid from "#app/pages/covid/covid.vue";
 import Changelog from "#app/pages/Changelog/Changelog.vue";
@@ -484,15 +483,6 @@ const router = new VueRouter({
                 permissions: ["shantytown.list"]
             },
             component: History,
-            beforeEnter: guardians.loadedAndUpToDate
-        },
-        {
-            meta: {
-                group: "admin",
-                permissions: ["shantytown_comment.moderate"]
-            },
-            path: "/historique-des-activites",
-            component: UserActivityList,
             beforeEnter: guardians.loadedAndUpToDate
         },
         {
