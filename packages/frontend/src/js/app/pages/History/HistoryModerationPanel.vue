@@ -2,7 +2,7 @@
     <PanelInfo class="mt-2 mb-6">
         <template v-slot:title>Règles de modération d'un message</template>
         <template v-slot:content>
-            <p class="font-bold text-tertiary mb-4">
+            <p class="font-bold mb-4">
                 En tant qu'administrateur, vous êtes en charge de la modération
                 des messages.
             </p>

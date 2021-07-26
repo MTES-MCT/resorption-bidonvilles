@@ -90,7 +90,7 @@ export default {
                     group: "notifications",
                     type: "success",
                     title: "Message supprimé",
-                    text: "L'auteur du message en a été notifié par email"
+                    text: "L'auteur du message en a été notifié par mail"
                 });
 
                 store.commit("removeComment", this.activity.comment.id);

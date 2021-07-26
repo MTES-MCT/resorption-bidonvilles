@@ -64,7 +64,7 @@
                         :padding="false"
                         v-if="showModerationButton && isHover"
                         @click="openModerationModal"
-                        >Supprimer le commentaire</Button
+                        >Supprimer le message</Button
                     >
                     <Button
                         variant="primaryText"
