@@ -39,7 +39,7 @@
                     >
                 </template>
                 <template slot="title">
-                    <div class="flex justify-between">
+                    <div class="flex justify-between items-center">
                         <div>
                             <div class="text-display-xl mb-2">{{ title }}</div>
                             <div class="flex items-center" v-if="!isLoading">
@@ -73,9 +73,12 @@
                             </div>
                         </div>
                         <div
-                            class="flex-1 mt-6 pl-12 max-w-2xl"
-                            v-if="!isLoading"
+                            class="flex-1 text-center text-primary text-display-md"
+                            v-if="activitiesLoading"
                         >
+                            <Spinner />
+                        </div>
+                        <div class="flex-1 mt-6 pl-12 max-w-2xl" v-else>
                             <div v-if="lastActivities.length > 0">
                                 <h1 class="font-bold text-md border-b mb-2">
                                     Les activités des derniers jours
@@ -474,8 +477,11 @@ export default {
             return hasPermission(...args);
         },
         load() {
-            if (!this.shantytowns.length || !this.activities.length) {
+            if (!this.shantytowns.length) {
                 store.dispatch("fetchTowns");
+            }
+
+            if (!this.activities.length) {
                 store.dispatch("fetchActivities");
             }
         },
@@ -514,7 +520,7 @@ export default {
             activities: "activities"
         }),
         isLoading() {
-            return this.townsLoading || this.activitiesLoading;
+            return this.townsLoading;
         },
         filteredActivities() {
             if (!this.filters.location) {
