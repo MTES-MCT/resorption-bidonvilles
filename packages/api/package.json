@@ -1,6 +1,6 @@
 {
   "name": "@resorptionbidonvilles/api",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "API d'Action Bidonvilles",
   "main": "server/index.js",
   "repository": "git+https://github.com/MTES-MCT/action-bidonvilles.git",
