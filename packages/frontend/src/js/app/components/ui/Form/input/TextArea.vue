@@ -24,6 +24,8 @@
                     v-bind="filteredProps"
                     :class="classes"
                     :data-cy-field="cypressName"
+                    :disabled="disabled"
+                    :readonly="disabled"
                 />
                 <InputIcon
                     position="after"
@@ -94,6 +96,10 @@ export default {
         },
         showMandatoryStar: {
             required: false,
+            type: Boolean,
+            default: false
+        },
+        disabled: {
             type: Boolean,
             default: false
         }

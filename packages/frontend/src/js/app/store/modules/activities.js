@@ -35,6 +35,15 @@ export default {
         },
         setActivitiesPage(state, page) {
             state.currentPage = page;
+        },
+        removeComment(state, commentId) {
+            const index = state.items.findIndex(({ comment }) => {
+                return comment && comment.id === commentId;
+            });
+
+            if (index >= 0) {
+                state.items.splice(index, 1);
+            }
         }
     },
 

@@ -31,7 +31,10 @@ export default {
             }
 
             // commentaires
-            if (this.activity.covid || this.activity.highCovid) {
+            if (
+                (this.activity.comment && this.activity.comment.covid) ||
+                this.activity.highCovid
+            ) {
                 return "exclamation";
             }
 
