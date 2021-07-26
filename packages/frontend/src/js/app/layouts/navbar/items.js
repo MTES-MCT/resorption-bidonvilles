@@ -82,7 +82,7 @@ export default {
                     group: "stats"
                 },
                 {
-                    label: "Historique des activités",
+                    label: "Dernières activités",
                     target: "/activites",
                     group: "history"
                 }
