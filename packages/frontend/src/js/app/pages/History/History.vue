@@ -10,6 +10,8 @@
             </HistoryError>
 
             <PrivateContainer v-else class="py-6">
+                <HistoryModerationPanel v-if="canModerate" />
+
                 <h1 class="text-display-lg mb-2">
                     Dernières activités -
                     <span class="text-primary">{{ locationName }}</span>
@@ -53,10 +55,15 @@ import HistoryFilterBar from "./HistoryFilterBar.vue";
 import HistoryPagination from "./HistoryPagination.vue";
 import HistoryCardGroup from "./HistoryCardGroup.vue";
 import HistoryEmpty from "./HistoryEmpty.vue";
+import HistoryModerationPanel from "./HistoryModerationPanel.vue";
 
 import store from "#app/store";
 import { mapGetters } from "vuex";
-import { get as getConfig, getPermission } from "#helpers/api/config";
+import {
+    get as getConfig,
+    hasPermission,
+    getPermission
+} from "#helpers/api/config";
 
 export default {
     components: {
@@ -68,10 +75,12 @@ export default {
         HistoryFilterBar,
         HistoryPagination,
         HistoryCardGroup,
-        HistoryEmpty
+        HistoryEmpty,
+        HistoryModerationPanel
     },
     data() {
         return {
+            canModerate: hasPermission("shantytown_comment.moderate"),
             locationName: "Inconnu"
         };
     },
