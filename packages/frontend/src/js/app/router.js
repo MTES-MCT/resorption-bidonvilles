@@ -180,6 +180,7 @@ function home() {
  * Obviously, the routing configuration of the whole app
  */
 const router = new VueRouter({
+    mode: "history",
     scrollBehavior: (to, from, savedPosition) => {
         if (to.hash) {
             return {

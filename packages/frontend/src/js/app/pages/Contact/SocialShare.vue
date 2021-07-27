@@ -18,7 +18,7 @@ export default {
     computed: {
         url() {
             return encodeURIComponent(
-                "https://resorption-bidonvilles.beta.gouv.fr/#/contact"
+                "https://resorption-bidonvilles.beta.gouv.fr/contact"
             );
         }
     }
