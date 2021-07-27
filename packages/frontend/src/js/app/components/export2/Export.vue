@@ -108,6 +108,10 @@ export default {
                     }
                 },
                 {
+                    id: "actors",
+                    label: "Intervenants"
+                },
+                {
                     id: "comments",
                     label: "Commentaires",
                     description: ": les 5 derniers",
