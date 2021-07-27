@@ -464,6 +464,7 @@ function serializeShantytown(town, permission) {
         firePreventionSiteAccessible: town.firePreventionSiteAccessible,
         firePreventionDevices: town.firePreventionDevices,
         firePreventionComments: town.firePreventionComments,
+        resorptionTarget: town.resorptionTarget,
     };
 
     // @todo: alter all dates to a datetime so it can be easily serialized (just like closed_at)
@@ -561,6 +562,7 @@ const SQL = {
         'shantytowns.fire_prevention_site_accessible': 'firePreventionSiteAccessible',
         'shantytowns.fire_prevention_devices': 'firePreventionDevices',
         'shantytowns.fire_prevention_comments': 'firePreventionComments',
+        'shantytowns.resorption_target': 'resorptionTarget',
         'creators.user_id': 'createdById',
         'creators.first_name': 'createdByFirstName',
         'creators.last_name': 'createdByLastName',
@@ -1306,6 +1308,7 @@ module.exports = (database) => {
                         police_granted_at,
                         bailiff,
                         closed_with_solutions,
+                        resorption_target,
                         created_at,
                         created_by,
                         updated_at,
@@ -1379,6 +1382,7 @@ module.exports = (database) => {
                     police_granted_at,
                     bailiff,
                     closed_with_solutions,
+                    resorption_target,
                     created_at,
                     created_by,
                     updated_at,

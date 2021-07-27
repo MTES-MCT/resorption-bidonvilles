@@ -95,7 +95,7 @@
             </TownsListHeader>
             <div v-if="!isLoading">
                 <div
-                    class="md:flex items-end mb-4 justify-between print:hidden"
+                    class="md:flex items-start mb-4 justify-between print:hidden"
                 >
                     <TownsListFilters>
                         <TownsListFilter
@@ -225,6 +225,16 @@
                             class="mr-2 mb-2"
                             :value="filters.actors"
                             @input="val => updateFilters('actors', val)"
+                            :options="[
+                                { value: 'yes', label: 'Oui' },
+                                { value: 'no', label: 'Non' }
+                            ]"
+                        />
+                        <TownsListFilter
+                            title="Objectif résorption"
+                            class="mr-2 mb-2"
+                            :value="filters.target"
+                            @input="val => updateFilters('target', val)"
                             :options="[
                                 { value: 'yes', label: 'Oui' },
                                 { value: 'no', label: 'Non' }
