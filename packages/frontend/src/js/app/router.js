@@ -170,7 +170,7 @@ function home(to, from, next) {
             return next("/connexion");
         }
 
-        return next("/landing");
+        return next();
     }
 
     if (isConfigLoaded() !== true) {
@@ -205,13 +205,14 @@ const router = new VueRouter({
         {
             path: "/",
             beforeEnter: home,
+            component: LandingPage,
             meta: {
                 analyticsIgnore: true
             }
         },
         {
             path: "/landing",
-            component: LandingPage,
+            redirect: "/",
             beforeEnter: guardians.anonymous
         },
         {
