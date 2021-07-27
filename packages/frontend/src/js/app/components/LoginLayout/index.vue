@@ -1,27 +1,30 @@
 <template>
     <div>
-        <div class="v1">
-            <NavBar></NavBar>
-        </div>
+        <LoginNavBar />
 
-        <div class="max-w-sm mx-auto py-20">
-            <img class="h-32 mx-auto mb-8" src="./assets/bidonvilles.png" />
+        <div class="container px-10 mx-auto mb-4">
+            <div class="max-w-sm mx-auto py-20">
+                <img class="h-32 mx-auto mb-8" src="./assets/bidonvilles.png" />
 
-            <h1 class="text-display-lg text-center mb-8">
-                {{ title }}
-            </h1>
+                <h1 class="text-display-lg text-center mb-8">
+                    {{ title }}
+                </h1>
 
-            <slot />
+                <slot />
+            </div>
+            <Button variant="primaryText" icon="chevron-left" href="/landing" iconPosition="left"
+                >Revenir à la page d'accueil</Button
+            >
         </div>
     </div>
 </template>
 
 <script>
-import NavBar from "#app/layouts/navbar/navbar.vue";
+import LoginNavBar from "./LoginNavBar/index.vue";
 
 export default {
     components: {
-        NavBar
+        LoginNavBar
     },
     props: {
         title: {

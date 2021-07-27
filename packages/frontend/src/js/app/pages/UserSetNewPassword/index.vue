@@ -1,14 +1,13 @@
 <template>
     <LoginLayout title="Renouveler mon mot de passe">
         <ValidationObserver ref="form" v-slot="{ handleSubmit }">
-            <form @submit.prevent="handleSubmit(onLogin)">
+            <form @submit.prevent="handleSubmit(onSetPassword)">
                 <TextInput
                     label="Votre courriel"
                     v-model="email"
                     :disabled="true"
                     rules="required"
                     id="email"
-                    size="sm"
                 />
 
                 <TextInput
@@ -20,6 +19,10 @@
                 />
 
                 <PasswordInfo />
+
+                <div v-if="error" class="bg-red200 p-3 mb-8">
+                    {{ error }}
+                </div>
 
                 <div class="text-center">
                     <Button
@@ -40,6 +43,7 @@
 import LoginLayout from "#app/components/LoginLayout";
 import { checkPasswordToken, setPassword } from "#helpers/api/user";
 import PasswordInfo from "#app/components/LoginLayout/PasswordInfo";
+import { notify } from "#helpers/notificationHelper";
 
 export default {
     components: {
@@ -59,20 +63,33 @@ export default {
         async load() {
             try {
                 this.user = await checkPasswordToken(this.$route.params.token);
-                console.log(this.user);
                 this.email = this.user.email;
             } catch (err) {
-                console.log(err);
-                this.error = err;
+                this.error = err.user_message;
             }
         },
 
         async onSetPassword() {
-            setPassword(this.user.id, {
-                email: this.user.email,
-                password: this.password,
-                token: this.$route.params.token
-            });
+            this.loading = true;
+
+            try {
+                await setPassword(this.user.id, {
+                    email: this.user.email,
+                    password: this.password,
+                    token: this.$route.params.token
+                });
+                this.$router.push({ path: "/" });
+                notify({
+                    group: "notifications",
+                    type: "success",
+                    title: "Changer de mot de passe",
+                    text: "Votre nouveau mot de passe a été changé"
+                });
+            } catch (err) {
+                this.error = err.user_message;
+            }
+
+            this.loading = false;
         }
     },
     created() {
