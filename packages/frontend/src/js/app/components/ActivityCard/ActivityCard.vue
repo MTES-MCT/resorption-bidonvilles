@@ -87,18 +87,14 @@
 import { get as getConfig, getPermission } from "#helpers/api/config";
 import formatDate from "./utils/formatDate";
 import ActivityCardIcon from "./ActivityCardIcon.vue";
-import ActivityCardBodyShantytownCreated from "./ActivityCardBody/ActivityCardBodyShantytownCreated.vue";
 import ActivityCardBodyShantytownUpdated from "./ActivityCardBody/ActivityCardBodyShantytownUpdated.vue";
-import ActivityCardBodyShantytownClosed from "./ActivityCardBody/ActivityCardBodyShantytownClosed.vue";
 import ActivityCardBodyCommentCreated from "./ActivityCardBody/ActivityCardBodyCommentCreated.vue";
 import ActivityCardModerationModal from "./ActivityCardModerationModal.vue";
 
 export default {
     components: {
         ActivityCardIcon,
-        ActivityCardBodyShantytownCreated,
         ActivityCardBodyShantytownUpdated,
-        ActivityCardBodyShantytownClosed,
         ActivityCardBodyCommentCreated,
         ActivityCardModerationModal
     },
@@ -187,20 +183,16 @@ export default {
                     return "Nouveau message";
             }
         },
-        // eslint-disable-next-line vue/return-in-computed-property
         bodyComponent() {
             switch (`${this.activity.action}-${this.activity.entity}`) {
-                case "creation-shantytown":
-                    return ActivityCardBodyShantytownCreated;
+                case "creation-comment":
+                    return ActivityCardBodyCommentCreated;
 
                 case "update-shantytown":
                     return ActivityCardBodyShantytownUpdated;
 
-                case "closing-shantytown":
-                    return ActivityCardBodyShantytownClosed;
-
-                case "creation-comment":
-                    return ActivityCardBodyCommentCreated;
+                default:
+                    return null;
             }
         },
         seeMoreWording() {

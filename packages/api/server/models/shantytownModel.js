@@ -967,6 +967,28 @@ module.exports = (database) => {
     methods.getComments = getComments;
 
     /**
+     * @param {HistoryPermissions} permissions See above
+     * @param {String} permission shantytown.list
+     * @param {Object} requestedLocation Location requested
+     * @param {Object} userLocation
+     */
+    function updateWhereClauseForPermissions({
+        permissions, permission, requestedLocation, userLocation, whereFn,
+    }) {
+        // If the user has no permissions, return null
+        if (!permissions[permission]) {
+            return whereFn(null);
+        }
+
+        // If the user request nation and has nation permissions, don't restrict results
+        if (requestedLocation.type === 'nation' && permissions[permission].geographic_level === 'nation') {
+            return whereFn(requestedLocation);
+        }
+
+        return whereFn(userLocation);
+    }
+
+    /**
      * @typedef {Object} HistoryPermissions
      * @param {Object|null} 'shantytown.list'
      * @param {Object|null} 'shantytown_comment.list'
@@ -987,71 +1009,68 @@ module.exports = (database) => {
         };
         const replacements = {};
 
-        let localLocation;
-        if (userLocation[location.type] && userLocation[location.type].code === location[location.type].code) {
-            localLocation = userLocation;
-        } else if (location[userLocation.type] && location[userLocation.type].code === userLocation[userLocation.type].code) {
-            localLocation = location;
-        } else {
-            localLocation = null;
-        }
-
         // shantytowns
-        let appliedLocation;
-        if (!permissions['shantytown.list']) {
-            appliedLocation = null;
-        } else if (location.type === 'nation') {
-            if (permissions['shantytown.list'].geographic_level !== 'nation') {
-                appliedLocation = userLocation.type !== 'nation' ? userLocation : undefined;
-            }
-        } else {
-            appliedLocation = localLocation;
-        }
+        updateWhereClauseForPermissions({
+            permissions,
+            permission: 'shantytown.list',
+            requestedLocation: location,
+            userLocation,
+            whereFn: (loc) => {
+                if (!loc) {
+                    where.shantytowns.push('false');
+                    return;
+                }
 
-        if (appliedLocation === null) { // interdit
-            where.shantytowns.push('false');
-        } else if (appliedLocation !== undefined) { // pas national
-            where.shantytowns.push(`${fromGeoLevelToTableName(appliedLocation.type)}.code = :shantytownLocationCode`);
-            replacements.shantytownLocationCode = appliedLocation[appliedLocation.type].code;
-        }
+                if (loc.type === 'nation') {
+                    return;
+                }
 
-        // shantytown_comments
-        appliedLocation = undefined;
-        if (!permissions['shantytown_comment.list']) {
-            appliedLocation = null;
-        } else if (location.type === 'nation') {
-            if (permissions['shantytown_comment.list'].geographic_level !== 'nation') {
-                appliedLocation = userLocation.type !== 'nation' ? userLocation : undefined;
-            }
-        } else {
-            appliedLocation = localLocation;
-        }
+                where.shantytowns.push(`${fromGeoLevelToTableName(loc.type)}.code = :shantytownLocationCode`);
+                replacements.shantytownLocationCode = loc[loc.type].code;
+            },
+        });
 
-        if (appliedLocation === null) { // interdit
-            where.shantytown_comments.push('private != false AND false');
-        } else if (appliedLocation !== undefined) { // pas national
-            where.shantytown_comments.push(`private = false AND ${fromGeoLevelToTableName(appliedLocation.type)}.code = :shantytownCommentLocationCode`);
-            replacements.shantytownCommentLocationCode = appliedLocation[appliedLocation.type].code;
-        }
 
-        // private shantytown_comments
-        appliedLocation = undefined;
-        if (!permissions['shantytown_comment.listPrivate']) {
-            appliedLocation = null;
-        } else if (location.type === 'nation') {
-            if (permissions['shantytown_comment.listPrivate'].geographic_level !== 'nation') {
-                appliedLocation = userLocation.type !== 'nation' ? userLocation : undefined;
-            }
-        } else {
-            appliedLocation = localLocation;
-        }
+        updateWhereClauseForPermissions({
+            permissions,
+            permission: 'shantytown_comment.list',
+            requestedLocation: location,
+            userLocation,
+            whereFn: (loc) => {
+                if (!loc) {
+                    where.shantytown_comments.push('private != false AND false');
+                    return;
+                }
 
-        if (appliedLocation === null) { // interdit
-            where.shantytown_comments.push('private != true AND false');
-        } else if (appliedLocation !== undefined) { // pas national
-            where.shantytown_comments.push(`private = true AND ${fromGeoLevelToTableName(appliedLocation.type)}.code = :privateShantytownCommentLocationCode`);
-            replacements.privateShantytownCommentLocationCode = appliedLocation[appliedLocation.type].code;
-        }
+                if (loc.type === 'nation') {
+                    return;
+                }
+
+                where.shantytown_comments.push(`private = false AND ${fromGeoLevelToTableName(loc.type)}.code = :shantytownCommentLocationCode`);
+                replacements.shantytownCommentLocationCode = loc[loc.type].code;
+            },
+        });
+
+        updateWhereClauseForPermissions({
+            permissions,
+            permission: 'shantytown_comment.listPrivate',
+            requestedLocation: location,
+            userLocation,
+            whereFn: (loc) => {
+                if (!loc) {
+                    where.shantytown_comments.push('private != true AND false');
+                    return;
+                }
+
+                if (loc.type === 'nation') {
+                    return;
+                }
+
+                where.shantytown_comments.push(`private = true AND ${fromGeoLevelToTableName(loc.type)}.code = :privateShantytownCommentLocationCode`);
+                replacements.privateShantytownCommentLocationCode = loc[loc.type].code;
+            },
+        });
+
 
         // high covid comments
         switch (location.type) {
