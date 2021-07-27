@@ -50,7 +50,7 @@ describe("Gestion des sites", () => {
 
                         // assert
                         cy.url().should("contain", "/liste-des-sites");
-                        cy.visit(`/#/site/${siteId}`);
+                        cy.visit(`/site/${siteId}`);
                         cy.get("body").should(
                             "contain",
                             "Le site demandé n'existe pas en base de données"
