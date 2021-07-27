@@ -160,20 +160,24 @@ const guardians = {
  *
  * @returns {string}
  */
-function home() {
+function home(to, from, next) {
+    if (to.fullPath.substr(0, 2) === "/#") {
+        return next(to.fullPath.substr(2));
+    }
+
     if (isLoggedIn() !== true) {
         if (alreadyLoggedBefore()) {
-            return "/connexion";
+            return next("/connexion");
         }
 
-        return "/landing";
+        return next("/landing");
     }
 
     if (isConfigLoaded() !== true) {
-        return "/launcher";
+        return next("/launcher");
     }
 
-    return "/cartographie";
+    return next("/cartographie");
 }
 
 /**
@@ -200,7 +204,7 @@ const router = new VueRouter({
     routes: [
         {
             path: "/",
-            redirect: home,
+            beforeEnter: home,
             meta: {
                 analyticsIgnore: true
             }
@@ -509,6 +513,15 @@ const router = new VueRouter({
             }
         }
     ]
+});
+
+router.beforeEach((to, from, next) => {
+    if (to.fullPath.substr(0, 2) === "/#") {
+        next(to.fullPath.substr(2));
+        return;
+    }
+
+    next();
 });
 
 export { router };
