@@ -16,10 +16,10 @@
 export default {
     props: {
         to: {
-            type: String,
+            type: String
         },
         href: {
-            type: String,
+            type: String
         },
         is: {
             type: String,
@@ -28,8 +28,6 @@ export default {
     },
     computed: {
         isActive() {
-            console.log(this.$route.path);
-            console.log(this.to);
             return this.$route.path === this.to;
         }
     }

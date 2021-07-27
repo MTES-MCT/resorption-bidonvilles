@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 
 import LandingPage from "#app/pages/LandingPage/index.vue";
-import SignIn2 from "#app/pages/SignIn/index.vue";
+import SignIn from "#app/pages/SignIn/index.vue";
 import Contact from "#app/pages/Contact/index.vue";
 import Invitation from "#app/pages/Invitation/index.vue";
 import Dashboard from "#app/pages/dashboard/dashboard.vue";
@@ -222,7 +222,7 @@ const router = new VueRouter({
         },
         {
             path: "/connexion",
-            component: SignIn2,
+            component: SignIn,
             beforeEnter: guardians.anonymous
         },
         {

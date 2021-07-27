@@ -12,7 +12,11 @@
 
                 <slot />
             </div>
-            <Button variant="primaryText" icon="chevron-left" href="/landing" iconPosition="left"
+            <Button
+                variant="primaryText"
+                icon="chevron-left"
+                href="/landing"
+                iconPosition="left"
                 >Revenir à la page d'accueil</Button
             >
         </div>
