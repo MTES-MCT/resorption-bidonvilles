@@ -3,6 +3,8 @@ const { query } = require('express-validator');
 const { sequelize } = require('#db/models');
 const geoModel = require('#server/models/geoModel')(sequelize);
 
+
+// Check that user has at least one geographic national permission required for user activity
 function hasNationalPermission(user) {
     const { permissions } = user;
     let has = false;
@@ -17,6 +19,12 @@ function hasNationalPermission(user) {
     }
 
     return has;
+}
+
+function hasLocalPermission(user, location) {
+    // Check if the org's location is the same type of requested location and if the code is the same
+    return location[user.organization.location.type]
+      && location[user.organization.location.type].code === user.organization.location[user.organization.location.type].code;
 }
 
 module.exports = [
@@ -40,8 +48,7 @@ module.exports = [
             }
 
             // on vérifie que l'utilisateur a les droits pour accéder à ce périmètre géographique
-            if (!hasNationalPermission(req.user) && (!location[req.user.organization.location.type]
-                || location[req.user.organization.location.type].code !== req.user.organization.location[req.user.organization.location.type].code)) {
+            if (!hasNationalPermission(req.user) && !hasLocalPermission(req.user, location)) {
                 throw new Error('Vous n\'avez pas les droits suffisants pour accéder à ces données sur ce territoire');
             }
 

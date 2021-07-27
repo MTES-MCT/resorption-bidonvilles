@@ -69,13 +69,13 @@ export default {
             this.isOpen = false;
         },
         async remove() {
-            if (this.loading === true) {
+            if (this.loading) {
                 return;
             }
 
             this.loading = true;
             this.error = null;
-            console.log(this.activity.comment);
+
             try {
                 await deleteComment(
                     this.activity.comment.shantytown,
