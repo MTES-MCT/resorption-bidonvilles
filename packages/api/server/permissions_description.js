@@ -64,6 +64,31 @@ module.exports = {
             { id: 'hide_justice', label: 'Masquer les procédures judiciaires' },
         ],
     },
+    intervener: {
+        description: 'L\'accès intervenant permet à l\'utilisateur de connaître la situation d\'un site et de partager ses actions et constats à travers le « Journal du site ».',
+        national_permissions: [],
+        local_permissions: [
+            [
+                { type: 'view', label: 'Consulter les %sites%', comments: null },
+                {
+                    type: 'view', label: 'Consulter les procédures judiciaires (option pour les masquer disponible ci-dessous)', comments: null, option: 'hide_justice',
+                },
+                {
+                    type: 'edit', label: 'Écrire des commentaires sur le « Journal du site »', comments: null,
+                },
+                {
+                    type: 'edit', label: 'Se déclarer intervenant sur un site', comments: null,
+                },
+                {
+                    type: 'deny', label: 'Ne peut pas modifier les données d\'un site (Caractéristiques du site, Habitants, Conditions de vie et environnement)', comments: null,
+                },
+            ],
+            [{ type: 'view', label: 'Consulter les %dispositifs%', comments: null }],
+        ],
+        options: [
+            { id: 'hide_justice', label: 'Masquer les procédures judiciaires' },
+        ],
+    },
     local_admin: {
         description: '',
         national_permissions: [],
