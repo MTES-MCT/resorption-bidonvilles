@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 
 import LandingPage from "#app/pages/LandingPage/index.vue";
 import SignIn from "#app/pages/signin/signin.vue";
+import SignIn2 from "#app/pages/SignIn2/index.vue";
 import Contact from "#app/pages/Contact/index.vue";
 import Invitation from "#app/pages/Invitation/index.vue";
 import Dashboard from "#app/pages/dashboard/dashboard.vue";
@@ -14,11 +15,14 @@ import TownsDetails from "#app/pages/TownDetails/TownDetails";
 import Me from "#app/pages/me/me.vue";
 import UserList from "#app/pages/users.list/users.list.vue";
 import UserCreate from "#app/pages/users.create/users.create.vue";
+import UserActivate2 from "#app/pages/UserActivate/index.vue";
 import UserActivate from "#app/pages/users.activate/users.activate.vue";
 import UserValidate from "#app/pages/users.validate/users.validate.vue";
 import UserUpgrade from "#app/pages/users.upgrade/users.upgrade.vue";
 import UserRequestNewPassword from "#app/pages/users.requestNewPassword/users.requestNewPassword.vue";
+import UserRequestNewPassword2 from "#app/pages/UserRequestNewPassword/index.vue";
 import UserSetNewPassword from "#app/pages/users.setNewPassword/users.setNewPassword.vue";
+import UserSetNewPassword2 from "#app/pages/UserSetNewPassword/index.vue";
 import PlanList from "#app/pages/plans.list/plans.list.vue";
 import PlanCreate from "#app/pages/plans.create/plans.create.vue";
 import PlanDetails from "#app/pages/plans.details/plans.details.vue";
@@ -222,7 +226,7 @@ const router = new VueRouter({
         },
         {
             path: "/connexion",
-            component: SignIn,
+            component: SignIn2,
             beforeEnter: guardians.anonymous
         },
         {
@@ -394,7 +398,7 @@ const router = new VueRouter({
                 group: "users"
             },
             path: "/nouveau-mot-de-passe",
-            component: UserRequestNewPassword,
+            component: UserRequestNewPassword2,
             beforeEnter: guardians.anonymous
         },
         {
@@ -402,7 +406,7 @@ const router = new VueRouter({
                 group: "users"
             },
             path: "/renouveler-mot-de-passe/:token",
-            component: UserSetNewPassword,
+            component: UserSetNewPassword2,
             beforeEnter: guardians.anonymous
         },
         {
@@ -410,7 +414,7 @@ const router = new VueRouter({
                 group: "account"
             },
             path: "/activer-mon-compte/:token",
-            component: UserActivate,
+            component: UserActivate2,
             beforeEnter: guardians.anonymous
         },
         {

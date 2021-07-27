@@ -95,6 +95,9 @@ export default {
             required: false,
             type: String,
             default: undefined
+        },
+        disabled: {
+            type: Boolean
         }
     },
     computed: {
