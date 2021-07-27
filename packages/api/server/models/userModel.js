@@ -1,5 +1,6 @@
 const permissionsDescription = require('#server/permissions_description');
 const { getPermissionsFor } = require('#server/utils/permission');
+const { mailBlacklist } = require('#server/config');
 
 /**
  * @typedef {Object} UserFilters
@@ -850,25 +851,29 @@ module.exports = (database) => {
         },
     );
 
-    model.getDepartementWatchers = async departementCode => database.query(
-        `SELECT
-            u.user_id,
-            u.email,
-            u.first_name,
-            u.last_name
-        FROM localized_organizations lo
-        LEFT JOIN users u ON u.fk_organization = lo.organization_id
-        WHERE
-            (lo.location_type != 'region' AND lo.departement_code = :departementCode)
-            AND u.fk_status = 'active'
-            AND lo.active = TRUE`,
-        {
-            type: database.QueryTypes.SELECT,
-            replacements: {
-                departementCode,
+    model.getDepartementWatchers = async (departementCode) => {
+        const users = await database.query(
+            `SELECT
+                u.user_id,
+                u.email,
+                u.first_name,
+                u.last_name
+            FROM localized_organizations lo
+            LEFT JOIN users u ON u.fk_organization = lo.organization_id
+            WHERE
+                (lo.location_type != 'region' AND lo.departement_code = :departementCode)
+                AND u.fk_status = 'active'
+                AND lo.active = TRUE`,
+            {
+                type: database.QueryTypes.SELECT,
+                replacements: {
+                    departementCode,
+                },
             },
-        },
-    );
+        );
+
+        return users.filter(({ user_id }) => !mailBlacklist.includes(user_id));
+    };
 
     return model;
 };
