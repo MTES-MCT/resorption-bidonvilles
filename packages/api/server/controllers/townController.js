@@ -11,6 +11,7 @@ const mattermostUtils = require('#server/utils/mattermost');
 const userModel = require('#server/models/userModel')(sequelize);
 const mails = require('#server/mails/mails');
 const shantytownService = require('#server/services/shantytown');
+const shantytownActorThemes = require('#server/config/shantytown_actor_themes');
 
 function fromGeoLevelToTableName(geoLevel) {
     switch (geoLevel) {
@@ -795,6 +796,16 @@ module.exports = (models) => {
                     data: ({ updatedAt }) => (updatedAt ? tsToString(updatedAt, 'd/m/Y à h:i') : ''),
                     width: COLUMN_WIDTHS.SMALL,
                 },
+                actors: {
+                    title: 'Intervenants',
+                    data: ({ actors }) => actors.map((actor) => {
+                        const name = `${actor.first_name} ${actor.last_name.toUpperCase()}, ${actor.organization.name}`;
+                        const themes = actor.themes.map(({ id, value }) => value || shantytownActorThemes[id]).join(', ');
+
+                        return `- ${name} (${themes})`;
+                    }).join('\n'),
+                    width: COLUMN_WIDTHS.LARGE,
+                },
                 comments: {
                     title: 'Commentaires',
                     data: ({ comments }) => comments.regular.slice(0, 5).map(comment => `${tsToString(comment.createdAt, 'd/m/Y à h:i')} - ${comment.createdBy.lastName.toUpperCase()} ${comment.createdBy.firstName}\n${comment.description}`).join('\n----\n'),
@@ -1247,6 +1258,15 @@ module.exports = (models) => {
                         properties.policeRequestedAt,
                         properties.policeGrantedAt,
                         properties.bailiff,
+                    ],
+                });
+            }
+
+            if (options.indexOf('actors') !== -1) {
+                sections.push({
+                    title: 'Intervenants',
+                    properties: [
+                        properties.actors,
                     ],
                 });
             }

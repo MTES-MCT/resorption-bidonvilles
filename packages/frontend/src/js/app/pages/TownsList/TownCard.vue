@@ -9,14 +9,24 @@
     >
         <router-link :to="`site/${shantytown.id}`">
             <div class="-mt-1 print:mt-0">
-                <Tag
-                    :class="[
-                        'text-xs mb-4 mx-6 uppercase text-primary',
-                        isHover ? 'shadow-md' : ''
-                    ]"
-                >
-                    {{ lastUpdate }}
-                </Tag>
+                <div class="mb-4 px-6">
+                    <Tag
+                        :class="[
+                            'text-xs uppercase text-primary',
+                            isHover ? 'shadow-md' : ''
+                        ]"
+                    >
+                        {{ lastUpdate }}
+                    </Tag>
+                    <Tag
+                        :class="['ml-4 py-1 px-3', isHover ? 'shadow-md' : '']"
+                        variant="highlight"
+                        v-if="shantytown.resorptionTarget"
+                    >
+                        Objectif résorption
+                        {{ shantytown.resorptionTarget }} par la Préfecture
+                    </Tag>
+                </div>
                 <div class="text-md px-6">
                     <div class="text-primary text-display-md ">
                         <span class="font-bold">

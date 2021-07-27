@@ -62,6 +62,13 @@ export function filterShantytowns(shantytowns, filters) {
             return false;
         }
 
+        if (
+            filters.target.length > 0 &&
+            !checkTarget(shantytown, filters.target)
+        ) {
+            return false;
+        }
+
         return true;
     });
 }
@@ -200,6 +207,21 @@ function checkActors(shantytown, filters) {
     }
 
     if (filters.includes("no") && shantytown.actors.length === 0) {
+        return true;
+    }
+
+    return filters.length === 0;
+}
+
+/**
+ *
+ */
+function checkTarget(shantytown, filters) {
+    if (filters.includes("yes") && shantytown.resorptionTarget !== null) {
+        return true;
+    }
+
+    if (filters.includes("no") && shantytown.resorptionTarget === null) {
         return true;
     }
 
