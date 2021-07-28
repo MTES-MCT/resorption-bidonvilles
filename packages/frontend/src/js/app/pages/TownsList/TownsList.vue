@@ -13,7 +13,7 @@
                 <h1 class="text-display-md text-center mb-4">
                     Rechercher un site, une commune, un département... ?
                 </h1>
-                <TownsListSearchBar
+                <GeoSearchbar
                     :value="filters.location"
                     @blur="handleSearchBlur"
                 />
@@ -39,23 +39,76 @@
                     >
                 </template>
                 <template slot="title">
-                    <div class="text-display-xl mb-2">{{ title }}</div>
-                    <div class="flex items-center" v-if="!isLoading">
-                        <div class="mr-4">
-                            <img :src="locationImg" width="80" height="80" />
-                        </div>
+                    <div class="flex justify-between items-center">
                         <div>
-                            <div>
-                                <div>{{ populationTotal }} personnes</div>
+                            <div class="text-display-xl mb-2">{{ title }}</div>
+                            <div class="flex items-center" v-if="!isLoading">
+                                <div class="mr-4">
+                                    <img
+                                        :src="locationImg"
+                                        width="80"
+                                        height="80"
+                                    />
+                                </div>
                                 <div>
-                                    {{ filteredShantytowns.length }} sites
+                                    <div>
+                                        <div>
+                                            {{ populationTotal }} personnes
+                                        </div>
+                                        <div>
+                                            {{ filteredShantytowns.length }}
+                                            sites
+                                        </div>
+                                        <div
+                                            v-if="
+                                                hasJusticePermission &&
+                                                    justiceTotal
+                                            "
+                                        >
+                                            {{ justiceTotal }} site(s) avec une
+                                            procédure judiciaire
+                                        </div>
+                                    </div>
                                 </div>
-                                <div
-                                    v-if="hasJusticePermission && justiceTotal"
+                            </div>
+                        </div>
+                        <div
+                            class="flex-1 text-center text-primary text-display-md"
+                            v-if="activitiesLoading"
+                        >
+                            <Spinner />
+                        </div>
+                        <div class="flex-1 mt-6 pl-12 max-w-2xl" v-else>
+                            <div v-if="lastActivities.length > 0">
+                                <h1 class="font-bold text-md border-b mb-2">
+                                    Les activités des derniers jours
+                                </h1>
+                                <ActivityCard
+                                    v-for="(activity, index) in lastActivities"
+                                    :key="index"
+                                    variant="small"
+                                    :activity="activity"
+                                />
+                                <Button
+                                    variant="primaryText"
+                                    class="text-display-sm hover:underline mt-4"
+                                    :padding="false"
+                                    :href="historyPath"
+                                    >Voir toutes les activités sur ce
+                                    territoire</Button
                                 >
-                                    {{ justiceTotal }} site(s) avec une
-                                    procédure judiciaire
-                                </div>
+                            </div>
+
+                            <div v-else class="mt-12">
+                                <h1 class="font-bold text-xl">
+                                    Aucune activité sur ce territoire depuis 1
+                                    semaine
+                                </h1>
+                                <p>
+                                    Vous ou vos équipes, avez-vous effectué des
+                                    actions ?<br />Si oui, informez-en la
+                                    communauté !
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -98,7 +151,7 @@
                     class="md:flex items-start mb-4 justify-between print:hidden"
                 >
                     <TownsListFilters>
-                        <TownsListFilter
+                        <CustomFilter
                             title="Type de sites"
                             class="mr-2 mb-2"
                             :value="filters.fieldType"
@@ -110,7 +163,7 @@
                                 }))
                             "
                         />
-                        <TownsListFilter
+                        <CustomFilter
                             title="Nombre de personnes"
                             class="mr-2 mb-2"
                             :value="filters.population"
@@ -128,7 +181,7 @@
                                 }
                             ]"
                         />
-                        <TownsListFilter
+                        <CustomFilter
                             title="Origines"
                             class="mr-2 mb-2"
                             :value="filters.origin"
@@ -152,7 +205,7 @@
                                 }
                             ]"
                         />
-                        <TownsListFilter
+                        <CustomFilter
                             title="Conditions de vie"
                             class="mr-2 mb-2"
                             :value="filters.conditions"
@@ -196,8 +249,8 @@
                                     {{ label }}
                                 </div>
                             </template>
-                        </TownsListFilter>
-                        <TownsListFilter
+                        </CustomFilter>
+                        <CustomFilter
                             v-if="hasJusticePermission"
                             title="Procédure judiciaire"
                             class="mr-2 mb-2"
@@ -220,7 +273,7 @@
                                 }
                             ]"
                         />
-                        <TownsListFilter
+                        <CustomFilter
                             title="Intervenants"
                             class="mr-2 mb-2"
                             :value="filters.actors"
@@ -241,10 +294,10 @@
                             ]"
                         />
                     </TownsListFilters>
-                    <TownsListSort
+                    <Sort
                         :value="sort"
                         @input="updateSort"
-                        :status="filters.status"
+                        :options="sortOptions[filters.status]"
                         class="mb-2"
                     />
                 </div>
@@ -290,17 +343,18 @@
 </template>
 
 <script>
+import getSince from "#app/pages/TownsList/getSince";
+import ActivityCard from "#app/components/ActivityCard/ActivityCard.vue";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer.vue";
 import PrivateLayout from "#app/components/PrivateLayout";
 import EventBannerPlatform from "#app/components/EventBannerPlatform";
 import EventBannerContribute from "#app/components/EventBannerContribute";
 import EventBannerVaccination from "#app/components/EventBannerVaccination";
 import TownCard from "./TownCard";
-import TownsListSearchBar from "./TownsListSearchBar";
+import GeoSearchbar from "#app/components/GeoSearchbar/GeoSearchbar.vue";
 import TownsListHeader from "./TownsListHeader/TownsListHeader";
 import TownsListHeaderTab from "./TownsListHeader/TownsListHeaderTab";
 import TownsListFilters from "./TownsListFilters/TownsListFilters";
-import TownsListFilter from "./TownsListFilters/TownsListFilter";
 import {
     get as getConfig,
     getPermission,
@@ -309,7 +363,6 @@ import {
 import { filterShantytowns } from "./filterShantytowns";
 import Export from "#app/components/export2/Export.vue";
 import Spinner from "#app/components/ui/Spinner";
-import TownsListSort from "./TownsListSort/TownsListSort";
 import store from "#app/store";
 import { mapGetters } from "vuex";
 
@@ -317,19 +370,18 @@ const PER_PAGE = 20;
 
 export default {
     components: {
-        TownsListSort,
         Spinner,
         TownCard,
+        ActivityCard,
         EventBannerPlatform,
         EventBannerContribute,
         EventBannerVaccination,
         PrivateContainer,
         PrivateLayout,
-        TownsListSearchBar,
+        GeoSearchbar,
         TownsListHeader,
         TownsListHeaderTab,
         TownsListFilters,
-        TownsListFilter,
         Export
     },
     mounted() {
@@ -348,7 +400,49 @@ export default {
             hasJusticePermission: permission.data_justice === true,
             fieldTypes,
             exportIsVisible: false,
-            printMode: false
+            printMode: false,
+            sortOptions: {
+                open: [
+                    {
+                        value: `cityName`,
+                        label: `Commune`
+                    },
+                    {
+                        value: `builtAt`,
+                        label: `Date d'installation`
+                    },
+                    {
+                        value: `updatedAt`,
+                        label: `Date d'actualisation`
+                    },
+                    {
+                        value: `declaredAt`,
+                        label: `Date de signalement`
+                    }
+                ],
+                close: [
+                    {
+                        value: `cityName`,
+                        label: `Commune`
+                    },
+                    {
+                        value: `closedAt`,
+                        label: `Date de fermeture`
+                    },
+                    {
+                        value: `builtAt`,
+                        label: `Date d'installation`
+                    },
+                    {
+                        value: `updatedAt`,
+                        label: `Date d'actualisation`
+                    },
+                    {
+                        value: `declaredAt`,
+                        label: `Date de signalement`
+                    }
+                ]
+            }
         };
     },
     methods: {
@@ -386,6 +480,10 @@ export default {
             if (!this.shantytowns.length) {
                 store.dispatch("fetchTowns");
             }
+
+            if (!this.activities.length) {
+                store.dispatch("fetchActivities");
+            }
         },
         showExport() {
             setTimeout(() => {
@@ -413,12 +511,33 @@ export default {
     computed: {
         ...mapGetters({
             shantytowns: "towns",
-            isLoading: "townsLoading",
+            townsLoading: "townsLoading",
+            activitiesLoading: "activitiesLoading",
             error: "townsError",
             filters: "townsFilters",
             sort: "townsSort",
-            currentPage: "townsCurrentPage"
+            currentPage: "townsCurrentPage",
+            activities: "activities"
         }),
+        isLoading() {
+            return this.townsLoading;
+        },
+        filteredActivities() {
+            if (!this.filters.location) {
+                return this.activities;
+            }
+
+            return this.activities.filter(item => {
+                const { code, type } = this.filters.location.data;
+                return item.shantytown[type].code === code;
+            });
+        },
+        lastActivities() {
+            return this.filteredActivities.slice(0, 5).filter(({ date }) => {
+                const { days } = getSince(date);
+                return days <= 7;
+            });
+        },
         locationImg() {
             // Guadeloupe, Martinique, Guyane, Réunion, Mayotte
             const unsupportedRegions = ["01", "02", "03", "04", "06"];
@@ -517,6 +636,10 @@ export default {
                     : start + (this.filteredShantytowns.length % PER_PAGE) - 1;
 
             return `${start} - ${end} sur ${this.filteredShantytowns.length}`;
+        },
+        historyPath() {
+            const { type, code } = this.currentLocation.data;
+            return `/activites/${type}${code ? `/${code}` : ""}`;
         }
     }
 };

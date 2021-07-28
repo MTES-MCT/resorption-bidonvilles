@@ -114,6 +114,12 @@ export default {
                 center: DEFAULT_VIEW,
                 zoom: 6
             })
+        },
+
+        loadTerritoryLayers: {
+            type: Boolean,
+            default: true,
+            required: false
         }
     },
 
@@ -124,14 +130,18 @@ export default {
              *
              * @type {L.geoJSON}
              */
-            regionalLayer: L.geoJSON(regions),
+            regionalLayer: this.loadTerritoryLayers
+                ? L.geoJSON(regions)
+                : false,
 
             /**
              * La couche départementale
              *
              * @type {L.geoJSON}
              */
-            departementalLayer: L.geoJSON(departements),
+            departementalLayer: this.loadTerritoryLayers
+                ? L.geoJSON(departements)
+                : false,
 
             /**
              * La couche communal
@@ -300,10 +310,12 @@ export default {
 
     watch: {
         towns() {
-            this.countNumberOfTowns();
-            this.loadRegionalData();
-            this.loadDepartementalData();
-            this.loadCityData();
+            if (this.loadTerritoryLayers) {
+                this.countNumberOfTowns();
+                this.loadRegionalData();
+                this.loadDepartementalData();
+                this.loadCityData();
+            }
         },
 
         pois() {
@@ -510,12 +522,16 @@ export default {
         onZoomEnd() {
             const zoomLevel = this.map.getZoom();
 
-            if (zoomLevel <= REGION_MAX_ZOOM_LEVEL) {
-                this.showRegionalLayer();
-            } else if (zoomLevel <= DEPT_MAX_ZOOM_LEVEL) {
-                this.showDepartementalLayer();
-            } else if (zoomLevel <= CITY_MAX_ZOOM_LEVEL) {
-                this.showCityLayer();
+            if (this.loadTerritoryLayers) {
+                if (zoomLevel <= REGION_MAX_ZOOM_LEVEL) {
+                    this.showRegionalLayer();
+                } else if (zoomLevel <= DEPT_MAX_ZOOM_LEVEL) {
+                    this.showDepartementalLayer();
+                } else if (zoomLevel <= CITY_MAX_ZOOM_LEVEL) {
+                    this.showCityLayer();
+                } else {
+                    this.showTownsLayer();
+                }
             } else {
                 this.showTownsLayer();
             }

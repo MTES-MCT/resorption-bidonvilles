@@ -6,6 +6,7 @@
         <CommentBlock
             v-for="comment in sortedComments"
             :key="comment.id"
+            :id="`message${comment.id}`"
             :comment="comment"
         />
     </div>

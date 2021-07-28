@@ -1,6 +1,18 @@
 import { getApi } from "#helpers/api/main";
 
 /**
+ * Fetches any location
+ *
+ * @param {String} type
+ * @param {String} [code]
+ *
+ * @returns {Promise}
+ */
+export function get(type, code) {
+    return getApi(`/locations/${type}${code ? `/${code}` : ""}`);
+}
+
+/**
  * Lists all departements related to a specific region
  *
  * @returns {Promise}

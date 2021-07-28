@@ -471,6 +471,10 @@ module.exports = (app) => {
         controllers.geo.search,
     );
     app.get(
+        '/locations/:type/:code?',
+        controllers.geo.get,
+    );
+    app.get(
         '/cities/search',
         middlewares.auth.authenticate,
         middlewares.appVersion.sync,
@@ -531,49 +535,21 @@ module.exports = (app) => {
 
     // user activities
     app.get(
-        '/user-activities',
+        '/activities',
         middlewares.auth.authenticate,
-        async (req, res, next) => {
-            // parse filters
-            const { filters: rawFilters } = req.query;
-            req.filters = {};
-
-            if (rawFilters !== undefined) {
-                req.filters = rawFilters.split(',').reduce((acc, filter) => {
-                    const [key, value] = filter.split(':');
-                    return Object.assign({}, acc, {
-                        [key]: decodeURIComponent(value),
-                    });
-                }, {});
-            }
-
-            // check if filter covid is requested
-            if (req.filters.covid === '1') {
-                try {
-                    middlewares.auth.checkPermissions(['covid_comment.list'], req, res, next, false);
-                } catch (error) {
-                    return undefined;
-                }
-            } else {
-                try {
-                    middlewares.auth.checkPermissions(['shantytown_comment.moderate'], req, res, next, false);
-                } catch (error) {
-                    return undefined;
-                }
-            }
-
-            // check charte
-            try {
-                await middlewares.charte.check(req, res, next, false);
-            } catch (error) {
-                return res.status(400).send({
-                    user_message: error.message,
-                });
-            }
-
-            return next();
-        },
+        (...args) => middlewares.auth.checkOneOrMorePermissions(['shantytown.list', 'shantytown_comment.list', 'shantytown_comment.listPrivate'], ...args),
+        middlewares.charte.check,
         middlewares.appVersion.sync,
-        controllers.userActivity.list,
+        validators.activity.list,
+        middlewares.validation,
+        controllers.userActivity.regular,
+    );
+
+    app.get(
+        '/activities/covid',
+        middlewares.auth.authenticate,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        controllers.userActivity.covid,
     );
 };

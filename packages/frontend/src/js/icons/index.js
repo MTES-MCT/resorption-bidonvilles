@@ -66,6 +66,7 @@ import {
     faPlus,
     faCheck,
     faPen,
+    faExclamation,
     faExclamationTriangle,
     faBan,
     faMale,
@@ -143,6 +144,7 @@ library.add(faSearch);
 library.add(faPlus);
 library.add(faCheck);
 library.add(faPen);
+library.add(faExclamation);
 library.add(faExclamationTriangle);
 library.add(faMale);
 library.add(faBalanceScale);

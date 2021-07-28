@@ -302,6 +302,7 @@ export default {
                     "fetchTownDetails",
                     this.$route.params.id
                 );
+                setTimeout(this.goToAnchor, 50);
             } catch (error) {
                 this.error =
                     (error && error.user_message) ||
@@ -309,6 +310,16 @@ export default {
             }
 
             this.loading = false;
+        },
+        goToAnchor() {
+            if (!this.$route.hash) {
+                return;
+            }
+
+            const el = document.querySelector(this.$route.hash);
+            if (el) {
+                el.scrollIntoView({ behavior: "smooth" });
+            }
         }
     }
 };

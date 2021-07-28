@@ -99,6 +99,16 @@ import VueMatomo from "./matomo/matomo";
 import { router } from "#app/router";
 import store from "#app/store";
 
+const DAYS = [
+    "Dimanche",
+    "Lundi",
+    "Mardi",
+    "Mercredi",
+    "Jeudi",
+    "Vendredi",
+    "Samedi"
+];
+
 const MONTHS = [
     { long: "Janvier", short: "jan." },
     { long: "Février", short: "fév." },
@@ -167,7 +177,8 @@ window.App = Object.freeze({
             .replace("h", `0${date.getHours()}`.slice(-2))
             .replace("i", `0${date.getMinutes()}`.slice(-2))
             .replace("M", MONTHS[date.getMonth()].long)
-            .replace("B", MONTHS[date.getMonth()].short);
+            .replace("B", MONTHS[date.getMonth()].short)
+            .replace("U", DAYS[date.getDay()]);
     }
 });
 

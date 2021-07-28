@@ -4,7 +4,7 @@ import {
     getDepartementsForEpci
 } from "#helpers/api/geo";
 import { create } from "#helpers/api/highCovidComment";
-import { list } from "#helpers/api/userActivity";
+import { listCovid } from "#helpers/api/userActivity";
 import NavBar from "#app/layouts/navbar/navbar.vue";
 import Table from "#app/components/table/table.vue";
 import SlideNote from "#app/components/slide-note/slide-note.vue";
@@ -120,7 +120,7 @@ export default {
                 author: activity.author,
                 icon: activity.entity === "comment" ? "comment" : "pencil-alt",
                 shantytown: activity.shantytown.id,
-                address: `${activity.shantytown.usename}, ${activity.shantytown.city}`,
+                address: `${activity.shantytown.usename}, ${activity.shantytown.city.name}`,
                 action: "Commentaire sur le",
                 content: activity.content,
                 comment: activity.comment_id,
@@ -188,7 +188,7 @@ export default {
                     });
             }
 
-            Promise.all([list({ covid: "1" }), departementsPromise])
+            Promise.all([listCovid(), departementsPromise])
                 .then(([userActivities, { departements }]) => {
                     this.activities = userActivities;
                     this.allowedDepartements = departements;
