@@ -59,7 +59,12 @@ export default {
             return this.variant === "small";
         },
         fieldList() {
-            return this.activity.diff.map(({ field }) => field).join(", ");
+            let list = this.activity.diff.map(({ field }) => field);
+            if (this.variant === "small" && list.length > 4) {
+                list = [...list.slice(0, 4), "..."];
+            }
+
+            return list.join(", ");
         },
         toggleIcon() {
             return this.showDetails ? "chevron-up" : "chevron-down";
