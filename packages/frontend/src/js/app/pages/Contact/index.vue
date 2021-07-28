@@ -90,6 +90,12 @@
                                 v-model="commonFields.request_type"
                                 variant="card"
                             />
+                            <Checkbox
+                                checkValue="register-newsletter"
+                                :label="$t('contactPage.registerNewsletter')"
+                                v-model="commonFields.request_type"
+                                variant="card"
+                            />
                         </CheckableGroup>
                         <CheckableGroup
                             v-if="isRequestAccess"

@@ -4,4 +4,5 @@ module.exports = [
     'help-request',
     'info-request',
     'access-request',
+    'register-newsletter',
 ];
