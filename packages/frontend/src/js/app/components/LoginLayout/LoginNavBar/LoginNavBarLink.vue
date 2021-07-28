@@ -1,6 +1,6 @@
 <template>
     <component
-        :is="is"
+        :is="as"
         :class="[
             'uppercase',
             'hover:text-primary',
@@ -21,7 +21,7 @@ export default {
         href: {
             type: String
         },
-        is: {
+        as: {
             type: String,
             default: "router-link"
         }

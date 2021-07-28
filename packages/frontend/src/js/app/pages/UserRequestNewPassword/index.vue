@@ -13,7 +13,7 @@
                     v-model="email"
                     rules="required"
                     id="email"
-                    info="Le courriel utilisé pour accéder à Résorption-Bidonvilles"
+                    info="Le courriel utilisé pour accéder à Résorption-bidonvilles"
                 />
 
                 <div v-if="error" class="bg-red200 p-3 mb-8">
@@ -67,6 +67,9 @@ export default {
                 });
             } catch (err) {
                 this.error = err.user_message;
+                if (err.fields) {
+                    this.$refs.form.setErrors(err.fields);
+                }
             }
             this.loading = false;
         }

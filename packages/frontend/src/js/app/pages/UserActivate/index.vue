@@ -10,12 +10,11 @@
                     :disabled="true"
                 />
 
-                <TextInput
+                <PasswordInput
                     label="Votre mot de passe"
                     v-model="password"
                     rules="required"
                     id="password"
-                    type="password"
                 />
 
                 <PasswordInfo />
@@ -89,6 +88,9 @@ export default {
                 });
             } catch (err) {
                 this.error = err.user_message;
+                if (err.fields) {
+                    this.$refs.form.setErrors(err.fields);
+                }
             }
             this.loading = false;
         }

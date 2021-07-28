@@ -17,7 +17,7 @@
                 icon="chevron-left"
                 href="/landing"
                 iconPosition="left"
-                >Revenir à la page d'accueil</Button
+                >Aller à la page d'accueil</Button
             >
         </div>
     </div>

@@ -10,12 +10,11 @@
                     id="email"
                 />
 
-                <TextInput
+                <PasswordInput
                     label="Votre mot de passe"
                     v-model="password"
                     rules="required"
                     id="password"
-                    type="password"
                 />
 
                 <PasswordInfo />
@@ -78,7 +77,7 @@ export default {
                     password: this.password,
                     token: this.$route.params.token
                 });
-                this.$router.push({ path: "/" });
+                this.$router.push({ path: "/connexion" });
                 notify({
                     group: "notifications",
                     type: "success",
@@ -87,6 +86,9 @@ export default {
                 });
             } catch (err) {
                 this.error = err.user_message;
+                if (err.fields) {
+                    this.$refs.form.setErrors(err.fields);
+                }
             }
 
             this.loading = false;

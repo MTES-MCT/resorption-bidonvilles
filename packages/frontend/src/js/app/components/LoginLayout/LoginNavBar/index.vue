@@ -11,8 +11,7 @@
                     >demander un accès</LoginNavBarLink
                 >
                 <LoginNavBarLink
-                    is="a"
-                    class="uppercase hover:text-primary text-G600"
+                    as="a"
                     href="mailto:contact@resorption-bidonvilles.beta.gouv.fr"
                     >aide</LoginNavBarLink
                 >

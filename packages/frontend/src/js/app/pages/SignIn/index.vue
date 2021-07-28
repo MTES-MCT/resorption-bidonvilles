@@ -1,5 +1,5 @@
 <template>
-    <LoginLayout title="Connectez vous à Résorption-Bidonvilles">
+    <LoginLayout title="Connectez-vous à Résorption-bidonvilles">
         <ValidationObserver ref="form" v-slot="{ handleSubmit }">
             <form @submit.prevent="handleSubmit(onLogin)">
                 <TextInput
@@ -10,12 +10,11 @@
                     id="email"
                 />
 
-                <TextInput
+                <PasswordInput
                     label="Votre mot de passe"
                     v-model="password"
                     rules="required"
                     id="password"
-                    type="password"
                 />
 
                 <div class="text-center">
@@ -73,6 +72,9 @@ export default {
             } catch (err) {
                 this.error = err.user_message;
                 this.loading = false;
+                if (err.fields) {
+                    this.$refs.form.setErrors(err.fields);
+                }
             }
         }
     }
