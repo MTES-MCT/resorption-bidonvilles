@@ -283,7 +283,7 @@
                                 { value: 'no', label: 'Non' }
                             ]"
                         />
-                        <TownsListFilter
+                        <CustomFilter
                             title="Objectif résorption"
                             class="mr-2 mb-2"
                             :value="filters.target"
