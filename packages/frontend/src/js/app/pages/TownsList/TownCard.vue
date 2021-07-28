@@ -265,7 +265,7 @@ import TownCardIcon from "./TownCardIcon";
 import flagEU from "./assets/eu.png";
 import flagFR from "./assets/fr.png";
 import flagExtraCommunautaires from "./assets/extra-communautaires.png";
-import getSince from "./getSince";
+import formatDateSinceActivity from "./formatDateSinceActivity";
 import { formatLivingConditions } from "#app/pages/TownDetails/formatLivingConditions";
 
 export default {
@@ -338,31 +338,9 @@ export default {
             );
         },
         lastUpdate() {
-            const { days, months, weeks } = getSince(this.shantytown.updatedAt);
-
-            if (months === 0) {
-                if (days === 0) {
-                    return `Dernière mise à jour aujourd'hui`;
-                }
-
-                if (days > 0 && days < 7) {
-                    return `Dernière mise à jour il y a ${days} jour${
-                        days > 1 ? "s" : ""
-                    }`;
-                }
-
-                if (weeks > 0 && months === 0) {
-                    return `Dernière mise à jour il y a ${weeks} semaine${
-                        weeks > 1 ? "s" : ""
-                    }`;
-                }
-            }
-
-            if (months < 12) {
-                return `Dernière mise à jour il y a ${months} mois`;
-            }
-
-            return "Dernière mise à jour il y a plus d'un an";
+            return `Dernière mise à jour ${formatDateSinceActivity(
+                this.shantytown.updatedAt
+            )}`;
         },
         isClosed() {
             return (

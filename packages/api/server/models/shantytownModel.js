@@ -968,16 +968,127 @@ module.exports = (database) => {
 
     methods.getComments = getComments;
 
-    methods.getHistory = async (user, permission) => {
-        // apply geographic level permission
-        const where = [];
-        const highCovidWhere = [];
+    /**
+     * @param {HistoryPermissions} permissions See above
+     * @param {String} permission shantytown.list
+     * @param {Object} requestedLocation Location requested
+     * @param {Object} userLocation
+     */
+    function updateWhereClauseForPermissions({
+        permissions, permission, requestedLocation, userLocation, whereFn,
+    }) {
+        // If the user has no permissions, return null
+        if (!permissions[permission]) {
+            return whereFn(null);
+        }
+
+        // If the user request nation and has nation permissions, don't restrict results
+        if (requestedLocation.type === 'nation' && permissions[permission].geographic_level === 'nation') {
+            return whereFn(requestedLocation);
+        }
+
+        return whereFn(userLocation);
+    }
+
+    /**
+     * @typedef {Object} HistoryPermissions
+     * @param {Object|null} 'shantytown.list'
+     * @param {Object|null} 'shantytown_comment.list'
+     * @param {Object|null} 'shantytown_comment.listPrivate'
+     */
+
+    /**
+     * @param {Object} userLocation Location to be used for 'local' permissions
+     * @param {HistoryPermissions} permissions See above
+     * @param {Object} location Location to be queried
+     */
+    methods.getHistory = async (userLocation, permissions, location) => {
+        // apply geographic level restrictions
+        const where = {
+            shantytowns: [],
+            shantytown_comments: [],
+            high_covid_comments: [],
+        };
         const replacements = {};
-        if (user.permissions[permission.entity][permission.feature].geographic_level !== 'nation'
-                && user.organization.location.type !== 'nation') {
-            where.push(`${fromGeoLevelToTableName(user.organization.location.type)}.code = :locationCode`);
-            highCovidWhere.push('d2.code = :locationCode');
-            replacements.locationCode = user.organization.location[user.organization.location.type].code;
+
+        // shantytowns
+        updateWhereClauseForPermissions({
+            permissions,
+            permission: 'shantytown.list',
+            requestedLocation: location,
+            userLocation,
+            whereFn: (loc) => {
+                if (!loc) {
+                    where.shantytowns.push('false');
+                    return;
+                }
+
+                if (loc.type === 'nation') {
+                    return;
+                }
+
+                where.shantytowns.push(`${fromGeoLevelToTableName(loc.type)}.code = :shantytownLocationCode`);
+                replacements.shantytownLocationCode = loc[loc.type].code;
+            },
+        });
+
+
+        updateWhereClauseForPermissions({
+            permissions,
+            permission: 'shantytown_comment.list',
+            requestedLocation: location,
+            userLocation,
+            whereFn: (loc) => {
+                if (!loc) {
+                    where.shantytown_comments.push('private != false AND false');
+                    return;
+                }
+
+                if (loc.type === 'nation') {
+                    return;
+                }
+
+                where.shantytown_comments.push(`private = false AND ${fromGeoLevelToTableName(loc.type)}.code = :shantytownCommentLocationCode`);
+                replacements.shantytownCommentLocationCode = loc[loc.type].code;
+            },
+        });
+
+        updateWhereClauseForPermissions({
+            permissions,
+            permission: 'shantytown_comment.listPrivate',
+            requestedLocation: location,
+            userLocation,
+            whereFn: (loc) => {
+                if (!loc) {
+                    where.shantytown_comments.push('private != true AND false');
+                    return;
+                }
+
+                if (loc.type === 'nation') {
+                    return;
+                }
+
+                where.shantytown_comments.push(`private = true AND ${fromGeoLevelToTableName(loc.type)}.code = :privateShantytownCommentLocationCode`);
+                replacements.privateShantytownCommentLocationCode = loc[loc.type].code;
+            },
+        });
+
+
+        // high covid comments
+        switch (location.type) {
+            case 'region':
+                where.high_covid_comments.push('d2.fk_region = :locationCode');
+                replacements.locationCode = location.region.code;
+                break;
+
+            case 'departement':
+            case 'epci':
+            case 'city':
+                where.high_covid_comments.push('d2.code = :locationCode');
+                replacements.locationCode = location.departement.code;
+                break;
+
+            default:
         }
 
         // perform query
@@ -987,7 +1098,13 @@ module.exports = (database) => {
                     activities.*,
                     author.first_name AS author_first_name,
                     author.last_name AS author_last_name,
-                    author.fk_organization AS author_organization
+                    author.fk_organization AS author_organization,
+                    author.first_name AS "userFirstName",
+                    author.last_name AS "userLastName",
+                    author.position AS "userPosition",
+                    organization.abbreviation AS "organizationAbbreviation",
+                    organization.name AS "organizationName",
+                    organization.organization_id AS "organizationId"
                 FROM
                     ((
                         SELECT
@@ -998,23 +1115,29 @@ module.exports = (database) => {
                             shantytowns.created_at AS created_at,
                             cities.fk_departement AS departement,
                             COALESCE(shantytowns.updated_by, shantytowns.created_by) AS author_id,
-                            0 AS comment_id,
+                            0 AS "commentId",
                             NULL AS content,
+                            FALSE AS private,
                             'shantytown' AS entity,
                             ${Object.keys(SQL.selection).map(key => `${key} AS "${SQL.selection[key]}"`).join(',')},
                             FALSE AS "isCovid",
-                            DATE(NULL) AS "covid_date",
-                            FALSE AS equipe_maraude,
-                            FALSE AS equipe_sanitaire,
-                            FALSE AS equipe_accompagnement,
-                            FALSE AS distribution_alimentaire,
-                            FALSE AS action_mediation_sante,
-                            FALSE AS sensibilisation_vaccination,
-                            FALSE AS equipe_mobile_depistage,
-                            FALSE AS equipe_mobile_vaccination,
-                            FALSE AS personnes_orientees,
-                            FALSE AS personnes_avec_symptomes,
-                            FALSE AS besoin_action,
+                            NULL AS "commentDescription",
+                            DATE(NULL) AS "commentCreatedAt",
+                            FALSE AS "commentPrivate",
+                            0 AS "commentCreatedBy",
+                            0 AS "shantytownId",
+                            DATE(NULL) AS "covidCommentDate",
+                            FALSE AS "covidEquipeMaraude",
+                            FALSE AS "covidEquipeSanitaire",
+                            FALSE AS "covidEquipeAccompagnement",
+                            FALSE AS "covidDistributionAlimentaire",
+                            FALSE AS "covidActionMediationSante",
+                            FALSE AS "covidSensibilisationVaccination",
+                            FALSE AS "covidEquipeMobileDepistage",
+                            FALSE AS "covidEquipeMobileVaccination",
+                            FALSE AS "covidPersonnesOrientees",
+                            FALSE AS "covidPersonnesAvecSymptomes",
+                            FALSE AS "covidBesoinAction",
                             0 AS "highCommentId",
                             NULL AS "highCommentDptName",
                             NULL AS "highCommentDptCode"
@@ -1022,7 +1145,7 @@ module.exports = (database) => {
                         LEFT JOIN shantytowns AS s ON shantytowns.shantytown_id = s.shantytown_id
                         ${SQL.joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
                         WHERE s.shantytown_id IS NOT NULL /* filter out history of deleted shantytowns */
-                        ${where.length > 0 ? `AND (${where.join(') AND (')})` : ''}
+                        ${where.shantytowns.length > 0 ? `AND ((${where.shantytowns.join(') OR (')}))` : ''}
                     )
                     UNION
                     (
@@ -1031,29 +1154,35 @@ module.exports = (database) => {
                             shantytowns.created_at AS created_at,
                             cities.fk_departement AS departement,
                             COALESCE(shantytowns.updated_by, shantytowns.created_by) AS author_id,
-                            0 AS comment_id,
+                            0 AS "commentId",
                             NULL AS content,
+                            FALSE AS private,
                             'shantytown' AS entity,
                             ${Object.keys(SQL.selection).map(key => `${key} AS "${SQL.selection[key]}"`).join(', ')},
                             FALSE AS "isCovid",
-                            DATE(NULL) AS "covid_date",
-                            FALSE AS equipe_maraude,
-                            FALSE AS equipe_sanitaire,
-                            FALSE AS equipe_accompagnement,
-                            FALSE AS distribution_alimentaire,
-                            FALSE AS action_mediation_sante,
-                            FALSE AS sensibilisation_vaccination,
-                            FALSE AS equipe_mobile_depistage,
-                            FALSE AS equipe_mobile_vaccination,
-                            FALSE AS personnes_orientees,
-                            FALSE AS personnes_avec_symptomes,
-                            FALSE AS besoin_action,
+                            NULL AS "commentDescription",
+                            DATE(NULL) AS "commentCreatedAt",
+                            FALSE AS "commentPrivate",
+                            0 AS "commentCreatedBy",
+                            0 AS "shantytownId",
+                            DATE(NULL) AS "covidCommentDate",
+                            FALSE AS "covidEquipeMaraude",
+                            FALSE AS "covidEquipeSanitaire",
+                            FALSE AS "covidEquipeAccompagnement",
+                            FALSE AS "covidDistributionAlimentaire",
+                            FALSE AS "covidActionMediationSante",
+                            FALSE AS "covidSensibilisationVaccination",
+                            FALSE AS "covidEquipeMobileDepistage",
+                            FALSE AS "covidEquipeMobileVaccination",
+                            FALSE AS "covidPersonnesOrientees",
+                            FALSE AS "covidPersonnesAvecSymptomes",
+                            FALSE AS "covidBesoinAction",
                             0 AS "highCommentId",
                             NULL AS "highCommentDptName",
                             NULL AS "highCommentDptCode"
                         FROM shantytowns
                         ${SQL.joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
-                        ${where.length > 0 ? `WHERE (${where.join(') AND (')})` : ''}
+                        ${where.shantytowns.length > 0 ? `WHERE (${where.shantytowns.join(') OR (')})` : ''}
                     )
                     UNION
                     (
@@ -1062,14 +1191,20 @@ module.exports = (database) => {
                             NULL AS created_at,
                             cities.fk_departement AS departement,
                             comments.created_by AS author_id,
-                            comments.shantytown_comment_id AS comment_id,
+                            comments.shantytown_comment_id AS "commentId",
                             comments.description AS content,
+                            comments.private AS private,
                             'comment' AS entity,
                             ${Object.keys(SQL.selection).map(key => `${key} AS "${SQL.selection[key]}"`).join(',')},
                             CASE WHEN covid_comments.date IS NOT NULL THEN TRUE
                                  ELSE FALSE
                                  END
                             AS "isCovid",
+                            comments.description AS "commentDescription",
+                            comments.created_at AS "commentCreatedAt",
+                            comments.private AS "commentPrivate",
+                            comments.created_by AS "commentCreatedBy",
+                            shantytowns.shantytown_id AS "shantytownId",
                             covid_comments.date AS "covid_date",
                             covid_comments.equipe_maraude,
                             covid_comments.equipe_sanitaire,
@@ -1090,7 +1225,7 @@ module.exports = (database) => {
                         LEFT JOIN shantytown_covid_comments covid_comments ON covid_comments.fk_comment = comments.shantytown_comment_id
                         ${SQL.joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
                         WHERE shantytowns.shantytown_id IS NOT NULL /* filter out history of deleted shantytowns */
-                        ${where.length > 0 ? `AND (${where.join(') AND (')})` : ''}
+                        ${where.shantytown_comments.length > 0 ? `AND ((${where.shantytown_comments.join(') OR (')}))` : ''}
                     )
                     UNION
                     (
@@ -1099,23 +1234,29 @@ module.exports = (database) => {
                             NULL AS created_at,
                             NULL as departement,
                             comments.created_by AS author_id,
-                            0 AS comment_id,
+                            0 AS "commentId",
                             comments.description AS content,
+                            FALSE AS private,
                             'comment' AS entity,
                             ${Object.keys(SQL.selection).map(key => `${key} AS "${SQL.selection[key]}"`).join(',')},
                             TRUE AS "isCovid",
-                            DATE(NULL) AS "covid_date",
-                            FALSE AS equipe_maraude,
-                            FALSE AS equipe_sanitaire,
-                            FALSE AS equipe_accompagnement,
-                            FALSE AS distribution_alimentaire,
-                            FALSE AS action_mediation_sante,
-                            FALSE AS sensibilisation_vaccination,
-                            FALSE AS equipe_mobile_depistage,
-                            FALSE AS equipe_mobile_vaccination,
-                            FALSE AS personnes_orientees,
-                            FALSE AS personnes_avec_symptomes,
-                            FALSE AS besoin_action,
+                            NULL AS "commentDescription",
+                            DATE(NULL) AS "commentCreatedAt",
+                            FALSE AS "commentPrivate",
+                            0 AS "commentCreatedBy",
+                            0 AS "shantytownId",
+                            DATE(NULL) AS "covidCommentDate",
+                            FALSE AS "covidEquipeMaraude",
+                            FALSE AS "covidEquipeSanitaire",
+                            FALSE AS "covidEquipeAccompagnement",
+                            FALSE AS "covidDistributionAlimentaire",
+                            FALSE AS "covidActionMediationSante",
+                            FALSE AS "covidSensibilisationVaccination",
+                            FALSE AS "covidEquipeMobileDepistage",
+                            FALSE AS "covidEquipeMobileVaccination",
+                            FALSE AS "covidPersonnesOrientees",
+                            FALSE AS "covidPersonnesAvecSymptomes",
+                            FALSE AS "covidBesoinAction",
                             comments.high_covid_comment_id AS "highCommentId",
                             d2.name AS "highCommentDptName",
                             d2.code AS "highCommentDptCode"
@@ -1124,9 +1265,10 @@ module.exports = (database) => {
                         ${SQL.joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
                         LEFT JOIN high_covid_comment_territories territories ON territories.fk_comment = comments.high_covid_comment_id
                         LEFT JOIN departements d2 ON territories.fk_departement = d2.code
-                        ${highCovidWhere.length > 0 ? `WHERE (${highCovidWhere.join(') AND (')})` : ''}
+                        ${where.high_covid_comments.length > 0 ? `WHERE (${where.high_covid_comments.join(') AND (')})` : ''}
                     )) activities
                 LEFT JOIN users author ON activities.author_id = author.user_id
+                LEFT JOIN localized_organizations organization ON author.fk_organization = organization.organization_id
                 ORDER BY activities.date ASC
                 `,
             {
@@ -1149,8 +1291,22 @@ module.exports = (database) => {
                     shantytown: {
                         id: activity.id,
                         usename: getUsenameOf(activity),
-                        city: activity.cityName,
-                        departement: activity.departement,
+                        city: {
+                            code: activity.cityCode,
+                            name: activity.cityName,
+                        },
+                        epci: {
+                            code: activity.epciCode,
+                            name: activity.epciName,
+                        },
+                        departement: {
+                            code: activity.departementCode,
+                            name: activity.departementName,
+                        },
+                        region: {
+                            code: activity.regionCode,
+                            name: activity.regionName,
+                        },
                     },
                     entity: activity.entity,
                 };
@@ -1167,22 +1323,9 @@ module.exports = (database) => {
 
                     const comment = Object.assign(o, {
                         action: 'creation',
-                        comment_id: activity.comment_id,
+                        comment_id: activity.commentId,
                         content: activity.content,
-                        covid: activity.isCovid && activity.highCommentDptName === null ? {
-                            date: activity.covid_date.getTime() / 1000,
-                            equipe_maraude: activity.equipe_maraude,
-                            equipe_sanitaire: activity.equipe_sanitaire,
-                            equipe_accompagnement: activity.equipe_accompagnement,
-                            distribution_alimentaire: activity.distribution_alimentaire,
-                            action_mediation_sante: activity.action_mediation_sante,
-                            sensibilisation_vaccination: activity.sensibilisation_vaccination,
-                            equipe_mobile_depistage: activity.equipe_mobile_depistage,
-                            equipe_mobile_vaccination: activity.equipe_mobile_vaccination,
-                            personnes_orientees: activity.personnes_orientees,
-                            personnes_avec_symptomes: activity.personnes_avec_symptomes,
-                            besoin_action: activity.besoin_action,
-                        } : null,
+                        comment: activity.highCommentId === 0 ? serializeComment(activity) : null,
                         highCovid: activity.highCommentId !== 0 ? {
                             departements: [{
                                 code: activity.highCommentDptCode,
@@ -1200,7 +1343,7 @@ module.exports = (database) => {
 
                 // ====== SHANTYTOWNS
                 const previousVersion = previousVersions[activity.id] || null;
-                const serializedShantytown = serializeShantytown(activity, user.permissions.shantytown.list);
+                const serializedShantytown = serializeShantytown(activity, permissions['shantytown.list']);
                 previousVersions[activity.id] = serializedShantytown;
 
                 let action;

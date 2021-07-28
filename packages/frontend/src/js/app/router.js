@@ -27,11 +27,11 @@ import PlanMarks from "#app/pages/plans.marks/plans.marks.vue";
 import PrivateStats from "#app/pages/PrivateStats/index.vue";
 import LegalMentions from "#app/pages/legalMentions/legalMentions.vue";
 import Directory from "#app/pages/directory/directory.vue";
-import UserActivityList from "#app/pages/userActivity.list/userActivity.list.vue";
 import PublicStats from "#app/pages/PublicStats/index.vue";
 import Covid from "#app/pages/covid/covid.vue";
 import Changelog from "#app/pages/Changelog/Changelog.vue";
 import CharteEngagement from "#app/pages/CharteEngagement/CharteEngagement.vue";
+import History from "#app/pages/History/History.vue";
 
 import { logout, isLoggedIn, alreadyLoggedBefore } from "#helpers/api/user";
 import {
@@ -468,12 +468,21 @@ const router = new VueRouter({
             beforeEnter: guardians.loadedAndUpToDate
         },
         {
+            path: "/activites",
             meta: {
-                group: "admin",
-                permissions: ["shantytown_comment.moderate"]
+                group: "history",
+                permissions: ["shantytown.list"]
             },
-            path: "/historique-des-activites",
-            component: UserActivityList,
+            component: History,
+            beforeEnter: guardians.loadedAndUpToDate
+        },
+        {
+            path: "/activites/:locationType/:locationCode?",
+            meta: {
+                group: "history",
+                permissions: ["shantytown.list"]
+            },
+            component: History,
             beforeEnter: guardians.loadedAndUpToDate
         },
         {

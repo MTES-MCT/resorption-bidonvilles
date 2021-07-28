@@ -11,7 +11,8 @@
                 :loading="loading"
                 prefixIcon="search"
                 :inputClasses="['rounded-full shadow-sm w-64']"
-                placeholder="Adresse, nom d’un site, ville…"
+                :placeholder="placeholder"
+                ref="autocomplete"
             >
                 <template v-slot:cta>
                     <Button class="rounded-full ml-2" size="sm"
@@ -19,7 +20,7 @@
                     >
                 </template>
                 <template v-slot:extra="{ removeItem }">
-                    <div class="py-1 text-right">
+                    <div class="py-1 text-right" v-if="allowShowAll">
                         <Button
                             variant="primaryText"
                             @click="removeItem"
@@ -80,6 +81,15 @@ export default {
     props: {
         value: {
             type: Object
+        },
+        allowShowAll: {
+            type: Boolean,
+            default: true
+        },
+        placeholder: {
+            type: String,
+            default: "Adresse, nom d’un site, ville…",
+            required: false
         }
     },
     data() {
@@ -121,6 +131,9 @@ export default {
             }
 
             return [];
+        },
+        setValue(value) {
+            return this.$refs.autocomplete.setValue(value);
         }
     }
 };

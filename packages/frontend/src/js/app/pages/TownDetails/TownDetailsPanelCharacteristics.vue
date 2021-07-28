@@ -118,6 +118,7 @@
                             :display-searchbar="false"
                             :towns="[town]"
                             :default-view="center"
+                            :load-territory-layers="false"
                         ></Map>
                     </div>
                 </div>

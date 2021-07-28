@@ -42,6 +42,7 @@
                                     ref="searchInput"
                                     v-bind="inputProps"
                                     v-on="inputListeners"
+                                    :disabled="disabled"
                                     :class="classes"
                                     @focus="handleFocus"
                                     @blur="handleBlur"
@@ -110,7 +111,11 @@
                             </div>
                         </transition>
                         <div>
-                            <slot name="extra" :removeItem="removeItem" />
+                            <slot
+                                name="extra"
+                                :searchInput="searchInput"
+                                :removeItem="removeItem"
+                            />
                         </div>
                     </div>
                 </template>
@@ -182,6 +187,10 @@ export default {
         },
         prefixIcon: {
             type: String
+        },
+        disabled: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {
@@ -209,10 +218,19 @@ export default {
             results: []
         };
     },
+    watch: {
+        defaultValue() {
+            this.setValue(this.defaultValue);
+        }
+    },
     mounted() {
         this.$refs.provider.syncValue(this.value);
     },
     methods: {
+        setValue(value) {
+            this.value = value || null;
+            this.searchInput = value ? this.getResultValue(value) : "";
+        },
         removeItem() {
             this.value = null;
             this.searchInput = "";

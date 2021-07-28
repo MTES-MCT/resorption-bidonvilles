@@ -82,9 +82,9 @@ export default {
                     group: "stats"
                 },
                 {
-                    label: "Historique des activités",
-                    target: "/historique-des-activites",
-                    group: "admin"
+                    label: "Dernières activités",
+                    target: "/activites",
+                    group: "history"
                 }
             ]
         },
