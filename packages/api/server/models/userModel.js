@@ -851,7 +851,7 @@ module.exports = (database) => {
         },
     );
 
-    model.getDepartementWatchers = async (departementCode) => {
+    model.getDepartementWatchers = async (departementCode, applyBlacklist = false) => {
         const users = await database.query(
             `SELECT
                 u.user_id,
@@ -872,7 +872,11 @@ module.exports = (database) => {
             },
         );
 
-        return users.filter(({ user_id }) => !mailBlacklist.includes(user_id));
+        if (applyBlacklist === true) {
+            return users.filter(({ user_id }) => !mailBlacklist.includes(user_id));
+        }
+
+        return users;
     };
 
     return model;
