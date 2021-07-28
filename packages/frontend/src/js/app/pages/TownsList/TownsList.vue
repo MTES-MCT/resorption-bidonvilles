@@ -39,7 +39,7 @@
                     >
                 </template>
                 <template slot="title">
-                    <div class="flex justify-between items-center">
+                    <div class="flex justify-between items-start">
                         <div>
                             <div class="text-display-xl mb-2">{{ title }}</div>
                             <div class="flex items-center" v-if="!isLoading">
