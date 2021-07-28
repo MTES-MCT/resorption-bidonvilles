@@ -64,6 +64,11 @@ export default {
             group: "directory"
         },
         {
+            label: "Tableau de bord",
+            target: "/statistiques",
+            group: "stats"
+        },
+        {
             label: "Administration",
             items: [
                 {
@@ -75,11 +80,6 @@ export default {
                     label: "Créer un utilisateur",
                     target: "/nouvel-utilisateur",
                     group: "userCreation"
-                },
-                {
-                    label: "Tableau de bord",
-                    target: "/statistiques",
-                    group: "stats"
                 },
                 {
                     label: "Dernières activités",
