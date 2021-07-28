@@ -294,12 +294,14 @@
                             ]"
                         />
                     </TownsListFilters>
-                    <Sort
-                        :value="sort"
-                        @input="updateSort"
-                        :options="sortOptions[filters.status]"
-                        class="mb-2"
-                    />
+                    <div>
+                        <div class="mb-2">Trier par</div>
+                        <Sort
+                            v-model="sort"
+                            :options="sortOptions[filters.status]"
+                            class="mb-2"
+                        />
+                    </div>
                 </div>
 
                 <div>
@@ -515,10 +517,17 @@ export default {
             activitiesLoading: "activitiesLoading",
             error: "townsError",
             filters: "townsFilters",
-            sort: "townsSort",
             currentPage: "townsCurrentPage",
             activities: "activities"
         }),
+        sort: {
+            get() {
+                return store.state.towns.sort;
+            },
+            set(value) {
+                this.updateSort(value);
+            }
+        },
         isLoading() {
             return this.townsLoading;
         },
