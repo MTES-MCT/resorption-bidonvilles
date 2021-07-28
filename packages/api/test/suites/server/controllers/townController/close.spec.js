@@ -85,7 +85,7 @@ describe.only('townController.close()', () => {
             };
 
             dependencies.getDepartementWatchers
-                .withArgs('78')
+                .withArgs('78', true)
                 .resolves(output.watchers);
             dependencies.shantytownFindOne
                 .withArgs(input.user, 1)
