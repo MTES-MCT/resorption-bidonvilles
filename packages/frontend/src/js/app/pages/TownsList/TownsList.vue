@@ -533,7 +533,7 @@ export default {
             });
         },
         lastActivities() {
-            return this.filteredActivities.slice(0, 5).filter(({ date }) => {
+            return this.filteredActivities.slice(0, 3).filter(({ date }) => {
                 const { days } = getSince(date);
                 return days <= 7;
             });
