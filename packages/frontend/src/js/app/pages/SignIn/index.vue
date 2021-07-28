@@ -8,6 +8,7 @@
                     v-model="email"
                     rules="required"
                     id="email"
+                    cypressName="email"
                 />
 
                 <PasswordInput
@@ -15,6 +16,7 @@
                     v-model="password"
                     rules="required"
                     id="password"
+                    cypressName="password"
                 />
 
                 <div class="text-center">
