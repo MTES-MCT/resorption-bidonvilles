@@ -1,13 +1,23 @@
-import getSince from "#app/pages/TownsList/getSince";
+function isSameDay(now, then) {
+    return (
+        now.getFullYear() === then.getFullYear() &&
+        now.getMonth() === then.getMonth() &&
+        now.getDate() === then.getDate()
+    );
+}
 
 export default function formatDate(date) {
-    const { days } = getSince(date);
+    const now = new Date();
+    const then = new Date(date * 1000);
 
     let day = `${App.formatDate(date, "U")} ${App.formatDate(date, "d M y")}`;
-    if (days === 0) {
+    if (isSameDay(now, then)) {
         day = "Aujourd'hui";
-    } else if (days === 1) {
-        day = "Hier";
+    } else {
+        now.setDate(now.getDate() - 1);
+        if (isSameDay(now, then)) {
+            day = "Hier";
+        }
     }
 
     return `${day} à ${App.formatDate(date, "h")}h`;
