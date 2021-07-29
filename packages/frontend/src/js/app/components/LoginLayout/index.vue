@@ -4,7 +4,10 @@
 
         <div class="container px-10 mx-auto mb-4">
             <div class="max-w-sm mx-auto py-20">
-                <img class="h-32 mx-auto mb-8" src="../../../../../public/img/town.png" />
+                <img
+                    class="h-32 mx-auto mb-8"
+                    src="../../../../../public/img/town.png"
+                />
 
                 <h1 class="text-display-lg text-center mb-8">
                     {{ title }}
