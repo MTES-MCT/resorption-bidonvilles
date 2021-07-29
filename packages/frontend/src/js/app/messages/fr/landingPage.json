@@ -86,10 +86,6 @@
       "1": {
         "text": "8600 bénéficiaires"
       },
-      "2": {
-        "text": "17 sites résorbés",
-        "info": "+10 en 1 an"
-      },
       "3": {
         "text": "1 000 personnes relogées"
       },
@@ -134,7 +130,6 @@
           "text": "de la DITP en octobre 2020"
         }
       }
-
     }
   },
   "contactForm": {
@@ -142,10 +137,10 @@
     "cta": "Nous contacter"
   },
   "newsletter": {
-      "title": "Abonnez-vous à notre lettre d'information mensuelle",
-      "text": "Vous souhaitez être informé des nouveautés de la plateforme, des évènements, des bonnes pratiques de terrain et de l’actualité sur le sujet des bidonvilles ? Abonnez-vous !",
-      "cta": "Je m'abonne",
-      "link": "Voir la lettre",
-      "viewAll": "Voir toutes les lettres d'information"
+    "title": "Abonnez-vous à notre lettre d'information mensuelle",
+    "text": "Vous souhaitez être informé des nouveautés de la plateforme, des évènements, des bonnes pratiques de terrain et de l’actualité sur le sujet des bidonvilles ? Abonnez-vous !",
+    "cta": "Je m'abonne",
+    "link": "Voir la lettre",
+    "viewAll": "Voir toutes les lettres d'information"
   }
 }

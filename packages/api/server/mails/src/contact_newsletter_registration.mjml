@@ -1,0 +1,23 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Demande d'abonnement à la lettre d'info</mj-title>
+        <mj-include path='common/attributes.mjml' />
+        <mj-include path='common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class='text-primary text-display pb-4'>
+                    Une personne a demandé à être abonnée à la lettre d'info
+                </mj-text>
+                <mj-text>
+                    Une demande de contact/d'accès à été faite, assortie d'une demande d'abonnement à la lettre d'info, par l'email <a href="mailto:{{var:email}}">{{var:email}}</a>.
+                </mj-text>
+            </mj-column>
+        </mj-section>
+
+        <mj-include path='common/footer.mjml' />
+    </mj-body>
+</mjml>

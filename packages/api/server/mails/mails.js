@@ -622,4 +622,23 @@ module.exports = {
             preserveRecipient,
         });
     },
+
+    /**
+     * @param {User} recipient
+     * @param {Object} options
+     */
+    sendContactNewsletterRegistration(recipient, options = {}) {
+        const { variables, preserveRecipient, replyTo } = options;
+
+        return mailService.send('contact_newsletter_registration', {
+            recipient,
+            variables: {
+                email: variables.email,
+                frontUrl,
+                backUrl,
+            },
+            preserveRecipient,
+            replyTo,
+        });
+    },
 };
