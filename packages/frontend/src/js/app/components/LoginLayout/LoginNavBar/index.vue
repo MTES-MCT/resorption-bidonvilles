@@ -22,7 +22,7 @@
 
 <script>
 import NavBarLogo from "./NavBarLogo.vue";
-import LoginNavBarLink from "#app/components/LoginLayout/LoginNavBar/LoginNavBarLink";
+import LoginNavBarLink from "./LoginNavBarLink";
 
 export default {
     components: {
