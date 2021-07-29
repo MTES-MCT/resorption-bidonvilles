@@ -229,6 +229,22 @@ export default {
             showAddresses: false,
 
             /**
+             * Value of showAddresses before the print
+             *
+             * Used to restore the original value after the print
+             *
+             * @type {Boolean}
+             */
+            showAddressesBeforePrint: false,
+
+            /**
+             * Wether the current print was triggered manually (from an action button) or naturally
+             *
+             * @type {true|null}
+             */
+            manualPrint: null,
+
+            /**
              * Liste des types de terrains existants
              *
              * @type {Array.<FieldType>}
@@ -334,9 +350,9 @@ export default {
          */
         showAddresses() {
             if (this.showAddresses === true) {
-                document.body.setAttribute("class", "leaflet-show-addresses");
+                document.body.classList.add("leaflet-show-addresses");
             } else {
-                document.body.setAttribute("class", "");
+                document.body.classList.remove("leaflet-show-addresses");
             }
         },
 
@@ -367,26 +383,36 @@ export default {
     mounted() {
         this.createMap();
 
-        window.onbeforeprint = () => {
-            this.preprint(false);
+        window.onbeforeprint = async () => {
+            if (this.manualPrint !== true) {
+                this.preprint(false);
+            }
         };
         window.onafterprint = () => {
+            this.manualPrint = null;
+
             document.body.classList.remove("preprint");
             this.map.addControl(this.map.zoomControl);
             this.setupLayersControl();
             this.resize();
+
+            this.showAddresses = this.showAddressesBeforePrint;
         };
     },
 
     methods: {
-        preprint(triggerPrint = true) {
+        preprint(manualPrint = true) {
+            this.manualPrint = manualPrint === true;
+            this.showAddressesBeforePrint = this.showAddresses;
+            this.showAddresses = true;
+
             document.body.classList.add("preprint");
             this.map.removeControl(this.map.zoomControl);
             this.removeLayersControl();
             this.resize();
 
-            if (triggerPrint === true) {
-                window.print();
+            if (manualPrint === true) {
+                setTimeout(window.print, 200);
             }
         },
         countNumberOfTowns() {
