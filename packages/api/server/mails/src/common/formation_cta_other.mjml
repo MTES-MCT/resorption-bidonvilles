@@ -1,1 +1,1 @@
-<mj-text mj-class="pb-4"><a href="{{var:formationUrl}}" class="link">{{var:formationUrl}}</a></mj-text>
+<mj-text mj-class="pb-4">{{var:formationUrl}}</mj-text>

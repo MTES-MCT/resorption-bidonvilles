@@ -15,6 +15,7 @@ import bg from "vee-validate/dist/locale/bg";
 import notifications from "vue-notification/dist/ssr";
 import Button from "./Button.vue";
 import TextInput from "./Form/input/TextInput.vue";
+import PasswordInput from "./Form/input/PasswordInput.vue";
 import InlineTextInput from "./Form/input/InlineTextInput.vue";
 import TextArea from "./Form/input/TextArea.vue";
 import Icon from "./Icon.vue";
@@ -51,6 +52,7 @@ import Tooltip from "./Tooltip.vue";
 export default function(vueInstance) {
     vueInstance.component("Button", Button);
     vueInstance.component("TextInput", TextInput);
+    vueInstance.component("PasswordInput", PasswordInput);
     vueInstance.component("InlineTextInput", InlineTextInput);
     vueInstance.component("TextArea", TextArea);
     vueInstance.component("Icon", Icon);

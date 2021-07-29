@@ -10,7 +10,7 @@
                 :getResultValue="resultValue"
                 :loading="loading"
                 prefixIcon="search"
-                :inputClasses="['rounded-full shadow-sm w-64']"
+                :inputClasses="['rounded-full shadow-sm']"
                 :placeholder="placeholder"
                 ref="autocomplete"
             >
@@ -88,7 +88,7 @@ export default {
         },
         placeholder: {
             type: String,
-            default: "Adresse, nom d’un site, ville…",
+            default: "Adresse, nom d’un site, ville, code postal…",
             required: false
         }
     },
@@ -141,7 +141,7 @@ export default {
 
 <style scoped>
 .searchbox {
-    max-width: 500px;
-    min-width: 500px;
+    max-width: 530px;
+    min-width: 530px;
 }
 </style>

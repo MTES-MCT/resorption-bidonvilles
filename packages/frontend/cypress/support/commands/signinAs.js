@@ -8,7 +8,7 @@
  */
 Cypress.Commands.add("signinAs", ({ email, password }) => {
     cy.visit("/connexion");
-    cy.get("#input-email").type(email);
-    cy.get("#input-password").type(password);
+    cy.get("[data-cy-field='email']").type(email);
+    cy.get("[data-cy-field='password']").type(password);
     cy.contains("Me connecter").click();
 });

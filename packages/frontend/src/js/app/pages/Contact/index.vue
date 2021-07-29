@@ -90,6 +90,13 @@
                                 v-model="commonFields.request_type"
                                 variant="card"
                             />
+                            <Checkbox
+                                checkValue="register-newsletter"
+                                :label="$t('contactPage.registerNewsletter')"
+                                v-model="commonFields.request_type"
+                                v-if="isFrenchLocale"
+                                variant="card"
+                            />
                         </CheckableGroup>
                         <CheckableGroup
                             v-if="isRequestAccess"
@@ -435,15 +442,20 @@ export default {
                     this.$trackMatomoEvent("Contact", "Demande d'information");
                     from = "contact_others";
                 }
-                this.$router.push(
-                    `/invitation?email=${encodeURIComponent(
-                        this.commonFields.email
-                    )}&first_name=${encodeURIComponent(
-                        this.commonFields.first_name
-                    )}&last_name=${encodeURIComponent(
-                        this.commonFields.last_name
-                    )}&from=${from}`
-                );
+
+                if (this.isFrenchLocale) {
+                    this.$router.push(
+                        `/invitation?email=${encodeURIComponent(
+                            this.commonFields.email
+                        )}&first_name=${encodeURIComponent(
+                            this.commonFields.first_name
+                        )}&last_name=${encodeURIComponent(
+                            this.commonFields.last_name
+                        )}&from=${from}`
+                    );
+                } else {
+                    this.$router.push("/");
+                }
 
                 notify({
                     group: "notifications",
