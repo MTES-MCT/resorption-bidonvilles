@@ -271,7 +271,12 @@ export default {
                                                                                 longitude =
                                                                             }
                                                                     } */
-            }
+            },
+
+            /**
+             *
+             */
+            layersControl: null
         };
     },
 
@@ -361,9 +366,29 @@ export default {
 
     mounted() {
         this.createMap();
+
+        window.onbeforeprint = () => {
+            this.preprint(false);
+        };
+        window.onafterprint = () => {
+            document.body.classList.remove("preprint");
+            this.map.addControl(this.map.zoomControl);
+            this.setupLayersControl();
+            this.resize();
+        };
     },
 
     methods: {
+        preprint(triggerPrint = true) {
+            document.body.classList.add("preprint");
+            this.map.removeControl(this.map.zoomControl);
+            this.removeLayersControl();
+            this.resize();
+
+            if (triggerPrint === true) {
+                window.print();
+            }
+        },
         countNumberOfTowns() {
             this.numberOfShantytownsBy = this.towns.reduce(
                 (acc, obj) => {
@@ -406,6 +431,7 @@ export default {
         setupMapControls() {
             this.setupZoomControl();
             this.setupLayersControl();
+            this.setupPrintControl();
             this.setupAddressTogglerControl();
             this.setupFieldTypesLegendControl();
         },
@@ -425,11 +451,48 @@ export default {
          * @returns {undefined}
          */
         setupLayersControl() {
-            const layersControl = L.control.layers(this.mapLayers, undefined, {
-                collapsed: false
+            if (!this.layersControl) {
+                this.layersControl = L.control.layers(
+                    this.mapLayers,
+                    undefined,
+                    {
+                        collapsed: false
+                    }
+                );
+            }
+
+            if (!this.layersControl._map) {
+                this.map.addControl(this.layersControl);
+            }
+        },
+
+        /**
+         *
+         */
+        removeLayersControl() {
+            if (this.layersControl) {
+                this.map.removeControl(this.layersControl);
+            }
+        },
+
+        /**
+         * Initialise le contrôle "Voir les adresses des sites"
+         *
+         * @returns {undefined}
+         */
+        setupPrintControl() {
+            const { printer } = this.$refs;
+            const Printer = L.Control.extend({
+                options: {
+                    position: "bottomright"
+                },
+
+                onAdd() {
+                    return printer;
+                }
             });
 
-            this.map.addControl(layersControl);
+            this.map.addControl(new Printer());
         },
 
         /**
