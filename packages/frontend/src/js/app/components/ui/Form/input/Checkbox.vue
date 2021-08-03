@@ -34,6 +34,7 @@
                 v-bind="filteredProps"
                 :checked="isChecked"
                 @change="onChange"
+                :disabled="disabled"
             />
             <slot :isChecked="isChecked">
                 <div class="ml-2">
@@ -77,6 +78,10 @@ export default {
         },
         cypressName: {
             type: String
+        },
+        disabled: {
+            type: Boolean,
+            default: false
         }
     },
     methods: {
@@ -100,7 +105,9 @@ export default {
             return {
                 classic: "form-checkbox h-5 w-5",
                 invisible: "appearance-none absolute invisible",
-                default: "checkbox-town-input"
+                default: `checkbox-town-input ${
+                    this.disabled ? "bg-G300" : "bg-white"
+                }`
             }[this.variant];
         }
     }
