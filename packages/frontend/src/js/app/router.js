@@ -15,7 +15,7 @@ import Me from "#app/pages/me/me.vue";
 import UserList from "#app/pages/users.list/users.list.vue";
 import UserCreate from "#app/pages/UserCreate/index.vue";
 import UserActivate from "#app/pages/UserActivate/index.vue";
-import UserValidate from "#app/pages/users.validate/users.validate.vue";
+import UserValidate from "#app/pages/UserValidate/index.vue";
 import UserUpgrade from "#app/pages/users.upgrade/users.upgrade.vue";
 import UserRequestNewPassword from "#app/pages/UserRequestNewPassword/index.vue";
 import UserSetNewPassword from "#app/pages/UserSetNewPassword/index.vue";

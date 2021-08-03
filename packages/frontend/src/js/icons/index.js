@@ -76,7 +76,8 @@ import {
     faPrint,
     faFile,
     faCopy,
-    faExternalLinkAlt
+    faExternalLinkAlt,
+    faPhone
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(faFlag);
@@ -96,6 +97,7 @@ library.add(faMapMarkedAlt);
 library.add(faChartLine);
 library.add(faComments);
 library.add(faEnvelope);
+library.add(faPhone);
 library.add(faPlayCircle);
 library.add(faFileExcel);
 library.add(faSortDown);
