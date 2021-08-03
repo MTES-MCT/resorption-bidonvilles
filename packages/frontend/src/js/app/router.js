@@ -13,7 +13,7 @@ import TownsUpdate from "#app/pages/TownUpdate/TownUpdate.vue";
 import TownsDetails from "#app/pages/TownDetails/TownDetails";
 import Me from "#app/pages/me/me.vue";
 import UserList from "#app/pages/users.list/users.list.vue";
-import UserCreate from "#app/pages/users.create/users.create.vue";
+import UserCreate from "#app/pages/UserCreate/index.vue";
 import UserActivate from "#app/pages/UserActivate/index.vue";
 import UserValidate from "#app/pages/users.validate/users.validate.vue";
 import UserUpgrade from "#app/pages/users.upgrade/users.upgrade.vue";
