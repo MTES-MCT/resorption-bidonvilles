@@ -41,7 +41,6 @@
                             label="Téléphone"
                             v-model="commonFields.phone"
                             id="phone"
-                            rules="required"
                         />
                     </InputGroup>
 
@@ -152,7 +151,7 @@
                         "
                         class="bg-red200 p-3 mb-8"
                     >
-                        {{ $t("contactPage.error") }}
+                        Votre demande comprend des erreurs:
 
                         <ul class="mt-4">
                             <li
