@@ -1,34 +1,37 @@
 <template>
     <div>
-        <div class="p-4 bg-G100">
+        <div class="py-4 px-8 bg-G100">
             <div class="text-display-sm mb-4">Paramètres de l'accès</div>
 
             <div>
                 <div class="mb-8">
-                    <div class="font-bold">Accès {{ user.role }}</div>
+                    <div class="font-bold">Accès « {{ user.role }} »</div>
                     <div>{{ permission.description }}</div>
-                    <div class="text-primary">
+                    <div class="text-info">
                         <Icon icon="info-circle" />&nbsp; Les paramètres d'accès
                         sont identiques pour tous les membres d'une structure.
                     </div>
                 </div>
 
-                <UserValidatePermissions
-                    v-if="hasPermissionsFor('national')"
-                    title="À l'échelle nationale"
-                    :items="permission.national_permissions"
-                ></UserValidatePermissions>
-                <UserValidatePermissions
-                    v-if="hasPermissionsFor('local')"
-                    title="Sur le territoire d'intervention"
-                    :items="permission.local_permissions"
-                ></UserValidatePermissions>
+                <div class="ml-8">
+                    <UserValidatePermissions
+                        class="mb-4"
+                        v-if="hasPermissionsFor('national')"
+                        title="À l’échelle nationale"
+                        :items="permission.national_permissions"
+                    ></UserValidatePermissions>
+                    <UserValidatePermissions
+                        v-if="hasPermissionsFor('local')"
+                        title="Les droits de l’utilisateur à l’échelle du territoire"
+                        :items="permission.local_permissions"
+                    ></UserValidatePermissions>
+                </div>
             </div>
         </div>
-        <div class="p-4 bg-G200" v-if="availableOptions.length > 0">
+        <div class="py-4 px-8 bg-G300" v-if="availableOptions.length > 0">
             <div>
                 <div class="font-bold">Options</div>
-                <div class="text-primary mb-4">
+                <div class="text-info mb-4">
                     <Icon icon="info-circle" />&nbsp; Les options sont
                     identiques pour tous les membres d'une structure.
                 </div>

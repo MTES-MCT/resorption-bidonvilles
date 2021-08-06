@@ -41,12 +41,35 @@
                         >Définir comme « Administrateur local »</Button
                     >
                     <Button
-                        v-if="user.status === 'active'"
+                        v-if="
+                            loggedUser.role_id === 'national_admin' &&
+                                user.role_id === 'local_admin'
+                        "
                         class="mr-4"
-                        variant="primary"
-                        @click="remove"
-                        >Désactiver l'accès</Button
+                        variant="primaryText"
+                        @click="downgradeLocalAdmin"
+                        >Retirer rôle « Administrateur local »</Button
                     >
+
+                    <div
+                        @mouseover="isHoverDisableAccess = true"
+                        @mouseleave="isHoverDisableAccess = false"
+                    >
+                        <Button
+                            v-if="isExpired"
+                            class="mr-4"
+                            variant="primary"
+                            @click="remove"
+                            >Supprimer l'accès</Button
+                        >
+                        <Button
+                            v-if="user.status === 'active'"
+                            class="mr-4"
+                            variant="primary"
+                            @click="remove"
+                            >Désactiver l'accès</Button
+                        >
+                    </div>
                     <Button
                         v-if="
                             user.status === 'new' && user.user_access === null
@@ -56,14 +79,29 @@
                         @click="deny"
                         >Refuser l'accès</Button
                     >
-                    <Button
-                        v-if="user.status === 'new'"
-                        variant="tertiary"
-                        icon="paper-plane"
-                        iconPosition="left"
-                        @click="validate"
-                        >Envoyer un accès</Button
+                    <div
+                        @mouseover="isHoverSendAccess = true"
+                        @mouseleave="isHoverSendAccess = false"
                     >
+                        <Button
+                            v-if="user.status === 'new'"
+                            variant="tertiary"
+                            icon="paper-plane"
+                            iconPosition="left"
+                            @click="validate"
+                            >Envoyer un accès</Button
+                        >
+                    </div>
+                </div>
+                <div class="italic mt-4 flex justify-end h-8">
+                    <div v-if="isHoverSendAccess">
+                        L’utilisateur va recevoir un mail avec un lien
+                        d'activation
+                    </div>
+                    <div v-if="isHoverDisableAccess">
+                        L’utilisateur ne pourra plus se connecter, les données
+                        partagées seront conservées.
+                    </div>
                 </div>
             </div>
 
@@ -167,7 +205,10 @@ export default {
              *
              * @type {Number}
              */
-            tokenExpiresIn: activationTokenExpiresIn / 3600 / 24
+            tokenExpiresIn: activationTokenExpiresIn / 3600 / 24,
+
+            isHoverSendAccess: false,
+            isHoverDisableAccess: false
         };
     },
 
@@ -196,6 +237,24 @@ export default {
             }
 
             return this.permission.options;
+        },
+
+        /**
+         * Indicates whether the activation link is now expired
+         *
+         * @returns {Boolean}
+         */
+        isExpired() {
+            const now = Date.now();
+            console.log(this.user.status);
+            console.log(this.user.user_access);
+
+            return (
+                this.user !== null &&
+                this.user.status !== "active" &&
+                this.user.user_access !== null &&
+                now - this.user.user_access.expires_at * 1000 > 0
+            );
         }
     },
 
@@ -327,7 +386,25 @@ export default {
                 return;
             }
 
-            await upgradeLocalAdmin(this.$route.params.id);
+            await upgradeLocalAdmin(this.$route.params.id, true);
+            window.location.reload();
+        },
+
+        async downgradeLocalAdmin() {
+            if (this.validation.state === "loading") {
+                return;
+            }
+
+            // eslint-disable-next-line no-alert
+            if (
+                !window.confirm(
+                    "Êtes-vous sûr de vouloir retirer à cet utilisateur les droits d'administrateur local ?"
+                )
+            ) {
+                return;
+            }
+
+            await upgradeLocalAdmin(this.$route.params.id, false);
             window.location.reload();
         },
 

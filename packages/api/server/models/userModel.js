@@ -774,6 +774,17 @@ module.exports = (database) => {
         );
     };
 
+    model.downgradeLocalAdmin = async (userId) => {
+        await database.query(
+            'UPDATE USERS SET fk_role = NULL where user_id = :userId',
+            {
+                replacements: {
+                    userId,
+                },
+            },
+        );
+    };
+
     model.getAdminsFor = async (user) => {
         let localAdmins = null;
         if (user.organization.location.departement !== null) {
