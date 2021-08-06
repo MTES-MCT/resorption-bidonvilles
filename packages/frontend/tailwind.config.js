@@ -117,10 +117,10 @@ module.exports = {
                 red100: "#FDF2F3",
 
                 // Functional colors
-                success: "#0D6635",
-                info: "#3A55D1",
+                success: "#008941",
+                info: "#0762C8",
                 warning: "#FA5C00",
-                error: "#B60000",
+                error: "#E10600",
 
                 // UI colors /  text
                 G800: "#1E1E1E",
