@@ -41,7 +41,10 @@
             </span>
         </UserValidateAccessStatusDate>
 
-        <div class="mb-4 text-center font-bold" v-if="user.last_access">
+        <div
+            class="mb-4 text-center font-bold"
+            v-if="user.last_access && loggedUser.role_id === 'national_admin'"
+        >
             Dernière connexion le {{ formatDate(user.last_access, "d M y") }}
         </div>
     </div>
@@ -53,6 +56,9 @@ export default {
     components: { UserValidateAccessStatusDate },
     props: {
         user: {
+            type: Object
+        },
+        loggedUser: {
             type: Object
         }
     },
