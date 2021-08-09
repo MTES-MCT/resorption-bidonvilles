@@ -23,7 +23,7 @@
                             :availableOptions="options"
                             class="mb-4"
                         />
-                        <div class="bg-yellow-200 p-4 mb-4">
+                        <div class="bg-yellow-200 p-4 mb-12">
                             Ne jamais envoyer un accès si vous avez un doute sur
                             l’identité de la personne.
                         </div>
@@ -70,15 +70,21 @@
                             >Désactiver l'accès</Button
                         >
                     </div>
-                    <Button
-                        v-if="
-                            user.status === 'new' && user.user_access === null
-                        "
-                        class="mr-4"
-                        variant="primary"
-                        @click="deny"
-                        >Refuser l'accès</Button
+                    <div
+                        @mouseover="isHoverDenyAccess = true"
+                        @mouseleave="isHoverDenyAccess = false"
                     >
+                        <Button
+                            v-if="
+                                user.status === 'new' &&
+                                    user.user_access === null
+                            "
+                            class="mr-4"
+                            variant="primary"
+                            @click="deny"
+                            >Refuser l'accès</Button
+                        >
+                    </div>
                     <div
                         @mouseover="isHoverSendAccess = true"
                         @mouseleave="isHoverSendAccess = false"
@@ -94,9 +100,12 @@
                     </div>
                 </div>
                 <div class="italic mt-4 flex justify-end h-8">
+                    <div v-if="isHoverDenyAccess">
+                        L'utilisateur recevra automatiquement un mail.
+                    </div>
                     <div v-if="isHoverSendAccess">
                         L’utilisateur va recevoir un mail avec un lien
-                        d'activation
+                        d'activation.
                     </div>
                     <div v-if="isHoverDisableAccess">
                         L’utilisateur ne pourra plus se connecter, les données
@@ -208,7 +217,8 @@ export default {
             tokenExpiresIn: activationTokenExpiresIn / 3600 / 24,
 
             isHoverSendAccess: false,
-            isHoverDisableAccess: false
+            isHoverDisableAccess: false,
+            isHoverDenyAccess: false
         };
     },
 
@@ -246,8 +256,6 @@ export default {
          */
         isExpired() {
             const now = Date.now();
-            console.log(this.user.status);
-            console.log(this.user.user_access);
 
             return (
                 this.user !== null &&
