@@ -1,5 +1,5 @@
 // Common classes between TextInput / TextArea / Select
-export default function getInputClasses(variant, inputOptions) {
+export default function getInputClasses(variant, inputOptions = {}) {
     const { error, prefixIcon, suffixIcon, size } = inputOptions;
 
     return {
