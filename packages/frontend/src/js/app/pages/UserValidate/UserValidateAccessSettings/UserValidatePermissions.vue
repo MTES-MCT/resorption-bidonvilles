@@ -21,9 +21,7 @@
                         />
                     </div>
 
-                    <span
-                        v-html="item.label.replace(/%(.+?)%/gi, '<em>$1</em>')"
-                    ></span>
+                    <span v-html="item.label.replace(/%(.+?)%/gi, '$1')"></span>
                 </div>
                 <div v-if="item.comments" class="flex items-center">
                     <div class="w-6">
