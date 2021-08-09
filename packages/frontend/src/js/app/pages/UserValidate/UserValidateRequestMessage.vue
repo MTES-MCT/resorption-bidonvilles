@@ -1,5 +1,5 @@
 <template>
-    <div class="p-4 bg-G100">
+    <div class="py-4 px-8 bg-G100">
         <div class="flex justify-between mb-4">
             <div class="text-display-sm">Message</div>
             <div>{{ formatDate(user.created_at, "d M y") }}</div>
