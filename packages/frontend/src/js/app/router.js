@@ -26,7 +26,8 @@ import PlanEdit from "#app/pages/plans.edit/plans.edit.vue";
 import PlanMarks from "#app/pages/plans.marks/plans.marks.vue";
 import PrivateStats from "#app/pages/PrivateStats/index.vue";
 import LegalMentions from "#app/pages/legalMentions/legalMentions.vue";
-import Directory from "#app/pages/directory/directory.vue";
+import OrganizationDetails from "#app/pages/OrganizationDetails/index.vue";
+import OrganizationList from "#app/pages/OrganizationList/index.vue";
 import PublicStats from "#app/pages/PublicStats/index.vue";
 import Covid from "#app/pages/covid/covid.vue";
 import Changelog from "#app/pages/Changelog/Changelog.vue";
@@ -497,8 +498,16 @@ const router = new VueRouter({
             meta: {
                 group: "directory"
             },
-            path: "/annuaire/:id?",
-            component: Directory,
+            path: "/annuaire/",
+            component: OrganizationList,
+            beforeEnter: guardians.loadedAndUpToDate
+        },
+        {
+            meta: {
+                group: "directory"
+            },
+            path: "/annuaire/:id",
+            component: OrganizationDetails,
             beforeEnter: guardians.loadedAndUpToDate
         },
         {

@@ -5,9 +5,17 @@
         </div>
 
         <UserValidateDetailsLabel label="Structure :" class="mb-2">
-            <strong>{{ user.organization.abbreviation }} </strong>({{
-                user.organization.name
-            }})
+            <router-link
+                class="text-info"
+                :to="'/annuaire/' + user.organization.id"
+            >
+                <div v-if="user.organization.abbreviation">
+                    {{ user.organization.abbreviation }} ({{
+                        user.organization.name
+                    }})
+                </div>
+                <div v-else>{{ user.organization.name }}</div>
+            </router-link>
         </UserValidateDetailsLabel>
 
         <UserValidateDetailsLabel

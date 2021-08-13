@@ -14,13 +14,15 @@ import { get as getConfig } from "#helpers/api/config";
 
 import activities from "./modules/activities";
 import locations from "./modules/locations";
+import directory from "./modules/directory";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {
         activities,
-        locations
+        locations,
+        directory
     },
     state: {
         towns: {
