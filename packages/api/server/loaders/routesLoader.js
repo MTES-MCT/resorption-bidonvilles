@@ -155,7 +155,7 @@ module.exports = (app) => {
         '/users/:id/local-admin',
         middlewares.auth.authenticate,
         middlewares.auth.isSuperAdmin,
-        controllers.user.upgradeLocalAdmin,
+        controllers.user.updateLocalAdmin,
     );
     app.post(
         '/users/new-password',

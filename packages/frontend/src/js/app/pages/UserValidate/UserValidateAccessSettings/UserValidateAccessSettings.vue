@@ -74,7 +74,7 @@ export default {
             type: Array
         },
         availableOptions: {
-            type: Object
+            type: Array
         }
     },
     methods: {
