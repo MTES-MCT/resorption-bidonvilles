@@ -18,7 +18,7 @@
             </ValidationProvider>
         </InputWrapper>
         <TextInput
-            label="Votre fonction"
+            :label="functionLabel"
             :value="collectivityFunction"
             @input="val => $emit('update:collectivityFunction', val)"
             rules="required"
@@ -46,6 +46,10 @@ export default {
         },
         collectivityFunction: {
             required: true
+        },
+        functionLabel: {
+            type: String,
+            default: "Votre fonction"
         }
     }
 };

@@ -16,7 +16,7 @@
             >
         </Select>
         <TextInput
-            label="Fonction de l'utilisateur"
+            :label="functionLabel"
             :value="administrationFunction"
             @input="val => $emit('update:administrationFunction', val)"
             rules="required"
@@ -35,6 +35,10 @@ export default {
         },
         administrationFunction: {
             required: true
+        },
+        functionLabel: {
+            type: String,
+            default: "Votre fonction"
         }
     },
     data() {

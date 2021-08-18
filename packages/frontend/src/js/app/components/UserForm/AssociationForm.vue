@@ -56,7 +56,7 @@
         </div>
 
         <TextInput
-            label="Fonction de l'utilisateur"
+            :label="functionLabel"
             :value="associationFunction"
             @input="val => $emit('update:associationFunction', val)"
             rules="required"
@@ -85,6 +85,10 @@ export default {
         },
         newAssociationAcronym: {
             required: true
+        },
+        functionLabel: {
+            type: String,
+            default: "Votre fonction"
         }
     },
     data() {
