@@ -1,8 +1,8 @@
 <template>
     <PrivateLayout>
         <PrivateContainer class="py-16">
-            <div class="text-display-lg mb-8">Fiche utilisateur</div>
-            <div v-if="user">
+            <div v-if="state === 'loaded' && user">
+                <div class="text-display-lg mb-8">Fiche utilisateur</div>
                 <div class="flex">
                     <div class="w-1/3">
                         <UserValidateDetails :user="user" />
@@ -114,9 +114,10 @@
                 </div>
             </div>
 
-            <div v-else class="text-center text-primary text-display-lg mt-16">
-                <Spinner />
-            </div>
+            <LoadingPage v-else-if="state === 'loading'" />
+            <ErrorPage v-else>
+                L'utilisateur demandé n'existe pas en base de données.
+            </ErrorPage>
         </PrivateContainer>
     </PrivateLayout>
 </template>
@@ -124,6 +125,8 @@
 <script>
 import PrivateLayout from "#app/components/PrivateLayout";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer.vue";
+import LoadingPage from "#app/components/PrivateLayout/LoadingPage.vue";
+import ErrorPage from "#app/components/PrivateLayout/ErrorPage.vue";
 import UserValidateDetails from "./UserValidateDetails/UserValidateDetails";
 import UserValidateAccessStatus from "./UserValidateAccessStatus/UserValidateAccessStatus";
 import UserValidateRequestMessage from "./UserValidateRequestMessage";
@@ -134,29 +137,25 @@ import {
     get,
     remove,
     sendActivationLink,
-    upgradeLocalAdmin
+    updateLocalAdmin
 } from "#helpers/api/user";
 import { notify } from "#helpers/notificationHelper";
-import Spinner from "#app/components/ui/Spinner";
 
 let permissions;
 
 export default {
     components: {
-        Spinner,
         PrivateLayout,
         PrivateContainer,
         UserValidateAccessStatus,
         UserValidateDetails,
         UserValidateRequestMessage,
-        UserValidateAccessSettings
+        UserValidateAccessSettings,
+        LoadingPage,
+        ErrorPage
     },
     data() {
-        const {
-            permissions_description,
-            activation_token_expires_in: activationTokenExpiresIn,
-            user: loggedUser
-        } = getConfig();
+        const { permissions_description, user: loggedUser } = getConfig();
         permissions = permissions_description;
 
         return {
@@ -186,13 +185,6 @@ export default {
             state: null,
 
             /**
-             * Wether an activation link is being generated for one of the users
-             *
-             * @type {boolean}
-             */
-            loading: false,
-
-            /**
              * Validation state
              *
              * @type {Object}
@@ -208,13 +200,6 @@ export default {
              * @type {Object.<String,Boolean>}
              */
             checkedOptions: {},
-
-            /**
-             * Number of days of validity of an activation days
-             *
-             * @type {Number}
-             */
-            tokenExpiresIn: activationTokenExpiresIn / 3600 / 24,
 
             isHoverSendAccess: false,
             isHoverDisableAccess: false,
@@ -281,7 +266,7 @@ export default {
          * Please note that this cannot be done if the data has already been loaded
          * before.
          */
-        load() {
+        async load() {
             // loading data is forbidden if the component is already loading or loaded
             if ([null, "error"].indexOf(this.state) === -1) {
                 return;
@@ -290,17 +275,15 @@ export default {
             this.state = "loading";
             this.error = null;
 
-            get(this.$route.params.id)
-                .then(user => {
-                    this.user = user;
-                    this.checkedOptions = user.permission_options;
-
-                    this.state = "loaded";
-                })
-                .catch(({ user_message: error }) => {
-                    this.error = error;
-                    this.state = "error";
-                });
+            try {
+                const user = await get(this.$route.params.id);
+                this.user = user;
+                this.checkedOptions = user.permission_options;
+                this.state = "loaded";
+            } catch ({ user_message: error }) {
+                this.error = error;
+                this.state = "error";
+            }
         },
 
         /**
@@ -352,7 +335,7 @@ export default {
         /**
          * Denies access to the user
          */
-        deny() {
+        async deny() {
             if (this.validation.state === "loading") {
                 return;
             }
@@ -360,24 +343,23 @@ export default {
             this.validation.state = "loading";
             this.validation.error = null;
 
-            denyAccess(this.$route.params.id)
-                .then(() => {
-                    this.validation.state = null;
+            try {
+                await denyAccess(this.$route.params.id);
+                this.validation.state = null;
 
-                    this.$trackMatomoEvent("Demande d'accès", "Refuser accès");
-                    notify({
-                        group: "notifications",
-                        type: "success",
-                        title: "Accès refusé",
-                        text: "L'utilisateur a été supprimé de la base"
-                    });
-
-                    this.$router.push("/liste-des-utilisateurs");
-                })
-                .catch(({ user_message: error }) => {
-                    this.validation.state = null;
-                    this.validation.error = error;
+                this.$trackMatomoEvent("Demande d'accès", "Refuser accès");
+                notify({
+                    group: "notifications",
+                    type: "success",
+                    title: "Accès refusé",
+                    text: "L'utilisateur a été supprimé de la base"
                 });
+
+                this.$router.push("/liste-des-utilisateurs");
+            } catch ({ user_message: error }) {
+                this.validation.state = null;
+                this.validation.error = error;
+            }
         },
 
         async upgradeLocalAdmin() {
@@ -394,7 +376,7 @@ export default {
                 return;
             }
 
-            await upgradeLocalAdmin(this.$route.params.id, true);
+            await updateLocalAdmin(this.$route.params.id, true);
             window.location.reload();
         },
 
@@ -412,14 +394,14 @@ export default {
                 return;
             }
 
-            await upgradeLocalAdmin(this.$route.params.id, false);
+            await updateLocalAdmin(this.$route.params.id, false);
             window.location.reload();
         },
 
         /**
          *
          */
-        remove() {
+        async remove() {
             if (this.validation.state === "loading") {
                 return;
             }
@@ -436,23 +418,22 @@ export default {
             this.validation.state = "loading";
             this.validation.error = null;
 
-            remove(this.$route.params.id)
-                .then(() => {
-                    this.validation.state = null;
+            try {
+                await remove(this.$route.params.id);
+                this.validation.state = null;
 
-                    notify({
-                        group: "notifications",
-                        type: "success",
-                        title: "Accès supprimé",
-                        text: "L'utilisateur a été supprimé de la base"
-                    });
-
-                    this.$router.push("/liste-des-utilisateurs");
-                })
-                .catch(({ user_message: error }) => {
-                    this.validation.state = null;
-                    this.validation.error = error;
+                notify({
+                    group: "notifications",
+                    type: "success",
+                    title: "Accès supprimé",
+                    text: "L'utilisateur a été supprimé de la base"
                 });
+
+                this.$router.push("/liste-des-utilisateurs");
+            } catch ({ user_message: error }) {
+                this.validation.state = null;
+                this.validation.error = error;
+            }
         }
     }
 };

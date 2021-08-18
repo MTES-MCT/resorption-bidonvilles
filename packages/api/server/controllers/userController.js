@@ -871,7 +871,7 @@ module.exports = models => ({
         return res.status(200).send({});
     },
 
-    async upgradeLocalAdmin(req, res, next) {
+    async updateLocalAdmin(req, res, next) {
         const { admin } = req.body;
 
         try {

@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import UserValidateAccessStatusDate from "#app/pages/UserValidate/UserValidateAccessStatus/UserValidateAccessStatusDate";
+import UserValidateAccessStatusDate from "./UserValidateAccessStatusDate";
 export default {
     components: { UserValidateAccessStatusDate },
     props: {

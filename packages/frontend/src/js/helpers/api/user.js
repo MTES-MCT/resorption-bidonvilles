@@ -195,7 +195,7 @@ export function remove(userId) {
 /**
  * POST /users/:id/local-admin
  */
-export function upgradeLocalAdmin(userId, admin = true) {
+export function updateLocalAdmin(userId, admin = true) {
     return postApi(`/users/${userId}/local-admin`, { admin });
 }
 
