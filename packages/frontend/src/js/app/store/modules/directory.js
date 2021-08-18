@@ -1,4 +1,5 @@
 import { getDirectory } from "#helpers/api/user";
+import { get as getConfig } from "#helpers/api/config";
 
 export default {
     state: {
@@ -49,11 +50,42 @@ export default {
     },
 
     actions: {
-        async fetchDirectory({ commit }) {
+        setUserLocation({ commit }) {
+            const { user } = getConfig();
+            if (user.organization.location.type !== "nation") {
+                console.log("setUserLocation", user.organization.location);
+                commit("setDirectoryLocationFilter", {
+                    id:
+                        user.organization.location[
+                            user.organization.location.type
+                        ].code,
+                    label:
+                        user.organization.location[
+                            user.organization.location.type
+                        ].name,
+                    category: user.organization.location.type,
+                    locationType: user.organization.location.type,
+                    code:
+                        user.organization.location[
+                            user.organization.location.type
+                        ].code,
+                    data: {
+                        code:
+                            user.organization.location[
+                                user.organization.location.type
+                            ].code,
+                        type: user.organization.location.type
+                    }
+                });
+            }
+        },
+        async fetchDirectory({ commit, dispatch }) {
             commit("setDirectoryLoading", true);
             commit("setDirectoryError", null);
 
             try {
+                dispatch("setUserLocation");
+
                 const { organizations } = await getDirectory();
 
                 const enrichedOrganizations = organizations.map(org => ({
@@ -97,8 +129,6 @@ export default {
             const { filters } = state;
 
             const result = state.items.filter(item => {
-                console.log(item.type.name, item.type.id);
-
                 if (filters.location && !checkLocation(item, filters)) {
                     return false;
                 }
@@ -129,6 +159,7 @@ export default {
 function checkSearch(organization, search) {
     return (
         !!organization.name?.match(new RegExp(search, "ig")) ||
+        !!organization.abbreviation?.match(new RegExp(search, "ig")) ||
         !!organization.users.some(
             user =>
                 `${user.first_name} ${user.last_name}`.match(

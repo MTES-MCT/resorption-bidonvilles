@@ -20,15 +20,17 @@
                     >
                 </template>
                 <template v-slot:extra="{ removeItem }">
-                    <div class="py-1 text-right" v-if="allowShowAll">
-                        <Button
-                            variant="primaryText"
-                            @click="removeItem"
-                            size="sm"
-                            class="font-bold"
-                            >Voir tous les sites de France</Button
-                        >
-                    </div>
+                    <slot name="extra">
+                        <div class="py-1 text-right" v-if="allowShowAll">
+                            <Button
+                                variant="primaryText"
+                                @click="removeItem"
+                                size="sm"
+                                class="font-bold"
+                                >Voir tous les sites de France</Button
+                            >
+                        </div>
+                    </slot>
                 </template>
                 <template
                     v-slot:default="{

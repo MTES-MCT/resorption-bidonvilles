@@ -1,7 +1,10 @@
 <template>
     <OrganizationDetailsUserWrapper :user="user">
         <div
-            class="bg-G100 border-l-4 border-info p-4 grid grid-cols-2 grid-gap-32"
+            :class="[
+                'bg-G100 border-l-4 border-info p-4 grid grid-cols-2 grid-gap-32',
+                hasPermission('user.read') && 'hover:bg-blue200'
+            ]"
         >
             <div>
                 <h1 class="text-display-sm">
@@ -23,12 +26,17 @@
 <script>
 import OrganizationDetailsUserIcon from "#app/pages/OrganizationDetails/OrganizationDetailsUserIcon";
 import OrganizationDetailsUserWrapper from "#app/pages/OrganizationDetails/OrganizationDetailsUserWrapper";
+import { hasPermission } from "#helpers/api/config";
+
 export default {
     components: { OrganizationDetailsUserWrapper, OrganizationDetailsUserIcon },
     props: {
         user: {
             type: Object
         }
+    },
+    methods: {
+        hasPermission
     }
 };
 </script>

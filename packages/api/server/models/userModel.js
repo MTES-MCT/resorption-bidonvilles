@@ -646,6 +646,7 @@ module.exports = (database) => {
                     organizations.city_name,
                     roles_regular.name AS role,
                     users.user_id AS "user_id",
+                    users.fk_role AS "user_role",
                     users.first_name AS "user_firstName",
                     users.last_name AS "user_lastName",
                     users.email AS "user_email",
@@ -710,6 +711,7 @@ module.exports = (database) => {
                 if (user.user_id !== null) {
                     hash[user.organization_id].users.push({
                         id: user.user_id,
+                        role: user.user_role,
                         first_name: user.user_firstName,
                         last_name: user.user_lastName,
                         email: user.user_email,
