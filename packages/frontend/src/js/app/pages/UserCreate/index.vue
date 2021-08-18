@@ -98,6 +98,7 @@
                         :organizationFunction.sync="
                             requestAccessFields.position
                         "
+                        functionLabel="Fonction de l'utilisateur"
                     />
                     <TerritorialCollectivityForm
                         v-if="isTerritorialCollectivityRequest"
@@ -107,6 +108,7 @@
                         :collectivityFunction.sync="
                             requestAccessFields.position
                         "
+                        functionLabel="Fonction de l'utilisateur"
                     />
                     <AssociationForm
                         v-if="isAssociationRequest"
@@ -121,6 +123,7 @@
                         :newAssociationAcronym.sync="
                             associationFields.new_association_abbreviation
                         "
+                        functionLabel="Fonction de l'utilisateur"
                     />
                     <AdministrationForm
                         v-if="isAdministrationRequest"
@@ -130,6 +133,7 @@
                         :administrationFunction.sync="
                             requestAccessFields.position
                         "
+                        functionLabel="Fonction de l'utilisateur"
                     />
 
                     <CheckableGroup
@@ -185,10 +189,10 @@
 
 <script>
 import { create } from "#helpers/api/user";
-import PublicEstablishmentForm from "./PublicEstablishmentForm.vue";
-import TerritorialCollectivityForm from "./TerritorialCollectivityForm.vue";
-import AssociationForm from "./AssociationForm.vue";
-import AdministrationForm from "./AdministrationForm.vue";
+import PublicEstablishmentForm from "#app/components/UserForm/PublicEstablishmentForm.vue";
+import TerritorialCollectivityForm from "#app/components/UserForm/TerritorialCollectivityForm.vue";
+import AssociationForm from "#app/components/UserForm/AssociationForm.vue";
+import AdministrationForm from "#app/components/UserForm/AdministrationForm.vue";
 import CheckableGroup from "#app/components/ui/Form/CheckableGroup.vue";
 import Checkbox from "#app/components/ui/Form/input/Checkbox.vue";
 import TextInput from "#app/components/ui/Form/input/TextInput";

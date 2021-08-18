@@ -32,7 +32,7 @@
             </SelectOption>
         </Select>
         <TextInput
-            label="Votre fonction"
+            :label="functionLabel"
             :value="organizationFunction"
             @input="val => $emit('update:organizationFunction', val)"
             rules="required"
@@ -57,6 +57,10 @@ export default {
         },
         organizationFunction: {
             required: true
+        },
+        functionLabel: {
+            type: String,
+            default: "Votre fonction"
         }
     },
     data() {
