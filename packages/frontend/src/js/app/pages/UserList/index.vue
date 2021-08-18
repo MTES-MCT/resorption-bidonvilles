@@ -1,7 +1,7 @@
 <template>
     <PrivateLayout>
         <PrivateContainer>
-            <div v-if="users.length">
+            <div v-if="!loading && users.length">
                 <UserListHeader
                     :filters="filters"
                     @update:search="val => (filters.search = val)"
@@ -19,9 +19,10 @@
                     <div class="pr-6 text-G600">{{ elementsOnPage }}</div>
                 </div>
             </div>
-            <div v-else class="text-center text-primary text-display-lg mt-16">
-                <Spinner />
-            </div>
+            <LoadingPage v-else-if="loading" />
+            <ErrorPage v-else>
+                Une erreur est survenue.
+            </ErrorPage>
         </PrivateContainer>
     </PrivateLayout>
 </template>
@@ -32,6 +33,8 @@ import UserListHeader from "./UserListHeader/index.vue";
 import UserListTable from "./UserListTable";
 import { list } from "#helpers/api/user";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
+import LoadingPage from "#app/components/PrivateLayout/LoadingPage";
+import ErrorPage from "#app/components/PrivateLayout/ErrorPage";
 import enrichUsersWithStatus from "./enrichUsersWithStatus";
 import Fuse from "fuse.js";
 
@@ -44,7 +47,9 @@ export default {
         PrivateContainer,
         UserListHeader,
         UserListTable,
-        PrivateLayout
+        PrivateLayout,
+        LoadingPage,
+        ErrorPage
     },
     computed: {
         filteredUsers() {
@@ -93,33 +98,36 @@ export default {
         onChangePage(newPage) {
             this.currentPage = newPage;
         },
-        load() {
-            list()
-                .then(users => {
-                    this.users = enrichUsersWithStatus(users).filter(
-                        ({ status }) => status !== "inactive"
-                    );
-                    const options = {
-                        threshold: 0.0,
-                        ignoreLocation: true,
-                        useExtendedSearch: true,
-                        shouldSort: false,
-                        isCaseSensitive: false,
-                        keys: [
-                            "full_name",
-                            "organization.name",
-                            "organization.abbreviation",
-                            "position",
-                            "territory",
-                            "role"
-                        ]
-                    };
+        async load() {
+            try {
+                this.loading = true;
+                const users = await list();
 
-                    fuse = new Fuse(this.users, options);
-                })
-                .catch(({ user_message: error }) => {
-                    this.error = error;
-                });
+                this.users = enrichUsersWithStatus(users).filter(
+                    ({ status }) => status !== "inactive"
+                );
+                const options = {
+                    threshold: 0.0,
+                    ignoreLocation: true,
+                    useExtendedSearch: true,
+                    shouldSort: false,
+                    isCaseSensitive: false,
+                    keys: [
+                        "full_name",
+                        "organization.name",
+                        "organization.abbreviation",
+                        "position",
+                        "territory",
+                        "role"
+                    ]
+                };
+
+                fuse = new Fuse(this.users, options);
+            } catch ({ user_message: error }) {
+                this.error = error;
+            }
+
+            this.loading = false;
         }
     },
     data() {
@@ -128,6 +136,7 @@ export default {
                 search: "",
                 status: []
             },
+            loading: true,
             error: null,
             users: [],
             currentPage: 1

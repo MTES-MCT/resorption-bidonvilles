@@ -44,14 +44,6 @@
                 </div>
             </div>
             <div>
-                <Button
-                    icon="file-excel"
-                    iconPosition="left"
-                    variant="primary"
-                    class="mr-6 mb-2 md:mb-0"
-                    @click="showExport"
-                    >Exporter</Button
-                >
                 <router-link to="/nouvel-utilisateur"
                     ><Button
                         icon="plus"
@@ -83,9 +75,6 @@ export default {
     methods: {
         handleSearchBlur(data) {
             this.$emit("update:location", data.value);
-        },
-        showExport() {
-            window.alert("todo");
         }
     }
 };

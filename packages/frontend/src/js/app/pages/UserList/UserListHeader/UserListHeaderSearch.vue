@@ -4,7 +4,7 @@
             <InputIcon
                 class="text-primary pl-6"
                 position="before"
-                prefixIcon="search"
+                icon="search"
             />
 
             <input
