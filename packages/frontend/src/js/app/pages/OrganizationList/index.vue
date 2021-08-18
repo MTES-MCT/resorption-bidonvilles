@@ -63,16 +63,13 @@
                     />
                 </div>
             </div>
-            <div v-else>
-                <div class="text-center text-primary text-display-lg mt-16">
-                    <Spinner />
-                </div>
-            </div>
+            <LoadingPage v-if="loading" />
         </PrivateContainer>
     </PrivateLayout>
 </template>
 <script>
 import PrivateLayout from "#app/components/PrivateLayout";
+import LoadingPage from "#app/components/PrivateLayout/LoadingPage";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
 import GeoSearchbar from "#app/components/GeoSearchbar/GeoSearchbar.vue";
 import OrganizationListHeader from "./OrganizationListHeader";
@@ -90,7 +87,8 @@ export default {
         GeoSearchbar,
         OrganizationListHeader,
         OrganizationListFiltersPagination,
-        OrganizationCard
+        OrganizationCard,
+        LoadingPage
     },
     data() {
         const { user } = getConfig();
