@@ -10,28 +10,39 @@
                     :value="$store.state.directory.filters.location"
                     @blur="handleSearchBlur"
                     placeholder="Département, nom de la structure"
-                    :allowShowAll="false"
-                />
+                >
+                    <template v-slot:extra>
+                        <div class="py-1 text-right">
+                            <Button
+                                variant="primaryText"
+                                @click="toggleUserLocation"
+                                size="sm"
+                                class="font-bold"
+                                >{{
+                                    $store.state.directory.filters.location ||
+                                    currentUser.organization.location.type ===
+                                        "nation"
+                                        ? "Voir tous les utilisateurs de France"
+                                        : "Voir tous les utilisateurs de mon territoire"
+                                }}</Button
+                            >
+                        </div>
+                    </template>
+                </GeoSearchbar>
             </PrivateContainer>
         </div>
         <PrivateContainer class="pt-4 pb-16">
             <OrganizationListHeader
-                class="mb-4"
-                :locationImg="locationImg"
+                class="mb-8"
                 :title="title"
+                :locationImg="locationImg"
                 :nbOrganizations="filteredOrganizations.length"
                 :nbUsers="nbUsers"
             />
             <OrganizationListFiltersPagination
                 class="mb-4"
                 :filters="$store.state.directory.filters"
-                @update:intervention="
-                    val => $store.commit('setDirectoryInterventionFilter', val)
-                "
-                @update:organizationType="
-                    val =>
-                        $store.commit('setDirectoryOrganizationTypeFilter', val)
-                "
+                @update:organizationType="updateOrganizationType"
                 :nbPages="nbPages"
                 :currentPage="currentPage"
                 :onChangePage="onChangePage"
@@ -41,7 +52,7 @@
                     v-for="organization in filteredOrganizationsByPage"
                     :key="organization.id"
                     :organization="organization"
-                    class="mb-2"
+                    class="mb-4"
                 />
                 <div class="mt-4 flex justify-end">
                     <Pagination
@@ -69,6 +80,7 @@ import OrganizationListFiltersPagination from "./OrganizationListFiltersPaginati
 import OrganizationCard from "./OrganizationCard";
 import Pagination from "#app/components/ui/Pagination";
 import { mapGetters } from "vuex";
+import { get as getConfig } from "#helpers/api/config";
 
 export default {
     components: {
@@ -80,11 +92,27 @@ export default {
         OrganizationListFiltersPagination,
         OrganizationCard
     },
+    data() {
+        const { user } = getConfig();
+        return {
+            currentUser: user
+        };
+    },
     methods: {
         async load() {
-            // on fetch les activités
             if (this.$store.state.directory.items.length === 0) {
                 this.$store.dispatch("fetchDirectory");
+            }
+        },
+        toggleUserLocation() {
+            this.$store.commit("setDirectorySearchFilter", "");
+            if (
+                this.$store.state.directory.filters.location ||
+                this.currentUser.organization.location.type === "nation"
+            ) {
+                this.$store.commit("setDirectoryLocationFilter", null);
+            } else {
+                this.$store.dispatch("setUserLocation");
             }
         },
         onChangePage(newPage) {
@@ -93,6 +121,11 @@ export default {
         handleSearchBlur(data) {
             this.$store.commit("setDirectoryLocationFilter", data.value);
             this.$store.commit("setDirectorySearchFilter", data.search);
+            this.$store.commit("setDirectoryPage", 1);
+        },
+        updateOrganizationType(val) {
+            this.$store.commit("setDirectoryOrganizationTypeFilter", val);
+            this.$store.commit("setDirectoryPage", 1);
         }
     },
     created() {
@@ -113,11 +146,15 @@ export default {
             // Guadeloupe, Martinique, Guyane, Réunion, Mayotte
             const unsupportedRegions = ["01", "02", "03", "04", "06"];
             const locationFilter = this.$store.state.directory.filters.location;
-            const isRegion = locationFilter && locationFilter.type === "Région";
+            const isNation = locationFilter && locationFilter.type === "nation";
+            const isRegion =
+                locationFilter && locationFilter.locationType === "region";
+            const isDepartement =
+                locationFilter && locationFilter.locationType === "departement";
             const isUnsupportedRegion =
                 isRegion && unsupportedRegions.includes(locationFilter.code);
 
-            if (!locationFilter || isUnsupportedRegion) {
+            if (!locationFilter || isNation || isUnsupportedRegion) {
                 return "/img/regions/fallback.svg";
             }
 
@@ -125,24 +162,17 @@ export default {
                 return `/img/regions/${locationFilter.code}.svg`;
             }
 
+            if (isDepartement) {
+                return `/img/departements/${locationFilter.code}.svg`;
+            }
+
             return `/img/departements/${locationFilter.departement}.svg`;
         },
-        currentLocation() {
-            return (
-                this.$store.state.directory.filters.location || {
-                    id: null,
-                    label: "France",
-                    category: "Pays",
-                    data: {
-                        code: null,
-                        type: "nation"
-                    }
-                }
-            );
-        },
         title() {
-            if (this.$store.state.directory.filters.location) {
-                return `${this.$store.state.directory.filters.location.label}`;
+            const locationFilter = this.$store.state.directory.filters.location;
+
+            if (locationFilter && locationFilter.type !== "nation") {
+                return locationFilter.label;
             }
 
             return `France métropolitaine`;

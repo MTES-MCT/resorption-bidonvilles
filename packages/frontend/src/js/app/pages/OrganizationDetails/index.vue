@@ -41,7 +41,8 @@
                 v-else-if="!directoryLoading && !organization"
                 class="text-center text-error text-display-lg mt-16"
             >
-                La structure demandé n'existe pas en base de données
+                La structure demandé n'existe pas en base de données ou n'a pas
+                d'utilisateurs actifs
             </div>
             <div v-else-if="directoryLoading && organization">
                 <div class="text-center text-primary text-display-lg mt-16">

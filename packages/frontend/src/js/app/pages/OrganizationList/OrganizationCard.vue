@@ -12,17 +12,29 @@
                 <div class="text-md font-bold w-2/3 pr-16">
                     {{ organization.name }} {{ territory }}
                 </div>
-                <ul class="w-1/3 list-disc">
+                <ul class="w-128 pl-16 list-disc">
                     <li
                         v-for="user in organization.users.slice(0, 5)"
                         :key="user.id"
                     >
-                        {{ user.last_name.toUpperCase() }} {{ user.first_name }}
+                        {{ user.last_name.toUpperCase() }}
+                        {{ user.first_name }}
+                        <Icon
+                            icon="user-shield"
+                            class="text-info"
+                            v-if="user.role === 'local_admin'"
+                        />
                     </li>
                     <li v-if="organization.users.length > 5">
                         +{{ organization.users.length }} contacts
                     </li>
                 </ul>
+                <Button
+                    variant="primaryText"
+                    icon="arrow-right"
+                    class="text-display-sm self-end whitespace-no-wrap hover:underline -mb-4"
+                    >Voir la fiche complète</Button
+                >
             </div>
         </router-link>
     </div>
