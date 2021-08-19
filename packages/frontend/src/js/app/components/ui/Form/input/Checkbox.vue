@@ -109,7 +109,7 @@ export default {
 <!-- Custom checkbox style -->
 <style>
 .checkbox-town-input {
-    @apply w-5 h-5 appearance-none border-2 border-G200 relative outline-none cursor-pointer;
+    @apply w-5 h-5 appearance-none border-2 border-G800 relative outline-none cursor-pointer;
 }
 .checkbox-town-input:checked {
     @apply bg-primary;

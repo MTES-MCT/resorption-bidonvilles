@@ -47,7 +47,7 @@
                     <div class="text-display-md">Structure</div>
                     <InputGroup>
                         <CheckableGroup
-                            label="Quelle est la structure de l'utilisateur?"
+                            label="Quelle est la structure de l'utilisateur ?"
                             showMandatoryStar
                             rules="required"
                             id="organization_category"
