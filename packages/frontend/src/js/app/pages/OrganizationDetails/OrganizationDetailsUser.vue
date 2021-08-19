@@ -2,12 +2,12 @@
     <OrganizationDetailsUserWrapper :user="user">
         <div
             :class="[
-                'bg-G100 border-l-4 border-info p-4 grid grid-cols-2 grid-gap-32',
+                'bg-G200 p-4 grid grid-cols-2 grid-gap-32',
                 hasPermission('user.read') && 'hover:bg-blue200'
             ]"
         >
             <div>
-                <h1 class="text-display-sm">
+                <h1 class="font-bold">
                     {{ user.last_name.toUpperCase() }} {{ user.first_name }}
                 </h1>
                 <div class="text-info">Fonction : {{ user.position }}</div>

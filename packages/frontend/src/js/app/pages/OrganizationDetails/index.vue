@@ -25,7 +25,7 @@
                     </div>
 
                     <div>
-                        <div>Role :</div>
+                        <div>Rôle :</div>
                         <div class="text-lg">{{ organization.role }}</div>
                     </div>
                 </div>

@@ -13,10 +13,6 @@
                         <div>
                             <div>{{ nbOrganizations }} structures</div>
                             <div>{{ nbUsers }} utilisateurs</div>
-                            <div>
-                                Les utilisateurs nationaux ont une visibilité
-                                sur tous les territoires.
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -34,9 +30,8 @@
                         ><Icon icon="user-shield" /> Les administrateurs
                         locaux</span
                     >
-                    ont pour rôle est d’ouvrir et de gérer les accès aux
-                    utilisateurs de leur territoire. Ils sont à solliciter pour
-                    toute question sur les droits d'accès et la plateforme.
+                    gèrent les accès des utilisateurs de leur territoire et sont
+                    à solliciter pour toute question sur la plateforme.
                 </div>
             </div>
         </div>

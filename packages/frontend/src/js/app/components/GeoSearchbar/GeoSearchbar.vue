@@ -20,7 +20,7 @@
                     >
                 </template>
                 <template v-slot:extra="{ removeItem }">
-                    <slot name="extra">
+                    <slot name="extra" :removeItem="removeItem">
                         <div class="py-1 text-right" v-if="allowShowAll">
                             <Button
                                 variant="primaryText"

@@ -8,7 +8,7 @@
             :closedTowns="filters.status !== 'open'"
         ></Export>
 
-        <div class="bg-G100 print:hidden">
+        <div class="bg-G200 print:hidden">
             <PrivateContainer class="py-6">
                 <h1 class="text-display-md text-center mb-4">
                     Rechercher un site, une commune, un département... ?
