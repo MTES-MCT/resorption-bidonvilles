@@ -1,7 +1,7 @@
 <template>
     <div
         :class="[
-            'rounded-sm cursor-pointer border preventPrintBreak',
+            'rounded-sm cursor-pointer border border-cardBorder preventPrintBreak',
             isHover ? 'bg-blue200 border-transparent' : ''
         ]"
         @mouseenter="isHover = true"
