@@ -27,7 +27,7 @@ export default {
     },
     methods: {
         formatDate(...args) {
-            return App.formatDate.call(App, ...args);
+            return App.formatDate.call(App, ...args).toLowerCase();
         }
     }
 };
