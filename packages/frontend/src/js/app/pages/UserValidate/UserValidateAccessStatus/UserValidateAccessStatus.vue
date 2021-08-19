@@ -5,14 +5,7 @@
             :date="user.created_at"
             icon="flag"
             color="text-secondary"
-        />
-
-        <UserValidateAccessStatusDate
-            v-if="isExpired"
-            text="Expiré"
-            :date="user.user_access.expires_at"
-            icon="unlink"
-            color="text-G400"
+            class="mb-2"
         />
 
         <UserValidateAccessStatusDate
@@ -21,12 +14,22 @@
             :date="user.user_access.created_at"
             icon="paper-plane"
             color="text-primary"
+            class="mb-2"
         >
             <span v-if="user.user_access.sent_by">
-                Par {{ user.user_access.sent_by.first_name }}
+                par {{ user.user_access.sent_by.first_name }}
                 {{ user.user_access.sent_by.last_name }}
             </span>
         </UserValidateAccessStatusDate>
+
+        <UserValidateAccessStatusDate
+            v-if="isExpired"
+            text="Expiré"
+            :date="user.user_access.expires_at"
+            icon="unlink"
+            color="text-G400"
+            class="mb-2"
+        />
 
         <UserValidateAccessStatusDate
             v-if="user.user_access && user.user_access.used_at"
@@ -34,9 +37,10 @@
             :date="user.user_access.used_at"
             icon="user-check"
             color="text-tertiary"
+            class="mb-2"
         >
             <span v-if="user.user_access.sent_by">
-                Par {{ user.user_access.sent_by.first_name }}
+                par {{ user.user_access.sent_by.first_name }}
                 {{ user.user_access.sent_by.last_name }}
             </span>
         </UserValidateAccessStatusDate>
@@ -64,7 +68,7 @@ export default {
     },
     methods: {
         formatDate(...args) {
-            return App.formatDate.call(App, ...args);
+            return App.formatDate.call(App, ...args).toLowerCase();
         }
     },
     computed: {
