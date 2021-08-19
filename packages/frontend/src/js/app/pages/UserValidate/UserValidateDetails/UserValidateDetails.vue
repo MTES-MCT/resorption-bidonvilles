@@ -6,7 +6,7 @@
 
         <UserValidateDetailsLabel label="Structure :" class="mb-2">
             <router-link
-                class="text-info"
+                class="text-primary"
                 :to="'/annuaire/' + user.organization.id"
             >
                 <div v-if="user.organization.abbreviation">
