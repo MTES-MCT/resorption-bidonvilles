@@ -96,6 +96,7 @@ export default {
             );
         },
         onChangePage(newPage) {
+            window.scrollTo(0, 0);
             this.currentPage = newPage;
         },
         async load() {

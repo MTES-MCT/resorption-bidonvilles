@@ -35,6 +35,6 @@ export default {
 <style scoped>
 .userListGrid {
     @apply grid gap-x-8;
-    grid-template-columns: 1.5fr 1.5fr 1fr 1fr 1fr;
+    grid-template-columns: 1.5fr 1.5fr 1fr 1fr 1.5fr;
 }
 </style>
