@@ -41,6 +41,11 @@ export function setCustomVariables($piwik, user) {
         superuser: user.is_superuser,
         is_admin: user.is_admin,
         role: user.role_id,
+        org_id: user.organization.id,
+        org_name: user.organization.abbreviation || user.organization.name,
+        org_type:
+            user.organization.type.abbreviation ||
+            user.organization.type.name_singular,
         org_category: user.organization.category.uid,
         org_location_type: user.organization.location.type,
         org_location_name: location?.name,
