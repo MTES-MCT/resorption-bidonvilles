@@ -124,6 +124,7 @@
                             associationFields.new_association_abbreviation
                         "
                         functionLabel="Fonction de l'utilisateur"
+                        :creationFromPlan="!!$route.query.association_name"
                     />
                     <AdministrationForm
                         v-if="isAdministrationRequest"
@@ -276,7 +277,9 @@ export default {
                 legal: []
             },
             requestAccessFields: {
-                organization_category: null,
+                organization_category: this.$route.query.association_name
+                    ? "association"
+                    : null,
                 position: ""
             },
             publicEstablishmentFields: {

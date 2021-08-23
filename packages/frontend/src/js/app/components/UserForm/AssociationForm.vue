@@ -6,6 +6,7 @@
             @input="val => $emit('update:associationName', val)"
             rules="required"
             id="association"
+            :disabled="creationFromPlan"
         >
             <optgroup label="Autre">
                 <option value="Autre"
@@ -43,6 +44,7 @@
                 @input="val => $emit('update:associationTerritory', val)"
                 rules="required"
                 id="departement"
+                :disabled="creationFromPlan"
             >
                 <SelectOption>- Selectionner un choix -</SelectOption>
                 <SelectOption
@@ -89,6 +91,10 @@ export default {
         functionLabel: {
             type: String,
             default: "Votre fonction"
+        },
+        creationFromPlan: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -128,6 +134,17 @@ export default {
                 label: `${code} - ${name}`
             })
         );
+
+        // Set association name/territory values after async loading of options to be correctly displayed
+        if (this.creationFromPlan) {
+            const {
+                association_name,
+                association_departement
+            } = this.$route.query;
+
+            this.$emit("update:associationName", association_name);
+            this.$emit("update:associationTerritory", association_departement);
+        }
     }
 };
 </script>
