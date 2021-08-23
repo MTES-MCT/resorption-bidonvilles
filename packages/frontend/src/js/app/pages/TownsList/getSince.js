@@ -2,8 +2,10 @@ export default function getSince(ts) {
     const now = new Date();
     const then = new Date(ts * 1000);
 
-    const days = Math.floor(
-        Math.abs(now.getTime() - then.getTime()) / (1000 * 3600 * 24)
+    const days = Math.abs(
+        (now.getFullYear() - then.getFullYear()) * 365 +
+            (now.getFullYear() - then.getFullYear()) * (365 / 12) +
+            (now.getDate() - then.getDate())
     );
 
     const weeks = Math.floor(days / 7);
