@@ -286,15 +286,14 @@ module.exports = (database) => {
                 CASE
                     WHEN
                         users.fk_status = 'new' AND last_user_accesses.user_access_id IS NULL
-                        THEN 10000000 + extract(epoch from users.created_at)::int
+                        THEN 4
                     WHEN users.fk_status = 'new' AND last_user_accesses.expires_at < NOW()::date
-                        THEN extract(epoch from last_user_accesses.created_at)::int
+                        THEN 3
                     WHEN users.fk_status = 'new' AND last_user_accesses.expires_at > NOW()::date
-                        THEN extract(epoch from last_user_accesses.created_at)::int - 10000000
-                    WHEN users.fk_role IS NULL THEN 3
-                    WHEN users.fk_role = 'local_admin' THEN 2
+                        THEN 2
                     ELSE 1
                 END DESC,
+                users.created_at DESC,
                 upper(users.last_name) ASC,
                 upper(users.first_name) ASC`,
             {
