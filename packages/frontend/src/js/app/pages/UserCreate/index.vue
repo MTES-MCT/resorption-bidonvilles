@@ -44,48 +44,12 @@
                         />
                     </InputGroup>
 
-                    <div class="text-display-md">Structure</div>
-                    <InputGroup>
-                        <CheckableGroup
-                            label="Quelle est la structure de l'utilisateur ?"
-                            showMandatoryStar
-                            rules="required"
-                            id="organization_category"
-                        >
-                            <Radio
-                                v-model="
-                                    requestAccessFields.organization_category
-                                "
-                                checkValue="public_establishment"
-                                label="Service de l’Etat, établissement ou organisme public"
-                                variant="card"
-                            />
-                            <Radio
-                                v-model="
-                                    requestAccessFields.organization_category
-                                "
-                                checkValue="territorial_collectivity"
-                                label="Collectivité territoriale"
-                                variant="card"
-                            />
-                            <Radio
-                                v-model="
-                                    requestAccessFields.organization_category
-                                "
-                                checkValue="association"
-                                label="Association"
-                                variant="card"
-                            />
-                            <Radio
-                                v-model="
-                                    requestAccessFields.organization_category
-                                "
-                                checkValue="administration"
-                                label="Administration centrale"
-                                variant="card"
-                            />
-                        </CheckableGroup>
-                    </InputGroup>
+                    <OrganizationCategorySelect
+                        label="Quelle est la structure de l'utilisateur ?"
+                        :organization_category.sync="
+                            requestAccessFields.organization_category
+                        "
+                    />
 
                     <PublicEstablishmentForm
                         v-if="isPublicEstablishmentRequest"
@@ -198,9 +162,11 @@ import CheckableGroup from "#app/components/ui/Form/CheckableGroup.vue";
 import Checkbox from "#app/components/ui/Form/input/Checkbox.vue";
 import TextInput from "#app/components/ui/Form/input/TextInput";
 import PrivateLayout from "#app/components/PrivateLayout";
+import OrganizationCategorySelect from "#app/components/UserForm/OrganizationCategorySelect";
 
 export default {
     components: {
+        OrganizationCategorySelect,
         TextInput,
         Checkbox,
         CheckableGroup,

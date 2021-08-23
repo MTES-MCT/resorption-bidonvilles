@@ -119,47 +119,14 @@
                                 variant="card"
                             />
                         </CheckableGroup>
-                        <CheckableGroup
+
+                        <OrganizationCategorySelect
                             v-if="isRequestAccessAndActor"
                             :label="$t('contactPage.whichEstablishment')"
-                            rules="required"
-                            id="is_actor"
-                        >
-                            <Radio
-                                v-model="
-                                    requestAccessFields.organization_category
-                                "
-                                checkValue="public_establishment"
-                                :label="$t('contactPage.public')"
-                                variant="card"
-                            />
-                            <Radio
-                                v-model="
-                                    requestAccessFields.organization_category
-                                "
-                                checkValue="territorial_collectivity"
-                                :label="
-                                    $t('contactPage.territorialCollectivity')
-                                "
-                                variant="card"
-                            />
-                            <Radio
-                                v-model="
-                                    requestAccessFields.organization_category
-                                "
-                                checkValue="association"
-                                :label="$t('contactPage.association')"
-                                variant="card"
-                            />
-                            <Radio
-                                v-model="
-                                    requestAccessFields.organization_category
-                                "
-                                checkValue="administration"
-                                :label="$t('contactPage.administration')"
-                                variant="card"
-                            />
-                        </CheckableGroup>
+                            :organization_category.sync="
+                                requestAccessFields.organization_category
+                            "
+                        />
 
                         <PublicEstablishmentForm
                             v-if="isPublicEstablishmentRequest"
@@ -344,6 +311,7 @@ import PublicLayout from "#app/components/PublicLayout/index.vue";
 import PublicContainer from "#app/components/PublicLayout/PublicContainer.vue";
 import PublicEstablishmentForm from "#app/components/UserForm/PublicEstablishmentForm.vue";
 import TerritorialCollectivityForm from "#app/components/UserForm/TerritorialCollectivityForm.vue";
+import OrganizationCategorySelect from "#app/components/UserForm/OrganizationCategorySelect.vue";
 import AssociationForm from "#app/components/UserForm/AssociationForm.vue";
 import AdministrationForm from "#app/components/UserForm/AdministrationForm.vue";
 import CheckableGroup from "#app/components/ui/Form/CheckableGroup.vue";
@@ -361,6 +329,7 @@ export default {
         PublicLayout,
         PublicEstablishmentForm,
         TerritorialCollectivityForm,
+        OrganizationCategorySelect,
         AdministrationForm,
         AssociationForm
     },
