@@ -56,5 +56,33 @@ describe(
         const result = formatDateSince(d.getTime() / 1000);
 
         expect(result).toEqual("2 ans et 2 mois");
+    }),
+
+    it("should work with a date of a few years ago", () => {
+        const d = new Date();
+        d.setDate(d.getDate() - 800);
+        const result = formatDateSince(d.getTime() / 1000);
+
+        expect(result).toEqual("2 ans et 2 mois");
+    }),
+
+    it.only("should work with yesterday even if it's less than 24h", () => {
+        const d = new Date();
+        d.setDate(d.getDate() - 1);
+        d.setHours(23, 59, 59);
+
+        const result = formatDateSince(d.getTime() / 1000);
+
+        expect(result).toEqual("Hier");
+    }),
+
+    it.only("should work with 2 days ago even if it's less than 48h", () => {
+        const d = new Date();
+        d.setDate(d.getDate() - 2);
+        d.setHours(23, 59, 59);
+
+        const result = formatDateSince(d.getTime() / 1000);
+
+        expect(result).toEqual("2 jours");
     })
 );
