@@ -12,17 +12,20 @@
             </div>
             <div class="flex-shrink-0 lg:flex-shrink px-8 py-2 lg:py-8 lg:px-4">
                 <div class="tracking-wide text-display-md text-primary">
-                    Formation personnalisée
+                    Webinaire prise en main de Résorption-bidonvilles
                 </div>
                 <p class="mt-2 text-md">
-                    En 45 minutes, prenez en main rapidement la plateforme
-                    <em>Résorption-bidonvilles</em> grâce à une présentation
-                    personnalisée. Nous répondrons à toutes vos questions.
+                    Vous souhaitez prendre en main la plateforme ? découvrir les
+                    fonctionnalités qui vous seront utiles ? vous remettre à
+                    niveau ? Nous vous montrerons l'essentiel en
+                    <span class="font-bold">45 minutes</span> avec une
+                    démonstration personnalisée et en direct de l’outil
+                    collaboratif.
                 </p>
             </div>
             <div class="lg:mt-6 flex-shrink-0 px-8 py-2 lg:p-8">
                 <a
-                    href="https://app.evalandgo.com/s/index.php?a=JTk2cCU5N2slOUElQjA=&id=JTk4ayU5QW4lOTYlQUY="
+                    href="https://app.evalandgo.com/s/index.php?id=JTk5aSU5M2slOTklQUI%3D&a=JTk2cCU5N2slOUElQjA%3D"
                     target="_blank"
                 >
                     <Button class="my-2" variant="secondary"
