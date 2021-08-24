@@ -6,6 +6,13 @@ const ALLOWED_TYPES = require('#server/config/contact_request_types');
 
 module.exports = newUser(
     [
+        body('verifEmail')
+            .custom((value, { req }) => {
+                if (value !== req.body.email) {
+                    throw new Error('La vérification de l\'email ne correspond pas à l\'adresse email');
+                }
+                return true;
+            }),
         body('request_type')
             .isArray({ min: 1 }).withMessage('Vous devez préciser la ou les raisons de votre prise de contact')
             .custom((requestTypes) => {
