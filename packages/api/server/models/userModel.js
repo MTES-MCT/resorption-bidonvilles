@@ -286,15 +286,14 @@ module.exports = (database) => {
                 CASE
                     WHEN
                         users.fk_status = 'new' AND last_user_accesses.user_access_id IS NULL
-                        THEN 10000000 + extract(epoch from users.created_at)::int
+                        THEN 4
                     WHEN users.fk_status = 'new' AND last_user_accesses.expires_at < NOW()::date
-                        THEN extract(epoch from last_user_accesses.created_at)::int
+                        THEN 3
                     WHEN users.fk_status = 'new' AND last_user_accesses.expires_at > NOW()::date
-                        THEN extract(epoch from last_user_accesses.created_at)::int - 10000000
-                    WHEN users.fk_role IS NULL THEN 3
-                    WHEN users.fk_role = 'local_admin' THEN 2
+                        THEN 2
                     ELSE 1
                 END DESC,
+                users.created_at DESC,
                 upper(users.last_name) ASC,
                 upper(users.first_name) ASC`,
             {
@@ -647,12 +646,14 @@ module.exports = (database) => {
                     organizations.city_name,
                     roles_regular.name AS role,
                     users.user_id AS "user_id",
+                    users.fk_role AS "user_role",
                     users.first_name AS "user_firstName",
                     users.last_name AS "user_lastName",
                     users.email AS "user_email",
                     users.phone AS "user_phone",
                     users.position AS "user_position",
                     organizations.fk_type AS "type_id",
+                    organization_types.fk_category AS "type_category",
                     organization_types.name_singular AS "type_name",
                     organization_types.abbreviation AS "type_abbreviation"
                 FROM localized_organizations AS organizations
@@ -699,6 +700,7 @@ module.exports = (database) => {
                         },
                         type: {
                             id: user.type_id,
+                            category: user.type_category,
                             name: user.type_name,
                             abbreviation: user.type_abbreviation,
                         },
@@ -711,6 +713,7 @@ module.exports = (database) => {
                 if (user.user_id !== null) {
                     hash[user.organization_id].users.push({
                         id: user.user_id,
+                        role: user.user_role,
                         first_name: user.user_firstName,
                         last_name: user.user_lastName,
                         email: user.user_email,
@@ -766,6 +769,17 @@ module.exports = (database) => {
     model.upgradeLocalAdmin = async (userId) => {
         await database.query(
             'UPDATE USERS SET fk_role = \'local_admin\' where user_id = :userId',
+            {
+                replacements: {
+                    userId,
+                },
+            },
+        );
+    };
+
+    model.downgradeLocalAdmin = async (userId) => {
+        await database.query(
+            'UPDATE USERS SET fk_role = NULL where user_id = :userId',
             {
                 replacements: {
                     userId,

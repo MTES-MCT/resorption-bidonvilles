@@ -229,6 +229,22 @@ export default {
             showAddresses: false,
 
             /**
+             * Value of showAddresses before the print
+             *
+             * Used to restore the original value after the print
+             *
+             * @type {Boolean}
+             */
+            showAddressesBeforePrint: false,
+
+            /**
+             * Wether the current print was triggered manually (from an action button) or naturally
+             *
+             * @type {true|null}
+             */
+            manualPrint: null,
+
+            /**
              * Liste des types de terrains existants
              *
              * @type {Array.<FieldType>}
@@ -271,7 +287,12 @@ export default {
                                                                                 longitude =
                                                                             }
                                                                     } */
-            }
+            },
+
+            /**
+             *
+             */
+            layersControl: null
         };
     },
 
@@ -329,9 +350,9 @@ export default {
          */
         showAddresses() {
             if (this.showAddresses === true) {
-                document.body.setAttribute("class", "leaflet-show-addresses");
+                document.body.classList.add("leaflet-show-addresses");
             } else {
-                document.body.setAttribute("class", "");
+                document.body.classList.remove("leaflet-show-addresses");
             }
         },
 
@@ -361,9 +382,39 @@ export default {
 
     mounted() {
         this.createMap();
+
+        window.onbeforeprint = async () => {
+            if (this.manualPrint !== true) {
+                this.preprint(false);
+            }
+        };
+        window.onafterprint = () => {
+            this.manualPrint = null;
+
+            document.body.classList.remove("preprint");
+            this.map.addControl(this.map.zoomControl);
+            this.setupLayersControl();
+            this.resize();
+
+            this.showAddresses = this.showAddressesBeforePrint;
+        };
     },
 
     methods: {
+        preprint(manualPrint = true) {
+            this.manualPrint = manualPrint === true;
+            this.showAddressesBeforePrint = this.showAddresses;
+            this.showAddresses = true;
+
+            document.body.classList.add("preprint");
+            this.map.removeControl(this.map.zoomControl);
+            this.removeLayersControl();
+            this.resize();
+
+            if (manualPrint === true) {
+                setTimeout(window.print, 200);
+            }
+        },
         countNumberOfTowns() {
             this.numberOfShantytownsBy = this.towns.reduce(
                 (acc, obj) => {
@@ -406,6 +457,7 @@ export default {
         setupMapControls() {
             this.setupZoomControl();
             this.setupLayersControl();
+            this.setupPrintControl();
             this.setupAddressTogglerControl();
             this.setupFieldTypesLegendControl();
         },
@@ -425,11 +477,48 @@ export default {
          * @returns {undefined}
          */
         setupLayersControl() {
-            const layersControl = L.control.layers(this.mapLayers, undefined, {
-                collapsed: false
+            if (!this.layersControl) {
+                this.layersControl = L.control.layers(
+                    this.mapLayers,
+                    undefined,
+                    {
+                        collapsed: false
+                    }
+                );
+            }
+
+            if (!this.layersControl._map) {
+                this.map.addControl(this.layersControl);
+            }
+        },
+
+        /**
+         *
+         */
+        removeLayersControl() {
+            if (this.layersControl) {
+                this.map.removeControl(this.layersControl);
+            }
+        },
+
+        /**
+         * Initialise le contrôle "Voir les adresses des sites"
+         *
+         * @returns {undefined}
+         */
+        setupPrintControl() {
+            const { printer } = this.$refs;
+            const Printer = L.Control.extend({
+                options: {
+                    position: "bottomright"
+                },
+
+                onAdd() {
+                    return printer;
+                }
             });
 
-            this.map.addControl(layersControl);
+            this.map.addControl(new Printer());
         },
 
         /**

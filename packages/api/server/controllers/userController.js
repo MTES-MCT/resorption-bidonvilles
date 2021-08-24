@@ -871,13 +871,17 @@ module.exports = models => ({
         return res.status(200).send({});
     },
 
-    async upgradeLocalAdmin(req, res, next) {
+    async updateLocalAdmin(req, res, next) {
+        const { admin } = req.body;
+
         try {
             const user = await models.user.findOne(req.params.id);
 
-            if (user) {
+            if (user && admin) {
                 await models.user.upgradeLocalAdmin(req.params.id);
                 await sendAdminWelcome(user);
+            } else if (user) {
+                await models.user.downgradeLocalAdmin(req.params.id);
             }
         } catch (error) {
             res.status(500).send({

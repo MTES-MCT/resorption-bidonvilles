@@ -1,6 +1,6 @@
 {
   "name": "@resorptionbidonvilles/frontend",
-  "version": "1.9.1",
+  "version": "1.10.0",
   "description": "Frontend de Résorption Bidonvilles",
   "scripts": {
     "dev": "vue-cli-service serve --port 80",
@@ -27,6 +27,7 @@
     "chart.js": "^2.9.4",
     "core-js": "^3.6.5",
     "cypress": "^5.1.0",
+    "fuse.js": "^6.4.6",
     "leaflet.markercluster": "^1.4.1",
     "simplebar-vue": "^1.3.3",
     "vee-validate": "^3.4.0",

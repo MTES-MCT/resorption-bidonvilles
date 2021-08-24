@@ -25,5 +25,16 @@
   "send": "Trimite",
   "cancel": "Anulează",
   "error": "Solicitarea dvs. conține erori:",
-  "share": "Împărtășeste acestă pagină"
+  "share": "Împărtășeste acestă pagină",
+  "referral": {
+    "question": "Cum ați auzit de platforma Résorption-Bidonvilles?",
+    "dihalEvent": "În timpul unui eveniment Dihal",
+    "newsletter": "Buletin informativ",
+    "socialNetwork": "Rețele sociale",
+    "wordOfMouth": "Cuvântul din gură / recomandare",
+    "onlineSearch": "Cercetare pe internet",
+    "other": "Alte",
+    "otherQuestion": "Puteți specifica modul în care ați aflat despre platformă?",
+    "wordOfMouthQuestion": "Cine ți-a recomandat platforma?"
+  }
 }

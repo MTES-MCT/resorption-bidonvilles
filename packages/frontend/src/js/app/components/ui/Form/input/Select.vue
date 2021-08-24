@@ -64,6 +64,9 @@ export default {
         },
         icon: {
             type: String
+        },
+        disabled: {
+            type: Boolean
         }
     },
     computed: {

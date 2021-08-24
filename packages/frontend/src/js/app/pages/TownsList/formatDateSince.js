@@ -14,6 +14,10 @@ export default function formatDateSince(date) {
         return `${months} mois`;
     }
 
+    if (days === 1) {
+        return `Hier`;
+    }
+
     if (days > 0) {
         return `${days} jours`;
     }

@@ -2,6 +2,9 @@ export default function getSince(ts) {
     const now = new Date();
     const then = new Date(ts * 1000);
 
+    now.setHours(0, 0, 0);
+    then.setHours(0, 0, 0);
+
     const days = Math.floor(
         Math.abs(now.getTime() - then.getTime()) / (1000 * 3600 * 24)
     );

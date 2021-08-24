@@ -105,6 +105,14 @@
   --theme-info-bg: var(--lighter-blue);
 }
 
+@media print {
+    .marker-cluster-small,
+    .marker-cluster-small div {
+        -webkit-print-color-adjust: exact !important;
+        color-adjust: exact;
+    }
+}
+
 .v1 {
   font-family: Fira Sans, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -365,6 +373,8 @@
         flex-shrink: 0;
         -webkit-mask-image: url(/img/map-marker.svg);
         mask-image: url(/img/map-marker.svg);
+        -webkit-print-color-adjust: exact !important;
+        color-adjust: exact;
       }
 
       .mapPin-water {
@@ -442,6 +452,8 @@
       vertical-align: middle;
       background: red;
       border-radius: 3px;
+      -webkit-print-color-adjust: exact !important;
+      color-adjust: exact;
     }
   }
 

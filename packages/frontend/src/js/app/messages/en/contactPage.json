@@ -25,5 +25,16 @@
   "send": "Send",
   "cancel": "Cancel",
   "error": "Your request contains errors:",
-  "share": "Share this page"
+  "share": "Share this page",
+  "referral": {
+    "question": "How did you hear about the Résorption-Bidonvilles platform?",
+    "dihalEvent": "During a Dihal event",
+    "newsletter": "A newsletter",
+    "socialNetwork": "Social Network (LinkedIn, Twitter, Ideal co...)",
+    "wordOfMouth": "Word of mouth ",
+    "onlineSearch": "Online research",
+    "other": "Other",
+    "otherQuestion": "Can you specify how you found out about the platform? ",
+    "wordOfMouthQuestion": "Who recommended the platform to you? "
+  }
 }
