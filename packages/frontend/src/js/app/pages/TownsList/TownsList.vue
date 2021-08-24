@@ -20,9 +20,8 @@
             </PrivateContainer>
         </div>
         <PrivateContainer class="pt-10">
-            <EventBannerPlatform></EventBannerPlatform>
             <EventBannerContribute></EventBannerContribute>
-            <EventBannerVaccination></EventBannerVaccination>
+            <EventBannerWaterAccess></EventBannerWaterAccess>
 
             <TownsListHeader :search="filters.location" class="mb-6">
                 <template slot="filters">
@@ -349,9 +348,8 @@ import getSince from "#app/pages/TownsList/getSince";
 import ActivityCard from "#app/components/ActivityCard/ActivityCard.vue";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer.vue";
 import PrivateLayout from "#app/components/PrivateLayout";
-import EventBannerPlatform from "#app/components/EventBannerPlatform";
 import EventBannerContribute from "#app/components/EventBannerContribute";
-import EventBannerVaccination from "#app/components/EventBannerVaccination";
+import EventBannerWaterAccess from "#app/components/EventBannerWaterAccess";
 import TownCard from "./TownCard";
 import GeoSearchbar from "#app/components/GeoSearchbar/GeoSearchbar.vue";
 import TownsListHeader from "./TownsListHeader/TownsListHeader";
@@ -375,9 +373,8 @@ export default {
         Spinner,
         TownCard,
         ActivityCard,
-        EventBannerPlatform,
         EventBannerContribute,
-        EventBannerVaccination,
+        EventBannerWaterAccess,
         PrivateContainer,
         PrivateLayout,
         GeoSearchbar,

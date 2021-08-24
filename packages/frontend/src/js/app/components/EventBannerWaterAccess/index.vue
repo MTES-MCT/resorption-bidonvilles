@@ -1,29 +1,26 @@
 <template>
     <div class="flex items-stretch border-solid mb-8" v-if="shouldBeVisible">
         <Button
-            icon="external-link-alt"
+            icon="calendar"
             class="justify-self-start flex-shrink-0 px-4 py-6"
             size="lg"
             variant="specialEvent"
             iconPosition="left"
             target="blank"
-            href="https://hello.idealco.fr/inscription-formation-dihaldgs-vaccination/"
-            >Je m'inscris au webinaire du 19 juillet
+            href="https://hello.idealco.fr/inscription-formation-dihal-acceseaubidonvilles/"
+            >Je m'inscris
         </Button>
         <div class="justify-self-start ml-4 mt-2">
-            <div>
-                <span class="font-bold"
-                    >Webinaire sur les enjeux de la campagne de sensibilisation
-                    et de vaccination dans les bidonvilles</span
-                >
-                en partenariat avec la Direction Générale de la Santé - Lundi 19
-                juillet de 14h à 15h.
+            <div class="font-bold text-display-sm">
+                Jeudi 23 septembre de 10h à 12h : webinaire sur l'accès à l'eau
+                dans les bidonvilles : un droit et un enjeu de santé publique
+                essentiels à une stratégie de résorption.
             </div>
             <div>
                 <a
                     class="link"
                     target="_blank"
-                    href="https://hello.idealco.fr/inscription-formation-dihaldgs-vaccination/"
+                    href="https://hello.idealco.fr/inscription-formation-dihal-acceseaubidonvilles/"
                     >En savoir plus</a
                 >.
             </div>
@@ -35,7 +32,10 @@
 export default {
     computed: {
         shouldBeVisible() {
-            return new Date() < new Date("2021-07-20");
+            return (
+                new Date() >= new Date("2021-09-01") &&
+                new Date() <= new Date("2021-09-23")
+            );
         }
     }
 };
