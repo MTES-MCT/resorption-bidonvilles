@@ -38,6 +38,7 @@
                         class="mr-4"
                         variant="primaryText"
                         @click="upgradeLocalAdmin"
+                        :loading="validation.loading === 'upgrade'"
                         >Définir comme « Administrateur local »</Button
                     >
                     <Button
@@ -48,6 +49,7 @@
                         class="mr-4"
                         variant="primaryText"
                         @click="downgradeLocalAdmin"
+                        :loading="validation.loading === 'downgrade'"
                         >Retirer rôle « Administrateur local »</Button
                     >
 
@@ -60,6 +62,7 @@
                             class="mr-4"
                             variant="primary"
                             @click="remove"
+                            :loading="validation.loading === 'remove'"
                             >Supprimer l'accès</Button
                         >
                         <Button
@@ -67,6 +70,7 @@
                             class="mr-4"
                             variant="primary"
                             @click="remove"
+                            :loading="validation.loading === 'remove'"
                             >Désactiver l'accès</Button
                         >
                     </div>
@@ -81,6 +85,7 @@
                             "
                             class="mr-4"
                             variant="primary"
+                            :loading="validation.loading === 'deny'"
                             @click="deny"
                             >Refuser l'accès</Button
                         >
@@ -94,6 +99,7 @@
                             variant="tertiary"
                             icon="paper-plane"
                             iconPosition="left"
+                            :loading="validation.loading === 'validate'"
                             @click="validate"
                             >Envoyer un accès</Button
                         >
@@ -111,6 +117,13 @@
                         L’utilisateur ne pourra plus se connecter, les données
                         partagées seront conservées.
                     </div>
+                </div>
+
+                <div
+                    v-if="validation.error"
+                    class="text-error flex justify-end"
+                >
+                    {{ validation.error }}
                 </div>
             </div>
 
@@ -190,7 +203,7 @@ export default {
              * @type {Object}
              */
             validation: {
-                state: null,
+                loading: null,
                 error: null
             },
 
@@ -298,54 +311,48 @@ export default {
         /**
          * Allows access to the user
          */
-        validate() {
-            if (this.validation.state === "loading") {
+        async validate() {
+            if (this.validation.loading) {
                 return;
             }
 
-            this.validation.state = "loading";
+            this.validation.loading = "validate";
             this.validation.error = null;
 
-            sendActivationLink(this.$route.params.id, {
-                options: this.checkedOptions
-            })
-                .then(() => {
-                    this.validation.state = null;
-
-                    this.$trackMatomoEvent(
-                        "Demande d'accès",
-                        "Approuver accès"
-                    );
-
-                    notify({
-                        group: "notifications",
-                        type: "success",
-                        title: "Accès envoyé",
-                        text: "Un accès a été envoyé à l'utilisateur"
-                    });
-
-                    this.$router.push("/liste-des-utilisateurs");
-                })
-                .catch(({ user_message: error }) => {
-                    this.validation.state = null;
-                    this.validation.error = error;
+            try {
+                await sendActivationLink(this.$route.params.id, {
+                    options: this.checkedOptions
                 });
+                this.$trackMatomoEvent("Demande d'accès", "Approuver accès");
+
+                notify({
+                    group: "notifications",
+                    type: "success",
+                    title: "Accès envoyé",
+                    text: "Un accès a été envoyé à l'utilisateur"
+                });
+
+                this.$router.push("/liste-des-utilisateurs");
+            } catch ({ user_message: error }) {
+                this.validation.error = error;
+            }
+
+            this.validation.loading = null;
         },
 
         /**
          * Denies access to the user
          */
         async deny() {
-            if (this.validation.state === "loading") {
+            if (this.validation.loading) {
                 return;
             }
 
-            this.validation.state = "loading";
+            this.validation.loading = "deny";
             this.validation.error = null;
 
             try {
                 await denyAccess(this.$route.params.id);
-                this.validation.state = null;
 
                 this.$trackMatomoEvent("Demande d'accès", "Refuser accès");
                 notify({
@@ -357,13 +364,14 @@ export default {
 
                 this.$router.push("/liste-des-utilisateurs");
             } catch ({ user_message: error }) {
-                this.validation.state = null;
                 this.validation.error = error;
             }
+
+            this.validation.loading = null;
         },
 
         async upgradeLocalAdmin() {
-            if (this.validation.state === "loading") {
+            if (this.validation.loading) {
                 return;
             }
 
@@ -376,12 +384,21 @@ export default {
                 return;
             }
 
-            await updateLocalAdmin(this.$route.params.id, true);
-            window.location.reload();
+            this.validation.loading = "upgrade";
+            this.validation.error = null;
+
+            try {
+                await updateLocalAdmin(this.$route.params.id, true);
+                window.location.reload();
+            } catch ({ user_message: error }) {
+                this.validation.error = error;
+            }
+
+            this.validation.loading = null;
         },
 
         async downgradeLocalAdmin() {
-            if (this.validation.state === "loading") {
+            if (this.validation.loading) {
                 return;
             }
 
@@ -394,15 +411,24 @@ export default {
                 return;
             }
 
-            await updateLocalAdmin(this.$route.params.id, false);
-            window.location.reload();
+            this.validation.loading = "downgrade";
+            this.validation.error = null;
+
+            try {
+                await updateLocalAdmin(this.$route.params.id, false);
+                window.location.reload();
+            } catch ({ user_message: error }) {
+                this.validation.error = error;
+            }
+
+            this.validation.loading = null;
         },
 
         /**
          *
          */
         async remove() {
-            if (this.validation.state === "loading") {
+            if (this.validation.loading) {
                 return;
             }
 
@@ -415,12 +441,11 @@ export default {
                 return;
             }
 
-            this.validation.state = "loading";
+            this.validation.loading = "remove";
             this.validation.error = null;
 
             try {
                 await remove(this.$route.params.id);
-                this.validation.state = null;
 
                 notify({
                     group: "notifications",
@@ -431,9 +456,10 @@ export default {
 
                 this.$router.push("/liste-des-utilisateurs");
             } catch ({ user_message: error }) {
-                this.validation.state = null;
                 this.validation.error = error;
             }
+
+            this.validation.loading = null;
         }
     }
 };
