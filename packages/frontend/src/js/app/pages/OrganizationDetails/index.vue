@@ -41,7 +41,7 @@
                 v-else-if="!directoryLoading && !organization"
                 class="text-center text-error text-display-lg mt-16"
             >
-                La structure demandé n'existe pas en base de données ou n'a pas
+                La structure demandée n'existe pas en base de données ou n'a pas
                 d'utilisateurs actifs
             </ErrorPage>
 

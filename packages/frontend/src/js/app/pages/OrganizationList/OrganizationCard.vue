@@ -58,7 +58,7 @@ export default {
     computed: {
         territory() {
             // Only display territory for associations
-            if (this.organization.type.id === 8) {
+            if (this.organization.type.category === "association") {
                 return `– ${this.organization.locationName}`;
             }
 
