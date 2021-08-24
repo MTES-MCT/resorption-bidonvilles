@@ -135,5 +135,12 @@
   "contactForm": {
     "email": "E-mailul dumneavoastră",
     "cta": "Contactaţi-ne"
+  },
+  "newsletter": {
+    "title": "Abonați-vă la newsletter-ul nostru lunar (in franceza)",
+    "text": "Doriți să fiți informat cu privire la știrile platformei, evenimentele, cele mai bune practici în domeniu și știrile pe subiectul mahalalelor? Abonati-va !",
+    "cta": "Mă abonez",
+    "link": "",
+    "viewAll": ""
   }
 }
