@@ -14,6 +14,7 @@
                     checkValue="public_establishment"
                     :label="$t('contactPage.public')"
                     variant="card"
+                    :disabled="disabled"
                 />
                 <Radio
                     :value="organization_category"
@@ -21,6 +22,7 @@
                     checkValue="territorial_collectivity"
                     :label="$t('contactPage.territorialCollectivity')"
                     variant="card"
+                    :disabled="disabled"
                 />
                 <Radio
                     :value="organization_category"
@@ -28,6 +30,7 @@
                     checkValue="association"
                     :label="$t('contactPage.association')"
                     variant="card"
+                    :disabled="disabled"
                 />
                 <Radio
                     :value="organization_category"
@@ -35,6 +38,7 @@
                     checkValue="administration"
                     :label="$t('contactPage.administration')"
                     variant="card"
+                    :disabled="disabled"
                 />
             </CheckableGroup>
         </InputGroup>
@@ -51,6 +55,11 @@ export default {
         label: {
             type: String,
             required: true
+        },
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     }
 };

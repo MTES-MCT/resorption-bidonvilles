@@ -15,6 +15,7 @@
                 v-bind="filteredProps"
                 :checked="isChecked"
                 @change="onChange"
+                :disabled="disabled"
             />
             <div>{{ label }}</div>
         </CheckableCard>
@@ -37,6 +38,7 @@
                 :data-cy-label="label"
                 :data-cy-checked="`${isChecked}`"
                 @change="onChange"
+                :disabled="disabled"
             />
             <slot :isChecked="isChecked">
                 <div class="ml-2">
@@ -86,6 +88,11 @@ export default {
         type: {
             type: String,
             default: "radio"
+        },
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
     methods: {
