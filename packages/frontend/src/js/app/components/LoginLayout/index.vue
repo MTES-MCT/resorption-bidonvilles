@@ -3,7 +3,7 @@
         <LoginNavBar />
 
         <div class="container px-10 mx-auto mb-4">
-            <div class="max-w-sm mx-auto pt-16 pb-12">
+            <div class="max-w-sm mx-auto py-10">
                 <img
                     class="h-24 mx-auto mb-8"
                     src="../../../../../public/img/town.png"
