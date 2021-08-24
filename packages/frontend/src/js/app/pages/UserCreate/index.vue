@@ -49,6 +49,7 @@
                         :organization_category.sync="
                             requestAccessFields.organization_category
                         "
+                        :disabled="!!$route.query.association_name"
                     />
 
                     <PublicEstablishmentForm
