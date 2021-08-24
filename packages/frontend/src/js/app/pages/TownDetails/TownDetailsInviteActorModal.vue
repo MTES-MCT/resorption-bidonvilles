@@ -189,7 +189,7 @@ export default {
                 this.$trackMatomoEvent(
                     "Intervenant",
                     "Déclaration intervenant",
-                    this.townId
+                    `S${this.townId}`
                 );
                 return this.$store.dispatch("addTownActor", {
                     townId: this.townId,
@@ -201,8 +201,8 @@ export default {
 
             this.$trackMatomoEvent(
                 "Intervenant",
-                "Invitation intevernant",
-                this.townId
+                "Invitation intervenant",
+                `S${this.townId}`
             );
             return this.$store.dispatch("inviteNewTownActor", {
                 townId: this.townId,

@@ -479,7 +479,11 @@ export default {
                 title: "Dispositif correctement déclaré",
                 text: "Le dispositif a bien été ajouté en base de données"
             });
-            this.$trackMatomoEvent("Dispositif", "Création dispositif");
+            this.$trackMatomoEvent(
+                "Dispositif",
+                "Création dispositif",
+                `D${id}`
+            );
 
             this.$router.push(`/dispositif/${id}`);
         }

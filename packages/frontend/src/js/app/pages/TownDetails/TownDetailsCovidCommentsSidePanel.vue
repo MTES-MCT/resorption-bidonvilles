@@ -219,9 +219,9 @@ export default {
             })
                 .then(async response => {
                     this.$trackMatomoEvent(
-                        "Commentaire",
+                        "Site",
                         "Création commentaire Covid",
-                        this.town.id
+                        `S${this.town.id}`
                     );
 
                     try {
