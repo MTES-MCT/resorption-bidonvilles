@@ -13,6 +13,10 @@
                             label: `Service de l'état, établissement ou organisme public`
                         },
                         {
+                            value: 'administration',
+                            label: `Administration`
+                        },
+                        {
                             value: 'territorial_collectivity',
                             label: 'Collectivité territoriale'
                         },

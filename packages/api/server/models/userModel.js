@@ -653,6 +653,7 @@ module.exports = (database) => {
                     users.phone AS "user_phone",
                     users.position AS "user_position",
                     organizations.fk_type AS "type_id",
+                    organization_types.fk_category AS "type_category",
                     organization_types.name_singular AS "type_name",
                     organization_types.abbreviation AS "type_abbreviation"
                 FROM localized_organizations AS organizations
@@ -699,6 +700,7 @@ module.exports = (database) => {
                         },
                         type: {
                             id: user.type_id,
+                            category: user.type_category,
                             name: user.type_name,
                             abbreviation: user.type_abbreviation,
                         },

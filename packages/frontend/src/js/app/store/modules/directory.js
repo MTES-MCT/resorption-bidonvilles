@@ -53,7 +53,6 @@ export default {
         setUserLocation({ commit }) {
             const { user } = getConfig();
             if (user.organization.location.type !== "nation") {
-                console.log("setUserLocation", user.organization.location);
                 commit("setDirectoryLocationFilter", {
                     id:
                         user.organization.location[
@@ -102,7 +101,10 @@ export default {
 
                 commit("setDirectory", enrichedOrganizations);
             } catch (error) {
-                commit("setDirectoryError", "Une erreur est survenue");
+                commit(
+                    "setDirectoryError",
+                    (error && error.user_message) || "Une erreur est survenue"
+                );
             }
 
             commit("setDirectoryLoading", false);
@@ -191,27 +193,9 @@ function checkLocation(organization, filters) {
 }
 
 function checkOrganizationType(organization, organizationTypes) {
-    const territorialCollectivityIds = [4, 5, 6, 7, 33];
-    const associationId = 8;
-
     if (!organizationTypes.length) {
         return true;
     }
 
-    if (organizationTypes.includes("association")) {
-        return organization.type.id === associationId;
-    }
-
-    if (organizationTypes.includes("territorial_collectivity")) {
-        return territorialCollectivityIds.includes(organization.type.id);
-    }
-
-    if (organizationTypes.includes("public_establishment")) {
-        return (
-            organization.type.id !== associationId &&
-            !territorialCollectivityIds.includes(organization.type.id)
-        );
-    }
-
-    return false;
+    return organizationTypes.some(type => organization.type.category === type);
 }
