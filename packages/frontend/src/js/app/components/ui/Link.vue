@@ -1,7 +1,8 @@
 <template>
-    <router-link :to="to" class="text-primary hover:text-primaryDark"
+    <router-link v-if="internalLink" :to="to" :class="classes"
         ><slot></slot
     ></router-link>
+    <a v-else :href="to" :class="classes"><slot></slot></a>
 </template>
 
 <script>
@@ -10,6 +11,18 @@ export default {
         to: {
             type: String,
             required: true
+        }
+    },
+
+    data() {
+        return {
+            classes: "text-primary hover:text-primaryDark"
+        };
+    },
+
+    computed: {
+        internalLink() {
+            return this.to && this.to[0] === "/";
         }
     }
 };

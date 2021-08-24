@@ -36,9 +36,8 @@
                 </header>
 
                 <div class="container plansList-body">
-                    <EventBannerPlatform></EventBannerPlatform>
                     <EventBannerContribute></EventBannerContribute>
-                    <EventBannerVaccination></EventBannerVaccination>
+                    <EventBannerWaterAccess></EventBannerWaterAccess>
                     <CollectivityInput class="planList-search" v-model="location"></CollectivityInput>
 
                     <Table :columns="columns" :content="pageContent" :emptyLabel="'Aucun dispositif sur ce territoire'" @click="routeToPlan">
