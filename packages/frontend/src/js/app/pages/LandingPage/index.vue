@@ -41,7 +41,7 @@
         <PublicContainer>
             <div class="max-w-screen-lg mx-auto py-20">
                 <LandingPageThirdSection />
-                <LandingPageNewsletter v-if="$i18n.locale === 'fr'" />
+                <LandingPageNewsletter />
                 <div class="text-center mt-24">
                     <h2 class="text-display-lg text-secondary">
                         {{ $t("landingPage.hero.subtitle") }}

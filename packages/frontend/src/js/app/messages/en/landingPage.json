@@ -135,5 +135,12 @@
   "contactForm": {
     "email": "Your email",
     "cta": "Contact us"
+  },
+  "newsletter": {
+    "title": "Subscribe to our monthly newsletter (in French)",
+    "text": "Do you want to be informed of the platform's news, events, best practices in the field and news on the subject of slums? Subscribe !",
+    "cta": "I subscribe",
+    "link": "",
+    "viewAll": ""
   }
 }
