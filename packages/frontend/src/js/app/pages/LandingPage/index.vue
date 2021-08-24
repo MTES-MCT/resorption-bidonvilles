@@ -11,6 +11,7 @@
         <PublicContainer>
             <div class="pt-4">
                 <div class="max-w-screen-lg mx-auto pb-20">
+                    <LandingDiscoverBanner v-if="$i18n.locale === 'fr'" />
                     <LandingTutorialBanner v-if="$i18n.locale === 'fr'" />
                 </div>
             </div>
@@ -80,6 +81,7 @@ import LandingPageContactForm from "./LandingPageContactForm.vue";
 import CreditWrapper from "./CreditWrapper.vue";
 import LandingPageNewsletter from "./LandingPageNewsletter.vue";
 import LandingTutorialBanner from "./LandingTutorialBanner";
+import LandingDiscoverBanner from "./LandingDiscoverBanner";
 
 export default {
     components: {
@@ -93,7 +95,8 @@ export default {
         LandingPageBanner,
         LandingPageContactForm,
         LandingPageNewsletter,
-        LandingTutorialBanner
+        LandingTutorialBanner,
+        LandingDiscoverBanner
     }
 };
 </script>
