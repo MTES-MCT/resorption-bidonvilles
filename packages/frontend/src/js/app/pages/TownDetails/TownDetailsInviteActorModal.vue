@@ -188,7 +188,7 @@ export default {
             if (this.form.user && this.form.user.id) {
                 this.$trackMatomoEvent(
                     "Intervenant",
-                    "Déclaration intervenant",
+                    "Invitation intervenant",
                     `S${this.townId}`
                 );
                 return this.$store.dispatch("addTownActor", {

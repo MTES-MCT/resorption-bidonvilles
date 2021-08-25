@@ -218,11 +218,6 @@ export default {
         }
     },
     mounted() {
-        this.$trackMatomoEvent(
-            "Cartographie",
-            "Click sur site",
-            `S${this.town.id}`
-        );
         document.addEventListener("click", this.checkOutsideClick);
     },
     destroyed() {
@@ -255,6 +250,17 @@ export default {
 
             const routerData = this.$router.resolve(`/site/${this.town.id}`);
             open(routerData.href);
+        }
+    },
+    watch: {
+        town() {
+            if (this.town) {
+                this.$trackMatomoEvent(
+                    "Cartographie",
+                    "Click sur site",
+                    `S${this.town.id}`
+                );
+            }
         }
     }
 };
