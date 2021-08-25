@@ -17,8 +17,14 @@
                                 variant="primaryText"
                                 @click="
                                     () => {
-                                        removeItem();
-                                        toggleUserLocation();
+                                        $store.state.directory.filters
+                                            .location ||
+                                        currentUser.organization.location
+                                            .type === 'nation'
+                                            ? removeItem()
+                                            : $store.dispatch(
+                                                  'setUserLocation'
+                                              );
                                     }
                                 "
                                 size="sm"
@@ -105,17 +111,6 @@ export default {
         async load() {
             if (this.$store.state.directory.items.length === 0) {
                 this.$store.dispatch("fetchDirectory");
-            }
-        },
-        toggleUserLocation() {
-            this.$store.commit("setDirectorySearchFilter", "");
-            if (
-                this.$store.state.directory.filters.location ||
-                this.currentUser.organization.location.type === "nation"
-            ) {
-                this.$store.commit("setDirectoryLocationFilter", null);
-            } else {
-                this.$store.dispatch("setUserLocation");
             }
         },
         onChangePage(newPage) {

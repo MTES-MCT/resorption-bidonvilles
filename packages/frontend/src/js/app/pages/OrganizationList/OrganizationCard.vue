@@ -10,7 +10,7 @@
         <router-link :to="`annuaire/${organization.id}`">
             <div class="p-4 flex">
                 <div class="text-md font-bold w-1/2 pr-16">
-                    {{ organization.name }} {{ territory }}
+                    {{ name }}
                 </div>
                 <ul class="flex-1 pl-16">
                     <li
@@ -33,10 +33,9 @@
                     variant="primaryText"
                     icon="arrow-right"
                     :class="[
-                        'text-display-sm self-end whitespace-no-wrap hover:underline -mb-4',
-                        isHover ? 'opacity-1' : 'opacity-0'
+                        'text-display-sm self-end whitespace-no-wrap hover:underline -mb-4'
                     ]"
-                    >Voir la fiche complète</Button
+                    >{{ isHover ? "Voir la fiche complète" : "" }}</Button
                 >
             </div>
         </router-link>
@@ -56,17 +55,17 @@ export default {
         };
     },
     computed: {
-        territory() {
+        name() {
             // Only display territory for associations
             if (this.organization.type.category === "association") {
-                return `– ${this.organization.locationName}`;
+                return `${this.organization.name} – ${this.organization.locationName}`;
             }
 
             if (this.organization.location.type === "nation") {
-                return `– National`;
+                return `${this.organization.name} – National`;
             }
 
-            return ``;
+            return this.organization.name.replace("-", "–");
         }
     }
 };

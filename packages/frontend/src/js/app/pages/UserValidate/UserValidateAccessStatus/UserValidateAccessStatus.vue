@@ -27,7 +27,7 @@
             text="Expiré"
             :date="user.user_access.expires_at"
             icon="unlink"
-            color="text-G400"
+            color="text-G600"
             class="mb-2"
         />
 
