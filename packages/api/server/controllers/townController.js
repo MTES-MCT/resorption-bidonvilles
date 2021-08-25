@@ -799,7 +799,7 @@ module.exports = (models) => {
                 actors: {
                     title: 'Intervenants',
                     data: ({ actors }) => actors.map((actor) => {
-                        const name = `${actor.first_name} ${actor.last_name.toUpperCase()}, ${actor.organization.name}`;
+                        const name = `${models.user.formatName(actor)}, ${actor.organization.name}`;
                         const themes = actor.themes.map(({ id, value }) => value || shantytownActorThemes[id]).join(', ');
 
                         return `- ${name} (${themes})`;
@@ -808,7 +808,7 @@ module.exports = (models) => {
                 },
                 comments: {
                     title: 'Commentaires',
-                    data: ({ comments }) => comments.regular.slice(0, 5).map(comment => `${tsToString(comment.createdAt, 'd/m/Y à h:i')} - ${comment.createdBy.lastName.toUpperCase()} ${comment.createdBy.firstName}\n${comment.description}`).join('\n----\n'),
+                    data: ({ comments }) => comments.regular.slice(0, 5).map(comment => `${tsToString(comment.createdAt, 'd/m/Y à h:i')} - ${models.user.formatName(comment.createdBy)}\n${comment.description}`).join('\n----\n'),
                     width: COLUMN_WIDTHS.LARGE,
                 },
                 covidComments: {
@@ -819,7 +819,7 @@ module.exports = (models) => {
                             .map(tag => covidTags[tag])
                             .join('\n');
 
-                        return `${tsToString(comment.createdAt, 'd/m/Y à h:i')} - ${comment.createdBy.lastName.toUpperCase()} ${comment.createdBy.firstName}\nDate de l'intervention : ${tsToString(comment.covid.date, 'd/m/Y')}\n${tags}\n${comment.description}`;
+                        return `${tsToString(comment.createdAt, 'd/m/Y à h:i')} - ${models.user.formatName(comment.createdBy)}\nDate de l'intervention : ${tsToString(comment.covid.date, 'd/m/Y')}\n${tags}\n${comment.description}`;
                     }).join('\n----\n'),
                     width: COLUMN_WIDTHS.LARGE,
                 },

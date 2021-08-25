@@ -52,8 +52,8 @@ export default {
                         id: "author",
                         label: "AUTEUR",
                         field: comment =>
-                            `${comment.createdBy.lastName.toUpperCase()} ${
-                                comment.createdBy.firstName
+                            `${comment.createdBy.last_name.toUpperCase()} ${
+                                comment.createdBy.first_name
                             } (${comment.createdBy.position} - ${
                                 comment.createdBy.organization
                             })`

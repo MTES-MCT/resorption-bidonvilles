@@ -13,8 +13,10 @@ const {
     sendUserAccessPending,
     sendUserAccessExpired,
     sendUserAccessActivatedWelcome,
-    formatName,
 } = require('#server/mails/mails');
+
+const { sequelize } = require('#db/models');
+const { formatName } = require('#server/models/userModel')(sequelize);
 
 module.exports = {
     toAdmin: {
@@ -23,7 +25,7 @@ module.exports = {
                 admins.map(admin => sendAdminNewRequestNotification(admin, {
                     variables: {
                         adminUrl: `${frontUrl}/nouvel-utilisateur/${user.id}`,
-                        userName: formatName(user.first_name, user.last_name),
+                        userName: formatName(user),
                         orgName: user.organization.abbreviation || user.organization.name,
                     },
                 })),
@@ -35,7 +37,7 @@ module.exports = {
                 admins.map(admin => sendAdminRequestPendingReminder1(admin, {
                     variables: {
                         adminUrl: `${frontUrl}/nouvel-utilisateur/${user.id}`,
-                        userName: formatName(user.first_name, user.last_name),
+                        userName: formatName(user),
                         orgName: user.organization.abbreviation || user.organization.name,
                     },
                 })),
@@ -47,7 +49,7 @@ module.exports = {
                 admins.map(admin => sendAdminRequestPendingReminder2(admin, {
                     variables: {
                         adminUrl: `${frontUrl}/nouvel-utilisateur/${user.id}`,
-                        userName: formatName(user.first_name, user.last_name),
+                        userName: formatName(user),
                         orgName: user.organization.abbreviation || user.organization.name,
                     },
                 })),
@@ -57,7 +59,7 @@ module.exports = {
         accessExpired(admin, user, submitDate) {
             return sendAdminAccessExpired(admin, {
                 variables: {
-                    userName: formatName(user.first_name, user.last_name),
+                    userName: formatName(user),
                     activationUrlSentDate: dateToString(submitDate),
                     adminUrl: `${frontUrl}/nouvel-utilisateur/${user.id}`,
                 },
@@ -66,7 +68,7 @@ module.exports = {
 
         accessActivated(admin, user) {
             return sendAdminAccessActivated(admin, {
-                variables: { userName: formatName(user.first_name, user.last_name) },
+                variables: { userName: formatName(user) },
             });
         },
     },
@@ -79,7 +81,7 @@ module.exports = {
         accessDenied(user, admin) {
             return sendUserAccessDenied(user, {
                 variables: {
-                    adminName: formatName(admin.first_name, admin.last_name),
+                    adminName: formatName(admin),
                 },
                 replyTo: admin,
             });
@@ -88,7 +90,7 @@ module.exports = {
         accessGranted(user, admin, activationLink, expiracyDate) {
             return sendUserAccessGranted(user, {
                 variables: {
-                    adminName: formatName(admin.first_name, admin.last_name),
+                    adminName: formatName(admin),
                     activationUrl: activationLink,
                     activationUrlExpDate: dateToString(expiracyDate, true),
                 },

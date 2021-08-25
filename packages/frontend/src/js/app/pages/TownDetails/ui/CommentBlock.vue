@@ -16,8 +16,8 @@
             territoire.
         </div>
         <div class="text-primary font-bold mb-1">
-            <Icon icon="user" /> {{ comment.createdBy.firstName }}
-            {{ comment.createdBy.lastName }} -
+            <Icon icon="user" /> {{ comment.createdBy.first_name }}
+            {{ comment.createdBy.last_name }} -
             {{ comment.createdBy.organization }}
         </div>
         <div class="ml-5">

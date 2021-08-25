@@ -185,7 +185,7 @@ module.exports = models => ({
                             label: 'Acteurs',
                         },
                         id: user.id,
-                        label: `${user.first_name} ${user.last_name.toUpperCase()}`,
+                        label: models.user.formatName(user),
                         organization: user.organization_id,
                     })),
                 );
