@@ -150,8 +150,8 @@ export default {
 
             if (this.activity.entity === "user") {
                 return {
-                    text: "text-primary",
-                    bg: "bg-primary"
+                    text: "text-orange500",
+                    bg: "bg-orange500"
                 };
             }
 
