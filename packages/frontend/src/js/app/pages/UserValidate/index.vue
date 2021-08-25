@@ -321,7 +321,14 @@ export default {
 
             try {
                 await sendActivationLink(this.$route.params.id, {
-                    options: this.checkedOptions
+                    options: {
+                        create_and_close_shantytown: this.checkedOptions.includes(
+                            "create_and_close_shantytown"
+                        ),
+                        hide_justice: this.checkedOptions.includes(
+                            "hide_justice"
+                        )
+                    }
                 });
                 this.$trackMatomoEvent("Demande d'accès", "Approuver accès");
 
