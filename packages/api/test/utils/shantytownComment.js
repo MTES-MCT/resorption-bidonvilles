@@ -7,11 +7,11 @@ module.exports = {
             private: false,
             createdBy: {
                 id: 2,
-                firstName: 'Jean',
-                lastName: 'Dupont',
+                first_name: 'Jean',
+                last_name: 'Dupont',
                 position: 'Mock',
                 organization: 'DIHAL',
-                organizationId: 2,
+                organization_id: 2,
             },
             shantytown: 1,
         };

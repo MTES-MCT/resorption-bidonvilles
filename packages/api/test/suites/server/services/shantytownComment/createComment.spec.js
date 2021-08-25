@@ -116,7 +116,16 @@ describe.only('services/shantytownComment', () => {
                     {
                         recipient: output.watchers[0],
                         variables: {
-                            shantytown: input.shantytown, comment: output.comment, annuaireUrl, messageUrl, backUrl, recipientName, frontUrl,
+                            shantytown: input.shantytown,
+                            createdBy: {
+                                name: 'Jean DUPONT',
+                                organization: 'DIHAL',
+                            },
+                            annuaireUrl,
+                            messageUrl,
+                            backUrl,
+                            recipientName,
+                            frontUrl,
                         },
                         preserveRecipient: false,
                     });
@@ -124,7 +133,16 @@ describe.only('services/shantytownComment', () => {
                     {
                         recipient: output.watchers[1],
                         variables: {
-                            shantytown: input.shantytown, comment: output.comment, annuaireUrl, messageUrl, backUrl, recipientName, frontUrl,
+                            shantytown: input.shantytown,
+                            createdBy: {
+                                name: 'Jean DUPONT',
+                                organization: 'DIHAL',
+                            },
+                            annuaireUrl,
+                            messageUrl,
+                            backUrl,
+                            recipientName,
+                            frontUrl,
                         },
                         preserveRecipient: false,
                     });
@@ -132,7 +150,16 @@ describe.only('services/shantytownComment', () => {
                     {
                         recipient: output.watchers[2],
                         variables: {
-                            shantytown: input.shantytown, comment: output.comment, annuaireUrl, messageUrl, backUrl, recipientName, frontUrl,
+                            shantytown: input.shantytown,
+                            createdBy: {
+                                name: 'Jean DUPONT',
+                                organization: 'DIHAL',
+                            },
+                            annuaireUrl,
+                            messageUrl,
+                            backUrl,
+                            recipientName,
+                            frontUrl,
                         },
                         preserveRecipient: false,
                     });
