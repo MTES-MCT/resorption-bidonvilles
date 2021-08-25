@@ -23,10 +23,15 @@
                 <h1 :class="classes.title">
                     {{ title }}
                 </h1>
-                <p :class="classes.author">
+                <p :class="classes.author" v-if="activity.author">
                     par :
                     <Link :to="`/annuaire/${activity.author.organization}`">{{
                         activity.author.name
+                    }}</Link>
+                </p>
+                <p v-if="activity.user">
+                    <Link :to="`/annuaire/${activity.user.organization}`">{{
+                        activity.user.name
                     }}</Link>
                 </p>
                 <p v-if="activity.shantytown">
@@ -143,6 +148,13 @@ export default {
                 };
             }
 
+            if (this.activity.entity === "user") {
+                return {
+                    text: "text-primary",
+                    bg: "bg-primary"
+                };
+            }
+
             // création de commentaire
             if (
                 (this.activity.comment && this.activity.comment.covid) ||
@@ -170,6 +182,9 @@ export default {
 
                 case "closing-shantytown":
                     return "Fermeture d'un site";
+
+                case "creation-user":
+                    return "Nouvel utilisateur";
 
                 case "creation-comment":
                     if (
@@ -200,6 +215,10 @@ export default {
                 return "Voir la fiche du site";
             }
 
+            if (this.activity.entity === "user") {
+                return "Voir la fiche dans l'annuaire";
+            }
+
             if (this.activity.highCovidComment) {
                 return "Voir les messages Covid-19";
             }
@@ -214,6 +233,10 @@ export default {
                 }
 
                 return `/site/${this.activity.shantytown.id}#message${this.activity.comment.id}`;
+            }
+
+            if (this.activity.entity === "user") {
+                return `/annuaire/${this.activity.user.organization}`;
             }
 
             return `/site/${this.activity.shantytown.id}`;

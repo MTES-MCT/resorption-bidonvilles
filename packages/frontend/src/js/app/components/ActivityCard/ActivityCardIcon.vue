@@ -30,6 +30,10 @@ export default {
                 return "map-marker-alt";
             }
 
+            if (this.activity.entity === "user") {
+                return "user";
+            }
+
             // commentaires
             if (
                 (this.activity.comment && this.activity.comment.covid) ||

@@ -32,6 +32,10 @@ export default {
                     {
                         label: "Nouveaux messages",
                         value: "comment-creation"
+                    },
+                    {
+                        label: "Nouveaux utilisateurs",
+                        value: "user-creation"
                     }
                 ]
             }

@@ -895,5 +895,37 @@ module.exports = (database) => {
 
     model.formatName = ({ first_name, last_name }) => `${first_name.charAt(0).toUpperCase() + first_name.slice(1)} ${last_name.toUpperCase()}`;
 
+    model.getHistory = async () => {
+        const activities = await database.query(
+            `
+                SELECT
+                    lua.used_at AS "date",
+                    users.first_name,
+                    users.last_name,
+                    organizations.organization_id
+                FROM last_user_accesses lua
+                LEFT JOIN users ON lua.fk_user = users.user_id
+                LEFT JOIN localized_organizations organizations ON users.fk_organization = organizations.organization_id
+                WHERE
+                    lua.used_at IS NOT NULL
+                ORDER BY lua.used_at DESC
+                `,
+            {
+                type: database.QueryTypes.SELECT,
+            },
+        );
+
+        return activities
+            .map(activity => ({
+                entity: 'user',
+                action: 'creation',
+                date: activity.date.getTime() / 1000,
+                user: {
+                    name: model.formatName(activity),
+                    organization: activity.organization_id,
+                },
+            }));
+    };
+
     return model;
 };
