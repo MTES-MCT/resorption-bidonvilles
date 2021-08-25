@@ -103,10 +103,10 @@ export default {
 
             return this.activities.filter(activity => {
                 if (this.filter === "regular") {
-                    return activity.covid !== null;
+                    return activity.comment && !!activity.comment.covid;
                 }
 
-                return activity.highCovid !== null;
+                return !!activity.highCovidComment;
             });
         },
         parsedActivities() {
@@ -119,13 +119,15 @@ export default {
                 time: App.formatDate(activity.date, "h:i"),
                 author: activity.author,
                 icon: activity.entity === "comment" ? "comment" : "pencil-alt",
-                shantytown: activity.shantytown.id,
-                address: `${activity.shantytown.usename}, ${activity.shantytown.city.name}`,
+                shantytown: activity.shantytown?.id,
+                address: `${activity.shantytown?.usename}, ${activity.shantytown?.city.name}`,
                 action: "Commentaire sur le",
-                content: activity.content,
+                content: activity.highCovidComment
+                    ? activity.highCovidComment.description
+                    : activity.comment.description,
                 comment: activity.comment_id,
-                covid: activity.covid,
-                highCovid: activity.highCovid
+                covid: (activity.comment && activity.comment.covid) || null,
+                highCovid: activity.highCovidComment || null
             }));
         },
         canSubmitHighComment() {
