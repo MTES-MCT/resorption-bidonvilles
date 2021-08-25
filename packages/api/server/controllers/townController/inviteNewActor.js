@@ -2,15 +2,15 @@
 const { triggerActorInvitedAlert } = require('#server/utils/mattermost');
 const {
     sendUserShantytownActorInvitation,
-    formatName,
 } = require('#server/mails/mails');
-
+const { sequelize } = require('#db/models');
+const { formatName } = require('#server/models/userModel')(sequelize);
 
 module.exports = () => async (req, res, next) => {
     try {
         await sendUserShantytownActorInvitation({ email: req.body.email }, {
             variables: {
-                inviterName: formatName(req.user.first_name, req.user.last_name),
+                inviterName: formatName(req.user),
                 shantytown: req.shantytown,
             },
         });

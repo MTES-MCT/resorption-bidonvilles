@@ -1,4 +1,6 @@
 const moment = require('moment');
+const { sequelize } = require('#db/models');
+const { formatName } = require('#server/models/userModel')(sequelize);
 const mailService = require('#server/services/mailService');
 const { frontUrl, backUrl } = require('#server/config');
 
@@ -18,11 +20,7 @@ const REQUESTER_CAMPAIGN = 'demandeur-email';
 const USER_CAMPAIGN = 'utilisateur-email';
 const INVITE_CAMPAIGN = 'invite-email';
 
-const formatName = (firstName, lastName) => `${firstName.charAt(0).toUpperCase() + firstName.slice(1)} ${lastName.toUpperCase()}`;
-
 module.exports = {
-    formatName,
-
     /**
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
@@ -35,7 +33,7 @@ module.exports = {
         return mailService.send('admin_access_activated', {
             recipient,
             variables: {
-                recipientName: formatName(recipient.first_name, recipient.last_name),
+                recipientName: formatName(recipient),
                 userName: variables.userName,
                 frontUrl: `${frontUrl}?${utm}`,
                 formationUrl,
@@ -57,7 +55,7 @@ module.exports = {
         return mailService.send('admin_access_expired', {
             recipient,
             variables: {
-                recipientName: formatName(recipient.first_name, recipient.last_name),
+                recipientName: formatName(recipient),
                 userName: variables.userName,
                 activationUrlSentDate: variables.activationUrlSentDate,
                 frontUrl: `${frontUrl}?${utm}`,
@@ -100,7 +98,7 @@ module.exports = {
         return mailService.send('admin_new_request_notification', {
             recipient,
             variables: {
-                recipientName: formatName(recipient.first_name, recipient.last_name),
+                recipientName: formatName(recipient),
                 userName: variables.userName,
                 orgName: variables.orgName,
                 frontUrl: `${frontUrl}?${utm}`,
@@ -127,7 +125,7 @@ module.exports = {
         return mailService.send('admin_request_pending_reminder_1', {
             recipient,
             variables: {
-                recipientName: formatName(recipient.first_name, recipient.last_name),
+                recipientName: formatName(recipient),
                 userName: variables.userName,
                 orgName: variables.orgName,
                 frontUrl: `${frontUrl}?${utm}`,
@@ -153,7 +151,7 @@ module.exports = {
         return mailService.send('admin_request_pending_reminder_2', {
             recipient,
             variables: {
-                recipientName: formatName(recipient.first_name, recipient.last_name),
+                recipientName: formatName(recipient),
                 userName: variables.userName,
                 orgName: variables.orgName,
                 frontUrl: `${frontUrl}?${utm}`,
@@ -178,7 +176,7 @@ module.exports = {
         return mailService.send('admin_welcome', {
             recipient,
             variables: {
-                recipientName: formatName(recipient.first_name, recipient.last_name),
+                recipientName: formatName(recipient),
                 connexionUrl: `${connexionUrl}?${utm}`,
                 adminGuideUrl,
                 backUrl,
@@ -200,7 +198,7 @@ module.exports = {
         return mailService.send('demo_invitation', {
             recipient,
             variables: {
-                recipientName: formatName(recipient.first_name, recipient.last_name),
+                recipientName: formatName(recipient),
                 formationUrl,
                 backUrl,
                 frontUrl: `${frontUrl}?${utm}`,
@@ -221,7 +219,7 @@ module.exports = {
         return mailService.send('platform_invitation', {
             recipient,
             variables: {
-                recipientName: formatName(recipient.first_name, recipient.last_name),
+                recipientName: formatName(recipient),
                 inviterName: variables.inviterName,
                 frontUrl: `${frontUrl}?${utm}`,
                 backUrl,
@@ -268,7 +266,7 @@ module.exports = {
         return mailService.send('shantytown_actor_notification', {
             recipient,
             variables: {
-                recipientName: formatName(recipient.first_name, recipient.last_name),
+                recipientName: formatName(recipient),
                 inviterName: variables.inviterName,
                 siteUrl: `${frontUrl}/site/${variables.shantytown.id}?${utm}`,
                 actionUrl: `${frontUrl}/site/${variables.shantytown.id}?${utm}&action=new_actor`,
@@ -293,7 +291,7 @@ module.exports = {
         return mailService.send('user_access_activated_welcome', {
             recipient,
             variables: {
-                recipientName: formatName(recipient.first_name, recipient.last_name),
+                recipientName: formatName(recipient),
                 userGuideUrl,
                 frontUrl: `${frontUrl}?${utm}`,
                 backUrl,
@@ -316,7 +314,7 @@ module.exports = {
         return mailService.send('user_access_denied', {
             recipient,
             variables: {
-                recipientName: formatName(recipient.first_name, recipient.last_name),
+                recipientName: formatName(recipient),
                 adminName: variables.adminName,
                 frontUrl: `${frontUrl}?${utm}`,
                 backUrl,
@@ -339,7 +337,7 @@ module.exports = {
         return mailService.send('user_access_expired', {
             recipient,
             variables: {
-                recipientName: formatName(recipient.first_name, recipient.last_name),
+                recipientName: formatName(recipient),
                 frontUrl: `${frontUrl}?${utm}`,
                 backUrl,
                 formationUrl,
@@ -360,7 +358,7 @@ module.exports = {
         return mailService.send('user_access_granted', {
             recipient,
             variables: {
-                recipientName: formatName(recipient.first_name, recipient.last_name),
+                recipientName: formatName(recipient),
                 adminName: variables.adminName,
                 frontUrl: `${frontUrl}?${utm}`,
                 backUrl,
@@ -387,7 +385,7 @@ module.exports = {
         return mailService.send('user_access_pending', {
             recipient,
             variables: {
-                recipientName: formatName(recipient.first_name, recipient.last_name),
+                recipientName: formatName(recipient),
                 activationUrl: `${variables.activationUrl}?${utm}`,
                 activationUrlExpDate: variables.activationUrlExpDate,
                 formationUrl,
@@ -414,7 +412,7 @@ module.exports = {
         return mailService.send('user_access_request_confirmation', {
             recipient,
             variables: {
-                recipientName: formatName(recipient.first_name, recipient.last_name),
+                recipientName: formatName(recipient),
                 frontUrl: `${frontUrl}?${utm}`,
                 backUrl,
             },
@@ -455,7 +453,7 @@ module.exports = {
         return mailService.send('user_features', {
             recipient,
             variables: {
-                recipientName: formatName(recipient.first_name, recipient.last_name),
+                recipientName: formatName(recipient),
                 connexionUrl: `${connexionUrl}?${utm}`,
                 backUrl,
                 frontUrl: `${frontUrl}?${utm}`,
@@ -476,7 +474,7 @@ module.exports = {
         return mailService.send('user_idealco_invitation', {
             recipient,
             variables: {
-                recipientName: formatName(recipient.first_name, recipient.last_name),
+                recipientName: formatName(recipient),
                 idealcoUrl,
                 backUrl,
                 frontUrl: `${frontUrl}?${utm}`,
@@ -497,12 +495,15 @@ module.exports = {
         return mailService.send('user_new_comment', {
             recipient,
             variables: {
-                recipientName: formatName(recipient.first_name, recipient.last_name),
+                recipientName: formatName(recipient),
                 backUrl,
                 frontUrl: `${frontUrl}?${utm}`,
                 shantytown: variables.shantytown,
-                comment: variables.comment,
-                annuaireUrl: `${frontUrl}/annuaire/${variables.comment.createdBy.organizationId}?${utm}`,
+                createdBy: {
+                    name: formatName(variables.comment.createdBy),
+                    organization: variables.comment.createdBy.organization,
+                },
+                annuaireUrl: `${frontUrl}/annuaire/${variables.comment.createdBy.organization_id}?${utm}`,
                 messageUrl: `${frontUrl}/site/${variables.shantytown.id}#newComment`,
             },
             preserveRecipient,
@@ -519,7 +520,7 @@ module.exports = {
         return mailService.send('user_new_password', {
             recipient,
             variables: {
-                recipientName: formatName(recipient.first_name, recipient.last_name),
+                recipientName: formatName(recipient),
                 backUrl,
                 link: variables.link,
             },
@@ -542,7 +543,7 @@ module.exports = {
                 backUrl,
                 frontUrl: `${frontUrl}?${utm}`,
                 connexionUrl: `${connexionUrl}?${utm}`,
-                recipientName: formatName(recipient.first_name, recipient.last_name),
+                recipientName: formatName(recipient),
             },
             preserveRecipient,
         });
@@ -562,10 +563,10 @@ module.exports = {
         return mailService.send('user_shantytown_declared', {
             recipient,
             variables: {
-                recipientName: formatName(recipient.first_name, recipient.last_name),
+                recipientName: formatName(recipient),
                 departementName: variables.departement.name,
                 hour: moment(variables.shantytown.createdAt).utcOffset(2).format('HH:mm'),
-                creatorName: formatName(variables.creator.first_name, variables.creator.last_name),
+                creatorName: formatName(variables.creator),
                 townFullAddress: variables.shantytown.address,
                 frontUrl: `${frontUrl}?${utm.regular}`,
                 connexionUrl: `${connexionUrl}?${utm.connexion}`,
@@ -589,10 +590,10 @@ module.exports = {
         return mailService.send('user_shantytown_closed', {
             recipient,
             variables: {
-                recipientName: formatName(recipient.first_name, recipient.last_name),
+                recipientName: formatName(recipient),
                 departementName: variables.departement.name,
                 hour: moment(variables.shantytown.closedAt).utcOffset(2).format('HH:mm'),
-                editorName: formatName(variables.editor.first_name, variables.editor.last_name),
+                editorName: formatName(variables.editor),
                 townFullAddress: variables.shantytown.address,
                 frontUrl: `${frontUrl}?${utm.regular}`,
                 connexionUrl: `${connexionUrl}?${utm.connexion}`,
@@ -614,7 +615,7 @@ module.exports = {
         return mailService.send('user_share', {
             recipient,
             variables: {
-                recipientName: formatName(recipient.first_name, recipient.last_name),
+                recipientName: formatName(recipient),
                 invitationUrl: `${invitationUrl}?email=${encodeURIComponent(recipient.email)}&first_name=${encodeURIComponent(recipient.first_name)}&last_name=${encodeURIComponent(recipient.last_name)}&from=push_mail&${utm}`,
                 backUrl,
                 frontUrl: `${frontUrl}?${utm}`,

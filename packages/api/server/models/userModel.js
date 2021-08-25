@@ -879,5 +879,7 @@ module.exports = (database) => {
         return users;
     };
 
+    model.formatName = ({ first_name, last_name }) => `${first_name.charAt(0).toUpperCase() + first_name.slice(1)} ${last_name.toUpperCase()}`;
+
     return model;
 };

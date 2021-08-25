@@ -28,7 +28,7 @@ module.exports = [
             }
 
             if (req.shantytown.actors.some(({ id }) => id === value)) {
-                throw new Error(`${user.first_name} ${user.last_name.toUpperCase()} fait déjà partie des intervenants`);
+                throw new Error(`${userModel.formatName(user)} fait déjà partie des intervenants`);
             }
 
             req.body.user = user;
