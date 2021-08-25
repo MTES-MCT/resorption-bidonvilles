@@ -49,8 +49,7 @@
 export default {
     props: {
         organization_category: {
-            type: String,
-            required: true
+            type: String
         },
         label: {
             type: String,
