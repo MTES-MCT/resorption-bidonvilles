@@ -2,6 +2,7 @@ const { sequelize } = require('#db/models');
 const shantytownModel = require('#server/models/shantytownModel')(sequelize);
 const shantytownCommentModel = require('#server/models/shantytownComment');
 const highCovidCommentModel = require('#server/models/highCovidCommentModel')(sequelize);
+const userModel = require('#server/models/userModel')(sequelize);
 
 function serializeActivity(activity) {
     return activity;
@@ -20,6 +21,7 @@ module.exports = () => ({
             shantytownModel.getHistory(userLocation, permissions, location),
             shantytownCommentModel.getHistory(userLocation, permissions, location),
             highCovidCommentModel.getHistory(location),
+            userModel.getHistory(),
         ]);
 
         const orderedActivities = [];
