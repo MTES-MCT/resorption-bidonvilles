@@ -33,7 +33,7 @@ export default {
             // commentaires
             if (
                 (this.activity.comment && this.activity.comment.covid) ||
-                this.activity.highCovid
+                this.activity.highCovidComment
             ) {
                 return "exclamation";
             }

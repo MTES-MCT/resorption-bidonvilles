@@ -9,7 +9,7 @@ module.exports = models => ({
             };
 
             return res.status(200).send(
-                await models.shantytown.getHistory(
+                await models.userActivity.getHistory(
                     req.user.organization.location,
                     permissions,
                     req.body.location,
@@ -36,7 +36,7 @@ module.exports = models => ({
                 'shantytown_comment.listPrivate': req.user.isAllowedTo('listPrivate', 'shantytown_comment') ? req.user.permissions.shantytown_comment.listPrivate : null,
             };
 
-            let results = await models.shantytown.getHistory(
+            let results = await models.userActivity.getHistory(
                 req.user.organization.location,
                 permissions,
                 req.user.organization.location,
