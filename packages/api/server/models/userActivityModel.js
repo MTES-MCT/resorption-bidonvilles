@@ -14,15 +14,25 @@ module.exports = () => ({
      * @param {Object} userLocation Location to be used for 'local' permissions
      * @param {HistoryPermissions} permissions See above
      * @param {Object} location Location to be queried
+     * @param {Array.<String>} entities List of entities to be included
      */
-    async getHistory(userLocation, permissions, location) {
+    async getHistory(userLocation, permissions, location, entities = ['shantytown', 'shantytownComment', 'highCovidComment', 'user']) {
         // perform query
-        const activities = await Promise.all([
-            shantytownModel.getHistory(userLocation, permissions, location),
-            shantytownCommentModel.getHistory(userLocation, permissions, location),
-            highCovidCommentModel.getHistory(location),
-            userModel.getHistory(),
-        ]);
+        const promises = [];
+        if (entities.includes('shantytown')) {
+            promises.push(shantytownModel.getHistory(userLocation, permissions, location));
+        }
+        if (entities.includes('shantytownComment')) {
+            promises.push(shantytownCommentModel.getHistory(userLocation, permissions, location));
+        }
+        if (entities.includes('highCovidComment')) {
+            promises.push(highCovidCommentModel.getHistory(userLocation, permissions, location));
+        }
+        if (entities.includes('user')) {
+            promises.push(userModel.getHistory());
+        }
+
+        const activities = await Promise.all(promises);
 
         const orderedActivities = [];
         while (activities.reduce((sum, { length }) => sum + length, 0) > 0) {

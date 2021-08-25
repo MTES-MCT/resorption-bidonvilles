@@ -1,5 +1,6 @@
 const { sequelize } = require('#db/models');
 const { formatName } = require('#server/models/userModel')(sequelize);
+const updateWhereClauseForPermissions = require('#server/models/common/updateWhereClauseForPermissions');
 
 module.exports = (database) => {
     // eslint-disable-next-line global-require
@@ -149,26 +150,43 @@ module.exports = (database) => {
         );
     });
 
-    methods.getHistory = async (location) => {
+    methods.getHistory = async (userLocation, permissions, location) => {
         // apply geographic level restrictions
         const where = [];
         const replacements = {};
 
-        switch (location.type) {
-            case 'region':
-                where.push('departements.fk_region = :locationCode');
-                replacements.locationCode = location.region.code;
-                break;
+        updateWhereClauseForPermissions({
+            permissions,
+            permission: 'covid_comment.list',
+            requestedLocation: location,
+            userLocation,
+            whereFn: (loc) => {
+                if (!loc) {
+                    where.push('false');
+                    return;
+                }
 
-            case 'departement':
-            case 'epci':
-            case 'city':
-                where.push('departements.code = :locationCode');
-                replacements.locationCode = location.departement.code;
-                break;
+                if (loc.type === 'nation') {
+                    return;
+                }
 
-            default:
-        }
+                switch (loc.type) {
+                    case 'region':
+                        where.push('departements.fk_region = :locationCode');
+                        replacements.locationCode = loc.region.code;
+                        break;
+
+                    case 'departement':
+                    case 'epci':
+                    case 'city':
+                        where.push('departements.code = :locationCode');
+                        replacements.locationCode = loc.departement.code;
+                        break;
+
+                    default:
+                }
+            },
+        });
 
         const activities = await database.query(
             `
