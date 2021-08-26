@@ -62,6 +62,7 @@ function serializeUser(user, latestCharte, filters, permissionMap) {
                 name_singular: user.organization_type_name_singular,
                 name_plural: user.organization_type_name_plural,
                 abbreviation: user.organization_type_abbreviation,
+                category: user.organization_type_category,
             },
             category: {
                 uid: user.organization_category_id,
@@ -157,7 +158,7 @@ module.exports = (database) => {
     const charteEngagementModel = require('./charteEngagementModel')(database);
 
     /**
-     * Fetches a list of shantytowns from the database
+     * Fetches a list of users from the database
      *
      * @param {Array.<Object>} where   List of where clauses
      * @param {UserFilters}    filters
@@ -248,6 +249,7 @@ module.exports = (database) => {
                 organization_types.name_plural AS organization_type_name_plural,
                 organization_types.abbreviation AS organization_type_abbreviation,
                 organization_types.fk_role AS organization_type_role,
+                organization_types.fk_category AS organization_type_category,
                 roles_regular.name AS organization_type_role_name,
                 organization_categories.uid AS organization_category_id,
                 organization_categories.name_singular AS organization_category_name_singular,

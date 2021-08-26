@@ -232,4 +232,24 @@ module.exports = models => ({
         }
     },
 
+    async update(req, res, next) {
+        const { id } = req.params;
+        const { intervenant } = req.body;
+
+        try {
+            if (intervenant === true) {
+                await models.organization.setIntervenant(id);
+            }
+        } catch (error) {
+            res.status(500).send({
+                error: {
+                    user_message: 'Une erreur est survenue lors de la mise à jour de la structure',
+                    developer_message: error.message,
+                },
+            });
+            return next(error);
+        }
+
+        return res.status(200).send({});
+    },
 });

@@ -255,6 +255,23 @@ module.exports = database => ({
         return name;
     },
 
+    async setIntervenant(organizationId) {
+        const transaction = await database.transaction();
+
+        await database.query('UPDATE organizations SET fk_type = (SELECT organization_type_id FROM organization_types where fk_category = \'intervener\')  WHERE organization_id = :organizationId', {
+            replacements: {
+                organizationId,
+            },
+            transaction,
+        });
+        await database.query('REFRESH MATERIALIZED VIEW localized_organizations',
+            {
+                transaction,
+            });
+
+        return transaction.commit();
+    },
+
     async setCustomPermissions(organizationId, permissions) {
         return database.transaction(t => database.query('DELETE FROM permissions WHERE fk_organization = :organizationId', {
             transaction: t,
