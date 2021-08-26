@@ -3,7 +3,6 @@ import { list } from "#helpers/api/plan";
 import "vue-good-table/dist/vue-good-table.css";
 import NavBar from "#app/layouts/navbar/navbar.vue";
 import CollectivityInput from "#app/components/form/input/collectivity/collectivity.vue";
-import EventBannerContribute from "#app/components/EventBannerContribute";
 import EventBannerWaterAccess from "#app/components/EventBannerWaterAccess";
 import { open } from "#helpers/tabHelper";
 import {
@@ -17,7 +16,6 @@ export default {
         NavBar,
         Table,
         CollectivityInput,
-        EventBannerContribute,
         EventBannerWaterAccess
     },
 
