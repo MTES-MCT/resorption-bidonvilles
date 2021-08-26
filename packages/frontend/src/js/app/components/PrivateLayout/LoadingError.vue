@@ -15,11 +15,12 @@
             <p class="mt-6 text-red text-lg">
                 <slot>Une erreur inconnue est survenue.</slot><br />
                 <Button
+                    v-if="retry"
                     variant="primaryText"
                     class="hover:underline"
                     size="lg"
                     :padding="false"
-                    @click="$emit('retry')"
+                    @click="retry()"
                     >Réessayer ?</Button
                 >
             </p>
@@ -31,6 +32,13 @@
 import townImg from "../../../../../public/img/town.png";
 
 export default {
+    props: {
+        retry: {
+            type: Function,
+            required: false,
+            default: null
+        }
+    },
     data() {
         return {
             townImg

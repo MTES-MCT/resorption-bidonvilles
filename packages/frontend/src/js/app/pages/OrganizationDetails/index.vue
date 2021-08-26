@@ -37,13 +37,10 @@
                     :key="user.id"
                 />
             </div>
-            <ErrorPage
-                v-else-if="!directoryLoading && !organization"
-                class="text-center text-error text-display-lg mt-16"
-            >
+            <LoadingError v-else-if="!directoryLoading && !organization">
                 La structure demandée n'existe pas en base de données ou n'a pas
                 d'utilisateurs actifs
-            </ErrorPage>
+            </LoadingError>
 
             <LoadingPage v-else-if="directoryLoading && organization" />
         </PrivateContainer>
@@ -52,7 +49,7 @@
 <script>
 import PrivateLayout from "#app/components/PrivateLayout";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
-import ErrorPage from "#app/components/PrivateLayout/ErrorPage";
+import LoadingError from "#app/components/PrivateLayout/LoadingError";
 import LoadingPage from "#app/components/PrivateLayout/LoadingPage";
 import { mapGetters } from "vuex";
 import OrganizationDetailsUser from "#app/pages/OrganizationDetails/OrganizationDetailsUser";
@@ -61,7 +58,7 @@ export default {
         OrganizationDetailsUser,
         PrivateLayout,
         PrivateContainer,
-        ErrorPage,
+        LoadingError,
         LoadingPage
     },
 

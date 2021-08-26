@@ -6,9 +6,9 @@
     </PrivateLayout>
 
     <PrivateLayout v-else-if="error !== null">
-        <div class="text-center text-error text-primary text-display-lg mt-16">
+        <LoadingError :retry="fetchData">
             {{ error }}
-        </div>
+        </LoadingError>
     </PrivateLayout>
 
     <PrivateLayout v-else>
@@ -166,6 +166,7 @@ import TownDetailsActorAlert from "./TownDetailsActorAlert";
 import TownDetailsCloseModal from "./TownDetailsCloseModal";
 import TownDetailsActorThemesModal from "./TownDetailsActorThemesModal";
 import TownDetailsInviteActorModal from "./TownDetailsInviteActorModal";
+import LoadingError from "#app/components/PrivateLayout/LoadingError";
 import { notify } from "#helpers/notificationHelper";
 
 export default {
@@ -188,7 +189,8 @@ export default {
         TownDetailsPanelPlans,
         TownDetailsCovidCommentsSidePanel,
         TownDetailsInviteActorModal,
-        TownDetailsNewCommentLeftColumn
+        TownDetailsNewCommentLeftColumn,
+        LoadingError
     },
     data() {
         const permission = getPermission("shantytown.list");
