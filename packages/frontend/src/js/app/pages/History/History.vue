@@ -5,9 +5,9 @@
         <div>
             <HistoryLoader v-if="loading"></HistoryLoader>
 
-            <HistoryError v-else-if="error !== null" @retry="load">
-                <template>{{ error }}</template>
-            </HistoryError>
+            <LoadingError v-else-if="error !== null" :retry="load">
+                {{ error }}
+            </LoadingError>
 
             <PrivateContainer v-else class="py-6">
                 <HistoryModerationPanel v-if="canModerate" />
@@ -50,7 +50,7 @@ import PrivateLayout from "#app/components/PrivateLayout";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer.vue";
 import HistoryLoader from "./HistoryLoader.vue";
 import HistorySearchbar from "./HistorySearchbar.vue";
-import HistoryError from "./HistoryError.vue";
+import LoadingError from "#app/components/PrivateLayout/LoadingError.vue";
 import HistoryFilterBar from "./HistoryFilterBar.vue";
 import HistoryPagination from "./HistoryPagination.vue";
 import HistoryCardGroup from "./HistoryCardGroup.vue";
@@ -71,7 +71,7 @@ export default {
         PrivateContainer,
         HistoryLoader,
         HistorySearchbar,
-        HistoryError,
+        LoadingError,
         HistoryFilterBar,
         HistoryPagination,
         HistoryCardGroup,

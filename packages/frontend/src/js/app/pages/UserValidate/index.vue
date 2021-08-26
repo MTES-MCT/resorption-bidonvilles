@@ -128,9 +128,9 @@
             </div>
 
             <LoadingPage v-else-if="state === 'loading'" />
-            <ErrorPage v-else>
+            <LoadingError v-else>
                 L'utilisateur demandé n'existe pas en base de données.
-            </ErrorPage>
+            </LoadingError>
         </PrivateContainer>
     </PrivateLayout>
 </template>
@@ -139,7 +139,7 @@
 import PrivateLayout from "#app/components/PrivateLayout";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer.vue";
 import LoadingPage from "#app/components/PrivateLayout/LoadingPage.vue";
-import ErrorPage from "#app/components/PrivateLayout/ErrorPage.vue";
+import LoadingError from "#app/components/PrivateLayout/LoadingError.vue";
 import UserValidateDetails from "./UserValidateDetails/UserValidateDetails";
 import UserValidateAccessStatus from "./UserValidateAccessStatus/UserValidateAccessStatus";
 import UserValidateRequestMessage from "./UserValidateRequestMessage";
@@ -165,7 +165,7 @@ export default {
         UserValidateRequestMessage,
         UserValidateAccessSettings,
         LoadingPage,
-        ErrorPage
+        LoadingError
     },
     data() {
         const { permissions_description, user: loggedUser } = getConfig();
