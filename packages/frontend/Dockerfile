@@ -20,7 +20,7 @@ RUN yarn install --silent && yarn cache clean
 # ====
 # Production (build)
 # ====
-FROM node:16.3-slim AS build
+FROM node:16-bullseye-slim AS build
 
 RUN apt-get update || : && apt-get install -y \
     python \
@@ -33,8 +33,8 @@ USER node
 WORKDIR /home/node/app/
 
 COPY --from=development --chown=root:root /home/node/app/node_modules ./node_modules
-COPY . .
-RUN chown -R node:node .
+COPY --chown=node:node  . .
+
 RUN yarn build
 
 # ====
