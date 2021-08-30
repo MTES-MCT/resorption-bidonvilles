@@ -1,7 +1,7 @@
 # ====
 # Development
 # ====
-FROM node:16.3-slim AS development
+FROM node:16-bullseye-slim AS development
 
 RUN apt-get update || : && apt-get install -y \
     python \

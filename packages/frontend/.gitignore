@@ -1,3 +1,7 @@
-.cache
-cypress/videos
-cypress/screenshots
+node_modules
+.DS_Store
+.idea
+.vscode
+lerna-debug.log
+packages/frontend/src/.temp
+packages/frontend/dist/*

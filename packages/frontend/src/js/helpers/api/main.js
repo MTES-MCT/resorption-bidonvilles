@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { getToken, logout } from "#helpers/api/user";
-import { router } from "#app/router";
+// import { router } from "#app/router";
 import { open as openTab } from "#helpers/tabHelper";
 import { VUE_APP_API_URL, APP_VERSION } from "#src/js/env.js";
 
@@ -47,7 +47,7 @@ function handleRequestResponse(success, failure) {
             case ERRORS.MISSING_TOKEN:
             case ERRORS.EXPIRED_OR_INVALID_TOKEN:
                 logout(Vue.prototype.$piwik);
-                router.push("/");
+                // router.push("/");
                 break;
 
             // for everything else, let the current component decide what's best
@@ -109,7 +109,7 @@ function request(method, url, data, headers = {}) {
             }
         }
 
-        xhr.setRequestHeader("x-app-version", APP_VERSION);
+        xhr.setRequestHeader("x-app-version", APP_VERSION || '1.10.3');
 
         xhr.onload = handleRequestResponse.bind(xhr, success, failure);
         xhr.onerror = handleRequestFailure.bind(xhr, failure);

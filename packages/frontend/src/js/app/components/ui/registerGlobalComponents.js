@@ -7,10 +7,10 @@ import {
 } from "vee-validate";
 /*eslint import/namespace: ['error', { allowComputed: true }]*/
 import * as rules from "vee-validate/dist/rules";
-import fr from "vee-validate/dist/locale/fr.json";
-import en from "vee-validate/dist/locale/en";
-import ro from "vee-validate/dist/locale/ro";
-import bg from "vee-validate/dist/locale/bg";
+// import fr from "vee-validate/dist/locale/fr.json";
+// import en from "vee-validate/dist/locale/en";
+// import ro from "vee-validate/dist/locale/ro";
+// import bg from "vee-validate/dist/locale/bg";
 
 import notifications from "vue-notification/dist/ssr";
 import Button from "./Button.vue";
@@ -40,12 +40,12 @@ import Sort from "./Sort.vue";
 import Autocomplete from "./Autocomplete.vue";
 import Spinner from "./Spinner.vue";
 import CheckableGroup from "./Form/CheckableGroup.vue";
-import Datepicker from "./Datepicker.vue";
+// import Datepicker from "./Datepicker.vue";
 import Tag from "./Tag.vue";
 import Pagination from "./Pagination.vue";
 import PanelInfo from "./PanelInfo.vue";
 import Link from "./Link.vue";
-import MapV2 from "./Map.vue";
+// import MapV2 from "./Map.vue";
 import InfoBanner from "./InfoBanner.vue";
 import Tooltip from "./Tooltip.vue";
 
@@ -76,12 +76,12 @@ export default function(vueInstance) {
     vueInstance.component("Callout", Callout);
     vueInstance.component("Spinner", Spinner);
     vueInstance.component("AutocompleteV2", Autocomplete);
-    vueInstance.component("DatepickerV2", Datepicker);
+    // vueInstance.component("DatepickerV2", Datepicker);
     vueInstance.component("Tag", Tag);
     vueInstance.component("Pagination", Pagination);
     vueInstance.component("PanelInfo", PanelInfo);
     vueInstance.component("Link", Link);
-    vueInstance.component("MapV2", MapV2);
+    // vueInstance.component("MapV2", MapV2);
     vueInstance.component("InfoBanner", InfoBanner);
     vueInstance.component("Tooltip", Tooltip);
 
@@ -94,12 +94,12 @@ export default function(vueInstance) {
     vueInstance.component("AutocompleteVue", AutocompleteVue);
 
     // Vee Validate (Form Validation)
-    localize({
-        en,
-        fr,
-        bg,
-        ro
-    });
+    // localize({
+    //     en,
+    //     // fr,
+    //     // bg,
+    //     // ro
+    // });
 
     Object.keys(rules).forEach(rule => {
         extend(rule, {

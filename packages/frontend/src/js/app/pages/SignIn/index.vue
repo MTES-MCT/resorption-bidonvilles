@@ -61,6 +61,9 @@ export default {
             loading: null
         };
     },
+    mounted() {
+        console.log(process.env);
+    },
     methods: {
         async onLogin() {
             try {
