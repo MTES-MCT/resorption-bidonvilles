@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import townImg from "../../../../../public/img/town.png";
+import townImg from "../../../../../static/img/town.png";
 
 export default {
     data() {

@@ -5,42 +5,74 @@ const redirects = [{ from: "/landing", to: "/" }];
 const anonymousRoutes = [
     {
         path: "/",
-        component: path.join(__dirname, "./pages/LandingPage/index.vue")
+        component: path.join(__dirname, "./pages/LandingPage/index.vue"),
+        context: {
+            beforeEnter: "home"
+        }
     },
     {
         path: "/contact",
-        component: path.join(__dirname, "./pages/Contact/index.vue")
+        component: path.join(__dirname, "./pages/Contact/index.vue"),
+        context: {
+            beforeEnter: "anonymous"
+        }
     },
     {
         path: "/stats",
-        component: path.join(__dirname, "./pages/PublicStats/index.vue")
+        component: path.join(__dirname, "./pages/PublicStats/index.vue"),
+        context: {
+            beforeEnter: "anonymous"
+        }
     },
     {
         path: "/connexion",
-        component: path.join(__dirname, "./pages/SignIn/index.vue")
+        component: path.join(__dirname, "./pages/SignIn/index.vue"),
+        context: {
+            beforeEnter: "anonymous"
+        }
     },
     {
         path: "/invitation",
         component: path.join(__dirname, "./pages/Invitation/index.vue")
+    },
+    {
+        path: "/mentions-legales",
+        component: path.join(
+            __dirname,
+            "./pages/legalMentions/legalMentions.vue"
+        )
     }
 ];
 
 const loggedRoutes = [
     {
         path: "/launcher",
-        component: path.join(__dirname, "./pages/launcher/launcher.vue")
+        component: path.join(__dirname, "./pages/launcher/launcher.vue"),
+        context: {
+            beforeEnter: "loggedIn"
+        }
     },
     {
         path: "/nouvelle-version",
-        component: path.join(__dirname, "./pages/Invitation/index.vue")
+        component: path.join(__dirname, "./pages/Invitation/index.vue"),
+        context: {
+            beforeEnter: "loadedAndUpgraded"
+        }
     },
-    // {
-    //     path: "deconnexion",
-    //     component: todo,
-    //     meta: {
-    //         analyticsIgnore: true
-    //     }
-    // },
+    {
+        path: "/deconnexion",
+        component: path.join(__dirname, "./pages/EmptyPage/index.vue"),
+        context: {
+            meta: {
+                analyticsIgnore: true
+            },
+            beforeEnter: (to, from, next) => {
+                // TODO: FIX
+                // logout(Vue.prototype.$piwik);
+                next("/");
+            },
+        },
+    },
     {
         path: "/cartographie",
         component: path.join(__dirname, "./pages/dashboard/dashboard.vue"),
@@ -92,245 +124,310 @@ const loggedRoutes = [
             },
             beforeEnter: "loadedAndUpToDate"
         }
+    },
+    {
+        path: "/feedback",
+        component: path.join(__dirname, "./pages/EmptyPage/index.vue"),
+        context: {
+            beforeEnter(to, from, next) {
+                window.location.href =
+                    "mailto:contact@resorption-bidonvilles.beta.gouv.fr";
+                next(false);
+            }
+        }
+    },
+    {
+        path: "/conditions-d-utilisation",
+        component: path.join(__dirname, "./pages/EmptyPage/index.vue"),
+        context: {
+            beforeEnter(to, from, next) {
+                window.open("/doc/CGU_2021_04_08.pdf");
+                next(false);
+            }
+        }
+    },
+    {
+        path: "/typologie-des-acces",
+        component: path.join(__dirname, "./pages/EmptyPage/index.vue"),
+        context: {
+            beforeEnter(to, from, next) {
+                window.open("/doc/guide_de_l_administrateur.pdf");
+                next(false);
+            }
+        }
+    },
+    {
+        path: "/charte-d-engagement",
+        component: path.join(__dirname, "./pages/EmptyPage/index.vue"),
+        context: {
+            beforeEnter(to, from, next) {
+                // TODO: FIX
+                // const {
+                //     version_charte_engagement: { fichier }
+                // } = getConfig();
+                // window.open(fichier, "_blank");
+                // next(false);
+            }
+        }
+    },
+
+    {
+        path: "/mon-compte",
+        component: path.join(__dirname, "./pages/me/me.vue"),
+        context: {
+            meta: {
+                group: "account"
+            },
+
+            beforeEnter: "loadedAndUpToDate"
+        }
+    },
+    {
+        path: "/liste-des-utilisateurs",
+        component: path.join(__dirname, "./pages/UserList/index.vue"),
+        context: {
+            meta: {
+                group: "users",
+                permissions: ["user.list"]
+            },
+            beforeEnter: "loadedAndUpToDate"
+        }
+    },
+    {
+        path: "/nouvel-utilisateur",
+        component: path.join(__dirname, "./pages/UserCreate/index.vue"),
+        context: {
+            meta: {
+                group: "userCreation",
+                permissions: ["user.create"]
+            },
+            beforeEnter: "loadedAndUpToDate"
+        }
+    },
+    {
+        path: "/signature-charte-engagement",
+        component: path.join(
+            __dirname,
+            "./pages/CharteEngagement/CharteEngagement.vue"
+        ),
+        context: {
+            beforeEnter: "signatureCharte"
+        }
+    },
+    {
+        path: "/nouvel-utilisateur/:id",
+        component: path.join(__dirname, "./pages/UserValidate/index.vue"),
+        context: {
+            meta: {
+                group: "users",
+                permissions: ["user.activate"]
+            },
+            beforeEnter: "loadedAndUpToDate"
+        }
+    },
+    {
+        path: "/mise-a-niveau",
+        component: path.join(
+            __dirname,
+            "./pages/users.upgrade/users.upgrade.vue"
+        ),
+        context: {
+            meta: {
+                group: "users"
+            },
+            beforeEnter: "loaded"
+        }
+    },
+    {
+        path: "/nouveau-mot-de-passe",
+        component: path.join(
+            __dirname,
+            "./pages/UserRequestNewPassword/index.vue"
+        ),
+        context: {
+            meta: {
+                group: "users"
+            },
+            beforeEnter: "anonymous"
+        }
+    },
+    {
+        path: "/renouveler-mot-de-passe/:token",
+        component: path.join(__dirname, "./pages/UserSetNewPassword/index.vue"),
+        context: {
+            meta: {
+                group: "users"
+            },
+            beforeEnter: "anonymous"
+        }
+    },
+    {
+        path: "/activer-mon-compte/:token",
+        component: path.join(__dirname, "./pages/UserActivate/index.vue"),
+        context: {
+            meta: {
+                group: "account"
+            },
+            beforeEnter: "anonymous"
+        }
+    },
+    {
+        path: "/liste-des-dispositifs",
+        component: path.join(__dirname, "./pages/plans.list/plans.list.vue"),
+        context: {
+            meta: {
+                group: "plans",
+                permissions: ["plan.list"]
+            },
+            beforeEnter: "loadedAndUpToDate"
+        }
+    },
+    {
+        path: "/nouveau-dispositif",
+        component: path.join(
+            __dirname,
+            "./pages/plans.create/plans.create.vue"
+        ),
+        context: {
+            meta: {
+                group: "plans",
+                permissions: ["plan.create"]
+            },
+            beforeEnter: "loadedAndUpToDate"
+        }
+    },
+    {
+        path: "/modifier-dispositif/:id",
+        component: path.join(__dirname, "./pages/plans.edit/plans.edit.vue"),
+        context: {
+            meta: {
+                group: "plans",
+                permissions: ["plan.update"]
+            },
+            beforeEnter: "loadedAndUpToDate"
+        }
+    },
+    {
+        path: "/dispositif/:id",
+        component: path.join(
+            __dirname,
+            "./pages/plans.details/plans.details.vue"
+        ),
+        context: {
+            meta: {
+                group: "plans",
+                permissions: ["plan.read"]
+            },
+            beforeEnter: "loadedAndUpToDate"
+        }
+    },
+    {
+        path: "/dispositif/:id/indicateurs",
+        component: path.join(__dirname, "./pages/plans.marks/plans.marks.vue"),
+        context: {
+            meta: {
+                group: "plans",
+                permissions: ["plan.updateMarks"]
+            },
+            beforeEnter: "loadedAndUpToDate"
+        }
+    },
+    {
+        path: "/statistiques/:code?",
+        component: path.join(__dirname, "./pages/PrivateStats/index.vue"),
+        context: {
+            meta: {
+                group: "stats",
+                permissions: ["stats.read"]
+            },
+            beforeEnter: "loadedAndUpToDate"
+        }
+    },
+    {
+        path: "/activites",
+        component: path.join(__dirname, "./pages/History/History.vue"),
+        context: {
+            meta: {
+                group: "history",
+                permissions: ["shantytown.list"]
+            },
+            beforeEnter: "loadedAndUpToDate"
+        }
+    },
+    {
+        path: "/activites/:locationType/:locationCode?",
+        component: path.join(__dirname, "./pages/History/History.vue"),
+        context: {
+            meta: {
+                group: "history",
+                permissions: ["shantytown.list"]
+            },
+            beforeEnter: "loadedAndUpToDate"
+        }
+    },
+    {
+        path: "/covid-19",
+        component: path.join(__dirname, "./pages/covid/covid.vue"),
+        context: {
+            meta: {
+                group: "covid"
+            },
+            beforeEnter: "loadedAndUpToDate"
+        }
+    },
+    {
+        path: "/annuaire/",
+        component: path.join(__dirname, "./pages/OrganizationList/index.vue"),
+        context: {
+            meta: {
+                group: "directory"
+            },
+            beforeEnter: "loadedAndUpToDate"
+        }
+    },
+    {
+        path: "/annuaire/:id",
+        component: path.join(
+            __dirname,
+            "./pages/OrganizationDetails/index.vue"
+        ),
+        context: {
+            meta: {
+                group: "directory"
+            },
+            beforeEnter: "loadedAndUpToDate"
+        }
+    },
+    {
+        path: "/fiches-hebergement-logement-adapte",
+        component: path.join(__dirname, "./pages/EmptyPage/index.vue"),
+        context: {
+            beforeEnter(to, from, next) {
+                window.open("/doc/fiches-hebergement-logement-adapte.pdf");
+                next(false);
+            }
+        }
+    },
+    {
+        path: "/fiche-bidonvilles-maraudes",
+        component: path.join(__dirname, "./pages/EmptyPage/index.vue"),
+        context: {
+            beforeEnter(to, from, next) {
+                window.open("/doc/fiche-bidonvilles-maraudes.pdf");
+                next(false);
+            }
+        }
+    },
+    {
+        path: "/covid-19-recommandations-vaccination",
+        component: path.join(__dirname, "./pages/EmptyPage/index.vue"),
+        context: {
+            beforeEnter(to, from, next) {
+                window.open("/doc/covid-19-recommandations-vaccination.pdf");
+                next(false);
+            }
+        }
     }
-    // {
-    //     path: "/feedback",
-    //     beforeEnter(to, from, next) {
-    //         window.location.href =
-    //             "mailto:contact@resorption-bidonvilles.beta.gouv.fr";
-    //         next(false);
-    //     }
-    // },
-    // {
-    //     path: "/conditions-d-utilisation",
-    //     beforeEnter(to, from, next) {
-    //         window.open("/doc/CGU_2021_04_08.pdf");
-    //         next(false);
-    //     }
-    // },
-    // {
-    //     path: "/typologie-des-acces",
-    //     beforeEnter(to, from, next) {
-    //         window.open("/doc/guide_de_l_administrateur.pdf");
-    //         next(false);
-    //     }
-    // },
-    // {
-    //     path: "/charte-d-engagement",
-    //     beforeEnter(to, from, next) {
-    //         const {
-    //             version_charte_engagement: { fichier }
-    //         } = getConfig();
-    //         window.open(fichier, "_blank");
-    //         next(false);
-    //     }
-    // },
-    // {
-    //     path: "/mentions-legales",
-    //     component: LegalMentions
-    // },
-    // {
-    //     meta: {
-    //         group: "account"
-    //     },
-    //     path: "/mon-compte",
-    //     component: Me,
-    //     beforeEnter: guardians.loadedAndUpToDate
-    // },
-    // {
-    //     meta: {
-    //         group: "users",
-    //         permissions: ["user.list"]
-    //     },
-    //     path: "/liste-des-utilisateurs",
-    //     component: UserList,
-    //     beforeEnter: guardians.loadedAndUpToDate
-    // },
-    // {
-    //     meta: {
-    //         group: "userCreation",
-    //         permissions: ["user.create"]
-    //     },
-    //     path: "/nouvel-utilisateur",
-    //     component: UserCreate,
-    //     beforeEnter: guardians.loadedAndUpToDate
-    // },
-    // {
-    //     path: "/signature-charte-engagement",
-    //     component: CharteEngagement,
-    //     beforeEnter: guard.bind(this, [
-    //         { checker: isLoggedIn, target: "/connexion" },
-    //         { checker: isConfigLoaded, target: "/launcher" },
-    //         { checker: isPermitted, target: "/", saveEntrypoint: false },
-    //         {
-    //             checker() {
-    //                 return !hasAcceptedCharte();
-    //             },
-    //             target: "/"
-    //         }
-    //     ])
-    // },
-    // {
-    //     meta: {
-    //         group: "users",
-    //         permissions: ["user.activate"]
-    //     },
-    //     path: "/nouvel-utilisateur/:id",
-    //     component: UserValidate,
-    //     beforeEnter: guardians.loadedAndUpToDate
-    // },
-    // {
-    //     meta: {
-    //         group: "users"
-    //     },
-    //     path: "/mise-a-niveau",
-    //     component: UserUpgrade,
-    //     beforeEnter: guardians.loaded
-    // },
-    // {
-    //     meta: {
-    //         group: "users"
-    //     },
-    //     path: "/nouveau-mot-de-passe",
-    //     component: UserRequestNewPassword,
-    //     beforeEnter: guardians.anonymous
-    // },
-    // {
-    //     meta: {
-    //         group: "users"
-    //     },
-    //     path: "/renouveler-mot-de-passe/:token",
-    //     component: UserSetNewPassword,
-    //     beforeEnter: guardians.anonymous
-    // },
-    // {
-    //     meta: {
-    //         group: "account"
-    //     },
-    //     path: "/activer-mon-compte/:token",
-    //     component: UserActivate,
-    //     beforeEnter: guardians.anonymous
-    // },
-    // {
-    //     meta: {
-    //         group: "plans",
-    //         permissions: ["plan.list"]
-    //     },
-    //     path: "/liste-des-dispositifs",
-    //     component: PlanList,
-    //     beforeEnter: guardians.loadedAndUpToDate
-    // },
-    // {
-    //     meta: {
-    //         group: "plans",
-    //         permissions: ["plan.create"]
-    //     },
-    //     path: "/nouveau-dispositif",
-    //     component: PlanCreate,
-    //     beforeEnter: guardians.loadedAndUpToDate
-    // },
-    // {
-    //     meta: {
-    //         group: "plans",
-    //         permissions: ["plan.update"]
-    //     },
-    //     path: "/modifier-dispositif/:id",
-    //     component: PlanEdit,
-    //     beforeEnter: guardians.loadedAndUpToDate
-    // },
-    // {
-    //     meta: {
-    //         group: "plans",
-    //         permissions: ["plan.read"]
-    //     },
-    //     path: "/dispositif/:id",
-    //     component: PlanDetails,
-    //     beforeEnter: guardians.loadedAndUpToDate
-    // },
-    // {
-    //     meta: {
-    //         group: "plans",
-    //         permissions: ["plan.updateMarks"]
-    //     },
-    //     path: "/dispositif/:id/indicateurs",
-    //     component: PlanMarks,
-    //     beforeEnter: guardians.loadedAndUpToDate
-    // },
-    // {
-    //     path: "/statistiques/:code?",
-    //     meta: {
-    //         group: "stats",
-    //         permissions: ["stats.read"]
-    //     },
-    //     component: PrivateStats,
-    //     beforeEnter: guardians.loadedAndUpToDate
-    // },
-    // {
-    //     path: "/activites",
-    //     meta: {
-    //         group: "history",
-    //         permissions: ["shantytown.list"]
-    //     },
-    //     component: History,
-    //     beforeEnter: guardians.loadedAndUpToDate
-    // },
-    // {
-    //     path: "/activites/:locationType/:locationCode?",
-    //     meta: {
-    //         group: "history",
-    //         permissions: ["shantytown.list"]
-    //     },
-    //     component: History,
-    //     beforeEnter: guardians.loadedAndUpToDate
-    // },
-    // {
-    //     meta: {
-    //         group: "covid"
-    //     },
-    //     path: "/covid-19",
-    //     component: Covid,
-    //     beforeEnter: guardians.loadedAndUpToDate
-    // },
-    // {
-    //     meta: {
-    //         group: "directory"
-    //     },
-    //     path: "/annuaire/",
-    //     component: OrganizationList,
-    //     beforeEnter: guardians.loadedAndUpToDate
-    // },
-    // {
-    //     meta: {
-    //         group: "directory"
-    //     },
-    //     path: "/annuaire/:id",
-    //     component: OrganizationDetails,
-    //     beforeEnter: guardians.loadedAndUpToDate
-    // },
-    // {
-    //     path: "/fiches-hebergement-logement-adapte",
-    //     beforeEnter(to, from, next) {
-    //         window.open("/doc/fiches-hebergement-logement-adapte.pdf");
-    //         next(false);
-    //     }
-    // },
-    // {
-    //     path: "/fiche-bidonvilles-maraudes",
-    //     beforeEnter(to, from, next) {
-    //         window.open("/doc/fiche-bidonvilles-maraudes.pdf");
-    //         next(false);
-    //     }
-    // },
-    // {
-    //     path: "/covid-19-recommandations-vaccination",
-    //     beforeEnter(to, from, next) {
-    //         window.open("/doc/covid-19-recommandations-vaccination.pdf");
-    //         next(false);
-    //     }
-    // }
 ];
 
-module.exports = [
-    ...anonymousRoutes,
-    // ...loggedRoutes
-];
+module.exports = [...anonymousRoutes, ...loggedRoutes];

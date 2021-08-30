@@ -137,7 +137,7 @@ export default function(Vue, { appOptions, router }) {
     });
     appOptions.store = initStore(Vue);
 
-    router.beforeEach((to, from, next, ...params) => {
+    router.beforeEach((to, from, next) => {
         const matchedRoute = routes.find(r => r.path === to.path);
 
         if (!matchedRoute) {
@@ -146,12 +146,12 @@ export default function(Vue, { appOptions, router }) {
 
         const { beforeEnter } = matchedRoute.context || {};
 
-        if (beforeEnter) {
+        if (typeof beforeEnter === "function") {
+            beforeEnter(to, from, next);
+        } else if (guardians[beforeEnter]) {
             guardians[beforeEnter](to, from, next);
         } else {
             next();
         }
-
-
     });
 }

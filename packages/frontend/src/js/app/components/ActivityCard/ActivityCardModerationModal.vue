@@ -38,7 +38,6 @@
 import CommentBlock from "#app/pages/TownDetails/ui/CommentBlock.vue";
 import { notify } from "#helpers/notificationHelper";
 import { deleteComment } from "#helpers/api/town";
-import store from "#app/store";
 
 export default {
     components: {
@@ -93,7 +92,7 @@ export default {
                     text: "L'auteur du message en a été notifié par mail"
                 });
 
-                store.commit("removeComment", this.activity.comment.id);
+                this.$store.commit("removeComment", this.activity.comment.id);
             } catch (error) {
                 this.error =
                     (error && error.user_message) ||

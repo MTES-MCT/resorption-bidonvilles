@@ -1,11 +1,57 @@
 const path = require("path");
+const SentryPlugin = require("@sentry/webpack-plugin");
+const { DefinePlugin } = require("webpack");
+const { version } = require("./package.json");
+
+const { VUE_APP_SENTRY_RELEASE } = require("./src/js/env.js");
 
 module.exports = {
     plugins: [
         {
             use: "gridsome-plugin-tailwindcss"
         },
+        {
+            use: "gridsome-plugin-pug"
+        }
     ],
+    configureWebpack: {
+        devServer: {
+            progress: false,
+            disableHostCheck: true
+        },
+        plugins: [
+            ...(process.env.VUE_APP_SENTRY_SOURCEMAP_AUTHKEY
+                ? [
+                      new SentryPlugin({
+                          authToken:
+                              process.env.VUE_APP_SENTRY_SOURCEMAP_AUTHKEY,
+                          release: VUE_APP_SENTRY_RELEASE,
+                          org: "resorption-bidonvilles",
+                          project: "resorption-bidonvilles",
+
+                          // webpack specific configuration
+                          include: "./dist"
+                      })
+                  ]
+                : []),
+            new DefinePlugin({
+                "process.env.APP_VERSION": JSON.stringify(version),
+                // TODO: Check why we have to add these
+                "process.env.VUE_APP_API_URL": JSON.stringify(
+                    process.env.VUE_APP_API_URL
+                ),
+                "process.env.VUE_APP_MATOMO_ON": JSON.stringify(
+                    process.env.VUE_APP_MATOMO_ON
+                ),
+                "process.env.VUE_APP_SENTRY_ON": JSON.stringify(
+                    process.env.VUE_APP_SENTRY_ON
+                ),
+                "process.env.VUE_APP_SENTRY": JSON.stringify(
+                    process.env.VUE_APP_SENTRY
+                )
+            })
+        ]
+    },
     chainWebpack: config => {
         config.resolve.alias
             .set("#app", path.resolve(__dirname, "./src/js/app/"))

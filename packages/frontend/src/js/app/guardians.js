@@ -1,4 +1,4 @@
-import { isLoggedIn } from "#helpers/api/user";
+import { alreadyLoggedBefore, isLoggedIn } from "#helpers/api/user";
 import {
     get as getConfig,
     hasAcceptedCharte,
@@ -31,7 +31,7 @@ let entryPoint = null;
  * @param {Function}        next
  */
 function guard(checkers, to, from, next) {
-    console.log({checkers, to, from, next});
+    console.log({ checkers, to, from, next });
 
     for (let i = 0; i < checkers.length; i += 1) {
         const { checker, target, saveEntryPoint } = checkers[i];
@@ -41,7 +41,7 @@ function guard(checkers, to, from, next) {
                 entryPoint = to;
             }
 
-            console.log('next', target);
+            console.log("next", target);
 
             next(target);
             return;
@@ -59,7 +59,7 @@ function guard(checkers, to, from, next) {
  * @returns {boolean}
  */
 function isPermitted(to) {
-    console.log('isPermitted', to);
+    console.log("isPermitted", to);
 
     const { permissions } = to.meta;
 
@@ -90,7 +90,7 @@ function isUpgraded() {
  * @returns {boolean}
  */
 function hasNoPendingChangelog() {
-    console.log('hasNoPending');
+    console.log("hasNoPending");
     const { changelog } = getConfig();
     return !changelog || changelog.length === 0;
 }
@@ -119,7 +119,37 @@ const guardians = {
         { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
         { checker: isUpgraded, target: "/mise-a-niveau" },
         { checker: hasNoPendingChangelog, target: "/nouvelle-version" }
-    ])
+    ]),
+    signatureCharte: guard.bind(this, [
+        { checker: isLoggedIn, target: "/connexion" },
+        { checker: isConfigLoaded, target: "/launcher" },
+        { checker: isPermitted, target: "/", saveEntrypoint: false },
+        {
+            checker() {
+                return !hasAcceptedCharte();
+            },
+            target: "/"
+        }
+    ]),
+    home: (to, from, next) => {
+        if (to.fullPath.substr(0, 2) === "/#") {
+            return next(to.fullPath.substr(2));
+        }
+
+        if (isLoggedIn() !== true) {
+            if (alreadyLoggedBefore()) {
+                return next("/connexion");
+            }
+
+            return next();
+        }
+
+        if (isConfigLoaded() !== true) {
+            return next("/launcher");
+        }
+
+        return next("/cartographie");
+    }
 };
 
 /**

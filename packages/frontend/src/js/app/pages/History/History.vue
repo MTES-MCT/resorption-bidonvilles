@@ -57,7 +57,6 @@ import HistoryCardGroup from "./HistoryCardGroup.vue";
 import HistoryEmpty from "./HistoryEmpty.vue";
 import HistoryModerationPanel from "./HistoryModerationPanel.vue";
 
-import store from "#app/store";
 import { mapGetters } from "vuex";
 import {
     get as getConfig,
@@ -92,7 +91,7 @@ export default {
             locations: "locations"
         }),
         currentPageItems() {
-            const { itemsPerPage, currentPage } = store.state.activities;
+            const { itemsPerPage, currentPage } = this.$store.state.activities;
             const start = (currentPage - 1) * itemsPerPage;
 
             return this.activities.slice(start, start + itemsPerPage);
@@ -156,7 +155,7 @@ export default {
             this.load();
         },
         activities() {
-            store.commit("setActivitiesPage", 1);
+            this.$store.commit("setActivitiesPage", 1);
         }
     },
     mounted() {
@@ -171,16 +170,16 @@ export default {
             }
 
             // on fetch les activités
-            if (store.state.activities.items.length === 0) {
-                store.dispatch("fetchActivities");
+            if (this.$store.state.activities.items.length === 0) {
+                this.$store.dispatch("fetchActivities");
             }
 
-            // on fetch le nom de la location, si elle n'est pas déjà dans le store
+            // on fetch le nom de la location, si elle n'est pas déjà dans le this.$store
             // nécessaire pour l'affichage dans la UI et la barre de recherche
             if (this.locationType !== "nation") {
                 if (!this.locations[this.locationType]?.[this.locationCode]) {
                     // @todo: gérer une éventuelle erreur ici
-                    await store.dispatch("fetchLocation", {
+                    await this.$store.dispatch("fetchLocation", {
                         type: this.locationType,
                         code: this.locationCode
                     });
@@ -192,9 +191,9 @@ export default {
                 this.locationType === "nation" ||
                 this.$route.path === this.defaultPath
             ) {
-                store.commit("setActivityLocationFilter", null);
+                this.$store.commit("setActivityLocationFilter", null);
             } else {
-                store.commit(
+                this.$store.commit(
                     "setActivityLocationFilter",
                     this.locations[this.locationType][this.locationCode]
                 );
@@ -216,7 +215,7 @@ export default {
 
         onLocationChange() {
             // on redirige vers la bonne URL (ce qui automatiquement relancera un load() via les watchers)
-            const { location } = store.state.activities.filters;
+            const { location } = this.$store.state.activities.filters;
             if (location === null) {
                 this.routeTo("/activites/nation");
             } else {
