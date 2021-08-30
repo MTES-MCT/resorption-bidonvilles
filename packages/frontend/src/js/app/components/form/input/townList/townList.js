@@ -45,7 +45,7 @@ export default {
     },
 
     data() {
-        const { field_types: fieldTypes, user } = getConfig();
+        const { field_types: fieldTypes = [], user } = getConfig() || {};
         const permission = getPermission("shantytown.list");
 
         const userLocation = {

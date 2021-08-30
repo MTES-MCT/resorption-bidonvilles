@@ -38,7 +38,7 @@ export default {
         }
     },
     data() {
-        const { actor_themes: themes } = getConfig();
+        const { actor_themes: themes = [] } = getConfig() || {};
         return {
             themes
         };

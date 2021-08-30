@@ -12,7 +12,7 @@ export default {
     },
 
     data() {
-        const { user: me, topics } = getConfig();
+        const { user: me, topics = [] } = getConfig() || {};
         const data = {
             status: null,
             error: null,

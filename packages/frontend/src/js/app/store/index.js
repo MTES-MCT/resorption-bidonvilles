@@ -1,4 +1,3 @@
-import Vue from "vue";
 import Vuex from "vuex";
 import {
     all as fetchAll,
@@ -18,8 +17,6 @@ import directory from "./modules/directory";
 
 export default function(Vue) {
     Vue.use(Vuex);
-
-    console.log('initStore', Vue);
 
     return new Vuex.Store({
         modules: {
@@ -130,7 +127,8 @@ export default function(Vue) {
             async fetchTowns({ commit }) {
                 commit("setLoading", true);
                 try {
-                    const { user, field_types: fieldTypes } = getConfig();
+                    const { user, field_types: fieldTypes = [] } =
+                        getConfig() || {};
 
                     if (
                         user.organization.location.type !== "nation" &&
@@ -174,7 +172,7 @@ export default function(Vue) {
             },
 
             async fetchTownDetails({ commit }, id) {
-                const { field_types: fieldTypes } = getConfig();
+                const { field_types: fieldTypes = [] } = getConfig() || [];
                 const town = enrichShantytown(await fetchOne(id), fieldTypes);
                 commit("setDetailedTown", town);
             },

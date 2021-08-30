@@ -25,7 +25,7 @@ export default {
     },
 
     data() {
-        const { social_origins } = getConfig();
+        const { social_origins = [] } = getConfig() || {};
 
         return {
             values: social_origins,

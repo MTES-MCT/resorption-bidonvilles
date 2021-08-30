@@ -30,7 +30,7 @@ export default {
     },
 
     data() {
-        const { field_types } = getConfig();
+        const { field_types = [] } = getConfig() || {};
 
         return {
             values: field_types,

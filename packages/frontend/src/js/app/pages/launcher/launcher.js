@@ -14,12 +14,10 @@ export default {
         NavBar
     },
     mounted() {
-        console.log('launcher');
         this.loadConfig();
     },
     methods: {
         loadConfig() {
-            console.log('loadConfig');
             if (isConfigLoaded() === true) {
                 this.redirect();
                 return;
@@ -38,7 +36,7 @@ export default {
         redirect() {
             const { user } = get();
             this.track(user);
-            const entrypoint = getEntryPoint()
+            const entrypoint = getEntryPoint();
             this.$router.push(entrypoint.path);
         },
         track(user) {

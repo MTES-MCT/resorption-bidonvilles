@@ -10,9 +10,7 @@ export default {
     },
 
     data() {
-        const {
-            user: { id: userId, email }
-        } = getConfig();
+        const { user: { id: userId, email } = {} } = getConfig() || {};
 
         return {
             formData: {

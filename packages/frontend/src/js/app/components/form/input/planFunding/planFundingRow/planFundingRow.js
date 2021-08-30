@@ -67,6 +67,7 @@ export default {
         const showRealAmount =
             this.inputMode !== "default" || !this.isCurrentYear();
         const allowEdition = !Number.isFinite(this.value.realAmount);
+        const { finance_types: financeTypes = [] } = getConfig() || {};
 
         return {
             /**
@@ -74,7 +75,7 @@ export default {
              *
              * @type {Array.<FinanceType>}
              */
-            financeTypes: getConfig().finance_types || [],
+            financeTypes,
 
             /**
              *

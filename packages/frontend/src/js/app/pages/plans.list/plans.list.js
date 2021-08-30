@@ -22,8 +22,8 @@ export default {
     },
 
     data() {
-        const { user } = getConfig();
-        const permission = getPermission("plan.list");
+        const { user } = getConfig() || {};
+        const permission = getPermission("plan.list") || {};
         const hasNationalPermission = permission.geographic_level === "nation";
         const data = {
             locationTitle: null,

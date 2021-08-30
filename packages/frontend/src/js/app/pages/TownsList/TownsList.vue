@@ -391,8 +391,8 @@ export default {
         };
     },
     data() {
-        const { field_types: fieldTypes } = getConfig();
-        const permission = getPermission("shantytown.list");
+        const { field_types: fieldTypes = [] } = getConfig() || {};
+        const permission = getPermission("shantytown.list") || {};
 
         return {
             hasJusticePermission: permission.data_justice === true,
@@ -465,7 +465,10 @@ export default {
             this.$store.commit("setSort", val);
         },
         updateFilters(filter, val) {
-            this.$store.commit("setFilters", { ...this.filters, [filter]: val });
+            this.$store.commit("setFilters", {
+                ...this.filters,
+                [filter]: val
+            });
             this.onChangePage(1);
         },
         onChangePage(page) {

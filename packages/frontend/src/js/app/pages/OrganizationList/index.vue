@@ -19,8 +19,10 @@
                                     () => {
                                         $store.state.directory.filters
                                             .location ||
-                                        currentUser.organization.location
-                                            .type === 'nation'
+                                        (
+                                            currentUser &&
+                                            currentUser.organization.location
+                                        ).type === 'nation'
                                             ? removeItem()
                                             : $store.dispatch(
                                                   'setUserLocation'
@@ -31,8 +33,9 @@
                                 class="font-bold"
                                 >{{
                                     $store.state.directory.filters.location ||
-                                    currentUser.organization.location.type ===
-                                        "nation"
+                                    (currentUser &&
+                                        currentUser.organization.location
+                                            .type) === "nation"
                                         ? "Voir tous les utilisateurs de France"
                                         : "Voir tous les utilisateurs de mon territoire"
                                 }}</Button
@@ -102,7 +105,7 @@ export default {
         LoadingPage
     },
     data() {
-        const { user } = getConfig();
+        const { user } = getConfig() || {};
         return {
             currentUser: user
         };

@@ -109,7 +109,7 @@ function request(method, url, data, headers = {}) {
             }
         }
 
-        xhr.setRequestHeader("x-app-version", APP_VERSION || '1.10.3');
+        xhr.setRequestHeader("x-app-version", APP_VERSION);
 
         xhr.onload = handleRequestResponse.bind(xhr, success, failure);
         xhr.onerror = handleRequestFailure.bind(xhr, failure);

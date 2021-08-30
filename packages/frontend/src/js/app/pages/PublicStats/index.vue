@@ -376,6 +376,10 @@ export default {
          * before.
          */
         load() {
+            if (process.isServer) {
+                return;
+            }
+
             if (this.state === "loading") {
                 return;
             }

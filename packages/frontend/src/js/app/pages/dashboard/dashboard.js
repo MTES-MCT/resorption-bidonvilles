@@ -45,7 +45,7 @@ export default {
         simplebar
     },
     data() {
-        const { user } = getConfig();
+        const { user, owner_types = [] } = getConfig() || {};
 
         return {
             error: undefined,
@@ -137,7 +137,7 @@ export default {
                     icon: iconPeople,
                     label: "Type de propriétaire",
                     id: "ownerType",
-                    options: getConfig().owner_types.map(type => ({
+                    options: owner_types.map(type => ({
                         value: type.id,
                         label: type.label,
                         checked: true
@@ -431,7 +431,7 @@ export default {
                 fetchAllPois().catch(() => [])
             ])
                 .then(([, pois]) => {
-                    const { field_types: fieldTypes } = getConfig();
+                    const { field_types: fieldTypes = [] } = getConfig() || {};
 
                     this.loading = false;
 

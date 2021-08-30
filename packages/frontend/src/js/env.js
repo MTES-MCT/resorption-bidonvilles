@@ -8,5 +8,3 @@ module.exports = {
     APP_VERSION: VERSION,
     VUE_APP_SENTRY_RELEASE: `rb-front@${VERSION}`
 };
-
-

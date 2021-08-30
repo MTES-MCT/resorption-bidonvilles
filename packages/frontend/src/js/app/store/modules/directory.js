@@ -51,7 +51,7 @@ export default {
 
     actions: {
         setUserLocation({ commit }) {
-            const { user } = getConfig();
+            const { user } = getConfig() || {};
             if (user.organization.location.type !== "nation") {
                 commit("setDirectoryLocationFilter", {
                     id:

@@ -168,7 +168,7 @@ export default {
         ErrorPage
     },
     data() {
-        const { permissions_description, user: loggedUser } = getConfig();
+        const { permissions_description, user: loggedUser } = getConfig() || {};
         permissions = permissions_description;
 
         return {

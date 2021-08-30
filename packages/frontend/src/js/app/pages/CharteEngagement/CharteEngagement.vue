@@ -51,7 +51,11 @@
             </p>
 
             <div class="my-4">
-                <a class="link" :href="charte.fichier" target="_blank">
+                <a
+                    class="link"
+                    :href="charte ? charte.fichier : null"
+                    target="_blank"
+                >
                     Charte d'engagement détaillée
                 </a>
             </div>
@@ -145,10 +149,8 @@ export default {
     },
 
     data() {
-        const {
-            user: { id: userId },
-            version_charte_engagement: charte
-        } = getConfig();
+        const { user: { id: userId } = {}, version_charte_engagement: charte } =
+            getConfig() || {};
 
         return {
             user: userId,

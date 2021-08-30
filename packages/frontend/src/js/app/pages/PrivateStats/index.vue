@@ -261,7 +261,7 @@ export default {
         const config = getConfig();
 
         return {
-            departements: config.departements,
+            departements: config ? config.departements : [],
             stats: null,
             matomoStats: null,
             fetching: true
