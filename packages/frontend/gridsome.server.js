@@ -6,7 +6,4 @@ module.exports = function(api) {
             createPage(page);
         }
     });
-    // api.afterBuild (({ redirects }) => {
-    //     console.log(redirects);
-    // })
 };
