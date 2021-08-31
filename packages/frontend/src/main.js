@@ -137,32 +137,34 @@ export default function(Vue, { appOptions, router }) {
     });
     appOptions.store = initStore(Vue);
 
-    router.beforeEach((to, from, next) => {
-        // TODO: Check if we can find a way to retrieve beforeEnter with a less hacky way as they are not passed to/from
-        const matchedRoute = routes.find(r => {
-            if (to.matched.length === 1) {
-                const matchedPath = to.matched[0].path;
-                return (
-                    matchedPath === r.path ||
-                    (r.path === "/" && matchedPath === "")
-                );
+    if (process.isClient) {
+        router.beforeEach((to, from, next) => {
+            // TODO: Check if we can find a way to retrieve beforeEnter with a less hacky way as they are not passed to/from
+            const matchedRoute = routes.find(r => {
+                if (to.matched.length === 1) {
+                    const matchedPath = to.matched[0].path;
+                    return (
+                        matchedPath === r.path ||
+                        (r.path === "/" && matchedPath === "")
+                    );
+                }
+
+                return to.path.replace(/\/$/, "") === r.path;
+            });
+
+            if (!matchedRoute) {
+                return next();
             }
 
-            return to.path.replace(/\/$/, "") === r.path;
+            const { beforeEnter } = matchedRoute.context || {};
+
+            if (typeof beforeEnter === "function") {
+                beforeEnter(to, from, next);
+            } else if (guardians[beforeEnter]) {
+                guardians[beforeEnter](to, from, next);
+            } else {
+                next();
+            }
         });
-
-        if (!matchedRoute) {
-            return next();
-        }
-
-        const { beforeEnter } = matchedRoute.context || {};
-
-        if (typeof beforeEnter === "function") {
-            beforeEnter(to, from, next);
-        } else if (guardians[beforeEnter]) {
-            guardians[beforeEnter](to, from, next);
-        } else {
-            next();
-        }
-    });
+    }
 }
