@@ -59,5 +59,8 @@ module.exports = {
             .set("#helpers", path.resolve(__dirname, "./src/js/helpers"))
             .set("#matomo", path.resolve(__dirname, "./src/js/matomo"));
         config.plugins.delete("progress");
-    }
+    },
+    prefetch: {
+        mask: '^$', // example - disable all prefetch
+    },
 };
