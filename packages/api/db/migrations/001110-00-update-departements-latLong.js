@@ -8,14 +8,14 @@ const { sequelize } = require('../models');
  */
 function updateLatLongDepartements() {
     return parser(
-        fs.readFileSync(path.resolve(__dirname, '..', 'data/deptartements-with-lat-and-lon.csv'), { encoding: 'utf8' }),
+        fs.readFileSync(path.resolve(__dirname, '..', 'data/departements-with-lat-and-lon.csv'), { encoding: 'utf8' }),
         {
             headers: ['code', 'name', 'latitude', 'longitude'],
             separator: ';',
         },
     )
-        .then(cities => Promise.all(
-            cities.map(city => sequelize.query(`UPDATE "cities" SET latitude = ${city.latitude},  longitude = ${city.longitude} WHERE code = '${city.code}'`)),
+        .then(departements => Promise.all(
+            departements.map(departement => sequelize.query(`UPDATE "departements" SET latitude = ${departement.latitude},  longitude = ${departement.longitude} WHERE code = '${departement.code}'`)),
         ));
 }
 
@@ -27,8 +27,8 @@ function revertUpdateLatLongDepartements() {
             separator: ';',
         },
     )
-        .then(cities => Promise.all(
-            cities.map(city => sequelize.query(`UPDATE "cities" SET latitude = ${city.latitude},  longitude = ${city.longitude} WHERE code = '${city.code}'`)),
+        .then(departements => Promise.all(
+            departements.map(departement => sequelize.query(`UPDATE "departements" SET latitude = ${departement.latitude},  longitude = ${departement.longitude} WHERE code = '${departement.code}'`)),
         ));
 }
 
