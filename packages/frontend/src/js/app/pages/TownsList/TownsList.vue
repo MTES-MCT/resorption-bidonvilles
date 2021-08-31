@@ -465,7 +465,10 @@ export default {
             this.$store.commit("setSort", val);
         },
         updateFilters(filter, val) {
-            this.$store.commit("setFilters", { ...this.filters, [filter]: val });
+            this.$store.commit("setFilters", {
+                ...this.filters,
+                [filter]: val
+            });
             this.onChangePage(1);
         },
         onChangePage(page) {

@@ -1,7 +1,9 @@
 <template>
-    <ClientOnly>
-        <PrivatePage />
-    </ClientOnly>
+    <div>
+        <ClientOnly>
+            <PrivatePage />
+        </ClientOnly>
+    </div>
 </template>
 
 <script>

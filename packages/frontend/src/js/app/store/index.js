@@ -1,4 +1,3 @@
-import Vue from "vue";
 import Vuex from "vuex";
 import {
     all as fetchAll,
@@ -18,8 +17,6 @@ import directory from "./modules/directory";
 
 export default function(Vue) {
     Vue.use(Vuex);
-
-    console.log('initStore', Vue);
 
     return new Vuex.Store({
         modules: {

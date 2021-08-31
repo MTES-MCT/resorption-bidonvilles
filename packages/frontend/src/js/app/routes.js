@@ -55,17 +55,14 @@ const anonymousRoutes = [
     },
     {
         path: "/renouveler-mot-de-passe/:token",
-        component: path.join(
-            __dirname,
-            "./pages/UserSetNewPassword/index.vue"
-        ),
+        component: path.join(__dirname, "./pages/UserSetNewPassword/index.vue"),
         context: {
             meta: {
                 group: "users"
             },
             beforeEnter: "anonymous"
         }
-    },
+    }
 ];
 
 const loggedRoutes = [
