@@ -138,7 +138,18 @@ export default function(Vue, { appOptions, router }) {
     appOptions.store = initStore(Vue);
 
     router.beforeEach((to, from, next) => {
-        const matchedRoute = routes.find(r => r.path === to.path);
+        // TODO: Check if we can find a way to retrieve beforeEnter with a less hacky way as they are not passed to/from
+        const matchedRoute = routes.find(r => {
+            if (to.matched.length === 1) {
+                const matchedPath = to.matched[0].path;
+                return (
+                    matchedPath === r.path ||
+                    (r.path === "/" && matchedPath === "")
+                );
+            }
+
+            return to.path.replace(/\/$/, "") === r.path;
+        });
 
         if (!matchedRoute) {
             return next();
