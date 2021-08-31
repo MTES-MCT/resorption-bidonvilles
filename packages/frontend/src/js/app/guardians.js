@@ -31,6 +31,8 @@ let entryPoint = null;
  * @param {Function}        next
  */
 function guard(checkers, to, from, next) {
+    console.log({ checkers, to, from, next });
+
     for (let i = 0; i < checkers.length; i += 1) {
         const { checker, target, saveEntryPoint } = checkers[i];
 
@@ -38,6 +40,8 @@ function guard(checkers, to, from, next) {
             if (saveEntryPoint !== false) {
                 entryPoint = to;
             }
+
+            console.log("next", target);
 
             next(target);
             return;
@@ -74,7 +78,9 @@ function isPermitted(to) {
  * @returns {boolean}
  */
 function isUpgraded() {
-    const { user: { position } = {} } = getConfig() || {};
+    const {
+        user: { position }
+    } = getConfig();
     return position !== "";
 }
 
@@ -85,7 +91,7 @@ function isUpgraded() {
  */
 function hasNoPendingChangelog() {
     console.log("hasNoPending");
-    const { changelog } = getConfig() || {};
+    const { changelog } = getConfig();
     return !changelog || changelog.length === 0;
 }
 

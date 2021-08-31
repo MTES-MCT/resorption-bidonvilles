@@ -4,9 +4,7 @@
 
         <section class="section section-white">
             <div class="container">
-                <ClientOnly>
-                    <Form v-bind="formDefinition" v-model="formData" @complete="onComplete"></Form>
-                </ClientOnly>
+                <Form v-bind="formDefinition" v-model="formData" @complete="onComplete"></Form>
             </div>
         </section>
     </div>

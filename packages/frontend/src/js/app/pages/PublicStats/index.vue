@@ -154,7 +154,7 @@ export default {
             matomoStats: null
         };
     },
-    created() {
+    mounted() {
         this.load();
     },
 
@@ -376,10 +376,6 @@ export default {
          * before.
          */
         load() {
-            if (process.isServer) {
-                return;
-            }
-
             if (this.state === "loading") {
                 return;
             }

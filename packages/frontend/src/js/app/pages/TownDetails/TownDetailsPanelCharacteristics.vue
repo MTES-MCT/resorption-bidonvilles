@@ -113,16 +113,14 @@
                     </TownDetailsPanelSection>
                 </div>
                 <div class="w-1/2 bg-G200">
-                    <ClientOnly>
-                        <div class="v1">
-                            <Map
-                                :display-searchbar="false"
-                                :towns="[town]"
-                                :default-view="center"
-                                :load-territory-layers="false"
-                            ></Map>
-                        </div>
-                    </ClientOnly>
+                    <div class="v1">
+                        <Map
+                            :display-searchbar="false"
+                            :towns="[town]"
+                            :default-view="center"
+                            :load-territory-layers="false"
+                        ></Map>
+                    </div>
                 </div>
             </div>
         </template>
@@ -131,6 +129,7 @@
 
 <script>
 import TownDetailsPanel from "./ui/TownDetailsPanel.vue";
+import Map from "#app/components/map/map.vue";
 import TownDetailsPanelSection from "./ui/TownDetailsPanelSection.vue";
 import formatDateSince from "../TownsList/formatDateSince";
 import { notify } from "#helpers/notificationHelper";
@@ -141,11 +140,7 @@ export default {
             type: Object
         }
     },
-    components: {
-        TownDetailsPanel,
-        TownDetailsPanelSection,
-        Map: () => import("#app/components/map/map.vue")
-    },
+    components: { TownDetailsPanel, TownDetailsPanelSection, Map },
     methods: {
         /**
          * @see index.js

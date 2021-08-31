@@ -22,8 +22,8 @@ export default {
     },
 
     data() {
-        const { user } = getConfig() || {};
-        const permission = getPermission("plan.list") || {};
+        const { user } = getConfig();
+        const permission = getPermission("plan.list");
         const hasNationalPermission = permission.geographic_level === "nation";
         const data = {
             locationTitle: null,
@@ -31,9 +31,7 @@ export default {
             location: null
         };
 
-        let userLocationType = user
-            ? user.organization.location.type
-            : "nation";
+        let userLocationType = user.organization.location.type;
         if (userLocationType === "epci" || userLocationType === "city") {
             userLocationType = "departement";
         }
@@ -134,7 +132,7 @@ export default {
         }
     },
 
-    mounted() {
+    created() {
         this.load();
     },
 

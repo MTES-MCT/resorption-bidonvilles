@@ -18,7 +18,7 @@ export default {
     },
 
     data() {
-        const { user } = getConfig() || {};
+        const { user } = getConfig();
 
         return {
             /**
@@ -129,10 +129,6 @@ export default {
             }));
         },
         canSubmitHighComment() {
-            if (!this.user) {
-                return false;
-            }
-
             return (
                 this.user.organization.location.type !== "nation" &&
                 getPermission("covid_comment.list").geographic_level !==
@@ -153,10 +149,6 @@ export default {
          * before.
          */
         load() {
-            if (process.isServer) {
-                return;
-            }
-
             // loading data is forbidden if the component is already loading or loaded
             if ([null, "error"].indexOf(this.state) === -1) {
                 return;

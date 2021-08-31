@@ -28,7 +28,7 @@ export default {
     },
 
     data() {
-        const { etp_types: types = [] } = getConfig() || {};
+        const { etp_types: types } = getConfig();
 
         return {
             rows: this.value,

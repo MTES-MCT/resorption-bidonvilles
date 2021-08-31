@@ -1,4 +1,5 @@
 import NavBar from "#app/layouts/navbar/navbar.vue";
+import Form from "#app/components/form/form.vue";
 import { get, addState } from "#helpers/api/plan";
 import { hasPermission } from "#helpers/api/config";
 import { notify } from "#helpers/notificationHelper";
@@ -6,7 +7,7 @@ import { notify } from "#helpers/notificationHelper";
 export default {
     components: {
         NavBar,
-        Form: () => import("#app/components/form/form.vue")
+        Form
     },
 
     data() {

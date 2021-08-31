@@ -107,7 +107,7 @@ export default {
         }
     },
     data() {
-        const { user } = getConfig() || {};
+        const { user } = getConfig();
         return {
             user
         };

@@ -21,7 +21,5 @@
     </section>
 
     //- state: loaded
-    <ClientOnly>
-        <Form v-if="loading.status === 'completed'" v-bind="formDefinition" v-model="formData" @complete="onComplete" ref="form"></Form>
-    </ClientOnly>
+    <Form v-if="loading.status === 'completed'" v-bind="formDefinition" v-model="formData" @complete="onComplete" ref="form"></Form>
 </div>

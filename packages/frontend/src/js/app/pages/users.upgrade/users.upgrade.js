@@ -1,15 +1,18 @@
 import NavBar from "#app/layouts/navbar/navbar.vue";
+import Form from "#app/components/form/form.vue";
 import { get as getConfig, load } from "#helpers/api/config";
 import { upgrade } from "#helpers/api/user";
 
 export default {
     components: {
         NavBar,
-        Form: () => import("#app/components/form/form.vue")
+        Form
     },
 
     data() {
-        const { user: { id: userId, email } = {} } = getConfig() || {};
+        const {
+            user: { id: userId, email }
+        } = getConfig();
 
         return {
             formData: {

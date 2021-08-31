@@ -136,7 +136,7 @@ export default {
             return this.$route.params.locationCode;
         },
         defaultPath() {
-            const { user } = getConfig() || {};
+            const { user } = getConfig();
             const { geographic_level } = getPermission("shantytown.list");
             if (geographic_level === "nation") {
                 return "/activites/nation";

@@ -30,7 +30,7 @@ export default {
     },
 
     data() {
-        const { owner_types = [] } = getConfig() || {};
+        const { owner_types } = getConfig();
 
         return {
             values: owner_types,

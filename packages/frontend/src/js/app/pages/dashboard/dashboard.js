@@ -1,6 +1,7 @@
 import simplebar from "simplebar-vue";
 import NavBar from "#app/layouts/navbar/navbar.vue";
 import FilterGroup from "./filterGroup/filterGroup.vue";
+import Map from "#app/components/map/map.vue";
 import Quickview from "#app/components/quickview/quickview.vue";
 import POIView from "./POIView.vue";
 import { mapGetters } from "vuex";
@@ -38,26 +39,24 @@ export default {
     components: {
         NavBar,
         FilterGroup,
+        Map,
         Quickview,
-        Map: () => import("#app/components/map/map.vue"),
         POIView,
         simplebar
     },
     data() {
-        const { user, owner_types = [] } = getConfig() || {};
+        const { user } = getConfig();
 
         return {
             error: undefined,
             loading: false,
-            defaultMapView: process.isServer
-                ? { center: [0, 0], zoom: 11 }
-                : {
-                      center: [
-                          user.organization.location.latitude,
-                          user.organization.location.longitude
-                      ],
-                      zoom: getDefaultZoomFor(user.organization.location.type)
-                  },
+            defaultMapView: {
+                center: [
+                    user.organization.location.latitude,
+                    user.organization.location.longitude
+                ],
+                zoom: getDefaultZoomFor(user.organization.location.type)
+            },
             pois: [],
             quickview: {
                 town: null,
@@ -138,7 +137,7 @@ export default {
                     icon: iconPeople,
                     label: "Type de propriétaire",
                     id: "ownerType",
-                    options: owner_types.map(type => ({
+                    options: getConfig().owner_types.map(type => ({
                         value: type.id,
                         label: type.label,
                         checked: true
@@ -327,8 +326,10 @@ export default {
             return visibleTowns;
         }
     },
-    mounted() {
+    created() {
         this.fetchData();
+    },
+    mounted() {
         window.addEventListener("resize", this.resize);
     },
     beforeDestroy() {
@@ -430,7 +431,7 @@ export default {
                 fetchAllPois().catch(() => [])
             ])
                 .then(([, pois]) => {
-                    const { field_types: fieldTypes = [] } = getConfig() || {};
+                    const { field_types: fieldTypes } = getConfig();
 
                     this.loading = false;
 

@@ -93,7 +93,7 @@ import { closeChangelog, get as getConfig, load } from "#helpers/api/config";
 
 export default {
     data() {
-        const { changelog } = getConfig() || {};
+        const { changelog } = getConfig();
 
         return {
             pending: false,

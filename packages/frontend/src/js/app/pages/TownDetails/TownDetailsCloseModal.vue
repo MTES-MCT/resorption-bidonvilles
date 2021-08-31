@@ -209,7 +209,7 @@ export default {
         }
     },
     data() {
-        const { closing_solutions: closingSolutions = [] } = getConfig() || {};
+        const { closing_solutions: closingSolutions } = getConfig();
 
         return {
             loading: false,

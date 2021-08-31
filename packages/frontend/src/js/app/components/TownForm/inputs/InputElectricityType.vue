@@ -31,7 +31,7 @@ export default {
     },
 
     data() {
-        const { electricity_types = [] } = getConfig() || {};
+        const { electricity_types } = getConfig();
 
         return {
             values: electricity_types,

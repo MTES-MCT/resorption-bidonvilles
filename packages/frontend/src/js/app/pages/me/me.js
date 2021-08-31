@@ -1,10 +1,11 @@
 import NavBar from "#app/layouts/navbar/navbar.vue";
+import Form from "#app/components/form/form.vue";
 import { me, edit } from "#helpers/api/user";
 
 export default {
     components: {
         NavBar,
-        Form: () => import("#app/components/form/form.vue")
+        Form
     },
     data() {
         const formData = {
@@ -79,7 +80,7 @@ export default {
         };
     },
 
-    mounted() {
+    created() {
         this.preload();
     },
 
