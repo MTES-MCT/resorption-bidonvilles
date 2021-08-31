@@ -1,19 +1,17 @@
 import NavBar from "#app/layouts/navbar/navbar.vue";
 import SlideNote from "#app/components/slide-note/slide-note.vue";
-import Map from "#app/components/map/map.vue";
 import { get, close } from "#helpers/api/plan";
 import { hasPermission, get as getConfig } from "#helpers/api/config";
 import PlanFunding from "#app/components/form/input/planFunding/planFunding.vue";
-import Input from "#app/components/form/input/input.vue";
 import { notify } from "#helpers/notificationHelper";
 
 export default {
     components: {
         NavBar,
         SlideNote,
-        Map,
+        Map: () => import("#app/components/map/map.vue"),
         PlanFunding,
-        Input
+        Input: () => import("#app/components/form/input/input.vue"),
     },
 
     data() {

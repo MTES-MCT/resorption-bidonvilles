@@ -1,7 +1,6 @@
 import simplebar from "simplebar-vue";
 import NavBar from "#app/layouts/navbar/navbar.vue";
 import FilterGroup from "./filterGroup/filterGroup.vue";
-import Map from "#app/components/map/map.vue";
 import Quickview from "#app/components/quickview/quickview.vue";
 import POIView from "./POIView.vue";
 import { mapGetters } from "vuex";
@@ -39,8 +38,8 @@ export default {
     components: {
         NavBar,
         FilterGroup,
-        Map,
         Quickview,
+        Map: () => import("#app/components/map/map.vue"),
         POIView,
         simplebar
     },
@@ -50,13 +49,15 @@ export default {
         return {
             error: undefined,
             loading: false,
-            defaultMapView: {
-                center: [
-                    user.organization.location.latitude,
-                    user.organization.location.longitude
-                ],
-                zoom: getDefaultZoomFor(user.organization.location.type)
-            },
+            defaultMapView: process.isServer
+                ? { center: [0, 0], zoom: 11 }
+                : {
+                      center: [
+                          user.organization.location.latitude,
+                          user.organization.location.longitude
+                      ],
+                      zoom: getDefaultZoomFor(user.organization.location.type)
+                  },
             pois: [],
             quickview: {
                 town: null,
@@ -326,10 +327,8 @@ export default {
             return visibleTowns;
         }
     },
-    created() {
-        this.fetchData();
-    },
     mounted() {
+        this.fetchData();
         window.addEventListener("resize", this.resize);
     },
     beforeDestroy() {

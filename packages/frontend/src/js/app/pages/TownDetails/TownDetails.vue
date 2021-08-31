@@ -190,7 +190,7 @@ export default {
         TownDetailsNewCommentLeftColumn
     },
     data() {
-        const permission = getPermission("shantytown.list");
+        const permission = getPermission("shantytown.list") || {};
         const { field_types: fieldTypes = [], user } = getConfig() || {};
 
         return {

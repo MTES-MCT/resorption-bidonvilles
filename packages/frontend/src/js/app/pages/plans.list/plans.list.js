@@ -31,7 +31,9 @@ export default {
             location: null
         };
 
-        let userLocationType = user.organization.location.type;
+        let userLocationType = user
+            ? user.organization.location.type
+            : "nation";
         if (userLocationType === "epci" || userLocationType === "city") {
             userLocationType = "departement";
         }
@@ -132,7 +134,7 @@ export default {
         }
     },
 
-    created() {
+    mounted() {
         this.load();
     },
 

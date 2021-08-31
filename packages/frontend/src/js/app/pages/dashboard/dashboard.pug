@@ -13,7 +13,9 @@
 
             //- content
             <div v-bind:style="{ width: !loading && !error ? 'auto' : 0 }" class="content" ref="main">
-                <Map v-bind="rendererProps" @town-click="showQuickview" @poi-click="showPOIView" @on-row-click="routeToTown" ref="map"></Map>
+                <ClientOnly>
+                    <Map v-bind="rendererProps" @town-click="showQuickview" @poi-click="showPOIView" @on-row-click="routeToTown" ref="map"></Map>
+                </ClientOnly>
             </div>
 
             //- notifications

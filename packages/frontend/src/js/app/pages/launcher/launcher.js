@@ -37,7 +37,7 @@ export default {
             const { user } = get();
             this.track(user);
             const entrypoint = getEntryPoint();
-            this.$router.push(entrypoint.path);
+            this.$router.push(entrypoint);
         },
         track(user) {
             Sentry.setUser({ id: user.id });

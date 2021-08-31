@@ -73,17 +73,16 @@ const loggedRoutes = [
             }
         }
     },
-    // TODO: Fix leaflet
-    // {
-    //     path: "/cartographie",
-    //     component: path.join(__dirname, "./pages/dashboard/dashboard.vue"),
-    //     context: {
-    //         beforeEnter: "loadedAndUpToDate",
-    //         meta: {
-    //             group: "townList"
-    //         }
-    //     }
-    // },
+    {
+        path: "/cartographie",
+        component: path.join(__dirname, "./pages/dashboard/dashboard.vue"),
+        context: {
+            beforeEnter: "loadedAndUpToDate",
+            meta: {
+                group: "townList"
+            }
+        }
+    },
     {
         path: "/liste-des-sites",
         component: path.join(__dirname, "./pages/TownsList/TownsList.vue"),
@@ -105,18 +104,16 @@ const loggedRoutes = [
             }
         }
     },
-
-    // TODO: Fix map window leaflet
-    // {
-    //     path: "/site/:id",
-    //     component: path.join(__dirname, "./pages/TownDetails/TownDetails.vue"),
-    //     context: {
-    //         meta: {
-    //             group: "townList"
-    //         },
-    //         beforeEnter: "loadedAndUpToDate"
-    //     }
-    // },
+    {
+        path: "/site/:id",
+        component: path.join(__dirname, "./pages/TownDetails/TownDetails.vue"),
+        context: {
+            meta: {
+                group: "townList"
+            },
+            beforeEnter: "loadedAndUpToDate"
+        }
+    },
     {
         path: "/site/:id/mise-a-jour",
         component: path.join(__dirname, "./pages/TownUpdate/TownUpdate.vue"),
@@ -172,19 +169,17 @@ const loggedRoutes = [
             // }
         }
     },
+    {
+        path: "/mon-compte",
+        component: path.join(__dirname, "./pages/me/me.vue"),
+        context: {
+            meta: {
+                group: "account"
+            },
 
-    // TODO: Fix vuejs datepicker
-    // {
-    //     path: "/mon-compte",
-    //     component: path.join(__dirname, "./pages/me/me.vue"),
-    //     context: {
-    //         meta: {
-    //             group: "account"
-    //         },
-    //
-    //         beforeEnter: "loadedAndUpToDate"
-    //     }
-    // },
+            beforeEnter: "loadedAndUpToDate"
+        }
+    },
     {
         path: "/liste-des-utilisateurs",
         component: path.join(__dirname, "./pages/UserList/index.vue"),
@@ -228,7 +223,11 @@ const loggedRoutes = [
             beforeEnter: "loadedAndUpToDate"
         }
     },
-    // TODO: Fix datepicker
+    // TODO: FIX it
+    // var HEAD = document.head || document.getElementsByTagName('head')[0];
+    //            ^
+    //
+    // ReferenceError: document is not defined
     // {
     //     path: "/mise-a-niveau",
     //     component: path.join(
@@ -275,72 +274,67 @@ const loggedRoutes = [
             beforeEnter: "anonymous"
         }
     },
-    // TODO: Fix getConfig
-    // {
-    //     path: "/liste-des-dispositifs",
-    //     component: path.join(__dirname, "./pages/plans.list/plans.list.vue"),
-    //     context: {
-    //         meta: {
-    //             group: "plans",
-    //             permissions: ["plan.list"]
-    //         },
-    //         beforeEnter: "loadedAndUpToDate"
-    //     }
-    // },
-    // TODO: Fix vuejs datepicker
-    // {
-    //     path: "/nouveau-dispositif",
-    //     component: path.join(
-    //         __dirname,
-    //         "./pages/plans.create/plans.create.vue"
-    //     ),
-    //     context: {
-    //         meta: {
-    //             group: "plans",
-    //             permissions: ["plan.create"]
-    //         },
-    //         beforeEnter: "loadedAndUpToDate"
-    //     }
-    // },
-    // TODO: Fix vuejs datepicker
-    // {
-    //     path: "/modifier-dispositif/:id",
-    //     component: path.join(__dirname, "./pages/plans.edit/plans.edit.vue"),
-    //     context: {
-    //         meta: {
-    //             group: "plans",
-    //             permissions: ["plan.update"]
-    //         },
-    //         beforeEnter: "loadedAndUpToDate"
-    //     }
-    // },
-    // TODO: Fix leaflet
-    // {
-    //     path: "/dispositif/:id",
-    //     component: path.join(
-    //         __dirname,
-    //         "./pages/plans.details/plans.details.vue"
-    //     ),
-    //     context: {
-    //         meta: {
-    //             group: "plans",
-    //             permissions: ["plan.read"]
-    //         },
-    //         beforeEnter: "loadedAndUpToDate"
-    //     }
-    // },
-    // TODO: Fix vuejs datepicker
-    // {
-    //     path: "/dispositif/:id/indicateurs",
-    //     component: path.join(__dirname, "./pages/plans.marks/plans.marks.vue"),
-    //     context: {
-    //         meta: {
-    //             group: "plans",
-    //             permissions: ["plan.updateMarks"]
-    //         },
-    //         beforeEnter: "loadedAndUpToDate"
-    //     }
-    // },
+    {
+        path: "/liste-des-dispositifs",
+        component: path.join(__dirname, "./pages/plans.list/plans.list.vue"),
+        context: {
+            meta: {
+                group: "plans",
+                permissions: ["plan.list"]
+            },
+            beforeEnter: "loadedAndUpToDate"
+        }
+    },
+    {
+        path: "/nouveau-dispositif",
+        component: path.join(
+            __dirname,
+            "./pages/plans.create/plans.create.vue"
+        ),
+        context: {
+            meta: {
+                group: "plans",
+                permissions: ["plan.create"]
+            },
+            beforeEnter: "loadedAndUpToDate"
+        }
+    },
+    {
+        path: "/modifier-dispositif/:id",
+        component: path.join(__dirname, "./pages/plans.edit/plans.edit.vue"),
+        context: {
+            meta: {
+                group: "plans",
+                permissions: ["plan.update"]
+            },
+            beforeEnter: "loadedAndUpToDate"
+        }
+    },
+    {
+        path: "/dispositif/:id",
+        component: path.join(
+            __dirname,
+            "./pages/plans.details/plans.details.vue"
+        ),
+        context: {
+            meta: {
+                group: "plans",
+                permissions: ["plan.read"]
+            },
+            beforeEnter: "loadedAndUpToDate"
+        }
+    },
+    {
+        path: "/dispositif/:id/indicateurs",
+        component: path.join(__dirname, "./pages/plans.marks/plans.marks.vue"),
+        context: {
+            meta: {
+                group: "plans",
+                permissions: ["plan.updateMarks"]
+            },
+            beforeEnter: "loadedAndUpToDate"
+        }
+    },
     {
         path: "/statistiques/:code?",
         component: path.join(__dirname, "./pages/PrivateStats/index.vue"),
@@ -384,17 +378,16 @@ const loggedRoutes = [
             beforeEnter: "loadedAndUpToDate"
         }
     },
-    // TODO: Fix  Redirected when going from "/" to "/annuaire/" via a navigation guard.
-    // {
-    //     path: "/annuaire/",
-    //     component: path.join(__dirname, "./pages/OrganizationList/index.vue"),
-    //     context: {
-    //         meta: {
-    //             group: "directory"
-    //         },
-    //         beforeEnter: "loadedAndUpToDate"
-    //     }
-    // },
+    {
+        path: "/annuaire",
+        component: path.join(__dirname, "./pages/OrganizationList/index.vue"),
+        context: {
+            meta: {
+                group: "directory"
+            },
+            beforeEnter: "loadedAndUpToDate"
+        }
+    },
     {
         path: "/annuaire/:id",
         component: path.join(

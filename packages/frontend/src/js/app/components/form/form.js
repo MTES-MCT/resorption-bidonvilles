@@ -1,10 +1,9 @@
-import Input from "./input/input.vue";
 import SlideNote from "#app/components/slide-note/slide-note.vue";
 import { notify } from "#helpers/notificationHelper";
 
 export default {
     components: {
-        Input,
+        Input: import("./input/input.vue"),
         SlideNote
     },
 

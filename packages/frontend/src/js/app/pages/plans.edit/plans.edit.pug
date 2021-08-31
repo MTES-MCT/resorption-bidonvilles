@@ -20,7 +20,9 @@
         </div>
 
         <div v-if="status === 'loaded'">
-            <Form v-bind="formDefinition" v-model="formData" @complete="onComplete" ref="form"></Form>
+            <ClientOnly>
+                <Form v-bind="formDefinition" v-model="formData" @complete="onComplete" ref="form"></Form>
+            </ClientOnly>
         </div>
     </section>
 </div>

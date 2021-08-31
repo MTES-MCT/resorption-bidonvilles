@@ -1,5 +1,4 @@
 import NavBar from "#app/layouts/navbar/navbar.vue";
-import Form from "#app/components/form/form.vue";
 import { get as getConfig, hasPermission } from "#helpers/api/config";
 import { create } from "#helpers/api/plan";
 import {
@@ -13,7 +12,7 @@ import { getDepartementsForRegion } from "#helpers/api/geo";
 export default {
     components: {
         NavBar,
-        Form
+        Form: () => import("#app/components/form/form.vue")
     },
 
     data() {
@@ -330,7 +329,7 @@ export default {
                 '<br/><a class="link" onclick="createUser()">Vous pouvez créer un compte utilisateur en cliquant ici.</span>';
         }
 
-        if (me.organization.category.uid === "public_establishment") {
+        if (me && me.organization.category.uid === "public_establishment") {
             data.formData.government = [
                 {
                     id: me.id,
