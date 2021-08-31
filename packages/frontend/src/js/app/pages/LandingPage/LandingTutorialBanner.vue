@@ -4,9 +4,10 @@
     >
         <div class="lg:flex">
             <div class="lg:flex-shrink-0 justify-center">
-                <img
-                    class="m-4 h-40"
+                <g-image
+                    class="m-4"
                     src="./assets/formation-personalisee.jpg"
+                    width="240"
                     alt=""
                 />
             </div>

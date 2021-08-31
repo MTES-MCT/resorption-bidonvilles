@@ -5,8 +5,9 @@
     >
         <div class="lg:flex items-center">
             <div class="lg:flex-shrink-0 justify-center">
-                <img
-                    class="h-48 m-4"
+                <g-image
+                    class="m-4"
+                    width="290"
                     src="./assets/banniere_access_eau.jpg"
                     alt=""
                 />

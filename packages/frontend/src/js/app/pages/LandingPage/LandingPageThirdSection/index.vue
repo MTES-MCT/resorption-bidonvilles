@@ -183,12 +183,14 @@
                     class="flex flex-row flex-wrap items-center justify-between mt-8"
                 >
                     <a href="https://solidarites-sante.gouv.fr/"
-                        ><img
+                        ><g-image
+                            width="160"
                             class="h-24 m-2"
                             src="./assets/logo-gouvernement.jpg"
                     /></a>
                     <a href="https://ec.europa.eu/info/index_en"
-                        ><img
+                        ><g-image
+                            width="410"
                             class="h-24 my-2"
                             src="./assets/logo-commission-europenne.png"
                     /></a>
@@ -198,18 +200,21 @@
                 >
                     <a
                         href="https://beta.gouv.fr/approche/incubateurs/mtes.html"
-                        ><img
+                        ><g-image
+                            width="96"
                             class="h-24 m-2"
                             src="./assets/logo-fabrique-numerique.png"
                     /></a>
                     <a href="https://beta.gouv.fr/"
-                        ><img
+                        ><g-image
+                            width="160"
                             class="h-20 m-2"
                             src="./assets/logo_beta-gouv-fr.jpg"
                     /></a>
                     <a
                         href="https://entrepreneur-interet-general.etalab.gouv.fr/defis/2019/resorption-bidonvilles.html"
-                        ><img
+                        ><g-image
+                            width="330"
                             class="h-16 m-2"
                             src="./assets/logo-entrepreneur-interet-general.png"
                     /></a>

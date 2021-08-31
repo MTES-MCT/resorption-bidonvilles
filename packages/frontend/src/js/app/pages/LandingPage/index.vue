@@ -19,7 +19,8 @@
             {{ $t("landingPage.firstBanner.text") }}
         </LandingPageBanner>
         <CreditWrapper credit="© Diego Inglez de Souza">
-            <img
+            <g-image
+                width="1440"
                 class="h-128 w-full object-cover object-center"
                 src="./assets/resorption-bidonvilles-1.jpg"
             />
@@ -33,7 +34,8 @@
             {{ $t("landingPage.secondBanner.text") }}
         </LandingPageBanner>
         <CreditWrapper credit="© Ville de Strasbourg">
-            <img
+            <g-image
+                width="1440"
                 class="h-128 w-full object-cover object-top"
                 src="./assets/resorption-bidonvilles-2.jpg"
             />
@@ -52,15 +54,18 @@
         </PublicContainer>
         <CreditWrapper credit="© Ville de Strasbourg">
             <div class="grid grid-cols-3 w-full gap-0">
-                <img
+                <g-image
+                    width="600"
                     class="h-64 w-full object-cover object-top"
                     src="./assets/resorption-bidonvilles-3.jpg"
                 />
-                <img
+                <g-image
+                    width="600"
                     class="h-64 w-full object-cover object-top"
                     src="./assets/resorption-bidonvilles-4.jpg"
                 />
-                <img
+                <g-image
+                    width="600"
                     class="h-64 w-full object-cover object-top"
                     src="./assets/resorption-bidonvilles-5.jpg"
                 /></div

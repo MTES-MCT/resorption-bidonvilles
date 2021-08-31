@@ -1,6 +1,7 @@
 <template>
     <div>
-        <img
+        <g-image
+            width="1024"
             class="full-width mx-auto"
             src="./assets/resorption-bidonvilles-dessin.png"
         />
@@ -57,18 +58,18 @@
                 <LandingPageContextImage
                     :label="$t('landingPage.firstSection.before')"
                 >
-                    <img
+                    <g-image
                         v-if="$i18n.locale === 'fr'"
-                        src="./assets/fr/before.jpg"/>
-                    <img
+                        src="./assets/fr/before-fr.jpg"/>
+                    <g-image
                         v-if="$i18n.locale === 'en'"
-                        src="./assets/en/before.png"/>
-                    <img
+                        src="./assets/en/before-en.png"/>
+                    <g-image
                         v-if="$i18n.locale === 'bg'"
-                        src="./assets/bg/before.png"/>
-                    <img
+                        src="./assets/bg/before-bg.png"/>
+                    <g-image
                         v-if="$i18n.locale === 'ro'"
-                        src="./assets/ro/before.png"
+                        src="./assets/ro/before-ro.png"
                 /></LandingPageContextImage>
                 <div
                     class="hidden md:block border-solid border-r-2 border-gray-200 m-20"
@@ -76,18 +77,18 @@
                 <LandingPageContextImage
                     :label="$t('landingPage.firstSection.after')"
                 >
-                    <img
+                    <g-image
                         v-if="$i18n.locale === 'fr'"
-                        src="./assets/fr/after.jpg"/>
-                    <img
+                        src="./assets/fr/after-fr.jpg"/>
+                    <g-image
                         v-if="$i18n.locale === 'en'"
-                        src="./assets/en/after.png"/>
-                    <img
+                        src="./assets/en/after-en.png"/>
+                    <g-image
                         v-if="$i18n.locale === 'bg'"
-                        src="./assets/bg/after.png"/>
-                    <img
+                        src="./assets/bg/after-bg.png"/>
+                    <g-image
                         v-if="$i18n.locale === 'ro'"
-                        src="./assets/ro/after.png"
+                        src="./assets/ro/after-ro.png"
                 /></LandingPageContextImage>
             </div>
             <LandingPageUserFeedback class="mt-32" />
