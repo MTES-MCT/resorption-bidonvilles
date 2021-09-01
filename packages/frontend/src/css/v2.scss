@@ -3,18 +3,21 @@
   font-family: Marianne;
   font-weight: 700;
   src: url("../fonts/Marianne-Bold.otf") format("opentype");
+  font-display: swap;
 }
 
 @font-face {
   font-family: Marianne;
   font-weight: 400;
   src: url("../fonts/Marianne-Regular.otf") format("opentype");
+  font-display: swap;
 }
 
 @font-face {
   font-family: Marianne;
   font-weight: 300;
   src: url("../fonts/Marianne-Light.otf") format("opentype");
+  font-display: swap;
 }
 
 // Typography should be defined before utilities, otherwise it's not possible to override colors or font-weight easily
