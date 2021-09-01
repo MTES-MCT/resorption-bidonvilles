@@ -47,6 +47,16 @@
                                 $t("footer.legal")
                             }}</router-link>
                         </li>
+                        <li>
+                            {{ $t("footer.RGAA") }}
+                        </li>
+                        <li>
+                            <a
+                                href="https://github.com/MTES-MCT/resorption-bidonvilles"
+                            >
+                                <Icon :icon="['fab', 'github']" /> GitHub
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
