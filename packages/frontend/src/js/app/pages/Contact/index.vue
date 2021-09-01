@@ -33,6 +33,13 @@
                                 rules="required|email"
                             />
                             <TextInput
+                                :label="$t('contactPage.verifEmail')"
+                                v-model="commonFields.verifEmail"
+                                id="verifEmail"
+                                validationName="Confirmation Email"
+                                rules="required|email"
+                            />
+                            <TextInput
                                 :label="$t('contactPage.firstname')"
                                 v-model="commonFields.first_name"
                                 id="first_name"
@@ -447,6 +454,7 @@ export default {
             error: null,
             commonFields: {
                 email: this.$route.query.email || "",
+                verifEmail: "",
                 phone: "",
                 first_name: "",
                 last_name: "",
