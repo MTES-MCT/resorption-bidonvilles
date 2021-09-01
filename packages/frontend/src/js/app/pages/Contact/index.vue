@@ -403,12 +403,12 @@ export default {
 
                 if (this.isRequestAccessAndActor) {
                     this.$trackMatomoEvent(
-                        "Demande d'accès",
-                        "Demande d'accès"
+                        "Demande d accès",
+                        "Demande d accès"
                     );
                     from = "access_request";
                 } else {
-                    this.$trackMatomoEvent("Contact", "Demande d'information");
+                    this.$trackMatomoEvent("Contact", "Demande d information");
                     from = "contact_others";
                 }
 

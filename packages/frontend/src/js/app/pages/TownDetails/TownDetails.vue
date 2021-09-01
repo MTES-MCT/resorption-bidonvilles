@@ -231,7 +231,7 @@ export default {
         this.$trackMatomoEvent(
             "Site",
             "Visite page site",
-            this.$route.params.id
+            `S${this.$route.params.id}`
         );
 
         if (this.$route.query.action === "new_actor") {
@@ -261,9 +261,9 @@ export default {
         },
         handleNewComment(comments) {
             this.$trackMatomoEvent(
-                "Commentaire",
+                "Site",
                 "Création commentaire",
-                this.town.id
+                `S${this.town.id}`
             );
             this.town.comments.regular = comments;
         },

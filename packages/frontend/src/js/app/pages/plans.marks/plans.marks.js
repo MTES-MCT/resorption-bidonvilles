@@ -528,7 +528,7 @@ export default {
             this.$trackMatomoEvent(
                 "Dispositif",
                 "Mise à jour indicateurs",
-                this.$route.params.id
+                `D${this.$route.params.id}`
             );
 
             this.$router.push(`/dispositif/${this.$route.params.id}`);
