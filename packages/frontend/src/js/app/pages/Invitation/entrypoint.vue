@@ -6,6 +6,9 @@
 
 <script>
 export default {
+    metaInfo: {
+        title: "Invitation -"
+    },
     components: {
         PrivatePage: () => import("./index.vue")
     }

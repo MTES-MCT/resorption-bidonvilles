@@ -6,13 +6,21 @@ const { version } = require("./package.json");
 const { VUE_APP_SENTRY_RELEASE } = require("./src/js/env.js");
 
 module.exports = {
+    title: "Résorption Bidonvilles",
+    siteDescription:
+        "Résorption-bidonvilles, outil d’information, de partage et de pilotage, la plateforme offre une solution performante et efficace pour la résorption des bidonvilles.",
+    siteUrl: "https://resorption-bidonvilles.beta.gouv.fr/",
+    titleTemplate: "%s Résorption Bidonvilles ",
+    icon: {
+        favicon: './static/img/logo-marianne.svg',
+    },
     plugins: [
         {
             use: "gridsome-plugin-tailwindcss"
         },
         {
             use: "gridsome-plugin-pug"
-        },
+        }
         // {
         //     use: "gridsome-plugin-bundle-analyzer"
         // }
@@ -66,7 +74,7 @@ module.exports = {
                         name: "geojson",
                         reuseExistingChunk: true,
                         priority: 100
-                    },
+                    }
                 }
             });
         }

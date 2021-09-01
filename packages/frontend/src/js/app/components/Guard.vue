@@ -17,7 +17,7 @@ import {
     hasAcceptedCharte,
     load
 } from "#helpers/api/config";
-import { isLoggedIn } from "#helpers/api/user";
+import { isLoggedIn, logout } from "#helpers/api/user";
 import * as Sentry from "@sentry/vue";
 import { setCustomVariables } from "#matomo/matomo";
 
@@ -67,6 +67,12 @@ export default {
         if (this.$context.beforeEnter?.action === "open") {
             window.open(this.$context.beforeEnter.to);
             this.$router.go(-1);
+            return;
+        }
+
+        if (this.$context.beforeEnter?.action === "signout") {
+            logout(this.$piwik);
+            this.$router.push("/");
             return;
         }
 

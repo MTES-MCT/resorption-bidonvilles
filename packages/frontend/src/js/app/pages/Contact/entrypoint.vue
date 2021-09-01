@@ -6,6 +6,9 @@
 
 <script>
 export default {
+    metaInfo: {
+        title: "Contact -"
+    },
     components: {
         PrivatePage: () => import("./index.vue")
     }

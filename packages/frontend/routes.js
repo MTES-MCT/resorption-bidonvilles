@@ -68,6 +68,10 @@ const anonymousRoutes = [
             beforeEnter: "anonymous"
         }
     },
+
+];
+
+const anonymousWithoutRendering = [
     {
         path: "/renouveler-mot-de-passe/:token",
         component: path.join(
@@ -80,8 +84,21 @@ const anonymousRoutes = [
             },
             beforeEnter: "anonymous"
         }
-    }
-];
+    },
+    {
+        path: "/activer-mon-compte/:token",
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/UserActivate/entrypoint.vue"
+        ),
+        context: {
+            meta: {
+                group: "account"
+            },
+            beforeEnter: "anonymous"
+        }
+    },
+]
 
 const loggedRoutes = [
     {
@@ -235,19 +252,6 @@ const loggedRoutes = [
                 group: "users"
             },
             beforeEnter: "loaded"
-        }
-    },
-    {
-        path: "/activer-mon-compte/:token",
-        component: path.join(
-            __dirname,
-            "./src/js/app/pages/UserActivate/entrypoint.vue"
-        ),
-        context: {
-            meta: {
-                group: "account"
-            },
-            beforeEnter: "anonymous"
         }
     },
     {
@@ -414,10 +418,9 @@ const actionRoutes = [
             meta: {
                 analyticsIgnore: true
             },
-            beforeEnter: (to, from, next) => {
-                // TODO: FIX
-                // logout(Vue.prototype.$piwik);
-                next("/");
+            beforeEnter: {
+                action: "signout",
+                to: "/"
             }
         }
     }
@@ -546,6 +549,7 @@ const redirects = [
 
 module.exports = [
     ...anonymousRoutes,
+    ...anonymousWithoutRendering,
     ...loggedRoutes,
     ...fileRoutes,
     ...actionRoutes,

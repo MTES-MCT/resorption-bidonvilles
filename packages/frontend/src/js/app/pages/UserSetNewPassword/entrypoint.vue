@@ -1,6 +1,8 @@
 <template>
     <Guard>
-        <PrivatePage />
+        <ClientOnly>
+            <PrivatePage />
+        </ClientOnly>
     </Guard>
 </template>
 
