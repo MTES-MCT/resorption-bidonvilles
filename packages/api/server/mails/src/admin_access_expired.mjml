@@ -14,7 +14,7 @@
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
-                    Vous avez ouvert un accès à la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a> à {{var:userName}} le {{var:activationUrlSentDate}}. Cette personne n’a pas activé son accès dans le délai des 7 jours, son lien est dorénavant expiré.
+                    Vous avez ouvert un accès à la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a> à <span class="font-bold">{{var:userName}}</span> le {{var:activationUrlSentDate}}. Cette personne n’a pas activé son accès dans le délai des 7 jours, son lien est dorénavant expiré.
                 </mj-text>
                 <mj-text>
                     Nous vous invitons à prendre contact avec elle pour comprendre la raison de cette non-activation et, si nécessaire, lui envoyer un nouveau lien d’activation depuis <a href="{{var:adminUrl}}" class="link font-bold">votre onglet administration de la plateforme</a>.
