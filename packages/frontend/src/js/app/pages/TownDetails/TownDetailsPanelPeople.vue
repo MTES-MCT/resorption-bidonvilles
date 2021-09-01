@@ -9,61 +9,65 @@
                     à l'amélioration de la connaissance.
                 </div>
 
-                <table class="table-fixed text-center mb-6">
-                    <thead>
-                        <tr>
-                            <td></td>
-                            <td class="border-b"></td>
-                            <td
-                                v-for="(col, colIndex) in populationHistory"
-                                class="w-24 py-2 border-b"
-                                v-bind:class="{
-                                    'font-bold': colIndex === 0,
-                                    'bg-gray-200': colIndex === 0
-                                }"
-                                v-bind:key="colIndex"
-                            >
-                                {{ col.date }}<br />{{ col.year }}
-                            </td>
-                        </tr>
-                    </thead>
+                <div class="overflow-x-auto max-w-4xl mb-6">
+                    <table class="table-fixed text-center">
+                        <thead>
+                            <tr>
+                                <td></td>
+                                <td class="border-b"></td>
+                                <td
+                                    v-for="(col, colIndex) in populationHistory"
+                                    class="w-24 py-2 border-b"
+                                    v-bind:class="{
+                                        'font-bold': colIndex === 0,
+                                        'bg-gray-200': colIndex === 0
+                                    }"
+                                    v-bind:key="colIndex"
+                                >
+                                    {{ col.date }}<br />{{ col.year }}
+                                </td>
+                            </tr>
+                        </thead>
 
-                    <tbody>
-                        <tr
-                            v-for="(section, index) in sections"
-                            :class="section.css"
-                            v-bind:key="index"
-                        >
-                            <td
-                                v-if="index === 0"
-                                class="align-top pr-2 text-xl"
-                                :rowspan="sections.length"
+                        <tbody>
+                            <tr
+                                v-for="(section, index) in sections"
+                                :class="section.css"
+                                v-bind:key="index"
                             >
-                                <Icon icon="male" class="mr-1"></Icon>
-                                <Icon icon="male"></Icon>
-                            </td>
-                            <td class="text-left pr-4 border-b">
-                                {{ section.title }}
-                            </td>
-                            <td
-                                v-for="(col, colIndex) in populationHistory"
-                                class="py-1 border-b"
-                                v-bind:class="{
-                                    'border-r':
-                                        colIndex > 0 ||
-                                        populationHistory.length <= 1,
-                                    'bg-gray-100': colIndex === 0
-                                }"
-                                v-bind:key="colIndex"
-                                :data-cy-data="
-                                    colIndex === 0 ? section.data : undefined
-                                "
-                            >
-                                {{ col[section.data] }}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                <td
+                                    v-if="index === 0"
+                                    class="align-top pr-2 text-xl"
+                                    :rowspan="sections.length"
+                                >
+                                    <Icon icon="male" class="mr-1"></Icon>
+                                    <Icon icon="male"></Icon>
+                                </td>
+                                <td class="text-left pr-4 border-b">
+                                    {{ section.title }}
+                                </td>
+                                <td
+                                    v-for="(col, colIndex) in populationHistory"
+                                    class="py-1 border-b"
+                                    v-bind:class="{
+                                        'border-r':
+                                            colIndex > 0 ||
+                                            populationHistory.length <= 1,
+                                        'bg-gray-100': colIndex === 0
+                                    }"
+                                    v-bind:key="colIndex"
+                                    :data-cy-data="
+                                        colIndex === 0
+                                            ? section.data
+                                            : undefined
+                                    "
+                                >
+                                    {{ col[section.data] }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
                 <div>
                     <div class="font-bold">Origine</div>
