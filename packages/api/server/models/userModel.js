@@ -879,7 +879,14 @@ module.exports = (database) => {
         return users;
     };
 
-    model.formatName = ({ first_name, last_name }) => `${first_name.charAt(0).toUpperCase() + first_name.slice(1)} ${last_name.toUpperCase()}`;
+    model.formatName = (user) => {
+        let { firstName, lastName } = user;
+        if (!firstName && user.first_name) {
+            ({ first_name: firstName, last_name: lastName } = user);
+        }
+
+        return `${firstName.charAt(0).toUpperCase() + firstName.slice(1)} ${lastName.toUpperCase()}`;
+    };
 
     model.getHistory = async () => {
         const activities = await database.query(

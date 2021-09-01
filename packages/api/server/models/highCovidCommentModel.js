@@ -13,11 +13,11 @@ module.exports = (database) => {
             createdAt: comment.createdAt.getTime() / 1000,
             createdBy: {
                 id: comment.userId,
-                first_name: comment.userFirstName,
-                last_name: comment.userLastName,
+                firstName: comment.userFirstName,
+                lastName: comment.userLastName,
                 position: comment.userPosition,
                 organization: comment.organizationAbbreviation || comment.organizationName,
-                organization_id: comment.organizationId,
+                organizationId: comment.organizationId,
             },
             covid: {
                 departements: [],
