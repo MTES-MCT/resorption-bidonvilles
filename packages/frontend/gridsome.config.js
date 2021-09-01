@@ -57,6 +57,14 @@ module.exports = {
             config.optimization.splitChunks({
                 chunks: "all",
                 maxInitialRequests: Infinity,
+                cacheGroups: {
+                    geojson: {
+                        test: /[\\/]geojson[\\/]/,
+                        name: "geojson",
+                        reuseExistingChunk: true,
+                        priority: 100
+                    },
+                }
             });
         }
 
