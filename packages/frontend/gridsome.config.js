@@ -52,7 +52,14 @@ module.exports = {
             })
         ]
     },
-    chainWebpack: config => {
+    chainWebpack: (config, { isProd, isClient }) => {
+        if (isProd && isClient) {
+            config.optimization.splitChunks({
+                chunks: "all",
+                maxInitialRequests: Infinity,
+            });
+        }
+
         config.resolve.alias
             .set("#app", path.resolve(__dirname, "./src/js/app/"))
             .set("#src", path.resolve(__dirname, "./src/"))

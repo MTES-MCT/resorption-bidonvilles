@@ -1,16 +1,5 @@
-import {
-    ValidationProvider,
-    ValidationObserver,
-    extend,
-    localize
-} from "vee-validate";
-/*eslint import/namespace: ['error', { allowComputed: true }]*/
-import * as rules from "vee-validate/dist/rules";
-import fr from "vee-validate/dist/locale/fr.json";
-import en from "vee-validate/dist/locale/en.json";
-import ro from "vee-validate/dist/locale/ro.json";
-import bg from "vee-validate/dist/locale/bg.json";
-
+const asyncRegisterVeeValidate = () =>
+    import("./registerVeeValidate").then(m => m.default);
 const notifications = () => import("vue-notification/dist/ssr");
 const Button = () => import("./Button");
 const TextInput = () => import("./Form/input/TextInput.vue");
@@ -87,25 +76,7 @@ export default function(vueInstance) {
 
     vueInstance.use(notifications);
     vueInstance.component("NotificationsGroup", NotificationsGroup);
-    vueInstance.component("ValidationProvider", ValidationProvider);
-
-    vueInstance.component("ValidationObserver", ValidationObserver);
-
     vueInstance.component("AutocompleteVue", AutocompleteVue);
 
-    // Vee Validate (Form Validation)
-    localize({
-        en,
-        fr,
-        bg,
-        ro
-    });
-
-    Object.keys(rules).forEach(rule => {
-        extend(rule, {
-            ...rules[rule] // copies rule configuration
-        });
-    });
-
-    localize("fr");
+    asyncRegisterVeeValidate().then(m => m(vueInstance));
 }
