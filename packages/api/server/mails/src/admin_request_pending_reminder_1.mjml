@@ -10,7 +10,7 @@
         <mj-section>
             <mj-column>
                 <mj-text mj-class='text-primary text-display pb-4'>
-                    Vous avez reçu une nouvelle demande d'accès à la plateforme <span class="font-italic">Résorption-bidonvilles</span> de {{var:userName}}, {{var:orgName}}
+                    Vous avez reçu une nouvelle demande d'accès à la plateforme <span class="font-italic">Résorption-bidonvilles</span> de <span class="font-bold">{{var:userName}}</span>, {{var:orgName}}
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">

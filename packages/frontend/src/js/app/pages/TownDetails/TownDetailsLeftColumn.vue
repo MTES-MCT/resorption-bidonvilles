@@ -44,8 +44,8 @@
                     <div class="ml-2">
                         <div>Le journal du site</div>
                         <div>
-                            {{ town.comments.regular.length }} message{{
-                                town.comments.regular.length > 1 ? "s" : ""
+                            {{ nbComments }} message{{
+                                nbComments > 1 ? "s" : ""
                             }}
                         </div>
                     </div>
@@ -71,6 +71,9 @@ export default {
     props: {
         town: {
             type: Object
+        },
+        nbComments: {
+            type: Number
         },
         hasJusticePermission: {
             type: Boolean

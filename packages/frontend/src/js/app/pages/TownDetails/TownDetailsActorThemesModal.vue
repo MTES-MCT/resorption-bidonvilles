@@ -181,6 +181,11 @@ export default {
 
         dispatch() {
             if (this.mode === "add") {
+                this.$trackMatomoEvent(
+                    "Intervenant",
+                    "Déclaration intervenant",
+                    `S${this.town.id}`
+                );
                 return this.$store.dispatch("addTownActor", {
                     townId: this.town.id,
                     actor: {

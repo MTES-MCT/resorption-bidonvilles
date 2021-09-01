@@ -526,13 +526,22 @@ export default {
             }
         },
 
-        submitFn(data) {
+        async submitFn(data) {
             if (this.mode === "create") {
-                this.$trackMatomoEvent("Site", "Création site");
-                return add(data);
+                const result = await add(data);
+                this.$trackMatomoEvent(
+                    "Site",
+                    "Création site",
+                    `S${result.town.id}`
+                );
+                return result;
             }
 
-            this.$trackMatomoEvent("Site", "Mise à jour site");
+            this.$trackMatomoEvent(
+                "Site",
+                "Mise à jour site",
+                `S${this.data.id}`
+            );
             return edit(this.data.id, data);
         }
     }

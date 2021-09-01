@@ -182,8 +182,16 @@ export default {
                 this.$trackMatomoEvent(
                     "Site",
                     "Fermeture site",
-                    this.form.closed_with_solutions
+                    `S${this.town.id}`
                 );
+
+                if (this.form.closed_with_solutions) {
+                    this.$trackMatomoEvent(
+                        "Site",
+                        "Résorption du site",
+                        `S${this.town.id}`
+                    );
+                }
             } catch (err) {
                 this.loading = false;
                 this.error = err;

@@ -33,6 +33,13 @@
                                 rules="required|email"
                             />
                             <TextInput
+                                :label="$t('contactPage.verifEmail')"
+                                v-model="commonFields.verifEmail"
+                                id="verifEmail"
+                                validationName="Confirmation Email"
+                                rules="required|email"
+                            />
+                            <TextInput
                                 :label="$t('contactPage.firstname')"
                                 v-model="commonFields.first_name"
                                 id="first_name"
@@ -403,12 +410,12 @@ export default {
 
                 if (this.isRequestAccessAndActor) {
                     this.$trackMatomoEvent(
-                        "Demande d'accès",
-                        "Demande d'accès"
+                        "Demande d accès",
+                        "Demande d accès"
                     );
                     from = "access_request";
                 } else {
-                    this.$trackMatomoEvent("Contact", "Demande d'information");
+                    this.$trackMatomoEvent("Contact", "Demande d information");
                     from = "contact_others";
                 }
 
@@ -447,6 +454,7 @@ export default {
             error: null,
             commonFields: {
                 email: this.$route.query.email || "",
+                verifEmail: "",
                 phone: "",
                 first_name: "",
                 last_name: "",
