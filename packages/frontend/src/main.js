@@ -4,7 +4,6 @@ import registerGlobalComponents from "#app/components/ui/registerGlobalComponent
 import MarianneBold from "./fonts/Marianne-Bold.otf";
 import MarianneLight from "./fonts/Marianne-Light.otf";
 import MarianneRegular from "./fonts/Marianne-Regular.otf";
-import MarianneThin from "./fonts/Marianne-Thin.otf";
 
 // Import vue libs
 import initStore from "#app/store";
@@ -40,12 +39,6 @@ export default function(Vue, { appOptions, head }) {
     head.link.push({
         rel: "preload",
         href: MarianneRegular,
-        as: "font",
-        crossorigin: true
-    });
-    head.link.push({
-        rel: "preload",
-        href: MarianneThin,
         as: "font",
         crossorigin: true
     });
