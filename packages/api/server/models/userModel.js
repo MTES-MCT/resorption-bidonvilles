@@ -1,6 +1,7 @@
 const permissionsDescription = require('#server/permissions_description');
 const { getPermissionsFor } = require('#server/utils/permission');
 const { mailBlacklist } = require('#server/config');
+const { sequelize: database } = require('#db/models');
 
 /**
  * @typedef {Object} UserFilters
@@ -150,7 +151,7 @@ function serializeUser(user, latestCharte, filters, permissionMap) {
     return serialized;
 }
 
-module.exports = (database) => {
+module.exports = () => {
     // eslint-disable-next-line global-require
     const permissionModel = require('./permissionModel')(database);
     // eslint-disable-next-line global-require

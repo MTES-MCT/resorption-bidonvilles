@@ -1,7 +1,6 @@
 const nodeMailjet = require('node-mailjet');
 const { mail: mailConfig, frontUrl } = require('#server/config');
-const { sequelize } = require('#db/models');
-const userModel = require('#server/models/userModel')(sequelize);
+const userModel = require('#server/models/userModel')();
 
 const mailjet = nodeMailjet.connect(
     mailConfig.publicKey || 'unknown',

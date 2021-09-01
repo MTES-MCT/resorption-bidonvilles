@@ -2,8 +2,7 @@
 const { sendUserPlatformInvitation } = require('#server/mails/mails');
 const { triggerPeopleInvitedAlert } = require('#server/utils/mattermost');
 const { mattermost } = require('#server/config');
-const { sequelize } = require('#db/models');
-const { formatName } = require('#server/models/userModel')(sequelize);
+const { formatName } = require('#server/models/userModel')();
 
 const sendEmailsInvitations = async (guests, greeter) => {
     for (let i = 0; i < guests.length; i += 1) {

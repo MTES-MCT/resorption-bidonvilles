@@ -1,5 +1,4 @@
-const { sequelize } = require('#db/models');
-const { formatName } = require('#server/models/userModel')(sequelize);
+const { formatName } = require('#server/models/userModel')();
 const updateWhereClauseForPermissions = require('#server/models/common/updateWhereClauseForPermissions');
 
 module.exports = (database) => {
