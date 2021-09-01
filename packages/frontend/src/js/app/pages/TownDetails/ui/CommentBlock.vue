@@ -22,6 +22,12 @@
         </div>
         <div class="ml-5">
             <div class="flex flex-wrap">
+                <Tag
+                    v-if="!!comment.covid"
+                    variant="withoutBackground"
+                    :class="['inline-block', 'bg-red', 'text-white']"
+                    >Covid-19</Tag
+                >
                 <CovidTag
                     v-for="tag in covidTags"
                     :key="tag.prop"

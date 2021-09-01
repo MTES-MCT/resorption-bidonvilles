@@ -23,6 +23,7 @@
                 <TownDetailsLeftColumn
                     :hasJusticePermission="hasJusticePermission"
                     :town="town"
+                    :nbComments="comments.length"
                     class="leftColumnWidth"
                     v-on:openHistory="openHistory"
                 />
