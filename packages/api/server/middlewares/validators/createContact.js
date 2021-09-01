@@ -9,7 +9,7 @@ module.exports = newUser(
         body('verifEmail')
             .custom((value, { req }) => {
                 if (value !== req.body.email) {
-                    throw new Error('La vérification de l\'email ne correspond pas à l\'adresse email');
+                    throw new Error('Les deux adresses email ne se correspondent pas');
                 }
                 return true;
             }),
