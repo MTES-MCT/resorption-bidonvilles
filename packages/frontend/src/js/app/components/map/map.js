@@ -1,7 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 
 import L from "leaflet";
-import pointOnFeature from "@turf/point-on-feature";
 import Address from "#app/components/address/address.vue";
 import { get as getConfig } from "#helpers/api/config";
 import "leaflet-providers";
@@ -402,11 +401,31 @@ export default {
                     }
 
                     if (acc.departements[obj.departement.code] === undefined) {
-                        acc.departements[obj.departement.code] = 0;
+                        acc.departements[obj.departement.code] = {};
+                        acc.departements[obj.departement.code].sites = 0;
+                        acc.departements[obj.departement.code].code =
+                            obj.departement.code;
+                        acc.departements[obj.departement.code].name =
+                            obj.departement.name;
+                        acc.departements[obj.departement.code].latitude =
+                            obj.departement.latitude;
+                        acc.departements[obj.departement.code].longitude =
+                            obj.departement.longitude;
+                        acc.departements[obj.departement.code].chieftown =
+                            obj.departement.chieftown;
                     }
 
                     if (acc.regions[obj.region.code] === undefined) {
-                        acc.regions[obj.region.code] = 0;
+                        acc.regions[obj.region.code] = {};
+                        acc.regions[obj.region.code].sites = 0;
+                        acc.regions[obj.region.code].code = obj.region.code;
+                        acc.regions[obj.region.code].name = obj.region.name;
+                        acc.regions[obj.region.code].latitude =
+                            obj.region.latitude;
+                        acc.regions[obj.region.code].longitude =
+                            obj.region.longitude;
+                        acc.regions[obj.region.code].chieftown =
+                            obj.region.chieftown;
                     }
 
                     if (acc.cities[obj.city.code] === undefined) {
@@ -419,8 +438,8 @@ export default {
                             obj.city.longitude;
                     }
 
-                    acc.departements[obj.departement.code] += 1;
-                    acc.regions[obj.region.code] += 1;
+                    acc.departements[obj.departement.code].sites += 1;
+                    acc.regions[obj.region.code].sites += 1;
                     acc.cities[obj.city.code].sites += 1;
 
                     return acc;
@@ -428,6 +447,7 @@ export default {
                 { regions: {}, departements: {}, cities: {} }
             );
         },
+
         /**
          * Initialise tous les contrôles de la carte
          *
@@ -888,35 +908,29 @@ export default {
                     layer.remove();
                     return;
                 }
-
-                // Calcul de la position du marqueur
-                // On utilise la méthode pointOnFeature(), qui garantit que le point soit dans le polygone, plutôt que centroid()
-                const { feature } = layer;
-                const markerPosition = pointOnFeature(feature);
-                // Création du marqueur à partir de la long et lat retournées par pointOnFeature()
-                const lon = markerPosition.geometry.coordinates[0];
-                const lat = markerPosition.geometry.coordinates[1];
+            });
+            Object.keys(this.numberOfShantytownsBy.regions).forEach(key => {
                 const nbSites =
-                    this.numberOfShantytownsBy.regions[
-                        feature.properties.code
-                    ] || 0;
-                if (nbSites > 0) {
-                    this.circleWithText(
-                        this.map,
-                        [lat, lon],
-                        this.numberOfShantytownsBy.regions[
-                            feature.properties.code
-                        ] || 0,
-                        20,
-                        3,
-                        "region"
-                    ).addTo(this.regionalLayer);
-                    this.regionalLayer.setStyle({
-                        color: "white",
-                        weight: 8,
-                        opacity: 1
-                    });
-                }
+                    this.numberOfShantytownsBy.regions[key].sites > 0
+                        ? this.numberOfShantytownsBy.regions[key].sites
+                        : 0;
+                this.circleWithText(
+                    this.map,
+                    [
+                        this.numberOfShantytownsBy.regions[key].latitude,
+                        this.numberOfShantytownsBy.regions[key].longitude
+                    ],
+                    [
+                        this.numberOfShantytownsBy.regions[key].chieftown
+                            .latitude,
+                        this.numberOfShantytownsBy.regions[key].chieftown
+                            .longitude
+                    ],
+                    `<div>${nbSites}</div>`,
+                    20,
+                    3,
+                    "region"
+                ).addTo(this.regionalLayer);
             });
         },
 
@@ -927,36 +941,35 @@ export default {
                     layer.remove();
                     return;
                 }
-
-                // Calcul de la position du marqueur
-                // On utilise la méthode pointOnFeature(), qui garantit que le point soit dans le polygone, plutôt que centroid()
-                const { feature } = layer;
-                const markerPosition = pointOnFeature(feature);
-                // Création du marqueur à partir de la long et lat retournées par pointOnFeature()
-                const lon = markerPosition.geometry.coordinates[0];
-                const lat = markerPosition.geometry.coordinates[1];
-
-                const nbSites =
-                    this.numberOfShantytownsBy.departements[
-                        feature.properties.code
-                    ] || 0;
-                const siteLabel = nbSites > 1 ? "sites" : "site";
-                if (nbSites > 0) {
+            });
+            Object.keys(this.numberOfShantytownsBy.departements).forEach(
+                key => {
+                    const nbSites =
+                        this.numberOfShantytownsBy.departements[key].sites > 0
+                            ? this.numberOfShantytownsBy.departements[key].sites
+                            : 0;
+                    const siteLabel = nbSites > 1 ? "sites" : "site";
                     this.circleWithText(
                         this.map,
-                        [lat, lon],
-                        `<div><strong>${feature.properties.nom}</strong><br/>${nbSites} ${siteLabel}</div>`,
+                        [
+                            this.numberOfShantytownsBy.departements[key]
+                                .latitude,
+                            this.numberOfShantytownsBy.departements[key]
+                                .longitude
+                        ],
+                        [
+                            this.numberOfShantytownsBy.departements[key]
+                                .chieftown.latitude,
+                            this.numberOfShantytownsBy.departements[key]
+                                .chieftown.longitude
+                        ],
+                        `<div><strong>${this.numberOfShantytownsBy.departements[key].name}</strong><br/>${nbSites} ${siteLabel}</div>`,
                         45,
                         3,
                         "dept"
                     ).addTo(this.departementalLayer);
-                    this.departementalLayer.setStyle({
-                        color: "white",
-                        weight: 8,
-                        opacity: 1
-                    });
                 }
-            });
+            );
         },
 
         // Fonction de chargement des marqueurs par commune
@@ -972,6 +985,10 @@ export default {
                 citiesMarkers.push(
                     this.circleWithText(
                         this.map,
+                        [
+                            this.numberOfShantytownsBy.cities[key].latitude,
+                            this.numberOfShantytownsBy.cities[key].longitude
+                        ],
                         [
                             this.numberOfShantytownsBy.cities[key].latitude,
                             this.numberOfShantytownsBy.cities[key].longitude
@@ -1045,7 +1062,15 @@ export default {
             this.removeAllTownMarkers();
         },
 
-        circleWithText(map, latLng, txt, radius, borderWidth, circleClass) {
+        circleWithText(
+            map,
+            latLng,
+            chiefTownLatLng,
+            txt,
+            radius,
+            borderWidth,
+            circleClass
+        ) {
             const size = radius * 2;
             const style =
                 'style="width: ' +
@@ -1071,19 +1096,16 @@ export default {
             });
             const marker = L.marker(latLng, {
                 icon: icon
-            }).on("click", function(e) {
+            }).on("click", function() {
                 if (map.getZoom() <= REGION_MAX_ZOOM_LEVEL) {
                     // Nous sommes au-delà du niveau régional, un clic affiche le niveau régional
-                    map.setView(
-                        e.target.getLatLng(),
-                        REGION_MAX_ZOOM_LEVEL + 1
-                    );
+                    map.setView(chiefTownLatLng, REGION_MAX_ZOOM_LEVEL + 1);
                 } else if (map.getZoom() <= DEPT_MAX_ZOOM_LEVEL) {
                     // nous sommes au niveau régional, un clic affiche le niveau des départements
-                    map.setView(e.target.getLatLng(), DEPT_MAX_ZOOM_LEVEL + 1);
+                    map.setView(chiefTownLatLng, DEPT_MAX_ZOOM_LEVEL + 1);
                 } else if (map.getZoom() <= CITY_MAX_ZOOM_LEVEL) {
                     // nous sommes au niveau départemental, un clic affiche le niveau des communes
-                    map.setView(e.target.getLatLng(), CITY_MAX_ZOOM_LEVEL + 1);
+                    map.setView(chiefTownLatLng, CITY_MAX_ZOOM_LEVEL + 1);
                 }
             });
             return marker;
