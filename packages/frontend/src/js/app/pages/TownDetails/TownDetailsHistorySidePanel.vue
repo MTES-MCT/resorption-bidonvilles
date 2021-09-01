@@ -26,7 +26,7 @@
                 <TownDetailsHistoryCard
                     v-if="town.closedAt"
                     :author="town.updatedBy"
-                    :when="town.closedAt"
+                    :when="town.updatedAt"
                     title="Fermeture du site"
                 ></TownDetailsHistoryCard>
                 <!-- Fin date de fermeture du site -->
