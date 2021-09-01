@@ -33,6 +33,7 @@ import Covid from "#app/pages/covid/covid.vue";
 import Changelog from "#app/pages/Changelog/Changelog.vue";
 import CharteEngagement from "#app/pages/CharteEngagement/CharteEngagement.vue";
 import History from "#app/pages/History/History.vue";
+import Page404 from "#app/pages/404/404.vue";
 
 import { logout, isLoggedIn, alreadyLoggedBefore } from "#helpers/api/user";
 import {
@@ -530,6 +531,14 @@ const router = new VueRouter({
                 window.open("/doc/covid-19-recommandations-vaccination.pdf");
                 next(false);
             }
+        },
+        {
+            path: "/404",
+            component: Page404
+        },
+        {
+            path: "*",
+            redirect: "/404"
         }
     ]
 });
