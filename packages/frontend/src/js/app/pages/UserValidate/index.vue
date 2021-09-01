@@ -33,7 +33,7 @@
                     <Button
                         v-if="
                             loggedUser.role_id === 'national_admin' &&
-                                user.organization.type.category !== 'intervener'
+                                user.organization.type.uid !== 'intervenant'
                         "
                         class="mr-4"
                         variant="primaryText"
