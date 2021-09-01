@@ -7,7 +7,7 @@
 <script>
 export default {
     components: {
-        PrivatePage: () => import("./index.vue")
+        PrivatePage: () => import("./legalMentions.vue")
     }
 };
 </script>

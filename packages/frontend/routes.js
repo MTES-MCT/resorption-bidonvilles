@@ -3,48 +3,63 @@ const path = require("path");
 const anonymousRoutes = [
     {
         path: "/",
-        component: path.join(__dirname, "./pages/LandingPage/index.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/LandingPage/entrypoint.vue"
+        ),
         context: {
             beforeEnter: "home"
         }
     },
     {
         path: "/contact",
-        component: path.join(__dirname, "./pages/Contact/index.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/Contact/entrypoint.vue"
+        ),
         context: {
             beforeEnter: "anonymous"
         }
     },
     {
         path: "/stats",
-        component: path.join(__dirname, "./pages/PublicStats/index.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/PublicStats/entrypoint.vue"
+        ),
         context: {
             beforeEnter: "anonymous"
         }
     },
     {
         path: "/connexion",
-        component: path.join(__dirname, "./pages/SignIn/index.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/SignIn/entrypoint.vue"
+        ),
         context: {
             beforeEnter: "anonymous"
         }
     },
     {
         path: "/invitation",
-        component: path.join(__dirname, "./pages/Invitation/index.vue")
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/Invitation/entrypoint.vue"
+        )
     },
     {
         path: "/mentions-legales",
         component: path.join(
             __dirname,
-            "./pages/legalMentions/legalMentions.vue"
+            "./src/js/app/pages/legalMentions/entrypoint.vue"
         )
     },
     {
         path: "/nouveau-mot-de-passe",
         component: path.join(
             __dirname,
-            "./pages/UserRequestNewPassword/index.vue"
+            "./src/js/app/pages/UserRequestNewPassword/entrypoint.vue"
         ),
         context: {
             meta: {
@@ -55,7 +70,10 @@ const anonymousRoutes = [
     },
     {
         path: "/renouveler-mot-de-passe/:token",
-        component: path.join(__dirname, "./pages/UserSetNewPassword/index.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/UserSetNewPassword/index.vue"
+        ),
         context: {
             meta: {
                 group: "users"
@@ -67,22 +85,21 @@ const anonymousRoutes = [
 
 const loggedRoutes = [
     {
-        path: "/launcher",
-        component: path.join(__dirname, "./pages/launcher/entrypoint.vue"),
-        context: {
-            beforeEnter: "loggedIn"
-        }
-    },
-    {
         path: "/nouvelle-version",
-        component: path.join(__dirname, "./pages/Invitation/entrypoint.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/Invitation/entrypoint.vue"
+        ),
         context: {
             beforeEnter: "loadedAndUpgraded"
         }
     },
     {
         path: "/cartographie",
-        component: path.join(__dirname, "./pages/dashboard/entrypoint.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/dashboard/entrypoint.vue"
+        ),
         context: {
             beforeEnter: "loadedAndUpToDate",
             meta: {
@@ -92,7 +109,10 @@ const loggedRoutes = [
     },
     {
         path: "/liste-des-sites",
-        component: path.join(__dirname, "./pages/TownsList/entrypoint.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/TownsList/entrypoint.vue"
+        ),
         context: {
             beforeEnter: "loadedAndUpToDate",
             meta: {
@@ -102,7 +122,10 @@ const loggedRoutes = [
     },
     {
         path: "/nouveau-site",
-        component: path.join(__dirname, "./pages/TownCreate/entrypoint.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/TownCreate/entrypoint.vue"
+        ),
         context: {
             beforeEnter: "loadedAndUpToDate",
             meta: {
@@ -113,7 +136,10 @@ const loggedRoutes = [
     },
     {
         path: "/site/:id",
-        component: path.join(__dirname, "./pages/TownDetails/entrypoint.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/TownDetails/entrypoint.vue"
+        ),
         context: {
             meta: {
                 group: "townList"
@@ -123,7 +149,10 @@ const loggedRoutes = [
     },
     {
         path: "/site/:id/mise-a-jour",
-        component: path.join(__dirname, "./pages/TownUpdate/entrypoint.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/TownUpdate/entrypoint.vue"
+        ),
         context: {
             meta: {
                 group: "townList"
@@ -134,7 +163,7 @@ const loggedRoutes = [
 
     {
         path: "/mon-compte",
-        component: path.join(__dirname, "./pages/me/entrypoint.vue"),
+        component: path.join(__dirname, "./src/js/app/pages/me/entrypoint.vue"),
         context: {
             meta: {
                 group: "account"
@@ -145,7 +174,10 @@ const loggedRoutes = [
     },
     {
         path: "/liste-des-utilisateurs",
-        component: path.join(__dirname, "./pages/UserList/entrypoint.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/UserList/entrypoint.vue"
+        ),
         context: {
             meta: {
                 group: "users",
@@ -156,7 +188,10 @@ const loggedRoutes = [
     },
     {
         path: "/nouvel-utilisateur",
-        component: path.join(__dirname, "./pages/UserCreate/entrypoint.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/UserCreate/entrypoint.vue"
+        ),
         context: {
             meta: {
                 group: "userCreation",
@@ -169,7 +204,7 @@ const loggedRoutes = [
         path: "/signature-charte-engagement",
         component: path.join(
             __dirname,
-            "./pages/CharteEngagement/entrypoint.vue"
+            "./src/js/app/pages/CharteEngagement/entrypoint.vue"
         ),
         context: {
             beforeEnter: "signatureCharte"
@@ -177,7 +212,10 @@ const loggedRoutes = [
     },
     {
         path: "/nouvel-utilisateur/:id",
-        component: path.join(__dirname, "./pages/UserValidate/entrypoint.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/UserValidate/entrypoint.vue"
+        ),
         context: {
             meta: {
                 group: "users",
@@ -188,7 +226,10 @@ const loggedRoutes = [
     },
     {
         path: "/mise-a-niveau",
-        component: path.join(__dirname, "./pages/users.upgrade/entrypoint.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/users.upgrade/entrypoint.vue"
+        ),
         context: {
             meta: {
                 group: "users"
@@ -198,7 +239,10 @@ const loggedRoutes = [
     },
     {
         path: "/activer-mon-compte/:token",
-        component: path.join(__dirname, "./pages/UserActivate/entrypoint.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/UserActivate/entrypoint.vue"
+        ),
         context: {
             meta: {
                 group: "account"
@@ -208,7 +252,10 @@ const loggedRoutes = [
     },
     {
         path: "/liste-des-dispositifs",
-        component: path.join(__dirname, "./pages/plans.list/entrypoint.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/plans.list/entrypoint.vue"
+        ),
         context: {
             meta: {
                 group: "plans",
@@ -219,7 +266,10 @@ const loggedRoutes = [
     },
     {
         path: "/nouveau-dispositif",
-        component: path.join(__dirname, "./pages/plans.create/entrypoint.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/plans.create/entrypoint.vue"
+        ),
         context: {
             meta: {
                 group: "plans",
@@ -230,7 +280,10 @@ const loggedRoutes = [
     },
     {
         path: "/modifier-dispositif/:id",
-        component: path.join(__dirname, "./pages/plans.edit/entrypoint.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/plans.edit/entrypoint.vue"
+        ),
         context: {
             meta: {
                 group: "plans",
@@ -241,7 +294,10 @@ const loggedRoutes = [
     },
     {
         path: "/dispositif/:id",
-        component: path.join(__dirname, "./pages/plans.details/entrypoint.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/plans.details/entrypoint.vue"
+        ),
         context: {
             meta: {
                 group: "plans",
@@ -252,7 +308,10 @@ const loggedRoutes = [
     },
     {
         path: "/dispositif/:id/indicateurs",
-        component: path.join(__dirname, "./pages/plans.marks/entrypoint.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/plans.marks/entrypoint.vue"
+        ),
         context: {
             meta: {
                 group: "plans",
@@ -263,7 +322,10 @@ const loggedRoutes = [
     },
     {
         path: "/statistiques/:code?",
-        component: path.join(__dirname, "./pages/PrivateStats/entrypoint.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/PrivateStats/entrypoint.vue"
+        ),
         context: {
             meta: {
                 group: "stats",
@@ -274,7 +336,10 @@ const loggedRoutes = [
     },
     {
         path: "/activites",
-        component: path.join(__dirname, "./pages/History/entrypoint.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/History/entrypoint.vue"
+        ),
         context: {
             meta: {
                 group: "history",
@@ -285,7 +350,10 @@ const loggedRoutes = [
     },
     {
         path: "/activites/:locationType/:locationCode?",
-        component: path.join(__dirname, "./pages/History/entrypoint.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/History/entrypoint.vue"
+        ),
         context: {
             meta: {
                 group: "history",
@@ -296,7 +364,10 @@ const loggedRoutes = [
     },
     {
         path: "/covid-19",
-        component: path.join(__dirname, "./pages/covid/entrypoint.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/covid/entrypoint.vue"
+        ),
         context: {
             meta: {
                 group: "covid"
@@ -308,7 +379,7 @@ const loggedRoutes = [
         path: "/annuaire",
         component: path.join(
             __dirname,
-            "./pages/OrganizationList/entrypoint.vue"
+            "./src/js/app/pages/OrganizationList/entrypoint.vue"
         ),
         context: {
             meta: {
@@ -321,7 +392,7 @@ const loggedRoutes = [
         path: "/annuaire/:id",
         component: path.join(
             __dirname,
-            "./pages/OrganizationDetails/entrypoint.vue"
+            "./src/js/app/pages/OrganizationDetails/entrypoint.vue"
         ),
         context: {
             meta: {
@@ -335,7 +406,10 @@ const loggedRoutes = [
 const actionRoutes = [
     {
         path: "/deconnexion",
-        component: path.join(__dirname, "./pages/EmptyPage/index.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/EmptyPage/index.vue"
+        ),
         context: {
             meta: {
                 analyticsIgnore: true
@@ -352,76 +426,90 @@ const actionRoutes = [
 const fileRoutes = [
     {
         path: "/feedback",
-        component: path.join(__dirname, "./pages/EmptyPage/index.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/EmptyPage/index.vue"
+        ),
         context: {
-            beforeEnter(to, from, next) {
-                window.location.href =
-                    "mailto:contact@resorption-bidonvilles.beta.gouv.fr";
-                next(false);
+            beforeEnter: {
+                action: "redirect",
+                to: "mailto:contact@resorption-bidonvilles.beta.gouv.fr"
             }
         }
     },
     {
         path: "/conditions-d-utilisation",
-        component: path.join(__dirname, "./pages/EmptyPage/index.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/EmptyPage/index.vue"
+        ),
         context: {
-            beforeEnter(to, from, next) {
-                window.open("/doc/CGU_2021_04_08.pdf");
-                next(false);
+            beforeEnter: {
+                action: "open",
+                to: "/doc/CGU_2021_04_08.pdf"
             }
         }
     },
     {
         path: "/typologie-des-acces",
-        component: path.join(__dirname, "./pages/EmptyPage/index.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/EmptyPage/index.vue"
+        ),
         context: {
-            beforeEnter(to, from, next) {
-                window.open("/doc/guide_de_l_administrateur.pdf");
-                next(false);
+            beforeEnter: {
+                action: "open",
+                to: "/doc/guide_de_l_administrateur.pdf"
             }
         }
     },
     {
         path: "/charte-d-engagement",
-        component: path.join(__dirname, "./pages/EmptyPage/index.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/EmptyPage/index.vue"
+        ),
         context: {
-            // beforeEnter(to, from, next) {
-            // TODO: FIX
-            // const {
-            //     version_charte_engagement: { fichier }
-            // } = getConfig();
-            // window.open(fichier, "_blank");
-            // next(false);
-            // }
+            // TODO: FIX, charte is not implemented in guard
+            beforeEnter: "charte"
         }
     },
     {
         path: "/fiches-hebergement-logement-adapte",
-        component: path.join(__dirname, "./pages/EmptyPage/index.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/EmptyPage/index.vue"
+        ),
         context: {
-            beforeEnter(to, from, next) {
-                window.open("/doc/fiches-hebergement-logement-adapte.pdf");
-                next(false);
+            beforeEnter: {
+                action: "open",
+                to: "/doc/fiches-hebergement-logement-adapte.pdf"
             }
         }
     },
     {
         path: "/fiche-bidonvilles-maraudes",
-        component: path.join(__dirname, "./pages/EmptyPage/index.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/EmptyPage/index.vue"
+        ),
         context: {
-            beforeEnter(to, from, next) {
-                window.open("/doc/fiche-bidonvilles-maraudes.pdf");
-                next(false);
+            beforeEnter: {
+                action: "open",
+                to: "/doc/fiche-bidonvilles-maraudes.pdf"
             }
         }
     },
     {
         path: "/covid-19-recommandations-vaccination",
-        component: path.join(__dirname, "./pages/EmptyPage/index.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/EmptyPage/index.vue"
+        ),
         context: {
-            beforeEnter(to, from, next) {
-                window.open("/doc/covid-19-recommandations-vaccination.pdf");
-                next(false);
+            beforeEnter: {
+                action: "open",
+                to: "/doc/covid-19-recommandations-vaccination.pdf"
             }
         }
     }
@@ -430,10 +518,27 @@ const fileRoutes = [
 const redirects = [
     {
         path: "/landing",
-        component: path.join(__dirname, "./pages/EmptyPage/index.vue"),
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/EmptyPage/index.vue"
+        ),
         context: {
-            beforeEnter: (to, from, next) => {
-                next("/");
+            beforeEnter: {
+                action: "redirect",
+                to: "/"
+            }
+        }
+    },
+    {
+        path: "/launcher",
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/EmptyPage/index.vue"
+        ),
+        context: {
+            beforeEnter: {
+                action: "redirect",
+                to: "/"
             }
         }
     }

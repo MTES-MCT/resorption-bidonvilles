@@ -6584,6 +6584,13 @@ graphql@^14.4.2:
   dependencies:
     iterall "^1.2.2"
 
+gridsome-plugin-bundle-analyzer@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/gridsome-plugin-bundle-analyzer/-/gridsome-plugin-bundle-analyzer-1.0.0.tgz#c81382bcda4a440c4c9292401a37d6f8bf6831a0"
+  integrity sha512-zgWtTGCigxpxwh+Q6xerHGJxzPIeHwA+r8BswiFgUfr2p1Rr1mKt+O9xig+Im4Jl4zCO7VP6cYWNx553mCc1HA==
+  dependencies:
+    webpack-bundle-analyzer "^3.8.0"
+
 gridsome-plugin-pug@^0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/gridsome-plugin-pug/-/gridsome-plugin-pug-0.0.3.tgz#05ec2e2ada681ba385eab41169eb3adddcd06c7d"

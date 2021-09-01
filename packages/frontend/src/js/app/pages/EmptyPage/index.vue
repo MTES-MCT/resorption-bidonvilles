@@ -1,3 +1,5 @@
 <template>
-    <div />
+    <Guard>
+        <div />
+    </Guard>
 </template>

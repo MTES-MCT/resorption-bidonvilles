@@ -12,7 +12,10 @@ module.exports = {
         },
         {
             use: "gridsome-plugin-pug"
-        }
+        },
+        // {
+        //     use: "gridsome-plugin-bundle-analyzer"
+        // }
     ],
     configureWebpack: {
         devServer: {
@@ -76,6 +79,6 @@ module.exports = {
         config.plugins.delete("progress");
     },
     prefetch: {
-        mask: '^$', // example - disable all prefetch
-    },
+        mask: "^$" // example - disable all prefetch
+    }
 };

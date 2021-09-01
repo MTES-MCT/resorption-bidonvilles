@@ -57,6 +57,7 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-vue": "^7.10.0",
     "gridsome": "^0.7.23",
+    "gridsome-plugin-bundle-analyzer": "^1.0.0",
     "gridsome-plugin-pug": "^0.0.3",
     "gridsome-plugin-tailwindcss": "^4.1.1",
     "json-loader": "^0.5.7",

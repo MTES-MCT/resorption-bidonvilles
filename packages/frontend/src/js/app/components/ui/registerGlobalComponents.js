@@ -1,6 +1,10 @@
+// This module cannot be lazyloaded as it's defined in src/App.vue
+import notifications from "vue-notification/dist/ssr";
+import NotificationsGroup from "./NotificationsGroup.vue";
+
+// Lazyloaded modules
 const asyncRegisterVeeValidate = () =>
     import("./registerVeeValidate").then(m => m.default);
-const notifications = () => import("vue-notification/dist/ssr");
 const Button = () => import("./Button");
 const TextInput = () => import("./Form/input/TextInput.vue");
 const PasswordInput = () => import("./Form/input/PasswordInput.vue");
@@ -20,7 +24,6 @@ const MenuItem = () => import("./Menu/Menu.vue");
 const Dropdown = () => import("./Dropdown.vue");
 const CustomFilter = () => import("./Filter.vue");
 const FullBottomSection = () => import("./FullBottomSection.vue");
-const NotificationsGroup = () => import("./NotificationsGroup.vue");
 const Modal = () => import("./Modal.vue");
 const Callout = () => import("./Callout.vue");
 const SidePanel = () => import("./SidePanel.vue");

@@ -1,4 +1,4 @@
-const pages = require('./src/js/app/routes')
+const pages = require('./routes')
 
 module.exports = function(api) {
     api.createPages(({ createPage }) => {

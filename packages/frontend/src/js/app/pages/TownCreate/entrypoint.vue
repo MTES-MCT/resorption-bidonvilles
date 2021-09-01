@@ -1,9 +1,9 @@
 <template>
-    <div>
+    <Guard>
         <ClientOnly>
             <PrivatePage />
         </ClientOnly>
-    </div>
+    </Guard>
 </template>
 
 <script>
