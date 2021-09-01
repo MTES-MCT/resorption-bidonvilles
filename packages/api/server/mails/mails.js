@@ -503,7 +503,7 @@ module.exports = {
                     name: formatName(variables.comment.createdBy),
                     organization: variables.comment.createdBy.organization,
                 },
-                annuaireUrl: `${frontUrl}/annuaire/${variables.comment.createdBy.organization_id}?${utm}`,
+                annuaireUrl: `${frontUrl}/annuaire/${variables.comment.createdBy.organizationId}?${utm}`,
                 messageUrl: `${frontUrl}/site/${variables.shantytown.id}#newComment`,
             },
             preserveRecipient,

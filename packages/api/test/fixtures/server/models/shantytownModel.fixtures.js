@@ -268,8 +268,8 @@ function getFullTownOutput(townId, version = 'unfiltered', withDistrict = false)
                 createdBy: {
                     id: 1,
                     company: randomStr,
-                    first_name: randomStr,
-                    last_name: randomStr,
+                    firstName: randomStr,
+                    lastName: randomStr,
                 },
             },
             {
@@ -279,8 +279,8 @@ function getFullTownOutput(townId, version = 'unfiltered', withDistrict = false)
                 createdBy: {
                     id: 1,
                     company: randomStr,
-                    first_name: randomStr,
-                    last_name: randomStr,
+                    firstName: randomStr,
+                    lastName: randomStr,
                 },
             },
         ],
