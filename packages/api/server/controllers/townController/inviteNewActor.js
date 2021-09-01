@@ -3,8 +3,7 @@ const { triggerActorInvitedAlert } = require('#server/utils/mattermost');
 const {
     sendUserShantytownActorInvitation,
 } = require('#server/mails/mails');
-const { sequelize } = require('#db/models');
-const { formatName } = require('#server/models/userModel')(sequelize);
+const { formatName } = require('#server/models/userModel')();
 
 module.exports = () => async (req, res, next) => {
     try {

@@ -1,6 +1,5 @@
 const moment = require('moment');
-const { sequelize } = require('#db/models');
-const { formatName } = require('#server/models/userModel')(sequelize);
+const { formatName } = require('#server/models/userModel')();
 const mailService = require('#server/services/mailService');
 const { frontUrl, backUrl } = require('#server/config');
 

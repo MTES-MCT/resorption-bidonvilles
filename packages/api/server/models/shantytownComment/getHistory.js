@@ -1,7 +1,7 @@
 const { fromGeoLevelToTableName } = require('#server/utils/geo');
 const { sequelize } = require('#db/models');
 const updateWhereClauseForPermissions = require('#server/models/common/updateWhereClauseForPermissions');
-const { formatName } = require('#server/models/userModel')(sequelize);
+const { formatName } = require('#server/models/userModel')();
 const { getUsenameOf, serializeComment } = require('#server/models/shantytownModel')(sequelize);
 
 module.exports = async (userLocation, permissions, location) => {
