@@ -23,8 +23,38 @@ import "./formatDate";
 import registerGlobalComponents from "#app/components/ui/registerGlobalComponents";
 import "./js/icons";
 import guardians from "./js/app/guardians";
+import MarianneBold from "./fonts/Marianne-Bold.otf";
+import MarianneLight from "./fonts/Marianne-Light.otf";
+import MarianneRegular from "./fonts/Marianne-Regular.otf";
+import MarianneThin from "./fonts/Marianne-Thin.otf";
 
-export default function(Vue, { appOptions, router }) {
+export default function(Vue, { appOptions, router, head }) {
+    // Preload fonts for performances
+    head.link.push({
+        rel: "preload",
+        href: MarianneBold,
+        as: "font",
+        crossorigin: true
+    });
+    head.link.push({
+        rel: "preload",
+        href: MarianneLight,
+        as: "font",
+        crossorigin: true
+    });
+    head.link.push({
+        rel: "preload",
+        href: MarianneRegular,
+        as: "font",
+        crossorigin: true
+    });
+    head.link.push({
+        rel: "preload",
+        href: MarianneThin,
+        as: "font",
+        crossorigin: true
+    });
+
     // Sentry should be loaded as soon as possible
     if (VUE_APP_SENTRY_ON === "true") {
         Sentry.init({
