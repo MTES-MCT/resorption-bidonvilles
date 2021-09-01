@@ -1,5 +1,4 @@
 /* eslint-disable no-underscore-dangle */
-
 import L from "leaflet";
 import pointOnFeature from "@turf/point-on-feature";
 import Address from "#app/components/address/address.vue";
