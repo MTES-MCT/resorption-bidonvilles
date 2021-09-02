@@ -7,7 +7,7 @@
         @mouseenter="isHover = true"
         @mouseleave="isHover = false"
     >
-        <router-link :to="`annuaire/${organization.id}`">
+        <router-link :to="`/annuaire/${organization.id}`">
             <div class="p-4 flex">
                 <div class="text-md font-bold w-1/2 pr-16">
                     {{ name }}
