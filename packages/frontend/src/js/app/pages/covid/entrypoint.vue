@@ -1,15 +1,16 @@
 <template>
-    <Guard>
-        <ClientOnly>
-            <PrivatePage />
-        </ClientOnly>
+    <Guard
+        :ssr="$context && $context.ssr"
+        :beforeEnter="$context && $context.beforeEnter"
+    >
+        <Page />
     </Guard>
 </template>
 
 <script>
 export default {
     components: {
-        PrivatePage: () => import("./covid.vue")
+        Page: () => import("./covid.vue")
     }
 };
 </script>

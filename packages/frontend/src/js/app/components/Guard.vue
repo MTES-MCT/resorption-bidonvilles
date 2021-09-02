@@ -50,36 +50,41 @@ const guardGroups = {
 };
 
 export default {
+    props: {
+        ssr: {
+            type: Boolean,
+            default: false
+        },
+        beforeEnter: {
+            type: [Object, String]
+        }
+    },
     data() {
         return {
-            ready: false,
+            ready: !!this.$props.ssr,
             error: null
         };
     },
     async mounted() {
-        console.log(this.$context.beforeEnter);
-
-        if (this.$context.beforeEnter?.action === "redirect") {
-            this.$router.push(this.$context.beforeEnter.to);
+        if (this.beforeEnter?.action === "redirect") {
+            this.$router.push(this.beforeEnter.to);
             return;
         }
 
-        if (this.$context.beforeEnter?.action === "open") {
-            window.open(this.$context.beforeEnter.to);
+        if (this.beforeEnter?.action === "open") {
+            window.open(this.beforeEnter.to);
             this.$router.go(-1);
             return;
         }
 
-        if (this.$context.beforeEnter?.action === "signout") {
+        if (this.beforeEnter?.action === "signout") {
             logout(this.$piwik);
             this.$router.push("/");
             return;
         }
 
         const guards =
-            (this.$context.beforeEnter &&
-                guardGroups[this.$context.beforeEnter]) ||
-            [];
+            (this.beforeEnter && guardGroups[this.beforeEnter]) || [];
 
         for (const guard of guards) {
             if (guard === "isLoggedIn" && !isLoggedIn()) {

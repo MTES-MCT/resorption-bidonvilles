@@ -1,15 +1,16 @@
 <template>
-    <Guard>
-        <ClientOnly>
-            <PrivatePage />
-        </ClientOnly>
-    </Guard>
+    <Guard
+        :ssr="$context && $context.ssr"
+        :beforeEnter="$context && $context.beforeEnter"
+    >
+        <Page
+    /></Guard>
 </template>
 
 <script>
 export default {
     components: {
-        PrivatePage: () => import("./users.upgrade.vue")
+        Page: () => import("./users.upgrade.vue")
     }
 };
 </script>

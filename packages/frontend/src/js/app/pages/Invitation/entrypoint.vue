@@ -1,6 +1,9 @@
 <template>
-    <Guard>
-        <PrivatePage />
+    <Guard
+        :ssr="$context && $context.ssr"
+        :beforeEnter="$context && $context.beforeEnter"
+    >
+        <Page />
     </Guard>
 </template>
 
@@ -10,7 +13,7 @@ export default {
         title: "Invitation -"
     },
     components: {
-        PrivatePage: () => import("./index.vue")
+        Page: () => import("./index.vue")
     }
 };
 </script>

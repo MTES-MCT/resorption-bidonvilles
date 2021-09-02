@@ -1,13 +1,16 @@
 <template>
-    <Guard>
-        <PrivatePage />
+    <Guard
+        :ssr="$context && $context.ssr"
+        :beforeEnter="$context && $context.beforeEnter"
+    >
+        <Page />
     </Guard>
 </template>
 
 <script>
 export default {
     components: {
-        PrivatePage: () => import("./index.vue")
+        Page: () => import("./index.vue")
     }
 };
 </script>

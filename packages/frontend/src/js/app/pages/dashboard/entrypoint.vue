@@ -1,15 +1,16 @@
 <template>
-    <Guard>
-        <ClientOnly>
-            <PrivatePage />
-        </ClientOnly>
+    <Guard
+        :ssr="$context && $context.ssr"
+        :beforeEnter="$context && $context.beforeEnter"
+    >
+        <Page />
     </Guard>
 </template>
 
 <script>
 export default {
     components: {
-        PrivatePage: () => import("./dashboard.vue")
+        Page: () => import("./dashboard.vue")
     }
 };
 </script>

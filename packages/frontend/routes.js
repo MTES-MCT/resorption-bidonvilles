@@ -8,7 +8,8 @@ const anonymousRoutes = [
             "./src/js/app/pages/LandingPage/entrypoint.vue"
         ),
         context: {
-            beforeEnter: "home"
+            beforeEnter: "home",
+            ssr: true
         }
     },
     {
@@ -18,7 +19,8 @@ const anonymousRoutes = [
             "./src/js/app/pages/Contact/entrypoint.vue"
         ),
         context: {
-            beforeEnter: "anonymous"
+            beforeEnter: "anonymous",
+            ssr: true
         }
     },
     {
@@ -28,7 +30,8 @@ const anonymousRoutes = [
             "./src/js/app/pages/PublicStats/entrypoint.vue"
         ),
         context: {
-            beforeEnter: "anonymous"
+            beforeEnter: "anonymous",
+            ssr: true
         }
     },
     {
@@ -38,7 +41,8 @@ const anonymousRoutes = [
             "./src/js/app/pages/SignIn/entrypoint.vue"
         ),
         context: {
-            beforeEnter: "anonymous"
+            beforeEnter: "anonymous",
+            ssr: true
         }
     },
     {
@@ -46,14 +50,20 @@ const anonymousRoutes = [
         component: path.join(
             __dirname,
             "./src/js/app/pages/Invitation/entrypoint.vue"
-        )
+        ),
+        context: {
+            ssr: true
+        }
     },
     {
         path: "/mentions-legales",
         component: path.join(
             __dirname,
             "./src/js/app/pages/legalMentions/entrypoint.vue"
-        )
+        ),
+        context: {
+            ssr: true
+        }
     },
     {
         path: "/nouveau-mot-de-passe",
@@ -65,10 +75,10 @@ const anonymousRoutes = [
             meta: {
                 group: "users"
             },
-            beforeEnter: "anonymous"
+            beforeEnter: "anonymous",
+            ssr: true
         }
-    },
-
+    }
 ];
 
 const anonymousWithoutRendering = [
@@ -97,8 +107,8 @@ const anonymousWithoutRendering = [
             },
             beforeEnter: "anonymous"
         }
-    },
-]
+    }
+];
 
 const loggedRoutes = [
     {

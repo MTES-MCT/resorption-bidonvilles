@@ -1,6 +1,9 @@
 <template>
-    <Guard>
-        <PrivatePage />
+    <Guard
+        :ssr="$context && $context.ssr"
+        :beforeEnter="$context && $context.beforeEnter"
+    >
+        <Page />
     </Guard>
 </template>
 
@@ -10,7 +13,7 @@ export default {
         title: "Mentions légales -"
     },
     components: {
-        PrivatePage: () => import("./legalMentions.vue")
+        Page: () => import("./legalMentions.vue")
     }
 };
 </script>
