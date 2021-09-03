@@ -6,7 +6,7 @@
             <div class="lg:flex-shrink-0 justify-center">
                 <img
                     class="m-4 h-40"
-                    src="./assets/formation-personalisee.jpg"
+                    src="./assets/formation_prise_en_main.jpg"
                     alt=""
                 />
             </div>
