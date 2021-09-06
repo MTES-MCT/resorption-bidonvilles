@@ -70,15 +70,8 @@
     },
     "video": {
       "text": "Comprendre la résorption des bidonvilles en 2 minutes"
-    }
-  },
-  "secondBanner": {
-    "text": "Voisin, citoyen, habitant d’un bidonville… Une info ? Une question ? Une alerte ?",
-    "cta": "Nous contacter"
-  },
-  "thirdSection": {
-    "title": "Les actions en chiffres",
-    "firstParagraph": {
+    },
+    "thirdParagraph": {
       "bold": "Plus de 30 actions de résorption des bidonvilles menées en 2019 par 35 opérateurs.",
       "normal": "Ces actions sont financées à 75 % par l’État, à 15 % par les collectivités territoriales et à 10 % par des fonds privés ou européens. \nLes équipes de professionnels accompagnent les familles sur bidonville, en squat ou dans le logement sur tous les aspects : santé, logement, emploi, éducation, stabilisation et sécurisation du site."
     },
@@ -100,8 +93,15 @@
         "text": "615 contrats de travail signés"
       }
     },
-    "cta": "Télécharger le dernier bilan",
-    "secondParagraph": {
+    "cta": "Télécharger le dernier bilan"
+  },
+  "secondBanner": {
+    "text": "Voisin, citoyen, habitant d’un bidonville… Une info ? Une question ? Une alerte ?",
+    "cta": "Nous contacter"
+  },
+  "thirdSection": {
+    "title": "Les actions en chiffres",
+    "firstParagraph": {
       "title": "Un projet porté par la Délégation interministérielle à l’hébergement et l’accès au logement",
       "body": {
         "text1": "La plateforme numérique Résorption-bidonvilles, portée et lancée en 2018 par la",

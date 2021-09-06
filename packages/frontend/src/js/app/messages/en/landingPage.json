@@ -70,15 +70,8 @@
     },
     "video": {
       "text": "Understanding slum clearance in 2 minutes"
-    }
-  },
-  "secondBanner": {
-    "text": "Neighbour, citizen, slum dweller... Any news? A question ? An alert?",
-    "cta": "Contact us"
-  },
-  "thirdSection": {
-    "title": "Actions in figures",
-    "firstParagraph": {
+    },
+    "thirdParagraph": {
       "bold": "In 2019, more than 30 slum clearance projects have been carried out by 35 NGOs",
       "normal": "They have been financed 75% by the State, 15% by local authorities and 10% by private or European funds. Families living in slums have been supported in order to access to health, housing, employment, education and sanitation."
     },
@@ -100,8 +93,15 @@
         "text": "615 employment contracts signed"
       }
     },
-    "cta": "Download the latest report",
-    "secondParagraph": {
+    "cta": "Download the latest report"
+  },
+  "secondBanner": {
+    "text": "Neighbour, citizen, slum dweller... Any news? A question ? An alert?",
+    "cta": "Contact us"
+  },
+  "thirdSection": {
+    "title": "Actions in figures",
+    "firstParagraph": {
       "title": "A project led by the interministerial delegation for access to housing (DIHAL)",
       "body": {
         "text1": "The digital platform Résorption-bidonvilles, launched in 2018 by the",

@@ -70,15 +70,8 @@
     },
     "video": {
       "text": "Înțelegerea resorbției de bidonville în 2 minute"
-    }
-  },
-  "secondBanner": {
-    "text": "Vecin, cetățean, rezident într-un bidonville... O informaţie? O întrebare? O alertă?",
-    "cta": "Contactaţi-ne"
-  },
-  "thirdSection": {
-    "title": "Acţiunile desfăşurate in cifre",
-    "firstParagraph": {
+    },
+    "thirdParagraph": {
       "bold": "Peste 30 de acțiuni desfășurate în 2019 de catre 35 de operatori.",
       "normal": "Acestea sunt 75% finanțate de stat, 15% de autoritățile locale și 10% din fonduri private sau europene. Echipe de profesioniști însoțesc familiile în bidonville, cladirile dezafectate sau în locuință cuprinzând toate aspectele: sănătate, locuința, ocuparea forței de muncă, educație, stabilizare și securitatea locului."
     },
@@ -100,8 +93,15 @@
         "text": "615 contracte de muncă semnate"
       }
     },
-    "cta": "Încarcaţi ultimul bilanţ",
-    "secondParagraph": {
+    "cta": "Încarcaţi ultimul bilanţ"
+  },
+  "secondBanner": {
+    "text": "Vecin, cetățean, rezident într-un bidonville... O informaţie? O întrebare? O alertă?",
+    "cta": "Contactaţi-ne"
+  },
+  "thirdSection": {
+    "title": "Acţiunile desfăşurate in cifre",
+    "firstParagraph": {
       "title": "Un proiect realizat de Delegația Interministerială privind cazarea și accesul la locuințe",
       "body": {
         "text1": "Platforma digitală „resorbția de bidonville”, lansată în 2018 de",
