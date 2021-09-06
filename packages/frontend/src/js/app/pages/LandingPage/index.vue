@@ -1,5 +1,10 @@
 <template>
     <PublicLayout :displayLanguagePicker="true">
+        <template v-slot:anchors>
+            <a href="#plateforme">La plateforme</a>
+            <a href="#strategie">La stratégie de résorption</a>
+        </template>
+
         <PublicContainer>
             <div class="pt-4">
                 <div class="max-w-screen-lg mx-auto pb-20">
@@ -25,7 +30,7 @@
                 src="./assets/resorption-bidonvilles-1.jpg"
             />
         </CreditWrapper>
-        <PublicContainer>
+        <PublicContainer id="strategie">
             <div class="max-w-screen-lg mx-auto py-20">
                 <LandingPageSecondSection />
             </div>

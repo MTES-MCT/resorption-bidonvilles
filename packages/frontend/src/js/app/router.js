@@ -162,7 +162,7 @@ const guardians = {
  * @returns {string}
  */
 function home(to, from, next) {
-    if (to.fullPath.substr(0, 2) === "/#") {
+    if (to.fullPath.substr(0, 3) === "/#/") {
         return next(to.fullPath.substr(2));
     }
 
@@ -535,7 +535,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    if (to.fullPath.substr(0, 2) === "/#") {
+    if (to.fullPath.substr(0, 3) === "/#/") {
         next(to.fullPath.substr(2));
         return;
     }

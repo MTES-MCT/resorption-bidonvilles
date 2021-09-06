@@ -15,7 +15,11 @@
                 >
                     <NavBarLogo />
 
-                    <div class="hidden md:flex flex-row">
+                    <div class="hidden md:flex flex-row items-center">
+                        <div class="mr-8 hidden xl:block flex space-x-5">
+                            <slot name="anchors"></slot>
+                        </div>
+
                         <div>
                             <router-link to="/connexion">
                                 <Button variant="primary">{{

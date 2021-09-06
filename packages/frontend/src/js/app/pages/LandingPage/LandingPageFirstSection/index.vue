@@ -5,7 +5,7 @@
             src="./assets/resorption-bidonvilles-dessin.png"
         />
         <LandingEventBanner v-if="$i18n.locale === 'fr'" />
-        <div class="mt-24">
+        <div class="mt-24" id="plateforme">
             <div class="max-w-screen-sm mx-auto">
                 <div class="text-display-lg font-normal">
                     {{ $t("landingPage.firstSection.context.title") }}
