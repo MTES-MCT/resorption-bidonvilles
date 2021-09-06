@@ -1,12 +1,8 @@
 <template>
     <div>
         <div>
-            <div class="max-w-screen-sm mx-auto">
-                <h2 class="text-display-lg">
-                    {{ $t("landingPage.thirdSection.firstParagraph.title") }}
-                </h2>
-
-                <div class="mt-4">
+            <div class="mx-auto flex flex-col lg:flex-row">
+                <div class="lg:max-w-sm">
                     {{
                         $t("landingPage.thirdSection.firstParagraph.body.text1")
                     }}
@@ -45,7 +41,7 @@
                     >
                 </div>
 
-                <div class="mt-8">
+                <div class="mt-6 lg:mt-0 lg:ml-6">
                     <div>
                         {{
                             $t(
@@ -120,42 +116,33 @@
                         </li>
                     </ul>
                 </div>
+            </div>
 
-                <div
-                    class="flex flex-row flex-wrap items-center justify-between mt-8"
-                >
-                    <a href="https://solidarites-sante.gouv.fr/"
-                        ><img
-                            class="h-24 m-2"
-                            src="./assets/logo-gouvernement.jpg"
-                    /></a>
-                    <a href="https://ec.europa.eu/info/index_en"
-                        ><img
-                            class="h-24 my-2"
-                            src="./assets/logo-commission-europenne.png"
-                    /></a>
-                </div>
-                <div
-                    class="flex flex-row flex-wrap items-center justify-between mt-8"
-                >
-                    <a
-                        href="https://beta.gouv.fr/approche/incubateurs/mtes.html"
-                        ><img
-                            class="h-24 m-2"
-                            src="./assets/logo-fabrique-numerique.png"
-                    /></a>
-                    <a href="https://beta.gouv.fr/"
-                        ><img
-                            class="h-20 m-2"
-                            src="./assets/logo_beta-gouv-fr.jpg"
-                    /></a>
-                    <a
-                        href="https://entrepreneur-interet-general.etalab.gouv.fr/defis/2019/resorption-bidonvilles.html"
-                        ><img
-                            class="h-16 m-2"
-                            src="./assets/logo-entrepreneur-interet-general.png"
-                    /></a>
-                </div>
+            <div
+                class="grid grid-cols-2 lg:grid-cols-5 items-center justify-items-center mt-8"
+            >
+                <a href="https://solidarites-sante.gouv.fr/"
+                    ><img class="h-24 p-2" src="./assets/logo-gouvernement.jpg"
+                /></a>
+                <a href="https://ec.europa.eu/info/index_en"
+                    ><img
+                        class="h-24 py-2"
+                        src="./assets/logo-commission-europenne.png"
+                /></a>
+                <a href="https://beta.gouv.fr/approche/incubateurs/mtes.html"
+                    ><img
+                        class="h-24 p-2"
+                        src="./assets/logo-fabrique-numerique.png"
+                /></a>
+                <a href="https://beta.gouv.fr/"
+                    ><img class="h-20 p-2" src="./assets/logo_beta-gouv-fr.jpg"
+                /></a>
+                <a
+                    href="https://entrepreneur-interet-general.etalab.gouv.fr/defis/2019/resorption-bidonvilles.html"
+                    ><img
+                        class="h-16 p-2"
+                        src="./assets/logo-entrepreneur-interet-general.png"
+                /></a>
             </div>
         </div>
     </div>
