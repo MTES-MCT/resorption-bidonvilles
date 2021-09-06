@@ -46,7 +46,6 @@
         </CreditWrapper>
         <PublicContainer>
             <div class="max-w-screen-lg mx-auto py-20">
-                <LandingPageThirdSection />
                 <LandingPageNewsletter />
                 <div class="text-center mt-24">
                     <h2 class="text-display-lg text-secondary">
@@ -71,6 +70,11 @@
                     src="./assets/resorption-bidonvilles-5.jpg"
                 /></div
         ></CreditWrapper>
+        <PublicContainer>
+            <div class="max-w-screen-lg mx-auto py-20">
+                <LandingPageThirdSection />
+            </div>
+        </PublicContainer>
     </PublicLayout>
 </template>
 
