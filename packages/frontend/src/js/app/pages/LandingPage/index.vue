@@ -43,7 +43,8 @@
         </CreditWrapper>
         <PublicContainer>
             <div class="max-w-screen-lg mx-auto py-20">
-                <LandingPageNewsletter />
+                <LandingPageFAQ />
+                <LandingPageNewsletter class="mt-20" />
                 <div class="text-center mt-20">
                     <h2 class="text-display-lg text-secondary">
                         {{ $t("landingPage.hero.subtitle") }}
@@ -89,6 +90,7 @@ import LandingPageNewsletter from "./LandingPageNewsletter.vue";
 import LandingTutorialBanner from "./LandingTutorialBanner";
 import LandingDiscoverBanner from "./LandingDiscoverBanner";
 import NewsPopupWater from "./NewsPopup/NewsPopupWater.vue";
+import LandingPageFAQ from "./LandingPageFAQ";
 
 export default {
     components: {
@@ -104,7 +106,8 @@ export default {
         LandingPageNewsletter,
         LandingTutorialBanner,
         LandingDiscoverBanner,
-        NewsPopupWater
+        NewsPopupWater,
+        LandingPageFAQ
     }
 };
 </script>
