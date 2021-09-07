@@ -101,11 +101,16 @@ export function me() {
 /**
  * Updates data about the current user
  *
+ * @param userId
  * @param {User_Data} data
  *
  * @returns {Promise}
  */
-export function edit(data) {
+export function edit(userId, data) {
+    if (userId) {
+        return putApi(`/users/${userId}`, data);
+    }
+
     return postApi("/me", data);
 }
 
