@@ -6,26 +6,28 @@
             <div class="lg:flex-shrink-0 justify-center">
                 <img
                     class="m-4 h-40"
-                    src="./assets/formation_prise_en_main.jpg"
+                    src="./assets/formation-personalisee.jpg"
                     alt=""
                 />
             </div>
             <div class="flex-shrink-0 lg:flex-shrink px-8 py-2 lg:py-8 lg:px-4">
                 <div class="tracking-wide text-display-md text-primary">
-                    Webinaire prise en main de Résorption-bidonvilles
+                    Webinaire découverte
+                    <span class="italic">Résorption-bidonvilles</span>
                 </div>
                 <p class="mt-2 text-md">
-                    Vous souhaitez prendre en main la plateforme ? découvrir les
-                    fonctionnalités qui vous seront utiles ? vous remettre à
-                    niveau ? Nous vous montrerons l'essentiel en
-                    <span class="font-bold">45 minutes</span> avec une
-                    démonstration personnalisée et en direct de l’outil
-                    collaboratif.
+                    Vous souhaitez découvrir ce qu'est
+                    <span class="italic">Résorption-bidonvilles</span> ?
+                    comprendre le rôle de la plateforme numérique dans la
+                    politique de résorption des bidonvilles ?<br />
+                    Nous répondons à toutes vos questions dans ce webinaire de
+                    <span class="font-bold">20 minutes</span>.<br />
+                    Inscrivez-vous !
                 </p>
             </div>
             <div class="lg:mt-6 flex-shrink-0 px-8 py-2 lg:p-8">
                 <a
-                    href="https://app.evalandgo.com/s/index.php?id=JTk5aSU5M2slOTklQUI%3D&a=JTk2cCU5N2slOUElQjA%3D"
+                    href="https://app.evalandgo.com/s/index.php?id=JTk5aSU5M2slOTklQUQ%3D&a=JTk2cCU5N2slOUElQjA%3D"
                     target="_blank"
                 >
                     <Button class="my-2" variant="secondary"

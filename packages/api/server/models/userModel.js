@@ -1,6 +1,7 @@
 const permissionsDescription = require('#server/permissions_description');
 const { getPermissionsFor } = require('#server/utils/permission');
 const { mailBlacklist } = require('#server/config');
+const { sequelize: database } = require('#db/models');
 
 /**
  * @typedef {Object} UserFilters
@@ -59,6 +60,7 @@ function serializeUser(user, latestCharte, filters, permissionMap) {
             active: user.organization_active,
             type: {
                 id: user.organization_type_id,
+                uid: user.organization_type_uid,
                 name_singular: user.organization_type_name_singular,
                 name_plural: user.organization_type_name_plural,
                 abbreviation: user.organization_type_abbreviation,
@@ -150,14 +152,14 @@ function serializeUser(user, latestCharte, filters, permissionMap) {
     return serialized;
 }
 
-module.exports = (database) => {
+module.exports = () => {
     // eslint-disable-next-line global-require
     const permissionModel = require('./permissionModel')(database);
     // eslint-disable-next-line global-require
     const charteEngagementModel = require('./charteEngagementModel')(database);
 
     /**
-     * Fetches a list of shantytowns from the database
+     * Fetches a list of users from the database
      *
      * @param {Array.<Object>} where   List of where clauses
      * @param {UserFilters}    filters
@@ -244,6 +246,7 @@ module.exports = (database) => {
                 organizations.latitude,
                 organizations.longitude,
                 organization_types.organization_type_id,
+                organization_types.uid AS organization_type_uid,
                 organization_types.name_singular AS organization_type_name_singular,
                 organization_types.name_plural AS organization_type_name_plural,
                 organization_types.abbreviation AS organization_type_abbreviation,
@@ -891,6 +894,47 @@ module.exports = (database) => {
         }
 
         return users;
+    };
+
+    model.formatName = (user) => {
+        let { firstName, lastName } = user;
+        if (!firstName && user.first_name) {
+            ({ first_name: firstName, last_name: lastName } = user);
+        }
+
+        return `${firstName.charAt(0).toUpperCase() + firstName.slice(1)} ${lastName.toUpperCase()}`;
+    };
+
+    model.getHistory = async () => {
+        const activities = await database.query(
+            `
+                SELECT
+                    lua.used_at AS "date",
+                    users.first_name,
+                    users.last_name,
+                    organizations.organization_id
+                FROM last_user_accesses lua
+                LEFT JOIN users ON lua.fk_user = users.user_id
+                LEFT JOIN localized_organizations organizations ON users.fk_organization = organizations.organization_id
+                WHERE
+                    lua.used_at IS NOT NULL
+                ORDER BY lua.used_at DESC
+                `,
+            {
+                type: database.QueryTypes.SELECT,
+            },
+        );
+
+        return activities
+            .map(activity => ({
+                entity: 'user',
+                action: 'creation',
+                date: activity.date.getTime() / 1000,
+                user: {
+                    name: model.formatName(activity),
+                    organization: activity.organization_id,
+                },
+            }));
     };
 
     return model;

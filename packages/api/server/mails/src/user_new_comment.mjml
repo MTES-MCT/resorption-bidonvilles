@@ -11,10 +11,10 @@
             <mj-column>
                 <mj-text mj-class="pb-4">Bonjour,</mj-text>
                 <mj-text>
-                    Un nouveau message a été publié par {{var:comment.createdBy.firstName}} {{var:comment.createdBy.lastName}} ({{var:comment.createdBy.organization}}) sur le site situé {{var:shantytown.addressSimple}} ({{var:shantytown.departement.name}}).
+                    Un nouveau message a été publié par {{var:createdBy.name}} ({{var:createdBy.organization}}) sur le site situé {{var:shantytown.addressSimple}} ({{var:shantytown.departement.name}}).
                 </mj-text>
                 <mj-button href="{{var:messageUrl}}" mj-class="button-primary">Voir le message</mj-button><br/>
-                <mj-button href="{{var:annuaireUrl}}" mj-class="button-secondary" padding="0 0 2rem 0">Contacter {{var:comment.createdBy.firstName}} {{var:comment.createdBy.lastName}}</mj-button>
+                <mj-button href="{{var:annuaireUrl}}" mj-class="button-secondary" padding="0 0 2rem 0">Contacter {{var:createdBy.name}}</mj-button>
                 <mj-text mj-class="pb-4">
                     En tant que personne intervenant sur ce site, vous êtes informé(e) en temps réel de tout nouveau message.<br/>
                 </mj-text>

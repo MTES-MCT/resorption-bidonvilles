@@ -20,9 +20,9 @@
                 </div>
             </div>
             <LoadingPage v-else-if="loading" />
-            <ErrorPage v-else>
+            <LoadingError :retry="load" v-else>
                 Une erreur est survenue.
-            </ErrorPage>
+            </LoadingError>
         </PrivateContainer>
     </PrivateLayout>
 </template>
@@ -34,7 +34,7 @@ import UserListTable from "./UserListTable";
 import { list } from "#helpers/api/user";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
 import LoadingPage from "#app/components/PrivateLayout/LoadingPage";
-import ErrorPage from "#app/components/PrivateLayout/ErrorPage";
+import LoadingError from "#app/components/PrivateLayout/LoadingError";
 import enrichUsersWithStatus from "./enrichUsersWithStatus";
 import Fuse from "fuse.js";
 
@@ -49,7 +49,7 @@ export default {
         UserListTable,
         PrivateLayout,
         LoadingPage,
-        ErrorPage
+        LoadingError
     },
     computed: {
         filteredUsers() {

@@ -1,7 +1,8 @@
 
-const { formatName, sendUserPlatformInvitation } = require('#server/mails/mails');
+const { sendUserPlatformInvitation } = require('#server/mails/mails');
 const { triggerPeopleInvitedAlert } = require('#server/utils/mattermost');
 const { mattermost } = require('#server/config');
+const { formatName } = require('#server/models/userModel')();
 
 const sendEmailsInvitations = async (guests, greeter) => {
     for (let i = 0; i < guests.length; i += 1) {
@@ -15,7 +16,7 @@ const sendEmailsInvitations = async (guests, greeter) => {
             // eslint-disable-next-line no-await-in-loop
             await sendUserPlatformInvitation(guest, {
                 variables: {
-                    inviterName: formatName(greeter.first_name, greeter.last_name),
+                    inviterName: formatName(greeter),
                 },
             });
         } catch (err) {

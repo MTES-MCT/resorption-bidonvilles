@@ -1,9 +1,9 @@
 
 const { sequelize } = require('#db/models');
 const {
-    formatName,
     sendUserShantytownActorNotification,
 } = require('#server/mails/mails');
+const { formatName } = require('#server/models/userModel')(sequelize);
 
 module.exports = models => async (req, res, next) => {
     // if the actor to be added is the current user, proceed
@@ -39,7 +39,7 @@ module.exports = models => async (req, res, next) => {
     try {
         await sendUserShantytownActorNotification(req.body.user, {
             variables: {
-                inviterName: formatName(req.user.first_name, req.user.last_name),
+                inviterName: formatName(req.user),
                 shantytown: req.shantytown,
             },
         });

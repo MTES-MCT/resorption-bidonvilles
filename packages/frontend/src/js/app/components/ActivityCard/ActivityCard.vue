@@ -23,23 +23,28 @@
                 <h1 :class="classes.title">
                     {{ title }}
                 </h1>
-                <p :class="classes.author">
+                <p :class="classes.author" v-if="activity.author">
                     par :
                     <Link :to="`/annuaire/${activity.author.organization}`">{{
                         activity.author.name
                     }}</Link>
                 </p>
-                <p v-if="activity.shantytown.id">
+                <p v-if="activity.user">
+                    <Link :to="`/annuaire/${activity.user.organization}`">{{
+                        activity.user.name
+                    }}</Link>
+                </p>
+                <p v-if="activity.shantytown">
                     site :
                     <Link :to="`/site/${activity.shantytown.id}`"
                         >{{ activity.shantytown.usename }},
                         {{ activity.shantytown.city.name }}</Link
                     >
                 </p>
-                <p v-if="activity.highCovid">
+                <p v-if="activity.highCovidComment">
                     territoire(s) :
                     {{
-                        activity.highCovid.departements
+                        activity.highCovidComment.departements
                             .map(({ name }) => name)
                             .join(", ")
                     }}
@@ -143,10 +148,17 @@ export default {
                 };
             }
 
+            if (this.activity.entity === "user") {
+                return {
+                    text: "text-orange500",
+                    bg: "bg-orange500"
+                };
+            }
+
             // création de commentaire
             if (
                 (this.activity.comment && this.activity.comment.covid) ||
-                this.activity.highCovid
+                this.activity.highCovidComment
             ) {
                 return {
                     text: "text-error",
@@ -171,11 +183,14 @@ export default {
                 case "closing-shantytown":
                     return "Fermeture d'un site";
 
+                case "creation-user":
+                    return "Nouvel utilisateur";
+
                 case "creation-comment":
                     if (
                         (this.activity.comment &&
                             this.activity.comment.covid) ||
-                        this.activity.highCovid
+                        this.activity.highCovidComment
                     ) {
                         return "Nouveau message Covid-19";
                     }
@@ -200,7 +215,11 @@ export default {
                 return "Voir la fiche du site";
             }
 
-            if (this.activity.highCovid) {
+            if (this.activity.entity === "user") {
+                return "Voir la fiche dans l'annuaire";
+            }
+
+            if (this.activity.highCovidComment) {
                 return "Voir les messages Covid-19";
             }
 
@@ -209,11 +228,15 @@ export default {
         // eslint-disable-next-line vue/return-in-computed-property
         link() {
             if (this.activity.entity === "comment") {
-                if (this.activity.highCovid) {
+                if (this.activity.highCovidComment) {
                     return "/covid-19";
                 }
 
-                return `/site/${this.activity.shantytown.id}#message${this.activity.comment_id}`;
+                return `/site/${this.activity.shantytown.id}#message${this.activity.comment.id}`;
+            }
+
+            if (this.activity.entity === "user") {
+                return `/annuaire/${this.activity.user.organization}`;
             }
 
             return `/site/${this.activity.shantytown.id}`;
@@ -236,7 +259,7 @@ export default {
             // on vérifie que l'activité en question est modérable (= un commentaire ou un commentaire COVID non territoire)
             if (
                 this.activity.entity !== "comment" ||
-                this.activity.highCovid ||
+                this.activity.highCovidComment ||
                 this.variant === "small"
             ) {
                 return false;

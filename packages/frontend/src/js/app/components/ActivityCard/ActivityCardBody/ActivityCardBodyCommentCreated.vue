@@ -9,7 +9,10 @@
                 :tag="tag"
             />
         </div>
-        <p><span class="font-bold">Message :</span> {{ activity.content }}</p>
+        <p>
+            <span class="font-bold">Message :</span>
+            {{ description }}
+        </p>
     </div>
 </template>
 
@@ -35,6 +38,12 @@ export default {
     },
 
     computed: {
+        description() {
+            return this.activity.highCovidComment
+                ? this.activity.highCovidComment.description
+                : this.activity.comment.description;
+        },
+
         covidTags: function() {
             if (!this.activity.comment || !this.activity.comment.covid) {
                 return [];

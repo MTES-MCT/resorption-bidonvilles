@@ -33,6 +33,17 @@
                     <Button
                         v-if="
                             loggedUser.role_id === 'national_admin' &&
+                                user.organization.type.uid !== 'intervenant'
+                        "
+                        class="mr-4"
+                        variant="primaryText"
+                        @click="setIntervenant"
+                        :loading="validation.loading === 'intervenant'"
+                        >Définir comme « Intervenant »</Button
+                    >
+                    <Button
+                        v-if="
+                            loggedUser.role_id === 'national_admin' &&
                                 user.role_id !== 'local_admin'
                         "
                         class="mr-4"
@@ -128,9 +139,9 @@
             </div>
 
             <LoadingPage v-else-if="state === 'loading'" />
-            <ErrorPage v-else>
+            <LoadingError v-else>
                 L'utilisateur demandé n'existe pas en base de données.
-            </ErrorPage>
+            </LoadingError>
         </PrivateContainer>
     </PrivateLayout>
 </template>
@@ -139,7 +150,7 @@
 import PrivateLayout from "#app/components/PrivateLayout";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer.vue";
 import LoadingPage from "#app/components/PrivateLayout/LoadingPage.vue";
-import ErrorPage from "#app/components/PrivateLayout/ErrorPage.vue";
+import LoadingError from "#app/components/PrivateLayout/LoadingError.vue";
 import UserValidateDetails from "./UserValidateDetails/UserValidateDetails";
 import UserValidateAccessStatus from "./UserValidateAccessStatus/UserValidateAccessStatus";
 import UserValidateRequestMessage from "./UserValidateRequestMessage";
@@ -152,6 +163,7 @@ import {
     sendActivationLink,
     updateLocalAdmin
 } from "#helpers/api/user";
+import { update as updateOrganization } from "#helpers/api/organization";
 import { notify } from "#helpers/notificationHelper";
 
 let permissions;
@@ -165,7 +177,7 @@ export default {
         UserValidateRequestMessage,
         UserValidateAccessSettings,
         LoadingPage,
-        ErrorPage
+        LoadingError
     },
     data() {
         const { permissions_description, user: loggedUser } = getConfig();
@@ -462,6 +474,35 @@ export default {
                 });
 
                 this.$router.push("/liste-des-utilisateurs");
+            } catch ({ user_message: error }) {
+                this.validation.error = error;
+            }
+
+            this.validation.loading = null;
+        },
+
+        async setIntervenant() {
+            if (this.validation.loading) {
+                return;
+            }
+
+            // eslint-disable-next-line no-alert
+            if (
+                !window.confirm(
+                    "Êtes-vous sûr de vouloir accorder le statut d'intervenant à cet utilisateur et à tous les membres de la structure ?"
+                )
+            ) {
+                return;
+            }
+
+            this.validation.loading = "intervenant";
+            this.validation.error = null;
+
+            try {
+                await updateOrganization(this.user.organization.id, {
+                    intervenant: true
+                });
+                window.location.reload();
             } catch ({ user_message: error }) {
                 this.validation.error = error;
             }
