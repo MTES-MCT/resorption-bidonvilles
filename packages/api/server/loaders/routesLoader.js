@@ -80,6 +80,15 @@ module.exports = (app) => {
         controllers.user.get,
     );
     app.put(
+        '/users/:id',
+        middlewares.auth.authenticate,
+        middlewares.auth.isSuperAdmin,
+        validators.editUser,
+        middlewares.validation,
+        controllers.user.edit,
+    );
+
+    app.put(
         '/users/:id/charte_engagement',
         middlewares.auth.authenticate,
         controllers.user.acceptCharte,

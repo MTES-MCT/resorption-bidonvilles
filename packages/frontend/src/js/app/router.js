@@ -343,6 +343,14 @@ const router = new VueRouter({
         },
         {
             meta: {
+                group: "account"
+            },
+            path: "/user/:id",
+            component: Account,
+            beforeEnter: guardians.loadedAndUpToDate
+        },
+        {
+            meta: {
                 group: "users",
                 permissions: ["user.list"]
             },

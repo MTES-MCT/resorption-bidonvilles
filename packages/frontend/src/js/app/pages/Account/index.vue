@@ -10,6 +10,7 @@ import PrivateLayout from "#app/components/PrivateLayout";
 import AccountRead from "./AccountRead/AccountRead";
 import AccountEdit from "./AccountEdit/AccountEdit";
 import { get as getConfig } from "#helpers/api/config";
+import { get as getUser } from "#helpers/api/user";
 
 export default {
     components: {
@@ -18,12 +19,22 @@ export default {
         AccountEdit
     },
     data() {
-        const { user } = getConfig();
+        const { user: connectedUser } = getConfig();
 
         return {
-            user,
-            edit: false
+            user: !this.$route.params.id ? connectedUser : null,
+            edit: false,
+            error: null
         };
+    },
+    async mounted() {
+        if (!this.user && this.$route.params.id) {
+            try {
+                this.user = await getUser(this.$route.params.id);
+            } catch (err) {
+                this.error = err;
+            }
+        }
     }
 };
 </script>

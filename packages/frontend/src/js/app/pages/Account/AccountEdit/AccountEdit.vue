@@ -48,15 +48,6 @@
                 />
 
                 <TextInput
-                    label="Courriel"
-                    id="email"
-                    rules="required"
-                    :disabled="true"
-                    v-model="edit.email"
-                    :showMandatoryStar="true"
-                />
-
-                <TextInput
                     label="Téléphone"
                     id="phone"
                     info="(utilisé sur l'annuaire, il facilite la mise en relation entre acteurs)"
@@ -112,7 +103,6 @@ export default {
                 first_name: this.user.first_name || "",
                 last_name: this.user.last_name || "",
                 position: this.user.position || "",
-                email: this.user.email || "",
                 phone: this.user.phone || "",
                 password: ""
             }
@@ -127,7 +117,7 @@ export default {
         async submit() {
             this.loading = true;
             try {
-                await edit(this.edit);
+                await edit(this.$route.params.id, this.edit);
                 window.location.reload();
             } catch ({ user_message, fields }) {
                 this.error = user_message;
