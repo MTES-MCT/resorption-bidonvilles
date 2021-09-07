@@ -419,6 +419,13 @@ module.exports = (app) => {
     );
 
     // organizations
+    app.put(
+        '/organizations/:id',
+        middlewares.auth.authenticate,
+        middlewares.auth.isSuperAdmin,
+        controllers.organization.update,
+    );
+
     app.get(
         '/organizations/search',
         middlewares.auth.authenticate,
