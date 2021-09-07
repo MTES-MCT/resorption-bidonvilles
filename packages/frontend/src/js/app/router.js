@@ -11,7 +11,7 @@ import TownsList from "#app/pages/TownsList/TownsList.vue";
 import TownsCreate from "#app/pages/TownCreate/TownCreate.vue";
 import TownsUpdate from "#app/pages/TownUpdate/TownUpdate.vue";
 import TownsDetails from "#app/pages/TownDetails/TownDetails";
-import Me from "#app/pages/me/me.vue";
+import Account from "#app/pages/Account/index.vue";
 import UserList from "#app/pages/UserList/index.vue";
 import UserCreate from "#app/pages/UserCreate/index.vue";
 import UserActivate from "#app/pages/UserActivate/index.vue";
@@ -338,7 +338,7 @@ const router = new VueRouter({
                 group: "account"
             },
             path: "/mon-compte",
-            component: Me,
+            component: Account,
             beforeEnter: guardians.loadedAndUpToDate
         },
         {
