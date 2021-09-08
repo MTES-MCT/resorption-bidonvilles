@@ -265,12 +265,7 @@ export default {
                 regions: {},
                 departements: {},
                 cities: {}
-            },
-
-            /**
-             *
-             */
-            layersControl: null
+            }
         };
     },
 
@@ -901,7 +896,7 @@ export default {
                 .classList[action]("mapPin--street");
         },
 
-        // Fonction de chargement des données geoJson régionales
+        // Fonction de chargement des marqueurs régionaux
         loadRegionalData() {
             this.regionalLayer.getLayers().forEach(layer => {
                 if (layer instanceof L.Marker) {
@@ -934,7 +929,7 @@ export default {
             });
         },
 
-        // Fonction de chargement des données geoJson départementales
+        // Fonction de chargement des marqueurs départementaux
         loadDepartementalData() {
             this.departementalLayer.getLayers().forEach(layer => {
                 if (layer instanceof L.Marker) {
