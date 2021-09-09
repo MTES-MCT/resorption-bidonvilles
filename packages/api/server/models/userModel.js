@@ -89,6 +89,7 @@ function serializeUser(user, latestCharte, filters, permissionMap) {
                 city: user.city_code !== null ? {
                     code: user.city_code,
                     name: user.city_name,
+                    main: user.city_main,
                 } : null,
             },
         },
@@ -243,6 +244,7 @@ module.exports = () => {
                 organizations.epci_name,
                 organizations.city_code,
                 organizations.city_name,
+                organizations.city_main,
                 organizations.latitude,
                 organizations.longitude,
                 organization_types.organization_type_id,
@@ -647,6 +649,7 @@ module.exports = () => {
                     organizations.epci_name,
                     organizations.city_code,
                     organizations.city_name,
+                    organizations.city_main,
                     roles_regular.name AS role,
                     users.user_id AS "user_id",
                     users.fk_role AS "user_role",
@@ -699,6 +702,7 @@ module.exports = () => {
                             city: user.city_code !== null ? {
                                 code: user.city_code,
                                 name: user.city_name,
+                                main: user.city_main,
                             } : null,
                         },
                         type: {
