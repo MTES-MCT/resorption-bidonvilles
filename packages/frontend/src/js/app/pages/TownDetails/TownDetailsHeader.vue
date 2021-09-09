@@ -124,16 +124,17 @@ export default {
                     ? permission.geographic_level
                     : this.user.organization.location.type;
 
+            const userLocation = this.user.organization.location[level];
             if (level === "nation") {
                 return true;
-            } else if (this.user.organization.location[level] === null) {
+            } else if (userLocation === null) {
                 return false;
             }
 
-            return (
-                this.town[level].code ===
-                this.user.organization.location[level].code
-            );
+            const townCode = this.town[level].main || this.town[level].code;
+            const userCode = userLocation.main || userLocation.code;
+
+            return townCode === userCode;
         },
         // Force scroll even if hash is already present in url
         scrollFix(to) {

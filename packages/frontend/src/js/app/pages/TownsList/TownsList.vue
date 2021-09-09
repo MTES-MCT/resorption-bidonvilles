@@ -532,7 +532,22 @@ export default {
 
             return this.activities.filter(item => {
                 const { code, type } = this.filters.location.data;
-                return item.shantytown[type].code === code;
+
+                // activity related to a shantytown
+                if (item.shantytown) {
+                    return item.shantytown[type].code === code;
+                }
+
+                // activity related to a user
+                if (item.user) {
+                    const location = item.user.location[type];
+                    const locationCode = location
+                        ? location.main || location.code
+                        : null;
+                    return locationCode === code;
+                }
+
+                return false;
             });
         },
         lastActivities() {
