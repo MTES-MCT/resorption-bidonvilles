@@ -5,8 +5,7 @@ module.exports = (sequelize, DataTypes) => {
      * SCHEMA
      ********************************************************************************************* */
 
-    class Schema extends Model { }
-    Schema.init({
+    const Stats_Exports = sequelize.define('Stats_Exports', {
         /**
          * Whether the scope of the export was closed shantytowns or opened
          */
@@ -84,46 +83,7 @@ module.exports = (sequelize, DataTypes) => {
         paranoid: false,
         timestamps: true,
     });
-    Schema.removeAttribute('id');
+    Stats_Exports.removeAttribute('id');
 
-    /**
-     * @constraint check_location
-     *
-     * Applied on the following columns:
-     * - fk_region
-     * - fk_departement
-     * - fk_epci
-     * - fk_city
-     *
-     * Enforces the following rules regarding the geographic scope of the export:
-     * - for a national scope: all columns must be null.
-     * - for any local scope: one and only one of the columns should not be null.
-     */
-
-
-    class Stats_Exports extends Schema {
-        /** *****************************************************************************************
-         * CUSTOM METHODS
-         ***************************************************************************************** */
-
-        // none
-
-        /** *****************************************************************************************
-         * ASSOCIATIONS
-         ***************************************************************************************** */
-
-        /**
-         * Creates the proper associations between this model and others
-         *
-         * @param {Object.<String,Model>} models
-         *
-         * @returns {undefined}
-         */
-        static associate(models) {
-            // none defined
-        }
-    }
-
-    // The End
     return Stats_Exports;
 };
