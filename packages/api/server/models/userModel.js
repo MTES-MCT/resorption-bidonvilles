@@ -192,6 +192,19 @@ module.exports = () => {
                     },
                 });
             }
+
+            if (userLevel === 'departement') {
+                if (user.organization.location.departement === null) {
+                    return [];
+                }
+
+                where.push({
+                    location: {
+                        query: 'organizations.departement_code',
+                        value: user.organization.location.departement.code,
+                    },
+                });
+            }
         }
 
         const whereClause = where.map((clauses, index) => {
