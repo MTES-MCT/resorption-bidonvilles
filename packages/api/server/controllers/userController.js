@@ -1,5 +1,6 @@
 const semver = require('semver');
 const jwt = require('jsonwebtoken');
+const JSONToCSV = require('json2csv');
 const sanitize = require('#server/controllers/userController/helpers/sanitize');
 const checkPassword = require('#server/controllers/userController/helpers/checkPassword');
 const validate = require('#server/controllers/userController/helpers/validate');
@@ -89,6 +90,25 @@ module.exports = models => ({
         try {
             const users = await models.user.findAll(req.user);
             res.status(200).send(users);
+        } catch (error) {
+            res.status(500).send({
+                error: {
+                    user_message: 'Une erreur est survenue lors de la récupération des données en base',
+                    developer_message: error.message,
+                },
+            });
+        }
+    },
+
+    async listExport(req, res) {
+        try {
+            const users = await models.user.findAll(req.user);
+            const csv = JSONToCSV.parse(users);
+
+            // The frontend expect a JSON for every API calls, so we wrap the CSV in a json entry
+            res.status(200).send({
+                csv,
+            });
         } catch (error) {
             res.status(500).send({
                 error: {
