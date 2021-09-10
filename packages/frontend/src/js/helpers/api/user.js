@@ -130,6 +130,13 @@ export function list() {
 }
 
 /**
+ * GET /users/export
+ */
+export function listExport() {
+    return getApi("/users/export");
+}
+
+/**
  * GET /users/:id
  */
 export function get(id) {
