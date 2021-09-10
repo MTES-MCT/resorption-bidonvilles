@@ -1,6 +1,13 @@
 <template>
     <ValidationObserver ref="form" v-slot="{ handleSubmit }">
-        <AccountHeader title="Mettre à jour mon compte" class="bg-G200">
+        <AccountHeader
+            :title="
+                $route.params.id
+                    ? 'Mise à jour du compte'
+                    : 'Mettre à jour mon compte'
+            "
+            class="bg-G200"
+        >
             <div class="flex">
                 <Button variant="primaryText" @click="$emit('cancelEdit')"
                     >Annuler</Button
@@ -14,7 +21,13 @@
             </div>
         </AccountHeader>
         <PrivateContainer>
-            <AccountPanel title="Mes coordonnées et identifiants">
+            <AccountPanel
+                :title="
+                    $route.params.id
+                        ? 'Coordonnées et identifiants'
+                        : 'Mes coordonnées et identifiants'
+                "
+            >
                 <AccountReadLabel label="Structure" class="mb-8">
                     <router-link
                         class="text-primary"
@@ -55,7 +68,7 @@
                     :showMandatoryStar="true"
                 />
 
-                <div class="border-t mt-4 pt-4">
+                <div class="border-t mt-4 pt-4" v-if="!$route.params.id">
                     <PasswordInput
                         label="Votre mot de passe"
                         v-model="edit.password"

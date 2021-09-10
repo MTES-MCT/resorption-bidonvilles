@@ -1,6 +1,8 @@
 <template>
     <div>
-        <AccountHeader title="Mon compte">
+        <AccountHeader
+            :title="$route.params.id ? `Compte de l'utilisateur` : 'Mon compte'"
+        >
             <Button
                 variant="primary"
                 @click="$emit('openEdit')"
@@ -10,7 +12,13 @@
             >
         </AccountHeader>
         <PrivateContainer>
-            <AccountPanel title="Mes coordonnées et identifiants">
+            <AccountPanel
+                :title="
+                    $route.params.id
+                        ? 'Coordonnées et identifiants'
+                        : 'Mes coordonnées et identifiants'
+                "
+            >
                 <AccountReadLabel label="Structure" class="mb-8">
                     <router-link
                         class="text-primary"
@@ -35,7 +43,7 @@
                     {{ user.phone }}
                 </AccountReadLabel>
 
-                <div class="mt-8">
+                <div class="mt-8" v-if="!$route.params.id">
                     <div class="font-bold">
                         Vos identifiants de connexion sont votre courriel et
                         votre mot de passe.
