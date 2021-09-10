@@ -211,7 +211,7 @@ module.exports = models => ({
         const userId = paramId || connectedUserId;
 
         const {
-            first_name: firstName, last_name: lastName, email, phone,
+            first_name: firstName, last_name: lastName, email, phone, position,
         } = req.body;
         const user = await models.user.findOne(userId, { auth: true });
 
@@ -231,6 +231,7 @@ module.exports = models => ({
             last_name: lastName,
             email,
             phone,
+            position,
         };
 
         if (req.body.password) {
@@ -242,6 +243,7 @@ module.exports = models => ({
             return res.status(200).send({
                 id: user.userId,
                 email: user.email,
+                position,
                 first_name: firstName,
                 last_name: lastName,
                 departement: user.departement,
