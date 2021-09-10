@@ -104,6 +104,19 @@ function isPermitted(to) {
 }
 
 /**
+ * Checks if the current user is a national admin
+ *
+ * @returns {boolean}
+ */
+function isNationalAdmin() {
+    const {
+        user: { role_id }
+    } = getConfig();
+
+    return role_id === "national_admin";
+}
+
+/**
  * Checks whether the current user has to upgrade his account before accessing any other page
  *
  * @returns {boolean}
@@ -151,6 +164,14 @@ const guardians = {
         { checker: isLoggedIn, target: "/connexion" },
         { checker: isConfigLoaded, target: "/launcher" },
         { checker: isPermitted, target: "/", saveEntrypoint: false },
+        { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
+        { checker: isUpgraded, target: "/mise-a-niveau" },
+        { checker: hasNoPendingChangelog, target: "/nouvelle-version" }
+    ]),
+    isNationalAdmin: guard.bind(this, [
+        { checker: isLoggedIn, target: "/connexion" },
+        { checker: isConfigLoaded, target: "/launcher" },
+        { checker: isNationalAdmin, target: "/" },
         { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
         { checker: isUpgraded, target: "/mise-a-niveau" },
         { checker: hasNoPendingChangelog, target: "/nouvelle-version" }
@@ -342,12 +363,12 @@ const router = new VueRouter({
             beforeEnter: guardians.loadedAndUpToDate
         },
         {
+            path: "/utilisateur/:id",
+            component: Account,
+            beforeEnter: guardians.isNationalAdmin,
             meta: {
                 group: "account"
-            },
-            path: "/user/:id",
-            component: Account,
-            beforeEnter: guardians.loadedAndUpToDate
+            }
         },
         {
             meta: {

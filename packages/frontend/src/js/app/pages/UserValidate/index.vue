@@ -5,7 +5,14 @@
                 <div class="text-display-lg mb-8">Fiche utilisateur</div>
                 <div class="flex">
                     <div class="w-1/3">
-                        <UserValidateDetails :user="user" />
+                        <UserValidateDetails :user="user" class="mb-4" />
+                        <router-link
+                            class="link"
+                            v-if="loggedUser.role_id === 'national_admin'"
+                            :to="'/utilisateur/' + user.id"
+                            >Modifier les informations de
+                            l'utilisateur</router-link
+                        >
                         <div class="border border-G400 w-16 my-4"></div>
                         <UserValidateAccessStatus :user="user" />
                     </div>
