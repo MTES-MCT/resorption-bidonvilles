@@ -115,8 +115,11 @@
                                 }"
                                 :height="250"
                             />
+                            <div class="mt-4 text-sm text-center">
+                                La donnée sur le nombre de ressortissants UE est
+                                disponible uniquement à partir de mars 2021.
+                            </div>
                         </div>
-
                         <Spinner v-else />
                     </div>
 
