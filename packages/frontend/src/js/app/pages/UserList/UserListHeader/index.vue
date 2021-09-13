@@ -2,9 +2,16 @@
     <div>
         <div class="py-16">
             <div class="flex justify-between">
-                <h2 class="text-display-lg mb-4 whitespace-nowrap">
-                    Liste des utilisateurs
-                </h2>
+                <div>
+                    <h2 class="text-display-lg mb-4 whitespace-nowrap">
+                        Liste des utilisateurs
+                    </h2>
+                    <router-link to="/typologie-des-acces" class="link">
+                        <Icon icon="file-pdf" />
+                        Guide des accès et de l'administrateur</router-link
+                    >
+                </div>
+
                 <div>
                     <UserListHeaderSearch
                         :value="filters.search"
