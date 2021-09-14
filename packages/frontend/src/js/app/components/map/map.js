@@ -120,6 +120,12 @@ export default {
             type: Boolean,
             default: true,
             required: false
+        },
+
+        layerName: {
+            type: String,
+            required: false,
+            default: "Dessin"
         }
     },
 
@@ -292,7 +298,9 @@ export default {
             /**
              *
              */
-            layersControl: null
+            layersControl: null,
+
+            layerToDisplay: this.layerName
         };
     },
 
@@ -591,7 +599,7 @@ export default {
          */
         createMap() {
             this.map = L.map("map", {
-                layers: this.mapLayers.Dessin, // fond de carte par défaut
+                layers: this.mapLayers[this.layerToDisplay], // fond de carte à afficher
                 scrollWheelZoom: false // interdire le zoom via la molette de la souris
             });
 
