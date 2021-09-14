@@ -119,6 +119,7 @@
                             :towns="[town]"
                             :default-view="center"
                             :load-territory-layers="false"
+                            layer-name="Satellite"
                         ></Map>
                     </div>
                 </div>
