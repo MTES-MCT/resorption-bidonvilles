@@ -91,8 +91,16 @@ export default {
                 // location filter
                 if (filters.location !== null) {
                     const { code, type } = filters.location.data;
-                    if (item.shantytown[type].code !== code) {
-                        return false;
+                    if (item.shantytown) {
+                        return item.shantytown[type].code === code;
+                    }
+
+                    if (item.user) {
+                        const location = item.user.location[type];
+                        const locationCode = location
+                            ? location.main || location.code
+                            : null;
+                        return locationCode === code;
                     }
                 }
 
