@@ -3,6 +3,8 @@ Un nouveau message a été publié par {{var:createdBy.name}}
 ({{var:createdBy.organization}}) sur le site situé
 {{var:shantytown.addressSimple}} ({{var:shantytown.departement.name}}).
 
+{{var:comment}}
+
 Voir le message [{{var:messageUrl}}]
 
 Contacter {{var:createdBy.name}} [{{var:annuaireUrl}}]
