@@ -496,6 +496,38 @@ module.exports = () => {
         },
 
         /**
+         * Returns the list of users subscribed to the departement activity summary mail
+         *
+         * @returns {Array.<User>}
+         */
+        findDepartementSummarySubscribers: async () => {
+            const users = await query(
+                [
+                    {
+                        fk_status: ['active'],
+                    },
+                ],
+                {},
+            );
+
+            return users.reduce((argAcc, user) => {
+                const acc = { ...argAcc };
+
+                let locationType = user.organization.location.type;
+                if (!acc[locationType]) {
+                    locationType = 'departement';
+                }
+
+                acc[locationType].push(user);
+                return acc;
+            }, {
+                nation: [],
+                region: [],
+                departement: [],
+            });
+        },
+
+        /**
          * Searches for the users members of an organization
          *
          * @param {Number}       organizationId

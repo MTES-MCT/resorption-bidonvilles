@@ -4,7 +4,7 @@ const Tracing = require('@sentry/tracing');
 const packageJSON = require('../package.json');
 
 const config = require('./config.js');
-const app = require('#server/app');
+import app from '#server/app';
 
 app.start().then((expressApp) => {
     if (config.sentry.dsn) {

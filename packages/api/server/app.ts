@@ -1,5 +1,5 @@
 const Sentry = require('@sentry/node');
-const loaders = require('#server/loaders');
+import loaders from '#server/loaders';
 const { port } = require('#server/config');
 
 const sentryContextHandlers = (app) => {
@@ -29,7 +29,7 @@ const sentryErrorHandlers = (app) => {
 };
 
 
-module.exports = {
+export default {
     async start() {
         // app
         const app = loaders.express();
@@ -51,6 +51,7 @@ module.exports = {
 
         try {
             await agenda.start();
+            await agenda.every("00 00 04 * * 1", "send_activity_summary");
             // eslint-disable-next-line no-console
             console.log('Set scheduled jobs up');
         } catch (error) {

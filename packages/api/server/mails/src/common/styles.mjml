@@ -19,4 +19,12 @@
   .text-primary {
     color: #000091;
   }
+
+  .text-secondary {
+    color: #FF6F4c;
+  }
+
+  .text-sm {
+      font-size: 0.75rem;
+  }
 </mj-style>

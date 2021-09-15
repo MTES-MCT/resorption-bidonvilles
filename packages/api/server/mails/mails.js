@@ -18,6 +18,7 @@ const ADMIN_CAMPAIGN = 'admin-email';
 const REQUESTER_CAMPAIGN = 'demandeur-email';
 const USER_CAMPAIGN = 'utilisateur-email';
 const INVITE_CAMPAIGN = 'invite-email';
+const SUMMARY_CAMPAIGN = 'recap-activite-email';
 
 module.exports = {
     /**
@@ -640,6 +641,25 @@ module.exports = {
             },
             preserveRecipient,
             replyTo,
+        });
+    },
+
+    sendActivitySummary(recipient, options = {}) {
+        const { variables, preserveRecipient = false } = options;
+
+        const utm = generateTrackingUTM(SUMMARY_CAMPAIGN, variables.campaign);
+        return mailService.send('activity_summary', {
+            recipient,
+            variables: {
+                title: variables.title ? `${variables.title}, ` : '',
+                from: variables.from,
+                to: variables.to,
+                recipientName: formatName(recipient),
+                summaries: variables.summaries,
+                frontUrl,
+                utm,
+            },
+            preserveRecipient,
         });
     },
 };
