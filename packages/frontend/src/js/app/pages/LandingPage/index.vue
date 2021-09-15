@@ -1,6 +1,17 @@
 <template>
     <PublicLayout :displayLanguagePicker="true">
         <PublicContainer>
+            <div class="pt-4 text-center">
+                <Button
+                    class="my-2"
+                    variant="secondary"
+                    @click="toggleModal = !toggleModal"
+                >
+                    Ouvrir popup
+                </Button>
+                {{ toggleModal }}
+            </div>
+            <news-popup v-if="toggleModal">Hello !</news-popup>
             <div class="pt-4">
                 <div class="max-w-screen-lg mx-auto pb-20">
                     <LandingPageHero class="mt-20" />
@@ -82,6 +93,7 @@ import CreditWrapper from "./CreditWrapper.vue";
 import LandingPageNewsletter from "./LandingPageNewsletter.vue";
 import LandingTutorialBanner from "./LandingTutorialBanner";
 import LandingDiscoverBanner from "./LandingDiscoverBanner";
+import NewsPopup from "../NewsPopup/NewsPopup.vue";
 
 export default {
     components: {
@@ -96,7 +108,13 @@ export default {
         LandingPageContactForm,
         LandingPageNewsletter,
         LandingTutorialBanner,
-        LandingDiscoverBanner
+        LandingDiscoverBanner,
+        NewsPopup
+    },
+    data() {
+        return {
+            toggleModal: false
+        };
     }
 };
 </script>
