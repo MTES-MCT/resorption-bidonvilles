@@ -487,13 +487,13 @@ module.exports = (models) => {
                 },
                 coordinates: {
                     title: 'Coordonnées GPS',
-                    data: ({ latitude, longitude }) => `${latitude},${longitude}`,
+                    data: ({ latitude, longitude }) => `${latitude.toFixed(4)},${longitude.toFixed(4)}`,
                     width: COLUMN_WIDTHS.SMALL,
                 },
                 name: {
                     title: 'Appellation du site',
                     data: ({ name }) => name,
-                    width: COLUMN_WIDTHS.SMALL,
+                    width: COLUMN_WIDTHS.LARGE,
                 },
                 fieldType: {
                     title: 'Type de site',
