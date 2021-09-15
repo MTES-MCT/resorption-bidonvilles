@@ -459,19 +459,19 @@ module.exports = (models) => {
                     align: 'left',
                     width: COLUMN_WIDTHS.LARGE,
                 },
-                citycode: {
-                    title: 'Code INSEE',
-                    data: ({ city }) => city.code,
-                    bold: true,
-                    align: 'left',
-                    width: COLUMN_WIDTHS.SMALL,
-                },
                 city: {
                     title: 'Commune',
                     data: ({ city }) => city.name,
                     bold: true,
                     align: 'left',
                     width: COLUMN_WIDTHS.MEDIUM,
+                },
+                citycode: {
+                    title: 'Code INSEE',
+                    data: ({ city }) => city.code,
+                    bold: true,
+                    align: 'left',
+                    width: COLUMN_WIDTHS.SMALL,
                 },
                 address: {
                     title: 'Adresse',
@@ -1128,8 +1128,8 @@ module.exports = (models) => {
                 title: 'Localisation',
                 properties: [
                     properties.departement,
-                    properties.citycode,
                     properties.city,
+                    properties.citycode,
                     properties.address,
                     properties.name,
                 ],
