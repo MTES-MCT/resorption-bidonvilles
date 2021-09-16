@@ -1,9 +1,10 @@
 import { ActivityNationalSummary } from "#server/models/activityModel/types/ActivityNationalSummary";
+import { User } from '#server/models/userModel/types/User';
 const { sendActivitySummary } = require('#server/mails/mails');
 import * as moment from 'moment';
 moment.locale('fr');
 
-export default async (argFrom: Date, argTo: Date, summaries: ActivityNationalSummary, subscribers: Array<any>): Promise<Array<void>> => {
+export default async (argFrom: Date, argTo: Date, summaries: ActivityNationalSummary, subscribers: Array<User>): Promise<Array<void>> => {
     const from = moment(argFrom);
     const to = moment(argTo);
 

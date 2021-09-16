@@ -155,9 +155,9 @@ function serializeUser(user, latestCharte, filters, permissionMap) {
 
 module.exports = () => {
     // eslint-disable-next-line global-require
-    const permissionModel = require('./permissionModel')(database);
+    const permissionModel = require('../permissionModel')(database);
     // eslint-disable-next-line global-require
-    const charteEngagementModel = require('./charteEngagementModel')(database);
+    const charteEngagementModel = require('../charteEngagementModel')(database);
 
     /**
      * Fetches a list of users from the database
