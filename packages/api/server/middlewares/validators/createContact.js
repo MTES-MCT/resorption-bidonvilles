@@ -47,9 +47,6 @@ module.exports = newUser(
                 return true;
             }),
 
-        body('referral')
-            .customSanitizer(value => value || null),
-
         body('referral_other')
             .customSanitizer((value, { req }) => {
                 if (req.body.referral !== 'other') {
