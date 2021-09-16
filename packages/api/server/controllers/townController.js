@@ -487,7 +487,7 @@ module.exports = (models) => {
                 },
                 coordinates: {
                     title: 'Coordonnées GPS',
-                    data: ({ latitude, longitude }) => `${latitude.toFixed(4)},${longitude.toFixed(4)}`,
+                    data: ({ latitude, longitude }) => `${latitude},${longitude}`,
                     width: COLUMN_WIDTHS.SMALL,
                 },
                 name: {
