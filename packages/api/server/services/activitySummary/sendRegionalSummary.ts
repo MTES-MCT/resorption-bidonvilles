@@ -13,7 +13,7 @@ export default async (argFrom: Date, argTo: Date, summaries: ActivityNationalSum
             const regionCode = subscriber.organization.location.region.code;
             const s = summaries[regionCode];
 
-            sendActivitySummary(subscriber, {
+            return sendActivitySummary(subscriber, {
                 variables: {
                     campaign: `r${regionCode}-${from.format('DD-MM-YYYY')}`,
                     title: subscriber.organization.location.region.name,

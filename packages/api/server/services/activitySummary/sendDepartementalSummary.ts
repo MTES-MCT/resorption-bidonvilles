@@ -11,7 +11,7 @@ export default async (argFrom: Date, argTo: Date, summaries: ActivityNationalSum
     return Promise.all(
         subscribers.map((subscriber) => {
             const { location } = subscriber.organization;
-            sendActivitySummary(subscriber, {
+            return sendActivitySummary(subscriber, {
                 variables: {
                     campaign: `d${location.departement.code}-${from.format('DD-MM-YYYY')}`,
                     title: location.departement.name,
