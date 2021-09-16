@@ -1,6 +1,6 @@
-const Sentry = require('@sentry/node');
+import * as Sentry from '@sentry/node';
 import loaders from '#server/loaders';
-const { port } = require('#server/config');
+import { port } from '#server/config';
 
 const sentryContextHandlers = (app) => {
     app.use(Sentry.Handlers.requestHandler());
