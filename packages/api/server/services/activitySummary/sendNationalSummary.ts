@@ -37,6 +37,8 @@ export default async (argFrom: Date, argTo: Date, argSummaries: ActivityNational
                 to: to.format('DD MMMM YYYY'),
                 summaries,
             },
-        })),
+        })
+            .catch(() => { }) // catch the error to avoid blocking other emails
+        ),
     );
 };

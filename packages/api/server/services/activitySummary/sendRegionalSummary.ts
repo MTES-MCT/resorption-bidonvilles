@@ -21,7 +21,7 @@ export default async (argFrom: Date, argTo: Date, summaries: ActivityNationalSum
                     to: to.format('DD MMMM YYYY'),
                     summaries: Object.keys(s).sort().map(departementCode => s[departementCode]),
                 },
-            });
+            }).catch(() => { }); // catch the error to avoid blocking other emails;
         }),
     );
 };

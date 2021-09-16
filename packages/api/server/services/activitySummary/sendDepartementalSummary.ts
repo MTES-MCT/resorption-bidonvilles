@@ -21,7 +21,7 @@ export default async (argFrom: Date, argTo: Date, summaries: ActivityNationalSum
                         summaries[location.region.code][location.departement.code],
                     ],
                 },
-            });
+            }).catch(() => { }); // catch the error to avoid blocking other emails
         }),
     );
 };
