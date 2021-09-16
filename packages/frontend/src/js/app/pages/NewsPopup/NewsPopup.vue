@@ -17,7 +17,7 @@
                     <div class="text-display-md text-secondary">
                         {{ popupEvent.title }}
                     </div>
-                    <div class="text-display-md text-blue-600">
+                    <div class="text-display-md text-primary">
                         {{ popupEvent.text }}
                     </div>
                     <img
