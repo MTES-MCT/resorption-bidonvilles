@@ -2,7 +2,7 @@
     <div>
         <div
             class="fixed overflow-x-hidden overflow-y-auto inset-0 flex justify-center items-center z-50"
-            v-if="popupEvent.toggleModal && shouldBeVisible"
+            v-if="toggleModalPopup && shouldBeVisible"
         >
             <div
                 class="bg-white relative mx-auto w-auto max-w-2xl border-2 border-black"
@@ -15,10 +15,10 @@
                         Fermer X
                     </Button>
                     <div class="text-display-md text-secondary">
-                        {{ popupEvent.title }}
+                        {{ popup.title }}
                     </div>
                     <div class="text-display-md text-primary">
-                        {{ popupEvent.text }}
+                        {{ popup.text }}
                     </div>
                     <img
                         class="mt-4"
@@ -36,7 +36,7 @@
             </div>
         </div>
         <div
-            v-if="popupEvent.toggleModal && shouldBeVisible"
+            v-if="toggleModalPopup && shouldBeVisible"
             class="absolute inset-0 z-40 opacity-50 bg-black"
         ></div>
     </div>
@@ -52,12 +52,12 @@ export default {
     },
     data() {
         return {
-            popupEvent: { ...this.popup }
+            toggleModalPopup: this.popup.toggleModal
         };
     },
     computed: {
         shouldBeVisible() {
-            return new Date() < new Date(this.popupEvent.maxDate);
+            return new Date() < new Date(this.popup.maxDate);
         }
     }
 };
