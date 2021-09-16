@@ -1,17 +1,12 @@
 <template>
     <PublicLayout :displayLanguagePicker="true">
         <PublicContainer>
-            <div class="pt-4 text-center">
-                <Button
-                    class="my-2"
-                    variant="secondary"
-                    @click="toggleModal = !toggleModal"
-                >
-                    Ouvrir popup
-                </Button>
-                {{ toggleModal }}
-            </div>
-            <news-popup v-if="toggleModal">Hello !</news-popup>
+            <div class="pt-4 text-center"></div>
+            <news-popup
+                :popup="popup"
+                v-if="popup.toggleModal"
+                v-on:updateToggleModal="updateToggleModal"
+            ></news-popup>
             <div class="pt-4">
                 <div class="max-w-screen-lg mx-auto pb-20">
                     <LandingPageHero class="mt-20" />
@@ -113,8 +108,74 @@ export default {
     },
     data() {
         return {
-            toggleModal: false
+            popup: {
+                toggleModal: false,
+                title: "Evènement",
+                text: "jeudi 23 septembre de 10h à 12h",
+                imgName: "webinaire_acces_a_l_eau.jpg",
+                infoLink:
+                    "https://hello.idealco.fr/inscription-formation-dihal-acceseaubidonvilles/",
+                joinLink:
+                    "https://hello.idealco.fr/inscription-formation-dihal-acceseaubidonvilles/",
+                maxDate: "2021-09-23"
+            }
         };
+    },
+    methods: {
+        updateToggleModal() {
+            this.popup.toggleModal = !this.popup.toggleModal;
+        },
+        getCookie(name) {
+            let matches = document.cookie.match(
+                new RegExp(
+                    "(?:^|; )" +
+                        // name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") +
+                        name.replace(/([.$?*|{}()[\]\\/+^])/g, "\\$1") +
+                        "=([^;]*)"
+                )
+            );
+            return matches ? decodeURIComponent(matches[1]) : undefined;
+        },
+        setCookie(name, value, options = {}) {
+            options = {
+                path: "/",
+                // add other defaults here if necessary
+                ...options
+            };
+
+            if (options.expires instanceof Date) {
+                options.expires = options.expires.toUTCString();
+            }
+
+            let updatedCookie =
+                encodeURIComponent(name) + "=" + encodeURIComponent(value);
+
+            for (let optionKey in options) {
+                updatedCookie += "; " + optionKey;
+                let optionValue = options[optionKey];
+                if (optionValue !== true) {
+                    updatedCookie += "=" + optionValue;
+                }
+            }
+
+            document.cookie = updatedCookie;
+        }
+    },
+    mounted() {
+        const eventPopupCookie = this.getCookie("eventPopupCookie");
+        if (!eventPopupCookie || eventPopupCookie == null) {
+            // +90 day from now
+            let maxDate = new Date((Date.now() + 86400e3) * 90);
+            maxDate = maxDate.toUTCString();
+
+            setTimeout(() => {
+                this.popup.toggleModal = true;
+            }, 5000);
+            this.setCookie("eventPopupCookie", "true", {
+                secure: true,
+                "max-age": maxDate
+            });
+        }
     }
 };
 </script>
