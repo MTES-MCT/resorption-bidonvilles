@@ -51,7 +51,7 @@ export default {
 
         try {
             await agenda.start();
-            await agenda.every("00 00 04 * * 1", "send_activity_summary");
+            await agenda.every("00 00 07 * * 1", "send_activity_summary"); // every monday at 7AM
             // eslint-disable-next-line no-console
             console.log('Set scheduled jobs up');
         } catch (error) {
