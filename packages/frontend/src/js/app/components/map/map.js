@@ -396,41 +396,35 @@ export default {
                     }
 
                     if (acc.departements[obj.departement.code] === undefined) {
-                        acc.departements[obj.departement.code] = {};
-                        acc.departements[obj.departement.code].sites = 0;
-                        acc.departements[obj.departement.code].code =
-                            obj.departement.code;
-                        acc.departements[obj.departement.code].name =
-                            obj.departement.name;
-                        acc.departements[obj.departement.code].latitude =
-                            obj.departement.latitude;
-                        acc.departements[obj.departement.code].longitude =
-                            obj.departement.longitude;
-                        acc.departements[obj.departement.code].chieftown =
-                            obj.departement.chieftown;
+                        acc.departements[obj.departement.code] = {
+                            sites: 0,
+                            code: obj.departement.code,
+                            name: obj.departement.name,
+                            latitude: obj.departement.latitude,
+                            longitude: obj.departement.longitude,
+                            chieftown: obj.departement.chieftown
+                        };
                     }
 
                     if (acc.regions[obj.region.code] === undefined) {
-                        acc.regions[obj.region.code] = {};
-                        acc.regions[obj.region.code].sites = 0;
-                        acc.regions[obj.region.code].code = obj.region.code;
-                        acc.regions[obj.region.code].name = obj.region.name;
-                        acc.regions[obj.region.code].latitude =
-                            obj.region.latitude;
-                        acc.regions[obj.region.code].longitude =
-                            obj.region.longitude;
-                        acc.regions[obj.region.code].chieftown =
-                            obj.region.chieftown;
+                        acc.regions[obj.region.code] = {
+                            sites: 0,
+                            code: obj.region.code,
+                            name: obj.region.name,
+                            latitude: obj.region.latitude,
+                            longitude: obj.region.longitude,
+                            chieftown: obj.region.chieftown
+                        };
                     }
 
                     if (acc.cities[obj.city.code] === undefined) {
-                        acc.cities[obj.city.code] = {};
-                        acc.cities[obj.city.code].sites = 0;
-                        acc.cities[obj.city.code].code = obj.city.code;
-                        acc.cities[obj.city.code].name = obj.city.name;
-                        acc.cities[obj.city.code].latitude = obj.city.latitude;
-                        acc.cities[obj.city.code].longitude =
-                            obj.city.longitude;
+                        acc.cities[obj.city.code] = {
+                            sites: 0,
+                            code: obj.city.code,
+                            name: obj.city.name,
+                            latitude: obj.city.latitude,
+                            longitude: obj.city.longitude
+                        };
                     }
 
                     acc.departements[obj.departement.code].sites += 1;
