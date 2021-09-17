@@ -263,44 +263,15 @@ export default {
              * @type {Object}
              */
             numberOfShantytownsBy: {
-                regions: {}, // sera rempli avec un objet du type : { "01": 0, "02": 0, ..., "11": 0 }
-                departements: {}, // sera rempli avec un objet du type : { "01": 0, "02": 0, ..., "92": 0 }
-                cities: {} /* sera rempli avec un objet du type :
-                                                                    {
-                                                                        "01":
-                                                                            {
-                                                                                sites = 0,
-                                                                                code = ,
-                                                                                name = ,
-                                                                                latitude = ,
-                                                                                longitude =
-                                                                            },
-                                                                        "02":
-                                                                            {
-                                                                                sites = 0,
-                                                                                code = ,
-                                                                                name = ,
-                                                                                latitude = ,
-                                                                                longitude =
-                                                                            },
-                                                                        ...,
-                                                                        "92":
-                                                                            {
-                                                                                sites = 0,
-                                                                                code = ,
-                                                                                name = ,
-                                                                                latitude = ,
-                                                                                longitude =
-                                                                            }
-                                                                    } */
+                regions: {},
+                departements: {},
+                cities: {}
             },
 
             /**
              *
              */
-            layersControl: null,
-
-            layerToDisplay: this.layerName
+            layersControl: null
         };
     },
 
@@ -599,7 +570,7 @@ export default {
          */
         createMap() {
             this.map = L.map("map", {
-                layers: this.mapLayers[this.layerToDisplay], // fond de carte à afficher
+                layers: this.mapLayers[this.layerName], // fond de carte à afficher
                 scrollWheelZoom: false // interdire le zoom via la molette de la souris
             });
 
