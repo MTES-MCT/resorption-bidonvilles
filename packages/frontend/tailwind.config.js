@@ -9,13 +9,6 @@ module.exports = {
         purgeLayersByDefault: true
     },
     theme: {
-        opacity: {
-            "10": ".1",
-            "20": ".2",
-            "30": ".3",
-            "40": ".4",
-            "50": ".5"
-        },
         fontFamily: {
             body: ["Marianne", "arial", "sans-serif"]
         },
