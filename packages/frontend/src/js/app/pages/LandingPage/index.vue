@@ -110,6 +110,7 @@ export default {
         return {
             popup: {
                 toggleModal: false,
+                name: "waterAccessWebinar",
                 title: "Evènement",
                 text: "jeudi 23 septembre de 10h à 12h",
                 imgName: "webinaire_acces_a_l_eau.jpg",
@@ -161,18 +162,13 @@ export default {
         }
     },
     mounted() {
-        const eventPopupCookie = this.getCookie("eventPopupCookie");
+        const eventPopupCookie = this.getCookie(this.popup.name);
         if (!eventPopupCookie || eventPopupCookie == null) {
-            // +90 day from now
-            let maxDate = new Date((Date.now() + 86400e3) * 90);
-            maxDate = maxDate.toUTCString();
-
             setTimeout(() => {
                 this.popup.toggleModal = true;
             }, 5000);
-            this.setCookie("eventPopupCookie", "true", {
-                secure: true,
-                "max-age": maxDate
+            this.setCookie(this.popup.name, "true", {
+                secure: true
             });
         }
     }
