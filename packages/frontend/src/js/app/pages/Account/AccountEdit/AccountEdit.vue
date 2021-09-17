@@ -128,9 +128,11 @@ export default {
     },
     methods: {
         async submit() {
+            this.error = null;
             this.loading = true;
+
             try {
-                await edit(this.$route.params.id, this.edit);
+                await edit(this.edit, this.$route.params.id);
                 window.location.reload();
             } catch ({ user_message, fields }) {
                 this.error = user_message;

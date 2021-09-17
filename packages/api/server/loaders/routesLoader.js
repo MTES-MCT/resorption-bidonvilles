@@ -83,6 +83,8 @@ module.exports = (app) => {
         '/users/:id',
         middlewares.auth.authenticate,
         middlewares.auth.isSuperAdmin,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
         validators.editUser,
         middlewares.validation,
         controllers.user.edit,

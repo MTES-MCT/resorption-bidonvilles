@@ -50,10 +50,13 @@
                     </div>
                     <div>
                         Si vous souhaitez changer de courriel, écrivez-nous à
-                        contact@resorption-bodonvilles.beta.gouv.fr
+                        <a
+                            href="mailto:contact@resorption-bodonvilles.beta.gouv.fr"
+                            >contact@resorption-bodonvilles.beta.gouv.fr</a
+                        >
                     </div>
                     <div>
-                        Si vous souhaitez changer notre mot de passe, cliquez
+                        Si vous souhaitez changer votre mot de passe, cliquez
                         sur
                         <span
                             class="link cursor-pointer font-bold"
