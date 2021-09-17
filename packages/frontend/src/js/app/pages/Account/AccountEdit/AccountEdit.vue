@@ -62,6 +62,7 @@
 
                 <TextInput
                     label="Téléphone"
+                    :rules="!$route.params.id ? 'required' : ''"
                     id="phone"
                     info="(utilisé sur l'annuaire, il facilite la mise en relation entre acteurs)"
                     v-model="edit.phone"

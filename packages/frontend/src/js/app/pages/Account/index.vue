@@ -3,10 +3,11 @@
         <LoadingError v-if="error">
             {{ error }}
         </LoadingError>
-        <div v-else>
+        <div v-else-if="user">
             <AccountRead v-if="!edit" :user="user" @openEdit="edit = true" />
             <AccountEdit v-else :user="user" @cancelEdit="edit = false" />
         </div>
+        <LoadingPage v-else />
     </PrivateLayout>
 </template>
 
@@ -17,9 +18,11 @@ import AccountRead from "./AccountRead/AccountRead";
 import AccountEdit from "./AccountEdit/AccountEdit";
 import { get as getConfig } from "#helpers/api/config";
 import { get as getUser } from "#helpers/api/user";
+import LoadingPage from "#app/components/PrivateLayout/LoadingPage";
 
 export default {
     components: {
+        LoadingPage,
         PrivateLayout,
         LoadingError,
         AccountRead,
