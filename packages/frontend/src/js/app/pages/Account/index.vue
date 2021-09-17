@@ -1,7 +1,7 @@
 <template>
     <PrivateLayout class="mb-16">
-        <LoadingError v-if="error || (!user && !loading)">
-            L'utilisateur n'existe pas en base de données.
+        <LoadingError v-if="error">
+            {{ error }}
         </LoadingError>
         <div v-else>
             <AccountRead v-if="!edit" :user="user" @openEdit="edit = true" />
@@ -36,14 +36,24 @@ export default {
     methods: {
         async load() {
             this.loading = true;
+            this.error = null;
+            this.edit = false;
+
             const { user: connectedUser } = getConfig();
 
             try {
                 this.user = this.$route.params.id
                     ? await getUser(this.$route.params.id)
                     : connectedUser;
+
+                if (!this.user) {
+                    this.error =
+                        "L'utilisateur n'existe pas en base de données.";
+                }
             } catch (err) {
-                this.error = err;
+                this.error =
+                    (err && err.user_message) ||
+                    "Une erreur inconnue est survenue lors du chargement des données";
             }
             this.loading = false;
         }
