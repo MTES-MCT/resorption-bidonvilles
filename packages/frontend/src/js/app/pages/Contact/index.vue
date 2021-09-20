@@ -193,6 +193,7 @@
                         <CheckableGroup
                             v-if="isFrenchLocale"
                             :label="$t('contactPage.referral.question')"
+                            rules="required"
                             id="referral"
                         >
                             <Radio

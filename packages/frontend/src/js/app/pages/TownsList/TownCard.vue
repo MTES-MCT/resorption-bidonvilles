@@ -2,7 +2,8 @@
     <div
         :class="[
             'rounded-sm cursor-pointer border border-cardBorder preventPrintBreak',
-            isHover ? 'bg-blue200 border-transparent' : ''
+            isHover ? 'bg-blue200 border-transparent' : '',
+            shantytown.closedAt ? 'closedShantytown' : ''
         ]"
         @mouseenter="isHover = true"
         @mouseleave="isHover = false"
@@ -368,6 +369,28 @@ export default {
 }
 .customAlign {
     height: 30px;
+}
+
+.closedShantytown {
+    position: relative;
+    overflow: hidden;
+}
+
+.closedShantytown:before {
+    position: absolute;
+    pointer-events: none;
+    content: "";
+    background: linear-gradient(
+        to left bottom,
+        transparent 50%,
+        currentColor 49.8%,
+        currentColor 50.2%,
+        transparent 50%
+    );
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
 }
 
 .preventPrintBreak {

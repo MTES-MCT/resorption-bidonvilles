@@ -91,9 +91,25 @@ export default {
                 // location filter
                 if (filters.location !== null) {
                     const { code, type } = filters.location.data;
-                    if (item.shantytown[type].code !== code) {
-                        return false;
+                    if (item.shantytown) {
+                        const shantytownLocation = item.shantytown[type];
+                        const shantytownCode =
+                            shantytownLocation.main || shantytownLocation.code;
+
+                        return shantytownCode === code;
                     }
+
+                    if (item.user) {
+                        const userLocation = item.user.location[type];
+
+                        const userCode = userLocation
+                            ? userLocation.main || userLocation.code
+                            : null;
+
+                        return userCode === code;
+                    }
+
+                    return false;
                 }
 
                 return true;

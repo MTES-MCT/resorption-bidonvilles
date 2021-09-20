@@ -36,7 +36,7 @@ module.exports = newUser(
             .notEmpty().withMessage('Vous devez préciser votre message'),
 
         body('referral')
-            .optional({ nullable: true })
+            .notEmpty().bail().withMessage('Vous devez précisez par quel moyen vous avez connu la plateforme')
             .isString().bail().withMessage('Le champ "Comment avez-vous connu la plateforme Résorption-bidonvilles ?" est invalide')
             .trim()
             .custom((value) => {
@@ -46,9 +46,6 @@ module.exports = newUser(
 
                 return true;
             }),
-
-        body('referral')
-            .customSanitizer(value => value || null),
 
         body('referral_other')
             .customSanitizer((value, { req }) => {

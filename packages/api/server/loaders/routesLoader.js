@@ -57,6 +57,12 @@ module.exports = (app) => {
         controllers.user.list,
     );
     app.get(
+        '/users/export',
+        middlewares.auth.authenticate,
+        middlewares.auth.isSuperAdmin,
+        controllers.user.listExport,
+    );
+    app.get(
         '/me',
         middlewares.auth.authenticate,
         middlewares.appVersion.sync,

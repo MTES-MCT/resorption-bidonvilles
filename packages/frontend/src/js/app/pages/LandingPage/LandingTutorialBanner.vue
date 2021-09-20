@@ -6,21 +6,19 @@
             <div class="lg:flex-shrink-0 justify-center">
                 <img
                     class="m-4 h-40"
-                    src="./assets/formation_prise_en_main.jpg"
+                    src="./assets/prendre_en_main.jpg"
                     alt=""
                 />
             </div>
-            <div class="flex-shrink-0 lg:flex-shrink px-8 py-2 lg:py-8 lg:px-4">
+            <div class="flex-shrink-0 lg:flex-shrink px-8 py-2 lg:py-4 lg:px-4">
                 <div class="tracking-wide text-display-md text-primary">
                     Webinaire prise en main de Résorption-bidonvilles
                 </div>
                 <p class="mt-2 text-md">
                     Vous souhaitez prendre en main la plateforme ? découvrir les
                     fonctionnalités qui vous seront utiles ? vous remettre à
-                    niveau ? Nous vous montrerons l'essentiel en
-                    <span class="font-bold">45 minutes</span> avec une
-                    démonstration personnalisée et en direct de l’outil
-                    collaboratif.
+                    niveau ? Nous vous montrerons l'essentiel avec une
+                    démonstration personnalisée et en direct.
                 </p>
             </div>
             <div class="lg:mt-6 flex-shrink-0 px-8 py-2 lg:p-8">

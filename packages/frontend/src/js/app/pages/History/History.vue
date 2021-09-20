@@ -188,10 +188,7 @@ export default {
             }
 
             // on remplit la barre de recherche
-            if (
-                this.locationType === "nation" ||
-                this.$route.path === this.defaultPath
-            ) {
+            if (this.locationType === "nation") {
                 store.commit("setActivityLocationFilter", null);
             } else {
                 store.commit(

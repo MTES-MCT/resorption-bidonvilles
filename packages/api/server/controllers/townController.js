@@ -466,6 +466,13 @@ module.exports = (models) => {
                     align: 'left',
                     width: COLUMN_WIDTHS.MEDIUM,
                 },
+                citycode: {
+                    title: 'Code INSEE',
+                    data: ({ city }) => city.code,
+                    bold: true,
+                    align: 'left',
+                    width: COLUMN_WIDTHS.SMALL,
+                },
                 address: {
                     title: 'Adresse',
                     data: ({ addressSimple }) => addressSimple,
@@ -486,7 +493,7 @@ module.exports = (models) => {
                 name: {
                     title: 'Appellation du site',
                     data: ({ name }) => name,
-                    width: COLUMN_WIDTHS.SMALL,
+                    width: COLUMN_WIDTHS.LARGE,
                 },
                 fieldType: {
                     title: 'Type de site',
@@ -1122,6 +1129,7 @@ module.exports = (models) => {
                 properties: [
                     properties.departement,
                     properties.city,
+                    properties.citycode,
                     properties.address,
                     properties.name,
                 ],
