@@ -102,7 +102,7 @@ module.exports = models => ({
 
     async listExport(req, res) {
         try {
-            const users = await models.user.findAll(req.user);
+            const users = await models.user.listExport();
             const csv = JSONToCSV.parse(users);
 
             // The frontend expect a JSON for every API calls, so we wrap the CSV in a json entry

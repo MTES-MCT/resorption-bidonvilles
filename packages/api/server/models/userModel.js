@@ -1014,6 +1014,9 @@ module.exports = () => {
             "Code département",
             used_at ASC,
             expires_at DESC;`,
+        {
+            type: database.QueryTypes.SELECT,
+        },
     );
 
     return model;
