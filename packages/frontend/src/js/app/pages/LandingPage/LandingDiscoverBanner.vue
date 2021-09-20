@@ -6,23 +6,20 @@
             <div class="lg:flex-shrink-0 justify-center">
                 <img
                     class="m-4 h-40"
-                    src="./assets/formation-personalisee.jpg"
+                    src="./assets/decouvrir_23.03.09.jpg"
                     alt=""
                 />
             </div>
-            <div class="flex-shrink-0 lg:flex-shrink px-8 py-2 lg:py-8 lg:px-4">
+            <div class="flex-shrink-0 lg:flex-shrink px-8 py-2 lg:py-6 lg:px-4">
                 <div class="tracking-wide text-display-md text-primary">
                     Webinaire découverte
                     <span class="italic">Résorption-bidonvilles</span>
                 </div>
                 <p class="mt-2 text-md">
-                    Vous souhaitez découvrir ce qu'est
+                    Vous souhaitez découvrir la plateforme numérique
                     <span class="italic">Résorption-bidonvilles</span> ?
-                    comprendre le rôle de la plateforme numérique dans la
-                    politique de résorption des bidonvilles ?<br />
-                    Nous répondons à toutes vos questions dans ce webinaire de
-                    <span class="font-bold">20 minutes</span>.<br />
-                    Inscrivez-vous !
+                    comprendre son rôle dans la politique publique ?<br />
+                    Inscrivez-vous ! Nous répondrons à toutes vos questions.
                 </p>
             </div>
             <div class="lg:mt-6 flex-shrink-0 px-8 py-2 lg:p-8">
