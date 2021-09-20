@@ -378,6 +378,7 @@ export default {
 
 .closedShantytown:before {
     position: absolute;
+    pointer-events: none;
     content: "";
     background: linear-gradient(
         to left bottom,
