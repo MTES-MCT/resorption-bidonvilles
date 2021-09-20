@@ -20,10 +20,7 @@
                     <div class="text-display-md text-primary">
                         {{ popup.text }}
                     </div>
-                    <img
-                        class="mt-4"
-                        :src="require(`./assets/${popup.imgName}`)"
-                    />
+                    <img class="mt-4" :src="popup.imageName" />
                 </div>
                 <div class="mx-8 mt-4 mb-8 flex justify-between">
                     <a :href="popup.infoLink" target="_blank">
