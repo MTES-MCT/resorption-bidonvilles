@@ -84,7 +84,7 @@ import CreditWrapper from "./CreditWrapper.vue";
 import LandingPageNewsletter from "./LandingPageNewsletter.vue";
 import LandingTutorialBanner from "./LandingTutorialBanner";
 import LandingDiscoverBanner from "./LandingDiscoverBanner";
-import NewsPopupWater from "../NewsPopup/NewsPopupWater.vue";
+import NewsPopupWater from "./NewsPopup/NewsPopupWater.vue";
 
 export default {
     components: {
