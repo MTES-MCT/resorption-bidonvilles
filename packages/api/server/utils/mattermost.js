@@ -27,6 +27,7 @@ async function triggerShantytownCloseAlert(town, user) {
     const builtAtStr = formatDate(new Date(town.builtAt * 1000));
     const declaredAtStr = formatDate(new Date(town.declaredAt * 1000));
     const closedAtStr = formatDate(new Date(town.closedAt * 1000));
+    const resorptionTarget = !town.resorptionTarget ? 'non' : town.resorptionTarget;
 
     const mattermostMessage = {
         channel: '#notif-fermeture-sites',
@@ -60,6 +61,10 @@ async function triggerShantytownCloseAlert(town, user) {
                     {
                         short: false,
                         value: `*Date de fermeture du site* : ${closedAtStr}`,
+                    },
+                    {
+                        short: false,
+                        value: `*Site avec objectif résorption* : ${resorptionTarget}`,
                     },
                 ],
             },
