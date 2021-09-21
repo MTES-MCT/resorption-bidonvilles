@@ -236,6 +236,13 @@ export function acceptCharte(
 }
 
 /**
+ * POST /users/:id/comment
+ */
+export function comment(userId, data) {
+    return postApi(`/users/${userId}/comment`, data);
+}
+
+/**
  * @typedef {Object} User_Data
  * @property {string} first_name
  * @property {string} last_name
