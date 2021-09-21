@@ -149,6 +149,13 @@ module.exports = (app) => {
         middlewares.appVersion.sync,
         controllers.user.upgrade,
     );
+    app.post(
+        '/users/:id/comment',
+        middlewares.auth.authenticate,
+        middlewares.auth.isSuperAdmin,
+        middlewares.appVersion.sync,
+        controllers.user.comment,
+    );
     app.get(
         '/activation-tokens/:token/check',
         controllers.user.checkActivationToken,
