@@ -5,6 +5,7 @@ import {
     faGithub
 } from "@fortawesome/free-brands-svg-icons";
 import {
+    faChalkboardTeacher,
     faFlag,
     faLock,
     faPaperPlane,
@@ -80,7 +81,7 @@ import {
     faExternalLinkAlt,
     faPhone
 } from "@fortawesome/free-solid-svg-icons";
-
+library.add(faChalkboardTeacher);
 library.add(faFlag);
 library.add(faBan);
 library.add(faChevronDown);
