@@ -609,6 +609,40 @@ module.exports = () => {
             }
         },
 
+        updateComment: async (userId, comment, transaction = undefined) => {
+            if (userId === undefined) {
+                throw new Error('The user id is missing');
+            }
+
+            const setClauses = [];
+            const replacements = {};
+
+            if (!comment || comment.value === undefined) {
+                throw new Error('The comment is missing');
+            }
+
+            setClauses.push(`admin_comment = ${comment.value}`);
+
+            const [, { rowCount }] = await database.query(
+                `UPDATE
+                    users
+                SET
+                    ${setClauses.join(',')}
+                WHERE
+                    users.user_id = :userId`,
+                {
+                    replacements: Object.assign(replacements, {
+                        userId,
+                    }),
+                    transaction,
+                },
+            );
+
+            if (rowCount === 0) {
+                throw new Error(`The user #${userId} does not exist`);
+            }
+        },
+
         delete: id => database.query(
             'DELETE FROM users WHERE users.user_id = :id',
             {
