@@ -26,6 +26,16 @@
                             :availableOptions="options"
                             class="mb-4"
                         />
+                        <!-- Début commentaires administrateurs nationaux -->
+                        <div
+                            v-if="loggedUser.role_id === 'national_admin'"
+                            class="bg-G200 p-4 my-4"
+                        >
+                            <UserValidateComment
+                                :user="user"
+                            ></UserValidateComment>
+                        </div>
+                        <!-- Fin commentaires administrateurs nationaux -->
                         <div class="bg-yellow-200 p-4 mb-12">
                             Ne jamais envoyer un accès si vous avez un doute sur
                             l’identité de la personne.
@@ -154,6 +164,7 @@ import PrivateLayout from "#app/components/PrivateLayout";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer.vue";
 import LoadingPage from "#app/components/PrivateLayout/LoadingPage.vue";
 import LoadingError from "#app/components/PrivateLayout/LoadingError.vue";
+import UserValidateComment from "./UserValidateComment/UserValidateComment";
 import UserValidateDetails from "./UserValidateDetails/UserValidateDetails";
 import UserValidateAccessStatus from "./UserValidateAccessStatus/UserValidateAccessStatus";
 import UserValidateRequestMessage from "./UserValidateRequestMessage";
@@ -175,6 +186,7 @@ export default {
     components: {
         PrivateLayout,
         PrivateContainer,
+        UserValidateComment,
         UserValidateAccessStatus,
         UserValidateDetails,
         UserValidateRequestMessage,
