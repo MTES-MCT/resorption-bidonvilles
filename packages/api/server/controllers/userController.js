@@ -212,8 +212,8 @@ module.exports = models => ({
     },
 
     /**
-         * Returns information about... yourself!
-         */
+     * Returns information about... yourself!
+     */
     async me(req, res) {
         const user = await models.user.findOne(req.user.id, {
             extended: true,
@@ -222,8 +222,8 @@ module.exports = models => ({
     },
 
     /**
-         * Updates some data about the current user
-         */
+     * Updates some data about the current user
+     */
     async edit(req, res, next) {
         const { id: userId } = req.user;
         const {
@@ -297,6 +297,47 @@ module.exports = models => ({
         }
 
         return res.status(200).send(result);
+    },
+
+    /**
+     * Creates or updates comments about a user
+     */
+    async comment(req, res, next) {
+        const userId = req.params.id;
+        const { comment } = req.body;
+
+        const user = await models.user.findOne(userId, { auth: true });
+
+        if (user === null) {
+            res.status(500).send({
+                error: {
+                    user_message: 'Impossible de trouver vos informations en bases de données.',
+                    developer_message: `User #${userId} does not exist`,
+                },
+            });
+            return next(new Error(`User #${userId} does not exist`));
+        }
+
+        // actually update the comment
+        const data = {
+            comment,
+        };
+
+        try {
+            await models.user.update(userId, data);
+            return res.status(200).send({
+                id: user.userId,
+                comment: user.admin_comment,
+            });
+        } catch (error) {
+            res.status(500).send({
+                error: {
+                    user_message: 'Une erreur est survenue dans l\'écriture de vos informations en base de données.',
+                    developer_message: error.message,
+                },
+            });
+            return next(error);
+        }
     },
 
     async setDefaultExport(req, res, next) {
