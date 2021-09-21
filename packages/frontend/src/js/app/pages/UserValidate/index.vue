@@ -14,7 +14,10 @@
                             l'utilisateur</router-link
                         >
                         <div class="border border-G400 w-16 my-4"></div>
-                        <UserValidateAccessStatus :user="user" />
+                        <UserValidateAccessStatus
+                            :user="user"
+                            :loggedUser="loggedUser"
+                        />
                     </div>
 
                     <div class="ml-24 w-2/3">
