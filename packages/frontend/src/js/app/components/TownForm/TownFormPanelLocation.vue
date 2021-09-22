@@ -7,6 +7,33 @@
                     @change="onAddressChange"
                 ></InputAddress>
             </FormParagraph>
+            <div class="text-sm mb-4 max-w-lg" v-if="nearbyShantytowns.length">
+                <span v-if="nearbyShantytowns.length === 1"
+                    >1 site enregistré</span
+                >
+                <span v-else
+                    >{{ nearbyShantytowns.length }} site sont enregistrés</span
+                >
+                <span>
+                    dans un rayon de 500 mètres autour de cette adresse.
+                    Assurez-vous de ne pas déclarer un site déjà enregistré sur
+                    la plateforme:</span
+                >
+                <ul class="list-disc ml-4">
+                    <li
+                        :key="town.shantytown_id"
+                        v-for="town in nearbyShantytowns"
+                    >
+                        <router-link
+                            class="link"
+                            :to="`/site/${town.shantytown_id}`"
+                        >
+                            {{town.address_simple}}
+                            <span v-if="town.name">« {{ town.name }} »</span>
+                        </router-link>
+                    </li>
+                </ul>
+            </div>
             <FormParagraph title="Appellation du site">
                 <InputName v-model="input.name"></InputName>
             </FormParagraph>
@@ -22,6 +49,7 @@
 import InputAddress from "./inputs/InputAddress.vue";
 import InputName from "./inputs/InputName.vue";
 import InputCoordinates from "./inputs/InputCoordinates.vue";
+import { findNearby } from "#helpers/api/town";
 
 export default {
     components: {
@@ -39,13 +67,29 @@ export default {
 
     data() {
         return {
-            input: this.value
+            input: this.value,
+            nearbyShantytowns: []
         };
     },
 
     methods: {
         onAddressChange(coordinates) {
             this.input.coordinates = coordinates;
+        }
+    },
+    watch: {
+        "input.address": async function() {
+            this.nearbyShantytowns = [];
+        },
+        "input.coordinates": async function() {
+            const latitude = this.input.coordinates[0];
+            const longitude = this.input.coordinates[1];
+            try {
+                const { towns } = await findNearby(latitude, longitude);
+                this.nearbyShantytowns = towns;
+            } catch (err) {
+                console.log(err);
+            }
         }
     }
 };
