@@ -177,7 +177,9 @@ export function findRelations(townId, query) {
  * GET /towns/findNearby
  */
 export function findNearby(latitude, longitude) {
-    return getApi(`/towns/findNearby?latitude=${latitude}&longitude=${longitude}`);
+    return getApi(
+        `/towns/findNearby?latitude=${latitude}&longitude=${longitude}`
+    );
 }
 
 /**
