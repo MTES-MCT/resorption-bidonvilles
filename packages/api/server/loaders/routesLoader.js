@@ -149,7 +149,7 @@ module.exports = (app) => {
         middlewares.appVersion.sync,
         controllers.user.upgrade,
     );
-    app.post(
+    app.put(
         '/users/:id/comment',
         middlewares.auth.authenticate,
         middlewares.auth.isSuperAdmin,
