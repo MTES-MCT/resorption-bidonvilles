@@ -96,6 +96,7 @@ function serializeUser(user, latestCharte, filters, permissionMap) {
         charte_engagement_a_jour: latestCharte === null || user.charte_engagement_signee === latestCharte,
         subscribed_to_summary: user.subscribed_to_summary,
         last_access: user.last_access !== null ? user.last_access.getTime() / 1000 : null,
+        admin_comments: user.admin_comments,
         is_admin: user.is_admin,
         role: user.role_name || user.organization_type_role_name,
         role_id: user.role || user.organization_type_role,
@@ -228,6 +229,7 @@ module.exports = () => {
                 users.charte_engagement_signee,
                 users.subscribed_to_summary,
                 users.last_access,
+                users.admin_comments,
                 CASE WHEN users.fk_role IS NULL THEN FALSE
                     ELSE TRUE
                 END AS is_admin,
@@ -645,25 +647,23 @@ module.exports = () => {
                 throw new Error('The user id is missing');
             }
 
-            const setClauses = [];
             const replacements = {};
 
-            if (!comment || comment.value === undefined) {
+            if (!comment || comment.admin_comments === undefined) {
                 throw new Error('The comment is missing');
             }
-
-            setClauses.push(`admin_comment = ${comment.value}`);
 
             const [, { rowCount }] = await database.query(
                 `UPDATE
                     users
                 SET
-                    ${setClauses.join(',')}
+                    admin_comments = :commentValue
                 WHERE
-                    users.user_id = :userId`,
+                    user_id = :userId`,
                 {
                     replacements: Object.assign(replacements, {
                         userId,
+                        commentValue: comment.admin_comments,
                     }),
                     transaction,
                 },
