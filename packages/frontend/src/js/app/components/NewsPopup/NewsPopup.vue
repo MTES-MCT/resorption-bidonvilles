@@ -34,7 +34,7 @@
         </div>
         <div
             v-if="toggleModalPopup && shouldBeVisible"
-            class="absolute inset-0 z-40 opacity-50 bg-black"
+            class="fixed inset-0 z-40 opacity-50 bg-black"
         ></div>
     </div>
 </template>
