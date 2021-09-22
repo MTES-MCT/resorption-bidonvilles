@@ -28,7 +28,7 @@
                             class="link"
                             :to="`/site/${town.shantytown_id}`"
                         >
-                            {{town.address_simple}}
+                            {{ town.address_simple }}
                             <span v-if="town.name">« {{ town.name }} »</span>
                         </router-link>
                     </li>
