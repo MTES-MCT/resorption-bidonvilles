@@ -247,6 +247,15 @@ module.exports = (app) => {
         controllers.town.getRelations,
     );
 
+    app.get(
+        '/towns/findNearby',
+        middlewares.auth.authenticate,
+        (...args) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        controllers.town.findNearbyTowns,
+    );
+
     // plans
     app.get(
         '/plans',
