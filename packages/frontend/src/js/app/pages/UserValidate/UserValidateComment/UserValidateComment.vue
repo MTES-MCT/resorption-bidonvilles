@@ -26,8 +26,7 @@ export default {
         return {
             commentError: null,
             commentErrors: {},
-            adminComment: "",
-            isPrivate: false,
+            adminComment: this.user.admin_comments,
             loading: false
         };
     },
@@ -38,7 +37,7 @@ export default {
     },
     methods: {
         cancelComment() {
-            this.adminComment = "";
+            this.adminComment = this.user.admin_comments;
         },
         async addComment() {
             // clean previous errors
@@ -47,11 +46,11 @@ export default {
             this.loading = true;
 
             try {
-                const response = await apiComment(this.user.id, {
-                    value: this.adminComment
-                });
-                this.$emit("submit", response.comments);
-                this.adminComment = "";
+                const response = await apiComment(
+                    this.user.id,
+                    this.adminComment
+                );
+                this.adminComment = response.adminComment;
             } catch (response) {
                 this.commentError = response.user_message;
                 this.commentErrors = response.fields || {};
