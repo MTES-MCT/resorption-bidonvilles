@@ -1461,7 +1461,8 @@ module.exports = (database) => {
             shantytowns.longitude,
             shantytowns.address,
             shantytowns.address_details,
-            ${distanceCalc} as distance
+            ${distanceCalc} as distance,
+            (SELECT regexp_matches(shantytowns.address, '^(.+) [0-9]+ [^,]+,? [0-9]+,? [^, ]+(,.+)?$'))[1] as address_simple
         FROM shantytowns
         WHERE ${distanceCalc} < :distanceRadius
         `,

@@ -174,6 +174,13 @@ export function findRelations(townId, query) {
 }
 
 /**
+ * GET /towns/findNearby
+ */
+export function findNearby(latitude, longitude) {
+    return getApi(`/towns/findNearby?latitude=${latitude}&longitude=${longitude}`);
+}
+
+/**
  * @typedef {Object} Town_Data
  * @property {number} latitude,
  * @property {number} longitude,
