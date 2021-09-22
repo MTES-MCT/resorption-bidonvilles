@@ -11,7 +11,7 @@ import TownsList from "#app/pages/TownsList/TownsList.vue";
 import TownsCreate from "#app/pages/TownCreate/TownCreate.vue";
 import TownsUpdate from "#app/pages/TownUpdate/TownUpdate.vue";
 import TownsDetails from "#app/pages/TownDetails/TownDetails";
-import Me from "#app/pages/me/me.vue";
+import Account from "#app/pages/Account/index.vue";
 import UserList from "#app/pages/UserList/index.vue";
 import UserCreate from "#app/pages/UserCreate/index.vue";
 import UserActivate from "#app/pages/UserActivate/index.vue";
@@ -104,6 +104,19 @@ function isPermitted(to) {
 }
 
 /**
+ * Checks if the current user is a national admin
+ *
+ * @returns {boolean}
+ */
+function isNationalAdmin() {
+    const {
+        user: { role_id }
+    } = getConfig();
+
+    return role_id === "national_admin";
+}
+
+/**
  * Checks whether the current user has to upgrade his account before accessing any other page
  *
  * @returns {boolean}
@@ -151,6 +164,14 @@ const guardians = {
         { checker: isLoggedIn, target: "/connexion" },
         { checker: isConfigLoaded, target: "/launcher" },
         { checker: isPermitted, target: "/", saveEntrypoint: false },
+        { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
+        { checker: isUpgraded, target: "/mise-a-niveau" },
+        { checker: hasNoPendingChangelog, target: "/nouvelle-version" }
+    ]),
+    isNationalAdmin: guard.bind(this, [
+        { checker: isLoggedIn, target: "/connexion" },
+        { checker: isConfigLoaded, target: "/launcher" },
+        { checker: isNationalAdmin, target: "/" },
         { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
         { checker: isUpgraded, target: "/mise-a-niveau" },
         { checker: hasNoPendingChangelog, target: "/nouvelle-version" }
@@ -338,8 +359,16 @@ const router = new VueRouter({
                 group: "account"
             },
             path: "/mon-compte",
-            component: Me,
+            component: Account,
             beforeEnter: guardians.loadedAndUpToDate
+        },
+        {
+            path: "/utilisateur/:id",
+            component: Account,
+            beforeEnter: guardians.isNationalAdmin,
+            meta: {
+                group: "account"
+            }
         },
         {
             meta: {

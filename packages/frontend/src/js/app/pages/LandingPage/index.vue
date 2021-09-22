@@ -1,6 +1,8 @@
 <template>
     <PublicLayout :displayLanguagePicker="true">
         <PublicContainer>
+            <div class="pt-4 text-center"></div>
+            <NewsPopupWater></NewsPopupWater>
             <div class="pt-4">
                 <div class="max-w-screen-lg mx-auto pb-20">
                     <LandingPageHero class="mt-20" />
@@ -82,6 +84,7 @@ import CreditWrapper from "./CreditWrapper.vue";
 import LandingPageNewsletter from "./LandingPageNewsletter.vue";
 import LandingTutorialBanner from "./LandingTutorialBanner";
 import LandingDiscoverBanner from "./LandingDiscoverBanner";
+import NewsPopupWater from "./NewsPopup/NewsPopupWater.vue";
 
 export default {
     components: {
@@ -96,7 +99,8 @@ export default {
         LandingPageContactForm,
         LandingPageNewsletter,
         LandingTutorialBanner,
-        LandingDiscoverBanner
+        LandingDiscoverBanner,
+        NewsPopupWater
     }
 };
 </script>
