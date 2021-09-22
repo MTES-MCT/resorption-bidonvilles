@@ -1477,5 +1477,30 @@ module.exports = (database) => {
         }
     };
 
+    methods.findNearby = async (latitude, longitude, distance) => {
+        const distanceCalc = '(6371 * 2 * ASIN(SQRT( POWER(SIN(( :latitude - shantytowns.latitude) *  pi()/180 / 2), 2) +COS( :latitude * pi()/180) * COS(shantytowns.latitude * pi()/180) * POWER(SIN(( :longitude - shantytowns.longitude) * pi()/180 / 2), 2) )))';
+
+        return database.query(`
+        SELECT 
+            shantytowns.shantytown_id,
+            shantytowns.name,
+            shantytowns.status,
+            shantytowns.declared_at,
+            shantytowns.built_at,
+            shantytowns.closed_at,
+            shantytowns.latitude,
+            shantytowns.longitude,
+            shantytowns.address,
+            shantytowns.address_details,
+            ${distanceCalc} as distance
+        FROM shantytowns
+        WHERE ${distanceCalc} < :distanceRadius
+        `,
+        {
+            type: database.QueryTypes.SELECT,
+            replacements: { latitude, longitude, distanceRadius: distance },
+        });
+    };
+
     return methods;
 };
