@@ -33,6 +33,7 @@ module.exports = {
                         NULL AS "epci_name",
                         NULL AS "city_code",
                         NULL AS "city_name",
+                        NULL AS "city_main",
 
                         46.7755829 AS "latitude",
                         2.0497727 AS "longitude"
@@ -67,6 +68,7 @@ module.exports = {
                         NULL AS "epci_name",
                         NULL AS "city_code",
                         NULL AS "city_name",
+                        NULL AS "city_main",
 
                         regions.latitude AS "latitude",
                         regions.longitude AS "longitude"
@@ -97,6 +99,7 @@ module.exports = {
                         NULL AS "epci_name",
                         NULL AS "city_code",
                         NULL AS "city_name",
+                        NULL AS "city_main",
 
                         departements.latitude AS "latitude",
                         departements.longitude AS "longitude"
@@ -129,6 +132,7 @@ module.exports = {
                         epci.name AS "epci_name",
                         NULL AS "city_code",
                         NULL AS "city_name",
+                        NULL AS "city_main",
 
                         departements.latitude AS "latitude",
                         departements.longitude AS "longitude"
@@ -165,6 +169,7 @@ module.exports = {
                         epci.name AS "epci_name",
                         cities.code AS "city_code",
                         cities.name AS "city_name",
+                        cities.fk_main AS "city_main",
 
                         cities.latitude AS "latitude",
                         cities.longitude AS "longitude"
@@ -193,26 +198,67 @@ module.exports = {
             ))
             .then(() => queryInterface.sequelize.query(
                 `CREATE OR REPLACE VIEW public.shantytown_watchers AS
-                    SELECT s.shantytown_id AS fk_shantytown, u.user_id AS fk_user
-                    FROM shantytowns s
-                    LEFT JOIN cities c ON s.fk_city::text = c.code::text
-                    LEFT JOIN departements d ON c.fk_departement::text = d.code::text
-                    LEFT JOIN localized_organizations lo ON lo.region_code::text = d.fk_region::text
-                    LEFT JOIN users u ON u.fk_organization = lo.organization_id
-                    WHERE lo.active = true AND u.fk_status::text = 'active'::text AND lo.location_type = 'region'::text AND u.fk_role::text = 'local_admin'::text
-                UNION
-                    SELECT s.shantytown_id AS fk_shantytown, u.user_id AS fk_user
-                    FROM shantytowns s
-                    LEFT JOIN cities c ON s.fk_city::text = c.code::text
-                    LEFT JOIN localized_organizations lo ON lo.departement_code = c.fk_departement::text
-                    LEFT JOIN users u ON u.fk_organization = lo.organization_id
-                    WHERE lo.active = true AND u.fk_status::text = 'active'::text AND u.fk_role::text = 'local_admin'::text
-                UNION
-                    SELECT sa.fk_shantytown, u.user_id AS fk_user
-                    FROM shantytown_actors sa
-                    LEFT JOIN users u ON sa.fk_user = u.user_id
-                    LEFT JOIN organizations o ON u.fk_organization = o.organization_id
-                    WHERE u.fk_status::text = 'active'::text AND o.active = true;`,
+                (
+                    (
+                        SELECT
+                            s.shantytown_id AS fk_shantytown,
+                            u.user_id AS fk_user
+                        FROM
+                            shantytowns s
+                        LEFT JOIN
+                            cities c ON s.fk_city::text = c.code::text
+                        LEFT JOIN
+                            departements d ON c.fk_departement::text = d.code::text
+                        LEFT JOIN
+                        localized_organizations lo ON lo.region_code::text = d.fk_region::text
+                        LEFT JOIN
+                            users u ON u.fk_organization = lo.organization_id
+                        WHERE
+                            lo.active = true
+                        AND
+                            u.fk_status::text = 'active'::text 
+                        AND
+                            lo.location_type = 'region'::text
+                        AND
+                            u.fk_role::text = 'local_admin'::text
+                    )
+                    UNION
+                    (
+                        SELECT
+                            s.shantytown_id AS fk_shantytown,
+                            u.user_id AS fk_user
+                        FROM
+                            shantytowns s
+                        LEFT JOIN
+                            cities c ON s.fk_city::text = c.code::text
+                        LEFT JOIN   
+                            localized_organizations lo ON lo.departement_code = c.fk_departement::text
+                        LEFT JOIN
+                            users u ON u.fk_organization = lo.organization_id
+                        WHERE
+                            lo.active = true
+                        AND
+                            u.fk_status::text = 'active'::text
+                        AND
+                            u.fk_role::text = 'local_admin'::text
+                    )
+                    UNION
+                    (
+                        SELECT
+                            sa.fk_shantytown,
+                            u.user_id AS fk_user
+                        FROM
+                            shantytown_actors sa
+                        LEFT JOIN
+                            users u ON sa.fk_user = u.user_id
+                        LEFT JOIN
+                            organizations o ON u.fk_organization = o.organization_id
+                        WHERE
+                            u.fk_status::text = 'active'::text
+                        AND
+                            o.active = true
+                    )
+                )`,
                 {
                     transaction,
                 },
@@ -407,6 +453,65 @@ module.exports = {
             ))
             .then(() => queryInterface.sequelize.query(
                 'REFRESH MATERIALIZED VIEW localized_organizations',
+                {
+                    transaction,
+                },
+            ))
+            .then(() => queryInterface.sequelize.query(
+                `CREATE VIEW shantytown_watchers AS
+                (
+                    (
+                    SELECT
+                        s.shantytown_id AS fk_shantytown,
+                        u.user_id AS fk_user
+                    FROM shantytowns s
+                    LEFT JOIN cities c ON s.fk_city = c.code
+                    LEFT JOIN departements d ON c.fk_departement = d.code
+                    LEFT JOIN localized_organizations lo ON lo.region_code = d.fk_region
+                    LEFT JOIN users u ON u.fk_organization = lo.organization_id
+                    WHERE
+                        lo.active = true
+                        AND
+                        u.fk_status = 'active'
+                        AND
+                        lo.location_type = 'region'
+                        AND
+                        u.fk_role = 'local_admin'
+                    )
+            
+                    UNION
+            
+                    (
+                    SELECT
+                        s.shantytown_id AS fk_shantytown,
+                        u.user_id AS fk_user
+                    FROM shantytowns s
+                    LEFT JOIN cities c ON s.fk_city = c.code
+                    LEFT JOIN localized_organizations lo ON lo.departement_code = c.fk_departement
+                    LEFT JOIN users u ON u.fk_organization = lo.organization_id
+                    WHERE
+                        lo.active = true
+                        AND
+                        u.fk_status = 'active'
+                        AND
+                        u.fk_role = 'local_admin'
+                    )
+            
+                    UNION
+            
+                    (
+                    SELECT
+                        sa.fk_shantytown,
+                        u.user_id AS fk_user
+                    FROM shantytown_actors sa
+                    LEFT JOIN users u ON sa.fk_user = u.user_id
+                    LEFT JOIN organizations o ON u.fk_organization = o.organization_id
+                    WHERE
+                        u.fk_status = 'active'
+                        AND
+                        o.active = TRUE
+                    )
+                )`,
                 {
                     transaction,
                 },
