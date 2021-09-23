@@ -12,6 +12,7 @@ const inviteShantytownActor = require('./shantytownActors/inviteShantytownActor'
 const invite = require('./invite');
 const createShantytownComment = require('./shantytownComment/create');
 const activityList = require('./activity/list');
+const userComments = require('./userComments');
 
 module.exports = {
     closeTown,
@@ -34,4 +35,5 @@ module.exports = {
     activity: {
         list: activityList,
     },
+    userComments,
 };
