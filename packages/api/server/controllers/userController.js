@@ -318,8 +318,7 @@ module.exports = models => ({
         if (user === null) {
             res.status(500).send({
                 error: {
-                    user_message: 'Impossible de trouver vos informations en bases de données.',
-                    developer_message: `User #${userId} does not exist`,
+                    user_message: 'Impossible de trouver l\'utilisateur en base de données.',
                 },
             });
             return next(new Error(`User #${userId} does not exist`));
@@ -337,7 +336,6 @@ module.exports = models => ({
             res.status(500).send({
                 error: {
                     user_message: 'Une erreur est survenue dans l\'écriture de vos informations en base de données.',
-                    developer_message: error.message,
                 },
             });
             return next(error);
