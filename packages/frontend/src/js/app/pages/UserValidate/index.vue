@@ -13,7 +13,7 @@
                             >Modifier les informations de
                             l'utilisateur</router-link
                         >
-                        <div class="border border-G400 w-16 my-4"></div>
+                        <div class="border border-G100 w-16 my-4"></div>
                         <UserValidateAccessStatus
                             :user="user"
                             :loggedUser="loggedUser"
@@ -33,16 +33,14 @@
                             :availableOptions="options"
                             class="mb-4"
                         />
-                        <!-- Début commentaires administrateurs nationaux -->
                         <div
                             v-if="loggedUser.role_id === 'national_admin'"
-                            class="bg-G200 p-4 my-4"
+                            class="bg-G100 p-4 my-4"
                         >
                             <UserValidateComment
                                 :user="user"
                             ></UserValidateComment>
                         </div>
-                        <!-- Fin commentaires administrateurs nationaux -->
                         <div
                             class="bg-yellow-200 p-4 mb-12"
                             v-if="!user.user_access"
