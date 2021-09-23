@@ -51,6 +51,8 @@
 
         <mj-text mj-class='pt-2'>Pour rappel : <span class='text-secondary font-bold'>{{ summary.shantytowns_total }} sites</span> et <span class='text-secondary font-bold'>{{ summary.population_total }} habitants</span> en bidonvilles ou squats</mj-text>
         
-        <mj-include path="common/connect_cta.mjml" />
+        <mj-button align="left" mj-class="button-primary" href="{{var:connexionUrl}}">
+            Me connecter
+        </mj-button>
     </mj-column>
 </mj-section>
