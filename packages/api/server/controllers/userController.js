@@ -1,7 +1,6 @@
 const semver = require('semver');
 const jwt = require('jsonwebtoken');
 const JSONToCSV = require('json2csv');
-const { trim } = require('validator');
 const sanitize = require('#server/controllers/userController/helpers/sanitize');
 const checkPassword = require('#server/controllers/userController/helpers/checkPassword');
 const validate = require('#server/controllers/userController/helpers/validate');
@@ -313,33 +312,12 @@ module.exports = models => ({
      * Updates comments about a user
      */
     async comment(req, res, next) {
-        const userId = req.params.id;
-        const user = await models.user.findOne(userId, { auth: true });
-
-        // validate input
-        let checkedCommentValue;
         try {
-            checkedCommentValue = trim(req.body.comment);
-        } catch (error) {
-            return res.status(error.code).send(error.serialize());
-        }
-
-        if (user === null) {
-            res.status(500).send({
-                error: {
-                    user_message: 'Impossible de trouver l\'utilisateur en base de données.',
-                },
-            });
-            return next(new Error(`User #${userId} does not exist`));
-        }
-
-        // actually updates the comments
-        try {
-            await models.user.updateComment(user.id, {
-                admin_comments: checkedCommentValue,
+            await models.user.updateComment(req.params.id, {
+                admin_comments: req.body.comment,
             });
             return res.status(200).send({
-                adminComment: checkedCommentValue,
+                adminComment: req.body.comment,
             });
         } catch (error) {
             res.status(500).send({
