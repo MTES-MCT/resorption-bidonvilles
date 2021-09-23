@@ -147,7 +147,7 @@ module.exports = (app) => {
     );
     app.put(
         '/users/:id/comment',
-        validators.addUserComment,
+        validators.userComments,
         middlewares.auth.authenticate,
         middlewares.auth.isSuperAdmin,
         middlewares.appVersion.sync,
