@@ -1,7 +1,6 @@
 <template>
-    <div class="bg-g100 p-4 customShadow">
+    <div v-if="state === 'loaded' && user" class="bg-G100 p-4 customShadow">
         <TextArea
-            class="whitespace-pre"
             rows="5"
             label="Commentaire"
             info="(champ réservé aux administrateurs nationaux)"
@@ -18,6 +17,10 @@
             >
         </div>
     </div>
+    <div class="text-red" v-else-if="state === 'error'">
+        <p class="font-bold">Erreur</p>
+        <p>{{ commentError }}</p>
+    </div>
 </template>
 <script>
 import { comment as apiComment } from "#helpers/api/user";
@@ -28,7 +31,15 @@ export default {
             commentError: null,
             commentErrors: {},
             adminComment: this.user.admin_comments,
-            loading: false
+            loading: false,
+            /**
+             * The current state of the page
+             *
+             * One out of: 'loading', 'error', or 'loaded'
+             *
+             * @type {string|null}
+             */
+            state: "loaded"
         };
     },
     props: {
@@ -51,10 +62,21 @@ export default {
                     this.user.id,
                     this.adminComment
                 );
+                // Met à jour la valeur affichée dans le champ
                 this.adminComment = response.adminComment;
             } catch (response) {
-                this.commentError = response.user_message;
-                this.commentErrors = response.fields || {};
+                if (
+                    response.user_message === null ||
+                    response.user_message.length < 1
+                ) {
+                    this.commentError =
+                        "Une erreur est survenue lors de la mise à jour du comentaire";
+                    this.commentErrors = {};
+                } else {
+                    this.commentError = response.user_message;
+                    this.commentErrors = response.fields || {};
+                }
+                this.state = "error";
             }
             this.loading = false;
         }
