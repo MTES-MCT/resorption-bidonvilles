@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/node';
 import loaders from '#server/loaders';
-import { port } from '#server/config';
+import { port, sendActivitySummary } from '#server/config';
 
 const sentryContextHandlers = (app) => {
     app.use(Sentry.Handlers.requestHandler());
@@ -51,7 +51,11 @@ export default {
 
         try {
             await agenda.start();
-            await agenda.every("00 00 07 * * 1", "send_activity_summary"); // every monday at 7AM
+
+            if (sendActivitySummary) {
+                await agenda.every("00 00 07 * * 1", "send_activity_summary"); // every monday at 7AM
+            }
+
             // eslint-disable-next-line no-console
             console.log('Set scheduled jobs up');
         } catch (error) {

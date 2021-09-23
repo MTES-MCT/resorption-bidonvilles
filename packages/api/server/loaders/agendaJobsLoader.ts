@@ -8,13 +8,16 @@ const {
 } = require('#server/mails/mails');
 import * as moment from 'moment';
 import activitySummary from '#server/services/activitySummary';
+import { sendActivitySummary } from '#server/config';
 
 export default (agenda) => {
     agenda.define(
         'send_activity_summary',
         async (job) => {
-            const now = moment().utcOffset(2);
-            await activitySummary.sendAll(now.day(), now.month(), now.year());
+            if (sendActivitySummary) {
+                const now = moment().utcOffset(2);
+                await activitySummary.sendAll(now.day(), now.month(), now.year());
+            }
         }
     );
 
