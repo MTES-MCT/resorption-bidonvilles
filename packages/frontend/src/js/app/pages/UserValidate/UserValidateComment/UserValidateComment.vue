@@ -1,6 +1,7 @@
 <template>
     <div class="bg-g100 p-4 customShadow">
         <TextArea
+            class="whitespace-pre"
             rows="5"
             label="Commentaire"
             info="(champ réservé aux administrateurs nationaux)"
