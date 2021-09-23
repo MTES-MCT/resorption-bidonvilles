@@ -643,16 +643,7 @@ module.exports = () => {
         },
 
         updateComment: async (userId, comment, transaction = undefined) => {
-            if (userId === undefined) {
-                throw new Error('The user id is missing');
-            }
-
             const replacements = {};
-
-            if (!comment || comment.admin_comments === undefined) {
-                throw new Error('The comment is missing');
-            }
-
             const [, { rowCount }] = await database.query(
                 `UPDATE
                     users
