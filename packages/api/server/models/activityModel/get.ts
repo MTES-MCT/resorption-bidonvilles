@@ -157,6 +157,7 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
         FROM departements d
         LEFT JOIN totals ON totals.fk_departement = d.code
         LEFT JOIN activities ON activities.departement = d.code
+        WHERE "shantytownsTotal" > 0
         ORDER BY d.code ASC
         `,
         {
