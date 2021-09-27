@@ -153,7 +153,7 @@ export default {
              *
              * @type {L.layerGroup}
              */
-            cityLayer: L.layerGroup(),
+            cityLayer: this.loadTerritoryLayers ? L.layerGroup() : false,
 
             /**
              * La carte
@@ -265,7 +265,14 @@ export default {
                 regions: {},
                 departements: {},
                 cities: {}
-            }
+            },
+
+            /**
+             * Indicate if the map reached the level to display the shantytowns
+             *
+             * @type {Boolean}
+             */
+            displayShantytownsLevel: false
         };
     },
 
@@ -304,8 +311,10 @@ export default {
 
     watch: {
         towns() {
-            if (this.loadTerritoryLayers) {
-                this.countNumberOfTowns();
+            this.countNumberOfTowns();
+            if (this.displayShantytownsLevel) {
+                this.syncTownMarkers();
+            } else {
                 this.loadRegionalData();
                 this.loadDepartementalData();
                 this.loadCityData();
@@ -391,11 +400,6 @@ export default {
         countNumberOfTowns() {
             this.numberOfShantytownsBy = this.towns.reduce(
                 (acc, obj) => {
-                    // Following code deactivated to show closed shantytons
-                    // if (obj.closedAt !== null) {
-                    //     return acc;
-                    // }
-
                     if (acc.departements[obj.departement.code] === undefined) {
                         acc.departements[obj.departement.code] = {
                             sites: 0,
@@ -600,17 +604,20 @@ export default {
         onZoomEnd() {
             const zoomLevel = this.map.getZoom();
 
-            if (this.loadTerritoryLayers) {
-                if (zoomLevel <= REGION_MAX_ZOOM_LEVEL) {
-                    this.showRegionalLayer();
-                } else if (zoomLevel <= DEPT_MAX_ZOOM_LEVEL) {
-                    this.showDepartementalLayer();
-                } else if (zoomLevel <= CITY_MAX_ZOOM_LEVEL) {
-                    this.showCityLayer();
-                } else {
-                    this.showTownsLayer();
-                }
+            if (zoomLevel <= REGION_MAX_ZOOM_LEVEL) {
+                this.displayShantytownsLevel = false;
+                this.loadRegionalData();
+                this.showRegionalLayer();
+            } else if (zoomLevel <= DEPT_MAX_ZOOM_LEVEL) {
+                this.displayShantytownsLevel = false;
+                this.loadDepartementalData();
+                this.showDepartementalLayer();
+            } else if (zoomLevel <= CITY_MAX_ZOOM_LEVEL) {
+                this.displayShantytownsLevel = false;
+                this.loadCityData();
+                this.showCityLayer();
             } else {
+                this.displayShantytownsLevel = true;
                 this.showTownsLayer();
             }
 
@@ -899,6 +906,7 @@ export default {
                     return;
                 }
             });
+
             Object.keys(this.numberOfShantytownsBy.regions).forEach(key => {
                 const nbSites =
                     this.numberOfShantytownsBy.regions[key].sites > 0
@@ -932,6 +940,7 @@ export default {
                     return;
                 }
             });
+
             Object.keys(this.numberOfShantytownsBy.departements).forEach(
                 key => {
                     const nbSites =
@@ -964,9 +973,10 @@ export default {
 
         // Fonction de chargement des marqueurs par commune
         loadCityData() {
+            this.cityLayer.clearLayers();
+
             // On crée les marqueurs
             const citiesMarkers = [];
-            // for (var key of Object.keys(this.numberOfShantytownsBy.cities)) {
             Object.keys(this.numberOfShantytownsBy.cities).forEach(key => {
                 const siteLabel =
                     this.numberOfShantytownsBy.cities[key].sites > 1
@@ -990,7 +1000,9 @@ export default {
                     )
                 );
             });
-            this.cityLayer = L.layerGroup(citiesMarkers);
+            if (citiesMarkers.length > 0) {
+                L.layerGroup(citiesMarkers).addTo(this.cityLayer);
+            }
         },
 
         showRegionalLayer() {
