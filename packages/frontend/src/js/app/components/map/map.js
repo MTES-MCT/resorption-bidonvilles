@@ -391,9 +391,10 @@ export default {
         countNumberOfTowns() {
             this.numberOfShantytownsBy = this.towns.reduce(
                 (acc, obj) => {
-                    if (obj.closedAt !== null) {
-                        return acc;
-                    }
+                    // Following code deactivated to show closed shantytons
+                    // if (obj.closedAt !== null) {
+                    //     return acc;
+                    // }
 
                     if (acc.departements[obj.departement.code] === undefined) {
                         acc.departements[obj.departement.code] = {
