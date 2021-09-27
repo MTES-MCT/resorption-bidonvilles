@@ -21,14 +21,14 @@
                 >
                 <ul class="list-disc ml-4">
                     <li
-                        :key="town.shantytown_id"
+                        :key="town.id"
                         v-for="town in nearbyShantytowns.slice(0, 5)"
                     >
                         <router-link
                             class="link"
                             :to="`/site/${town.shantytown_id}`"
                         >
-                            {{ town.address_simple }}
+                            {{ town.addressSimple || town.address }}
                             <span v-if="town.name">« {{ town.name }} »</span>
                             <span> ({{ town.distance.toFixed(2) }}km)</span>
                         </router-link>
@@ -88,9 +88,8 @@ export default {
             try {
                 const { towns } = await findNearby(latitude, longitude);
                 this.nearbyShantytowns = towns;
-            } catch (err) {
-                console.log(err);
-            }
+                // eslint-disable-next-line no-empty
+            } catch (err) {}
         }
     }
 };

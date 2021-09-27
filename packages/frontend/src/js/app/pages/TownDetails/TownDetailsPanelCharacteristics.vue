@@ -130,10 +130,10 @@
                                     >
                                         <router-link
                                             class="link"
-                                            :to="`/site/${town.shantytown_id}`"
+                                            :to="`/site/${town.id}`"
                                         >
                                             {{
-                                                town.address_simple ||
+                                                town.addressSimple ||
                                                     town.address
                                             }}
                                             <span v-if="town.name"
@@ -158,11 +158,11 @@
                             :towns="[
                                 {
                                     ...town,
-                                    style: `opacity: 1; z-index: 99999`
+                                    style: `opacity: 1`
                                 },
                                 ...nearbyTowns.map(t => ({
                                     ...t,
-                                    style: `opacity: 0.7`
+                                    style: `opacity: 0.8`
                                 }))
                             ]"
                             :default-view="center"
@@ -199,8 +199,8 @@ export default {
     components: { TownDetailsPanel, TownDetailsPanelSection, Map },
     methods: {
         goTo(town) {
-            if (town.shantytown_id) {
-                this.$router.push(`/site/${town.shantytown_id}`);
+            if (town.id) {
+                this.$router.push(`/site/${town.id}`);
             }
         },
         /**
@@ -233,9 +233,7 @@ export default {
                 this.town.longitude
             );
 
-            this.nearbyTowns = towns.filter(
-                town => town.shantytown_id !== this.town.id
-            );
+            this.nearbyTowns = towns.filter(town => town.id !== this.town.id);
             // eslint-disable-next-line no-empty
         } catch (err) {}
     },
