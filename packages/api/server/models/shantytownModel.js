@@ -687,15 +687,14 @@ module.exports = (database) => {
     }
 
     /**
-     * Fetches a list of shantytowns from the database
+     * Helper to add filters to restrict access to shantytowns based on user's location
      *
      * @returns {Array.<Object>}
      */
-    async function query(where = [], order = ['departements.code ASC', 'cities.name ASC'], user, feature, includeChangelog = false) {
-        const replacements = {};
-
+    function updateWhereClauseWithUserLocation(user, feature, where = []) {
         const featureLevel = user.permissions.shantytown[feature].geographic_level;
         const userLevel = user.organization.location.type;
+
         if (featureLevel !== 'nation' && (featureLevel !== 'local' || userLevel !== 'nation')) {
             const level = featureLevel === 'local' ? userLevel : featureLevel;
             if (user.organization.location[level] === null) {
@@ -718,14 +717,35 @@ module.exports = (database) => {
             }
         }
 
-        const whereClause = where.map((clauses, index) => {
+        return where;
+    }
+
+    /**
+     * Stringify a list of where clauses
+     *
+     * @returns String
+     */
+    function stringifyWhereClause(where, replacements) {
+        return where.map((clauses, index) => {
             const clauseGroup = Object.keys(clauses).map((column) => {
+                // eslint-disable-next-line no-param-reassign
                 replacements[`${column}${index}`] = clauses[column].value || clauses[column];
                 return `${clauses[column].query || `shantytowns.${column}`} ${clauses[column].not ? 'NOT ' : ''}IN (:${column}${index})`;
             }).join(' OR ');
 
             return `(${clauseGroup})`;
         }).join(' AND ');
+    }
+
+    /**
+     * Fetches a list of shantytowns from the database
+     *
+     * @returns {Array.<Object>}
+     */
+    async function query(where = [], order = ['departements.code ASC', 'cities.name ASC'], user, feature, includeChangelog = false) {
+        const replacements = {};
+        updateWhereClauseWithUserLocation(user, feature, where);
+        const whereClause = stringifyWhereClause(where, replacements);
 
         const towns = await database.query(
             getBaseSql(
@@ -1446,7 +1466,13 @@ module.exports = (database) => {
         }
     };
 
-    methods.findNearby = async (latitude, longitude, distance) => {
+
+    methods.findNearby = async (user, latitude, longitude, distance) => {
+        const replacements = {};
+        const locationWhere = [];
+        updateWhereClauseWithUserLocation(user, 'list', locationWhere);
+        const locationWhereClause = stringifyWhereClause(locationWhere, replacements);
+
         const distanceCalc = '(6371 * 2 * ASIN(SQRT( POWER(SIN(( :latitude - shantytowns.latitude) *  pi()/180 / 2), 2) +COS( :latitude * pi()/180) * COS(shantytowns.latitude * pi()/180) * POWER(SIN(( :longitude - shantytowns.longitude) * pi()/180 / 2), 2) )))';
 
         return database.query(`
@@ -1464,11 +1490,21 @@ module.exports = (database) => {
             ${distanceCalc} as distance,
             (SELECT regexp_matches(shantytowns.address, '^(.+) [0-9]+ [^,]+,? [0-9]+,? [^, ]+(,.+)?$'))[1] as address_simple
         FROM shantytowns
-        WHERE ${distanceCalc} < :distanceRadius
+        LEFT JOIN cities on shantytowns.fk_city = cities.code
+        LEFT JOIN epci on cities.fk_epci = epci.code
+        LEFT JOIN departements on cities.fk_departement = departements.code
+        LEFT JOIN regions on departements.fk_region = regions.code
+        WHERE 
+            ${distanceCalc} < :distanceRadius
+            AND closed_at is NULL
+            ${locationWhereClause ? `AND ${locationWhereClause}` : ''}
+        ORDER BY distance ASC
         `,
         {
             type: database.QueryTypes.SELECT,
-            replacements: { latitude, longitude, distanceRadius: distance },
+            replacements: {
+                ...replacements, latitude, longitude, distanceRadius: distance,
+            },
         });
     };
 
