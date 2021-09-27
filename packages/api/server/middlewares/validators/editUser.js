@@ -48,4 +48,8 @@ module.exports = [
 
             return true;
         }),
+
+    body('subscribed_to_summary')
+        .notEmpty().bail().withMessage('Le champ "Abonnement au récapitulatif hebdomadaire" est obligatoire')
+        .isBoolean().bail().withMessage('Le champ "Abonnement au récapitulatif hebdomadaire" est invalide'),
 ];

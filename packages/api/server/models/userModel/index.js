@@ -589,6 +589,7 @@ module.exports = () => {
             const allowedProperties = [
                 'first_name', 'last_name', 'position', 'phone', 'password', 'defaultExport', 'fk_status',
                 'last_version', 'last_changelog', 'charte_engagement_signee', 'last_access',
+                'subscribed_to_summary',
             ];
             const propertiesToColumns = {
                 first_name: 'first_name',
@@ -602,6 +603,7 @@ module.exports = () => {
                 last_changelog: 'last_changelog',
                 charte_engagement_signee: 'charte_engagement_signee',
                 last_access: 'last_access',
+                subscribed_to_summary: 'subscribed_to_summary',
             };
             const setClauses = [];
             const replacements = {};
@@ -613,7 +615,7 @@ module.exports = () => {
                     if (property === 'defaultExport' && values[property]) {
                         replacements[property] = values[property].replace(/\s/g, '') || null;
                     } else {
-                        replacements[property] = values[property] || null;
+                        replacements[property] = values[property] !== undefined ? values[property] : null;
                     }
                 }
             });

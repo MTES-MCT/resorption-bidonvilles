@@ -232,6 +232,7 @@ module.exports = models => ({
 
         const {
             first_name: firstName, last_name: lastName, email, phone, position,
+            subscribed_to_summary: subscribedToSummary,
         } = req.body;
         const user = await models.user.findOne(userId, { auth: true });
 
@@ -252,6 +253,7 @@ module.exports = models => ({
             email,
             phone,
             position,
+            subscribed_to_summary: subscribedToSummary,
         };
 
         if (req.body.password) {
@@ -267,6 +269,7 @@ module.exports = models => ({
                 first_name: firstName,
                 last_name: lastName,
                 departement: user.departement,
+                subscribed_to_summary: subscribedToSummary,
             });
         } catch (error) {
             res.status(500).send({
