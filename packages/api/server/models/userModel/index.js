@@ -94,6 +94,7 @@ function serializeUser(user, latestCharte, filters, permissionMap) {
             },
         },
         charte_engagement_a_jour: latestCharte === null || user.charte_engagement_signee === latestCharte,
+        subscribed_to_summary: user.subscribed_to_summary,
         is_admin: user.is_admin,
         role: user.role_name || user.organization_type_role_name,
         role_id: user.role || user.organization_type_role,
@@ -226,6 +227,7 @@ module.exports = () => {
                 users.last_version,
                 users.last_changelog,
                 users.charte_engagement_signee,
+                users.subscribed_to_summary,
                 CASE WHEN users.fk_role IS NULL THEN FALSE
                     ELSE TRUE
                 END AS is_admin,
