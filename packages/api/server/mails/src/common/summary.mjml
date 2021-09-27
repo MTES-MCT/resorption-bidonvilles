@@ -4,7 +4,7 @@
             {{ summary.code }} – {{ summary.name }}
         </mj-text>
 
-        <mj-raw>{% if summary.new_shantytowns_length == 1 %}</mj-raw>
+        <mj-raw>{% if summary.new_shantytowns_length <= 1 %}</mj-raw>
         <mj-text mj-class='font-bold pt-2'>{{ summary.new_shantytowns_length }} nouveau site</mj-text>
         <mj-raw>{% else %}</mj-raw>
         <mj-text mj-class='font-bold pt-2'>{{ summary.new_shantytowns_length }} nouveaux sites</mj-text>
@@ -13,7 +13,7 @@
         <mj-text><a href="{{var:frontUrl}}/site/{{shantytown.id}}?{{var:utm}}-nouveau-site" class="link">{{ shantytown.usename }}</a></mj-text>
         <mj-raw>{% endfor %}</mj-raw>
 
-        <mj-raw>{% if summary.closed_shantytowns_length == 1 %}</mj-raw>
+        <mj-raw>{% if summary.closed_shantytowns_length <= 1 %}</mj-raw>
         <mj-text mj-class='font-bold pt-2'>{{ summary.closed_shantytowns_length }} site fermé</mj-text>
         <mj-raw>{% else %}</mj-raw>
         <mj-text mj-class='font-bold pt-2'>{{ summary.closed_shantytowns_length }} sites fermés</mj-text>
@@ -22,7 +22,7 @@
         <mj-text><a href="{{var:frontUrl}}/site/{{shantytown.id}}?{{var:utm}}-site-ferme" class="link">{{ shantytown.usename }}</a></mj-text>
         <mj-raw>{% endfor %}</mj-raw>
 
-        <mj-raw>{% if summary.updated_shantytowns_length == 1 %}</mj-raw>
+        <mj-raw>{% if summary.updated_shantytowns_length <= 1 %}</mj-raw>
         <mj-text mj-class='font-bold pt-2'>{{ summary.updated_shantytowns_length }} site mis à jour</mj-text>
         <mj-raw>{% else %}</mj-raw>
         <mj-text mj-class='font-bold pt-2'>{{ summary.updated_shantytowns_length }} sites mis à jour</mj-text>
@@ -31,7 +31,7 @@
         <mj-text><a href="{{var:frontUrl}}/site/{{shantytown.id}}?{{var:utm}}-site-mis-a-jour" class="link">{{ shantytown.usename }}</a></mj-text>
         <mj-raw>{% endfor %}</mj-raw>
 
-        <mj-raw>{% if summary.new_comments_length == 1 %}</mj-raw>
+        <mj-raw>{% if summary.new_comments_length <= 1 %}</mj-raw>
         <mj-text mj-class='font-bold pt-2'>{{ summary.new_comments_length }} message dans le journal du site</mj-text>
         <mj-raw>{% else %}</mj-raw>
         <mj-text mj-class='font-bold pt-2'>{{ summary.new_comments_length }} messages dans le journal du site</mj-text>
@@ -40,7 +40,7 @@
         <mj-text><a href="{{var:frontUrl}}/site/{{comment.shantytownId}}?{{var:utm}}-nouveau-message#message{{comment.id}}" class="link">{{ comment.shantytownUsename }}</a></mj-text>
         <mj-raw>{% endfor %}</mj-raw>
 
-        <mj-raw>{% if summary.new_users_length == 1 %}</mj-raw>
+        <mj-raw>{% if summary.new_users_length <= 1 %}</mj-raw>
         <mj-text mj-class='font-bold pt-2'>{{ summary.new_users_length }} nouvel utilisateur</mj-text>
         <mj-raw>{% else %}</mj-raw>
         <mj-text mj-class='font-bold pt-2'>{{ summary.new_users_length }} nouveaux utilisateurs</mj-text>
