@@ -315,6 +315,10 @@ export default {
         towns() {
             if (this.displayShantytownsLevel) {
                 this.syncTownMarkers();
+
+                // The method syncTownMarkers recreates the layer and make it visible even if it wasn't before
+                // Call onZoomEnd to hide if if necessary
+                this.onZoomEnd();
             }
 
             if (this.loadTerritoryLayers) {
@@ -323,8 +327,6 @@ export default {
                 this.loadDepartementalData();
                 this.loadCityData();
             }
-
-            this.syncTownMarkers();
         },
 
         pois() {
