@@ -12,7 +12,7 @@
                     >1 site enregistré</span
                 >
                 <span v-else
-                    >{{ nearbyShantytowns.length }} site sont enregistrés</span
+                    >{{ nearbyShantytowns.length }} sites sont enregistrés</span
                 >
                 <span>
                     dans un rayon de 500 mètres autour de cette adresse.
@@ -22,7 +22,7 @@
                 <ul class="list-disc ml-4">
                     <li
                         :key="town.shantytown_id"
-                        v-for="town in nearbyShantytowns"
+                        v-for="town in nearbyShantytowns.slice(0, 5)"
                     >
                         <router-link
                             class="link"
