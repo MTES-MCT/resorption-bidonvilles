@@ -506,6 +506,9 @@ module.exports = () => {
                     {
                         fk_status: ['active'],
                     },
+                    {
+                        subscribed_to_summary: true,
+                    },
                 ],
                 {},
             );
