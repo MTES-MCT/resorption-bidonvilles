@@ -111,14 +111,58 @@
                             </div>
                         </div>
                     </TownDetailsPanelSection>
+                    <TownDetailsPanelSection v-if="nearbyTowns.length">
+                        <div class="grid grid-cols-2">
+                            <div>
+                                <div class="font-bold">
+                                    Sites à proximité
+                                </div>
+                                <div class="text-sm text-G600">
+                                    Dans un rayon de 500m
+                                </div>
+                            </div>
+                            <div>
+                                <ul class="list-disc ml-4">
+                                    <li
+                                        class="text-sm mb-1"
+                                        :key="town.shantytown_id"
+                                        v-for="town in nearbyTowns.slice(0, 5)"
+                                    >
+                                        <router-link
+                                            class="link"
+                                            :to="`/site/${town.shantytown_id}`"
+                                        >
+                                            {{
+                                                town.address_simple ||
+                                                    town.address
+                                            }}
+                                            <span v-if="town.name"
+                                                >« {{ town.name }} »</span
+                                            >
+                                        </router-link>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </TownDetailsPanelSection>
                 </div>
-                <div class="w-1/2 bg-G200">
+                <div class="w-1/2">
                     <div class="v1">
                         <Map
                             :display-searchbar="false"
-                            :towns="[town]"
+                            :towns="[
+                                {
+                                    ...town,
+                                    style: `opacity: 1; z-index: 99999`
+                                },
+                                ...nearbyTowns.map(t => ({
+                                    ...t,
+                                    style: `opacity: 0.7`
+                                }))
+                            ]"
                             :default-view="center"
                             :load-territory-layers="false"
+                            @town-click="goTo"
                             layer-name="Satellite"
                         ></Map>
                     </div>
@@ -134,6 +178,7 @@ import Map from "#app/components/map/map.vue";
 import TownDetailsPanelSection from "./ui/TownDetailsPanelSection.vue";
 import formatDateSince from "../TownsList/formatDateSince";
 import { notify } from "#helpers/notificationHelper";
+import { findNearby } from "#helpers/api/town";
 
 export default {
     props: {
@@ -141,8 +186,18 @@ export default {
             type: Object
         }
     },
+    data() {
+        return {
+            nearbyTowns: []
+        };
+    },
     components: { TownDetailsPanel, TownDetailsPanelSection, Map },
     methods: {
+        goTo(town) {
+            if (town.shantytown_id) {
+                this.$router.push(`/site/${town.shantytown_id}`);
+            }
+        },
         /**
          * @see index.js
          */
@@ -165,6 +220,19 @@ export default {
                 text: "Les coordonnées ont été copiées dans le presse-papier"
             });
         }
+    },
+    async created() {
+        try {
+            const { towns } = await findNearby(
+                this.town.latitude,
+                this.town.longitude
+            );
+
+            this.nearbyTowns = towns.filter(
+                town => town.shantytown_id !== this.town.id
+            );
+            // eslint-disable-next-line no-empty
+        } catch (err) {}
     },
     computed: {
         buildAt() {
