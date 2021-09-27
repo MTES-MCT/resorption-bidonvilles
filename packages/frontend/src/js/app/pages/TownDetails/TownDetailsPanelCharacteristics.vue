@@ -139,6 +139,11 @@
                                             <span v-if="town.name"
                                                 >« {{ town.name }} »</span
                                             >
+                                            <span>
+                                                ({{
+                                                    town.distance.toFixed(2)
+                                                }}km)</span
+                                            >
                                         </router-link>
                                     </li>
                                 </ul>
