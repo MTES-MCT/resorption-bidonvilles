@@ -177,6 +177,7 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
 
         if (acc[row.regionCode][row.departementCode] === undefined) {
             acc[row.regionCode][row.departementCode] = {
+                has_activity: false,
                 code: row.departementCode,
                 name: row.departementName,
                 new_shantytowns: [],
@@ -198,6 +199,8 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
         if (row.activityType === null) {
             return acc;
         }
+
+        acc[row.regionCode][row.departementCode].has_activity = true;
 
         // activité "nouvel utilisateur"
         if (row.activityType === 'new_users') {

@@ -24,6 +24,7 @@ export default async (argFrom: Date, argTo: Date, summaries: ActivityNationalSum
                     from: from.format('DD'),
                     to: to.format('DD MMMM YYYY'),
                     summaries: Object.keys(s).sort().map(departementCode => s[departementCode]),
+                    showDetails: true,
                 },
             });
         });

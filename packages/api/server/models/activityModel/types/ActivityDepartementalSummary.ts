@@ -15,6 +15,7 @@ interface UserSummary {
 }
 
 export interface ActivityDepartementalSummary {
+    has_activity: boolean,
     code: string,
     name: string,
     new_shantytowns: Array<ShantytownSummary>,

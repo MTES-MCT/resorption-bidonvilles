@@ -656,6 +656,7 @@ module.exports = {
                 to: variables.to,
                 recipientName: formatName(recipient),
                 connexionUrl: `${connexionUrl}?${utm}`,
+                showDetails: variables.showDetails || false,
                 summaries: variables.summaries,
                 frontUrl,
                 utm,

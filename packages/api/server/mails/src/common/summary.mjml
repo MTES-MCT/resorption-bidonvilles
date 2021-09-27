@@ -4,55 +4,13 @@
             {{ summary.code }} – {{ summary.name }}
         </mj-text>
 
-        <mj-raw>{% if summary.new_shantytowns_length <= 1 %}</mj-raw>
-        <mj-text mj-class='font-bold pt-2'>{{ summary.new_shantytowns_length }} nouveau site</mj-text>
+        <mj-raw>{% if var:showDetails %}</mj-raw>
+            <mj-include path="summary_full_activities.mjml" />
+        <mj-raw>{% elseif summary.has_activity %}</mj-raw>
+            <mj-include path="summary_full_activities.mjml" />
         <mj-raw>{% else %}</mj-raw>
-        <mj-text mj-class='font-bold pt-2'>{{ summary.new_shantytowns_length }} nouveaux sites</mj-text>
+            <mj-text mj-class='pt-2 font-bold'>Aucune activité</mj-text>
+            <mj-include path="summary_footer.mjml" />
         <mj-raw>{% endif %}</mj-raw>
-        <mj-raw>{% for shantytown in summary.new_shantytowns %}</mj-raw>
-        <mj-text><a href="{{var:frontUrl}}/site/{{shantytown.id}}?{{var:utm}}-nouveau-site" class="link">{{ shantytown.usename }}</a></mj-text>
-        <mj-raw>{% endfor %}</mj-raw>
-
-        <mj-raw>{% if summary.closed_shantytowns_length <= 1 %}</mj-raw>
-        <mj-text mj-class='font-bold pt-2'>{{ summary.closed_shantytowns_length }} site fermé</mj-text>
-        <mj-raw>{% else %}</mj-raw>
-        <mj-text mj-class='font-bold pt-2'>{{ summary.closed_shantytowns_length }} sites fermés</mj-text>
-        <mj-raw>{% endif %}</mj-raw>
-        <mj-raw>{% for shantytown in summary.closed_shantytowns %}</mj-raw>
-        <mj-text><a href="{{var:frontUrl}}/site/{{shantytown.id}}?{{var:utm}}-site-ferme" class="link">{{ shantytown.usename }}</a></mj-text>
-        <mj-raw>{% endfor %}</mj-raw>
-
-        <mj-raw>{% if summary.updated_shantytowns_length <= 1 %}</mj-raw>
-        <mj-text mj-class='font-bold pt-2'>{{ summary.updated_shantytowns_length }} site mis à jour</mj-text>
-        <mj-raw>{% else %}</mj-raw>
-        <mj-text mj-class='font-bold pt-2'>{{ summary.updated_shantytowns_length }} sites mis à jour</mj-text>
-        <mj-raw>{% endif %}</mj-raw>
-        <mj-raw>{% for shantytown in summary.updated_shantytowns %}</mj-raw>
-        <mj-text><a href="{{var:frontUrl}}/site/{{shantytown.id}}?{{var:utm}}-site-mis-a-jour" class="link">{{ shantytown.usename }}</a></mj-text>
-        <mj-raw>{% endfor %}</mj-raw>
-
-        <mj-raw>{% if summary.new_comments_length <= 1 %}</mj-raw>
-        <mj-text mj-class='font-bold pt-2'>{{ summary.new_comments_length }} message dans le journal du site</mj-text>
-        <mj-raw>{% else %}</mj-raw>
-        <mj-text mj-class='font-bold pt-2'>{{ summary.new_comments_length }} messages dans le journal du site</mj-text>
-        <mj-raw>{% endif %}</mj-raw>
-        <mj-raw>{% for comment in summary.new_comments %}</mj-raw>
-        <mj-text><a href="{{var:frontUrl}}/site/{{comment.shantytownId}}?{{var:utm}}-nouveau-message#message{{comment.id}}" class="link">{{ comment.shantytownUsename }}</a></mj-text>
-        <mj-raw>{% endfor %}</mj-raw>
-
-        <mj-raw>{% if summary.new_users_length <= 1 %}</mj-raw>
-        <mj-text mj-class='font-bold pt-2'>{{ summary.new_users_length }} nouvel utilisateur</mj-text>
-        <mj-raw>{% else %}</mj-raw>
-        <mj-text mj-class='font-bold pt-2'>{{ summary.new_users_length }} nouveaux utilisateurs</mj-text>
-        <mj-raw>{% endif %}</mj-raw>
-        <mj-raw>{% for user in summary.new_users %}</mj-raw>
-        <mj-text><a href="{{var:frontUrl}}/annuaire/{{user.organizationId}}?{{var:utm}}-nouvel-utilisateur" class="link">{{ user.name }}</a></mj-text>
-        <mj-raw>{% endfor %}</mj-raw>
-
-        <mj-text mj-class='pt-2'>Pour rappel : <span class='text-secondary font-bold'>{{ summary.shantytowns_total }} sites</span> et <span class='text-secondary font-bold'>{{ summary.population_total }} habitants</span> en bidonvilles ou squats</mj-text>
-        
-        <mj-button align="left" mj-class="button-primary" href="{{var:connexionUrl}}">
-            Me connecter
-        </mj-button>
     </mj-column>
 </mj-section>

@@ -25,6 +25,7 @@ export default async (argFrom: Date, argTo: Date, summaries: ActivityNationalSum
                     summaries: [
                         summaries[location.region.code][location.departement.code],
                     ],
+                    showDetails: true,
                 },
             });
         });
