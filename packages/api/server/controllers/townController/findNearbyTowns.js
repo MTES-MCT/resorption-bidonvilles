@@ -1,7 +1,7 @@
 
 module.exports = models => async (req, res, next) => {
     try {
-        const { latitude, longitude, distance = 1 } = req.query;
+        const { latitude, longitude, distance = 0.5 } = req.query;
         const towns = await models.shantytown.findNearby(req.user, latitude, longitude, distance);
         return res.status(200).send({ towns });
     } catch (error) {
