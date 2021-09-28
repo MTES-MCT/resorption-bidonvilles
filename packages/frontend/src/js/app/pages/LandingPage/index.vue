@@ -1,5 +1,11 @@
 <template>
     <PublicLayout :displayLanguagePicker="true">
+        <template v-slot:anchors v-if="$i18n.locale === 'fr'">
+            <a href="#plateforme">La plateforme</a>
+            <a href="#strategie">La stratégie de résorption</a>
+            <a href="#faq">FAQ</a>
+        </template>
+
         <PublicContainer>
             <div class="pt-4 text-center"></div>
             <NewsPopupWater></NewsPopupWater>
@@ -27,7 +33,7 @@
                 src="./assets/resorption-bidonvilles-1.jpg"
             />
         </CreditWrapper>
-        <PublicContainer>
+        <PublicContainer id="strategie">
             <div class="max-w-screen-lg mx-auto py-20">
                 <LandingPageSecondSection />
             </div>
@@ -43,8 +49,10 @@
         </CreditWrapper>
         <PublicContainer>
             <div class="max-w-screen-lg mx-auto py-20">
-                <LandingPageFAQ />
-                <LandingPageNewsletter class="mt-20" />
+                <LandingPageFAQ id="faq" v-if="$i18n.locale === 'fr'" />
+                <LandingPageNewsletter
+                    :class="$i18n.locale === 'fr' ? 'mt-20' : ''"
+                />
                 <div class="text-center mt-20">
                     <h2 class="text-display-lg text-secondary">
                         {{ $t("landingPage.hero.subtitle") }}

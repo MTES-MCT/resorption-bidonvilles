@@ -3,7 +3,9 @@
         <NavBar
             :stickyHeader="stickyHeader"
             :displayLanguagePicker="displayLanguagePicker"
-        />
+        >
+            <template v-slot:anchors><slot name="anchors"></slot></template>
+        </NavBar>
         <slot />
         <PublicFooter />
     </div>
