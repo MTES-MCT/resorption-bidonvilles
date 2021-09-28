@@ -1,0 +1,122 @@
+Semaine du {{ var:from }} au {{ var:to }}
+{% for summary in var:summaries %}
+{{ summary.code }} – {{ summary.name }}
+{% if var:showDetails %}{% if summary.new_shantytowns_length > 1 %}
+{{ summary.new_shantytowns_length }} nouveaux sites
+{% else %}
+{{ summary.new_shantytowns_length }} nouveau site
+{% endif %}{% for shantytown in summary.new_shantytowns %}
+{{ shantytown.usename }}
+[{{var:frontUrl}}/site/{{shantytown.id}}?{{var:utm}}-nouveau-site]
+{% endfor %}{% if summary.closed_shantytowns_length > 1 %}
+{{ summary.closed_shantytowns_length }} sites fermés
+{% else %}
+{{ summary.closed_shantytowns_length }} site fermé
+{% endif %}{% for shantytown in summary.closed_shantytowns %}
+{{ shantytown.usename }}
+[{{var:frontUrl}}/site/{{shantytown.id}}?{{var:utm}}-site-ferme]
+{% endfor %}{% if summary.updated_shantytowns_length > 1 %}
+{{ summary.updated_shantytowns_length }} sites mis à jour
+{% else %}
+{{ summary.updated_shantytowns_length }} site mis à jour
+{% endif %}{% for shantytown in summary.updated_shantytowns %}
+{{ shantytown.usename }}
+[{{var:frontUrl}}/site/{{shantytown.id}}?{{var:utm}}-site-mis-a-jour]
+{% endfor %}{% if summary.new_comments_length > 1 %}
+{{ summary.new_comments_length }} messages dans le journal du site
+{% else %}
+{{ summary.new_comments_length }} message dans le journal du site
+{% endif %}{% for comment in summary.new_comments %}
+{{ comment.shantytownUsename }}
+[{{var:frontUrl}}/site/{{comment.shantytownId}}?{{var:utm}}-nouveau-message#message{{comment.id}}]
+{% endfor %}{% if summary.new_users_length > 1 %}
+{{ summary.new_users_length }} nouveaux utilisateurs
+{% else %}
+{{ summary.new_users_length }} nouvel utilisateur
+{% endif %}{% for user in summary.new_users %}
+{{ user.name }}
+[{{var:frontUrl}}/annuaire/{{user.organizationId}}?{{var:utm}}-nouvel-utilisateur]
+{% endfor %}
+Pour rappel : {{ summary.shantytowns_total }} sites et {{
+summary.population_total }} habitants en bidonvilles ou squats
+
+Me connecter [{{var:connexionUrl}}]
+
+{% elseif summary.has_activity %}{% if summary.new_shantytowns_length > 1 %}
+{{ summary.new_shantytowns_length }} nouveaux sites
+{% else %}
+{{ summary.new_shantytowns_length }} nouveau site
+{% endif %}{% for shantytown in summary.new_shantytowns %}
+{{ shantytown.usename }}
+[{{var:frontUrl}}/site/{{shantytown.id}}?{{var:utm}}-nouveau-site]
+{% endfor %}{% if summary.closed_shantytowns_length > 1 %}
+{{ summary.closed_shantytowns_length }} sites fermés
+{% else %}
+{{ summary.closed_shantytowns_length }} site fermé
+{% endif %}{% for shantytown in summary.closed_shantytowns %}
+{{ shantytown.usename }}
+[{{var:frontUrl}}/site/{{shantytown.id}}?{{var:utm}}-site-ferme]
+{% endfor %}{% if summary.updated_shantytowns_length > 1 %}
+{{ summary.updated_shantytowns_length }} sites mis à jour
+{% else %}
+{{ summary.updated_shantytowns_length }} site mis à jour
+{% endif %}{% for shantytown in summary.updated_shantytowns %}
+{{ shantytown.usename }}
+[{{var:frontUrl}}/site/{{shantytown.id}}?{{var:utm}}-site-mis-a-jour]
+{% endfor %}{% if summary.new_comments_length > 1 %}
+{{ summary.new_comments_length }} messages dans le journal du site
+{% else %}
+{{ summary.new_comments_length }} message dans le journal du site
+{% endif %}{% for comment in summary.new_comments %}
+{{ comment.shantytownUsename }}
+[{{var:frontUrl}}/site/{{comment.shantytownId}}?{{var:utm}}-nouveau-message#message{{comment.id}}]
+{% endfor %}{% if summary.new_users_length > 1 %}
+{{ summary.new_users_length }} nouveaux utilisateurs
+{% else %}
+{{ summary.new_users_length }} nouvel utilisateur
+{% endif %}{% for user in summary.new_users %}
+{{ user.name }}
+[{{var:frontUrl}}/annuaire/{{user.organizationId}}?{{var:utm}}-nouvel-utilisateur]
+{% endfor %}
+Pour rappel : {{ summary.shantytowns_total }} sites et {{
+summary.population_total }} habitants en bidonvilles ou squats
+
+Me connecter [{{var:connexionUrl}}]
+
+{% else %}
+Aucune activité
+Pour rappel : {{ summary.shantytowns_total }} sites et {{
+summary.population_total }} habitants en bidonvilles ou squats
+
+Me connecter [{{var:connexionUrl}}]
+
+{% endif %}
+
+{% endfor%}
+
+Avez-vous effectué d’autres actions ? Il est encore temps de les partager !
+Le partage d’information entre tous les acteurs est essentiel pour accélérer la
+résorption des bidonvilles.
+Connectez-vous dès maintenant à la plateforme ! et participez à la résorption
+des bidonvilles en partageant les changements dont vous auriez eu connaissance
+ces derniers jours sur les sites de votre territoire.
+Une fermeture, un nouveau site, un accès à l'eau endommagé, de nouvelles
+arrivées, le passage d’un médiateur scolaire, une procédure judiciaire en cours…
+Les données de ce mail sont issues de la plateforme Résorption-bidonvilles
+[{{var:frontUrl}}?{{var:utm}}].
+Ce courriel a été envoyé à tous les utilisateurs de la plateforme présents dans
+votre département et votre région ainsi qu'aux acteurs nationaux comme la Dihal.
+
+Cordialement,
+L'équipe Résorption-bidonvilles
+
+
+
+Résorption-bidonvilles
+Agir pour résorber les bidonvilles
+contact@resorption-bidonvilles.beta.gouv.fr
+[contact@resorption-bidonvilles.beta.gouv.fr]
+Développé par la Dihal [https://www.gouvernement.fr/resorption-des-bidonvilles]
+
+Pour ne plus recevoir ces récapitulatifs hebdomadaires, veuillez le signaler
+dans votre espace "Mon compte" [{{var:frontUrl}}/mon-compte?{{var:utm}}].
