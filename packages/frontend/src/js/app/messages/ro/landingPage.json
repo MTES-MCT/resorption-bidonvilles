@@ -75,6 +75,32 @@
     "thirdParagraph": "",
     "video": {
       "text": "Înțelegerea resorbției de bidonville în 2 minute"
+    },
+    "bilan": {
+      "title": "Acţiunile desfăşurate in cifre",
+      "firstParagraph": {
+        "bold": "Peste 30 de acțiuni desfășurate în 2019 de catre 35 de operatori.",
+        "normal": "Acestea sunt 75% finanțate de stat, 15% de autoritățile locale și 10% din fonduri private sau europene. Echipe de profesioniști însoțesc familiile în bidonville, cladirile dezafectate sau în locuință cuprinzând toate aspectele: sănătate, locuința, ocuparea forței de muncă, educație, stabilizare și securitatea locului."
+      },
+      "figures": {
+        "1": {
+          "text": "8 600 de beneficiari ai acestor actiuni"
+        },
+        "3": {
+          "text": "1 000 de persoane relocate"
+        },
+        "4": {
+          "text": "1 350 elevi"
+        },
+        "5": {
+          "text": "2 040 de beneficiari",
+          "info": "de sprijin medical"
+        },
+        "6": {
+          "text": "615 contracte de muncă semnate"
+        }
+      },
+      "cta": "Încarcaţi ultimul bilanţ"
     }
   },
   "secondBanner": {
@@ -82,31 +108,7 @@
     "cta": "Contactaţi-ne"
   },
   "thirdSection": {
-    "title": "Acţiunile desfăşurate in cifre",
     "firstParagraph": {
-      "bold": "Peste 30 de acțiuni desfășurate în 2019 de catre 35 de operatori.",
-      "normal": "Acestea sunt 75% finanțate de stat, 15% de autoritățile locale și 10% din fonduri private sau europene. Echipe de profesioniști însoțesc familiile în bidonville, cladirile dezafectate sau în locuință cuprinzând toate aspectele: sănătate, locuința, ocuparea forței de muncă, educație, stabilizare și securitatea locului."
-    },
-    "bilan": {
-      "1": {
-        "text": "8 600 de beneficiari ai acestor actiuni"
-      },
-      "3": {
-        "text": "1 000 de persoane relocate"
-      },
-      "4": {
-        "text": "1 350 elevi"
-      },
-      "5": {
-        "text": "2 040 de beneficiari",
-        "info": "de sprijin medical"
-      },
-      "6": {
-        "text": "615 contracte de muncă semnate"
-      }
-    },
-    "cta": "Încarcaţi ultimul bilanţ",
-    "secondParagraph": {
       "title": "Un proiect realizat de Delegația Interministerială privind cazarea și accesul la locuințe",
       "body": {
         "text1": "Platforma digitală „resorbția de bidonville”, lansată în 2018 de",

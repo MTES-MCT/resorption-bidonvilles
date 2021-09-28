@@ -75,6 +75,32 @@
     "thirdParagraph": "",
     "video": {
       "text": "Understanding slum clearance in 2 minutes"
+    },
+    "bilan": {
+      "title": "Actions in figures",
+      "firstParagraph": {
+        "bold": "In 2019, more than 30 slum clearance projects have been carried out by 35 NGOs",
+        "normal": "They have been financed 75% by the State, 15% by local authorities and 10% by private or European funds. Families living in slums have been supported in order to access to health, housing, employment, education and sanitation."
+      },
+      "figures": {
+        "1": {
+          "text": "8,600 beneficiaries of the actions"
+        },
+        "3": {
+          "text": "1,000 people re-housed"
+        },
+        "4": {
+          "text": "1,350 children in school"
+        },
+        "5": {
+          "text": "2,040 beneficiaries",
+          "info": "of health support"
+        },
+        "6": {
+          "text": "615 employment contracts signed"
+        }
+      },
+      "cta": "Download the latest report"
     }
   },
   "secondBanner": {
@@ -82,31 +108,7 @@
     "cta": "Contact us"
   },
   "thirdSection": {
-    "title": "Actions in figures",
     "firstParagraph": {
-      "bold": "In 2019, more than 30 slum clearance projects have been carried out by 35 NGOs",
-      "normal": "They have been financed 75% by the State, 15% by local authorities and 10% by private or European funds. Families living in slums have been supported in order to access to health, housing, employment, education and sanitation."
-    },
-    "bilan": {
-      "1": {
-        "text": "8,600 beneficiaries of the actions"
-      },
-      "3": {
-        "text": "1,000 people re-housed"
-      },
-      "4": {
-        "text": "1,350 children in school"
-      },
-      "5": {
-        "text": "2,040 beneficiaries",
-        "info": "of health support"
-      },
-      "6": {
-        "text": "615 employment contracts signed"
-      }
-    },
-    "cta": "Download the latest report",
-    "secondParagraph": {
       "title": "A project led by the interministerial delegation for access to housing (DIHAL)",
       "body": {
         "text1": "The digital platform Résorption-bidonvilles, launched in 2018 by the",
