@@ -94,6 +94,7 @@ function serializeUser(user, latestCharte, filters, permissionMap) {
             },
         },
         charte_engagement_a_jour: latestCharte === null || user.charte_engagement_signee === latestCharte,
+        subscribed_to_summary: user.subscribed_to_summary,
         is_admin: user.is_admin,
         role: user.role_name || user.organization_type_role_name,
         role_id: user.role || user.organization_type_role,
@@ -155,9 +156,9 @@ function serializeUser(user, latestCharte, filters, permissionMap) {
 
 module.exports = () => {
     // eslint-disable-next-line global-require
-    const permissionModel = require('./permissionModel')(database);
+    const permissionModel = require('../permissionModel')(database);
     // eslint-disable-next-line global-require
-    const charteEngagementModel = require('./charteEngagementModel')(database);
+    const charteEngagementModel = require('../charteEngagementModel')(database);
 
     /**
      * Fetches a list of users from the database
@@ -226,6 +227,7 @@ module.exports = () => {
                 users.last_version,
                 users.last_changelog,
                 users.charte_engagement_signee,
+                users.subscribed_to_summary,
                 CASE WHEN users.fk_role IS NULL THEN FALSE
                     ELSE TRUE
                 END AS is_admin,
@@ -496,6 +498,41 @@ module.exports = () => {
         },
 
         /**
+         * Returns the list of users subscribed to the departement activity summary mail
+         *
+         * @returns {Array.<User>}
+         */
+        findDepartementSummarySubscribers: async () => {
+            const users = await query(
+                [
+                    {
+                        fk_status: ['active'],
+                    },
+                    {
+                        subscribed_to_summary: true,
+                    },
+                ],
+                {},
+            );
+
+            return users.reduce((argAcc, user) => {
+                const acc = { ...argAcc };
+
+                let locationType = user.organization.location.type;
+                if (!acc[locationType]) {
+                    locationType = 'departement';
+                }
+
+                acc[locationType].push(user);
+                return acc;
+            }, {
+                nation: [],
+                region: [],
+                departement: [],
+            });
+        },
+
+        /**
          * Searches for the users members of an organization
          *
          * @param {Number}       organizationId
@@ -554,6 +591,7 @@ module.exports = () => {
             const allowedProperties = [
                 'first_name', 'last_name', 'position', 'phone', 'password', 'defaultExport', 'fk_status',
                 'last_version', 'last_changelog', 'charte_engagement_signee', 'last_access',
+                'subscribed_to_summary',
             ];
             const propertiesToColumns = {
                 first_name: 'first_name',
@@ -567,6 +605,7 @@ module.exports = () => {
                 last_changelog: 'last_changelog',
                 charte_engagement_signee: 'charte_engagement_signee',
                 last_access: 'last_access',
+                subscribed_to_summary: 'subscribed_to_summary',
             };
             const setClauses = [];
             const replacements = {};
@@ -578,7 +617,7 @@ module.exports = () => {
                     if (property === 'defaultExport' && values[property]) {
                         replacements[property] = values[property].replace(/\s/g, '') || null;
                     } else {
-                        replacements[property] = values[property] || null;
+                        replacements[property] = values[property] !== undefined ? values[property] : null;
                     }
                 }
             });

@@ -42,6 +42,11 @@
                 <AccountReadLabel label="Téléphone">
                     {{ user.phone }}
                 </AccountReadLabel>
+                <AccountReadLabel
+                    label="Abonné(e) au récapitulatif hebdomadaire"
+                >
+                    {{ user.subscribed_to_summary ? "Oui" : "Non" }}
+                </AccountReadLabel>
 
                 <div class="mt-8" v-if="!$route.params.id">
                     <div class="font-bold">
@@ -51,8 +56,8 @@
                     <div>
                         Si vous souhaitez changer de courriel, écrivez-nous à
                         <a
-                            href="mailto:contact@resorption-bodonvilles.beta.gouv.fr"
-                            >contact@resorption-bodonvilles.beta.gouv.fr</a
+                            href="mailto:contact@resorption-bidonvilles.beta.gouv.fr"
+                            >contact@resorption-bidonvilles.beta.gouv.fr</a
                         >
                     </div>
                     <div>

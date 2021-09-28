@@ -1,0 +1,1 @@
+export type permissionGeographicLevel = 'nation' | 'region' | 'departement' | 'epci' | 'city' | 'local' | 'own';

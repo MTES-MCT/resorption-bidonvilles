@@ -6,8 +6,21 @@ const {
     sendUserShare,
     sendUserReview,
 } = require('#server/mails/mails');
+import * as moment from 'moment';
+import activitySummary from '#server/services/activitySummary';
+import { sendActivitySummary } from '#server/config';
 
-module.exports = (agenda) => {
+export default (agenda) => {
+    agenda.define(
+        'send_activity_summary',
+        async (job) => {
+            if (sendActivitySummary) {
+                const now = moment().utcOffset(2);
+                await activitySummary.sendAll(now.day(), now.month(), now.year());
+            }
+        }
+    );
+
     agenda.define(
         'access_request_pending_1st',
         (job) => {

@@ -1,0 +1,1 @@
+export type permissionOption = 'close_shantytown' | 'create_and_close_shantytown' | 'hide_justice';
