@@ -45,8 +45,7 @@
     "cta": "Demander un accès"
   },
   "secondSection": {
-    "title": "La résorption complète des bidonvilles,",
-    "subtitle": "un objectif national",
+    "title": "Quelle est la politique de résorption des bidonvilles ?",
     "data": {
       "1": {
         "line1": "Plus de",
@@ -64,11 +63,18 @@
         "line3": "Roumains et Bulgares"
       }
     },
-    "firstParagraph": "Un bidonville est un terrain, une friche ou un immeuble bâti généralement dépourvu des services de base (eau, électricité, gestion des déchets) et occupé illégalement par plusieurs familles.",
-    "secondParagraph": {
+    "firstParagraph": {
       "bold": "Le gouvernement fixe un objectif clair de résorption des bidonvilles en dépassant l’approche centrée sur les évacuations au profit d’une approche globale",
       "normal": "alliant insertion sociale, respect de l’ordre public et prévention des réinstallations. Dans tous les territoires concernés, des actions multi-partenariales efficaces, humaines et pragmatiques doivent être mises en place.",
       "link": "En savoir plus sur la politique de résorption des bidonvilles"
+    },
+    "secondParagraph": {
+      "bold": "Qu’est-ce qu’un bidonville ?",
+      "normal": "Un bidonville est un terrain, une friche ou un immeuble bâti généralement dépourvu des services de base (eau, électricité, gestion des déchets) et occupé illégalement par plusieurs familles."
+    },
+    "thirdParagraph": {
+      "bold": "Qu'est-ce qu'une résorption ?",
+      "normal": "Un site est considéré comme résorbé si une solution pérenne en logement ou hébergement est mise en place pour 66 % des habitants du site."
     },
     "video": {
       "text": "Comprendre la résorption des bidonvilles en 2 minutes"

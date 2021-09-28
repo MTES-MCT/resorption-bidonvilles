@@ -45,8 +45,7 @@
     "cta": "Solicitaţi accesul"
   },
   "secondSection": {
-    "title": "Dizolvarea platzurilor,",
-    "subtitle": "un obiectiv național",
+    "title": "Care este politica de modernizare a mahalalelor?",
     "data": {
       "1": {
         "line1": "Peste",
@@ -64,12 +63,16 @@
         "line3": "români și bulgari"
       }
     },
-    "firstParagraph": "Un bidonville este un teren, un maidan sau o clădire construită care în general e lipsită de servicii de bază (apă, electricitate, gestionarea deșeurilor) și ocupată ilegal de mai multe familii. Un bidonville mai est denumit si „plaț” în limbaj familiar.",
-    "secondParagraph": {
+    "firstParagraph": {
       "bold": "In 2018, Guvernul și-a stabilit un obiectiv clar pentru resorbția de bidonville, depășind abordarea centrată pe evacuare, într-o abordare cuprinzătoare care combină integrarea socială, respectarea ordinii publice și prevenirea reinstralarii.",
       "normal": "În toateteritoriile în cauză, trebuie instituite acțiuni eficiente, umane și pragmatice multi-parteneriale.",
       "link": "Aflați mai multe despre politica de resorbției de bidonville"
     },
+    "secondParagraph": {
+      "bold": "Ce este o bidonville?",
+      "normal": "Un bidonville este un teren, un maidan sau o clădire construită care în general e lipsită de servicii de bază (apă, electricitate, gestionarea deșeurilor) și ocupată ilegal de mai multe familii. Un bidonville mai est denumit si „plaț” în limbaj familiar."
+    },
+    "thirdParagraph": "",
     "video": {
       "text": "Înțelegerea resorbției de bidonville în 2 minute"
     }

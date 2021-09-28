@@ -24,27 +24,41 @@
                 <span class="text-display-lg font-normal">{{
                     $t("landingPage.secondSection.title")
                 }}</span>
-                <span class="text-display-lg block">{{
-                    $t("landingPage.secondSection.subtitle")
-                }}</span>
             </h2>
-            <div class="mt-8">
-                {{ $t("landingPage.secondSection.firstParagraph") }}
-            </div>
+
             <div class="mt-8">
                 <span class="font-bold">{{
-                    $t("landingPage.secondSection.secondParagraph.bold")
+                    $t("landingPage.secondSection.firstParagraph.bold")
                 }}</span>
-                {{ $t("landingPage.secondSection.secondParagraph.normal") }}
+                {{ $t("landingPage.secondSection.firstParagraph.normal") }}
             </div>
             <div>
                 <a
                     class="link"
                     href="https://www.ecologie.gouv.fr/resorption-des-campements-illicites-et-des-bidonvilles"
                     >{{
-                        $t("landingPage.secondSection.secondParagraph.link")
+                        $t("landingPage.secondSection.firstParagraph.link")
                     }}</a
                 >
+            </div>
+
+            <div class="mt-8">
+                <span class="font-bold">{{
+                    $t("landingPage.secondSection.secondParagraph.bold")
+                }}</span
+                ><br />
+                {{ $t("landingPage.secondSection.secondParagraph.normal") }}
+            </div>
+
+            <div
+                class="mt-8"
+                v-if="$t('landingPage.secondSection.thirdParagraph')"
+            >
+                <span class="font-bold">{{
+                    $t("landingPage.secondSection.thirdParagraph.bold")
+                }}</span
+                ><br />
+                {{ $t("landingPage.secondSection.thirdParagraph.normal") }}
             </div>
 
             <img

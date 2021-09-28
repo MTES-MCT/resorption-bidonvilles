@@ -45,8 +45,7 @@
     "cta": "Request access"
   },
   "secondSection": {
-    "title": "Reaching slum clearance,",
-    "subtitle": "a national objective",
+    "title": "What is the slum resorption policy?",
     "data": {
       "1": {
         "line1": "More than",
@@ -64,12 +63,16 @@
         "line3": "Romanian and Bulgarian citizens"
       }
     },
-    "firstParagraph": "A slum is an area that usually lacks basic services (water, electricity, waste management) and is illegally occupied by several families.",
-    "secondParagraph": {
+    "firstParagraph": {
       "bold": "The government sets a clear objective of slum resorption by moving away from an evacuation-centred approach to a global approach.",
       "normal": "combining social inclusion, respect for public order and prevention of resettlement. In all the territories concerned, effective, humane and pragmatic multi-partner actions must be implemented.",
       "link": "More about the slum resorption policy"
     },
+    "secondParagraph": {
+      "bold": "What is a slum?",
+      "normal": "A slum is an area that usually lacks basic services (water, electricity, waste management) and is illegally occupied by several families."
+    },
+    "thirdParagraph": "",
     "video": {
       "text": "Understanding slum clearance in 2 minutes"
     }
