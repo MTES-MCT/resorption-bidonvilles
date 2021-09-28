@@ -686,6 +686,59 @@ module.exports = (database) => {
         return comments;
     }
 
+    async function getAverageCompletion(shantytownIds) {
+        const results = await database.query(
+            `
+            SELECT
+                s.shantytown_id,
+                ((CASE WHEN (SELECT regexp_matches(s.address, '^(.+) [0-9]+ [^,]+,? [0-9]+,? [^, ]+(,.+)?$'))[1] IS NOT NULL THEN 1 ELSE 0 END)
+                +
+                (CASE WHEN ft.label <> 'Inconnu' THEN 1 ELSE 0 END)
+                +
+                (CASE WHEN ot.label <> 'Inconnu' THEN 1 ELSE 0 END)
+                +
+                (CASE WHEN s.census_status IS NOT NULL THEN 1 ELSE 0 END)
+                +
+                (CASE WHEN s.population_total IS NOT NULL THEN 1 ELSE 0 END)
+                +
+                (CASE WHEN s.population_couples IS NOT NULL THEN 1 ELSE 0 END)
+                +
+                (CASE WHEN s.population_minors IS NOT NULL THEN 1 ELSE 0 END)
+                +
+                (CASE WHEN s.population_total IS NOT NULL AND s.population_total >= 10 AND (SELECT COUNT(*) FROM shantytown_origins WHERE fk_shantytown = s.shantytown_id) > 0 THEN 1 ELSE 0 END)
+                +
+                (CASE WHEN et.label <> 'Inconnu' THEN 1 ELSE 0 END)
+                +
+                (CASE WHEN s.access_to_water IS NOT NULL THEN 1 ELSE 0 END)
+                +
+                (CASE WHEN s.access_to_sanitary IS NOT NULL THEN 1 ELSE 0 END)
+                +
+                (CASE WHEN s.trash_evacuation IS NOT NULL THEN 1 ELSE 0 END))::FLOAT / 12.0 AS completion
+            FROM
+                shantytowns s
+            LEFT JOIN
+                cities c ON s.fk_city = c.code
+            LEFT JOIN
+                field_types ft ON s.fk_field_type = ft.field_type_id
+            LEFT JOIN
+                owner_types ot ON s.fk_owner_type = ot.owner_type_id
+            LEFT JOIN
+                electricity_types et ON s.fk_electricity_type = et.electricity_type_id
+            WHERE
+                s.closed_at IS NULL
+            AND s.shantytown_id IN (:ids)`,
+            {
+                type: database.QueryTypes.SELECT,
+                replacements: {
+                    ids: shantytownIds,
+                },
+            },
+        );
+
+        return results;
+    }
+
+
     /**
      * Fetches a list of shantytowns from the database
      *
@@ -807,7 +860,11 @@ module.exports = (database) => {
             ),
         );
 
-        const [history, comments, covidComments, closingSolutions, actors, plans] = await Promise.all(promises);
+        promises.push(
+            getAverageCompletion(Object.keys(serializedTowns.hash)),
+        );
+
+        const [history, comments, covidComments, closingSolutions, actors, plans, completion] = await Promise.all(promises);
 
         if (history !== undefined && history.length > 0) {
             const serializedHistory = history.map(h => serializeShantytown(h, user.permissions.shantytown[feature]));
@@ -872,6 +929,10 @@ module.exports = (database) => {
             serializedTowns.hash[plan.shantytown_id].plans.push(
                 planShantytownModel.serializePlan(plan),
             );
+        });
+
+        completion.forEach((item) => {
+            serializedTowns.hash[item.shantytown_id].completion = item.completion;
         });
 
         return serializedTowns.ordered;
@@ -954,6 +1015,7 @@ module.exports = (database) => {
 
     methods.getComments = getComments;
 
+    methods.getAverageCompletion = getAverageCompletion;
 
     /**
      * @typedef {Object} HistoryPermissions

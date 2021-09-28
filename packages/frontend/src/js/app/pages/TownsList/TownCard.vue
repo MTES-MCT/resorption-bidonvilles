@@ -19,6 +19,10 @@
                     >
                         {{ lastUpdate }}
                     </Tag>
+                    <CompletionTag
+                        class="ml-4"
+                        :completion="shantytown.completion"
+                    />
                     <Tag
                         :class="['ml-4 py-1 px-3', isHover ? 'shadow-md' : '']"
                         variant="highlight"
@@ -268,6 +272,7 @@ import flagFR from "./assets/fr.png";
 import flagExtraCommunautaires from "./assets/extra-communautaires.png";
 import formatDateSinceActivity from "./formatDateSinceActivity";
 import { formatLivingConditions } from "#app/pages/TownDetails/formatLivingConditions";
+import CompletionTag from "#app/pages/TownsList/CompletionTag";
 
 export default {
     props: {
@@ -285,6 +290,7 @@ export default {
         };
     },
     components: {
+        CompletionTag,
         TownCardIcon
     },
     methods: {

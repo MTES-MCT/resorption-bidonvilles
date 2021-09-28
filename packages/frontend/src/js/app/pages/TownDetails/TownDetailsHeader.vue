@@ -30,6 +30,9 @@
                 Mis à jour le
                 {{ formatDate(town.updatedAt, "d/m/y") }}
             </div>
+            <div class="flex items-center uppercase text-sm ">
+                <CompletionTag :completion="town.completion" />
+            </div>
             <div class="flex items-center uppercase text-sm mr-4">
                 <Tag variant="highlight" v-if="town.resorptionTarget">
                     Objectif résorption
@@ -99,8 +102,10 @@
 
 <script>
 import { get as getConfig, getPermission } from "#helpers/api/config";
+import CompletionTag from "#app/pages/TownsList/CompletionTag";
 
 export default {
+    components: { CompletionTag },
     props: {
         town: {
             type: Object
