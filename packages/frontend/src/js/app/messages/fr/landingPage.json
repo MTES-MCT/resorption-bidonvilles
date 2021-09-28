@@ -112,14 +112,13 @@
   },
   "thirdSection": {
     "firstParagraph": {
-      "title": "Un projet porté par la Délégation interministérielle à l’hébergement et l’accès au logement",
       "body": {
-        "text1": "La plateforme numérique Résorption-bidonvilles, portée et lancée en 2018 par la",
-        "link1": "Dihal",
-        "text2": "s’inscrit dans un objectif de transformation de l’action publique",
-        "text3": "Les développements de la plateforme se poursuivent en lien étroit avec ses usagers.",
-        "text4": "Vous souhaitez en savoir plus sur la génèse du projet ? Accédez à sa fiche sur",
-        "link2": "le site officiel des start-ups d’Etat"
+        "text1": "La plateforme numérique",
+        "text2": "Résorption-bidonvilles",
+        "text3": "est portée par la Délégation Interministérielle à l'hébergement et l'accès au logement",
+        "text4": "Lancée en 2018, elle s'inscrit dans un objectif de transformation de l'action publique et est développée en lien étroit avec ses usagers",
+        "text5": "En savoir plus sur la génèse du projet : rendez-vous sur ",
+        "link1": "le site officiel des start-ups d’Etat"
       },
       "items": {
         "title": "Le projet a été lauréat de plusieurs appels à projet :",

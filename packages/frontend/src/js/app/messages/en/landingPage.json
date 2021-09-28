@@ -109,14 +109,13 @@
   },
   "thirdSection": {
     "firstParagraph": {
-      "title": "A project led by the interministerial delegation for access to housing (DIHAL)",
       "body": {
-        "text1": "The digital platform Résorption-bidonvilles, launched in 2018 by the",
-        "link1": "DIHAL",
-        "text2": "plays a role in transforming public action",
-        "text3": "The platform continues to be developed in close collaboration with its users.",
-        "text4": "To learn more about the beginning of the project, please visit ",
-        "link2": "the official website about Start-up d'Etat"
+        "text1": "The digital platform",
+        "text2": "Résorption-bidonvilles",
+        "text3": "is led by the interministerial delegation for access to housing",
+        "text4": "The platform continues to be developed in close collaboration with its users",
+        "text5": "To learn more about the beginning of the project, please visit",
+        "link1": "the official website about Start-up d'Etat"
       },
       "items": {
         "title": "The project was the winner of several calls for proposals:",

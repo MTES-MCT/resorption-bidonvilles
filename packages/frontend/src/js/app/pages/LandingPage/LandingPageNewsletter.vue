@@ -1,5 +1,5 @@
 <template>
-    <div class="text-center mt-40 max-w-screen-lg">
+    <div class="text-center max-w-screen-lg">
         <h2 class="text-display-lg text-primary">
             {{ $t("landingPage.newsletter.title") }}
         </h2>
