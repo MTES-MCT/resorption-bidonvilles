@@ -16,9 +16,11 @@
     "before": "Avant",
     "after": "Après",
     "context": {
-      "title": "Résorption-bidonvilles,",
-      "subtitle": "Un accélérateur de la résorption des bidonvilles",
-      "text": "Outil d’information, de partage et de pilotage, la plateforme offre une solution performante et efficace pour la résorption des bidonvilles. Elle permet de créer une véritable dynamique collaborative, au sein d’un territoire, entre les acteurs engagés vers l’objectif de résorption."
+      "title_part1": "La plateforme numérique",
+      "title_part2": "Résorption-bidonvilles",
+      "title_part3": "pourquoi, pour qui ?",
+      "text_1": "Outil d’information, de partage et de pilotage, la plateforme offre une solution performante et efficace pour accélérer la résorption des bidonvilles.",
+      "text_2": "Elle vise la transformation de l’action publique et permet de créer une véritable dynamique collaborative, au sein d’un territoire, entre les acteurs engagés vers l’objectif de résorption."
     },
     "feedback": {
       "1": {

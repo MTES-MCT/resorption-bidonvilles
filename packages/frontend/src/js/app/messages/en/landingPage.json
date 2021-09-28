@@ -16,9 +16,11 @@
     "before": "Before",
     "after": "After",
     "context": {
-      "title": "Résorption-bidonvilles,",
-      "subtitle": "A platform to boost the resorption of slums",
-      "text": "A tool for information, sharing and steering, the platform offers a high-performance and effective solution for slum clearance. It enables the collaboration of all local stakeholders involved in the slum clearance policy."
+      "title_part1": "",
+      "title_part2": "Résorption-bidonvilles",
+      "title_part3": "what and who is it for?",
+      "text_1": "A tool for information, sharing and steering, the platform offers a high-performance and effective solution for slum clearance.",
+      "text_2": "It enables the collaboration of all local stakeholders involved in the slum clearance policy."
     },
     "feedback": {
       "1": {

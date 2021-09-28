@@ -14,9 +14,11 @@
       "exchange": "Schimb de informatie rapidă intre participanţi"
     },
     "context": {
-      "title": "Resorbția de bidonville,",
-      "subtitle": "O platformă pentru a accelera resorbția de bidonville",
-      "text": "Un instrument de informare, partajare și ghidare , platforma oferă o soluție puternică și eficientă pentru resorbția de bidonville. Acesta permite crearea unei dinamici reale de colaborare, într-un teritoriu si între actorii dedicați obiectivului de resorbția de bidonville."
+      "title_part1": "Platforma digitală ",
+      "title_part2": "Résorption-bidonvilles",
+      "title_part3": "De ce, pentru cine?",
+      "text_1": "Un instrument de informare, partajare și ghidare , platforma oferă o soluție puternică și eficientă pentru resorbția de bidonville.",
+      "text_2": "Acesta permite crearea unei dinamici reale de colaborare, într-un teritoriu si între actorii dedicați obiectivului de resorbția de bidonville."
     },
     "before": "Înainte",
     "after": "După",
