@@ -84,6 +84,25 @@
                     </PasswordInfo>
                 </div>
 
+                <CheckableGroup
+                    label="Je souhaite recevoir le récapitulatif hebdomadaire par courriel"
+                    direction="vertical"
+                    withoutMargin
+                >
+                    <Radio
+                        label="oui"
+                        v-model="edit.subscribed_to_summary"
+                        :checkValue="true"
+                        type="checkbox"
+                    ></Radio>
+                    <Radio
+                        label="non"
+                        v-model="edit.subscribed_to_summary"
+                        :checkValue="false"
+                        type="checkbox"
+                    ></Radio>
+                </CheckableGroup>
+
                 <div v-if="error" class="text-error">
                     {{ error }}
                 </div>
@@ -118,7 +137,8 @@ export default {
                 last_name: this.user.last_name || "",
                 position: this.user.position || "",
                 phone: this.user.phone || "",
-                password: ""
+                password: "",
+                subscribed_to_summary: this.user.subscribed_to_summary === true
             }
         };
     },

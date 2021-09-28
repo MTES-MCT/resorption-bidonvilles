@@ -26,6 +26,7 @@ const config = {
     mailBlacklist: process.env.RB_API_EMAIL_BLACKLIST
         ? process.env.RB_API_EMAIL_BLACKLIST.split(',').map(id => parseInt(id, 10))
         : [],
+    sendActivitySummary: process.env.RB_API_SEND_ACTIVITY_SUMMARY === '1',
 };
 
 config.mattermost = process.env.RB_API_MATTERMOST_WEBHOOK;

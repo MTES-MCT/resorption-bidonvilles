@@ -12,6 +12,7 @@
   "dependencies": {
     "@sentry/node": "^6.2.2",
     "@sentry/tracing": "^6.2.2",
+    "@supercharge/promise-pool": "^1.7.0",
     "@types/node": "*",
     "agenda": "^3.1.0",
     "body-parser": "^1.18.3",

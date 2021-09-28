@@ -1,0 +1,16 @@
+<mj-section>
+    <mj-column>
+        <mj-text mj-class='text-display font-bold'>
+            {{ summary.code }} – {{ summary.name }}
+        </mj-text>
+
+        <mj-raw>{% if var:showDetails %}</mj-raw>
+            <mj-include path="summary_full_activities.mjml" />
+        <mj-raw>{% elseif summary.has_activity %}</mj-raw>
+            <mj-include path="summary_full_activities.mjml" />
+        <mj-raw>{% else %}</mj-raw>
+            <mj-text mj-class='pt-2 font-bold'>Aucune activité</mj-text>
+            <mj-include path="summary_footer.mjml" />
+        <mj-raw>{% endif %}</mj-raw>
+    </mj-column>
+</mj-section>
