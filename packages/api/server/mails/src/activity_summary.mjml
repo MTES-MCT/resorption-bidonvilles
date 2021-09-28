@@ -33,5 +33,11 @@
         </mj-section>
 
         <mj-include path='common/footer.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class='text-sm font-italic pt-4'>Pour ne plus recevoir ces récapitulatifs hebdomadaires, veuillez <a href="{{var:frontUrl}}/mon-compte?{{var:utm}}" class="link">le signaler dans votre espace "Mon compte"</a>.</mj-text>
+            </mj-column>
+        </mj-section>
     </mj-body>
 </mjml>
