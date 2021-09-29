@@ -1,9 +1,5 @@
 <template>
-    <Tag
-        :class="[
-            'text-xs uppercase text-primary relative',
-        ]"
-    >
+    <Tag :class="['text-xs uppercase text-primary relative']">
         Site completé à
         {{ Math.floor(completion * 100).toFixed(0) }}%
         <div
