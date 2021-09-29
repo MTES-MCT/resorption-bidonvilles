@@ -24,14 +24,14 @@ describe.only('townController.close()', () => {
         shantytownUpdate: undefined,
         shantytownFindOne: undefined,
         triggerShantytownCloseAlert: undefined,
-        getDepartementWatchers: undefined,
+        getLocationWatchers: undefined,
         sendUserShantytownClosed: undefined,
     };
     beforeEach(() => {
         dependencies.shantytownUpdate = sinon.stub(models.shantytown, 'update');
         dependencies.shantytownFindOne = sinon.stub(models.shantytown, 'findOne');
         dependencies.triggerShantytownCloseAlert = sinon.stub(mattermostUtils, 'triggerShantytownCloseAlert');
-        dependencies.getDepartementWatchers = sinon.stub(userModel, 'getDepartementWatchers');
+        dependencies.getLocationWatchers = sinon.stub(userModel, 'getLocationWatchers');
         dependencies.sendUserShantytownClosed = sinon.stub(mails, 'sendUserShantytownClosed');
     });
     afterEach(() => {
@@ -43,6 +43,25 @@ describe.only('townController.close()', () => {
         let output;
         let res;
         beforeEach(async () => {
+            const location = {
+                city: {
+                    name: 'Chatou',
+                    code: '78146',
+                },
+                epci: {
+                    code: '200058519',
+                    name: 'CA Saint-Germain Boucles de Seine',
+                },
+                departement: {
+                    name: 'Yvelines',
+                    code: '78',
+                },
+                region: {
+                    name: 'Île-de-France',
+                    code: '11',
+                },
+            };
+
             input = {
                 params: { id: 1 },
 
@@ -54,13 +73,9 @@ describe.only('townController.close()', () => {
                         { id: 1, people_affected: 10, households_affected: 5 },
                         { id: 2, people_affected: 20, households_affected: 10 },
                     ],
-
                     shantytown: {
                         id: 1,
-                        departement: {
-                            name: 'Yvelines',
-                            code: '78',
-                        },
+                        ...location,
                         closedAt: null,
                     }, // @todo: remplacer par une donnée générée via utils/shantytown dès que cet utils sera mergé dans develop...
                 },
@@ -76,16 +91,13 @@ describe.only('townController.close()', () => {
                 ],
                 shantytown: {
                     id: 1,
-                    departement: {
-                        name: 'Yvelines',
-                        code: '78',
-                    },
+                    ...location,
                     closedAt: input.body.closed_at.getTime() / 1000,
                 }, // @todo: remplacer par une donnée générée via utils/shantytown dès que cet utils sera mergé dans develop...
             };
 
-            dependencies.getDepartementWatchers
-                .withArgs('78', true)
+            dependencies.getLocationWatchers
+                .withArgs({ type: 'city', ...location }, true)
                 .resolves(output.watchers);
             dependencies.shantytownFindOne
                 .withArgs(input.user, 1)
