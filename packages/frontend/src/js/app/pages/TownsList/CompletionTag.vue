@@ -1,9 +1,15 @@
 <template>
     <Tag
-        :class="['text-xs uppercase text-primary', isHover ? 'shadow-md' : '']"
+        :class="[
+            'text-xs uppercase text-primary relative',
+        ]"
     >
         Site completé à
         {{ Math.floor(completion * 100).toFixed(0) }}%
+        <div
+            :class="['absolute', 'bg-info', 'h-px', 'bottom-0', 'left-0']"
+            :style="{ width: Math.floor(completion * 100) + '%' }"
+        ></div>
     </Tag>
 </template>
 
