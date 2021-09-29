@@ -32,11 +32,6 @@ function generateFakeUser() {
                 global.generate('string'),
             ],
         },
-        default_export: [
-            global.generate('string'),
-            global.generate('string'),
-            global.generate('string'),
-        ],
     };
 }
 

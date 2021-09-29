@@ -58,7 +58,6 @@ module.exports = {
             role_id: 'national_establisment',
             is_superuser: false,
             access_request_message: 'Demande d\'accès pour tests automatisés',
-            default_export: [],
             permissions: {
                 shantytown: {
                     create: { allowed: true, geographic_level: 'nation', data_justice: true },

@@ -102,13 +102,6 @@ module.exports = (app) => {
         controllers.user.acceptCharte,
     );
     app.post(
-        '/me/default-export',
-        middlewares.auth.authenticate,
-        middlewares.charte.check,
-        middlewares.appVersion.sync,
-        controllers.user.setDefaultExport,
-    );
-    app.post(
         '/users',
         middlewares.auth.authenticate,
         (...args) => middlewares.auth.checkPermissions(['user.create'], ...args),

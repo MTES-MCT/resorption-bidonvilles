@@ -68,14 +68,6 @@ describe('[/server/models] userModel', () => {
             });
         });
 
-        describe('if the user\'s default_export is null', () => {
-            it('it returns an empty array as default_export', async () => {
-                await global.insertFixtures(db, fixtures.findOneWithoutDefaultExport.inputs);
-                const { default_export } = await findOne(2);
-                expect(default_export).to.be.eql([]);
-            });
-        });
-
         describe('if the full user is explicitly requested', () => {
             it('it returns the user\'s salt and password', async () => {
                 await global.insertFixtures(db, fixtures.findOneFull.inputs);
@@ -118,35 +110,11 @@ describe('[/server/models] userModel', () => {
         describe('if the user id does not match an existing user', () => {
             it('it throws an exception', async () => {
                 const randomUserId = global.generate('number');
-                await expect(update(randomUserId, { defaultExport: 'whatever' })).to.be.rejectedWith(`The user #${randomUserId} does not exist`);
+                await expect(update(randomUserId, { first_name: 'whatever' })).to.be.rejectedWith(`The user #${randomUserId} does not exist`);
             });
         });
 
         [
-            [
-                {
-                    field: 'defaultExport',
-                    testName: 'string',
-                    value: 'something',
-                    expected: 'something',
-                },
-            ],
-            [
-                {
-                    field: 'defaultExport',
-                    testName: 'null value',
-                    value: null,
-                    expected: null,
-                },
-            ],
-            [
-                {
-                    field: 'defaultExport',
-                    testName: 'empty string',
-                    value: '     ',
-                    expected: null,
-                },
-            ],
             [
                 {
                     field: 'password',
@@ -185,7 +153,6 @@ describe('[/server/models] userModel', () => {
 
                 const [user] = await db.query(
                     `SELECT
-                        default_export AS "defaultExport",
                         password,
                         active
                     FROM users WHERE user_id = 1`,
