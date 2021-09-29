@@ -302,13 +302,13 @@ module.exports = models => ({
     /**
      * Updates comments about a user
      */
-    async comment(req, res, next) {
+    async setAdminComments(req, res, next) {
         try {
-            await models.user.updateComment(req.params.id, {
+            await models.user.update(req.params.id, {
                 admin_comments: req.body.comment,
             });
             return res.status(200).send({
-                adminComment: req.body.comment,
+                admin_comments: req.body.comment,
             });
         } catch (error) {
             res.status(500).send({

@@ -246,9 +246,9 @@ export function acceptCharte(
 /**
  * POST /users/:id/comment
  */
-export function comment(userId, commentValue) {
-    return putApi(`/users/${userId}/comment`, {
-        comment: commentValue
+export function setAdminComments(userId, comment) {
+    return putApi(`/users/${userId}/admin_comments`, {
+        comment
     });
 }
 
