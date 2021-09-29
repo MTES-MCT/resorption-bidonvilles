@@ -1500,8 +1500,7 @@ module.exports = (database) => {
 
     methods.findNearby = async (user, latitude, longitude, distance) => {
         const replacements = {};
-        const locationWhere = [];
-        updateWhereClauseWithUserLocation(user, 'list', locationWhere);
+        const locationWhere = updateWhereClauseWithUserLocation(user, 'list');
         const locationWhereClause = stringifyWhereClause(locationWhere, replacements);
 
         const distanceCalc = '(6371 * 2 * ASIN(SQRT( POWER(SIN(( :latitude - shantytowns.latitude) *  pi()/180 / 2), 2) +COS( :latitude * pi()/180) * COS(shantytowns.latitude * pi()/180) * POWER(SIN(( :longitude - shantytowns.longitude) * pi()/180 / 2), 2) )))';
@@ -1535,17 +1534,21 @@ module.exports = (database) => {
             },
         });
 
-        return result.map(r => ({
-            id: r.shantytown_id,
-            name: r.name,
-            closedAt: r.closed_at !== null ? (r.closed_at.getTime() / 1000) : null,
-            latitude: r.latitude,
-            longitude: r.longitude,
-            address: r.address,
-            addressSimple: r.address_simple,
-            accessToWater: r.access_to_water,
-            distance: r.distance,
-        }));
+        return result.map((r) => {
+            const town = {
+                id: r.shantytown_id,
+                name: r.name,
+                closedAt: r.closed_at !== null ? (r.closed_at.getTime() / 1000) : null,
+                latitude: r.latitude,
+                longitude: r.longitude,
+                address: r.address,
+                addressSimple: r.address_simple,
+                accessToWater: r.access_to_water,
+                distance: r.distance,
+            };
+
+            return { ...town, usename: getUsenameOf(town) };
+        });
     };
 
     return methods;

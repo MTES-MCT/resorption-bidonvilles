@@ -242,6 +242,7 @@ module.exports = (app) => {
 
     app.get(
         '/towns/findNearby',
+        validators.findNearbyTowns,
         middlewares.auth.authenticate,
         (...args) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
         middlewares.charte.check,

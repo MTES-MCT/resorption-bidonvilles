@@ -28,8 +28,7 @@
                             class="link"
                             :to="`/site/${town.shantytown_id}`"
                         >
-                            {{ town.addressSimple || town.address }}
-                            <span v-if="town.name">« {{ town.name }} »</span>
+                            {{ town.usename }}
                             <span> ({{ town.distance.toFixed(2) }}km)</span>
                         </router-link>
                     </li>

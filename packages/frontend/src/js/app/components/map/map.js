@@ -682,9 +682,7 @@ export default {
         },
 
         getTownAddress(town) {
-            return town.name
-                ? `${town.address} « ${town.name} »`
-                : town.address;
+            return town.usename;
         },
 
         getTownCoordinates(town) {

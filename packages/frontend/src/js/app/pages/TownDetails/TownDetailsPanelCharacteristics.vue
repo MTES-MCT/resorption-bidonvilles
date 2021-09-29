@@ -132,13 +132,7 @@
                                             class="link"
                                             :to="`/site/${town.id}`"
                                         >
-                                            {{
-                                                town.addressSimple ||
-                                                    town.address
-                                            }}
-                                            <span v-if="town.name"
-                                                >« {{ town.name }} »</span
-                                            >
+                                            {{ town.usename }}
                                             <span>
                                                 ({{
                                                     town.distance.toFixed(2)
@@ -199,7 +193,7 @@ export default {
     components: { TownDetailsPanel, TownDetailsPanelSection, Map },
     methods: {
         goTo(town) {
-            if (town.id) {
+            if (town.id && town.id !== this.town.id) {
                 this.$router.push(`/site/${town.id}`);
             }
         },

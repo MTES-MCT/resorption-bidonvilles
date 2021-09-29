@@ -12,6 +12,7 @@ const inviteShantytownActor = require('./shantytownActors/inviteShantytownActor'
 const invite = require('./invite');
 const createShantytownComment = require('./shantytownComment/create');
 const activityList = require('./activity/list');
+const findNearbyTowns = require('./findNearbyTowns');
 
 module.exports = {
     closeTown,
@@ -20,6 +21,7 @@ module.exports = {
     editTown,
     createUser,
     editUser,
+    findNearbyTowns,
     shantytownActors: {
         addShantytownActor,
         updateShantytownActor,
