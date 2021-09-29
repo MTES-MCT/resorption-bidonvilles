@@ -311,13 +311,15 @@ export default {
 
     watch: {
         towns() {
-            this.countNumberOfTowns();
-            if (this.displayShantytownsLevel) {
-                this.syncTownMarkers();
-            } else {
+            if (this.loadTerritoryLayers) {
+                this.countNumberOfTowns();
                 this.loadRegionalData();
                 this.loadDepartementalData();
                 this.loadCityData();
+
+                if (this.displayShantytownsLevel) {
+                    this.syncTownMarkers();
+                }
             }
         },
 
