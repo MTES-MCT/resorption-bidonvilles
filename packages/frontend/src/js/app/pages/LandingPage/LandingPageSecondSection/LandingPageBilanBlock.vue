@@ -9,7 +9,7 @@
         </div>
         <div class="ml-2">
             <span class="font-bold text-display-md">{{ text }}</span>
-            <span>{{ info }}</span>
+            <span class="pl-1">{{ info }}</span>
         </div>
     </div>
 </template>
