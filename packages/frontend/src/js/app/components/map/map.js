@@ -11,6 +11,7 @@ import "leaflet.markercluster/dist/leaflet.markercluster";
 import waterYes from "../../../../../public/img/water-yes.png";
 import utensils from "../../../../../public/img/utensils.png";
 import waterNo from "../../../../../public/img/water-no.png";
+import waterToImprove from "../../../../../public/img/water-to-improve.png";
 import waterNull from "../../../../../public/img/water-null.png";
 
 // données tirées de https://github.com/gregoiredavid/france-geojson
@@ -694,7 +695,42 @@ export default {
 
         getTownWaterImage(town) {
             if (town.accessToWater === true) {
-                return waterYes;
+                if (
+                    // eau potable ?
+                    town.waterPotable === null ||
+                    !town.waterPotable ||
+                    // accès continu à l'eau ?
+                    town.waterContinuousAccess === null ||
+                    !town.waterContinuousAccess ||
+                    // point d'accès public à l'eau ?
+                    town.waterPublicPoint === null ||
+                    !town.waterPublicPoint ||
+                    // distance au point le plus proche de moins de 20m ?
+                    town.waterDistance === null ||
+                    town.waterDistance !== "0-20" ||
+                    // route ou chemin à travserser pour atteindre le point d'eau ?
+                    town.waterRoadsToCross === null ||
+                    town.waterRoadsToCross ||
+                    // point d'eau accessible à tous ?
+                    town.waterEveryoneHasAccess === null ||
+                    !town.waterEveryoneHasAccess ||
+                    // eaux stagnantes près du point d'alimentation en eau ?
+                    town.waterStagnantWater === null ||
+                    town.waterStagnantWater ||
+                    // présence de bacs de lavage en nombre suffisant ?
+                    town.waterHandWashAccess === null ||
+                    !town.waterHandWashAccess ||
+                    Math.floor(
+                        Number(town.populationTotal) /
+                            Number(town.waterHandWashAccessNumber)
+                    ) > 20
+                        ? true
+                        : false
+                ) {
+                    return waterToImprove;
+                } else {
+                    return waterYes;
+                }
             }
 
             if (town.accessToWater === false) {
