@@ -1,84 +1,92 @@
 <template>
-    <div v-if="state === 'loaded' && user" class="bg-G100 p-4 customShadow">
-        <TextArea
-            rows="5"
-            label="Commentaire"
-            info="(champ réservé aux administrateurs nationaux)"
-            name="adminComment"
-            v-model="adminComment"
-            placeholder="Votre commentaire..."
-        />
-        <div class="flex items-center justify-between">
-            <Button variant="primaryText" @click="cancelComment"
-                >Annuler</Button
-            >
-            <Button variant="tertiary" @click="addComment" :loading="loading"
-                >Valider</Button
-            >
+    <div>
+        <div class="bg-G100 p-4 customShadow">
+            <TextArea
+                rows="5"
+                label="Commentaire"
+                info="(champ réservé aux administrateurs nationaux)"
+                name="adminComment"
+                v-model="admin_comments"
+                placeholder="Votre commentaire..."
+                :disabled="loading"
+            />
+            <div class="flex items-center justify-between">
+                <div>
+                    <Button
+                        v-if="
+                            !loading &&
+                                admin_comments !== (user.admin_comments || '')
+                        "
+                        variant="primaryText"
+                        @click="cancelComment"
+                        >Annuler mes changements</Button
+                    >
+                </div>
+                <Button
+                    variant="tertiary"
+                    @click="addComment"
+                    :loading="loading"
+                    >Valider</Button
+                >
+            </div>
         </div>
-    </div>
-    <div class="text-red" v-else-if="state === 'error'">
-        <p class="font-bold">Erreur</p>
-        <p>{{ commentError }}</p>
+
+        <div class="text-red" v-if="error">
+            <p class="font-bold">Une erreur est survenue :</p>
+            <p>{{ error }}</p>
+        </div>
     </div>
 </template>
 <script>
-import { comment as apiComment } from "#helpers/api/user";
+import { setAdminComments } from "#helpers/api/user";
 
 export default {
-    data() {
-        return {
-            commentError: null,
-            commentErrors: {},
-            adminComment: this.user.admin_comments,
-            loading: false,
-            /**
-             * The current state of the page
-             *
-             * One out of: 'loading', 'error', or 'loaded'
-             *
-             * @type {string|null}
-             */
-            state: "loaded"
-        };
-    },
     props: {
         user: {
             type: Object
         }
     },
+    data() {
+        return {
+            admin_comments: this.user.admin_comments || "",
+            error: null,
+            loading: false
+        };
+    },
     methods: {
-        cancelComment() {
-            this.adminComment = this.user.admin_comments;
-        },
         async addComment() {
-            // clean previous errors
-            this.commentError = null;
-            this.commentErrors = {};
+            if (this.loading === true) {
+                return;
+            }
+
             this.loading = true;
+            this.error = null;
 
             try {
-                const response = await apiComment(
+                const { admin_comments } = await setAdminComments(
                     this.user.id,
-                    this.adminComment
+                    this.admin_comments
                 );
+
                 // Met à jour la valeur affichée dans le champ
-                this.adminComment = response.adminComment;
+                // eslint-disable-next-line vue/no-mutating-props
+                this.user.admin_comments = admin_comments || "";
+                this.admin_comments = admin_comments || "";
             } catch (response) {
-                if (
-                    response.user_message === null ||
-                    response.user_message.length < 1
-                ) {
-                    this.commentError =
-                        "Une erreur est survenue lors de la mise à jour du comentaire";
-                    this.commentErrors = {};
+                if (!response || !response.user_message) {
+                    this.error = "Erreur inconnue";
                 } else {
-                    this.commentError = response.user_message;
-                    this.commentErrors = response.fields || {};
+                    this.error = response.user_message;
                 }
-                this.state = "error";
             }
+
             this.loading = false;
+        },
+
+        cancelComment() {
+            if (!this.loading) {
+                this.admin_comments = this.user.admin_comments;
+            }
         }
     }
 };

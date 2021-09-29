@@ -593,7 +593,7 @@ module.exports = () => {
             const allowedProperties = [
                 'first_name', 'last_name', 'position', 'phone', 'password', 'fk_status',
                 'last_version', 'last_changelog', 'charte_engagement_signee', 'last_access',
-                'subscribed_to_summary',
+                'subscribed_to_summary', 'admin_comments',
             ];
             const propertiesToColumns = {
                 first_name: 'first_name',
@@ -607,6 +607,7 @@ module.exports = () => {
                 charte_engagement_signee: 'charte_engagement_signee',
                 last_access: 'last_access',
                 subscribed_to_summary: 'subscribed_to_summary',
+                admin_comments: 'admin_comments',
             };
             const setClauses = [];
             const replacements = {};
@@ -632,29 +633,6 @@ module.exports = () => {
                 {
                     replacements: Object.assign(replacements, {
                         userId,
-                    }),
-                    transaction,
-                },
-            );
-
-            if (rowCount === 0) {
-                throw new Error(`The user #${userId} does not exist`);
-            }
-        },
-
-        updateComment: async (userId, comment, transaction = undefined) => {
-            const replacements = {};
-            const [, { rowCount }] = await database.query(
-                `UPDATE
-                    users
-                SET
-                    admin_comments = :commentValue
-                WHERE
-                    user_id = :userId`,
-                {
-                    replacements: Object.assign(replacements, {
-                        userId,
-                        commentValue: comment.admin_comments,
                     }),
                     transaction,
                 },
