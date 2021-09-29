@@ -624,6 +624,8 @@ module.exports = (database) => {
     const shantytownActorModel = require('#server/models/shantytownActorModel')(database);
     // eslint-disable-next-line global-require
     const planShantytownModel = require('#server/models/planShantytownModel')(database);
+    // eslint-disable-next-line global-require
+    const statsModel = require('#server/models/statsModel')(database);
 
     async function getComments(user, shantytownIds, covid = false) {
         const comments = shantytownIds.reduce((acc, id) => Object.assign({}, acc, {
@@ -691,29 +693,7 @@ module.exports = (database) => {
             `
             SELECT
                 s.shantytown_id,
-                ((CASE WHEN (SELECT regexp_matches(s.address, '^(.+) [0-9]+ [^,]+,? [0-9]+,? [^, ]+(,.+)?$'))[1] IS NOT NULL THEN 1 ELSE 0 END)
-                +
-                (CASE WHEN ft.label <> 'Inconnu' THEN 1 ELSE 0 END)
-                +
-                (CASE WHEN ot.label <> 'Inconnu' THEN 1 ELSE 0 END)
-                +
-                (CASE WHEN s.census_status IS NOT NULL THEN 1 ELSE 0 END)
-                +
-                (CASE WHEN s.population_total IS NOT NULL THEN 1 ELSE 0 END)
-                +
-                (CASE WHEN s.population_couples IS NOT NULL THEN 1 ELSE 0 END)
-                +
-                (CASE WHEN s.population_minors IS NOT NULL THEN 1 ELSE 0 END)
-                +
-                (CASE WHEN s.population_total IS NOT NULL AND s.population_total >= 10 AND (SELECT COUNT(*) FROM shantytown_origins WHERE fk_shantytown = s.shantytown_id) > 0 THEN 1 ELSE 0 END)
-                +
-                (CASE WHEN et.label <> 'Inconnu' THEN 1 ELSE 0 END)
-                +
-                (CASE WHEN s.access_to_water IS NOT NULL THEN 1 ELSE 0 END)
-                +
-                (CASE WHEN s.access_to_sanitary IS NOT NULL THEN 1 ELSE 0 END)
-                +
-                (CASE WHEN s.trash_evacuation IS NOT NULL THEN 1 ELSE 0 END))::FLOAT / 12.0 AS completion
+                ${statsModel.averageCompletionCalc} AS completion
             FROM
                 shantytowns s
             LEFT JOIN

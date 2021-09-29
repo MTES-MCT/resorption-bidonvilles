@@ -19,6 +19,30 @@ function convertToDateMapping(rows, startDate) {
     return result;
 }
 
+const averageCompletionCalc = `((CASE WHEN (SELECT regexp_matches(s.address, '^(.+) [0-9]+ [^,]+,? [0-9]+,? [^, ]+(,.+)?$'))[1] IS NOT NULL THEN 1 ELSE 0 END)
+                +
+                (CASE WHEN ft.label <> 'Inconnu' THEN 1 ELSE 0 END)
+                +
+                (CASE WHEN ot.label <> 'Inconnu' THEN 1 ELSE 0 END)
+                +
+                (CASE WHEN s.census_status IS NOT NULL THEN 1 ELSE 0 END)
+                +
+                (CASE WHEN s.population_total IS NOT NULL THEN 1 ELSE 0 END)
+                +
+                (CASE WHEN s.population_couples IS NOT NULL THEN 1 ELSE 0 END)
+                +
+                (CASE WHEN s.population_minors IS NOT NULL THEN 1 ELSE 0 END)
+                +
+                (CASE WHEN s.population_total IS NOT NULL AND s.population_total >= 10 AND (SELECT COUNT(*) FROM shantytown_origins WHERE fk_shantytown = s.shantytown_id) > 0 THEN 1 ELSE 0 END)
+                +
+                (CASE WHEN et.label <> 'Inconnu' THEN 1 ELSE 0 END)
+                +
+                (CASE WHEN s.access_to_water IS NOT NULL THEN 1 ELSE 0 END)
+                +
+                (CASE WHEN s.access_to_sanitary IS NOT NULL THEN 1 ELSE 0 END)
+                +
+                (CASE WHEN s.trash_evacuation IS NOT NULL THEN 1 ELSE 0 END))::FLOAT / 12.0`;
+
 module.exports = database => ({
     numberOfPeople: async (departement) => {
         const rows = await database.query(
@@ -521,6 +545,9 @@ module.exports = database => ({
         }), {});
     },
 
+    averageCompletionCalc,
+
+
     averageCompletionPercentage: async (departement) => {
         const rows = await database.query(
             `SELECT
@@ -528,29 +555,7 @@ module.exports = database => ({
             FROM
             (SELECT
                 c.fk_departement,
-                ((CASE WHEN (SELECT regexp_matches(s.address, '^(.+) [0-9]+ [^,]+,? [0-9]+,? [^, ]+(,.+)?$'))[1] IS NOT NULL THEN 1 ELSE 0 END)
-                +
-                (CASE WHEN ft.label <> 'Inconnu' THEN 1 ELSE 0 END)
-                +
-                (CASE WHEN ot.label <> 'Inconnu' THEN 1 ELSE 0 END)
-                +
-                (CASE WHEN s.census_status IS NOT NULL THEN 1 ELSE 0 END)
-                +
-                (CASE WHEN s.population_total IS NOT NULL THEN 1 ELSE 0 END)
-                +
-                (CASE WHEN s.population_couples IS NOT NULL THEN 1 ELSE 0 END)
-                +
-                (CASE WHEN s.population_minors IS NOT NULL THEN 1 ELSE 0 END)
-                +
-                (CASE WHEN s.population_total IS NOT NULL AND s.population_total >= 10 AND (SELECT COUNT(*) FROM shantytown_origins WHERE fk_shantytown = s.shantytown_id) > 0 THEN 1 ELSE 0 END)
-                +
-                (CASE WHEN et.label <> 'Inconnu' THEN 1 ELSE 0 END)
-                +
-                (CASE WHEN s.access_to_water IS NOT NULL THEN 1 ELSE 0 END)
-                +
-                (CASE WHEN s.access_to_sanitary IS NOT NULL THEN 1 ELSE 0 END)
-                +
-                (CASE WHEN s.trash_evacuation IS NOT NULL THEN 1 ELSE 0 END))::FLOAT / 12.0 AS pourcentage_completion
+                ${averageCompletionCalc} AS pourcentage_completion
             FROM
                 shantytowns s
             LEFT JOIN
