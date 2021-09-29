@@ -30,7 +30,10 @@
                             :availableOptions="options"
                             class="mb-4"
                         />
-                        <div class="bg-yellow-200 p-4 mb-12">
+                        <div
+                            class="bg-yellow-200 p-4 mb-12"
+                            v-if="!user.user_access"
+                        >
                             Ne jamais envoyer un accès si vous avez un doute sur
                             l’identité de la personne.
                         </div>
