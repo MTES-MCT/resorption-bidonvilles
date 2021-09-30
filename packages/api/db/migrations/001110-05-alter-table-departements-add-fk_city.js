@@ -10,17 +10,37 @@ module.exports = {
             {
                 transaction,
             },
-        ),
+        )
+            .then(() => queryInterface.addConstraint(
+                'departements',
+                ['fk_city'],
+                {
+                    type: 'foreign key',
+                    name: 'fk_departements_cheflieu',
+                    references: {
+                        table: 'cities',
+                        field: 'code',
+                    },
+                    onUpdate: 'cascade',
+                    onDelete: 'restrict',
+                    transaction,
+                },
+            )),
     ),
 
     down: queryInterface => queryInterface.sequelize.transaction(
-        transaction => queryInterface.removeColumn(
+        transaction => queryInterface.removeConstraint(
             'departements',
-            'fk_city',
-            {
-                transaction,
-            },
-        ),
+            'fk_departements_cheflieu',
+            { transaction },
+        )
+            .then(() => queryInterface.removeColumn(
+                'departements',
+                'fk_city',
+                {
+                    transaction,
+                },
+            )),
     ),
 
 };

@@ -1,29 +1,35 @@
 function addColumns(queryInterface, Sequelize) {
-    return Promise.all([
-        queryInterface.addColumn(
-            'regions',
-            'latitude',
-            {
-                type: Sequelize.DOUBLE,
-                allowNull: true,
-            },
-        ),
-        queryInterface.addColumn(
-            'regions',
-            'longitude',
-            {
-                type: Sequelize.DOUBLE,
-                allowNull: true,
-            },
-        ),
-    ]);
+    return queryInterface.sequelize.transaction(
+        transaction => Promise.all([
+            queryInterface.addColumn(
+                'regions',
+                'latitude',
+                {
+                    type: Sequelize.DOUBLE,
+                    allowNull: true,
+                },
+                { transaction },
+            ),
+            queryInterface.addColumn(
+                'regions',
+                'longitude',
+                {
+                    type: Sequelize.DOUBLE,
+                    allowNull: true,
+                },
+                { transaction },
+            ),
+        ]),
+    );
 }
 
 function removeColumns(queryInterface) {
-    return Promise.all([
-        queryInterface.removeColumn('regions', 'latitude'),
-        queryInterface.removeColumn('regions', 'longitude'),
-    ]);
+    return queryInterface.sequelize.transaction(
+        transaction => Promise.all([
+            queryInterface.removeColumn('regions', 'latitude', { transaction }),
+            queryInterface.removeColumn('regions', 'longitude', { transaction }),
+        ]),
+    );
 }
 
 module.exports = {
