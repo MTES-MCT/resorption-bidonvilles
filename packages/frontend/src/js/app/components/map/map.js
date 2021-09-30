@@ -8,8 +8,8 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster/dist/leaflet.markercluster";
 
-import waterYes from "../../../../../public/img/water-yes.png";
 import utensils from "../../../../../public/img/utensils.png";
+import waterYes from "../../../../../public/img/water-yes.png";
 import waterNo from "../../../../../public/img/water-no.png";
 import waterToImprove from "../../../../../public/img/water-to-improve.png";
 import waterNull from "../../../../../public/img/water-null.png";
@@ -17,6 +17,7 @@ import waterNull from "../../../../../public/img/water-null.png";
 // données tirées de https://github.com/gregoiredavid/france-geojson
 import departements from "#src/geojson/departements.json";
 import regions from "#src/geojson/regions.json";
+import { formatLivingConditions } from "#app/pages/TownDetails/formatLivingConditions";
 
 const DEFAULT_VIEW = [46.7755829, 2.0497727];
 const POI_ZOOM_LEVEL = 13;
@@ -694,50 +695,19 @@ export default {
         },
 
         getTownWaterImage(town) {
+            const { water } = formatLivingConditions(town);
+
+            if (town.accessToWater === null) {
+                return waterNull;
+            }
             if (town.accessToWater === true) {
-                if (
-                    // eau potable ?
-                    town.waterPotable === null ||
-                    !town.waterPotable ||
-                    // accès continu à l'eau ?
-                    town.waterContinuousAccess === null ||
-                    !town.waterContinuousAccess ||
-                    // point d'accès public à l'eau ?
-                    town.waterPublicPoint === null ||
-                    !town.waterPublicPoint ||
-                    // distance au point le plus proche de moins de 20m ?
-                    town.waterDistance === null ||
-                    town.waterDistance !== "0-20" ||
-                    // route ou chemin à travserser pour atteindre le point d'eau ?
-                    town.waterRoadsToCross === null ||
-                    town.waterRoadsToCross ||
-                    // point d'eau accessible à tous ?
-                    town.waterEveryoneHasAccess === null ||
-                    !town.waterEveryoneHasAccess ||
-                    // eaux stagnantes près du point d'alimentation en eau ?
-                    town.waterStagnantWater === null ||
-                    town.waterStagnantWater ||
-                    // présence de bacs de lavage en nombre suffisant ?
-                    town.waterHandWashAccess === null ||
-                    !town.waterHandWashAccess ||
-                    Math.floor(
-                        Number(town.populationTotal) /
-                            Number(town.waterHandWashAccessNumber)
-                    ) > 20
-                        ? true
-                        : false
-                ) {
+                if (water.negative.length > 0 || water.unknown.length > 0) {
                     return waterToImprove;
                 } else {
                     return waterYes;
                 }
             }
-
-            if (town.accessToWater === false) {
-                return waterNo;
-            }
-
-            return waterNull;
+            return waterNo;
         },
 
         /**
@@ -794,7 +764,6 @@ export default {
                     this.markTownAsSearchResult(marker);
                 }
             });
-
             marker.addTo(this.markersGroup.towns);
             this.townMarkers.push(marker);
             this.hashedTownMarkers[coordinates.join(";")] = marker;
