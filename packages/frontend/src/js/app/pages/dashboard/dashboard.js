@@ -81,6 +81,12 @@ export default {
                             icon: { id: "tint", color: "00a0e3" }
                         },
                         {
+                            value: null,
+                            label: "A améliorer",
+                            checked: true,
+                            icon: { id: "tint", color: "ff6f4c" }
+                        },
+                        {
                             value: false,
                             label: "Non",
                             checked: true,
