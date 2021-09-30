@@ -910,22 +910,17 @@ export default {
             });
 
             Object.keys(this.numberOfShantytownsBy.regions).forEach(key => {
-                const nbSites =
-                    this.numberOfShantytownsBy.regions[key].sites > 0
-                        ? this.numberOfShantytownsBy.regions[key].sites
-                        : 0;
+                const {
+                    sites: nbSites,
+                    latitude,
+                    longitude,
+                    chieftown
+                } = this.numberOfShantytownsBy.regions[key];
+
                 this.circleWithText(
                     this.map,
-                    [
-                        this.numberOfShantytownsBy.regions[key].latitude,
-                        this.numberOfShantytownsBy.regions[key].longitude
-                    ],
-                    [
-                        this.numberOfShantytownsBy.regions[key].chieftown
-                            .latitude,
-                        this.numberOfShantytownsBy.regions[key].chieftown
-                            .longitude
-                    ],
+                    [latitude, longitude],
+                    [chieftown.latitude, chieftown.longitude],
                     `<div>${nbSites}</div>`,
                     20,
                     3,
@@ -945,26 +940,20 @@ export default {
 
             Object.keys(this.numberOfShantytownsBy.departements).forEach(
                 key => {
-                    const nbSites =
-                        this.numberOfShantytownsBy.departements[key].sites > 0
-                            ? this.numberOfShantytownsBy.departements[key].sites
-                            : 0;
+                    const {
+                        sites: nbSites,
+                        latitude,
+                        longitude,
+                        chieftown,
+                        name
+                    } = this.numberOfShantytownsBy.departements[key];
+
                     const siteLabel = nbSites > 1 ? "sites" : "site";
                     this.circleWithText(
                         this.map,
-                        [
-                            this.numberOfShantytownsBy.departements[key]
-                                .latitude,
-                            this.numberOfShantytownsBy.departements[key]
-                                .longitude
-                        ],
-                        [
-                            this.numberOfShantytownsBy.departements[key]
-                                .chieftown.latitude,
-                            this.numberOfShantytownsBy.departements[key]
-                                .chieftown.longitude
-                        ],
-                        `<div><strong>${this.numberOfShantytownsBy.departements[key].name}</strong><br/>${nbSites} ${siteLabel}</div>`,
+                        [latitude, longitude],
+                        [chieftown.latitude, chieftown.longitude],
+                        `<div><strong>${name}</strong><br/>${nbSites} ${siteLabel}</div>`,
                         45,
                         3,
                         "dept"
