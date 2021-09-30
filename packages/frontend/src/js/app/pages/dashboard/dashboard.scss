@@ -88,36 +88,36 @@
         stroke:grey;
         stroke-width: 2;
     }
+}
 
-    .circle {
-        border-color: rgba(181, 226, 140, 0.6);
-        background-color: rgba(158, 199, 134, 0.6);
-        background-clip: padding-box;
-        display: table-cell;
-        text-align: center;
-        vertical-align: middle;
-        border-radius: 50%;
-        border-style: solid;
-        border-width: 5px;
-        font-family: Arial, Helvetica, sans-serif;
-        color: black;
-        -webkit-print-color-adjust: exact !important;
-        color-adjust: exact;
-    }
+.circle {
+    border-color: rgba(181, 226, 140, 0.6);
+    background-color: rgba(158, 199, 134, 0.8);
+    background-clip: padding-box;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 50%;
+    border-style: solid;
+    border-width: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact;
+}
 
-    .circle.region {
-        font-size: 16px;
-    }
+.circle.region {
+    font-size: 16px;
+}
 
-    .circle.dept {
-        font-size: 10px;
-    }
+.circle.dept {
+    font-size: 10px;
+}
 
-    .circle.city {
-        border-color: rgba(199, 119, 56, 0.6);
-        background-color: rgba(218, 119, 59, 0.8);
-        font-size: 10px;
-    }
+.circle.city {
+    border-color: rgba(199, 119, 56, 0.6);
+    background-color: rgba(218, 119, 59, 0.8);
+    font-size: 10px;
 }
 
 .preprint {
