@@ -30,7 +30,7 @@
                 Mis à jour le
                 {{ formatDate(town.updatedAt, "d/m/y") }}
             </div>
-            <div class="flex items-center uppercase text-sm ">
+            <div class="flex items-center uppercase text-sm mr-4">
                 <CompletionTag :completion="town.completion" />
             </div>
             <div class="flex items-center uppercase text-sm mr-4">
