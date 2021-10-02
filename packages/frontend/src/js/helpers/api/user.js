@@ -115,19 +115,6 @@ export function edit(data, userId) {
 }
 
 /**
- * Updates the default export for the current user
- *
- * @param {string} defaultExport
- *
- * @returns {Promise}
- */
-export function setDefaultExport(defaultExport) {
-    return postApi("/me/default-export", {
-        export: defaultExport
-    });
-}
-
-/**
  * GET /users
  */
 export function list() {

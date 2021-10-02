@@ -11,7 +11,7 @@ const { sequelize: database } = require('#db/models');
  *
  * Please find below the details about each filter:
  * - extended data is any data useful for the logged in user only. Typically, data that you
- *   would not need to display a user's profile page (example: default_export)
+ *   would not need to display a user's profile page
  * - auth data is any private authentication material: password, salt...
  */
 
@@ -114,7 +114,6 @@ function serializeUser(user, latestCharte, filters, permissionMap) {
 
         Object.assign(serialized, {
             access_request_message: user.access_request_message,
-            default_export: user.default_export ? user.default_export.split(',') : [],
             permissions,
             permission_options: roleDescription ? roleDescription.options.reduce((options, { id }) => {
                 switch (id) {
@@ -222,7 +221,6 @@ module.exports = () => {
                 users.salt,
                 users.access_request_message,
                 users.fk_status AS status,
-                users.default_export,
                 users.created_at,
                 users.last_version,
                 users.last_changelog,
@@ -589,7 +587,7 @@ module.exports = () => {
             }
 
             const allowedProperties = [
-                'first_name', 'last_name', 'position', 'phone', 'password', 'defaultExport', 'fk_status',
+                'first_name', 'last_name', 'position', 'phone', 'password', 'fk_status',
                 'last_version', 'last_changelog', 'charte_engagement_signee', 'last_access',
                 'subscribed_to_summary',
             ];
@@ -599,7 +597,6 @@ module.exports = () => {
                 position: 'position',
                 phone: 'phone',
                 password: 'password',
-                defaultExport: 'default_export',
                 fk_status: 'fk_status',
                 last_version: 'last_version',
                 last_changelog: 'last_changelog',
@@ -613,12 +610,7 @@ module.exports = () => {
             allowedProperties.forEach((property) => {
                 if (values && values[property] !== undefined) {
                     setClauses.push(`${propertiesToColumns[property]} = :${property}`);
-
-                    if (property === 'defaultExport' && values[property]) {
-                        replacements[property] = values[property].replace(/\s/g, '') || null;
-                    } else {
-                        replacements[property] = values[property] !== undefined ? values[property] : null;
-                    }
+                    replacements[property] = values[property];
                 }
             });
 

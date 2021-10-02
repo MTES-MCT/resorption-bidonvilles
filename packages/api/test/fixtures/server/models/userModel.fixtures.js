@@ -16,7 +16,6 @@ module.exports = {
                         first_name: randomStr,
                         last_name: randomStr,
                         company: randomStr,
-                        default_export: null,
                         fk_role: 2,
                         active: false,
                     },
@@ -43,7 +42,6 @@ module.exports = {
                     ],
                     data: [],
                 },
-                default_export: [randomStr, randomStr, randomStr],
                 active: true,
             },
             {
@@ -58,7 +56,6 @@ module.exports = {
                     feature: [],
                     data: [],
                 },
-                default_export: [],
                 active: false,
             },
         ],
@@ -85,7 +82,6 @@ module.exports = {
                 ],
                 data: [],
             },
-            default_export: [randomStr, randomStr, randomStr],
             active: true,
         },
     },
@@ -112,7 +108,6 @@ module.exports = {
                 ],
                 data: [],
             },
-            default_export: [randomStr, randomStr, randomStr],
             active: true,
         },
     },
@@ -122,29 +117,6 @@ module.exports = {
         salt: randomStr,
         password: randomStr,
         inputs: commonInputs,
-    },
-
-    findOneWithoutDefaultExport: {
-        inputs: [
-            ...commonInputs,
-            {
-                table: 'users',
-                rows: [
-                    {
-                        email: global.generate('string'),
-                        password: randomStr,
-                        salt: randomStr,
-                        fk_departement: '75',
-                        first_name: randomStr,
-                        last_name: randomStr,
-                        company: randomStr,
-                        default_export: null,
-                        fk_role: 1,
-                        active: true,
-                    },
-                ],
-            },
-        ],
     },
 
     findOneFull: {
