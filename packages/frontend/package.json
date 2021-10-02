@@ -1,6 +1,6 @@
 {
   "name": "@resorptionbidonvilles/frontend",
-  "version": "1.12.1",
+  "version": "1.13.0",
   "description": "Frontend de Résorption Bidonvilles",
   "scripts": {
     "dev": "vue-cli-service serve --port 80",
@@ -22,7 +22,6 @@
     "@sentry/vue": "^6.2.2",
     "@sentry/webpack-plugin": "^1.14.2",
     "@trevoreyre/autocomplete-vue": "^2.2.0",
-    "@turf/point-on-feature": "^6.3.0",
     "axios": "^0.21.1",
     "chart.js": "^2.9.4",
     "core-js": "^3.6.5",

@@ -324,6 +324,11 @@ export default {
                 el.scrollIntoView({ behavior: "smooth" });
             }
         }
+    },
+    watch: {
+        "$route.params.id": function() {
+            this.fetchData();
+        }
     }
 };
 </script>

@@ -348,10 +348,26 @@ function serializeShantytown(town, permission) {
         departement: {
             code: town.departementCode,
             name: town.departementName,
+            latitude: town.departementLatitude,
+            longitude: town.departementLongitude,
+            chieftown: {
+                code: town.departementChiefTownCode,
+                name: town.departementChiefTownName,
+                latitude: town.departementChiefTownLatitude,
+                longitude: town.departementChiefTownLongitude,
+            },
         },
         region: {
             code: town.regionCode,
             name: town.regionName,
+            latitude: town.regionLatitude,
+            longitude: town.regionLongitude,
+            chieftown: {
+                code: town.regionChiefTownCode,
+                name: town.regionChiefTownName,
+                latitude: town.regionChiefTownLatitude,
+                longitude: town.regionChiefTownLongitude,
+            },
         },
         declaredAt: fromDateToTimestamp(town.declaredAt),
         builtAt: fromDateToTimestamp(town.builtAt),
@@ -567,8 +583,21 @@ const SQL = {
         'epci.name': 'epciName',
         'departements.code': 'departementCode',
         'departements.name': 'departementName',
+        'departements.latitude': 'departementLatitude',
+        'departements.longitude': 'departementLongitude',
+        // Departement chieftown
+        'departementChiefTown.code': 'departementChiefTownCode',
+        'departementChiefTown.name': 'departementChiefTownName',
+        'departementChiefTown.latitude': 'departementChiefTownLatitude',
+        'departementChiefTown.longitude': 'departementChiefTownLongitude',
         'regions.code': 'regionCode',
         'regions.name': 'regionName',
+        'regions.latitude': 'regionLatitude',
+        'regions.longitude': 'regionLongitude',
+        'regionChiefTown.code': 'regionChiefTownCode',
+        'regionChiefTown.name': 'regionChiefTownName',
+        'regionChiefTown.latitude': 'regionChiefTownLatitude',
+        'regionChiefTown.longitude': 'regionChiefTownLongitude',
         'electricity_types.electricity_type_id': 'electricityTypeId',
         'electricity_types.label': 'electricityTypeLabel',
         'shantytowns.electricity_comments': 'electricityComments',
@@ -584,7 +613,9 @@ const SQL = {
         { table: 'cities', on: 'shantytowns.fk_city = cities.code' },
         { table: 'epci', on: 'cities.fk_epci = epci.code' },
         { table: 'departements', on: 'cities.fk_departement = departements.code' },
+        { table: 'cities AS departementChiefTown', on: 'departementChiefTown.code = departements.fk_city' },
         { table: 'regions', on: 'departements.fk_region = regions.code' },
+        { table: 'cities AS regionChiefTown', on: 'regionChiefTown.code = regions.fk_city' },
         { table: 'users AS creators', on: 'shantytowns.created_by = creators.user_id' },
         { table: 'organizations AS creators_organizations', on: 'creators.fk_organization = creators_organizations.organization_id' },
         { table: 'users AS updators', on: 'shantytowns.updated_by = updators.user_id' },
@@ -687,15 +718,14 @@ module.exports = (database) => {
     }
 
     /**
-     * Fetches a list of shantytowns from the database
+     * Helper to add filters to restrict access to shantytowns based on user's location
      *
      * @returns {Array.<Object>}
      */
-    async function query(where = [], order = ['departements.code ASC', 'cities.name ASC'], user, feature, includeChangelog = false) {
-        const replacements = {};
-
+    function updateWhereClauseWithUserLocation(user, feature, where = []) {
         const featureLevel = user.permissions.shantytown[feature].geographic_level;
         const userLevel = user.organization.location.type;
+
         if (featureLevel !== 'nation' && (featureLevel !== 'local' || userLevel !== 'nation')) {
             const level = featureLevel === 'local' ? userLevel : featureLevel;
             if (user.organization.location[level] === null) {
@@ -718,14 +748,35 @@ module.exports = (database) => {
             }
         }
 
-        const whereClause = where.map((clauses, index) => {
+        return where;
+    }
+
+    /**
+     * Stringify a list of where clauses
+     *
+     * @returns String
+     */
+    function stringifyWhereClause(where, replacements) {
+        return where.map((clauses, index) => {
             const clauseGroup = Object.keys(clauses).map((column) => {
+                // eslint-disable-next-line no-param-reassign
                 replacements[`${column}${index}`] = clauses[column].value || clauses[column];
                 return `${clauses[column].query || `shantytowns.${column}`} ${clauses[column].not ? 'NOT ' : ''}IN (:${column}${index})`;
             }).join(' OR ');
 
             return `(${clauseGroup})`;
         }).join(' AND ');
+    }
+
+    /**
+     * Fetches a list of shantytowns from the database
+     *
+     * @returns {Array.<Object>}
+     */
+    async function query(where = [], order = ['departements.code ASC', 'cities.name ASC'], user, feature, includeChangelog = false) {
+        const replacements = {};
+        updateWhereClauseWithUserLocation(user, feature, where);
+        const whereClause = stringifyWhereClause(where, replacements);
 
         const towns = await database.query(
             getBaseSql(
@@ -1444,6 +1495,60 @@ module.exports = (database) => {
         if (argTransaction === undefined) {
             await transaction.commit();
         }
+    };
+
+
+    methods.findNearby = async (user, latitude, longitude, distance) => {
+        const replacements = {};
+        const locationWhere = updateWhereClauseWithUserLocation(user, 'list');
+        const locationWhereClause = stringifyWhereClause(locationWhere, replacements);
+
+        const distanceCalc = '(6371 * 2 * ASIN(SQRT( POWER(SIN(( :latitude - shantytowns.latitude) *  pi()/180 / 2), 2) +COS( :latitude * pi()/180) * COS(shantytowns.latitude * pi()/180) * POWER(SIN(( :longitude - shantytowns.longitude) * pi()/180 / 2), 2) )))';
+
+        const result = await database.query(`
+        SELECT 
+            shantytowns.shantytown_id,
+            shantytowns.name,
+            shantytowns.closed_at,
+            shantytowns.latitude,
+            shantytowns.longitude,
+            shantytowns.address,
+            shantytowns.access_to_water,
+            ${distanceCalc} as distance,
+            (SELECT regexp_matches(shantytowns.address, '^(.+) [0-9]+ [^,]+,? [0-9]+,? [^, ]+(,.+)?$'))[1] as address_simple
+        FROM shantytowns
+        LEFT JOIN cities on shantytowns.fk_city = cities.code
+        LEFT JOIN epci on cities.fk_epci = epci.code
+        LEFT JOIN departements on cities.fk_departement = departements.code
+        LEFT JOIN regions on departements.fk_region = regions.code
+        WHERE 
+            ${distanceCalc} < :distanceRadius
+            AND closed_at is NULL
+            ${locationWhereClause ? `AND ${locationWhereClause}` : ''}
+        ORDER BY distance ASC
+        `,
+        {
+            type: database.QueryTypes.SELECT,
+            replacements: {
+                ...replacements, latitude, longitude, distanceRadius: distance,
+            },
+        });
+
+        return result.map((r) => {
+            const town = {
+                id: r.shantytown_id,
+                name: r.name,
+                closedAt: r.closed_at !== null ? (r.closed_at.getTime() / 1000) : null,
+                latitude: r.latitude,
+                longitude: r.longitude,
+                address: r.address,
+                addressSimple: r.address_simple,
+                accessToWater: r.access_to_water,
+                distance: r.distance,
+            };
+
+            return { ...town, usename: getUsenameOf(town) };
+        });
     };
 
     return methods;

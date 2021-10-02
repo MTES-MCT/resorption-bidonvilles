@@ -102,13 +102,6 @@ module.exports = (app) => {
         controllers.user.acceptCharte,
     );
     app.post(
-        '/me/default-export',
-        middlewares.auth.authenticate,
-        middlewares.charte.check,
-        middlewares.appVersion.sync,
-        controllers.user.setDefaultExport,
-    );
-    app.post(
         '/users',
         middlewares.auth.authenticate,
         (...args) => middlewares.auth.checkPermissions(['user.create'], ...args),
@@ -155,6 +148,16 @@ module.exports = (app) => {
         middlewares.auth.authenticate,
         middlewares.appVersion.sync,
         controllers.user.upgrade,
+    );
+    app.put(
+        '/users/:id/admin_comments',
+        middlewares.auth.authenticate,
+        middlewares.auth.isSuperAdmin,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        validators.setUserAdminComments,
+        middlewares.validation,
+        controllers.user.setAdminComments,
     );
     app.get(
         '/activation-tokens/:token/check',
@@ -245,6 +248,16 @@ module.exports = (app) => {
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.town.getRelations,
+    );
+
+    app.get(
+        '/towns/findNearby',
+        validators.findNearbyTowns,
+        middlewares.auth.authenticate,
+        (...args) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        controllers.town.findNearbyTowns,
     );
 
     // plans

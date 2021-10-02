@@ -5,16 +5,19 @@
             src="./assets/resorption-bidonvilles-dessin.png"
         />
         <LandingEventBanner v-if="$i18n.locale === 'fr'" />
-        <div class="mt-24">
+        <div class="mt-24" id="plateforme">
             <div class="max-w-screen-sm mx-auto">
                 <div class="text-display-lg font-normal">
-                    {{ $t("landingPage.firstSection.context.title") }}
-                </div>
-                <div class="text-display-lg">
-                    {{ $t("landingPage.firstSection.context.subtitle") }}
+                    {{ $t("landingPage.firstSection.context.title_part1") }}
+                    <span class="italic">{{
+                        $t("landingPage.firstSection.context.title_part2")
+                    }}</span>
+                    ;<br />
+                    {{ $t("landingPage.firstSection.context.title_part3") }}
                 </div>
                 <div class="mt-4">
-                    {{ $t("landingPage.firstSection.context.text") }}
+                    <p>{{ $t("landingPage.firstSection.context.text_1") }}</p>
+                    <p>{{ $t("landingPage.firstSection.context.text_2") }}</p>
                 </div>
             </div>
         </div>

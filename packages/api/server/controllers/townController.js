@@ -128,8 +128,16 @@ module.exports = (models) => {
 
                 // Send a notification to all users of the related departement
                 try {
-                    const { departement } = req.body.shantytown;
-                    const watchers = await userModel.getDepartementWatchers(departement.code, true);
+                    const {
+                        departement, city, region, epci,
+                    } = req.body.shantytown;
+                    const watchers = await userModel.getLocationWatchers({
+                        type: 'city',
+                        region,
+                        departement,
+                        epci,
+                        city,
+                    }, true);
                     watchers
                         .filter(({ user_id }) => user_id !== req.user.id) // do not send an email to the user who closed the town
                         .forEach((watcher) => {
@@ -1504,6 +1512,11 @@ module.exports = (models) => {
 
     // eslint-disable-next-line global-require
     methods.getRelations = require('./townController/getRelations')(
+        models,
+    );
+
+    // eslint-disable-next-line global-require
+    methods.findNearbyTowns = require('./townController/findNearbyTowns')(
         models,
     );
 

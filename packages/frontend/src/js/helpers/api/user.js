@@ -115,19 +115,6 @@ export function edit(data, userId) {
 }
 
 /**
- * Updates the default export for the current user
- *
- * @param {string} defaultExport
- *
- * @returns {Promise}
- */
-export function setDefaultExport(defaultExport) {
-    return postApi("/me/default-export", {
-        export: defaultExport
-    });
-}
-
-/**
  * GET /users
  */
 export function list() {
@@ -245,6 +232,15 @@ export function acceptCharte(
         version_de_charte: charteVersion,
         charte_agreement: charteAgreement,
         confidentiality_agreement: confidentialityAgreement
+    });
+}
+
+/**
+ * POST /users/:id/comment
+ */
+export function setAdminComments(userId, comment) {
+    return putApi(`/users/${userId}/admin_comments`, {
+        comment
     });
 }
 

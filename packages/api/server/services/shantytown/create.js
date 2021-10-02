@@ -4,7 +4,7 @@ const {
 } = require('#db/models');
 const { mattermost } = require('#server/config');
 const { triggerShantytownCreationAlert } = require('#server/utils/mattermost');
-const { getDepartementWatchers } = require('#server/models/userModel')(sequelize);
+const { getLocationWatchers } = require('#server/models/userModel')(sequelize);
 const { sendUserShantytownDeclared } = require('#server/mails/mails');
 
 module.exports = async (townData, user) => {
@@ -119,7 +119,7 @@ module.exports = async (townData, user) => {
 
     // Send a notification to all users of the related departement
     try {
-        const watchers = await getDepartementWatchers(townData.city.departement.code, true);
+        const watchers = await getLocationWatchers(townData.city, true);
         watchers
             .filter(({ user_id }) => user_id !== user.id) // do not send an email to the user who created the town
             .forEach((watcher) => {

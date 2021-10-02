@@ -13,8 +13,11 @@
                             >Modifier les informations de
                             l'utilisateur</router-link
                         >
-                        <div class="border border-G400 w-16 my-4"></div>
-                        <UserValidateAccessStatus :user="user" />
+                        <div class="border border-G100 w-16 my-4"></div>
+                        <UserValidateAccessStatus
+                            :user="user"
+                            :loggedUser="loggedUser"
+                        />
                     </div>
 
                     <div class="ml-24 w-2/3">
@@ -30,7 +33,18 @@
                             :availableOptions="options"
                             class="mb-4"
                         />
-                        <div class="bg-yellow-200 p-4 mb-12">
+                        <div
+                            v-if="loggedUser.role_id === 'national_admin'"
+                            class="bg-G100 p-4 my-4"
+                        >
+                            <UserValidateComment
+                                :user="user"
+                            ></UserValidateComment>
+                        </div>
+                        <div
+                            class="bg-yellow-200 p-4 mb-12"
+                            v-if="!user.user_access"
+                        >
                             Ne jamais envoyer un accès si vous avez un doute sur
                             l’identité de la personne.
                         </div>
@@ -158,6 +172,7 @@ import PrivateLayout from "#app/components/PrivateLayout";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer.vue";
 import LoadingPage from "#app/components/PrivateLayout/LoadingPage.vue";
 import LoadingError from "#app/components/PrivateLayout/LoadingError.vue";
+import UserValidateComment from "./UserValidateComment/UserValidateComment";
 import UserValidateDetails from "./UserValidateDetails/UserValidateDetails";
 import UserValidateAccessStatus from "./UserValidateAccessStatus/UserValidateAccessStatus";
 import UserValidateRequestMessage from "./UserValidateRequestMessage";
@@ -179,6 +194,7 @@ export default {
     components: {
         PrivateLayout,
         PrivateContainer,
+        UserValidateComment,
         UserValidateAccessStatus,
         UserValidateDetails,
         UserValidateRequestMessage,

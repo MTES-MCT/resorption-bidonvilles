@@ -16,9 +16,11 @@
     "before": "Avant",
     "after": "Après",
     "context": {
-      "title": "Résorption-bidonvilles,",
-      "subtitle": "Un accélérateur de la résorption des bidonvilles",
-      "text": "Outil d’information, de partage et de pilotage, la plateforme offre une solution performante et efficace pour la résorption des bidonvilles. Elle permet de créer une véritable dynamique collaborative, au sein d’un territoire, entre les acteurs engagés vers l’objectif de résorption."
+      "title_part1": "La plateforme numérique",
+      "title_part2": "Résorption-bidonvilles",
+      "title_part3": "pourquoi, pour qui ?",
+      "text_1": "Outil d’information, de partage et de pilotage, la plateforme offre une solution performante et efficace pour accélérer la résorption des bidonvilles.",
+      "text_2": "Elle vise la transformation de l’action publique et permet de créer une véritable dynamique collaborative, au sein d’un territoire, entre les acteurs engagés vers l’objectif de résorption."
     },
     "feedback": {
       "1": {
@@ -43,8 +45,7 @@
     "cta": "Demander un accès"
   },
   "secondSection": {
-    "title": "La résorption complète des bidonvilles,",
-    "subtitle": "un objectif national",
+    "title": "Quelle est la politique de résorption des bidonvilles ?",
     "data": {
       "1": {
         "line1": "Plus de",
@@ -62,14 +63,47 @@
         "line3": "Roumains et Bulgares"
       }
     },
-    "firstParagraph": "Un bidonville est un terrain, une friche ou un immeuble bâti généralement dépourvu des services de base (eau, électricité, gestion des déchets) et occupé illégalement par plusieurs familles.",
-    "secondParagraph": {
+    "firstParagraph": {
       "bold": "Le gouvernement fixe un objectif clair de résorption des bidonvilles en dépassant l’approche centrée sur les évacuations au profit d’une approche globale",
       "normal": "alliant insertion sociale, respect de l’ordre public et prévention des réinstallations. Dans tous les territoires concernés, des actions multi-partenariales efficaces, humaines et pragmatiques doivent être mises en place.",
       "link": "En savoir plus sur la politique de résorption des bidonvilles"
     },
+    "secondParagraph": {
+      "bold": "Qu’est-ce qu’un bidonville ?",
+      "normal": "Un bidonville est un terrain, une friche ou un immeuble bâti généralement dépourvu des services de base (eau, électricité, gestion des déchets) et occupé illégalement par plusieurs familles."
+    },
+    "thirdParagraph": {
+      "bold": "Qu'est-ce qu'une résorption ?",
+      "normal": "Un site est considéré comme résorbé si une solution pérenne en logement ou hébergement est mise en place pour 66 % des habitants du site."
+    },
     "video": {
       "text": "Comprendre la résorption des bidonvilles en 2 minutes"
+    },
+    "bilan": {
+      "title": "Les actions en chiffres",
+      "firstParagraph": {
+        "bold": "Plus de 30 actions de résorption des bidonvilles menées en 2019 par 35 opérateurs.",
+        "normal": "Ces actions sont financées à 75 % par l’État, à 15 % par les collectivités territoriales et à 10 % par des fonds privés ou européens. \nLes équipes de professionnels accompagnent les familles sur bidonville, en squat ou dans le logement sur tous les aspects : santé, logement, emploi, éducation, stabilisation et sécurisation du site."
+      },
+      "figures": {
+        "1": {
+          "text": "8600 bénéficiaires"
+        },
+        "3": {
+          "text": "1 000 personnes relogées"
+        },
+        "4": {
+          "text": "1 350 enfants scolarisés"
+        },
+        "5": {
+          "text": "2 040 bénéficiaires",
+          "info": "d'un accompagnement santé"
+        },
+        "6": {
+          "text": "615 contrats de travail signés"
+        }
+      },
+      "cta": "Télécharger le dernier bilan"
     }
   },
   "secondBanner": {
@@ -77,39 +111,14 @@
     "cta": "Nous contacter"
   },
   "thirdSection": {
-    "title": "Les actions en chiffres",
     "firstParagraph": {
-      "bold": "Plus de 30 actions de résorption des bidonvilles menées en 2019 par 35 opérateurs.",
-      "normal": "Ces actions sont financées à 75 % par l’État, à 15 % par les collectivités territoriales et à 10 % par des fonds privés ou européens. \nLes équipes de professionnels accompagnent les familles sur bidonville, en squat ou dans le logement sur tous les aspects : santé, logement, emploi, éducation, stabilisation et sécurisation du site."
-    },
-    "bilan": {
-      "1": {
-        "text": "8600 bénéficiaires"
-      },
-      "3": {
-        "text": "1 000 personnes relogées"
-      },
-      "4": {
-        "text": "1 350 enfants scolarisés"
-      },
-      "5": {
-        "text": "2 040 bénéficiaires",
-        "info": "d'un accompagnement santé"
-      },
-      "6": {
-        "text": "615 contrats de travail signés"
-      }
-    },
-    "cta": "Télécharger le dernier bilan",
-    "secondParagraph": {
-      "title": "Un projet porté par la Délégation interministérielle à l’hébergement et l’accès au logement",
       "body": {
-        "text1": "La plateforme numérique Résorption-bidonvilles, portée et lancée en 2018 par la",
-        "link1": "Dihal",
-        "text2": "s’inscrit dans un objectif de transformation de l’action publique",
-        "text3": "Les développements de la plateforme se poursuivent en lien étroit avec ses usagers.",
-        "text4": "Vous souhaitez en savoir plus sur la génèse du projet ? Accédez à sa fiche sur",
-        "link2": "le site officiel des start-ups d’Etat"
+        "text1": "La plateforme numérique",
+        "text2": "Résorption-bidonvilles",
+        "text3": "est portée par la Délégation Interministérielle à l'hébergement et l'accès au logement",
+        "text4": "Lancée en 2018, elle s'inscrit dans un objectif de transformation de l'action publique et est développée en lien étroit avec ses usagers",
+        "text5": "En savoir plus sur la génèse du projet : rendez-vous sur ",
+        "link1": "le site officiel des start-ups d’Etat"
       },
       "items": {
         "title": "Le projet a été lauréat de plusieurs appels à projet :",

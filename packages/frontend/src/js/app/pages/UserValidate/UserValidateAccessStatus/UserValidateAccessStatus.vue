@@ -45,12 +45,14 @@
             </span>
         </UserValidateAccessStatusDate>
 
-        <div
-            class="mb-4 text-center font-bold"
+        <UserValidateAccessStatusDate
             v-if="user.last_access && loggedUser.role_id === 'national_admin'"
-        >
-            Dernière connexion le {{ formatDate(user.last_access, "d M y") }}
-        </div>
+            text="Dernière connexion"
+            :date="user.last_access"
+            icon="chalkboard-teacher"
+            color="text-g600"
+            class="mb-2"
+        />
     </div>
 </template>
 

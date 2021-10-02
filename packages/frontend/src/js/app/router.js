@@ -147,21 +147,23 @@ const guardians = {
     anonymous: guard.bind(this, [
         { checker: () => !isLoggedIn(), target: "/", saveEntryPoint: false }
     ]),
-    loggedIn: guard.bind(this, [{ checker: isLoggedIn, target: "/connexion" }]),
+    loggedIn: guard.bind(this, [
+        { checker: isLoggedIn, target: "/connexion?r=1" }
+    ]),
     loaded: guard.bind(this, [
-        { checker: isLoggedIn, target: "/connexion" },
+        { checker: isLoggedIn, target: "/connexion?r=1" },
         { checker: isConfigLoaded, target: "/launcher" },
         { checker: isPermitted, target: "/", saveEntrypoint: false }
     ]),
     loadedAndUpgraded: guard.bind(this, [
-        { checker: isLoggedIn, target: "/connexion" },
+        { checker: isLoggedIn, target: "/connexion?r=1" },
         { checker: isConfigLoaded, target: "/launcher" },
         { checker: isPermitted, target: "/", saveEntrypoint: false },
         { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
         { checker: isUpgraded, target: "/mise-a-niveau" }
     ]),
     loadedAndUpToDate: guard.bind(this, [
-        { checker: isLoggedIn, target: "/connexion" },
+        { checker: isLoggedIn, target: "/connexion?r=1" },
         { checker: isConfigLoaded, target: "/launcher" },
         { checker: isPermitted, target: "/", saveEntrypoint: false },
         { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
@@ -169,7 +171,7 @@ const guardians = {
         { checker: hasNoPendingChangelog, target: "/nouvelle-version" }
     ]),
     isNationalAdmin: guard.bind(this, [
-        { checker: isLoggedIn, target: "/connexion" },
+        { checker: isLoggedIn, target: "/connexion?r=1" },
         { checker: isConfigLoaded, target: "/launcher" },
         { checker: isNationalAdmin, target: "/" },
         { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
@@ -184,7 +186,7 @@ const guardians = {
  * @returns {string}
  */
 function home(to, from, next) {
-    if (to.fullPath.substr(0, 2) === "/#") {
+    if (to.fullPath.substr(0, 3) === "/#/") {
         return next(to.fullPath.substr(2));
     }
 
@@ -573,7 +575,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    if (to.fullPath.substr(0, 2) === "/#") {
+    if (to.fullPath.substr(0, 3) === "/#/") {
         next(to.fullPath.substr(2));
         return;
     }

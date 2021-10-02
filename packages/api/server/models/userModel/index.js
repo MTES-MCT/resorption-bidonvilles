@@ -11,7 +11,7 @@ const { sequelize: database } = require('#db/models');
  *
  * Please find below the details about each filter:
  * - extended data is any data useful for the logged in user only. Typically, data that you
- *   would not need to display a user's profile page (example: default_export)
+ *   would not need to display a user's profile page
  * - auth data is any private authentication material: password, salt...
  */
 
@@ -95,6 +95,8 @@ function serializeUser(user, latestCharte, filters, permissionMap) {
         },
         charte_engagement_a_jour: latestCharte === null || user.charte_engagement_signee === latestCharte,
         subscribed_to_summary: user.subscribed_to_summary,
+        last_access: user.last_access !== null ? user.last_access.getTime() / 1000 : null,
+        admin_comments: user.admin_comments,
         is_admin: user.is_admin,
         role: user.role_name || user.organization_type_role_name,
         role_id: user.role || user.organization_type_role,
@@ -114,7 +116,6 @@ function serializeUser(user, latestCharte, filters, permissionMap) {
 
         Object.assign(serialized, {
             access_request_message: user.access_request_message,
-            default_export: user.default_export ? user.default_export.split(',') : [],
             permissions,
             permission_options: roleDescription ? roleDescription.options.reduce((options, { id }) => {
                 switch (id) {
@@ -222,12 +223,13 @@ module.exports = () => {
                 users.salt,
                 users.access_request_message,
                 users.fk_status AS status,
-                users.default_export,
                 users.created_at,
                 users.last_version,
                 users.last_changelog,
                 users.charte_engagement_signee,
                 users.subscribed_to_summary,
+                users.last_access,
+                users.admin_comments,
                 CASE WHEN users.fk_role IS NULL THEN FALSE
                     ELSE TRUE
                 END AS is_admin,
@@ -589,9 +591,9 @@ module.exports = () => {
             }
 
             const allowedProperties = [
-                'first_name', 'last_name', 'position', 'phone', 'password', 'defaultExport', 'fk_status',
+                'first_name', 'last_name', 'position', 'phone', 'password', 'fk_status',
                 'last_version', 'last_changelog', 'charte_engagement_signee', 'last_access',
-                'subscribed_to_summary',
+                'subscribed_to_summary', 'admin_comments',
             ];
             const propertiesToColumns = {
                 first_name: 'first_name',
@@ -599,13 +601,13 @@ module.exports = () => {
                 position: 'position',
                 phone: 'phone',
                 password: 'password',
-                defaultExport: 'default_export',
                 fk_status: 'fk_status',
                 last_version: 'last_version',
                 last_changelog: 'last_changelog',
                 charte_engagement_signee: 'charte_engagement_signee',
                 last_access: 'last_access',
                 subscribed_to_summary: 'subscribed_to_summary',
+                admin_comments: 'admin_comments',
             };
             const setClauses = [];
             const replacements = {};
@@ -613,12 +615,7 @@ module.exports = () => {
             allowedProperties.forEach((property) => {
                 if (values && values[property] !== undefined) {
                     setClauses.push(`${propertiesToColumns[property]} = :${property}`);
-
-                    if (property === 'defaultExport' && values[property]) {
-                        replacements[property] = values[property].replace(/\s/g, '') || null;
-                    } else {
-                        replacements[property] = values[property] !== undefined ? values[property] : null;
-                    }
+                    replacements[property] = values[property];
                 }
             });
 
@@ -911,7 +908,7 @@ module.exports = () => {
         },
     );
 
-    model.getDepartementWatchers = async (departementCode, applyBlacklist = false) => {
+    model.getLocationWatchers = async (location, applyBlacklist = false) => {
         const users = await database.query(
             `SELECT
                 u.user_id,
@@ -921,13 +918,18 @@ module.exports = () => {
             FROM localized_organizations lo
             LEFT JOIN users u ON u.fk_organization = lo.organization_id
             WHERE
-                (lo.location_type != 'region' AND lo.departement_code = :departementCode)
+                (
+                    (lo.location_type = 'departement' AND lo.departement_code = :departementCode)
+                    OR
+                    ((lo.location_type = 'epci' OR lo.location_type = 'city') AND lo.epci_code = :epciCode)
+                )
                 AND u.fk_status = 'active'
                 AND lo.active = TRUE`,
             {
                 type: database.QueryTypes.SELECT,
                 replacements: {
-                    departementCode,
+                    departementCode: location.departement.code,
+                    epciCode: location.epci.code,
                 },
             },
         );

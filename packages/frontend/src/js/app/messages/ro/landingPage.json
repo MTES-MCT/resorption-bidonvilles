@@ -14,9 +14,11 @@
       "exchange": "Schimb de informatie rapidă intre participanţi"
     },
     "context": {
-      "title": "Resorbția de bidonville,",
-      "subtitle": "O platformă pentru a accelera resorbția de bidonville",
-      "text": "Un instrument de informare, partajare și ghidare , platforma oferă o soluție puternică și eficientă pentru resorbția de bidonville. Acesta permite crearea unei dinamici reale de colaborare, într-un teritoriu si între actorii dedicați obiectivului de resorbția de bidonville."
+      "title_part1": "Platforma digitală ",
+      "title_part2": "Résorption-bidonvilles",
+      "title_part3": "De ce, pentru cine?",
+      "text_1": "Un instrument de informare, partajare și ghidare , platforma oferă o soluție puternică și eficientă pentru resorbția de bidonville.",
+      "text_2": "Acesta permite crearea unei dinamici reale de colaborare, într-un teritoriu si între actorii dedicați obiectivului de resorbția de bidonville."
     },
     "before": "Înainte",
     "after": "După",
@@ -43,8 +45,7 @@
     "cta": "Solicitaţi accesul"
   },
   "secondSection": {
-    "title": "Dizolvarea platzurilor,",
-    "subtitle": "un obiectiv național",
+    "title": "Care este politica de modernizare a mahalalelor?",
     "data": {
       "1": {
         "line1": "Peste",
@@ -62,14 +63,44 @@
         "line3": "români și bulgari"
       }
     },
-    "firstParagraph": "Un bidonville este un teren, un maidan sau o clădire construită care în general e lipsită de servicii de bază (apă, electricitate, gestionarea deșeurilor) și ocupată ilegal de mai multe familii. Un bidonville mai est denumit si „plaț” în limbaj familiar.",
-    "secondParagraph": {
+    "firstParagraph": {
       "bold": "In 2018, Guvernul și-a stabilit un obiectiv clar pentru resorbția de bidonville, depășind abordarea centrată pe evacuare, într-o abordare cuprinzătoare care combină integrarea socială, respectarea ordinii publice și prevenirea reinstralarii.",
       "normal": "În toateteritoriile în cauză, trebuie instituite acțiuni eficiente, umane și pragmatice multi-parteneriale.",
       "link": "Aflați mai multe despre politica de resorbției de bidonville"
     },
+    "secondParagraph": {
+      "bold": "Ce este o bidonville?",
+      "normal": "Un bidonville este un teren, un maidan sau o clădire construită care în general e lipsită de servicii de bază (apă, electricitate, gestionarea deșeurilor) și ocupată ilegal de mai multe familii. Un bidonville mai est denumit si „plaț” în limbaj familiar."
+    },
+    "thirdParagraph": "",
     "video": {
       "text": "Înțelegerea resorbției de bidonville în 2 minute"
+    },
+    "bilan": {
+      "title": "Acţiunile desfăşurate in cifre",
+      "firstParagraph": {
+        "bold": "Peste 30 de acțiuni desfășurate în 2019 de catre 35 de operatori.",
+        "normal": "Acestea sunt 75% finanțate de stat, 15% de autoritățile locale și 10% din fonduri private sau europene. Echipe de profesioniști însoțesc familiile în bidonville, cladirile dezafectate sau în locuință cuprinzând toate aspectele: sănătate, locuința, ocuparea forței de muncă, educație, stabilizare și securitatea locului."
+      },
+      "figures": {
+        "1": {
+          "text": "8 600 de beneficiari ai acestor actiuni"
+        },
+        "3": {
+          "text": "1 000 de persoane relocate"
+        },
+        "4": {
+          "text": "1 350 elevi"
+        },
+        "5": {
+          "text": "2 040 de beneficiari",
+          "info": "de sprijin medical"
+        },
+        "6": {
+          "text": "615 contracte de muncă semnate"
+        }
+      },
+      "cta": "Încarcaţi ultimul bilanţ"
     }
   },
   "secondBanner": {
@@ -77,39 +108,14 @@
     "cta": "Contactaţi-ne"
   },
   "thirdSection": {
-    "title": "Acţiunile desfăşurate in cifre",
     "firstParagraph": {
-      "bold": "Peste 30 de acțiuni desfășurate în 2019 de catre 35 de operatori.",
-      "normal": "Acestea sunt 75% finanțate de stat, 15% de autoritățile locale și 10% din fonduri private sau europene. Echipe de profesioniști însoțesc familiile în bidonville, cladirile dezafectate sau în locuință cuprinzând toate aspectele: sănătate, locuința, ocuparea forței de muncă, educație, stabilizare și securitatea locului."
-    },
-    "bilan": {
-      "1": {
-        "text": "8 600 de beneficiari ai acestor actiuni"
-      },
-      "3": {
-        "text": "1 000 de persoane relocate"
-      },
-      "4": {
-        "text": "1 350 elevi"
-      },
-      "5": {
-        "text": "2 040 de beneficiari",
-        "info": "de sprijin medical"
-      },
-      "6": {
-        "text": "615 contracte de muncă semnate"
-      }
-    },
-    "cta": "Încarcaţi ultimul bilanţ",
-    "secondParagraph": {
-      "title": "Un proiect realizat de Delegația Interministerială privind cazarea și accesul la locuințe",
       "body": {
-        "text1": "Platforma digitală „resorbția de bidonville”, lansată în 2018 de",
-        "link1": "Dihal",
-        "text2": "face parte dintr-un obiectiv de transformare a acțiunii publice.",
-        "text3": "Evoluțiile platformei continuă în strânsă colaborare cu utilizatorii săi.",
-        "text4": "Doriți să aflați mai multe despre crearea proiectului? Accesați fişa proiectulu",
-        "link2": "pe site-ul oficial:  Start-Up de stat"
+        "text1": "Platforma digitală",
+        "text2": "„resorbția de bidonville”",
+        "text3": "este realizat de Delegația Interministerială privind cazarea și accesul la locuințe",
+        "text4": "Evoluțiile platformei continuă în strânsă colaborare cu utilizatorii săi",
+        "text5": "Doriți să aflați mai multe despre crearea proiectului? Accesați fişa proiectulu",
+        "link1": "pe site-ul oficial: Start-Up de stat"
       },
       "items": {
         "title": "Proiectul a fost câștigătorul mai multor cereri de proiecte :",
