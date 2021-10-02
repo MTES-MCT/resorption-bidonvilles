@@ -153,9 +153,9 @@ function serializePlan(user, permissions, plan) {
 
 module.exports = (database) => {
     // eslint-disable-next-line global-require
-    const userModel = require('./userModel')(database);
+    const userModel = require('#server/models/userModel')(database);
     // eslint-disable-next-line global-require
-    const shantytownModel = require('./shantytownModel')(database);
+    const shantytownModel = require('#server/models/shantytownModel')(database);
     async function query(user, feature, filters = {}) {
         const where = [];
         const replacements = Object.assign({}, filters);
