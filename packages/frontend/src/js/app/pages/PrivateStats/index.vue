@@ -2,13 +2,25 @@
     <PrivateLayout>
         <PrivateContainer class="py-4">
             <div class="flex">
-                <LeftColumn :departements="departements" />
-                <div class="pt-8 ml-32 flex-1 pb-32">
-                    <div class="text-display-lg text-primary">
-                        <span v-if="territory.code"
-                            >{{ territory.code }} -</span
+                <LeftColumn :departements="departements" class="print:hidden" />
+                <div class="pt-8 ml-32 print:ml-0 flex-1 pb-32">
+                    <div
+                        class="text-display-lg text-primary flex justify-between"
+                    >
+                        <div>
+                            <span v-if="territory.code"
+                                >{{ territory.code }} -</span
+                            >
+                            {{ territory.name }}
+                        </div>
+                        <Button
+                            icon="print"
+                            iconPosition="left"
+                            variant="primaryOutline"
+                            class="print:hidden"
+                            @click="togglePrint"
+                            >Imprimer</Button
                         >
-                        {{ territory.name }}
                     </div>
                     <div>
                         <div v-if="stats" class="mt-8">
@@ -189,6 +201,9 @@ export default {
         this.loadData();
     },
     methods: {
+        togglePrint() {
+            window.print();
+        },
         loadData() {
             this.getMatomoStats();
             all(this.$route.params.code)
