@@ -16,9 +16,11 @@
     "before": "Before",
     "after": "After",
     "context": {
-      "title": "Résorption-bidonvilles,",
-      "subtitle": "A platform to boost the resorption of slums",
-      "text": "A tool for information, sharing and steering, the platform offers a high-performance and effective solution for slum clearance. It enables the collaboration of all local stakeholders involved in the slum clearance policy."
+      "title_part1": "",
+      "title_part2": "Résorption-bidonvilles",
+      "title_part3": "what and who is it for?",
+      "text_1": "A tool for information, sharing and steering, the platform offers a high-performance and effective solution for slum clearance.",
+      "text_2": "It enables the collaboration of all local stakeholders involved in the slum clearance policy."
     },
     "feedback": {
       "1": {
@@ -43,8 +45,7 @@
     "cta": "Request access"
   },
   "secondSection": {
-    "title": "Reaching slum clearance,",
-    "subtitle": "a national objective",
+    "title": "What is the slum resorption policy?",
     "data": {
       "1": {
         "line1": "More than",
@@ -62,14 +63,44 @@
         "line3": "Romanian and Bulgarian citizens"
       }
     },
-    "firstParagraph": "A slum is an area that usually lacks basic services (water, electricity, waste management) and is illegally occupied by several families.",
-    "secondParagraph": {
+    "firstParagraph": {
       "bold": "The government sets a clear objective of slum resorption by moving away from an evacuation-centred approach to a global approach.",
       "normal": "combining social inclusion, respect for public order and prevention of resettlement. In all the territories concerned, effective, humane and pragmatic multi-partner actions must be implemented.",
       "link": "More about the slum resorption policy"
     },
+    "secondParagraph": {
+      "bold": "What is a slum?",
+      "normal": "A slum is an area that usually lacks basic services (water, electricity, waste management) and is illegally occupied by several families."
+    },
+    "thirdParagraph": "",
     "video": {
       "text": "Understanding slum clearance in 2 minutes"
+    },
+    "bilan": {
+      "title": "Actions in figures",
+      "firstParagraph": {
+        "bold": "In 2019, more than 30 slum clearance projects have been carried out by 35 NGOs",
+        "normal": "They have been financed 75% by the State, 15% by local authorities and 10% by private or European funds. Families living in slums have been supported in order to access to health, housing, employment, education and sanitation."
+      },
+      "figures": {
+        "1": {
+          "text": "8,600 beneficiaries of the actions"
+        },
+        "3": {
+          "text": "1,000 people re-housed"
+        },
+        "4": {
+          "text": "1,350 children in school"
+        },
+        "5": {
+          "text": "2,040 beneficiaries",
+          "info": "of health support"
+        },
+        "6": {
+          "text": "615 employment contracts signed"
+        }
+      },
+      "cta": "Download the latest report"
     }
   },
   "secondBanner": {
@@ -77,39 +108,14 @@
     "cta": "Contact us"
   },
   "thirdSection": {
-    "title": "Actions in figures",
     "firstParagraph": {
-      "bold": "In 2019, more than 30 slum clearance projects have been carried out by 35 NGOs",
-      "normal": "They have been financed 75% by the State, 15% by local authorities and 10% by private or European funds. Families living in slums have been supported in order to access to health, housing, employment, education and sanitation."
-    },
-    "bilan": {
-      "1": {
-        "text": "8,600 beneficiaries of the actions"
-      },
-      "3": {
-        "text": "1,000 people re-housed"
-      },
-      "4": {
-        "text": "1,350 children in school"
-      },
-      "5": {
-        "text": "2,040 beneficiaries",
-        "info": "of health support"
-      },
-      "6": {
-        "text": "615 employment contracts signed"
-      }
-    },
-    "cta": "Download the latest report",
-    "secondParagraph": {
-      "title": "A project led by the interministerial delegation for access to housing (DIHAL)",
       "body": {
-        "text1": "The digital platform Résorption-bidonvilles, launched in 2018 by the",
-        "link1": "DIHAL",
-        "text2": "plays a role in transforming public action",
-        "text3": "The platform continues to be developed in close collaboration with its users.",
-        "text4": "To learn more about the beginning of the project, please visit ",
-        "link2": "the official website about Start-up d'Etat"
+        "text1": "The digital platform",
+        "text2": "Résorption-bidonvilles",
+        "text3": "is led by the interministerial delegation for access to housing",
+        "text4": "The platform continues to be developed in close collaboration with its users",
+        "text5": "To learn more about the beginning of the project, please visit",
+        "link1": "the official website about Start-up d'Etat"
       },
       "items": {
         "title": "The project was the winner of several calls for proposals:",

@@ -24,27 +24,41 @@
                 <span class="text-display-lg font-normal">{{
                     $t("landingPage.secondSection.title")
                 }}</span>
-                <span class="text-display-lg block">{{
-                    $t("landingPage.secondSection.subtitle")
-                }}</span>
             </h2>
-            <div class="mt-8">
-                {{ $t("landingPage.secondSection.firstParagraph") }}
-            </div>
+
             <div class="mt-8">
                 <span class="font-bold">{{
-                    $t("landingPage.secondSection.secondParagraph.bold")
+                    $t("landingPage.secondSection.firstParagraph.bold")
                 }}</span>
-                {{ $t("landingPage.secondSection.secondParagraph.normal") }}
+                {{ $t("landingPage.secondSection.firstParagraph.normal") }}
             </div>
             <div>
                 <a
                     class="link"
                     href="https://www.ecologie.gouv.fr/resorption-des-campements-illicites-et-des-bidonvilles"
                     >{{
-                        $t("landingPage.secondSection.secondParagraph.link")
+                        $t("landingPage.secondSection.firstParagraph.link")
                     }}</a
                 >
+            </div>
+
+            <div class="mt-8">
+                <span class="font-bold">{{
+                    $t("landingPage.secondSection.secondParagraph.bold")
+                }}</span
+                ><br />
+                {{ $t("landingPage.secondSection.secondParagraph.normal") }}
+            </div>
+
+            <div
+                class="mt-8"
+                v-if="$t('landingPage.secondSection.thirdParagraph')"
+            >
+                <span class="font-bold">{{
+                    $t("landingPage.secondSection.thirdParagraph.bold")
+                }}</span
+                ><br />
+                {{ $t("landingPage.secondSection.thirdParagraph.normal") }}
             </div>
 
             <img
@@ -88,6 +102,64 @@
                 {{ $t("landingPage.secondSection.video.text") }}
             </div>
         </div>
+
+        <div class="mt-20 max-w-screen-sm mx-auto">
+            <h2 class="text-display-lg">
+                {{ $t("landingPage.secondSection.bilan.title") }}
+            </h2>
+            <div class=" mt-8">
+                <span class="font-bold">{{
+                    $t("landingPage.secondSection.bilan.firstParagraph.bold")
+                }}</span>
+                {{
+                    $t("landingPage.secondSection.bilan.firstParagraph.normal")
+                }}
+            </div>
+
+            <div class="flex flex-row items-center my-8">
+                <div class="bg-gray-500 h-px flex-1" />
+                <div
+                    class="inline-block bg-black text-white text-display-md px-4"
+                >
+                    2019
+                </div>
+                <div class="bg-gray-500 h-px flex-1" />
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 md:gap-x-16">
+                <LandingPageBilanBlock
+                    icon="users"
+                    :text="$t('landingPage.secondSection.bilan.figures.1.text')"
+                />
+                <LandingPageBilanBlock
+                    icon="hand-holding-medical"
+                    :text="$t('landingPage.secondSection.bilan.figures.3.text')"
+                />
+                <LandingPageBilanBlock
+                    icon="map-marker-alt"
+                    :text="$t('landingPage.secondSection.bilan.figures.4.text')"
+                />
+                <LandingPageBilanBlock
+                    icon="file-signature"
+                    :text="$t('landingPage.secondSection.bilan.figures.6.text')"
+                />
+                <LandingPageBilanBlock
+                    icon="book"
+                    :text="$t('landingPage.secondSection.bilan.figures.5.text')"
+                    :info="$t('landingPage.secondSection.bilan.figures.5.info')"
+                />
+            </div>
+            <div class="text-center mt-8">
+                <a
+                    href="https://www.gouvernement.fr/sites/default/files/contenu/piece-jointe/2019/09/bilan_campements_2018_vecran.pdf"
+                >
+                    <Button variant="secondary">
+                        {{ $t("landingPage.secondSection.bilan.cta") }}
+                    </Button>
+                </a>
+            </div>
+        </div>
+
         <LandingPageContributeBanner v-if="$i18n.locale === 'fr'" />
     </div>
 </template>
@@ -95,11 +167,15 @@
 <script>
 import LandingPageDataBlock from "./LandingPageDataBlock.vue";
 import LandingPageContributeBanner from "../LandingPageContributeBanner.vue";
+import LandingPageBilanBlock from "./LandingPageBilanBlock.vue";
+import Button from "#app/components/ui/Button.vue";
 
 export default {
     components: {
         LandingPageDataBlock,
-        LandingPageContributeBanner
+        LandingPageContributeBanner,
+        LandingPageBilanBlock,
+        Button
     }
 };
 </script>
