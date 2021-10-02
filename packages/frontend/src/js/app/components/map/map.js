@@ -315,6 +315,10 @@ export default {
         towns() {
             if (this.displayShantytownsLevel) {
                 this.syncTownMarkers();
+
+                // The method syncTownMarkers recreates the layer and make it visible even if it wasn't before
+                // Call onZoomEnd to hide if if necessary
+                this.onZoomEnd();
             }
 
             if (this.loadTerritoryLayers) {
@@ -743,12 +747,13 @@ export default {
             const coordinates = this.getTownCoordinates(town);
             const color = this.getTownColor(town);
             const waterImage = this.getTownWaterImage(town);
+            const style = town.style ? `style="${town.style}"` : "";
 
             const marker = L.marker(coordinates, {
-                title: town.address,
+                title: address,
                 icon: L.divIcon({
                     className: "leaflet-marker",
-                    html: `<span class="mapPin mapPin--shantytown">
+                    html: `<span class="mapPin mapPin--shantytown" ${style}>
                         <span class="mapPin-wrapper">
                             <span class="mapPin-water"><img src="${waterImage}" /></span>
                             <span class="mapPin-marker" style="background-color: ${color}"></span>
