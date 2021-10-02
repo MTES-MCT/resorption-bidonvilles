@@ -236,6 +236,15 @@ export function acceptCharte(
 }
 
 /**
+ * POST /users/:id/comment
+ */
+export function setAdminComments(userId, comment) {
+    return putApi(`/users/${userId}/admin_comments`, {
+        comment
+    });
+}
+
+/**
  * @typedef {Object} User_Data
  * @property {string} first_name
  * @property {string} last_name

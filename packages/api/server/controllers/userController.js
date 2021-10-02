@@ -212,8 +212,8 @@ module.exports = models => ({
     },
 
     /**
-         * Returns information about... yourself!
-         */
+     * Returns information about... yourself!
+     */
     async me(req, res) {
         const user = await models.user.findOne(req.user.id, {
             extended: true,
@@ -222,8 +222,8 @@ module.exports = models => ({
     },
 
     /**
-         * Updates some data about the current user
-         */
+     * Updates some data about the current user
+     */
     async edit(req, res, next) {
         const { id: paramId } = req.params;
         const { id: connectedUserId } = req.user;
@@ -306,6 +306,27 @@ module.exports = models => ({
         }
 
         return res.status(200).send(result);
+    },
+
+    /**
+     * Updates comments about a user
+     */
+    async setAdminComments(req, res, next) {
+        try {
+            await models.user.update(req.params.id, {
+                admin_comments: req.body.comment,
+            });
+            return res.status(200).send({
+                admin_comments: req.body.comment,
+            });
+        } catch (error) {
+            res.status(500).send({
+                error: {
+                    user_message: 'Une erreur est survenue dans l\'écriture de vos informations en base de données.',
+                },
+            });
+            return next(error);
+        }
     },
 
     async setDefaultExport(req, res, next) {

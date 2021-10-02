@@ -95,6 +95,8 @@ function serializeUser(user, latestCharte, filters, permissionMap) {
         },
         charte_engagement_a_jour: latestCharte === null || user.charte_engagement_signee === latestCharte,
         subscribed_to_summary: user.subscribed_to_summary,
+        last_access: user.last_access !== null ? user.last_access.getTime() / 1000 : null,
+        admin_comments: user.admin_comments,
         is_admin: user.is_admin,
         role: user.role_name || user.organization_type_role_name,
         role_id: user.role || user.organization_type_role,
@@ -226,6 +228,8 @@ module.exports = () => {
                 users.last_changelog,
                 users.charte_engagement_signee,
                 users.subscribed_to_summary,
+                users.last_access,
+                users.admin_comments,
                 CASE WHEN users.fk_role IS NULL THEN FALSE
                     ELSE TRUE
                 END AS is_admin,
@@ -589,7 +593,7 @@ module.exports = () => {
             const allowedProperties = [
                 'first_name', 'last_name', 'position', 'phone', 'password', 'fk_status',
                 'last_version', 'last_changelog', 'charte_engagement_signee', 'last_access',
-                'subscribed_to_summary',
+                'subscribed_to_summary', 'admin_comments',
             ];
             const propertiesToColumns = {
                 first_name: 'first_name',
@@ -603,6 +607,7 @@ module.exports = () => {
                 charte_engagement_signee: 'charte_engagement_signee',
                 last_access: 'last_access',
                 subscribed_to_summary: 'subscribed_to_summary',
+                admin_comments: 'admin_comments',
             };
             const setClauses = [];
             const replacements = {};
