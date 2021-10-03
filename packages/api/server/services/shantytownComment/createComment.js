@@ -1,6 +1,6 @@
 const { sequelize } = require('#db/models');
 
-const shantytownCommentModel = require('#server/models/shantytownComment');
+const shantytownCommentModel = require('#server/models/shantytownCommentModel')();
 const shantytownModel = require('#server/models/shantytownModel')(sequelize);
 const mattermostUtils = require('#server/utils/mattermost');
 
