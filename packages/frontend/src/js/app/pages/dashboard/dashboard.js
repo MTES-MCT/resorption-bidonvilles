@@ -72,6 +72,7 @@ export default {
                 {
                     faIcon: "tint",
                     label: "Accès à l'eau",
+                    // id: "waterAccessConditions",
                     id: "accessToWater",
                     options: [
                         {
@@ -80,12 +81,12 @@ export default {
                             checked: true,
                             icon: { id: "tint", color: "00a0e3" }
                         },
-                        {
-                            value: "toImprove",
-                            label: "A améliorer",
-                            checked: true,
-                            icon: { id: "tint", color: "ff6f4c" }
-                        },
+                        // {
+                        //     value: "toImprove",
+                        //     label: "A améliorer",
+                        //     checked: true,
+                        //     icon: { id: "tint", color: "ff6f4c" }
+                        // },
                         {
                             value: false,
                             label: "Non",
@@ -211,15 +212,13 @@ export default {
         },
         visibleTowns() {
             let visibleTowns = this.towns;
-
             this.allowedFilters.forEach(filterGroup => {
                 switch (filterGroup.id) {
-                    case "accessToWater":
+                    case "waterAccessConditions":
                         {
                             const allowed = filterGroup.options
                                 .filter(option => option.checked)
                                 .map(option => option.value);
-
                             visibleTowns = visibleTowns.filter(
                                 town =>
                                     allowed.indexOf(town.accessToWater) !== -1
