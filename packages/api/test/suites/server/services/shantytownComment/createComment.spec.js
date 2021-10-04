@@ -1,26 +1,18 @@
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const proxyquire = require('proxyquire');
+const rewiremock = require('rewiremock/node');
+const Sequelize = require('sequelize-mock');
 
 chai.use(sinonChai);
 
 const { expect } = chai;
-const { sequelize } = require('#db/models');
-const shantytownCommentModel = require('#server/models/shantytownCommentModel')();
-const shantytownModel = require('#server/models/shantytownModel')(sequelize);
-const mattermostUtils = require('#server/utils/mattermost');
-const userModel = require('#server/models/userModel')(sequelize);
-const mailService = require('#server/services/mailService');
 const ServiceError = require('#server/errors/ServiceError');
 
-const createComment = proxyquire('#server/services/shantytownComment/createComment', {
-    '#server/models/shantytownModel': () => shantytownModel,
-    '#server/models/userModel': () => userModel,
-});
+const sequelizeStub = new Sequelize();
+
 const { serialized: fakeUser } = require('#test/utils/user');
 const { serialized: fakeComment } = require('#test/utils/shantytownComment');
-
 
 describe.only('services/shantytownComment', () => {
     const dependencies = {
@@ -31,16 +23,36 @@ describe.only('services/shantytownComment', () => {
         getShantytownWatchers: undefined,
         sendMail: undefined,
     };
+    let createComment;
     beforeEach(() => {
-        dependencies.createComment = sinon.stub(shantytownCommentModel, 'create');
-        dependencies.findOneComment = sinon.stub(shantytownCommentModel, 'findOne');
-        dependencies.getComments = sinon.stub(shantytownModel, 'getComments');
-        dependencies.triggerNewComment = sinon.stub(mattermostUtils, 'triggerNewComment');
-        dependencies.getShantytownWatchers = sinon.stub(userModel, 'getShantytownWatchers');
-        dependencies.sendMail = sinon.stub(mailService, 'send');
-    });
-    afterEach(() => {
-        Object.values(dependencies).forEach(stub => stub && stub.restore());
+        dependencies.getComments = sinon.stub();
+        dependencies.getShantytownWatchers = sinon.stub();
+        dependencies.createComment = sinon.stub();
+        dependencies.findOneComment = sinon.stub();
+        dependencies.triggerNewComment = sinon.stub();
+        dependencies.sendMail = sinon.stub();
+
+        createComment = rewiremock.proxy('#server/services/shantytownComment/createComment', {
+            '#db/models': {
+                sequelize: sequelizeStub,
+            },
+            '#server/models/shantytownModel': () => ({
+                getComments: dependencies.getComments,
+            }),
+            '#server/models/userModel': () => ({
+                getShantytownWatchers: dependencies.getShantytownWatchers,
+            }),
+            '#server/models/shantytownCommentModel': () => ({
+                create: dependencies.createComment,
+                findOne: dependencies.findOneComment,
+            }),
+            '#server/utils/mattermost': {
+                triggerNewComment: dependencies.triggerNewComment,
+            },
+            '#server/mails/mails': {
+                sendUserNewComment: dependencies.sendMail,
+            },
+        });
     });
 
     describe('createComment()', () => {
@@ -84,6 +96,7 @@ describe.only('services/shantytownComment', () => {
                     .withArgs(input.shantytown.id, input.comment.private)
                     .resolves(output.watchers);
 
+                sequelizeStub.$queueResult([[{ shantytown_comment_id: output.comment.id }]]);
                 response = await createComment(input.comment, input.shantytown, input.user);
             });
 
@@ -105,67 +118,25 @@ describe.only('services/shantytownComment', () => {
             });
 
             it('envoie une notification mail', () => {
-                const annuaireUrl = 'undefined/annuaire/2?pk_campaign=utilisateur-email&pk_kwd=nouveau-commentaire';
-                const messageUrl = 'undefined/site/1#newComment';
-                const frontUrl = 'undefined?pk_campaign=utilisateur-email&pk_kwd=nouveau-commentaire';
-                const backUrl = undefined;
-                const recipientName = 'Jean DUPONT';
-
                 expect(dependencies.sendMail.callCount).to.be.eql(3);
-                expect(dependencies.sendMail).to.have.been.calledWithExactly('user_new_comment',
-                    {
-                        recipient: output.watchers[0],
-                        variables: {
-                            shantytown: input.shantytown,
-                            createdBy: {
-                                name: 'Jean DUPONT',
-                                organization: 'DIHAL',
-                            },
-                            comment: 'Un commentaire',
-                            annuaireUrl,
-                            messageUrl,
-                            backUrl,
-                            recipientName,
-                            frontUrl,
-                        },
-                        preserveRecipient: false,
-                    });
-                expect(dependencies.sendMail).to.have.been.calledWithExactly('user_new_comment',
-                    {
-                        recipient: output.watchers[1],
-                        variables: {
-                            shantytown: input.shantytown,
-                            createdBy: {
-                                name: 'Jean DUPONT',
-                                organization: 'DIHAL',
-                            },
-                            comment: 'Un commentaire',
-                            annuaireUrl,
-                            messageUrl,
-                            backUrl,
-                            recipientName,
-                            frontUrl,
-                        },
-                        preserveRecipient: false,
-                    });
-                expect(dependencies.sendMail).to.have.been.calledWithExactly('user_new_comment',
-                    {
-                        recipient: output.watchers[2],
-                        variables: {
-                            shantytown: input.shantytown,
-                            createdBy: {
-                                name: 'Jean DUPONT',
-                                organization: 'DIHAL',
-                            },
-                            comment: 'Un commentaire',
-                            annuaireUrl,
-                            messageUrl,
-                            backUrl,
-                            recipientName,
-                            frontUrl,
-                        },
-                        preserveRecipient: false,
-                    });
+                expect(dependencies.sendMail).to.have.been.calledWithExactly(output.watchers[0], {
+                    variables: {
+                        shantytown: input.shantytown,
+                        comment: output.comment,
+                    },
+                });
+                expect(dependencies.sendMail).to.have.been.calledWithExactly(output.watchers[1], {
+                    variables: {
+                        shantytown: input.shantytown,
+                        comment: output.comment,
+                    },
+                });
+                expect(dependencies.sendMail).to.have.been.calledWithExactly(output.watchers[2], {
+                    variables: {
+                        shantytown: input.shantytown,
+                        comment: output.comment,
+                    },
+                });
             });
 
             it('collecte et retourne la liste des commentaires actualisés', async () => {

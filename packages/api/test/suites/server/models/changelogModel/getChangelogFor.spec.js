@@ -1,9 +1,7 @@
 const SequelizeMock = require('sequelize-mock');
+const rewiremock = require('rewiremock/node');
 const { expect } = require('chai');
 
-SequelizeMock.prototype.QueryTypes = {};
-
-const factory = require('#server/models/changelogModel');
 const { serialized: createUser } = require('#test/utils/user');
 const { raw: createChangelogItem } = require('#test/utils/changelog');
 
@@ -13,7 +11,13 @@ describe.only('ChangelogModel', () => {
         let sequelizeStub;
         beforeEach(() => {
             sequelizeStub = new SequelizeMock();
-            ({ getChangelogFor } = factory(sequelizeStub));
+            sequelizeStub.QueryTypes = SequelizeMock.QueryTypes;
+
+            ({ getChangelogFor } = rewiremock.proxy('#server/models/changelogModel', {
+                '#db/models': {
+                    sequelize: sequelizeStub,
+                },
+            })());
         });
 
         it('Si l\'utilisateur se connecte à l\'application pour la première fois, on ne lui retourne aucun changelog', async () => {
