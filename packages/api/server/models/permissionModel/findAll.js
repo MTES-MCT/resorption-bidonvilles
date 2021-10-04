@@ -5,4 +5,4 @@ const query = require('./_common/query');
  *
  * @returns {PermissionMap}
  */
-module.exports = query();
+module.exports = query;
