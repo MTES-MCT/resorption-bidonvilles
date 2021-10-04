@@ -1,0 +1,32 @@
+const query = require('./_common/query');
+
+module.exports = (organizationCategoryId, geographicFilter = undefined, filters = {}) => {
+    const where = [
+        {
+            organizationCategory: {
+                query: 'organization_categories.uid',
+                value: [organizationCategoryId],
+            },
+        },
+    ];
+
+    if (geographicFilter !== undefined) {
+        if (geographicFilter.type === 'departement') {
+            where.push({
+                departement: {
+                    query: 'organizations.departement_code',
+                    value: [geographicFilter.value],
+                },
+            });
+        } else if (geographicFilter.type === 'region') {
+            where.push({
+                departement: {
+                    query: 'organizations.region_code',
+                    value: [geographicFilter.value],
+                },
+            });
+        }
+    }
+
+    return query(where, filters);
+};
