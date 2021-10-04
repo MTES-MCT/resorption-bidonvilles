@@ -318,6 +318,40 @@ function getUsenameOf(shantytown) {
     return addressSimple;
 }
 
+function getWaterHandWashAccessPopulationRatio(populationTotal, waterHandWashAccessNumber) {
+    return populationTotal && waterHandWashAccessNumber ? Math.floor(Number(populationTotal) / Number(waterHandWashAccessNumber)) : null;
+}
+
+
+/**
+ * Computes the waterAccessConditions field of the given shantytown
+ * @param {Object} shantytown
+ *
+ * @returns {string || null}
+ */
+function getWaterAccessConditions(shantytown) {
+    if (shantytown.accessToWater) {
+        // const waterHandWashAccessPopulationRatio = getWaterHandWashAccessPopulationRatio(shantytown.populationTotal, shantytown.waterHandWashAccessNumber);
+        // if (
+        //     !shantytown.waterPotable
+        //     || !shantytown.waterContinuousAccess
+        //     || !shantytown.waterPublicPoint
+        //     || !shantytown.waterDistance
+        //     || shantytown.waterDistance !== '0-20'
+        //     || shantytown.waterRoadsToCross === null
+        //     || shantytown.waterRoadsToCross
+        //     || !shantytown.waterEveryoneHasAccess
+        //     || shantytown.waterStagnantWater === null
+        //     || shantytown.waterStagnantWater
+        //     || !shantytown.waterHandWashAccess
+        //     || waterHandWashAccessPopulationRatio > 20
+        // ) {
+        //     return 'toImprove';
+        // }
+        return 'true';
+    }
+    return shantytown.accessToWater === false ? 'false' : null;
+}
 
 /**
  * Serializes a single shantytown row
@@ -393,6 +427,8 @@ function serializeShantytown(town, permission) {
         accessToSanitary: town.accessToSanitary,
         sanitaryComments: town.sanitaryComments,
         accessToWater: town.accessToWater,
+        waterAccessConditions: getWaterAccessConditions(town),
+        waterHandWashAccessPopulationRatio: getWaterHandWashAccessPopulationRatio(town.populationTotal, town.waterHandWashAccessNumber),
         waterComments: town.waterComments,
         trashEvacuation: town.trashEvacuation,
         owner: town.owner,
