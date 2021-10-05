@@ -16,10 +16,6 @@ module.exports = (argPermissions, rows) => {
             geographic_level: row.geographic_level,
         };
 
-        Object.keys(row).filter(key => key.substr(0, 5) === 'data_').forEach((key) => {
-            permission[key] = row[key];
-        });
-
         // merge it to the permissions object
         let ownerId;
         let ownerType;

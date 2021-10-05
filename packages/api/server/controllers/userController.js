@@ -23,7 +23,7 @@ const {
 const { auth: authConfig } = require('#server/config');
 const { sequelize } = require('#db/models');
 
-function fromOptionToPermissions(user, option, dataJustice) {
+function fromOptionToPermissions(option) {
     switch (option.id) {
         case 'close_shantytown':
             return [
@@ -31,7 +31,6 @@ function fromOptionToPermissions(user, option, dataJustice) {
                     entity: 'shantytown',
                     feature: 'close',
                     level: 'local',
-                    data: { data_justice: dataJustice },
                     allowed: true,
                 },
             ];
@@ -42,28 +41,25 @@ function fromOptionToPermissions(user, option, dataJustice) {
                     entity: 'shantytown',
                     feature: 'create',
                     level: 'local',
-                    data: { data_justice: dataJustice },
                     allowed: true,
                 },
                 {
                     entity: 'shantytown',
                     feature: 'close',
                     level: 'local',
-                    data: { data_justice: dataJustice },
                     allowed: true,
                 },
             ];
 
         case 'hide_justice': {
-            const defaultPermissions = user.permissions.shantytown || {};
-
-            return Object.keys(defaultPermissions).map(feature => ({
-                entity: 'shantytown',
-                feature,
-                level: defaultPermissions[feature].geographic_level,
-                data: { data_justice: false },
-                allowed: defaultPermissions[feature].allowed,
-            }));
+            return [
+                {
+                    entity: 'shantytown_justice',
+                    feature: 'access',
+                    level: 'local',
+                    allowed: false,
+                },
+            ];
         }
 
         default:
@@ -71,17 +67,10 @@ function fromOptionToPermissions(user, option, dataJustice) {
     }
 }
 
-function fromOptionsToPermissions(user, options) {
-    if (options.length === 0) {
-        return [];
-    }
-
-    // special case of data_justice
-    const dataJustice = options.find(({ id }) => id === 'hide_justice') === undefined;
-
+function fromOptionsToPermissions(options) {
     return options.reduce((permissions, option) => [
         ...permissions,
-        ...fromOptionToPermissions(user, option, dataJustice),
+        ...fromOptionToPermissions(option),
     ], []);
 }
 
@@ -499,7 +488,7 @@ module.exports = models => ({
             const requestedOptions = options.filter(({ id }) => req.body.options && req.body.options[id] === true);
 
             // inject additional permissions related to options
-            const additionalPermissions = fromOptionsToPermissions(user, requestedOptions);
+            const additionalPermissions = fromOptionsToPermissions(requestedOptions);
             try {
                 await models.organization.setCustomPermissions(user.organization.id, additionalPermissions);
             } catch (error) {

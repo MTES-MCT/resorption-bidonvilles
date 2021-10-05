@@ -267,7 +267,7 @@ module.exports = async (editor, shantytownId, data, argTransaction = undefined) 
             updated_by: editor.id,
             updated_at: new Date(),
         },
-        editor.permissions.shantytown.update.data_justice === true
+        editor.isAllowedTo('access', 'shantytown_justice')
             ? justiceData
             : {},
     );

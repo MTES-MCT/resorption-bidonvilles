@@ -20,20 +20,21 @@ module.exports = (entity, owners) => {
 
     return sequelize.query(`
         SELECT
-            permissions.fk_organization AS organization,
-            permissions.fk_role_admin AS role_admin,
-            permissions.fk_role_regular AS role_regular,
-            permissions.fk_entity AS entity,
-            permissions.fk_feature AS feature,
-            permissions.allowed,
-            permissions.fk_geographic_level AS geographic_level,
-            ${entity}_permissions.*
-        FROM ${entity}_permissions
-        LEFT JOIN permissions ON ${entity}_permissions.fk_permission = permissions.permission_id
-        ${where.length > 0 ? `WHERE ${where.join(' OR ')}` : ''}
+            fk_organization AS organization,
+            fk_role_admin AS role_admin,
+            fk_role_regular AS role_regular,
+            fk_entity AS entity,
+            fk_feature AS feature,
+            allowed,
+            fk_geographic_level AS geographic_level
+        FROM permissions
+        WHERE fk_entity = :entity ${where.length > 0 ? `AND (${where.join(' OR ')})` : ''}
         ORDER BY role_admin ASC, role_regular ASC, organization ASC, feature ASC
     `, {
         type: sequelize.QueryTypes.SELECT,
-        replacements,
+        replacements: {
+            ...replacements,
+            entity,
+        },
     });
 };

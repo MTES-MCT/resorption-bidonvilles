@@ -117,7 +117,7 @@ module.exports = {
                 SELECT
                     permission_id,
                     p.fk_entity,
-                    CASE WHEN p.fk_entity = 'shantytown' THEN aj.allowed ELSE NULL END AS data_justice,
+                    CASE WHEN p.fk_entity = 'shantytown' THEN COALESCE(aj.allowed, FALSE) ELSE NULL END AS data_justice,
                     CASE WHEN p.fk_entity = 'plan' THEN FALSE ELSE NULL END AS data_finances
                 FROM permissions p
                 LEFT JOIN annex_justice aj ON (aj.fk_organization = p.fk_organization OR aj.fk_role_admin = p.fk_role_admin OR aj.fk_role_regular = p.fk_role_regular)

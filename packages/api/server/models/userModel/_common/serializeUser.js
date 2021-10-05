@@ -119,7 +119,7 @@ module.exports = (user, latestCharte, filters, permissionMap) => {
                         break;
 
                     case 'hide_justice':
-                        if (permissions.shantytown && permissions.shantytown.list && !permissions.shantytown.list.data_justice) {
+                        if (permissions.shantytown_justice && permissions.shantytown_justice.access && !permissions.shantytown_justice.access.allowed) {
                             return [...options, id];
                         }
                         break;

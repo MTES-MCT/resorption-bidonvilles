@@ -193,7 +193,7 @@ export default {
         LoadingError
     },
     data() {
-        const permission = getPermission("shantytown.list");
+        const permission = getPermission("shantytown_justice.access");
         const { field_types: fieldTypes, user } = getConfig();
 
         return {
@@ -208,7 +208,7 @@ export default {
             loading: false,
             fieldTypes,
             user,
-            hasJusticePermission: permission.data_justice === true
+            hasJusticePermission: permission !== null
         };
     },
     computed: {

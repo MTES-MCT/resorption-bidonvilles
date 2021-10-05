@@ -24,16 +24,6 @@ module.exports = async (organizationId, permissions) => sequelize.transaction(
                         allowed: permission.allowed,
                     },
                 },
-            )
-                .then(([[{ permission_id: permissionId }]]) => {
-                    const replacements = Object.assign({ fk_permission: permissionId }, permission.data || {});
-                    return sequelize.query(
-                        `INSERT INTO ${permission.entity}_permissions VALUES (${Object.keys(replacements).map(name => `:${name}`).join(',')})`,
-                        {
-                            transaction: t,
-                            replacements,
-                        },
-                    );
-                })),
+            )),
         )),
 );
