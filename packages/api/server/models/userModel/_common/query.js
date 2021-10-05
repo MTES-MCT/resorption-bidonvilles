@@ -149,30 +149,7 @@ module.exports = async (where = [], filters, user = null, feature) => {
 
     let permissionMap = null;
     if (filters.extended === true) {
-        const permissionOwners = users.reduce((acc, row) => {
-            if (row.is_admin === true) {
-                if (!Object.prototype.hasOwnProperty.call(acc, 'role_admin')) {
-                    acc.role_admin = [];
-                }
-
-                acc.role_admin.push(row.user_role_admin);
-            } else {
-                if (acc.organization.indexOf(row.organization_id) === -1) {
-                    acc.organization.push(row.organization_id);
-                }
-
-                if (acc.role_regular.indexOf(row.user_role_regular) === -1) {
-                    acc.role_regular.push(row.user_role_regular);
-                }
-            }
-
-            return acc;
-        }, {
-            organization: [],
-            role_regular: [],
-        });
-
-        permissionMap = await permissionModel.find(permissionOwners);
+        permissionMap = await permissionModel.find(users.map(({ id }) => id));
     }
 
     return users.map(row => serializeUser(row, latestCharte, filters, permissionMap));

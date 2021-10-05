@@ -1,5 +1,4 @@
 const permissionsDescription = require('#server/permissions_description');
-const { getPermissionsFor } = require('#server/utils/permission');
 
 /**
  * @typedef {Object} UserFilters
@@ -99,7 +98,7 @@ module.exports = (user, latestCharte, filters, permissionMap) => {
 
     if (filters.extended === true) {
         const roleDescription = permissionsDescription[serialized.role_id];
-        const permissions = getPermissionsFor(user, permissionMap);
+        const permissions = (permissionMap && permissionMap[user.id]) || {};
 
         Object.assign(serialized, {
             access_request_message: user.access_request_message,
