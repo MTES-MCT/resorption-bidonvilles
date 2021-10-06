@@ -357,6 +357,9 @@ export default {
             try {
                 await sendActivationLink(this.$route.params.id, {
                     options: {
+                        close_shantytown: this.checkedOptions.includes(
+                            "close_shantytown"
+                        ),
                         create_and_close_shantytown: this.checkedOptions.includes(
                             "create_and_close_shantytown"
                         ),

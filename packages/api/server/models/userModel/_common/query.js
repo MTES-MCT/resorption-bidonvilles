@@ -44,7 +44,11 @@ module.exports = async (where = [], filters, user = null, feature) => {
     }
 
     const users = await sequelize.query(
-        `SELECT
+        `WITH user_options AS (
+            SELECT fk_user, ARRAY_AGG(fk_option) AS options FROM user_permission_options GROUP BY fk_user
+        )
+
+        SELECT
             users.user_id AS id,
             users.first_name,
             users.last_name,
@@ -103,7 +107,8 @@ module.exports = async (where = [], filters, user = null, feature) => {
             activator.last_name AS activator_last_name,
             activator.position AS activator_position,
             activator_organization.organization_id AS activator_organization_id,
-            activator_organization.name AS activator_organization_name
+            activator_organization.name AS activator_organization_name,
+            user_options.options AS permission_options
         FROM
             users
         LEFT JOIN
@@ -122,6 +127,8 @@ module.exports = async (where = [], filters, user = null, feature) => {
             organizations AS activator_organization ON activator.fk_organization = activator_organization.organization_id
         LEFT JOIN
             roles_regular ON users.fk_role_regular = roles_regular.role_id
+        LEFT JOIN
+            user_options ON user_options.fk_user = users.user_id
         ${where.length > 0 ? `WHERE ${whereClause}` : ''}
         ORDER BY
             CASE

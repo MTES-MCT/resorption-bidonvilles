@@ -19,6 +19,7 @@ const getLocationWatchers = require('./getLocationWatchers');
 const getNationalAdmins = require('./_common/getNationalAdmins');
 const getShantytownWatchers = require('./getShantytownWatchers');
 const listExport = require('./listExport');
+const setPermissionOptions = require('./setPermissionOptions');
 const update = require('./update');
 const upgradeLocalAdmin = require('./upgradeLocalAdmin');
 
@@ -44,6 +45,7 @@ module.exports = () => ({
     getNationalAdmins,
     getShantytownWatchers,
     listExport,
+    setPermissionOptions,
     update,
     upgradeLocalAdmin,
 });
