@@ -36,7 +36,8 @@ module.exports = {
                 SELECT u.user_id AS fk_user, p.fk_feature, p.fk_entity, p.allowed, p.fk_geographic_level
                 FROM permissions p
                 LEFT JOIN users u ON u.fk_organization = p.fk_organization
-                WHERE p.fk_organization IS NOT NULL AND u.user_id IS NOT NULL`,
+                LEFT JOIN last_user_accesses lua ON lua.fk_user = u.user_id
+                WHERE p.fk_organization IS NOT NULL AND u.user_id IS NOT NULL AND lua.user_access_id IS NOT NULL`,
                 {
                     transaction,
                 },
