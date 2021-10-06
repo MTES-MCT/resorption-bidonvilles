@@ -434,7 +434,9 @@ module.exports = models => ({
 
         if (user.organization.active !== true) {
             const { options } = permissionsDescription[user.role_id];
-            const requestedOptions = options.filter(({ id }) => req.body.options && req.body.options[id] === true);
+            const requestedOptions = options
+                .filter(({ id }) => req.body.options && req.body.options[id] === true)
+                .map(({ id }) => id);
 
             // inject additional permissions related to options
             try {
