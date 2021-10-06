@@ -212,12 +212,13 @@ module.exports = {
                     },
                     onUpdate: 'cascade',
                     onDelete: 'restrict',
+                    transaction,
                 },
             ))
             .then(() => queryInterface.sequelize.query(
                 `UPDATE organizations
                  SET fk_type = 4
-                 WHERE organization_id IN (34195, 14243, 14310, 14314, 14338, 14360, 14399, 34116)`,
+                 WHERE organization_id IN (14243, 14310, 14314, 14338, 14360, 14399, 34116, 34195)`,
                 {
                     transaction,
                 },
@@ -249,7 +250,7 @@ module.exports = {
             .then(() => queryInterface.sequelize.query(
                 `UPDATE organizations
                     SET fk_type = 8
-                    WHERE organization_id IN (41494, 41579, 41595, 41616, 41634)`,
+                    WHERE organization_id IN (41494, 41579, 41595, 41616, 41634, 41644, 41653, 41658, 41942)`,
                 {
                     transaction,
                 },
@@ -291,7 +292,7 @@ module.exports = {
                 .then(() => queryInterface.sequelize.query(
                     `UPDATE organizations
                         SET fk_type = (SELECT organization_type_id FROM organization_types WHERE LOWER(name_singular)='intervenant')
-                        WHERE organization_id IN (34195, 14243, 14310, 14314, 14338, 14360, 14399, 34116, 41494, 41579, 41595, 41616, 41634, 39854, 40344, 40671, 40904)`,
+                        WHERE organization_id IN (14243, 14310, 14314, 14338, 14360, 14399, 34116, 34195, 39854, 40344, 40671, 40904, 41494, 41579, 41595, 41616, 41634, 41644, 41653, 41658, 41942)`,
                     {
                         transaction,
                     },
