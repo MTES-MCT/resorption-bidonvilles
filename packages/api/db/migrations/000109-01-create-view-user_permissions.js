@@ -1,4 +1,4 @@
-const createViewActualPermissions = require('./common/create_view_user_actual_permissions');
+const createViewActualPermissions = require('./common/user_actual_permissions/01_create_original_view');
 
 module.exports = {
     up: queryInterface => createViewActualPermissions(queryInterface),
