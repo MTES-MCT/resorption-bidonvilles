@@ -108,7 +108,7 @@ module.exports = async (where = [], filters, user = null, feature) => {
             activator.position AS activator_position,
             activator_organization.organization_id AS activator_organization_id,
             activator_organization.name AS activator_organization_name,
-            user_options.options AS permission_options
+            COALESCE(user_options.options, array[]::varchar[]) AS permission_options
         FROM
             users
         LEFT JOIN
