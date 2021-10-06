@@ -15,6 +15,7 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
             activities AS (
             SELECT
                 t."activityType",
+                t."city",
                 t."departement",
                 t."shantytownId",
                 t."shantytownName",
@@ -29,6 +30,7 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
                 (
                 SELECT
                     'new_shantytowns' AS "activityType",
+                    c.name            AS "city",
                     c.fk_departement  AS "departement",
                     s.shantytown_id   AS "shantytownId",
                     s.name            AS "shantytownName",
@@ -49,6 +51,7 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
                 (
                 SELECT
                     'closed_shantytowns' AS "activityType",
+                    c.name               AS "city",
                     c.fk_departement     AS "departement",
                     s.shantytown_id      AS "shantytownId",
                     s.name               AS "shantytownName",
@@ -69,6 +72,7 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
                 (
                 SELECT
                     'updated_shantytowns' AS "activityType",
+                    c.name                AS "city",
                     c.fk_departement      AS "departement",
                     history.shantytown_id AS "shantytownId",
                     shantytowns.name      AS "shantytownName",
@@ -97,6 +101,7 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
                 (
                 SELECT
                     'new_comments'           AS "activityType",
+                    c.name                   AS "city",
                     c.fk_departement         AS "departement",
                     s.shantytown_id          AS "shantytownId",
                     s.name                   AS "shantytownName",
@@ -119,6 +124,7 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
                 (
                 SELECT
                     'new_users'         AS "activityType",
+                    NULL::varchar       AS "city",
                     lo.departement_code AS "departement",
                     NULL::bigint        AS "shantytownId",
                     NULL::varchar       AS "shantytownName",
@@ -228,12 +234,14 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
         if (row.activityType === 'new_comments') {
             summary = {
                 id: row.shantytownCommentId,
+                city: row.city,
                 shantytownId,
                 shantytownUsename: shantytownUsename,
             };
         } else {
             summary = {
                 id: shantytownId,
+                city: row.city,
                 usename: shantytownUsename,
             };
         }
