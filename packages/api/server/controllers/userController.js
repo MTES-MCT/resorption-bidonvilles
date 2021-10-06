@@ -432,31 +432,21 @@ module.exports = models => ({
             });
         }
 
-        const { options } = permissionsDescription[user.role_id];
-        const requestedOptions = options
-            .filter(({ id }) => req.body.options && req.body.options[id] === true)
-            .map(({ id }) => id);
-
         try {
-            await models.user.setPermissionOptions(user.id, requestedOptions);
-        } catch (error) {
-            res.status(500).send({
-                error: {
-                    user_message: 'Une erreur est survenue lors de la sauvegarde des options sélectionnées',
-                    developer_message: error.message,
-                },
-            });
-            return next(error);
-        }
-
-        try {
-            // reload the user to take options into account (they might have changed above)
             await sequelize.transaction(async (transaction) => {
+                const { options } = permissionsDescription[user.role_id];
+                const requestedOptions = options
+                    .filter(({ id }) => req.body.options && req.body.options[id] === true)
+                    .map(({ id }) => id);
+                await models.user.setPermissionOptions(user.id, requestedOptions, transaction);
+
+                // reload the user to take options into account (they might have changed above)
                 user = await models.user.findOne(
                     req.params.id,
                     { extended: true },
                     req.user,
                     'activate',
+                    transaction,
                 );
 
                 const now = new Date();

@@ -1,8 +1,15 @@
 const { sequelize } = require('#db/models');
 
-module.exports = async (userId, options) => sequelize.transaction(
-    t => sequelize.query('DELETE FROM user_permission_options WHERE fk_user = :userId', {
-        transaction: t,
+module.exports = async (userId, options, argTransaction) => {
+    let transaction = argTransaction;
+    let commitTransaction = false;
+    if (!transaction) {
+        transaction = await sequelize.transaction();
+        commitTransaction = true;
+    }
+
+    await sequelize.query('DELETE FROM user_permission_options WHERE fk_user = :userId', {
+        transaction,
         replacements: {
             userId,
         },
@@ -11,12 +18,16 @@ module.exports = async (userId, options) => sequelize.transaction(
             options.map(option => sequelize.query(
                 'INSERT INTO user_permission_options(fk_user, fk_option) VALUES (:userId, :option)',
                 {
-                    transaction: t,
+                    transaction,
                     replacements: {
                         userId,
                         option,
                     },
                 },
             )),
-        )),
-);
+        ));
+
+    if (commitTransaction === true) {
+        await transaction.commit();
+    }
+};

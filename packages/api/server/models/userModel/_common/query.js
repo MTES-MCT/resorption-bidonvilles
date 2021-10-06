@@ -3,7 +3,7 @@ const charteEngagementModel = require('#server/models/charteEngagementModel')();
 const permissionModel = require('#server/models/permissionModel')();
 const serializeUser = require('./serializeUser');
 
-module.exports = async (where = [], filters, user = null, feature) => {
+module.exports = async (where = [], filters, user = null, feature, transaction) => {
     const replacements = {};
 
     if (user !== null) {
@@ -147,6 +147,7 @@ module.exports = async (where = [], filters, user = null, feature) => {
         {
             type: sequelize.QueryTypes.SELECT,
             replacements,
+            transaction,
         },
     );
 
