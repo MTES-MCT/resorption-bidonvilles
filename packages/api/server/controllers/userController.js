@@ -432,24 +432,21 @@ module.exports = models => ({
             });
         }
 
-        if (user.organization.active !== true) {
-            const { options } = permissionsDescription[user.role_id];
-            const requestedOptions = options
-                .filter(({ id }) => req.body.options && req.body.options[id] === true)
-                .map(({ id }) => id);
+        const { options } = permissionsDescription[user.role_id];
+        const requestedOptions = options
+            .filter(({ id }) => req.body.options && req.body.options[id] === true)
+            .map(({ id }) => id);
 
-            // inject additional permissions related to options
-            try {
-                await models.user.setPermissionOptions(user.id, requestedOptions);
-            } catch (error) {
-                res.status(500).send({
-                    error: {
-                        user_message: 'Une erreur est survenue lors de la sauvegarde des options sélectionnées',
-                        developer_message: error.message,
-                    },
-                });
-                return next(error);
-            }
+        try {
+            await models.user.setPermissionOptions(user.id, requestedOptions);
+        } catch (error) {
+            res.status(500).send({
+                error: {
+                    user_message: 'Une erreur est survenue lors de la sauvegarde des options sélectionnées',
+                    developer_message: error.message,
+                },
+            });
+            return next(error);
         }
 
         try {
