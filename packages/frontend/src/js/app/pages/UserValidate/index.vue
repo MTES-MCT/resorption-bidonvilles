@@ -247,7 +247,7 @@ export default {
              *
              * @type {Object.<String,Boolean>}
              */
-            checkedOptions: {},
+            checkedOptions: [],
 
             isHoverSendAccess: false,
             isHoverDisableAccess: false,
