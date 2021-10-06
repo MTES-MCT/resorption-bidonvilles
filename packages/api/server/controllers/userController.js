@@ -56,7 +56,7 @@ function fromOptionToPermissions(option) {
                 {
                     entity: 'shantytown_justice',
                     feature: 'access',
-                    level: 'local',
+                    level: null,
                     allowed: false,
                 },
             ];
