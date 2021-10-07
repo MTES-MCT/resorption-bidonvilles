@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const permissions = require("../fixtures/permissions");
 const users = require("../fixtures/users.json");
 
