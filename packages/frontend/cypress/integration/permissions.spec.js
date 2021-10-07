@@ -2,6 +2,9 @@
 const permissions = require("../fixtures/permissions");
 const users = require("../fixtures/users.json");
 
+const TEST_SHANTYTOWN_ID = 999999;
+const TEST_URL = `/site/${TEST_SHANTYTOWN_ID}`;
+
 const getAllowedAndForbiddenRoutes = ({ shantytown, plan, admin }) => {
     const allowedRoutes = [];
     const forbiddenRoutes = [];
@@ -65,10 +68,7 @@ describe("Permissions tests", () => {
                 describe("L'utilisateur ne doit voir que certaines actions sur la fiche d'un site", () => {
                     beforeEach(() => {
                         cy.restoreLocalStorage();
-                        cy.visit("/liste-des-sites");
-                        cy.get("[data-cy='townCard'] a")
-                            .first()
-                            .click();
+                        cy.visit(TEST_URL);
                     });
 
                     if (userPermissions.shantytown.close) {
@@ -90,6 +90,16 @@ describe("Permissions tests", () => {
                             cy.get("[data-cy='updateTown']").should(
                                 "not.exist"
                             );
+                        });
+                    }
+
+                    if (userPermissions.shantytown.readPrivateComments) {
+                        it(`L'utilisateur ${key} doit pouvoir lire les commentaires privés`, () => {
+                            cy.get("#comments").should("contain", "2 messages");
+                        });
+                    } else {
+                        it(`L'utilisateur ${key} doit pouvoir lire que les commentaires publiques`, () => {
+                            cy.get("#comments").should("contain", "1 message");
                         });
                     }
                 });
