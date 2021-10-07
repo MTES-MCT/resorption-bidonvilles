@@ -107,6 +107,16 @@ describe("Permissions tests", () => {
                             cy.get("#comments").should("contain", "1 message");
                         });
                     }
+
+                    if (userPermissions.shantytown.hideJustice) {
+                        it(`L'utilisateur ${key} ne doit pas pouvoir lire les procédures judiciaires`, () => {
+                            cy.get("#judicial").should('not.exist');
+                        });
+                    } else {
+                        it(`L'utilisateur ${key} doit pouvoir lire les procédures judiciaires`, () => {
+                            cy.get("#judicial").should('exist');
+                        });
+                    }
                 });
 
                 describe("L'utilisateur ne doit voir que certaines informations sur la liste des sites", () => {

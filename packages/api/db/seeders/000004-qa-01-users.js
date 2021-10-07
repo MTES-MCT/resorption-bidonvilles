@@ -246,7 +246,7 @@ const users = [
             epci: null,
             city: null, // bordeaux
         },
-        options: ['hide_justice'],
+        options: [{ id: 'hide_justice' }],
     },
     {
         user: generate({
@@ -373,7 +373,26 @@ module.exports = {
 
             await queryInterface.bulkInsert('users', [{ ...user.user, fk_organization }]);
             if (user.options.length) {
-                const permissions = fromOptionsToPermissions({ permissions: {} }, user.options);
+                const permissions = fromOptionsToPermissions({
+                    permissions: {
+                        shantytown: {
+                            read: {
+                                entity: 'shantytown',
+                                feature: 'read',
+                                geographic_level: 'local',
+                                data: { data_justice: true },
+                                allowed: true,
+                            },
+                            list: {
+                                entity: 'shantytown',
+                                feature: 'list',
+                                geographic_level: 'local',
+                                data: { data_justice: true },
+                                allowed: true,
+                            },
+                        },
+                    },
+                }, user.options);
                 await setCustomPermissions(fk_organization, permissions);
             }
         }

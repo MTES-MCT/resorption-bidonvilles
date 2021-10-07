@@ -87,7 +87,8 @@ module.exports = {
             ...defaultPermissions,
             shantytown: {
                 ...defaultPermissions.shantytown,
-                edit: false
+                edit: false,
+                hideJustice: true
             }
         },
         territory: "Gironde"
