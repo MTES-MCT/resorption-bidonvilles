@@ -84,7 +84,6 @@ module.exports = (user, latestCharte, filters, permissionMap) => {
         subscribed_to_summary: user.subscribed_to_summary,
         last_access: user.last_access !== null ? user.last_access.getTime() / 1000 : null,
         admin_comments: user.admin_comments,
-        user_role_name: user.user_role_name,
         is_admin: user.is_admin,
         role: user.role_name || user.organization_type_role_name,
         role_id: user.role || user.organization_type_role,
