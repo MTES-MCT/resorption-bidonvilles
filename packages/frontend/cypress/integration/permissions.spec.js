@@ -110,11 +110,11 @@ describe("Permissions tests", () => {
 
                     if (userPermissions.shantytown.hideJustice) {
                         it(`L'utilisateur ${key} ne doit pas pouvoir lire les procédures judiciaires`, () => {
-                            cy.get("#judicial").should('not.exist');
+                            cy.get("#judicial").should("not.exist");
                         });
                     } else {
                         it(`L'utilisateur ${key} doit pouvoir lire les procédures judiciaires`, () => {
-                            cy.get("#judicial").should('exist');
+                            cy.get("#judicial").should("exist");
                         });
                     }
                 });
