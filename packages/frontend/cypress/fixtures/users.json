@@ -19,6 +19,10 @@
         "email": "qa-region@resorption-bidonvilles.beta.gouv.fr",
         "password": "fabnum"
     },
+    "prefecture": {
+        "email": "qa-prefecture@resorption-bidonvilles.beta.gouv.fr",
+        "password": "fabnum"
+    },
     "localAdmin": {
         "email": "qa-local-admin@resorption-bidonvilles.beta.gouv.fr",
         "password": "fabnum"

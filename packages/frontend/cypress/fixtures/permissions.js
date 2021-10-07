@@ -1,44 +1,36 @@
 const defaultPermissions = {
     shantytown: {
-        read: true,
         readOutsideTerritory: false,
         edit: true,
         create: false,
-        close: false
+        close: false,
+        readPrivateComments: false
     },
     plan: {
-        read: true,
-        edit: false,
         create: false
     },
     admin: {
         listUsers: false,
         createUser: false,
-        stats: false,
-        promoteLocalAdmin: false,
-        promoteInterevenant: false
+        stats: false
     }
 };
 
 const localAdminPermissions = {
     shantytown: {
-        read: true,
         readOutsideTerritory: true,
         edit: true,
         create: true,
-        close: true
+        close: true,
+        readPrivateComments: true
     },
     plan: {
-        read: true,
-        edit: true,
         create: true
     },
     admin: {
         listUsers: true,
         createUser: true,
-        stats: true,
-        promoteLocalAdmin: false,
-        promoteInterevenant: false
+        stats: true
     }
 };
 
@@ -62,6 +54,23 @@ module.exports = {
         permissions: defaultPermissions,
         territory: "Gironde"
     },
+    prefecture: {
+        permissions: {
+            ...defaultPermissions,
+            shantytown: {
+                ...defaultPermissions.shantytown,
+                readOutsideTerritory: true,
+                create: true,
+                close: true,
+                readPrivateComments: true
+            },
+            plan: {
+                ...defaultPermissions.shantytown,
+                create: true
+            }
+        },
+        territory: "Gironde"
+    },
     localAdmin: {
         permissions: {
             ...localAdminPermissions
@@ -72,9 +81,7 @@ module.exports = {
         permissions: {
             ...localAdminPermissions,
             admin: {
-                ...localAdminPermissions.admin,
-                promoteInterevenant: true,
-                promoteLocalAdmin: true
+                ...localAdminPermissions.admin
             }
         },
         territory: "Bordeaux"
