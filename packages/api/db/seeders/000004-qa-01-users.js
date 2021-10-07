@@ -1,7 +1,6 @@
 /* eslint-disable newline-per-chained-call,no-await-in-loop, no-restricted-syntax */
 const crypto = require('crypto');
 const { sequelize } = require('../../db/models/index');
-const organizationModel = require('../../server/models/organizationModel')(sequelize);
 
 function generate({
     email, password, first_name, last_name, fk_role, phone, position, fk_organization,
@@ -86,6 +85,83 @@ function fromOptionsToPermissions(user, options) {
     ], []);
 }
 
+const createOrganization = async (name, abbreviation = null, type, region = null, departement = null, epci = null, city = null, active = false, argTransaction = undefined) => {
+    let transaction = argTransaction;
+    if (transaction === undefined) {
+        transaction = await sequelize.transaction();
+    }
+
+    const response = await sequelize.query(
+        `INSERT INTO
+        organizations(name, abbreviation, fk_type, fk_region, fk_departement, fk_epci, fk_city, active)
+    VALUES
+        (:name, :abbreviation, :type, :region, :departement, :epci, :city, :active)
+    RETURNING organization_id AS id`,
+        {
+            replacements: {
+                name,
+                abbreviation,
+                type,
+                region,
+                departement,
+                epci,
+                city,
+                active,
+            },
+            transaction,
+        },
+    );
+    await sequelize.query(
+        'REFRESH MATERIALIZED VIEW localized_organizations',
+        {
+            transaction,
+        },
+    );
+
+    if (argTransaction === undefined) {
+        await transaction.commit();
+    }
+
+    return response;
+};
+
+const setCustomPermissions = async (organizationId, permissions) => sequelize.transaction(
+    t => sequelize.query('DELETE FROM permissions WHERE fk_organization = :organizationId', {
+        transaction: t,
+        replacements: {
+            organizationId,
+        },
+    })
+        .then(() => Promise.all(
+            permissions.map(permission => sequelize.query(
+                `INSERT INTO
+                            permissions(fk_organization, fk_role_admin, fk_role_regular, fk_feature, fk_entity, allowed, fk_geographic_level)
+                        VALUES
+                            (:organizationId, NULL, NULL, :feature, :entity, :allowed, :level)
+                        RETURNING permission_id`,
+                {
+                    transaction: t,
+                    replacements: {
+                        organizationId,
+                        feature: permission.feature,
+                        entity: permission.entity,
+                        level: permission.level,
+                        allowed: permission.allowed,
+                    },
+                },
+            )
+                .then(([[{ permission_id: permissionId }]]) => {
+                    const replacements = Object.assign({ fk_permission: permissionId }, permission.data || {});
+                    return sequelize.query(
+                        `INSERT INTO ${permission.entity}_permissions VALUES (${Object.keys(replacements).map(name => `:${name}`).join(',')})`,
+                        {
+                            transaction: t,
+                            replacements,
+                        },
+                    );
+                })),
+        )),
+);
 
 const users = [
     {
@@ -174,6 +250,19 @@ const users = [
     },
     {
         user: generate({
+            email: 'qa-prefecture@resorption-bidonvilles.beta.gouv.fr',
+            password: 'fabnum',
+            first_name: 'QA',
+            last_name: 'prefecture',
+            fk_role: null,
+            phone: '00 00 00 00 00',
+            position: 'qa',
+        }),
+        organization: 31, // Prefecture de département gironde
+        options: [],
+    },
+    {
+        user: generate({
             email: 'qa-local-admin@resorption-bidonvilles.beta.gouv.fr',
             password: 'fabnum',
             first_name: 'QA',
@@ -219,12 +308,18 @@ const users = [
 module.exports = {
     up: async (queryInterface) => {
         for (const user of users) {
-            const [[{ id: fk_organization }]] = await organizationModel.create(user.organization.name, user.organization.abbreviation, user.organization.type, user.organization.region, user.organization.departement, user.organization.epci, user.organization.city, true);
+            let fk_organization;
+            if (typeof user.organization === 'object') {
+                const [[{ id }]] = await createOrganization(user.organization.name, user.organization.abbreviation, user.organization.type, user.organization.region, user.organization.departement, user.organization.epci, user.organization.city, true);
+                fk_organization = id;
+            } else {
+                fk_organization = user.organization;
+            }
+
             await queryInterface.bulkInsert('users', [{ ...user.user, fk_organization }]);
             if (user.options.length) {
                 const permissions = fromOptionsToPermissions({ permissions: {} }, user.options);
-                console.log(user.options, permissions);
-                await organizationModel.setCustomPermissions(fk_organization, permissions);
+                await setCustomPermissions(fk_organization, permissions);
             }
         }
     },
