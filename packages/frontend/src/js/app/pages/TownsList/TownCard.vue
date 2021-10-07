@@ -1,5 +1,6 @@
 <template>
     <div
+        data-cy="townCard"
         :class="[
             'rounded-sm cursor-pointer border border-cardBorder preventPrintBreak',
             isHover ? 'bg-blue200 border-transparent' : '',

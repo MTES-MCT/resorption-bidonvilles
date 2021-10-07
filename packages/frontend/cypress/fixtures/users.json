@@ -2,5 +2,29 @@
     "admin": {
         "email": "admin@resorption-bidonvilles.beta.gouv.fr",
         "password": "fabnum"
+    },
+    "city": {
+        "email": "qa-city@resorption-bidonvilles.beta.gouv.fr",
+        "password": "fabnum"
+    },
+    "cityWithCreateOption": {
+        "email": "qa-city-with-create-option@resorption-bidonvilles.beta.gouv.fr",
+        "password": "fabnum"
+    },
+    "departement": {
+        "email": "qa-departement@resorption-bidonvilles.beta.gouv.fr",
+        "password": "fabnum"
+    },
+    "region": {
+        "email": "qa-region@resorption-bidonvilles.beta.gouv.fr",
+        "password": "fabnum"
+    },
+    "localAdmin": {
+        "email": "qa-local-admin@resorption-bidonvilles.beta.gouv.fr",
+        "password": "fabnum"
+    },
+    "nationalAdmin": {
+        "email": "qa-national-admin@resorption-bidonvilles.beta.gouv.fr",
+        "password": "fabnum"
     }
 }
