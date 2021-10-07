@@ -4,7 +4,8 @@ const defaultPermissions = {
         edit: true,
         create: false,
         close: false,
-        readPrivateComments: false
+        readPrivateComments: false,
+        hideJustice: false
     },
     plan: {
         create: false
@@ -54,6 +55,16 @@ module.exports = {
         permissions: defaultPermissions,
         territory: "Gironde"
     },
+    departementWithHideOption: {
+        permissions: {
+            ...defaultPermissions,
+            shantytown: {
+                ...defaultPermissions.shantytown,
+                hideJustice: true
+            }
+        },
+        territory: "Gironde"
+    },
     prefecture: {
         permissions: {
             ...defaultPermissions,
@@ -80,6 +91,24 @@ module.exports = {
             }
         },
         territory: "Gironde"
+    },
+    national: {
+        permissions: {
+            ...defaultPermissions,
+            shantytown: {
+                ...defaultPermissions.shantytown,
+                edit: false,
+                create: false,
+                close: false,
+                readPrivateComments: false,
+                readOutsideTerritory: true
+            },
+            admin: {
+                ...defaultPermissions.admin,
+                stats: true
+            }
+        },
+        territory: "National"
     },
     localAdmin: {
         permissions: {

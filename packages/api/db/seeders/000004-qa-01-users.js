@@ -229,6 +229,27 @@ const users = [
     },
     {
         user: generate({
+            email: 'qa-departement-with-hide-justice-option@resorption-bidonvilles.beta.gouv.fr',
+            password: 'fabnum',
+            first_name: 'QA',
+            last_name: 'Departement',
+            fk_role: null,
+            phone: '00 00 00 00 00',
+            position: 'qa',
+        }),
+        organization: {
+            name: 'QA departement',
+            abbreviation: 'QA departement',
+            type: 8, // association
+            region: null,
+            departement: 33,
+            epci: null,
+            city: null, // bordeaux
+        },
+        options: ['hide_justice'],
+    },
+    {
+        user: generate({
             email: 'qa-region@resorption-bidonvilles.beta.gouv.fr',
             password: 'fabnum',
             first_name: 'QA',
@@ -281,7 +302,19 @@ const users = [
             city: null,
         },
         options: [],
-        observator: true,
+    },
+    {
+        user: generate({
+            email: 'qa-national@resorption-bidonvilles.beta.gouv.fr',
+            password: 'fabnum',
+            first_name: 'QA',
+            last_name: 'national',
+            fk_role: null,
+            phone: '00 00 00 00 00',
+            position: 'qa',
+        }),
+        organization: 40760, // dihal
+        options: [],
     },
     {
         user: generate({

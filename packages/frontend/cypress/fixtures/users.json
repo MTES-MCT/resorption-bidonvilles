@@ -15,6 +15,10 @@
         "email": "qa-departement@resorption-bidonvilles.beta.gouv.fr",
         "password": "fabnum"
     },
+    "departementWithHideOption": {
+        "email": "qa-departement-with-hide-justice-option@resorption-bidonvilles.beta.gouv.fr",
+        "password": "fabnum"
+    },
     "region": {
         "email": "qa-region@resorption-bidonvilles.beta.gouv.fr",
         "password": "fabnum"
@@ -25,6 +29,10 @@
     },
     "intervenant": {
         "email": "qa-intervenant@resorption-bidonvilles.beta.gouv.fr",
+        "password": "fabnum"
+    },
+    "national": {
+        "email": "qa-national@resorption-bidonvilles.beta.gouv.fr",
         "password": "fabnum"
     },
     "localAdmin": {
