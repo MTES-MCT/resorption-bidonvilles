@@ -263,6 +263,28 @@ const users = [
     },
     {
         user: generate({
+            email: 'qa-intervenant@resorption-bidonvilles.beta.gouv.fr',
+            password: 'fabnum',
+            first_name: 'QA',
+            last_name: 'observator',
+            fk_role: null,
+            phone: '00 00 00 00 00',
+            position: 'qa',
+        }),
+        organization: {
+            name: 'QA intervenant',
+            abbreviation: 'QA intervenant',
+            type: 31, // intervenant
+            region: null,
+            departement: 33,
+            epci: null,
+            city: null,
+        },
+        options: [],
+        observator: true,
+    },
+    {
+        user: generate({
             email: 'qa-local-admin@resorption-bidonvilles.beta.gouv.fr',
             password: 'fabnum',
             first_name: 'QA',

@@ -71,6 +71,16 @@ module.exports = {
         },
         territory: "Gironde"
     },
+    intervenant: {
+        permissions: {
+            ...defaultPermissions,
+            shantytown: {
+                ...defaultPermissions.shantytown,
+                edit: false
+            }
+        },
+        territory: "Gironde"
+    },
     localAdmin: {
         permissions: {
             ...localAdminPermissions

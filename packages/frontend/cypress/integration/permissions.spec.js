@@ -22,6 +22,11 @@ const getAllowedAndForbiddenRoutes = ({ shantytown, plan, admin }) => {
     return { allowedRoutes, forbiddenRoutes };
 };
 
+// const tests = {
+//     intervenant: permissions.intervenant,
+//     // localAdmin: permissions.localAdmin
+// };
+
 describe("Permissions tests", () => {
     Object.entries(permissions).forEach(
         ([key, { permissions: userPermissions, territory }]) => {
