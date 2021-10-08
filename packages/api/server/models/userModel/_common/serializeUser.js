@@ -85,7 +85,7 @@ module.exports = (user, latestCharte, filters, permissionMap) => {
         last_access: user.last_access !== null ? user.last_access.getTime() / 1000 : null,
         admin_comments: user.admin_comments,
         is_admin: user.is_admin,
-        role: user.role_name || user.user_type_role_name,
+        role: user.role_name || user.user_role_regular_name,
         role_id: user.role || user.user_type_role,
         is_superuser: user.role === 'national_admin',
     };
