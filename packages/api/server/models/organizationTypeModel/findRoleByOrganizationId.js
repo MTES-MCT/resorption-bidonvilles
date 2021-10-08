@@ -1,6 +1,10 @@
 const { sequelize } = require('#db/models');
 
-module.exports = async (organization_id) => {
+module.exports = async (organization_id, argTransaction = undefined) => {
+    let transaction = argTransaction;
+    if (transaction === undefined) {
+        transaction = await sequelize.transaction();
+    }
     const result = await sequelize.query(
         `SELECT
             fk_role
@@ -16,8 +20,13 @@ module.exports = async (organization_id) => {
             replacements: {
                 organization_id,
             },
+            transaction,
         },
     );
+
+    if (argTransaction === undefined) {
+        await transaction.commit();
+    }
 
     return result.length === 1 ? result[0].fk_role : null;
 };
