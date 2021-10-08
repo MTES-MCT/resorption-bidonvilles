@@ -89,7 +89,7 @@ module.exports = async (where = [], filters, user = null, feature) => {
             organization_types.name_plural AS organization_type_name_plural,
             organization_types.abbreviation AS organization_type_abbreviation,
             users.fk_role_regular AS user_type_role,
-            roles_regular.name AS user_type_role_name,
+            roles_regular.name AS user_role_regular_name,
             organization_categories.uid AS organization_category_id,
             organization_categories.name_singular AS organization_category_name_singular,
             organization_categories.name_plural AS organization_category_name_plural,
