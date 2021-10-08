@@ -17,7 +17,6 @@ module.exports = async () => {
             organizations.city_code,
             organizations.city_name,
             organizations.city_main,
-            organization_roles_regular.name AS organization_role,
             users.user_id AS "user_id",
             users.fk_role AS "user_role_admin",
             users.first_name AS "user_firstName",
@@ -33,7 +32,6 @@ module.exports = async () => {
         FROM localized_organizations AS organizations
         LEFT JOIN users ON users.fk_organization = organizations.organization_id
         LEFT JOIN organization_types ON organizations.fk_type = organization_types.organization_type_id
-        LEFT JOIN roles_regular AS organization_roles_regular ON organization_types.fk_role = organization_roles_regular.role_id
         LEFT JOIN roles_regular AS user_roles_regular ON users.fk_role_regular = user_roles_regular.role_id
         WHERE
             organizations.active = TRUE
@@ -81,7 +79,6 @@ module.exports = async () => {
                     abbreviation: user.type_abbreviation,
                 },
                 users: [],
-                role: user.organization_role,
             };
             organizations.push(hash[user.organization_id]);
         }
