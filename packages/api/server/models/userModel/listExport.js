@@ -14,9 +14,8 @@ module.exports = async () => sequelize.query(
             ELSE 'Lien d''activation toujours valide'
         END AS "Statut",
         TO_CHAR(lua.used_at :: DATE, 'dd/mm/yyyy') AS "Date d'activation du compte",
-        u.fk_role AS "Rôle de l'acteur",
+        u.fk_role AS "Rôle administrateur de l'acteur",
         TO_CHAR(u.last_access :: DATE, 'dd/mm/yyyy hh:mm:ss') AS "Date et heure de dernière connexion",    
-        u.fk_role AS "Rôle de l'acteur",
         o.name AS "Organisation",
         o.abbreviation AS "Organisation abbr",
         rr.name AS "Rôle de l'organisation",
