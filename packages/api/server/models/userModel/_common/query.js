@@ -88,8 +88,8 @@ module.exports = async (where = [], filters, user = null, feature) => {
             organization_types.name_singular AS organization_type_name_singular,
             organization_types.name_plural AS organization_type_name_plural,
             organization_types.abbreviation AS organization_type_abbreviation,
-            organization_types.fk_role AS organization_type_role,
-            roles_regular.name AS organization_type_role_name,
+            users.fk_role_regular AS user_type_role,
+            roles_regular.name AS user_type_role_name,
             organization_categories.uid AS organization_category_id,
             organization_categories.name_singular AS organization_category_name_singular,
             organization_categories.name_plural AS organization_category_name_plural,
@@ -121,7 +121,7 @@ module.exports = async (where = [], filters, user = null, feature) => {
         LEFT JOIN
             organizations AS activator_organization ON activator.fk_organization = activator_organization.organization_id
         LEFT JOIN
-            roles_regular ON organization_types.fk_role = roles_regular.role_id
+            roles_regular ON users.fk_role_regular = roles_regular.role_id
         ${where.length > 0 ? `WHERE ${whereClause}` : ''}
         ORDER BY
             CASE
