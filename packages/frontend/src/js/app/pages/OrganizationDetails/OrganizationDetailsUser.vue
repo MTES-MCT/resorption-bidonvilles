@@ -11,6 +11,7 @@
                     {{ user.last_name.toUpperCase() }} {{ user.first_name }}
                 </h1>
                 <div class="text-info">Fonction : {{ user.position }}</div>
+                <div class="text-info">Rôle : {{ user.role }}</div>
             </div>
             <div>
                 <OrganizationDetailsUserIcon icon="envelope">{{
