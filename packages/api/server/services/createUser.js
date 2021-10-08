@@ -25,10 +25,8 @@ async function createUser(data) {
         }
 
         // get fk_type from organization_types to initialize fk_role_regular field
-        if (data.organization) {
-            const fk_role_regular = await organizationTypeModel.findRoleByOrganizationId(parseInt(data.organization, 10));
-            Object.assign(data, { fk_role_regular });
-        }
+        const fk_role_regular = await organizationTypeModel.findRoleByOrganizationId(parseInt(data.organization, 10), t);
+        Object.assign(data, { fk_role_regular });
 
         // create the user himself
         return userModel.create(Object.assign(data, {
