@@ -65,8 +65,8 @@ module.exports = async (where = [], filters, user = null, feature) => {
             CASE WHEN users.fk_role IS NULL THEN FALSE
                 ELSE TRUE
             END AS is_admin,
-            users.fk_role AS role,
-            roles_admin.name AS role_name,
+            users.fk_role AS role_admin,
+            roles_admin.name AS user_role_admin_name,
             organizations.organization_id,
             organizations.name AS organization_name,
             organizations.abbreviation AS organization_abbreviation,
@@ -88,7 +88,7 @@ module.exports = async (where = [], filters, user = null, feature) => {
             organization_types.name_singular AS organization_type_name_singular,
             organization_types.name_plural AS organization_type_name_plural,
             organization_types.abbreviation AS organization_type_abbreviation,
-            users.fk_role_regular AS user_type_role,
+            users.fk_role_regular AS user_role_regular,
             roles_regular.name AS user_role_regular_name,
             organization_categories.uid AS organization_category_id,
             organization_categories.name_singular AS organization_category_name_singular,
@@ -161,8 +161,8 @@ module.exports = async (where = [], filters, user = null, feature) => {
                     acc.organization.push(row.organization_id);
                 }
 
-                if (acc.role_regular.indexOf(row.user_type_role) === -1) {
-                    acc.role_regular.push(row.user_type_role);
+                if (acc.role_regular.indexOf(row.user_role_regular) === -1) {
+                    acc.role_regular.push(row.user_role_regular);
                 }
             }
 
