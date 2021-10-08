@@ -1,10 +1,6 @@
 const { sequelize } = require('#db/models');
 
-module.exports = async (organization_id, argTransaction = undefined) => {
-    let transaction = argTransaction;
-    if (transaction === undefined) {
-        transaction = await sequelize.transaction();
-    }
+module.exports = async (organization_id, transaction = undefined) => {
     const result = await sequelize.query(
         `SELECT
             fk_role
@@ -23,10 +19,6 @@ module.exports = async (organization_id, argTransaction = undefined) => {
             transaction,
         },
     );
-
-    if (argTransaction === undefined) {
-        await transaction.commit();
-    }
 
     return result.length === 1 ? result[0].fk_role : null;
 };
