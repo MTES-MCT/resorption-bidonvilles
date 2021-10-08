@@ -161,8 +161,8 @@ module.exports = async (where = [], filters, user = null, feature) => {
                     acc.organization.push(row.organization_id);
                 }
 
-                if (acc.role_regular.indexOf(row.organization_type_role) === -1) {
-                    acc.role_regular.push(row.organization_type_role);
+                if (acc.role_regular.indexOf(row.user_type_role) === -1) {
+                    acc.role_regular.push(row.user_type_role);
                 }
             }
 
