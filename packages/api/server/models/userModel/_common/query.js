@@ -155,7 +155,7 @@ module.exports = async (where = [], filters, user = null, feature) => {
                     acc.role_admin = [];
                 }
 
-                acc.role_admin.push(row.role);
+                acc.role_admin.push(row.role_admin);
             } else {
                 if (acc.organization.indexOf(row.organization_id) === -1) {
                     acc.organization.push(row.organization_id);
