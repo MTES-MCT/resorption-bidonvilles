@@ -26,11 +26,11 @@ function mergePermissions(rolePermissions, orgPermissions) {
  */
 function getPermissionsFor(user, permissionMap) {
     if (user.is_admin === true) {
-        return permissionMap.roles_admin[user.role] || {};
+        return permissionMap.roles_admin[user.role_admin] || {};
     }
 
     return mergePermissions(
-        permissionMap.roles_regular[user.user_role_regular] || {},
+        permissionMap.roles_regular[user.fk_role_regular] || {},
         permissionMap.organizations[user.organization_id] || {},
     );
 }
