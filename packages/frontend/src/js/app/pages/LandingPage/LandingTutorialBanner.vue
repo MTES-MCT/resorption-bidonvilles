@@ -12,7 +12,8 @@
             </div>
             <div class="flex-shrink-0 lg:flex-shrink px-8 py-2 lg:py-4 lg:px-4">
                 <div class="tracking-wide text-display-md text-primary">
-                    Webinaire prise en main de Résorption-bidonvilles
+                    Webinaire prise en main de
+                    <span class="italic">Résorption-bidonvilles</span>
                 </div>
                 <p class="mt-2 text-md">
                     Vous souhaitez prendre en main la plateforme ? découvrir les

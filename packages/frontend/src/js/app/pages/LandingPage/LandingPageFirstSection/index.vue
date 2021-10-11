@@ -12,8 +12,7 @@
                     <span class="italic">{{
                         $t("landingPage.firstSection.context.title_part2")
                     }}</span>
-                    ;<br />
-                    {{ $t("landingPage.firstSection.context.title_part3") }}
+                    ; {{ $t("landingPage.firstSection.context.title_part3") }}
                 </div>
                 <div class="mt-4">
                     <p>{{ $t("landingPage.firstSection.context.text_1") }}</p>

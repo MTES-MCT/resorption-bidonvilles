@@ -1,13 +1,11 @@
 const { sequelize } = require('#db/models');
 
-const shantytownCommentModel = require('#server/models/shantytownComment');
+const shantytownCommentModel = require('#server/models/shantytownCommentModel')();
 const shantytownModel = require('#server/models/shantytownModel')(sequelize);
 const mattermostUtils = require('#server/utils/mattermost');
 
 const userModel = require('#server/models/userModel')(sequelize);
-const {
-    sendUserNewComment,
-} = require('#server/mails/mails');
+const mails = require('#server/mails/mails');
 const ServiceError = require('#server/errors/ServiceError');
 
 /**
@@ -52,7 +50,7 @@ module.exports = async (comment, shantytown, author) => {
         if (watchers.length > 0) {
             const serializedComment = await shantytownCommentModel.findOne(commentId);
             await Promise.all(
-                watchers.map(user => sendUserNewComment(user, { variables: { shantytown, comment: serializedComment } })),
+                watchers.map(user => mails.sendUserNewComment(user, { variables: { shantytown, comment: serializedComment } })),
             );
         }
     } catch (error) {

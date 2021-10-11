@@ -5,7 +5,7 @@ const { frontUrl, backUrl } = require('#server/config');
 
 const generateTrackingUTM = require('./generateTrackingUTM');
 
-const formationUrl = 'https://app.evalandgo.com/s/index.php?a=JTk2cCU5N2slOUElQjA=&id=JTk4ayU5QW4lOTYlQUY=';
+const formationUrl = 'https://app.evalandgo.com/s/index.php?id=JTk5aSU5M2slOTklQUQ%3D&a=JTk2cCU5N2slOUElQjA%3D';
 const connexionUrl = `${frontUrl}/connexion`;
 const contactUrl = `${frontUrl}/contact`;
 const adminGuideUrl = `${backUrl}/assets/guide_utilisateur/guide_admin_2020_06.pdf`;
