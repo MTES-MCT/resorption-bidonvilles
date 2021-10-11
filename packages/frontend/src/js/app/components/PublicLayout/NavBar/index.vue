@@ -4,7 +4,13 @@
             <NavBarSticky
                 :menuDisplayed="menuDisplayed"
                 :toggleMenu="toggleMenu"
-            />
+            >
+                <template v-slot:anchors>
+                    <div class="mr-8 hidden xl:inline-block space-x-5">
+                        <slot name="anchors"></slot>
+                    </div>
+                </template>
+            </NavBarSticky>
         </div>
 
         <div :class="sticky && 'hidden'">

@@ -8,12 +8,14 @@
                 <NavBarLogo />
                 <!-- Desktop actions -->
                 <div class="hidden md:block">
-                    <router-link to="/contact" class="mr-2">
+                    <slot name="anchors"></slot>
+
+                    <router-link to="/contact" class="mr-2 inline-block">
                         <Button variant="secondary">{{
                             $t("landingPage.header.contact")
                         }}</Button>
                     </router-link>
-                    <router-link to="/connexion">
+                    <router-link to="/connexion" class="inline-block">
                         <Button variant="primary">{{
                             $t("landingPage.header.connect")
                         }}</Button>

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1 class="text-display-lg font-bold">Les questions récurrentes</h1>
+        <h1 class="text-display-lg font-bold">FAQ : questions fréquentes</h1>
         <Accordion class="ml-16 mt-6">
             <AccordionItem>
                 <template v-slot:title>Qui a accès à la plateforme ?</template>
