@@ -86,8 +86,8 @@ module.exports = (user, latestCharte, filters, permissionMap) => {
         admin_comments: user.admin_comments,
         is_admin: user.is_admin,
         role: user.user_role_admin_name || user.user_role_regular_name,
-        role_id: user.role_admin || user.user_role_regular,
-        is_superuser: user.role === 'national_admin',
+        role_id: user.user_role_admin || user.user_role_regular,
+        is_superuser: user.user_role_admin === 'national_admin',
     };
 
     if (filters.auth === true) {
