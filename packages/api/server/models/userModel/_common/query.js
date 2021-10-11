@@ -65,7 +65,7 @@ module.exports = async (where = [], filters, user = null, feature) => {
             CASE WHEN users.fk_role IS NULL THEN FALSE
                 ELSE TRUE
             END AS is_admin,
-            users.fk_role AS role_admin,
+            users.fk_role AS user_role_admin,
             roles_admin.name AS user_role_admin_name,
             organizations.organization_id,
             organizations.name AS organization_name,
@@ -155,7 +155,7 @@ module.exports = async (where = [], filters, user = null, feature) => {
                     acc.role_admin = [];
                 }
 
-                acc.role_admin.push(row.role_admin);
+                acc.role_admin.push(row.user_role_admin);
             } else {
                 if (acc.organization.indexOf(row.organization_id) === -1) {
                     acc.organization.push(row.organization_id);
