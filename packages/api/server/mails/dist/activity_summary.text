@@ -6,28 +6,28 @@ Semaine du {{ var:from }} au {{ var:to }}
 {% else %}
 {{ summary.new_shantytowns_length }} nouveau site
 {% endif %}{% for shantytown in summary.new_shantytowns %}
-{{ shantytown.usename }}
+{{ shantytown.usename }}, {{ shantytown.city }}
 [{{var:frontUrl}}/site/{{shantytown.id}}?{{var:utm}}-nouveau-site]
 {% endfor %}{% if summary.closed_shantytowns_length > 1 %}
 {{ summary.closed_shantytowns_length }} sites fermés
 {% else %}
 {{ summary.closed_shantytowns_length }} site fermé
 {% endif %}{% for shantytown in summary.closed_shantytowns %}
-{{ shantytown.usename }}
+{{ shantytown.usename }}, {{ shantytown.city }}
 [{{var:frontUrl}}/site/{{shantytown.id}}?{{var:utm}}-site-ferme]
 {% endfor %}{% if summary.updated_shantytowns_length > 1 %}
 {{ summary.updated_shantytowns_length }} sites mis à jour
 {% else %}
 {{ summary.updated_shantytowns_length }} site mis à jour
 {% endif %}{% for shantytown in summary.updated_shantytowns %}
-{{ shantytown.usename }}
+{{ shantytown.usename }}, {{ shantytown.city }}
 [{{var:frontUrl}}/site/{{shantytown.id}}?{{var:utm}}-site-mis-a-jour]
 {% endfor %}{% if summary.new_comments_length > 1 %}
 {{ summary.new_comments_length }} messages dans le journal du site
 {% else %}
 {{ summary.new_comments_length }} message dans le journal du site
 {% endif %}{% for comment in summary.new_comments %}
-{{ comment.shantytownUsename }}
+{{ comment.shantytownUsename }}, {{ comment.city }}
 [{{var:frontUrl}}/site/{{comment.shantytownId}}?{{var:utm}}-nouveau-message#message{{comment.id}}]
 {% endfor %}{% if summary.new_users_length > 1 %}
 {{ summary.new_users_length }} nouveaux utilisateurs
@@ -47,28 +47,28 @@ Me connecter [{{var:connexionUrl}}]
 {% else %}
 {{ summary.new_shantytowns_length }} nouveau site
 {% endif %}{% for shantytown in summary.new_shantytowns %}
-{{ shantytown.usename }}
+{{ shantytown.usename }}, {{ shantytown.city }}
 [{{var:frontUrl}}/site/{{shantytown.id}}?{{var:utm}}-nouveau-site]
 {% endfor %}{% if summary.closed_shantytowns_length > 1 %}
 {{ summary.closed_shantytowns_length }} sites fermés
 {% else %}
 {{ summary.closed_shantytowns_length }} site fermé
 {% endif %}{% for shantytown in summary.closed_shantytowns %}
-{{ shantytown.usename }}
+{{ shantytown.usename }}, {{ shantytown.city }}
 [{{var:frontUrl}}/site/{{shantytown.id}}?{{var:utm}}-site-ferme]
 {% endfor %}{% if summary.updated_shantytowns_length > 1 %}
 {{ summary.updated_shantytowns_length }} sites mis à jour
 {% else %}
 {{ summary.updated_shantytowns_length }} site mis à jour
 {% endif %}{% for shantytown in summary.updated_shantytowns %}
-{{ shantytown.usename }}
+{{ shantytown.usename }}, {{ shantytown.city }}
 [{{var:frontUrl}}/site/{{shantytown.id}}?{{var:utm}}-site-mis-a-jour]
 {% endfor %}{% if summary.new_comments_length > 1 %}
 {{ summary.new_comments_length }} messages dans le journal du site
 {% else %}
 {{ summary.new_comments_length }} message dans le journal du site
 {% endif %}{% for comment in summary.new_comments %}
-{{ comment.shantytownUsename }}
+{{ comment.shantytownUsename }}, {{ comment.city }}
 [{{var:frontUrl}}/site/{{comment.shantytownId}}?{{var:utm}}-nouveau-message#message{{comment.id}}]
 {% endfor %}{% if summary.new_users_length > 1 %}
 {{ summary.new_users_length }} nouveaux utilisateurs

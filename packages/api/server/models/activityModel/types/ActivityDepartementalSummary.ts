@@ -1,10 +1,12 @@
 interface ShantytownSummary {
     id: number,
+    city: string,
     usename: string
 }
 
 interface ShantytownCommentSummary {
     id: number,
+    city: string,
     shantytownId: number,
     shantytownUsename: string
 }
