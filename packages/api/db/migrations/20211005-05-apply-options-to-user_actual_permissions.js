@@ -120,9 +120,7 @@ module.exports = {
                                     p.allowed,
                                     p.fk_geographic_level
                                 FROM users u
-                                LEFT JOIN organizations o ON u.fk_organization = o.organization_id
-                                LEFT JOIN organization_types ot ON o.fk_type = ot.organization_type_id
-                                LEFT JOIN permissions p ON p.fk_role_regular = ot.fk_role
+                                LEFT JOIN permissions p ON p.fk_role_regular = u.fk_role_regular
                                 WHERE u.fk_role IS NULL)
                             ) t
                         )

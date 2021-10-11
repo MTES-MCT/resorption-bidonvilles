@@ -11,9 +11,7 @@ module.exports = {
                             SELECT u.user_id, ARRAY_AGG(uap.fk_feature || '.' || uap.fk_entity || '.' || uap.allowed || '.' || uap.fk_geographic_level) AS permissions
                             FROM user_actual_permissions uap
                             LEFT JOIN users u ON u.user_id = uap.user_id
-                            LEFT JOIN organizations o ON u.fk_organization = o.organization_id
-                            LEFT JOIN organization_types ot ON o.fk_type = ot.organization_type_id
-                            WHERE uap.fk_organization IS NOT NULL AND ot.fk_role = 'collaborator'
+                            WHERE uap.fk_organization IS NOT NULL AND u.fk_role_regular = 'collaborator'
                             GROUP BY u.user_id
                         ) t
                         WHERE permissions @> '{"close.shantytown.true.local"}'
@@ -25,9 +23,7 @@ module.exports = {
                             SELECT u.user_id, ARRAY_AGG(uap.fk_feature || '.' || uap.fk_entity || '.' || uap.allowed) AS permissions
                             FROM user_actual_permissions uap
                             LEFT JOIN users u ON u.user_id = uap.user_id
-                            LEFT JOIN organizations o ON u.fk_organization = o.organization_id
-                            LEFT JOIN organization_types ot ON o.fk_type = ot.organization_type_id
-                            WHERE uap.fk_organization IS NOT NULL AND ot.fk_role IN ('collaborator', 'association', 'intervener')
+                            WHERE uap.fk_organization IS NOT NULL AND u.fk_role_regular IN ('collaborator', 'association', 'intervener')
                             GROUP BY u.user_id
                         ) t
                         WHERE permissions @> '{"access.shantytown_justice.false"}'
@@ -39,9 +35,7 @@ module.exports = {
                             SELECT u.user_id, ARRAY_AGG(uap.fk_feature || '.' || uap.fk_entity || '.' || uap.allowed || '.' || uap.fk_geographic_level) AS permissions
                             FROM user_actual_permissions uap
                             LEFT JOIN users u ON u.user_id = uap.user_id
-                            LEFT JOIN organizations o ON u.fk_organization = o.organization_id
-                            LEFT JOIN organization_types ot ON o.fk_type = ot.organization_type_id
-                            WHERE uap.fk_organization IS NOT NULL AND ot.fk_role = 'association'
+                            WHERE uap.fk_organization IS NOT NULL AND u.fk_role_regular = 'association'
                             GROUP BY u.user_id
                         ) t
                         WHERE permissions @> '{"close.shantytown.true.local","create.shantytown.true.local"}'
