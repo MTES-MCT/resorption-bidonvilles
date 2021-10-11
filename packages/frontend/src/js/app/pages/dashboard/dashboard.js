@@ -72,23 +72,23 @@ export default {
                 {
                     faIcon: "tint",
                     label: "Accès à l'eau",
-                    // id: "waterAccessConditions",
-                    id: "accessToWater",
+                    id: "waterAccessConditions",
+                    // id: "accessToWater",
                     options: [
                         {
-                            value: true,
+                            value: "true",
                             label: "Oui",
                             checked: true,
                             icon: { id: "tint", color: "00a0e3" }
                         },
-                        // {
-                        //     value: "toImprove",
-                        //     label: "A améliorer",
-                        //     checked: true,
-                        //     icon: { id: "tint", color: "ff6f4c" }
-                        // },
                         {
-                            value: false,
+                            value: "toImprove",
+                            label: "A améliorer",
+                            checked: true,
+                            icon: { id: "tint", color: "ff6f4c" }
+                        },
+                        {
+                            value: "false",
                             label: "Non",
                             checked: true,
                             icon: { id: "tint-slash", color: "ADB9C9" }
@@ -221,7 +221,10 @@ export default {
                                 .map(option => option.value);
                             visibleTowns = visibleTowns.filter(
                                 town =>
-                                    allowed.indexOf(town.accessToWater) !== -1
+                                    //                                    allowed.indexOf(town.accessToWater) !== -1
+                                    allowed.indexOf(
+                                        town.waterAccessConditions
+                                    ) !== -1
                             );
                         }
                         break;
