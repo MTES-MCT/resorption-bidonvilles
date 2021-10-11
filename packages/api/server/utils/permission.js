@@ -30,7 +30,7 @@ function getPermissionsFor(user, permissionMap) {
     }
 
     return mergePermissions(
-        permissionMap.roles_regular[user.fk_role_regular] || {},
+        permissionMap.roles_regular[user.user_role_regular] || {},
         permissionMap.organizations[user.organization_id] || {},
     );
 }
