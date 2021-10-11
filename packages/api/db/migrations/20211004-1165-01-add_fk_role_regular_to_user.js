@@ -20,18 +20,18 @@ module.exports = {
                 userRoles.map(({ user_id, fk_role }) => queryInterface.sequelize.query(
                     'UPDATE users SET fk_role_regular = :fk_role WHERE user_id = :user_id',
                     { transaction, replacements: { user_id, fk_role } },
-                ))
-                    .then(() => queryInterface.changeColumn(
-                        'users',
-                        'fk_role_regular',
-                        {
-                            type: Sequelize.STRING,
-                            allowNull: false,
-                        },
-                        {
-                            transaction,
-                        },
-                    )),
+                )),
+            ))
+            .then(() => queryInterface.changeColumn(
+                'users',
+                'fk_role_regular',
+                {
+                    type: Sequelize.STRING,
+                    allowNull: false,
+                },
+                {
+                    transaction,
+                },
             ))
             .then(() => queryInterface.addConstraint(
                 'users',
