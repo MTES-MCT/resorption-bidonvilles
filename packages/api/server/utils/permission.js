@@ -26,7 +26,7 @@ function mergePermissions(rolePermissions, orgPermissions) {
  */
 function getPermissionsFor(user, permissionMap) {
     if (user.is_admin === true) {
-        return permissionMap.roles_admin[user.role_admin] || {};
+        return permissionMap.roles_admin[user.user_role_admin] || {};
     }
 
     return mergePermissions(
