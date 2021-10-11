@@ -51,7 +51,7 @@ module.exports = {
     ),
 
     down: queryInterface => queryInterface.sequelize.transaction(
-        transaction => queryInterface.sequelize.removeConstraint(
+        transaction => queryInterface.removeConstraint(
             'users',
             'fk_users_role_regular',
             { transaction },
