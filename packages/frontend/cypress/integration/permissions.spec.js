@@ -22,10 +22,11 @@ const getAllowedAndForbiddenRoutes = ({ shantytown, plan, admin }) => {
     return { allowedRoutes, forbiddenRoutes };
 };
 
-// const tests = {
-//     intervenant: permissions.intervenant,
-//     // localAdmin: permissions.localAdmin
-// };
+const tests = {
+    // intervenant: permissions.intervenant,
+    // localAdmin: permissions.localAdmin
+    departement: permissions.departement
+};
 
 describe("Permissions tests", () => {
     Object.entries(permissions).forEach(
@@ -47,6 +48,7 @@ describe("Permissions tests", () => {
                 describe("L'utilisateur etre redirigé sur la cartographie pour les pages sans accès", () => {
                     beforeEach(() => {
                         cy.restoreLocalStorage();
+                        cy.wait(100)
                     });
 
                     for (const route of forbiddenRoutes) {
@@ -60,6 +62,7 @@ describe("Permissions tests", () => {
                 describe("L'utilisateur doit pouvoir accéder à certaine pages si il a les permissions", () => {
                     beforeEach(() => {
                         cy.restoreLocalStorage();
+                        cy.wait(100)
                     });
 
                     for (const route of allowedRoutes) {
@@ -73,6 +76,7 @@ describe("Permissions tests", () => {
                 describe("L'utilisateur ne doit voir que certaines actions sur la fiche d'un site", () => {
                     beforeEach(() => {
                         cy.restoreLocalStorage();
+                        cy.wait(100)
                         cy.visit(TEST_URL);
                     });
 
@@ -122,6 +126,7 @@ describe("Permissions tests", () => {
                 describe("L'utilisateur ne doit voir que certaines informations sur la liste des sites", () => {
                     beforeEach(() => {
                         cy.restoreLocalStorage();
+                        cy.wait(100)
                         cy.visit("/liste-des-sites");
                     });
 
@@ -145,6 +150,72 @@ describe("Permissions tests", () => {
                                 const nbSites2 = $div.text();
                                 expect(nbSites2).equal(nbSites);
                             });
+                        });
+                    }
+                });
+
+                describe("L'utilisateur ne doit voir que certaines actions sur la liste des dispositifs", () => {
+                    beforeEach(() => {
+                        cy.restoreLocalStorage();
+                        cy.wait(100)
+                        cy.visit("/liste-des-dispositifs");
+                    });
+
+                    if (userPermissions.plan.create) {
+                        it("L'utilisateur doit voir le bouton nouveau dispositif", () => {
+                            cy.get("a[href='/nouveau-dispositif']").should(
+                                "exist"
+                            );
+                        });
+                    } else {
+                        it("L'utilisateur ne doit pas voir le bouton nouveau dispositif", () => {
+                            cy.get("a[href='/nouveau-dispositif']").should(
+                                "not.exist"
+                            );
+                        });
+                    }
+                });
+
+                describe("L'utilisateur ne doit voir que certaines actions sur la fiche d'un dispositif", () => {
+                    beforeEach(() => {
+                        cy.restoreLocalStorage();
+                        cy.wait(100)
+                        cy.visit("/liste-des-dispositifs");
+                        cy.get("tr.table-row--odd")
+                            .first()
+                            .invoke("attr", "href")
+                            .then(href => cy.visit(href));
+                    });
+
+                    if (userPermissions.plan.update) {
+                        it("L'utilisateur peut mettre à jour le dispositif", () => {
+                            cy.get("[data-cy='planUpdate']").should("exist");
+                        });
+                    } else {
+                        it("L'utilisateur ne doit pas pouvoir mettre à jour le dispositif", () => {
+                            cy.get("[data-cy='planUpdate']").should(
+                                "not.exist"
+                            );
+                        });
+                    }
+
+                    if (userPermissions.plan.updateMarks) {
+                        it("L'utilisateur peut mettre à jour les indicateurs", () => {
+                            cy.get("[data-cy='planMarks']").should("exist");
+                        });
+                    } else {
+                        it("L'utilisateur ne doit pas pouvoir mettre à jour les indicateurs", () => {
+                            cy.get("[data-cy='planMarks']").should("not.exist");
+                        });
+                    }
+
+                    if (userPermissions.plan.close) {
+                        it("L'utilisateur peut fermer un dispositif", () => {
+                            cy.get("[data-cy='planClose']").should("exist");
+                        });
+                    } else {
+                        it("L'utilisateur ne doit pas pouvoir fermer un dispositif", () => {
+                            cy.get("[data-cy='planClose']").should("not.exist");
                         });
                     }
                 });

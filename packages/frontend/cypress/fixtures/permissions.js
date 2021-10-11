@@ -8,7 +8,10 @@ const defaultPermissions = {
         hideJustice: false
     },
     plan: {
-        create: false
+        create: false,
+        update: false,
+        updateMarks: false,
+        close: false
     },
     admin: {
         listUsers: false,
@@ -26,7 +29,10 @@ const localAdminPermissions = {
         readPrivateComments: true
     },
     plan: {
-        create: true
+        create: true,
+        update: true,
+        updateMarks: true,
+        close: true
     },
     admin: {
         listUsers: true,
