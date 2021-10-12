@@ -1,9 +1,11 @@
 /* eslint-disable newline-per-chained-call,no-await-in-loop, no-restricted-syntax */
+require('module-alias/register');
 const crypto = require('crypto');
-const { sequelize } = require('../../db/models/index');
+const { create } = require('#server/models/organizationModel')();
+const { setPermissionOptions } = require('#server/models/userModel')();
 
 function generate({
-    email, password, first_name, last_name, fk_role, phone, position, fk_organization,
+    email, password, first_name, last_name, fk_role, phone, position, fk_organization, fk_role_regular,
 }) {
     const salt = crypto.randomBytes(16).toString('hex');
 
@@ -20,148 +22,9 @@ function generate({
         position,
         fk_organization,
         charte_engagement_signee: 2,
+        fk_role_regular,
     };
 }
-
-function fromOptionToPermissions(user, option, dataJustice) {
-    switch (option.id) {
-        case 'close_shantytown':
-            return [
-                {
-                    entity: 'shantytown',
-                    feature: 'close',
-                    level: 'local',
-                    data: { data_justice: dataJustice },
-                    allowed: true,
-                },
-            ];
-
-        case 'create_and_close_shantytown':
-            return [
-                {
-                    entity: 'shantytown',
-                    feature: 'create',
-                    level: 'local',
-                    data: { data_justice: dataJustice },
-                    allowed: true,
-                },
-                {
-                    entity: 'shantytown',
-                    feature: 'close',
-                    level: 'local',
-                    data: { data_justice: dataJustice },
-                    allowed: true,
-                },
-            ];
-
-        case 'hide_justice': {
-            const defaultPermissions = user.permissions.shantytown || {};
-
-            return Object.keys(defaultPermissions).map(feature => ({
-                entity: 'shantytown',
-                feature,
-                level: defaultPermissions[feature].geographic_level,
-                data: { data_justice: false },
-                allowed: defaultPermissions[feature].allowed,
-            }));
-        }
-
-        default:
-            return [];
-    }
-}
-
-function fromOptionsToPermissions(user, options) {
-    if (options.length === 0) {
-        return [];
-    }
-
-    // special case of data_justice
-    const dataJustice = options.find(({ id }) => id === 'hide_justice') === undefined;
-
-    return options.reduce((permissions, option) => [
-        ...permissions,
-        ...fromOptionToPermissions(user, option, dataJustice),
-    ], []);
-}
-
-const createOrganization = async (name, abbreviation = null, type, region = null, departement = null, epci = null, city = null, active = false, argTransaction = undefined) => {
-    let transaction = argTransaction;
-    if (transaction === undefined) {
-        transaction = await sequelize.transaction();
-    }
-
-    const response = await sequelize.query(
-        `INSERT INTO
-        organizations(name, abbreviation, fk_type, fk_region, fk_departement, fk_epci, fk_city, active)
-    VALUES
-        (:name, :abbreviation, :type, :region, :departement, :epci, :city, :active)
-    RETURNING organization_id AS id`,
-        {
-            replacements: {
-                name,
-                abbreviation,
-                type,
-                region,
-                departement,
-                epci,
-                city,
-                active,
-            },
-            transaction,
-        },
-    );
-    await sequelize.query(
-        'REFRESH MATERIALIZED VIEW localized_organizations',
-        {
-            transaction,
-        },
-    );
-
-    if (argTransaction === undefined) {
-        await transaction.commit();
-    }
-
-    return response;
-};
-
-const setCustomPermissions = async (organizationId, permissions) => sequelize.transaction(
-    t => sequelize.query('DELETE FROM permissions WHERE fk_organization = :organizationId', {
-        transaction: t,
-        replacements: {
-            organizationId,
-        },
-    })
-        .then(() => Promise.all(
-            permissions.map(permission => sequelize.query(
-                `INSERT INTO
-                            permissions(fk_organization, fk_role_admin, fk_role_regular, fk_feature, fk_entity, allowed, fk_geographic_level)
-                        VALUES
-                            (:organizationId, NULL, NULL, :feature, :entity, :allowed, :level)
-                        RETURNING permission_id`,
-                {
-                    transaction: t,
-                    replacements: {
-                        organizationId,
-                        feature: permission.feature,
-                        entity: permission.entity,
-                        level: permission.level,
-                        allowed: permission.allowed,
-                    },
-                },
-            )
-                .then(([[{ permission_id: permissionId }]]) => {
-                    const replacements = Object.assign({ fk_permission: permissionId }, permission.data || {});
-                    return sequelize.query(
-                        `INSERT INTO ${permission.entity}_permissions VALUES (${Object.keys(replacements).map(name => `:${name}`).join(',')})`,
-                        {
-                            transaction: t,
-                            replacements,
-                        },
-                    );
-                })),
-        )),
-);
 
 const users = [
     {
@@ -173,6 +36,7 @@ const users = [
             fk_role: null,
             phone: '00 00 00 00 00',
             position: 'qa',
+            fk_role_regular: 'association',
         }),
         organization: {
             name: 'QA city',
@@ -194,6 +58,7 @@ const users = [
             fk_role: null,
             phone: '00 00 00 00 00',
             position: 'qa',
+            fk_role_regular: 'association',
         }),
         organization: {
             name: 'QA city',
@@ -204,7 +69,7 @@ const users = [
             epci: null,
             city: 33063, // bordeaux
         },
-        options: [{ id: 'create_and_close_shantytown' }],
+        options: ['create_and_close_shantytown'],
     },
     {
         user: generate({
@@ -215,6 +80,7 @@ const users = [
             fk_role: null,
             phone: '00 00 00 00 00',
             position: 'qa',
+            fk_role_regular: 'association',
         }),
         organization: {
             name: 'QA departement',
@@ -236,6 +102,7 @@ const users = [
             fk_role: null,
             phone: '00 00 00 00 00',
             position: 'qa',
+            fk_role_regular: 'association',
         }),
         organization: {
             name: 'QA departement',
@@ -246,7 +113,7 @@ const users = [
             epci: null,
             city: null, // bordeaux
         },
-        options: [{ id: 'hide_justice' }],
+        options: ['hide_justice'],
     },
     {
         user: generate({
@@ -257,6 +124,7 @@ const users = [
             fk_role: null,
             phone: '00 00 00 00 00',
             position: 'qa',
+            fk_role_regular: 'association',
         }),
         organization: {
             name: 'QA region',
@@ -278,6 +146,7 @@ const users = [
             fk_role: null,
             phone: '00 00 00 00 00',
             position: 'qa',
+            fk_role_regular: 'direct_collaborator',
         }),
         organization: 31, // Prefecture de département gironde
         options: [],
@@ -291,6 +160,7 @@ const users = [
             fk_role: null,
             phone: '00 00 00 00 00',
             position: 'qa',
+            fk_role_regular: 'intervener',
         }),
         organization: {
             name: 'QA intervenant',
@@ -312,6 +182,7 @@ const users = [
             fk_role: null,
             phone: '00 00 00 00 00',
             position: 'qa',
+            fk_role_regular: 'national_establisment',
         }),
         organization: 40760, // dihal
         options: [],
@@ -325,6 +196,7 @@ const users = [
             fk_role: 'local_admin',
             phone: '00 00 00 00 00',
             position: 'qa',
+            fk_role_regular: 'national_establisment',
         }),
         organization: {
             name: 'QA local admin',
@@ -346,6 +218,7 @@ const users = [
             fk_role: 'national_admin',
             phone: '00 00 00 00 00',
             position: 'qa',
+            fk_role_regular: 'national_establisment',
         }),
         organization: {
             name: 'QA national admin',
@@ -365,35 +238,25 @@ module.exports = {
         for (const user of users) {
             let fk_organization;
             if (typeof user.organization === 'object') {
-                const [[{ id }]] = await createOrganization(user.organization.name, user.organization.abbreviation, user.organization.type, user.organization.region, user.organization.departement, user.organization.epci, user.organization.city, true);
+                const [[{ id }]] = await create(user.organization.name, user.organization.abbreviation, user.organization.type, user.organization.region, user.organization.departement, user.organization.epci, user.organization.city, true);
                 fk_organization = id;
             } else {
                 fk_organization = user.organization;
             }
 
             await queryInterface.bulkInsert('users', [{ ...user.user, fk_organization }]);
+
             if (user.options.length) {
-                const permissions = fromOptionsToPermissions({
-                    permissions: {
-                        shantytown: {
-                            read: {
-                                entity: 'shantytown',
-                                feature: 'read',
-                                geographic_level: 'local',
-                                data: { data_justice: true },
-                                allowed: true,
-                            },
-                            list: {
-                                entity: 'shantytown',
-                                feature: 'list',
-                                geographic_level: 'local',
-                                data: { data_justice: true },
-                                allowed: true,
-                            },
+                const [[{ user_id }]] = await queryInterface.sequelize.query(
+                    `SELECT user_id FROM users 
+                WHERE users.email = :email;`,
+                    {
+                        replacements: {
+                            email: user.user.email,
                         },
                     },
-                }, user.options);
-                await setCustomPermissions(fk_organization, permissions);
+                );
+                await setPermissionOptions(user_id, user.options);
             }
         }
     },
@@ -401,18 +264,45 @@ module.exports = {
     down: (queryInterface) => {
         const emails = users.map(u => u.user.email);
 
-
         return queryInterface.sequelize.transaction(
-            transaction => queryInterface.sequelize.query(
-                `DELETE FROM users 
-            WHERE users.email in (:emails);`,
-                {
-                    transaction,
-                    replacements: {
-                        emails,
+            async (transaction) => {
+                const [result] = await queryInterface.sequelize.query(
+                    `SELECT user_id FROM users 
+                WHERE users.email in (:emails);`,
+                    {
+                        transaction,
+                        replacements: {
+                            emails,
+                        },
                     },
-                },
-            ),
+                );
+
+                const userIds = result.map(r => r.user_id);
+
+                if (userIds.length) {
+                    await queryInterface.sequelize.query(
+                        `DELETE FROM user_permission_options 
+                    WHERE fk_user in (:userIds);`,
+                        {
+                            transaction,
+                            replacements: {
+                                userIds,
+                            },
+                        },
+                    );
+
+                    await queryInterface.sequelize.query(
+                        `DELETE FROM users 
+                    WHERE user_id in (:userIds);`,
+                        {
+                            transaction,
+                            replacements: {
+                                userIds,
+                            },
+                        },
+                    );
+                }
+            },
         );
     },
 };

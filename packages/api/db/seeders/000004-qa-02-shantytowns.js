@@ -1,8 +1,10 @@
 /* eslint-disable newline-per-chained-call,no-await-in-loop, no-restricted-syntax */
+require('module-alias/register');
 const {
     Shantytown: ShantyTowns,
-} = require('../models');
+} = require('#db/models');
 
+const { create } = require('#server/models/shantytownCommentModel')();
 
 const shantytowns = [
     {
@@ -35,24 +37,6 @@ const comments = [
 
 ];
 
-const createComment = async (queryInterface, data) => queryInterface.sequelize.query(
-    `INSERT INTO shantytown_comments(
-            description,
-            fk_shantytown,
-            created_by,
-            private
-        )
-        VALUES (
-            :description,
-            :fk_shantytown,
-            :created_by,
-            :private
-        )
-        RETURNING shantytown_comment_id`,
-    {
-        replacements: data,
-    },
-);
 
 module.exports = {
     up: async (queryInterface) => {
@@ -64,7 +48,7 @@ module.exports = {
             // Resolve userId from email
             const [[{ user_id: userId }]] = await queryInterface.sequelize.query('SELECT user_id from USERS where email = :email', { replacements: { email: comment.created_by } });
 
-            await createComment(queryInterface, {
+            await create({
                 ...comment,
                 created_by: userId,
             });
