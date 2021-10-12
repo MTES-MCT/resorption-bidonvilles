@@ -22,12 +22,6 @@ const getAllowedAndForbiddenRoutes = ({ shantytown, plan, admin }) => {
     return { allowedRoutes, forbiddenRoutes };
 };
 
-// const tests = {
-//     // intervenant: permissions.intervenant,
-//     // localAdmin: permissions.localAdmin
-//     departement: permissions.departement
-// };
-
 describe("Permissions tests", () => {
     Object.entries(permissions).forEach(
         ([key, { permissions: userPermissions, territory }]) => {
@@ -74,26 +68,29 @@ describe("Permissions tests", () => {
                 describe(`L'utilisateur ${key} ne doit voir que certaines actions sur la fiche d'un site`, () => {
                     beforeEach(() => {
                         cy.restoreLocalStorage();
-
                         cy.visit(TEST_URL);
                     });
 
                     if (userPermissions.shantytown.close) {
                         it(`L'utilisateur ${key} doit pouvoir fermer un site`, () => {
+                            cy.url().should("include", TEST_URL);
                             cy.get("[data-cy='closeTown']").should("exist");
                         });
                     } else {
                         it(`L'utilisateur ${key} ne doit pas pouvoir fermer un site`, () => {
+                            cy.url().should("include", TEST_URL);
                             cy.get("[data-cy='closeTown']").should("not.exist");
                         });
                     }
 
                     if (userPermissions.shantytown.edit) {
                         it(`L'utilisateur ${key} doit pouvoir mettre à jour un site`, () => {
+                            cy.url().should("include", TEST_URL);
                             cy.get("[data-cy='updateTown']").should("exist");
                         });
                     } else {
                         it(`L'utilisateur ${key} ne doit pas pouvoir mettre à jour un site`, () => {
+                            cy.url().should("include", TEST_URL);
                             cy.get("[data-cy='updateTown']").should(
                                 "not.exist"
                             );
@@ -102,35 +99,41 @@ describe("Permissions tests", () => {
 
                     if (userPermissions.shantytown.readPrivateComments) {
                         it(`L'utilisateur ${key} doit pouvoir lire les commentaires privés`, () => {
+                            cy.url().should("include", TEST_URL);
                             cy.get("#comments").should("contain", "2 messages");
                         });
                     } else {
                         it(`L'utilisateur ${key} doit pouvoir lire que les commentaires publiques`, () => {
+                            cy.url().should("include", TEST_URL);
                             cy.get("#comments").should("contain", "1 message");
                         });
                     }
 
                     if (userPermissions.shantytown.hideJustice) {
                         it(`L'utilisateur ${key} ne doit pas pouvoir lire les procédures judiciaires`, () => {
+                            cy.url().should("include", TEST_URL);
                             cy.get("#judicial").should("not.exist");
                         });
                     } else {
                         it(`L'utilisateur ${key} doit pouvoir lire les procédures judiciaires`, () => {
+                            cy.url().should("include", TEST_URL);
                             cy.get("#judicial").should("exist");
                         });
                     }
                 });
 
                 describe(`L'utilisateur ${key} ne doit voir que certaines informations sur la liste des sites`, () => {
+                    const townListURL = "/liste-des-sites";
                     beforeEach(() => {
                         cy.restoreLocalStorage();
-
-                        cy.visit("/liste-des-sites");
+                        cy.visit(townListURL);
                     });
 
                     if (!userPermissions.shantytown.readOutsideTerritory) {
                         it(`L'utilisateur ${key} ne doit accéder qu'aux sites lié à ${territory}`, () => {
                             let nbSites;
+
+                            cy.url().should("include", townListURL);
 
                             cy.get("[data-cy='searchInput']").should($input => {
                                 expect($input.val()).to.equal(territory);
@@ -153,20 +156,23 @@ describe("Permissions tests", () => {
                 });
 
                 describe(`L'utilisateur ${key} ne doit voir que certaines actions sur la liste des dispositifs`, () => {
+                    const planListURL = "/liste-des-dispositifs";
+
                     beforeEach(() => {
                         cy.restoreLocalStorage();
-
-                        cy.visit("/liste-des-dispositifs");
+                        cy.visit(planListURL);
                     });
 
                     if (userPermissions.plan.create) {
                         it(`L'utilisateur ${key} doit voir le bouton nouveau dispositif`, () => {
+                            cy.url().should("include", planListURL);
                             cy.get("a[href='/nouveau-dispositif']").should(
                                 "exist"
                             );
                         });
                     } else {
                         it(`L'utilisateur ${key} ne doit pas voir le bouton nouveau dispositif`, () => {
+                            cy.url().should("include", planListURL);
                             cy.get("a[href='/nouveau-dispositif']").should(
                                 "not.exist"
                             );
@@ -195,10 +201,12 @@ describe("Permissions tests", () => {
 
                     if (userPermissions.plan.update) {
                         it(`L'utilisateur ${key} peut mettre à jour le dispositif`, () => {
+                            cy.url().should("include", firstPlanHref);
                             cy.get("[data-cy='planUpdate']").should("exist");
                         });
                     } else {
                         it(`L'utilisateur ${key} ne doit pas pouvoir mettre à jour le dispositif`, () => {
+                            cy.url().should("include", firstPlanHref);
                             cy.get("[data-cy='planUpdate']").should(
                                 "not.exist"
                             );
@@ -207,20 +215,24 @@ describe("Permissions tests", () => {
 
                     if (userPermissions.plan.updateMarks) {
                         it(`L'utilisateur ${key} peut mettre à jour les indicateurs`, () => {
+                            cy.url().should("include", firstPlanHref);
                             cy.get("[data-cy='planMarks']").should("exist");
                         });
                     } else {
                         it(`L'utilisateur ${key} ne doit pas pouvoir mettre à jour les indicateurs`, () => {
+                            cy.url().should("include", firstPlanHref);
                             cy.get("[data-cy='planMarks']").should("not.exist");
                         });
                     }
 
                     if (userPermissions.plan.close) {
                         it(`L'utilisateur ${key} peut fermer un dispositif`, () => {
+                            cy.url().should("include", firstPlanHref);
                             cy.get("[data-cy='planClose']").should("exist");
                         });
                     } else {
                         it(`L'utilisateur ${key} ne doit pas pouvoir fermer un dispositif`, () => {
+                            cy.url().should("include", firstPlanHref);
                             cy.get("[data-cy='planClose']").should("not.exist");
                         });
                     }
