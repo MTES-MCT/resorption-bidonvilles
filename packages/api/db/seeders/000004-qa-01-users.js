@@ -196,7 +196,7 @@ const users = [
             fk_role: 'local_admin',
             phone: '00 00 00 00 00',
             position: 'qa',
-            fk_role_regular: 'national_establisment',
+            fk_role_regular: 'association',
         }),
         organization: {
             name: 'QA local admin',
@@ -218,7 +218,7 @@ const users = [
             fk_role: 'national_admin',
             phone: '00 00 00 00 00',
             position: 'qa',
-            fk_role_regular: 'national_establisment',
+            fk_role_regular: 'association',
         }),
         organization: {
             name: 'QA national admin',
