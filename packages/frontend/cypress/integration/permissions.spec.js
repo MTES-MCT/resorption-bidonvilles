@@ -47,6 +47,7 @@ describe("Permissions tests", () => {
                     for (const route of forbiddenRoutes) {
                         it(`L'utilisateur ${key} n'a pas le droit d'accéder à ${route}`, () => {
                             cy.visit(route);
+                            cy.url().should("not.include", "/launcher");
                             cy.url().should("include", "/cartographie");
                         });
                     }
@@ -60,6 +61,7 @@ describe("Permissions tests", () => {
                     for (const route of allowedRoutes) {
                         it(`L'utilisateur ${key} a le droit d'accéder à ${route}`, () => {
                             cy.visit(route);
+                            cy.url().should("not.include", "/launcher");
                             cy.url().should("include", route);
                         });
                     }
@@ -67,8 +69,11 @@ describe("Permissions tests", () => {
 
                 describe(`L'utilisateur ${key} ne doit voir que certaines actions sur la fiche d'un site`, () => {
                     beforeEach(() => {
+                        cy.server();
                         cy.restoreLocalStorage();
                         cy.visit(TEST_URL);
+                        cy.route(`/towns/*`).as("getShantytown");
+                        cy.wait("@getShantytown");
                     });
 
                     if (userPermissions.shantytown.close) {
@@ -125,8 +130,11 @@ describe("Permissions tests", () => {
                 describe(`L'utilisateur ${key} ne doit voir que certaines informations sur la liste des sites`, () => {
                     const townListURL = "/liste-des-sites";
                     beforeEach(() => {
+                        cy.server();
                         cy.restoreLocalStorage();
                         cy.visit(townListURL);
+                        cy.route(`/towns`).as("getShantytowns");
+                        cy.wait("@getShantytowns");
                     });
 
                     if (!userPermissions.shantytown.readOutsideTerritory) {
@@ -159,8 +167,11 @@ describe("Permissions tests", () => {
                     const planListURL = "/liste-des-dispositifs";
 
                     beforeEach(() => {
+                        cy.server();
                         cy.restoreLocalStorage();
                         cy.visit(planListURL);
+                        cy.route(`/plans`).as("getPlans");
+                        cy.wait("@getPlans");
                     });
 
                     if (userPermissions.plan.create) {
@@ -195,8 +206,11 @@ describe("Permissions tests", () => {
                     });
 
                     beforeEach(() => {
+                        cy.server();
                         cy.restoreLocalStorage();
                         cy.visit(firstPlanHref);
+                        cy.route(`/plans/*`).as("getPlan");
+                        cy.wait("@getPlan");
                     });
 
                     if (userPermissions.plan.update) {
