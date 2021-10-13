@@ -77,7 +77,7 @@ jobs:
         with:
           url: 'https://resorption-bidonvilles.localhost/'
           responseCode: 200
-          timeout: 30000
+          timeout: 300000
           interval: 2000
 
       # build and fill database
