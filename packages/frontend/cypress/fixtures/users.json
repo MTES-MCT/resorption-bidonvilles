@@ -3,24 +3,24 @@
         "email": "admin@resorption-bidonvilles.beta.gouv.fr",
         "password": "fabnum"
     },
-    "city": {
-        "email": "qa-city@resorption-bidonvilles.beta.gouv.fr",
+    "assoCity": {
+        "email": "qa-asso-city@resorption-bidonvilles.beta.gouv.fr",
         "password": "fabnum"
     },
-    "cityWithCreateOption": {
-        "email": "qa-city-with-create-option@resorption-bidonvilles.beta.gouv.fr",
+    "assoCityWithCreateOption": {
+        "email": "qa-asso-city-with-create-option@resorption-bidonvilles.beta.gouv.fr",
         "password": "fabnum"
     },
-    "departement": {
-        "email": "qa-departement@resorption-bidonvilles.beta.gouv.fr",
+    "assoDepartement": {
+        "email": "qa-asso-departement@resorption-bidonvilles.beta.gouv.fr",
         "password": "fabnum"
     },
-    "departementWithHideOption": {
-        "email": "qa-departement-with-hide-justice-option@resorption-bidonvilles.beta.gouv.fr",
+    "assoDepartementWithHideOption": {
+        "email": "qa-asso-departement-with-hide-justice-option@resorption-bidonvilles.beta.gouv.fr",
         "password": "fabnum"
     },
-    "region": {
-        "email": "qa-region@resorption-bidonvilles.beta.gouv.fr",
+    "assoRegion": {
+        "email": "qa-asso-region@resorption-bidonvilles.beta.gouv.fr",
         "password": "fabnum"
     },
     "prefecture": {

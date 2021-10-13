@@ -29,18 +29,18 @@ function generate({
 const users = [
     {
         user: generate({
-            email: 'qa-city@resorption-bidonvilles.beta.gouv.fr',
+            email: 'qa-asso-city@resorption-bidonvilles.beta.gouv.fr',
             password: 'fabnum',
             first_name: 'QA',
-            last_name: 'City',
+            last_name: 'Asso city',
             fk_role: null,
             phone: '00 00 00 00 00',
             position: 'qa',
             fk_role_regular: 'association',
         }),
         organization: {
-            name: 'QA city',
-            abbreviation: 'QA city',
+            name: 'QA asso city',
+            abbreviation: 'QA asso city',
             type: 8, // association
             region: null,
             departement: null,
@@ -51,17 +51,17 @@ const users = [
     },
     {
         user: generate({
-            email: 'qa-city-with-create-option@resorption-bidonvilles.beta.gouv.fr',
+            email: 'qa-asso-city-with-create-option@resorption-bidonvilles.beta.gouv.fr',
             password: 'fabnum',
             first_name: 'QA',
-            last_name: 'City',
+            last_name: 'Asso city with create option',
             fk_role: null,
             phone: '00 00 00 00 00',
             position: 'qa',
             fk_role_regular: 'association',
         }),
         organization: {
-            name: 'QA city',
+            name: 'Asso city with create option',
             abbreviation: 'QA city',
             type: 8, // association
             region: null,
@@ -73,18 +73,18 @@ const users = [
     },
     {
         user: generate({
-            email: 'qa-departement@resorption-bidonvilles.beta.gouv.fr',
+            email: 'qa-asso-departement@resorption-bidonvilles.beta.gouv.fr',
             password: 'fabnum',
             first_name: 'QA',
-            last_name: 'Departement',
+            last_name: 'Asso departement',
             fk_role: null,
             phone: '00 00 00 00 00',
             position: 'qa',
             fk_role_regular: 'association',
         }),
         organization: {
-            name: 'QA departement',
-            abbreviation: 'QA departement',
+            name: 'QA asso departement',
+            abbreviation: 'QA asso departement',
             type: 8, // association
             region: null,
             departement: 33,
@@ -95,18 +95,18 @@ const users = [
     },
     {
         user: generate({
-            email: 'qa-departement-with-hide-justice-option@resorption-bidonvilles.beta.gouv.fr',
+            email: 'qa-asso-departement-with-hide-justice-option@resorption-bidonvilles.beta.gouv.fr',
             password: 'fabnum',
             first_name: 'QA',
-            last_name: 'Departement',
+            last_name: 'Asso departement with hide justice option',
             fk_role: null,
             phone: '00 00 00 00 00',
             position: 'qa',
             fk_role_regular: 'association',
         }),
         organization: {
-            name: 'QA departement',
-            abbreviation: 'QA departement',
+            name: 'QA asso Departement with hide justice option',
+            abbreviation: 'QA asso Departement with hide justice option',
             type: 8, // association
             region: null,
             departement: 33,
@@ -117,23 +117,23 @@ const users = [
     },
     {
         user: generate({
-            email: 'qa-region@resorption-bidonvilles.beta.gouv.fr',
+            email: 'qa-asso-region@resorption-bidonvilles.beta.gouv.fr',
             password: 'fabnum',
             first_name: 'QA',
-            last_name: 'Region',
+            last_name: 'Asso region',
             fk_role: null,
             phone: '00 00 00 00 00',
             position: 'qa',
             fk_role_regular: 'association',
         }),
         organization: {
-            name: 'QA region',
-            abbreviation: 'QA region',
+            name: 'QA asso region',
+            abbreviation: 'QA asso region',
             type: 8, // association
             region: 75,
             departement: null,
             epci: null,
-            city: null, // bordeaux
+            city: null,
         },
         options: [],
     },

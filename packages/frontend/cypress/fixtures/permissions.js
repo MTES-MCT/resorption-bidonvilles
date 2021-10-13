@@ -42,11 +42,11 @@ const localAdminPermissions = {
 };
 
 module.exports = {
-    city: {
+    assoCity: {
         permissions: defaultPermissions,
         territory: "Bordeaux"
     },
-    cityWithCreateOption: {
+    assoCityWithCreateOption: {
         permissions: {
             ...defaultPermissions,
             shantytown: {
@@ -57,11 +57,11 @@ module.exports = {
         },
         territory: "Bordeaux"
     },
-    departement: {
+    assoDepartement: {
         permissions: defaultPermissions,
         territory: "Gironde"
     },
-    departementWithHideOption: {
+    assoDepartementWithHideOption: {
         permissions: {
             ...defaultPermissions,
             shantytown: {
