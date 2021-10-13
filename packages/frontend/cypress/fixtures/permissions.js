@@ -42,6 +42,19 @@ const localAdminPermissions = {
 };
 
 module.exports = {
+    city: {
+        permissions: {
+            ...defaultPermissions,
+            shantytown: {
+                ...defaultPermissions.shantytown,
+                create: true,
+            },
+            plan: {
+                ...defaultPermissions.plan
+            }
+        },
+        territory: "Bordeaux"
+    },
     assoCity: {
         permissions: defaultPermissions,
         territory: "Bordeaux"

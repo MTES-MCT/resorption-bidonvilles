@@ -29,6 +29,28 @@ function generate({
 const users = [
     {
         user: generate({
+            email: 'qa-city@resorption-bidonvilles.beta.gouv.fr',
+            password: 'fabnum',
+            first_name: 'QA',
+            last_name: 'City (Collaborator)',
+            fk_role: null,
+            phone: '00 00 00 00 00',
+            position: 'qa',
+            fk_role_regular: 'collaborator',
+        }),
+        organization: {
+            name: 'QA commune',
+            abbreviation: 'QA commune',
+            type: 4, // commune
+            region: null,
+            departement: null,
+            epci: null,
+            city: 33063, // bordeaux
+        },
+        options: [],
+    },
+    {
+        user: generate({
             email: 'qa-asso-city@resorption-bidonvilles.beta.gouv.fr',
             password: 'fabnum',
             first_name: 'QA',

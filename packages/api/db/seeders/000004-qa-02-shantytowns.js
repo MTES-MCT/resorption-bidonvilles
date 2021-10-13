@@ -26,7 +26,7 @@ const comments = [
         description: 'commentaire publique',
         private: false,
         fk_shantytown: 999999,
-        created_by: 'qa-city@resorption-bidonvilles.beta.gouv.fr',
+        created_by: 'qa-asso-city@resorption-bidonvilles.beta.gouv.fr',
     },
     {
         description: 'commentaire privé',

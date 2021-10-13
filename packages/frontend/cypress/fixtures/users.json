@@ -3,6 +3,10 @@
         "email": "admin@resorption-bidonvilles.beta.gouv.fr",
         "password": "fabnum"
     },
+    "city": {
+        "email": "qa-city@resorption-bidonvilles.beta.gouv.fr",
+        "password": "fabnum"
+    },
     "assoCity": {
         "email": "qa-asso-city@resorption-bidonvilles.beta.gouv.fr",
         "password": "fabnum"
