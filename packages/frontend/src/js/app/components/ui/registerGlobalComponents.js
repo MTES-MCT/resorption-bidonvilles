@@ -1,55 +1,47 @@
-import AutocompleteVue from "@trevoreyre/autocomplete-vue";
-import {
-    ValidationProvider,
-    ValidationObserver,
-    extend,
-    localize
-} from "vee-validate";
-/*eslint import/namespace: ['error', { allowComputed: true }]*/
-import * as rules from "vee-validate/dist/rules";
-import fr from "vee-validate/dist/locale/fr.json";
-import en from "vee-validate/dist/locale/en.json";
-import ro from "vee-validate/dist/locale/ro.json";
-import bg from "vee-validate/dist/locale/bg.json";
-
+// This module cannot be lazyloaded as it's defined in src/App.vue
 import notifications from "vue-notification/dist/ssr";
-import Button from "./Button.vue";
-import TextInput from "./Form/input/TextInput.vue";
-import PasswordInput from "./Form/input/PasswordInput.vue";
-import InlineTextInput from "./Form/input/InlineTextInput.vue";
-import TextArea from "./Form/input/TextArea.vue";
-import Icon from "./Icon.vue";
-import Checkbox from "./Form/input/Checkbox.vue";
-import Radio from "./Form/input/Radio.vue";
-import Select from "./Form/input/Select.vue";
-import SelectOption from "./Form/input/SelectOption.vue";
-import FormGroup from "./Form/FormGroup.vue";
-import InputGroup from "./Form/InputGroup.vue";
-import MandatoryStar from "./Form/utils/MandatoryStar.vue";
-import FormParagraph from "./Form/FormParagraph.vue";
-import Menu from "./Menu/Menu.vue";
-import MenuItem from "./Menu/MenuItem.vue";
-import Dropdown from "./Dropdown.vue";
-import CustomFilter from "./Filter.vue";
-import FullBottomSection from "./FullBottomSection.vue";
 import NotificationsGroup from "./NotificationsGroup.vue";
-import Modal from "./Modal.vue";
-import Callout from "./Callout.vue";
-import SidePanel from "./SidePanel.vue";
-import Sort from "./Sort.vue";
-import Autocomplete from "./Autocomplete.vue";
-import Spinner from "./Spinner.vue";
-import CheckableGroup from "./Form/CheckableGroup.vue";
-import Datepicker from "./Datepicker.vue";
-import Tag from "./Tag.vue";
-import Pagination from "./Pagination.vue";
-import PanelInfo from "./PanelInfo.vue";
-import Link from "./Link.vue";
-import MapV2 from "./Map.vue";
-import InfoBanner from "./InfoBanner.vue";
-import Tooltip from "./Tooltip.vue";
-import Accordion from "./Accordion.vue";
-import AccordionItem from "./AccordionItem.vue";
+
+// Lazyloaded modules
+const asyncRegisterVeeValidate = () =>
+    import("./registerVeeValidate").then(m => m.default);
+const Accordion = () => import("./Accordion");
+const AccordionItem = () => import("./AccordionItem");
+const Button = () => import("./Button");
+const TextInput = () => import("./Form/input/TextInput.vue");
+const PasswordInput = () => import("./Form/input/PasswordInput.vue");
+const InlineTextInput = () => import("./Form/input/InlineTextInput.vue");
+const TextArea = () => import("./Form/input/TextArea.vue");
+const Icon = () => import("./Icon.vue");
+const Checkbox = () => import("./Form/input/Checkbox.vue");
+const Radio = () => import("./Form/input/Checkbox.vue");
+const Select = () => import("./Form/input/Select.vue");
+const SelectOption = () => import("./Form/input/SelectOption.vue");
+const FormGroup = () => import("./Form/FormGroup.vue");
+const InputGroup = () => import("./Form/InputGroup.vue");
+const MandatoryStar = () => import("./Form/utils/MandatoryStar.vue");
+const FormParagraph = () => import("./Form/FormParagraph.vue");
+const Menu = () => import("./Menu/Menu.vue");
+const MenuItem = () => import("./Menu/Menu.vue");
+const Dropdown = () => import("./Dropdown.vue");
+const CustomFilter = () => import("./Filter.vue");
+const FullBottomSection = () => import("./FullBottomSection.vue");
+const Modal = () => import("./Modal.vue");
+const Callout = () => import("./Callout.vue");
+const SidePanel = () => import("./SidePanel.vue");
+const Sort = () => import("./Sort.vue");
+const Autocomplete = () => import("./Autocomplete.vue");
+const Spinner = () => import("./Spinner.vue");
+const CheckableGroup = () => import("./Form/CheckableGroup.vue");
+const Datepicker = () => import("./Datepicker.vue");
+const Tag = () => import("./Tag.vue");
+const Pagination = () => import("./Pagination.vue");
+const PanelInfo = () => import("./PanelInfo.vue");
+const Link = () => import("./Link.vue");
+const MapV2 = () => import("./Map.vue");
+const InfoBanner = () => import("./InfoBanner.vue");
+const Tooltip = () => import("./Tooltip.vue");
+const AutocompleteVue = () => import("@trevoreyre/autocomplete-vue");
 
 export default function(vueInstance) {
     vueInstance.component("Button", Button);
@@ -91,25 +83,7 @@ export default function(vueInstance) {
 
     vueInstance.use(notifications);
     vueInstance.component("NotificationsGroup", NotificationsGroup);
-    vueInstance.component("ValidationProvider", ValidationProvider);
-
-    vueInstance.component("ValidationObserver", ValidationObserver);
-
     vueInstance.component("AutocompleteVue", AutocompleteVue);
 
-    // Vee Validate (Form Validation)
-    localize({
-        en,
-        fr,
-        bg,
-        ro
-    });
-
-    Object.keys(rules).forEach(rule => {
-        extend(rule, {
-            ...rules[rule] // copies rule configuration
-        });
-    });
-
-    localize("fr");
+    asyncRegisterVeeValidate().then(m => m(vueInstance));
 }
