@@ -72,7 +72,7 @@ jobs:
 
       - name: "Wait for localhost"
         run: |
-          timeout -s TERM 30 bash -c \
+          timeout -s TERM 120 bash -c \
             'while [[ "$(curl -k -s -o /dev/null -L -w ''%{http_code}'' ${0})" != "200" ]]; do\
                 echo "🔹 Next ping in 5 seconds";\
                 sleep 5;\
