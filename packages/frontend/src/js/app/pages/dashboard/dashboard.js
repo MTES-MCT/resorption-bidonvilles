@@ -73,7 +73,6 @@ export default {
                     faIcon: "tint",
                     label: "Accès à l'eau",
                     id: "waterAccessConditions",
-                    // id: "accessToWater",
                     options: [
                         {
                             value: "true",
@@ -221,7 +220,6 @@ export default {
                                 .map(option => option.value);
                             visibleTowns = visibleTowns.filter(
                                 town =>
-                                    //                                    allowed.indexOf(town.accessToWater) !== -1
                                     allowed.indexOf(
                                         town.waterAccessConditions
                                     ) !== -1
