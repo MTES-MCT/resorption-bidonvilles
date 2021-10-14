@@ -3,8 +3,6 @@
 </template>
 
 <script>
-import store from "#app/store";
-
 export default {
     data() {
         return {
@@ -15,10 +13,10 @@ export default {
     computed: {
         sort: {
             get() {
-                return store.state.activities.sort;
+                return this.$store.state.activities.sort;
             },
             set(value) {
-                store.commit("setActivitiesSort", value);
+                this.$store.commit("setActivitiesSort", value);
             }
         }
     }

@@ -10,8 +10,6 @@
 </template>
 
 <script>
-import store from "#app/store";
-
 export default {
     data() {
         return {
@@ -45,10 +43,10 @@ export default {
     computed: {
         activityTypes: {
             get() {
-                return store.state.activities.filters.activityTypes;
+                return this.$store.state.activities.filters.activityTypes;
             },
             set(value) {
-                store.commit("setActivityTypesFilter", value);
+                this.$store.commit("setActivityTypesFilter", value);
             }
         }
     }

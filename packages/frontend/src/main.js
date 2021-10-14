@@ -1,9 +1,12 @@
 import "./init/styles";
+import "./init/formatDate";
 import registerGlobalComponents from "#app/components/ui/registerGlobalComponents";
 
 // Import vue libs
 import VueI18n from "vue-i18n";
 import messages from "#app/messages";
+import initStore from "#app/store";
+import Guard from "./js/app/components/Guard";
 
 // Lazyload non critical modules (Sentry, Matomo, VeeValidate)
 const asyncMatomo = import("./init/matomo").then(m => m.default);
@@ -19,9 +22,11 @@ export default function(Vue, { appOptions }) {
 
     // Register lazy loaded components
     registerGlobalComponents(Vue);
+    Vue.component("Guard", Guard);
 
     // Init critical stuff
     Vue.use(VueI18n);
+    appOptions.store = initStore(Vue);
     appOptions.i18n = new VueI18n({
         locale: "fr",
         messages

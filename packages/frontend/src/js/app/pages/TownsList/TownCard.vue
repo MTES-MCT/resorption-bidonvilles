@@ -9,7 +9,7 @@
         @mouseenter="isHover = true"
         @mouseleave="isHover = false"
     >
-        <router-link :to="`site/${shantytown.id}`">
+        <router-link :to="`/site/${shantytown.id}`">
             <div class="-mt-1 print:mt-0">
                 <div class="mb-4 px-6">
                     <Tag
@@ -246,7 +246,7 @@
                         <transition name="fade" v-if="isOpen">
                             <router-link
                                 v-if="isHover"
-                                :to="`site/${shantytown.id}/mise-a-jour`"
+                                :to="`/site/${shantytown.id}/mise-a-jour`"
                             >
                                 <Button
                                     variant="primaryText"
