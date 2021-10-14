@@ -8,9 +8,9 @@ import {
 /*eslint import/namespace: ['error', { allowComputed: true }]*/
 import * as rules from "vee-validate/dist/rules";
 import fr from "vee-validate/dist/locale/fr.json";
-import en from "vee-validate/dist/locale/en";
-import ro from "vee-validate/dist/locale/ro";
-import bg from "vee-validate/dist/locale/bg";
+import en from "vee-validate/dist/locale/en.json";
+import ro from "vee-validate/dist/locale/ro.json";
+import bg from "vee-validate/dist/locale/bg.json";
 
 import notifications from "vue-notification/dist/ssr";
 import Button from "./Button.vue";
