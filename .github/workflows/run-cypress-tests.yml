@@ -83,12 +83,12 @@ jobs:
       # build and fill database
       - name: "Generate database structure"
         working-directory: ./resorption-bidonvilles-deploy
-        run: make dev exec rb_api "yarn sequelize db:migrate"
+        run: make dev-exec rb_api "yarn sequelize db:migrate"
         continue-on-error: true
 
       - name: "Insert test data"
         working-directory: ./resorption-bidonvilles-deploy
-        run: make dev exec rb_api "yarn sequelize db:seed --seed 000001-users.js"
+        run: make dev-exec rb_api "yarn sequelize db:seed --seed 000001-users.js"
         continue-on-error: true
 
       # run tests, at last
