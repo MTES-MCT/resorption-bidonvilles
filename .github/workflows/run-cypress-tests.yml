@@ -93,5 +93,5 @@ jobs:
 
       # run tests, at last
       - name: "Run tests"
-        working-directory: ./resorption-bidonvilles/packages/api
+        working-directory: ./resorption-bidonvilles/packages/frontend
         run: yarn test
