@@ -10,10 +10,10 @@ import { all as fetchAllPois } from "#helpers/api/poi";
 import { get as getConfig, getPermission } from "#helpers/api/config";
 import { open } from "#helpers/tabHelper";
 
-import iconType from "../../../../../public/img/type.svg";
-import iconPeople from "../../../../../public/img/people.svg";
-import iconStatus from "../../../../../public/img/status.svg";
-import iconPin from "../../../../../public/img/pin.svg";
+import iconType from "../../../../../static/img/type.svg";
+import iconPeople from "../../../../../static/img/people.svg";
+import iconStatus from "../../../../../static/img/status.svg";
+import iconPin from "../../../../../static/img/pin.svg";
 
 /**
  * Returns the appropriate zoom level for the given location type

@@ -6,7 +6,7 @@
             <div class="max-w-sm mx-auto py-10">
                 <img
                     class="h-24 mx-auto mb-8"
-                    src="../../../../../public/img/town.png"
+                    src="../../../../../static/img/town.png"
                 />
 
                 <h1 class="text-display-lg text-center mb-8">
