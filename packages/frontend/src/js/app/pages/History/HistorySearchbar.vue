@@ -15,7 +15,6 @@
 
 <script>
 import GeoSearchbar from "#app/components/GeoSearchbar/GeoSearchbar.vue";
-import store from "#app/store";
 
 export default {
     components: {
@@ -25,14 +24,14 @@ export default {
     computed: {
         location: {
             get() {
-                return store.state.activities.filters.location;
+                return this.$store.state.activities.filters.location;
             },
             set(value) {
                 if (value) {
-                    store.commit("saveLocation", value);
+                    this.$store.commit("saveLocation", value);
                 }
 
-                store.commit("setActivityLocationFilter", value);
+                this.$store.commit("setActivityLocationFilter", value);
                 this.$emit("locationChange");
             }
         }
