@@ -73,12 +73,12 @@ jobs:
         continue-on-error: true
 
       - name: "Wait for localhost"
-        uses: nev7n/wait_for_response@v1
-        with:
-          url: 'https://resorption-bidonvilles.localhost/'
-          responseCode: 200
-          timeout: 300000
-          interval: 2000
+        run: |
+          timeout -s TERM 30 bash -c \
+            'while [[ "$(curl -k -s -o /dev/null -L -w ''%{http_code}'' ${0})" != "200" ]]; do\
+                echo "🔹 Next ping in 5 seconds";\
+                sleep 5;\
+            done' "https://resorption-bidonvilles.localhost"
 
       # build and fill database
       - name: "Generate database structure"
