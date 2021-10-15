@@ -10,7 +10,7 @@ module.exports = {
     siteDescription:
         "Résorption-bidonvilles, outil d’information, de partage et de pilotage, la plateforme offre une solution performante et efficace pour la résorption des bidonvilles.",
     siteUrl: "https://resorption-bidonvilles.beta.gouv.fr/",
-    titleTemplate: "%s Résorption Bidonvilles ",
+    titleTemplate: "Résorption Bidonvilles",
     icon: {
         favicon: "./static/img/logo-marianne.svg"
     },
