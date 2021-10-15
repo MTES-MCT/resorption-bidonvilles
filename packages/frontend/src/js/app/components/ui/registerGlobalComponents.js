@@ -1,10 +1,9 @@
 // This module cannot be lazyloaded as it's defined in src/App.vue
 import notifications from "vue-notification/dist/ssr";
 import NotificationsGroup from "./NotificationsGroup.vue";
+import registerVeeValidate from "./registerVeeValidate";
 
 // Lazyloaded modules
-const asyncRegisterVeeValidate = () =>
-    import("./registerVeeValidate").then(m => m.default);
 const Accordion = () => import("./Accordion");
 const AccordionItem = () => import("./AccordionItem");
 const Button = () => import("./Button");
@@ -85,5 +84,5 @@ export default function(vueInstance) {
     vueInstance.component("NotificationsGroup", NotificationsGroup);
     vueInstance.component("AutocompleteVue", AutocompleteVue);
 
-    asyncRegisterVeeValidate().then(m => m(vueInstance));
+    registerVeeValidate(vueInstance);
 }
