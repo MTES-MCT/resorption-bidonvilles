@@ -82,7 +82,7 @@ export default {
             (this.beforeEnter && guardGroups[this.beforeEnter]) || [];
         for (const guard of guards) {
             if (guard === "isLoggedIn" && !isLoggedIn()) {
-                this.$router.push("/connexion");
+                this.$router.push("/connexion?r=1");
             }
             if (guard === "isConfigLoaded" && !isConfigLoaded()) {
                 await this.loadConfig();
