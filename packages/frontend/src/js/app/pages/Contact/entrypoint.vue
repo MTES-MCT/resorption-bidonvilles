@@ -10,7 +10,8 @@
 <script>
 export default {
     metaInfo: {
-        title: "Contact -"
+        title: "Contact",
+        titleTemplate: "%s - Résorption Bidonvilles"
     },
     components: {
         Page: () => import("./index.vue")
