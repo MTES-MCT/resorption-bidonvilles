@@ -94,32 +94,44 @@ export default {
                     window.scrollTo(0, el.offsetTop);
                 }
             }
+        },
+        observe(nbTries = 1) {
+            // On mount, dom isn't always ready
+            // Loop until expected divs are present
+            if (!document.querySelector("#people") && nbTries < 10) {
+                setTimeout(() => {
+                    this.observe(nbTries + 1);
+                }, 50);
+                return;
+            }
+
+            const callback = entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        this.activeSection = entry.target.id;
+                    }
+                });
+            };
+
+            let observer = new IntersectionObserver(callback, {
+                rootMargin: "0px",
+                threshold: 0.5
+            });
+
+            observer.observe(document.querySelector("#intervenants"));
+            if (this.town.plans.length) {
+                observer.observe(document.querySelector("#plans"));
+            }
+
+            this.hasJusticePermission &&
+                observer.observe(document.querySelector("#judicial"));
+            observer.observe(document.querySelector("#living_conditions"));
+            observer.observe(document.querySelector("#people"));
+            observer.observe(document.querySelector("#characteristics"));
         }
     },
     mounted() {
-        const callback = entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    this.activeSection = entry.target.id;
-                }
-            });
-        };
-
-        let observer = new IntersectionObserver(callback, {
-            rootMargin: "0px",
-            threshold: 0.5
-        });
-
-        observer.observe(document.querySelector("#intervenants"));
-        if (this.town.plans.length) {
-            observer.observe(document.querySelector("#plans"));
-        }
-
-        this.hasJusticePermission &&
-            observer.observe(document.querySelector("#judicial"));
-        observer.observe(document.querySelector("#living_conditions"));
-        observer.observe(document.querySelector("#people"));
-        observer.observe(document.querySelector("#characteristics"));
+        this.observe();
     }
 };
 </script>

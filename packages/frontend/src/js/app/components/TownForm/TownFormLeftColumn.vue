@@ -35,24 +35,38 @@ export default {
             activeSection: "characteristics"
         };
     },
-    mounted() {
-        const callback = entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    this.activeSection = entry.target.id;
-                }
+    methods: {
+        observe(nbTries = 1) {
+            // On mount, dom isn't always ready
+            // Loop until expected divs are present
+            if (!document.querySelector("#people") && nbTries < 10) {
+                setTimeout(() => {
+                    this.observe(nbTries + 1);
+                }, 50);
+                return;
+            }
+
+            const callback = entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        this.activeSection = entry.target.id;
+                    }
+                });
+            };
+
+            let observer = new IntersectionObserver(callback, {
+                rootMargin: "0px",
+                threshold: 0.2
             });
-        };
 
-        let observer = new IntersectionObserver(callback, {
-            rootMargin: "0px",
-            threshold: 0.2
-        });
-
-        observer.observe(document.querySelector("#judicial"));
-        observer.observe(document.querySelector("#living_conditions"));
-        observer.observe(document.querySelector("#people"));
-        observer.observe(document.querySelector("#characteristics"));
+            observer.observe(document.querySelector("#judicial"));
+            observer.observe(document.querySelector("#living_conditions"));
+            observer.observe(document.querySelector("#people"));
+            observer.observe(document.querySelector("#characteristics"));
+        }
+    },
+    mounted() {
+        this.observe();
     }
 };
 </script>
