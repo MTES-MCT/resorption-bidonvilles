@@ -1,6 +1,11 @@
 <template>
     <div>
         <slot v-if="ready" />
+        <PrivateLayout v-else-if="error">
+            <LoadingError>
+                {{ error }}
+            </LoadingError>
+        </PrivateLayout>
         <div v-else class="flex justify-center items-center h-screen">
             <div class="text-center text-primary text-display-md">
                 <Spinner />
@@ -20,6 +25,9 @@ import {
 import { isLoggedIn, logout } from "#helpers/api/user";
 import * as Sentry from "@sentry/vue";
 import { setCustomVariables } from "#matomo/matomo";
+import PrivateLayout from "#app/components/PrivateLayout";
+import LoadingError from "#app/components/PrivateLayout/LoadingError.vue";
+
 const guardGroups = {
     anonymous: ["anonymous"],
     loggedIn: ["isLoggedIn"],
@@ -48,6 +56,10 @@ const guardGroups = {
     home: ["home"]
 };
 export default {
+    components: {
+        PrivateLayout,
+        LoadingError
+    },
     props: {
         ssr: {
             type: Boolean,
@@ -85,7 +97,13 @@ export default {
                 this.$router.push("/connexion?r=1");
             }
             if (guard === "isConfigLoaded" && !isConfigLoaded()) {
-                await this.loadConfig();
+                try {
+                    await this.loadConfig();
+                } catch (response) {
+                    this.error =
+                        response?.user_message || "Une erreur est survenue.";
+                    return;
+                }
             }
             if (guard === "isPermitted" && !this.isPermitted(this.$route)) {
                 this.$router.push("/");
@@ -109,21 +127,15 @@ export default {
         this.ready = true;
     },
     methods: {
-        loadConfig() {
+        async loadConfig() {
             if (isConfigLoaded() === true) {
                 this.configLoaded = true;
                 return;
             }
             this.error = null;
-            return load()
-                .then(user => {
-                    Sentry.setUser({ id: user.id });
-                    setCustomVariables(this.$piwik, user);
-                })
-                .catch(response => {
-                    console.log("Error while loading", response);
-                    this.error = response.user_message;
-                });
+            const user = await load();
+            Sentry.setUser({ id: user.id });
+            setCustomVariables(this.$piwik, user);
         },
         /**
          * Checks whether the user has an unread changelog pending
