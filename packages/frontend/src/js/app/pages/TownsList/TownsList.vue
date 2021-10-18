@@ -53,7 +53,7 @@
                                         <div>
                                             {{ populationTotal }} personnes
                                         </div>
-                                        <div>
+                                        <div data-cy="nbSites">
                                             {{ filteredShantytowns.length }}
                                             sites
                                         </div>
