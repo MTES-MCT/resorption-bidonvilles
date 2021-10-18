@@ -534,14 +534,14 @@ module.exports = mode => ([
      ********************************************************************************************* */
     body('owner_complaint')
         .customSanitizer((value, { req }) => {
-            if (req.user.permissions.shantytown[mode].data_justice !== true) {
+            if (!req.user.isAllowedTo('access', 'shantytown_justice')) {
                 return null;
             }
 
             return value;
         })
         .optional({ nullable: true })
-        .if((value, { req }) => req.user.permissions.shantytown[mode].data_justice === true)
+        .if((value, { req }) => req.user.isAllowedTo('access', 'shantytown_justice'))
         .toInt()
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "Dépôt de plainte par le propriétaire" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
@@ -551,13 +551,13 @@ module.exports = mode => ([
      ********************************************************************************************* */
     body('justice_procedure')
         .customSanitizer((value, { req }) => {
-            if (req.user.permissions.shantytown[mode].data_justice !== true) {
+            if (!req.user.isAllowedTo('access', 'shantytown_justice')) {
                 return null;
             }
 
             return value;
         })
-        .if((value, { req }) => req.user.permissions.shantytown[mode].data_justice === true)
+        .if((value, { req }) => req.user.isAllowedTo('access', 'shantytown_justice'))
         .exists({ checkNull: true }).bail().withMessage('Le champ "Existence d\'une procédure judiciaire" est obligatoire')
         .toInt()
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "Existence d\'une procédure judiciaire" est invalide')

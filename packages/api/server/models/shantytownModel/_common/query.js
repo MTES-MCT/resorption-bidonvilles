@@ -58,7 +58,7 @@ module.exports = async (where = [], order = ['departements.code ASC', 'cities.na
     const serializedTowns = towns.reduce(
         (object, town) => {
             /* eslint-disable no-param-reassign */
-            object.hash[town.id] = serializeShantytown(town, user.permissions.shantytown[feature]);
+            object.hash[town.id] = serializeShantytown(town, user.permissions);
             object.ordered.push(object.hash[town.id]);
             /* eslint-enable no-param-reassign */
             return object;
@@ -123,7 +123,7 @@ module.exports = async (where = [], order = ['departements.code ASC', 'cities.na
     const [history, comments, covidComments, closingSolutions, actors, plans] = await Promise.all(promises);
 
     if (history !== undefined && history.length > 0) {
-        const serializedHistory = history.map(h => serializeShantytown(h, user.permissions.shantytown[feature]));
+        const serializedHistory = history.map(h => serializeShantytown(h, user.permissions));
         for (let i = 1, { id } = serializedHistory[0]; i <= serializedHistory.length; i += 1) {
             if (!serializedHistory[i] || id !== serializedHistory[i].id) {
                 if (!serializedTowns.hash[id]) {

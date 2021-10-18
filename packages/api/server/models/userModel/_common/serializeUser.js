@@ -1,6 +1,3 @@
-const permissionsDescription = require('#server/permissions_description');
-const { getPermissionsFor } = require('#server/utils/permission');
-
 /**
  * @typedef {Object} UserFilters
  * @property {Boolean} [extended=false] Whether extended data should be returned or not
@@ -98,37 +95,12 @@ module.exports = (user, latestCharte, filters, permissionMap) => {
     }
 
     if (filters.extended === true) {
-        const roleDescription = permissionsDescription[serialized.role_id];
-        const permissions = getPermissionsFor(user, permissionMap);
+        const permissions = (permissionMap && permissionMap[user.id]) || {};
 
         Object.assign(serialized, {
             access_request_message: user.access_request_message,
             permissions,
-            permission_options: roleDescription ? roleDescription.options.reduce((options, { id }) => {
-                switch (id) {
-                    case 'close_shantytown':
-                        if (permissions.shantytown && permissions.shantytown.close && permissions.shantytown.close.allowed) {
-                            return [...options, id];
-                        }
-                        break;
-
-                    case 'create_and_close_shantytown':
-                        if (permissions && permissions.shantytown && permissions.shantytown.close && permissions.shantytown.close.allowed) {
-                            return [...options, id];
-                        }
-                        break;
-
-                    case 'hide_justice':
-                        if (permissions.shantytown && permissions.shantytown.list && !permissions.shantytown.list.data_justice) {
-                            return [...options, id];
-                        }
-                        break;
-
-                    default:
-                }
-
-                return options;
-            }, []) : [],
+            permission_options: user.permission_options,
         });
     }
 

@@ -25,7 +25,10 @@ describe.only('shantytownModel.update()', () => {
             const editor = generateUser({
                 permissions: {
                     shantytown: {
-                        update: { allowed: true, data_justice: false },
+                        update: { allowed: true },
+                    },
+                    shantytown_justice: {
+                        access: { allowed: false },
                     },
                 },
             });

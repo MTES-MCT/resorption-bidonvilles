@@ -77,7 +77,7 @@ module.exports = async (townData, user) => {
             Object.assign(
                 {},
                 baseTown,
-                user.permissions.shantytown.create.data_justice === true
+                user.isAllowedTo('access', 'shantytown_justice')
                     ? {
                         ownerComplaint: townData.owner_complaint,
                         justiceProcedure: townData.justice_procedure,

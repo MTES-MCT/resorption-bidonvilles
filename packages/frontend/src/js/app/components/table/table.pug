@@ -29,7 +29,7 @@
                 <td :colspan="parsedColumns.length">{{ emptyLabel }}</td>
             </tr>
 
-            <tr v-for="(row, index) in currentPageContent" :class="index % 2 === 0 ? 'table-row--odd' : ''" @click="click($event, row)">
+            <tr v-for="(row, index) in currentPageContent" :class="index % 2 === 0 ? 'table-row--odd' : ''" @click="click($event, row)" :href="'/dispositif/'+row.id">
                 <td v-for="column in parsedColumns" :class="`table-col--${column.id}`">
                     <slot :name="column.id" v-bind:row="row">
                         <span v-html="row[column.id]"></span>

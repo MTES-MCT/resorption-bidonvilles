@@ -7,7 +7,6 @@ const findOneAssociation = require('./findOneAssociation');
 const findOneById = require('./findOneById');
 const findOneByLocation = require('./findOneByLocation');
 const getName = require('./getName');
-const setCustomPermissions = require('./setCustomPermissions');
 const setIntervenant = require('./setIntervenant');
 
 module.exports = () => ({
@@ -20,6 +19,5 @@ module.exports = () => ({
     findOneById,
     findOneByLocation,
     getName,
-    setCustomPermissions,
     setIntervenant,
 });
