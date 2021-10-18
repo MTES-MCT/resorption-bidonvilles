@@ -1,3 +1,5 @@
+import "cypress-localstorage-commands";
+
 import "./checkShantytownDetails";
 import "./chooseDate";
 import "./emptyAdressAutocompleter";

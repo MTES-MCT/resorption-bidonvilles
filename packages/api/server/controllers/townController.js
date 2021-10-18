@@ -1242,7 +1242,7 @@ module.exports = (models) => {
                 sections.push(section);
             }
 
-            if (options.indexOf('justice') !== -1 && req.user.permissions.shantytown.export.data_justice === true) {
+            if (options.indexOf('justice') !== -1 && req.user.isAllowedTo('access', 'shantytown_justice')) {
                 sections.push({
                     title: 'Procédure judiciaire',
                     properties: [

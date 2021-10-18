@@ -53,7 +53,7 @@
                                         <div>
                                             {{ populationTotal }} personnes
                                         </div>
-                                        <div>
+                                        <div data-cy="nbSites">
                                             {{ filteredShantytowns.length }}
                                             sites
                                         </div>
@@ -390,10 +390,10 @@ export default {
     },
     data() {
         const { field_types: fieldTypes } = getConfig();
-        const permission = getPermission("shantytown.list");
+        const permission = getPermission("shantytown_justice.access");
 
         return {
-            hasJusticePermission: permission.data_justice === true,
+            hasJusticePermission: permission !== null,
             fieldTypes,
             exportIsVisible: false,
             printMode: false,

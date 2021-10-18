@@ -109,7 +109,7 @@ module.exports = async (userLocation, permissions, location) => {
             };
 
             const previousVersion = previousVersions[activity.id] || null;
-            const serializedShantytown = serializeShantytown(activity, permissions['shantytown.list']);
+            const serializedShantytown = serializeShantytown(activity, permissions);
             previousVersions[activity.id] = serializedShantytown;
 
             if (previousVersion === null) {

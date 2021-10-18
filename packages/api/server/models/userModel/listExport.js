@@ -14,12 +14,11 @@ module.exports = async () => sequelize.query(
             ELSE 'Lien d''activation toujours valide'
         END AS "Statut",
         TO_CHAR(lua.used_at :: DATE, 'dd/mm/yyyy') AS "Date d'activation du compte",
-        u.fk_role AS "Rôle de l'acteur",
+        u.fk_role AS "Rôle administrateur de l'acteur",
         TO_CHAR(u.last_access :: DATE, 'dd/mm/yyyy hh:mm:ss') AS "Date et heure de dernière connexion",    
-        u.fk_role AS "Rôle de l'acteur",
         o.name AS "Organisation",
         o.abbreviation AS "Organisation abbr",
-        rr.name AS "Rôle de l'organisation",
+        rr.name AS "Rôle de l'acteur",
         o.region_code AS "Code région",
         o.region_name AS "Région",
         o.departement_code AS "Code département",
@@ -31,9 +30,7 @@ module.exports = async () => sequelize.query(
     LEFT JOIN
         localized_organizations o ON o.organization_id = u.fk_organization
     LEFT JOIN
-       organization_types ot ON ot.organization_type_id = o.fk_type
-    LEFT JOIN
-       roles_regular rr ON rr.role_id = ot.fk_role
+       roles_regular rr ON rr.role_id = u.fk_role_regular
     WHERE
         lua.user_access_id IS NOT NULL 
     AND

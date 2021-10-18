@@ -7,10 +7,6 @@
                 <div class="mb-8">
                     <div class="font-bold">Accès « {{ user.role }} »</div>
                     <div>{{ permission.description }}</div>
-                    <div class="text-info">
-                        <Icon icon="info-circle" />&nbsp; Les paramètres d'accès
-                        sont identiques pour tous les membres d'une structure.
-                    </div>
                 </div>
 
                 <div class="ml-8">
@@ -47,7 +43,7 @@
                             :id="`option-${optionIndex}`"
                             :value="checkedOptions"
                             @input="val => $emit('update:checkedOptions', val)"
-                            :disabled="user.organization.active"
+                            :disabled="user.status !== 'new'"
                         />
                     </div>
                 </div>
