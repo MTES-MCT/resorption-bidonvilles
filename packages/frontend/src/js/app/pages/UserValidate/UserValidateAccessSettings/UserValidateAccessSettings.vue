@@ -43,7 +43,7 @@
                             :id="`option-${optionIndex}`"
                             :value="checkedOptions"
                             @input="val => $emit('update:checkedOptions', val)"
-                            :disabled="user.status === 'new'"
+                            :disabled="user.status !== 'new'"
                         />
                     </div>
                 </div>
