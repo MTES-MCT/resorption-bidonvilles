@@ -1,10 +1,44 @@
-const query = require('./_common/query');
+const { sequelize } = require('#db/models');
 
 /**
- * Returns a permission map for the requested owners only
+ * @param {Array.<Number>} owners User ids
  *
- * @param {PermissionOwners} owners
- *
- * @returns {PermissionMap}
+ * @returns {Object}
  */
-module.exports = owners => query(owners);
+module.exports = async (owners) => {
+    const permissions = await sequelize.query(`
+        SELECT
+            uap.user_id,
+            uap.fk_entity AS entity,
+            uap.fk_feature AS feature,
+            uap.allowed,
+            uap.fk_geographic_level AS geographic_level
+        FROM user_actual_permissions uap
+        WHERE uap.user_id IN (:owners)
+        ORDER BY user_id ASC, entity ASC, feature ASC
+    `, {
+        type: sequelize.QueryTypes.SELECT,
+        replacements: {
+            owners,
+        },
+    });
+
+    return permissions.reduce((argAcc, row) => {
+        const acc = { ...argAcc };
+        if (!acc[row.user_id]) {
+            acc[row.user_id] = {};
+        }
+
+        if (!acc[row.user_id][row.entity]) {
+            acc[row.user_id][row.entity] = {};
+        }
+
+        const permission = {
+            allowed: row.allowed,
+            geographic_level: row.geographic_level,
+        };
+
+        acc[row.user_id][row.entity][row.feature] = permission;
+        return acc;
+    }, {});
+};

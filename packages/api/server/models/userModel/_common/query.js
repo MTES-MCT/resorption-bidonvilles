@@ -3,7 +3,7 @@ const charteEngagementModel = require('#server/models/charteEngagementModel')();
 const permissionModel = require('#server/models/permissionModel')();
 const serializeUser = require('./serializeUser');
 
-module.exports = async (where = [], filters, user = null, feature) => {
+module.exports = async (where = [], filters, user = null, feature, transaction) => {
     const replacements = {};
 
     if (user !== null) {
@@ -44,7 +44,11 @@ module.exports = async (where = [], filters, user = null, feature) => {
     }
 
     const users = await sequelize.query(
-        `SELECT
+        `WITH user_options AS (
+            SELECT fk_user, ARRAY_AGG(fk_option) AS options FROM user_permission_options GROUP BY fk_user
+        )
+
+        SELECT
             users.user_id AS id,
             users.first_name,
             users.last_name,
@@ -65,8 +69,8 @@ module.exports = async (where = [], filters, user = null, feature) => {
             CASE WHEN users.fk_role IS NULL THEN FALSE
                 ELSE TRUE
             END AS is_admin,
-            users.fk_role AS role,
-            roles_admin.name AS role_name,
+            users.fk_role AS user_role_admin,
+            roles_admin.name AS user_role_admin_name,
             organizations.organization_id,
             organizations.name AS organization_name,
             organizations.abbreviation AS organization_abbreviation,
@@ -88,8 +92,8 @@ module.exports = async (where = [], filters, user = null, feature) => {
             organization_types.name_singular AS organization_type_name_singular,
             organization_types.name_plural AS organization_type_name_plural,
             organization_types.abbreviation AS organization_type_abbreviation,
-            organization_types.fk_role AS organization_type_role,
-            roles_regular.name AS organization_type_role_name,
+            users.fk_role_regular AS user_role_regular,
+            roles_regular.name AS user_role_regular_name,
             organization_categories.uid AS organization_category_id,
             organization_categories.name_singular AS organization_category_name_singular,
             organization_categories.name_plural AS organization_category_name_plural,
@@ -103,7 +107,8 @@ module.exports = async (where = [], filters, user = null, feature) => {
             activator.last_name AS activator_last_name,
             activator.position AS activator_position,
             activator_organization.organization_id AS activator_organization_id,
-            activator_organization.name AS activator_organization_name
+            activator_organization.name AS activator_organization_name,
+            COALESCE(user_options.options, array[]::varchar[]) AS permission_options
         FROM
             users
         LEFT JOIN
@@ -121,7 +126,9 @@ module.exports = async (where = [], filters, user = null, feature) => {
         LEFT JOIN
             organizations AS activator_organization ON activator.fk_organization = activator_organization.organization_id
         LEFT JOIN
-            roles_regular ON organization_types.fk_role = roles_regular.role_id
+            roles_regular ON users.fk_role_regular = roles_regular.role_id
+        LEFT JOIN
+            user_options ON user_options.fk_user = users.user_id
         ${where.length > 0 ? `WHERE ${whereClause}` : ''}
         ORDER BY
             CASE
@@ -140,6 +147,7 @@ module.exports = async (where = [], filters, user = null, feature) => {
         {
             type: sequelize.QueryTypes.SELECT,
             replacements,
+            transaction,
         },
     );
 
@@ -149,30 +157,7 @@ module.exports = async (where = [], filters, user = null, feature) => {
 
     let permissionMap = null;
     if (filters.extended === true) {
-        const permissionOwners = users.reduce((acc, row) => {
-            if (row.is_admin === true) {
-                if (!Object.prototype.hasOwnProperty.call(acc, 'role_admin')) {
-                    acc.role_admin = [];
-                }
-
-                acc.role_admin.push(row.role);
-            } else {
-                if (acc.organization.indexOf(row.organization_id) === -1) {
-                    acc.organization.push(row.organization_id);
-                }
-
-                if (acc.role_regular.indexOf(row.organization_type_role) === -1) {
-                    acc.role_regular.push(row.organization_type_role);
-                }
-            }
-
-            return acc;
-        }, {
-            organization: [],
-            role_regular: [],
-        });
-
-        permissionMap = await permissionModel.find(permissionOwners);
+        permissionMap = await permissionModel.find(users.map(({ id }) => id));
     }
 
     return users.map(row => serializeUser(row, latestCharte, filters, permissionMap));

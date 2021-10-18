@@ -102,9 +102,8 @@ export default {
                     id: "justice",
                     label: "Procédures judiciaires",
                     permission: {
-                        entity: "shantytown",
-                        feature: "export",
-                        data: "justice"
+                        entity: "shantytown_justice",
+                        feature: "access"
                     }
                 },
                 {
@@ -117,8 +116,7 @@ export default {
                     description: ": les 5 derniers",
                     permission: {
                         entity: "shantytown_comment",
-                        feature: "list",
-                        data: null
+                        feature: "list"
                     }
                 },
                 {
@@ -126,8 +124,7 @@ export default {
                     label: "Commentaires Covid-19",
                     permission: {
                         entity: "covid_comment",
-                        feature: "list",
-                        data: null
+                        feature: "list"
                     }
                 }
             ],
@@ -150,16 +147,10 @@ export default {
                         return true;
                     }
 
-                    const p = getPermission(
-                        `${permission.entity}.${permission.feature}`
-                    );
-                    if (p === null) {
-                        return false;
-                    }
-
                     return (
-                        permission.data === null ||
-                        p[`data_${permission.data}`] === true
+                        getPermission(
+                            `${permission.entity}.${permission.feature}`
+                        ) !== null
                     );
                 });
         }

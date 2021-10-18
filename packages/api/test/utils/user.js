@@ -60,12 +60,15 @@ module.exports = {
             access_request_message: 'Demande d\'accès pour tests automatisés',
             permissions: {
                 shantytown: {
-                    create: { allowed: true, geographic_level: 'nation', data_justice: true },
-                    list: { allowed: true, geographic_level: 'nation', data_justice: true },
-                    read: { allowed: true, geographic_level: 'nation', data_justice: true },
-                    update: { allowed: true, geographic_level: 'nation', data_justice: true },
-                    close: { allowed: true, geographic_level: 'nation', data_justice: true },
-                    export: { allowed: true, geographic_level: 'nation', data_justice: true },
+                    create: { allowed: true, geographic_level: 'nation' },
+                    list: { allowed: true, geographic_level: 'nation' },
+                    read: { allowed: true, geographic_level: 'nation' },
+                    update: { allowed: true, geographic_level: 'nation' },
+                    close: { allowed: true, geographic_level: 'nation' },
+                    export: { allowed: true, geographic_level: 'nation' },
+                },
+                shantytown_justice: {
+                    access: { allowed: true, geographic_level: 'local' },
                 },
                 shantytown_comment: {
                     create: { allowed: true, geographic_level: 'nation' },
@@ -74,17 +77,17 @@ module.exports = {
                     listPrivate: { allowed: true, geographic_level: 'nation' },
                 },
                 plan: {
-                    create: { allowed: true, geographic_level: 'nation', data_finances: true },
-                    list: { allowed: true, geographic_level: 'nation', data_finances: true },
-                    read: { allowed: true, geographic_level: 'nation', data_finances: true },
-                    update: { allowed: true, geographic_level: 'own', data_finances: true },
-                    updateMarks: { allowed: true, geographic_level: 'own', data_finances: true },
-                    close: { allowed: true, geographic_level: 'own', data_finances: true },
+                    create: { allowed: true, geographic_level: 'nation' },
+                    list: { allowed: true, geographic_level: 'nation' },
+                    read: { allowed: true, geographic_level: 'nation' },
+                    update: { allowed: true, geographic_level: 'own' },
+                    updateMarks: { allowed: true, geographic_level: 'own' },
+                    close: { allowed: true, geographic_level: 'own' },
                 },
                 user: {},
                 stats: {},
                 plan_finances: {
-                    access: { allowed: true, geographic_level: 'nation' },
+                    access: { allowed: true, geographic_level: 'local' },
                 },
                 covid_comment: {
                     list: { allowed: true, geographic_level: 'nation' },
@@ -94,6 +97,8 @@ module.exports = {
             last_version: '0.0.0',
             last_changelog: '0.0.0',
         };
+
+        defaultUser.isAllowedTo = (feature, entity) => defaultUser.permissions && defaultUser.permissions[entity] && defaultUser.permissions[entity][feature] && defaultUser.permissions[entity][feature].allowed === true;
 
         return Object.assign(defaultUser, override);
     },

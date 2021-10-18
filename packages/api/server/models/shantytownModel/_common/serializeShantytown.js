@@ -5,7 +5,7 @@ function fromDateToTimestamp(date) {
     return date !== null ? (new Date(`${date}T00:00:00`).getTime() / 1000) : null;
 }
 
-module.exports = (town, permission) => {
+module.exports = (town, userPermissions) => {
     const serializedTown = {
         id: town.id,
         name: town.name,
@@ -147,8 +147,10 @@ module.exports = (town, permission) => {
     };
 
     // @todo: alter all dates to a datetime so it can be easily serialized (just like closed_at)
-    const restrictedData = {
-        data_justice: {
+    if (userPermissions.shantytown_justice
+        && userPermissions.shantytown_justice.access
+        && userPermissions.shantytown_justice.access.allowed === true) {
+        Object.assign(serializedTown, {
             ownerComplaint: town.ownerComplaint,
             justiceProcedure: town.justiceProcedure,
             justiceRendered: town.justiceRendered,
@@ -159,14 +161,8 @@ module.exports = (town, permission) => {
             policeRequestedAt: fromDateToTimestamp(town.policeRequestedAt),
             policeGrantedAt: fromDateToTimestamp(town.policeGrantedAt),
             bailiff: town.bailiff,
-        },
-    };
-
-    Object.keys(restrictedData)
-        .filter(dataPermission => permission[dataPermission] === true)
-        .forEach((dataPermission) => {
-            Object.assign(serializedTown, restrictedData[dataPermission]);
         });
+    }
 
     return serializedTown;
 };

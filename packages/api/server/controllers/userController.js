@@ -23,68 +23,6 @@ const {
 const { auth: authConfig } = require('#server/config');
 const { sequelize } = require('#db/models');
 
-function fromOptionToPermissions(user, option, dataJustice) {
-    switch (option.id) {
-        case 'close_shantytown':
-            return [
-                {
-                    entity: 'shantytown',
-                    feature: 'close',
-                    level: 'local',
-                    data: { data_justice: dataJustice },
-                    allowed: true,
-                },
-            ];
-
-        case 'create_and_close_shantytown':
-            return [
-                {
-                    entity: 'shantytown',
-                    feature: 'create',
-                    level: 'local',
-                    data: { data_justice: dataJustice },
-                    allowed: true,
-                },
-                {
-                    entity: 'shantytown',
-                    feature: 'close',
-                    level: 'local',
-                    data: { data_justice: dataJustice },
-                    allowed: true,
-                },
-            ];
-
-        case 'hide_justice': {
-            const defaultPermissions = user.permissions.shantytown || {};
-
-            return Object.keys(defaultPermissions).map(feature => ({
-                entity: 'shantytown',
-                feature,
-                level: defaultPermissions[feature].geographic_level,
-                data: { data_justice: false },
-                allowed: defaultPermissions[feature].allowed,
-            }));
-        }
-
-        default:
-            return [];
-    }
-}
-
-function fromOptionsToPermissions(user, options) {
-    if (options.length === 0) {
-        return [];
-    }
-
-    // special case of data_justice
-    const dataJustice = options.find(({ id }) => id === 'hide_justice') === undefined;
-
-    return options.reduce((permissions, option) => [
-        ...permissions,
-        ...fromOptionToPermissions(user, option, dataJustice),
-    ], []);
-}
-
 module.exports = models => ({
     async list(req, res) {
         try {
@@ -494,33 +432,21 @@ module.exports = models => ({
             });
         }
 
-        if (user.organization.active !== true) {
-            const { options } = permissionsDescription[user.role_id];
-            const requestedOptions = options.filter(({ id }) => req.body.options && req.body.options[id] === true);
-
-            // inject additional permissions related to options
-            const additionalPermissions = fromOptionsToPermissions(user, requestedOptions);
-            try {
-                await models.organization.setCustomPermissions(user.organization.id, additionalPermissions);
-            } catch (error) {
-                res.status(500).send({
-                    error: {
-                        user_message: 'Une erreur est survenue lors de la sauvegarde des options sélectionnées',
-                        developer_message: error.message,
-                    },
-                });
-                return next(error);
-            }
-        }
-
         try {
-            // reload the user to take options into account (they might have changed above)
             await sequelize.transaction(async (transaction) => {
+                const { options } = permissionsDescription[user.role_id];
+                const requestedOptions = options
+                    .filter(({ id }) => req.body.options && req.body.options[id] === true)
+                    .map(({ id }) => id);
+                await models.user.setPermissionOptions(user.id, requestedOptions, transaction);
+
+                // reload the user to take options into account (they might have changed above)
                 user = await models.user.findOne(
                     req.params.id,
                     { extended: true },
                     req.user,
                     'activate',
+                    transaction,
                 );
 
                 const now = new Date();
