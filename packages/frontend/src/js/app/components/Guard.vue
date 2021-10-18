@@ -133,9 +133,13 @@ export default {
                 return;
             }
             this.error = null;
-            const user = await load();
-            Sentry.setUser({ id: user.id });
-            setCustomVariables(this.$piwik, user);
+            const { user } = await load();
+            try {
+                Sentry.setUser({ id: user.id });
+                setCustomVariables(this.$piwik, user);
+            } catch (err) {
+                console.log("Failed to init sentry or matomo", err);
+            }
         },
         /**
          * Checks whether the user has an unread changelog pending
