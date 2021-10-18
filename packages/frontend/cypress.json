@@ -3,5 +3,9 @@
     "baseUrl": "https://resorption-bidonvilles.localhost",
     "pluginsFile": false,
     "video": false,
-    "numTestsKeptInMemory": 0
+    "numTestsKeptInMemory": 0,
+    "retries": {
+      "runMode": 2,
+      "openMode": 2
+    }
 }

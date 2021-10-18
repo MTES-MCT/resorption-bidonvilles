@@ -64,15 +64,15 @@
                             </section>
 
                             <aside class="pageHeader-buttons">
-                                <router-link v-if="plan && plan.canUpdate" class="button" :to="`/modifier-dispositif/${plan.id}`">
+                                <router-link v-if="plan && plan.canUpdate" class="button" :to="`/modifier-dispositif/${plan.id}`" data-cy='planUpdate'>
                                     <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
                                     <span>Mettre à jour</span>
                                 </router-link>
-                                <router-link v-if="plan && plan.canUpdateMarks" class="button" :to="`/dispositif/${plan.id}/indicateurs`">
+                                <router-link v-if="plan && plan.canUpdateMarks" class="button" :to="`/dispositif/${plan.id}/indicateurs`" data-cy='planMarks'>
                                     <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
                                     <span>Indicateurs</span>
                                 </router-link>
-                                <a v-if="plan && plan.closed_at === null && plan.canClose" class="button" @click="setClosingAlertStatus('step1')">
+                                <a v-if="plan && plan.closed_at === null && plan.canClose" class="button" @click="setClosingAlertStatus('step1')" data-cy='planClose'>
                                     <span>Fermer le dispositif</span>
                                 </a>
                             </aside>

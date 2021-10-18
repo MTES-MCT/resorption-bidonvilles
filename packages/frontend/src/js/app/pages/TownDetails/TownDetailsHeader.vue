@@ -49,6 +49,7 @@
         </div>
         <div class="flex justify-end mt-2">
             <Button
+                data-cy="closeTown"
                 v-if="
                     hasLocalizedPermission('shantytown.close') &&
                         town.status === 'open'
@@ -60,6 +61,7 @@
                 >Fermer le site</Button
             >
             <Button
+                data-cy="updateTown"
                 variant="primary"
                 class="mr-8"
                 icon="pen"
@@ -84,6 +86,7 @@
                 >
             </router-link>
             <Button
+                data-cy="deleteTown"
                 v-if="hasLocalizedPermission('shantytown.delete')"
                 class="ml-8"
                 variant="secondary"

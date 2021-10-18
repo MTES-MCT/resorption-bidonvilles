@@ -23,6 +23,7 @@
                     <slot name="extra" :removeItem="removeItem">
                         <div class="py-1 text-right" v-if="allowShowAll">
                             <Button
+                                data-cy="seeAll"
                                 variant="primaryText"
                                 @click="removeItem"
                                 size="sm"
