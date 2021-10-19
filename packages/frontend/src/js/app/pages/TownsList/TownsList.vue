@@ -107,6 +107,14 @@
                                     actions ?<br />Si oui, informez-en la
                                     communauté !
                                 </p>
+                                <Button
+                                    variant="primaryText"
+                                    class="text-display-sm hover:underline mt-4"
+                                    :padding="false"
+                                    :href="historyPath"
+                                    >Voir toutes les activités sur ce
+                                    territoire</Button
+                                >
                             </div>
                         </div>
                     </div>
