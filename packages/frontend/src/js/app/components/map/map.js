@@ -753,7 +753,9 @@ export default {
                 title: address,
                 icon: L.divIcon({
                     className: "leaflet-marker",
-                    html: `<span class="mapPin mapPin--shantytown" ${style}>
+                    html: `<span class="mapPin mapPin--${
+                        town.status === "open" ? "open" : "closed"
+                    } mapPin--shantytown" ${style}>
                         <span class="mapPin-wrapper">
                             <span class="mapPin-water"><img src="${waterImage}" /></span>
                             <span class="mapPin-marker" style="background-color: ${color}"></span>
