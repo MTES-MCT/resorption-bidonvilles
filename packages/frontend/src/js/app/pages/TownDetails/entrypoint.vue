@@ -1,13 +1,13 @@
 <template>
-  <Guard>
-    <Page />
-  </Guard>
+    <Guard>
+        <Page />
+    </Guard>
 </template>
 
 <script>
 export default {
-  components: {
-    Page: () => import("./TownDetails.vue"),
-  },
+    components: {
+        Page: () => import("./TownDetails.vue")
+    }
 };
 </script>
