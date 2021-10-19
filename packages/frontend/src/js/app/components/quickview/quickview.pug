@@ -1,7 +1,7 @@
 <div v-bind:class="{ active }">
     <div class="shadow"></div>
 
-    <simplebar class="quickview" ref="quickviewPanel" data-simplebar-auto-hide="false">
+    <simplebar class="quickview" v-bind:class="{ 'quickview--closed': town && town.status !== 'open' }" ref="quickviewPanel" data-simplebar-auto-hide="false">
         <header class="quickview-header" v-if="town">
             <div class="quickview-actions">
                 <button type="button" class="actionButton mr-2" @click="showTown">Voir le site</button>
