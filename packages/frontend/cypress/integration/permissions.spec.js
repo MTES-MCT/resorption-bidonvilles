@@ -47,7 +47,6 @@ describe("Permissions tests", () => {
                     for (const route of forbiddenRoutes) {
                         it(`L'utilisateur ${key} n'a pas le droit d'accéder à ${route}`, () => {
                             cy.visit(route);
-                            cy.url().should("not.include", "/launcher");
                             cy.url().should("include", "/cartographie");
                         });
                     }
@@ -61,7 +60,6 @@ describe("Permissions tests", () => {
                     for (const route of allowedRoutes) {
                         it(`L'utilisateur ${key} a le droit d'accéder à ${route}`, () => {
                             cy.visit(route);
-                            cy.url().should("not.include", "/launcher");
                             cy.url().should("include", route);
                         });
                     }
@@ -71,8 +69,8 @@ describe("Permissions tests", () => {
                     beforeEach(() => {
                         cy.server();
                         cy.restoreLocalStorage();
-                        cy.visit(TEST_URL);
                         cy.route(`/towns/*`).as("getShantytown");
+                        cy.visit(TEST_URL);
                         cy.wait("@getShantytown");
                     });
 
@@ -132,8 +130,8 @@ describe("Permissions tests", () => {
                     beforeEach(() => {
                         cy.server();
                         cy.restoreLocalStorage();
-                        cy.visit(townListURL);
                         cy.route(`/towns`).as("getShantytowns");
+                        cy.visit(townListURL);
                         cy.wait("@getShantytowns");
                     });
 
@@ -169,8 +167,8 @@ describe("Permissions tests", () => {
                     beforeEach(() => {
                         cy.server();
                         cy.restoreLocalStorage();
-                        cy.visit(planListURL);
                         cy.route(`/plans`).as("getPlans");
+                        cy.visit(planListURL);
                         cy.wait("@getPlans");
                     });
 
@@ -208,8 +206,8 @@ describe("Permissions tests", () => {
                     beforeEach(() => {
                         cy.server();
                         cy.restoreLocalStorage();
-                        cy.visit(firstPlanHref);
                         cy.route(`/plans/*`).as("getPlan");
+                        cy.visit(firstPlanHref);
                         cy.wait("@getPlan");
                     });
 
