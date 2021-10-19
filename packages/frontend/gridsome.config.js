@@ -12,7 +12,7 @@ module.exports = {
     siteUrl: "https://resorption-bidonvilles.beta.gouv.fr/",
     titleTemplate: "Résorption Bidonvilles",
     icon: {
-        favicon: "./static/img/logo-marianne.svg"
+        favicon: "./static/img/favicon.png"
     },
     plugins: [
         {
