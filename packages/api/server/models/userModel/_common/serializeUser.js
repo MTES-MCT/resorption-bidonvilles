@@ -1,3 +1,5 @@
+const serializeUserAccess = require('./serializeUserAccess');
+
 /**
  * @typedef {Object} UserFilters
  * @property {Boolean} [extended=false] Whether extended data should be returned or not
@@ -20,23 +22,7 @@ module.exports = (user, latestCharte, filters, permissionMap) => {
         position: user.position,
         status: user.status,
         created_at: user.created_at.getTime() / 1000,
-        user_access: user.user_access_id !== null ? {
-            id: user.user_access_id,
-            sent_by: user.activator_id !== null ? {
-                id: user.activator_id,
-                email: user.activator_email,
-                first_name: user.activator_first_name,
-                last_name: user.activator_last_name,
-                position: user.activator_position,
-                organization: {
-                    id: user.activator_organization_id,
-                    name: user.activator_organization_name,
-                },
-            } : null,
-            used_at: user.user_access_used_at ? user.user_access_used_at.getTime() / 1000 : null,
-            expires_at: user.user_access_expires_at.getTime() / 1000,
-            created_at: user.user_access_created_at.getTime() / 1000,
-        } : null,
+        user_accesses: user.user_accesses.map(serializeUserAccess),
         organization: {
             id: user.organization_id,
             name: user.organization_name,

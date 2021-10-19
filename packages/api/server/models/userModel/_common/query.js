@@ -97,17 +97,6 @@ module.exports = async (where = [], filters, user = null, feature, transaction) 
             organization_categories.uid AS organization_category_id,
             organization_categories.name_singular AS organization_category_name_singular,
             organization_categories.name_plural AS organization_category_name_plural,
-            last_user_accesses.user_access_id,
-            last_user_accesses.used_at AS user_access_used_at,
-            last_user_accesses.expires_at AS user_access_expires_at,
-            last_user_accesses.created_at AS user_access_created_at,
-            activator.user_id AS activator_id,
-            activator.email AS activator_email,
-            activator.first_name AS activator_first_name,
-            activator.last_name AS activator_last_name,
-            activator.position AS activator_position,
-            activator_organization.organization_id AS activator_organization_id,
-            activator_organization.name AS activator_organization_name,
             COALESCE(user_options.options, array[]::varchar[]) AS permission_options
         FROM
             users
@@ -121,10 +110,6 @@ module.exports = async (where = [], filters, user = null, feature, transaction) 
             organization_types ON organizations.fk_type = organization_types.organization_type_id
         LEFT JOIN
             organization_categories ON organization_types.fk_category = organization_categories.uid
-        LEFT JOIN
-            users AS activator ON last_user_accesses.sent_by = activator.user_id
-        LEFT JOIN
-            organizations AS activator_organization ON activator.fk_organization = activator_organization.organization_id
         LEFT JOIN
             roles_regular ON users.fk_role_regular = roles_regular.role_id
         LEFT JOIN
@@ -155,10 +140,54 @@ module.exports = async (where = [], filters, user = null, feature, transaction) 
         return [];
     }
 
+    const userAccesses = await sequelize.query(
+        `SELECT
+            user_accesses.fk_user,
+            user_accesses.user_access_id,
+            user_accesses.used_at AS user_access_used_at,
+            user_accesses.expires_at AS user_access_expires_at,
+            user_accesses.created_at AS user_access_created_at,
+            activator.user_id AS activator_id,
+            activator.email AS activator_email,
+            activator.first_name AS activator_first_name,
+            activator.last_name AS activator_last_name,
+            activator.position AS activator_position,
+            activator_organization.organization_id AS activator_organization_id,
+            activator_organization.name AS activator_organization_name
+        FROM user_accesses
+        LEFT JOIN
+            users AS activator ON user_accesses.sent_by = activator.user_id
+        LEFT JOIN
+            organizations AS activator_organization ON activator.fk_organization = activator_organization.organization_id
+        WHERE user_accesses.fk_user IN (:userIds)
+        ORDER BY user_accesses.fk_user ASC, user_accesses.created_at DESC`,
+        {
+            type: sequelize.QueryTypes.SELECT,
+            replacements: {
+                userIds: users.map(({ id }) => id),
+            },
+            transaction,
+        },
+    );
+    const hashedUserAccesses = userAccesses.reduce((argAcc, row) => {
+        const acc = { ...argAcc };
+        if (acc[row.fk_user] === undefined) {
+            acc[row.fk_user] = [];
+        }
+
+        acc[row.fk_user].push(row);
+        return acc;
+    }, {});
+
     let permissionMap = null;
     if (filters.extended === true) {
         permissionMap = await permissionModel.find(users.map(({ id }) => id));
     }
 
-    return users.map(row => serializeUser(row, latestCharte, filters, permissionMap));
+    return users.map(row => serializeUser(
+        { ...row, user_accesses: hashedUserAccesses[row.id] || [] },
+        latestCharte,
+        filters,
+        permissionMap,
+    ));
 };

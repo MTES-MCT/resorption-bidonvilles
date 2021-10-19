@@ -6,16 +6,16 @@ const sendEmail = require('./mailer');
 const { scheduleEvent, cancelEvent } = require('./scheduler');
 
 function isAccessRequestPending(user) {
-    return user.status === 'new' && user.user_access === null;
+    return user.status === 'new' && user.user_accesses.length === 0;
 }
 
 function isAccessPending(user) {
-    return user.status === 'new' && user.user_access !== null;
+    return user.status === 'new' && user.user_accesses.length > 0;
 }
 
 function isAccessExpired(user) {
     const now = new Date();
-    return user.status === 'new' && user.user_access !== null && user.user_access.expires_at < now;
+    return user.status === 'new' && user.user_accesses.length > 0 && user.user_accesses[0].expires_at < now;
 }
 
 module.exports = {
@@ -29,10 +29,10 @@ module.exports = {
     async resetRequestsForUser(user) {
         await cancelEvent.accessRequestIsPending(user.id);
 
-        if (user.user_access !== null) {
+        if (user.user_accesses.length > 0) {
             await Promise.all([
-                cancelEvent.accessPending(user.user_access.id),
-                cancelEvent.accessExpired(user.user_access.id),
+                cancelEvent.accessPending(user.user_accesses[0].id),
+                cancelEvent.accessExpired(user.user_accesses[0].id),
             ]);
         }
     },
@@ -98,21 +98,22 @@ module.exports = {
      * Handle access request approved
      *
      * @param {User} user
+     * @param {UserAccess} userAccess
      */
-    async handleAccessRequestApproved(user) {
+    async handleAccessRequestApproved(user, userAccess) {
         // notify user
         await sendEmail.toUser.accessGranted(
             user,
-            user.user_access.sent_by,
-            getAccountActivationLink(user.user_access.id),
-            new Date(user.user_access.expires_at * 1000),
+            userAccess.sent_by,
+            getAccountActivationLink(userAccess.id),
+            new Date(userAccess.expires_at * 1000),
         );
 
         // schedule new events
         await Promise.all([
             cancelEvent.accessRequestIsPending(user.id),
-            scheduleEvent.accessPending(user.user_access.id),
-            scheduleEvent.accessExpired(user.user_access.id),
+            scheduleEvent.accessPending(userAccess.id),
+            scheduleEvent.accessExpired(userAccess.id),
         ]);
     },
 
@@ -131,9 +132,9 @@ module.exports = {
         // notify the user
         await sendEmail.toUser.accessPending(
             user,
-            user.user_access.sent_by,
-            getAccountActivationLink(user.user_access.id),
-            new Date(user.user_access.expires_at * 1000),
+            user.user_accesses[0].sent_by,
+            getAccountActivationLink(user.user_accesses[0].id),
+            new Date(user.user_accesses[0].expires_at * 1000),
         );
     },
 
@@ -153,13 +154,13 @@ module.exports = {
         await Promise.all([
             sendEmail.toUser.accessExpired(
                 user,
-                user.user_access.sent_by,
-                new Date(user.user_access.expires_at * 1000),
+                user.user_accesses[0].sent_by,
+                new Date(user.user_accesses[0].expires_at * 1000),
             ),
             sendEmail.toAdmin.accessExpired(
-                user.user_access.sent_by,
+                user.user_accesses[0].sent_by,
                 user,
-                new Date(user.user_access.created_at * 1000),
+                new Date(user.user_accesses[0].created_at * 1000),
             ),
         ]);
     },
@@ -171,14 +172,14 @@ module.exports = {
      */
     async handleAccessActivated(user) {
         await Promise.all([
-            sendEmail.toAdmin.accessActivated(user.user_access.sent_by, user),
+            sendEmail.toAdmin.accessActivated(user.user_accesses[0].sent_by, user),
             sendEmail.toUser.accessActivated(user),
             scheduleEvent.accessActivatedOnboarding(user),
         ]);
 
         await Promise.all([
-            cancelEvent.accessPending(user.user_access.id),
-            cancelEvent.accessExpired(user.user_access.id),
+            cancelEvent.accessPending(user.user_accesses[0].id),
+            cancelEvent.accessExpired(user.user_accesses[0].id),
         ]);
     },
 };
