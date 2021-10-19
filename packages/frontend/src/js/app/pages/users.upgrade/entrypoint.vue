@@ -1,16 +1,11 @@
 <template>
-    <Guard
-        :ssr="$context && $context.ssr"
-        :beforeEnter="$context && $context.beforeEnter"
-    >
-        <Page
-    /></Guard>
+  <Guard> <Page /></Guard>
 </template>
 
 <script>
 export default {
-    components: {
-        Page: () => import("./users.upgrade.vue")
-    }
+  components: {
+    Page: () => import("./users.upgrade.vue"),
+  },
 };
 </script>

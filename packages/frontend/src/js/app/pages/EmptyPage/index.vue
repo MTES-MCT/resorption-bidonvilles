@@ -1,8 +1,5 @@
 <template>
-    <Guard
-        :ssr="$context && $context.ssr"
-        :beforeEnter="$context && $context.beforeEnter"
-    >
-        <div />
-    </Guard>
+  <Guard>
+    <div />
+  </Guard>
 </template>
