@@ -456,6 +456,7 @@ export default {
          * @returns {undefined}
          */
         setupMapControls() {
+            this.map.attributionControl.setPosition("bottomleft");
             this.setupZoomControl();
             this.setupLayersControl();
             this.setupPrintControl();
