@@ -136,9 +136,14 @@ function checkOrigin(shantytown, filters) {
 }
 
 function checkSearch(shantytown, search) {
+    const plainActors = shantytown.actors
+        .map(({ first_name, last_name }) => `${first_name} ${last_name}`)
+        .join(" ");
+
     return (
         !!shantytown.name?.match(new RegExp(search, "ig")) ||
-        !!shantytown.address?.match(new RegExp(search, "ig"))
+        !!shantytown.address?.match(new RegExp(search, "ig")) ||
+        !!plainActors.match(new RegExp(search, "ig"))
     );
 }
 
