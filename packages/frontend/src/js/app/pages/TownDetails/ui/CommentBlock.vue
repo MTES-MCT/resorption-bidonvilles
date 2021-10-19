@@ -16,9 +16,11 @@
             territoire.
         </div>
         <div class="text-primary font-bold mb-1">
-            <Icon icon="user" /> {{ comment.createdBy.first_name }}
-            {{ comment.createdBy.last_name }} -
-            {{ comment.createdBy.organization }}
+            <router-link :to="`/annuaire/${comment.createdBy.organization_id}`">
+                <Icon icon="user" /> {{ comment.createdBy.first_name }}
+                {{ comment.createdBy.last_name }} -
+                {{ comment.createdBy.organization }}
+            </router-link>
         </div>
         <div class="ml-5">
             <div class="flex flex-wrap">
