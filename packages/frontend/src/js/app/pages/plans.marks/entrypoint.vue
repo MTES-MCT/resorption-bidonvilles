@@ -1,16 +1,13 @@
 <template>
-    <Guard
-        :ssr="$context && $context.ssr"
-        :beforeEnter="$context && $context.beforeEnter"
-    >
-        <Page />
-    </Guard>
+  <Guard>
+    <Page />
+  </Guard>
 </template>
 
 <script>
 export default {
-    components: {
-        Page: () => import("./plans.marks.vue")
-    }
+  components: {
+    Page: () => import("./plans.marks.vue"),
+  },
 };
 </script>

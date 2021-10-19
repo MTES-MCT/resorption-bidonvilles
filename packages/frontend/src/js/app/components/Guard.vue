@@ -60,41 +60,33 @@ export default {
         PrivateLayout,
         LoadingError
     },
-    props: {
-        ssr: {
-            type: Boolean,
-            default: false
-        },
-        beforeEnter: {
-            type: [Object, String]
-        }
-    },
     data() {
         return {
-            ready: !!this.$props.ssr,
+            ready: !!this.$route.meta?.ssr,
             error: null
         };
     },
     async mounted() {
-        if (this.beforeEnter?.action === "redirect") {
-            this.$router.push(this.beforeEnter.to);
+        const beforeEnter = this.$route.meta.beforeEnter;
+
+        if (beforeEnter?.action === "redirect") {
+            this.$router.push(beforeEnter.to);
             return;
         }
-        if (this.beforeEnter?.action === "open") {
-            window.open(this.beforeEnter.to);
+        if (beforeEnter?.action === "open") {
+            window.open(beforeEnter.to);
             this.$router.go(-1);
             return;
         }
-        if (this.beforeEnter?.action === "signout") {
+        if (beforeEnter?.action === "signout") {
             logout(this.$piwik);
             this.$router.push("/");
             return;
         }
-        const guards =
-            (this.beforeEnter && guardGroups[this.beforeEnter]) || [];
+        const guards = (beforeEnter && guardGroups[beforeEnter]) || [];
         for (const guard of guards) {
             if (guard === "isLoggedIn" && !isLoggedIn()) {
-                this.$router.push("/connexion?r=1");
+                return this.$router.push("/connexion?r=1");
             }
             if (guard === "isConfigLoaded" && !isConfigLoaded()) {
                 try {
@@ -105,23 +97,24 @@ export default {
                     return;
                 }
             }
-            if (guard === "isPermitted" && !this.isPermitted(this.$route)) {
-                this.$router.push("/");
+            if (guard === "isPermitted" && !this.isPermitted()) {
+                return this.$router.push("/");
             }
             if (guard === "hasAcceptedCharte" && !hasAcceptedCharte()) {
-                this.$router.push("/signature-charte-engagement");
+                return this.$router.push("/signature-charte-engagement");
             }
             if (guard === "isUpgraded" && !this.isUpgraded()) {
-                this.$router.push("/mise-a-niveau");
+                return this.$router.push("/mise-a-niveau");
             }
             if (
                 guard === "hasNoPendingChangelog" &&
                 this.hasPendingChangelog()
             ) {
-                this.$router.push("/nouvelle-version");
+                return this.$router.push("/nouvelle-version");
             }
             if (guard === "home") {
                 this.home();
+                return;
             }
         }
         this.ready = true;
@@ -164,12 +157,10 @@ export default {
         /**
          * Checks if the current user has all required permissions to access the given route
          *
-         * @param {Route} to
-         *
          * @returns {boolean}
          */
-        isPermitted(to) {
-            const { permissions } = to.meta;
+        isPermitted() {
+            const { permissions } = this.$route.meta;
             // if there is no permission needed, access is obviously granted
             if (!permissions) {
                 return true;

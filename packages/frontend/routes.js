@@ -7,9 +7,11 @@ const anonymousRoutes = [
             __dirname,
             "./src/js/app/pages/LandingPage/entrypoint.vue"
         ),
-        context: {
-            beforeEnter: "home",
-            ssr: true
+        route: {
+            meta: {
+                beforeEnter: "home",
+                ssr: true
+            }
         }
     },
     {
@@ -18,9 +20,11 @@ const anonymousRoutes = [
             __dirname,
             "./src/js/app/pages/Contact/entrypoint.vue"
         ),
-        context: {
-            beforeEnter: "anonymous",
-            ssr: true
+        route: {
+            meta: {
+                beforeEnter: "anonymous",
+                ssr: true
+            }
         }
     },
     {
@@ -29,9 +33,11 @@ const anonymousRoutes = [
             __dirname,
             "./src/js/app/pages/PublicStats/entrypoint.vue"
         ),
-        context: {
-            beforeEnter: "anonymous",
-            ssr: true
+        route: {
+            meta: {
+                beforeEnter: "anonymous",
+                ssr: true
+            }
         }
     },
     {
@@ -40,9 +46,11 @@ const anonymousRoutes = [
             __dirname,
             "./src/js/app/pages/SignIn/entrypoint.vue"
         ),
-        context: {
-            beforeEnter: "anonymous",
-            ssr: true
+        route: {
+            meta: {
+                beforeEnter: "anonymous",
+                ssr: true
+            }
         }
     },
     {
@@ -51,8 +59,10 @@ const anonymousRoutes = [
             __dirname,
             "./src/js/app/pages/Invitation/entrypoint.vue"
         ),
-        context: {
-            ssr: true
+        route: {
+            meta: {
+                ssr: true
+            }
         }
     },
     {
@@ -61,8 +71,10 @@ const anonymousRoutes = [
             __dirname,
             "./src/js/app/pages/legalMentions/entrypoint.vue"
         ),
-        context: {
-            ssr: true
+        route: {
+            meta: {
+                ssr: true
+            }
         }
     },
     {
@@ -71,12 +83,12 @@ const anonymousRoutes = [
             __dirname,
             "./src/js/app/pages/UserRequestNewPassword/entrypoint.vue"
         ),
-        context: {
+        route: {
             meta: {
-                group: "users"
-            },
-            beforeEnter: "anonymous",
-            ssr: true
+                group: "users",
+                beforeEnter: "anonymous",
+                ssr: true
+            }
         }
     }
 ];
@@ -88,11 +100,11 @@ const anonymousWithoutRendering = [
             __dirname,
             "./src/js/app/pages/UserSetNewPassword/index.vue"
         ),
-        context: {
+        route: {
             meta: {
-                group: "users"
-            },
-            beforeEnter: "anonymous"
+                group: "users",
+                beforeEnter: "anonymous"
+            }
         }
     },
     {
@@ -101,11 +113,11 @@ const anonymousWithoutRendering = [
             __dirname,
             "./src/js/app/pages/UserActivate/entrypoint.vue"
         ),
-        context: {
+        route: {
             meta: {
-                group: "account"
-            },
-            beforeEnter: "anonymous"
+                group: "account",
+                beforeEnter: "anonymous"
+            }
         }
     }
 ];
@@ -117,8 +129,10 @@ const loggedRoutes = [
             __dirname,
             "./src/js/app/pages/Invitation/entrypoint.vue"
         ),
-        context: {
-            beforeEnter: "loadedAndUpgraded"
+        route: {
+            meta: {
+                beforeEnter: "loadedAndUpgraded"
+            }
         }
     },
     {
@@ -127,9 +141,9 @@ const loggedRoutes = [
             __dirname,
             "./src/js/app/pages/dashboard/entrypoint.vue"
         ),
-        context: {
-            beforeEnter: "loadedAndUpToDate",
+        route: {
             meta: {
+                beforeEnter: "loadedAndUpToDate",
                 group: "townList"
             }
         }
@@ -140,9 +154,9 @@ const loggedRoutes = [
             __dirname,
             "./src/js/app/pages/TownsList/entrypoint.vue"
         ),
-        context: {
-            beforeEnter: "loadedAndUpToDate",
+        route: {
             meta: {
+                beforeEnter: "loadedAndUpToDate",
                 group: "townList"
             }
         }
@@ -153,9 +167,9 @@ const loggedRoutes = [
             __dirname,
             "./src/js/app/pages/TownCreate/entrypoint.vue"
         ),
-        context: {
-            beforeEnter: "loadedAndUpToDate",
+        route: {
             meta: {
+                beforeEnter: "loadedAndUpToDate",
                 group: "townCreation",
                 permissions: ["shantytown.create"]
             }
@@ -167,11 +181,11 @@ const loggedRoutes = [
             __dirname,
             "./src/js/app/pages/TownDetails/entrypoint.vue"
         ),
-        context: {
+        route: {
             meta: {
+                beforeEnter: "loadedAndUpToDate",
                 group: "townList"
-            },
-            beforeEnter: "loadedAndUpToDate"
+            }
         }
     },
     {
@@ -180,11 +194,11 @@ const loggedRoutes = [
             __dirname,
             "./src/js/app/pages/TownUpdate/entrypoint.vue"
         ),
-        context: {
+        route: {
             meta: {
+                beforeEnter: "loadedAndUpToDate",
                 group: "townList"
-            },
-            beforeEnter: "loadedAndUpToDate"
+            }
         }
     },
 
@@ -194,12 +208,11 @@ const loggedRoutes = [
             __dirname,
             "./src/js/app/pages/Account/entrypoint.vue"
         ),
-        context: {
+        route: {
             meta: {
+                beforeEnter: "loadedAndUpToDate",
                 group: "account"
-            },
-
-            beforeEnter: "loadedAndUpToDate"
+            }
         }
     },
     {
@@ -208,12 +221,11 @@ const loggedRoutes = [
             __dirname,
             "./src/js/app/pages/Account/entrypoint.vue"
         ),
-        context: {
+        route: {
             meta: {
+                beforeEnter: "loadedAndUpToDate",
                 group: "account"
-            },
-
-            beforeEnter: "loadedAndUpToDate"
+            }
         }
     },
     {
@@ -222,12 +234,12 @@ const loggedRoutes = [
             __dirname,
             "./src/js/app/pages/UserList/entrypoint.vue"
         ),
-        context: {
+        route: {
             meta: {
+                beforeEnter: "loadedAndUpToDate",
                 group: "users",
                 permissions: ["user.list"]
-            },
-            beforeEnter: "loadedAndUpToDate"
+            }
         }
     },
     {
@@ -236,12 +248,12 @@ const loggedRoutes = [
             __dirname,
             "./src/js/app/pages/UserCreate/entrypoint.vue"
         ),
-        context: {
+        route: {
             meta: {
+                beforeEnter: "loadedAndUpToDate",
                 group: "userCreation",
                 permissions: ["user.create"]
-            },
-            beforeEnter: "loadedAndUpToDate"
+            }
         }
     },
     {
@@ -250,8 +262,10 @@ const loggedRoutes = [
             __dirname,
             "./src/js/app/pages/CharteEngagement/entrypoint.vue"
         ),
-        context: {
-            beforeEnter: "signatureCharte"
+        route: {
+            meta: {
+                beforeEnter: "signatureCharte"
+            }
         }
     },
     {
@@ -260,12 +274,12 @@ const loggedRoutes = [
             __dirname,
             "./src/js/app/pages/UserValidate/entrypoint.vue"
         ),
-        context: {
+        route: {
             meta: {
                 group: "users",
-                permissions: ["user.activate"]
-            },
-            beforeEnter: "loadedAndUpToDate"
+                permissions: ["user.activate"],
+                beforeEnter: "loadedAndUpToDate"
+            }
         }
     },
     {
@@ -274,11 +288,11 @@ const loggedRoutes = [
             __dirname,
             "./src/js/app/pages/users.upgrade/entrypoint.vue"
         ),
-        context: {
+        route: {
             meta: {
-                group: "users"
-            },
-            beforeEnter: "loaded"
+                group: "users",
+                beforeEnter: "loaded"
+            }
         }
     },
     {
@@ -287,12 +301,12 @@ const loggedRoutes = [
             __dirname,
             "./src/js/app/pages/plans.list/entrypoint.vue"
         ),
-        context: {
+        route: {
             meta: {
                 group: "plans",
-                permissions: ["plan.list"]
-            },
-            beforeEnter: "loadedAndUpToDate"
+                permissions: ["plan.list"],
+                beforeEnter: "loadedAndUpToDate"
+            }
         }
     },
     {
@@ -301,12 +315,12 @@ const loggedRoutes = [
             __dirname,
             "./src/js/app/pages/plans.create/entrypoint.vue"
         ),
-        context: {
+        route: {
             meta: {
                 group: "plans",
-                permissions: ["plan.create"]
-            },
-            beforeEnter: "loadedAndUpToDate"
+                permissions: ["plan.create"],
+                beforeEnter: "loadedAndUpToDate"
+            }
         }
     },
     {
@@ -315,12 +329,12 @@ const loggedRoutes = [
             __dirname,
             "./src/js/app/pages/plans.edit/entrypoint.vue"
         ),
-        context: {
+        route: {
             meta: {
                 group: "plans",
-                permissions: ["plan.update"]
-            },
-            beforeEnter: "loadedAndUpToDate"
+                permissions: ["plan.update"],
+                beforeEnter: "loadedAndUpToDate"
+            }
         }
     },
     {
@@ -329,12 +343,12 @@ const loggedRoutes = [
             __dirname,
             "./src/js/app/pages/plans.details/entrypoint.vue"
         ),
-        context: {
+        route: {
             meta: {
                 group: "plans",
-                permissions: ["plan.read"]
-            },
-            beforeEnter: "loadedAndUpToDate"
+                permissions: ["plan.read"],
+                beforeEnter: "loadedAndUpToDate"
+            }
         }
     },
     {
@@ -343,12 +357,12 @@ const loggedRoutes = [
             __dirname,
             "./src/js/app/pages/plans.marks/entrypoint.vue"
         ),
-        context: {
+        route: {
             meta: {
                 group: "plans",
-                permissions: ["plan.updateMarks"]
-            },
-            beforeEnter: "loadedAndUpToDate"
+                permissions: ["plan.updateMarks"],
+                beforeEnter: "loadedAndUpToDate"
+            }
         }
     },
     {
@@ -357,12 +371,12 @@ const loggedRoutes = [
             __dirname,
             "./src/js/app/pages/PrivateStats/entrypoint.vue"
         ),
-        context: {
+        route: {
             meta: {
                 group: "stats",
-                permissions: ["stats.read"]
-            },
-            beforeEnter: "loadedAndUpToDate"
+                permissions: ["stats.read"],
+                beforeEnter: "loadedAndUpToDate"
+            }
         }
     },
     {
@@ -371,12 +385,12 @@ const loggedRoutes = [
             __dirname,
             "./src/js/app/pages/History/entrypoint.vue"
         ),
-        context: {
+        route: {
             meta: {
                 group: "history",
-                permissions: ["shantytown.list"]
-            },
-            beforeEnter: "loadedAndUpToDate"
+                permissions: ["shantytown.list"],
+                beforeEnter: "loadedAndUpToDate"
+            }
         }
     },
     {
@@ -385,12 +399,12 @@ const loggedRoutes = [
             __dirname,
             "./src/js/app/pages/History/entrypoint.vue"
         ),
-        context: {
+        route: {
             meta: {
                 group: "history",
-                permissions: ["shantytown.list"]
-            },
-            beforeEnter: "loadedAndUpToDate"
+                permissions: ["shantytown.list"],
+                beforeEnter: "loadedAndUpToDate"
+            }
         }
     },
     {
@@ -399,11 +413,11 @@ const loggedRoutes = [
             __dirname,
             "./src/js/app/pages/covid/entrypoint.vue"
         ),
-        context: {
+        route: {
             meta: {
-                group: "covid"
-            },
-            beforeEnter: "loadedAndUpToDate"
+                group: "covid",
+                beforeEnter: "loadedAndUpToDate"
+            }
         }
     },
     {
@@ -412,11 +426,11 @@ const loggedRoutes = [
             __dirname,
             "./src/js/app/pages/OrganizationList/entrypoint.vue"
         ),
-        context: {
+        route: {
             meta: {
-                group: "directory"
-            },
-            beforeEnter: "loadedAndUpToDate"
+                group: "directory",
+                beforeEnter: "loadedAndUpToDate"
+            }
         }
     },
     {
@@ -425,11 +439,11 @@ const loggedRoutes = [
             __dirname,
             "./src/js/app/pages/OrganizationDetails/entrypoint.vue"
         ),
-        context: {
+        route: {
             meta: {
-                group: "directory"
-            },
-            beforeEnter: "loadedAndUpToDate"
+                group: "directory",
+                beforeEnter: "loadedAndUpToDate"
+            }
         }
     }
 ];
@@ -441,13 +455,13 @@ const actionRoutes = [
             __dirname,
             "./src/js/app/pages/EmptyPage/index.vue"
         ),
-        context: {
+        route: {
             meta: {
-                analyticsIgnore: true
-            },
-            beforeEnter: {
-                action: "signout",
-                to: "/"
+                analyticsIgnore: true,
+                beforeEnter: {
+                    action: "signout",
+                    to: "/"
+                }
             }
         }
     }
@@ -460,10 +474,12 @@ const fileRoutes = [
             __dirname,
             "./src/js/app/pages/EmptyPage/index.vue"
         ),
-        context: {
-            beforeEnter: {
-                action: "redirect",
-                to: "mailto:contact@resorption-bidonvilles.beta.gouv.fr"
+        route: {
+            meta: {
+                beforeEnter: {
+                    action: "redirect",
+                    to: "mailto:contact@resorption-bidonvilles.beta.gouv.fr"
+                }
             }
         }
     },
@@ -473,10 +489,12 @@ const fileRoutes = [
             __dirname,
             "./src/js/app/pages/EmptyPage/index.vue"
         ),
-        context: {
-            beforeEnter: {
-                action: "open",
-                to: "/doc/CGU_2021_04_08.pdf"
+        route: {
+            meta: {
+                beforeEnter: {
+                    action: "open",
+                    to: "/doc/CGU_2021_04_08.pdf"
+                }
             }
         }
     },
@@ -486,10 +504,12 @@ const fileRoutes = [
             __dirname,
             "./src/js/app/pages/EmptyPage/index.vue"
         ),
-        context: {
-            beforeEnter: {
-                action: "open",
-                to: "/doc/guide_de_l_administrateur.pdf"
+        route: {
+            meta: {
+                beforeEnter: {
+                    action: "open",
+                    to: "/doc/guide_de_l_administrateur.pdf"
+                }
             }
         }
     },
@@ -499,9 +519,11 @@ const fileRoutes = [
             __dirname,
             "./src/js/app/pages/EmptyPage/index.vue"
         ),
-        context: {
-            // TODO: FIX, charte is not implemented in guard
-            beforeEnter: "charte"
+        route: {
+            meta: {
+                // TODO: FIX, charte is not implemented in guard
+                beforeEnter: "charte"
+            }
         }
     },
     {
@@ -510,10 +532,12 @@ const fileRoutes = [
             __dirname,
             "./src/js/app/pages/EmptyPage/index.vue"
         ),
-        context: {
-            beforeEnter: {
-                action: "open",
-                to: "/doc/fiches-hebergement-logement-adapte.pdf"
+        route: {
+            meta: {
+                beforeEnter: {
+                    action: "open",
+                    to: "/doc/fiches-hebergement-logement-adapte.pdf"
+                }
             }
         }
     },
@@ -523,10 +547,12 @@ const fileRoutes = [
             __dirname,
             "./src/js/app/pages/EmptyPage/index.vue"
         ),
-        context: {
-            beforeEnter: {
-                action: "open",
-                to: "/doc/fiche-bidonvilles-maraudes.pdf"
+        route: {
+            meta: {
+                beforeEnter: {
+                    action: "open",
+                    to: "/doc/fiche-bidonvilles-maraudes.pdf"
+                }
             }
         }
     },
@@ -536,10 +562,12 @@ const fileRoutes = [
             __dirname,
             "./src/js/app/pages/EmptyPage/index.vue"
         ),
-        context: {
-            beforeEnter: {
-                action: "open",
-                to: "/doc/covid-19-recommandations-vaccination.pdf"
+        route: {
+            meta: {
+                beforeEnter: {
+                    action: "open",
+                    to: "/doc/covid-19-recommandations-vaccination.pdf"
+                }
             }
         }
     }
@@ -552,10 +580,12 @@ const redirects = [
             __dirname,
             "./src/js/app/pages/EmptyPage/index.vue"
         ),
-        context: {
-            beforeEnter: {
-                action: "redirect",
-                to: "/"
+        route: {
+            meta: {
+                beforeEnter: {
+                    action: "redirect",
+                    to: "/"
+                }
             }
         }
     },
@@ -565,10 +595,12 @@ const redirects = [
             __dirname,
             "./src/js/app/pages/EmptyPage/index.vue"
         ),
-        context: {
-            beforeEnter: {
-                action: "redirect",
-                to: "/"
+        route: {
+            meta: {
+                beforeEnter: {
+                    action: "redirect",
+                    to: "/"
+                }
             }
         }
     }
