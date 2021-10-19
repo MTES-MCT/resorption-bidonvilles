@@ -95,7 +95,7 @@ module.exports = async (userLocation, permissions, location) => {
             LEFT JOIN epci ON cities.fk_epci = epci.code
             LEFT JOIN departements ON cities.fk_departement = departements.code
             LEFT JOIN regions ON departements.fk_region = regions.code
-            ${where.length > 0 ? `AND ((${where.join(') OR (')}))` : ''}
+            ${where.length > 0 ? `WHERE ((${where.join(') OR (')}))` : ''}
             ORDER BY comments.created_at DESC
             `,
         {
