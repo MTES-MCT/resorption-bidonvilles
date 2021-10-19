@@ -38,7 +38,10 @@
                     site :
                     <Link :to="`/site/${activity.shantytown.id}`"
                         >{{ activity.shantytown.usename }},
-                        {{ activity.shantytown.city.name }}</Link
+                        {{ activity.shantytown.city.name }}
+                        <span v-if="showDepartementCode"
+                            >({{ activity.shantytown.departement.code }})</span
+                        ></Link
                     >
                 </p>
                 <p v-if="activity.highCovidComment">
@@ -127,6 +130,21 @@ export default {
     },
 
     computed: {
+        showDepartementCode() {
+            const userLocation = this.user.organization.location;
+            if (["nation", "region"].includes(userLocation.type)) {
+                return true;
+            }
+
+            if (
+                userLocation.departement?.code !==
+                this.activity.shantytown.departement.code
+            ) {
+                return true;
+            }
+
+            return false;
+        },
         colors() {
             if (this.activity.entity === "shantytown") {
                 if (this.activity.action === "update") {
