@@ -619,7 +619,6 @@ module.exports = models => ({
                     fk_status: 'active',
                 }, transaction);
                 await models.userAccess.update(decoded.id, {
-                    sent_by: decoded.activatedBy,
                     used_at: now,
                 }, transaction);
 
