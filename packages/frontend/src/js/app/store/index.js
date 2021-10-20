@@ -128,11 +128,7 @@ export default new Vuex.Store({
         async fetchTowns({ commit }) {
             commit("setLoading", true);
             try {
-                const {
-                    user,
-                    field_types: fieldTypes
-                    // closing_solutions: closingSolutions
-                } = getConfig();
+                const { user, field_types: fieldTypes } = getConfig();
 
                 if (
                     user.organization.location.type !== "nation" &&
