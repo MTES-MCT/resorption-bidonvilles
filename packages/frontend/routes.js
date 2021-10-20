@@ -127,7 +127,7 @@ const loggedRoutes = [
         path: "/nouvelle-version",
         component: path.join(
             __dirname,
-            "./src/js/app/pages/Invitation/entrypoint.vue"
+            "./src/js/app/pages/Changelog/entrypoint.vue"
         ),
         route: {
             meta: {
@@ -264,7 +264,7 @@ const loggedRoutes = [
         ),
         route: {
             meta: {
-                beforeEnter: "signatureCharte"
+                beforeEnter: "loaded"
             }
         }
     },
