@@ -36,6 +36,7 @@ export default new Vuex.Store({
                 justice: [],
                 origin: [],
                 conditions: [],
+                closingSolution: [],
                 status: "open",
                 location: null,
                 actors: [],
@@ -127,7 +128,11 @@ export default new Vuex.Store({
         async fetchTowns({ commit }) {
             commit("setLoading", true);
             try {
-                const { user, field_types: fieldTypes } = getConfig();
+                const {
+                    user,
+                    field_types: fieldTypes
+                    // closing_solutions: closingSolutions
+                } = getConfig();
 
                 if (
                     user.organization.location.type !== "nation" &&
