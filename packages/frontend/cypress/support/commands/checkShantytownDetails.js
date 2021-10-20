@@ -291,9 +291,7 @@ Cypress.Commands.add("checkShantytownDetails", shantytown => {
 
     if (shantytown.fire_prevention_comments) {
         cy.get("[data-cy-data='fire_prevention_comments']").should($div => {
-            expect($div.text()).contains(
-                shantytown.fire_prevention_comments
-            );
+            expect($div.text()).contains(shantytown.fire_prevention_comments);
         });
     } else {
         cy.get("[data-cy-data='fire_prevention_comments']").should("not.exist");
