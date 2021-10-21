@@ -92,11 +92,11 @@
                                 <span v-if="shantytown.populationTotal >= 25">
                                     <Icon icon="male" />{{ " " }}</span
                                 >
-                                <span v-if="shantytown.populationTotal >= 75"
-                                    ><Icon icon="male" />{{ " " }}</span
+                                <span v-if="shantytown.populationTotal >= 75">
+                                    <Icon icon="male" />{{ " " }}</span
                                 >
-                                <span v-if="shantytown.populationTotal >= 100"
-                                    ><Icon icon="male"
+                                <span v-if="shantytown.populationTotal >= 100">
+                                    <Icon icon="male"
                                 /></span>
                             </div>
                         </div>
@@ -121,7 +121,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- third column -->
+                    <!-- third column - open shantytowns -->
                     <div v-if="showLivingConditionDetails">
                         <div>
                             <TownCardIcon
@@ -157,6 +157,15 @@
                                 >prev. incendie</TownCardIcon
                             >
                         </div>
+                    </div>
+                    <!-- third column - closed shantytowns -->
+                    <div v-esle>
+                        <ClosingSolutionsList
+                            :shantytownClosingSolutions="
+                                shantytown.closingSolutions
+                            "
+                            :closingSolutions="closingSolutions"
+                        ></ClosingSolutionsList>
                     </div>
                     <!-- fourth column -->
                     <div v-if="hasJusticePermission">
@@ -264,6 +273,7 @@
 
 <script>
 import TownCardIcon from "./TownCardIcon";
+import ClosingSolutionsList from "./ClosingSolutionsList";
 import flagEU from "./assets/eu.png";
 import flagFR from "./assets/fr.png";
 import flagExtraCommunautaires from "./assets/extra-communautaires.png";
@@ -277,6 +287,9 @@ export default {
         },
         hasJusticePermission: {
             type: Boolean
+        },
+        closingSolutions: {
+            type: Array
         }
     },
     data() {
@@ -286,7 +299,8 @@ export default {
         };
     },
     components: {
-        TownCardIcon
+        TownCardIcon,
+        ClosingSolutionsList
     },
     methods: {
         /**
