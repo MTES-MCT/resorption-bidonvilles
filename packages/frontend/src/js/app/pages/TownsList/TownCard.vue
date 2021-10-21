@@ -122,7 +122,7 @@
                         </div>
                     </div>
                     <!-- third column -->
-                    <div>
+                    <div v-if="showLivingConditionDetails">
                         <div>
                             <TownCardIcon
                                 :value="shantytown.accessToWater"
@@ -355,6 +355,9 @@ export default {
                 this.shantytown.closedAt &&
                 this.shantytown.closedWithSolutions === "yes"
             );
+        },
+        showLivingConditionDetails() {
+            return !(this.isSolved || this.isClosed);
         }
     }
 };
