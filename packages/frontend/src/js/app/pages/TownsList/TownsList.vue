@@ -452,16 +452,8 @@ export default {
                         label: `Date de fermeture`
                     },
                     {
-                        value: `builtAt`,
-                        label: `Date d'installation`
-                    },
-                    {
                         value: `updatedAt`,
                         label: `Date d'actualisation`
-                    },
-                    {
-                        value: `declaredAt`,
-                        label: `Date de signalement`
                     }
                 ]
             }
