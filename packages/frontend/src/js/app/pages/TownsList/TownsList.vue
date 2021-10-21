@@ -479,7 +479,7 @@ export default {
         },
         onClickCloseTab() {
             this.updateFilters("status", "close");
-            this.updateSort("cityName");
+            this.updateSort("closedAt");
         },
         onClickOpenTab() {
             this.updateFilters("status", "open");
