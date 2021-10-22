@@ -37,6 +37,7 @@ export default new Vuex.Store({
                 origin: [],
                 conditions: [],
                 closingSolution: [],
+                solvedOrClosed: [],
                 status: "open",
                 location: null,
                 actors: [],
