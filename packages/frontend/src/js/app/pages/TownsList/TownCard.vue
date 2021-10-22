@@ -43,10 +43,10 @@
                     </div>
                 </div>
                 <!-- Site fermé ou résorbé ? -->
-                <div class="px-6" v-if="this.isClosed">
+                <div class="px-6" v-if="isClosed(shantytown)">
                     Fermé le {{ formatDate(shantytown.closedAt, "d/m/y") }}
                 </div>
-                <div class="px-6" v-else-if="this.isSolved">
+                <div class="px-6" v-else-if="isSolved(shantytown)">
                     Résorbé le {{ formatDate(shantytown.closedAt, "d/m/y") }}
                 </div>
                 <!-- Fin site fermé ou résorbé ? -->
@@ -159,7 +159,7 @@
                         </div>
                     </div>
                     <!-- third column - closed shantytowns -->
-                    <div v-esle>
+                    <div v-else>
                         <ClosingSolutionsList
                             :shantytownClosingSolutions="
                                 shantytown.closingSolutions
@@ -279,6 +279,7 @@ import flagFR from "./assets/fr.png";
 import flagExtraCommunautaires from "./assets/extra-communautaires.png";
 import formatDateSinceActivity from "./formatDateSinceActivity";
 import { formatLivingConditions } from "#app/pages/TownDetails/formatLivingConditions";
+import { isSolved, isClosed } from "./common/SolvedOrClosed";
 
 export default {
     props: {
@@ -333,7 +334,9 @@ export default {
             }
 
             return origin;
-        }
+        },
+        isSolved,
+        isClosed
     },
     computed: {
         isOpen() {
@@ -358,20 +361,8 @@ export default {
                 this.shantytown.updatedAt
             )}`;
         },
-        isClosed() {
-            return (
-                this.shantytown.closedAt &&
-                this.shantytown.closedWithSolutions !== "yes"
-            );
-        },
-        isSolved() {
-            return (
-                this.shantytown.closedAt &&
-                this.shantytown.closedWithSolutions === "yes"
-            );
-        },
         showLivingConditionDetails() {
-            return !(this.isSolved || this.isClosed);
+            return !(isSolved(this.shantytown) || isClosed(this.shantytown));
         }
     }
 };
