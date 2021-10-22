@@ -273,6 +273,23 @@
                             "
                         />
                         <CustomFilter
+                            v-if="filters.status === 'close'"
+                            title="Résorbé / fermé"
+                            class="mr-2 mb-2"
+                            :value="filters.solvedOrClosed"
+                            @input="val => updateFilters('solvedOrClosed', val)"
+                            :options="[
+                                {
+                                    value: 'closed',
+                                    label: 'Fermé'
+                                },
+                                {
+                                    value: 'solved',
+                                    label: 'Résorbé'
+                                }
+                            ]"
+                        />
+                        <CustomFilter
                             v-if="hasJusticePermission"
                             title="Procédure judiciaire"
                             class="mr-2 mb-2"
