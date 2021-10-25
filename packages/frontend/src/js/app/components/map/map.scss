@@ -4,12 +4,14 @@
 }
 
 .leaflet-printer {
-    width: 30px;
+    padding: 0 5px;
     height: 30px;
     text-align: center;
     line-height: 25px;
     background: white;
-    border: 2px solid #ccc;
+    border: 2px solid #000091;
+    color: #000091;
+    font-weight: bold;
     border-radius: 5px;
     cursor: pointer;
 }
