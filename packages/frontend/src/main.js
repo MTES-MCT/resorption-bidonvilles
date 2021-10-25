@@ -22,6 +22,9 @@ export default function(Vue, { appOptions, head }) {
     asyncSentry.then(m => m(Vue));
     asyncMatomo.then(m => m(Vue));
 
+    // Add attributes to HTML tag
+    head.htmlAttrs = { lang: "fr" };
+
     // Preload fonts for performances
     head.link.push({
         rel: "preload",
