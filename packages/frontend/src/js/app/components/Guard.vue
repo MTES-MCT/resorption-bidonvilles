@@ -69,6 +69,12 @@ export default {
     async mounted() {
         const beforeEnter = this.$route.meta.beforeEnter;
 
+        if (beforeEnter?.to && beforeEnter.to.startsWith("mailto")) {
+            window.open(beforeEnter.to);
+            this.$router.go(-1);
+            return;
+        }
+
         if (beforeEnter?.action === "redirect") {
             this.$router.push(beforeEnter.to);
             return;
