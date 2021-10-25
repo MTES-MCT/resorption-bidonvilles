@@ -175,10 +175,6 @@ export default {
             return permissions.every(permission => hasPermission(permission));
         },
         home() {
-            const to = this.$route;
-            if (to.fullPath.substr(0, 2) === "/#") {
-                return this.$router.push(to.fullPath.substr(2));
-            }
             if (isLoggedIn()) {
                 return this.$router.push("/cartographie");
             }
