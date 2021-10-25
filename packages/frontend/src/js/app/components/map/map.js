@@ -459,9 +459,24 @@ export default {
             this.map.attributionControl.setPosition("bottomleft");
             this.setupZoomControl();
             this.setupLayersControl();
+            this.setupScaleControl();
             this.setupPrintControl();
             this.setupAddressTogglerControl();
             this.setupFieldTypesLegendControl();
+        },
+
+        /**
+         * Ajoute une échelle à la carte
+         */
+        setupScaleControl() {
+            const control = L.control
+                .scale({
+                    imperial: false,
+                    metric: true
+                })
+                .addTo(this.map);
+
+            control.setPosition("topright");
         },
 
         /**
