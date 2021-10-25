@@ -1,4 +1,5 @@
 import { userStatus } from './userStatus';
+import type { UserAccess } from './UserAccess';
 import { userLocationType } from './userLocationType';
 import { permissionOption } from '#server/models/permissionModel/types/permissionOption';
 import { Permissions } from '#server/models/permissionModel/types/Permissions';
@@ -12,22 +13,7 @@ export interface User {
     position: string,
     status: userStatus,
     created_at: number,
-    user_access: {
-        id: number,
-        sent_by: {
-            id: number,
-            first_name: string,
-            last_name: string,
-            position: string,
-            organization: {
-                id: number,
-                name: string
-            }
-        } | null,
-        used_at: number | null,
-        expires_at: number,
-        created_at: number
-    } | null,
+    user_accesses: UserAccess[],
     organization: {
         id: number,
         name: string,

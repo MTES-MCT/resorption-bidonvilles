@@ -459,14 +459,14 @@ module.exports = models => ({
                 }, transaction);
 
                 await accessRequestService.resetRequestsForUser(user);
-                await accessRequestService.handleAccessRequestApproved({
-                    ...user,
-                    user_access: {
+                await accessRequestService.handleAccessRequestApproved(
+                    user,
+                    {
                         id: userAccessId,
                         expires_at: expiresAt.getTime() / 1000,
                         sent_by: req.user,
                     },
-                });
+                );
             });
         } catch (error) {
             res.status(500).send({
@@ -613,24 +613,16 @@ module.exports = models => ({
             await sequelize.transaction(async (transaction) => {
                 const now = new Date();
 
-                let userAccessId = decoded.id;
-                if (decoded.id === undefined) {
-                    userAccessId = user.user_access.id;
-                }
-
                 await models.organization.activate(user.organization.id, transaction);
                 await models.user.update(user.id, {
                     password: hashPassword(req.body.password, user.salt),
                     fk_status: 'active',
                 }, transaction);
-                await models.userAccess.update(userAccessId, {
-                    sent_by: (user.user_access.sent_by === null && decoded.activatedBy) || undefined,
+                await models.userAccess.update(decoded.id, {
                     used_at: now,
                 }, transaction);
 
-                if (user.user_access.sent_by !== null) {
-                    await accessRequestService.handleAccessActivated(user);
-                }
+                await accessRequestService.handleAccessActivated(user);
             });
         } catch (error) {
             res.status(500).send({

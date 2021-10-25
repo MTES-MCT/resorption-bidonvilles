@@ -43,7 +43,7 @@
                         </div>
                         <div
                             class="bg-yellow-200 p-4 mb-12"
-                            v-if="!user.user_access"
+                            v-if="user.status === 'new'"
                         >
                             Ne jamais envoyer un accès si vous avez un doute sur
                             l’identité de la personne.
@@ -113,7 +113,7 @@
                         <Button
                             v-if="
                                 user.status === 'new' &&
-                                    user.user_access === null
+                                    user.user_accesses.length === 0
                             "
                             class="mr-4"
                             variant="primary"
@@ -293,8 +293,8 @@ export default {
             return (
                 this.user !== null &&
                 this.user.status !== "active" &&
-                this.user.user_access !== null &&
-                now - this.user.user_access.expires_at * 1000 > 0
+                this.user.user_accesses.length > 0 &&
+                now - this.user.user_accesses[0].expires_at * 1000 > 0
             );
         }
     },

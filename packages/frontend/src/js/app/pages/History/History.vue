@@ -107,10 +107,6 @@ export default {
             ) {
                 const item = this.currentPageItems[i];
                 const date = new Date(item.date * 1000);
-                date.setHours(0);
-                date.setMinutes(0);
-                date.setSeconds(0);
-                date.setMilliseconds(0);
                 const dateStr = `${date.getDate()}${date.getMonth()}${date.getFullYear()}`;
 
                 // si cet item n'est pas à la même date que le précédent on crée un nouveau groupe

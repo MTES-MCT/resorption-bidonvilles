@@ -47,7 +47,7 @@ module.exports = {
             ...defaultPermissions,
             shantytown: {
                 ...defaultPermissions.shantytown,
-                create: true,
+                create: true
             },
             plan: {
                 ...defaultPermissions.plan

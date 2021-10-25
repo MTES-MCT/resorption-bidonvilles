@@ -12,11 +12,11 @@ export default function enrichUsersWithStatus(users) {
 }
 
 function getUserStatus(user) {
-    if (user.user_access && user.user_access.used_at) {
+    if (user.user_accesses.length > 0 && user.user_accesses[0].used_at) {
         return {
             type: "activated",
             text: "Activé",
-            date: user.user_access.used_at,
+            date: user.user_accesses[0].used_at,
             icon: "user-check",
             color: "text-tertiary"
         };
@@ -26,17 +26,17 @@ function getUserStatus(user) {
         return {
             type: "expired",
             text: "Expiré",
-            date: user.user_access.expires_at,
+            date: user.user_accesses[0].expires_at,
             icon: "unlink",
             color: "text-G600"
         };
     }
 
-    if (user.user_access && user.user_access.created_at) {
+    if (user.user_accesses.length > 0 && user.user_accesses[0].created_at) {
         return {
             type: "sent",
             text: "Envoyé",
-            date: user.user_access.created_at,
+            date: user.user_accesses[0].created_at,
             icon: "paper-plane",
             color: "text-primary"
         };
@@ -56,7 +56,7 @@ function isExpired(user) {
     return (
         user !== null &&
         user.status !== "active" &&
-        user.user_access !== null &&
-        now - user.user_access.expires_at * 1000 > 0
+        user.user_accesses.length > 0 &&
+        now - user.user_accesses[0].expires_at * 1000 > 0
     );
 }
