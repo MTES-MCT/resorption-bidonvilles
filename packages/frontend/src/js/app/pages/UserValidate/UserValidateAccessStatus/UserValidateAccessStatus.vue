@@ -8,40 +8,66 @@
             class="mb-2"
         />
 
+        <div v-for="(userAccess, index) in oldUserAccesses" v-bind:key="index">
+            <UserValidateAccessStatusDate
+                text="Envoyé"
+                :date="userAccess.created_at"
+                icon="paper-plane"
+                color="text-primary"
+                class="mb-2"
+            >
+                <span v-if="userAccess.sent_by">
+                    par {{ userAccess.sent_by.first_name }}
+                    {{ userAccess.sent_by.last_name }}
+                </span>
+            </UserValidateAccessStatusDate>
+
+            <UserValidateAccessStatusDate
+                v-if="userAccess.isExpired"
+                text="Expiré"
+                :date="userAccess.expires_at"
+                icon="unlink"
+                color="text-G600"
+                class="mb-2"
+            />
+        </div>
+
         <UserValidateAccessStatusDate
-            v-if="user.user_access && user.user_access.created_at"
+            v-if="user.user_accesses.length > 0"
             text="Envoyé"
-            :date="user.user_access.created_at"
+            :date="user.user_accesses[0].created_at"
             icon="paper-plane"
             color="text-primary"
             class="mb-2"
         >
-            <span v-if="user.user_access.sent_by">
-                par {{ user.user_access.sent_by.first_name }}
-                {{ user.user_access.sent_by.last_name }}
+            <span v-if="user.user_accesses[0].sent_by">
+                par {{ user.user_accesses[0].sent_by.first_name }}
+                {{ user.user_accesses[0].sent_by.last_name }}
             </span>
         </UserValidateAccessStatusDate>
 
         <UserValidateAccessStatusDate
-            v-if="isExpired"
+            v-if="hasExpired(0)"
             text="Expiré"
-            :date="user.user_access.expires_at"
+            :date="user.user_accesses[0].expires_at"
             icon="unlink"
             color="text-G600"
             class="mb-2"
         />
 
         <UserValidateAccessStatusDate
-            v-if="user.user_access && user.user_access.used_at"
+            v-if="
+                user.user_accesses.length > 0 && user.user_accesses[0].used_at
+            "
             text="Activé"
-            :date="user.user_access.used_at"
+            :date="user.user_accesses[0].used_at"
             icon="user-check"
             color="text-tertiary"
             class="mb-2"
         >
-            <span v-if="user.user_access.sent_by">
-                par {{ user.user_access.sent_by.first_name }}
-                {{ user.user_access.sent_by.last_name }}
+            <span v-if="user.user_accesses[0].sent_by">
+                par {{ user.user_accesses[0].sent_by.first_name }}
+                {{ user.user_accesses[0].sent_by.last_name }}
             </span>
         </UserValidateAccessStatusDate>
 
@@ -71,22 +97,37 @@ export default {
     methods: {
         formatDate(...args) {
             return App.formatDate.call(App, ...args).toLowerCase();
+        },
+        hasExpired(userAccessIndex) {
+            // last user access to date
+            if (userAccessIndex === 0) {
+                const now = Date.now();
+                return (
+                    this.user.status === "new" &&
+                    this.user.user_accesses.length > 0 &&
+                    now - this.user.user_accesses[0].expires_at * 1000 > 0
+                );
+            }
+
+            // old user access: considered as expired only if it actually reached expiracy before
+            // the sending of the next user access
+            const expiredAt = this.user.user_accesses[userAccessIndex]
+                .expires_at;
+            const invalidatedAt = this.user.user_accesses[userAccessIndex - 1]
+                .created_at;
+
+            return expiredAt < invalidatedAt;
         }
     },
     computed: {
-        /**
-         * Indicates whether the activation link is now expired
-         *
-         * @returns {Boolean}
-         */
-        isExpired() {
-            const now = Date.now();
-            return (
-                this.user !== null &&
-                this.user.status !== "active" &&
-                this.user.user_access !== null &&
-                now - this.user.user_access.expires_at * 1000 > 0
-            );
+        oldUserAccesses() {
+            return [...this.user.user_accesses]
+                .map((userAccess, index) => ({
+                    ...userAccess,
+                    isExpired: this.hasExpired(index)
+                }))
+                .reverse()
+                .slice(0, -1);
         }
     }
 };
