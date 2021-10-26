@@ -351,7 +351,6 @@
                         :key="shantytown.id"
                         :shantytown="shantytown"
                         :hasJusticePermission="hasJusticePermission"
-                        :closingSolutions="closingSolutions"
                         class="mb-6"
                     />
                     <div

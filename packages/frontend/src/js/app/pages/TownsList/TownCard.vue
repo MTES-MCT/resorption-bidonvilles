@@ -164,7 +164,6 @@
                             :shantytownClosingSolutions="
                                 shantytown.closingSolutions
                             "
-                            :closingSolutions="closingSolutions"
                         ></ClosingSolutionsList>
                     </div>
                     <!-- fourth column -->
@@ -288,9 +287,6 @@ export default {
         },
         hasJusticePermission: {
             type: Boolean
-        },
-        closingSolutions: {
-            type: Array
         }
     },
     data() {
