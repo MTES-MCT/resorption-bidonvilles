@@ -211,14 +211,7 @@
                         leurs usages.
                     </p>
                     <p class="mt-6">
-                        <span class="font-bold">Le saviez-vous ?</span> Idée :
-                        évoquer ici l’historique des activités pour tracer les
-                        données partagées. La plateforme permet de s’informer
-                        des nouvelles activités réalisées sur votre territoire
-                        via l’historique des activités : un nouveau partenaire
-                        sur la plateforme, la création, fermeture ou
-                        modification d’un site, les constats partagés sur le
-                        journal d’un site.<br />
+                        <span class="font-bold">Le saviez-vous ?</span>
                         La rubrique “Dernières activités” vous permet d’être
                         informé de toutes les activités sur votre territoire :
                         un nouveau partenaire, une modification sur un site, un
