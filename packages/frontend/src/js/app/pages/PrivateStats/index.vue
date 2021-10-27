@@ -291,7 +291,7 @@ export default {
                 d => d.code === this.$route.params.code
             );
 
-            return territory || { name: "France métropolitaine" };
+            return territory || { name: "France" };
         },
 
         shantytownsEvolutionData() {
