@@ -649,7 +649,7 @@ export default {
                 return `« ${this.filters.search} »`;
             }
 
-            return `France métropolitaine`;
+            return `France`;
         },
         nbPages() {
             return Math.ceil(this.filteredShantytowns.length / PER_PAGE);
