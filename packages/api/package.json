@@ -67,7 +67,8 @@
     "sequelize-test-helpers": "^1.0.10",
     "sinon": "^7.2.7",
     "sinon-chai": "^3.3.0",
-    "sinon-express-mock": "^2.1.0"
+    "sinon-express-mock": "^2.1.0",
+    "ts-node-dev": "^1.1.8"
   },
   "husky": {
     "hooks": {
@@ -81,7 +82,7 @@
   },
   "scripts": {
     "db:create": "docker exec rb_api yarn sequelize db:migrate && yarn sequelize db:seed:all",
-    "dev": "nodemon --ext js,json,ts server/index.ts",
+    "dev": "ts-node-dev --respawn server/index.ts",
     "test": "mocha --recursive --require ./test/bootstrap.js --bail",
     "test:unit": "yarn test --invert --grep '.*server/models.*'",
     "test:integration": "yarn test --grep '.*server/models.*'",
