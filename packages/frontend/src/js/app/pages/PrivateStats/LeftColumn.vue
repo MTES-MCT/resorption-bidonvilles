@@ -6,9 +6,7 @@
 
         <div>
             <div>
-                <LeftColumnLink :to="`/statistiques/`"
-                    >France métropolitaine</LeftColumnLink
-                >
+                <LeftColumnLink :to="`/statistiques/`">France</LeftColumnLink>
             </div>
             <div v-for="option in departements" :key="option.code">
                 <LeftColumnLink :to="`/statistiques/${option.code}`"
