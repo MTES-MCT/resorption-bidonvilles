@@ -4,6 +4,7 @@
         "moduleResolution": "node",
         "outDir": "./dist",
         "allowJs": true,
+        "resolveJsonModule": true,
         "baseUrl": ".",
         "paths": {
             "#server/*": [
@@ -11,6 +12,9 @@
             ],
             "#db/*": [
                 "db/*"
+            ],
+            "#root/*": [
+                "*"
             ]
         },
         "lib": [

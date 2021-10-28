@@ -9,11 +9,15 @@ module.exports = (database) => {
         .reduce((models, file) => {
             const indexPath = path.join(__dirname, file, 'index.js');
             if (fs.existsSync(indexPath)) {
-                return {
-                    ...models,
-                    /* eslint-disable-next-line */
-                    [file.replace('Model', '')]: require(indexPath)(database)
-                };
+                /* eslint-disable-next-line */
+                const exp = require(indexPath);
+
+                if (typeof exp === 'function') {
+                    return {
+                        ...models,
+                        [file.replace('Model', '')]: exp(database),
+                    };
+                }
             }
 
             return models;
