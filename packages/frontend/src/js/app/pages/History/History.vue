@@ -198,7 +198,7 @@ export default {
 
         getLocationName() {
             if (this.locationType === "nation") {
-                return "France métropolitaine";
+                return "France";
             }
 
             return (
