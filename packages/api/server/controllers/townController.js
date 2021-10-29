@@ -1097,6 +1097,26 @@ module.exports = (models) => {
                     width: COLUMN_WIDTHS.SMALL,
                 },
 
+                // New Fields issue/1271
+                // hasPlan?
+                hasPlan: {
+                    title: 'Le site fait-il l’objet d’un dispositif ?',
+                    data: ({ plans }) => (plans.length > 0 ? 'oui' : 'non'),
+                    width: COLUMN_WIDTHS.SMALL,
+                },
+
+                resorptionTarget: {
+                    title: 'Site avec objectif de résorption ?',
+                    data: ({ resorptionTarget }) => {
+                        if (resorptionTarget === null) {
+                            return null;
+                        }
+
+                        return resorptionTarget;
+                    },
+                    width: COLUMN_WIDTHS.SMALL,
+                },
+
             };
 
             closingSolutions.forEach(({ id: solutionId }) => {
@@ -1157,6 +1177,8 @@ module.exports = (models) => {
                     properties.fieldType,
                     properties.builtAt,
                     properties.declaredAt,
+                    properties.hasPlan,
+                    properties.resorptionTarget,
                 ],
             };
 
@@ -1167,8 +1189,10 @@ module.exports = (models) => {
             }
 
             if (options.indexOf('owner') !== -1) {
-                section.properties.push(properties.ownerType);
-                section.properties.push(properties.owner);
+                if (['local_admin', 'national_admin', 'direct_collaborator'].includes(req.user.role_id)) {
+                    section.properties.push(properties.ownerType);
+                    section.properties.push(properties.owner);
+                }
             }
 
             sections.push(section);
