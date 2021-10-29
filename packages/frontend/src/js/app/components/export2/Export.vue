@@ -68,7 +68,7 @@
 
 <script>
 import { open } from "#helpers/api/main";
-import { getPermission } from "#helpers/api/config";
+import { get as getConfig, getPermission } from "#helpers/api/config";
 import Checkbox from "#app/components/ui/Form/input/Checkbox";
 import { VUE_APP_API_URL } from "#src/js/env.js";
 
@@ -79,6 +79,9 @@ export default {
         closedTowns: Boolean
     },
     data() {
+        const { user } = getConfig();
+        const userRole = user.role_id;
+
         return {
             existingOptions: [
                 {
@@ -128,12 +131,20 @@ export default {
                     }
                 }
             ],
-            options: []
+            options: [],
+            userRole
         };
     },
     computed: {
         title() {
             return this.closedTowns ? "fermés" : "existants";
+        },
+        displayOwnerOption() {
+            return [
+                "national_admin",
+                "local_admin",
+                "direct_collaborator"
+            ].includes(this.userRole);
         },
         availableOptions() {
             return this.existingOptions
@@ -152,7 +163,14 @@ export default {
                             `${permission.entity}.${permission.feature}`
                         ) !== null
                     );
-                });
+                })
+                .filter(option =>
+                    option.id === "owner"
+                        ? this.displayOwnerOption
+                            ? option
+                            : null
+                        : option
+                );
         }
     },
     methods: {
