@@ -1,5 +1,6 @@
 const getAddressSimpleOf = require('./getAddressSimpleOf');
 const getUsenameOf = require('./getUsenameOf');
+const getWaterAccessConditions = require('./getWaterAccessConditions');
 
 function fromDateToTimestamp(date) {
     return date !== null ? (new Date(`${date}T00:00:00`).getTime() / 1000) : null;
@@ -71,6 +72,7 @@ module.exports = (town, userPermissions) => {
         accessToSanitary: town.accessToSanitary,
         sanitaryComments: town.sanitaryComments,
         accessToWater: town.accessToWater,
+        waterAccessConditions: getWaterAccessConditions(town),
         waterComments: town.waterComments,
         trashEvacuation: town.trashEvacuation,
         owner: town.owner,
