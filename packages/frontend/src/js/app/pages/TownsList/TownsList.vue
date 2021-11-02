@@ -212,6 +212,7 @@
                             ]"
                         />
                         <CustomFilter
+                            v-if="filters.status === 'open'"
                             title="Conditions de vie"
                             class="mr-2 mb-2"
                             :value="filters.conditions"
@@ -256,6 +257,38 @@
                                 </div>
                             </template>
                         </CustomFilter>
+                        <CustomFilter
+                            v-if="filters.status === 'close'"
+                            title="Cause de la fermeture"
+                            class="mr-2 mb-2"
+                            :value="filters.closingSolution"
+                            @input="
+                                val => updateFilters('closingSolution', val)
+                            "
+                            :options="
+                                closingSolutions.map(f => ({
+                                    label: f.label,
+                                    value: f.id
+                                }))
+                            "
+                        />
+                        <CustomFilter
+                            v-if="filters.status === 'close'"
+                            title="Résorbé / fermé"
+                            class="mr-2 mb-2"
+                            :value="filters.solvedOrClosed"
+                            @input="val => updateFilters('solvedOrClosed', val)"
+                            :options="[
+                                {
+                                    value: 'closed',
+                                    label: 'Fermé'
+                                },
+                                {
+                                    value: 'solved',
+                                    label: 'Résorbé'
+                                }
+                            ]"
+                        />
                         <CustomFilter
                             v-if="hasJusticePermission"
                             title="Procédure judiciaire"
@@ -398,11 +431,13 @@ export default {
     },
     data() {
         const { field_types: fieldTypes } = getConfig();
+        const { closing_solutions: closingSolutions } = getConfig();
         const permission = getPermission("shantytown_justice.access");
 
         return {
             hasJusticePermission: permission !== null,
             fieldTypes,
+            closingSolutions,
             exportIsVisible: false,
             printMode: false,
             sortOptions: {
@@ -434,16 +469,8 @@ export default {
                         label: `Date de fermeture`
                     },
                     {
-                        value: `builtAt`,
-                        label: `Date d'installation`
-                    },
-                    {
                         value: `updatedAt`,
                         label: `Date d'actualisation`
-                    },
-                    {
-                        value: `declaredAt`,
-                        label: `Date de signalement`
                     }
                 ]
             }
@@ -461,7 +488,7 @@ export default {
         },
         onClickCloseTab() {
             this.updateFilters("status", "close");
-            this.updateSort("cityName");
+            this.updateSort("closedAt");
         },
         onClickOpenTab() {
             this.updateFilters("status", "open");
