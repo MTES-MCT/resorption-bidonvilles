@@ -2,7 +2,7 @@ module.exports = {
     up: queryInterface => queryInterface.sequelize.transaction(
         transaction => queryInterface.sequelize.query(
             `INSERT INTO organization_types(name_singular, name_plural, fk_category, fk_role, uid)
-            VALUES ('Assemblée nationale', 'Assemblée nationale', 'public_establishment', 'collaborator', 'assemblee_nationale')
+            VALUES ('Parlementaire', 'Parlementaires', 'public_establishment', 'collaborator', 'parlementaire')
             RETURNING organization_type_id`,
             {
                 transaction,
@@ -19,7 +19,7 @@ module.exports = {
             .then(({ organization_type_id, departements }) => queryInterface.bulkInsert(
                 'organizations',
                 departements.map(({ code, name }) => ({
-                    name: `Assemblée nationale - ${name}`,
+                    name: `Parlementaire - ${name}`,
                     active: false,
                     fk_type: organization_type_id,
                     fk_departement: code,
@@ -34,7 +34,7 @@ module.exports = {
 
     down: queryInterface => queryInterface.sequelize.transaction(
         transaction => queryInterface.sequelize.query(
-            'SELECT organization_type_id FROM organization_types WHERE uid = \'assemblee_nationale\'',
+            'SELECT organization_type_id FROM organization_types WHERE uid = \'parlementaire\'',
             { type: queryInterface.sequelize.QueryTypes.SELECT, transaction },
         )
             .then(([{ organization_type_id }]) => queryInterface.sequelize.query(
@@ -51,7 +51,7 @@ module.exports = {
                 { transaction },
             ))
             .then(() => queryInterface.sequelize.query(
-                'DELETE FROM organization_types WHERE uid = \'assemblee_nationale\'',
+                'DELETE FROM organization_types WHERE uid = \'parlementaire\'',
                 { transaction },
             )),
     ),
