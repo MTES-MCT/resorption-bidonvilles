@@ -18,60 +18,60 @@ import directory from "./modules/directory";
 export default function(Vue) {
     Vue.use(Vuex);
 
-export default new Vuex.Store({
-    modules: {
-        activities,
-        locations,
-        directory
-    },
-    state: {
-        towns: {
-            data: [],
-            loading: true,
-            error: null,
-            sort: "updatedAt",
-            filters: {
-                population: [],
-                fieldType: [],
-                justice: [],
-                origin: [],
-                conditions: [],
-                closingSolution: [],
-                solvedOrClosed: [],
-                status: "open",
-                location: null,
-                actors: [],
-                target: [],
-                search: ""
+    return new Vuex.Store({
+        modules: {
+            activities,
+            locations,
+            directory
+        },
+        state: {
+            towns: {
+                data: [],
+                loading: true,
+                error: null,
+                sort: "updatedAt",
+                filters: {
+                    population: [],
+                    fieldType: [],
+                    justice: [],
+                    origin: [],
+                    conditions: [],
+                    closingSolution: [],
+                    solvedOrClosed: [],
+                    status: "open",
+                    location: null,
+                    actors: [],
+                    target: [],
+                    search: ""
+                },
+                currentPage: 1
             },
-            currentPage: 1
+            detailedTown: null
         },
-        detailedTown: null
-    },
-    mutations: {
-        setLoading(state, value) {
-            state.towns.loading = value;
-        },
-        setTowns(state, towns) {
-            state.towns.data = towns;
-        },
-        setError(state, err) {
-            state.towns.error = err;
-        },
-        setSort(state, sort) {
-            state.towns.sort = sort;
-        },
-        setFilters(state, filters) {
-            state.towns.filters = filters;
-        },
-        setLocation(state, location) {
-            state.towns.filters.location = location;
-        },
-        setCurrentPage(state, page) {
-            state.towns.currentPage = page;
-        },
-        setDetailedTown(state, town) {
-            state.detailedTown = town;
+        mutations: {
+            setLoading(state, value) {
+                state.towns.loading = value;
+            },
+            setTowns(state, towns) {
+                state.towns.data = towns;
+            },
+            setError(state, err) {
+                state.towns.error = err;
+            },
+            setSort(state, sort) {
+                state.towns.sort = sort;
+            },
+            setFilters(state, filters) {
+                state.towns.filters = filters;
+            },
+            setLocation(state, location) {
+                state.towns.filters.location = location;
+            },
+            setCurrentPage(state, page) {
+                state.towns.currentPage = page;
+            },
+            setDetailedTown(state, town) {
+                state.detailedTown = town;
 
                 const index = state.towns.data.findIndex(
                     ({ id }) => id === town.id
