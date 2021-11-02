@@ -1,3 +1,4 @@
+const JSONToCSV = require('json2csv');
 const {
     Stats_Exports,
     Stats_Directory_Views,
@@ -163,5 +164,48 @@ module.exports = models => ({
         }
 
         return res.status(201).send({});
+    },
+
+    async export(req, res) {
+        try {
+            const [
+                averageCompletion,
+                people,
+                plans,
+                resorbedShantytowns,
+                shantytowns,
+                users] = await Promise.all([
+                models.stats.averageCompletionPercentageByDepartement(),
+                models.stats.numberOfPeopleByDepartement(),
+                models.stats.numberOfPlansByDepartement(),
+                models.stats.numberOfResorbedShantytownByDepartement(),
+                models.stats.numberOfShantytownByDepartement(),
+                models.stats.numberOfUsersByDepartement(),
+
+            ]);
+
+            const result = [
+                ...averageCompletion.map(r => ({ departement: r.fk_departement, valeur: (r.avg * 100).toFixed(2), type: 'completion' })),
+                ...people.map(r => ({ departement: r.fk_departement, valeur: r.total, type: 'habitants' })),
+                ...plans.map(r => ({ departement: r.fk_departement, valeur: r.total, type: 'dispositifs' })),
+                ...resorbedShantytowns.map(r => ({ departement: r.fk_departement, valeur: r.total, type: 'résorptions' })),
+                ...shantytowns.map(r => ({ departement: r.fk_departement, valeur: r.total, type: 'sites' })),
+                ...users.map(r => ({ departement: r.fk_departement, valeur: r.count, type: 'utilisateurs' })),
+            ];
+
+            const csv = JSONToCSV.parse(result);
+
+            // The frontend expect a JSON for every API calls, so we wrap the CSV in a json entry
+            res.status(200).send({
+                csv,
+            });
+        } catch (error) {
+            res.status(500).send({
+                error: {
+                    user_message: 'Une erreur est survenue lors de la récupération des données en base',
+                    developer_message: error.message,
+                },
+            });
+        }
     },
 });
