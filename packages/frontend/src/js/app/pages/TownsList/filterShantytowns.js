@@ -1,3 +1,5 @@
+import { isSolved, isClosed } from "./common/SolvedOrClosed";
+
 export function filterShantytowns(shantytowns, filters) {
     return shantytowns.filter(shantytown => {
         if (filters.status === "open" && shantytown.status !== "open") {
@@ -51,6 +53,20 @@ export function filterShantytowns(shantytowns, filters) {
         if (
             filters.conditions.length > 0 &&
             !checkConditions(shantytown, filters.conditions)
+        ) {
+            return false;
+        }
+
+        if (
+            filters.closingSolution.length > 0 &&
+            !checkClosingSolutions(shantytown, filters.closingSolution)
+        ) {
+            return false;
+        }
+
+        if (
+            filters.solvedOrClosed.length > 0 &&
+            !checkSolvedOrClosed(shantytown, filters.solvedOrClosed)
         ) {
             return false;
         }
@@ -196,6 +212,32 @@ function checkJustice(shantytown, filters) {
 
         return value === null;
     });
+}
+
+/**
+ * Filter on closing solutions
+ */
+function checkClosingSolutions(shantytown, filters) {
+    const closingSolutionsIds = shantytown.closingSolutions.map(function(
+        closingSolution
+    ) {
+        return closingSolution.id;
+    });
+
+    return closingSolutionsIds.some(e => filters.includes(e));
+}
+
+/**
+ * Filter on "solved or closed ?"
+ */
+function checkSolvedOrClosed(shantytown, filters) {
+    if (filters.includes("solved") && isSolved(shantytown)) {
+        return true;
+    }
+    if (filters.includes("closed") && isClosed(shantytown)) {
+        return true;
+    }
+    return false;
 }
 
 /**

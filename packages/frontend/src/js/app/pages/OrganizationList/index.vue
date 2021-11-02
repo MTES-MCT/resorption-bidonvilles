@@ -180,7 +180,7 @@ export default {
                 return `« ${searchFilter} »`;
             }
 
-            return `France métropolitaine`;
+            return `France`;
         },
         filteredOrganizations() {
             return this.directoryFilteredItems;

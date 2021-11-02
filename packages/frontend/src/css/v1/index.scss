@@ -361,6 +361,24 @@
     display: flex;
     align-items: center;
 
+    &.mapPin--closed {
+        &::before {
+            content: "x";
+            position: absolute;
+            z-index: 50;
+            right: -20px;
+            top: 0;
+            width: 13px;
+            height: 13px;
+            line-height: 10px;
+            font-size: 1em;
+            background: black;
+            color: white;
+            text-align: center;
+            border-radius: 50%;
+        }
+    }
+
     .mapPin-wrapper {
       border-radius: 50%;
       flex-shrink: 0;
