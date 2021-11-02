@@ -78,7 +78,11 @@ export default {
                     token: this.$route.params.token
                 });
                 this.$trackMatomoEvent("Demande d'accès", "Création compte");
-                window.localStorage.setItem("logged_once", true);
+
+                const d = new Date();
+                d.setTime(d.getTime() + 365 * 24 * 60 * 60 * 1000); // cookie is valid for 365 days
+                document.cookie = `logged_once=1;expires={d.toUTCString()};path=/`;
+
                 this.$router.push({ path: "/" });
                 notify({
                     group: "notifications",
