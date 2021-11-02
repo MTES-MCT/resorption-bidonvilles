@@ -68,18 +68,6 @@ export function isLoggedIn() {
 }
 
 /**
- * Checks if the current visitor has already been logged at least once
- *
- * @returns {Boolean}
- */
-export function alreadyLoggedBefore() {
-    if (process.isServer) {
-        return false;
-    }
-    return localStorage.getItem("logged_once") === true;
-}
-
-/**
  * Returns the access token of the current session (if any)
  *
  * @returns {string|null}
