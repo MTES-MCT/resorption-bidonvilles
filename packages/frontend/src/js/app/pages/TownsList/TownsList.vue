@@ -17,6 +17,26 @@
                     :value="filters.location"
                     @blur="handleSearchBlur"
                 />
+                <h1 class="text-display-md text-center mb-4">
+                    ou un intervenant
+                </h1>
+                <div class="searchbox m-auto flex">
+                    <TextInput
+                        v-model="filters.actor"
+                        class="flex-grow"
+                        placeholder="Nom d'un intervenant"
+                        :inputClasses="['rounded-full shadow-sm']"
+                        @blur="handleActorBlur"
+                    />
+                    <div>
+                        <Button
+                            class="rounded-full ml-2"
+                            size="sm"
+                            @click="handleActorBlur"
+                            >Rechercher</Button
+                        >
+                    </div>
+                </div>
             </PrivateContainer>
         </div>
         <PrivateContainer class="pt-10">
@@ -383,6 +403,13 @@
     </PrivateLayout>
 </template>
 
+<style scoped>
+.searchbox {
+    max-width: 530px;
+    min-width: 530px;
+}
+</style>
+
 <script>
 import getSince from "#app/pages/TownsList/getSince";
 import ActivityCard from "#app/components/ActivityCard/ActivityCard.vue";
@@ -477,6 +504,9 @@ export default {
         };
     },
     methods: {
+        handleActorBlur() {
+            this.onChangePage(1);
+        },
         handleSearchBlur(data) {
             this.$trackMatomoEvent("Liste des sites", "Recherche");
 

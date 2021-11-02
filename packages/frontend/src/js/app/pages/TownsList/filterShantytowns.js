@@ -1,92 +1,96 @@
 import { isSolved, isClosed } from "./common/SolvedOrClosed";
 
 export function filterShantytowns(shantytowns, filters) {
-    return shantytowns.filter(shantytown => {
-        if (filters.status === "open" && shantytown.status !== "open") {
-            return false;
-        }
+    return shantytowns
+        .filter(shantytown => {
+            if (filters.status === "open" && shantytown.status !== "open") {
+                return false;
+            }
 
-        if (filters.status === "close" && shantytown.status === "open") {
-            return false;
-        }
+            if (filters.status === "close" && shantytown.status === "open") {
+                return false;
+            }
 
-        if (filters.location && !checkLocation(shantytown, filters)) {
-            return false;
-        }
+            if (filters.location && !checkLocation(shantytown, filters)) {
+                return false;
+            }
 
-        if (
-            !filters.location &&
-            filters.search &&
-            !checkSearch(shantytown, filters.search)
-        ) {
-            return false;
-        }
+            if (
+                !filters.location &&
+                filters.search &&
+                !checkSearch(shantytown, filters.search)
+            ) {
+                return false;
+            }
 
-        if (
-            filters.fieldType.length > 0 &&
-            !checkFieldType(shantytown, filters.fieldType)
-        ) {
-            return false;
-        }
+            if (
+                filters.fieldType.length > 0 &&
+                !checkFieldType(shantytown, filters.fieldType)
+            ) {
+                return false;
+            }
 
-        if (
-            filters.population.length > 0 &&
-            !checkPopulation(shantytown, filters.population)
-        ) {
-            return false;
-        }
+            if (
+                filters.population.length > 0 &&
+                !checkPopulation(shantytown, filters.population)
+            ) {
+                return false;
+            }
 
-        if (
-            filters.justice.length > 0 &&
-            !checkJustice(shantytown, filters.justice)
-        ) {
-            return false;
-        }
+            if (
+                filters.justice.length > 0 &&
+                !checkJustice(shantytown, filters.justice)
+            ) {
+                return false;
+            }
 
-        if (
-            filters.origin.length > 0 &&
-            !checkOrigin(shantytown, filters.origin)
-        ) {
-            return false;
-        }
+            if (
+                filters.origin.length > 0 &&
+                !checkOrigin(shantytown, filters.origin)
+            ) {
+                return false;
+            }
 
-        if (
-            filters.conditions.length > 0 &&
-            !checkConditions(shantytown, filters.conditions)
-        ) {
-            return false;
-        }
+            if (
+                filters.conditions.length > 0 &&
+                !checkConditions(shantytown, filters.conditions)
+            ) {
+                return false;
+            }
 
-        if (
-            filters.closingSolution.length > 0 &&
-            !checkClosingSolutions(shantytown, filters.closingSolution)
-        ) {
-            return false;
-        }
+            if (
+                filters.closingSolution.length > 0 &&
+                !checkClosingSolutions(shantytown, filters.closingSolution)
+            ) {
+                return false;
+            }
 
-        if (
-            filters.solvedOrClosed.length > 0 &&
-            !checkSolvedOrClosed(shantytown, filters.solvedOrClosed)
-        ) {
-            return false;
-        }
+            if (
+                filters.solvedOrClosed.length > 0 &&
+                !checkSolvedOrClosed(shantytown, filters.solvedOrClosed)
+            ) {
+                return false;
+            }
 
-        if (
-            filters.actors.length > 0 &&
-            !checkActors(shantytown, filters.actors)
-        ) {
-            return false;
-        }
+            if (
+                filters.actors.length > 0 &&
+                !checkActors(shantytown, filters.actors)
+            ) {
+                return false;
+            }
 
-        if (
-            filters.target.length > 0 &&
-            !checkTarget(shantytown, filters.target)
-        ) {
-            return false;
-        }
+            if (
+                filters.target.length > 0 &&
+                !checkTarget(shantytown, filters.target)
+            ) {
+                return false;
+            }
 
-        return true;
-    });
+            return true;
+        })
+        .filter(shantytown => {
+            return checkActorSearch(shantytown, filters.actor);
+        });
 }
 
 function checkConditions(shantytown, filters) {
@@ -135,15 +139,21 @@ function checkOrigin(shantytown, filters) {
     return filteredArray.length;
 }
 
-function checkSearch(shantytown, search) {
+function checkActorSearch(shantytown, search) {
     const plainActors = shantytown.actors
-        .map(({ first_name, last_name }) => `${first_name} ${last_name}`)
+        .map(
+            ({ first_name, last_name, organization: { name: org } }) =>
+                `${first_name} ${last_name} ${org}`
+        )
         .join(" ");
 
+    return !!plainActors.match(new RegExp(search, "ig"));
+}
+
+function checkSearch(shantytown, search) {
     return (
         !!shantytown.name?.match(new RegExp(search, "ig")) ||
-        !!shantytown.address?.match(new RegExp(search, "ig")) ||
-        !!plainActors.match(new RegExp(search, "ig"))
+        !!shantytown.address?.match(new RegExp(search, "ig"))
     );
 }
 

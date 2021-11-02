@@ -40,6 +40,7 @@ export default new Vuex.Store({
                 solvedOrClosed: [],
                 status: "open",
                 location: null,
+                actor: "",
                 actors: [],
                 target: [],
                 search: ""

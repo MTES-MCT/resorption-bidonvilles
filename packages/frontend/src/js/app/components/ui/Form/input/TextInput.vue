@@ -24,6 +24,7 @@
                     v-bind="filteredProps"
                     :class="classes"
                     :data-cy-field="cypressName"
+                    @blur="$emit('blur')"
                 />
                 <InputIcon
                     position="after"
@@ -98,6 +99,12 @@ export default {
         },
         disabled: {
             type: Boolean
+        },
+        inputClasses: {
+            tyoe: Array,
+            default() {
+                return [];
+            }
         }
     },
     computed: {
@@ -109,8 +116,14 @@ export default {
             };
 
             return {
-                state: [...getInputClasses("state", inputOptions)],
-                default: getInputClasses("default", inputOptions)
+                state: [
+                    ...getInputClasses("state", inputOptions),
+                    ...this.inputClasses
+                ],
+                default: [
+                    ...getInputClasses("default", inputOptions),
+                    ...this.inputClasses
+                ]
             }[this.variant];
         }
     },
