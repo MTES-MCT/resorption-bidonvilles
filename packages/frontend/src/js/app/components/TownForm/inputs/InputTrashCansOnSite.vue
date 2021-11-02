@@ -1,6 +1,6 @@
 <template>
     <SubQuestionWrapper
-        label="Combien de poubelles / benes sont à proximité immédiate du site (moins de 100 mètres) ?"
+        label="Combien de poubelles / bennes sont à proximité immédiate du site (moins de 100 mètres) ?"
         withoutMargin
     >
         <InlineTextInput

@@ -38,7 +38,7 @@
                     <StatsBlock
                         :title="numberOfDepartements"
                         icon="flag"
-                        subtitle="départements de France métropolitaine"
+                        subtitle="départements"
                     />
                     <StatsBlock
                         :title="numberOfNewUsers.total"
