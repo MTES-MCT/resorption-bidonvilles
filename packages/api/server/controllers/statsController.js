@@ -4,6 +4,8 @@ const {
     Stats_Directory_Views,
 } = require('#db/models');
 
+const groupByKey = (list, key) => list.reduce((hash, obj) => ({ ...hash, [obj[key]]: { ...hash[obj[key]], ...obj } }), {});
+
 module.exports = models => ({
     all: async (req, res) => {
         const { departement } = req.params;
@@ -184,14 +186,14 @@ module.exports = models => ({
 
             ]);
 
-            const result = [
-                ...averageCompletion.map(r => ({ departement: r.fk_departement, valeur: (r.avg * 100).toFixed(2), type: 'completion' })),
-                ...people.map(r => ({ departement: r.fk_departement, valeur: r.total, type: 'habitants' })),
-                ...plans.map(r => ({ departement: r.fk_departement, valeur: r.total, type: 'dispositifs' })),
-                ...resorbedShantytowns.map(r => ({ departement: r.fk_departement, valeur: r.total, type: 'résorptions' })),
-                ...shantytowns.map(r => ({ departement: r.fk_departement, valeur: r.total, type: 'sites' })),
-                ...users.map(r => ({ departement: r.fk_departement, valeur: r.count, type: 'utilisateurs' })),
-            ];
+            const result = Object.values(groupByKey([
+                ...averageCompletion.map(r => ({ Département: r.fk_departement, 'Taux de completion': `${(r.avg * 100).toFixed(2)}%` })),
+                ...people.map(r => ({ Département: r.fk_departement, 'Nombre habitants': r.total })),
+                ...plans.map(r => ({ Département: r.fk_departement, 'Nombre de dispositifs': r.total })),
+                ...resorbedShantytowns.map(r => ({ Département: r.fk_departement, 'Nombre de résorptions': r.total })),
+                ...shantytowns.map(r => ({ Département: r.fk_departement, 'Nombre de sites': r.total })),
+                ...users.filter(r => r.fk_departement !== null).map(r => ({ Département: r.fk_departement, "Nombre d'utilisateurs": r.count })),
+            ], 'Département')).sort((a, b) => a.Département - b.Département);
 
             const csv = JSONToCSV.parse(result);
 
