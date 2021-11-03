@@ -176,14 +176,14 @@ module.exports = models => ({
                 plans,
                 resorbedShantytowns,
                 shantytowns,
-                users] = await Promise.all([
+                users,
+            ] = await Promise.all([
                 models.stats.averageCompletionPercentageByDepartement(),
                 models.stats.numberOfPeopleByDepartement(),
                 models.stats.numberOfPlansByDepartement(),
                 models.stats.numberOfResorbedShantytownByDepartement(),
                 models.stats.numberOfShantytownByDepartement(),
                 models.stats.numberOfUsersByDepartement(),
-
             ]);
 
             const result = Object.values(groupByKey([
