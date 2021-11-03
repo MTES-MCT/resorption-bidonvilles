@@ -1,3 +1,10 @@
+ERRATUM : un récapitulatif hebdomadaire erroné vous a été envoyé le mardi
+02/11/2021. Merci de l'ignorer et de ne prendre en compte que le présent
+récapitulatif.
+Merci de votre compréhension.
+
+
+
 Semaine du {{ var:from }} au {{ var:to }}
 {% for summary in var:summaries %}
 {{ summary.code }} – {{ summary.name }}

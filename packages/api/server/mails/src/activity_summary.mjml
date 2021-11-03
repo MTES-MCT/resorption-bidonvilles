@@ -5,6 +5,12 @@
         <mj-include path='common/styles.mjml' />
     </mj-head>
     <mj-body mj-class='bg-white'>
+        <mj-section>
+            <mj-column mj-class='bg-secondary text-center'>
+                <mj-text align="center"><span class='text-white'><strong>ERRATUM :</strong> un récapitulatif hebdomadaire erroné vous a été envoyé le mardi 02/11/2021. Merci de l'ignorer et de ne prendre en compte que le présent récapitulatif.<br/>Merci de votre compréhension.</span></mj-text>
+            </mj-column>
+        </mj-section>
+
         <mj-include path='common/hero.mjml' />
 
         <mj-section>

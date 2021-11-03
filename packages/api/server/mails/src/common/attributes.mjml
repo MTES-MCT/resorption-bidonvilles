@@ -4,6 +4,7 @@
     <mj-text padding="0" />
     <!-- background -->
     <mj-class name='bg-white' background-color='#FFFFFF'/>
+    <mj-class name='bg-secondary' background-color="#FF6F4C" />
     <!-- text-colors -->
     <mj-class name='text-primary' color="#000091" />
     <mj-class name='text-secondary' color="#FF6F4c"/>
