@@ -8,11 +8,11 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster/dist/leaflet.markercluster";
 
-import utensils from "../../../../../public/img/utensils.png";
-import waterYes from "../../../../../public/img/water-yes.png";
-import waterNo from "../../../../../public/img/water-no.png";
-import waterToImprove from "../../../../../public/img/water-to-improve.png";
-import waterNull from "../../../../../public/img/water-null.png";
+import utensils from "../../../../../static/img/utensils.png";
+import waterYes from "../../../../../static/img/water-yes.png";
+import waterNo from "../../../../../static/img/water-no.png";
+import waterToImprove from "../../../../../static/img/water-to-improve.png";
+import waterNull from "../../../../../static/img/water-null.png";
 
 // données tirées de https://github.com/gregoiredavid/france-geojson
 import departements from "#src/geojson/departements.json";

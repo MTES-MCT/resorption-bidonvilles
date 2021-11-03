@@ -1,6 +1,5 @@
 import Vue from "vue";
 import { getToken, logout } from "#helpers/api/user";
-import { router } from "#app/router";
 import { open as openTab } from "#helpers/tabHelper";
 import { VUE_APP_API_URL, APP_VERSION } from "#src/js/env.js";
 
@@ -47,7 +46,8 @@ function handleRequestResponse(success, failure) {
             case ERRORS.MISSING_TOKEN:
             case ERRORS.EXPIRED_OR_INVALID_TOKEN:
                 logout(Vue.prototype.$piwik);
-                router.push("/");
+                // TODO: TO FIX
+                // router.push("/");
                 break;
 
             // for everything else, let the current component decide what's best

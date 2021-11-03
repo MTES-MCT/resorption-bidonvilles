@@ -154,7 +154,7 @@ export default {
             matomoStats: null
         };
     },
-    created() {
+    mounted() {
         this.load();
     },
 

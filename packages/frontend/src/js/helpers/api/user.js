@@ -61,16 +61,10 @@ export function logout(piwik) {
  * @returns {boolean}
  */
 export function isLoggedIn() {
+    if (process.isServer) {
+        return false;
+    }
     return localStorage.getItem("token") !== null;
-}
-
-/**
- * Checks if the current visitor has already been logged at least once
- *
- * @returns {Boolean}
- */
-export function alreadyLoggedBefore() {
-    return localStorage.getItem("logged_once") === true;
 }
 
 /**
@@ -79,6 +73,9 @@ export function alreadyLoggedBefore() {
  * @returns {string|null}
  */
 export function getToken() {
+    if (process.isServer) {
+        return false;
+    }
     return localStorage.getItem("token");
 }
 

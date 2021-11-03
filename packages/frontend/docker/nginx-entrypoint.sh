@@ -1,6 +1,6 @@
 #!/bin/sh
 
-ENV_FILE=$(find /usr/share/nginx/html/js/index.*.js)
+ENV_FILE=$(find /usr/share/nginx/html/assets/js/app.*.js)
 TEMPLATE="$ENV_FILE.template"
 
 if [ ! -f "$TEMPLATE" ]

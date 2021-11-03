@@ -1,7 +1,7 @@
 # ====
 # Development
 # ====
-FROM node:16.3-slim AS development
+FROM node:16-bullseye AS development
 
 RUN apt-get update || : && apt-get install -y \
     python \
@@ -20,7 +20,7 @@ RUN yarn install --silent && yarn cache clean
 # ====
 # Production (build)
 # ====
-FROM node:16.3-slim AS build
+FROM node:16-bullseye AS build
 
 RUN apt-get update || : && apt-get install -y \
     python \
@@ -33,7 +33,7 @@ USER node
 WORKDIR /home/node/app/
 
 COPY --from=development --chown=root:root /home/node/app/node_modules ./node_modules
-COPY . .
+COPY --chown=node:node . .
 
 RUN yarn build
 
@@ -43,8 +43,8 @@ RUN yarn build
 FROM nginx:1.19-alpine AS production
 
 COPY ./docker/nginx-entrypoint.sh /
-
 COPY ./docker/nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./docker/redirects.conf /etc/nginx/redirects.conf
 COPY --from=build --chown=nginx:nginx /home/node/app/dist /usr/share/nginx/html
 
 ENTRYPOINT [ "sh", "/nginx-entrypoint.sh" ]

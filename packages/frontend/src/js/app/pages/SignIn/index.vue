@@ -75,7 +75,11 @@ export default {
                 this.loading = true;
                 await login(this.email, this.password);
                 this.$trackMatomoEvent("Login", "Connection");
-                window.localStorage.setItem("logged_once", true);
+
+                const d = new Date();
+                d.setTime(d.getTime() + 365 * 24 * 60 * 60 * 1000); // cookie is valid for 365 days
+                document.cookie = `logged_once=1;expires={d.toUTCString()};path=/`;
+
                 this.$router.push({ path: "/" });
                 this.loading = false;
             } catch (err) {

@@ -402,7 +402,6 @@ import {
 import { filterShantytowns } from "./filterShantytowns";
 import Export from "#app/components/export2/Export.vue";
 import Spinner from "#app/components/ui/Spinner";
-import store from "#app/store";
 import { mapGetters } from "vuex";
 
 const PER_PAGE = 20;
@@ -480,7 +479,7 @@ export default {
         handleSearchBlur(data) {
             this.$trackMatomoEvent("Liste des sites", "Recherche");
 
-            store.commit("setFilters", {
+            this.$store.commit("setFilters", {
                 ...this.filters,
                 location: data.value,
                 search: data.search
@@ -495,25 +494,28 @@ export default {
             this.updateSort("cityName");
         },
         updateSort(val) {
-            store.commit("setSort", val);
+            this.$store.commit("setSort", val);
         },
         updateFilters(filter, val) {
-            store.commit("setFilters", { ...this.filters, [filter]: val });
+            this.$store.commit("setFilters", {
+                ...this.filters,
+                [filter]: val
+            });
             this.onChangePage(1);
         },
         onChangePage(page) {
-            store.commit("setCurrentPage", page);
+            this.$store.commit("setCurrentPage", page);
         },
         hasPermission(...args) {
             return hasPermission(...args);
         },
         load() {
             if (!this.shantytowns.length) {
-                store.dispatch("fetchTowns");
+                this.$store.dispatch("fetchTowns");
             }
 
             if (!this.activities.length) {
-                store.dispatch("fetchActivities");
+                this.$store.dispatch("fetchActivities");
             }
         },
         showExport() {
@@ -551,7 +553,7 @@ export default {
         }),
         sort: {
             get() {
-                return store.state.towns.sort;
+                return this.$store.state.towns.sort;
             },
             set(value) {
                 this.updateSort(value);
