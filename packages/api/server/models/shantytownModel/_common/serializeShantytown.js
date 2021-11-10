@@ -73,7 +73,6 @@ module.exports = (town, userPermissions) => {
         accessToWater: town.accessToWater,
         waterComments: town.waterComments,
         trashEvacuation: town.trashEvacuation,
-        owner: town.owner,
         censusStatus: town.censusStatus,
         censusConductedBy: town.censusConductedBy,
         censusConductedAt: fromDateToTimestamp(town.censusConductedAt),
@@ -161,6 +160,14 @@ module.exports = (town, userPermissions) => {
             policeRequestedAt: fromDateToTimestamp(town.policeRequestedAt),
             policeGrantedAt: fromDateToTimestamp(town.policeGrantedAt),
             bailiff: town.bailiff,
+        });
+    }
+
+    if (userPermissions.shantytown_owner
+        && userPermissions.shantytown_owner.access
+        && userPermissions.shantytown_owner.access.allowed === true) {
+        Object.assign(serializedTown, {
+            owner: town.owner,
         });
     }
 

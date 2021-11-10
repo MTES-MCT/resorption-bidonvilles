@@ -37,7 +37,6 @@ module.exports = async (townData, user) => {
             ownerType: townData.owner_type,
             city: townData.citycode,
             createdBy: user.id,
-            owner: townData.owner,
             declaredAt: townData.declared_at,
             censusStatus: townData.census_status,
             censusConductedAt: townData.census_conducted_at,
@@ -89,6 +88,11 @@ module.exports = async (townData, user) => {
                         policeRequestedAt: townData.police_requested_at,
                         policeGrantedAt: townData.police_granted_at,
                         bailiff: townData.bailiff,
+                    }
+                    : {},
+                user.isAllowedTo('access', 'shantytown_owner')
+                    ? {
+                        owner: townData.owner,
                     }
                     : {},
             ),

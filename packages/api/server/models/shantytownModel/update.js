@@ -222,6 +222,7 @@ module.exports = async (editor, shantytownId, data, argTransaction = undefined) 
     ]);
 
     // now, update the shantytown
+    const accessKeys = ['owner'];
     const justiceKeys = [
         'owner_complaint',
         'justice_procedure',
@@ -234,7 +235,7 @@ module.exports = async (editor, shantytownId, data, argTransaction = undefined) 
         'police_granted_at',
         'bailiff',
     ];
-    const { commonData, justiceData } = Object.keys(data).reduce(
+    const { commonData, justiceData, ownerData } = Object.keys(data).reduce(
         (acc, key) => {
             if (['social_origins', 'closing_solutions'].includes(key)) { // ignore social_origins, they are a special case
                 return acc;
@@ -247,6 +248,18 @@ module.exports = async (editor, shantytownId, data, argTransaction = undefined) 
                         ...acc.justiceData,
                         [key]: data[key],
                     },
+                    ownerData: acc.ownerData,
+                };
+            }
+
+            if (accessKeys.includes(key)) {
+                return {
+                    commonData: acc.commonData,
+                    justiceData: acc.justiceData,
+                    ownerData: {
+                        ...acc.ownerData,
+                        [key]: data[key],
+                    },
                 };
             }
 
@@ -256,9 +269,10 @@ module.exports = async (editor, shantytownId, data, argTransaction = undefined) 
                     [key]: data[key],
                 },
                 justiceData: acc.justiceData,
+                ownerData: acc.ownerData,
             };
         },
-        { commonData: {}, justiceData: {} },
+        { commonData: {}, justiceData: {}, ownerData: {} },
     );
 
     const updatedTown = Object.assign(
@@ -269,6 +283,9 @@ module.exports = async (editor, shantytownId, data, argTransaction = undefined) 
         },
         editor.isAllowedTo('access', 'shantytown_justice')
             ? justiceData
+            : {},
+        editor.isAllowedTo('access', 'shantytown_owner')
+            ? ownerData
             : {},
     );
 

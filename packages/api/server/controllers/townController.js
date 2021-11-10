@@ -1188,11 +1188,9 @@ module.exports = (models) => {
                 section.properties.push(properties.status);
             }
 
-            if (options.indexOf('owner') !== -1) {
-                if (['local_admin', 'national_admin', 'direct_collaborator'].includes(req.user.role_id)) {
-                    section.properties.push(properties.ownerType);
-                    section.properties.push(properties.owner);
-                }
+            if (options.indexOf('owner') !== -1 && req.user.isAllowedTo('access', 'shantytown_owner')) {
+                section.properties.push(properties.ownerType);
+                section.properties.push(properties.owner);
             }
 
             sections.push(section);

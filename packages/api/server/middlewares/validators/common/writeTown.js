@@ -233,6 +233,10 @@ module.exports = mode => ([
      ********************************************************************************************* */
     body('owner')
         .customSanitizer((value, { req }) => {
+            if (!req.user.isAllowedTo('access', 'shantytown_owner')) {
+                return null;
+            }
+
             if (!req.body.owner_type_full || req.body.owner_type_full.label === 'Inconnu') {
                 return null;
             }
@@ -240,7 +244,7 @@ module.exports = mode => ([
             return value;
         })
         .optional({ nullable: true })
-        .if((value, { req }) => req.body.owner_type_full && req.body.owner_type_full.label !== 'Inconnu')
+        .if((value, { req }) => req.user.isAllowedTo('access', 'shantytown_owner') && req.body.owner_type_full && req.body.owner_type_full.label !== 'Inconnu')
         .isString().bail().withMessage('Le champ "Identité du propriétaire" est invalide')
         .trim(),
 
