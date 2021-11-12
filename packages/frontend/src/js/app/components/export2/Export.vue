@@ -68,7 +68,7 @@
 
 <script>
 import { open } from "#helpers/api/main";
-import { get as getConfig, getPermission } from "#helpers/api/config";
+import { getPermission } from "#helpers/api/config";
 import Checkbox from "#app/components/ui/Form/input/Checkbox";
 import { VUE_APP_API_URL } from "#src/js/env.js";
 
@@ -79,9 +79,6 @@ export default {
         closedTowns: Boolean
     },
     data() {
-        const { user } = getConfig();
-        const userRole = user.role_id;
-
         return {
             existingOptions: [
                 {
@@ -135,8 +132,7 @@ export default {
                     }
                 }
             ],
-            options: [],
-            userRole
+            options: []
         };
     },
     computed: {

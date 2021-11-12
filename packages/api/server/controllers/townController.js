@@ -1097,8 +1097,6 @@ module.exports = (models) => {
                     width: COLUMN_WIDTHS.SMALL,
                 },
 
-                // New Fields issue/1271
-                // hasPlan?
                 hasPlan: {
                     title: 'Le site fait-il l’objet d’un dispositif ?',
                     data: ({ plans }) => (plans.length > 0 ? 'oui' : 'non'),
