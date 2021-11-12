@@ -64,7 +64,6 @@
 
 <script>
 import LeftColumnNavLink from "#app/pages/TownDetails/ui/LeftColumnNavLink";
-import { hasPermission } from "#helpers/api/config";
 
 export default {
     components: { LeftColumnNavLink },
@@ -85,7 +84,6 @@ export default {
         };
     },
     methods: {
-        hasPermission,
         // Force scroll even if hash is already present in url
         scrollFix(to) {
             if (to === this.$route.hash) {
