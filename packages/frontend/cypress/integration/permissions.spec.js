@@ -125,6 +125,20 @@ describe("Permissions tests", () => {
                             cy.get("#judicial").should("exist");
                         });
                     }
+
+                    if (userPermissions.shantytown.hideOwner) {
+                        it(`L'utilisateur ${key} ne doit pas pouvoir lire le nom du propriétaire`, () => {
+                            cy.url().should("include", TEST_URL);
+                            cy.get("[data-cy-data='owner']").should(
+                                "not.exist"
+                            );
+                        });
+                    } else {
+                        it(`L'utilisateur ${key} doit pouvoir lire le nom du propriétaire`, () => {
+                            cy.url().should("include", TEST_URL);
+                            cy.get("[data-cy-data='owner']").should("exist");
+                        });
+                    }
                 });
 
                 describe(`L'utilisateur ${key} ne doit voir que certaines informations sur la liste des sites`, () => {
