@@ -100,7 +100,10 @@
                         </div>
                     </TownDetailsPanelSection>
                     <TownDetailsPanelSection
-                        v-if="town.ownerType.label !== 'Inconnu'"
+                        v-if="
+                            town.ownerType.label !== 'Inconnu' &&
+                                hasPermission('shantytown_owner.access')
+                        "
                     >
                         <div class="grid grid-cols-2">
                             <div class="font-bold">
@@ -178,6 +181,7 @@ import TownDetailsPanelSection from "./ui/TownDetailsPanelSection.vue";
 import formatDateSince from "../TownsList/formatDateSince";
 import { notify } from "#helpers/notificationHelper";
 import { findNearby } from "#helpers/api/town";
+import { hasPermission } from "#helpers/api/config";
 
 export default {
     props: {
@@ -192,6 +196,7 @@ export default {
     },
     components: { TownDetailsPanel, TownDetailsPanelSection, Map },
     methods: {
+        hasPermission,
         goTo(town) {
             if (town.id && town.id !== this.town.id) {
                 this.$router.push(`/site/${town.id}`);

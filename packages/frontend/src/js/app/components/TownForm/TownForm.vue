@@ -62,6 +62,7 @@
                         class="mt-10 townPanelShadow"
                         id="judicial"
                         v-model="town.judicial"
+                        v-if="hasJusticePermission"
                     ></TownFormPanelJudicial>
 
                     <div class="mt-8 text-right italic text-red font-bold">
@@ -99,7 +100,7 @@ import TownFormPanelLivingConditions from "./TownFormPanelLivingConditions";
 import TownFormPanelJudicial from "./TownFormPanelJudicial";
 import TownFormLeftColumn from "./TownFormLeftColumn";
 import TownFormErrorLog from "./TownFormErrorLog";
-import { get as getConfig } from "#helpers/api/config";
+import { get as getConfig, hasPermission } from "#helpers/api/config";
 import { add, edit } from "#helpers/api/town";
 import { notify } from "#helpers/notificationHelper";
 
@@ -316,6 +317,10 @@ export default {
             }
 
             return `/site/${this.data.id}`;
+        },
+
+        hasJusticePermission() {
+            return hasPermission("shantytown_justice.access");
         }
     },
 

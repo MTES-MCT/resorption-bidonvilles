@@ -5,7 +5,8 @@ const defaultPermissions = {
         create: false,
         close: false,
         readPrivateComments: false,
-        hideJustice: false
+        hideJustice: false,
+        hideOwner: true
     },
     plan: {
         create: false,
@@ -26,7 +27,8 @@ const localAdminPermissions = {
         edit: true,
         create: true,
         close: true,
-        readPrivateComments: true
+        readPrivateComments: true,
+        hideOwner: false
     },
     plan: {
         create: true,
@@ -92,7 +94,8 @@ module.exports = {
                 readOutsideTerritory: true,
                 create: true,
                 close: true,
-                readPrivateComments: true
+                readPrivateComments: true,
+                hideOwner: false
             },
             plan: {
                 ...defaultPermissions.shantytown,
@@ -106,8 +109,7 @@ module.exports = {
             ...defaultPermissions,
             shantytown: {
                 ...defaultPermissions.shantytown,
-                edit: false,
-                hideJustice: true
+                edit: false
             }
         },
         territory: "Gironde"
