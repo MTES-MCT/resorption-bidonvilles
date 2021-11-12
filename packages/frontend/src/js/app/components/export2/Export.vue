@@ -91,7 +91,11 @@ export default {
                 },
                 {
                     id: "owner",
-                    label: "Propriétaire"
+                    label: "Propriétaire",
+                    permission: {
+                        entity: "shantytown_owner",
+                        feature: "access"
+                    }
                 },
                 {
                     id: "life_conditions",
@@ -139,13 +143,6 @@ export default {
         title() {
             return this.closedTowns ? "fermés" : "existants";
         },
-        displayOwnerOption() {
-            return [
-                "national_admin",
-                "local_admin",
-                "direct_collaborator"
-            ].includes(this.userRole);
-        },
         availableOptions() {
             return this.existingOptions
                 .filter(
@@ -163,14 +160,7 @@ export default {
                             `${permission.entity}.${permission.feature}`
                         ) !== null
                     );
-                })
-                .filter(option =>
-                    option.id === "owner"
-                        ? this.displayOwnerOption
-                            ? option
-                            : null
-                        : option
-                );
+                });
         }
     },
     methods: {
