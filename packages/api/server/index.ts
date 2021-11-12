@@ -1,7 +1,7 @@
 require('module-alias/register');
-const Sentry = require('@sentry/node');
-const Tracing = require('@sentry/tracing');
-const packageJSON = require('../package.json');
+import * as Sentry from '@sentry/node';
+import * as Tracing from '@sentry/tracing';
+import { version } from '#root/package.json';
 
 const config = require('./config.js');
 import app from '#server/app';
@@ -10,7 +10,7 @@ app.start().then((expressApp) => {
     if (config.sentry.dsn) {
         Sentry.init({
             dsn: config.sentry.dsn,
-            release: `rb-api@${packageJSON.version}`,
+            release: `rb-api@${version}`,
             environment: 'production',
             beforeSend(err) {
                 // console.log('sentry send', err);

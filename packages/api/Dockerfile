@@ -13,7 +13,7 @@ COPY --chown=node:node package.json yarn.lock ./
 RUN yarn install --silent && yarn cache clean
 
 # ====
-# Production
+# Production (build)
 # ====
 FROM node:16.3-slim AS production
 
@@ -26,4 +26,5 @@ WORKDIR /home/node/app/
 COPY --from=development --chown=root:root /home/node/app/node_modules ./node_modules
 COPY . .
 
-ENTRYPOINT ["yarn", "dev"]
+RUN yarn build
+ENTRYPOINT ["yarn", "start"]
