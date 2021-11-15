@@ -187,7 +187,7 @@ const users = [
         organization: {
             name: 'QA intervenant',
             abbreviation: 'QA intervenant',
-            type: 31, // intervenant
+            type: 8, // association
             region: null,
             departement: 33,
             epci: null,

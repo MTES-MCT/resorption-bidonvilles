@@ -11,20 +11,21 @@ module.exports = async (where = [], filters, user = null, feature, transaction) 
             return [];
         }
 
-        const featureLevel = user.permissions.user[feature].geographic_level;
-        const userLevel = user.organization.location.type;
+        // if the feature is allowed locally only
+        if (user.permissions.user[feature].geographic_level !== 'nation') {
+            const userLevel = user.organization.location.type;
 
-        if (featureLevel !== 'nation' && (featureLevel !== 'local' || userLevel !== 'nation')) {
-            if (user.organization.location.region === null) {
-                return [];
+            // if the user is not on a national level
+            if (userLevel !== 'nation') {
+                const finalLevel = userLevel === 'region' ? 'region' : 'departement';
+
+                where.push({
+                    location: {
+                        query: `organizations.${finalLevel}_code`,
+                        value: user.organization.location[finalLevel].code,
+                    },
+                });
             }
-
-            where.push({
-                location: {
-                    query: 'organizations.region_code',
-                    value: user.organization.location.region.code,
-                },
-            });
         }
     }
 

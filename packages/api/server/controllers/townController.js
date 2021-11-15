@@ -1097,6 +1097,24 @@ module.exports = (models) => {
                     width: COLUMN_WIDTHS.SMALL,
                 },
 
+                hasPlan: {
+                    title: 'Le site fait-il l’objet d’un dispositif ?',
+                    data: ({ plans }) => (plans.length > 0 ? 'oui' : 'non'),
+                    width: COLUMN_WIDTHS.SMALL,
+                },
+
+                resorptionTarget: {
+                    title: 'Site avec objectif de résorption ?',
+                    data: ({ resorptionTarget }) => {
+                        if (resorptionTarget === null) {
+                            return null;
+                        }
+
+                        return resorptionTarget;
+                    },
+                    width: COLUMN_WIDTHS.SMALL,
+                },
+
             };
 
             closingSolutions.forEach(({ id: solutionId }) => {
@@ -1157,6 +1175,8 @@ module.exports = (models) => {
                     properties.fieldType,
                     properties.builtAt,
                     properties.declaredAt,
+                    properties.hasPlan,
+                    properties.resorptionTarget,
                 ],
             };
 
@@ -1166,7 +1186,7 @@ module.exports = (models) => {
                 section.properties.push(properties.status);
             }
 
-            if (options.indexOf('owner') !== -1) {
+            if (options.indexOf('owner') !== -1 && req.user.isAllowedTo('access', 'shantytown_owner')) {
                 section.properties.push(properties.ownerType);
                 section.properties.push(properties.owner);
             }

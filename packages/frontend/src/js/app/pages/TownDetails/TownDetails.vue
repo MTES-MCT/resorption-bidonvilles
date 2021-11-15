@@ -152,11 +152,7 @@ import TownDetailsPanelLivingConditions from "./TownDetailsPanelLivingConditions
 import TownDetailsPanelJudicial from "./TownDetailsPanelJudicial";
 import TownDetailsPanelPlans from "./TownDetailsPanelPlans";
 import TownDetailsPanelActors from "./TownDetailsPanelActors";
-import {
-    get as getConfig,
-    hasPermission,
-    getPermission
-} from "#helpers/api/config";
+import { get as getConfig, getPermission } from "#helpers/api/config";
 import TownDetailsNewComment from "./TownDetailsNewComment";
 import TownDetailsComments from "./TownDetailsComments";
 import TownDetailsNewCommentLeftColumn from "./TownDetailsNewCommentLeftColumn";
@@ -244,7 +240,6 @@ export default {
         this.fetchData();
     },
     methods: {
-        hasPermission,
         openActorThemes(variant = "default") {
             this.actorThemesOpen = true;
             this.actorThemesVariant = variant;

@@ -16,7 +16,8 @@ const shantytowns = [
         address: 'Bordeaux',
         city: '33063', // Bordeaux
         fieldType: 1, // inconnu
-        ownerType: 1, // inconnu
+        ownerType: 2, // privé
+        owner: 'John Doe',
         electricityType: 1, // inconnu
     },
 ];

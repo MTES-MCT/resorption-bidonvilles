@@ -88,7 +88,11 @@ export default {
                 },
                 {
                     id: "owner",
-                    label: "Propriétaire"
+                    label: "Propriétaire",
+                    permission: {
+                        entity: "shantytown_owner",
+                        feature: "access"
+                    }
                 },
                 {
                     id: "life_conditions",

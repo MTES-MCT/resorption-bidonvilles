@@ -31,7 +31,7 @@
                 ref="ownerType"
             ></InputOwnerType>
             <InputOwner
-                v-if="!ownerTypeIsUnknown"
+                v-if="!ownerTypeIsUnknown && hasOwnerPermission"
                 v-model="input.owner"
             ></InputOwner>
         </FormParagraph>
@@ -45,6 +45,7 @@ import InputFieldType from "./inputs/InputFieldType.vue";
 import InputDetailedAddress from "./inputs/InputDetailedAddress.vue";
 import InputOwnerType from "./inputs/InputOwnerType.vue";
 import InputOwner from "./inputs/InputOwner.vue";
+import { hasPermission } from "#helpers/api/config";
 
 export default {
     components: {
@@ -65,18 +66,31 @@ export default {
 
     data() {
         return {
+            isMounted: false,
             input: this.value
         };
     },
 
+    mounted() {
+        this.isMounted = true;
+    },
+
     computed: {
         ownerTypeIsUnknown() {
+            if (!this.isMounted) {
+                return true;
+            }
+
             const value = this.input.owner_type;
             if (this.$refs.ownerType === undefined) {
                 return true;
             }
 
             return this.$refs.ownerType.isUnknown(value);
+        },
+
+        hasOwnerPermission() {
+            return hasPermission("shantytown_owner.access");
         }
     }
 };
