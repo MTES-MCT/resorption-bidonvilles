@@ -29,6 +29,20 @@ function generate({
 const users = [
     {
         user: generate({
+            email: 'admin@resorption-bidonvilles.beta.gouv.fr',
+            password: 'fabnum',
+            first_name: 'QA',
+            last_name: 'Admin',
+            fk_role: 'national_admin',
+            phone: '00 00 00 00 00',
+            position: 'qa',
+            fk_role_regular: 'direct_collaborator',
+        }),
+        organization: 40760, // DIHAL
+        options: [],
+    },
+    {
+        user: generate({
             email: 'qa-city@resorption-bidonvilles.beta.gouv.fr',
             password: 'fabnum',
             first_name: 'QA',
