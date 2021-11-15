@@ -4,7 +4,7 @@ require('module-alias/register');
 const plans = [
     {
         plan_id: 999999,
-        name: '[QA]',
+        name: '[QA] D1',
         started_at: '2021-01-01',
         in_and_out: true,
         goals: 'objectifs',
@@ -117,7 +117,12 @@ module.exports = {
         await transaction.commit();
     },
 
-    down: queryInterface => queryInterface.sequelize.query(
-        'DELETE FROM plans2 WHERE name ILIKE \'[QA] %\'',
+    down: queryInterface => queryInterface.sequelize.transaction(
+        transaction => queryInterface.sequelize.query(
+            'DELETE FROM plans2 WHERE name ILIKE \'[QA]%\'',
+            {
+                transaction,
+            },
+        ),
     ),
 };

@@ -86,7 +86,7 @@ jobs:
 
       - name: "Insert test data"
         working-directory: ./resorption-bidonvilles-deploy
-        run: make dev-exec rb_api "yarn sequelize db:seed --seed 000001-users.js"
+        run: make dev exec rb_api "yarn sequelize db:seed --seed 000004-qa-01-users.js --seed 000004-qa-02-shantytowns.js --seed 000004-qa-03-plans.js"
         continue-on-error: true
 
       # run tests, at last
