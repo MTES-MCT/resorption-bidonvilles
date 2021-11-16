@@ -1,7 +1,7 @@
 {
   "name": "@resorptionbidonvilles/fullstack",
   "description": "Dépôt fullstack de la plateforme Résorption Bidonvilles, par la DIHAL",
-  "version": "1.17.0",
+  "version": "1.17.1",
   "license": "AGPL-3.0-or-later",
   "devDependencies": {
     "husky": "^6.0.0",
