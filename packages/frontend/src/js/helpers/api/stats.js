@@ -10,7 +10,7 @@ export function all(departement) {
 }
 
 /**
- * GET /users/export
+ * GET /statistics/export
  */
 export function exportStats() {
     return getApi("/statistics/export");

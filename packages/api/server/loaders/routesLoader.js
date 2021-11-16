@@ -566,6 +566,8 @@ module.exports = (app) => {
         '/statistics/export',
         middlewares.auth.authenticate,
         middlewares.auth.isSuperAdmin,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
         controllers.stats.export,
     );
 
