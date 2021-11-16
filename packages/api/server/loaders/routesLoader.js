@@ -562,6 +562,15 @@ module.exports = (app) => {
         },
     );
 
+    app.get(
+        '/statistics/export',
+        middlewares.auth.authenticate,
+        middlewares.auth.isSuperAdmin,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        controllers.stats.export,
+    );
+
     app.post(
         '/statistics/directory-views',
         middlewares.auth.authenticate,

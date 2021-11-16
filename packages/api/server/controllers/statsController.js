@@ -1,7 +1,10 @@
+const JSONToCSV = require('json2csv');
 const {
     Stats_Exports,
     Stats_Directory_Views,
 } = require('#db/models');
+
+const groupByKey = (list, key) => list.reduce((hash, obj) => ({ ...hash, [obj[key]]: { ...hash[obj[key]], ...obj } }), {});
 
 module.exports = models => ({
     all: async (req, res) => {
@@ -163,5 +166,48 @@ module.exports = models => ({
         }
 
         return res.status(201).send({});
+    },
+
+    async export(req, res) {
+        try {
+            const [
+                averageCompletion,
+                people,
+                plans,
+                resorbedShantytowns,
+                shantytowns,
+                users,
+            ] = await Promise.all([
+                models.stats.averageCompletionPercentageByDepartement(),
+                models.stats.numberOfPeopleByDepartement(),
+                models.stats.numberOfPlansByDepartement(),
+                models.stats.numberOfResorbedShantytownByDepartement(),
+                models.stats.numberOfShantytownByDepartement(),
+                models.stats.numberOfUsersByDepartement(),
+            ]);
+
+            const result = Object.values(groupByKey([
+                ...averageCompletion.map(r => ({ Département: r.fk_departement, 'Taux de completion': `${(r.avg * 100).toFixed(2)}%` })),
+                ...people.map(r => ({ Département: r.fk_departement, 'Nombre habitants': r.total })),
+                ...plans.map(r => ({ Département: r.fk_departement, 'Nombre de dispositifs': r.total })),
+                ...resorbedShantytowns.map(r => ({ Département: r.fk_departement, 'Nombre de résorptions': r.total })),
+                ...shantytowns.map(r => ({ Département: r.fk_departement, 'Nombre de sites': r.total })),
+                ...users.filter(r => r.fk_departement !== null).map(r => ({ Département: r.fk_departement, "Nombre d'utilisateurs": r.count })),
+            ], 'Département')).sort((a, b) => a.Département - b.Département);
+
+            const csv = JSONToCSV.parse(result);
+
+            // The frontend expect a JSON for every API calls, so we wrap the CSV in a json entry
+            res.status(200).send({
+                csv,
+            });
+        } catch (error) {
+            res.status(500).send({
+                error: {
+                    user_message: 'Une erreur est survenue lors de la récupération des données en base',
+                    developer_message: error.message,
+                },
+            });
+        }
     },
 });

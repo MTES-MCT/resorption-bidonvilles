@@ -13,14 +13,26 @@
                             >
                             {{ territory.name }}
                         </div>
-                        <Button
-                            icon="print"
-                            iconPosition="left"
-                            variant="primaryOutline"
-                            class="print:hidden"
-                            @click="togglePrint"
-                            >Imprimer</Button
-                        >
+                        <div class="flex flex-row">
+                            <Button
+                                icon="print"
+                                iconPosition="left"
+                                variant="primaryOutline"
+                                class="print:hidden"
+                                @click="togglePrint"
+                                >Imprimer</Button
+                            >
+                            <Button
+                                v-if="loggedUser.role_id === 'national_admin'"
+                                icon="file-excel"
+                                iconPosition="left"
+                                :loading="exportLoading"
+                                variant="primary"
+                                class="print:hidden ml-4"
+                                @click="exportCSV"
+                                >Exporter</Button
+                            >
+                        </div>
                     </div>
                     <div>
                         <div v-if="stats" class="mt-8">
@@ -180,11 +192,12 @@ import PrivateLayout from "#app/components/PrivateLayout";
 import { get as getConfig } from "#helpers/api/config";
 import LeftColumn from "#app/pages/PrivateStats/LeftColumn";
 import KeyMetric from "#app/pages/PrivateStats/KeyMetric";
-import { all } from "#helpers/api/stats";
+import { all, exportStats } from "#helpers/api/stats";
 import Spinner from "#app/components/ui/Spinner";
 import BarChart from "#app/pages/PrivateStats/BarChart";
 import LineChart from "#app/pages/PrivateStats/LineChart";
 import CreditsRepartition from "#app/pages/PrivateStats/CreditsRepartition";
+import { notify } from "#helpers/notificationHelper";
 
 export default {
     components: {
@@ -201,6 +214,29 @@ export default {
         this.loadData();
     },
     methods: {
+        async exportCSV() {
+            this.exportLoading = true;
+            try {
+                // We don't open it directly as permissions needs to be checked with user's token
+                const { csv } = await exportStats();
+
+                const hiddenElement = document.createElement("a");
+                hiddenElement.href =
+                    "data:text/csv;charset=utf-8," + encodeURI(csv);
+                hiddenElement.target = "_blank";
+                hiddenElement.download = "stats.csv";
+                hiddenElement.click();
+            } catch (err) {
+                notify({
+                    group: "notifications",
+                    type: "error",
+                    title: "Une erreur est survenue",
+                    text:
+                        "Une erreur est survenue durant l'export du tableau de bord"
+                });
+            }
+            this.exportLoading = false;
+        },
         togglePrint() {
             window.print();
         },
@@ -279,10 +315,12 @@ export default {
         const config = getConfig();
 
         return {
+            loggedUser: config.user,
             departements: config.departements,
             stats: null,
             matomoStats: null,
-            fetching: true
+            fetching: true,
+            exportLoading: false
         };
     },
     computed: {
