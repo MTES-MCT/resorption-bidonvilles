@@ -447,6 +447,15 @@ module.exports = (app) => {
         controllers.town.deleteComment,
     );
 
+    app.get(
+        '/comments',
+        middlewares.auth.authenticate,
+        (...args) => middlewares.auth.checkPermissions(['shantytown_comment.export'], ...args),
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        controllers.shantytownComment.export,
+    );
+
     // high covid comment
     app.post(
         '/high-covid-comments',
