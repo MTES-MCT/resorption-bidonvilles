@@ -257,7 +257,7 @@ module.exports = models => ({
     /**
      * Updates being_funded and being_funded_at about the current organization
      */
-    async updateFundedAt(req, res, next) {
+    async updateFundedStatus(req, res, next) {
         const { id: paramId } = req.params;
         const {
             being_funded, being_funded_at,
