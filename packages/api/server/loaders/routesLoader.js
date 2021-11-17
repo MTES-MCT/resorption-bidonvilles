@@ -455,13 +455,13 @@ module.exports = (app) => {
         controllers.organization.update,
     );
 
-    app.post(
-        '/organizations/:id',
+    app.put(
+        '/organizations/:id/funded-status',
         middlewares.auth.authenticate,
         middlewares.auth.isSuperAdmin,
         // validators.editOrganization,
         // middlewares.validation,
-        controllers.organization.updateFundedAt,
+        controllers.organization.updateFundedStatus,
     );
 
     app.get(
