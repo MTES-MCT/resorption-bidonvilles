@@ -1,4 +1,5 @@
 const activate = require('./activate');
+const updateBeingFunded = require('./updateBeingFunded');
 const create = require('./create');
 const findAssociationName = require('./findAssociationName');
 const findByCategory = require('./findByCategory');
@@ -11,6 +12,7 @@ const setIntervenant = require('./setIntervenant');
 
 module.exports = () => ({
     activate,
+    updateBeingFunded,
     create,
     findAssociationName,
     findByCategory,
