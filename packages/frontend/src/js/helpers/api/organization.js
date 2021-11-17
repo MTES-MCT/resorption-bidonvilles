@@ -1,4 +1,4 @@
-import { getApi, postApi, putApi } from "#helpers/api/main";
+import { getApi, putApi } from "#helpers/api/main";
 
 /**
  * GET /organizations/:id
@@ -93,6 +93,6 @@ export function update(organizationId, options = {}) {
 /**
  * POST /organizations/:id/update
  */
-export function updateFundedAt(organizationId, data) {
-    return postApi(`/organizations/${organizationId}`, data);
+export function updateFundedStatus(organizationId, data) {
+    return putApi(`/organizations/${organizationId}/funded-status`, data);
 }
