@@ -1,4 +1,4 @@
-import { getApi, postApi } from "#helpers/api/main";
+import { getApi, postApi, putApi } from "#helpers/api/main";
 
 /**
  * GET /organizations/:id
@@ -81,6 +81,13 @@ export function getMembersOfCategory(categoryId, regionId, departementId) {
     }
 
     return getApi(`/organization-categories/${categoryId}/users?${query}`);
+}
+
+/**
+ * PUT /organizations/:id
+ */
+export function update(organizationId, options = {}) {
+    return putApi(`/organizations/${organizationId}`, options);
 }
 
 /**
