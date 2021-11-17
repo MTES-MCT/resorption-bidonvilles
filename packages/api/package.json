@@ -85,7 +85,7 @@
   "scripts": {
     "db:create": "docker exec rb_api yarn sequelize db:migrate && yarn sequelize db:seed:all",
     "dev": "ts-node-dev server/index.ts",
-    "build": "tsc && tsc-alias && cp -r server/mails/dist dist/server/mails",
+    "build": "tsc && tsc-alias && cp -r server/mails/dist dist/server/mails && cp -r assets dist",
     "start": "nodemon dist/server/index.js",
     "test": "mocha --recursive --require ./test/bootstrap.js --bail",
     "test:unit": "yarn test --invert --grep '.*server/models.*'",
