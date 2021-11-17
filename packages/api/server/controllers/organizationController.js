@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const { sequelize } = require('#db/models');
 
 function trim(str) {
@@ -251,5 +252,50 @@ module.exports = models => ({
         }
 
         return res.status(200).send({});
+    },
+
+    /**
+     * Updates being_funded and being_funded_at about the current organization
+     */
+    async updateFundedAt(req, res, next) {
+        const { id: paramId } = req.params;
+        const {
+            being_funded, being_funded_at,
+        } = req.body;
+
+        const organization = await models.organization.findOneById(paramId);
+
+        if (organization === null) {
+            res.status(500).send({
+                error: {
+                    user_message: 'Impossible de trouver la structure en bases de données.',
+                    developer_message: `Organization #${paramId} does not exist`,
+                },
+            });
+            return next(new Error(`Organization #${paramId} does not exist`));
+        }
+
+        // actually update the organization in the database
+        const data = {
+            being_funded,
+            being_funded_at,
+        };
+
+        try {
+            await models.organization.updateBeingFunded(paramId, data);
+            return res.status(200).send({
+                organization_id: paramId,
+                being_funded,
+                being_funded_at,
+            });
+        } catch (error) {
+            res.status(500).send({
+                error: {
+                    user_message: 'Une erreur est survenue dans l\'écriture de vos informations en base de données.',
+                    developer_message: error.message,
+                },
+            });
+            return next(error);
+        }
     },
 });
