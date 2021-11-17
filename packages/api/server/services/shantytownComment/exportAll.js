@@ -41,5 +41,19 @@ module.exports = async (user) => {
         throw new ServiceError('select_failed', error);
     }
 
-    return comments;
+    // build excel file
+    return comments.map(raw => ({
+        'ID du commentaire': raw.commentId,
+        'ID du site': raw.shantytownId,
+        'Publié le': raw.commentCreatedAt,
+        Description: raw.commentDescription,
+        'ID de l\'auteur(e)': raw.userId,
+        'Commentaire privé ?': raw.commentPrivate ? 'Oui' : 'Non',
+        Prénom: raw.userFirstName,
+        'Nom de famille': raw.userLastName,
+        Structure: raw.organizationName,
+        Département: raw.departementName,
+        Role: raw.userRole,
+        'Objectif de résorption': raw.shantytownResorptionTarget,
+    }));
 };

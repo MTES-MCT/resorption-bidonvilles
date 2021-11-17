@@ -1,5 +1,4 @@
 const { sequelize } = require('#db/models');
-const { serializeComment } = require('#server/models/shantytownModel')(sequelize);
 
 /**
  * @param {Location} [location] Location filter. If set to null, no filter is applied and all
@@ -9,7 +8,7 @@ const { serializeComment } = require('#server/models/shantytownModel')(sequelize
  *                                     a subset of "location" (for instance, you are not expected to
  *                                     give a departement as location, and a region as privateLocation)
  */
-module.exports = async (location = null, privateLocation = null) => {
+module.exports = (location = null, privateLocation = null) => {
     const additionalWhere = [];
     const replacements = {};
     if (location && location.type && location.code) {
@@ -37,7 +36,7 @@ module.exports = async (location = null, privateLocation = null) => {
         additionalWhere.push('sc.private IS FALSE');
     }
 
-    const rows = await sequelize.query(
+    return sequelize.query(
         `SELECT
             sc.shantytown_comment_id AS "commentId",
             sc.description AS "commentDescription",
@@ -45,26 +44,32 @@ module.exports = async (location = null, privateLocation = null) => {
             sc.created_at AS "commentCreatedAt",
             sc.created_by "commentCreatedBy",
             sc.private AS "commentPrivate",
+            u.user_id AS "userId",
             u.first_name AS "userFirstName",
             u.last_name AS "userLastName",
             u.position AS "userPosition",
+            rr.name AS "userRole",
             o.abbreviation AS "organizationAbbreviation",
             o.name AS "organizationName",
-            o.organization_id AS "organizationId"
+            o.organization_id AS "organizationId",
+            d.name AS "departementName",
+            s.resorption_target AS "shantytownResorptionTarget"
         FROM
             shantytown_comments sc
         LEFT JOIN
             users u ON sc.created_by = u.user_id
         LEFT JOIN
+            roles_regular rr ON u.fk_role_regular = rr.role_id
+        LEFT JOIN
             organizations o ON u.fk_organization = o.organization_id
+        LEFT JOIN
+            shantytowns s ON sc.fk_shantytown = s.shantytown_id
+        LEFT JOIN
+            cities c ON s.fk_city = c.code
+        LEFT JOIN
+            departements d ON c.fk_departement = d.code
         ${additionalWhere.length > 0
-        ? `LEFT JOIN
-                shantytowns s ON sc.fk_shantytown = s.shantytown_id
-            LEFT JOIN
-                cities c ON s.fk_city = c.code
-            LEFT JOIN
-                departements d ON c.fk_departement = d.code
-            WHERE ${additionalWhere.join(' AND ')}`
+        ? `WHERE ${additionalWhere.join(' AND ')}`
         : ''
 }`,
         {
@@ -72,6 +77,4 @@ module.exports = async (location = null, privateLocation = null) => {
             replacements,
         },
     );
-
-    return rows.map(serializeComment);
 };
