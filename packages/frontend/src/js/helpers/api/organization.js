@@ -84,7 +84,7 @@ export function getMembersOfCategory(categoryId, regionId, departementId) {
 }
 
 /**
- * PUT /organizations/:id/update
+ * POST /organizations/:id/update
  */
 export function updateFundedAt(organizationId, data) {
     return postApi(`/organizations/${organizationId}`, data);
