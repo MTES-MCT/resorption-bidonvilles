@@ -85,7 +85,6 @@ import LoadingPage from "#app/components/PrivateLayout/LoadingPage";
 import OrganizationHeader from "#app/pages/OrganizationDetails/ui/OrganizationHeader";
 import { updateFundedAt } from "#helpers/api/organization";
 import { isCurrentUserNationalAdmin, formatDate } from "../utils/common.js";
-import store from "#app/store";
 
 export default {
     components: {
@@ -128,9 +127,9 @@ export default {
                     organizationId,
                     data
                 );
-                store.commit("updateOrganization", updatedOrganization);
-                this.being_funded_edited = updatedOrganization.being_funded;
+                this.$store.commit("updateOrganization", updatedOrganization);
                 this.being_funded_before = updatedOrganization.being_funded;
+                this.being_funded_edited = this.being_funded_before;
                 this.being_funded_at_before =
                     updatedOrganization.being_funded_at;
             } catch ({ user_message, fields }) {
