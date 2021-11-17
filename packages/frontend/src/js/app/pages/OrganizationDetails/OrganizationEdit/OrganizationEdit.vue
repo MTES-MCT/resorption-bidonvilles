@@ -43,6 +43,8 @@
                                 <CheckableGroup
                                     v-model="being_funded_edited"
                                     direction="horizontal"
+                                    rules="required"
+                                    validationName="Financement"
                                 >
                                     <Radio
                                         label="oui"
@@ -83,7 +85,7 @@ import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
 import LoadingError from "#app/components/PrivateLayout/LoadingError";
 import LoadingPage from "#app/components/PrivateLayout/LoadingPage";
 import OrganizationHeader from "#app/pages/OrganizationDetails/ui/OrganizationHeader";
-import { updateFundedAt } from "#helpers/api/organization";
+import { updateFundedStatus } from "#helpers/api/organization";
 import { isCurrentUserNationalAdmin, formatDate } from "../utils/common.js";
 
 export default {
@@ -123,7 +125,7 @@ export default {
                     being_funded_at: new Date()
                 };
                 const organizationId = parseInt(this.$route.params.id, 10);
-                const updatedOrganization = await updateFundedAt(
+                const updatedOrganization = await updateFundedStatus(
                     organizationId,
                     data
                 );
