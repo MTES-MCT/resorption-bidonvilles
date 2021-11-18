@@ -74,6 +74,17 @@
                     Exporter "Comment avez-vous connu..."</Button
                 >
                 <Button
+                    v-if="hasPermission('shantytown_actor.export')"
+                    @click="exportActors"
+                    :loading="loading"
+                    icon="file-excel"
+                    iconPosition="left"
+                    variant="primaryOutline"
+                    class="whitespace-no-wrap mr-4"
+                >
+                    Exporter les intervenants</Button
+                >
+                <Button
                     href="/nouvel-utilisateur"
                     icon="plus"
                     iconPosition="left"
@@ -91,6 +102,7 @@
 import { get as getConfig, hasPermission } from "#helpers/api/config";
 import { listExport } from "#helpers/api/user";
 import { fetchCSV } from "#helpers/api/contactFormReferral";
+import { exportActors } from "#helpers/api/actor";
 import UserListHeaderSearch from "#app/pages/UserList/UserListHeader/UserListHeaderSearch";
 import { notify } from "#helpers/notificationHelper";
 
@@ -120,6 +132,7 @@ export default {
             }
 
             this.loading = true;
+
             try {
                 // We don't open it directly as permissions needs to be checked with user's token
                 const { csv } = await listExport();
@@ -147,6 +160,7 @@ export default {
             }
 
             this.loading = true;
+
             try {
                 // We don't open it directly as permissions needs to be checked with user's token
                 const { csv } = await fetchCSV();
@@ -163,6 +177,34 @@ export default {
                     type: "error",
                     title: "Une erreur est survenue",
                     text: "Une erreur est survenue durant l'export des données"
+                });
+            }
+            this.loading = false;
+        },
+        async exportActors() {
+            if (this.loading) {
+                return;
+            }
+
+            this.loading = true;
+
+            try {
+                // We don't open it directly as permissions needs to be checked with user's token
+                const { csv } = await exportActors();
+
+                const hiddenElement = document.createElement("a");
+                hiddenElement.href =
+                    "data:text/csv;charset=utf-8," + encodeURI(csv);
+                hiddenElement.target = "_blank";
+                hiddenElement.download = "intervenants.csv";
+                hiddenElement.click();
+            } catch (err) {
+                notify({
+                    group: "notifications",
+                    type: "error",
+                    title: "Une erreur est survenue",
+                    text:
+                        "Une erreur est survenue durant l'export des intervenants"
                 });
             }
             this.loading = false;
