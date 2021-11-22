@@ -1,11 +1,4 @@
-import { getApi, putApi } from "#helpers/api/main";
-
-/**
- * GET /organizations/:id
- */
-export function get(id) {
-    return getApi(`/organizations/${id}`);
-}
+import { getApi, putApi, patchApi } from "#helpers/api/main";
 
 /**
  * Lists all categories
@@ -91,8 +84,13 @@ export function update(organizationId, options = {}) {
 }
 
 /**
- * POST /organizations/:id/update
+ * PATCH /organizations/:id
  */
-export function updateFundedStatus(organizationId, data) {
-    return putApi(`/organizations/${organizationId}/funded-status`, data);
+export function updateBeingFunded(organizationId, data = {}) {
+    // return patchApi(`/organizations/${organizationId}`, data);
+    return patchApi(`/organizations/${organizationId}`, {
+        operation: "replace",
+        path: "/being_funded",
+        data
+    });
 }
