@@ -63,6 +63,17 @@
                     Exporter</Button
                 >
                 <Button
+                    v-if="hasPermission('contact_form_referral.access')"
+                    @click="exportReferrals"
+                    :loading="loading"
+                    icon="file-excel"
+                    iconPosition="left"
+                    variant="primaryOutline"
+                    class="whitespace-no-wrap mr-4"
+                >
+                    Exporter "Comment avez-vous connu..."</Button
+                >
+                <Button
                     href="/nouvel-utilisateur"
                     icon="plus"
                     iconPosition="left"
@@ -77,8 +88,9 @@
 </template>
 
 <script>
-import { get as getConfig } from "#helpers/api/config";
+import { get as getConfig, hasPermission } from "#helpers/api/config";
 import { listExport } from "#helpers/api/user";
+import { fetchCSV } from "#helpers/api/contactFormReferral";
 import UserListHeaderSearch from "#app/pages/UserList/UserListHeader/UserListHeaderSearch";
 import { notify } from "#helpers/notificationHelper";
 
@@ -101,7 +113,12 @@ export default {
     },
     computed: {},
     methods: {
+        hasPermission,
         async exportUsers() {
+            if (this.loading) {
+                return;
+            }
+
             this.loading = true;
             try {
                 // We don't open it directly as permissions needs to be checked with user's token
@@ -120,6 +137,32 @@ export default {
                     title: "Une erreur est survenue",
                     text:
                         "Une erreur est survenue durant l'export des utilisateurs"
+                });
+            }
+            this.loading = false;
+        },
+        async exportReferrals() {
+            if (this.loading) {
+                return;
+            }
+
+            this.loading = true;
+            try {
+                // We don't open it directly as permissions needs to be checked with user's token
+                const { csv } = await fetchCSV();
+
+                const hiddenElement = document.createElement("a");
+                hiddenElement.href =
+                    "data:text/csv;charset=utf-8," + encodeURI(csv);
+                hiddenElement.target = "_blank";
+                hiddenElement.download = "referrals.csv";
+                hiddenElement.click();
+            } catch (err) {
+                notify({
+                    group: "notifications",
+                    type: "error",
+                    title: "Une erreur est survenue",
+                    text: "Une erreur est survenue durant l'export des données"
                 });
             }
             this.loading = false;

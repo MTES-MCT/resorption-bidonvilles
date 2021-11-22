@@ -598,4 +598,13 @@ module.exports = (app) => {
         middlewares.appVersion.sync,
         controllers.userActivity.covid,
     );
+
+    app.get(
+        '/contact-form-referrals',
+        middlewares.auth.authenticate,
+        (...args) => middlewares.auth.checkPermissions(['contact_form_referral.access'], ...args),
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        controllers.contactFormReferral.export,
+    );
 };
