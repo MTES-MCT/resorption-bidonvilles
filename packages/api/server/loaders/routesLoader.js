@@ -457,10 +457,10 @@ module.exports = (app) => {
 
     app.patch(
         '/organizations/:id',
-        // middlewares.auth.authenticate,
-        // middlewares.auth.isSuperAdmin,
-        // validators.editOrganization,
-        // middlewares.validation,
+        middlewares.auth.authenticate,
+        middlewares.auth.isSuperAdmin,
+        validators.editOrganization,
+        middlewares.validation,
         async (req, res, next) => {
             // parse body to check the requested operation
             let controller;
