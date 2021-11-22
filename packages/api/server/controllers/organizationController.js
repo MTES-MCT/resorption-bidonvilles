@@ -1,5 +1,5 @@
-/* eslint-disable no-console */
 const { sequelize } = require('#db/models');
+const { updateBeingFunded, findOneById } = require('#server/models/organizationModel')(sequelize);
 
 function trim(str) {
     if (typeof str !== 'string') {
@@ -255,44 +255,43 @@ module.exports = models => ({
     },
 
     /**
-     * Updates being_funded and being_funded_at about the current organization
+     * Updates being_funded and being_funded_at
      */
-    async updateFundedStatus(req, res, next) {
+    async updateBeingFunded(req, res, next) {
         const { id: paramId } = req.params;
-        const {
-            being_funded, being_funded_at,
-        } = req.body;
 
-        const organization = await models.organization.findOneById(paramId);
+        // Test if the organization id is missing
+        if (!paramId) {
+            res.status(500).send({
+                error: {
+                    user_message: 'L\'identifiant de l\'organisation n\'est pas précisé.',
+                },
+            });
+            return next(new Error('The organization id is missing.'));
+        }
+
+        const orgData = req.body.data;
+        const organization = await findOneById(paramId);
 
         if (organization === null) {
             res.status(500).send({
                 error: {
                     user_message: 'Impossible de trouver la structure en bases de données.',
-                    developer_message: `Organization #${paramId} does not exist`,
                 },
             });
             return next(new Error(`Organization #${paramId} does not exist`));
         }
 
-        // actually update the organization in the database
-        const data = {
-            being_funded,
-            being_funded_at,
-        };
-
         try {
-            await models.organization.updateBeingFunded(paramId, data);
+            await updateBeingFunded(paramId, orgData);
             return res.status(200).send({
                 organization_id: paramId,
-                being_funded,
-                being_funded_at,
+                orgData,
             });
         } catch (error) {
-            res.status(500).send({
+            res.status(404).send({
                 error: {
-                    user_message: 'Une erreur est survenue dans l\'écriture de vos informations en base de données.',
-                    developer_message: error.message,
+                    user_message: error.message.length > 0 ? error.message : 'Une erreur est survenue dans l\'écriture de vos informations en base de données.',
                 },
             });
             return next(error);
