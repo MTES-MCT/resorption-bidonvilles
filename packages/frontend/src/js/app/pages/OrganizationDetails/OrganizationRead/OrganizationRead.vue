@@ -51,6 +51,7 @@
                             <div>Date de mise à jour:</div>
                             <div class="text-lg">
                                 {{ beingFundedDate }}
+                                {{ organization.being_funded_at }}
                             </div>
                         </div>
                     </div>
@@ -63,26 +64,20 @@
                     :key="user.id"
                 />
             </div>
-            <LoadingError v-else-if="!organization">
-                La structure demandée n'existe pas en base de données ou n'a pas
-                d'utilisateurs actifs
-            </LoadingError>
         </PrivateContainer>
     </div>
 </template>
 <script>
 import { get as getConfig } from "#helpers/api/config";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
-import LoadingError from "#app/components/PrivateLayout/LoadingError";
 import OrganizationDetailsUser from "#app/pages/OrganizationDetails/OrganizationUser/OrganizationDetailsUser";
 import OrganizationHeader from "#app/pages/OrganizationDetails/ui/OrganizationHeader";
-import { isCurrentUserNationalAdmin, formatDate } from "../utils/common.js";
+import { formatDate, isCurrentUserNationalAdmin } from "../utils";
 
 export default {
     components: {
         OrganizationDetailsUser,
         PrivateContainer,
-        LoadingError,
         OrganizationHeader
     },
     data() {
@@ -101,9 +96,7 @@ export default {
         }
     },
     methods: {
-        formatDate(d) {
-            return formatDate(d);
-        }
+        formatDate
     },
     computed: {
         beingFundedDate() {

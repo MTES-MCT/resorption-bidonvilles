@@ -41,20 +41,20 @@
                             <div>Financement:</div>
                             <div class="text-lg">
                                 <CheckableGroup
-                                    v-model="being_funded_edited"
+                                    v-model="edit.being_funded"
                                     direction="horizontal"
                                     rules="required"
                                     validationName="Financement"
                                 >
                                     <Radio
                                         label="oui"
-                                        v-model="being_funded_edited"
+                                        v-model="edit.being_funded"
                                         :checkValue="true"
                                         type="checkbox"
                                     ></Radio>
                                     <Radio
                                         label="non"
-                                        v-model="being_funded_edited"
+                                        v-model="edit.being_funded"
                                         :checkValue="false"
                                         type="checkbox"
                                     ></Radio>
@@ -72,26 +72,20 @@
                     </div>
                 </div>
             </div>
-            <LoadingError v-else-if="!organization">
-                La structure demandée n'existe pas en base de données ou n'a pas
-                d'utilisateurs actifs
-            </LoadingError>
         </PrivateContainer>
     </ValidationObserver>
 </template>
 <script>
 import { get as getConfig } from "#helpers/api/config";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
-import LoadingError from "#app/components/PrivateLayout/LoadingError";
 import LoadingPage from "#app/components/PrivateLayout/LoadingPage";
 import OrganizationHeader from "#app/pages/OrganizationDetails/ui/OrganizationHeader";
-import { updateFundedStatus } from "#helpers/api/organization";
-import { isCurrentUserNationalAdmin, formatDate } from "../utils/common.js";
+import { updateBeingFunded } from "#helpers/api/organization";
+import { formatDate, isCurrentUserNationalAdmin } from "../utils";
 
 export default {
     components: {
         PrivateContainer,
-        LoadingError,
         OrganizationHeader,
         LoadingPage
     },
@@ -101,9 +95,12 @@ export default {
             error: null,
             loading: false,
             currentUser: user,
-            being_funded_edited: this.organization.being_funded,
             being_funded_before: this.organization.being_funded,
-            being_funded_at_before: this.organization.being_funded_at
+            being_funded_at_before: this.organization.being_funded_at,
+            edit: {
+                being_funded: this.organization.being_funded || false,
+                being_funded_at: this.organization.being_funded_at || ""
+            }
         };
     },
     props: {
@@ -112,28 +109,41 @@ export default {
         }
     },
     methods: {
-        formatDate(d) {
-            return formatDate(d);
-        },
+        formatDate,
         async submit() {
             this.error = null;
             this.loading = true;
 
             try {
-                const data = {
-                    being_funded: this.being_funded_edited === true,
-                    being_funded_at: new Date()
-                };
+                this.edit.being_funded_at = new Date();
                 const organizationId = parseInt(this.$route.params.id, 10);
-                const updatedOrganization = await updateFundedStatus(
+                const updatedOrganization = await updateBeingFunded(
                     organizationId,
-                    data
+                    this.edit
                 );
-                this.$store.commit("updateOrganization", updatedOrganization);
-                this.being_funded_before = updatedOrganization.being_funded;
-                this.being_funded_edited = this.being_funded_before;
+                updatedOrganization.orgData.id = organizationId;
+
+                // Reload organizations to update it in the vuex store
+                const updatedDirectory = this.$store.getters.directory;
+                const index = updatedDirectory.findIndex(item => {
+                    return item.id === updatedOrganization.orgData.id;
+                });
+                if (index >= 0) {
+                    // updatedDirectory[index] = {
+                    //     ...updatedDirectory[index],
+                    //     ...updatedOrganization.orgData
+                    // };
+
+                    updatedDirectory[index].being_funded =
+                        updatedOrganization.orgData.being_funded;
+                    updatedDirectory[index].being_funded_at =
+                        updatedOrganization.orgData.being_funded_at;
+                }
+                this.$store.commit("setDirectory", updatedDirectory);
+                this.being_funded_before =
+                    updatedOrganization.orgData.being_funded;
                 this.being_funded_at_before =
-                    updatedOrganization.being_funded_at;
+                    updatedOrganization.orgData.being_funded_at;
             } catch ({ user_message, fields }) {
                 this.loading = false;
                 this.error = user_message;
@@ -143,7 +153,7 @@ export default {
         cancelEdit() {
             this.error = null;
             this.loading = true;
-            this.being_funded_edited = this.being_funded_before;
+            this.edit.being_funded = this.being_funded_before;
             this.loading = false;
         }
     },
@@ -158,12 +168,15 @@ export default {
                 : false;
         },
         dataChanged() {
-            return this.being_funded_edited !== this.being_funded_before;
+            return (
+                this.edit.being_funded !== null &&
+                this.edit.being_funded !== this.being_funded_before
+            );
         },
         beingFundedDate() {
             return this.dataChanged
                 ? this.formatDate(new Date())
-                : this.formatDate(this.organization.being_funded_at);
+                : this.formatDate(this.edit.being_funded_at);
         }
     }
 };
