@@ -46,20 +46,6 @@ export default {
             if (index >= 0) {
                 state.items.splice(index, 1);
             }
-        },
-        updateOrganization(state, updatedOrganization) {
-            const index = state.items.findIndex(item => {
-                return (
-                    item.id ===
-                    parseInt(updatedOrganization.organization_id, 10)
-                );
-            });
-            if (index >= 0) {
-                state.items[index].being_funded =
-                    updatedOrganization.being_funded;
-                state.items[index].being_funded_at =
-                    updatedOrganization.being_funded_at;
-            }
         }
     },
 
