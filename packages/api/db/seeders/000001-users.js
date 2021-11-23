@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 
-function generate(email, password, first_name, last_name, fk_role, phone, position) {
+function generate(email, password, first_name, last_name, fk_role, fk_role_regular, phone, position) {
     const salt = crypto.randomBytes(16).toString('hex');
 
     return {
@@ -10,6 +10,7 @@ function generate(email, password, first_name, last_name, fk_role, phone, positi
         first_name,
         last_name,
         fk_role,
+	fk_role_regular,
         fk_status: 'active',
         access_request_message: 'Compte généré automatiquement',
         phone,
@@ -28,6 +29,7 @@ module.exports = {
                 'Administrateur',
                 'Résorption Bidonvilles',
                 'national_admin',
+		'direct_collaborator',
                 '00 00 00 00 00',
                 'Administrateur',
             ),
