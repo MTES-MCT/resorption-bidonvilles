@@ -46,19 +46,15 @@ module.exports = {
                 transaction,
             },
         )
-            .then((rows) => {
-                if (rows.length > 0) {
-                    return queryInterface.bulkInsert(
-                        'user_permission_options',
-                        rows,
-                        {
-                            transaction,
-                        },
-                    );
-                }
-                return Promise.resolve();
-            }),
+            .then(rows => queryInterface.bulkInsert(
+                'user_permission_options',
+                rows,
+                {
+                    transaction,
+                },
+            )),
     ),
+
     down: queryInterface => queryInterface.sequelize.query('DELETE FROM user_permission_options'),
 
 };
