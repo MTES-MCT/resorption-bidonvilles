@@ -51,7 +51,6 @@
                             <div>Date de mise à jour:</div>
                             <div class="text-lg">
                                 {{ beingFundedDate }}
-                                {{ organization.being_funded_at }}
                             </div>
                         </div>
                     </div>
