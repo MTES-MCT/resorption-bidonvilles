@@ -261,6 +261,19 @@
                             v-if="filters.status === 'close'"
                             title="Cause de la fermeture"
                             class="mr-2 mb-2"
+                            :value="filters.closingReason"
+                            @input="val => updateFilters('closingReason', val)"
+                            :options="
+                                closingReasons.map(f => ({
+                                    label: f.label,
+                                    value: f.id
+                                }))
+                            "
+                        />
+                        <CustomFilter
+                            v-if="filters.status === 'close'"
+                            title="Solution accompagnant la fermeture"
+                            class="mr-2 mb-2"
                             :value="filters.closingSolution"
                             @input="
                                 val => updateFilters('closingSolution', val)
@@ -437,6 +450,18 @@ export default {
             hasJusticePermission: permission !== null,
             fieldTypes,
             closingSolutions,
+            closingReasons: [
+                {
+                    id: "closed_by_justice",
+                    label: "Exécution d'une décision de justice"
+                },
+                {
+                    id: "closed_by_admin",
+                    label: "Exécution d'une décision administrative"
+                },
+                { id: "other", label: "Autre" },
+                { id: "unknown", label: "Raison inconnue" }
+            ],
             exportIsVisible: false,
             printMode: false,
             sortOptions: {
