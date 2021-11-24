@@ -65,6 +65,13 @@ export function filterShantytowns(shantytowns, filters) {
         }
 
         if (
+            filters.closingReason.length > 0 &&
+            !checkClosingReason(shantytown, filters.closingReason)
+        ) {
+            return false;
+        }
+
+        if (
             filters.solvedOrClosed.length > 0 &&
             !checkSolvedOrClosed(shantytown, filters.solvedOrClosed)
         ) {
@@ -225,6 +232,17 @@ function checkClosingSolutions(shantytown, filters) {
     });
 
     return closingSolutionsIds.some(e => filters.includes(e));
+}
+
+/**
+ * Filter on closingReasons
+ */
+function checkClosingReason(shantytown, filters) {
+    if (filters.includes(shantytown.status)) {
+        return true;
+    }
+
+    return false;
 }
 
 /**
