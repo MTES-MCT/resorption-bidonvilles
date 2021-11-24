@@ -1,3 +1,4 @@
+@use 'sass:math';
 @import '#src/css/v1/config/colors.scss';
 
 .v1 {
@@ -91,7 +92,8 @@
 
         > p {
             position: absolute;
-            margin: 8px 0 0 ($BREADCRUMB_ITEM_HEIGHT / 2) - 75px;
+            // margin: 8px 0 0 ($BREADCRUMB_ITEM_HEIGHT / 2) - 75px;
+            margin: 8px 0 0 math.div($BREADCRUMB-ITEM-HEIGHT, 2) -75px;
             width: 150px;
             text-align: center;
             text-transform: uppercase;
@@ -133,7 +135,8 @@
         -webkit-box-flex: 1;
         -ms-flex-positive: 1;
         margin: 0 -4px;
-        line-height: $BREADCRUMB_ITEM_HEIGHT - ($BREADCRUMB_SEPARATOR_HEIGHT / 2);
+        // line-height: $BREADCRUMB_ITEM_HEIGHT - ($BREADCRUMB_SEPARATOR_HEIGHT / 2);
+        line-height: $BREADCRUMB_ITEM_HEIGHT -(math.div($BREADCRUMB-ITEM-HEIGHT, 2));
 
         &:before {
             content: '';
