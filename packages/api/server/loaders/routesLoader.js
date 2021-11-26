@@ -111,6 +111,34 @@ module.exports = (app) => {
         middlewares.validation,
         controllers.user.create,
     );
+    app.patch(
+        '/users/:id',
+        middlewares.auth.authenticate,
+        middlewares.auth.isSuperAdmin,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        validators.setUserRoleRegular,
+        middlewares.validation,
+        async (req, res, next) => {
+            // parse body to check the requested operation
+            let controller;
+            switch (req.body.operation) {
+                case 'replace':
+                    switch (req.body.path) {
+                        case '/set_user_role_regular':
+                            controller = controllers.user.setUserRoleRegular;
+                            break;
+                        default:
+                            return res.status(404).send({});
+                    }
+                    break;
+                default:
+                    return res.status(404).send({});
+            }
+            // route to proper controller
+            return controller(req, res, next);
+        },
+    );
     app.post(
         '/contact',
         validators.createContact,
