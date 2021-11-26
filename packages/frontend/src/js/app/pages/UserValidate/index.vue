@@ -58,7 +58,7 @@
                         "
                         class="mr-4"
                         variant="primaryText"
-                        @click="setIntervenant"
+                        @click="setRoleRegularAsIntervenant"
                         :loading="validation.loading === 'intervenant'"
                         >Définir comme « Intervenant »</Button
                     >
@@ -183,9 +183,9 @@ import {
     get,
     remove,
     sendActivationLink,
-    updateLocalAdmin
+    updateLocalAdmin,
+    setUserRoleRegular
 } from "#helpers/api/user";
-import { update as updateOrganization } from "#helpers/api/organization";
 import { notify } from "#helpers/notificationHelper";
 
 let permissions;
@@ -507,7 +507,7 @@ export default {
             this.validation.loading = null;
         },
 
-        async setIntervenant() {
+        async setRoleRegularAsIntervenant() {
             if (this.validation.loading) {
                 return;
             }
@@ -515,7 +515,7 @@ export default {
             // eslint-disable-next-line no-alert
             if (
                 !window.confirm(
-                    "Êtes-vous sûr de vouloir accorder le statut d'intervenant à cet utilisateur et à tous les membres de la structure ?"
+                    "Êtes-vous sûr de vouloir accorder le statut d'intervenant à cet utilisateur ?"
                 )
             ) {
                 return;
@@ -525,9 +525,7 @@ export default {
             this.validation.error = null;
 
             try {
-                await updateOrganization(this.user.organization.id, {
-                    intervenant: true
-                });
+                await setUserRoleRegular(this.$route.params.id, "intervenant");
                 window.location.reload();
             } catch ({ user_message: error }) {
                 this.validation.error = error;
