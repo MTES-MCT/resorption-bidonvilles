@@ -22,6 +22,7 @@ const listExport = require('./listExport');
 const setPermissionOptions = require('./setPermissionOptions');
 const update = require('./update');
 const upgradeLocalAdmin = require('./upgradeLocalAdmin');
+const setUserRoleRegular = require('./setUserRoleRegular');
 
 module.exports = () => ({
     create,
@@ -48,4 +49,5 @@ module.exports = () => ({
     setPermissionOptions,
     update,
     upgradeLocalAdmin,
+    setUserRoleRegular,
 });
