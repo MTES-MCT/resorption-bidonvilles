@@ -1,5 +1,11 @@
 import { unload as unloadConfig } from "#helpers/api/config";
-import { postApi, putApi, getApi, deleteApi } from "#helpers/api/main";
+import {
+    postApi,
+    putApi,
+    patchApi,
+    getApi,
+    deleteApi
+} from "#helpers/api/main";
 
 /**
  * Sends a login request for the given user
@@ -238,6 +244,17 @@ export function acceptCharte(
 export function setAdminComments(userId, comment) {
     return putApi(`/users/${userId}/admin_comments`, {
         comment
+    });
+}
+
+/**
+ * PATCH /users/:id
+ */
+export async function setUserRoleRegular(userId, rolename) {
+    return patchApi(`/users/${userId}`, {
+        operation: "replace",
+        path: "/set_user_role_regular",
+        rolename
     });
 }
 
