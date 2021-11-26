@@ -998,4 +998,27 @@ module.exports = models => ({
 
         return res.status(200).send({});
     },
+
+    /**
+     * Set user's role_regular
+     */
+    async setUserRoleRegular(req, res, next) {
+        const { roleregular } = req.body;
+        try {
+            const user = await models.user.findOne(req.params.id);
+            if (user && user.role !== 'Intervenant') {
+                await models.user.setUserRoleRegular(req.params.id, roleregular.id);
+            }
+        } catch (error) {
+            res.status(500).send({
+                error: {
+                    user_message: 'Une erreur est survenue lors de la mise à jour de l\'utilisateur',
+                    developer_message: error.message,
+                },
+            });
+            return next(error);
+        }
+
+        return res.status(200).send({});
+    },
 });
