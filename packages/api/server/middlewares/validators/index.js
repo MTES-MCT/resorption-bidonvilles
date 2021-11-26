@@ -14,6 +14,7 @@ const createShantytownComment = require('./shantytownComment/create');
 const activityList = require('./activity/list');
 const findNearbyTowns = require('./findNearbyTowns');
 const setUserAdminComments = require('./setUserAdminComments');
+const setUserRoleRegular = require('./setUserRoleRegular');
 
 module.exports = {
     closeTown,
@@ -38,4 +39,5 @@ module.exports = {
         list: activityList,
     },
     setUserAdminComments,
+    setUserRoleRegular,
 };
