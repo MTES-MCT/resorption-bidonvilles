@@ -249,6 +249,14 @@ module.exports = (app) => {
         middlewares.appVersion.sync,
         controllers.town.getRelations,
     );
+    app.get(
+        '/actors',
+        middlewares.auth.authenticate,
+        (...args) => middlewares.auth.checkPermissions(['shantytown_actor.export'], ...args),
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        controllers.town.exportActors,
+    );
 
     app.get(
         '/towns/findNearby',
