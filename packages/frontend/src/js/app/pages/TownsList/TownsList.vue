@@ -272,21 +272,6 @@
                         />
                         <CustomFilter
                             v-if="filters.status === 'close'"
-                            title="Solution accompagnant la fermeture"
-                            class="mr-2 mb-2"
-                            :value="filters.closingSolution"
-                            @input="
-                                val => updateFilters('closingSolution', val)
-                            "
-                            :options="
-                                closingSolutions.map(f => ({
-                                    label: f.label,
-                                    value: f.id
-                                }))
-                            "
-                        />
-                        <CustomFilter
-                            v-if="filters.status === 'close'"
                             title="Résorbé / fermé"
                             class="mr-2 mb-2"
                             :value="filters.solvedOrClosed"
@@ -443,13 +428,11 @@ export default {
     },
     data() {
         const { field_types: fieldTypes } = getConfig();
-        const { closing_solutions: closingSolutions } = getConfig();
         const permission = getPermission("shantytown_justice.access");
 
         return {
             hasJusticePermission: permission !== null,
             fieldTypes,
-            closingSolutions,
             closingReasons: [
                 {
                     id: "closed_by_justice",
