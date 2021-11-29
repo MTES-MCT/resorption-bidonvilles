@@ -456,30 +456,12 @@ module.exports = (app) => {
     );
 
     app.patch(
-        '/organizations/:id',
+        '/organizations/:id/being_funded',
         middlewares.auth.authenticate,
         middlewares.auth.isSuperAdmin,
         validators.editOrganization,
         middlewares.validation,
-        async (req, res, next) => {
-            // parse body to check the requested operation
-            let controller;
-            switch (req.body.operation) {
-                case 'replace':
-                    switch (req.body.path) {
-                        case '/being_funded':
-                            controller = controllers.organization.updateBeingFunded;
-                            break;
-                        default:
-                            return res.status(404).send({});
-                    }
-                    break;
-                default:
-                    return res.status(404).send({});
-            }
-            // route to proper controller
-            return controller(req, res, next);
-        },
+        controllers.organization.updateBeingFunded,
     );
 
     app.get(
