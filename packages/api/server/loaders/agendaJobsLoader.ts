@@ -13,10 +13,10 @@ import { sendActivitySummary } from '#server/config';
 export default (agenda) => {
     agenda.define(
         'send_activity_summary',
-        async (job) => {
+        async () => {
             if (sendActivitySummary) {
-                const now = moment().utcOffset(2);
-                await activitySummary.sendAll(now.day(), now.month(), now.year());
+                const now = moment().utcOffset(2).subtract(7, 'days');
+                await activitySummary.sendAll(now.date(), now.month(), now.year());
             }
         }
     );
