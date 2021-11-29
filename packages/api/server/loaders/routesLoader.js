@@ -249,6 +249,14 @@ module.exports = (app) => {
         middlewares.appVersion.sync,
         controllers.town.getRelations,
     );
+    app.get(
+        '/actors',
+        middlewares.auth.authenticate,
+        (...args) => middlewares.auth.checkPermissions(['shantytown_actor.export'], ...args),
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        controllers.town.exportActors,
+    );
 
     app.get(
         '/towns/findNearby',
@@ -439,6 +447,15 @@ module.exports = (app) => {
         controllers.town.deleteComment,
     );
 
+    app.get(
+        '/comments',
+        middlewares.auth.authenticate,
+        (...args) => middlewares.auth.checkPermissions(['shantytown_comment.export'], ...args),
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        controllers.shantytownComment.export,
+    );
+
     // high covid comment
     app.post(
         '/high-covid-comments',
@@ -597,5 +614,14 @@ module.exports = (app) => {
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.userActivity.covid,
+    );
+
+    app.get(
+        '/contact-form-referrals',
+        middlewares.auth.authenticate,
+        (...args) => middlewares.auth.checkPermissions(['contact_form_referral.access'], ...args),
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        controllers.contactFormReferral.export,
     );
 };

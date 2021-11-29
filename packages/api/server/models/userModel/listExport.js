@@ -15,7 +15,7 @@ module.exports = async () => sequelize.query(
         END AS "Statut",
         TO_CHAR(lua.used_at :: DATE, 'dd/mm/yyyy') AS "Date d'activation du compte",
         u.fk_role AS "Rôle administrateur de l'acteur",
-        TO_CHAR(u.last_access :: DATE, 'dd/mm/yyyy hh:mm:ss') AS "Date et heure de dernière connexion",    
+        TO_CHAR(u.last_access :: DATE, 'dd/mm/yyyy') AS "Date de dernière connexion",
         o.name AS "Organisation",
         o.abbreviation AS "Organisation abbr",
         rr.name AS "Rôle de l'acteur",

@@ -36,9 +36,13 @@ Semaine du {{ var:from }} au {{ var:to }}
 {% endif %}{% for user in summary.new_users %}
 {{ user.name }}
 [{{var:frontUrl}}/annuaire/{{user.organizationId}}?{{var:utm}}-nouvel-utilisateur]
-{% endfor %}
+{% endfor %}{% if summary.shantytowns_total > 1 %}
 Pour rappel : {{ summary.shantytowns_total }} sites et {{
 summary.population_total }} habitants en bidonvilles ou squats
+{% else %}
+Pour rappel : {{ summary.shantytowns_total }} site et {{
+summary.population_total }} habitants en bidonvilles ou squats
+{% endif %}
 
 Me connecter [{{var:connexionUrl}}]
 
@@ -77,16 +81,25 @@ Me connecter [{{var:connexionUrl}}]
 {% endif %}{% for user in summary.new_users %}
 {{ user.name }}
 [{{var:frontUrl}}/annuaire/{{user.organizationId}}?{{var:utm}}-nouvel-utilisateur]
-{% endfor %}
+{% endfor %}{% if summary.shantytowns_total > 1 %}
 Pour rappel : {{ summary.shantytowns_total }} sites et {{
 summary.population_total }} habitants en bidonvilles ou squats
+{% else %}
+Pour rappel : {{ summary.shantytowns_total }} site et {{
+summary.population_total }} habitants en bidonvilles ou squats
+{% endif %}
 
 Me connecter [{{var:connexionUrl}}]
 
 {% else %}
 Aucune activité
+{% if summary.shantytowns_total > 1 %}
 Pour rappel : {{ summary.shantytowns_total }} sites et {{
 summary.population_total }} habitants en bidonvilles ou squats
+{% else %}
+Pour rappel : {{ summary.shantytowns_total }} site et {{
+summary.population_total }} habitants en bidonvilles ou squats
+{% endif %}
 
 Me connecter [{{var:connexionUrl}}]
 
