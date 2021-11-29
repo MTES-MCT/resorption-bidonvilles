@@ -36,7 +36,7 @@ export default function(Vue) {
                     justice: [],
                     origin: [],
                     conditions: [],
-                    closingSolution: [],
+                    closingReason: [],
                     solvedOrClosed: [],
                     status: "open",
                     location: null,
