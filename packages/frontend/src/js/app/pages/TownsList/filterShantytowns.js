@@ -58,13 +58,6 @@ export function filterShantytowns(shantytowns, filters) {
         }
 
         if (
-            filters.closingSolution.length > 0 &&
-            !checkClosingSolutions(shantytown, filters.closingSolution)
-        ) {
-            return false;
-        }
-
-        if (
             filters.closingReason.length > 0 &&
             !checkClosingReason(shantytown, filters.closingReason)
         ) {
@@ -219,19 +212,6 @@ function checkJustice(shantytown, filters) {
 
         return value === null;
     });
-}
-
-/**
- * Filter on closing solutions
- */
-function checkClosingSolutions(shantytown, filters) {
-    const closingSolutionsIds = shantytown.closingSolutions.map(function(
-        closingSolution
-    ) {
-        return closingSolution.id;
-    });
-
-    return closingSolutionsIds.some(e => filters.includes(e));
 }
 
 /**
