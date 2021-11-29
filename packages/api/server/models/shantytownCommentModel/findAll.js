@@ -71,7 +71,8 @@ module.exports = (location = null, privateLocation = null) => {
         ${additionalWhere.length > 0
         ? `WHERE ${additionalWhere.join(' AND ')}`
         : ''
-}`,
+}
+        ORDER BY sc.created_at DESC`,
         {
             type: sequelize.QueryTypes.SELECT,
             replacements,

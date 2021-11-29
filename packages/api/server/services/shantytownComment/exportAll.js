@@ -1,3 +1,4 @@
+const moment = require('moment');
 const shantytownCommentModel = require('#server/models/shantytownCommentModel')();
 const ServiceError = require('#server/errors/ServiceError');
 
@@ -42,18 +43,23 @@ module.exports = async (user) => {
     }
 
     // build excel file
-    return comments.map(raw => ({
-        'ID du commentaire': raw.commentId,
-        'ID du site': raw.shantytownId,
-        'Publié le': raw.commentCreatedAt,
-        Description: raw.commentDescription,
-        'ID de l\'auteur(e)': raw.userId,
-        'Commentaire privé ?': raw.commentPrivate ? 'Oui' : 'Non',
-        Prénom: raw.userFirstName,
-        'Nom de famille': raw.userLastName,
-        Structure: raw.organizationName,
-        Département: raw.departementName,
-        Role: raw.userRole,
-        'Objectif de résorption': raw.shantytownResorptionTarget,
-    }));
+    return comments.map((raw) => {
+        const createdAt = moment(raw.commentCreatedAt).utcOffset(2);
+
+        return {
+            S: createdAt.format('w'),
+            'ID du commentaire': raw.commentId,
+            'ID du site': raw.shantytownId,
+            'Publié le': createdAt.format('DD/MM/YYYY'),
+            Description: raw.commentDescription,
+            'ID de l\'auteur(e)': raw.userId,
+            'Commentaire privé ?': raw.commentPrivate ? 'Oui' : 'Non',
+            Prénom: raw.userFirstName,
+            'Nom de famille': raw.userLastName,
+            Structure: raw.organizationName,
+            Département: raw.departementName,
+            Role: raw.userRole,
+            'Objectif de résorption': raw.shantytownResorptionTarget,
+        };
+    });
 };
