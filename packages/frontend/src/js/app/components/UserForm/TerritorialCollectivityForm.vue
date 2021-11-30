@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import Collectivity from "#app/components/form/input/collectivity/collectivity";
+import Collectivity from "#app/components/form/input/collectivity/collectivity.vue";
 import InputLabel from "#app/components/ui/Form/utils/InputLabel.vue";
 import InputWrapper from "#app/components/ui/Form/utils/InputWrapper.vue";
 import InputError from "#app/components/ui/Form/utils/InputError.vue";
