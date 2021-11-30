@@ -1,14 +1,14 @@
 
 module.exports = {
     up: queryInterface => queryInterface.sequelize.transaction(
-        Promise.all([
+        transaction => Promise.all([
             queryInterface.sequelize.query(
                 'SELECT organization_type_id FROM organization_types WHERE uid = \'casnav\'',
-                { type: queryInterface.sequelize.QueryTypes.SELECT },
+                { type: queryInterface.sequelize.QueryTypes.SELECT, transaction },
             ),
             queryInterface.sequelize.query(
                 'SELECT * FROM regions WHERE code NOT IN (SELECT region_code FROM localized_organizations WHERE abbreviation LIKE \'CASNAV%\')',
-                { type: queryInterface.sequelize.QueryTypes.SELECT },
+                { type: queryInterface.sequelize.QueryTypes.SELECT, transaction },
             ),
         ])
             .then(([[{ organization_type_id }], regions]) => queryInterface.bulkInsert(
@@ -20,9 +20,13 @@ module.exports = {
                     fk_type: organization_type_id,
                     fk_region: code,
                 })),
+                {
+                    transaction,
+                },
             ))
             .then(() => queryInterface.sequelize.query(
                 'REFRESH MATERIALIZED VIEW localized_organizations',
+                { transaction },
             )),
     ),
 
