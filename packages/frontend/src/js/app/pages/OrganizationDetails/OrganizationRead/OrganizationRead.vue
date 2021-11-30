@@ -51,7 +51,6 @@ import { get as getConfig } from "#helpers/api/config";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
 import OrganizationDetailsUser from "#app/pages/OrganizationDetails/OrganizationUser/OrganizationDetailsUser";
 import OrganizationHeader from "#app/pages/OrganizationDetails/ui/OrganizationHeader";
-import { formatDate, isCurrentUserNationalAdmin } from "../utils";
 
 export default {
     components: {
@@ -62,7 +61,7 @@ export default {
     data() {
         const { user } = getConfig();
         return {
-            isNationalAdmin: isCurrentUserNationalAdmin(user.role_id)
+            isNationalAdmin: user.role_id === "national_admin"
         };
     },
     props: {
@@ -72,7 +71,10 @@ export default {
     },
     computed: {
         beingFundedDate() {
-            return formatDate(this.organization.being_funded_at);
+            return App.formatDate(
+                new Date(this.organization.being_funded_at).getTime() / 1000,
+                "d/m/y"
+            );
         }
     }
 };
