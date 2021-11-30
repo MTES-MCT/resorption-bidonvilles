@@ -1,19 +1,17 @@
 
 module.exports = {
     up: queryInterface => queryInterface.sequelize.transaction(
-        transaction => queryInterface.sequelize.query(
-            'select organization_type_id from organization_types where uid = \'casnav\'',
-            { type: queryInterface.sequelize.QueryTypes.SELECT, transaction },
-        )
-            .then(([{ organization_type_id }]) => queryInterface.sequelize.query(
-                'select * from regions where code not in (select region_code from localized_organizations where abbreviation ilike \'%CASNAV%\')',
-                { type: queryInterface.sequelize.QueryTypes.SELECT, transaction },
-            )
-                .then(regions => ({
-                    organization_type_id,
-                    regions,
-                })))
-            .then(({ organization_type_id, regions }) => queryInterface.bulkInsert(
+        Promise.all([
+            queryInterface.sequelize.query(
+                'SELECT organization_type_id FROM organization_types WHERE uid = \'casnav\'',
+                { type: queryInterface.sequelize.QueryTypes.SELECT },
+            ),
+            queryInterface.sequelize.query(
+                'SELECT * FROM regions WHERE code NOT IN (SELECT region_code FROM localized_organizations WHERE abbreviation LIKE \'CASNAV%\')',
+                { type: queryInterface.sequelize.QueryTypes.SELECT },
+            ),
+        ])
+            .then(([[{ organization_type_id }], regions]) => queryInterface.bulkInsert(
                 'organizations',
                 regions.map(({ code, name }) => ({
                     name: `Centre Académique pour la Scolarisation des Nouveaux Arrivants et des enfants du Voyage - ${name}`,
@@ -22,17 +20,15 @@ module.exports = {
                     fk_type: organization_type_id,
                     fk_region: code,
                 })),
-                { transaction },
             ))
             .then(() => queryInterface.sequelize.query(
                 'REFRESH MATERIALIZED VIEW localized_organizations',
-                { transaction },
             )),
     ),
 
     down: queryInterface => queryInterface.sequelize.transaction(
         transaction => queryInterface.sequelize.query(
-            'delete from organizations where abbreviation ilike \'%CASNAV%\'',
+            'DELETE FROM organizations WHERE abbreviation LIKE \'CASNAV%\'',
             {
                 transaction,
             },
