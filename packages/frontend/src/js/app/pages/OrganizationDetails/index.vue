@@ -2,42 +2,22 @@
     <PrivateLayout>
         <PrivateContainer class="py-8">
             <div v-if="!directoryLoading && organization">
-                <Button
-                    class="-ml-4 mb-8"
-                    variant="primaryText"
-                    icon="chevron-left"
-                    href="/annuaire"
-                    iconPosition="left"
-                    >Aller à l'annuaire</Button
-                >
-
-                <h1 class="text-display-lg mb-8">{{ organization.name }}</h1>
-
-                <div class="flex items-center mb-8">
-                    <div class="mr-48">
-                        <div>Territoire :</div>
-                        <div class="text-lg">
-                            {{ organization.locationName }}
-                            <span v-if="organization.locationCode"
-                                >({{ organization.locationCode }})</span
-                            >
-                        </div>
-                    </div>
-                </div>
-
-                <OrganizationDetailsUser
-                    class="mb-4"
-                    v-for="user in organization.users"
-                    :user="user"
-                    :key="user.id"
+                <OrganizationRead
+                    v-if="!edit"
+                    :organization="organization"
+                    @openEdit="edit = true"
+                />
+                <OrganizationEdit
+                    v-else
+                    :organization="organization"
+                    @cancelEdit="edit = false"
                 />
             </div>
-            <LoadingError v-else-if="!directoryLoading && !organization">
+            <LoadingError v-else-if="!directoryLoading">
                 La structure demandée n'existe pas en base de données ou n'a pas
                 d'utilisateurs actifs
             </LoadingError>
-
-            <LoadingPage v-else-if="directoryLoading && organization" />
+            <LoadingPage v-else />
         </PrivateContainer>
     </PrivateLayout>
 </template>
@@ -46,21 +26,27 @@ import PrivateLayout from "#app/components/PrivateLayout";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
 import LoadingError from "#app/components/PrivateLayout/LoadingError";
 import LoadingPage from "#app/components/PrivateLayout/LoadingPage";
+import OrganizationRead from "./OrganizationRead/OrganizationRead";
+import OrganizationEdit from "./OrganizationEdit/OrganizationEdit";
 import { mapGetters } from "vuex";
-import OrganizationDetailsUser from "#app/pages/OrganizationDetails/OrganizationDetailsUser";
+
 export default {
     components: {
-        OrganizationDetailsUser,
         PrivateLayout,
         PrivateContainer,
         LoadingError,
-        LoadingPage
+        LoadingPage,
+        OrganizationRead,
+        OrganizationEdit
     },
-
+    data() {
+        return {
+            edit: false
+        };
+    },
     methods: {
         async load() {
-            // on fetch les activités
-            if (this.$store.state.directory.items.length === 0) {
+            if (this.directory.length === 0) {
                 this.$store.dispatch("fetchDirectory");
             }
         }
@@ -71,12 +57,14 @@ export default {
     computed: {
         ...mapGetters({
             directoryLoading: "directoryLoading",
-            directoryError: "directoryError",
-            directory: "directory"
+            directory: "directory",
+            getOrganization: "organization"
         }),
+        organizationId() {
+            return parseInt(this.$route.params.id, 10);
+        },
         organization() {
-            const orgID = parseInt(this.$route.params.id, 10);
-            return this.directory.find(item => item.id === orgID);
+            return this.getOrganization(this.organizationId);
         }
     }
 };

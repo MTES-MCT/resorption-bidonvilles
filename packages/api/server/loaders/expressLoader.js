@@ -28,7 +28,7 @@ function asyncHandler(fn) {
 function asyncExpress() {
     const app = express();
 
-    const methods = ['get', 'post', 'put', 'delete'];
+    const methods = ['get', 'post', 'put', 'delete', 'patch'];
     methods.forEach((methodName) => {
         const originalMethod = app[methodName];
         app[methodName] = (...args) => {

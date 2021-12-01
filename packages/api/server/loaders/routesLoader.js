@@ -177,6 +177,16 @@ module.exports = (app) => {
         middlewares.auth.isSuperAdmin,
         controllers.user.updateLocalAdmin,
     );
+    app.patch(
+        '/users/:id/role_regular',
+        middlewares.auth.authenticate,
+        middlewares.auth.isSuperAdmin,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        validators.user.setRoleRegular,
+        middlewares.validation,
+        controllers.user.setRoleRegular,
+    );
     app.post(
         '/users/new-password',
         controllers.user.requestNewPassword,
@@ -465,12 +475,13 @@ module.exports = (app) => {
         controllers.town.createHighCovidComment,
     );
 
-    // organizations
-    app.put(
-        '/organizations/:id',
+    app.patch(
+        '/organizations/:id/being_funded',
         middlewares.auth.authenticate,
         middlewares.auth.isSuperAdmin,
-        controllers.organization.update,
+        validators.editOrganization,
+        middlewares.validation,
+        controllers.organization.updateBeingFunded,
     );
 
     app.get(
@@ -480,6 +491,7 @@ module.exports = (app) => {
         middlewares.appVersion.sync,
         controllers.organization.search,
     );
+
     app.get(
         '/organization-categories',
         controllers.organization.categories,

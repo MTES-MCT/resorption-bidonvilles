@@ -1,0 +1,40 @@
+<template>
+    <div>
+        <PrivateContainer class="py-8">
+            <Button
+                class="-ml-4"
+                variant="primaryText"
+                icon="chevron-left"
+                href="/annuaire"
+                iconPosition="left"
+                >Aller à l'annuaire</Button
+            >
+
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-display-lg">
+                        {{ title }}
+                    </h1>
+                </div>
+                <div>
+                    <slot />
+                </div>
+            </div>
+        </PrivateContainer>
+    </div>
+</template>
+
+<script>
+import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
+
+export default {
+    props: {
+        title: {
+            type: String
+        }
+    },
+    components: {
+        PrivateContainer
+    }
+};
+</script>

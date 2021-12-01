@@ -38,13 +38,14 @@ export default {
         setDirectoryPage(state, page) {
             state.currentPage = page;
         },
-        removeComment(state, commentId) {
-            const index = state.items.findIndex(({ comment }) => {
-                return comment && comment.id === commentId;
-            });
+        updateOrganization(state, data) {
+            const index = state.items.findIndex(({ id }) => id === data.id);
 
             if (index >= 0) {
-                state.items.splice(index, 1);
+                state.items.splice(index, 1, {
+                    ...state.items[index],
+                    ...data.partial
+                });
             }
         }
     },
@@ -154,6 +155,11 @@ export default {
             });
 
             return result;
+        },
+        organization(state) {
+            return id => {
+                return state.items.find(item => item.id === id);
+            };
         }
     }
 };

@@ -1,4 +1,4 @@
-import { getApi, putApi } from "#helpers/api/main";
+import { getApi, patchApi } from "#helpers/api/main";
 
 /**
  * Lists all categories
@@ -77,8 +77,8 @@ export function getMembersOfCategory(categoryId, regionId, departementId) {
 }
 
 /**
- * PUT /organizations/:id
+ * PATCH /organizations/:id
  */
-export function update(organizationId, options = {}) {
-    return putApi(`/organizations/${organizationId}`, options);
+export async function updateBeingFunded(organizationId, data) {
+    return patchApi(`/organizations/${organizationId}/being_funded`, data);
 }
