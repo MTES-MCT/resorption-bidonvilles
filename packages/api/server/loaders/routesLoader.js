@@ -475,13 +475,6 @@ module.exports = (app) => {
         controllers.town.createHighCovidComment,
     );
 
-    app.put(
-        '/organizations/:id',
-        middlewares.auth.authenticate,
-        middlewares.auth.isSuperAdmin,
-        controllers.organization.update,
-    );
-
     app.patch(
         '/organizations/:id/being_funded',
         middlewares.auth.authenticate,
