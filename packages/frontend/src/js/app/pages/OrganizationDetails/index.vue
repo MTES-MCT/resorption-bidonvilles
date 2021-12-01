@@ -13,13 +13,11 @@
                     @cancelEdit="edit = false"
                 />
             </div>
-            <LoadingError v-else-if="!directoryLoading && !organization">
+            <LoadingError v-else-if="!directoryLoading">
                 La structure demandée n'existe pas en base de données ou n'a pas
                 d'utilisateurs actifs
             </LoadingError>
-            <LoadingPage
-                v-else-if="(directoryLoading && !organization) || loading"
-            />
+            <LoadingPage v-else />
         </PrivateContainer>
     </PrivateLayout>
 </template>
@@ -48,7 +46,7 @@ export default {
     },
     methods: {
         async load() {
-            if (this.$store.state.directory.items.length === 0) {
+            if (this.directory.length === 0) {
                 this.$store.dispatch("fetchDirectory");
             }
         }
@@ -59,12 +57,14 @@ export default {
     computed: {
         ...mapGetters({
             directoryLoading: "directoryLoading",
-            directoryError: "directoryError",
-            directory: "directory"
+            directory: "directory",
+            getOrganization: "organization"
         }),
+        organizationId() {
+            return parseInt(this.$route.params.id, 10);
+        },
         organization() {
-            const orgID = parseInt(this.$route.params.id, 10);
-            return this.directory.find(item => item.id === orgID);
+            return this.getOrganization(this.organizationId);
         }
     }
 };

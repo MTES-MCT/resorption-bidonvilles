@@ -25,8 +25,8 @@
     </OrganizationDetailsUserWrapper>
 </template>
 <script>
-import OrganizationDetailsUserIcon from "#app/pages/OrganizationDetails/OrganizationUser/OrganizationDetailsUserIcon";
-import OrganizationDetailsUserWrapper from "#app/pages/OrganizationDetails/OrganizationUser/OrganizationDetailsUserWrapper";
+import OrganizationDetailsUserIcon from "./OrganizationDetailsUserIcon";
+import OrganizationDetailsUserWrapper from "./OrganizationDetailsUserWrapper";
 import { hasPermission } from "#helpers/api/config";
 
 export default {

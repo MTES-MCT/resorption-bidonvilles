@@ -86,10 +86,6 @@ export function update(organizationId, options = {}) {
 /**
  * PATCH /organizations/:id
  */
-export async function updateBeingFunded(organizationId, data = {}) {
-    return patchApi(`/organizations/${organizationId}`, {
-        operation: "replace",
-        path: "/being_funded",
-        data
-    });
+export async function updateBeingFunded(organizationId, data) {
+    return patchApi(`/organizations/${organizationId}/being_funded`, data);
 }

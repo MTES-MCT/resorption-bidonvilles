@@ -1,4 +1,4 @@
-module.exports = queryInterface => queryInterface.sequelize.query(
+module.exports = (queryInterface, transaction) => queryInterface.sequelize.query(
     `CREATE MATERIALIZED VIEW localized_organizations AS
     (
         SELECT
@@ -172,4 +172,7 @@ module.exports = queryInterface => queryInterface.sequelize.query(
         WHERE
             organizations.fk_city IS NOT NULL
     )`,
+    {
+        transaction,
+    },
 );

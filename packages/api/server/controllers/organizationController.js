@@ -1,5 +1,5 @@
 const { sequelize } = require('#db/models');
-const { updateBeingFunded, findOneById } = require('#server/models/organizationModel')(sequelize);
+const { updateBeingFunded } = require('#server/models/organizationModel')();
 
 function trim(str) {
     if (typeof str !== 'string') {
@@ -258,40 +258,18 @@ module.exports = models => ({
      * Updates being_funded and being_funded_at
      */
     async updateBeingFunded(req, res, next) {
-        const { id: paramId } = req.params;
-
-        // Test if the organization id is missing
-        if (!paramId) {
-            res.status(500).send({
-                error: {
-                    user_message: 'L\'identifiant de l\'organisation n\'est pas précisé.',
-                },
-            });
-            return next(new Error('The organization id is missing.'));
-        }
-
-        const orgData = req.body.data;
-        const organization = await findOneById(paramId);
-
-        if (organization === null) {
-            res.status(500).send({
-                error: {
-                    user_message: 'Impossible de trouver la structure en bases de données.',
-                },
-            });
-            return next(new Error(`Organization #${paramId} does not exist`));
-        }
-
         try {
-            await updateBeingFunded(paramId, orgData);
-            return res.status(200).send({
-                organization_id: paramId,
-                orgData,
-            });
+            const data = {
+                being_funded: req.body.being_funded,
+                being_funded_at: new Date(),
+            };
+            await updateBeingFunded(req.body.organization.id, data);
+
+            return res.status(200).send(data);
         } catch (error) {
-            res.status(404).send({
+            res.status(500).send({
                 error: {
-                    user_message: error.message.length > 0 ? error.message : 'Une erreur est survenue dans l\'écriture de vos informations en base de données.',
+                    user_message: 'Une erreur est survenue dans l\'écriture de vos informations en base de données.',
                 },
             });
             return next(error);

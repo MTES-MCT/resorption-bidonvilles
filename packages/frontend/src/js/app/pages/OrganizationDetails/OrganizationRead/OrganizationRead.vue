@@ -1,7 +1,7 @@
 <template>
     <div>
         <OrganizationHeader :title="organization.name">
-            <div class="flex" v-if="organization && isCurrentUserNationalAdmin">
+            <div class="flex" v-if="isNationalAdmin">
                 <Button
                     variant="primary"
                     @click="$emit('openEdit')"
@@ -13,56 +13,36 @@
         </OrganizationHeader>
 
         <PrivateContainer class="py-8">
-            <div v-if="organization">
-                <div class="grid grid-cols-3 grid-gap-32">
-                    <div class="flex items-top mb-8">
-                        <div class="mr-48">
-                            <div>Territoire:</div>
-                            <div class="text-lg">
-                                {{ organization.locationName }}
-                                <span v-if="organization.locationCode"
-                                    >({{ organization.locationCode }})</span
-                                >
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        v-if="isCurrentUserNationalAdmin"
-                        class="flex items-top mb-8"
-                    >
-                        <div class="mr-48">
-                            <div>Financement:</div>
-                            <div class="text-lg">
-                                <span>
-                                    {{
-                                        organization.being_funded
-                                            ? "Oui"
-                                            : "Non"
-                                    }}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        v-if="isCurrentUserNationalAdmin"
-                        class="flex items-top mb-8"
-                    >
-                        <div class="mr-48">
-                            <div>Date de mise à jour:</div>
-                            <div class="text-lg">
-                                {{ beingFundedDate }}
-                            </div>
-                        </div>
+            <div class="grid grid-cols-3 mb-8">
+                <div>
+                    <div>Territoire :</div>
+                    <div class="text-lg">
+                        {{ organization.locationName }}
+                        <span v-if="organization.locationCode"
+                            >({{ organization.locationCode }})</span
+                        >
                     </div>
                 </div>
-
-                <OrganizationDetailsUser
-                    class="mb-4"
-                    v-for="user in organization.users"
-                    :user="user"
-                    :key="user.id"
-                />
+                <div v-if="isNationalAdmin">
+                    <div>Financement:</div>
+                    <div class="text-lg">
+                        {{ organization.being_funded ? "Oui" : "Non" }}
+                    </div>
+                </div>
+                <div v-if="isNationalAdmin">
+                    <div>Date de mise à jour:</div>
+                    <div class="text-lg">
+                        {{ beingFundedDate }}
+                    </div>
+                </div>
             </div>
+
+            <OrganizationDetailsUser
+                class="mb-4"
+                v-for="user in organization.users"
+                :user="user"
+                :key="user.id"
+            />
         </PrivateContainer>
     </div>
 </template>
@@ -71,7 +51,6 @@ import { get as getConfig } from "#helpers/api/config";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
 import OrganizationDetailsUser from "#app/pages/OrganizationDetails/OrganizationUser/OrganizationDetailsUser";
 import OrganizationHeader from "#app/pages/OrganizationDetails/ui/OrganizationHeader";
-import { formatDate, isCurrentUserNationalAdmin } from "../utils";
 
 export default {
     components: {
@@ -82,27 +61,20 @@ export default {
     data() {
         const { user } = getConfig();
         return {
-            currentUser: user,
-            isHover: false
+            isNationalAdmin: user.role_id === "national_admin"
         };
     },
     props: {
         organization: {
             type: Object
-        },
-        directoryLoading: {
-            type: Boolean
         }
-    },
-    methods: {
-        formatDate
     },
     computed: {
         beingFundedDate() {
-            return formatDate(this.organization.being_funded_at);
-        },
-        isCurrentUserNationalAdmin() {
-            return isCurrentUserNationalAdmin(this.currentUser.role_id);
+            return App.formatDate(
+                new Date(this.organization.being_funded_at).getTime() / 1000,
+                "d/m/y"
+            );
         }
     }
 };
