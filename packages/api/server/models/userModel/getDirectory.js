@@ -17,6 +17,8 @@ module.exports = async () => {
             organizations.city_code,
             organizations.city_name,
             organizations.city_main,
+            organizations.being_funded,
+            organizations.being_funded_at,
             users.user_id AS "user_id",
             users.fk_role AS "user_role_admin",
             users.first_name AS "user_firstName",
@@ -52,6 +54,8 @@ module.exports = async () => {
                 id: user.organization_id,
                 name: user.name,
                 abbreviation: user.abbreviation,
+                being_funded: user.being_funded,
+                being_funded_at: user.being_funded_at,
                 location: {
                     type: user.location_type,
                     region: user.region_code !== null ? {

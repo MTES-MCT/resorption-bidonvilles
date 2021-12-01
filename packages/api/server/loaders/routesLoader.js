@@ -465,12 +465,20 @@ module.exports = (app) => {
         controllers.town.createHighCovidComment,
     );
 
-    // organizations
     app.put(
         '/organizations/:id',
         middlewares.auth.authenticate,
         middlewares.auth.isSuperAdmin,
         controllers.organization.update,
+    );
+
+    app.patch(
+        '/organizations/:id/being_funded',
+        middlewares.auth.authenticate,
+        middlewares.auth.isSuperAdmin,
+        validators.editOrganization,
+        middlewares.validation,
+        controllers.organization.updateBeingFunded,
     );
 
     app.get(
@@ -480,6 +488,7 @@ module.exports = (app) => {
         middlewares.appVersion.sync,
         controllers.organization.search,
     );
+
     app.get(
         '/organization-categories',
         controllers.organization.categories,

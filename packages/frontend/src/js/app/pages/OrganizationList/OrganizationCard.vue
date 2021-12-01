@@ -8,11 +8,18 @@
         @mouseleave="isHover = false"
     >
         <router-link :to="`/annuaire/${organization.id}`">
-            <div class="p-4 flex">
-                <div class="text-md font-bold w-1/2 pr-16">
+            <div class="p-4 grid grid-cols-4 auto-cols-max gap-4">
+                <div class="text-md font-bold">
                     {{ name }}
                 </div>
-                <ul class="flex-1 pl-16">
+                <div v-if="!displayBeingFunded" class="text-md" />
+                <div
+                    v-if="displayBeingFunded"
+                    class="text-md pl-4 sm:pl-8 lg:pl-32"
+                >
+                    <Icon icon="euro-sign" />
+                </div>
+                <ul class="pl-16">
                     <li
                         v-for="user in organization.users.slice(0, 5)"
                         :key="user.id"
@@ -33,7 +40,7 @@
                     variant="primaryText"
                     icon="arrow-right"
                     :class="[
-                        'text-display-sm self-end whitespace-no-wrap hover:underline -mb-4'
+                        'text-display-sm whitespace-no-wrap hover:underline -mb-4'
                     ]"
                     >{{ isHover ? "Voir la fiche complète" : "" }}</Button
                 >
@@ -43,6 +50,8 @@
 </template>
 
 <script>
+import { get as getConfig } from "#helpers/api/config";
+
 export default {
     props: {
         organization: {
@@ -50,8 +59,10 @@ export default {
         }
     },
     data() {
+        const { user } = getConfig();
         return {
-            isHover: false
+            isHover: false,
+            currentUser: user
         };
     },
     computed: {
@@ -66,6 +77,15 @@ export default {
             }
 
             return this.organization.name.replace("-", "–");
+        },
+        displayBeingFunded() {
+            if (
+                this.currentUser.role_id === "national_admin" &&
+                this.organization.being_funded
+            ) {
+                return true;
+            }
+            return false;
         }
     }
 };
