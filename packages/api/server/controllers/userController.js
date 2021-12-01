@@ -864,6 +864,23 @@ module.exports = models => ({
         return res.status(200).send({});
     },
 
+    async setRoleRegular(req, res, next) {
+        try {
+            await models.user.update(req.body.user.id, {
+                fk_role_regular: req.body.role.id,
+            });
+        } catch (error) {
+            res.status(500).send({
+                error: {
+                    user_message: 'Une erreur est survenue lors de la mise à jour du compte',
+                },
+            });
+            return next(error);
+        }
+
+        return res.status(200).send({});
+    },
+
     async requestNewPassword(req, res, next) {
         const data = { email: req.body.email };
         const fields = [

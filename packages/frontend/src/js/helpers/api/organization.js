@@ -1,4 +1,4 @@
-import { getApi, putApi, patchApi } from "#helpers/api/main";
+import { getApi, patchApi } from "#helpers/api/main";
 
 /**
  * Lists all categories
@@ -74,13 +74,6 @@ export function getMembersOfCategory(categoryId, regionId, departementId) {
     }
 
     return getApi(`/organization-categories/${categoryId}/users?${query}`);
-}
-
-/**
- * PUT /organizations/:id
- */
-export function update(organizationId, options = {}) {
-    return putApi(`/organizations/${organizationId}`, options);
 }
 
 /**

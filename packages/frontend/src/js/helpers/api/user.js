@@ -1,5 +1,11 @@
 import { unload as unloadConfig } from "#helpers/api/config";
-import { postApi, putApi, getApi, deleteApi } from "#helpers/api/main";
+import {
+    postApi,
+    putApi,
+    getApi,
+    deleteApi,
+    patchApi
+} from "#helpers/api/main";
 
 /**
  * Sends a login request for the given user
@@ -193,6 +199,13 @@ export function remove(userId) {
  */
 export function updateLocalAdmin(userId, admin = true) {
     return postApi(`/users/${userId}/local-admin`, { admin });
+}
+
+/**
+ * PATCH /users/:id/role_regular
+ */
+export function setRoleRegular(userId, roleId) {
+    return patchApi(`/users/${userId}/role_regular`, { role_id: roleId });
 }
 
 /**

@@ -8,7 +8,7 @@ module.exports = async (userId, values, transaction = undefined) => {
     const allowedProperties = [
         'first_name', 'last_name', 'position', 'phone', 'password', 'fk_status',
         'last_version', 'last_changelog', 'charte_engagement_signee', 'last_access',
-        'subscribed_to_summary', 'admin_comments',
+        'subscribed_to_summary', 'admin_comments', 'fk_role_regular',
     ];
     const propertiesToColumns = {
         first_name: 'first_name',
@@ -23,6 +23,7 @@ module.exports = async (userId, values, transaction = undefined) => {
         last_access: 'last_access',
         subscribed_to_summary: 'subscribed_to_summary',
         admin_comments: 'admin_comments',
+        fk_role_regular: 'fk_role_regular',
     };
     const setClauses = [];
     const replacements = {};

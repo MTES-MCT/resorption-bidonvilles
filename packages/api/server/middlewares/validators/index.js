@@ -15,6 +15,7 @@ const activityList = require('./activity/list');
 const findNearbyTowns = require('./findNearbyTowns');
 const setUserAdminComments = require('./setUserAdminComments');
 const editOrganization = require('./editOrganization');
+const userSetRoleRegular = require('./users/setRoleRegular');
 
 module.exports = {
     closeTown,
@@ -37,6 +38,9 @@ module.exports = {
     invite,
     activity: {
         list: activityList,
+    },
+    user: {
+        setRoleRegular: userSetRoleRegular,
     },
     setUserAdminComments,
     editOrganization,

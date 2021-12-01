@@ -8,7 +8,6 @@ const findOneAssociation = require('./findOneAssociation');
 const findOneById = require('./findOneById');
 const findOneByLocation = require('./findOneByLocation');
 const getName = require('./getName');
-const setIntervenant = require('./setIntervenant');
 
 module.exports = () => ({
     activate,
@@ -21,5 +20,4 @@ module.exports = () => ({
     findOneById,
     findOneByLocation,
     getName,
-    setIntervenant,
 });
