@@ -73,7 +73,13 @@ module.exports = {
         territory: "Bordeaux"
     },
     assoDepartement: {
-        permissions: defaultPermissions,
+        permissions: {
+            ...defaultPermissions,
+            plan: {
+                ...defaultPermissions.plan,
+                updateMarks: true
+            }
+        },
         territory: "Gironde"
     },
     assoDepartementWithHideOption: {
@@ -98,8 +104,10 @@ module.exports = {
                 hideOwner: false
             },
             plan: {
-                ...defaultPermissions.shantytown,
-                create: true
+                ...defaultPermissions.plan,
+                create: true,
+                update: true,
+                close: true
             }
         },
         territory: "Gironde"

@@ -15,7 +15,7 @@ function generate(email, password, first_name, last_name, fk_role, fk_role_regul
         access_request_message: 'Compte généré automatiquement',
         phone,
         position,
-        fk_organization: 1,
+        fk_organization: 40760, // DIHAL
     };
 }
 
