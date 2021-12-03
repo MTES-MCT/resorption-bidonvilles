@@ -543,6 +543,21 @@ module.exports = (models) => {
                     data: ({ owner }) => owner,
                     width: COLUMN_WIDTHS.MEDIUM,
                 },
+                isReinstallation: {
+                    title: 'Est-ce une réinstallation ?',
+                    data: ({ isReinstallation }) => {
+                        if (isReinstallation === true) {
+                            return 'oui';
+                        }
+
+                        if (isReinstallation === false) {
+                            return 'non';
+                        }
+
+                        return null;
+                    },
+                    width: COLUMN_WIDTHS.SMALL,
+                },
                 populationTotal: {
                     title: 'Nombre de personnes',
                     data: ({ populationTotal }) => populationTotal,
@@ -1175,6 +1190,7 @@ module.exports = (models) => {
                     properties.fieldType,
                     properties.builtAt,
                     properties.declaredAt,
+                    properties.isReinstallation,
                     properties.hasPlan,
                     properties.resorptionTarget,
                 ],
