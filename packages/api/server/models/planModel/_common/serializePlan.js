@@ -39,7 +39,7 @@ module.exports = (user, permissions, plan) => {
         updatedBy: plan.updatedBy,
         canUpdate: hasPermission(user, plan, 'update'),
         canUpdateMarks: hasPermission(user, plan, 'updateMarks'),
-        canClose: plan.states && plan.states.length > 0 && hasPermission(user, plan, 'close'),
+        canClose: hasPermission(user, plan, 'close'),
     };
 
     if (!plan.finances || permissions.finances === null || permissions.finances.allowed !== true) {

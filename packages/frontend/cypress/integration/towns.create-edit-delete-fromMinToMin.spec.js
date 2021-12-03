@@ -1,8 +1,7 @@
 describe("Gestion des sites", () => {
     it("Je peux déclarer un site au minimum, le modifier sans rien changer, puis le supprimer", () => {
         cy.fixture("users").then(({ admin }) => {
-            cy.server();
-            cy.route("/config").as("getConfig");
+            cy.intercept("GET", "/config").as("getConfig");
             cy.signinAs(admin);
             cy.wait("@getConfig").then(() => {
                 cy.fixture("shantytowns").then(({ min: minShantytown }) => {

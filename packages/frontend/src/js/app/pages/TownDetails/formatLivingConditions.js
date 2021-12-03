@@ -49,8 +49,8 @@ export function formatLivingConditions(town) {
     // Point d'eau public
     if (town.waterPublicPoint !== null) {
         town.waterPublicPoint
-            ? result.water.positive.push({ text: "Point d'eau public" })
-            : result.water.negative.push({ text: "Point d'eau public" });
+            ? result.water.negative.push({ text: "Point d'eau public" })
+            : result.water.positive.push({ text: "Point d'eau public" });
     } else {
         result.water.unknown.push({ text: "Point d'eau public" });
     }
