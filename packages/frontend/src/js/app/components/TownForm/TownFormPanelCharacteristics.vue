@@ -35,6 +35,16 @@
                 v-model="input.owner"
             ></InputOwner>
         </FormParagraph>
+        <FormParagraph
+            title="S'agit-il d'une réinstallation ?"
+            :showMandatoryStar="true"
+            class="w-128"
+        >
+            Plus de X% des habitants étaient déjà sur le territoire
+            <InputIsReinstallation
+                v-model="input.is_reinstallation"
+            ></InputIsReinstallation>
+        </FormParagraph>
     </FormGroup>
 </template>
 
@@ -45,6 +55,7 @@ import InputFieldType from "./inputs/InputFieldType.vue";
 import InputDetailedAddress from "./inputs/InputDetailedAddress.vue";
 import InputOwnerType from "./inputs/InputOwnerType.vue";
 import InputOwner from "./inputs/InputOwner.vue";
+import InputIsReinstallation from "./inputs/InputIsReinstallation.vue";
 import { hasPermission } from "#helpers/api/config";
 
 export default {
@@ -54,7 +65,8 @@ export default {
         InputFieldType,
         InputDetailedAddress,
         InputOwnerType,
-        InputOwner
+        InputOwner,
+        InputIsReinstallation
     },
 
     props: {

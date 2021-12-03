@@ -165,7 +165,10 @@ export default {
                     owner_type: this.data.ownerType
                         ? this.data.ownerType.id
                         : undefined,
-                    owner: this.data.owner
+                    owner: this.data.owner,
+                    is_reinstallation: this.boolToInt(
+                        this.data.isReinstallation
+                    )
                 },
                 people: {
                     population: {
@@ -441,6 +444,8 @@ export default {
                         .detailed_address,
                     owner_type: this.town.characteristics.owner_type,
                     owner: this.town.characteristics.owner,
+                    is_reinstallation: this.town.characteristics
+                        .is_reinstallation,
                     population_total: this.strToInt(
                         this.town.people.population.populationTotal
                     ),
