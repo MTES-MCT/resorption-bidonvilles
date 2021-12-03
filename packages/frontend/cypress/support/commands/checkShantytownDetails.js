@@ -44,6 +44,10 @@ Cypress.Commands.add("checkShantytownDetails", shantytown => {
         cy.get("[data-cy-data='owner']").should("not.exist");
     }
 
+    cy.get("[data-cy-data='is_reinstallation']").contains(
+        shantytown.is_reinstallation_plain
+    );
+
     cy.get("[data-cy-data='populationTotal']").contains(
         shantytown.population_total !== null ? shantytown.population_total : "-"
     );
