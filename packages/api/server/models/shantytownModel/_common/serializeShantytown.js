@@ -50,6 +50,7 @@ module.exports = (town, userPermissions) => {
         },
         declaredAt: fromDateToTimestamp(town.declaredAt),
         builtAt: fromDateToTimestamp(town.builtAt),
+        isReinstallation: town.isReinstallation,
         closedAt: town.closedAt !== null ? (town.closedAt.getTime() / 1000) : null,
         address: town.address,
         addressDetails: town.addressDetails,
