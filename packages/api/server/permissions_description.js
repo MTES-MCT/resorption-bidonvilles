@@ -89,6 +89,15 @@ module.exports = {
             { id: 'hide_justice', label: 'Masquer les procédures judiciaires' },
         ],
     },
+    external_observator: {
+        description: 'L\'accès observateur externe permet à l\'utilisateur de connaître la situation d\'un site et d\'accéder aux informations des dispositifs',
+        national_permissions: [],
+        local_permissions: [
+            [{ type: 'view', label: 'Consulter les %sites%', comments: null }],
+            [{ type: 'view', label: 'Consulter les %dispositifs%', comments: null }],
+        ],
+        options: [],
+    },
     local_admin: {
         description: '',
         national_permissions: [],
