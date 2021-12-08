@@ -27,10 +27,6 @@
         <div class="py-4 px-8 bg-G300" v-if="availableOptions.length > 0">
             <div>
                 <div class="font-bold">Options</div>
-                <div class="text-info mb-4">
-                    <Icon icon="info-circle" />&nbsp; Les options sont
-                    identiques pour tous les membres d'une structure.
-                </div>
                 <div class="ml-8">
                     <div
                         v-for="(option, optionIndex) in availableOptions"
