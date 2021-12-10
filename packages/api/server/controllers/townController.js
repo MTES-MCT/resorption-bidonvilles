@@ -1559,5 +1559,11 @@ module.exports = (models) => {
         models,
     );
 
+    // eslint-disable-next-line global-require
+    methods.findClosedNearbyTowns = require('./townController/findClosedNearbyTowns')(
+        models,
+    );
+
+
     return methods;
 };

@@ -13,6 +13,7 @@ const invite = require('./invite');
 const createShantytownComment = require('./shantytownComment/create');
 const activityList = require('./activity/list');
 const findNearbyTowns = require('./findNearbyTowns');
+const findClosedNearbyTowns = require('./findClosedNearbyTowns');
 const setUserAdminComments = require('./setUserAdminComments');
 const editOrganization = require('./editOrganization');
 const userSetRoleRegular = require('./users/setRoleRegular');
@@ -25,6 +26,7 @@ module.exports = {
     createUser,
     editUser,
     findNearbyTowns,
+    findClosedNearbyTowns,
     shantytownActors: {
         addShantytownActor,
         updateShantytownActor,

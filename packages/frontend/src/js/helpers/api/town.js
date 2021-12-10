@@ -183,6 +183,15 @@ export function findNearby(latitude, longitude) {
 }
 
 /**
+ * GET /towns/findNearbyClosed
+ */
+export function findClosedNearby(latitude, longitude) {
+    return getApi(
+        `/towns/findClosedNearby?latitude=${latitude}&longitude=${longitude}`
+    );
+}
+
+/**
  * @typedef {Object} Town_Data
  * @property {number} latitude,
  * @property {number} longitude,

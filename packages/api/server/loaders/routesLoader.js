@@ -278,6 +278,16 @@ module.exports = (app) => {
         controllers.town.findNearbyTowns,
     );
 
+    app.get(
+        '/towns/findClosedNearby',
+        validators.findNearbyTowns,
+        middlewares.auth.authenticate,
+        (...args) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        controllers.town.findClosedNearbyTowns,
+    );
+
     // plans
     app.get(
         '/plans',
