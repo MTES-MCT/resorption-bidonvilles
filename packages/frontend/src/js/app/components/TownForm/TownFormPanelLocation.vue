@@ -24,10 +24,7 @@
                         :key="town.id"
                         v-for="town in nearbyShantytowns.slice(0, 5)"
                     >
-                        <router-link
-                            class="link"
-                            :to="`/site/${town.shantytown_id}`"
-                        >
+                        <router-link class="link" :to="`/site/${town.id}`">
                             {{ town.usename }}
                             <span> ({{ town.distance.toFixed(2) }}km)</span>
                         </router-link>
@@ -49,7 +46,7 @@
 import InputAddress from "./inputs/InputAddress.vue";
 import InputName from "./inputs/InputName.vue";
 import InputCoordinates from "./inputs/InputCoordinates.vue";
-import { findNearby } from "#helpers/api/town";
+import { findNearby, findClosedNearby } from "#helpers/api/town";
 
 export default {
     components: {
@@ -86,7 +83,12 @@ export default {
             const longitude = this.input.coordinates[1];
             try {
                 const { towns } = await findNearby(latitude, longitude);
+                const { closedTowns } = await findClosedNearby(
+                    latitude,
+                    longitude
+                );
                 this.nearbyShantytowns = towns;
+                this.$emit("shareClosedTowns", closedTowns);
                 // eslint-disable-next-line no-empty
             } catch (err) {}
         }
