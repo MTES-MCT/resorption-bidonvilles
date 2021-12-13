@@ -16,6 +16,7 @@ function generate(email, password, first_name, last_name, fk_role, fk_role_regul
         phone,
         position,
         fk_organization: 40760, // DIHAL
+        charte_engagement_signee: 2,
     };
 }
 
@@ -36,5 +37,13 @@ module.exports = {
         ],
     ),
 
-    down: queryInterface => queryInterface.bulkDelete('users'),
+    down:
+        (queryInterface, Sequelize) => queryInterface.bulkDelete(
+            'users',
+            {
+                email: {
+                    [Sequelize.Op.like]: 'admin@resorption-bidonvilles.beta.gouv.fr'
+                }
+            }
+        ),
 };
