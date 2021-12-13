@@ -1,5 +1,5 @@
 module.exports = (queryInterface, transaction) => queryInterface.sequelize.query(
-    `CREATE VIEW user_actual_permissions AS
+    `CREATE OR REPLACE VIEW user_actual_permissions AS
         (WITH summary AS
             (
             SELECT
