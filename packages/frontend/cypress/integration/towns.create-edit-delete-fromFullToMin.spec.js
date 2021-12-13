@@ -1,8 +1,7 @@
 describe("Gestion des sites", () => {
     it("Je peux déclarer un site complet, le modifier au minimum, puis le supprimer", () => {
         cy.fixture("users").then(({ admin }) => {
-            cy.server();
-            cy.route("/config").as("getConfig");
+            cy.intercept("GET", "/config").as("getConfig");
             cy.signinAs(admin);
             cy.wait("@getConfig").then(() => {
                 cy.fixture("shantytowns").then(
@@ -13,6 +12,7 @@ describe("Gestion des sites", () => {
 
                         // prepare
                         cy.contains("Déclarer un site").click({ force: true });
+                        cy.url().should("include", "/nouveau-site");
                         cy.fillCreateTown(fullShantytown);
                         cy.get("[data-cy-button='submit']").click();
 
