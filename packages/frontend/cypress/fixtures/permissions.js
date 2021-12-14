@@ -164,6 +164,6 @@ module.exports = {
                 hideJustice: true
             }
         },
-        territory: "National"
+        territory: "Gironde"
     }
 };
