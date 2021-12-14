@@ -1,24 +1,19 @@
 const permissions = {
-    roles_regular: {
-        external_observator: {
-            shantytown: {
-                list: { level: 'local', data: { data_justice: false } },
-                read: { level: 'local', data: { data_justice: false } },
-            },
-            plan: {
-                list: { level: 'local', data: { data_finances: false } },
-                read: { level: 'local', data: { data_finances: false } },
-            },
-            shantytown_comment: {
-                list: { level: 'local', data: {} },
-            },
-            covid_comment: {
-                list: { level: 'local', data: {} },
-            },
-        },
+    shantytown: {
+        list: { level: 'local' },
+        read: { level: 'local' },
+    },
+    plan: {
+        list: { level: 'local' },
+        read: { level: 'local' },
+    },
+    shantytown_comment: {
+        list: { level: 'local' },
+    },
+    covid_comment: {
+        list: { level: 'local' },
     },
 };
-
 module.exports = {
 
     up: queryInterface => queryInterface.sequelize.transaction(
@@ -30,31 +25,25 @@ module.exports = {
             { transaction },
         )
             .then(async () => {
-                const p = Object.keys(permissions).reduce((promises, roleType) => {
-                    Object.keys(permissions[roleType]).forEach((roleId) => {
-                        Object.keys(permissions[roleType][roleId]).forEach((entity) => {
-                            Object.keys(permissions[roleType][roleId][entity]).forEach((feature) => {
-                                promises.push(
-                                    queryInterface.sequelize.query(
-                                        `INSERT INTO
-                                            permissions(fk_role_admin, fk_role_regular, fk_feature, fk_entity, allowed, fk_geographic_level)
+                const p = Object.keys(permissions).reduce((promises, entity) => {
+                    Object.keys(permissions[entity]).forEach((feature) => {
+                        promises.push(
+                            queryInterface.sequelize.query(
+                                `INSERT INTO
+                                            permissions(fk_role_regular, fk_feature, fk_entity, allowed, fk_geographic_level)
                                         VALUES
-                                            (:adminId, :regularId, :feature, :entity, TRUE, :level)
+                                            ('external_observator', :feature, :entity, TRUE, :level)
                                         RETURNING permission_id`,
-                                        {
-                                            transaction,
-                                            replacements: {
-                                                adminId: roleType === 'roles_admin' ? roleId : null,
-                                                regularId: roleType === 'roles_regular' ? roleId : null,
-                                                feature,
-                                                entity,
-                                                level: permissions[roleType][roleId][entity][feature].level,
-                                            },
-                                        },
-                                    ),
-                                );
-                            });
-                        });
+                                {
+                                    transaction,
+                                    replacements: {
+                                        feature,
+                                        entity,
+                                        level: permissions[entity][feature].level,
+                                    },
+                                },
+                            ),
+                        );
                     });
 
                     return promises;
