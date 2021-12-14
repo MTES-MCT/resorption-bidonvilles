@@ -170,7 +170,7 @@ const users = [
             position: 'qa',
             fk_role_regular: 'direct_collaborator',
         }),
-        organization: 31, // Prefecture de département gironde
+        organization: 'Préfecture de département - Gironde',
         options: [],
     },
     {
@@ -206,7 +206,7 @@ const users = [
             position: 'qa',
             fk_role_regular: 'national_establisment',
         }),
-        organization: 40760, // dihal
+        organization: 'Délégation Interministérielle à l\'Hébergement et à l\'Accès au Logement',
         options: [],
     },
     {
@@ -264,7 +264,15 @@ const users = [
             position: 'qa',
             fk_role_regular: 'external_observator',
         }),
-        organization: 40760, // dihal
+        organization: {
+            name: 'QA external_observator',
+            abbreviation: 'QA external_observator',
+            type: 8, // association
+            region: null,
+            departement: 33,
+            epci: null,
+            city: null,
+        },
         options: [],
     },
 ];
@@ -276,6 +284,17 @@ module.exports = {
             if (typeof user.organization === 'object') {
                 const [[{ id }]] = await create(user.organization.name, user.organization.abbreviation, user.organization.type, user.organization.region, user.organization.departement, user.organization.epci, user.organization.city, true);
                 fk_organization = id;
+            } else if (typeof user.organization === 'string') {
+                const [[{ organization_id }]] = await queryInterface.sequelize.query(
+                    `SELECT organization_id from organizations
+                    WHERE name = :organization_name;`,
+                    {
+                        replacements: {
+                            organization_name: user.organization,
+                        },
+                    },
+                );
+                fk_organization = organization_id;
             } else {
                 fk_organization = user.organization;
             }
