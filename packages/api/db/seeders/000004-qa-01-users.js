@@ -253,6 +253,20 @@ const users = [
         },
         options: [],
     },
+    {
+        user: generate({
+            email: 'qa-external-observator@resorption-bidonvilles.beta.gouv.fr',
+            password: 'fabnum',
+            first_name: 'QA',
+            last_name: 'external observator',
+            fk_role: null,
+            phone: '00 00 00 00 00',
+            position: 'qa',
+            fk_role_regular: 'external_observator',
+        }),
+        organization: 40760, // dihal
+        options: [],
+    },
 ];
 
 module.exports = {
