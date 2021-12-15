@@ -31,14 +31,14 @@ module.exports = {
                     type: 'deny', label: 'hors fermeture des sites', comments: null, option: 'close_shantytown',
                 },
                 {
-                    type: 'deny', label: 'Masquer les procédures judiciaires (option pour les afficher accessible ci-dessous)', comments: null, option: 'access_justice',
+                    type: 'deny', label: 'Masquer les procédures judiciaires (option pour les rendre accessibles ci-dessous)', comments: null, option: 'access_justice',
                 },
             ],
             [{ type: 'edit', label: 'Mettre à jour les %dispositifs%', comments: 'hors financements' }],
         ],
         options: [
             { id: 'close_shantytown', label: 'Autoriser le partenaire à créer un site et déclarer la fermeture d\'un site' },
-            { id: 'access_justice', label: 'Consulter les procédures judiciaires' },
+            { id: 'access_justice', label: 'Accéder aux procédures judiciaires' },
         ],
     },
     association: {
@@ -54,14 +54,14 @@ module.exports = {
                     type: 'deny', label: 'hors création des sites', comments: null, option: 'create_and_close_shantytown',
                 },
                 {
-                    type: 'deny', label: 'Masquer les procédures judiciaires (option pour les afficher accessible ci-dessous)', comments: null, option: 'access_justice',
+                    type: 'deny', label: 'Masquer les procédures judiciaires (option pour les rendre accessibles ci-dessous)', comments: null, option: 'access_justice',
                 },
             ],
             [{ type: 'view', label: 'Mettre à jour les %dispositifs%', comments: 'hors financements' }],
         ],
         options: [
             { id: 'create_and_close_shantytown', label: 'Autoriser l\'opérateur à créer un site et déclarer la fermeture d\'un site' },
-            { id: 'access_justice', label: 'Consulter les procédures judiciaires' },
+            { id: 'access_justice', label: 'Accéder aux procédures judiciaires' },
         ],
     },
     intervener: {
@@ -71,7 +71,7 @@ module.exports = {
             [
                 { type: 'view', label: 'Consulter les %sites%', comments: null },
                 {
-                    type: 'deny', label: 'Masquer les procédures judiciaires (option pour les afficher accessible ci-dessous)', comments: null, option: 'access_justice',
+                    type: 'deny', label: 'Masquer les procédures judiciaires (option pour les rendre accessibles ci-dessous)', comments: null, option: 'access_justice',
                 },
                 {
                     type: 'edit', label: 'Écrire des commentaires sur le « Journal du site »', comments: null,
@@ -86,7 +86,7 @@ module.exports = {
             [{ type: 'view', label: 'Consulter les %dispositifs%', comments: null }],
         ],
         options: [
-            { id: 'access_justice', label: 'Consulter les procédures judiciaires' },
+            { id: 'access_justice', label: 'Accéder aux procédures judiciaires' },
         ],
     },
     external_observator: {
