@@ -557,8 +557,8 @@ export default {
             );
             return edit(this.data.id, data);
         },
-        showClosedTowns(closedTown) {
-            this.nearbyClosedShantytowns = closedTown;
+        showClosedTowns(closedTowns) {
+            this.nearbyClosedShantytowns = closedTowns;
         }
     }
 };

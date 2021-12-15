@@ -81,6 +81,7 @@ export default {
         "input.coordinates": async function() {
             const latitude = this.input.coordinates[0];
             const longitude = this.input.coordinates[1];
+            this.$emit("shareClosedTowns", []);
             try {
                 const { towns } = await findNearby(latitude, longitude);
                 const { closedTowns } = await findClosedNearby(
