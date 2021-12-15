@@ -12,6 +12,7 @@ module.exports = async (owners) => {
             uap.fk_entity AS entity,
             uap.fk_feature AS feature,
             uap.allowed,
+            uap.is_writing,
             uap.fk_geographic_level AS geographic_level
         FROM user_actual_permissions uap
         WHERE uap.user_id IN (:owners)
@@ -36,6 +37,7 @@ module.exports = async (owners) => {
         const permission = {
             allowed: row.allowed,
             geographic_level: row.geographic_level,
+            is_writing: row.is_writing,
         };
 
         acc[row.user_id][row.entity][row.feature] = permission;

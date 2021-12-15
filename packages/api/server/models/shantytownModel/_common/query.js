@@ -1,12 +1,12 @@
 const { sequelize } = require('#db/models');
 const shantytownActorModel = require('#server/models/shantytownActorModel')();
 const planShantytownModel = require('#server/models/planShantytownModel')();
-const updateWhereClauseWithUserLocation = require('./updateWhereClauseWithUserLocation');
 const stringifyWhereClause = require('./stringifyWhereClause');
 const getComments = require('./getComments');
 const serializeShantytown = require('./serializeShantytown');
 const getDiff = require('./getDiff');
 const SQL = require('./SQL');
+const { where: pWhere } = require('#server/utils/permission');
 
 function getBaseSql(table, whereClause = null, order = null) {
     const tables = {
@@ -36,10 +36,17 @@ function getBaseSql(table, whereClause = null, order = null) {
 }
 
 module.exports = async (where = [], order = ['departements.code ASC', 'cities.name ASC'], user, feature, includeChangelog = false) => {
-    const replacements = {};
-    updateWhereClauseWithUserLocation(user, feature, where);
-    const whereClause = stringifyWhereClause(where, replacements);
+    const permissionsClauseGroup = pWhere().can(user).do(feature, 'shantytown');
+    if (permissionsClauseGroup === null) {
+        return [];
+    }
 
+    if (Object.keys(permissionsClauseGroup).length > 0) {
+        where.push(permissionsClauseGroup);
+    }
+
+    const replacements = {};
+    const whereClause = stringifyWhereClause(where, replacements);
     const towns = await sequelize.query(
         getBaseSql(
             'regular',
@@ -58,7 +65,7 @@ module.exports = async (where = [], order = ['departements.code ASC', 'cities.na
     const serializedTowns = towns.reduce(
         (object, town) => {
             /* eslint-disable no-param-reassign */
-            object.hash[town.id] = serializeShantytown(town, user.permissions);
+            object.hash[town.id] = serializeShantytown(town, user);
             object.ordered.push(object.hash[town.id]);
             /* eslint-enable no-param-reassign */
             return object;
@@ -123,7 +130,7 @@ module.exports = async (where = [], order = ['departements.code ASC', 'cities.na
     const [history, comments, covidComments, closingSolutions, actors, plans] = await Promise.all(promises);
 
     if (history !== undefined && history.length > 0) {
-        const serializedHistory = history.map(h => serializeShantytown(h, user.permissions));
+        const serializedHistory = history.map(h => serializeShantytown(h, user));
         for (let i = 1, { id } = serializedHistory[0]; i <= serializedHistory.length; i += 1) {
             if (!serializedHistory[i] || id !== serializedHistory[i].id) {
                 if (!serializedTowns.hash[id]) {

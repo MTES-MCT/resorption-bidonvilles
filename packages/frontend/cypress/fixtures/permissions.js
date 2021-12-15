@@ -1,6 +1,9 @@
 const defaultPermissions = {
     shantytown: {
-        readOutsideTerritory: false,
+        readAccessExtendsTo: {
+            category: "Département",
+            name: "Gironde"
+        },
         edit: true,
         create: false,
         close: false,
@@ -23,7 +26,10 @@ const defaultPermissions = {
 
 const localAdminPermissions = {
     shantytown: {
-        readOutsideTerritory: true,
+        readAccessExtendsTo: {
+            category: null,
+            name: "France"
+        },
         edit: true,
         create: true,
         close: true,
@@ -98,7 +104,10 @@ module.exports = {
             ...defaultPermissions,
             shantytown: {
                 ...defaultPermissions.shantytown,
-                readOutsideTerritory: true,
+                readAccessExtendsTo: {
+                    category: null,
+                    name: "France"
+                },
                 create: true,
                 close: true,
                 readPrivateComments: true,
@@ -129,6 +138,10 @@ module.exports = {
             ...defaultPermissions,
             shantytown: {
                 ...defaultPermissions.shantytown,
+                readAccessExtendsTo: {
+                    category: null,
+                    name: "France"
+                },
                 edit: false,
                 create: false,
                 close: false,
@@ -141,7 +154,7 @@ module.exports = {
                 stats: true
             }
         },
-        territory: "National"
+        territory: "France"
     },
     localAdmin: {
         permissions: {
@@ -160,7 +173,7 @@ module.exports = {
                 ...localAdminPermissions.admin
             }
         },
-        territory: "Bordeaux"
+        territory: "France"
     },
     externalObservator: {
         permissions: {

@@ -1,44 +1,24 @@
 const { sequelize } = require('#db/models');
 const userModel = require('#server/models/userModel')();
-const updateWhereClauseForPermissions = require('#server/models/common/updateWhereClauseForPermissions');
+const { restrict } = require('#server/utils/permission');
 
-module.exports = async (userLocation, permissions, location) => {
+module.exports = async (user, location) => {
     // apply geographic level restrictions
     const where = [];
     const replacements = {};
 
-    updateWhereClauseForPermissions({
-        permissions,
-        permission: 'covid_comment.list',
-        requestedLocation: location,
-        userLocation,
-        whereFn: (loc) => {
-            if (!loc) {
-                where.push('false');
-                return;
-            }
+    const restrictedLocation = restrict(location).for(user).askingTo('list', 'covid_comment');
+    if (restrictedLocation === null) {
+        return [];
+    }
 
-            if (loc.type === 'nation') {
-                return;
-            }
-
-            switch (loc.type) {
-                case 'region':
-                    where.push('departements.fk_region = :locationCode');
-                    replacements.locationCode = loc.region.code;
-                    break;
-
-                case 'departement':
-                case 'epci':
-                case 'city':
-                    where.push('departements.code = :locationCode');
-                    replacements.locationCode = loc.departement.code;
-                    break;
-
-                default:
-            }
-        },
-    });
+    if (restrictedLocation.type === 'region') {
+        where.push('departements.fk_region = :locationCode');
+        replacements.locationCode = restrictedLocation.region.code;
+    } else if (restrictedLocation.type !== 'nation') {
+        where.push('departements.code = :locationCode');
+        replacements.locationCode = restrictedLocation.departement.code;
+    }
 
     const activities = await sequelize.query(
         `

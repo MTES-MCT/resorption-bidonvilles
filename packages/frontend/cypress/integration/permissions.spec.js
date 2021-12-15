@@ -150,9 +150,12 @@ describe("Permissions tests", () => {
                         cy.wait("@getShantytowns");
                     });
 
-                    if (!userPermissions.shantytown.readOutsideTerritory) {
-                        it(`L'utilisateur ${key} ne doit accéder qu'aux sites lié à ${territory}`, () => {
+                    const extendedTerritory =
+                        userPermissions.shantytown.readAccessExtendsTo;
+                    if (territory !== "France") {
+                        it(`L'utilisateur ${key} doit pouvoir accéder aux sites liés à ${extendedTerritory.name}`, () => {
                             let nbSites;
+                            let nbSitesEtendus;
 
                             cy.url().should("include", townListURL);
 
@@ -160,18 +163,48 @@ describe("Permissions tests", () => {
                                 expect($input.val()).to.equal(territory);
                             });
 
-                            // Let's click on voir tous les sites and compare values
+                            // on compte le nombre de sites sur le territoire par défaut
                             cy.get("[data-cy='nbSites']").should("exist");
                             cy.get("[data-cy='nbSites']").should($div => {
                                 nbSites = $div.text();
                             });
-                            cy.get("[data-cy='seeAll']")
-                                .first()
-                                .click();
-                            cy.get("[data-cy='nbSites']").should($div => {
-                                const nbSites2 = $div.text();
-                                expect(nbSites2).equal(nbSites);
-                            });
+
+                            // si le territoire étendu est différent du territoire par défaut,
+                            // on vérifie qu'il est accessible en comparant le nombre de sites
+                            if (extendedTerritory.name !== territory) {
+                                if (extendedTerritory.name !== "France") {
+                                    cy.get(
+                                        "[data-cy-input='geoFilter']"
+                                    ).autocompleteLocation(
+                                        extendedTerritory.category,
+                                        extendedTerritory.name
+                                    );
+                                } else {
+                                    cy.get("[data-cy='seeAll']")
+                                        .first()
+                                        .click();
+                                }
+
+                                cy.get("[data-cy='nbSites']").should($div => {
+                                    nbSitesEtendus = $div.text();
+                                    expect(nbSitesEtendus).not.equal(nbSites);
+                                });
+                            }
+
+                            // si le territoire étendu n'est pas national, on vérifie que l'utilisateur
+                            // n'a pas accès aux sites sur le national
+                            if (extendedTerritory.name !== "France") {
+                                cy.get("[data-cy='seeAll']")
+                                    .first()
+                                    .click();
+
+                                cy.get("[data-cy='nbSites']").should($div => {
+                                    const nbSites2 = $div.text();
+                                    expect(nbSites2).equal(
+                                        nbSitesEtendus || nbSites
+                                    );
+                                });
+                            }
                         });
                     }
                 });

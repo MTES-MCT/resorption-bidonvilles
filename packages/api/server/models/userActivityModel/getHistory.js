@@ -9,17 +9,26 @@ const userModel = require('#server/models/userModel')();
  * @param {Object} location Location to be queried
  * @param {Array.<String>} entities List of entities to be included
  */
-module.exports = async (userLocation, permissions, location, entities = ['shantytown', 'shantytownComment', 'highCovidComment', 'user']) => {
+module.exports = async (user, location, entities = ['shantytown', 'shantytownComment', 'highCovidComment', 'user']) => {
     // perform query
     const promises = [];
     if (entities.includes('shantytown')) {
-        promises.push(shantytownModel.getHistory(userLocation, permissions, location));
+        promises.push(shantytownModel.getHistory(
+            user,
+            location,
+        ));
     }
     if (entities.includes('shantytownComment')) {
-        promises.push(shantytownCommentModel.getHistory(userLocation, permissions, location));
+        promises.push(shantytownCommentModel.getHistory(
+            user,
+            location,
+        ));
     }
     if (entities.includes('highCovidComment')) {
-        promises.push(highCovidCommentModel.getHistory(userLocation, permissions, location));
+        promises.push(highCovidCommentModel.getHistory(
+            user,
+            location,
+        ));
     }
     if (entities.includes('user')) {
         promises.push(userModel.getHistory());

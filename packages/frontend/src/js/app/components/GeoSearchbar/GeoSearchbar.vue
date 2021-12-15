@@ -55,6 +55,11 @@
                             </div>
                             <div class="flex-1">
                                 <MenuItem
+                                    :data-cy-value="
+                                        `${category.label} - ${getResultValue(
+                                            r
+                                        )}`
+                                    "
                                     v-for="(r, index) in results"
                                     :key="resultProps[index].id"
                                     v-bind="resultProps[index]"

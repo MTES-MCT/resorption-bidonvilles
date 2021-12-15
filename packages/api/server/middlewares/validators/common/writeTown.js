@@ -4,6 +4,7 @@ const { isLatLong, trim } = require('validator');
 
 // models
 const { sequelize } = require('#db/models');
+const { can } = require('#server/utils/permission');
 const fieldTypeModel = require('#server/models/fieldTypeModel')(sequelize);
 const geoModel = require('#server/models/geoModel')(sequelize);
 const ownerTypeModel = require('#server/models/ownerTypeModel')(sequelize);
@@ -71,33 +72,9 @@ module.exports = mode => ([
                 return true;
             }
 
-            const permission = req.user.permissions.shantytown[mode];
-            let geographicLevel = permission.geographic_level;
-            if (permission.geographic_level === 'local') {
-                if (['city', 'epci'].indexOf(req.user.organization.location.type) !== -1) {
-                    geographicLevel = 'departement';
-                } else {
-                    geographicLevel = req.user.organization.location.type;
-                }
-            }
-
-            const wording = mode === 'create' ? 'déclarer' : 'modifier';
-            switch (geographicLevel) {
-                case 'nation':
-                    return true;
-
-                case 'region':
-                case 'departement':
-                case 'epci':
-                case 'city':
-                    if (req.user.organization.location[geographicLevel] === null
-                        || req.body.city[geographicLevel].code !== req.user.organization.location[geographicLevel].code) {
-                        throw new Error(`Vous n'avez pas le droit de ${wording} un site sur ce territoire`);
-                    }
-                    break;
-
-                default:
-                    throw new Error(`Imposible de valider que vous disposez des droits suffisants pour ${wording} un site`);
+            if (!can(req.user).do(mode, 'shantytown').on(req.body.city)) {
+                const wording = mode === 'create' ? 'déclarer' : 'modifier';
+                throw new Error(`Vous n'avez pas le droit de ${wording} un site sur ce territoire`);
             }
 
             return true;

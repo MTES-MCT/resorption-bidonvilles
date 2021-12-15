@@ -1,31 +1,6 @@
 /* eslint-disable newline-per-chained-call */
 const { query } = require('express-validator');
-const { sequelize } = require('#db/models');
-const geoModel = require('#server/models/geoModel')(sequelize);
-
-
-// Check that user has at least one geographic national permission required for user activity
-function hasNationalPermission(user) {
-    const { permissions } = user;
-    let has = false;
-    if (user.isAllowedTo('list', 'shantytown')) {
-        has = has || permissions.shantytown.list.geographic_level === 'nation';
-    }
-    if (user.isAllowedTo('list', 'shantytown_comment')) {
-        has = has || permissions.shantytown_comment.list.geographic_level === 'nation';
-    }
-    if (user.isAllowedTo('listPrivate', 'shantytown_comment')) {
-        has = has || permissions.shantytown_comment.listPrivate.geographic_level === 'nation';
-    }
-
-    return has;
-}
-
-function hasLocalPermission(user, location) {
-    // Check if the org's location is the same type of requested location and if the code is the same
-    return location[user.organization.location.type]
-      && location[user.organization.location.type].code === user.organization.location[user.organization.location.type].code;
-}
+const geoModel = require('#server/models/geoModel')();
 
 module.exports = [
     query('location')
@@ -47,11 +22,6 @@ module.exports = [
                 throw new Error('Le périmètre géographique demandé n\'existe pas');
             }
 
-            // on vérifie que l'utilisateur a les droits pour accéder à ce périmètre géographique
-            if (!hasNationalPermission(req.user) && !hasLocalPermission(req.user, location)) {
-                throw new Error('Vous n\'avez pas les droits suffisants pour accéder à ces données sur ce territoire');
-            }
-
             // on garde le périmètre en question dans le body pour exploitation ultérieure par le contrôleur
             req.body.location = location;
             return true;
@@ -61,12 +31,7 @@ module.exports = [
     query('location')
         .customSanitizer((value, { req }) => {
             if (!value) {
-                if (hasNationalPermission(req.user)) {
-                    req.body.location = geoModel.getLocation('nation');
-                } else {
-                    req.body.location = req.user.organization.location;
-                }
-
+                req.body.location = geoModel.getLocation('nation');
                 return null;
             }
 

@@ -1,30 +1,22 @@
 const moment = require('moment');
 const ServiceError = require('#server/errors/ServiceError');
 const shantytownActorModel = require('#server/models/shantytownActorModel');
+const { where: fWhere } = require('#server/utils/permission');
 
 module.exports = async (user) => {
-    if (!user.permissions || !user.permissions.shantytown_actor || !user.permissions.shantytown_actor.export) {
+    const permissionClauseGroup = fWhere().can(user).do('export', 'shantytown_actor');
+    if (permissionClauseGroup === null) {
         return [];
     }
 
-    const { allowed, geographic_level: allowedLevel } = user.permissions.shantytown_actor.export;
-    if (!allowed) {
-        return [];
-    }
-
-    let location = null;
-    const { organization: { location: userLocation } } = user;
-    if (allowedLevel !== 'nation' && userLocation.type !== 'nation') {
-        if (userLocation.type === 'region') {
-            location = { type: 'region', ...userLocation.region };
-        } else {
-            location = { type: 'departement', ...userLocation.departement };
-        }
+    const where = [];
+    if (Object.keys(permissionClauseGroup).length > 0) {
+        where.push([permissionClauseGroup]);
     }
 
     let actors;
     try {
-        actors = await shantytownActorModel().findAllByLocation(location);
+        actors = await shantytownActorModel().findAllByLocation(where);
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }
