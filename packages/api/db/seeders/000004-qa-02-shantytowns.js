@@ -62,15 +62,23 @@ module.exports = {
 
         return queryInterface.sequelize.transaction(
             transaction => queryInterface.sequelize.query(
-                `DELETE FROM shantytowns 
-            WHERE shantytown_id in (:ids);`,
+                'DELETE FROM "ShantytownHistories" WHERE shantytown_id in (:ids);',
                 {
                     transaction,
                     replacements: {
                         ids: shantytownIds,
                     },
                 },
-            ),
+            )
+                .then(() => queryInterface.sequelize.query(
+                    'DELETE FROM shantytowns WHERE shantytown_id in (:ids);',
+                    {
+                        transaction,
+                        replacements: {
+                            ids: shantytownIds,
+                        },
+                    },
+                )),
         );
     },
 };
