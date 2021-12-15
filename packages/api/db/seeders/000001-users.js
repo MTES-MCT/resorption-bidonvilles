@@ -42,8 +42,8 @@ module.exports = {
             'users',
             {
                 email: {
-                    [Sequelize.Op.like]: 'admin@resorption-bidonvilles.beta.gouv.fr'
-                }
-            }
+                    [Sequelize.Op.like]: 'admin@resorption-bidonvilles.beta.gouv.fr',
+                },
+            },
         ),
 };
