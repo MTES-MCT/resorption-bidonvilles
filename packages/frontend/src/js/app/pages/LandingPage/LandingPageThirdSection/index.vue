@@ -115,20 +115,20 @@
         >
             <a href="https://solidarites-sante.gouv.fr/"
                 ><g-image
-                    width="160"
-                    class="h-24 m-2"
+                    width="200"
+                    class="h-20 m-2"
                     src="./assets/logo-gouvernement.jpg"
             /></a>
             <a href="https://ec.europa.eu/info/index_en"
                 ><g-image
-                    width="410"
-                    class="h-24 my-2"
+                    width="460"
+                    class="h-20 m-2"
                     src="./assets/logo-commission-europenne.png"
             /></a>
             <a href="https://beta.gouv.fr/approche/incubateurs/mtes.html"
                 ><g-image
                     width="96"
-                    class="h-24 m-2"
+                    class="h-22 m-2"
                     src="./assets/logo-fabrique-numerique.png"
             /></a>
             <a class="pl-12" href="https://beta.gouv.fr/"
