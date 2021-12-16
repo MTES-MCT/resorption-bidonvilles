@@ -19,8 +19,8 @@
         "email": "qa-asso-departement@resorption-bidonvilles.beta.gouv.fr",
         "password": "fabnum"
     },
-    "assoDepartementWithHideOption": {
-        "email": "qa-asso-departement-with-hide-justice-option@resorption-bidonvilles.beta.gouv.fr",
+    "assoDepartementWithAccessJusticeOption": {
+        "email": "qa-asso-departement-with-access-justice-option@resorption-bidonvilles.beta.gouv.fr",
         "password": "fabnum"
     },
     "assoRegion": {
