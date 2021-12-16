@@ -2,16 +2,6 @@ const createUserActualPermissionsNewSchema = require('./common/user_actual_permi
 const createViewWithoutOrganization = require('./common/user_actual_permissions/03_create_view_without_organization');
 
 module.exports = {
-    /*
-        1.  On crée l'option de permission 'access_justice'
-        2.  On filtre tous les utilisateurs qui ont le droit d'accès aux procédures judiciaires par leur rôle
-            et qui ne sont pas listés dans les options de permissions avec 'hide_justice'
-        3.  On crée pour les utilisateurs listés plus haut l'option 'access_justice'
-        4.  On supprime les octrois d'option 'hide_justice' qui n'existe plus
-        5.  On supprime le droit, par défaut, de voir les procédures judiciaires aux rôles:
-            collaborator (Partenaire institutionnel), association (Opérateur), intervener (Intervenant)
-        6.  On adapte la vue user_actual_permissions
-    */
     up: (queryInterface, Sequelize) => queryInterface.sequelize.transaction(
         // On crée l'option de permission 'access_justice'
         transaction => queryInterface.sequelize.query(
@@ -43,7 +33,7 @@ module.exports = {
                 { type: queryInterface.sequelize.QueryTypes.SELECT, transaction },
             ))
             // On crée pour les utilisateurs listés plus haut l'option 'access_justice'
-            .then(rows => {
+            .then(((rows) => {
                 queryInterface.bulkInsert(
                     'user_permission_options',
                     rows.map(({
@@ -56,7 +46,7 @@ module.exports = {
                         transaction,
                     },
                 );
-                const Op = Sequelize.Op;
+                const { Op } = Sequelize;
                 // On supprime les permissions accordées aux utilisateurs qui ont le droit d'accès aux procédures judiciaires par leur rôle
                 // car c'est l'option de permissions 'access_justice' qui permet l'ovtroi du droit d'accès aux PJ
                 queryInterface.bulkDelete(
@@ -67,26 +57,26 @@ module.exports = {
                         [Op.and]: [
                             {
                                 fk_entity: {
-                                    [Op.like]: 'shantytown_justice'
-                                }
+                                    [Op.like]: 'shantytown_justice',
+                                },
                             },
                             {
                                 fk_feature: {
-                                    [Op.like]: 'access'
-                                }
+                                    [Op.like]: 'access',
+                                },
                             },
                             {
                                 fk_user: {
-                                    [Op.eq]: user_id
-                                }
-                            }
-                        ]
+                                    [Op.eq]: user_id,
+                                },
+                            },
+                        ],
                     })),
                     {
                         transaction,
                     },
                 );
-            })
+            }))
             // On supprime les octrois d'option 'hide_justice' qui n'existe plus
             .then(() => queryInterface.sequelize.query(
                 'DELETE FROM user_permission_options WHERE fk_option = \'hide_justice\'',
@@ -118,19 +108,6 @@ module.exports = {
             .then(() => createUserActualPermissionsNewSchema(queryInterface, transaction)),
     ),
 
-    /*
-        1.  On crée l'option de permission 'hide_justice'
-        2.  On filtre tous les utilisateurs dont le rôle ne donne pas le droit d'accès aux procédures judiciaires 
-            et qui ne sont pas listés dans les options de permissions avec 'access_justice'
-        3.  On crée pour les utilisateurs listés plus haut l'option 'hide_justice'
-        4.  On filtre les utilisateurs qui ont accès ont le droit d'accès aux procédures judiciaires par leur rôle,
-            à qui on ne peut pas appliquer l'option 'hide_justice' mais à qui on a supprimer le droit d'accès aux PJ
-        5.  On ajoute les non-permissions aux utilisateurs visés au 4. en précisant allowed = FALSE dans la table `permissions`
-        6.  On supprime les octrois d'option 'hide_justice' qui n'existe plus
-        7.  On supprime le droit, par défaut, de voir les procédures judiciaires aux rôles:
-            collaborator (Partenaire institutionnel), association (Opérateur), intervener (Intervenant)
-        8.  On adapte la vue user_actual_permissions
-    */
     down: queryInterface => queryInterface.sequelize.transaction(
         // On crée l'option de permission 'hide_justice'
         transaction => queryInterface.sequelize.query(
@@ -200,13 +177,6 @@ module.exports = {
                     transaction,
                 },
             ))
-            // On supprime la vue user_actual_permissions
-            // .then(() => queryInterface.sequelize.query(
-            //     'DROP VIEW IF EXISTS user_actual_permissions',
-            //     {
-            //         transaction,
-            //     }
-            // ))
             // On crée la vue user_actual_permissions à partir de la dernière version
             .then(() => createViewWithoutOrganization(queryInterface, transaction)),
     ),
