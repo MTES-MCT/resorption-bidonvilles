@@ -5,7 +5,7 @@
         <div class="lg:flex">
             <div class="lg:flex-shrink-0 justify-center">
                 <g-image
-                    width="240"
+                    width="260"
                     class="m-4 h-40"
                     src="./assets/prendre_en_main.jpg"
                     alt=""
