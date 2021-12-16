@@ -18,18 +18,18 @@ function getBaseSql(table, whereClause = null, order = null) {
     return `
         WITH
             shantytown_computed_origins AS (SELECT
-                shantytown_id AS fk_shantytown,
+                s.${tables.origin_foreign_key} AS fk_shantytown,
                 string_to_array(array_to_string(array_agg(soo.social_origin_id::VARCHAR || '|' || soo.label), ','), ',') AS origins
             FROM "${tables.shantytowns}" s
             LEFT JOIN "${tables.shantytown_origins}" so ON so.fk_shantytown = s.${tables.origin_foreign_key}
             LEFT JOIN social_origins soo ON so.fk_social_origin = soo.social_origin_id
-            GROUP BY s.shantytown_id)
+            GROUP BY s.${tables.origin_foreign_key})
         SELECT
             ${Object.keys(SQL.selection).map(key => `${key} AS "${SQL.selection[key]}"`).join(',')},
             sco.origins AS "socialOrigins"
         FROM "${tables.shantytowns}" AS shantytowns
         ${SQL.joins.map(({ table: t, on }) => `LEFT JOIN ${t} ON ${on}`).join('\n')}
-        LEFT JOIN shantytown_computed_origins sco ON sco.fk_shantytown = shantytowns.shantytown_id
+        LEFT JOIN shantytown_computed_origins sco ON sco.fk_shantytown = shantytowns.${tables.origin_foreign_key}
         ${whereClause !== null ? `WHERE ${whereClause}` : ''}
         ${order !== null ? `ORDER BY ${order}` : ''}
     `;
