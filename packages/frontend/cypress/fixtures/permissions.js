@@ -83,7 +83,7 @@ module.exports = {
         },
         territory: "Gironde"
     },
-    assoDepartementWithAccessOption: {
+    assoDepartementWithAccessJusticeOption: {
         permissions: {
             ...defaultPermissions,
             shantytown: {
@@ -133,6 +133,7 @@ module.exports = {
                 create: false,
                 close: false,
                 readPrivateComments: false,
+                accessJustice: true,
                 readOutsideTerritory: true
             },
             admin: {
@@ -146,6 +147,7 @@ module.exports = {
         permissions: {
             ...localAdminPermissions,
             shantytown: {
+                ...localAdminPermissions.shantytown,
                 accessJustice: true
             }
         },
