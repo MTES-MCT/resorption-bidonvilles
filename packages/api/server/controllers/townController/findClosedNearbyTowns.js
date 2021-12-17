@@ -1,5 +1,4 @@
-const { sequelize } = require('#db/models');
-const { findNearby } = require('#server/models/shantytownModel')(sequelize);
+const { findNearby } = require('#server/models/shantytownModel')();
 
 module.exports = () => async (req, res, next) => {
     try {
