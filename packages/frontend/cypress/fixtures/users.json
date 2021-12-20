@@ -46,5 +46,9 @@
     "nationalAdmin": {
         "email": "qa-national-admin@resorption-bidonvilles.beta.gouv.fr",
         "password": "fabnum"
+    },
+    "externalObservator": {
+        "email": "qa-external-observator@resorption-bidonvilles.beta.gouv.fr",
+        "password": "fabnum"
     }
 }

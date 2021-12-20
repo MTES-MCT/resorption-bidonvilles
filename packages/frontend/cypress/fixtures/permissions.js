@@ -154,5 +154,16 @@ module.exports = {
             }
         },
         territory: "Bordeaux"
+    },
+    externalObservator: {
+        permissions: {
+            ...defaultPermissions,
+            shantytown: {
+                ...defaultPermissions.shantytown,
+                edit: false,
+                hideJustice: true
+            }
+        },
+        territory: "Gironde"
     }
 };
