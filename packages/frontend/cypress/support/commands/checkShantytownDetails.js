@@ -48,6 +48,14 @@ Cypress.Commands.add("checkShantytownDetails", shantytown => {
         shantytown.is_reinstallation_plain
     );
 
+    if (shantytown.reinstallation_comments) {
+        cy.get("[data-cy-data='reinstallation_comments']").should($div => {
+            expect($div.text()).contains(shantytown.reinstallation_comments);
+        });
+    } else {
+        cy.get("[data-cy-data='reinstallation_comments']").should("not.exist");
+    }
+
     cy.get("[data-cy-data='populationTotal']").contains(
         shantytown.population_total !== null ? shantytown.population_total : "-"
     );

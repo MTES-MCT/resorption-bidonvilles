@@ -171,7 +171,9 @@ export default {
                     owner: this.data.owner,
                     is_reinstallation: this.boolToInt(
                         this.data.isReinstallation
-                    )
+                    ),
+                    reinstallation_comments:
+                        this.data.reinstallationComments || undefined
                 },
                 people: {
                     population: {
@@ -449,6 +451,8 @@ export default {
                     owner: this.town.characteristics.owner,
                     is_reinstallation: this.town.characteristics
                         .is_reinstallation,
+                    reinstallation_comments: this.town.characteristics
+                        .reinstallation_comments,
                     population_total: this.strToInt(
                         this.town.people.population.populationTotal
                     ),

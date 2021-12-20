@@ -544,7 +544,7 @@ module.exports = (models) => {
                     width: COLUMN_WIDTHS.MEDIUM,
                 },
                 isReinstallation: {
-                    title: 'Est-ce une réinstallation ?',
+                    title: 'S\'agit-il d\'une réinstallation ?',
                     data: ({ isReinstallation }) => {
                         if (isReinstallation === true) {
                             return 'oui';
@@ -557,6 +557,11 @@ module.exports = (models) => {
                         return null;
                     },
                     width: COLUMN_WIDTHS.SMALL,
+                },
+                reinstallationComments: {
+                    title: 'Précisions sur la réinstallation',
+                    data: ({ reinstallationComments }) => reinstallationComments,
+                    width: COLUMN_WIDTHS.LARGE,
                 },
                 populationTotal: {
                     title: 'Nombre de personnes',
@@ -1191,6 +1196,7 @@ module.exports = (models) => {
                     properties.builtAt,
                     properties.declaredAt,
                     properties.isReinstallation,
+                    properties.reinstallationComments,
                     properties.hasPlan,
                     properties.resorptionTarget,
                 ],

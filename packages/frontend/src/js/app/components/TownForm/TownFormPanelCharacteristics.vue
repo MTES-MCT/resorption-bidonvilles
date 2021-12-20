@@ -40,7 +40,7 @@
             :showMandatoryStar="true"
             class="w-128"
         >
-            Plus de X% des habitants étaient déjà sur le territoire
+            La majorité des habitants était déjà sur le territoire.
             <TownFormClosedShantytowns
                 :nearbyClosedShantytowns="nearbyClosedShantytowns"
             ></TownFormClosedShantytowns>
@@ -48,6 +48,11 @@
                 v-model="input.is_reinstallation"
             ></InputIsReinstallation>
         </FormParagraph>
+        <div class="ml-12 mt-6">
+            <InputReinstallationComments
+                v-model="input.reinstallation_comments"
+            ></InputReinstallationComments>
+        </div>
     </FormGroup>
 </template>
 
@@ -59,6 +64,7 @@ import InputDetailedAddress from "./inputs/InputDetailedAddress.vue";
 import InputOwnerType from "./inputs/InputOwnerType.vue";
 import InputOwner from "./inputs/InputOwner.vue";
 import InputIsReinstallation from "./inputs/InputIsReinstallation.vue";
+import InputReinstallationComments from "./inputs/InputReinstallationComments.vue";
 import TownFormClosedShantytowns from "./TownFormClosedShantytowns.vue";
 import { hasPermission } from "#helpers/api/config";
 
@@ -71,6 +77,7 @@ export default {
         InputOwnerType,
         InputOwner,
         InputIsReinstallation,
+        InputReinstallationComments,
         TownFormClosedShantytowns
     },
 

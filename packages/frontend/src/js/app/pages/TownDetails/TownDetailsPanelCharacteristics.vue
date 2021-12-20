@@ -150,10 +150,22 @@
                     <TownDetailsPanelSection>
                         <div class="grid grid-cols-2">
                             <div class="font-bold">
-                                Réinstallation
+                                S'agit-t-il d'une réinstallation ?
                             </div>
                             <div data-cy-data="is_reinstallation">
                                 {{ boolToStr(town.isReinstallation) }}
+                            </div>
+                        </div>
+                    </TownDetailsPanelSection>
+                    <TownDetailsPanelSection
+                        v-if="town.reinstallationComments !== null"
+                    >
+                        <div class="grid grid-cols-2">
+                            <div class="font-bold">
+                                Précisions sur la réinstallation
+                            </div>
+                            <div data-cy-data="reinstallation_comments">
+                                {{ town.reinstallationComments }}
                             </div>
                         </div>
                     </TownDetailsPanelSection>
