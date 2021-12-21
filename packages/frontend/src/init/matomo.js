@@ -3,6 +3,12 @@ import VueMatomo from "#matomo/matomo";
 
 export default function(Vue) {
     if (VUE_APP_MATOMO_ON === "true") {
+        if (typeof String.prototype.replaceAll === "undefined") {
+            String.prototype.replaceAll = function(match, replace) {
+                return this.replace(new RegExp(match, "g"), () => replace);
+            };
+        }
+
         Vue.use(VueMatomo, {
             // Configure your matomo server and site by providing
             host: "https://stats.data.gouv.fr",
