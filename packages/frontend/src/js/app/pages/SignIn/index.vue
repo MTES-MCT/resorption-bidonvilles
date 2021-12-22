@@ -1,13 +1,13 @@
 <template>
     <LoginLayout title="Connectez-vous à Résorption-bidonvilles">
-        <ValidationObserver ref="form" v-slot="{ handleSubmit }">
-            <div
-                class="bg-yellow-200 p-2 -m-4 mb-4 text-sm"
-                v-if="isRedirectedFromPrivatePage"
-            >
-                Veuillez vous connecter pour accéder à la page souhaitée.
-            </div>
+        <div
+            class="bg-yellow-200 p-2 -m-4 mb-4 text-sm"
+            v-bind:class="{ hidden: !isRedirectedFromPrivatePage }"
+        >
+            Veuillez vous connecter pour accéder à la page souhaitée.
+        </div>
 
+        <ValidationObserver ref="form" v-slot="{ handleSubmit }">
             <form @submit.prevent="handleSubmit(onLogin)">
                 <TextInput
                     placeholder="marcel.dupont@example.com"
