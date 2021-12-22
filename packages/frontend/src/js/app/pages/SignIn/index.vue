@@ -36,7 +36,7 @@
                     </div>
 
                     <div class="flex items-center">
-                        <router-link to="contact" class="w-1/2 text-primary"
+                        <router-link to="/contact" class="w-1/2 text-primary"
                             >Demander un accès</router-link
                         >
                         <div class="mx-2">|</div>
