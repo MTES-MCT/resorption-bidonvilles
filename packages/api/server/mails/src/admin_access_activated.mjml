@@ -24,7 +24,7 @@
                 <mj-text mj-class="text-primary text-lg pb-4">
                     Vous souhaitez promouvoir l’outil auprès de vos partenaires ?
                 </mj-text>
-                <mj-text>Contactez vos interlocutrices Charlotte Piana et Wenndy Boukobza : <a href="mailto:contact@resorption-bidonvilles.beta.gouv.fr" class="link">contact@resorption-bidonvilles.beta.gouv.fr</a></mj-text>
+                <mj-text>Contactez vos interlocutrices Charlotte Piana et Wendy Boukobza, chargées de déploiement : <a href="mailto:contact@resorption-bidonvilles.beta.gouv.fr" class="link">contact@resorption-bidonvilles.beta.gouv.fr</a></mj-text>
             </mj-column>
         </mj-section>
 

@@ -27,7 +27,7 @@
                 </mj-button>
                 <mj-include path="common/connect_cta.mjml" />
                 <mj-text>
-                    Pour prendre en main rapidement la plateforme et vous guider dans ce rôle, merci de contacter vos interlocutrices Charlotte Piana et Wenndy Boukobza: <a href="mailto:contact@resorption-bidonvilles.beta.gouv.fr" class="link">contact@resorption-bidonvilles.beta.gouv.fr</a>.
+                    Pour prendre en main rapidement la plateforme et vous guider dans ce rôle, merci de contacter vos interlocutrices Charlotte Piana et Wendy Boukobza, chargées de déploiement : <a href="mailto:contact@resorption-bidonvilles.beta.gouv.fr" class="link">contact@resorption-bidonvilles.beta.gouv.fr</a>.
                 </mj-text>
             </mj-column>
         </mj-section>

@@ -3,8 +3,9 @@ Bonjour {{var:recipientName}},
 Votre lien d’accès à la plateforme Résorption-bidonvilles [{{var:frontUrl}}] a
 expiré.
 Bonne nouvelle, vous pouvez demander un nouveau lien !
-Nous vous invitons à prendre contact avec Charlotte Piana et Wenndy Boukobza
-pour recevoir un nouveau lien : contact@resorption-bidonvilles.beta.gouv.fr
+Nous vous invitons à prendre contact avec Charlotte Piana et Wendy Boukobza,
+chargées de déploiement, pour recevoir un nouveau lien :
+contact@resorption-bidonvilles.beta.gouv.fr
 [contact@resorption-bidonvilles.beta.gouv.fr].
 
 Cordialement,
