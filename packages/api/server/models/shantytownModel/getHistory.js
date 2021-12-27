@@ -1,3 +1,4 @@
+
 const { sequelize } = require('#db/models');
 const { fromGeoLevelToTableName } = require('#server/utils/geo');
 const userModel = require('#server/models/userModel')();
@@ -7,10 +8,11 @@ const getDiff = require('./_common/getDiff');
 const SQL = require('./_common/SQL');
 const { restrict } = require('#server/utils/permission');
 
-module.exports = async (user, location) => {
+module.exports = async (user, location, shantytownFilter, numberActivities, lastDate) => {
     // apply geographic level restrictions
     const where = [];
     const replacements = {};
+    const limit = `limit ${numberActivities}`;
 
     const restrictedLocation = restrict(location).for(user).askingTo('list', 'shantytown');
     if (restrictedLocation === null) {
@@ -32,6 +34,9 @@ module.exports = async (user, location) => {
             FROM
                 ((
                     SELECT
+                        shantytowns.hid,
+                        shantytowns.closed_at,
+                        shantytowns.created_at,
                         shantytowns.updated_at AS "date",
                         COALESCE(shantytowns.updated_by, shantytowns.created_by) AS author_id,
                         ${Object.keys(SQL.selection).map(key => `${key} AS "${SQL.selection[key]}"`).join(',')}
@@ -44,6 +49,9 @@ module.exports = async (user, location) => {
                 UNION
                 (
                     SELECT
+                        0 as hid,
+                        shantytowns.closed_at,
+                        shantytowns.created_at,
                         shantytowns.updated_at AS "date",
                         COALESCE(shantytowns.updated_by, shantytowns.created_by) AS author_id,
                         ${Object.keys(SQL.selection).map(key => `${key} AS "${SQL.selection[key]}"`).join(', ')}
@@ -52,7 +60,49 @@ module.exports = async (user, location) => {
                     ${where.length > 0 ? `WHERE (${where.join(') OR (')})` : ''}
                 )) activities
             LEFT JOIN users author ON activities.author_id = author.user_id
-            ORDER BY activities.date ASC
+            WHERE activities.date < '${lastDate}'
+            ${shantytownFilter.includes('shantytownCreation') ? '' : 'AND activities.date - activities.created_at > \'00:00:01\''}
+            ${shantytownFilter.includes('shantytownClosing') ? '' : 'AND activities.closed_at IS NULL'}
+            ${shantytownFilter.includes('shantytownUpdate') ? '' : 'AND (activities.closed_at IS NOT NULL OR activities.date - activities.created_at < \'00:00:01\')'}
+            ORDER BY activities.date DESC
+            ${limit}
+            `,
+        {
+            type: sequelize.QueryTypes.SELECT,
+            replacements,
+        },
+    );
+    const listOldestVersions = [];
+    const listIdOldestVersions = [];
+    // on récupère pour chaque bidonville la plus vieille version existante qui n'est pas une création
+    activities.reverse().forEach((activity) => {
+        if (!(listIdOldestVersions.includes(activity.id)) && (activity.date - activity.created_at > 10)) {
+            listIdOldestVersions.push(activity.id);
+        }
+        listOldestVersions.push(`(${activity.id} , ${activity.hid})`);
+    });
+    // on récupère les précédentes versions des éléments de listIdOldestVersions afin de pouvoir appliquer getDiff
+    const queryPreviousVersions = listIdOldestVersions.length === 0 ? [] : await sequelize.query(
+        `
+            SELECT
+                shantytowns.updated_at AS "date",
+                COALESCE(shantytowns.updated_by, shantytowns.created_by) AS author_id,
+                ${Object.keys(SQL.selection).map(key => `${key} AS "${SQL.selection[key]}"`).join(', ')}
+            FROM
+                "ShantytownHistories"  AS shantytowns
+            LEFT JOIN shantytowns AS s ON shantytowns.shantytown_id = s.shantytown_id
+            LEFT JOIN users author ON COALESCE(shantytowns.updated_by, shantytowns.created_by) = author.user_id
+            ${SQL.joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
+            WHERE (shantytowns.shantytown_id, shantytowns.updated_at) IN
+                (
+                    SELECT sho.shantytown_id, MAX(sho.updated_at)
+                    FROM "ShantytownHistories" sho
+                    WHERE
+                        sho.shantytown_id IN (${listIdOldestVersions})
+                        AND (sho.shantytown_id, sho.hid) NOT IN (${listOldestVersions})
+                        AND sho.updated_at < '${lastDate}'
+                    GROUP BY shantytown_id
+               )
             `,
         {
             type: sequelize.QueryTypes.SELECT,
@@ -61,6 +111,12 @@ module.exports = async (user, location) => {
     );
 
     const previousVersions = {};
+
+    // eslint-disable-next-line array-callback-return
+    queryPreviousVersions.map((activity) => {
+        const serializedShantytown = serializeShantytown(activity, user);
+        previousVersions[activity.id] = serializedShantytown;
+    });
 
     return activities
         .map((activity) => {
@@ -109,7 +165,6 @@ module.exports = async (user, location) => {
                 o.action = 'closing';
             } else {
                 o.action = 'update';
-
                 // on utilise le nom du site dans la précédente version (au cas om ce dernier aurait changé)
                 o.shantytown.usename = getUsenameOf(previousVersion);
 
@@ -120,9 +175,7 @@ module.exports = async (user, location) => {
 
                 o.diff = diff;
             }
-
             return o;
-        })
-        .filter(activity => activity !== null)
-        .reverse();
+        }).reverse()
+        .filter(activity => activity !== null);
 };

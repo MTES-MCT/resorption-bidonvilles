@@ -2,10 +2,11 @@ const { sequelize } = require('#db/models');
 const userModel = require('#server/models/userModel')();
 const { restrict } = require('#server/utils/permission');
 
-module.exports = async (user, location) => {
+module.exports = async (user, location, numberActivities, lastDate) => {
     // apply geographic level restrictions
     const where = [];
     const replacements = {};
+    const limit = `limit ${numberActivities}`;
 
     const restrictedLocation = restrict(location).for(user).askingTo('list', 'covid_comment');
     if (restrictedLocation === null) {
@@ -20,9 +21,11 @@ module.exports = async (user, location) => {
         replacements.locationCode = restrictedLocation.departement.code;
     }
 
+    const whereLastDate = `${where.length > 0 ? 'AND' : 'WHERE'} comments.created_at < '${lastDate}'`;
+
     const activities = await sequelize.query(
         `
-            SELECT
+            SELECT DISTINCT
                 comments.high_covid_comment_id AS "highCommentId",
                 comments.created_at AS "date",
                 author.first_name AS author_first_name,
@@ -35,8 +38,13 @@ module.exports = async (user, location) => {
             LEFT JOIN users author ON comments.created_by = author.user_id
             LEFT JOIN high_covid_comment_territories territories ON territories.fk_comment = comments.high_covid_comment_id
             LEFT JOIN departements ON territories.fk_departement = departements.code
+            LEFT JOIN regions ON departements.fk_region = regions.code
+            LEFT JOIN cities ON cities.fk_departement = departements.code
+            LEFT JOIN epci ON cities.fk_epci = epci.code
             ${where.length > 0 ? `WHERE (${where.join(') AND (')})` : ''}
+            ${whereLastDate}
             ORDER BY comments.created_at DESC
+            ${limit}
             `,
         {
             type: sequelize.QueryTypes.SELECT,

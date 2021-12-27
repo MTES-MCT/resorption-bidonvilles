@@ -13,27 +13,28 @@
 export default {
     data() {
         return {
+            activityFilter: [],
             options: {
                 activityTypes: [
                     {
                         label: "Nouveaux sites",
-                        value: "shantytown-creation"
+                        value: "shantytownCreation"
                     },
                     {
                         label: "Fermetures de sites",
-                        value: "shantytown-closing"
+                        value: "shantytownClosing"
                     },
                     {
                         label: "Modifications de sites",
-                        value: "shantytown-update"
+                        value: "shantytownUpdate"
                     },
                     {
                         label: "Nouveaux messages",
-                        value: "comment-creation"
+                        value: "shantytownComment_highCovidComment"
                     },
                     {
                         label: "Nouveaux utilisateurs",
-                        value: "user-creation"
+                        value: "user"
                     }
                 ]
             }
@@ -43,10 +44,11 @@ export default {
     computed: {
         activityTypes: {
             get() {
-                return this.$store.state.activities.filters.activityTypes;
+                return this.activityFilter;
             },
             set(value) {
-                this.$store.commit("setActivityTypesFilter", value);
+                this.activityFilter = value;
+                this.$emit("changeActivityFilter", value);
             }
         }
     }

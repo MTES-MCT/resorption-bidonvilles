@@ -5,10 +5,6 @@
         <div>
             <HistoryLoader v-if="loading"></HistoryLoader>
 
-            <LoadingError v-else-if="error !== null" :retry="load">
-                {{ error }}
-            </LoadingError>
-
             <PrivateContainer v-else class="py-6">
                 <HistoryModerationPanel v-if="canModerate" />
 
@@ -16,28 +12,31 @@
                     Dernières activités -
                     <span class="text-primary">{{ locationName }}</span>
                 </h1>
-                <HistoryFilterBar class="mb-6"></HistoryFilterBar>
 
-                <div v-if="activities.length > 0" ref="body">
-                    <HistoryPagination
-                        class="mb-6 -mr-6 flex justify-end"
-                    ></HistoryPagination>
+                <HistoryFilterBar
+                    class="mb-6"
+                    v-on:changeActivityFilter="changeActivityFilter"
+                ></HistoryFilterBar>
 
-                    <HistoryCardGroup
-                        v-for="(group, index) in currentPageGroups"
-                        :date="group.date"
-                        :items="group.items"
-                        :key="index"
-                        class="mb-4"
-                    ></HistoryCardGroup>
-
-                    <HistoryPagination
-                        class="mt-10 -mr-6 flex justify-end"
-                        @change="scrollToTop"
-                    ></HistoryPagination>
+                <div v-if="lastActivities.length > 0">
+                    <div>
+                        <HistoryCardGroup
+                            v-for="(group, index) in currentActivities"
+                            :date="group.date"
+                            :items="group.items"
+                            :key="index"
+                            id="infinite_scroll"
+                            class="mb-4"
+                        ></HistoryCardGroup>
+                    </div>
                 </div>
-
-                <div v-else>
+                <div
+                    class="flex-1 text-center text-primary text-display-md"
+                    v-if="activitiesLoading"
+                >
+                    <Spinner />
+                </div>
+                <div v-if="lastActivities.length === 0 && !activitiesLoading">
                     <HistoryEmpty></HistoryEmpty>
                 </div>
             </PrivateContainer>
@@ -50,14 +49,13 @@ import PrivateLayout from "#app/components/PrivateLayout";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer.vue";
 import HistoryLoader from "./HistoryLoader.vue";
 import HistorySearchbar from "./HistorySearchbar.vue";
-import LoadingError from "#app/components/PrivateLayout/LoadingError.vue";
 import HistoryFilterBar from "./HistoryFilterBar.vue";
-import HistoryPagination from "./HistoryPagination.vue";
 import HistoryCardGroup from "./HistoryCardGroup.vue";
 import HistoryEmpty from "./HistoryEmpty.vue";
 import HistoryModerationPanel from "./HistoryModerationPanel.vue";
 
 import { mapGetters } from "vuex";
+import { listRegular } from "#helpers/api/userActivity";
 import {
     get as getConfig,
     hasPermission,
@@ -70,9 +68,7 @@ export default {
         PrivateContainer,
         HistoryLoader,
         HistorySearchbar,
-        LoadingError,
         HistoryFilterBar,
-        HistoryPagination,
         HistoryCardGroup,
         HistoryEmpty,
         HistoryModerationPanel
@@ -80,31 +76,22 @@ export default {
     data() {
         return {
             canModerate: hasPermission("shantytown_comment.moderate"),
-            locationName: "Inconnu"
+            locationName: "Inconnu",
+            lastActivities: [],
+            lastActivityDate: new Date(),
+            activityFilter: [],
+            loading: false,
+            activitiesLoading: false
         };
     },
     computed: {
         ...mapGetters({
-            loading: "activitiesLoading",
-            error: "activitiesError",
-            activities: "activitiesFilteredItems",
             locations: "locations"
         }),
-        currentPageItems() {
-            const { itemsPerPage, currentPage } = this.$store.state.activities;
-            const start = (currentPage - 1) * itemsPerPage;
-
-            return this.activities.slice(start, start + itemsPerPage);
-        },
-        currentPageGroups() {
-            // on groupe les items de la page par date
+        currentActivities() {
             const groups = [];
-            for (
-                let i = 0, lastDate;
-                i < this.currentPageItems.length;
-                i += 1
-            ) {
-                const item = this.currentPageItems[i];
+            for (let i = 0, lastDate; i < this.lastActivities.length; i += 1) {
+                const item = this.lastActivities[i];
                 const date = new Date(item.date * 1000);
                 const dateStr = `${date.getDate()}${date.getMonth()}${date.getFullYear()}`;
 
@@ -122,9 +109,9 @@ export default {
 
                 lastDate = dateStr;
             }
-
             return groups;
         },
+
         locationType() {
             return this.$route.params.locationType;
         },
@@ -139,67 +126,97 @@ export default {
             }
 
             const { location } = user.organization;
-            return `/activites/${location.type}/${location[location.type]
-                ?.code || ""}`;
+            return `/activites/${location.type}/${`location[location.type]?
+            .code || ""`}`;
         }
     },
     watch: {
         "$route.params.locationType"() {
-            this.load();
+            this.lastActivities = [];
+            this.setDate();
+            window.addEventListener("scroll", this.reachBottom);
+            this.getActivities();
         },
         "$route.params.locationCode"() {
-            this.load();
+            this.lastActivities = [];
+            this.setDate();
+            window.addEventListener("scroll", this.reachBottom);
+            this.getActivities();
         },
-        activities() {
-            this.$store.commit("setActivitiesPage", 1);
+        activityFilter: {
+            deep: true,
+            handler: function() {
+                window.addEventListener("scroll", this.reachBottom);
+                this.getActivities();
+            }
         }
     },
     mounted() {
-        this.load();
+        this.setDate();
+        this.lastActivities = [];
+        this.loading = true;
+        this.getActivities();
+        window.addEventListener("scroll", this.reachBottom);
+    },
+    beforeDestroy() {
+        window.removeEventListener("scroll", this.reachBottom);
     },
     methods: {
-        async load() {
-            // on réécrit l'URL si l'accès se fait par "/activites"
+        setDate() {
+            const date = new Date();
+            this.lastActivityDate = date.getTime() / 1000;
+        },
+        reachBottom() {
+            let bottomOfWindow =
+                document.documentElement.offsetHeight -
+                    document.documentElement.scrollTop -
+                    window.innerHeight ===
+                0;
+            if (bottomOfWindow && !this.activitiesLoading) {
+                this.getActivities();
+            }
+        },
+
+        async getActivities() {
+            this.activitiesLoading = true;
             if (!this.locationType) {
                 this.$router.replace(this.defaultPath);
                 return;
             }
-
-            // on fetch les activités
-            if (this.$store.state.activities.items.length === 0) {
-                this.$store.dispatch("fetchActivities");
-            }
-
-            // on fetch le nom de la location, si elle n'est pas déjà dans le this.$store
-            // nécessaire pour l'affichage dans la UI et la barre de recherche
-            if (this.locationType !== "nation") {
-                if (!this.locations[this.locationType]?.[this.locationCode]) {
-                    // @todo: gérer une éventuelle erreur ici
-                    await this.$store.dispatch("fetchLocation", {
-                        type: this.locationType,
-                        code: this.locationCode
-                    });
-                }
-            }
-
-            // on remplit la barre de recherche
-            if (this.locationType === "nation") {
-                this.$store.commit("setActivityLocationFilter", null);
-            } else {
-                this.$store.commit(
-                    "setActivityLocationFilter",
-                    this.locations[this.locationType][this.locationCode]
-                );
-            }
-
             this.locationName = this.getLocationName();
+            const tempLastActivities = await listRegular(
+                this.lastActivityDate,
+                this.activityFilter,
+                10,
+                this.locationType,
+                this.locationCode
+            );
+            if (tempLastActivities.length > 0) {
+                this.lastActivityDate = tempLastActivities.slice(-1)[0].date;
+            }
+            this.lastActivities = [
+                ...this.lastActivities,
+                ...tempLastActivities
+            ];
+            this.activitiesLoading = false;
+            this.loading = false;
+            if (tempLastActivities.length < 10) {
+                // on arrive aux dernières activités
+                window.removeEventListener("scroll", this.reachBottom);
+            }
+        },
+
+        changeActivityFilter(list) {
+            // on modifie le filtre des dernières activités, ce qui relancera automatiquement un getActivities() via les watchers
+            this.lastActivities = [];
+            this.setDate();
+            this.activityFilter = list;
         },
 
         getLocationName() {
             if (this.locationType === "nation") {
                 return "France";
             }
-
             return (
                 this.locations[this.locationType]?.[this.locationCode]?.label ||
                 "Inconnu"
@@ -207,7 +224,7 @@ export default {
         },
 
         onLocationChange() {
-            // on redirige vers la bonne URL (ce qui automatiquement relancera un load() via les watchers)
+            // on redirige vers la bonne URL (ce qui automatiquement relancera un getActivities() via les watchers)
             const { location } = this.$store.state.activities.filters;
             if (location === null) {
                 this.routeTo("/activites/nation");
@@ -222,12 +239,7 @@ export default {
             if (this.$route.path === path) {
                 return;
             }
-
             this.$router.replace(path);
-        },
-
-        scrollToTop() {
-            this.$refs.body.scrollIntoView();
         }
     }
 };

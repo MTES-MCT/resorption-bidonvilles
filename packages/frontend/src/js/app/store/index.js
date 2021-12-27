@@ -11,7 +11,6 @@ import {
 import enrichShantytown from "#app/pages/TownsList/enrichShantytown";
 import { get as getConfig } from "#helpers/api/config";
 
-import activities from "./modules/activities";
 import locations from "./modules/locations";
 import directory from "./modules/directory";
 
@@ -20,7 +19,6 @@ export default function(Vue) {
 
     return new Vuex.Store({
         modules: {
-            activities,
             locations,
             directory
         },
