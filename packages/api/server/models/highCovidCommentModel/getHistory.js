@@ -2,11 +2,11 @@ const { sequelize } = require('#db/models');
 const userModel = require('#server/models/userModel')();
 const updateWhereClauseForPermissions = require('#server/models/common/updateWhereClauseForPermissions');
 
-module.exports = async (userLocation, permissions, location) => {
+module.exports = async (userLocation, permissions, location, locationType, locationCode, numberActivities, lastDate) => {
     // apply geographic level restrictions
     const where = [];
     const replacements = {};
-
+    const limit = `limit ${numberActivities}`;
     updateWhereClauseForPermissions({
         permissions,
         permission: 'covid_comment.list',
@@ -39,10 +39,10 @@ module.exports = async (userLocation, permissions, location) => {
             }
         },
     });
-
+    const whereLastDate = `${where.length > 0 ? 'AND' : 'WHERE'} comments.created_at < '${lastDate}'`;
     const activities = await sequelize.query(
         `
-            SELECT
+            SELECT DISTINCT
                 comments.high_covid_comment_id AS "highCommentId",
                 comments.created_at AS "date",
                 author.first_name AS author_first_name,
@@ -55,8 +55,17 @@ module.exports = async (userLocation, permissions, location) => {
             LEFT JOIN users author ON comments.created_by = author.user_id
             LEFT JOIN high_covid_comment_territories territories ON territories.fk_comment = comments.high_covid_comment_id
             LEFT JOIN departements ON territories.fk_departement = departements.code
+            LEFT JOIN regions ON departements.fk_region = regions.code
+            LEFT JOIN cities ON cities.fk_departement = departements.code
+            LEFT JOIN epci ON cities.fk_epci = epci.code
             ${where.length > 0 ? `WHERE (${where.join(') AND (')})` : ''}
+            ${whereLastDate}
+            ${locationType === 'city' ? `AND cities.code = '${locationCode}'` : ''}
+            ${locationType === 'epci' ? `AND epci.code = '${locationCode}'` : ''}
+            ${locationType === 'departement' ? `AND departements.code = '${locationCode}'` : ''}
+            ${locationType === 'region' ? `AND regions.code = '${locationCode}'` : ''}
             ORDER BY comments.created_at DESC
+            ${limit}
             `,
         {
             type: sequelize.QueryTypes.SELECT,

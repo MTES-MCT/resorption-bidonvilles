@@ -382,7 +382,6 @@
 </template>
 
 <script>
-import getSince from "#app/pages/TownsList/getSince";
 import ActivityCard from "#app/components/ActivityCard/ActivityCard.vue";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer.vue";
 import PrivateLayout from "#app/components/PrivateLayout";
@@ -401,6 +400,7 @@ import { filterShantytowns } from "./filterShantytowns";
 import Export from "#app/components/export2/Export.vue";
 import Spinner from "#app/components/ui/Spinner";
 import { mapGetters } from "vuex";
+import { listRegular } from "#helpers/api/userActivity";
 
 const PER_PAGE = 20;
 
@@ -431,6 +431,10 @@ export default {
         const permission = getPermission("shantytown_justice.access");
 
         return {
+            locationType: null,
+            locationCode: null,
+            lastActivities: [],
+            activitiesLoading: false,
             hasJusticePermission: permission !== null,
             fieldTypes,
             closingReasons: [
@@ -484,9 +488,30 @@ export default {
         };
     },
     methods: {
+        async getActivities() {
+            const { user } = getConfig();
+            const { geographic_level } = getPermission("shantytown.list");
+            if (geographic_level === "nation") {
+                this.locationType = "nation";
+            } else {
+                const { location } = user.organization;
+                this.locationType = location.type;
+                this.locationCode = location[location.type].code;
+            }
+            this.activitiesLoading = true;
+            const date = new Date();
+            const currentDate = date.getTime() / 1000;
+            this.lastActivities = await listRegular(
+                currentDate,
+                [],
+                5,
+                this.locationType,
+                this.locationCode
+            );
+            this.activitiesLoading = false;
+        },
         handleSearchBlur(data) {
             this.$trackMatomoEvent("Liste des sites", "Recherche");
-
             this.$store.commit("setFilters", {
                 ...this.filters,
                 location: data.value,
@@ -521,10 +546,7 @@ export default {
             if (!this.shantytowns.length) {
                 this.$store.dispatch("fetchTowns");
             }
-
-            if (!this.activities.length) {
-                this.$store.dispatch("fetchActivities");
-            }
+            this.getActivities();
         },
         showExport() {
             setTimeout(() => {
@@ -553,7 +575,6 @@ export default {
         ...mapGetters({
             shantytowns: "towns",
             townsLoading: "townsLoading",
-            activitiesLoading: "activitiesLoading",
             error: "townsError",
             filters: "townsFilters",
             currentPage: "townsCurrentPage",
@@ -569,37 +590,6 @@ export default {
         },
         isLoading() {
             return this.townsLoading;
-        },
-        filteredActivities() {
-            if (!this.filters.location) {
-                return this.activities;
-            }
-
-            return this.activities.filter(item => {
-                const { code, type } = this.filters.location.data;
-
-                // activity related to a shantytown
-                if (item.shantytown) {
-                    return item.shantytown[type].code === code;
-                }
-
-                // activity related to a user
-                if (item.user) {
-                    const location = item.user.location[type];
-                    const locationCode = location
-                        ? location.main || location.code
-                        : null;
-                    return locationCode === code;
-                }
-
-                return false;
-            });
-        },
-        lastActivities() {
-            return this.filteredActivities.slice(0, 3).filter(({ date }) => {
-                const { days } = getSince(date);
-                return days <= 7;
-            });
         },
         locationImg() {
             // Guadeloupe, Martinique, Guyane, Réunion, Mayotte

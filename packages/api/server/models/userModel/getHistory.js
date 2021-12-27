@@ -1,7 +1,8 @@
 const { sequelize } = require('#db/models');
 const formatName = require('./_common/formatName');
 
-module.exports = async () => {
+module.exports = async (locationType, locationCode, numberActivities, lastDate) => {
+    const limit = `limit ${numberActivities}`;
     const activities = await sequelize.query(
         `
             SELECT
@@ -24,7 +25,13 @@ module.exports = async () => {
             LEFT JOIN localized_organizations organizations ON users.fk_organization = organizations.organization_id
             WHERE
                 lua.used_at IS NOT NULL
+                AND lua.used_at < '${lastDate}'
+                ${locationType === 'city' ? `AND organizations.city_code = '${locationCode}'` : ''}
+                ${locationType === 'epci' ? `AND organizations.epci_code = '${locationCode}'` : ''}
+                ${locationType === 'departement' ? `AND organizations.departement_code = '${locationCode}'` : ''}
+                ${locationType === 'region' ? `AND organizations.region_code = '${locationCode}'` : ''}
             ORDER BY lua.used_at DESC
+            ${limit}
             `,
         {
             type: sequelize.QueryTypes.SELECT,

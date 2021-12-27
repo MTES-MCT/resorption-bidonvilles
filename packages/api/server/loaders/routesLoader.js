@@ -621,14 +621,6 @@ module.exports = (app) => {
     );
 
     app.get(
-        '/activities/covid',
-        middlewares.auth.authenticate,
-        middlewares.charte.check,
-        middlewares.appVersion.sync,
-        controllers.userActivity.covid,
-    );
-
-    app.get(
         '/contact-form-referrals',
         middlewares.auth.authenticate,
         (...args) => middlewares.auth.checkPermissions(['contact_form_referral.access'], ...args),

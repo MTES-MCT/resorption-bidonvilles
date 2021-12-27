@@ -4,10 +4,11 @@ const updateWhereClauseForPermissions = require('#server/models/common/updateWhe
 const { formatName } = require('#server/models/userModel')();
 const { getUsenameOf, serializeComment } = require('#server/models/shantytownModel')(sequelize);
 
-module.exports = async (userLocation, permissions, location) => {
+module.exports = async (userLocation, permissions, location, locationType, locationCode, numberActivities, lastDate, onlyCovid = false) => {
     // apply geographic level restrictions
     const where = [];
     const replacements = {};
+    const limit = `limit ${numberActivities}`;
 
     updateWhereClauseForPermissions({
         permissions,
@@ -48,7 +49,7 @@ module.exports = async (userLocation, permissions, location) => {
             replacements.privateShantytownCommentLocationCode = loc[loc.type].code;
         },
     });
-
+    const whereLastDate = `${where.length > 0 ? 'AND' : 'WHERE'} comments.created_at < '${lastDate}'`;
     const activities = await sequelize.query(
         `
             SELECT
@@ -96,7 +97,14 @@ module.exports = async (userLocation, permissions, location) => {
             LEFT JOIN departements ON cities.fk_departement = departements.code
             LEFT JOIN regions ON departements.fk_region = regions.code
             ${where.length > 0 ? `WHERE ((${where.join(') OR (')}))` : ''}
+            ${whereLastDate}
+            ${onlyCovid ? 'AND covid_comments.shantytown_covid_comment_id is not null' : ''}
+            ${locationType === 'city' ? `AND cities.code = '${locationCode}'` : ''}
+            ${locationType === 'epci' ? `AND epci.code = '${locationCode}'` : ''}
+            ${locationType === 'departement' ? `AND departements.code = '${locationCode}'` : ''}
+            ${locationType === 'region' ? `AND regions.code = '${locationCode}'` : ''}
             ORDER BY comments.created_at DESC
+            ${limit}
             `,
         {
             type: sequelize.QueryTypes.SELECT,

@@ -5,15 +5,28 @@ import { getApi } from "#helpers/api/main";
  *
  * @returns {Promise}
  */
-export function listRegular() {
-    return getApi(`/activities`);
-}
 
-/**
- * Lists covid activities
- *
- * @returns {Promise}
- */
-export function listCovid() {
-    return getApi(`/activities/covid`);
+export function listRegular(
+    lastActivityDate,
+    activityFilter,
+    numberActivities,
+    locationType,
+    locationCode
+) {
+    const realActivityFilter =
+        activityFilter.length === 0
+            ? [
+                  "shantytownCreation",
+                  "shantytownClosing",
+                  "shantytownUpdate",
+                  "shantytownComment",
+                  "highCovidComment",
+                  "user"
+              ]
+            : activityFilter;
+    return getApi(
+        `/activities?lastActivityDate=${lastActivityDate}&numberActivities=${numberActivities}&filter=${realActivityFilter.join(
+            ""
+        )}&locationType=${locationType}&locationCode=${locationCode}`
+    );
 }

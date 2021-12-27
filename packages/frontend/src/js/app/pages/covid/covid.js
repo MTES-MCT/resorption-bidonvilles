@@ -4,7 +4,7 @@ import {
     getDepartementsForEpci
 } from "#helpers/api/geo";
 import { create } from "#helpers/api/highCovidComment";
-import { listCovid } from "#helpers/api/userActivity";
+import { listRegular } from "#helpers/api/userActivity";
 import NavBar from "#app/layouts/navbar/navbar.vue";
 import Table from "#app/components/table/table.vue";
 import SlideNote from "#app/components/slide-note/slide-note.vue";
@@ -150,6 +150,26 @@ export default {
          * Please note that this cannot be done if the data has already been loaded
          * before.
          */
+        async getCovidMessages() {
+            const { user } = getConfig();
+            const { geographic_level } = getPermission("shantytown.list");
+            if (geographic_level === "nation") {
+                this.locationType = "nation";
+            } else {
+                const { location } = user.organization;
+                this.locationType = location.type;
+                this.locationCode = location[location.type].code;
+            }
+            const date = new Date();
+            const activities = await listRegular(
+                date.getTime() / 1000,
+                ["highCovidComment", "shantytownComment", "onlyCovid"],
+                9999999999,
+                this.locationType,
+                this.locationCode
+            );
+            return activities;
+        },
         load() {
             // loading data is forbidden if the component is already loading or loaded
             if ([null, "error"].indexOf(this.state) === -1) {
@@ -190,7 +210,7 @@ export default {
                     });
             }
 
-            Promise.all([listCovid(), departementsPromise])
+            Promise.all([this.getCovidMessages(), departementsPromise])
                 .then(([userActivities, { departements }]) => {
                     this.activities = userActivities;
                     this.allowedDepartements = departements;
