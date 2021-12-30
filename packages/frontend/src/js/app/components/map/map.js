@@ -7,6 +7,7 @@ import "leaflet-providers";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster/dist/leaflet.markercluster";
+import html2canvas from "html2canvas";
 
 import utensils from "../../../../../static/img/utensils.png";
 import waterYes from "../../../../../static/img/water-yes.png";
@@ -151,7 +152,7 @@ export default {
                 : false,
 
             /**
-             * La couche communal
+             * La couche communale
              *
              * @type {L.layerGroup}
              */
@@ -374,35 +375,65 @@ export default {
         this.createMap();
 
         window.onbeforeprint = async () => {
-            if (this.manualPrint !== true) {
-                this.preprint(false);
-            }
+            this.printMapScreenshot(false);
         };
+
         window.onafterprint = () => {
             this.manualPrint = null;
-
             document.body.classList.remove("preprint");
             this.map.addControl(this.map.zoomControl);
             this.setupLayersControl();
-            this.resize();
-
             this.showAddresses = this.showAddressesBeforePrint;
         };
     },
 
     methods: {
-        preprint(manualPrint = true) {
+        printMapScreenshot(manualPrint = true) {
             this.manualPrint = manualPrint === true;
-            this.showAddressesBeforePrint = this.showAddresses;
-            this.showAddresses = true;
 
-            document.body.classList.add("preprint");
+            const html2canvasConfiguration = {
+                useCORS: true,
+                width: this.map._size.x,
+                height: this.map._size.y,
+                logging: false
+            };
+
+            // Stocke le paramètre "showAddress" avant le passage en mode impression
+            this.showAddressesBeforePrint = this.showAddresses;
+            // Affiche l'adresse des sites pour l'impression
+            this.showAddresses = true;
+            // Masque le contrôle de zoom
             this.map.removeControl(this.map.zoomControl);
+            // Masque le contrôle affichant les couches
             this.removeLayersControl();
-            this.resize();
+            // Ajoute la feuille de style "preprint"
+            // (masque barre de recherche, bouton d'impression et commutateur d'affichage des adresses de sites)
+            document.body.classList.add("preprint");
 
             if (manualPrint === true) {
-                setTimeout(window.print, 200);
+                const printWindow = window.open(
+                    "",
+                    "PrintWindow",
+                    "width=400,height=200"
+                );
+                html2canvas(
+                    document.getElementById("map"),
+                    html2canvasConfiguration
+                ).then(canvas => {
+                    const doc = printWindow.document;
+                    const img = doc.createElement("img");
+                    img.src = canvas.toDataURL("image/png");
+                    doc.body.appendChild(img);
+                    setTimeout(() => {
+                        printWindow.print();
+                        printWindow.close();
+                    }, 0);
+                });
+                // Restauration de l'environnement tel qu'il était avant la préparation de l'impression
+                document.body.classList.remove("preprint");
+                this.setupLayersControl();
+                this.map.addControl(this.map.zoomControl);
+                this.showAddresses = this.showAddressesBeforePrint;
             }
         },
         countNumberOfTowns() {
