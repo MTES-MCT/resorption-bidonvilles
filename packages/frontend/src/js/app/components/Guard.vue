@@ -55,6 +55,7 @@ const guardGroups = {
     ],
     home: ["home"]
 };
+
 export default {
     components: {
         PrivateLayout,
@@ -69,31 +70,30 @@ export default {
     async mounted() {
         const beforeEnter = this.$route.meta.beforeEnter;
 
-        if (beforeEnter?.to && beforeEnter.to.startsWith("mailto")) {
-            window.open(beforeEnter.to);
-            this.$router.go(-1);
-            return;
-        }
-
         if (beforeEnter?.action === "redirect") {
             this.$router.push(beforeEnter.to);
             return;
         }
+
         if (beforeEnter?.action === "open") {
             window.open(beforeEnter.to);
             this.$router.go(-1);
             return;
         }
+
         if (beforeEnter?.action === "signout") {
             logout(this.$piwik);
             this.$router.push("/");
             return;
         }
+
         const guards = (beforeEnter && guardGroups[beforeEnter]) || [];
         for (const guard of guards) {
             if (guard === "isLoggedIn" && !isLoggedIn()) {
+                this.$store.commit("setEntrypoint", this.$route.path);
                 return this.$router.push("/connexion?r=1");
             }
+
             if (guard === "isConfigLoaded" && !isConfigLoaded()) {
                 try {
                     await this.loadConfig();
@@ -107,6 +107,7 @@ export default {
                 return this.$router.push("/");
             }
             if (guard === "hasAcceptedCharte" && !hasAcceptedCharte()) {
+                this.$store.commit("setEntrypoint", this.$route.path);
                 return this.$router.push("/signature-charte-engagement");
             }
             if (guard === "isUpgraded" && !this.isUpgraded()) {
@@ -116,6 +117,7 @@ export default {
                 guard === "hasNoPendingChangelog" &&
                 this.hasPendingChangelog()
             ) {
+                this.$store.commit("setEntrypoint", this.$route.path);
                 return this.$router.push("/nouvelle-version");
             }
             if (guard === "home") {
@@ -123,8 +125,10 @@ export default {
                 return;
             }
         }
+
         this.ready = true;
     },
+
     methods: {
         async loadConfig() {
             if (isConfigLoaded() === true) {
@@ -176,6 +180,12 @@ export default {
         },
         home() {
             if (isLoggedIn()) {
+                const { entrypoint } = this.$store.state;
+                if (entrypoint !== null) {
+                    this.$store.commit("setEntrypoint", null);
+                    return this.$router.push(entrypoint);
+                }
+
                 return this.$router.push("/cartographie");
             }
         }

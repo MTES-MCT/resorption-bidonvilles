@@ -477,7 +477,7 @@ const fileRoutes = [
         route: {
             meta: {
                 beforeEnter: {
-                    action: "redirect",
+                    action: "open",
                     to: "mailto:contact@resorption-bidonvilles.beta.gouv.fr"
                 }
             }
