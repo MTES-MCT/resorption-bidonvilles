@@ -41,7 +41,7 @@
                         >
                         <div class="mx-2">|</div>
                         <router-link
-                            to="nouveau-mot-de-passe"
+                            to="/nouveau-mot-de-passe"
                             class="w-1/2 text-primary"
                             >Mot de passe oublié</router-link
                         >
