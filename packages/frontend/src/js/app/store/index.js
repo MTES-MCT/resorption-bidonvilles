@@ -25,6 +25,7 @@ export default function(Vue) {
             directory
         },
         state: {
+            entrypoint: null,
             towns: {
                 data: [],
                 loading: true,
@@ -49,6 +50,9 @@ export default function(Vue) {
             detailedTown: null
         },
         mutations: {
+            setEntrypoint(state, value) {
+                state.entrypoint = value;
+            },
             setLoading(state, value) {
                 state.towns.loading = value;
             },
