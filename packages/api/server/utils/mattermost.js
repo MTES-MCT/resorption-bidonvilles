@@ -140,7 +140,7 @@ async function triggerNewUserAlert(user) {
                     },
                     {
                         short: false,
-                        value: `*Organisatio*: ${user.organization.name}`,
+                        value: `*Organisation*: ${user.organization.name}`,
                     },
                     {
                         short: false,
@@ -248,6 +248,51 @@ async function triggerPeopleInvitedAlert(guest, greeter, msg) {
     await peopleInvitedAlert.send(mattermostMessage);
 }
 
+async function triggerDeclaredActor(town, user) {
+    if (!mattermost) {
+        return;
+    }
+
+    const declaredActor = new IncomingWebhook(mattermost);
+
+    const address = formatAddress(town);
+    const username = formatUsername(user);
+    const townLink = formatTownLink(town.id, address);
+
+    const mattermostMessage = {
+        channel: '#notif-intervenants-declares',
+        username: 'Alerte Résorption Bidonvilles',
+        icon_emoji: ':robot:',
+        text: `:rotating_light: ${username} s'est déclaré comme intervenant sur le site ${townLink}`,
+        fields: [],
+    };
+
+    await declaredActor.send(mattermostMessage);
+}
+
+async function triggerRemoveDeclaredActor(town, user) {
+    if (!mattermost) {
+        return;
+    }
+
+    const removeDeclaredActor = new IncomingWebhook(mattermost);
+
+    const address = formatAddress(town);
+    const username = formatUsername(user);
+    const townLink = formatTownLink(town.id, address);
+
+    const mattermostMessage = {
+        channel: '#notif-intervenants-declares',
+        username: 'Alerte Résorption Bidonvilles',
+        icon_emoji: ':robot:',
+        text: `:rotating_light: ${username} a cessé d'intervenir sur le site ${townLink}`,
+        fields: [],
+    };
+
+    await removeDeclaredActor.send(mattermostMessage);
+}
+
+
 module.exports = {
     triggerShantytownCloseAlert,
     triggerShantytownCreationAlert,
@@ -255,4 +300,6 @@ module.exports = {
     triggerActorInvitedAlert,
     triggerPeopleInvitedAlert,
     triggerNewComment,
+    triggerDeclaredActor,
+    triggerRemoveDeclaredActor,
 };

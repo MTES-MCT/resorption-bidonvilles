@@ -1,7 +1,14 @@
 
 const { sequelize } = require('#db/models');
+const { triggerRemoveDeclaredActor } = require('#server/utils/mattermost');
 
 module.exports = models => async (req, res, next) => {
+    try {
+        await triggerRemoveDeclaredActor(req.shantytown, req.user);
+    } catch (error) {
+        // ignore
+    }
+
     let actors;
     try {
         actors = await sequelize.transaction(async (transaction) => {

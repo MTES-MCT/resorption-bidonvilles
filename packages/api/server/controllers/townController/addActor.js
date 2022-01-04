@@ -1,11 +1,18 @@
 
 const { sequelize } = require('#db/models');
+const { triggerDeclaredActor } = require('#server/utils/mattermost');
 const {
     sendUserShantytownActorNotification,
 } = require('#server/mails/mails');
 const { formatName } = require('#server/models/userModel')(sequelize);
 
 module.exports = models => async (req, res, next) => {
+    try {
+        await triggerDeclaredActor(req.shantytown, req.user);
+    } catch (error) {
+        // ignore
+    }
+
     // if the actor to be added is the current user, proceed
     if (req.body.user.id === req.user.id) {
         try {
