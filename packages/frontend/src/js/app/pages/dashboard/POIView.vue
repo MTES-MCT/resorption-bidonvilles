@@ -35,8 +35,8 @@
                     <div v-if="poi.entity.phone" class="my-2">
                         Tel: {{ poi.entity.phone }}
                     </div>
-                    <div v-if="poi.entity.email" class="my-2">
-                        Email: {{ poi.entity.email }}
+                    <div v-if="poi.entity.mail" class="my-2">
+                        Email: {{ poi.entity.mail }}
                     </div>
                     <div v-if="poi.languages" class="my-2">
                         Langue: {{ poi.languages.join(", ") }}
