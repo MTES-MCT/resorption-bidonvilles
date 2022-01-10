@@ -1,6 +1,6 @@
 
 const { sequelize } = require('#db/models');
-const { triggerDeclaredActor } = require('#server/utils/mattermost');
+const { triggerDeclaredActor, triggerInvitedActor } = require('#server/utils/mattermost');
 const {
     sendUserShantytownActorNotification,
 } = require('#server/mails/mails');
@@ -56,6 +56,12 @@ module.exports = models => async (req, res, next) => {
             user_message: 'Une erreur est survenue lors de l\'invitation de l\'utilisateur',
         });
         return next(error);
+    }
+
+    try {
+        await triggerInvitedActor(req.shantytown, req.user, req.body.user);
+    } catch (error) {
+        // ignore
     }
 
     return res.status(200).send({});

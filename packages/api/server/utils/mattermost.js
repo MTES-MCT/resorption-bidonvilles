@@ -270,6 +270,29 @@ async function triggerDeclaredActor(town, user) {
     await declaredActor.send(mattermostMessage);
 }
 
+async function triggerInvitedActor(town, host, guest) {
+    if (!mattermost) {
+        return;
+    }
+
+    const invitedActor = new IncomingWebhook(mattermost);
+
+    const address = formatAddress(town);
+    const hostUsername = formatUsername(host);
+    const guestUsername = formatUsername(guest);
+    const townLink = formatTownLink(town.id, address);
+
+    const mattermostMessage = {
+        channel: '#notif-intervenants-declares',
+        username: 'Alerte Résorption Bidonvilles',
+        icon_emoji: ':robot:',
+        text: `:rotating_light: ${hostUsername} a invité ${guestUsername} à se déclarer comme intervenant sur le site ${townLink}`,
+        fields: [],
+    };
+
+    await invitedActor.send(mattermostMessage);
+}
+
 async function triggerRemoveDeclaredActor(town, user) {
     if (!mattermost) {
         return;
@@ -301,5 +324,6 @@ module.exports = {
     triggerPeopleInvitedAlert,
     triggerNewComment,
     triggerDeclaredActor,
+    triggerInvitedActor,
     triggerRemoveDeclaredActor,
 };
