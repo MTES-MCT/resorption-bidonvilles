@@ -48,7 +48,7 @@
                 v-model="input.is_reinstallation"
             ></InputIsReinstallation>
         </FormParagraph>
-        <div class="ml-12 mt-6">
+        <div class="ml-12 mt-6" v-if="input.is_reinstallation === 1">
             <InputReinstallationComments
                 v-model="input.reinstallation_comments"
             ></InputReinstallationComments>
