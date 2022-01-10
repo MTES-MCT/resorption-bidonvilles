@@ -1210,7 +1210,9 @@ module.exports = models => ({
                 addError('audience', 'Vous devez préciser le nombre de personnes intégrées au dispositif');
             }
 
-            if (Number.isNaN(stateData.audience.in.families)) stateData.audience.in.families = 0;
+            if (Number.isNaN(stateData.audience.in.families)) {
+                stateData.audience.in.families = 0;
+            }
         }
 
         if (stateData.audience.in.families > 0) {
