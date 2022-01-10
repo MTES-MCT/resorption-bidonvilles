@@ -501,13 +501,22 @@ export default {
             this.activitiesLoading = true;
             const date = new Date();
             const currentDate = date.getTime() / 1000;
-            this.lastActivities = await listRegular(
+            const tempLastActivities = await listRegular(
                 currentDate,
                 [],
                 5,
                 this.locationType,
                 this.locationCode
             );
+            console.log(tempLastActivities);
+            tempLastActivities.forEach(activity => {
+                console.log(currentDate - activity.date);
+                if (currentDate - activity.date < 604800) {
+                    // on ne prend que les activités de la semaine passée
+                    this.lastActivities.push(activity);
+                }
+            });
+            console.log(this.lastActivities);
             this.activitiesLoading = false;
         },
         handleSearchBlur(data) {
