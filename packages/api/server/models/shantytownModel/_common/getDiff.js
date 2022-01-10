@@ -3,7 +3,7 @@ const { fromTsToFormat } = require('#server/utils/date');
 module.exports = (oldVersion, newVersion) => {
     const properties = [
         'name', 'builtAt', 'declaredAt', 'addressSimple',
-        'addressDetails', 'fieldType', 'ownerType', 'owner', 'isReinstallation', 'censusStatus', 'censusConductedAt',
+        'addressDetails', 'fieldType', 'ownerType', 'owner', 'isReinstallation', 'reinstallationComments', 'censusStatus', 'censusConductedAt',
         'censusConductedBy', 'populationTotal', 'populationCouples',
         'populationMinors', 'populationMinors0To3', 'populationMinors3To6', 'populationMinors6To12',
         'populationMinors12To16', 'populationMinors16To18', 'minorsInSchool',
@@ -28,6 +28,7 @@ module.exports = (oldVersion, newVersion) => {
         ownerType: 'Type de propriétaire',
         owner: 'Propriétaire',
         isReinstallation: 'S\'agit-il d\'une réinstallation ?',
+        reinstallationComments: 'Précisions sur la réinstallation',
         censusStatus: 'Statut du diagnostic',
         censusConductedAt: 'Date du diagnostic',
         censusConductedBy: 'Opérateur en charge du diagnostic',

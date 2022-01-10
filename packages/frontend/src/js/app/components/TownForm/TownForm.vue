@@ -37,12 +37,14 @@
                     <TownFormPanelLocation
                         class="mt-10"
                         v-model="town.location"
+                        @shareClosedTowns="showClosedTowns"
                     ></TownFormPanelLocation>
 
                     <TownFormPanelCharacteristics
                         class="mt-10 townPanelShadow"
                         id="characteristics"
                         v-model="town.characteristics"
+                        :nearbyClosedShantytowns="nearbyClosedShantytowns"
                     ></TownFormPanelCharacteristics>
 
                     <TownFormPanelPeople
@@ -133,6 +135,7 @@ export default {
         const { field_types: fieldTypes, user } = getConfig();
 
         return {
+            nearbyClosedShantytowns: [],
             mainError: null,
             loading: false,
             showInfo: true,
@@ -168,7 +171,9 @@ export default {
                     owner: this.data.owner,
                     is_reinstallation: this.boolToInt(
                         this.data.isReinstallation
-                    )
+                    ),
+                    reinstallation_comments:
+                        this.data.reinstallationComments || undefined
                 },
                 people: {
                     population: {
@@ -446,6 +451,8 @@ export default {
                     owner: this.town.characteristics.owner,
                     is_reinstallation: this.town.characteristics
                         .is_reinstallation,
+                    reinstallation_comments: this.town.characteristics
+                        .reinstallation_comments,
                     population_total: this.strToInt(
                         this.town.people.population.populationTotal
                     ),
@@ -553,6 +560,9 @@ export default {
                 `S${this.data.id}`
             );
             return edit(this.data.id, data);
+        },
+        showClosedTowns(closedTowns) {
+            this.nearbyClosedShantytowns = closedTowns;
         }
     }
 };

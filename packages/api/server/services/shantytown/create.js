@@ -36,6 +36,7 @@ module.exports = async (townData, user) => {
             fieldType: townData.field_type,
             ownerType: townData.owner_type,
             isReinstallation: townData.is_reinstallation,
+            reinstallationComments: townData.reinstallation_comments,
             city: townData.citycode,
             createdBy: user.id,
             declaredAt: townData.declared_at,

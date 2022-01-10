@@ -10,6 +10,7 @@ module.exports = {
         'shantytowns.longitude': 'longitude',
         'shantytowns.address': 'address',
         'shantytowns.is_reinstallation': 'isReinstallation',
+        'shantytowns.reinstallation_comments': 'reinstallationComments',
         'shantytowns.address_details': 'addressDetails',
         '(SELECT regexp_matches(shantytowns.address, \'^(.+) [0-9]+ [^,]+,? [0-9]+,? [^, ]+(,.+)?$\'))[1]': 'addressSimple',
         'shantytowns.population_total': 'populationTotal',

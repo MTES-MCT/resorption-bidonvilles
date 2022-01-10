@@ -261,6 +261,17 @@ module.exports = mode => ([
         .customSanitizer(fromIntToBoolSanitizer),
 
     /* **********************************************************************************************
+     * Précisions sur la réinstallation
+     ********************************************************************************************* */
+    body('reinstallation_comments')
+        .optional({ nullable: true })
+        .isString().bail().withMessage('Le champ "Précisions sur la réinstallation" est invalide')
+        .trim(),
+
+    body('reinstallation_comments')
+        .customSanitizer(value => value || null),
+
+    /* **********************************************************************************************
      * Statut du diagnostic social
      ********************************************************************************************* */
     body('census_status')
