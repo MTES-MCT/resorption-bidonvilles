@@ -543,6 +543,26 @@ module.exports = (models) => {
                     data: ({ owner }) => owner,
                     width: COLUMN_WIDTHS.MEDIUM,
                 },
+                isReinstallation: {
+                    title: 'S\'agit-il d\'une réinstallation ?',
+                    data: ({ isReinstallation }) => {
+                        if (isReinstallation === true) {
+                            return 'oui';
+                        }
+
+                        if (isReinstallation === false) {
+                            return 'non';
+                        }
+
+                        return null;
+                    },
+                    width: COLUMN_WIDTHS.SMALL,
+                },
+                reinstallationComments: {
+                    title: 'Précisions sur la réinstallation',
+                    data: ({ reinstallationComments }) => reinstallationComments,
+                    width: COLUMN_WIDTHS.LARGE,
+                },
                 populationTotal: {
                     title: 'Nombre de personnes',
                     data: ({ populationTotal }) => populationTotal,
@@ -1175,6 +1195,8 @@ module.exports = (models) => {
                     properties.fieldType,
                     properties.builtAt,
                     properties.declaredAt,
+                    properties.isReinstallation,
+                    properties.reinstallationComments,
                     properties.hasPlan,
                     properties.resorptionTarget,
                 ],
@@ -1542,6 +1564,12 @@ module.exports = (models) => {
     methods.findNearbyTowns = require('./townController/findNearbyTowns')(
         models,
     );
+
+    // eslint-disable-next-line global-require
+    methods.findClosedNearbyTowns = require('./townController/findClosedNearbyTowns')(
+        models,
+    );
+
 
     return methods;
 };

@@ -3,7 +3,7 @@ const updateWhereClauseWithUserLocation = require('./_common/updateWhereClauseWi
 const stringifyWhereClause = require('./_common/stringifyWhereClause');
 const getUsenameOf = require('./_common/getUsenameOf');
 
-module.exports = async (user, latitude, longitude, distance) => {
+module.exports = async (user, latitude, longitude, distance, closed = false) => {
     const replacements = {};
     const locationWhere = updateWhereClauseWithUserLocation(user, 'list');
     const locationWhereClause = stringifyWhereClause(locationWhere, replacements);
@@ -28,7 +28,7 @@ module.exports = async (user, latitude, longitude, distance) => {
     LEFT JOIN regions on departements.fk_region = regions.code
     WHERE 
         ${distanceCalc} < :distanceRadius
-        AND closed_at is NULL
+        AND closed_at is ${closed ? 'NOT' : ''} NULL
         ${locationWhereClause ? `AND ${locationWhereClause}` : ''}
     ORDER BY distance ASC
     `,

@@ -1189,8 +1189,18 @@ module.exports = models => ({
                 return false;
             }
 
-            return Object.values(stateData.audience[key]).some(value => Number.isNaN(value) || value < 0);
+            let returnValue = false;
+            returnValue = Object.keys(stateData.audience[key]).some((nestedKey) => {
+                if (nestedKey !== 'families') {
+                    if (Number.isNaN(stateData.audience[key][nestedKey]) || (stateData.audience[key][nestedKey]) < 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            return returnValue;
         });
+
         if (hasBadValues) {
             addError('audience', 'Les chiffres indiqués ne peuvent pas être négatifs');
         }
@@ -1200,13 +1210,15 @@ module.exports = models => ({
                 addError('audience', 'Vous devez préciser le nombre de personnes intégrées au dispositif');
             }
 
-            if (Number.isNaN(stateData.audience.in.families) || stateData.audience.in.families <= 0) {
-                addError('audience', 'Vous devez préciser le nombre de ménages intégrés au dispositif');
+            if (Number.isNaN(stateData.audience.in.families)) {
+                stateData.audience.in.families = 0;
             }
         }
 
-        if (stateData.audience.in.total < stateData.audience.in.families) {
-            addError('audience', 'Le nombre de ménages ne peut pas être supérieur au nombre de personnes');
+        if (stateData.audience.in.families > 0) {
+            if (stateData.audience.in.total < stateData.audience.in.families) {
+                addError('audience', 'Le nombre de ménages ne peut pas être supérieur au nombre de personnes');
+            }
         }
         if (stateData.audience.in.women + stateData.audience.in.minors > stateData.audience.in.total) {
             addError('audience', 'La somme du nombre de femmes et de mineurs ne peut pas être supérieure au nombre de personnes');

@@ -96,6 +96,16 @@ module.exports = function (sequelize, DataTypes) {
             },
             field: 'fk_owner_type',
         },
+        isReinstallation: {
+            type: DataTypes.BOOLEAN,
+            allowNull: true,
+            field: 'is_reinstallation',
+        },
+        reinstallationComments: {
+            type: DataTypes.TEXT,
+            allowNull: true,
+            field: 'reinstallation_comments',
+        },
         populationTotal: {
             type: DataTypes.INTEGER,
             allowNull: true,

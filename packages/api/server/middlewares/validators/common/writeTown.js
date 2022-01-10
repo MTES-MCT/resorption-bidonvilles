@@ -252,6 +252,26 @@ module.exports = mode => ([
         .customSanitizer(value => value || null),
 
     /* **********************************************************************************************
+     * Reinstallation
+     ********************************************************************************************* */
+    body('is_reinstallation')
+        .exists({ checkNull: true }).bail().withMessage('Le champ "S\'agit-il d\'une réinstallation ?" est obligatoire')
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "S\'agit-il d\'une réinstallation ?" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
+    /* **********************************************************************************************
+     * Précisions sur la réinstallation
+     ********************************************************************************************* */
+    body('reinstallation_comments')
+        .optional({ nullable: true })
+        .isString().bail().withMessage('Le champ "Précisions sur la réinstallation" est invalide')
+        .trim(),
+
+    body('reinstallation_comments')
+        .customSanitizer(value => value || null),
+
+    /* **********************************************************************************************
      * Statut du diagnostic social
      ********************************************************************************************* */
     body('census_status')

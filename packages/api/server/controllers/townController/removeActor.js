@@ -1,5 +1,6 @@
 
 const { sequelize } = require('#db/models');
+const { triggerRemoveDeclaredActor } = require('#server/utils/mattermost');
 
 module.exports = models => async (req, res, next) => {
     let actors;
@@ -21,6 +22,12 @@ module.exports = models => async (req, res, next) => {
             user_message: 'Une erreur est survenue lors de l\'écriture en base de données',
         });
         return next(error);
+    }
+
+    try {
+        await triggerRemoveDeclaredActor(req.shantytown, req.user);
+    } catch (error) {
+        // ignore
     }
 
     return res.status(200).send({
