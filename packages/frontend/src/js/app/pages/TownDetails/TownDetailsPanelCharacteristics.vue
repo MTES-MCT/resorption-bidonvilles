@@ -147,6 +147,28 @@
                             </div>
                         </div>
                     </TownDetailsPanelSection>
+                    <TownDetailsPanelSection>
+                        <div class="grid grid-cols-2">
+                            <div class="font-bold">
+                                S'agit-t-il d'une réinstallation ?
+                            </div>
+                            <div data-cy-data="is_reinstallation">
+                                {{ boolToStr(town.isReinstallation) }}
+                            </div>
+                        </div>
+                    </TownDetailsPanelSection>
+                    <TownDetailsPanelSection
+                        v-if="town.reinstallationComments !== null"
+                    >
+                        <div class="grid grid-cols-2">
+                            <div class="font-bold">
+                                Précisions sur la réinstallation
+                            </div>
+                            <!-- eslint-disable -->
+                            <div class="whitespace-pre" data-cy-data="reinstallation_comments">{{ town.reinstallationComments }}</div>
+                            <!-- eslint-enable -->
+                        </div>
+                    </TownDetailsPanelSection>
                 </div>
                 <div class="w-1/2">
                     <div class="v1">
@@ -196,6 +218,12 @@ export default {
     },
     components: { TownDetailsPanel, TownDetailsPanelSection, Map },
     methods: {
+        boolToStr(bool) {
+            if (bool === null) {
+                return "non communiqué";
+            }
+            return bool ? "Oui" : "Non";
+        },
         hasPermission,
         goTo(town) {
             if (town.id && town.id !== this.town.id) {

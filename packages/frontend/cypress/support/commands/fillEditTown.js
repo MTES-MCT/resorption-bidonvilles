@@ -79,6 +79,22 @@ Cypress.Commands.add("fillEditTown", shantytown => {
         cy.get("[data-cy-field='owner']").clear();
     }
 
+    // reinstallation
+    if (shantytown.is_reinstallation) {
+        cy.get(
+            `[data-cy-field="is_reinstallation"][data-cy-label="${shantytown.is_reinstallation}"]`
+        ).myCheck();
+    }
+
+    // reinstallation comments
+    if (shantytown.reinstallation_comments) {
+        cy.get("[data-cy-field='reinstallation_comments']").typeReplace(
+            shantytown.reinstallation_comments
+        );
+    } else {
+        cy.get("[data-cy-field='reinstallation_comments']").clear();
+    }
+
     // population total
     if (
         shantytown.population_total !== undefined &&
