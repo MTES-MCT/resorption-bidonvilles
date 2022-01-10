@@ -3,7 +3,7 @@
         label=" "
         direction="horizontal"
         id="is_reinstallation"
-        validationName="Reinstallation"
+        validationName="S'agit-il d'une réinstallation ?"
         rules="required"
         :withoutMargin="true"
     >
