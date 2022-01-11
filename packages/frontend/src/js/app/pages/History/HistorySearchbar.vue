@@ -24,15 +24,10 @@ export default {
     computed: {
         location: {
             get() {
-                return this.$store.state.activities.filters.location;
+                return null;
             },
             set(value) {
-                if (value) {
-                    this.$store.commit("saveLocation", value);
-                }
-
-                this.$store.commit("setActivityLocationFilter", value);
-                this.$emit("locationChange");
+                this.$emit("locationChange", value);
             }
         }
     }

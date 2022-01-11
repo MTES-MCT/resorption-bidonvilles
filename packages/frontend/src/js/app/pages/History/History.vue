@@ -12,7 +12,6 @@
                     Dernières activités -
                     <span class="text-primary">{{ locationName }}</span>
                 </h1>
-
                 <HistoryFilterBar
                     class="mb-6"
                     v-on:changeActivityFilter="changeActivityFilter"
@@ -223,9 +222,8 @@ export default {
             );
         },
 
-        onLocationChange() {
+        onLocationChange(location) {
             // on redirige vers la bonne URL (ce qui automatiquement relancera un getActivities() via les watchers)
-            const { location } = this.$store.state.activities.filters;
             if (location === null) {
                 this.routeTo("/activites/nation");
             } else {
