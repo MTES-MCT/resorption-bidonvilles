@@ -397,11 +397,13 @@ export default {
                 height: this.map._size.y,
                 logging: false
             };
-
             // Stocke le paramètre "showAddress" avant le passage en mode impression
             this.showAddressesBeforePrint = this.showAddresses;
             // Affiche l'adresse des sites pour l'impression
-            this.showAddresses = true;
+            // timeout nécessaire pour Chrome
+            setTimeout(() => {
+                this.showAddresses = true;
+            }, 200);
             // Masque le contrôle de zoom
             this.map.removeControl(this.map.zoomControl);
             // Masque le contrôle affichant les couches
@@ -410,31 +412,37 @@ export default {
             // (masque barre de recherche, bouton d'impression et commutateur d'affichage des adresses de sites)
             document.body.classList.add("preprint");
 
-            if (manualPrint === true) {
-                const printWindow = window.open(
-                    "",
-                    "PrintWindow",
-                    "width=400,height=200"
-                );
-                html2canvas(
-                    document.getElementById("map"),
-                    html2canvasConfiguration
-                ).then(canvas => {
-                    const doc = printWindow.document;
-                    const img = doc.createElement("img");
-                    img.src = canvas.toDataURL("image/png");
-                    doc.body.appendChild(img);
+            // timeout nécessaire pour Chrome
+            setTimeout(() => {
+                if (manualPrint === true) {
+                    const printWindow = window.open(
+                        "",
+                        "PrintWindow",
+                        "width=800,height=600"
+                    );
+                    html2canvas(
+                        document.getElementById("map"),
+                        html2canvasConfiguration
+                    ).then(canvas => {
+                        const doc = printWindow.document;
+                        const img = doc.createElement("img");
+                        img.src = canvas.toDataURL("image/png");
+                        doc.body.appendChild(img);
+                        setTimeout(() => {
+                            printWindow.print();
+                            printWindow.close();
+                        }, 200);
+                    });
+                    // Restauration de l'environnement tel qu'il était avant la préparation de l'impression
+                    document.body.classList.remove("preprint");
+                    this.setupLayersControl();
+                    this.map.addControl(this.map.zoomControl);
+                    // timeout nécessaire pour Chrome
                     setTimeout(() => {
-                        printWindow.print();
-                        printWindow.close();
-                    }, 0);
-                });
-                // Restauration de l'environnement tel qu'il était avant la préparation de l'impression
-                document.body.classList.remove("preprint");
-                this.setupLayersControl();
-                this.map.addControl(this.map.zoomControl);
-                this.showAddresses = this.showAddressesBeforePrint;
-            }
+                        this.showAddresses = this.showAddressesBeforePrint;
+                    }, 200);
+                }
+            }, 200);
         },
         countNumberOfTowns() {
             this.numberOfShantytownsBy = this.towns.reduce(
