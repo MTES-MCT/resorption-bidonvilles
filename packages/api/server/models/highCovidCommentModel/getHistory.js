@@ -6,7 +6,7 @@ module.exports = async (userLocation, permissions, location, locationType, locat
     // apply geographic level restrictions
     const where = [];
     const replacements = {};
-    const limit = `limit ${numberActivities}`;
+    const limit = numberActivities !== '-1' ? `limit ${numberActivities}` : '';
     updateWhereClauseForPermissions({
         permissions,
         permission: 'covid_comment.list',

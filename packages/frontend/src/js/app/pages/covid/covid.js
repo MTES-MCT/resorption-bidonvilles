@@ -164,7 +164,7 @@ export default {
             const activities = await listRegular(
                 date.getTime() / 1000,
                 ["highCovidComment", "shantytownComment", "onlyCovid"],
-                9999999999,
+                -1,
                 this.locationType,
                 this.locationCode
             );

@@ -56,7 +56,5 @@ module.exports = async (userLocation, permissions, location, locationType, locat
         const [activity] = arr.splice(0, 1);
         orderedActivities.push(activity);
     }
-    // console.log('et ici ? =========');
-    // console.log(orderedActivities.slice(0, numberActivities));
     return orderedActivities.slice(0, numberActivities);
 };

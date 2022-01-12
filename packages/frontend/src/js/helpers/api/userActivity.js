@@ -25,8 +25,14 @@ export function listRegular(
               ]
             : activityFilter;
     return getApi(
-        `/activities?lastActivityDate=${lastActivityDate}&numberActivities=${numberActivities}&filter=${realActivityFilter.join(
-            ""
-        )}&locationType=${locationType}&locationCode=${locationCode}`
+        `/activities?lastActivityDate=${encodeURIComponent(
+            lastActivityDate
+        )}&numberActivities=${encodeURIComponent(
+            numberActivities
+        )}&filter=${encodeURIComponent(
+            realActivityFilter.join("")
+        )}&locationType=${encodeURIComponent(
+            locationType
+        )}&locationCode=${encodeURIComponent(locationCode)}`
     );
 }
