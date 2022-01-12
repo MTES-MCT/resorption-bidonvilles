@@ -84,10 +84,10 @@ module.exports = (queryInterface, transaction) => queryInterface.sequelize.query
                             fk_user AS user_id,
                             'access' AS fk_feature,
                             'shantytown_justice' AS fk_entity,
-                            FALSE AS allowed,
-                            'local' AS fk_geographic_level
+                            TRUE AS allowed,
+                            null AS fk_geographic_level
                         FROM user_permission_options
-                        WHERE fk_option IN('hide_justice'))
+                        WHERE fk_option IN('access_justice'))
                     ) t2
                     LEFT JOIN users u ON t2.user_id = u.user_id)
 

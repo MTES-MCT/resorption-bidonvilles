@@ -114,15 +114,15 @@ describe("Permissions tests", () => {
                         });
                     }
 
-                    if (userPermissions.shantytown.hideJustice) {
-                        it(`L'utilisateur ${key} ne doit pas pouvoir lire les procédures judiciaires`, () => {
-                            cy.url().should("include", TEST_URL);
-                            cy.get("#judicial").should("not.exist");
-                        });
-                    } else {
+                    if (userPermissions.shantytown.accessJustice) {
                         it(`L'utilisateur ${key} doit pouvoir lire les procédures judiciaires`, () => {
                             cy.url().should("include", TEST_URL);
                             cy.get("#judicial").should("exist");
+                        });
+                    } else {
+                        it(`L'utilisateur ${key} ne doit pas pouvoir lire les procédures judiciaires`, () => {
+                            cy.url().should("include", TEST_URL);
+                            cy.get("#judicial").should("not.exist");
                         });
                     }
 

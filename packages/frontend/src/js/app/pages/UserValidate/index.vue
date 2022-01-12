@@ -365,8 +365,8 @@ export default {
                         create_and_close_shantytown: this.checkedOptions.includes(
                             "create_and_close_shantytown"
                         ),
-                        hide_justice: this.checkedOptions.includes(
-                            "hide_justice"
+                        access_justice: this.checkedOptions.includes(
+                            "access_justice"
                         )
                     }
                 });
