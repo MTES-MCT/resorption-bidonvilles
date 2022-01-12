@@ -31,7 +31,7 @@ module.exports = {
                     type: 'deny', label: 'hors fermeture des sites', comments: null, option: 'close_shantytown',
                 },
                 {
-                    type: 'deny', label: 'Masquer les procédures judiciaires (option pour les rendre accessibles ci-dessous)', comments: null, option: 'access_justice',
+                    type: 'deny', label: 'hors procédures judiciaires', comments: null, option: 'access_justice',
                 },
             ],
             [{ type: 'edit', label: 'Mettre à jour les %dispositifs%', comments: 'hors financements' }],
@@ -54,7 +54,7 @@ module.exports = {
                     type: 'deny', label: 'hors création des sites', comments: null, option: 'create_and_close_shantytown',
                 },
                 {
-                    type: 'deny', label: 'Masquer les procédures judiciaires (option pour les rendre accessibles ci-dessous)', comments: null, option: 'access_justice',
+                    type: 'deny', label: 'hors procédures judiciaires', comments: null, option: 'access_justice',
                 },
             ],
             [{ type: 'view', label: 'Mettre à jour les %dispositifs%', comments: 'hors financements' }],
@@ -71,7 +71,7 @@ module.exports = {
             [
                 { type: 'view', label: 'Consulter les %sites%', comments: null },
                 {
-                    type: 'deny', label: 'Masquer les procédures judiciaires (option pour les rendre accessibles ci-dessous)', comments: null, option: 'access_justice',
+                    type: 'deny', label: 'hors procédures judiciaires', comments: null, option: 'access_justice',
                 },
                 {
                     type: 'edit', label: 'Écrire des commentaires sur le « Journal du site »', comments: null,
