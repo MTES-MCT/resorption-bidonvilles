@@ -1,4 +1,3 @@
-
 const { sequelize } = require('#db/models');
 const { fromGeoLevelToTableName } = require('#server/utils/geo');
 const userModel = require('#server/models/userModel')();
@@ -12,7 +11,7 @@ module.exports = async (user, location, shantytownFilter, numberActivities, last
     // apply geographic level restrictions
     const where = [];
     const replacements = {};
-    const limit = `limit ${numberActivities}`;
+    const limit = numberActivities !== '-1' ? `limit ${numberActivities}` : '';
 
     const restrictedLocation = restrict(location).for(user).askingTo('list', 'shantytown');
     if (restrictedLocation === null) {

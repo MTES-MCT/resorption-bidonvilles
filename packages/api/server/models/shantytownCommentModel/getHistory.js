@@ -8,7 +8,7 @@ module.exports = async (user, location, numberActivities, lastDate, onlyCovid = 
     // apply geographic level restrictions
     const where = [];
     const replacements = {};
-    const limit = `limit ${numberActivities}`;
+    const limit = numberActivities !== '-1' ? `limit ${numberActivities}` : '';
 
     const restrictedLocations = {
         public: restrict(location).for(user).askingTo('list', 'shantytown_comment'),

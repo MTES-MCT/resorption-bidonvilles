@@ -18,16 +18,13 @@
                 ></HistoryFilterBar>
 
                 <div v-if="lastActivities.length > 0">
-                    <div>
-                        <HistoryCardGroup
-                            v-for="(group, index) in currentActivities"
-                            :date="group.date"
-                            :items="group.items"
-                            :key="index"
-                            id="infinite_scroll"
-                            class="mb-4"
-                        ></HistoryCardGroup>
-                    </div>
+                    <HistoryCardGroup
+                        v-for="(group, index) in currentActivities"
+                        :date="group.date"
+                        :items="group.items"
+                        :key="index"
+                        class="mb-4"
+                    ></HistoryCardGroup>
                 </div>
                 <div
                     class="flex-1 text-center text-primary text-display-md"
@@ -80,7 +77,8 @@ export default {
             lastActivityDate: new Date(),
             activityFilter: [],
             loading: false,
-            activitiesLoading: false
+            activitiesLoading: false,
+            endOfActivities: false
         };
     },
     computed: {
@@ -133,19 +131,16 @@ export default {
         "$route.params.locationType"() {
             this.lastActivities = [];
             this.setDate();
-            window.addEventListener("scroll", this.reachBottom);
             this.getActivities();
         },
         "$route.params.locationCode"() {
             this.lastActivities = [];
             this.setDate();
-            window.addEventListener("scroll", this.reachBottom);
             this.getActivities();
         },
         activityFilter: {
             deep: true,
             handler: function() {
-                window.addEventListener("scroll", this.reachBottom);
                 this.getActivities();
             }
         }
@@ -171,7 +166,11 @@ export default {
                     document.documentElement.scrollTop -
                     window.innerHeight ===
                 0;
-            if (bottomOfWindow && !this.activitiesLoading) {
+            if (
+                bottomOfWindow &&
+                !this.activitiesLoading &&
+                !this.endOfActivities
+            ) {
                 this.getActivities();
             }
         },
@@ -201,7 +200,7 @@ export default {
             this.loading = false;
             if (tempLastActivities.length < 10) {
                 // on arrive aux dernières activités
-                window.removeEventListener("scroll", this.reachBottom);
+                this.endOfActivities = true;
             }
         },
 

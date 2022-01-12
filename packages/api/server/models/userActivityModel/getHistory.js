@@ -56,7 +56,5 @@ module.exports = async (user, location, entities, numberActivities, lastDate) =>
         const [activity] = arr.splice(0, 1);
         orderedActivities.push(activity);
     }
-    // console.log('et ici ? =========');
-    // console.log(orderedActivities.slice(0, numberActivities));
     return orderedActivities.slice(0, numberActivities);
 };

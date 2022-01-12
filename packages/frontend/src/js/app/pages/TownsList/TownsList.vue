@@ -426,14 +426,18 @@ export default {
         window.onafterprint = () => {
             this.printMode = false;
         };
+        this.getActivities(
+            this.filters.location !== null
+                ? this.filters.location.locationType
+                : "nation",
+            this.filters.location !== null ? this.filters.location.code : null
+        );
     },
     data() {
         const { field_types: fieldTypes } = getConfig();
         const permission = getPermission("shantytown_justice.access");
 
         return {
-            locationType: null,
-            locationCode: null,
             lastActivities: [],
             activitiesLoading: false,
             hasJusticePermission: permission !== null,
@@ -489,16 +493,8 @@ export default {
         };
     },
     methods: {
-        async getActivities() {
-            const { user } = getConfig();
-            const { geographic_level } = getPermission("shantytown.list");
-            if (geographic_level === "nation") {
-                this.locationType = "nation";
-            } else {
-                const { location } = user.organization;
-                this.locationType = location.type;
-                this.locationCode = location[location.type].code;
-            }
+        async getActivities(locationType, locationCode) {
+            this.lastActivities = [];
             this.activitiesLoading = true;
             const date = new Date();
             const currentDate = date.getTime() / 1000;
@@ -506,21 +502,19 @@ export default {
                 currentDate,
                 [],
                 5,
-                this.locationType,
-                this.locationCode
+                locationType,
+                locationCode
             );
-            console.log(tempLastActivities);
             tempLastActivities.forEach(activity => {
-                console.log(currentDate - activity.date);
                 if (currentDate - activity.date < 604800) {
                     // on ne prend que les activités de la semaine passée
                     this.lastActivities.push(activity);
                 }
             });
-            console.log(this.lastActivities);
             this.activitiesLoading = false;
         },
         handleSearchBlur(data) {
+            this.getActivities(data.value.locationType, data.value.code);
             this.$trackMatomoEvent("Liste des sites", "Recherche");
             this.$store.commit("setFilters", {
                 ...this.filters,
@@ -556,7 +550,6 @@ export default {
             if (!this.shantytowns.length) {
                 this.$store.dispatch("fetchTowns");
             }
-            this.getActivities();
         },
         showExport() {
             setTimeout(() => {
