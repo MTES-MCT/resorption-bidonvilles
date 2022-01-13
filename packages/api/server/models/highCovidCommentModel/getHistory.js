@@ -2,11 +2,11 @@ const { sequelize } = require('#db/models');
 const userModel = require('#server/models/userModel')();
 const updateWhereClauseForPermissions = require('#server/models/common/updateWhereClauseForPermissions');
 
-module.exports = async (userLocation, permissions, location, locationType, locationCode, numberActivities, lastDate) => {
+module.exports = async (userLocation, permissions, location, locationType, locationCode, numberOfActivities, lastDate) => {
     // apply geographic level restrictions
     const where = [];
     const replacements = {};
-    const limit = numberActivities !== '-1' ? `limit ${numberActivities}` : '';
+    const limit = numberOfActivities !== '-1' ? `limit ${numberOfActivities}` : '';
     updateWhereClauseForPermissions({
         permissions,
         permission: 'covid_comment.list',
@@ -39,7 +39,22 @@ module.exports = async (userLocation, permissions, location, locationType, locat
             }
         },
     });
-    const whereLastDate = `${where.length > 0 ? 'AND' : 'WHERE'} comments.created_at < '${lastDate}'`;
+    where.push(`comments.created_at < '${lastDate}'`);
+    switch (locationType) {
+        case 'region':
+            where.push(`regions.code = '${locationCode}'`);
+            break;
+        case 'departement':
+            where.push(`departements.code = '${locationCode}'`);
+            break;
+        case 'epci':
+            where.push(`epci.code = '${locationCode}'`);
+            break;
+        case 'city':
+            where.push(`cities.code = '${locationCode}'`);
+            break;
+        default:
+    }
     const activities = await sequelize.query(
         `
             SELECT DISTINCT
@@ -59,11 +74,6 @@ module.exports = async (userLocation, permissions, location, locationType, locat
             LEFT JOIN cities ON cities.fk_departement = departements.code
             LEFT JOIN epci ON cities.fk_epci = epci.code
             ${where.length > 0 ? `WHERE (${where.join(') AND (')})` : ''}
-            ${whereLastDate}
-            ${locationType === 'city' ? `AND cities.code = '${locationCode}'` : ''}
-            ${locationType === 'epci' ? `AND epci.code = '${locationCode}'` : ''}
-            ${locationType === 'departement' ? `AND departements.code = '${locationCode}'` : ''}
-            ${locationType === 'region' ? `AND regions.code = '${locationCode}'` : ''}
             ORDER BY comments.created_at DESC
             ${limit}
             `,

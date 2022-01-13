@@ -4,11 +4,11 @@ const updateWhereClauseForPermissions = require('#server/models/common/updateWhe
 const { formatName } = require('#server/models/userModel')();
 const { getUsenameOf, serializeComment } = require('#server/models/shantytownModel')(sequelize);
 
-module.exports = async (userLocation, permissions, location, locationType, locationCode, numberActivities, lastDate, onlyCovid = false) => {
+module.exports = async (userLocation, permissions, location, locationType, locationCode, numberOfActivities, lastDate, onlyCovid = false) => {
     // apply geographic level restrictions
     const where = [];
     const replacements = {};
-    const limit = numberActivities !== '-1' ? `limit ${numberActivities}` : '';
+    const limit = numberOfActivities !== '-1' ? `limit ${numberOfActivities}` : '';
 
     updateWhereClauseForPermissions({
         permissions,

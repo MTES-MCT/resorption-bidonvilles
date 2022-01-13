@@ -8,11 +8,11 @@ const getDiff = require('./_common/getDiff');
 const SQL = require('./_common/SQL');
 
 
-module.exports = async (userLocation, permissions, location, locationType, locationCode, shantytownFilter, numberActivities, lastDate) => {
+module.exports = async (userLocation, permissions, location, locationType, locationCode, shantytownFilter, numberOfActivities, lastDate) => {
     // apply geographic level restrictions
     const where = [];
     const replacements = {};
-    const limit = numberActivities !== '-1' ? `limit ${numberActivities}` : '';
+    const limit = numberOfActivities !== '-1' ? `limit ${numberOfActivities}` : '';
     updateWhereClauseForPermissions({
         permissions,
         permission: 'shantytown.list',

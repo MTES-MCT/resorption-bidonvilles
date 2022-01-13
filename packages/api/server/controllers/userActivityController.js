@@ -1,7 +1,9 @@
+const moment = require('moment');
+
 module.exports = models => ({
     async regular(req, res, next) {
         const {
-            lastActivityDate, numberActivities,
+            lastActivityDate, numberOfActivities,
             filter, locationType,
             locationCode,
         } = req.query;
@@ -17,7 +19,6 @@ module.exports = models => ({
                 'shantytown_comment.listPrivate': req.user.isAllowedTo('listPrivate', 'shantytown_comment') ? req.user.permissions.shantytown_comment.listPrivate : null,
                 'covid_comment.list': req.user.isAllowedTo('list', 'covid_comment') ? req.user.permissions.covid_comment.list : null,
             };
-
             return res.status(200).send(
                 await models.userActivity.getHistory(
                     req.user.organization.location,
@@ -26,8 +27,8 @@ module.exports = models => ({
                     locationType,
                     locationCode,
                     filter,
-                    numberActivities,
-                    `${lastDate.toISOString().slice(0, 10)} ${lastDate.toTimeString().replace('GMT', '').slice(0, 14)}`,
+                    numberOfActivities,
+                    moment(lastDate).format('YYYY-MM-DD hh:mm:ss ZZ'),
                 ),
             );
         } catch (error) {

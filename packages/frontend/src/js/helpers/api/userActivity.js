@@ -9,7 +9,7 @@ import { getApi } from "#helpers/api/main";
 export function listRegular(
     lastActivityDate,
     activityFilter,
-    numberActivities,
+    numberOfActivities,
     locationType,
     locationCode
 ) {
@@ -27,8 +27,8 @@ export function listRegular(
     return getApi(
         `/activities?lastActivityDate=${encodeURIComponent(
             lastActivityDate
-        )}&numberActivities=${encodeURIComponent(
-            numberActivities
+        )}&numberOfActivities=${encodeURIComponent(
+            numberOfActivities
         )}&filter=${encodeURIComponent(
             realActivityFilter.join("")
         )}&locationType=${encodeURIComponent(
