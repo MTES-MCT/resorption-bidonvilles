@@ -174,7 +174,7 @@ module.exports = async (userLocation, permissions, location, locationType, locat
                 o.action = 'closing';
             } else {
                 o.action = 'update';
-                // on utilise le nom du site dans la précédente version (au cas om ce dernier aurait changé)
+                // on utilise le nom du site dans la précédente version (au cas ou ce dernier aurait changé)
                 o.shantytown.usename = getUsenameOf(previousVersion);
 
                 const diff = getDiff(previousVersion, serializedShantytown);

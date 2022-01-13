@@ -123,18 +123,20 @@ export default {
             }
 
             const { location } = user.organization;
-            return `/activites/${location.type}/${`location[location.type]?
-            .code || ""`}`;
+            return `/activites/${location.type}/${location[location.type]
+                ?.code || ""}`;
         }
     },
     watch: {
         "$route.params.locationType"() {
             this.lastActivities = [];
+            this.endOfActivities = false;
             this.setDate();
             this.getActivities();
         },
         "$route.params.locationCode"() {
             this.lastActivities = [];
+            this.endOfActivities = false;
             this.setDate();
             this.getActivities();
         },
@@ -198,7 +200,7 @@ export default {
             ];
             this.activitiesLoading = false;
             this.loading = false;
-            if (tempLastActivities.length < 10) {
+            if (tempLastActivities.length === 0) {
                 // on arrive aux dernières activités
                 this.endOfActivities = true;
             }
@@ -208,6 +210,7 @@ export default {
             // on modifie le filtre des dernières activités, ce qui relancera automatiquement un getActivities() via les watchers
             this.lastActivities = [];
             this.setDate();
+            this.endOfActivities = false;
             this.activityFilter = list;
         },
 
@@ -226,6 +229,7 @@ export default {
             if (location === null) {
                 this.routeTo("/activites/nation");
             } else {
+                this.locationName = location.label;
                 const { type, code } = location.data;
                 this.routeTo(`/activites/${type}/${code}`);
             }
