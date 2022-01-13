@@ -7,11 +7,11 @@ const getDiff = require('./_common/getDiff');
 const SQL = require('./_common/SQL');
 const { restrict } = require('#server/utils/permission');
 
-module.exports = async (user, location, shantytownFilter, numberActivities, lastDate) => {
+module.exports = async (user, location, shantytownFilter, numberOfActivities, lastDate) => {
     // apply geographic level restrictions
     const where = [];
     const replacements = {};
-    const limit = numberActivities !== '-1' ? `limit ${numberActivities}` : '';
+    const limit = numberOfActivities !== '-1' ? `limit ${numberOfActivities}` : '';
 
     const restrictedLocation = restrict(location).for(user).askingTo('list', 'shantytown');
     if (restrictedLocation === null) {

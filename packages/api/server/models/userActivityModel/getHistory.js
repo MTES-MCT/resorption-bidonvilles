@@ -9,7 +9,7 @@ const userModel = require('#server/models/userModel')();
  * @param {Object} location Location to be queried
  * @param {Array.<String>} entities List of entities to be included
  */
-module.exports = async (user, location, entities, numberActivities, lastDate) => {
+module.exports = async (user, location, entities, numberOfActivities, lastDate) => {
     const promises = [];
     const shantytownFilter = [];
     if (entities.includes('shantytownCreation')) {
@@ -22,16 +22,16 @@ module.exports = async (user, location, entities, numberActivities, lastDate) =>
         shantytownFilter.push('shantytownClosing');
     }
     if (shantytownFilter.length > 0) {
-        promises.push(shantytownModel.getHistory(user, location, shantytownFilter, numberActivities, lastDate));
+        promises.push(shantytownModel.getHistory(user, location, shantytownFilter, numberOfActivities, lastDate));
     }
     if (entities.includes('shantytownComment')) {
-        promises.push(shantytownCommentModel.getHistory(user, location, numberActivities, lastDate, entities.includes('onlyCovid')));
+        promises.push(shantytownCommentModel.getHistory(user, location, numberOfActivities, lastDate, entities.includes('onlyCovid')));
     }
     if (entities.includes('highCovidComment')) {
-        promises.push(highCovidCommentModel.getHistory(user, location, numberActivities, lastDate));
+        promises.push(highCovidCommentModel.getHistory(user, location, numberOfActivities, lastDate));
     }
     if (entities.includes('user')) {
-        promises.push(userModel.getHistory(numberActivities, lastDate));
+        promises.push(userModel.getHistory(numberOfActivities, lastDate));
     }
     const activities = await Promise.all(promises);
     const orderedActivities = [];
@@ -56,5 +56,5 @@ module.exports = async (user, location, entities, numberActivities, lastDate) =>
         const [activity] = arr.splice(0, 1);
         orderedActivities.push(activity);
     }
-    return orderedActivities.slice(0, numberActivities);
+    return orderedActivities.slice(0, numberOfActivities);
 };

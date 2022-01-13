@@ -108,7 +108,6 @@ export default {
             }
             return groups;
         },
-
         locationType() {
             return this.$route.params.locationType;
         },
@@ -129,35 +128,34 @@ export default {
     },
     watch: {
         "$route.params.locationType"() {
-            this.lastActivities = [];
-            this.endOfActivities = false;
-            this.setDate();
-            this.getActivities();
+            this.load();
         },
         "$route.params.locationCode"() {
-            this.lastActivities = [];
-            this.endOfActivities = false;
-            this.setDate();
-            this.getActivities();
+            this.load();
         },
         activityFilter: {
             deep: true,
             handler: function() {
-                this.getActivities();
+                this.load();
             }
         }
     },
     mounted() {
-        this.setDate();
-        this.lastActivities = [];
         this.loading = true;
-        this.getActivities();
+        this.locationName = this.getLocationName();
+        this.load();
         window.addEventListener("scroll", this.reachBottom);
     },
     beforeDestroy() {
         window.removeEventListener("scroll", this.reachBottom);
     },
     methods: {
+        load() {
+            this.setDate();
+            this.lastActivities = [];
+            this.endOfActivities = false;
+            this.getActivities();
+        },
         setDate() {
             const date = new Date();
             this.lastActivityDate = date.getTime() / 1000;
@@ -183,7 +181,6 @@ export default {
                 this.$router.replace(this.defaultPath);
                 return;
             }
-            this.locationName = this.getLocationName();
             const tempLastActivities = await listRegular(
                 this.lastActivityDate,
                 this.activityFilter,
@@ -208,20 +205,16 @@ export default {
 
         changeActivityFilter(list) {
             // on modifie le filtre des dernières activités, ce qui relancera automatiquement un getActivities() via les watchers
-            this.lastActivities = [];
-            this.setDate();
-            this.endOfActivities = false;
             this.activityFilter = list;
         },
 
         getLocationName() {
-            if (this.locationType === "nation") {
+            const { user } = getConfig();
+            const location = user.organization.location;
+            if (location.type === "nation") {
                 return "France";
             }
-            return (
-                this.locations[this.locationType]?.[this.locationCode]?.label ||
-                "Inconnu"
-            );
+            return location[location.type]?.name || "Inconnu";
         },
 
         onLocationChange(location) {

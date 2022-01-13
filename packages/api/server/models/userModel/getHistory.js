@@ -1,8 +1,8 @@
 const { sequelize } = require('#db/models');
 const formatName = require('./_common/formatName');
 
-module.exports = async (locationType, locationCode, numberActivities, lastDate) => {
-    const limit = numberActivities !== '-1' ? `limit ${numberActivities}` : '';
+module.exports = async (locationType, locationCode, numberOfActivities, lastDate) => {
+    const limit = numberOfActivities !== '-1' ? `limit ${numberOfActivities}` : '';
     const activities = await sequelize.query(
         `
             SELECT

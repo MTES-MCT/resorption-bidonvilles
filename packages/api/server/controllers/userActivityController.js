@@ -1,7 +1,9 @@
+const moment = require('moment');
+
 module.exports = models => ({
     async regular(req, res, next) {
         const {
-            lastActivityDate, numberActivities,
+            lastActivityDate, numberOfActivities,
             filter, locationType,
             locationCode,
         } = req.query;
@@ -17,8 +19,8 @@ module.exports = models => ({
                     locationType,
                     locationCode,
                     filter,
-                    numberActivities,
-                    `${lastDate.toISOString().slice(0, 10)} ${lastDate.toTimeString().replace('GMT', '').slice(0, 14)}`,
+                    numberOfActivities,
+                    moment(lastDate).format('YYYY-MM-DD hh:mm:ss ZZ'),
                 ),
             );
         } catch (error) {

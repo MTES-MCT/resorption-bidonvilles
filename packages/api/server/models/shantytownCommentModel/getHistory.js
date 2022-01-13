@@ -4,11 +4,11 @@ const { formatName } = require('#server/models/userModel')();
 const { getUsenameOf, serializeComment } = require('#server/models/shantytownModel')();
 const { restrict } = require('#server/utils/permission');
 
-module.exports = async (user, location, numberActivities, lastDate, onlyCovid = false) => {
+module.exports = async (user, location, numberOfActivities, lastDate, onlyCovid = false) => {
     // apply geographic level restrictions
     const where = [];
     const replacements = {};
-    const limit = numberActivities !== '-1' ? `limit ${numberActivities}` : '';
+    const limit = numberOfActivities !== '-1' ? `limit ${numberOfActivities}` : '';
 
     const restrictedLocations = {
         public: restrict(location).for(user).askingTo('list', 'shantytown_comment'),
