@@ -2,6 +2,7 @@
 const { sequelize } = require('#db/models');
 const shantytownModel = require('#server/models/shantytownModel')(sequelize);
 
+
 module.exports = () => async (req, res, next) => {
     let town;
     try {
@@ -18,7 +19,6 @@ module.exports = () => async (req, res, next) => {
             user_message: `Le site d'identifiant ${req.params.id} n'existe pas : mise à jour impossible`,
         });
     }
-
     try {
         await shantytownModel.update(
             req.user,
@@ -96,9 +96,8 @@ module.exports = () => async (req, res, next) => {
                 bailiff: req.body.bailiff,
             },
         );
-        town = await shantytownModel.findOne(req.user, req.params.id);
-
-        return res.status(200).send(town);
+        const updatedTown = await shantytownModel.findOne(req.user, req.params.id);
+        return res.status(200).send(updatedTown);
     } catch (e) {
         res.status(500).send({
             user_message: 'Une erreur est survenue dans l\'enregistrement du site en base de données',
