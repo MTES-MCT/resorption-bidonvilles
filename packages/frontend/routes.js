@@ -90,6 +90,18 @@ const anonymousRoutes = [
                 ssr: true
             }
         }
+    },
+    {
+        path: "/test-table",
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/TestTable/entrypoint.vue"
+        ),
+        route: {
+            meta: {
+                ssr: true
+            }
+        }
     }
 ];
 
