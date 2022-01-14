@@ -11,7 +11,7 @@
 
 <script>
 import SimpleTable from "#app/components/Table/SimpleTable.vue";
-// import RbTable from "#app/components/Table/RbTable.vue";
+import plans from "./plans.js";
 
 export default {
     components: {
@@ -29,26 +29,7 @@ export default {
                     "Pilote",
                     "Opérateur"
                 ],
-                datas: [
-                    {
-                        name:
-                            "Programme d’accès au logement et à l’insertion pour des familles sorties des squats et des campements du département des Alpes-Maritimes",
-                        departement: "06",
-                        site:
-                            "Sur site, dans le logement, au sein de locaux associatifs...",
-                        manager: "Préfecture de département - Alpes-Maritimes",
-                        operator: "Accompagnement promotion insertion Provence"
-                    },
-                    {
-                        name:
-                            "Accompagnement des familles intracommunautaires.",
-                        departement: "94",
-                        site: "3 Avenue Pierre Sémard",
-                        manager:
-                            "Direction Régionale et Interdépartementale de l'Hébergement et du Logement - Île-de-France",
-                        operator: "Convivances"
-                    }
-                ],
+                datas: plans,
                 emptyTableText: "Aucun élément à afficher"
             },
             dataTable2: {
