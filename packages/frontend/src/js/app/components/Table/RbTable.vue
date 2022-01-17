@@ -51,7 +51,7 @@ export default {
     }
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .zebra tr:nth-child(even) {
     @apply bg-G200;
 }

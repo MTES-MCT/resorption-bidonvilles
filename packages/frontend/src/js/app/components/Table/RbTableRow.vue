@@ -1,7 +1,7 @@
 <template>
     <tr>
         <th :class="variantClasses" v-for="(column, i) in row" :key="i">
-            <rb-table-column :column="column"></rb-table-column>
+            <rb-table-column :column="column" />
         </th>
     </tr>
 </template>
@@ -24,7 +24,7 @@ export default {
             return {
                 primary:
                     "bg-G200 font-bold border-0 border-b-2 border-black px-4 py-2",
-                secondary: "bg-G100 border-0 font-normal text-left px-4 py-2"
+                secondary: "border-0 font-normal text-left px-4 py-2"
             }[this.variant];
         }
     }
