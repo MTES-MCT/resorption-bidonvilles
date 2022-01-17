@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>Tableau 1</h1>
-        <Simple-table :dataTable="dataTable" />
+        <Rb-table :dataTable="dataTable" />
         <br />
         <h1>Tableau 2</h1>
         <Simple-table :dataTable="dataTable2" />
@@ -10,19 +10,19 @@
 </template>
 
 <script>
-import SimpleTable from "#app/components/Table/SimpleTable.vue";
+import RbTable from "#app/components/Table/RbTable.vue";
 import plans from "./plans.js";
 
 export default {
     components: {
-        SimpleTable
-        // RbTable
+        RbTable
     },
     data() {
         return {
             dataTable: {
                 caption: "Dispositifs - National",
                 columns: [
+                    "Identifiant",
                     "Nom du dispositif",
                     "Dpt",
                     "Lieu",
