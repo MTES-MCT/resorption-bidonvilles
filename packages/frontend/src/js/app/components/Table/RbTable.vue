@@ -7,7 +7,7 @@
         <table>
             <!-- header rows and columns -->
             <thead>
-                <rb-table-row :row="dataTable.columns" variant="primary" />
+                <rb-table-row :row="dataTable.columns" />
             </thead>
             <!-- data rows and columns -->
             <tbody>
@@ -26,7 +26,7 @@
                     v-for="(data, key) in dataTable.datas"
                     :key="key"
                     :row="data"
-                    :variant="secondary"
+                    variant="secondary"
                 />
             </tbody>
         </table>

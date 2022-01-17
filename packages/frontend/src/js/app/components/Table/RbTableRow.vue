@@ -16,14 +16,15 @@ export default {
         row: Object,
         variant: {
             type: String,
-            default: "primary" // 'primary' for column caption row and 'secondary' for data row
+            default: "primary" // 'primary' for column titles row and 'secondary' for data row
         }
     },
     computed: {
         variantClasses() {
             return {
-                primary: "bg-G200 border px-8 py-4",
-                secondary: "bg-G100 border text-left px-8 py-4"
+                primary:
+                    "bg-G200 font-bold border-0 border-b-2 border-black px-4 py-2",
+                secondary: "bg-G100 border-0 font-normal text-left px-4 py-2"
             }[this.variant];
         }
     }
