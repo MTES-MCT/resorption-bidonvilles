@@ -44,7 +44,7 @@
 
 <script>
 import CovidTag from "#app/components/CovidTag/CovidTag.vue";
-import covidTags from "#app/pages/covid/covidTags";
+import covidTags from "#app/pages/CovidHistory/covidTags";
 
 export default {
     components: {

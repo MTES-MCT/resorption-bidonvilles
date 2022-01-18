@@ -7,17 +7,6 @@
         <CovidHistorySearchbar @locationChange="onLocationChange">
         </CovidHistorySearchbar>
 
-        <Private-container v-if="canSubmitHighComment">
-            <CovidHistoryNewHighComment
-                :class="['flex-1', 'pb-16', 'pt-16']"
-                @addComment="submitHighCovidComment"
-                id="newComment"
-                :user="user"
-                :allowedDepartements="allowedDepartements"
-                :highCovidComment="highCovidComment"
-            />
-        </Private-container>
-
         <PrivateContainer class="py-6">
             <CovidHistoryHeaderLinks class="mb-6 mt-6">
             </CovidHistoryHeaderLinks>
@@ -71,6 +60,17 @@
                 <CovidHistoryEmpty></CovidHistoryEmpty>
             </div>
         </PrivateContainer>
+
+        <Private-container v-if="canSubmitHighComment">
+            <CovidHistoryNewHighComment
+                :class="['flex-1', 'pb-16', 'pt-16']"
+                @addComment="submitHighCovidComment"
+                id="newComment"
+                :user="user"
+                :allowedDepartements="allowedDepartements"
+                :highCovidComment="highCovidComment"
+            />
+        </Private-container>
     </PrivateLayout>
 </template>
 
@@ -274,6 +274,7 @@ export default {
         },
         load() {
             // loading data is forbidden if the component is already loading or loaded
+            this.currentPage = 1;
             if ([null, "error"].indexOf(this.state) === -1) {
                 return;
             }
