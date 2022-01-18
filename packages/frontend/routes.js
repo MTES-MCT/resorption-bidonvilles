@@ -411,7 +411,7 @@ const loggedRoutes = [
         path: "/covid-19",
         component: path.join(
             __dirname,
-            "./src/js/app/pages/covid/entrypoint.vue"
+            "./src/js/app/pages/CovidHistory/entrypoint.vue"
         ),
         route: {
             meta: {
