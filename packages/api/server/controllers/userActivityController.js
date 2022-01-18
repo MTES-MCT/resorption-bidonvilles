@@ -20,7 +20,7 @@ module.exports = models => ({
                     locationCode,
                     filter,
                     numberOfActivities,
-                    moment(lastDate).format('YYYY-MM-DD hh:mm:ss ZZ'),
+                    moment(lastDate).format('YYYY-MM-DD HH:mm:ss ZZ'),
                 ),
             );
         } catch (error) {
