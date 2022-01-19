@@ -1,13 +1,24 @@
 <template>
-    <PrivateLayout v-if="this.state === 'loading'">
-        <CovidHistoryLoader></CovidHistoryLoader>
-    </PrivateLayout>
-
-    <PrivateLayout v-else>
+    <PrivateLayout>
         <CovidHistorySearchbar @locationChange="onLocationChange">
         </CovidHistorySearchbar>
 
-        <PrivateContainer class="py-6">
+        <Private-container v-if="canSubmitHighComment">
+            <CovidHistoryNewHighComment
+                :class="['flex-1', 'pb-16', 'pt-16']"
+                @addComment="submitHighCovidComment"
+                id="newComment"
+                :user="user"
+                :allowedDepartements="allowedDepartements"
+                :highCovidComment="highCovidComment"
+            />
+        </Private-container>
+
+        <PrivateContainer v-if="this.state === 'loading'">
+            <CovidHistoryLoader></CovidHistoryLoader>
+        </PrivateContainer>
+
+        <PrivateContainer v-else class="py-6">
             <CovidHistoryHeaderLinks class="mb-6 mt-6">
             </CovidHistoryHeaderLinks>
             <CovidHistoryHeader class="mb-6">
@@ -27,7 +38,7 @@
                     <CovidHistoryHeaderTab
                         :active="filter === 'territory'"
                         @click="onClickTerritoryTab"
-                        >commentaires "Territoires"</CovidHistoryHeaderTab
+                        >Commentaires "Territoires"</CovidHistoryHeaderTab
                     >
                 </template>
             </CovidHistoryHeader>
@@ -60,17 +71,6 @@
                 <CovidHistoryEmpty></CovidHistoryEmpty>
             </div>
         </PrivateContainer>
-
-        <Private-container v-if="canSubmitHighComment">
-            <CovidHistoryNewHighComment
-                :class="['flex-1', 'pb-16', 'pt-16']"
-                @addComment="submitHighCovidComment"
-                id="newComment"
-                :user="user"
-                :allowedDepartements="allowedDepartements"
-                :highCovidComment="highCovidComment"
-            />
-        </Private-container>
     </PrivateLayout>
 </template>
 
@@ -247,15 +247,7 @@ export default {
     },
 
     created() {
-        const { user } = getConfig();
-        const { geographic_level } = getPermission("shantytown.list");
-        if (geographic_level === "nation") {
-            this.locationType = "nation";
-        } else {
-            const { location } = user.organization;
-            this.locationType = location.type;
-            this.locationCode = location[location.type].code;
-        }
+        this.initLocation();
         this.load();
     },
 
@@ -265,12 +257,22 @@ export default {
             const activities = await listRegular(
                 date.getTime() / 1000,
                 ["highCovidComment", "shantytownComment", "onlyCovid"],
-                9999999,
+                -1,
                 this.locationType,
                 this.locationCode
             );
-            console.log(activities);
             return activities;
+        },
+        initLocation() {
+            const { user } = getConfig();
+            const { geographic_level } = getPermission("shantytown.list");
+            if (geographic_level === "nation") {
+                this.locationType = "nation";
+            } else {
+                const { location } = user.organization;
+                this.locationType = location.type;
+                this.locationCode = location[location.type].code;
+            }
         },
         load() {
             // loading data is forbidden if the component is already loading or loaded
@@ -380,8 +382,12 @@ export default {
         },
 
         onLocationChange(location) {
-            this.locationType = location.locationType;
-            this.locationCode = location.code;
+            if (location === null) {
+                this.initLocation();
+            } else {
+                this.locationType = location.locationType;
+                this.locationCode = location.code;
+            }
             this.load();
         },
 

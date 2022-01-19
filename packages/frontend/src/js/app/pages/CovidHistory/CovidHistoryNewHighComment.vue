@@ -29,14 +29,17 @@
             <div class="mb-4"><Icon icon="user" /> {{ user.first_name }}</div>
             <TextArea rows="5" name="newComment" v-model="newComment" />
             <div class="flex items-center justify-between">
-                <Button variant="primaryText" @click="cancelComment"
-                    >Annuler</Button
-                >
                 <Button
-                    variant="tertiary"
+                    variant="primary"
                     @click="addComment"
                     :loading="this.highCovidComment.pending"
                     >Valider</Button
+                >
+                <Button
+                    v-if="newComment !== ''"
+                    variant="tertiaryText"
+                    @click="cancelComment"
+                    >Annuler</Button
                 >
             </div>
             <p v-if="highCovidComment.error !== null">
