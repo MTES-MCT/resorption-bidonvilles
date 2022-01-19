@@ -13,7 +13,7 @@ export default {
         RbTableColumn
     },
     props: {
-        row: Object,
+        row: [Array, Object],
         variant: {
             type: String,
             default: "primary" // 'primary' for column titles row and 'secondary' for data row
