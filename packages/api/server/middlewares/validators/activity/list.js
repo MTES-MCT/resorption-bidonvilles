@@ -1,8 +1,16 @@
 /* eslint-disable newline-per-chained-call */
+
 const { query } = require('express-validator');
 const geoModel = require('#server/models/geoModel')();
 
 module.exports = [
+    query('numberOfActivities')
+        .exists()
+        .isInt().bail().withMessage('Le nombre d\'activités est invalide'),
+
+    query('lastActivityDate')
+        .exists(),
+
     query('location')
         .optional({ nullable: true })
         .isString().bail().withMessage('Le périmètre géographique est invalide')

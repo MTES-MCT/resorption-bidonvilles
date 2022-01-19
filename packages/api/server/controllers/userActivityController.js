@@ -9,7 +9,7 @@ module.exports = models => ({
         } = req.query;
         const lastDate = new Date();
         if (lastActivityDate) {
-            lastDate.setTime(lastActivityDate * 1000);
+            lastDate.setTime(lastActivityDate);
         }
         try {
             return res.status(200).send(

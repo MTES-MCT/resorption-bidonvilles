@@ -182,7 +182,7 @@ export default {
                 return;
             }
             const tempLastActivities = await listRegular(
-                this.lastActivityDate,
+                this.lastActivityDate * 1000,
                 this.activityFilter,
                 10,
                 this.locationType,
