@@ -313,7 +313,7 @@ const loggedRoutes = [
         path: "/nouveau-dispositif",
         component: path.join(
             __dirname,
-            "./src/js/app/pages/plans.create/entrypoint.vue"
+            "./src/js/app/pages/PlanCreate/entrypoint.vue"
         ),
         route: {
             meta: {

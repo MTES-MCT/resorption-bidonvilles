@@ -23,19 +23,23 @@
             </div>
 
             <PrivateContainer class="flex pt-10">
-                <TownFormLeftColumn class="leftColumnWidth" />
+                <FormLeftColumn
+                    class="leftColumnWidth"
+                    :sections="sections"
+                    defaultSection="characteristics"
+                />
                 <div class="flex-1">
                     <TownFormPanelInfo
                         v-if="showInfo"
                         @close="closeInfo()"
                     ></TownFormPanelInfo>
 
-                    <TownFormErrorLog
+                    <FormErrorLog
                         id="erreurs"
                         class="mt-8 mb-8"
                         :mainError="mainError"
                         :errors="errors"
-                    ></TownFormErrorLog>
+                    ></FormErrorLog>
 
                     <TownFormPanelLocation
                         class="mt-10"
@@ -105,8 +109,8 @@ import TownFormPanelCharacteristics from "./TownFormPanelCharacteristics";
 import TownFormPanelPeople from "./TownFormPanelPeople";
 import TownFormPanelLivingConditions from "./TownFormPanelLivingConditions";
 import TownFormPanelJudicial from "./TownFormPanelJudicial";
-import TownFormLeftColumn from "./TownFormLeftColumn";
-import TownFormErrorLog from "./TownFormErrorLog";
+import FormLeftColumn from "#app/components/ui/Form/FormLeftColumn";
+import FormErrorLog from "#app/components/ui/Form/FormErrorLog";
 import { get as getConfig, hasPermission } from "#helpers/api/config";
 import { add, edit } from "#helpers/api/town";
 import { notify } from "#helpers/notificationHelper";
@@ -126,8 +130,8 @@ export default {
 
     components: {
         PrivateContainer,
-        TownFormLeftColumn,
-        TownFormErrorLog,
+        FormLeftColumn,
+        FormErrorLog,
         TownFormPanelInfo,
         TownFormPanelLocation,
         TownFormPanelCharacteristics,
@@ -144,6 +148,15 @@ export default {
             mainError: null,
             loading: false,
             showInfo: true,
+            sections: [
+                { id: "characteristics", label: "Caractéristiques du site" },
+                { id: "people", label: "Habitants" },
+                {
+                    id: "living_conditions",
+                    label: "Conditions de vie et environnement"
+                },
+                { id: "judicial", label: "Procédure judiciaire" }
+            ],
             town: {
                 location: {
                     address: {
