@@ -1,4 +1,4 @@
-const hasPermission = require('./hasPermission');
+const { can } = require('#server/utils/permission');
 
 const locationTypes = {
     shantytowns: 'sur site(s) : bidonville ou squat',
@@ -9,6 +9,7 @@ const locationTypes = {
 
 module.exports = (user, permissions, plan) => {
     const base = {
+        type: 'plan',
         id: plan.id,
         name: plan.name,
         started_at: new Date(plan.startedAt).getTime(),
@@ -32,14 +33,27 @@ module.exports = (user, permissions, plan) => {
             code: plan.region_code,
             name: plan.region_name,
         },
+        geo_location: {
+            type: 'departement',
+            region: {
+                code: plan.region_code,
+                name: plan.region_name,
+            },
+            departement: {
+                code: plan.departement_code,
+                name: plan.departement_name,
+            },
+            epci: null,
+            city: null,
+        },
         operator_contacts: plan.operators,
         states: plan.states || [],
         topics: plan.topics,
         createdBy: plan.createdBy,
         updatedBy: plan.updatedBy,
-        canUpdate: hasPermission(user, plan, 'update'),
-        canUpdateMarks: hasPermission(user, plan, 'updateMarks'),
-        canClose: hasPermission(user, plan, 'close'),
+        canUpdate: can(user).do('update', 'plan').on(plan),
+        canUpdateMarks: can(user).do('updateMarks', 'plan').on(plan),
+        canClose: can(user).do('close', 'plan').on(plan),
     };
 
     if (!plan.finances || permissions.finances === null || permissions.finances.allowed !== true) {

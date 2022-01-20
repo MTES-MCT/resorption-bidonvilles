@@ -5,6 +5,8 @@ const { serialized: fakeUser } = require('#test/utils/user');
 const {
     nation, paris, marseille,
 } = require('#test/utils/location');
+const { serialized: fakeShantytown } = require('#test/utils/shantytown');
+const { serialized: fakePlan } = require('#test/utils/plan');
 
 describe.only('utils/permission.can()', () => {
     let user;
@@ -19,7 +21,7 @@ describe.only('utils/permission.can()', () => {
 
     it('retourne false si le user n\'a pas la permission write pour l\'entity something', () => {
         user.permissions.something = {
-            read: { allowed: true, geographic_level: 'nation' },
+            read: { allowed: true, allow_all: true, allowed_on: null },
         };
         expect(can(user).do('write', 'something').on(paris.city())).to.be.false;
     });
@@ -32,199 +34,301 @@ describe.only('utils/permission.can()', () => {
     });
 
     /* eslint-disable indent */
-    // utilisateur national
-    unUserRattacheA(nation())
-        .avecUnePermission()
-            .deNiveau('nation')
-                .peutAcceder('au national', nation())
-                .peutAcceder('à n\'importe quelle ville', marseille.city())
-                .peutAcceder('à n\'importe quel arrondissement de ville', marseille.district())
-            .deNiveau('local')
-                .peutAcceder('au national', nation())
-                .peutAcceder('à n\'importe quelle ville', marseille.city())
-                .peutAcceder('à n\'importe quel arrondissement de ville', marseille.district())
-            .deNiveau('region') // on suppose que c'est vrai pour tous les niveaux inférieurs
-                .nePeutPasAcceder('au national', nation())
-                .nePeutPasAcceder('à une ville', paris.city());
-
-    // utilisateur régional
-    unUserRattacheA(paris.region())
-        .avecUnePermission()
-            .deNiveau('nation')
-                .peutAcceder('au national', nation())
-                .peutAcceder('à n\'importe quelle ville', marseille.city())
-                .peutAcceder('à n\'importe quel arrondissement de ville', marseille.district())
-            .deNiveau('local')
-                .peutAcceder('à sa région', paris.region())
-                .peutAcceder('à ses villes', paris.city())
-                .peutAcceder('aux arrondissements de ses villes', paris.district())
-                .nePeutPasAcceder('au national', nation())
-                .nePeutPasAcceder('aux autres régions', marseille.region())
-            .deNiveau('region')
-                .peutAcceder('à sa région', paris.region())
-                .peutAcceder('à ses villes', paris.city())
-                .peutAcceder('aux arrondissements de ses villes', paris.district())
-                .nePeutPasAcceder('au national', nation())
-                .nePeutPasAcceder('aux autres régions', marseille.region())
-            .deNiveau('departement')
-                .nePeutPasAcceder('à sa région', paris.region())
-                .nePeutPasAcceder('à ses villes', paris.city());
-
-    // utilisateur départemental
-    unUserRattacheA(paris.departement())
-        .avecUnePermission()
-            .deNiveau('nation')
-                .peutAcceder('au national', nation())
-                .peutAcceder('à n\'importe quelle ville', marseille.city())
-                .peutAcceder('à n\'importe quel arrondissement de ville', marseille.district())
-            .deNiveau('region')
-                .peutAcceder('à sa région', paris.region())
-                .peutAcceder('à ses villes', paris.city())
-                .peutAcceder('aux arrondissements de ses villes', paris.district())
-                .nePeutPasAcceder('au national', nation())
-                .nePeutPasAcceder('aux autres régions', marseille.region())
-            .deNiveau('local')
-                .peutAcceder('à son département', paris.departement())
-                .peutAcceder('à ses villes', paris.city())
-                .peutAcceder('aux arrondissements de ses villes', paris.district())
-                .nePeutPasAcceder('au régional', paris.region())
-                .nePeutPasAcceder('aux autres départements', marseille.departement())
-            .deNiveau('departement')
-                .peutAcceder('à son département', paris.departement())
-                .peutAcceder('à ses villes', paris.city())
-                .peutAcceder('aux arrondissements de ses villes', paris.district())
-                .nePeutPasAcceder('au régional', paris.region())
-                .nePeutPasAcceder('aux autres départements', marseille.departement())
-            .deNiveau('epci')
-                .nePeutPasAcceder('à son département', paris.departement())
-                .nePeutPasAcceder('à ses villes', paris.city());
-
-    // utilisateur intercommunal
-    unUserRattacheA(paris.epci())
-        .avecUnePermission('écriture')
-            .deNiveau('nation')
-                .peutAcceder('au national', nation())
-                .peutAcceder('à n\'importe quelle ville', marseille.city())
-                .peutAcceder('à n\'importe quel arrondissement de ville', marseille.district())
-            .deNiveau('region')
-                .peutAcceder('à sa région', paris.region())
-                .peutAcceder('à ses villes', paris.city())
-                .peutAcceder('aux arrondissements de ses villes', paris.district())
-                .nePeutPasAcceder('au national', nation())
-                .nePeutPasAcceder('aux autres régions', marseille.region())
-            .deNiveau('departement')
-                .peutAcceder('à son département', paris.departement())
-                .peutAcceder('à ses villes', paris.city())
-                .peutAcceder('aux arrondissements de ses villes', paris.district())
-                .nePeutPasAcceder('au régional', paris.region())
-                .nePeutPasAcceder('aux autres départements', marseille.departement())
-            .deNiveau('local')
-                .peutAcceder('à son epci', paris.epci())
-                .peutAcceder('à ses villes', paris.city())
-                .peutAcceder('aux arrondissements de ses villes', paris.district())
-                .nePeutPasAcceder('à son département', paris.departement())
-                .nePeutPasAcceder('aux autres epci', marseille.epci())
-            .deNiveau('epci')
-                .peutAcceder('à son epci', paris.epci())
-                .peutAcceder('à ses villes', paris.city())
-                .peutAcceder('aux arrondissements de ses villes', paris.district())
-                .nePeutPasAcceder('à son département', paris.departement())
-                .nePeutPasAcceder('aux autres epci', marseille.epci())
-            .deNiveau('city')
-                .nePeutPasAcceder('à son epci', paris.epci())
-                .nePeutPasAcceder('à ses villes', paris.city())
-        .avecUnePermission('lecture')
-            .deNiveau('local')
-                .peutAcceder('à son département', paris.departement())
-                .peutAcceder('à son epci', paris.epci())
-                .peutAcceder('à ses villes', paris.city())
-                .peutAcceder('aux arrondissements de ses villes', paris.district())
-                .nePeutPasAcceder('au régional', paris.region())
-                .nePeutPasAcceder('aux autres départements', marseille.departement());
-
-    // utilisateur communal
-    unUserRattacheA(paris.city())
-        .avecUnePermission('écriture')
-            .deNiveau('nation')
-                .peutAcceder('au national', nation())
-                .peutAcceder('à n\'importe quelle ville', marseille.city())
-                .peutAcceder('à n\'importe quel arrondissement de ville', marseille.district())
-            .deNiveau('region')
-                .peutAcceder('à sa région', paris.region())
-                .peutAcceder('à ses villes', paris.city())
-                .peutAcceder('aux arrondissements de ses villes', paris.district())
-                .nePeutPasAcceder('au national', nation())
-                .nePeutPasAcceder('aux autres régions', marseille.region())
-            .deNiveau('departement')
-                .peutAcceder('à son département', paris.departement())
-                .peutAcceder('à ses villes', paris.city())
-                .peutAcceder('aux arrondissements de ses villes', paris.district())
-                .nePeutPasAcceder('au régional', paris.region())
-                .nePeutPasAcceder('aux autres départements', marseille.departement())
-            .deNiveau('epci')
-                .peutAcceder('à son epci', paris.epci())
-                .peutAcceder('à ses villes', paris.city())
-                .peutAcceder('aux arrondissements de ses villes', paris.district())
-                .nePeutPasAcceder('à son département', paris.departement())
-                .nePeutPasAcceder('aux autres epci', marseille.epci())
-            .deNiveau('local')
-                .peutAcceder('à sa ville', paris.city())
-                .peutAcceder('aux arrondissements de sa ville', paris.district())
-                .nePeutPasAcceder('à son epci', paris.epci())
-                .nePeutPasAcceder('aux autres villes', marseille.city())
-            .deNiveau('city')
-                .peutAcceder('à sa ville', paris.city())
-                .peutAcceder('aux arrondissements de sa ville', paris.district())
-                .nePeutPasAcceder('à son epci', paris.epci())
-                .nePeutPasAcceder('aux autres villes', marseille.city())
-        .avecUnePermission('lecture')
-            .deNiveau('local')
-                .peutAcceder('à son département', paris.departement())
-                .peutAcceder('à son epci', paris.epci())
-                .peutAcceder('à ses villes', paris.city())
-                .peutAcceder('aux arrondissements de ses villes', paris.district())
-                .nePeutPasAcceder('au régional', paris.region())
-                .nePeutPasAcceder('aux autres départements', marseille.departement());
-    /* eslint-enable indent */
-
-    function unUserRattacheA(userLocation) {
-        function avecUnePermission(permissionType) {
-            function deNiveau(permissionLevel = 'lecture') {
-                function createTestCase(expectedResult, caseLabel, requestedLocation) {
-                    it(`retourne ${expectedResult} pour un utilisateur de niveau '${userLocation.type}' qui a une permission ${permissionType} au niveau ${permissionLevel} et souhaite accéder ${caseLabel}`, () => {
-                        user.permissions.something = {
-                            do: {
-                                is_writing: permissionType === 'écriture',
-                                allowed: true,
-                                geographic_level: permissionLevel,
-                            },
-                        };
-                        user.organization.location = userLocation;
-                        expect(can(user).do('do', 'something').on(requestedLocation)).to.be[`${expectedResult}`];
-                    });
-
-                    return {
-                        avecUnePermission,
-                        deNiveau,
-                        peutAcceder: createTestCase.bind(this, true),
-                        nePeutPasAcceder: createTestCase.bind(this, false),
-                    };
-                }
-
-                return {
-                    avecUnePermission,
-                    deNiveau,
-                    peutAcceder: createTestCase.bind(this, true),
-                    nePeutPasAcceder: createTestCase.bind(this, false),
-                };
-            }
-
-            return {
-                avecUnePermission,
-                deNiveau,
+    describe('si la permission something.write a allow_all = true', () => {
+        it('retourne true, quelle que soit la localisation demandée', () => {
+            user.permissions.something = {
+                write: { allowed: true, allow_all: true, allowed_on: null },
             };
-        }
 
-        return { avecUnePermission };
-    }
+            expect(can(user).do('write', 'something').on(paris.district())).to.be.true;
+            expect(can(user).do('write', 'something').on(paris.city())).to.be.true;
+            expect(can(user).do('write', 'something').on(paris.epci())).to.be.true;
+            expect(can(user).do('write', 'something').on(paris.departement())).to.be.true;
+            expect(can(user).do('write', 'something').on(paris.region())).to.be.true;
+            expect(can(user).do('write', 'something').on(nation())).to.be.true;
+        });
+    });
+
+    describe('si la permission something.write est limitée à une région', () => {
+        beforeEach(() => {
+            user.permissions.something = {
+                write: {
+                    allowed: true,
+                    allow_all: false,
+                    allowed_on: {
+                        regions: [paris.region().region.code],
+                        departements: [],
+                        epci: [],
+                        cities: [],
+                        shantytowns: [],
+                        plans: [],
+                    },
+                },
+            };
+        });
+
+        it('retourne true pour la région en question', () => {
+            expect(can(user).do('write', 'something').on(paris.region())).to.be.true;
+        });
+
+        it('retourne true pour n\'importe quel territoire de cette région', () => {
+            expect(can(user).do('write', 'something').on(paris.district())).to.be.true;
+        });
+
+        it('retourne true pour un site situé dans cette région', () => {
+            expect(can(user).do('write', 'something').on(fakeShantytown(paris.city()))).to.be.true;
+        });
+
+        it('retourne true pour un dispositif situé dans cette région', () => {
+            expect(can(user).do('write', 'something').on(fakePlan(paris.departement()))).to.be.true;
+        });
+
+        it('retourne false pour le national', () => {
+            expect(can(user).do('write', 'something').on(nation())).to.be.false;
+        });
+
+        it('retourne false pour une autre région', () => {
+            expect(can(user).do('write', 'something').on(marseille.region())).to.be.false;
+        });
+
+        it('retourne false pour n\'importe quel territoire en-dehors de cette région', () => {
+            expect(can(user).do('write', 'something').on(marseille.departement())).to.be.false;
+        });
+
+        it('retourne false pour un site situé dans une autre région', () => {
+            expect(can(user).do('write', 'something').on(fakeShantytown(marseille.city()))).to.be.false;
+        });
+
+        it('retourne false pour un dispositif situé dans une autre région', () => {
+            expect(can(user).do('write', 'something').on(fakePlan(marseille.departement()))).to.be.false;
+        });
+    });
+
+    describe('si la permission something.write est limitée à un département', () => {
+        beforeEach(() => {
+            user.permissions.something = {
+                write: {
+                    allowed: true,
+                    allow_all: false,
+                    allowed_on: {
+                        regions: [],
+                        departements: [paris.departement().departement.code],
+                        epci: [],
+                        cities: [],
+                        shantytowns: [],
+                        plans: [],
+                    },
+                },
+            };
+        });
+
+        it('retourne true pour le département en question', () => {
+            expect(can(user).do('write', 'something').on(paris.departement())).to.be.true;
+        });
+
+        it('retourne true pour n\'importe quel territoire de ce département', () => {
+            expect(can(user).do('write', 'something').on(paris.district())).to.be.true;
+        });
+
+        it('retourne true pour un site situé dans ce département', () => {
+            expect(can(user).do('write', 'something').on(fakeShantytown(paris.city()))).to.be.true;
+        });
+
+        it('retourne true pour un dispositif situé dans ce département', () => {
+            expect(can(user).do('write', 'something').on(fakePlan(paris.departement()))).to.be.true;
+        });
+
+        it('retourne false pour le national', () => {
+            expect(can(user).do('write', 'something').on(nation())).to.be.false;
+        });
+
+        it('retourne false pour le régional', () => {
+            expect(can(user).do('write', 'something').on(paris.region())).to.be.false;
+        });
+
+        it('retourne false pour un autre département', () => {
+            expect(can(user).do('write', 'something').on(marseille.departement())).to.be.false;
+        });
+
+        it('retourne false pour n\'importe quel territoire en-dehors de ce département', () => {
+            expect(can(user).do('write', 'something').on(marseille.epci())).to.be.false;
+        });
+
+        it('retourne false pour un site situé dans un autre département', () => {
+            expect(can(user).do('write', 'something').on(fakeShantytown(marseille.city()))).to.be.false;
+        });
+
+        it('retourne false pour un dispositif situé dans un autre département', () => {
+            expect(can(user).do('write', 'something').on(fakePlan(marseille.departement()))).to.be.false;
+        });
+    });
+
+    describe('si la permission something.write est limitée à un epci', () => {
+        beforeEach(() => {
+            user.permissions.something = {
+                write: {
+                    allowed: true,
+                    allow_all: false,
+                    allowed_on: {
+                        regions: [],
+                        departements: [],
+                        epci: [paris.epci().epci.code],
+                        cities: [],
+                        shantytowns: [],
+                        plans: [],
+                    },
+                },
+            };
+        });
+
+        it('retourne true pour l\'epci en question', () => {
+            expect(can(user).do('write', 'something').on(paris.epci())).to.be.true;
+        });
+
+        it('retourne true pour n\'importe quel territoire de cet epci', () => {
+            expect(can(user).do('write', 'something').on(paris.district())).to.be.true;
+        });
+
+        it('retourne true pour un site situé dans cet epci', () => {
+            expect(can(user).do('write', 'something').on(fakeShantytown(paris.city()))).to.be.true;
+        });
+
+        it('retourne false pour le national', () => {
+            expect(can(user).do('write', 'something').on(nation())).to.be.false;
+        });
+
+        it('retourne false pour le régional', () => {
+            expect(can(user).do('write', 'something').on(paris.region())).to.be.false;
+        });
+
+        it('retourne false pour le départemental', () => {
+            expect(can(user).do('write', 'something').on(paris.departement())).to.be.false;
+        });
+
+        it('retourne false pour un autre epci', () => {
+            expect(can(user).do('write', 'something').on(marseille.epci())).to.be.false;
+        });
+
+        it('retourne false pour n\'importe quel territoire en-dehors de ce département', () => {
+            expect(can(user).do('write', 'something').on(marseille.city())).to.be.false;
+        });
+
+        it('retourne false pour un site situé dans un autre epci', () => {
+            expect(can(user).do('write', 'something').on(fakeShantytown(marseille.city()))).to.be.false;
+        });
+
+        it('retourne false pour n\'importe quel dispositif', () => {
+            expect(can(user).do('write', 'something').on(fakePlan(paris.departement()))).to.be.false;
+        });
+    });
+
+    describe('si la permission something.write est limitée à une ville', () => {
+        beforeEach(() => {
+            user.permissions.something = {
+                write: {
+                    allowed: true,
+                    allow_all: false,
+                    allowed_on: {
+                        regions: [],
+                        departements: [],
+                        epci: [],
+                        cities: [paris.city().city.code],
+                        shantytowns: [],
+                        plans: [],
+                    },
+                },
+            };
+        });
+
+        it('retourne true pour la ville en question', () => {
+            expect(can(user).do('write', 'something').on(paris.city())).to.be.true;
+        });
+
+        it('retourne true pour n\'importe quel arrondissement de cette ville', () => {
+            expect(can(user).do('write', 'something').on(paris.district())).to.be.true;
+        });
+
+        it('retourne true pour un site situé dans cette ville', () => {
+            expect(can(user).do('write', 'something').on(fakeShantytown(paris.city()))).to.be.true;
+        });
+
+        it('retourne false pour le national', () => {
+            expect(can(user).do('write', 'something').on(nation())).to.be.false;
+        });
+
+        it('retourne false pour le régional', () => {
+            expect(can(user).do('write', 'something').on(paris.region())).to.be.false;
+        });
+
+        it('retourne false pour le départemental', () => {
+            expect(can(user).do('write', 'something').on(paris.departement())).to.be.false;
+        });
+
+        it('retourne false pour l\'intercommunal', () => {
+            expect(can(user).do('write', 'something').on(paris.epci())).to.be.false;
+        });
+
+        it('retourne false pour une autre ville', () => {
+            expect(can(user).do('write', 'something').on(marseille.city())).to.be.false;
+        });
+
+        it('retourne false pour un site situé dans une autre ville', () => {
+            expect(can(user).do('write', 'something').on(fakeShantytown(marseille.city()))).to.be.false;
+        });
+
+        it('retourne false pour n\'importe quel dispositif', () => {
+            expect(can(user).do('write', 'something').on(fakePlan(paris.departement()))).to.be.false;
+        });
+    });
+
+    describe('si la permission something.write est limitée à un site', () => {
+        beforeEach(() => {
+            user.permissions.something = {
+                write: {
+                    allowed: true,
+                    allow_all: false,
+                    allowed_on: {
+                        regions: [],
+                        departements: [],
+                        epci: [],
+                        cities: [],
+                        shantytowns: [fakeShantytown(paris.city()).id],
+                        plans: [],
+                    },
+                },
+            };
+        });
+
+        it('retourne true pour le site en question', () => {
+            expect(can(user).do('write', 'something').on(fakeShantytown(paris.city()))).to.be.true;
+        });
+
+        it('retourne false pour le national', () => {
+            expect(can(user).do('write', 'something').on(nation())).to.be.false;
+        });
+
+        it('retourne false pour le régional', () => {
+            expect(can(user).do('write', 'something').on(paris.region())).to.be.false;
+        });
+
+        it('retourne false pour le départemental', () => {
+            expect(can(user).do('write', 'something').on(paris.departement())).to.be.false;
+        });
+
+        it('retourne false pour l\'intercommunal', () => {
+            expect(can(user).do('write', 'something').on(paris.epci())).to.be.false;
+        });
+
+        it('retourne false pour le communal', () => {
+            expect(can(user).do('write', 'something').on(paris.city())).to.be.false;
+        });
+
+        it('retourne false pour n\'importe quel autre site', () => {
+            expect(can(user).do('write', 'something').on(fakeShantytown(marseille.city(), { id: 2 }))).to.be.false;
+        });
+
+        it('retourne false pour n\'importe quel dispositif', () => {
+            expect(can(user).do('write', 'something').on(fakePlan(paris.departement()))).to.be.false;
+        });
+    });
 });

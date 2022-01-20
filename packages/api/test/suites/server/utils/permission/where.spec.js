@@ -1,7 +1,9 @@
 const { expect } = require('chai');
 const { where } = require('#server/utils/permission/index');
 const { serialized: fakeUser } = require('#test/utils/user');
-const { nation, paris } = require('#test/utils/location');
+const { serialized: fakeShantytown } = require('#test/utils/shantytown');
+const { serialized: fakePlan } = require('#test/utils/plan');
+const { paris, marseille } = require('#test/utils/location');
 
 describe.only('utils/permission.where()', () => {
     let user;
@@ -28,328 +30,76 @@ describe.only('utils/permission.where()', () => {
         expect(where().can(user).do('write', 'something')).to.be.null;
     });
 
-    describe('cas valides', () => {
-        const cases = {
-            'utilisateur communal': {
-                'permission nationale': {
-                    condition: 'aucune condition',
-                    user_level: paris.city(),
-                    permission_level: 'nation',
-                    expected: {},
-                },
-                'permission régionale': {
-                    condition: 'une condition sur sa région',
-                    user_level: paris.city(),
-                    permission_level: 'region',
-                    expected: {
-                        region: {
-                            query: 'regions.code',
-                            value: [paris.region().region.code],
-                        },
-                    },
-                },
-                'permission départementale': {
-                    condition: 'une condition sur son département',
-                    user_level: paris.city(),
-                    permission_level: 'departement',
-                    expected: {
-                        departement: {
-                            query: 'departements.code',
-                            value: [paris.departement().departement.code],
-                        },
-                    },
-                },
-                'permission intercommunale': {
-                    condition: 'une condition sur son epci',
-                    user_level: paris.city(),
-                    permission_level: 'epci',
-                    expected: {
-                        epci: {
-                            query: 'epci.code',
-                            value: [paris.epci().epci.code],
-                        },
-                    },
-                },
-                'permission communale': {
-                    condition: 'une condition sur sa ville',
-                    user_level: paris.city(),
-                    permission_level: 'city',
-                    expected: {
-                        city: {
-                            query: 'cities.code',
-                            value: [paris.city().city.code],
-                        },
-                        city_arrondissement: {
-                            query: 'cities.fk_main',
-                            value: [paris.city().city.code],
-                        },
-                    },
-                },
-                'permission d\'écriture locale': {
-                    condition: 'une condition sur sa ville',
-                    user_level: paris.city(),
-                    permission_level: 'local',
-                    expected: {
-                        city: {
-                            query: 'cities.code',
-                            value: [paris.city().city.code],
-                        },
-                        city_arrondissement: {
-                            query: 'cities.fk_main',
-                            value: [paris.city().city.code],
-                        },
-                    },
-                },
-                'permission de lecture locale': {
-                    condition: 'une condition sur son département',
-                    user_level: paris.city(),
-                    permission_level: 'local',
-                    is_writing: false,
-                    expected: {
-                        departement: {
-                            query: 'departements.code',
-                            value: [paris.departement().departement.code],
-                        },
-                    },
-                },
-            },
-            'utilisateur intercommunal': {
-                'permission nationale': {
-                    condition: 'aucune condition',
-                    user_level: paris.epci(),
-                    permission_level: 'nation',
-                    expected: {},
-                },
-                'permission régionale': {
-                    condition: 'une condition sur sa région',
-                    user_level: paris.epci(),
-                    permission_level: 'region',
-                    expected: {
-                        region: {
-                            query: 'regions.code',
-                            value: [paris.region().region.code],
-                        },
-                    },
-                },
-                'permission départementale': {
-                    condition: 'une condition sur son département',
-                    user_level: paris.epci(),
-                    permission_level: 'departement',
-                    expected: {
-                        departement: {
-                            query: 'departements.code',
-                            value: [paris.departement().departement.code],
-                        },
-                    },
-                },
-                'permission intercommunale': {
-                    condition: 'une condition sur son epci',
-                    user_level: paris.epci(),
-                    permission_level: 'epci',
-                    expected: {
-                        epci: {
-                            query: 'epci.code',
-                            value: [paris.epci().epci.code],
-                        },
-                    },
-                },
-                'permission d\'écriture locale': {
-                    condition: 'une condition sur son epci',
-                    user_level: paris.epci(),
-                    permission_level: 'local',
-                    expected: {
-                        epci: {
-                            query: 'epci.code',
-                            value: [paris.epci().epci.code],
-                        },
-                    },
-                },
-                'permission de lecture locale': {
-                    condition: 'une condition sur son département',
-                    user_level: paris.epci(),
-                    permission_level: 'local',
-                    is_writing: false,
-                    expected: {
-                        departement: {
-                            query: 'departements.code',
-                            value: [paris.departement().departement.code],
-                        },
-                    },
-                },
-            },
-            'utilisateur départemental': {
-                'permission nationale': {
-                    condition: 'aucune condition',
-                    user_level: paris.departement(),
-                    permission_level: 'nation',
-                    expected: {},
-                },
-                'permission régionale': {
-                    condition: 'une condition sur sa région',
-                    user_level: paris.departement(),
-                    permission_level: 'region',
-                    expected: {
-                        region: {
-                            query: 'regions.code',
-                            value: [paris.region().region.code],
-                        },
-                    },
-                },
-                'permission départementale': {
-                    condition: 'une condition sur son département',
-                    user_level: paris.departement(),
-                    permission_level: 'departement',
-                    expected: {
-                        departement: {
-                            query: 'departements.code',
-                            value: [paris.departement().departement.code],
-                        },
-                    },
-                },
-                'permission locale': {
-                    condition: 'une condition sur son département',
-                    user_level: paris.departement(),
-                    permission_level: 'local',
-                    expected: {
-                        departement: {
-                            query: 'departements.code',
-                            value: [paris.departement().departement.code],
-                        },
-                    },
-                },
-            },
-            'utilisateur régional': {
-                'permission nationale': {
-                    condition: 'aucune condition',
-                    user_level: paris.region(),
-                    permission_level: 'nation',
-                    expected: {},
-                },
-                'permission régionale': {
-                    condition: 'une condition sur sa région',
-                    user_level: paris.region(),
-                    permission_level: 'region',
-                    expected: {
-                        region: {
-                            query: 'regions.code',
-                            value: [paris.region().region.code],
-                        },
-                    },
-                },
-                'permission locale': {
-                    condition: 'une condition sur sa région',
-                    user_level: paris.region(),
-                    permission_level: 'local',
-                    expected: {
-                        region: {
-                            query: 'regions.code',
-                            value: [paris.region().region.code],
-                        },
-                    },
-                },
-            },
-            'utilisateur national': {
-                'permission nationale': {
-                    condition: 'aucune condition',
-                    user_level: nation(),
-                    permission_level: 'nation',
-                    expected: {},
-                },
-                'permission locale': {
-                    condition: 'aucune condition',
-                    user_level: nation(),
-                    permission_level: 'local',
-                    expected: {},
-                },
+    it('retourne un objet vide si la permission est accordée sur tous les territoires', () => {
+        user.permissions.something = {
+            write: {
+                allowed: true,
+                allow_all: true,
+                allowed_on: null,
             },
         };
-
-        Object.keys(cases).forEach((userLevel) => {
-            Object.keys(cases[userLevel]).forEach((permissionLevel) => {
-                const {
-                    condition, permission_level, user_level, is_writing, expected,
-                } = cases[userLevel][permissionLevel];
-                it(`pour un ${userLevel} avec une ${permissionLevel}, retourne ${condition}`, () => {
-                    user.permissions.something = {
-                        write: {
-                            allowed: true,
-                            geographic_level: permission_level,
-                            is_writing: is_writing !== false,
-                        },
-                    };
-                    user.organization.location = user_level;
-                    expect(where().can(user).do('write', 'something')).to.be.eql(expected);
-                });
-            });
-        });
+        user.organization.location = paris.city();
+        expect(where().can(user).do('write', 'something')).to.be.eql({});
     });
 
-    describe('cas invalides', () => {
-        const cases = {
-            'utilisateur intercommunal': {
-                'permission communale': {
-                    user_level: paris.epci(),
-                    permission_level: 'city',
-                },
+    it('retourne un objet vide si la permission est accordée sur tous les territoires', () => {
+        user.permissions.something = {
+            write: {
+                allowed: true,
+                allow_all: true,
+                allowed_on: null,
             },
-            'utilisateur départemental': {
-                'permission intercommunale': {
-                    user_level: paris.departement(),
-                    permission_level: 'epci',
-                },
-                'permission communale': {
-                    user_level: paris.departement(),
-                    permission_level: 'city',
-                },
-            },
-            'utilisateur régional': {
-                'permission départementale': {
-                    user_level: paris.region(),
-                    permission_level: 'departement',
-                },
-                'permission intercommunale': {
-                    user_level: paris.region(),
-                    permission_level: 'epci',
-                },
-                'permission communale': {
-                    user_level: paris.region(),
-                    permission_level: 'city',
-                },
-            },
-            'utilisateur national': {
-                'permission régionale': {
-                    user_level: nation(),
-                    permission_level: 'region',
-                },
-                'permission départementale': {
-                    user_level: nation(),
-                    permission_level: 'departement',
-                },
-                'permission intercommunale': {
-                    user_level: nation(),
-                    permission_level: 'epci',
-                },
-                'permission communale': {
-                    user_level: nation(),
-                    permission_level: 'city',
+        };
+        expect(where().can(user).do('write', 'something')).to.be.eql({});
+    });
+
+    it('retourne un objet avec les conditions correspondent aux territoires listés dans allowed_on', () => {
+        const location = paris.district();
+        const otherLocation = marseille.district();
+
+        user.permissions.something = {
+            write: {
+                allowed: true,
+                allow_all: false,
+                allowed_on: {
+                    regions: [location.region.code, otherLocation.region.code],
+                    departements: [location.departement.code, otherLocation.departement.code],
+                    epci: [location.epci.code, otherLocation.epci.code],
+                    cities: [location.city.code, otherLocation.city.code],
+                    shantytowns: [fakeShantytown(paris.city()).id],
+                    plans: [fakePlan(paris.departement()).id],
                 },
             },
         };
-
-        Object.keys(cases).forEach((userLevel) => {
-            Object.keys(cases[userLevel]).forEach((permissionLevel) => {
-                const { permission_level, user_level } = cases[userLevel][permissionLevel];
-                it(`pour un ${userLevel} avec une ${permissionLevel}, retourne null`, () => {
-                    user.permissions.something = {
-                        write: {
-                            allowed: true,
-                            geographic_level: permission_level,
-                        },
-                    };
-                    user.organization.location = user_level;
-                    expect(where().can(user).do('write', 'something')).to.be.null;
-                });
-            });
+        expect(where().can(user).do('write', 'something')).to.be.eql({
+            regions: {
+                query: 'regions.code',
+                value: [location.region.code, otherLocation.region.code],
+            },
+            departements: {
+                query: 'departements.code',
+                value: [location.departement.code, otherLocation.departement.code],
+            },
+            epci: {
+                query: 'epci.code',
+                value: [location.epci.code, otherLocation.epci.code],
+            },
+            cities: {
+                query: 'cities.code',
+                value: [location.city.code, otherLocation.city.code],
+            },
+            cities_arrondissement: {
+                query: 'cities.fk_main',
+                value: [location.city.code, otherLocation.city.code],
+            },
+            shantytowns: {
+                query: 'shantytowns.shantytown_id',
+                value: [1],
+            },
+            plans: {
+                query: 'plans.plan_id',
+                value: [1],
+            },
         });
     });
 });

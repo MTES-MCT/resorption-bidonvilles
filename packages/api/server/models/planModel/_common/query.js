@@ -2,50 +2,29 @@ const { sequelize } = require('#db/models');
 const userModel = require('#server/models/userModel')();
 const shantytownModel = require('#server/models/shantytownModel')();
 const serializePlan = require('./serializePlan');
+const { where } = require('#server/utils/permission/where');
+const stringifyWhereClause = require('#server/models/_common/stringifyWhereClause');
 
 module.exports = async (user, feature, filters = {}) => {
-    const where = [];
     const replacements = Object.assign({}, filters);
 
-    // check if a location filter should be applied (ie. the feature is not allowed on a national level)
-    const featureLevel = user.permissions.plan[feature].geographic_level;
-    const userLevel = user.organization.location.type;
-
-    // list-read
-    if (featureLevel === 'own') {
-        // not supported at the moment
-    } else if (featureLevel !== 'nation' && userLevel !== 'nation') {
-        const levelValue = {
-            city: 1,
-            epci: 2,
-            departement: 3,
-            region: 4,
-        };
-
-        let level;
-        if (featureLevel === 'local' || levelValue[featureLevel] <= levelValue[userLevel]) {
-            level = userLevel;
-        } else {
-            level = featureLevel;
-        }
-
-        if (level === 'region') {
-            where.push('regions.code = :locationCode');
-            replacements.locationCode = user.organization.location.region.code;
-        } else {
-            where.push('departements.code = :locationCode');
-            replacements.locationCode = user.organization.location.departement.code;
-        }
+    const locationClauseGroup = where().can(user).do(feature, 'plan');
+    if (locationClauseGroup === null) {
+        return [];
     }
 
-    // integrate custom filters
-    const filterParts = [];
-    Object.keys(filters).forEach((column) => {
-        filterParts.push(`plans.${column} IN (:${column})`);
-    });
+    const whereClauseGroups = [];
+    if (Object.keys(locationClauseGroup).length > 0) {
+        whereClauseGroups.push(locationClauseGroup);
+    }
 
-    if (filterParts.length > 0) {
-        where.push(filterParts.join(' OR '));
+    if (Object.keys(filters).length > 0) {
+        whereClauseGroups.push(filters);
+    }
+
+    let whereClause = null;
+    if (whereClauseGroups.length > 0) {
+        whereClause = stringifyWhereClause('plans', whereClauseGroups, replacements);
     }
 
     const rows = await sequelize.query(
@@ -79,7 +58,7 @@ module.exports = async (user, feature, filters = {}) => {
         LEFT JOIN departements ON plan_departements.fk_departement = departements.code
         LEFT JOIN regions ON departements.fk_region = regions.code
         LEFT JOIN locations ON plans.fk_location = locations.location_id
-        ${where.length > 0 ? `WHERE (${where.join(') AND (')})` : ''}
+        ${whereClause !== null ? `WHERE ${whereClause}` : ''}
         ORDER BY plans.plan_id ASC`,
         {
             type: sequelize.QueryTypes.SELECT,

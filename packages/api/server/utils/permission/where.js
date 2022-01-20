@@ -1,5 +1,4 @@
 const getPermission = require('./getPermission');
-const { fromGeoLevelToTableName } = require('#server/utils/geo');
 
 module.exports = () => ({
     can(user) {
@@ -10,37 +9,47 @@ module.exports = () => ({
                     return null;
                 }
 
-                let level = permission.geographic_level;
-                if (level === 'local') {
-                    if (permission.is_writing === false && ['city', 'epci'].includes(user.organization.location.type)) {
-                        level = 'departement';
-                    } else {
-                        level = user.organization.location.type;
-                    }
-                }
-
-                if (level === 'nation') {
+                if (permission.allow_all === true) {
                     return {};
                 }
 
-                if (!user.organization.location[level]) {
+                const clauseGroup = Object.keys(permission.allowed_on).reduce((acc, tableName) => {
+                    if (permission.allowed_on[tableName] && permission.allowed_on[tableName].length > 0) {
+                        let primaryKey = 'code';
+                        if (tableName === 'shantytowns') {
+                            primaryKey = 'shantytown_id';
+                        } else if (tableName === 'plans') {
+                            primaryKey = 'plan_id';
+                        }
+
+                        const where = {
+                            [tableName]: {
+                                query: `${tableName}.${primaryKey}`,
+                                value: permission.allowed_on[tableName],
+                            },
+                        };
+
+                        if (tableName === 'cities') {
+                            where[`${tableName}_arrondissement`] = {
+                                query: `${tableName}.fk_main`,
+                                value: permission.allowed_on[tableName],
+                            };
+                        }
+
+                        return {
+                            ...acc,
+                            ...where,
+                        };
+                    }
+
+                    return acc;
+                }, {});
+
+                if (Object.keys(clauseGroup).length === 0) {
                     return null;
                 }
 
-                const where = {
-                    [level]: {
-                        query: `${fromGeoLevelToTableName(level)}.code`,
-                        value: [user.organization.location[level].code],
-                    },
-                };
-                if (level === 'city') {
-                    where[`${level}_arrondissement`] = {
-                        query: `${fromGeoLevelToTableName(level)}.fk_main`,
-                        value: [user.organization.location[level].code],
-                    };
-                }
-
-                return where;
+                return clauseGroup;
             },
         };
     },
