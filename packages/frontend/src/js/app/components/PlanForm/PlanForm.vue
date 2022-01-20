@@ -127,7 +127,16 @@ export default {
                 { id: "financial", label: "Financement" }
             ],
             plan: {
-                characteristics: {},
+                characteristics: {
+                    name: this.data.name || undefined,
+                    departement: this.data.departement || undefined,
+                    started_at: this.data.started_at || undefined,
+                    expected_to_end_at:
+                        this.data.expected_to_end_at || undefined,
+                    in_and_out: this.data.in_and_out || undefined,
+                    topics: this.data.topics || [],
+                    goals: this.data.goals || undefined
+                },
                 location: {},
                 people: {},
                 financial: {}
