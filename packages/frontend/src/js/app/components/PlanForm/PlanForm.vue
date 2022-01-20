@@ -32,6 +32,30 @@
                         :errors="errors"
                     ></FormErrorLog>
 
+                    <PlanFormPanelCharacteristics
+                        class="mt-10 planPanelShadow"
+                        id="characteristics"
+                        v-model="plan.characteristics"
+                    ></PlanFormPanelCharacteristics>
+
+                    <PlanFormPanelLocation
+                        class="mt-10 planPanelShadow"
+                        id="location"
+                        v-model="plan.location"
+                    ></PlanFormPanelLocation>
+
+                    <PlanFormPanelPeople
+                        class="mt-10 planPanelShadow"
+                        id="people"
+                        v-model="plan.people"
+                    ></PlanFormPanelPeople>
+
+                    <PlanFormPanelFinancial
+                        class="mt-10 planPanelShadow"
+                        id="financial"
+                        v-model="plan.financial"
+                    ></PlanFormPanelFinancial>
+
                     <div class="mt-8 text-right italic text-red font-bold">
                         * : Réponses obligatoires
                     </div>
@@ -51,7 +75,7 @@
 </template>
 
 <style scoped>
-.townPanelShadow {
+.planPanelShadow {
     box-shadow: 0 0px 20px 0 rgba(0, 0, 0, 0.1), 0 0px 0px 0 rgba(0, 0, 0, 0.06);
     border-radius: 5px;
 }
@@ -60,6 +84,10 @@
 <script>
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
 import PlanFormPanelInfo from "./PlanFormPanelInfo";
+import PlanFormPanelCharacteristics from "./PlanFormPanelCharacteristics";
+import PlanFormPanelLocation from "./PlanFormPanelLocation";
+import PlanFormPanelPeople from "./PlanFormPanelPeople";
+import PlanFormPanelFinancial from "./PlanFormPanelFinancial";
 import FormLeftColumn from "#app/components/ui/Form/FormLeftColumn";
 import FormErrorLog from "#app/components/ui/Form/FormErrorLog";
 import { notify } from "#helpers/notificationHelper";
@@ -81,7 +109,11 @@ export default {
         PrivateContainer,
         FormLeftColumn,
         FormErrorLog,
-        PlanFormPanelInfo
+        PlanFormPanelInfo,
+        PlanFormPanelCharacteristics,
+        PlanFormPanelLocation,
+        PlanFormPanelPeople,
+        PlanFormPanelFinancial
     },
 
     data() {
@@ -94,7 +126,12 @@ export default {
                 { id: "people", label: "Contacts" },
                 { id: "financial", label: "Financement" }
             ],
-            plan: {}
+            plan: {
+                characteristics: {},
+                location: {},
+                people: {},
+                financial: {}
+            }
         };
     },
 
