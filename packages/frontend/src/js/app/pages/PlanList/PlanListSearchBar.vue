@@ -1,7 +1,7 @@
 <template>
     <div class="bg-G100 py-6">
         <h1 class="text-display-md text-center">
-            Rechercher un site, une commune, un département... ?
+            Rechercher une commune, un département... ?
         </h1>
 
         <GeoSearchbar
