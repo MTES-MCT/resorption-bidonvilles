@@ -289,7 +289,7 @@ export default {
             }
 
             if (
-                this.permission.geographic_level === "nation" ||
+                this.permission.allow_all ||
                 this.user.organization.location.type === "nation"
             ) {
                 return true;
