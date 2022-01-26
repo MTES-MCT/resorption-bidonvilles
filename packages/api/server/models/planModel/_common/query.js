@@ -2,7 +2,7 @@ const { sequelize } = require('#db/models');
 const userModel = require('#server/models/userModel')();
 const shantytownModel = require('#server/models/shantytownModel')();
 const serializePlan = require('./serializePlan');
-const { where } = require('#server/utils/permission/where');
+const { where } = require('#server/utils/permission');
 const stringifyWhereClause = require('#server/models/_common/stringifyWhereClause');
 
 module.exports = async (user, feature, filters = {}) => {

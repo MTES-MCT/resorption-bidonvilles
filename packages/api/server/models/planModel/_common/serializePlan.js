@@ -51,10 +51,10 @@ module.exports = (user, permissions, plan) => {
         topics: plan.topics,
         createdBy: plan.createdBy,
         updatedBy: plan.updatedBy,
-        canUpdate: can(user).do('update', 'plan').on(plan),
-        canUpdateMarks: can(user).do('updateMarks', 'plan').on(plan),
-        canClose: can(user).do('close', 'plan').on(plan),
     };
+    base.canUpdate = can(user).do('update', 'plan').on(base);
+    base.canUpdateMarks = can(user).do('updateMarks', 'plan').on(base);
+    base.canClose = can(user).do('close', 'plan').on(base);
 
     if (!plan.finances || permissions.finances === null || permissions.finances.allowed !== true) {
         base.finances = [];

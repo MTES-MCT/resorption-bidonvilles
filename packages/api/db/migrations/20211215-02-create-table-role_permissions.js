@@ -175,6 +175,7 @@ module.exports = {
                     fk_entity,
                     allowed,
                     CASE
+                        WHEN allowed IS FALSE THEN NULL
                         WHEN fk_geographic_level = 'nation' THEN TRUE
                         ELSE FALSE
                     END AS allow_all
