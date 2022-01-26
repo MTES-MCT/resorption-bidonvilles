@@ -122,11 +122,9 @@ export default {
                 return false;
             }
 
-            let level =
-                permission.geographic_level !== "local"
-                    ? permission.geographic_level
-                    : this.user.organization.location.type;
-
+            let level = permission.allow_all
+                ? "nation"
+                : this.user.organization.location.type;
             const userLocation = this.user.organization.location[level];
             if (level === "nation") {
                 return true;
