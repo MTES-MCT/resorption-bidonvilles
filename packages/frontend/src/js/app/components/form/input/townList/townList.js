@@ -1,6 +1,6 @@
 import { get as getConfig, getPermission } from "#helpers/api/config";
 import { all as fetchAll } from "#helpers/api/town";
-import Table from "#app/components/table/table.vue";
+import Table from "#app/components/Table/table.vue";
 import CollectivityInput from "#app/components/form/input/collectivity/collectivity.vue";
 
 export default {

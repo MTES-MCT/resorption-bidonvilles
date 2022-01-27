@@ -6,7 +6,7 @@ import {
 import { create } from "#helpers/api/highCovidComment";
 import { listCovid } from "#helpers/api/userActivity";
 import NavBar from "#app/layouts/navbar/navbar.vue";
-import Table from "#app/components/table/table.vue";
+import Table from "#app/components/Table/table.vue";
 import SlideNote from "#app/components/slide-note/slide-note.vue";
 import covidTags from "./covidTags";
 

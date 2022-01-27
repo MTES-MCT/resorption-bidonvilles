@@ -1,13 +1,14 @@
 <template>
-    <span class="font-bold text-xl">
-        {{ caption }}
+    <span>
+        {{ content }}
     </span>
 </template>
+
 <script>
 export default {
     props: {
-        caption: {
-            type: String,
+        content: {
+            type: [String, Number],
             required: true
         }
     }
