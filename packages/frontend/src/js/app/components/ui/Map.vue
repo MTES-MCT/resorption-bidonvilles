@@ -7,6 +7,7 @@
 
 <script>
 import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 import Tooltip from "./Map/Tooltip.vue";
 import "leaflet-providers";
 
