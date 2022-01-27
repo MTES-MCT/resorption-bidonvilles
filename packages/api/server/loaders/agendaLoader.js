@@ -8,7 +8,9 @@ module.exports = () => {
         instance = new Agenda({
             db: {
                 address: agenda.mongo_address,
+                options: { useUnifiedTopology: true },
             },
+            processEvery: '40 seconds',
         });
     }
 
