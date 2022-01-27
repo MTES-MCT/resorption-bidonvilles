@@ -117,10 +117,10 @@ const users = [
     },
     {
         user: generate({
-            email: 'qa-asso-departement-with-hide-justice-option@resorption-bidonvilles.beta.gouv.fr',
+            email: 'qa-asso-departement-with-access-justice-option@resorption-bidonvilles.beta.gouv.fr',
             password: 'fabnum',
             first_name: 'QA',
-            last_name: 'Asso departement with hide justice option',
+            last_name: 'Asso departement with access justice option',
             fk_role: null,
             phone: '00 00 00 00 00',
             position: 'qa',
@@ -128,14 +128,14 @@ const users = [
         }),
         organization: {
             name: 'QA asso Departement with hide justice option',
-            abbreviation: 'QA asso Departement with hide justice option',
+            abbreviation: 'QA asso Departement with access justice option',
             type: 8, // association
             region: null,
             departement: 33,
             epci: null,
             city: null, // bordeaux
         },
-        options: ['hide_justice'],
+        options: ['access_justice'],
     },
     {
         user: generate({
@@ -171,7 +171,7 @@ const users = [
             fk_role_regular: 'direct_collaborator',
         }),
         organization: 'Préfecture de département - Gironde',
-        options: [],
+        options: ['access_justice'],
     },
     {
         user: generate({
@@ -207,7 +207,7 @@ const users = [
             fk_role_regular: 'national_establisment',
         }),
         organization: 'Délégation Interministérielle à l\'Hébergement et à l\'Accès au Logement',
-        options: [],
+        options: ['access_justice'],
     },
     {
         user: generate({
@@ -229,7 +229,7 @@ const users = [
             epci: null,
             city: null, // bordeaux
         },
-        options: [],
+        options: ['access_justice'],
     },
     {
         user: generate({
@@ -251,7 +251,7 @@ const users = [
             epci: null,
             city: null, // bordeaux
         },
-        options: [],
+        options: ['access_justice'],
     },
     {
         user: generate({

@@ -5,7 +5,7 @@ const defaultPermissions = {
         create: false,
         close: false,
         readPrivateComments: false,
-        hideJustice: false,
+        accessJustice: false,
         hideOwner: true
     },
     plan: {
@@ -28,6 +28,7 @@ const localAdminPermissions = {
         create: true,
         close: true,
         readPrivateComments: true,
+        accessJustice: true,
         hideOwner: false
     },
     plan: {
@@ -82,12 +83,12 @@ module.exports = {
         },
         territory: "Gironde"
     },
-    assoDepartementWithHideOption: {
+    assoDepartementWithAccessJusticeOption: {
         permissions: {
             ...defaultPermissions,
             shantytown: {
                 ...defaultPermissions.shantytown,
-                hideJustice: true
+                accessJustice: true
             }
         },
         territory: "Gironde"
@@ -101,6 +102,7 @@ module.exports = {
                 create: true,
                 close: true,
                 readPrivateComments: true,
+                accessJustice: true,
                 hideOwner: false
             },
             plan: {
@@ -131,6 +133,7 @@ module.exports = {
                 create: false,
                 close: false,
                 readPrivateComments: false,
+                accessJustice: true,
                 readOutsideTerritory: true
             },
             admin: {
@@ -142,7 +145,11 @@ module.exports = {
     },
     localAdmin: {
         permissions: {
-            ...localAdminPermissions
+            ...localAdminPermissions,
+            shantytown: {
+                ...localAdminPermissions.shantytown,
+                accessJustice: true
+            }
         },
         territory: "Gironde"
     },
