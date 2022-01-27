@@ -137,7 +137,26 @@ export default {
                     topics: this.data.topics || [],
                     goals: this.data.goals || undefined
                 },
-                location: {},
+                location: {
+                    location_type: this.data.location_type || undefined,
+                    location_details: this.data.location_details || undefined,
+                    location_shantytowns: this.data.shantytowns || [],
+                    location_address: {
+                        address: {
+                            label:
+                                (this.data.location &&
+                                    this.data.location.address) ||
+                                undefined,
+                            citycode: undefined
+                        },
+                        coordinates: this.data.location
+                            ? [
+                                  this.data.location.latitude,
+                                  this.data.location.longitude
+                              ]
+                            : undefined
+                    }
+                },
                 people: {},
                 financial: {}
             }
