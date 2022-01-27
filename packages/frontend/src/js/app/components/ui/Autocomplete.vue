@@ -72,7 +72,7 @@
                             <div
                                 v-if="focused && searchInput"
                                 :class="[
-                                    'origin-top-left-10 absolute z-10 left-0 mt-2 w-full rounded-md shadow-lg'
+                                    'origin-top-left-10 absolute above-map left-0 mt-2 w-full rounded-md shadow-lg'
                                 ]"
                             >
                                 <slot
@@ -125,6 +125,12 @@
         </InputWrapper>
     </ValidationProvider>
 </template>
+
+<style lang="scss" scoped>
+.above-map {
+    z-index: 2500;
+}
+</style>
 
 <script>
 import InputLabel from "./Form/utils/InputLabel.vue";
