@@ -1,0 +1,29 @@
+<template>
+    <div class="flex items-center customAlign">
+        <Icon
+            icon="map-marker-alt"
+            class="text-lg"
+            :style="`color: ${fieldType.color}`"
+        />
+        <div class="font-bold ml-2 whitespace-no-wrap">
+            {{ fieldType.label }}
+        </div>
+    </div>
+</template>
+
+<style scoped lang="scss">
+.customAlign {
+    height: 30px;
+}
+</style>
+
+<script>
+export default {
+    props: {
+        fieldType: {
+            type: Object,
+            required: true
+        }
+    }
+};
+</script>
