@@ -1,4 +1,4 @@
-import Table from "#app/components/table/table.vue";
+import Table from "#app/components/Table/table.vue";
 import { list } from "#helpers/api/plan";
 import "vue-good-table/dist/vue-good-table.css";
 import NavBar from "#app/layouts/navbar/navbar.vue";
