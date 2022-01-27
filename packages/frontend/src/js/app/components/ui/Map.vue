@@ -88,7 +88,8 @@ export default {
     methods: {
         createMap() {
             this.map = L.map("map", {
-                layers: this.mapLayers.Satellite // fond de carte par défaut
+                layers: this.mapLayers.Satellite, // fond de carte par défaut
+                scrollWheelZoom: false
             });
         },
 
