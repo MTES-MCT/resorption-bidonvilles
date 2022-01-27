@@ -8,6 +8,7 @@
             class="hover:bg-G200 rounded-full px-4 py-1 mx-2 focus:outline-none "
             :disabled="currentPage === 1"
             @click="onPrevious"
+            type="button"
             >Précédent</Button
         >
 
@@ -43,6 +44,7 @@
             :disabled="currentPage === nbPages"
             class="hover:bg-G200  rounded-full px-4 py-1 mx-2  focus:outline-none"
             @click="onNext"
+            type="button"
             >Suivant</Button
         >
     </div>
