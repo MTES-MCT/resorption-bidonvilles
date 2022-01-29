@@ -5,7 +5,10 @@
         v-slot="{ errors }"
         :vid="id"
     >
-        <InputWrapper :hasErrors="!!errors.length">
+        <InputWrapper
+            :hasErrors="!!errors.length"
+            :withoutMargin="withoutMargin"
+        >
             <InputLabel :label="label" :info="info" />
 
             <div class="relative">
@@ -66,6 +69,9 @@ export default {
             type: String
         },
         disabled: {
+            type: Boolean
+        },
+        withoutMargin: {
             type: Boolean
         }
     },

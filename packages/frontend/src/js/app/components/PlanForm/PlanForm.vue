@@ -158,7 +158,9 @@ export default {
                     }
                 },
                 people: {},
-                financial: {}
+                financial: {
+                    finances: this.data.finances || []
+                }
             }
         };
     },

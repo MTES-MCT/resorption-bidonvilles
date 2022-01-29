@@ -37,7 +37,7 @@
                     :key="getKey(row, key)"
                 >
                     <template v-slot:cell="slotProps">
-                        <slot name="cell" v-bind="slotProps">
+                        <slot name="cell" v-bind="{ ...slotProps, row: key }">
                             <RbTableCell :content="slotProps.content" />
                         </slot>
                     </template>
