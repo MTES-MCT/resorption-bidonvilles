@@ -5,7 +5,10 @@
         v-slot="{ errors }"
         :vid="id"
     >
-        <InputWrapper :hasErrors="!!errors.length">
+        <InputWrapper
+            :hasErrors="!!errors.length"
+            :withoutMargin="withoutMargin"
+        >
             <InputLabel
                 :label="label"
                 :info="info"
@@ -68,7 +71,7 @@ export default {
             type: String
         },
         value: {
-            type: String
+            type: [String, Number]
         },
         id: {
             type: String
@@ -97,6 +100,9 @@ export default {
             default: undefined
         },
         disabled: {
+            type: Boolean
+        },
+        withoutMargin: {
             type: Boolean
         }
     },

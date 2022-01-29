@@ -1,16 +1,24 @@
 <template>
     <FormGroup title="Financements">
-        Incoming...
+        <FormParagraph title="Comment est financé le dispositif ?">
+            <InputFinances v-model="input.finances"></InputFinances>
+        </FormParagraph>
     </FormGroup>
 </template>
 
 <script>
+import InputFinances from "#app/components/InputFinances/InputFinances.vue";
+
 export default {
     props: {
         value: {
             type: Object,
             required: true
         }
+    },
+
+    components: {
+        InputFinances
     },
 
     data() {
