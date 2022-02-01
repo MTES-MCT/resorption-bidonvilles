@@ -224,7 +224,13 @@ export default {
                 // Create a user and send an email to admins
                 const user = await create(data);
                 this.loading = false;
-                this.$router.push(`/nouvel-utilisateur/${user.id}`);
+
+                if (this.$route.query.association_name) {
+                    window.opener.postMessage(user, "*");
+                    window.close();
+                } else {
+                    this.$router.push(`/nouvel-utilisateur/${user.id}`);
+                }
             } catch (err) {
                 this.loading = false;
                 this.error = err;

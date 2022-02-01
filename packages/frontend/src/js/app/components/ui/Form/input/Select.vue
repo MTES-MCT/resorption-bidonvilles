@@ -50,7 +50,7 @@ export default {
             type: String
         },
         value: {
-            type: String
+            type: [String, Number]
         },
         validationName: {
             type: String
