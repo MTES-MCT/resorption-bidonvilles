@@ -327,7 +327,7 @@ const loggedRoutes = [
         path: "/modifier-dispositif/:id",
         component: path.join(
             __dirname,
-            "./src/js/app/pages/plans.edit/entrypoint.vue"
+            "./src/js/app/pages/PlanUpdate/entrypoint.vue"
         ),
         route: {
             meta: {

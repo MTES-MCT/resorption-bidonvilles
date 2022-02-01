@@ -1,7 +1,10 @@
 <template>
     <FormGroup title="Financements">
         <FormParagraph title="Comment est financé le dispositif ?">
-            <InputFinances v-model="input.finances"></InputFinances>
+            <InputFinances
+                v-model="input.finances"
+                :realAmount="realAmount"
+            ></InputFinances>
         </FormParagraph>
     </FormGroup>
 </template>
@@ -14,6 +17,11 @@ export default {
         value: {
             type: Object,
             required: true
+        },
+        realAmount: {
+            type: String, // either "none", "all", or "past"
+            required: false,
+            default: "none"
         }
     },
 
