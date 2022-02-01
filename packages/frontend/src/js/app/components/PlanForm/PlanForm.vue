@@ -157,7 +157,17 @@ export default {
                             : undefined
                     }
                 },
-                people: {},
+                people: {
+                    government: this.data.government_contacts
+                        ? this.data.government_contacts[0]
+                        : undefined,
+                    association: this.data.operator_contacts
+                        ? this.data.operator_contacts[0].organization
+                        : undefined,
+                    contact: this.data.operator_contacts
+                        ? this.data.operator_contacts[0].id
+                        : undefined
+                },
                 financial: {
                     finances: this.data.finances || []
                 }
