@@ -57,6 +57,7 @@
                         class="mt-10 planPanelShadow"
                         id="financial"
                         v-model="plan.financial"
+                        :realAmount="mode === 'create' ? 'none' : 'past'"
                     ></PlanFormPanelFinancial>
 
                     <div class="mt-8 text-right italic text-red font-bold">
@@ -134,18 +135,32 @@ export default {
             plan: {
                 characteristics: {
                     name: this.data.name || undefined,
-                    departement: this.data.departement || undefined,
-                    started_at: this.data.started_at || undefined,
-                    expected_to_end_at:
-                        this.data.expected_to_end_at || undefined,
-                    in_and_out: this.data.in_and_out || undefined,
-                    topics: this.data.topics || [],
+                    departement: this.data.departement
+                        ? this.data.departement.code
+                        : undefined,
+                    started_at: this.data.started_at
+                        ? new Date(this.data.started_at)
+                        : undefined,
+                    expected_to_end_at: this.data.expected_to_end_at
+                        ? new Date(this.data.expected_to_end_at)
+                        : undefined,
+                    in_and_out:
+                        typeof this.data.in_and_out === "boolean"
+                            ? this.data.in_and_out
+                            : undefined,
+                    topics: this.data.topics
+                        ? this.data.topics.map(({ uid }) => uid)
+                        : [],
                     goals: this.data.goals || undefined
                 },
                 location: {
-                    location_type: this.data.location_type || undefined,
+                    location_type: this.data.location_type
+                        ? this.data.location_type.id
+                        : undefined,
                     location_details: this.data.location_details || undefined,
-                    location_shantytowns: this.data.shantytowns || [],
+                    location_shantytowns: this.data.shantytowns
+                        ? this.data.shantytowns.map(({ id }) => id)
+                        : [],
                     location_address: {
                         address: {
                             label:
@@ -174,7 +189,17 @@ export default {
                         : undefined
                 },
                 financial: {
-                    finances: this.data.finances || []
+                    finances: this.data.finances
+                        ? this.data.finances.map(finances => {
+                              return {
+                                  ...finances,
+                                  data: finances.data.map(row => ({
+                                      ...row,
+                                      type: row.type.uid
+                                  }))
+                              };
+                          })
+                        : []
                 }
             }
         };

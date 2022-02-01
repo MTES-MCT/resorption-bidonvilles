@@ -17,6 +17,15 @@
                     v-model="input[row].details"
                     :withoutMargin="true"
                 />
+                <span v-else-if="column === 'realAmount'">
+                    <TextInput
+                        v-if="realAmount === 'enabled'"
+                        type="number"
+                        v-model="input[row].realAmount"
+                        :withoutMargin="true"
+                    />
+                    <span v-else>À renseigner l'année prochaine</span>
+                </span>
                 <span v-else-if="column === 'remove'">
                     <Button
                         variant="primaryText"
@@ -47,6 +56,11 @@ export default {
             default() {
                 return [];
             }
+        },
+        realAmount: {
+            type: String, // either "none", "disabled", "enabled"
+            required: false,
+            default: "none"
         }
     },
 
@@ -57,14 +71,22 @@ export default {
 
     data() {
         return {
-            input: this.value,
-            columns: [
+            input: this.value
+        };
+    },
+
+    computed: {
+        columns() {
+            return [
                 { id: "type", label: "Type de financements" },
                 { id: "amount", label: "Montants prévus" },
                 { id: "details", label: "Précision" },
+                ...(this.realAmount !== "none"
+                    ? [{ id: "realAmount", label: "Dépenses exécutées" }]
+                    : []),
                 { id: "remove", label: "" }
-            ]
-        };
+            ];
+        }
     },
 
     watch: {
@@ -78,6 +100,7 @@ export default {
             this.input.push({
                 type: undefined,
                 amount: 0,
+                realAmount: 0,
                 details: ""
             });
         },

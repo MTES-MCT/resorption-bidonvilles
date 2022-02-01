@@ -27,7 +27,10 @@
                 >Année suivante</Button
             >
         </div>
-        <InputFinancesYear v-model="currentYearData" />
+        <InputFinancesYear
+            v-model="currentYearData"
+            :realAmount="realAmountForCurrentYear"
+        />
     </div>
 </template>
 
@@ -53,6 +56,11 @@ export default {
             default() {
                 return [];
             }
+        },
+        realAmount: {
+            type: String, // either "none", "all" (for all years), "past" (for all years but current year)
+            required: false,
+            default: "none"
         }
     },
 
@@ -82,6 +90,17 @@ export default {
             });
 
             return currentYearTable ? currentYearTable.data : [];
+        },
+        realAmountForCurrentYear() {
+            if (this.realAmount === "none") {
+                return "none";
+            }
+
+            if (this.realAmount === "all") {
+                return "enabled";
+            }
+
+            return this.currentYear < this.maxYear ? "enabled" : "disabled";
         }
     },
 
