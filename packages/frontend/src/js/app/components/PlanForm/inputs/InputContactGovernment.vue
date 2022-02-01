@@ -1,6 +1,6 @@
 <template>
     <AutocompleteV2
-        id="user_id"
+        id="government"
         label="Pilote du dispositif"
         info="Tapez les premières lettres du nom ou du prénom de la personne"
         prefixIcon="user"

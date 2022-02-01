@@ -1,6 +1,6 @@
 <template>
     <AutocompleteV2
-        id="user_id"
+        id="association"
         label="Opérateur ou service en charge de l'intervention"
         info="Tapez les premières lettres du nom de l'association"
         prefixIcon="user"
