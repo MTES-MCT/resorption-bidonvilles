@@ -5,7 +5,10 @@
                 <PrivateContainer class="flex justify-between items-baseline">
                     <div class="text-display-lg">{{ submitWording }}</div>
                     <div>
-                        <Button variant="primaryText" @click="back"
+                        <Button
+                            variant="primaryText"
+                            @click="back"
+                            type="button"
                             >Annuler</Button
                         >
                         <Button
@@ -64,7 +67,9 @@
 
             <div class="pt-12 pb-16">
                 <PrivateContainer class="flex justify-end items-baseline">
-                    <Button variant="primaryText" @click="back">Annuler</Button>
+                    <Button variant="primaryText" @click="back" type="button"
+                        >Annuler</Button
+                    >
                     <Button class="ml-5" variant="tertiary" :loading="loading"
                         >Valider</Button
                     >
