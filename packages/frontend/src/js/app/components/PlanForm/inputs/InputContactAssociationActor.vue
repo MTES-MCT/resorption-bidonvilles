@@ -24,11 +24,13 @@
         </p>
         <Select
             v-else
+            id="contact"
             label=""
             validationName="Personne référente chez l'opérateur"
             rules="required"
             v-model="input"
         >
+            <SelectOption>- Selectionner un choix -</SelectOption>
             <SelectOption
                 v-for="value in values"
                 :key="value.value"
@@ -48,7 +50,7 @@ import { getMembers } from "#helpers/api/organization";
 export default {
     props: {
         value: {
-            type: Number,
+            type: [Number, String],
             required: false
         },
         associationId: {
@@ -78,6 +80,9 @@ export default {
     },
 
     watch: {
+        input() {
+            this.$emit("input", this.input);
+        },
         associationId() {
             this.load();
         },

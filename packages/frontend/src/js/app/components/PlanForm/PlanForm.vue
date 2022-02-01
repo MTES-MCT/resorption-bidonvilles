@@ -97,6 +97,7 @@ import PlanFormPanelFinancial from "./PlanFormPanelFinancial";
 import FormLeftColumn from "#app/components/ui/Form/FormLeftColumn";
 import FormErrorLog from "#app/components/ui/Form/FormErrorLog";
 import { notify } from "#helpers/notificationHelper";
+import { create, update } from "#helpers/api/plan";
 
 export default {
     props: {
@@ -232,6 +233,34 @@ export default {
             this.$router.replace(this.backPage);
         },
 
+        formatDate(d) {
+            if (!d || !(d instanceof Date)) {
+                return d;
+            }
+
+            const year = d.getFullYear();
+            const month = `${d.getMonth() + 1}`.padStart(2, "0");
+            const day = `${d.getDate()}`.padStart(2, "0");
+
+            return `${year}-${month}-${day}`;
+        },
+
+        boolToInt(bool) {
+            if (bool === undefined) {
+                return undefined;
+            }
+
+            if (bool === true) {
+                return 1;
+            }
+
+            if (bool === false) {
+                return 0;
+            }
+
+            return -1;
+        },
+
         async submit() {
             const isValid = await this.$refs.form.validate();
             if (!isValid) {
@@ -246,13 +275,56 @@ export default {
             this.$router.replace("#top");
 
             try {
-                const result = await this.submitFn({});
+                const result = await this.submitFn({
+                    name: this.plan.characteristics.name,
+                    departement: this.plan.characteristics.departement,
+                    startedAt: this.formatDate(
+                        this.plan.characteristics.started_at
+                    ),
+                    expectedToEndAt: this.formatDate(
+                        this.plan.characteristics.expected_to_end_at
+                    ),
+                    in_and_out: this.boolToInt(
+                        this.plan.characteristics.in_and_out
+                    ),
+                    topics: this.plan.characteristics.topics,
+                    goals: this.plan.characteristics.goals,
+                    locationType: this.plan.location.location_type,
+                    locationShantytowns:
+                        this.plan.location.location_type === "shantytowns"
+                            ? this.plan.location.location_shantytowns
+                            : undefined,
+                    locationAddress:
+                        this.plan.location.location_type === "location"
+                            ? {
+                                  address: {
+                                      label: this.plan.location.location_address
+                                          .address.label
+                                  },
+                                  location: {
+                                      coordinates: this.plan.location
+                                          .location_address.coordinates
+                                  }
+                              }
+                            : undefined,
+                    locationDetails:
+                        this.plan.location.location_type === "other"
+                            ? this.plan.location.location_details
+                            : undefined,
+                    government: this.plan.people.government
+                        ? [{ id: this.plan.people.government.id }]
+                        : undefined,
+                    contact: this.plan.people.contact
+                        ? this.plan.people.contact
+                        : undefined,
+                    finances: this.plan.financial.finances
+                });
 
                 this.loading = false;
 
                 let id;
                 if (this.mode === "create") {
-                    id = result.plan.id;
+                    id = result.id;
                 } else {
                     id = this.data.id;
                 }
@@ -280,8 +352,23 @@ export default {
             }
         },
 
-        async submitFn() {
-            throw new Error();
+        async submitFn(data) {
+            if (this.mode === "create") {
+                const result = await create(data);
+                this.$trackMatomoEvent(
+                    "Dispositif",
+                    "Création dispositif",
+                    `D${result.id}`
+                );
+                return result;
+            }
+
+            this.$trackMatomoEvent(
+                "Dispositif",
+                "Mise à jour dispositiif",
+                `D${this.data.id}`
+            );
+            return update(this.data.id, data);
         }
     }
 };

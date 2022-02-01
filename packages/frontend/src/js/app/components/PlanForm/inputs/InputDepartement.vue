@@ -1,11 +1,12 @@
 <template>
     <Select
-        label=""
         id="departement"
+        label=""
         validationName="Département d'intervention principal"
         rules="required"
         v-model="input"
     >
+        <SelectOption>- Selectionner un choix -</SelectOption>
         <SelectOption
             v-for="value in values"
             :key="value.code"
