@@ -97,111 +97,111 @@
                         </header>
 
                         <article class="block">
-                            <div class="dataSection-line">
-                                <p class="data"><span class="data-label">Date de début</span><br/>{{ formatDate(plan.started_at / 1000, 'd M y') }}</p>
-                                <p v-if="plan.expected_to_end_at" class="data"><span class="data-label">Date de fin prévue</span><br/>{{ formatDate(plan.expected_to_end_at / 1000, 'd M y') }}<br/><strong>Durée prévue : {{ dateDiff(plan.started_at, plan.expected_to_end_at) }}</strong></p>
-                                <p v-if="plan.closed_at" class="data"><span class="data-label">Date de fin</span><br/>{{ formatDate(plan.closed_at / 1000, 'd M y') }}<br/><strong>Durée : {{ dateDiff(plan.started_at, plan.closed_at) }}</strong></p>
-                            </div>
+                            //- <div class="dataSection-line">
+                                //- <p class="data"><span class="data-label">Date de début</span><br/>{{ formatDate(plan.started_at / 1000, 'd M y') }}</p>
+                                //- <p v-if="plan.expected_to_end_at" class="data"><span class="data-label">Date de fin prévue</span><br/>{{ formatDate(plan.expected_to_end_at / 1000, 'd M y') }}<br/><strong>Durée prévue : {{ dateDiff(plan.started_at, plan.expected_to_end_at) }}</strong></p>
+                                //- <p v-if="plan.closed_at" class="data"><span class="data-label">Date de fin</span><br/>{{ formatDate(plan.closed_at / 1000, 'd M y') }}<br/><strong>Durée : {{ dateDiff(plan.started_at, plan.closed_at) }}</strong></p>
+                            //- </div>
 
-                            <p class="data-label">Champs d'intervention</p>
-                            <p v-for="topic in plan.topics"><span class="rbTag rbTag--warning">{{ topic.name }}</span><br/></p>
+                            //- <p class="data-label">Champs d'intervention</p>
+                            //- <p v-for="topic in plan.topics"><span class="rbTag rbTag--warning">{{ topic.name }}</span><br/></p>
 
-                            <div class="dataSection-line">
-                                <p class="data">
-                                    <span class="data-label">Objectifs</span><br/>
-                                    <span v-html="escapeHtml(plan.goals).replace(/\n/g, '<br/>')"></span>
-                                </p>
-                            </div>
+                            //- <div class="dataSection-line">
+                            //-     <p class="data">
+                            //-         <span class="data-label">Objectifs</span><br/>
+                            //-         <span v-html="escapeHtml(plan.goals).replace(/\n/g, '<br/>')"></span>
+                            //-     </p>
+                            //- </div>
 
                             <div class="dataSection-line" v-if="plan.final_comment">
-                                <p class="data">
-                                    <span class="data-label">Commentaire</span><br/>
-                                    <span v-html="escapeHtml(plan.final_comment).replace(/\n/g, '<br/>')"></span>
-                                </p>
+                                //- <p class="data">
+                                //-     <span class="data-label">Commentaire</span><br/>
+                                //-     <span v-html="escapeHtml(plan.final_comment).replace(/\n/g, '<br/>')"></span>
+                                //- </p>
                             </div>
                         </article>
                     </section>
 
-                    <section class="dataSection">
-                        <header class="dataSection-header">
-                            <h1 class="dataSection-title">
-                                <span class="dataSection-icon"><font-awesome-icon icon="map-pin"></font-awesome-icon></span> Lieu
-                            </h1>
-                        </header>
+                    //- <section class="dataSection">
+                    //-     <header class="dataSection-header">
+                    //-         <h1 class="dataSection-title">
+                    //-             <span class="dataSection-icon"><font-awesome-icon icon="map-pin"></font-awesome-icon></span> Lieu
+                    //-         </h1>
+                    //-     </header>
 
-                        <article class="block">
-                            <div class="dataSection-line">
-                                <p>
-                                    <span class="data-label">{{ plan.location_type.label }}</span><br/>
-                                    <span v-if="plan.location_type.id === 'shantytowns'">
-                                        <p v-for="shantytown in plan.shantytowns">
-                                            <router-link :to="`/site/${shantytown.id}`" class="locationPoint">{{ shantytown.usename }}</router-link>
-                                        </p>
-                                    </span>
-                                    <span v-if="plan.location_type.id === 'location'" class="locationPoint">{{ plan.location.label }}</span>
-                                    <span v-if="plan.location_type.id === 'other'">{{ plan.location_details }}</span>
-                                </p>
-                            </div>
-                            <Map v-if="plan.location_type.id === 'location'" :display-searchbar="false" :towns="[ address ]" :default-view="center"></Map>
-                        </article>
-                    </section>
+                    //-     <article class="block">
+                    //-         <div class="dataSection-line">
+                    //-             <p>
+                    //-                 <span class="data-label">{{ plan.location_type.label }}</span><br/>
+                    //-                 <span v-if="plan.location_type.id === 'shantytowns'">
+                    //-                     <p v-for="shantytown in plan.shantytowns">
+                    //-                         <router-link :to="`/site/${shantytown.id}`" class="locationPoint">{{ shantytown.usename }}</router-link>
+                    //-                     </p>
+                    //-                 </span>
+                    //-                 <span v-if="plan.location_type.id === 'location'" class="locationPoint">{{ plan.location.label }}</span>
+                    //-                 <span v-if="plan.location_type.id === 'other'">{{ plan.location_details }}</span>
+                    //-             </p>
+                    //-         </div>
+                    //-         <Map v-if="plan.location_type.id === 'location'" :display-searchbar="false" :towns="[ address ]" :default-view="center"></Map>
+                    //-     </article>
+                    //- </section>
 
-                    <section class="dataSection">
-                        <header class="dataSection-header">
-                            <h1 class="dataSection-title">
-                                <span class="dataSection-icon"><font-awesome-icon icon="address-book"></font-awesome-icon></span> Contacts
-                            </h1>
-                        </header>
+                    //- <section class="dataSection">
+                    //-     <header class="dataSection-header">
+                    //-         <h1 class="dataSection-title">
+                    //-             <span class="dataSection-icon"><font-awesome-icon icon="address-book"></font-awesome-icon></span> Contacts
+                    //-         </h1>
+                    //-     </header>
 
-                        <article class="block">
-                            <div class="dataSection-line">
-                                <p class="data"><span class="data-label">Pilote</span><br/><router-link :to="`/annuaire/${plan.government_contacts[0].organization.id}`" class="user">{{ plan.government_contacts[0].first_name }} {{ plan.government_contacts[0].last_name.toUpperCase() }}<br/>{{ plan.government_contacts[0].organization.name }}</router-link></p>
-                            </div>
-                            <div class="dataSection-line">
-                                <p class="data"><span class="data-label">Opérateur ou service en charge</span><br/><router-link :to="`/annuaire/${plan.operator_contacts[0].organization.id}`" class="user">{{ plan.operator_contacts[0].first_name }} {{ plan.operator_contacts[0].last_name.toUpperCase() }}<br/>{{ plan.operator_contacts[0].organization.name }}</router-link></p>
-                            </div>
-                        </article>
-                    </section>
+                    //-     <article class="block">
+                    //-         <div class="dataSection-line">
+                    //-             <p class="data"><span class="data-label">Pilote</span><br/><router-link :to="`/annuaire/${plan.government_contacts[0].organization.id}`" class="user">{{ plan.government_contacts[0].first_name }} {{ plan.government_contacts[0].last_name.toUpperCase() }}<br/>{{ plan.government_contacts[0].organization.name }}</router-link></p>
+                    //-         </div>
+                    //-         <div class="dataSection-line">
+                    //-             <p class="data"><span class="data-label">Opérateur ou service en charge</span><br/><router-link :to="`/annuaire/${plan.operator_contacts[0].organization.id}`" class="user">{{ plan.operator_contacts[0].first_name }} {{ plan.operator_contacts[0].last_name.toUpperCase() }}<br/>{{ plan.operator_contacts[0].organization.name }}</router-link></p>
+                    //-         </div>
+                    //-     </article>
+                    //- </section>
 
-                    <section class="dataSection rb-table" v-if="plan && plan.finances && plan.finances.length > 0">
-                        <header class="dataSection-header">
-                            <h1 class="dataSection-title">
-                                <span class="dataSection-icon"><font-awesome-icon icon="euro-sign"></font-awesome-icon></span> Financements
-                            </h1>
-                        </header>
+                    //- <section class="dataSection rb-table" v-if="plan && plan.finances && plan.finances.length > 0">
+                    //-     <header class="dataSection-header">
+                    //-         <h1 class="dataSection-title">
+                    //-             <span class="dataSection-icon"><font-awesome-icon icon="euro-sign"></font-awesome-icon></span> Financements
+                    //-         </h1>
+                    //-     </header>
 
-                        <header class="planFunding-header">
-                            <font-awesome-icon icon="caret-square-left" @click="showPreviousYear" class="planFunding-yearSwitch" v-bind:class="{ 'planFunding-yearSwitch--disabled': reachedMinFinanceIndex === true }"></font-awesome-icon>
-                            <span>{{ plan.finances[currentFinanceIndex].year }} </span>
-                            <font-awesome-icon icon="caret-square-right" @click="showNextYear" class="planFunding-yearSwitch" v-bind:class="{ 'planFunding-yearSwitch--disabled': reachedMaxFinanceIndex === true }"></font-awesome-icon>
-                        </header>
+                    //-     <header class="planFunding-header">
+                    //-         <font-awesome-icon icon="caret-square-left" @click="showPreviousYear" class="planFunding-yearSwitch" v-bind:class="{ 'planFunding-yearSwitch--disabled': reachedMinFinanceIndex === true }"></font-awesome-icon>
+                    //-         <span>{{ plan.finances[currentFinanceIndex].year }} </span>
+                    //-         <font-awesome-icon icon="caret-square-right" @click="showNextYear" class="planFunding-yearSwitch" v-bind:class="{ 'planFunding-yearSwitch--disabled': reachedMaxFinanceIndex === true }"></font-awesome-icon>
+                    //-     </header>
 
-                        <table class="table block">
-                            <thead>
-                                <tr>
-                                    <th class="table-col">Type de financements</th>
-                                    <th class="table-col">Montants<br/>prévus</th>
-                                    <th class="table-col">Précision</th>
-                                    <th class="table-col">Dépenses<br/>exécutées</th>
-                                </tr>
-                            </thead>
+                    //-     <table class="table block">
+                    //-         <thead>
+                    //-             <tr>
+                    //-                 <th class="table-col">Type de financements</th>
+                    //-                 <th class="table-col">Montants<br/>prévus</th>
+                    //-                 <th class="table-col">Précision</th>
+                    //-                 <th class="table-col">Dépenses<br/>exécutées</th>
+                    //-             </tr>
+                    //-         </thead>
 
-                            <tbody>
-                                <tr v-for="finance in plan.finances[currentFinanceIndex].data">
-                                    <td>{{ finance.type.name }}</td>
-                                    <td>{{ finance.amount }} €<br/>soit {{ Math.round((finance.amount / financeTotal()) * 100) }}%</td>
-                                    <td>{{ finance.details }}</td>
-                                    <td v-if="finance.realAmount">{{ finance.realAmount }} €</td>
-                                    <td v-else-if="reachedMaxFinanceIndex">À remplir entre janvier et mars</td>
-                                    <td v-else>Non renseignées</td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td colspan="3"><strong>TOTAL : {{ financeTotal() }}€</strong></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </section>
+                    //-         <tbody>
+                    //-             <tr v-for="finance in plan.finances[currentFinanceIndex].data">
+                    //-                 <td>{{ finance.type.name }}</td>
+                    //-                 <td>{{ finance.amount }} €<br/>soit {{ Math.round((finance.amount / financeTotal()) * 100) }}%</td>
+                    //-                 <td>{{ finance.details }}</td>
+                    //-                 <td v-if="finance.realAmount">{{ finance.realAmount }} €</td>
+                    //-                 <td v-else-if="reachedMaxFinanceIndex">À remplir entre janvier et mars</td>
+                    //-                 <td v-else>Non renseignées</td>
+                    //-             </tr>
+                    //-             <tr>
+                    //-                 <td></td>
+                    //-                 <td colspan="3"><strong>TOTAL : {{ financeTotal() }}€</strong></td>
+                    //-             </tr>
+                    //-         </tbody>
+                    //-     </table>
+                    //- </section>
 
                     <section class="dataSection rb-table" v-if="plan.states.length > 0">
                         <header class="dataSection-header">

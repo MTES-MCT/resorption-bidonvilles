@@ -28,8 +28,20 @@ export default {
         }
     },
     data() {
+        const callback = entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    this.activeSection = entry.target.id;
+                }
+            });
+        };
+
         return {
-            activeSection: this.defaultSection || this.sections[0].id
+            activeSection: this.defaultSection || this.sections[0].id,
+            observer: new IntersectionObserver(callback, {
+                rootMargin: "0px",
+                threshold: 0.2
+            })
         };
     },
     methods: {
@@ -44,24 +56,18 @@ export default {
                 return;
             }
 
-            const callback = entries => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        this.activeSection = entry.target.id;
-                    }
-                });
-            };
-
-            let observer = new IntersectionObserver(callback, {
-                rootMargin: "0px",
-                threshold: 0.2
-            });
-
+            this.observer.disconnect();
             this.sections.forEach(({ id }) => {
-                observer.observe(document.querySelector(`#${id}`));
+                const el = document.querySelector(`#${id}`);
+                if (!el) {
+                    return;
+                }
+
+                this.observer.observe(el);
             });
         }
     },
+
     mounted() {
         this.observe();
     }

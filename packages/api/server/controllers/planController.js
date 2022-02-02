@@ -169,8 +169,8 @@ function sanitizeState(plan, data) {
 
     function extractAudience(key) {
         return {
-            total: parseInt(audience[key].people, 10),
-            families: parseInt(audience[key].households, 10),
+            total: parseInt(audience[key].total, 10),
+            families: parseInt(audience[key].families, 10),
             women: parseInt(audience[key].women, 10),
             minors: parseInt(audience[key].minors, 10),
         };
@@ -195,7 +195,7 @@ function sanitizeState(plan, data) {
     const topics = plan.topics.map(({ uid }) => uid);
 
     function getIntOrNull(value) {
-        return value !== '' && value !== undefined ? parseInt(value, 10) : null;
+        return value !== '' && value !== undefined && value !== null ? parseInt(value, 10) : null;
     }
 
     // indicateurs droit commun
