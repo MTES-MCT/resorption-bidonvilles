@@ -27,36 +27,27 @@
         </div>
         <div class="flex justify-end mt-2">
             <Button
-                v-if="
-                    hasLocalizedPermission('plan.close') &&
-                        plan.closed_at === null
-                "
+                v-if="plan.canClose === true && plan.closed_at === null"
                 variant="primaryOutline"
-                class="mr-8"
+                class="ml-8"
                 @click="$emit('closePlan')"
                 >Fermer le dispositif</Button
             >
             <Button
                 variant="primary"
-                class="mr-8"
+                class="ml-8"
                 icon="pen"
                 iconPosition="left"
-                v-if="
-                    hasLocalizedPermission('plan.update') &&
-                        plan.closed_at !== null
-                "
+                v-if="plan.canUpdate === true && plan.closed_at === null"
                 @click="routeToUpdate"
                 >Mettre à jour</Button
             >
             <Button
                 variant="primary"
-                class="mr-8"
+                class="ml-8"
                 icon="pen"
                 iconPosition="left"
-                v-if="
-                    hasLocalizedPermission('plan.updateMarks') &&
-                        plan.closed_at !== null
-                "
+                v-if="plan.canUpdateMarks === true && plan.closed_at === null"
                 @click="routeToUpdateMarks"
                 >Mettre à jour les indicateurs</Button
             >
@@ -65,7 +56,7 @@
 </template>
 
 <script>
-import { get as getConfig, getPermission } from "#helpers/api/config";
+import { get as getConfig } from "#helpers/api/config";
 
 export default {
     props: {
@@ -80,30 +71,6 @@ export default {
         };
     },
     methods: {
-        hasLocalizedPermission(permissionName) {
-            return true;
-            // const permission = getPermission(permissionName);
-            // if (permission === null) {
-            //     return false;
-            // }
-
-            // let level =
-            //     permission.geographic_level !== "local"
-            //         ? permission.geographic_level
-            //         : this.user.organization.location.type;
-
-            // const userLocation = this.user.organization.location[level];
-            // if (level === "nation") {
-            //     return true;
-            // } else if (userLocation === null) {
-            //     return false;
-            // }
-
-            // const townCode = this.town[level].main || this.town[level].code;
-            // const userCode = userLocation.main || userLocation.code;
-
-            // return townCode === userCode;
-        },
         /**
          * @see index.js
          */
