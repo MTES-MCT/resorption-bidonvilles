@@ -1,8 +1,8 @@
 <template>
-    <TownDetailsPanel>
+    <DetailsPanel>
         <template v-slot:title>Procédure judiciaire</template>
         <template v-slot:body>
-            <TownDetailsPanelSection>
+            <DetailsPanelSection>
                 <div class="grid grid-cols-2">
                     <div class="flex items-center">
                         <Icon icon="scroll" class="mr-2" />
@@ -14,11 +14,11 @@
                         {{ boolToStr(town.ownerComplaint) }}
                     </div>
                 </div>
-            </TownDetailsPanelSection>
+            </DetailsPanelSection>
             <div class="flex">
                 <Icon icon="balance-scale" class="mr-4 mt-5" />
                 <div class="flex-1">
-                    <TownDetailsPanelSection>
+                    <DetailsPanelSection>
                         <div class="grid grid-cols-2">
                             <div class="font-bold">
                                 Existence d’une procédure judiciaire
@@ -28,8 +28,8 @@
                                 {{ boolToStr(town.justiceProcedure) }}
                             </div>
                         </div>
-                    </TownDetailsPanelSection>
-                    <TownDetailsPanelSection>
+                    </DetailsPanelSection>
+                    <DetailsPanelSection>
                         <div class="grid grid-cols-2">
                             <div class="font-bold">
                                 Décision de justice rendue
@@ -39,8 +39,8 @@
                                 {{ justiceRendered }}
                             </div>
                         </div>
-                    </TownDetailsPanelSection>
-                    <TownDetailsPanelSection>
+                    </DetailsPanelSection>
+                    <DetailsPanelSection>
                         <div class="grid grid-cols-2">
                             <div class="font-bold">Contentieux</div>
 
@@ -51,11 +51,11 @@
                                 {{ boolToStr(town.justiceChallenged) }}
                             </div>
                         </div>
-                    </TownDetailsPanelSection>
+                    </DetailsPanelSection>
                 </div>
             </div>
 
-            <TownDetailsPanelSection>
+            <DetailsPanelSection>
                 <div class="grid grid-cols-2">
                     <div class="flex items-center">
                         <img :src="policeSiren" class="w-6 h-6 mr-2" />
@@ -67,9 +67,9 @@
                         {{ policeStatusLabel }}
                     </div>
                 </div>
-            </TownDetailsPanelSection>
+            </DetailsPanelSection>
 
-            <TownDetailsPanelSection>
+            <DetailsPanelSection>
                 <div class="grid grid-cols-2">
                     <div class="flex items-center">
                         <span class="w-6 h-6 mr-2 text-center"
@@ -84,14 +84,14 @@
                         {{ town.bailiff || "NC" }}
                     </div>
                 </div>
-            </TownDetailsPanelSection>
+            </DetailsPanelSection>
         </template>
-    </TownDetailsPanel>
+    </DetailsPanel>
 </template>
 
 <script>
-import TownDetailsPanel from "./ui/TownDetailsPanel.vue";
-import TownDetailsPanelSection from "./ui/TownDetailsPanelSection.vue";
+import DetailsPanel from "#app/components/ui/details/DetailsPanel.vue";
+import DetailsPanelSection from "#app/components/ui/details/DetailsPanelSection.vue";
 import policeSiren from "../TownsList/assets/police_siren.svg";
 
 export default {
@@ -116,7 +116,7 @@ export default {
             return bool ? "oui" : "non";
         }
     },
-    components: { TownDetailsPanel, TownDetailsPanelSection },
+    components: { DetailsPanel, DetailsPanelSection },
     computed: {
         justiceRendered() {
             if (this.town.justiceRendered === null) {

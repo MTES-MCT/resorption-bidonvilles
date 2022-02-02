@@ -341,7 +341,7 @@ const loggedRoutes = [
         path: "/dispositif/:id",
         component: path.join(
             __dirname,
-            "./src/js/app/pages/plans.details/entrypoint.vue"
+            "./src/js/app/pages/PlanDetails/entrypoint.vue"
         ),
         route: {
             meta: {

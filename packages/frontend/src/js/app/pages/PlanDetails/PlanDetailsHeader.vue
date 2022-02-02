@@ -1,0 +1,121 @@
+<template>
+    <div>
+        <div class="text-display-lg">
+            {{ plan.name }}
+        </div>
+        <div class="flex items-center">
+            <div
+                v-if="plan.closed_at !== null"
+                class="flex items-center uppercase text-sm mr-4"
+            >
+                Fermé le
+                {{ formatDate(plan.closed_at, "d/m/y") }}
+            </div>
+            <div
+                class="flex items-center uppercase text-sm mr-4"
+                v-if="!plan.updated_at"
+            >
+                <div class="rounded-full bg-corail h-3 w-3 mr-2 " />
+                Déclaré le
+                {{ formatDate(plan.created_at / 1000, "d/m/y") }}
+            </div>
+            <div class="flex items-center uppercase text-sm mr-4" v-else>
+                <div class="rounded-full bg-corail h-3 w-3 mr-2 " />
+                Mis à jour le
+                {{ formatDate(plan.updated_at / 1000, "d/m/y") }}
+            </div>
+        </div>
+        <div class="flex justify-end mt-2">
+            <Button
+                v-if="
+                    hasLocalizedPermission('plan.close') &&
+                        plan.closed_at === null
+                "
+                variant="primaryOutline"
+                class="mr-8"
+                @click="$emit('closePlan')"
+                >Fermer le dispositif</Button
+            >
+            <Button
+                variant="primary"
+                class="mr-8"
+                icon="pen"
+                iconPosition="left"
+                v-if="
+                    hasLocalizedPermission('plan.update') &&
+                        plan.closed_at !== null
+                "
+                @click="routeToUpdate"
+                >Mettre à jour</Button
+            >
+            <Button
+                variant="primary"
+                class="mr-8"
+                icon="pen"
+                iconPosition="left"
+                v-if="
+                    hasLocalizedPermission('plan.updateMarks') &&
+                        plan.closed_at !== null
+                "
+                @click="routeToUpdateMarks"
+                >Mettre à jour les indicateurs</Button
+            >
+        </div>
+    </div>
+</template>
+
+<script>
+import { get as getConfig, getPermission } from "#helpers/api/config";
+
+export default {
+    props: {
+        plan: {
+            type: Object
+        }
+    },
+    data() {
+        const { user } = getConfig();
+        return {
+            user
+        };
+    },
+    methods: {
+        hasLocalizedPermission(permissionName) {
+            return true;
+            // const permission = getPermission(permissionName);
+            // if (permission === null) {
+            //     return false;
+            // }
+
+            // let level =
+            //     permission.geographic_level !== "local"
+            //         ? permission.geographic_level
+            //         : this.user.organization.location.type;
+
+            // const userLocation = this.user.organization.location[level];
+            // if (level === "nation") {
+            //     return true;
+            // } else if (userLocation === null) {
+            //     return false;
+            // }
+
+            // const townCode = this.town[level].main || this.town[level].code;
+            // const userCode = userLocation.main || userLocation.code;
+
+            // return townCode === userCode;
+        },
+        /**
+         * @see index.js
+         */
+        formatDate(...args) {
+            return window.App.formatDate.apply(window, args);
+        },
+        routeToUpdate() {
+            this.$router.push(`/modifier-dispositif/${this.plan.id}/`);
+        },
+        routeToUpdateMarks() {
+            this.$router.push(`/dispositif/${this.plan.id}/indicateurs`);
+        }
+    }
+};
+</script>

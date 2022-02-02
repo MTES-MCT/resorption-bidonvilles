@@ -34,6 +34,7 @@ module.exports = async (user, feature, filters = {}) => {
             plans.started_at AS "startedAt",
             plans.expected_to_end_at AS "expectedToEndAt",
             plans.closed_at AS "closedAt",
+            plans.created_at AS "createdAt",
             plans.updated_at AS "updatedAt",
             plans.in_and_out AS "inAndOut",
             plans.goals AS "goals",

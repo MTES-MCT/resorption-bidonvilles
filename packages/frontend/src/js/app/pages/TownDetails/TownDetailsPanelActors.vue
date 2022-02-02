@@ -1,8 +1,8 @@
 <template>
-    <TownDetailsPanel>
+    <DetailsPanel>
         <template v-slot:title>Intervenants</template>
         <template v-slot:body>
-            <TownDetailsPanelSection>
+            <DetailsPanelSection>
                 <InfoBanner
                     v-if="isNotAnActor && !town.closedAt"
                     icon="flag"
@@ -66,22 +66,22 @@
                         >
                     </div>
                 </div>
-            </TownDetailsPanelSection>
+            </DetailsPanelSection>
         </template>
-    </TownDetailsPanel>
+    </DetailsPanel>
 </template>
 
 <script>
-import TownDetailsPanel from "./ui/TownDetailsPanel.vue";
+import DetailsPanel from "#app/components/ui/details/DetailsPanel.vue";
+import DetailsPanelSection from "#app/components/ui/details/DetailsPanelSection.vue";
 import TownDetailsActorCard from "./ui/TownDetailsActorCard.vue";
 import TownDetailsSelfCard from "./ui/TownDetailsSelfCard.vue";
-import TownDetailsPanelSection from "./ui/TownDetailsPanelSection.vue";
 import { get as getConfig } from "#helpers/api/config";
 
 export default {
     components: {
-        TownDetailsPanel,
-        TownDetailsPanelSection,
+        DetailsPanel,
+        DetailsPanelSection,
         TownDetailsActorCard,
         TownDetailsSelfCard
     },
