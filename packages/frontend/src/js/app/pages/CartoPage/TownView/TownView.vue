@@ -47,7 +47,7 @@
                     {{ section.title }}
                 </div>
                 <div
-                    class="flex justify-between items-center"
+                    class="flex justify-between items-end"
                     v-for="row in section.rows"
                     :key="row.value"
                 >
