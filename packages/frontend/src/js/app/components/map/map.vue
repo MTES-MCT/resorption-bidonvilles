@@ -24,8 +24,12 @@
                 </p>
             </div>
 
-            <div ref="printer" class="leaflet-printer" @click="preprint(true)">
-                <Icon icon="print" /> Imprimer
+            <div
+                ref="printer"
+                class="leaflet-printer"
+                @click="printMapScreenshot"
+            >
+                <Icon icon="print" /> Imprimer la carte
             </div>
         </div>
     </section>
@@ -41,7 +45,8 @@ import "leaflet-providers";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster/dist/leaflet.markercluster";
-import "./map.scss";
+import html2canvas from "html2canvas";
+import "./map.scss"; // on importe le scss ici pour que le html généré par le js y ait accès
 
 import utensils from "../../../../../static/img/utensils.png";
 import waterYes from "../../../../../static/img/water-yes.png";
@@ -186,7 +191,7 @@ export default {
                 : false,
 
             /**
-             * La couche communal
+             * La couche communale
              *
              * @type {L.layerGroup}
              */
@@ -278,13 +283,6 @@ export default {
              * @type {Boolean}
              */
             showAddressesBeforePrint: false,
-
-            /**
-             * Wether the current print was triggered manually (from an action button) or naturally
-             *
-             * @type {true|null}
-             */
-            manualPrint: null,
 
             /**
              * Liste des types de terrains existants
@@ -408,36 +406,81 @@ export default {
     mounted() {
         this.createMap();
 
-        window.onbeforeprint = async () => {
-            if (this.manualPrint !== true) {
-                this.preprint(false);
-            }
+        window.onbeforeprint = () => {
+            this.onBeforePrint(false);
+            this.printMapScreenshot();
         };
         window.onafterprint = () => {
-            this.manualPrint = null;
-
-            document.body.classList.remove("preprint");
-            this.map.addControl(this.map.zoomControl);
-            this.setupLayersControl();
-            this.resize();
-
-            this.showAddresses = this.showAddressesBeforePrint;
+            this.onAfterPrint(false);
         };
     },
 
     methods: {
-        preprint(manualPrint = true) {
-            this.manualPrint = manualPrint === true;
+        printMapScreenshot() {
+            this.onBeforePrint(true);
+            // timeout nécessaire pour Chrome
+            setTimeout(() => {
+                const printWindow = window.open(
+                    "",
+                    "PrintWindow",
+                    "width=800,height=600"
+                );
+                if (!printWindow) {
+                    return;
+                }
+
+                html2canvas(document.getElementById("map"), {
+                    useCORS: true,
+                    width: this.map._size.x,
+                    height: this.map._size.y,
+                    logging: false
+                }).then(canvas => {
+                    const doc = printWindow.document;
+                    const img = doc.createElement("img");
+                    img.src = canvas.toDataURL("image/png");
+                    doc.body.appendChild(img);
+                    setTimeout(() => {
+                        printWindow.print();
+                        printWindow.close();
+                    }, 200);
+                });
+                // Restauration de l'environnement tel qu'il était avant la préparation de l'impression
+                this.onAfterPrint(true);
+            }, 200);
+        },
+        onBeforePrint(manualPrint = false) {
+            // Affiche l'adresse des sites pour l'impression
+            // Stocke le paramètre "showAddress" avant le passage en mode impression
             this.showAddressesBeforePrint = this.showAddresses;
-            this.showAddresses = true;
-
-            document.body.classList.add("preprint");
-            this.map.removeControl(this.map.zoomControl);
-            this.removeLayersControl();
-            this.resize();
-
             if (manualPrint === true) {
-                setTimeout(window.print, 200);
+                setTimeout(() => {
+                    // timeout nécessaire pour Chrome
+                    this.showAddresses = true;
+                }, 200);
+            } else {
+                this.showAddresses = true;
+            }
+            // Masque le contrôle de zoom
+
+            this.map.removeControl(this.map.zoomControl);
+            // Masque le contrôle affichant les couches
+            this.removeLayersControl();
+            // Ajoute la feuille de style "preprint"
+            // (masque barre de recherche, bouton d'impression et commutateur d'affichage des adresses de sites)
+            document.body.classList.add("preprint");
+        },
+        onAfterPrint(manualPrint = false) {
+            document.body.classList.remove("preprint");
+            this.setupLayersControl();
+            this.map.addControl(this.map.zoomControl);
+
+            // timeout nécessaire pour Chrome
+            if (manualPrint === true) {
+                setTimeout(() => {
+                    this.showAddresses = this.showAddressesBeforePrint;
+                }, 200);
+            } else {
+                this.showAddresses = this.showAddressesBeforePrint;
             }
         },
         countNumberOfTowns() {
