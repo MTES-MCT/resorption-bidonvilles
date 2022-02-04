@@ -55,7 +55,7 @@
                 </section>
             </DetailsPanelSection>
 
-            <DetailsPanelSection class="flex" v-if="plan.final_comments">
+            <DetailsPanelSection class="flex" v-if="plan.final_comment">
                 <aside aria-label="Commentaires">
                     <Icon icon="comment" class="mr-2" />
                 </aside>
@@ -63,7 +63,7 @@
                     <span class="font-bold"
                         >Commentaires suite à la fermeture du dispositif</span
                     >
-                    <p class="pre-line">{{ plan.final_comments }}</p>
+                    <p class="pre-line">{{ plan.final_comment }}</p>
                 </section>
             </DetailsPanelSection>
         </template>

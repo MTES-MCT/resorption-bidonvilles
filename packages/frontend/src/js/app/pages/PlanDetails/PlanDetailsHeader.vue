@@ -8,8 +8,9 @@
                 v-if="plan.closed_at !== null"
                 class="flex items-center uppercase text-sm mr-4"
             >
+                <div class="rounded-full bg-red h-3 w-3 mr-2 " />
                 Fermé le
-                {{ formatDate(plan.closed_at, "d/m/y") }}
+                {{ formatDate(plan.closed_at / 1000, "d/m/y") }}
             </div>
             <div
                 class="flex items-center uppercase text-sm mr-4"
@@ -25,7 +26,7 @@
                 {{ formatDate(plan.updated_at / 1000, "d/m/y") }}
             </div>
         </div>
-        <div class="flex justify-end mt-2">
+        <div class="flex justify-end mt-2 mb-2">
             <Button
                 v-if="plan.canClose === true && plan.closed_at === null"
                 variant="primaryOutline"

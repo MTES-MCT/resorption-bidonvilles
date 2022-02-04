@@ -1,42 +1,53 @@
 <template>
-    <div>
-        <InputLabel :label="label" :showMandatoryStar="showMandatoryStar" />
-        <div class="mb-3 text-G600"><slot name="info"></slot></div>
+    <ValidationProvider
+        :name="validationName"
+        v-slot="{ errors }"
+        :vid="validationName"
+    >
+        <InputWrapper :hasErrors="!!errors.length">
+            <InputLabel :label="label" :showMandatoryStar="showMandatoryStar" />
+            <div class="mb-3 text-G600"><slot name="info"></slot></div>
 
-        <div class="flex justify-between mb-2">
-            <Button
-                icon="chevron-left"
-                iconPosition="left"
-                variant="custom"
-                size="custom"
-                class="hover:bg-G200 rounded-full px-4 py-1 focus:outline-none "
-                @click="previousYear"
-                type="button"
-                >Année précédente</Button
-            >
-            <div class="font-bold text-lg">Financements {{ currentYear }}</div>
-            <Button
-                icon="chevron-right"
-                iconPosition="right"
-                variant="custom"
-                size="custom"
-                class="hover:bg-G200 rounded-full px-4 py-1 focus:outline-none "
-                @click="nextYear"
-                type="button"
-                :disabled="currentYear === maxYear"
-                >Année suivante</Button
-            >
-        </div>
-        <InputFinancesYear
-            v-model="currentYearData"
-            :realAmount="realAmountForCurrentYear"
-        />
-    </div>
+            <InputError>{{ errors[0] }}</InputError>
+            <div class="flex justify-between mb-2">
+                <Button
+                    icon="chevron-left"
+                    iconPosition="left"
+                    variant="custom"
+                    size="custom"
+                    class="hover:bg-G200 rounded-full px-4 py-1 focus:outline-none "
+                    @click="previousYear"
+                    type="button"
+                    >Année précédente</Button
+                >
+                <div class="font-bold text-lg">
+                    Financements {{ currentYear }}
+                </div>
+                <Button
+                    icon="chevron-right"
+                    iconPosition="right"
+                    variant="custom"
+                    size="custom"
+                    class="hover:bg-G200 rounded-full px-4 py-1 focus:outline-none "
+                    @click="nextYear"
+                    type="button"
+                    :disabled="currentYear === maxYear"
+                    >Année suivante</Button
+                >
+            </div>
+            <InputFinancesYear
+                v-model="currentYearData"
+                :realAmount="realAmountForCurrentYear"
+            />
+        </InputWrapper>
+    </ValidationProvider>
 </template>
 
 <script>
 import InputLabel from "#app/components/ui/Form/utils/InputLabel.vue";
 import InputFinancesYear from "./InputFinancesYear.vue";
+import InputWrapper from "#app/components/ui/Form/utils/InputWrapper.vue";
+import InputError from "#app/components/ui/Form/utils/InputError.vue";
 
 export default {
     props: {
@@ -61,12 +72,17 @@ export default {
             type: String, // either "none", "all" (for all years), "past" (for all years but current year)
             required: false,
             default: "none"
+        },
+        validationName: {
+            type: String
         }
     },
 
     components: {
         InputLabel,
-        InputFinancesYear
+        InputFinancesYear,
+        InputWrapper,
+        InputError
     },
 
     data() {

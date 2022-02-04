@@ -48,6 +48,7 @@
                         :plan="plan"
                         class="mb-10"
                         id="audience"
+                        :audience="audience"
                         v-if="plan.states.length > 0"
                     />
                     <PlanDetailsPanelDroitsCommuns
@@ -101,6 +102,14 @@
                 </div>
             </div>
         </PrivateContainer>
+
+        <!--  Close Shantytown Modal -->
+        <PlanDetailsCloseModal
+            :plan="plan"
+            :audience="audience"
+            :isOpen="showCloseModal"
+            @closeModal="showCloseModal = false"
+        />
     </PrivateLayout>
 </template>
 
@@ -124,6 +133,7 @@ import PlanDetailsPanelLogement from "./PlanDetailsPanelLogement.vue";
 import PlanDetailsPanelSecurisation from "./PlanDetailsPanelSecurisation.vue";
 import PlanDetailsPanelMarks from "./PlanDetailsPanelMarks.vue";
 import PlanDetailsInfo from "./PlanDetailsInfo.vue";
+import PlanDetailsCloseModal from "./PlanDetailsCloseModal.vue";
 import { get } from "#helpers/api/plan";
 
 export default {
@@ -146,6 +156,7 @@ export default {
         PlanDetailsPanelSecurisation,
         PlanDetailsPanelMarks,
         PlanDetailsInfo,
+        PlanDetailsCloseModal,
         LoadingError
     },
 
@@ -153,7 +164,8 @@ export default {
         return {
             loading: false,
             error: null,
-            plan: null
+            plan: null,
+            showCloseModal: false
         };
     },
 
@@ -164,6 +176,77 @@ export default {
             }
 
             return this.plan.topics.map(({ uid }) => uid);
+        },
+        audience() {
+            if (!this.plan || this.plan.states.length === 0) {
+                return null;
+            }
+
+            function sum(originalObj, additionalObj) {
+                return {
+                    total: originalObj.total + additionalObj.total,
+                    families: originalObj.families + additionalObj.families,
+                    women: originalObj.women + additionalObj.women,
+                    minors: originalObj.minors + additionalObj.minors
+                };
+            }
+
+            return this.plan.states.reduce(
+                (acc, { audience }) => {
+                    if (audience.in) {
+                        acc.in = sum(acc.in, audience.in);
+                    }
+
+                    if (audience.out_positive) {
+                        acc.out_positive = sum(
+                            acc.out_positive,
+                            audience.out_positive
+                        );
+                    }
+
+                    if (audience.out_abandoned) {
+                        acc.out_abandoned = sum(
+                            acc.out_abandoned,
+                            audience.out_abandoned
+                        );
+                    }
+
+                    if (audience.out_excluded) {
+                        acc.out_excluded = sum(
+                            acc.out_excluded,
+                            audience.out_excluded
+                        );
+                    }
+
+                    return acc;
+                },
+                {
+                    in: {
+                        total: 0,
+                        families: 0,
+                        women: 0,
+                        minors: 0
+                    },
+                    out_positive: {
+                        total: 0,
+                        families: 0,
+                        women: 0,
+                        minors: 0
+                    },
+                    out_abandoned: {
+                        total: 0,
+                        families: 0,
+                        women: 0,
+                        minors: 0
+                    },
+                    out_excluded: {
+                        total: 0,
+                        families: 0,
+                        women: 0,
+                        minors: 0
+                    }
+                }
+            );
         }
     },
 
@@ -212,7 +295,7 @@ export default {
         },
 
         closePlan() {
-            console.log("fermeture");
+            this.showCloseModal = true;
         }
     }
 };
