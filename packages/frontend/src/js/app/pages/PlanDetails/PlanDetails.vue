@@ -93,6 +93,10 @@
                             plan.states.length > 0 && topics.includes('safety')
                         "
                     />
+                    <PlanDetailsPanelMarks
+                        :planId="plan.id"
+                        v-if="plan.states.length === 0 && plan.canUpdateMarks"
+                    />
                 </div>
             </div>
         </PrivateContainer>
@@ -117,6 +121,7 @@ import PlanDetailsPanelEducation from "./PlanDetailsPanelEducation.vue";
 import PlanDetailsPanelEmploi from "./PlanDetailsPanelEmploi.vue";
 import PlanDetailsPanelLogement from "./PlanDetailsPanelLogement.vue";
 import PlanDetailsPanelSecurisation from "./PlanDetailsPanelSecurisation.vue";
+import PlanDetailsPanelMarks from "./PlanDetailsPanelMarks.vue";
 import { get } from "#helpers/api/plan";
 
 export default {
@@ -137,6 +142,7 @@ export default {
         PlanDetailsPanelEmploi,
         PlanDetailsPanelLogement,
         PlanDetailsPanelSecurisation,
+        PlanDetailsPanelMarks,
         LoadingError
     },
 
