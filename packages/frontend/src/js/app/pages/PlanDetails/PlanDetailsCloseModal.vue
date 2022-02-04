@@ -7,23 +7,12 @@
             <ValidationObserver ref="form" v-slot="{ handleSubmit, errors }">
                 <form @submit.prevent="handleSubmit(submit)">
                     <div class="scrollableContainer -mx-4 -mt-8 p-4">
-                        <div
-                            v-if="error || (errors && errors.length > 0)"
-                            class="bg-red200 p-6 mb-4"
-                        >
-                            <p v-if="error">{{ error }}</p>
-                            <p v-else>Le formulaire comprend des erreurs :</p>
-
-                            <ul class="mt-4" v-if="errors && errors.length > 0">
-                                <li
-                                    v-for="(error, inputId) in errors"
-                                    :key="inputId"
-                                    v-show="error.length"
-                                >
-                                    {{ error[0] }}
-                                </li>
-                            </ul>
-                        </div>
+                        <FormErrorLog
+                            :mainError="error"
+                            :errors="errors"
+                            class="mb-4"
+                            :linksToErrors="false"
+                        />
 
                         <div v-if="step === 1">
                             <p>
@@ -50,6 +39,7 @@
                             <InputFinances
                                 v-model="form.finances"
                                 realAmount="all"
+                                id="finances"
                                 validationName="Financements"
                             ></InputFinances>
                         </div>
@@ -71,6 +61,7 @@
                             />
                             <TextArea
                                 rows="5"
+                                id="comment"
                                 name="comment"
                                 v-model="form.comment"
                                 label="Commentaire"
@@ -86,7 +77,7 @@
                                 v-if="step > 1"
                                 variant="tertiary"
                                 type="button"
-                                @click="step = 1"
+                                @click="previousStep()"
                                 :disabled="loading || step === 1"
                                 >Précédent</Button
                             >
@@ -103,8 +94,7 @@
                                 v-if="step === 1"
                                 variant="tertiary"
                                 type="button"
-                                :disabled="loading"
-                                @click="step = 2"
+                                @click.native="nextStep"
                                 >Suite</Button
                             >
                             <Button
@@ -126,6 +116,7 @@
 import { close } from "#helpers/api/plan";
 import { notify } from "#helpers/notificationHelper";
 import InputFinances from "#app/components/InputFinances/InputFinances.vue";
+import FormErrorLog from "#app/components/ui/Form/FormErrorLog";
 
 export default {
     props: {
@@ -145,6 +136,7 @@ export default {
     },
 
     components: {
+        FormErrorLog,
         InputFinances
     },
 
@@ -152,21 +144,7 @@ export default {
         return {
             loading: false,
             error: null,
-            form: {
-                finances: this.plan.finances
-                    ? this.plan.finances.map(finances => {
-                          return {
-                              ...finances,
-                              data: finances.data.map(row => ({
-                                  ...row,
-                                  type: row.type.uid
-                              }))
-                          };
-                      })
-                    : [],
-                closedAt: null,
-                comment: ""
-            },
+            form: this.emptyData(),
             step: 1
         };
     },
@@ -210,10 +188,38 @@ export default {
         },
         closeModal() {
             this.$emit("closeModal");
+            this.form = this.emptyData();
+            this.step = 1;
+            this.$nextTick(() => {
+                this.$refs.form.reset();
+            });
+        },
+        emptyData() {
+            return {
+                finances: this.plan.finances
+                    ? this.plan.finances.map(finances => {
+                          return {
+                              ...finances,
+                              data: finances.data.map(row => ({
+                                  ...row,
+                                  type: row.type.uid
+                              }))
+                          };
+                      })
+                    : [],
+                closedAt: null,
+                comment: ""
+            };
+        },
+        nextStep(event) {
+            event.preventDefault();
+            this.step = 2;
+        },
+        previousStep() {
             this.step = 1;
         },
         async submit() {
-            if (this.loading === true) {
+            if (this.loading === true || this.step === 1) {
                 return;
             }
 

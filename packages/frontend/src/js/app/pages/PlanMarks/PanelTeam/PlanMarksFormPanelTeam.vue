@@ -1,6 +1,6 @@
 <template>
     <FormGroup title="Équipe">
-        <InputEtp v-model="input" validationName="etp" />
+        <InputEtp v-model="input" validationName="Équipe" id="etp" />
     </FormGroup>
 </template>
 

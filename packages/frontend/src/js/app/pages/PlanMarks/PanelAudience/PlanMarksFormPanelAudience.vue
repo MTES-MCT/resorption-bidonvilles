@@ -43,7 +43,8 @@
             <InputAudience
                 v-model="input"
                 :mode="mode"
-                validationName="audience"
+                validationName="Entrées et sorties du dispositif"
+                id="audience"
             />
         </FormParagraph>
     </FormGroup>

@@ -1,43 +1,46 @@
 <template>
-    <div>
-        <InputLabel :label="label" :showMandatoryStar="showMandatoryStar" />
-        <div class="mb-3 text-G600"><slot name="info"></slot></div>
+    <ValidationProvider :name="validationName" v-slot="{ errors }" :vid="id">
+        <InputWrapper :hasErrors="!!errors.length">
+            <InputLabel :label="label" :showMandatoryStar="showMandatoryStar" />
+            <div class="mb-3 text-G600"><slot name="info"></slot></div>
 
-        <Spinner v-if="townsLoading"></Spinner>
-        <div v-else>
-            <TabList :tabs="tabs" v-model="currentTab" class="mb-4" />
-            <TextInput
-                prefixIcon="search"
-                placeholder="Adresse, nom d'un site, ville..."
-                v-model="search"
-            />
-            <RbTable :columns="columns" :data="data">
-                <template v-slot:cell="{ content, column }">
-                    <Checkbox
-                        :checkValue="content"
-                        v-model="input"
-                        v-if="column === 'checkbox'"
-                    />
-                    <TownField
-                        :fieldType="content"
-                        v-else-if="column === 'fieldType'"
-                    />
-                    <span
-                        v-else-if="column === 'population'"
-                        class="block text-right"
-                    >
-                        <TownPopulation
-                            v-if="content !== null"
-                            class="justify-end"
-                            :population="content"
+            <Spinner v-if="townsLoading"></Spinner>
+            <div v-else>
+                <TabList :tabs="tabs" v-model="currentTab" class="mb-4" />
+                <TextInput
+                    prefixIcon="search"
+                    placeholder="Adresse, nom d'un site, ville..."
+                    v-model="search"
+                />
+                <InputError>{{ errors[0] }}</InputError>
+                <RbTable :columns="columns" :data="data">
+                    <template v-slot:cell="{ content, column }">
+                        <Checkbox
+                            :checkValue="content"
+                            v-model="input"
+                            v-if="column === 'checkbox'"
                         />
-                        <span v-else class="text-G600 italic">NC</span>
-                    </span>
-                    <RbTableCell v-else :content="content" />
-                </template>
-            </RbTable>
-        </div>
-    </div>
+                        <TownField
+                            :fieldType="content"
+                            v-else-if="column === 'fieldType'"
+                        />
+                        <span
+                            v-else-if="column === 'population'"
+                            class="block text-right"
+                        >
+                            <TownPopulation
+                                v-if="content !== null"
+                                class="justify-end"
+                                :population="content"
+                            />
+                            <span v-else class="text-G600 italic">NC</span>
+                        </span>
+                        <RbTableCell v-else :content="content" />
+                    </template>
+                </RbTable>
+            </div>
+        </InputWrapper>
+    </ValidationProvider>
 </template>
 
 <script>
@@ -48,6 +51,8 @@ import RbTableCell from "#app/components/Table/RbTableCell.vue";
 import TownField from "#app/components/TownField/TownField.vue";
 import TownPopulation from "#app/components/TownPopulation/TownPopulation.vue";
 import TabList from "#app/components/TabList/TabList.vue";
+import InputWrapper from "#app/components/ui/Form/utils/InputWrapper.vue";
+import InputError from "#app/components/ui/Form/utils/InputError.vue";
 
 export default {
     props: {
@@ -67,6 +72,12 @@ export default {
             default() {
                 return [];
             }
+        },
+        validationName: {
+            type: String
+        },
+        id: {
+            type: String
         }
     },
 
@@ -76,7 +87,9 @@ export default {
         RbTableCell,
         TownField,
         TownPopulation,
-        TabList
+        TabList,
+        InputWrapper,
+        InputError
     },
 
     data() {

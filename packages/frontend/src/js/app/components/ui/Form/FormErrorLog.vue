@@ -9,9 +9,13 @@
                 :key="inputId"
                 v-show="error.length"
             >
-                <router-link class="link" :to="{ hash: inputId }">{{
-                    error[0]
-                }}</router-link>
+                <router-link
+                    class="link"
+                    :to="{ hash: inputId }"
+                    v-if="linksToError === true"
+                    >{{ error[0] }}</router-link
+                >
+                <span v-else>{{ error[0] }}</span>
             </li>
         </ul>
     </div>
@@ -33,6 +37,11 @@ export default {
             default() {
                 return {};
             }
+        },
+        linksToError: {
+            type: Boolean,
+            required: false,
+            default: true
         }
     },
 

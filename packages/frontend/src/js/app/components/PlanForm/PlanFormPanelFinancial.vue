@@ -4,7 +4,8 @@
             <InputFinances
                 v-model="input.finances"
                 :realAmount="realAmount"
-                validationName="finances"
+                validationName="Financements"
+                id="finances"
             ></InputFinances>
         </FormParagraph>
     </FormGroup>

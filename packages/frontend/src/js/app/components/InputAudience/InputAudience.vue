@@ -1,9 +1,5 @@
 <template>
-    <ValidationProvider
-        :name="validationName"
-        v-slot="{ errors }"
-        :vid="validationName"
-    >
+    <ValidationProvider :name="validationName" v-slot="{ errors }" :vid="id">
         <InputWrapper :hasErrors="!!errors.length">
             <InputError>{{ errors[0] }}</InputError>
 
@@ -41,6 +37,9 @@ export default {
             required: true
         },
         validationName: {
+            type: String
+        },
+        id: {
             type: String
         }
     },
