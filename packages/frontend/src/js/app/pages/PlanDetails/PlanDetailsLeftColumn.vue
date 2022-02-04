@@ -19,7 +19,8 @@ export default {
                     id: "people",
                     label: "Contacts"
                 },
-                { id: "financial", label: "Financements" }
+                { id: "financial", label: "Financements" },
+                { id: "team", label: "Équipe" }
             ]
         };
     }

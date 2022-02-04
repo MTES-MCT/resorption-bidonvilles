@@ -37,6 +37,12 @@
                         class="mb-10"
                         id="financial"
                     />
+                    <PlanDetailsPanelTeam
+                        :plan="plan"
+                        class="mb-10"
+                        id="team"
+                        v-if="plan.states.length > 0"
+                    />
                 </div>
             </div>
         </PrivateContainer>
@@ -53,6 +59,7 @@ import PlanDetailsPanelCharacteristics from "./PlanDetailsPanelCharacteristics.v
 import PlanDetailsPanelLocation from "./PlanDetailsPanelLocation.vue";
 import PlanDetailsPanelPeople from "./PlanDetailsPanelPeople.vue";
 import PlanDetailsPanelFinancial from "./PlanDetailsPanelFinancial.vue";
+import PlanDetailsPanelTeam from "./PlanDetailsPanelTeam.vue";
 import { get } from "#helpers/api/plan";
 
 export default {
@@ -65,6 +72,7 @@ export default {
         PlanDetailsPanelLocation,
         PlanDetailsPanelPeople,
         PlanDetailsPanelFinancial,
+        PlanDetailsPanelTeam,
         LoadingError
     },
 
@@ -74,6 +82,16 @@ export default {
             error: null,
             plan: null
         };
+    },
+
+    computed: {
+        topics() {
+            if (!this.plan) {
+                return [];
+            }
+
+            return this.plan.topics.map(({ uid }) => uid);
+        }
     },
 
     watch: {
