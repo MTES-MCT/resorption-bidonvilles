@@ -14,6 +14,7 @@
     <PrivateLayout v-else>
         <PrivateContainer class="py-10">
             <PlanDetailsHeader :plan="plan" @closePlan="closePlan" />
+            <PlanDetailsInfo />
             <div class="flex pt-10 ">
                 <PlanDetailsLeftColumn :plan="plan" class="leftColumnWidth" />
                 <div class="flex-1">
@@ -122,6 +123,7 @@ import PlanDetailsPanelEmploi from "./PlanDetailsPanelEmploi.vue";
 import PlanDetailsPanelLogement from "./PlanDetailsPanelLogement.vue";
 import PlanDetailsPanelSecurisation from "./PlanDetailsPanelSecurisation.vue";
 import PlanDetailsPanelMarks from "./PlanDetailsPanelMarks.vue";
+import PlanDetailsInfo from "./PlanDetailsInfo.vue";
 import { get } from "#helpers/api/plan";
 
 export default {
@@ -143,6 +145,7 @@ export default {
         PlanDetailsPanelLogement,
         PlanDetailsPanelSecurisation,
         PlanDetailsPanelMarks,
+        PlanDetailsInfo,
         LoadingError
     },
 
