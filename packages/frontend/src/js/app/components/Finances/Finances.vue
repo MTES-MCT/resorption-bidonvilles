@@ -54,7 +54,8 @@ export default {
                     .filter(({ data }) => {
                         return data.length > 0;
                     })
-                    .map(({ year }) => year)
+                    .map(({ year }) => year),
+                maxYear
             ),
             currentYear: maxYear
         };
