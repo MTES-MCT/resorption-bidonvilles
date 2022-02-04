@@ -197,19 +197,6 @@ export default {
             mainError: null,
             loading: false,
             showInfo: true,
-            sections: [
-                { id: "date", label: "Date d'actualisation" },
-                { id: "audience", label: "Entrées et sorties" },
-                { id: "team", label: "Équipe" },
-                { id: "droits_communs", label: "Droits communs et ressources" },
-                { id: "sante", label: "Santé" },
-                { id: "emploi", label: "Formation et emploi" },
-                { id: "logement", label: "Logement" },
-                {
-                    id: "securite",
-                    label: "Stabilisation et sécurisation du site"
-                }
-            ],
             state: {
                 date: null,
                 audience: {},
@@ -305,6 +292,43 @@ export default {
     computed: {
         topics() {
             return this.data.topics.map(({ uid }) => uid);
+        },
+        sections() {
+            const s = [{ id: "date", label: "Date d'actualisation" }];
+
+            if (this.state.date) {
+                s.push(
+                    ...[
+                        { id: "audience", label: "Entrées et sorties" },
+                        { id: "team", label: "Équipe" },
+                        {
+                            id: "droits_communs",
+                            label: "Droits communs et ressources"
+                        }
+                    ]
+                );
+
+                if (this.topics.includes("health")) {
+                    s.push({ id: "sante", label: "Santé" });
+                }
+
+                if (this.topics.includes("work")) {
+                    s.push({ id: "emploi", label: "Formation et emploi" });
+                }
+
+                if (this.topics.includes("housing")) {
+                    s.push({ id: "logement", label: "Logement" });
+                }
+
+                if (this.topics.includes("safety")) {
+                    s.push({
+                        id: "securite",
+                        label: "Stabilisation et sécurisation du site"
+                    });
+                }
+            }
+
+            return s;
         }
     },
 

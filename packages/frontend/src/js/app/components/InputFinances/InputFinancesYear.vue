@@ -8,6 +8,7 @@
                 />
                 <TextInput
                     type="number"
+                    step="0.01"
                     v-else-if="column === 'amount'"
                     v-model="input[row].amount"
                     :withoutMargin="true"

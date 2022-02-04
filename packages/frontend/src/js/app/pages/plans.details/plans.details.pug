@@ -203,206 +203,206 @@
                     //-     </table>
                     //- </section>
 
-                    <section class="dataSection rb-table" v-if="plan.states.length > 0">
-                        <header class="dataSection-header">
-                            <h1 class="dataSection-title">
-                                <span class="dataSection-icon"><font-awesome-icon icon="users"></font-awesome-icon></span> Équipe
-                            </h1>
-                        </header>
+                    //- <section class="dataSection rb-table" v-if="plan.states.length > 0">
+                    //-     <header class="dataSection-header">
+                    //-         <h1 class="dataSection-title">
+                    //-             <span class="dataSection-icon"><font-awesome-icon icon="users"></font-awesome-icon></span> Équipe
+                    //-         </h1>
+                    //-     </header>
 
-                        <table class="table block">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th v-for="state in plan.states">{{ formatDate(new Date(state.date).getTime() / 1000, 'd B y') }}</th>
-                                </tr>
-                            </thead>
+                    //-     <table class="table block">
+                    //-         <thead>
+                    //-             <tr>
+                    //-                 <th></th>
+                    //-                 <th v-for="state in plan.states">{{ formatDate(new Date(state.date).getTime() / 1000, 'd B y') }}</th>
+                    //-             </tr>
+                    //-         </thead>
 
-                            <tbody>
-                                <tr v-for="etpType in availableEtpTypes">
-                                    <th>{{ etpType.name }}</th>
-                                    <td v-for="state in plan.states">{{ (state.etp.find(({ type: { uid } }) => uid === etpType.uid) || { total: 0 }).total }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </section>
+                    //-         <tbody>
+                    //-             <tr v-for="etpType in availableEtpTypes">
+                    //-                 <th>{{ etpType.name }}</th>
+                    //-                 <td v-for="state in plan.states">{{ (state.etp.find(({ type: { uid } }) => uid === etpType.uid) || { total: 0 }).total }}</td>
+                    //-             </tr>
+                    //-         </tbody>
+                    //-     </table>
+                    //- </section>
 
-                    <section class="dataSection rb-table" v-if="audience">
-                        <header class="dataSection-header">
-                            <h1 class="dataSection-title">
-                                <span class="dataSection-icon"><font-awesome-icon icon="arrow-right"></font-awesome-icon></span> Public
-                            </h1>
-                        </header>
+                    //- <section class="dataSection rb-table" v-if="audience">
+                    //-     <header class="dataSection-header">
+                    //-         <h1 class="dataSection-title">
+                    //-             <span class="dataSection-icon"><font-awesome-icon icon="arrow-right"></font-awesome-icon></span> Public
+                    //-         </h1>
+                    //-     </header>
 
-                        <table class="table block">
-                            <thead>
-                                <tr>
-                                    <th class="table-col"></th>
-                                    <th class="table-col">Ménages</th>
-                                    <th class="table-col">Personnes</th>
-                                    <th class="table-col">dont femmes</th>
-                                    <th class="table-col">dont mineurs</th>
-                                </tr>
-                            </thead>
+                    //-     <table class="table block">
+                    //-         <thead>
+                    //-             <tr>
+                    //-                 <th class="table-col"></th>
+                    //-                 <th class="table-col">Ménages</th>
+                    //-                 <th class="table-col">Personnes</th>
+                    //-                 <th class="table-col">dont femmes</th>
+                    //-                 <th class="table-col">dont mineurs</th>
+                    //-             </tr>
+                    //-         </thead>
 
-                            <tbody>
-                                <tr>
-                                    <td><strong>Entrées</strong> dans le dispositif</td>
-                                    <td>{{ audience.in.families }}</td>
-                                    <td>{{ audience.in.total }}</td>
-                                    <td>{{ audience.in.women }}</td>
-                                    <td>{{ audience.in.minors }}</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Sorties positivement</strong><br/>fin accompagnement social et/ou<br/>prise en charge dans un autre dispositif</td>
-                                    <td>{{ audience.out_positive.families }}</td>
-                                    <td>{{ audience.out_positive.total }}</td>
-                                    <td>{{ audience.out_positive.women }}</td>
-                                    <td>{{ audience.out_positive.minors }}</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Exclusion</strong> du dispositif</td>
-                                    <td>{{ audience.out_excluded.families }}</td>
-                                    <td>{{ audience.out_excluded.total }}</td>
-                                    <td>{{ audience.out_excluded.women }}</td>
-                                    <td>{{ audience.out_excluded.minors }}</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Abandon / départ volontaire</strong></td>
-                                    <td>{{ audience.out_abandoned.families }}</td>
-                                    <td>{{ audience.out_abandoned.total }}</td>
-                                    <td>{{ audience.out_abandoned.women }}</td>
-                                    <td>{{ audience.out_abandoned.minors }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </section>
+                    //-         <tbody>
+                    //-             <tr>
+                    //-                 <td><strong>Entrées</strong> dans le dispositif</td>
+                    //-                 <td>{{ audience.in.families }}</td>
+                    //-                 <td>{{ audience.in.total }}</td>
+                    //-                 <td>{{ audience.in.women }}</td>
+                    //-                 <td>{{ audience.in.minors }}</td>
+                    //-             </tr>
+                    //-             <tr>
+                    //-                 <td><strong>Sorties positivement</strong><br/>fin accompagnement social et/ou<br/>prise en charge dans un autre dispositif</td>
+                    //-                 <td>{{ audience.out_positive.families }}</td>
+                    //-                 <td>{{ audience.out_positive.total }}</td>
+                    //-                 <td>{{ audience.out_positive.women }}</td>
+                    //-                 <td>{{ audience.out_positive.minors }}</td>
+                    //-             </tr>
+                    //-             <tr>
+                    //-                 <td><strong>Exclusion</strong> du dispositif</td>
+                    //-                 <td>{{ audience.out_excluded.families }}</td>
+                    //-                 <td>{{ audience.out_excluded.total }}</td>
+                    //-                 <td>{{ audience.out_excluded.women }}</td>
+                    //-                 <td>{{ audience.out_excluded.minors }}</td>
+                    //-             </tr>
+                    //-             <tr>
+                    //-                 <td><strong>Abandon / départ volontaire</strong></td>
+                    //-                 <td>{{ audience.out_abandoned.families }}</td>
+                    //-                 <td>{{ audience.out_abandoned.total }}</td>
+                    //-                 <td>{{ audience.out_abandoned.women }}</td>
+                    //-                 <td>{{ audience.out_abandoned.minors }}</td>
+                    //-             </tr>
+                    //-         </tbody>
+                    //-     </table>
+                    //- </section>
 
-                    <section class="dataSection rb-table" v-if="plan.states.length > 0">
-                        <header class="dataSection-header">
-                            <h1 class="dataSection-title">
-                                <span class="dataSection-icon"><font-awesome-icon icon="id-card"></font-awesome-icon></span> Droit commun et ressources
-                            </h1>
-                        </header>
+                    //- <section class="dataSection rb-table" v-if="plan.states.length > 0">
+                    //-     <header class="dataSection-header">
+                    //-         <h1 class="dataSection-title">
+                    //-             <span class="dataSection-icon"><font-awesome-icon icon="id-card"></font-awesome-icon></span> Droit commun et ressources
+                    //-         </h1>
+                    //-     </header>
 
-                        <table class="table block">
-                            <thead>
-                                <tr>
-                                    <th class="table-col">Nombre de personnes ayant</th>
-                                    <th class="table-col" v-for="state in plan.states">{{ formatDate(new Date(state.date).getTime() / 1000, 'd B y') }}</th>
-                                </tr>
-                            </thead>
+                    //-     <table class="table block">
+                    //-         <thead>
+                    //-             <tr>
+                    //-                 <th class="table-col">Nombre de personnes ayant</th>
+                    //-                 <th class="table-col" v-for="state in plan.states">{{ formatDate(new Date(state.date).getTime() / 1000, 'd B y') }}</th>
+                    //-             </tr>
+                    //-         </thead>
 
-                            <tbody>
-                                <tr>
-                                    <td>une domiciliation</td>
-                                    <td v-for="state in plan.states">{{ state.droit_commun.domiciliation === null ? 'NC' : state.droit_commun.domiciliation }}</td>
-                                </tr>
-                                <tr>
-                                    <td>des droits CAF ouverts</td>
-                                    <td v-for="state in plan.states">{{ state.droit_commun.droits_caf === null ? 'NC' : state.droit_commun.droits_caf }}</td>
-                                </tr>
-                                <tr>
-                                    <td>un emploi stable / ressources suffisantes</td>
-                                    <td v-for="state in plan.states">{{ state.droit_commun.emploi_stable === null ? 'NC' : state.droit_commun.emploi_stable }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </section>
+                    //-         <tbody>
+                    //-             <tr>
+                    //-                 <td>une domiciliation</td>
+                    //-                 <td v-for="state in plan.states">{{ state.droit_commun.domiciliation === null ? 'NC' : state.droit_commun.domiciliation }}</td>
+                    //-             </tr>
+                    //-             <tr>
+                    //-                 <td>des droits CAF ouverts</td>
+                    //-                 <td v-for="state in plan.states">{{ state.droit_commun.droits_caf === null ? 'NC' : state.droit_commun.droits_caf }}</td>
+                    //-             </tr>
+                    //-             <tr>
+                    //-                 <td>un emploi stable / ressources suffisantes</td>
+                    //-                 <td v-for="state in plan.states">{{ state.droit_commun.emploi_stable === null ? 'NC' : state.droit_commun.emploi_stable }}</td>
+                    //-             </tr>
+                    //-         </tbody>
+                    //-     </table>
+                    //- </section>
 
-                    <section class="dataSection rb-table" v-if="plan.states.length > 0 && plan.topics.find(({ uid }) => uid === 'health')">
-                        <header class="dataSection-header">
-                            <h1 class="dataSection-title">
-                                <span class="dataSection-icon"><font-awesome-icon icon="user-md"></font-awesome-icon></span> Santé
-                            </h1>
-                        </header>
+                    //- <section class="dataSection rb-table" v-if="plan.states.length > 0 && plan.topics.find(({ uid }) => uid === 'health')">
+                    //-     <header class="dataSection-header">
+                    //-         <h1 class="dataSection-title">
+                    //-             <span class="dataSection-icon"><font-awesome-icon icon="user-md"></font-awesome-icon></span> Santé
+                    //-         </h1>
+                    //-     </header>
 
-                        <table class="table block">
-                            <thead>
-                                <tr>
-                                    <th class="table-col"></th>
-                                    <th class="table-col" v-for="state in plan.states">{{ formatDate(new Date(state.date).getTime() / 1000, 'd B y') }}</th>
-                                </tr>
-                            </thead>
+                    //-     <table class="table block">
+                    //-         <thead>
+                    //-             <tr>
+                    //-                 <th class="table-col"></th>
+                    //-                 <th class="table-col" v-for="state in plan.states">{{ formatDate(new Date(state.date).getTime() / 1000, 'd B y') }}</th>
+                    //-             </tr>
+                    //-         </thead>
 
-                            <tbody>
-                                <tr>
-                                    <th :colspan="plan.states.length + 1"><strong>Nombre de personnes avec...</strong></th>
-                                </tr>
-                                <tr>
-                                    <td>une couverture AME valide</td>
-                                    <td v-for="state in plan.states">{{ state.sante.ame_valide === null ? 'NC' : state.sante.ame_valide }}</td>
-                                </tr>
-                                <tr>
-                                    <td>une couverture PUMA valide</td>
-                                    <td v-for="state in plan.states">{{ state.sante.puma_valide === null ? 'NC' : state.sante.puma_valide }}</td>
-                                </tr>
-                                <tr>
-                                    <td>une demande AME en cours</td>
-                                    <td v-for="state in plan.states">{{ state.sante.ame_en_cours === null ? 'NC' : state.sante.ame_en_cours }}</td>
-                                </tr>
-                                <tr>
-                                    <td>une demande PUMA en cours</td>
-                                    <td v-for="state in plan.states">{{ state.sante.puma_en_cours === null ? 'NC' : state.sante.puma_en_cours }}</td>
-                                </tr>
-                                <tr>
-                                    <th :colspan="plan.states.length + 1"><strong>Nombre de personnes ayant fait l'objet d'au moins...</strong></th>
-                                </tr>
-                                <tr>
-                                    <td>une orientation vers une structure de santé</td>
-                                    <td v-for="state in plan.states">{{ state.sante.orientation === null ? 'NC' : state.sante.orientation }}</td>
-                                </tr>
-                                <tr>
-                                    <td>un accompagnement physique vers une structure de santé</td>
-                                    <td v-for="state in plan.states">{{ state.sante.accompagnement === null ? 'NC' : state.sante.accompagnement }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </section>
+                    //-         <tbody>
+                    //-             <tr>
+                    //-                 <th :colspan="plan.states.length + 1"><strong>Nombre de personnes avec...</strong></th>
+                    //-             </tr>
+                    //-             <tr>
+                    //-                 <td>une couverture AME valide</td>
+                    //-                 <td v-for="state in plan.states">{{ state.sante.ame_valide === null ? 'NC' : state.sante.ame_valide }}</td>
+                    //-             </tr>
+                    //-             <tr>
+                    //-                 <td>une couverture PUMA valide</td>
+                    //-                 <td v-for="state in plan.states">{{ state.sante.puma_valide === null ? 'NC' : state.sante.puma_valide }}</td>
+                    //-             </tr>
+                    //-             <tr>
+                    //-                 <td>une demande AME en cours</td>
+                    //-                 <td v-for="state in plan.states">{{ state.sante.ame_en_cours === null ? 'NC' : state.sante.ame_en_cours }}</td>
+                    //-             </tr>
+                    //-             <tr>
+                    //-                 <td>une demande PUMA en cours</td>
+                    //-                 <td v-for="state in plan.states">{{ state.sante.puma_en_cours === null ? 'NC' : state.sante.puma_en_cours }}</td>
+                    //-             </tr>
+                    //-             <tr>
+                    //-                 <th :colspan="plan.states.length + 1"><strong>Nombre de personnes ayant fait l'objet d'au moins...</strong></th>
+                    //-             </tr>
+                    //-             <tr>
+                    //-                 <td>une orientation vers une structure de santé</td>
+                    //-                 <td v-for="state in plan.states">{{ state.sante.orientation === null ? 'NC' : state.sante.orientation }}</td>
+                    //-             </tr>
+                    //-             <tr>
+                    //-                 <td>un accompagnement physique vers une structure de santé</td>
+                    //-                 <td v-for="state in plan.states">{{ state.sante.accompagnement === null ? 'NC' : state.sante.accompagnement }}</td>
+                    //-             </tr>
+                    //-         </tbody>
+                    //-     </table>
+                    //- </section>
 
-                    <section class="dataSection rb-table" v-if="plan.states.length > 0 && plan.topics.find(({ uid }) => uid === 'school')">
-                        <header class="dataSection-header">
-                            <h1 class="dataSection-title">
-                                <span class="dataSection-icon"><font-awesome-icon icon="user-md"></font-awesome-icon></span> Éducation et scolarisation
-                            </h1>
-                        </header>
+                    //- <section class="dataSection rb-table" v-if="plan.states.length > 0 && plan.topics.find(({ uid }) => uid === 'school')">
+                    //-     <header class="dataSection-header">
+                    //-         <h1 class="dataSection-title">
+                    //-             <span class="dataSection-icon"><font-awesome-icon icon="user-md"></font-awesome-icon></span> Éducation et scolarisation
+                    //-         </h1>
+                    //-     </header>
 
-                        <table class="table block">
-                            <thead>
-                                <tr>
-                                    <th class="table-col"></th>
-                                    <th class="table-col" v-for="state in plan.states">{{ formatDate(new Date(state.date).getTime() / 1000, 'd B y') }}</th>
-                                </tr>
-                            </thead>
+                    //-     <table class="table block">
+                    //-         <thead>
+                    //-             <tr>
+                    //-                 <th class="table-col"></th>
+                    //-                 <th class="table-col" v-for="state in plan.states">{{ formatDate(new Date(state.date).getTime() / 1000, 'd B y') }}</th>
+                    //-             </tr>
+                    //-         </thead>
 
-                            <tbody>
-                                <tr>
-                                    <td>Mineurs en âge d'être scolarisé ou suivant une formation</td>
-                                    <td v-for="state in plan.states">{{ state.education.scolarisables === null ? 'NC' : state.education.scolarisables }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Mineurs bénéficiant d'une action de médiation (3 - 18 ans)</td>
-                                    <td v-for="state in plan.states">{{ state.education.en_mediation === null ? 'NC' : state.education.en_mediation }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Scolarisés en maternelle</td>
-                                    <td v-for="state in plan.states">{{ state.education.maternelles === null ? 'NC' : state.education.maternelles }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Scolarisés en primaire</td>
-                                    <td v-for="state in plan.states">{{ state.education.elementaires === null ? 'NC' : state.education.elementaires }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Scolarisés en collège</td>
-                                    <td v-for="state in plan.states">{{ state.education.colleges === null ? 'NC' : state.education.colleges }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Scolarisés au Lycée - formation professionnelle</td>
-                                    <td v-for="state in plan.states">{{ state.education.lycees === null ? 'NC' : state.education.lycees }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </section>
+                    //-         <tbody>
+                    //-             <tr>
+                    //-                 <td>Mineurs en âge d'être scolarisé ou suivant une formation</td>
+                    //-                 <td v-for="state in plan.states">{{ state.education.scolarisables === null ? 'NC' : state.education.scolarisables }}</td>
+                    //-             </tr>
+                    //-             <tr>
+                    //-                 <td>Mineurs bénéficiant d'une action de médiation (3 - 18 ans)</td>
+                    //-                 <td v-for="state in plan.states">{{ state.education.en_mediation === null ? 'NC' : state.education.en_mediation }}</td>
+                    //-             </tr>
+                    //-             <tr>
+                    //-                 <td>Scolarisés en maternelle</td>
+                    //-                 <td v-for="state in plan.states">{{ state.education.maternelles === null ? 'NC' : state.education.maternelles }}</td>
+                    //-             </tr>
+                    //-             <tr>
+                    //-                 <td>Scolarisés en primaire</td>
+                    //-                 <td v-for="state in plan.states">{{ state.education.elementaires === null ? 'NC' : state.education.elementaires }}</td>
+                    //-             </tr>
+                    //-             <tr>
+                    //-                 <td>Scolarisés en collège</td>
+                    //-                 <td v-for="state in plan.states">{{ state.education.colleges === null ? 'NC' : state.education.colleges }}</td>
+                    //-             </tr>
+                    //-             <tr>
+                    //-                 <td>Scolarisés au Lycée - formation professionnelle</td>
+                    //-                 <td v-for="state in plan.states">{{ state.education.lycees === null ? 'NC' : state.education.lycees }}</td>
+                    //-             </tr>
+                    //-         </tbody>
+                    //-     </table>
+                    //- </section>
 
                     <section class="dataSection rb-table" v-if="plan.states.length > 0 && plan.topics.find(({ uid }) => uid === 'work')">
                         <header class="dataSection-header">

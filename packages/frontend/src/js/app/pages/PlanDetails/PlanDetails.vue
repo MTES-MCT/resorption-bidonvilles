@@ -43,6 +43,56 @@
                         id="team"
                         v-if="plan.states.length > 0"
                     />
+                    <PlanDetailsPanelAudience
+                        :plan="plan"
+                        class="mb-10"
+                        id="audience"
+                        v-if="plan.states.length > 0"
+                    />
+                    <PlanDetailsPanelDroitsCommuns
+                        :plan="plan"
+                        class="mb-10"
+                        id="droits_communs"
+                        v-if="plan.states.length > 0"
+                    />
+                    <PlanDetailsPanelSante
+                        :plan="plan"
+                        class="mb-10"
+                        id="sante"
+                        v-if="
+                            plan.states.length > 0 && topics.includes('health')
+                        "
+                    />
+                    <PlanDetailsPanelEducation
+                        :plan="plan"
+                        class="mb-10"
+                        id="education"
+                        v-if="
+                            plan.states.length > 0 && topics.includes('school')
+                        "
+                    />
+                    <PlanDetailsPanelEmploi
+                        :plan="plan"
+                        class="mb-10"
+                        id="emploi"
+                        v-if="plan.states.length > 0 && topics.includes('work')"
+                    />
+                    <PlanDetailsPanelLogement
+                        :plan="plan"
+                        class="mb-10"
+                        id="logement"
+                        v-if="
+                            plan.states.length > 0 && topics.includes('housing')
+                        "
+                    />
+                    <PlanDetailsPanelSecurisation
+                        :plan="plan"
+                        class="mb-10"
+                        id="securisation"
+                        v-if="
+                            plan.states.length > 0 && topics.includes('safety')
+                        "
+                    />
                 </div>
             </div>
         </PrivateContainer>
@@ -60,6 +110,13 @@ import PlanDetailsPanelLocation from "./PlanDetailsPanelLocation.vue";
 import PlanDetailsPanelPeople from "./PlanDetailsPanelPeople.vue";
 import PlanDetailsPanelFinancial from "./PlanDetailsPanelFinancial.vue";
 import PlanDetailsPanelTeam from "./PlanDetailsPanelTeam.vue";
+import PlanDetailsPanelAudience from "./PlanDetailsPanelAudience.vue";
+import PlanDetailsPanelDroitsCommuns from "./PlanDetailsPanelDroitsCommuns.vue";
+import PlanDetailsPanelSante from "./PlanDetailsPanelSante.vue";
+import PlanDetailsPanelEducation from "./PlanDetailsPanelEducation.vue";
+import PlanDetailsPanelEmploi from "./PlanDetailsPanelEmploi.vue";
+import PlanDetailsPanelLogement from "./PlanDetailsPanelLogement.vue";
+import PlanDetailsPanelSecurisation from "./PlanDetailsPanelSecurisation.vue";
 import { get } from "#helpers/api/plan";
 
 export default {
@@ -73,6 +130,13 @@ export default {
         PlanDetailsPanelPeople,
         PlanDetailsPanelFinancial,
         PlanDetailsPanelTeam,
+        PlanDetailsPanelAudience,
+        PlanDetailsPanelDroitsCommuns,
+        PlanDetailsPanelSante,
+        PlanDetailsPanelEducation,
+        PlanDetailsPanelEmploi,
+        PlanDetailsPanelLogement,
+        PlanDetailsPanelSecurisation,
         LoadingError
     },
 

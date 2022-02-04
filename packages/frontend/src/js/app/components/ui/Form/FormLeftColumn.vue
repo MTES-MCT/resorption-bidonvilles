@@ -70,6 +70,12 @@ export default {
 
     mounted() {
         this.observe();
+    },
+
+    watch: {
+        sections() {
+            this.observe();
+        }
     }
 };
 </script>

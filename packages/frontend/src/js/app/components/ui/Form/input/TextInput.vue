@@ -27,6 +27,7 @@
                     v-bind="filteredProps"
                     :class="classes"
                     :data-cy-field="cypressName"
+                    :step="step"
                 />
                 <InputIcon
                     position="after"
@@ -63,6 +64,10 @@ export default {
         type: {
             type: String,
             default: "text"
+        },
+        step: {
+            type: [String, Number], // For "number" inputs only
+            default: 0
         },
         validationName: {
             type: String
