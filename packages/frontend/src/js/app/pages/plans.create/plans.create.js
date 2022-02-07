@@ -1,6 +1,10 @@
 import NavBar from "#app/layouts/navbar/navbar.vue";
 import Form from "#app/components/form/form.vue";
-import { get as getConfig, hasPermission } from "#helpers/api/config";
+import {
+    get as getConfig,
+    hasPermission,
+    getPermission
+} from "#helpers/api/config";
 import { create } from "#helpers/api/plan";
 import {
     getByCategory,
@@ -17,7 +21,7 @@ export default {
     },
 
     data() {
-        const { user: me, topics } = getConfig();
+        const { user: me, topics, departements } = getConfig();
         const data = {
             user: me,
             formData: {
@@ -26,7 +30,8 @@ export default {
             loading: {
                 status: null,
                 error: null
-            }
+            },
+            departements
         };
         const that = this;
         const refs = this.$refs;
@@ -391,44 +396,30 @@ export default {
     },
 
     methods: {
-        getDepartementsForCurrentUser() {
-            const LEVEL_VALUES = {
-                city: 1,
-                epci: 2,
-                departement: 3,
-                region: 4,
-                nation: 5
-            };
-            const featureLevel = this.user.permissions.plan.create
-                .geographic_level;
-            const userLevel = this.user.organization.location.type;
-
-            let level;
-            if (featureLevel === "local") {
-                level = userLevel;
-            } else if (LEVEL_VALUES[userLevel] > LEVEL_VALUES[featureLevel]) {
-                level = userLevel;
-            } else {
-                level = featureLevel;
+        async getDepartementsForCurrentUser() {
+            const permission = getPermission("plan.create");
+            if (!permission) {
+                return [];
             }
 
-            // feature level = "local"
-            switch (level) {
-                case "nation": {
-                    const { departements } = getConfig();
-                    return Promise.resolve(departements);
-                }
-
-                case "region":
-                    return getDepartementsForRegion(
-                        this.user.organization.location.region.code
-                    ).then(({ departements }) => departements);
-
-                default:
-                    return Promise.resolve([
-                        this.user.organization.location.departement
-                    ]);
+            if (permission.allow_all) {
+                return this.departements;
             }
+
+            const codesOfAllowedDepartements = [
+                ...permission.allowed_on.departements,
+                ...(await Promise.all(
+                    permission.allowed_on.regions.map(code =>
+                        getDepartementsForRegion(code)
+                    )
+                )
+                    .map(({ departements }) => departements)
+                    .flat())
+            ];
+
+            return this.departements.filter(({ code }) => {
+                return codesOfAllowedDepartements.includes(code);
+            });
         },
 
         load() {
