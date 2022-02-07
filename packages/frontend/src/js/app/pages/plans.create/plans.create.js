@@ -412,7 +412,9 @@ export default {
                     permission.allowed_on.regions.map(code =>
                         getDepartementsForRegion(code)
                     )
-                ).flat())
+                )
+                    .map(({ departements }) => departements)
+                    .flat())
             ];
 
             return this.departements.filter(({ code }) => {
