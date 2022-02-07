@@ -21,10 +21,6 @@ export function getDepartementsForRegion(regionCode) {
     return getApi(`/regions/${regionCode}/departements`);
 }
 
-export function getDepartements() {
-    return getApi("/departements");
-}
-
 /**
  * Lists all departements related to a specific epci
  *

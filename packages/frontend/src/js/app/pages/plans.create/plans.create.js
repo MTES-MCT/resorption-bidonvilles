@@ -1,6 +1,10 @@
 import NavBar from "#app/layouts/navbar/navbar.vue";
 import Form from "#app/components/form/form.vue";
-import { get as getConfig, hasPermission } from "#helpers/api/config";
+import {
+    get as getConfig,
+    hasPermission,
+    getPermission
+} from "#helpers/api/config";
 import { create } from "#helpers/api/plan";
 import {
     getByCategory,
@@ -8,7 +12,7 @@ import {
     getMembersOfCategory
 } from "#helpers/api/organization";
 import { notify } from "#helpers/notificationHelper";
-import { getDepartementsForRegion, getDepartements } from "#helpers/api/geo";
+import { getDepartementsForRegion } from "#helpers/api/geo";
 
 export default {
     components: {
@@ -17,7 +21,7 @@ export default {
     },
 
     data() {
-        const { user: me, topics } = getConfig();
+        const { user: me, topics, departements } = getConfig();
         const data = {
             user: me,
             formData: {
@@ -26,7 +30,8 @@ export default {
             loading: {
                 status: null,
                 error: null
-            }
+            },
+            departements
         };
         const that = this;
         const refs = this.$refs;
@@ -392,34 +397,27 @@ export default {
 
     methods: {
         async getDepartementsForCurrentUser() {
-            // on récupère la liste de tous les départements
-            const allDepartements = await getDepartements();
-            if (this.user.permissions.plan.create.allow_all) {
-                return allDepartements.departements;
-            } else {
-                let departements = [];
-                // on récupère les départements associés à la permission
-                this.user.permissions.plan.create.allowed_on.departements.forEach(
-                    departementCode => {
-                        departements.push(
-                            allDepartements.departements[departementCode]
-                        );
-                    }
-                );
-                const promises = [];
-                // pour chaque région associée à la permission, on va chercher les départements correspondants
-                this.user.permissions.plan.create.allowed_on.regions.forEach(
-                    regionCode => {
-                        promises.push(getDepartementsForRegion(regionCode));
-                    }
-                );
-                const departementsForRegion = await Promise.all(promises);
-                departements = [
-                    ...departements,
-                    ...departementsForRegion[0].departements
-                ];
-                return departements;
+            const permission = getPermission("plan.create");
+            if (!permission) {
+                return [];
             }
+
+            if (permission.allow_all) {
+                return this.departements;
+            }
+
+            const codesOfAllowedDepartements = [
+                ...permission.allowed_on.departements,
+                ...(await Promise.all(
+                    permission.allowed_on.regions.map(code =>
+                        getDepartementsForRegion(code)
+                    )
+                ).flat())
+            ];
+
+            return this.departements.filter(({ code }) => {
+                return codesOfAllowedDepartements.includes(code);
+            });
         },
 
         load() {
