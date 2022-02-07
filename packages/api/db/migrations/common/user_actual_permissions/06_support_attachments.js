@@ -49,7 +49,10 @@ module.exports = (queryInterface, transaction) => queryInterface.sequelize.query
                     user_permissions.fk_feature,
                     features.is_writing,
                     user_permissions.allowed,
-                    user_permissions.allow_all,
+                    CASE
+                        WHEN local_writing_locations.regions IS NULL THEN TRUE
+                        ELSE user_permissions.allow_all
+                    END AS allow_all,
                     CASE
                         WHEN user_permissions.allow_all IS TRUE THEN NULL
                         WHEN local_writing_locations.regions IS NULL THEN NULL
@@ -127,13 +130,34 @@ module.exports = (queryInterface, transaction) => queryInterface.sequelize.query
                         'close' AS fk_feature,
                         TRUE AS is_writing,
                         TRUE AS allowed,
-                        FALSE AS allow_all,
-                        local_writing_locations.regions,
-                        local_writing_locations.departements,
-                        local_writing_locations.epci,
-                        local_writing_locations.cities,
-                        local_writing_locations.shantytowns,
-                        local_writing_locations.plans
+                        CASE
+                            WHEN local_writing_locations.regions IS NULL THEN TRUE
+                            ELSE FALSE
+                        END AS allow_all,
+                        CASE
+                            WHEN local_writing_locations.regions IS NULL THEN NULL
+                            ELSE local_writing_locations.regions
+                        END AS regions,
+                        CASE
+                            WHEN local_writing_locations.departements IS NULL THEN NULL
+                            ELSE local_writing_locations.departements
+                        END AS departements,
+                        CASE
+                            WHEN local_writing_locations.epci IS NULL THEN NULL
+                            ELSE local_writing_locations.epci
+                        END AS epci,
+                        CASE
+                            WHEN local_writing_locations.cities IS NULL THEN NULL
+                            ELSE local_writing_locations.cities
+                        END AS cities,
+                        CASE
+                            WHEN local_writing_locations.shantytowns IS NULL THEN NULL
+                            ELSE local_writing_locations.shantytowns
+                        END AS shantytowns,
+                        CASE
+                            WHEN local_writing_locations.plans IS NULL THEN NULL
+                            ELSE local_writing_locations.plans
+                        END AS plans
                     FROM user_permission_options
                     LEFT JOIN local_writing_locations ON user_permission_options.fk_user = local_writing_locations.user_id
                     WHERE fk_option IN ('close_shantytown', 'create_and_close_shantytown')
@@ -147,13 +171,34 @@ module.exports = (queryInterface, transaction) => queryInterface.sequelize.query
                         'create' AS fk_feature,
                         TRUE AS is_writing,
                         TRUE AS allowed,
-                        FALSE AS allow_all,
-                        local_writing_locations.regions,
-                        local_writing_locations.departements,
-                        local_writing_locations.epci,
-                        local_writing_locations.cities,
-                        local_writing_locations.shantytowns,
-                        local_writing_locations.plans
+                        CASE
+                            WHEN local_writing_locations.regions IS NULL THEN TRUE
+                            ELSE FALSE
+                        END AS allow_all,
+                        CASE
+                            WHEN local_writing_locations.regions IS NULL THEN NULL
+                            ELSE local_writing_locations.regions
+                        END AS regions,
+                        CASE
+                            WHEN local_writing_locations.departements IS NULL THEN NULL
+                            ELSE local_writing_locations.departements
+                        END AS departements,
+                        CASE
+                            WHEN local_writing_locations.epci IS NULL THEN NULL
+                            ELSE local_writing_locations.epci
+                        END AS epci,
+                        CASE
+                            WHEN local_writing_locations.cities IS NULL THEN NULL
+                            ELSE local_writing_locations.cities
+                        END AS cities,
+                        CASE
+                            WHEN local_writing_locations.shantytowns IS NULL THEN NULL
+                            ELSE local_writing_locations.shantytowns
+                        END AS shantytowns,
+                        CASE
+                            WHEN local_writing_locations.plans IS NULL THEN NULL
+                            ELSE local_writing_locations.plans
+                        END AS plans
                     FROM user_permission_options
                     LEFT JOIN local_writing_locations ON user_permission_options.fk_user = local_writing_locations.user_id
                     WHERE fk_option IN ('create_and_close_shantytown')
@@ -192,7 +237,10 @@ module.exports = (queryInterface, transaction) => queryInterface.sequelize.query
                     user_permissions.fk_feature,
                     features.is_writing,
                     user_permissions.allowed,
-                    user_permissions.allow_all,
+                    CASE
+                        WHEN local_writing_locations.regions IS NULL THEN TRUE
+                        ELSE user_permissions.allow_all
+                    END AS allow_all,
                     CASE
                         WHEN user_permissions.allow_all IS TRUE THEN NULL
                         WHEN local_writing_locations.regions IS NULL THEN NULL
@@ -255,7 +303,10 @@ module.exports = (queryInterface, transaction) => queryInterface.sequelize.query
                     role_permissions.fk_feature,
                     features.is_writing,
                     role_permissions.allowed,
-                    role_permissions.allow_all,
+                    CASE
+                        WHEN local_writing_locations.regions IS NULL THEN TRUE
+                        ELSE role_permissions.allow_all
+                    END AS allow_all,
                     CASE
                         WHEN role_permissions.allow_all IS TRUE THEN NULL
                         WHEN local_writing_locations.regions IS NULL THEN NULL
@@ -311,7 +362,10 @@ module.exports = (queryInterface, transaction) => queryInterface.sequelize.query
                     role_permissions.fk_feature,
                     features.is_writing,
                     role_permissions.allowed,
-                    role_permissions.allow_all,
+                    CASE
+                        WHEN local_writing_locations.regions IS NULL THEN TRUE
+                        ELSE role_permissions.allow_all
+                    END AS allow_all,
                     CASE
                         WHEN role_permissions.allow_all IS TRUE THEN NULL
                         WHEN local_writing_locations.regions IS NULL THEN NULL
