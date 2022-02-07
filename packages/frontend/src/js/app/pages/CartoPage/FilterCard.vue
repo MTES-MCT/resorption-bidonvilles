@@ -27,8 +27,6 @@
                         </font-awesome-icon>
                         <span>{{ option.label }}</span> </label
                     ><br />
-                    <!-- <Checkbox :checkValue="option.value" :id="id + '-' + (option.id || index)" :label="option.label" v-model="option.checked">
-                    </Checkbox> -->
                 </div>
             </div>
         </main>
@@ -72,7 +70,6 @@ export default {
     display: flex;
 
     padding: 20px 0;
-    border-color: #13213f;
     border-style: solid;
     border-width: 0 0 1px;
 
@@ -80,14 +77,8 @@ export default {
         padding-left: 30px;
 
         > h1 {
-            margin: 0 0 10px;
-            padding: 0;
             letter-spacing: 0.05em;
             cursor: pointer;
-        }
-        input[type="checkbox"] {
-            width: 17px;
-            height: 17px;
         }
     }
 }

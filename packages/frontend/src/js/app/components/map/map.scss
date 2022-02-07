@@ -4,6 +4,7 @@
 }
 
 .leaflet-printer {
+    font-family: Marianne;
     padding: 0 5px;
     height: 30px;
     text-align: center;
@@ -250,6 +251,7 @@ img {
 
 
 .leaflet-address-toggler {
+    font-family: Marianne;
     padding: 5px 10px;
     background: white;
     border-radius: 5px;
@@ -257,6 +259,7 @@ img {
   }
 
 .leaflet-legend {
+    font-family: Marianne;
     padding: 5px 10px;
     background: white;
     border-radius: 5px;
@@ -332,18 +335,6 @@ input{
         z-index: 5000;
         width: 280px;
         box-shadow: -2px 9px 5px 5px rgba(0,0,0,0.5);
-
-        .autocomplete-result {
-            padding-top: 10px;
-            padding-bottom: 10px;
-
-            span {
-                padding-bottom: 25px;
-            }
-
-            white-space: normal;
-            line-height: 25px;
-        }
     }
 
     .content {
@@ -457,10 +448,8 @@ input[type="checkbox"] {
 }
 
 input[type="checkbox"]:checked {
-    background-color: #0053b3;
-    background-color: var(--theme-primary);
-    border-color: #0053b3;
-    border-color: var(--theme-primary);
+    background-color: #000091;
+    border-color: #000091;
     opacity: 1;
     -webkit-transition: border-color 0.2s ease-in, background-color 0.2s ease-out;
     transition: border-color 0.2s ease-in, background-color 0.2s ease-out;
@@ -475,7 +464,7 @@ input[type="checkbox"]::before {
     left: 0.15em;
     height: 1em;
     width: 1em;
-    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><path d="M14.23 1.304L6.112 9.501 2.767 6.117a1.029 1.029 0 0 0-1.464 0 1.054 1.054 0 0 0 0 1.479l4.055 4.101c.208.21.481.31.754.305.272.005.545-.095.753-.305l8.829-8.915a1.053 1.053 0 0 0 0-1.478 1.027 1.027 0 0 0-1.464 0z" fill="white" /></svg>') center center no-repeat;
+    background: url('data:image/svg+xml;utf8,<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check" class="svg-inline--fa fa-check fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="white" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path></svg>') center center no-repeat;
 }
 
 input[type="checkbox"]:checked::before {
