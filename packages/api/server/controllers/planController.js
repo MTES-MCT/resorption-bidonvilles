@@ -1,5 +1,6 @@
 const { trim } = require('validator');
 const { sequelize } = require('#db/models');
+const { addAttachments, removeAttachments } = require('#server/models/permissionModel')();
 
 function sanitize(data) {
     const sanitizedData = {};
@@ -637,14 +638,15 @@ module.exports = models => ({
             }
         }
 
+        let associationContact;
         if (!planData.associationContact) {
             addError('association', 'Vous devez désigner la personne référente au sein de l\'opérateur ou service en charge de l\'intervention');
         } else {
             try {
-                const user = await models.user.findOne(planData.associationContact);
-                if (user === null) {
+                associationContact = await models.user.findOne(planData.associationContact);
+                if (associationContact === null) {
                     addError('contact', 'La personne référente n\'a pas été retrouvée en base de données');
-                } else if (user.organization.category.uid !== 'association') {
+                } else if (associationContact.organization.category.uid !== 'association') {
                     addError('association', 'Le service en charge de l\'intervention doit être une association');
                 }
             } catch (error) {
@@ -833,6 +835,7 @@ module.exports = models => ({
 
                 return Promise.all([
                     Promise.resolve(planId),
+
                     sequelize.query(
                         `INSERT INTO plan_managers(fk_plan, fk_user, created_by)
                         VALUES (:planId, :userId, :createdBy)`,
@@ -857,6 +860,22 @@ module.exports = models => ({
                             },
                             transaction: t,
                         },
+                    ),
+
+                    // pour le manager (utilisateur), on octroie les droits suivants sur le dispositif :
+                    // list, read, update, et close
+                    ...['list', 'read', 'update', 'close'].map(
+                        feature => addAttachments([{ type: 'plan', id: planId }])
+                            .toUser(planData.government.id)
+                            .onFeature(feature, 'plan', t),
+                    ),
+
+                    // pour l'opérateur (structure), on octroie les droits suivants sur le dispositif :
+                    // list, read, updateMarks
+                    ...['list', 'read', 'updateMarks'].map(
+                        feature => addAttachments([{ type: 'plan', id: planId }])
+                            .toOrganization(associationContact.organization.id)
+                            .onFeature(feature, 'plan', t),
                     ),
                 ]);
             });
@@ -1020,9 +1039,13 @@ module.exports = models => ({
 
                 // update
                 await sequelize.query(
-                    'UPDATE plans2 SET name = :name, started_at = :startedAt, expected_to_end_at = :expectedToEndAt, goals = :goals, updated_by = :updatedBy WHERE plan_id = :planId',
+                    'UPDATE plans2 SET name = :name, started_at = :startedAt, expected_to_end_at = :expectedToEndAt, goals = :goals, updated_by = :updatedBy, updated_at = :updatedAt WHERE plan_id = :planId',
                     {
-                        replacements: Object.assign({}, planData, { planId: plan.id }),
+                        replacements: {
+                            ...planData,
+                            planId: plan.id,
+                            updatedAt: new Date(),
+                        },
                         transaction: t,
                     },
                 );
@@ -1031,6 +1054,11 @@ module.exports = models => ({
                 await Promise.all([
                     sequelize.query('DELETE FROM finances WHERE fk_plan = :planId', { replacements: { planId: plan.id }, transaction: t }),
                     sequelize.query('DELETE FROM plan_managers WHERE fk_plan = :planId', { replacements: { planId: plan.id }, transaction: t }),
+                    ...['list', 'read', 'update', 'close'].map(
+                        feature => removeAttachments([{ type: 'plan', id: plan.id }])
+                            .fromUser(plan.government_contacts[0].id)
+                            .onFeature(feature, 'plan', t),
+                    ),
                 ]);
 
                 // insert into finances
@@ -1073,18 +1101,25 @@ module.exports = models => ({
                 );
 
                 // managers
-                return sequelize.query(
-                    `INSERT INTO plan_managers(fk_plan, fk_user, created_by)
-                        VALUES (:planId, :userId, :createdBy)`,
-                    {
-                        replacements: {
-                            planId: plan.id,
-                            userId: planData.government.id,
-                            createdBy: req.user.id,
+                return Promise.all([
+                    sequelize.query(
+                        `INSERT INTO plan_managers(fk_plan, fk_user, created_by)
+                            VALUES (:planId, :userId, :createdBy)`,
+                        {
+                            replacements: {
+                                planId: plan.id,
+                                userId: planData.government.id,
+                                createdBy: req.user.id,
+                            },
+                            transaction: t,
                         },
-                        transaction: t,
-                    },
-                );
+                    ),
+                    ...['list', 'read', 'update', 'close'].map(
+                        feature => addAttachments([{ type: 'plan', id: plan.id }])
+                            .toUser(planData.government.id)
+                            .onFeature(feature, 'plan', t),
+                    ),
+                ]);
             });
         } catch (error) {
             res.status(500).send({

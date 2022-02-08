@@ -133,8 +133,8 @@ export default {
         },
         defaultPath() {
             const { user } = getConfig();
-            const { geographic_level } = getPermission("shantytown.list");
-            if (geographic_level === "nation") {
+            const { allow_all } = getPermission("shantytown.list");
+            if (allow_all) {
                 return "/activites/nation";
             }
 

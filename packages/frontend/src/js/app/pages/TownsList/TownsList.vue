@@ -14,6 +14,7 @@
                     Rechercher un site, une commune, un département... ?
                 </h1>
                 <GeoSearchbar
+                    data-cy-input="geoFilter"
                     :value="filters.location"
                     @blur="handleSearchBlur"
                 />

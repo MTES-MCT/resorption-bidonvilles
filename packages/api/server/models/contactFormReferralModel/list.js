@@ -1,20 +1,16 @@
 const { sequelize } = require('#db/models');
 
-module.exports = (location) => {
-    let where = null;
+module.exports = (where = []) => {
     const replacements = {};
 
-    if (location && location.code) {
-        if (location.type === 'region') {
-            where = 'region_code = :locationCode';
-            replacements.locationCode = location.code;
-        } else if (location.type === 'departement') {
-            where = 'departement_code = :locationCode';
-            replacements.locationCode = location.code;
-        } else {
-            where = 'FALSE';
-        }
-    }
+    const whereClause = where.map((clauses, index) => {
+        const clauseGroup = Object.keys(clauses).map((column) => {
+            replacements[`${column}${index}`] = clauses[column].value || clauses[column];
+            return `${clauses[column].query || `users.${column}`} ${clauses[column].operator || 'IN'} (:${column}${index})`;
+        }).join(' OR ');
+
+        return `(${clauseGroup})`;
+    }).join(' AND ');
 
     return sequelize.query(
         `SELECT 
@@ -29,7 +25,11 @@ module.exports = (location) => {
             FROM contact_form_referrals
             LEFT JOIN users ON fk_user = user_id
             LEFT JOIN localized_organizations ON fk_organization = organization_id
-            ${where !== null ? `WHERE ${where}` : ''}`,
+            LEFT JOIN regions ON localized_organizations.region_code = regions.code
+            LEFT JOIN departements ON localized_organizations.departement_code = departements.code
+            LEFT JOIN epci ON localized_organizations.epci_code = epci.code
+            LEFT JOIN cities ON localized_organizations.city_code = cities.code
+            ${whereClause ? `WHERE ${whereClause}` : ''}`,
         {
             type: sequelize.QueryTypes.SELECT,
             replacements,

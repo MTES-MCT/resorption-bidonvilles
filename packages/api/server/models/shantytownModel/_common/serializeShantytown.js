@@ -1,13 +1,15 @@
 const getAddressSimpleOf = require('./getAddressSimpleOf');
 const getUsenameOf = require('./getUsenameOf');
 const getWaterAccessConditions = require('./getWaterAccessConditions');
+const { can } = require('#server/utils/permission');
 
 function fromDateToTimestamp(date) {
     return date !== null ? (new Date(`${date}T00:00:00`).getTime() / 1000) : null;
 }
 
-module.exports = (town, userPermissions) => {
+module.exports = (town, user) => {
     const serializedTown = {
+        type: 'shantytown',
         id: town.id,
         name: town.name,
         status: town.status,
@@ -149,10 +151,14 @@ module.exports = (town, userPermissions) => {
         resorptionTarget: town.resorptionTarget,
     };
 
-    // @todo: alter all dates to a datetime so it can be easily serialized (just like closed_at)
-    if (userPermissions.shantytown_justice
-        && userPermissions.shantytown_justice.access
-        && userPermissions.shantytown_justice.access.allowed === true) {
+    const location = {
+        type: 'city',
+        city: serializedTown.city,
+        epci: serializedTown.epci,
+        departement: serializedTown.departement,
+        region: serializedTown.region,
+    };
+    if (can(user).do('access', 'shantytown_justice').on(location)) {
         Object.assign(serializedTown, {
             ownerComplaint: town.ownerComplaint,
             justiceProcedure: town.justiceProcedure,
@@ -167,9 +173,7 @@ module.exports = (town, userPermissions) => {
         });
     }
 
-    if (userPermissions.shantytown_owner
-        && userPermissions.shantytown_owner.access
-        && userPermissions.shantytown_owner.access.allowed === true) {
+    if (can(user).do('access', 'shantytown_owner').on(location)) {
         Object.assign(serializedTown, {
             owner: town.owner,
         });

@@ -72,7 +72,7 @@ export default {
                 type: user.organization.location.type
             }
         };
-        const hasNationalPermission = permission.geographic_level === "nation";
+        const hasNationalPermission = permission.allow_all;
 
         let location;
         let defaultLocation;

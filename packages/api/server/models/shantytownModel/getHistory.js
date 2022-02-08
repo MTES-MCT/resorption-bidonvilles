@@ -1,36 +1,26 @@
 const { sequelize } = require('#db/models');
 const { fromGeoLevelToTableName } = require('#server/utils/geo');
 const userModel = require('#server/models/userModel')();
-const updateWhereClauseForPermissions = require('#server/models/common/updateWhereClauseForPermissions');
 const getUsenameOf = require('./_common/getUsenameOf');
 const serializeShantytown = require('./_common/serializeShantytown');
 const getDiff = require('./_common/getDiff');
 const SQL = require('./_common/SQL');
+const { restrict } = require('#server/utils/permission');
 
-module.exports = async (userLocation, permissions, location) => {
+module.exports = async (user, location) => {
     // apply geographic level restrictions
     const where = [];
     const replacements = {};
 
-    updateWhereClauseForPermissions({
-        permissions,
-        permission: 'shantytown.list',
-        requestedLocation: location,
-        userLocation,
-        whereFn: (loc) => {
-            if (!loc) {
-                where.push('false');
-                return;
-            }
+    const restrictedLocation = restrict(location).for(user).askingTo('list', 'shantytown');
+    if (restrictedLocation === null) {
+        return [];
+    }
 
-            if (loc.type === 'nation') {
-                return;
-            }
-
-            where.push(`${fromGeoLevelToTableName(loc.type)}.code = :shantytownLocationCode`);
-            replacements.shantytownLocationCode = loc[loc.type].code;
-        },
-    });
+    if (restrictedLocation.type !== 'nation') {
+        where.push(`${fromGeoLevelToTableName(restrictedLocation.type)}.code = :shantytownLocationCode`);
+        replacements.shantytownLocationCode = restrictedLocation[restrictedLocation.type].code;
+    }
 
     const activities = await sequelize.query(
         `
@@ -92,6 +82,7 @@ module.exports = async (userLocation, permissions, location) => {
                     city: {
                         code: activity.cityCode,
                         name: activity.cityName,
+                        main: activity.cityMain,
                     },
                     epci: {
                         code: activity.epciCode,
@@ -109,7 +100,7 @@ module.exports = async (userLocation, permissions, location) => {
             };
 
             const previousVersion = previousVersions[activity.id] || null;
-            const serializedShantytown = serializeShantytown(activity, permissions);
+            const serializedShantytown = serializeShantytown(activity, user);
             previousVersions[activity.id] = serializedShantytown;
 
             if (previousVersion === null) {

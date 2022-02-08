@@ -1,19 +1,15 @@
 const { sequelize } = require('#db/models');
 
-module.exports = (location = null) => {
-    let where = '';
+module.exports = (where = []) => {
     const replacements = {};
-    if (location !== null) {
-        if (location.type === 'region') {
-            where = 'd.fk_region = :locationCode';
-            replacements.locationCode = location.code;
-        } else if (location.type === 'departement') {
-            where = 'd.code = :locationCode';
-            replacements.locationCode = location.code;
-        } else {
-            where = 'FALSE';
-        }
-    }
+    const whereClause = where.map((clauses, index) => {
+        const clauseGroup = Object.keys(clauses).map((column) => {
+            replacements[`${column}${index}`] = clauses[column].value || clauses[column];
+            return `${clauses[column].query || `users.${column}`} ${clauses[column].operator || 'IN'} (:${column}${index})`;
+        }).join(' OR ');
+
+        return `(${clauseGroup})`;
+    }).join(' AND ');
 
     return sequelize.query(
         `SELECT
@@ -30,14 +26,16 @@ module.exports = (location = null) => {
             o.name AS "organizationName",
             o.abbreviation AS "organizationAbbreviation",
             s.resorption_target AS "shantytownResorptionTarget",
-            d.name AS "departementName"
+            departements.name AS "departementName"
         FROM shantytown_actors sa
         LEFT JOIN users u ON sa.fk_user = u.user_id
         LEFT JOIN organizations o ON u.fk_organization = o.organization_id
         LEFT JOIN shantytowns s ON sa.fk_shantytown = s.shantytown_id
-        LEFT JOIN cities c ON s.fk_city = c.code
-        LEFT JOIN departements d ON c.fk_departement = d.code
-        WHERE u.fk_status = 'active'${where !== '' ? `AND ${where}` : ''}
+        LEFT JOIN cities ON s.fk_city = cities.code
+        LEFT JOIN epci ON cities.fk_epci = epci.code
+        LEFT JOIN departements ON cities.fk_departement = departements.code
+        LEFT JOIN regions ON departements.fk_region = regions.code
+        WHERE u.fk_status = 'active'${whereClause !== '' ? `AND ${whereClause}` : ''}
         ORDER BY sa.created_at DESC`,
         {
             type: sequelize.QueryTypes.SELECT,

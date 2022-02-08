@@ -2,30 +2,19 @@ const { sequelize } = require('#db/models');
 const charteEngagementModel = require('#server/models/charteEngagementModel')();
 const permissionModel = require('#server/models/permissionModel')();
 const serializeUser = require('./serializeUser');
+const { where: fWhere } = require('#server/utils/permission');
 
 module.exports = async (where = [], filters, user = null, feature, transaction) => {
     const replacements = {};
 
     if (user !== null) {
-        if (!user.permissions.user || !user.permissions.user[feature]) {
+        const permissionClauseGroup = fWhere().can(user).do(feature, 'user');
+        if (permissionClauseGroup === null) {
             return [];
         }
 
-        // if the feature is allowed locally only
-        if (user.permissions.user[feature].geographic_level !== 'nation') {
-            const userLevel = user.organization.location.type;
-
-            // if the user is not on a national level
-            if (userLevel !== 'nation') {
-                const finalLevel = userLevel === 'region' ? 'region' : 'departement';
-
-                where.push({
-                    location: {
-                        query: `organizations.${finalLevel}_code`,
-                        value: user.organization.location[finalLevel].code,
-                    },
-                });
-            }
+        if (Object.keys(permissionClauseGroup).length > 0) {
+            where.push(permissionClauseGroup);
         }
     }
 
@@ -107,6 +96,10 @@ module.exports = async (where = [], filters, user = null, feature, transaction) 
             roles_admin ON users.fk_role = roles_admin.role_id
         LEFT JOIN
             localized_organizations AS organizations ON users.fk_organization = organizations.organization_id
+        LEFT JOIN regions ON organizations.region_code = regions.code
+        LEFT JOIN departements ON organizations.departement_code = departements.code
+        LEFT JOIN epci ON organizations.epci_code = epci.code
+        LEFT JOIN cities ON organizations.city_code = cities.code
         LEFT JOIN
             organization_types ON organizations.fk_type = organization_types.organization_type_id
         LEFT JOIN
