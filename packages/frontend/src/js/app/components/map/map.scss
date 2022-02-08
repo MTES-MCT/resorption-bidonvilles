@@ -21,9 +21,11 @@
         display: none;
     }
 
+
     #map {
-        width: 1024px;
-        height: 576px;
+        .leaflet-printer {
+            display: none;
+        }
 
         .leaflet-address-toggler {
             display: none;

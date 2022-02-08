@@ -5,7 +5,8 @@
   },
   "hero": {
     "title": "Taking action for slum clearance",
-    "subtitle": "Ask a question or request an access"
+    "subtitle": "Ask a question or request an access",
+    "review": "slums cleared"
   },
   "firstSection": {
     "features": {
@@ -84,20 +85,23 @@
       },
       "figures": {
         "1": {
+          "text": "16 slums cleared"
+        },
+        "2": {
           "text": "8,600 beneficiaries of the actions"
         },
         "3": {
-          "text": "1,000 people re-housed"
+          "text": "1,464 people re-housed"
         },
         "4": {
-          "text": "1,350 children in school"
+          "text": "3,125 children in school"
         },
         "5": {
-          "text": "2,040 beneficiaries",
+          "text": "2,000 beneficiaries",
           "info": "of health support"
         },
         "6": {
-          "text": "615 employment contracts signed"
+          "text": "1078 employment contracts signed"
         }
       },
       "cta": "Download the latest report"

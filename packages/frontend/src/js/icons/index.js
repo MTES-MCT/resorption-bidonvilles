@@ -79,7 +79,8 @@ import {
     faFile,
     faCopy,
     faExternalLinkAlt,
-    faPhone
+    faPhone,
+    faSchool
 } from "@fortawesome/free-solid-svg-icons";
 library.add(faChalkboardTeacher);
 library.add(faFlag);
@@ -160,3 +161,4 @@ library.add(faCopy);
 library.add(faLock);
 library.add(faExternalLinkAlt);
 library.add(faGithub);
+library.add(faSchool);
