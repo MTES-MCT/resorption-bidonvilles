@@ -45,7 +45,7 @@ module.exports = {
     async down(queryInterface) {
         const transaction = await queryInterface.sequelize.transaction();
 
-        const [{ organization_type_id }] = queryInterface.sequelize.query(
+        const [{ organization_type_id }] = await queryInterface.sequelize.query(
             'SELECT organization_type_id FROM organization_types WHERE uid = \'pole_emploi\'',
             {
                 type: queryInterface.sequelize.QueryTypes.SELECT,
