@@ -1,12 +1,23 @@
 const { sequelize } = require('#db/models');
-const updateWhereClauseWithUserLocation = require('./_common/updateWhereClauseWithUserLocation');
-const stringifyWhereClause = require('./_common/stringifyWhereClause');
+const stringifyWhereClause = require('#server/models/_common/stringifyWhereClause');
 const getUsenameOf = require('./_common/getUsenameOf');
+const { where } = require('#server/utils/permission');
 
 module.exports = async (user, latitude, longitude, distance, closed = false) => {
     const replacements = {};
-    const locationWhere = updateWhereClauseWithUserLocation(user, 'list');
-    const locationWhereClause = stringifyWhereClause(locationWhere, replacements);
+    const permissionClauseGroup = where().can(user).do('list', 'shantytown');
+    if (permissionClauseGroup === null) {
+        return [];
+    }
+
+    let locationWhereClause = null;
+    if (Object.keys(permissionClauseGroup).length > 0) {
+        locationWhereClause = stringifyWhereClause(
+            'shantytowns',
+            [permissionClauseGroup],
+            replacements,
+        );
+    }
 
     const distanceCalc = '(6371 * 2 * ASIN(SQRT( POWER(SIN(( :latitude - shantytowns.latitude) *  pi()/180 / 2), 2) +COS( :latitude * pi()/180) * COS(shantytowns.latitude * pi()/180) * POWER(SIN(( :longitude - shantytowns.longitude) * pi()/180 / 2), 2) )))';
 
@@ -22,10 +33,10 @@ module.exports = async (user, latitude, longitude, distance, closed = false) => 
         ${distanceCalc} as distance,
         (SELECT regexp_matches(shantytowns.address, '^(.+) [0-9]+ [^,]+,? [0-9]+,? [^, ]+(,.+)?$'))[1] as address_simple
     FROM shantytowns
-    LEFT JOIN cities on shantytowns.fk_city = cities.code
-    LEFT JOIN epci on cities.fk_epci = epci.code
-    LEFT JOIN departements on cities.fk_departement = departements.code
-    LEFT JOIN regions on departements.fk_region = regions.code
+    LEFT JOIN cities ON shantytowns.fk_city = cities.code
+    LEFT JOIN epci ON cities.fk_epci = epci.code
+    LEFT JOIN departements ON cities.fk_departement = departements.code
+    LEFT JOIN regions ON departements.fk_region = regions.code
     WHERE 
         ${distanceCalc} < :distanceRadius
         AND closed_at is ${closed ? 'NOT' : ''} NULL

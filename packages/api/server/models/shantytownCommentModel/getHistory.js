@@ -1,53 +1,38 @@
 const { fromGeoLevelToTableName } = require('#server/utils/geo');
 const { sequelize } = require('#db/models');
-const updateWhereClauseForPermissions = require('#server/models/common/updateWhereClauseForPermissions');
 const { formatName } = require('#server/models/userModel')();
-const { getUsenameOf, serializeComment } = require('#server/models/shantytownModel')(sequelize);
+const { getUsenameOf, serializeComment } = require('#server/models/shantytownModel')();
+const { restrict } = require('#server/utils/permission');
 
-module.exports = async (userLocation, permissions, location) => {
+module.exports = async (user, location) => {
     // apply geographic level restrictions
     const where = [];
     const replacements = {};
 
-    updateWhereClauseForPermissions({
-        permissions,
-        permission: 'shantytown_comment.list',
-        requestedLocation: location,
-        userLocation,
-        whereFn: (loc) => {
-            if (!loc) {
-                where.push('private != false AND false');
-                return;
-            }
+    const restrictedLocations = {
+        public: restrict(location).for(user).askingTo('list', 'shantytown_comment'),
+        private: restrict(location).for(user).askingTo('listPrivate', 'shantytown_comment'),
+    };
 
-            if (loc.type === 'nation') {
-                return;
-            }
+    if (restrictedLocations.public === null && restrictedLocations.private === null) {
+        return [];
+    }
 
-            where.push(`private = false AND ${fromGeoLevelToTableName(loc.type)}.code = :shantytownCommentLocationCode`);
-            replacements.shantytownCommentLocationCode = loc[loc.type].code;
-        },
-    });
+    // public comments
+    if (restrictedLocations.public === null) {
+        where.push('private != false AND false');
+    } else if (restrictedLocations.public.type !== 'nation') {
+        where.push(`private = false AND ${fromGeoLevelToTableName(restrictedLocations.public.type)}.code = :shantytownCommentLocationCode`);
+        replacements.shantytownCommentLocationCode = restrictedLocations.public[restrictedLocations.public.type].code;
+    }
 
-    updateWhereClauseForPermissions({
-        permissions,
-        permission: 'shantytown_comment.listPrivate',
-        requestedLocation: location,
-        userLocation,
-        whereFn: (loc) => {
-            if (!loc) {
-                where.push('private != true AND false');
-                return;
-            }
-
-            if (loc.type === 'nation') {
-                return;
-            }
-
-            where.push(`private = true AND ${fromGeoLevelToTableName(loc.type)}.code = :privateShantytownCommentLocationCode`);
-            replacements.privateShantytownCommentLocationCode = loc[loc.type].code;
-        },
-    });
+    // private comments
+    if (restrictedLocations.private === null) {
+        where.push('private != true AND false');
+    } else if (restrictedLocations.private.type !== 'nation') {
+        where.push(`private = true AND ${fromGeoLevelToTableName(restrictedLocations.private.type)}.code = :privateShantytownCommentLocationCode`);
+        replacements.privateShantytownCommentLocationCode = restrictedLocations.private[restrictedLocations.private.type].code;
+    }
 
     const activities = await sequelize.query(
         `

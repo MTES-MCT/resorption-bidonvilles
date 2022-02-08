@@ -122,22 +122,26 @@ export default {
                 return false;
             }
 
-            let level =
-                permission.geographic_level !== "local"
-                    ? permission.geographic_level
-                    : this.user.organization.location.type;
-
-            const userLocation = this.user.organization.location[level];
-            if (level === "nation") {
+            if (permission.allow_all === true) {
                 return true;
-            } else if (userLocation === null) {
-                return false;
             }
 
-            const townCode = this.town[level].main || this.town[level].code;
-            const userCode = userLocation.main || userLocation.code;
-
-            return townCode === userCode;
+            return (
+                this.permission.allowed_on.regions.includes(
+                    this.town.region.code
+                ) ||
+                this.permission.allowed_on.departements.includes(
+                    this.town.departement.code
+                ) ||
+                this.permission.allowed_on.epci.includes(this.town.epci.code) ||
+                this.permission.allowed_on.cities.includes(
+                    this.town.city.code
+                ) ||
+                this.permission.allowed_on.cities.includes(
+                    this.town.city.main
+                ) ||
+                this.permission.allowed_on.shantytowns.includes(this.town.id)
+            );
         },
         // Force scroll even if hash is already present in url
         scrollFix(to) {

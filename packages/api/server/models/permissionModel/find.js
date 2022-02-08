@@ -11,8 +11,15 @@ module.exports = async (owners) => {
             uap.user_id,
             uap.fk_entity AS entity,
             uap.fk_feature AS feature,
+            uap.is_writing,
             uap.allowed,
-            uap.fk_geographic_level AS geographic_level
+            uap.allow_all,
+            uap.regions,
+            uap.departements,
+            uap.epci,
+            uap.cities,
+            uap.shantytowns,
+            uap.plans
         FROM user_actual_permissions uap
         WHERE uap.user_id IN (:owners)
         ORDER BY user_id ASC, entity ASC, feature ASC
@@ -34,8 +41,17 @@ module.exports = async (owners) => {
         }
 
         const permission = {
+            is_writing: row.is_writing,
             allowed: row.allowed,
-            geographic_level: row.geographic_level,
+            allow_all: row.allow_all === true,
+            allowed_on: row.allow_all === false ? {
+                regions: row.regions || [],
+                departements: row.departements || [],
+                epci: row.epci || [],
+                cities: row.cities || [],
+                shantytowns: row.shantytowns || [],
+                plans: row.plans || [],
+            } : null,
         };
 
         acc[row.user_id][row.entity][row.feature] = permission;

@@ -288,22 +288,29 @@ export default {
                 return false;
             }
 
-            if (
-                this.permission.geographic_level === "nation" ||
-                this.user.organization.location.type === "nation"
-            ) {
+            if (this.permission.allow_all) {
                 return true;
             }
 
-            // on vérifie qu'il a le droit de modérer spécifiquement ce commentaire
-            const locationType =
-                this.user.organization.location.type === "region"
-                    ? "region"
-                    : "departement";
-
             return (
-                this.activity.shantytown[locationType].code ===
-                this.user.organization.location[locationType].code
+                this.permission.allowed_on.regions.includes(
+                    this.activity.shantytown.region.code
+                ) ||
+                this.permission.allowed_on.departements.includes(
+                    this.activity.shantytown.departement.code
+                ) ||
+                this.permission.allowed_on.epci.includes(
+                    this.activity.shantytown.epci.code
+                ) ||
+                this.permission.allowed_on.cities.includes(
+                    this.activity.shantytown.city.code
+                ) ||
+                this.permission.allowed_on.cities.includes(
+                    this.activity.shantytown.city.main
+                ) ||
+                this.permission.allowed_on.shantytowns.includes(
+                    this.activity.shantytown.id
+                )
             );
         }
     },

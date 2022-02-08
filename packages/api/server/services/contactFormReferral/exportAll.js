@@ -1,29 +1,21 @@
 const ServiceError = require('#server/errors/ServiceError');
 const { list } = require('#server/models/contactFormReferralModel')();
+const { where: fWhere } = require('#server/utils/permission');
 
 module.exports = async (user) => {
-    if (!user || !user.permissions || !user.permissions.contact_form_referral || !user.permissions.contact_form_referral.access) {
+    const permissionClauseGroup = fWhere().can(user).do('access', 'contact_form_referral');
+    if (permissionClauseGroup === null) {
         return [];
     }
 
-    const { allowed, geographic_level: allowedLevel } = user.permissions.contact_form_referral.access;
-    if (!allowed) {
-        return [];
-    }
-
-    const { location: userLocation } = user.organization;
-    let allowedLocation = null;
-    if (allowedLevel !== 'nation' && userLocation.type !== 'nation') {
-        if (userLocation.type === 'region') {
-            allowedLocation = { type: 'region', ...userLocation.region };
-        } else {
-            allowedLocation = { type: 'departement', ...userLocation.departement };
-        }
+    const where = [];
+    if (Object.keys(permissionClauseGroup).length > 0) {
+        where.push([permissionClauseGroup]);
     }
 
     let referrals;
     try {
-        referrals = await list(allowedLocation);
+        referrals = await list(where);
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }

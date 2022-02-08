@@ -8,6 +8,7 @@ const { fromTsToFormat: tsToString, toFormat: dateToString } = require('#server/
 const { createExport } = require('#server/utils/excel');
 const { fromGeoLevelToTableName } = require('#server/utils/geo');
 const { sendUserCommentDeletion } = require('#server/mails/mails');
+const { can } = require('#server/utils/permission');
 const mattermostUtils = require('#server/utils/mattermost');
 const userModel = require('#server/models/userModel')(sequelize);
 const mails = require('#server/mails/mails');
@@ -21,10 +22,6 @@ function addError(errors, field, error) {
     }
 
     errors[field].push(error);
-}
-
-function hasPermission(user, feature, entity) {
-    return user.permissions && user.permissions[entity] && user.permissions[entity][feature] && user.permissions[entity][feature].allowed === true;
 }
 
 module.exports = (models) => {
@@ -235,7 +232,14 @@ module.exports = (models) => {
                 return next(error);
             }
 
-            if (author.id !== req.user.id && !hasPermission(req.user, 'moderate', 'shantytown_comment')) {
+            const location = {
+                type: 'city',
+                region: town.region,
+                departement: town.departement,
+                epci: town.epci,
+                city: town.city,
+            };
+            if (author.id !== req.user.id && !can(req.user).do('moderate', 'shantytown_comment').on(location)) {
                 return res.status(400).send({
                     error: {
                         user_message: 'Vous n\'avez pas accès à ces données',
@@ -299,20 +303,6 @@ module.exports = (models) => {
         },
 
         async export(req, res, next) {
-            function isLocationAllowed(user, location) {
-                if (user.permissions.shantytown.export.geographic_level === 'nation') {
-                    return true;
-                }
-
-                if (user.organization.location.type === 'nation') {
-                    return true;
-                }
-
-                return location[user.organization.location.type]
-                    && user.organization.location[user.organization.location.type]
-                    && user.organization.location[user.organization.location.type].code === location[user.organization.location.type].code;
-            }
-
             if (!Object.prototype.hasOwnProperty.call(req.query, 'locationType')
                 || !Object.prototype.hasOwnProperty.call(req.query, 'locationCode')) {
                 return res.status(400).send({
@@ -342,7 +332,7 @@ module.exports = (models) => {
                 next(error);
             }
 
-            if (!isLocationAllowed(req.user, location)) {
+            if (!can(req.user).do('export', 'shantytown').on(location)) {
                 return res.status(400).send({
                     success: false,
                     response: {

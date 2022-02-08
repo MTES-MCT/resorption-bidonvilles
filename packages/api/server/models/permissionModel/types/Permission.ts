@@ -1,6 +1,13 @@
-import { permissionGeographicLevel } from './permissionGeographicLevel';
-
 export interface Permission {
-    allowed: true,
-    geographic_level: permissionGeographicLevel,
+    is_writing: boolean,
+    allowed: boolean,
+    allow_all: boolean,
+    allowed_on: null | {
+        regions: string[],
+        departements: string[],
+        epci: string[],
+        cities: string[],
+        shantytowns: number[],
+        plans: number[],
+    },
 }

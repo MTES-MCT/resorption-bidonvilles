@@ -22,7 +22,7 @@ export default {
     data() {
         const { user } = getConfig();
         const permission = getPermission("plan.list");
-        const hasNationalPermission = permission.geographic_level === "nation";
+        const hasNationalPermission = permission.allow_all;
         const data = {
             locationTitle: null,
             defaultLocation: null,
@@ -157,7 +157,6 @@ export default {
 
             this.state = "loading";
             this.error = null;
-
             list()
                 .then(plans => {
                     this.plans = plans;
