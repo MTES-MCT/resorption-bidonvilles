@@ -88,20 +88,23 @@
       },
       "figures": {
         "1": {
+          "text": "16 sites résorbés"
+        },
+        "2": {
           "text": "8600 bénéficiaires"
         },
         "3": {
-          "text": "1 000 personnes relogées"
+          "text": "1 464 personnes relogées"
         },
         "4": {
-          "text": "1 350 enfants scolarisés"
+          "text": "3 125 enfants scolarisés"
         },
         "5": {
-          "text": "2 040 bénéficiaires",
+          "text": "2 000 bénéficiaires",
           "info": "d'un accompagnement santé"
         },
         "6": {
-          "text": "615 contrats de travail signés"
+          "text": "1078 contrats de travail signés"
         }
       },
       "cta": "Télécharger le dernier bilan"

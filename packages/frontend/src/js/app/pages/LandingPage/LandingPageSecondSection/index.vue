@@ -77,7 +77,7 @@
                 width="640"
                 v-if="$i18n.locale === 'bg'"
                 class="mt-20 w-full"
-                src="./assets/map-bg.png"
+                src="./assets/map-bg.jpg"
             />
             <g-image
                 width="640"
@@ -125,22 +125,26 @@
                 <div
                     class="inline-block bg-black text-white text-display-md px-4"
                 >
-                    2019
+                    2020
                 </div>
                 <div class="bg-gray-500 h-px flex-1" />
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 md:gap-x-16">
                 <LandingPageBilanBlock
-                    icon="users"
+                    icon="map-marker-alt"
                     :text="$t('landingPage.secondSection.bilan.figures.1.text')"
+                />
+                <LandingPageBilanBlock
+                    icon="users"
+                    :text="$t('landingPage.secondSection.bilan.figures.2.text')"
                 />
                 <LandingPageBilanBlock
                     icon="hand-holding-medical"
                     :text="$t('landingPage.secondSection.bilan.figures.3.text')"
                 />
                 <LandingPageBilanBlock
-                    icon="map-marker-alt"
+                    icon="school"
                     :text="$t('landingPage.secondSection.bilan.figures.4.text')"
                 />
                 <LandingPageBilanBlock
@@ -155,7 +159,8 @@
             </div>
             <div class="text-center mt-8">
                 <a
-                    href="https://www.gouvernement.fr/sites/default/files/contenu/piece-jointe/2019/09/bilan_campements_2018_vecran.pdf"
+                    target="_blank"
+                    href="https://www.gouvernement.fr/sites/default/files/contenu/piece-jointe/2021/10/point_detape_2019-2020_-_resorption_des_bidonvilles_vweb.pdf"
                 >
                     <Button variant="secondary">
                         {{ $t("landingPage.secondSection.bilan.cta") }}

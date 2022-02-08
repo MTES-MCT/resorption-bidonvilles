@@ -85,20 +85,23 @@
       },
       "figures": {
         "1": {
+          "text": "16 platz resorbite"
+        },
+        "2": {
           "text": "8 600 de beneficiari ai acestor actiuni"
         },
         "3": {
-          "text": "1 000 de persoane relocate"
+          "text": "1 464 de persoane relocate"
         },
         "4": {
-          "text": "1 350 elevi"
+          "text": "3 125 elevi"
         },
         "5": {
-          "text": "2 040 de beneficiari",
+          "text": "2 000 de beneficiari",
           "info": "de sprijin medical"
         },
         "6": {
-          "text": "615 contracte de muncă semnate"
+          "text": "1078 contracte de muncă semnate"
         }
       },
       "cta": "Încarcaţi ultimul bilanţ"
