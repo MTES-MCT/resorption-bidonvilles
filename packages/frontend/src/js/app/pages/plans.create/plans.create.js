@@ -408,13 +408,15 @@ export default {
 
             const codesOfAllowedDepartements = [
                 ...permission.allowed_on.departements,
-                ...(await Promise.all(
-                    permission.allowed_on.regions.map(code =>
-                        getDepartementsForRegion(code)
+                ...(
+                    await Promise.all(
+                        permission.allowed_on.regions.map(code =>
+                            getDepartementsForRegion(code)
+                        )
                     )
                 )
                     .map(({ departements }) => departements)
-                    .flat())
+                    .flat()
             ];
 
             return this.departements.filter(({ code }) => {

@@ -13,7 +13,7 @@ module.exports = async (data, transaction = undefined) => {
                 fk_user: data.fk_user || null,
                 fk_organization: data.fk_organization || null,
                 allowed: data.allowed,
-                allow_all: typeof data.allowed === 'boolean' ? data.allowed : null,
+                allow_all: typeof data.allow_all === 'boolean' ? data.allow_all : null,
                 is_cumulative: typeof data.is_cumulative === 'boolean' ? data.is_cumulative : null,
             },
         },

@@ -12,8 +12,11 @@ async function addAttachments(attachments, user, feature, entity, transaction = 
             return;
         }
 
-        userPermissionId = userPermission.id;
-        await updateUserPermission(userPermissionId, { allowed: true, allow_all: false, is_cumulative: false }, transaction);
+        userPermissionId = userPermission.user_permission_id;
+
+        if (userPermission.allowed === false) {
+            await updateUserPermission(userPermissionId, { allowed: true, allow_all: false, is_cumulative: false }, transaction);
+        }
     } else {
         let is_cumulative = false;
         if (defaultPermission !== null) {

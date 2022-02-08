@@ -1041,7 +1041,11 @@ module.exports = models => ({
                 await sequelize.query(
                     'UPDATE plans2 SET name = :name, started_at = :startedAt, expected_to_end_at = :expectedToEndAt, goals = :goals, updated_by = :updatedBy, updated_at = :updatedAt WHERE plan_id = :planId',
                     {
-                        replacements: Object.assign({}, planData, { planId: plan.id }),
+                        replacements: {
+                            ...planData,
+                            planId: plan.id,
+                            updatedAt: new Date(),
+                        },
                         transaction: t,
                     },
                 );
