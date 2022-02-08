@@ -14,13 +14,10 @@ module.exports = requestedLocation => ({
                     return null;
                 }
 
-                let level = permission.geographic_level;
-                if (level === 'local') {
-                    if (permission.is_writing === false && ['city', 'epci'].includes(user.organization.location.type)) {
-                        level = 'departement';
-                    } else {
-                        level = user.organization.location.type;
-                    }
+                // local permissions
+                let level = user.organization.location.type;
+                if (permission.is_writing === false && ['city', 'epci'].includes(user.organization.location.type)) {
+                    level = 'departement';
                 }
 
                 if (!user.organization.location[level] || (requestedLocation[level] && user.organization.location[level].code !== requestedLocation[level].code)) {

@@ -9,6 +9,7 @@ function fromDateToTimestamp(date) {
 
 module.exports = (town, user) => {
     const serializedTown = {
+        type: 'shantytown',
         id: town.id,
         name: town.name,
         status: town.status,

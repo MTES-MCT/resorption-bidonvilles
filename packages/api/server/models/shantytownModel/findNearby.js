@@ -1,5 +1,5 @@
 const { sequelize } = require('#db/models');
-const stringifyWhereClause = require('./_common/stringifyWhereClause');
+const stringifyWhereClause = require('#server/models/_common/stringifyWhereClause');
 const getUsenameOf = require('./_common/getUsenameOf');
 const { where } = require('#server/utils/permission');
 
@@ -13,6 +13,7 @@ module.exports = async (user, latitude, longitude, distance, closed = false) => 
     let locationWhereClause = null;
     if (Object.keys(permissionClauseGroup).length > 0) {
         locationWhereClause = stringifyWhereClause(
+            'shantytowns',
             [permissionClauseGroup],
             replacements,
         );

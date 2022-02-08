@@ -27,6 +27,8 @@ describe.only('utils/permission.restrict()', () => {
             do: {
                 allowed: false,
                 is_writing: false,
+                allow_all: null,
+                allowed_on: null,
             },
         };
         expect(restrict(nation()).for(user).askingTo('do', 'something')).to.be.null;
@@ -38,49 +40,83 @@ describe.only('utils/permission.restrict()', () => {
                 'permission nationale': {
                     condition: 'nation',
                     user_level: paris.city(),
-                    permission_level: 'nation',
+                    allow_all: true,
+                    allowed_on: null,
                     max_level: nation(),
                     out_of_bounds: null,
                 },
                 'permission régionale': {
                     condition: 'sa région',
-                    user_level: paris.city(),
-                    permission_level: 'region',
+                    user_level: paris.region(),
+                    allow_all: false,
+                    allowed_on: {
+                        regions: [paris.city().region.code],
+                        departements: [],
+                        epci: [],
+                        cities: [],
+                        shantytowns: [],
+                        plans: [],
+                    },
                     max_level: paris.region(),
                     out_of_bounds: marseille.district(),
                 },
                 'permission départementale': {
                     condition: 'son département',
-                    user_level: paris.city(),
-                    permission_level: 'departement',
+                    user_level: paris.departement(),
+                    allow_all: false,
+                    allowed_on: {
+                        regions: [],
+                        departements: [paris.city().departement.code],
+                        epci: [],
+                        cities: [],
+                        shantytowns: [],
+                        plans: [],
+                    },
                     max_level: paris.departement(),
                     out_of_bounds: marseille.district(),
                 },
                 'permission intercommunale': {
                     condition: 'son epci',
-                    user_level: paris.city(),
-                    permission_level: 'epci',
+                    user_level: paris.epci(),
+                    allow_all: false,
+                    allowed_on: {
+                        regions: [],
+                        departements: [],
+                        epci: [paris.city().epci.code],
+                        cities: [],
+                        shantytowns: [],
+                        plans: [],
+                    },
                     max_level: paris.epci(),
                     out_of_bounds: marseille.district(),
                 },
                 'permission communale': {
                     condition: 'sa ville',
                     user_level: paris.city(),
-                    permission_level: 'city',
-                    max_level: paris.city(),
-                    out_of_bounds: marseille.district(),
-                },
-                'permission d\'écriture locale': {
-                    condition: 'sa ville',
-                    user_level: paris.city(),
-                    permission_level: 'local',
+                    allow_all: false,
+                    allowed_on: {
+                        regions: [],
+                        departements: [],
+                        epci: [],
+                        cities: [paris.city().city.code],
+                        shantytowns: [],
+                        plans: [],
+                    },
                     max_level: paris.city(),
                     out_of_bounds: marseille.district(),
                 },
                 'permission de lecture locale': {
                     condition: 'son département',
                     user_level: paris.city(),
-                    permission_level: 'local',
+                    allow_all: false,
+                    allowed_on: {
+                        regions: [],
+                        departements: [paris.city().departement.code],
+                        epci: [],
+                        cities: [],
+                        shantytowns: [],
+                        plans: [],
+                    },
                     is_writing: false,
                     max_level: paris.departement(),
                     out_of_bounds: marseille.district(),
@@ -90,42 +126,68 @@ describe.only('utils/permission.restrict()', () => {
                 'permission nationale': {
                     condition: 'nation',
                     user_level: paris.epci(),
-                    permission_level: 'nation',
+                    allow_all: true,
+                    allowed_on: null,
                     max_level: nation(),
                     out_of_bounds: null,
                 },
                 'permission régionale': {
                     condition: 'sa région',
-                    user_level: paris.epci(),
-                    permission_level: 'region',
+                    user_level: paris.region(),
+                    allow_all: false,
+                    allowed_on: {
+                        regions: [paris.city().region.code],
+                        departements: [],
+                        epci: [],
+                        cities: [],
+                        shantytowns: [],
+                        plans: [],
+                    },
                     max_level: paris.region(),
                     out_of_bounds: marseille.district(),
                 },
                 'permission départementale': {
                     condition: 'son département',
-                    user_level: paris.epci(),
-                    permission_level: 'departement',
+                    user_level: paris.departement(),
+                    allow_all: false,
+                    allowed_on: {
+                        regions: [],
+                        departements: [paris.city().departement.code],
+                        epci: [],
+                        cities: [],
+                        shantytowns: [],
+                        plans: [],
+                    },
                     max_level: paris.departement(),
                     out_of_bounds: marseille.district(),
                 },
                 'permission intercommunale': {
                     condition: 'son epci',
                     user_level: paris.epci(),
-                    permission_level: 'epci',
-                    max_level: paris.epci(),
-                    out_of_bounds: marseille.district(),
-                },
-                'permission d\'écriture locale': {
-                    condition: 'son epci',
-                    user_level: paris.epci(),
-                    permission_level: 'local',
+                    allow_all: false,
+                    allowed_on: {
+                        regions: [],
+                        departements: [],
+                        epci: [paris.city().epci.code],
+                        cities: [],
+                        shantytowns: [],
+                        plans: [],
+                    },
                     max_level: paris.epci(),
                     out_of_bounds: marseille.district(),
                 },
                 'permission de lecture locale': {
                     condition: 'son département',
                     user_level: paris.epci(),
-                    permission_level: 'local',
+                    allow_all: false,
+                    allowed_on: {
+                        regions: [],
+                        departements: [paris.city().departement.code],
+                        epci: [],
+                        cities: [],
+                        shantytowns: [],
+                        plans: [],
+                    },
                     is_writing: false,
                     max_level: paris.departement(),
                     out_of_bounds: marseille.district(),
@@ -135,28 +197,38 @@ describe.only('utils/permission.restrict()', () => {
                 'permission nationale': {
                     condition: 'nation',
                     user_level: paris.departement(),
-                    permission_level: 'nation',
+                    allow_all: true,
+                    allowed_on: null,
                     max_level: nation(),
                     out_of_bounds: null,
                 },
                 'permission régionale': {
                     condition: 'sa région',
-                    user_level: paris.departement(),
-                    permission_level: 'region',
+                    user_level: paris.region(),
+                    allow_all: false,
+                    allowed_on: {
+                        regions: [paris.city().region.code],
+                        departements: [],
+                        epci: [],
+                        cities: [],
+                        shantytowns: [],
+                        plans: [],
+                    },
                     max_level: paris.region(),
                     out_of_bounds: marseille.district(),
                 },
                 'permission départementale': {
                     condition: 'son département',
                     user_level: paris.departement(),
-                    permission_level: 'departement',
-                    max_level: paris.departement(),
-                    out_of_bounds: marseille.district(),
-                },
-                'permission locale': {
-                    condition: 'son département',
-                    user_level: paris.departement(),
-                    permission_level: 'local',
+                    allow_all: false,
+                    allowed_on: {
+                        regions: [],
+                        departements: [paris.city().departement.code],
+                        epci: [],
+                        cities: [],
+                        shantytowns: [],
+                        plans: [],
+                    },
                     max_level: paris.departement(),
                     out_of_bounds: marseille.district(),
                 },
@@ -165,21 +237,23 @@ describe.only('utils/permission.restrict()', () => {
                 'permission nationale': {
                     condition: 'nation',
                     user_level: paris.region(),
-                    permission_level: 'nation',
+                    allow_all: true,
+                    allowed_on: null,
                     max_level: nation(),
                     out_of_bounds: null,
                 },
                 'permission régionale': {
                     condition: 'sa région',
                     user_level: paris.region(),
-                    permission_level: 'region',
-                    max_level: paris.region(),
-                    out_of_bounds: marseille.district(),
-                },
-                'permission locale': {
-                    condition: 'sa région',
-                    user_level: paris.region(),
-                    permission_level: 'local',
+                    allow_all: false,
+                    allowed_on: {
+                        regions: [paris.city().region.code],
+                        departements: [],
+                        epci: [],
+                        cities: [],
+                        shantytowns: [],
+                        plans: [],
+                    },
                     max_level: paris.region(),
                     out_of_bounds: marseille.district(),
                 },
@@ -188,14 +262,8 @@ describe.only('utils/permission.restrict()', () => {
                 'permission nationale': {
                     condition: 'nation',
                     user_level: nation(),
-                    permission_level: 'nation',
-                    max_level: nation(),
-                    out_of_bounds: null,
-                },
-                'permission locale': {
-                    condition: 'nation',
-                    user_level: nation(),
-                    permission_level: 'local',
+                    allow_all: true,
+                    allowed_on: null,
                     max_level: nation(),
                     out_of_bounds: null,
                 },
@@ -205,7 +273,7 @@ describe.only('utils/permission.restrict()', () => {
         Object.keys(cases).forEach((userLevel) => {
             Object.keys(cases[userLevel]).forEach((permissionLevel) => {
                 const {
-                    condition, permission_level, user_level, is_writing, max_level, out_of_bounds,
+                    condition, allow_all, allowed_on, user_level, is_writing, max_level, out_of_bounds,
                 } = cases[userLevel][permissionLevel];
 
                 const { above, below } = getLevelLimitsFor(max_level);
@@ -214,7 +282,8 @@ describe.only('utils/permission.restrict()', () => {
                         user.permissions.something = {
                             do: {
                                 allowed: true,
-                                geographic_level: permission_level,
+                                allow_all,
+                                allowed_on,
                                 is_writing: is_writing !== false,
                             },
                         };
@@ -227,7 +296,8 @@ describe.only('utils/permission.restrict()', () => {
                     user.permissions.something = {
                         do: {
                             allowed: true,
-                            geographic_level: permission_level,
+                            allow_all,
+                            allowed_on,
                             is_writing: is_writing !== false,
                         },
                     };
@@ -240,7 +310,8 @@ describe.only('utils/permission.restrict()', () => {
                         user.permissions.something = {
                             do: {
                                 allowed: true,
-                                geographic_level: permission_level,
+                                allow_all,
+                                allowed_on,
                                 is_writing: is_writing !== false,
                             },
                         };
@@ -251,76 +322,6 @@ describe.only('utils/permission.restrict()', () => {
             });
         });
     });
-
-    describe('cas invalides', () => {
-        const cases = {
-            'utilisateur intercommunal': {
-                'permission communale': {
-                    user_level: paris.epci(),
-                    permission_level: 'city',
-                },
-            },
-            'utilisateur départemental': {
-                'permission intercommunale': {
-                    user_level: paris.departement(),
-                    permission_level: 'epci',
-                },
-                'permission communale': {
-                    user_level: paris.departement(),
-                    permission_level: 'city',
-                },
-            },
-            'utilisateur régional': {
-                'permission départementale': {
-                    user_level: paris.region(),
-                    permission_level: 'departement',
-                },
-                'permission intercommunale': {
-                    user_level: paris.region(),
-                    permission_level: 'epci',
-                },
-                'permission communale': {
-                    user_level: paris.region(),
-                    permission_level: 'city',
-                },
-            },
-            'utilisateur national': {
-                'permission régionale': {
-                    user_level: nation(),
-                    permission_level: 'region',
-                },
-                'permission départementale': {
-                    user_level: nation(),
-                    permission_level: 'departement',
-                },
-                'permission intercommunale': {
-                    user_level: nation(),
-                    permission_level: 'epci',
-                },
-                'permission communale': {
-                    user_level: nation(),
-                    permission_level: 'city',
-                },
-            },
-        };
-
-        Object.keys(cases).forEach((userLevel) => {
-            Object.keys(cases[userLevel]).forEach((permissionLevel) => {
-                const { permission_level, user_level } = cases[userLevel][permissionLevel];
-                it(`pour un ${userLevel} avec une ${permissionLevel}, retourne null`, () => {
-                    user.permissions.something = {
-                        do: {
-                            allowed: true,
-                            geographic_level: permission_level,
-                        },
-                    };
-                    user.organization.location = user_level;
-                    expect(restrict(paris.city()).for(user).askingTo('do', 'something')).to.be.null;
-                });
-            });
-        });
-    });
-
 
     function getLevelLimitsFor(location) {
         switch (location.type) {

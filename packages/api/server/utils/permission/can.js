@@ -10,32 +10,53 @@ module.exports = user => ({
                     return false;
                 }
 
-                // check the geographic level
-                let permissionLevel = permission.geographic_level;
-                if (permission.geographic_level === 'local') {
-                    if (['epci', 'city'].includes(user.organization.location.type) && permission.is_writing === false) {
-                        permissionLevel = 'departement';
-                    } else {
-                        permissionLevel = user.organization.location.type;
-                    }
-                }
-
-                if (permissionLevel === 'nation') {
+                // if the permission is allowed everywhere: we can stop here
+                if (permission.allow_all === true) {
                     return true;
                 }
 
-                const locationLevel = location[permissionLevel];
-                if (!locationLevel) {
-                    return false;
+                // check shantytowns and plans
+                let geoLocation = location;
+                if (location.type === 'shantytown') {
+                    if (permission.allowed_on.shantytowns.includes(location.id)) {
+                        return true;
+                    }
+
+                    geoLocation = {
+                        type: 'city',
+                        region: location.region,
+                        departement: location.departement,
+                        epci: location.epci,
+                        city: location.city,
+                    };
                 }
 
-                const userLevel = user.organization.location[permissionLevel];
-                if (!userLevel) {
-                    return false;
+                if (location.type === 'plan') {
+                    if (permission.allowed_on.plans.includes(location.id)) {
+                        return true;
+                    }
+
+                    geoLocation = location.geo_location;
                 }
 
-                return (userLevel.main || userLevel.code)
-                            === (locationLevel.main || locationLevel.code);
+                // check locations
+                if (geoLocation.city !== null && (permission.allowed_on.cities.includes(geoLocation.city.code) || permission.allowed_on.cities.includes(geoLocation.city.main))) {
+                    return true;
+                }
+
+                if (geoLocation.epci !== null && permission.allowed_on.epci.includes(geoLocation.epci.code)) {
+                    return true;
+                }
+
+                if (geoLocation.departement !== null && permission.allowed_on.departements.includes(geoLocation.departement.code)) {
+                    return true;
+                }
+
+                if (geoLocation.region !== null && permission.allowed_on.regions.includes(geoLocation.region.code)) {
+                    return true;
+                }
+
+                return false;
             },
         };
     },

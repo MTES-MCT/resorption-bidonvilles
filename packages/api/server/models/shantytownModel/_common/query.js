@@ -1,7 +1,7 @@
 const { sequelize } = require('#db/models');
 const shantytownActorModel = require('#server/models/shantytownActorModel')();
 const planShantytownModel = require('#server/models/planShantytownModel')();
-const stringifyWhereClause = require('./stringifyWhereClause');
+const stringifyWhereClause = require('#server/models/_common/stringifyWhereClause');
 const getComments = require('./getComments');
 const serializeShantytown = require('./serializeShantytown');
 const getDiff = require('./getDiff');
@@ -46,7 +46,7 @@ module.exports = async (where = [], order = ['departements.code ASC', 'cities.na
     }
 
     const replacements = {};
-    const whereClause = stringifyWhereClause(where, replacements);
+    const whereClause = stringifyWhereClause('shantytowns', where, replacements);
     const towns = await sequelize.query(
         getBaseSql(
             'regular',

@@ -82,6 +82,7 @@ module.exports = async (user, location) => {
                     city: {
                         code: activity.cityCode,
                         name: activity.cityName,
+                        main: activity.cityMain,
                     },
                     epci: {
                         code: activity.epciCode,
