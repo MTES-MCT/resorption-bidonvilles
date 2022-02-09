@@ -5,7 +5,7 @@
 
         <PrivateContainer v-if="canSubmitHighComment">
             <CovidHistoryNewHighComment
-                :class="['flex-1', 'pb-16', 'pt-16']"
+                class="py-16"
                 @addComment="submitHighCovidComment"
                 :user="user"
                 :allowedDepartements="allowedDepartements"
