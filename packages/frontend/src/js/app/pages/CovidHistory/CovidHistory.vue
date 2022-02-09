@@ -261,8 +261,8 @@ export default {
             );
         },
         initLocation() {
-            const { geographic_level } = getPermission("shantytown.list");
-            if (geographic_level === "nation") {
+            const permission = getPermission("shantytown.list");
+            if (permission && permission.allow_all === true) {
                 this.locationType = "nation";
             } else {
                 const { location } = this.user.organization;
