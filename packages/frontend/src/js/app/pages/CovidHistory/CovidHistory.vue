@@ -263,12 +263,11 @@ export default {
             );
         },
         initLocation() {
-            const { user } = getConfig();
             const { geographic_level } = getPermission("shantytown.list");
             if (geographic_level === "nation") {
                 this.locationType = "nation";
             } else {
-                const { location } = user.organization;
+                const { location } = this.user.organization;
                 this.locationType = location.type;
                 this.locationCode = location[location.type].code;
             }
