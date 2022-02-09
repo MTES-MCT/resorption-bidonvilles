@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-1 justify-between">
+    <div class="flex justify-between">
         <CovidHistoryDateColumn
             :date="date"
             class="w-48 pr-4 mr-4 mt-4 border-r-4 border-blue100"
