@@ -3,7 +3,7 @@
         <div>
             <h1 class="text-display-lg mb-4">Covid-19</h1>
             <h2 class="mb-4">
-                L'ensemble des commentaires sur votre territoire (département ou
+                L'ensemble des messages sur votre territoire (département ou
                 région)
             </h2>
         </div>

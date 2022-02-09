@@ -1,17 +1,15 @@
 <template>
     <div>
         <div class="text-display-lg text-corail">
-            <Icon icon="comment" /> Ecrire un commentaire 'Territoire'
+            <Icon icon="comment" /> Écrire un message 'Territoire'
         </div>
         <div class="text-display-md pt-6 pb-4">
-            Les commentaires "territoires" permettent de partager des
-            informations sur le pilotage, la coordination et l'organisation
-            retenus au niveau local.
+            Les messages "territoires" permettent de partager des informations
+            sur le pilotage, la coordination et l'organisation retenus au niveau
+            local.
         </div>
         <div v-if="allowedDepartements.length > 1">
-            <CheckableGroup
-                label="Territoire(s) concerné(s) par votre commentaire"
-            >
+            <CheckableGroup label="Territoire(s) concerné(s) par votre message">
                 <Checkbox
                     v-for="departement in allowedDepartements"
                     v-model="departements"
@@ -22,7 +20,7 @@
             </CheckableGroup>
         </div>
         <div v-else-if="allowedDepartements.length === 1">
-            Territoire concerné par votre commentaire :
+            Territoire concerné par votre message :
             {{ allowedDepartements[0].name }}
         </div>
         <div class="bg-white p-6 customShadow">

@@ -34,12 +34,12 @@
                     :active="filter === 'shantytowns'"
                     @click="setFilter('shantytowns')"
                     class="mr-8"
-                    >Commentaires "Sites"</CovidHistoryHeaderTab
+                    >Messages "Sites"</CovidHistoryHeaderTab
                 >
                 <CovidHistoryHeaderTab
                     :active="filter === 'territory'"
                     @click="setFilter('territory')"
-                    >Commentaires "Territoires"</CovidHistoryHeaderTab
+                    >Messages "Territoires"</CovidHistoryHeaderTab
                 >
             </CovidHistoryHeader>
 
