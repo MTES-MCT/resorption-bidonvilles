@@ -18,6 +18,10 @@
             <CovidHistoryLoader></CovidHistoryLoader>
         </PrivateContainer>
 
+        <PrivateContainer v-else-if="this.error !== null">
+            <LoadingError>{{ this.error }}</LoadingError>
+        </PrivateContainer>
+
         <PrivateContainer v-else class="py-6">
             <CovidHistoryHeaderLinks class="mb-6 mt-6">
             </CovidHistoryHeaderLinks>
@@ -84,6 +88,7 @@ import CovidHistoryEmpty from "./CovidHistoryEmpty.vue";
 import CovidHistoryNewHighComment from "./CovidHistoryNewHighComment.vue";
 import PrivateLayout from "#app/components/PrivateLayout";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer.vue";
+import LoadingError from "#app/components/PrivateLayout/LoadingError.vue";
 import CovidHistorySearchbar from "./CovidHistorySearchbar.vue";
 import { get as getConfig, getPermission } from "#helpers/api/config";
 import {
@@ -102,6 +107,7 @@ export default {
         CovidHistoryHeaderLinks,
         PrivateLayout,
         PrivateContainer,
+        LoadingError,
         CovidHistoryLoader,
         CovidHistoryHeader,
         CovidHistoryHeaderTab,
