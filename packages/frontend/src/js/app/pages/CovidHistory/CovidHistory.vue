@@ -239,9 +239,7 @@ export default {
         },
         canSubmitHighComment() {
             return (
-                this.user.organization.location.type !== "nation" &&
-                getPermission("covid_comment.list").geographic_level !==
-                    "nation"
+                this.allowedDepartements && this.allowedDepartements.length > 0
             );
         }
     },
