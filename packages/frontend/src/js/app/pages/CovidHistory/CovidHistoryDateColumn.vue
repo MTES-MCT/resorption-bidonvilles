@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import formatDate from "./utils/formatDate";
+import formatDate from "#app/utils/formatDate";
 
 export default {
     props: {
