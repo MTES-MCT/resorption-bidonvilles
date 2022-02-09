@@ -3,14 +3,8 @@
         <CovidHistorySearchbar @locationChange="onLocationChange">
         </CovidHistorySearchbar>
 
-        <PrivateContainer v-if="canSubmitHighComment">
-            <CovidHistoryNewHighComment
-                class="py-16"
-                @addComment="submitHighCovidComment"
-                :user="user"
-                :allowedDepartements="allowedDepartements"
-                :highCovidComment="highCovidComment"
-            />
+        <PrivateContainer>
+            <CovidHistoryNewHighComment class="py-16" />
         </PrivateContainer>
 
         <PrivateContainer v-if="this.loading">
@@ -83,11 +77,6 @@ import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer.vue
 import LoadingError from "#app/components/PrivateLayout/LoadingError.vue";
 import CovidHistorySearchbar from "./CovidHistorySearchbar.vue";
 import { get as getConfig, getPermission } from "#helpers/api/config";
-import {
-    getDepartementsForRegion,
-    getDepartementsForEpci
-} from "#helpers/api/geo";
-import { create } from "#helpers/api/highCovidComment";
 import { listRegular } from "#helpers/api/userActivity";
 import { mapGetters } from "vuex";
 
@@ -134,24 +123,6 @@ export default {
             activities: [],
 
             /**
-             * List of departements
-             *
-             * @type {Array.<Departement>}
-             */
-            allowedDepartements: [],
-
-            /**
-             * List of selected departements
-             *
-             * @type {Object}
-             */
-            highCovidComment: {
-                data: {},
-                pending: false,
-                error: null
-            },
-
-            /**
              * The error's user message
              *
              * Obivously, null if there is no error
@@ -173,7 +144,8 @@ export default {
 
     computed: {
         ...mapGetters({
-            locations: "locations"
+            locations: "locations",
+            allowedDepartements: "allowedDepartements"
         }),
         nbPages() {
             return Math.ceil(this.filteredActivities.length / PER_PAGE);
@@ -227,15 +199,14 @@ export default {
             return groups;
         },
         canSubmitHighComment() {
-            return (
-                this.allowedDepartements && this.allowedDepartements.length > 0
-            );
+            return this.allowedDepartements.length > 0;
         }
     },
 
     created() {
         this.initLocation();
         this.load();
+        this.$store.dispatch("fetchAllowedDepartements");
     },
 
     methods: {
@@ -269,47 +240,9 @@ export default {
 
             //
             try {
-                let departementsPromise;
-                switch (this.user.organization.location.type) {
-                    default:
-                    case "nation":
-                        departementsPromise = Promise.resolve({
-                            departements: []
-                        });
-                        break;
-
-                    case "region":
-                        departementsPromise = getDepartementsForRegion(
-                            this.user.organization.location.region.code
-                        );
-                        break;
-
-                    case "epci":
-                        departementsPromise = getDepartementsForEpci(
-                            this.user.organization.location.epci.code
-                        );
-                        break;
-
-                    case "departement":
-                    case "city":
-                        departementsPromise = Promise.resolve({
-                            departements: [
-                                this.user.organization.location.departement
-                            ]
-                        });
-                }
-
-                const [userActivities, { departements }] = await Promise.all([
-                    this.getCovidMessages(),
-                    departementsPromise
-                ]);
-
+                const userActivities = await this.getCovidMessages();
                 this.activities = userActivities;
                 this.currentPage = 1;
-                this.allowedDepartements = departements;
-                this.highCovidComment.data.departements = departements.map(
-                    ({ code }) => code
-                );
             } catch (error) {
                 this.error =
                     error.user_message || "Une erreur inconnue est survenue";
@@ -336,33 +269,6 @@ export default {
         setFilter(filter) {
             this.filter = filter;
             this.currentPage = 1;
-        },
-
-        /**
-         *
-         */
-        submitHighCovidComment(data) {
-            if (this.highCovidComment.pending) {
-                return;
-            }
-
-            this.highCovidComment.pending = true;
-            this.highCovidComment.error = null;
-
-            create(data)
-                .then(() => {
-                    this.highCovidComment.pending = false;
-                })
-                .then(() => {
-                    this.load();
-                })
-                .catch(({ user_message: message, fields }) => {
-                    this.highCovidComment.pending = false;
-                    this.highCovidComment.error = {
-                        message,
-                        fields
-                    };
-                });
         },
 
         onLocationChange(location) {
