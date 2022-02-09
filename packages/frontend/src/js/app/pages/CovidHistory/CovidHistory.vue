@@ -27,19 +27,19 @@
             <CovidHistoryHeader class="mb-6">
                 <CovidHistoryHeaderTab
                     :active="filter === 'all'"
-                    @click="onClickAllTab"
+                    @click="setFilter('all')"
                     class="mr-8"
                     >Tous</CovidHistoryHeaderTab
                 >
                 <CovidHistoryHeaderTab
                     :active="filter === 'shantytowns'"
-                    @click="onClickShantytownsTab"
+                    @click="setFilter('shantytowns')"
                     class="mr-8"
                     >Commentaires "Sites"</CovidHistoryHeaderTab
                 >
                 <CovidHistoryHeaderTab
                     :active="filter === 'territory'"
-                    @click="onClickTerritoryTab"
+                    @click="setFilter('territory')"
                     >Commentaires "Territoires"</CovidHistoryHeaderTab
                 >
             </CovidHistoryHeader>
@@ -340,13 +340,9 @@ export default {
             this.$router.push(`/site/${row.shantytown}`);
         },
 
-        /**
-         * Sets filter
-         *
-         * @param {'all'|'regular'|'high'} filter
-         */
         setFilter(filter) {
             this.filter = filter;
+            this.currentPage = 1;
         },
 
         /**
@@ -384,21 +380,6 @@ export default {
                 this.locationCode = location.code;
             }
             this.load();
-        },
-
-        onClickAllTab() {
-            this.filter = "all";
-            this.currentPage = 1;
-        },
-
-        onClickShantytownsTab() {
-            this.filter = "shantytowns";
-            this.currentPage = 1;
-        },
-
-        onClickTerritoryTab() {
-            this.filter = "territory";
-            this.currentPage = 1;
         }
     }
 };
