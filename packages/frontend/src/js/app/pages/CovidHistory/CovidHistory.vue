@@ -252,16 +252,15 @@ export default {
     },
 
     methods: {
-        async getCovidMessages() {
+        getCovidMessages() {
             const date = new Date();
-            const activities = await listRegular(
+            return listRegular(
                 date.getTime() / 1000,
                 ["highCovidComment", "shantytownComment", "onlyCovid"],
                 -1,
                 this.locationType,
                 this.locationCode
             );
-            return activities;
         },
         initLocation() {
             const { user } = getConfig();
