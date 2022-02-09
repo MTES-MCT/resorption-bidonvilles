@@ -22,9 +22,8 @@
         </PrivateContainer>
 
         <PrivateContainer v-else class="py-6">
-            <CovidHistoryHeaderLinks class="mb-6 mt-6">
-            </CovidHistoryHeaderLinks>
-            <CovidHistoryHeader class="mb-6">
+            <CovidHistoryHeaderLinks class="mb-6 mt-6" />
+            <CovidHistoryHeader class="mb-6" v-if="activities.length > 0">
                 <CovidHistoryHeaderTab
                     :active="filter === 'all'"
                     @click="setFilter('all')"
