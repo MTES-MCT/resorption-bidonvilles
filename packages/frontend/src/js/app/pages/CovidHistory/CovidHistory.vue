@@ -14,7 +14,7 @@
             />
         </Private-container>
 
-        <PrivateContainer v-if="this.state === 'loading'">
+        <PrivateContainer v-if="this.loading">
             <CovidHistoryLoader></CovidHistoryLoader>
         </PrivateContainer>
 
@@ -162,14 +162,7 @@ export default {
              */
             error: null,
 
-            /**
-             * The current state of the page
-             *
-             * One out of: 'loading', 'error', or 'loaded'
-             *
-             * @type {string|null}
-             */
-            state: null,
+            loading: false,
 
             /**
              *
@@ -177,7 +170,6 @@ export default {
             covidTags,
             locationType: null,
             locationCode: null,
-            loading: false,
             currentPage: 1
         };
     },
@@ -271,12 +263,11 @@ export default {
             }
         },
         async load() {
-            // loading data is forbidden if the component is already loading or loaded
-            if ([null, "error"].indexOf(this.state) === -1) {
+            if (this.loading === true) {
                 return;
             }
 
-            this.state = "loading";
+            this.loading = true;
             this.error = null;
 
             //
@@ -322,12 +313,12 @@ export default {
                 this.highCovidComment.data.departements = departements.map(
                     ({ code }) => code
                 );
-                this.state = "error";
             } catch (error) {
                 this.error =
                     error.user_message || "Une erreur inconnue est survenue";
-                this.state = "error";
             }
+
+            this.loading = false;
         },
 
         onChangePage(page) {
@@ -368,7 +359,6 @@ export default {
             create(data)
                 .then(() => {
                     this.highCovidComment.pending = false;
-                    this.state = null;
                 })
                 .then(() => {
                     this.load();
