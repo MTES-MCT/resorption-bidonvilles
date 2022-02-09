@@ -4,7 +4,7 @@
         <CustomFilter
             title="Type d'activités"
             :options="options.activityTypes"
-            v-model="activityTypes"
+            v-model="activityFilter"
         />
     </div>
 </template>
@@ -42,14 +42,14 @@ export default {
     },
 
     computed: {
-        activityTypes: {
-            get() {
-                return this.activityFilter;
-            },
-            set(value) {
-                this.activityFilter = value;
-                this.$emit("changeActivityFilter", value);
-            }
+        arrActivityFilter() {
+            return this.activityFilter.map(value => value.split("_")).flat();
+        }
+    },
+
+    watch: {
+        activityFilter() {
+            this.$emit("changeActivityFilter", this.arrActivityFilter);
         }
     }
 };

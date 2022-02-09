@@ -31,7 +31,7 @@ module.exports = async (user, location, entities, numberOfActivities, lastDate) 
         promises.push(highCovidCommentModel.getHistory(user, location, numberOfActivities, lastDate));
     }
     if (entities.includes('user')) {
-        promises.push(userModel.getHistory(numberOfActivities, lastDate));
+        promises.push(userModel.getHistory(location, numberOfActivities, lastDate));
     }
     const activities = await Promise.all(promises);
     const orderedActivities = [];

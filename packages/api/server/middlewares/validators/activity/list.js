@@ -4,20 +4,67 @@ const { query } = require('express-validator');
 const geoModel = require('#server/models/geoModel')();
 
 module.exports = [
+    // number of activities
     query('numberOfActivities')
-        .exists()
-        .isInt().bail().withMessage('Le nombre d\'activités est invalide'),
+        .optional()
+        .toInt()
+        .isInt().bail().withMessage('Le nombre d\'activités est invalide')
+        .isInt({ min: 1 }).bail().withMessage('Le nombre d\'activités ne peut être inférieur à 1'),
+
+    query('numberOfActivities')
+        .customSanitizer(value => value || 10),
+
+    // last activity date
+    query('lastActivityDate')
+        .optional()
+        .toInt()
+        .isInt().bail().withMessage('La date doit être un timestamp'),
 
     query('lastActivityDate')
-        .exists(),
+        .customSanitizer(value => value || Date.now()),
 
-    query('location')
-        .optional({ nullable: true })
-        .isString().bail().withMessage('Le périmètre géographique est invalide')
-        .trim()
-        .custom(async (value, { req }) => {
-            // on vérifie que le périmètre géographique demandé existe
-            const [type, code] = value.split(',');
+    // filter
+    query('filter')
+        .optional()
+        .isString().bail().withMessage('La liste de filtre doit être une chaîne de caractères')
+        .customSanitizer(value => value.split(','))
+        .custom((value) => {
+            const knownFilters = [
+                'shantytownCreation',
+                'shantytownClosing',
+                'shantytownUpdate',
+                'shantytownComment',
+                'highCovidComment',
+                'user',
+                'onlyCovid',
+            ];
+            const unknownFilters = value.filter(s => !knownFilters.includes(s));
+
+            if (unknownFilters.length > 0) {
+                throw new Error(`Les filtres "${unknownFilters.join(',')}" n'existent pas`);
+            }
+
+            return true;
+        }),
+
+    query('filter')
+        .customSanitizer(value => value || [
+            'shantytownCreation',
+            'shantytownClosing',
+            'shantytownUpdate',
+            'shantytownComment',
+            'highCovidComment',
+            'user',
+        ]),
+
+    // location (type and code)
+    query('locationType')
+        .optional()
+        .custom(async (type, { req }) => {
+            const code = req.query.locationCode;
+            if (!code) {
+                throw new Error('Le code de la localisation demandée est obligatoire');
+            }
 
             let location;
             try {
@@ -35,14 +82,18 @@ module.exports = [
             return true;
         }),
 
-    // on définit un périmètre géographique par défaut si aucun n'a été donné
-    query('location')
-        .customSanitizer((value, { req }) => {
-            if (!value) {
-                req.body.location = geoModel.getLocation('nation');
-                return null;
+    query('locationType')
+        .custom((value, { req }) => {
+            if (!req.body.location) {
+                req.body.location = {
+                    type: 'nation',
+                    region: null,
+                    departement: null,
+                    epci: null,
+                    city: null,
+                };
             }
 
-            return value;
+            return true;
         }),
 ];

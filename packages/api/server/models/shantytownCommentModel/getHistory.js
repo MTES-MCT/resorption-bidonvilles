@@ -85,7 +85,7 @@ module.exports = async (user, location, numberOfActivities, lastDate, onlyCovid 
             LEFT JOIN regions ON departements.fk_region = regions.code
             ${where.length > 0 ? `WHERE ((${where.join(') OR (')}))` : ''}
             ${whereLastDate}
-            ${onlyCovid ? 'AND covid_comments.shantytown_covid_comment_id is not null' : ''}
+            ${onlyCovid ? 'AND covid_comments.shantytown_covid_comment_id IS NOT NULL' : ''}
             ORDER BY comments.created_at DESC
             ${limit}
             `,

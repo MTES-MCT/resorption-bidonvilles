@@ -2,25 +2,16 @@ const moment = require('moment');
 
 module.exports = models => ({
     async regular(req, res, next) {
-        const {
-            lastActivityDate, numberOfActivities,
-            filter, locationType,
-            locationCode,
-        } = req.query;
-        const lastDate = new Date();
-        if (lastActivityDate) {
-            lastDate.setTime(lastActivityDate);
-        }
+        const { lastActivityDate, numberOfActivities, filter } = req.query;
+
         try {
             return res.status(200).send(
                 await models.userActivity.getHistory(
                     req.user,
                     req.body.location,
-                    locationType,
-                    locationCode,
                     filter,
                     numberOfActivities,
-                    moment(lastDate).format('YYYY-MM-DD HH:mm:ss ZZ'),
+                    moment(lastActivityDate).format('YYYY-MM-DD HH:mm:ss ZZ'),
                 ),
             );
         } catch (error) {

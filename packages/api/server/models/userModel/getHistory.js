@@ -1,7 +1,7 @@
 const { sequelize } = require('#db/models');
 const formatName = require('./_common/formatName');
 
-module.exports = async (locationType, locationCode, numberOfActivities, lastDate) => {
+module.exports = async (location, numberOfActivities, lastDate) => {
     const limit = numberOfActivities !== '-1' ? `limit ${numberOfActivities}` : '';
     const activities = await sequelize.query(
         `
@@ -26,10 +26,10 @@ module.exports = async (locationType, locationCode, numberOfActivities, lastDate
             WHERE
                 lua.used_at IS NOT NULL
                 AND lua.used_at < '${lastDate}'
-                ${locationType === 'city' ? `AND organizations.city_code = '${locationCode}'` : ''}
-                ${locationType === 'epci' ? `AND organizations.epci_code = '${locationCode}'` : ''}
-                ${locationType === 'departement' ? `AND organizations.departement_code = '${locationCode}'` : ''}
-                ${locationType === 'region' ? `AND organizations.region_code = '${locationCode}'` : ''}
+                ${location.type === 'city' ? `AND organizations.city_code = '${location.city.code}'` : ''}
+                ${location.type === 'epci' ? `AND organizations.epci_code = '${location.epci.code}'` : ''}
+                ${location.type === 'departement' ? `AND organizations.departement_code = '${location.departement.code}'` : ''}
+                ${location.type === 'region' ? `AND organizations.region_code = '${location.region.code}'` : ''}
             ORDER BY lua.used_at DESC
             ${limit}
             `,

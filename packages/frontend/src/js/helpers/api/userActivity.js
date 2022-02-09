@@ -30,7 +30,7 @@ export function listRegular(
         )}&numberOfActivities=${encodeURIComponent(
             numberOfActivities
         )}&filter=${encodeURIComponent(
-            realActivityFilter.join("")
+            realActivityFilter.join(",")
         )}&locationType=${encodeURIComponent(
             locationType
         )}&locationCode=${encodeURIComponent(locationCode)}`
