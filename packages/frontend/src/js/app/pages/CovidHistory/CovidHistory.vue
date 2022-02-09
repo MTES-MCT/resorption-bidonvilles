@@ -7,7 +7,6 @@
             <CovidHistoryNewHighComment
                 :class="['flex-1', 'pb-16', 'pt-16']"
                 @addComment="submitHighCovidComment"
-                id="newComment"
                 :user="user"
                 :allowedDepartements="allowedDepartements"
                 :highCovidComment="highCovidComment"
