@@ -155,6 +155,7 @@ export default {
              * @type {Object}
              */
             highCovidComment: {
+                data: {},
                 pending: false,
                 error: null
             },
@@ -277,37 +278,37 @@ export default {
             this.error = null;
 
             //
-            let departementsPromise;
-            switch (this.user.organization.location.type) {
-                default:
-                case "nation":
-                    departementsPromise = Promise.resolve({
-                        departements: []
-                    });
-                    break;
-
-                case "region":
-                    departementsPromise = getDepartementsForRegion(
-                        this.user.organization.location.region.code
-                    );
-                    break;
-
-                case "epci":
-                    departementsPromise = getDepartementsForEpci(
-                        this.user.organization.location.epci.code
-                    );
-                    break;
-
-                case "departement":
-                case "city":
-                    departementsPromise = Promise.resolve({
-                        departements: [
-                            this.user.organization.location.departement
-                        ]
-                    });
-            }
-
             try {
+                let departementsPromise;
+                switch (this.user.organization.location.type) {
+                    default:
+                    case "nation":
+                        departementsPromise = Promise.resolve({
+                            departements: []
+                        });
+                        break;
+
+                    case "region":
+                        departementsPromise = getDepartementsForRegion(
+                            this.user.organization.location.region.code
+                        );
+                        break;
+
+                    case "epci":
+                        departementsPromise = getDepartementsForEpci(
+                            this.user.organization.location.epci.code
+                        );
+                        break;
+
+                    case "departement":
+                    case "city":
+                        departementsPromise = Promise.resolve({
+                            departements: [
+                                this.user.organization.location.departement
+                            ]
+                        });
+                }
+
                 const [userActivities, { departements }] = await Promise.all([
                     this.getCovidMessages(),
                     departementsPromise
