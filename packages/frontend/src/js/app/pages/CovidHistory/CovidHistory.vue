@@ -4,7 +4,11 @@
         </CovidHistorySearchbar>
 
         <PrivateContainer>
-            <CovidHistoryNewHighComment class="py-16" />
+            <CovidHistoryHeaderLinks class="mt-6" />
+            <CovidHistoryNewHighComment
+                v-if="canSubmitHighComment"
+                class="my-6"
+            />
         </PrivateContainer>
 
         <PrivateContainer v-if="this.loading">
@@ -16,7 +20,6 @@
         </PrivateContainer>
 
         <PrivateContainer v-else class="py-6">
-            <CovidHistoryHeaderLinks class="mb-6 mt-6" />
             <CovidHistoryHeader class="mb-6" v-if="activities.length > 0">
                 <CovidHistoryHeaderTab
                     :active="filter === 'all'"
