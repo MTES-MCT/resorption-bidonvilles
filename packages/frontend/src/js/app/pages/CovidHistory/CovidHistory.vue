@@ -270,9 +270,8 @@ export default {
                 this.locationCode = location[location.type].code;
             }
         },
-        load() {
+        async load() {
             // loading data is forbidden if the component is already loading or loaded
-            this.currentPage = 1;
             if ([null, "error"].indexOf(this.state) === -1) {
                 return;
             }
@@ -310,19 +309,25 @@ export default {
                         ]
                     });
             }
-            Promise.all([this.getCovidMessages(), departementsPromise])
-                .then(([userActivities, { departements }]) => {
-                    this.activities = userActivities;
-                    this.allowedDepartements = departements;
-                    this.highCovidComment.data.departements = departements.map(
-                        ({ code }) => code
-                    );
-                    this.state = "error";
-                })
-                .catch(({ user_message: error }) => {
-                    this.error = error;
-                    this.state = "error";
-                });
+
+            try {
+                const [userActivities, { departements }] = await Promise.all([
+                    this.getCovidMessages(),
+                    departementsPromise
+                ]);
+
+                this.activities = userActivities;
+                this.currentPage = 1;
+                this.allowedDepartements = departements;
+                this.highCovidComment.data.departements = departements.map(
+                    ({ code }) => code
+                );
+                this.state = "error";
+            } catch (error) {
+                this.error =
+                    error.user_message || "Une erreur inconnue est survenue";
+                this.state = "error";
+            }
         },
 
         onChangePage(page) {
