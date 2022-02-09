@@ -42,34 +42,32 @@
                     >Commentaires "Territoires"</CovidHistoryHeaderTab
                 >
             </CovidHistoryHeader>
+
             <div v-if="activities.length > 0">
-                <div>
-                    <Pagination
-                        class="md:mt-0 mb-2"
-                        v-if="nbPages > 1"
-                        :currentPage="currentPage"
-                        :nbPages="nbPages"
-                        :onChangePage="onChangePage"
-                    />
-                    <CovidHistoryCardGroup
-                        v-for="(group, index) in currentActivities"
-                        :date="group.date"
-                        :items="group.items"
-                        :key="index"
-                        class="mb-4"
-                    ></CovidHistoryCardGroup>
-                    <Pagination
-                        class="md:mt-0 mb-2"
-                        v-if="nbPages > 1"
-                        :currentPage="currentPage"
-                        :nbPages="nbPages"
-                        :onChangePage="onChangePage"
-                    />
-                </div>
+                <Pagination
+                    class="md:mt-0 mb-2"
+                    v-if="nbPages > 1"
+                    :currentPage="currentPage"
+                    :nbPages="nbPages"
+                    :onChangePage="onChangePage"
+                />
+                <CovidHistoryCardGroup
+                    v-for="(group, index) in currentActivities"
+                    :date="group.date"
+                    :items="group.items"
+                    :key="index"
+                    class="mb-4"
+                ></CovidHistoryCardGroup>
+                <Pagination
+                    class="md:mt-0 mb-2"
+                    v-if="nbPages > 1"
+                    :currentPage="currentPage"
+                    :nbPages="nbPages"
+                    :onChangePage="onChangePage"
+                />
             </div>
-            <div v-else>
-                <CovidHistoryEmpty></CovidHistoryEmpty>
-            </div>
+
+            <CovidHistoryEmpty v-else></CovidHistoryEmpty>
         </PrivateContainer>
     </PrivateLayout>
 </template>
