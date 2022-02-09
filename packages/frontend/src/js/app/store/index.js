@@ -13,6 +13,7 @@ import { get as getConfig } from "#helpers/api/config";
 
 import locations from "./modules/locations";
 import directory from "./modules/directory";
+import highCovidComments from "./modules/highCovidComments";
 
 export default function(Vue) {
     Vue.use(Vuex);
@@ -20,7 +21,8 @@ export default function(Vue) {
     return new Vuex.Store({
         modules: {
             locations,
-            directory
+            directory,
+            highCovidComments
         },
         state: {
             towns: {
