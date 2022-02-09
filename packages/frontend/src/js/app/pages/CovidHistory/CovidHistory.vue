@@ -89,7 +89,6 @@ import {
 } from "#helpers/api/geo";
 import { create } from "#helpers/api/highCovidComment";
 import { listRegular } from "#helpers/api/userActivity";
-import covidTags from "../CovidHistory/covidTags";
 import { mapGetters } from "vuex";
 
 const PER_PAGE = 10;
@@ -166,7 +165,6 @@ export default {
             /**
              *
              */
-            covidTags,
             locationType: null,
             locationCode: null,
             currentPage: 1
