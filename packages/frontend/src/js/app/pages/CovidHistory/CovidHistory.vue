@@ -45,8 +45,7 @@
 
             <div v-if="activities.length > 0">
                 <Pagination
-                    class="md:mt-0 mb-2"
-                    v-if="nbPages > 1"
+                    class="md:mt-0 mb-6 justify-end"
                     :currentPage="currentPage"
                     :nbPages="nbPages"
                     :onChangePage="onChangePage"
@@ -59,8 +58,7 @@
                     class="mb-4"
                 ></CovidHistoryCardGroup>
                 <Pagination
-                    class="md:mt-0 mb-2"
-                    v-if="nbPages > 1"
+                    class="mt-8 justify-end"
                     :currentPage="currentPage"
                     :nbPages="nbPages"
                     :onChangePage="onChangePage"
