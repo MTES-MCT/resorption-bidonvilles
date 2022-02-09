@@ -1,7 +1,7 @@
 <template>
     <div
         :class="[
-            'border-b-2 pb-1',
+            'border-b-2 pb-1 inline-block',
             active
                 ? 'text-primary font-bold border-primary'
                 : 'cursor-pointer border-transparent'

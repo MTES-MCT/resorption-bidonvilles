@@ -25,25 +25,23 @@
             <CovidHistoryHeaderLinks class="mb-6 mt-6">
             </CovidHistoryHeaderLinks>
             <CovidHistoryHeader class="mb-6">
-                <template slot="filters">
-                    <CovidHistoryHeaderTab
-                        :active="filter === 'all'"
-                        @click="onClickAllTab"
-                        class="mr-8"
-                        >Tous</CovidHistoryHeaderTab
-                    >
-                    <CovidHistoryHeaderTab
-                        :active="filter === 'shantytowns'"
-                        @click="onClickShantytownsTab"
-                        class="mr-8"
-                        >Commentaires "Sites"</CovidHistoryHeaderTab
-                    >
-                    <CovidHistoryHeaderTab
-                        :active="filter === 'territory'"
-                        @click="onClickTerritoryTab"
-                        >Commentaires "Territoires"</CovidHistoryHeaderTab
-                    >
-                </template>
+                <CovidHistoryHeaderTab
+                    :active="filter === 'all'"
+                    @click="onClickAllTab"
+                    class="mr-8"
+                    >Tous</CovidHistoryHeaderTab
+                >
+                <CovidHistoryHeaderTab
+                    :active="filter === 'shantytowns'"
+                    @click="onClickShantytownsTab"
+                    class="mr-8"
+                    >Commentaires "Sites"</CovidHistoryHeaderTab
+                >
+                <CovidHistoryHeaderTab
+                    :active="filter === 'territory'"
+                    @click="onClickTerritoryTab"
+                    >Commentaires "Territoires"</CovidHistoryHeaderTab
+                >
             </CovidHistoryHeader>
             <div v-if="activities.length > 0">
                 <div>
