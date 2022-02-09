@@ -3,7 +3,7 @@
         <CovidHistorySearchbar @locationChange="onLocationChange">
         </CovidHistorySearchbar>
 
-        <Private-container v-if="canSubmitHighComment">
+        <PrivateContainer v-if="canSubmitHighComment">
             <CovidHistoryNewHighComment
                 :class="['flex-1', 'pb-16', 'pt-16']"
                 @addComment="submitHighCovidComment"
@@ -12,7 +12,7 @@
                 :allowedDepartements="allowedDepartements"
                 :highCovidComment="highCovidComment"
             />
-        </Private-container>
+        </PrivateContainer>
 
         <PrivateContainer v-if="this.loading">
             <CovidHistoryLoader></CovidHistoryLoader>
