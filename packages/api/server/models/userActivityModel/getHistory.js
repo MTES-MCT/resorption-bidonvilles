@@ -34,27 +34,11 @@ module.exports = async (user, location, entities, numberOfActivities, lastDate) 
         promises.push(userModel.getHistory(location, numberOfActivities, lastDate));
     }
     const activities = await Promise.all(promises);
-    const orderedActivities = [];
-    while (activities.reduce((sum, { length }) => sum + length, 0) > 0) {
-        // on recherche le tableau d'activités qui contient l'activité la plus récente
-        // (cela part du principe que chaque tableau est préalablement ordonné de l'activité
-        // la plus récente à la plus ancienne)
-        const arr = activities.reduce((acc, subActivities) => {
-            if (subActivities.length === 0) {
-                return acc;
-            }
+    const sortedActivities = activities.flat().sort((a, b) => (a.date > b.date ? -1 : 1));
 
-            if (!acc || subActivities[0].date > acc[0].date) {
-                return subActivities;
-            }
-
-            return acc;
-        }, null);
-
-        // on retire l'activité du tableau (réduisant ainsi petit à petit la taille de chaque
-        // tableau : une fois chaque tableau vide, la boucle est terminée)
-        const [activity] = arr.splice(0, 1);
-        orderedActivities.push(activity);
+    if (numberOfActivities !== -1) {
+        return sortedActivities.slice(0, numberOfActivities);
     }
-    return orderedActivities.slice(0, numberOfActivities);
+
+    return sortedActivities;
 };

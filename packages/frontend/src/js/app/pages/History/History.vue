@@ -3,7 +3,9 @@
         <HistorySearchbar @locationChange="onLocationChange"></HistorySearchbar>
 
         <div>
-            <HistoryLoader v-if="loading"></HistoryLoader>
+            <HistoryLoader
+                v-if="loading && activities.length === 0"
+            ></HistoryLoader>
 
             <PrivateContainer v-else class="py-6">
                 <HistoryModerationPanel v-if="canModerate" />
@@ -12,29 +14,25 @@
                     Dernières activités -
                     <span class="text-primary">{{ locationName }}</span>
                 </h1>
-                <HistoryFilterBar
-                    class="mb-6"
-                    v-on:changeActivityFilter="changeActivityFilter"
-                ></HistoryFilterBar>
+                <HistoryFilterBar class="mb-6"></HistoryFilterBar>
 
-                <div v-if="lastActivities.length > 0">
+                <div v-if="activities.length > 0">
                     <HistoryCardGroup
-                        v-for="(group, index) in currentActivities"
+                        v-for="group in parsedActivities"
                         :date="group.date"
                         :items="group.items"
-                        :key="index"
+                        :key="group.id"
                         class="mb-4"
                     ></HistoryCardGroup>
+                    <div
+                        class="text-center text-primary text-display-md"
+                        v-if="loading"
+                    >
+                        <Spinner />
+                    </div>
                 </div>
-                <div
-                    class="flex-1 text-center text-primary text-display-md"
-                    v-if="activitiesLoading"
-                >
-                    <Spinner />
-                </div>
-                <div v-if="lastActivities.length === 0 && !activitiesLoading">
-                    <HistoryEmpty></HistoryEmpty>
-                </div>
+
+                <HistoryEmpty v-else />
             </PrivateContainer>
         </div>
     </PrivateLayout>
@@ -51,12 +49,7 @@ import HistoryEmpty from "./HistoryEmpty.vue";
 import HistoryModerationPanel from "./HistoryModerationPanel.vue";
 
 import { mapGetters } from "vuex";
-import { listRegular } from "#helpers/api/userActivity";
-import {
-    get as getConfig,
-    hasPermission,
-    getPermission
-} from "#helpers/api/config";
+import { get as getConfig, hasPermission } from "#helpers/api/config";
 
 export default {
     components: {
@@ -72,29 +65,43 @@ export default {
     data() {
         return {
             canModerate: hasPermission("shantytown_comment.moderate"),
-            locationName: "Inconnu",
-            lastActivities: [],
-            lastActivityDate: new Date(),
-            activityFilter: [],
-            loading: false,
-            activitiesLoading: false,
-            endOfActivities: false
+            locationName: "Inconnu"
         };
     },
     computed: {
         ...mapGetters({
-            locations: "locations"
+            loading: "activitiesLoading",
+            error: "activitiesError",
+            activities: "activities",
+            lastActivityDate: "lastActivityDate",
+            endOfActivities: "endOfActivities",
+            loadedLocationType: "activitiesLoadedLocationType",
+            loadedLocationCode: "activitiesLoadedLocationCode",
+            loadedFilters: "activitiesLoadedFilters",
+            locations: "locations",
+            filters: "activitiesFilters"
         }),
-        currentActivities() {
+        parsedActivities() {
             const groups = [];
-            for (let i = 0, lastDate; i < this.lastActivities.length; i += 1) {
-                const item = this.lastActivities[i];
+            for (let i = 0, lastDate; i < this.activities.length; i += 1) {
+                const item = this.activities[i];
                 const date = new Date(item.date * 1000);
-                const dateStr = `${date.getDate()}${date.getMonth()}${date.getFullYear()}`;
+                const dateStr = `${date
+                    .getDate()
+                    .toString()
+                    .padStart(2, "0")}${date
+                    .getMonth()
+                    .toString()
+                    .padStart(2, "0")}${date.getFullYear()}`;
 
                 // si cet item n'est pas à la même date que le précédent on crée un nouveau groupe
                 if (!lastDate || dateStr !== lastDate) {
                     groups.push({
+                        id: [
+                            this.locationType,
+                            this.locationCode,
+                            dateStr
+                        ].join("-"),
                         date,
                         items: [item]
                     });
@@ -109,23 +116,19 @@ export default {
             return groups;
         },
         locationType() {
-            return this.$route.params.locationType;
+            return this.$route.params.locationType || null;
         },
         locationCode() {
-            return this.$route.params.locationCode;
+            return this.$route.params.locationCode || null;
         },
         defaultPath() {
             const { user } = getConfig();
-            const { allow_all } = getPermission("shantytown.list");
-            if (allow_all) {
-                return "/activites/nation";
-            }
-
             const { location } = user.organization;
             return `/activites/${location.type}/${location[location.type]
                 ?.code || ""}`;
         }
     },
+
     watch: {
         "$route.params.locationType"() {
             this.load();
@@ -133,96 +136,124 @@ export default {
         "$route.params.locationCode"() {
             this.load();
         },
-        activityFilter: {
-            deep: true,
-            handler: function() {
-                this.load();
-            }
+        filters() {
+            this.load();
         }
     },
+
     mounted() {
-        this.loading = true;
-        this.locationName = this.getLocationName();
         this.load();
         window.addEventListener("scroll", this.reachBottom);
     },
-    beforeDestroy() {
+
+    unmounted() {
         window.removeEventListener("scroll", this.reachBottom);
     },
+
     methods: {
-        load() {
-            this.setDate();
-            this.lastActivities = [];
-            this.endOfActivities = false;
-            this.getActivities();
+        async load() {
+            // on réécrit l'URL si l'accès se fait par "/activites"
+            if (!this.locationType) {
+                this.$router.replace(this.defaultPath);
+                return;
+            }
+
+            // si on a déjà chargé cette location (ou qu'on est en train de le faire) : stop !
+            const strFilters = [...this.filters].sort().join("_");
+            if (
+                this.loadedLocationType === this.locationType &&
+                this.loadedLocationCode === this.locationCode &&
+                this.loadedFilters === strFilters
+            ) {
+                return;
+            }
+
+            // on reset l'état
+            this.$store.commit("setActivitiesLoading", false);
+            this.$store.commit("setActivitiesLastDate", Date.now() / 1000);
+            this.$store.commit("setActivitiesEndReached", false);
+            this.$store.commit("setActivities", []);
+            this.$store.commit("setActivitiesLoadedSignature", {
+                locationType: this.locationType,
+                locationCode: this.locationCode,
+                filters: strFilters
+            });
+
+            // on fetch les activités
+            this.$store.dispatch("fetchActivities", {
+                locationType: this.locationType,
+                locationCode: this.locationCode
+            });
+
+            // on fetch le nom de la location, si elle n'est pas déjà dans le $store
+            // nécessaire pour l'affichage dans la UI et la barre de recherche
+            if (this.locationType !== "nation") {
+                if (!this.locations[this.locationType]?.[this.locationCode]) {
+                    await this.$store.dispatch("fetchLocation", {
+                        type: this.locationType,
+                        code: this.locationCode
+                    });
+                }
+            }
+
+            // on remplit la barre de recherche
+            if (this.locationType === "nation") {
+                this.$store.commit("setActivityLocationFilter", null);
+            } else {
+                this.$store.commit(
+                    "setActivityLocationFilter",
+                    this.locations[this.locationType][this.locationCode]
+                );
+            }
+
+            this.locationName = this.getLocationName();
         },
-        setDate() {
-            const date = new Date();
-            this.lastActivityDate = date.getTime() / 1000;
+
+        async loadNext() {
+            // on a déjà chargé toutes les activités : stop !
+            if (this.endOfActivities === true) {
+                return;
+            }
+
+            // on est déjà en train de fetch : stop !
+            if (this.loading === true) {
+                return;
+            }
+
+            // on fetch les activités
+            this.$store.dispatch("fetchActivities", {
+                locationType: this.locationType,
+                locationCode: this.locationCode
+            });
         },
+
+        getLocationName() {
+            if (this.locationType === "nation") {
+                return "France";
+            }
+            return (
+                this.locations[this.locationType]?.[this.locationCode]?.label ||
+                "Inconnu"
+            );
+        },
+
         reachBottom() {
             let bottomOfWindow =
                 document.documentElement.offsetHeight -
                     document.documentElement.scrollTop -
                     window.innerHeight ===
                 0;
-            if (
-                bottomOfWindow &&
-                !this.activitiesLoading &&
-                !this.endOfActivities
-            ) {
-                this.getActivities();
+            if (bottomOfWindow) {
+                this.loadNext();
             }
         },
 
-        async getActivities() {
-            this.activitiesLoading = true;
-            if (!this.locationType) {
-                this.$router.replace(this.defaultPath);
-                return;
-            }
-            const tempLastActivities = await listRegular(
-                this.lastActivityDate * 1000,
-                this.activityFilter,
-                10,
-                this.locationType,
-                this.locationCode
-            );
-            if (tempLastActivities.length > 0) {
-                this.lastActivityDate = tempLastActivities.slice(-1)[0].date;
-            }
-            this.lastActivities = [
-                ...this.lastActivities,
-                ...tempLastActivities
-            ];
-            this.activitiesLoading = false;
-            this.loading = false;
-            if (tempLastActivities.length === 0) {
-                // on arrive aux dernières activités
-                this.endOfActivities = true;
-            }
-        },
-
-        changeActivityFilter(list) {
-            // on modifie le filtre des dernières activités, ce qui relancera automatiquement un getActivities() via les watchers
-            this.activityFilter = list;
-        },
-
-        getLocationName() {
-            const { user } = getConfig();
-            const location = user.organization.location;
-            if (location.type === "nation") {
-                return "France";
-            }
-            return location[location.type]?.name || "Inconnu";
-        },
-
-        onLocationChange(location) {
+        onLocationChange() {
             // on redirige vers la bonne URL (ce qui automatiquement relancera un getActivities() via les watchers)
+            const { location } = this.$store.state.activities.filters;
             if (location === null) {
                 this.routeTo("/activites/nation");
             } else {
-                this.locationName = location.label;
                 const { type, code } = location.data;
                 this.routeTo(`/activites/${type}/${code}`);
             }

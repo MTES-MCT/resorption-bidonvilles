@@ -8,6 +8,7 @@
             class="mt-4"
             :allowShowAll="false"
             v-model="location"
+            :disabled="$store.state.activities.loading"
             placeholder="Nom d'une commune, département..."
         ></GeoSearchbar>
     </div>
@@ -24,10 +25,14 @@ export default {
     computed: {
         location: {
             get() {
-                return null;
+                return this.$store.state.activities.filters.location;
             },
             set(value) {
-                this.$emit("locationChange", value);
+                if (value) {
+                    this.$store.commit("saveLocation", value);
+                }
+                this.$store.commit("setActivityLocationFilter", value);
+                this.$emit("locationChange");
             }
         }
     }

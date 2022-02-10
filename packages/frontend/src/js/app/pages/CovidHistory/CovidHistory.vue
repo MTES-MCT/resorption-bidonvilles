@@ -3,7 +3,7 @@
         <CovidHistorySearchbar @locationChange="onLocationChange">
         </CovidHistorySearchbar>
 
-        <PrivateContainer>
+        <PrivateContainer v-if="!this.loading && this.error === null">
             <CovidHistoryHeaderLinks class="mt-6" />
             <CovidHistoryNewHighComment
                 v-if="canSubmitHighComment"
@@ -40,7 +40,7 @@
                 >
             </CovidHistoryHeader>
 
-            <div v-if="activities.length > 0">
+            <div v-if="currentActivities.length > 0">
                 <Pagination
                     class="md:mt-0 mb-6 justify-end"
                     :currentPage="currentPage"
@@ -216,7 +216,7 @@ export default {
         getCovidMessages() {
             const date = new Date();
             return listRegular(
-                date.getTime() / 1000,
+                date.getTime(),
                 ["highCovidComment", "shantytownComment", "onlyCovid"],
                 -1,
                 this.locationType,

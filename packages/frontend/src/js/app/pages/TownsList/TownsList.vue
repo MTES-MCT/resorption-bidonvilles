@@ -499,7 +499,7 @@ export default {
             const date = new Date();
             const currentDate = date.getTime() / 1000;
             const tempLastActivities = await listRegular(
-                currentDate,
+                currentDate * 1000,
                 [],
                 5,
                 locationType,

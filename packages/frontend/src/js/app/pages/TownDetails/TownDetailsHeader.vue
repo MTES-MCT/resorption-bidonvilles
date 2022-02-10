@@ -127,20 +127,14 @@ export default {
             }
 
             return (
-                this.permission.allowed_on.regions.includes(
-                    this.town.region.code
-                ) ||
-                this.permission.allowed_on.departements.includes(
+                permission.allowed_on.regions.includes(this.town.region.code) ||
+                permission.allowed_on.departements.includes(
                     this.town.departement.code
                 ) ||
-                this.permission.allowed_on.epci.includes(this.town.epci.code) ||
-                this.permission.allowed_on.cities.includes(
-                    this.town.city.code
-                ) ||
-                this.permission.allowed_on.cities.includes(
-                    this.town.city.main
-                ) ||
-                this.permission.allowed_on.shantytowns.includes(this.town.id)
+                permission.allowed_on.epci.includes(this.town.epci.code) ||
+                permission.allowed_on.cities.includes(this.town.city.code) ||
+                permission.allowed_on.cities.includes(this.town.city.main) ||
+                permission.allowed_on.shantytowns.includes(this.town.id)
             );
         },
         // Force scroll even if hash is already present in url

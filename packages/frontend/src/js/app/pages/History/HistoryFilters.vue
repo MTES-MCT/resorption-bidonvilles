@@ -4,6 +4,7 @@
         <CustomFilter
             title="Type d'activités"
             :options="options.activityTypes"
+            :disabled="$store.state.activities.loading"
             v-model="activityFilter"
         />
     </div>
@@ -13,7 +14,6 @@
 export default {
     data() {
         return {
-            activityFilter: [],
             options: {
                 activityTypes: [
                     {
@@ -42,14 +42,13 @@ export default {
     },
 
     computed: {
-        arrActivityFilter() {
-            return this.activityFilter.map(value => value.split("_")).flat();
-        }
-    },
-
-    watch: {
-        activityFilter() {
-            this.$emit("changeActivityFilter", this.arrActivityFilter);
+        activityFilter: {
+            get() {
+                return this.$store.state.activities.filters.activityTypes;
+            },
+            set(value) {
+                this.$store.commit("setActivityTypesFilter", value);
+            }
         }
     }
 };

@@ -233,6 +233,10 @@ export default {
             this.searchInput = value ? this.getResultValue(value) : "";
         },
         removeItem() {
+            if (this.disabled === true) {
+                return;
+            }
+
             this.value = null;
             this.searchInput = "";
             this.$emit("submit", null);

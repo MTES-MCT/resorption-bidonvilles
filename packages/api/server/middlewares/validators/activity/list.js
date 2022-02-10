@@ -9,7 +9,13 @@ module.exports = [
         .optional()
         .toInt()
         .isInt().bail().withMessage('Le nombre d\'activités est invalide')
-        .isInt({ min: 1 }).bail().withMessage('Le nombre d\'activités ne peut être inférieur à 1'),
+        .custom((value) => {
+            if (value !== -1 && value < 1) {
+                throw new Error('Le nombre d\'activités ne peut être inférieur à 1');
+            }
+
+            return true;
+        }),
 
     query('numberOfActivities')
         .customSanitizer(value => value || 10),
