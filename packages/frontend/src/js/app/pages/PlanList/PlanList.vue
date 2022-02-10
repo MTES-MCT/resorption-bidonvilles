@@ -1,20 +1,20 @@
 <template>
     <PrivateLayout>
-        <PlanListSearchBar @locationChange="onLocationChange">
-        </PlanListSearchBar>
-        <PrivateContainer>
-            <PlanListHeader :locationTitle="locationTitle"></PlanListHeader>
-        </PrivateContainer>
+        <PlanListSearchBar v-model="location" />
 
         <PrivateContainer v-if="state == 'loading'">
             <PlanListLoader></PlanListLoader>
         </PrivateContainer>
 
         <PrivateContainer v-else-if="state == 'loaded'">
+            <PlanListHeader
+                class="pt-10"
+                :locationTitle="currentLocation.label"
+            ></PlanListHeader>
+
             <div v-if="plansFilteredByLocation.length > 1">
                 <Pagination
-                    class="md:mt-0 mb-6"
-                    v-if="nbPages > 1"
+                    class="md:mt-0 mb-6 justify-end"
                     :currentPage="currentPage"
                     :nbPages="nbPages"
                     :onChangePage="onChangePage"
@@ -26,22 +26,18 @@
                     class="mb-6"
                 />
                 <Pagination
-                    class="md:mt-0 mb-6"
-                    v-if="nbPages > 1"
+                    class="md:mt-0 mb-12 justify-end"
                     :currentPage="currentPage"
                     :nbPages="nbPages"
                     :onChangePage="onChangePage"
                 />
             </div>
 
-            <div v-if="plansFilteredByLocation.length == 0">
-                <PlanListEmpty></PlanListEmpty>
-            </div>
+            <PlanListEmpty v-else />
         </PrivateContainer>
 
         <PrivateContainer v-else>
-            <PlanListError :error="error" @retryLoading="retryLoading">
-            </PlanListError>
+            <LoadingError :retry="load">{{ error }}</LoadingError>
         </PrivateContainer>
     </PrivateLayout>
 </template>
@@ -53,10 +49,9 @@ import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer.vue
 import PlanListLoader from "./PlanListLoader.vue";
 import PlanListHeader from "./PlanListHeader/PlanListHeader.vue";
 import PlanListEmpty from "./PlanListEmpty.vue";
-import PlanListError from "./PlanListError.vue";
 import PlanCard from "./PlanListCard/PlanCard.vue";
+import LoadingError from "#app/components/PrivateLayout/LoadingError.vue";
 import { list } from "#helpers/api/plan";
-import "vue-good-table/dist/vue-good-table.css";
 import { get as getConfig, getPermission } from "#helpers/api/config";
 
 const PER_PAGE = 10;
@@ -64,21 +59,19 @@ const PER_PAGE = 10;
 export default {
     components: {
         PlanListSearchBar,
+        LoadingError,
         PrivateLayout,
         PrivateContainer,
         PlanListLoader,
         PlanListHeader,
         PlanCard,
-        PlanListEmpty,
-        PlanListError
+        PlanListEmpty
     },
     data() {
         const { user } = getConfig();
         const permission = getPermission("plan.list");
-        const hasNationalPermission = permission.geographic_level === "nation";
+        const hasNationalPermission = permission.allow_all === true;
         const data = {
-            locationTitle: null,
-            defaultLocation: null,
             location: null
         };
 
@@ -107,25 +100,9 @@ export default {
         };
 
         if (hasNationalPermission !== true || userLocationType === "nation") {
-            data.defaultLocation = { ...userLocation };
             data.location = null;
         } else {
-            data.defaultLocation = {
-                id: null,
-                label: "France",
-                category: "Pays",
-                data: {
-                    code: null,
-                    type: "nation"
-                }
-            };
             data.location = { ...userLocation };
-        }
-
-        if (data.defaultLocation.data.type === "nation") {
-            data.locationTitle = "National";
-        } else {
-            data.locationTitle = data.defaultLocation.label;
         }
 
         return Object.assign(data, {
@@ -156,12 +133,10 @@ export default {
             currentPage: 1
         });
     },
+
     methods: {
         onChangePage(page) {
             this.currentPage = page;
-        },
-        onLocationChange(location) {
-            this.location = location;
         },
         /**
          * Tries fetching the data from the API
@@ -181,19 +156,12 @@ export default {
                     this.plans = plans;
                     this.state = "loaded";
                 })
-                .catch(({ user_message: error }) => {
-                    this.error = error;
+                .catch(error => {
+                    this.error =
+                        (error && error.user_message) ||
+                        "Une erreur inconnue est survenue";
                     this.state = "error";
                 });
-        },
-
-        /**
-         * Alias to load(), for better readibility in the view
-         *
-         * @see load()
-         */
-        retryLoading() {
-            this.load();
         }
     },
     created() {
@@ -202,7 +170,17 @@ export default {
 
     computed: {
         currentLocation() {
-            return this.location || this.defaultLocation;
+            return this.location && this.location.label
+                ? this.location
+                : {
+                      id: null,
+                      label: "France",
+                      category: "Pays",
+                      data: {
+                          code: null,
+                          type: "nation"
+                      }
+                  };
         },
         plansFilteredByLocation() {
             return this.plans

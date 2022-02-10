@@ -15,18 +15,28 @@
 
 <script>
 import GeoSearchbar from "#app/components/GeoSearchbar/GeoSearchbar.vue";
+
 export default {
+    props: {
+        value: {
+            type: Object,
+            required: false
+        }
+    },
+
     components: {
         GeoSearchbar
     },
-    computed: {
-        location: {
-            get() {
-                return null;
-            },
-            set(value) {
-                this.$emit("locationChange", value);
-            }
+
+    data() {
+        return {
+            location: { ...this.value }
+        };
+    },
+
+    watch: {
+        location() {
+            this.$emit("input", { ...this.location });
         }
     }
 };
