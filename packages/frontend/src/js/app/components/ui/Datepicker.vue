@@ -13,7 +13,7 @@
                 :showMandatoryStar="showMandatoryStar"
                 :id="id"
             />
-            <div class="relative">
+            <div class="relative" :class="width">
                 <InputIcon
                     position="before"
                     icon="calendar"
@@ -82,6 +82,10 @@ export default {
             required: false,
             type: Boolean,
             default: false
+        },
+        width: {
+            type: String,
+            required: false
         }
     },
     components: {

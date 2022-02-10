@@ -1,6 +1,6 @@
 const query = require('./_common/query');
 
-module.exports = (organizationCategoryId, geographicFilter = undefined, filters = {}) => {
+module.exports = (organizationCategoryId, geographicFilter = undefined, filters = {}, customWhere = []) => {
     const where = [
         {
             organizationCategory: {
@@ -8,6 +8,7 @@ module.exports = (organizationCategoryId, geographicFilter = undefined, filters 
                 value: [organizationCategoryId],
             },
         },
+        ...customWhere,
     ];
 
     if (geographicFilter !== undefined) {

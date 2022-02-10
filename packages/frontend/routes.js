@@ -299,7 +299,7 @@ const loggedRoutes = [
         path: "/liste-des-dispositifs",
         component: path.join(
             __dirname,
-            "./src/js/app/pages/plans.list/entrypoint.vue"
+            "./src/js/app/pages/PlanList/entrypoint.vue"
         ),
         route: {
             meta: {
@@ -313,7 +313,7 @@ const loggedRoutes = [
         path: "/nouveau-dispositif",
         component: path.join(
             __dirname,
-            "./src/js/app/pages/plans.create/entrypoint.vue"
+            "./src/js/app/pages/PlanCreate/entrypoint.vue"
         ),
         route: {
             meta: {
@@ -327,7 +327,7 @@ const loggedRoutes = [
         path: "/modifier-dispositif/:id",
         component: path.join(
             __dirname,
-            "./src/js/app/pages/plans.edit/entrypoint.vue"
+            "./src/js/app/pages/PlanUpdate/entrypoint.vue"
         ),
         route: {
             meta: {
@@ -341,7 +341,7 @@ const loggedRoutes = [
         path: "/dispositif/:id",
         component: path.join(
             __dirname,
-            "./src/js/app/pages/plans.details/entrypoint.vue"
+            "./src/js/app/pages/PlanDetails/entrypoint.vue"
         ),
         route: {
             meta: {
@@ -355,7 +355,7 @@ const loggedRoutes = [
         path: "/dispositif/:id/indicateurs",
         component: path.join(
             __dirname,
-            "./src/js/app/pages/plans.marks/entrypoint.vue"
+            "./src/js/app/pages/PlanMarks/entrypoint.vue"
         ),
         route: {
             meta: {

@@ -1,11 +1,8 @@
 <template>
-    <TownDetailsPanel>
+    <DetailsPanel>
         <template v-slot:title>Dispositifs</template>
         <template v-slot:body>
-            <TownDetailsPanelSection
-                v-for="plan in town.plans"
-                :key="plan.plan_id"
-            >
+            <DetailsPanelSection v-for="plan in town.plans" :key="plan.plan_id">
                 <div class="flex">
                     <div class="w-2/3">
                         <div class="font-bold mb-2">
@@ -38,17 +35,17 @@
                         >
                     </div>
                 </div>
-            </TownDetailsPanelSection>
+            </DetailsPanelSection>
         </template>
-    </TownDetailsPanel>
+    </DetailsPanel>
 </template>
 
 <script>
-import TownDetailsPanel from "./ui/TownDetailsPanel.vue";
-import TownDetailsPanelSection from "./ui/TownDetailsPanelSection.vue";
+import DetailsPanel from "#app/components/ui/details/DetailsPanel.vue";
+import DetailsPanelSection from "#app/components/ui/details/DetailsPanelSection.vue";
 
 export default {
-    components: { TownDetailsPanel, TownDetailsPanelSection },
+    components: { DetailsPanel, DetailsPanelSection },
 
     props: {
         town: {

@@ -5,7 +5,10 @@
         v-slot="{ errors }"
         :vid="id"
     >
-        <InputWrapper :hasErrors="!!errors.length">
+        <InputWrapper
+            :hasErrors="!!errors.length"
+            :withoutMargin="withoutMargin"
+        >
             <InputLabel :label="label" :info="info" />
 
             <div class="relative">
@@ -15,6 +18,7 @@
                     @change="$emit('input', $event.target.value)"
                     :id="id"
                     v-bind="filteredProps"
+                    :disabled="disabled"
                 >
                     <slot />
                 </select>
@@ -47,7 +51,7 @@ export default {
             type: String
         },
         value: {
-            type: String
+            type: [String, Number]
         },
         validationName: {
             type: String
@@ -66,6 +70,9 @@ export default {
             type: String
         },
         disabled: {
+            type: Boolean
+        },
+        withoutMargin: {
             type: Boolean
         }
     },

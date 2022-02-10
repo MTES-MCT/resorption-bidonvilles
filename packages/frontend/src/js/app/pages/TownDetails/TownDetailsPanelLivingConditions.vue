@@ -1,5 +1,5 @@
 <template>
-    <TownDetailsPanel>
+    <DetailsPanel>
         <template v-slot:title>Conditions de vie et environnement</template>
         <template v-slot:body>
             <div>
@@ -62,11 +62,11 @@
                 />
             </div>
         </template>
-    </TownDetailsPanel>
+    </DetailsPanel>
 </template>
 
 <script>
-import TownDetailsPanel from "./ui/TownDetailsPanel.vue";
+import DetailsPanel from "#app/components/ui/details/DetailsPanel.vue";
 import TownDetailsPanelLivingConditionsSection from "./ui/TownDetailsPanelLivingConditionsSection";
 import { formatLivingConditions } from "./formatLivingConditions.js";
 
@@ -81,6 +81,6 @@ export default {
             details: formatLivingConditions(this.town)
         };
     },
-    components: { TownDetailsPanelLivingConditionsSection, TownDetailsPanel }
+    components: { TownDetailsPanelLivingConditionsSection, DetailsPanel }
 };
 </script>

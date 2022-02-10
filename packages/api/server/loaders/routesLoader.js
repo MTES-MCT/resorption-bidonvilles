@@ -354,7 +354,7 @@ module.exports = (app) => {
 
             // check charte
             try {
-                await middlewares.charte.check.sync(req, res, next, false);
+                await middlewares.charte.check(req, res, next, false);
             } catch (error) {
                 return res.status(400).send({
                     user_message: error.message,
