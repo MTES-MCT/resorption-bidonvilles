@@ -1,5 +1,5 @@
 <template>
-    <OrganizationDetailsUserWrapper :user="user">
+    <OrganizationDetailsUserWrapper :user="user" :linkToUser="linkToUser">
         <div
             :class="[
                 'bg-G200 p-4 grid grid-cols-2 grid-gap-32',
@@ -34,6 +34,11 @@ export default {
     props: {
         user: {
             type: Object
+        },
+        linkToUser: {
+            // true pour rediriger vers la fiche utilisateur, false pour rediriger vers la fiche structure
+            type: Boolean,
+            default: true
         }
     },
     methods: {

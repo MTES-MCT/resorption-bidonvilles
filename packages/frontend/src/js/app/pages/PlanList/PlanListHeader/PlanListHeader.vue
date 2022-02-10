@@ -6,8 +6,8 @@
             <span class="font-bold">{{ location.label }}</span>
         </h2>
 
-        <div v-if="hasPermission('plan.create')" align="right">
-            <router-link to="/nouveau-dispositif" align="right">
+        <div v-if="hasPermission('plan.create')" align="right" class="mb-6">
+            <router-link to="/nouveau-dispositif">
                 <Button
                     icon="plus"
                     iconPosition="left"

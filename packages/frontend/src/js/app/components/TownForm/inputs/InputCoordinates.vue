@@ -1,5 +1,5 @@
 <template>
-    <MapV2 v-model="input" :zoom="zoom"></MapV2>
+    <MapV2 v-model="input" :zoom="zoom" :disabled="disabled"></MapV2>
 </template>
 
 <script>
@@ -8,6 +8,11 @@ export default {
         value: {
             value: Array,
             required: false
+        },
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
 

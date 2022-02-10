@@ -80,7 +80,8 @@ import {
     faCopy,
     faExternalLinkAlt,
     faPhone,
-    faSchool
+    faSchool,
+    faBullseye
 } from "@fortawesome/free-solid-svg-icons";
 library.add(faChalkboardTeacher);
 library.add(faFlag);
@@ -141,7 +142,6 @@ library.add(faChevronUp);
 library.add(faChevronLeft);
 library.add(faChevronRight);
 library.add(faArrowLeft);
-library.add(faArrowRight);
 library.add(faSpinner);
 library.add(faTwitterSquare);
 library.add(faFacebookSquare);
@@ -162,3 +162,4 @@ library.add(faLock);
 library.add(faExternalLinkAlt);
 library.add(faGithub);
 library.add(faSchool);
+library.add(faBullseye);

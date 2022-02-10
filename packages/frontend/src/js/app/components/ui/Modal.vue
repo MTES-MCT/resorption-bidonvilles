@@ -70,12 +70,9 @@ export default {
     },
     methods: {
         checkOutsideClick(event) {
-            if (
-                this.isOpen &&
-                this.closeModal &&
-                !this.$refs.dialog.contains(event.target)
-            ) {
+            if (this.isOpen && !this.$refs.dialog.contains(event.target)) {
                 this.closeModal();
+                this.$emit("closeModal");
             }
         }
     },

@@ -1,10 +1,10 @@
 <template>
-    <TownDetailsPanel>
+    <DetailsPanel>
         <template v-slot:title>Caractéristiques du site</template>
         <template v-slot:body>
             <div class="flex">
                 <div class="w-1/2 pr-8">
-                    <TownDetailsPanelSection>
+                    <DetailsPanelSection>
                         <div class="grid grid-cols-2">
                             <div>
                                 <div class="font-bold">
@@ -39,9 +39,9 @@
                                 </div>
                             </div>
                         </div>
-                    </TownDetailsPanelSection>
+                    </DetailsPanelSection>
 
-                    <TownDetailsPanelSection>
+                    <DetailsPanelSection>
                         <div class="grid grid-cols-2">
                             <div class="font-bold">
                                 Type de site
@@ -58,8 +58,8 @@
                                 {{ town.fieldType.label }}
                             </div>
                         </div>
-                    </TownDetailsPanelSection>
-                    <TownDetailsPanelSection v-if="town.addressDetails">
+                    </DetailsPanelSection>
+                    <DetailsPanelSection v-if="town.addressDetails">
                         <div class="grid grid-cols-2">
                             <div class="font-bold">
                                 Informations d'accès
@@ -68,8 +68,8 @@
                                 {{ town.addressDetails }}
                             </div>
                         </div>
-                    </TownDetailsPanelSection>
-                    <TownDetailsPanelSection>
+                    </DetailsPanelSection>
+                    <DetailsPanelSection>
                         <div class="font-bold">
                             Coordonnées GPS
                         </div>
@@ -88,8 +88,8 @@
                                 >Copier</Button
                             >
                         </div>
-                    </TownDetailsPanelSection>
-                    <TownDetailsPanelSection>
+                    </DetailsPanelSection>
+                    <DetailsPanelSection>
                         <div class="grid grid-cols-2">
                             <div class="font-bold">
                                 Propriétaire
@@ -98,8 +98,8 @@
                                 {{ town.ownerType.label }}
                             </div>
                         </div>
-                    </TownDetailsPanelSection>
-                    <TownDetailsPanelSection
+                    </DetailsPanelSection>
+                    <DetailsPanelSection
                         v-if="
                             town.ownerType.label !== 'Inconnu' &&
                                 hasPermission('shantytown_owner.access')
@@ -113,8 +113,8 @@
                                 {{ town.owner || "non communiqué" }}
                             </div>
                         </div>
-                    </TownDetailsPanelSection>
-                    <TownDetailsPanelSection v-if="nearbyTowns.length">
+                    </DetailsPanelSection>
+                    <DetailsPanelSection v-if="nearbyTowns.length">
                         <div class="grid grid-cols-2">
                             <div>
                                 <div class="font-bold">
@@ -146,8 +146,8 @@
                                 </ul>
                             </div>
                         </div>
-                    </TownDetailsPanelSection>
-                    <TownDetailsPanelSection>
+                    </DetailsPanelSection>
+                    <DetailsPanelSection>
                         <div class="grid grid-cols-2">
                             <div class="font-bold">
                                 S'agit-t-il d'une réinstallation ?
@@ -156,8 +156,8 @@
                                 {{ boolToStr(town.isReinstallation) }}
                             </div>
                         </div>
-                    </TownDetailsPanelSection>
-                    <TownDetailsPanelSection
+                    </DetailsPanelSection>
+                    <DetailsPanelSection
                         v-if="town.reinstallationComments !== null"
                     >
                         <div class="grid grid-cols-2">
@@ -168,7 +168,7 @@
                             <div class="whitespace-pre" data-cy-data="reinstallation_comments">{{ town.reinstallationComments }}</div>
                             <!-- eslint-enable -->
                         </div>
-                    </TownDetailsPanelSection>
+                    </DetailsPanelSection>
                 </div>
                 <div class="w-1/2">
                     <div class="v1">
@@ -193,13 +193,13 @@
                 </div>
             </div>
         </template>
-    </TownDetailsPanel>
+    </DetailsPanel>
 </template>
 
 <script>
-import TownDetailsPanel from "./ui/TownDetailsPanel.vue";
 import Map from "#app/components/map/map.vue";
-import TownDetailsPanelSection from "./ui/TownDetailsPanelSection.vue";
+import DetailsPanel from "#app/components/ui/details/DetailsPanel.vue";
+import DetailsPanelSection from "#app/components/ui/details/DetailsPanelSection.vue";
 import formatDateSince from "../TownsList/formatDateSince";
 import { notify } from "#helpers/notificationHelper";
 import { findNearby } from "#helpers/api/town";
@@ -216,7 +216,7 @@ export default {
             nearbyTowns: []
         };
     },
-    components: { TownDetailsPanel, TownDetailsPanelSection, Map },
+    components: { DetailsPanel, DetailsPanelSection, Map },
     methods: {
         boolToStr(bool) {
             if (bool === null) {

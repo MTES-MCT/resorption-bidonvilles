@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1 class="font-bold text-xl">
+        <h1 :class="`font-bold text-${size}`">
             {{ title }} <MandatoryStar v-if="showMandatoryStar"></MandatoryStar>
         </h1>
         <p class="mt-1 mb-4"><slot /></p>
@@ -18,6 +18,11 @@ module.exports = {
             required: false,
             type: Boolean,
             default: false
+        },
+        size: {
+            type: String,
+            required: false,
+            default: "xl"
         }
     }
 };

@@ -5,7 +5,10 @@
         v-slot="{ errors }"
         :vid="id"
     >
-        <InputWrapper :hasErrors="!!errors.length">
+        <InputWrapper
+            :hasErrors="!!errors.length"
+            :withoutMargin="withoutMargin"
+        >
             <InputLabel
                 :label="label"
                 :info="info"
@@ -24,6 +27,8 @@
                     v-bind="filteredProps"
                     :class="classes"
                     :data-cy-field="cypressName"
+                    :step="step"
+                    :disabled="disabled"
                 />
                 <InputIcon
                     position="after"
@@ -61,6 +66,10 @@ export default {
             type: String,
             default: "text"
         },
+        step: {
+            type: [String, Number], // For "number" inputs only
+            default: 0
+        },
         validationName: {
             type: String
         },
@@ -68,7 +77,7 @@ export default {
             type: String
         },
         value: {
-            type: String
+            type: [String, Number]
         },
         id: {
             type: String
@@ -97,6 +106,9 @@ export default {
             default: undefined
         },
         disabled: {
+            type: Boolean
+        },
+        withoutMargin: {
             type: Boolean
         }
     },

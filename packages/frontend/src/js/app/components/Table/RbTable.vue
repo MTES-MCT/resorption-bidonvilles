@@ -2,7 +2,10 @@
     <div>
         <RbTableCaption v-if="caption" :caption="caption"></RbTableCaption>
 
-        <div v-if="usePagination" class="mb-4 flex justify-end">
+        <div
+            v-if="usePagination && this.nbPages > 1"
+            class="mb-4 flex justify-end"
+        >
             <Pagination
                 :currentPage="currentPage"
                 :nbPages="nbPages"
@@ -37,7 +40,7 @@
                     :key="getKey(row, key)"
                 >
                     <template v-slot:cell="slotProps">
-                        <slot name="cell" v-bind="slotProps">
+                        <slot name="cell" v-bind="{ ...slotProps, row: key }">
                             <RbTableCell :content="slotProps.content" />
                         </slot>
                     </template>
@@ -45,7 +48,10 @@
             </tbody>
         </table>
 
-        <div v-if="usePagination" class="mt-4 flex justify-end">
+        <div
+            v-if="usePagination && this.nbPages > 1"
+            class="mt-4 flex justify-end"
+        >
             <Pagination
                 :currentPage="currentPage"
                 :nbPages="nbPages"

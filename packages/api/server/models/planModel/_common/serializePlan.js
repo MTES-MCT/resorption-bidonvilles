@@ -15,6 +15,7 @@ module.exports = (user, permissions, plan) => {
         started_at: new Date(plan.startedAt).getTime(),
         expected_to_end_at: plan.expectedToEndAt ? (new Date(plan.expectedToEndAt).getTime()) : null,
         closed_at: plan.closedAt ? new Date(plan.closedAt).getTime() : null,
+        created_at: new Date(plan.createdAt).getTime(),
         updated_at: plan.updatedAt ? new Date(plan.updatedAt).getTime() : null,
         in_and_out: plan.inAndOut === true,
         goals: plan.goals,

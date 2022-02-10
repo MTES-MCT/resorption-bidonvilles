@@ -65,15 +65,26 @@ export function getMembers(organizationId) {
  *
  * @returns {Promise}
  */
-export function getMembersOfCategory(categoryId, regionId, departementId) {
-    let query = "";
+export function getMembersOfCategory(
+    categoryId,
+    regionId,
+    departementId,
+    search = null
+) {
+    let query = [];
     if (departementId !== undefined) {
-        query = `departementId=${encodeURIComponent(departementId)}`;
+        query.push(`departementId=${encodeURIComponent(departementId)}`);
     } else if (regionId !== undefined) {
-        query = `regionId=${encodeURIComponent(regionId)}`;
+        query.push(`regionId=${encodeURIComponent(regionId)}`);
     }
 
-    return getApi(`/organization-categories/${categoryId}/users?${query}`);
+    if (search !== null) {
+        query.push(`q=${encodeURIComponent(search)}`);
+    }
+
+    return getApi(
+        `/organization-categories/${categoryId}/users?${query.join("&")}`
+    );
 }
 
 /**

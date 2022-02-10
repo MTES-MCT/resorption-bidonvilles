@@ -55,16 +55,7 @@
                 >
                     <!-- first column -->
                     <div>
-                        <div class="flex items-center customAlign">
-                            <Icon
-                                icon="map-marker-alt"
-                                class="text-lg"
-                                :style="`color: ${shantytown.fieldType.color}`"
-                            />
-                            <div class="font-bold ml-2">
-                                {{ shantytown.fieldType.label }}
-                            </div>
-                        </div>
+                        <TownField :fieldType="shantytown.fieldType" />
                         <div class="ml-5">
                             <div>
                                 {{ shantytown.statusName }} depuis <br />
@@ -83,23 +74,11 @@
                         >
                             Population : inconnu
                         </div>
-                        <div v-else class="text-lg font-bold flex items-center">
-                            <div class="mr-2">
-                                {{ shantytown.populationTotal }}
-                            </div>
-                            <div>
-                                <Icon icon="male" />{{ " " }}
-                                <span v-if="shantytown.populationTotal >= 25">
-                                    <Icon icon="male" />{{ " " }}</span
-                                >
-                                <span v-if="shantytown.populationTotal >= 75">
-                                    <Icon icon="male" />{{ " " }}</span
-                                >
-                                <span v-if="shantytown.populationTotal >= 100">
-                                    <Icon icon="male"
-                                /></span>
-                            </div>
-                        </div>
+                        <TownPopulation
+                            v-else
+                            class="text-lg font-bold"
+                            :population="shantytown.populationTotal"
+                        />
                         <div>
                             <div
                                 v-if="!shantytown.socialOrigins.length"
@@ -272,6 +251,8 @@
 
 <script>
 import TownCardIcon from "./TownCardIcon";
+import TownField from "#app/components/TownField/TownField.vue";
+import TownPopulation from "#app/components/TownPopulation/TownPopulation.vue";
 import ClosingSolutionsList from "./ClosingSolutionsList";
 import flagEU from "./assets/eu.png";
 import flagFR from "./assets/fr.png";
@@ -297,7 +278,9 @@ export default {
     },
     components: {
         TownCardIcon,
-        ClosingSolutionsList
+        ClosingSolutionsList,
+        TownField,
+        TownPopulation
     },
     methods: {
         /**
@@ -371,9 +354,6 @@ export default {
     @media print {
         grid-template-columns: 160px 208px 164px 200px 236px;
     }
-}
-.customAlign {
-    height: 30px;
 }
 
 .closedShantytown {
