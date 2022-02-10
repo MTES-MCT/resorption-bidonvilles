@@ -168,6 +168,15 @@ function sanitizeState(plan, data) {
     };
 
     function extractAudience(key) {
+        if (!audience[key]) {
+            return {
+                total: 0,
+                families: 0,
+                women: 0,
+                minors: 0,
+            };
+        }
+
         return {
             total: parseInt(audience[key].total, 10),
             families: parseInt(audience[key].families, 10),
