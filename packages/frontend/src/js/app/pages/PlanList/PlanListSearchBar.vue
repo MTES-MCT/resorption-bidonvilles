@@ -17,26 +17,18 @@
 import GeoSearchbar from "#app/components/GeoSearchbar/GeoSearchbar.vue";
 
 export default {
-    props: {
-        value: {
-            type: Object,
-            required: false
-        }
-    },
-
     components: {
         GeoSearchbar
     },
 
-    data() {
-        return {
-            location: { ...this.value }
-        };
-    },
-
-    watch: {
-        location() {
-            this.$emit("input", { ...this.location });
+    computed: {
+        location: {
+            get() {
+                return this.$store.state.plans.locationFilter;
+            },
+            set(value) {
+                this.$store.commit("setPlansLocationFilter", value);
+            }
         }
     }
 };

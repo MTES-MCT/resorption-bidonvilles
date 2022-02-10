@@ -54,14 +54,12 @@
                     <!-- 4ème colonne -->
                     <PlanCardPiloteColumn
                         :government_contact="plan.government_contacts[0]"
-                        @setPlanLink="setPlanLink"
                     >
                     </PlanCardPiloteColumn>
 
                     <!-- 5ème colonne -->
                     <PlanCardOperatorColumn
                         :operator_contact="plan.operator_contacts[0]"
-                        @setPlanLink="setPlanLink"
                     >
                     </PlanCardOperatorColumn>
 
@@ -84,7 +82,6 @@
 </template>
 
 <script>
-import { open } from "#helpers/tabHelper";
 import PlanCardDepartementColumn from "./PlanCardDepartementColumn.vue";
 import PlanCardInterventionTopicColumn from "./PlanCardInterventionTopicColumn.vue";
 import PlanCardLocationColumn from "./PlanCardLocationColumn.vue";
@@ -101,8 +98,7 @@ export default {
     },
     data() {
         return {
-            isHover: false,
-            planLinkActive: true
+            isHover: false
         };
     },
     components: {
@@ -119,15 +115,7 @@ export default {
          * @param {Object}
          */
         routeToPlan() {
-            if (this.planLinkActive) {
-                const routeData = this.$router.resolve(
-                    `/dispositif/${this.plan.id}`
-                );
-                open(routeData.href);
-            }
-        },
-        setPlanLink(value) {
-            this.planLinkActive = value;
+            this.$router.push(`/dispositif/${this.plan.id}`);
         },
         formatDate(value) {
             const date = new Date();

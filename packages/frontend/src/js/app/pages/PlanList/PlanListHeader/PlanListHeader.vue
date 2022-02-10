@@ -3,7 +3,7 @@
         <h1 class="text-display-lg mb-4 whitespace-nowrap">Dispositifs</h1>
         <h2 class="mb-4">
             L'ensemble des dispositifs sur votre territoire :
-            <span class="font-bold">{{ locationTitle }}</span>
+            <span class="font-bold">{{ location.label }}</span>
         </h2>
 
         <div v-if="hasPermission('plan.create')" align="right">
@@ -23,18 +23,19 @@
 
 <script>
 import { hasPermission } from "#helpers/api/config";
+import { mapGetters } from "vuex";
 
 export default {
-    props: {
-        locationTitle: {
-            type: String
-        }
-    },
-
     methods: {
         hasPermission(...args) {
             return hasPermission(...args);
         }
+    },
+
+    computed: {
+        ...mapGetters({
+            location: "plansLocationFilter"
+        })
     }
 };
 </script>

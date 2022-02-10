@@ -5,19 +5,14 @@
         </div>
         <div class="ml-2 flex-grow">
             <span class="text-dark font-bold"> Pilote <br /></span>
-            <!-- Quand on clique sur le lien du pilote, planLinkActive permet de ne pas ouvrir la page du dispositif en même temps -->
-            <div
-                @mouseenter="setPlanLink(false)"
-                @mouseleave="setPlanLink(true)"
+            <Button
+                @click.native.stop
+                variant="primaryText"
+                :href="`/annuaire/${government_contact.organization.id}`"
+                class="text-display-sm hover:underline -mb-1"
             >
-                <Button
-                    variant="primaryText"
-                    :href="`/annuaire/${government_contact.organization.id}`"
-                    class="text-display-sm hover:underline -mb-1"
-                >
-                    {{ government_contact.organization.name }}
-                </Button>
-            </div>
+                {{ government_contact.organization.name }}
+            </Button>
         </div>
     </div>
 </template>
@@ -27,11 +22,6 @@ export default {
     props: {
         government_contact: {
             type: Object
-        }
-    },
-    methods: {
-        setPlanLink(value) {
-            this.$emit("setPlanLink", value);
         }
     }
 };
