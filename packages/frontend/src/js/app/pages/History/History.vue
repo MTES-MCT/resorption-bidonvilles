@@ -241,8 +241,8 @@ export default {
             let bottomOfWindow =
                 document.documentElement.offsetHeight -
                     document.documentElement.scrollTop -
-                    window.innerHeight ===
-                0;
+                    window.innerHeight <
+                window.innerHeight;
             if (bottomOfWindow) {
                 this.loadNext();
             }
