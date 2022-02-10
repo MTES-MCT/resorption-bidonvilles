@@ -28,6 +28,7 @@
                     :class="classes"
                     :data-cy-field="cypressName"
                     :step="step"
+                    :disabled="disabled"
                 />
                 <InputIcon
                     position="after"

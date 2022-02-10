@@ -5,12 +5,16 @@
                 <InputAddress
                     v-model="input.address"
                     @change="onAddressChange"
+                    :disabled="disabled"
                 ></InputAddress>
             </FormParagraph>
         </div>
 
         <div class="w-full h-96" v-if="input.address.label">
-            <InputCoordinates v-model="input.coordinates"></InputCoordinates>
+            <InputCoordinates
+                v-model="input.coordinates"
+                :disabled="disabled"
+            ></InputCoordinates>
         </div>
     </div>
 </template>
@@ -27,6 +31,11 @@ export default {
             default() {
                 return {};
             }
+        },
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
 

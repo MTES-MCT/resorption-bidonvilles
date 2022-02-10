@@ -11,6 +11,7 @@
             <div class="w-64">
                 <InputDepartement
                     v-model="input.departement"
+                    :disabled="mode !== 'create'"
                 ></InputDepartement>
             </div>
         </FormParagraph>
@@ -27,8 +28,11 @@
                 ></InputExpectedToEndAt>
             </div>
 
-            <InputInAndOut v-model="input.in_and_out" />
-            <InputTopics v-model="input.topics" />
+            <InputInAndOut
+                v-model="input.in_and_out"
+                :disabled="mode !== 'create'"
+            />
+            <InputTopics v-model="input.topics" :disabled="mode !== 'create'" />
             <InputGoals v-model="input.goals" />
         </FormParagraph>
     </FormGroup>
@@ -47,6 +51,10 @@ export default {
     props: {
         value: {
             type: Object,
+            required: true
+        },
+        mode: {
+            type: String,
             required: true
         }
     },

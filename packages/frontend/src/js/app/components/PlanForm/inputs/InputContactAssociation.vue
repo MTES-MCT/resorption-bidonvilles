@@ -12,6 +12,7 @@
         :defaultValue="input"
         v-model="input"
         @submit="$emit('input', $event)"
+        :disabled="disabled"
     ></AutocompleteV2>
 </template>
 
@@ -23,6 +24,11 @@ export default {
         value: {
             type: Object,
             required: false
+        },
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
 

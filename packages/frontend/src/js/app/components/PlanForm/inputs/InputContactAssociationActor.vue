@@ -29,6 +29,7 @@
             validationName="Personne référente chez l'opérateur"
             rules="required"
             v-model="input"
+            :disabled="disabled"
         >
             <SelectOption>- Selectionner un choix -</SelectOption>
             <SelectOption
@@ -64,6 +65,11 @@ export default {
         associationDepartement: {
             type: String,
             required: true
+        },
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
 

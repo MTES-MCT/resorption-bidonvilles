@@ -19,6 +19,7 @@
                             :checkValue="content"
                             v-model="input"
                             v-if="column === 'checkbox'"
+                            :disabled="disabled"
                         />
                         <TownField
                             :fieldType="content"
@@ -78,6 +79,11 @@ export default {
         },
         id: {
             type: String
+        },
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
 

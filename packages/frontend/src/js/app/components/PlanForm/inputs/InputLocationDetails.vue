@@ -6,6 +6,7 @@
         :showMandatoryStar="true"
         rules="required"
         v-model="input"
+        :disabled="disabled"
     ></TextInput>
 </template>
 
@@ -16,6 +17,11 @@ export default {
             type: String,
             required: false,
             default: ""
+        },
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
 

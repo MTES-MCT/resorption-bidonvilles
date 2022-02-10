@@ -6,21 +6,25 @@
         >
             <InputLocationType
                 v-model="input.location_type"
+                :disabled="mode !== 'create'"
             ></InputLocationType>
 
             <InputLocationShantytowns
                 v-if="input.location_type === 'shantytowns'"
                 v-model="input.location_shantytowns"
+                :disabled="mode !== 'create'"
             />
 
             <InputLocationAddress
                 v-if="input.location_type === 'location'"
                 v-model="input.location_address"
+                :disabled="mode !== 'create'"
             />
 
             <InputLocationDetails
                 v-if="input.location_type === 'other'"
                 v-model="input.location_details"
+                :disabled="mode !== 'create'"
             />
         </FormParagraph>
     </FormGroup>
@@ -36,6 +40,10 @@ export default {
     props: {
         value: {
             type: Object,
+            required: true
+        },
+        mode: {
+            type: String,
             required: true
         }
     },

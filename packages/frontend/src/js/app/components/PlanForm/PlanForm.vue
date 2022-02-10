@@ -39,18 +39,21 @@
                         class="mt-10 planPanelShadow"
                         id="characteristics"
                         v-model="plan.characteristics"
+                        :mode="mode"
                     ></PlanFormPanelCharacteristics>
 
                     <PlanFormPanelLocation
                         class="mt-10 planPanelShadow"
                         id="location"
                         v-model="plan.location"
+                        :mode="mode"
                     ></PlanFormPanelLocation>
 
                     <PlanFormPanelPeople
                         class="mt-10 planPanelShadow"
                         id="people"
                         v-model="plan.people"
+                        :mode="mode"
                     ></PlanFormPanelPeople>
 
                     <PlanFormPanelFinancial
@@ -275,7 +278,7 @@ export default {
             this.$router.replace("#top");
 
             try {
-                const result = await this.submitFn({
+                const plan = await this.submitFn({
                     name: this.plan.characteristics.name,
                     departement: this.plan.characteristics.departement,
                     startedAt: this.formatDate(
@@ -322,14 +325,8 @@ export default {
 
                 this.loading = false;
 
-                let id;
-                if (this.mode === "create") {
-                    id = result.id;
-                } else {
-                    id = this.data.id;
-                }
-
-                this.$router.push(`/dispositif/${id}`);
+                this.$store.commit("addPlan", plan);
+                this.$router.push(`/dispositif/${plan.id}`);
 
                 notify({
                     group: "notifications",

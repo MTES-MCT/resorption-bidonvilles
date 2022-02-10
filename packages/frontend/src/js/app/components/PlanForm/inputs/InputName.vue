@@ -4,7 +4,6 @@
         label=""
         validationName="Nom du dispositif"
         rules="required"
-        info="Exemples : ..."
         v-model="input"
     ></TextInput>
 </template>

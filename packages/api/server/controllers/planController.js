@@ -890,9 +890,14 @@ module.exports = models => ({
             return next(error);
         }
 
-        return res.status(200).send({
-            id: finalPlanId,
-        });
+        let plan = null;
+        try {
+            plan = await models.plan.findOne(req.user, finalPlanId);
+        } catch (error) {
+            // ignore
+        }
+
+        return res.status(200).send(plan);
     },
 
     async update(req, res, next) {
@@ -1132,7 +1137,15 @@ module.exports = models => ({
             return next(error);
         }
 
-        return res.status(200).send({});
+
+        let updatedPlan = null;
+        try {
+            updatedPlan = await models.plan.findOne(req.user, req.params.id);
+        } catch (error) {
+            // ignore
+        }
+
+        return res.status(200).send(updatedPlan);
     },
 
     async addState(req, res, next) {

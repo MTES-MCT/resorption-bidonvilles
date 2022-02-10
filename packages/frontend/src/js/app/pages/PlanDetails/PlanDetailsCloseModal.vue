@@ -130,8 +130,7 @@ export default {
             required: true
         },
         audience: {
-            type: Object,
-            required: true
+            type: Object
         }
     },
 

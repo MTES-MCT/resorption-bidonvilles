@@ -13,6 +13,7 @@
             :label="value.name"
             v-model="checked"
             :checkValue="value.uid"
+            :disabled="disabled"
         ></Checkbox>
     </CheckableGroup>
 </template>
@@ -26,6 +27,11 @@ export default {
             type: Array,
             required: false,
             default: () => []
+        },
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
 

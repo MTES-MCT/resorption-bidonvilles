@@ -10,24 +10,28 @@
             label="Sur site(s) : bidonville ou squat"
             v-model="checked"
             checkValue="shantytowns"
+            :disabled="disabled"
         ></Radio>
         <Radio
             variant="card"
             label="Sur terrain d'insertion"
             v-model="checked"
             checkValue="location"
+            :disabled="disabled"
         ></Radio>
         <Radio
             variant="card"
             label="Dans le logement"
             v-model="checked"
             checkValue="housing"
+            :disabled="disabled"
         ></Radio>
         <Radio
             variant="card"
             label="Dans plusieurs lieux (hébergement, permanence, rue...)"
             v-model="checked"
             checkValue="other"
+            :disabled="disabled"
         ></Radio>
     </CheckableGroup>
 </template>
@@ -39,6 +43,11 @@ export default {
             type: String,
             required: false,
             default: undefined
+        },
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
 

@@ -5,6 +5,7 @@
         validationName="Département d'intervention principal"
         rules="required"
         v-model="input"
+        :disabled="disabled"
     >
         <SelectOption>- Selectionner un choix -</SelectOption>
         <SelectOption
@@ -25,6 +26,11 @@ export default {
             type: String,
             required: false,
             default: undefined
+        },
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
 

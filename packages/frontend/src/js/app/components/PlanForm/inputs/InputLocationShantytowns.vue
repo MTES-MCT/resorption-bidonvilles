@@ -5,6 +5,7 @@
         validationName="Sites concernés"
         :showMandatoryStar="true"
         rules="required"
+        :disabled="disabled"
         v-model="input"
     >
         <template v-slot:info
@@ -28,6 +29,11 @@ export default {
             default() {
                 return [];
             }
+        },
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
 

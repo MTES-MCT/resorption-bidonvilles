@@ -9,7 +9,7 @@
         <PrivateContainer v-else-if="state == 'loaded'">
             <PlanListHeader class="pt-10" />
 
-            <div v-if="pageContent.length > 1">
+            <div v-if="pageContent.length >= 1">
                 <Pagination
                     class="md:mt-0 mb-6 justify-end"
                     :currentPage="currentPage"

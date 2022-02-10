@@ -18,6 +18,7 @@
                     @change="$emit('input', $event.target.value)"
                     :id="id"
                     v-bind="filteredProps"
+                    :disabled="disabled"
                 >
                     <slot />
                 </select>

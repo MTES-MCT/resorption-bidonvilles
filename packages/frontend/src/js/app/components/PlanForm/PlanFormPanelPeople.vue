@@ -1,7 +1,10 @@
 <template>
     <FormGroup title="Contacts">
         <InputContactGovernment v-model="input.government" />
-        <InputContactAssociation v-model="input.association" />
+        <InputContactAssociation
+            v-model="input.association"
+            :disabled="mode !== 'create'"
+        />
         <InputContactAssociationActor
             v-if="input.association"
             v-model="input.contact"
@@ -10,6 +13,7 @@
             :associationDepartement="
                 input.association.location.departement.code
             "
+            :disabled="mode !== 'create'"
         />
     </FormGroup>
 </template>
@@ -23,6 +27,10 @@ export default {
     props: {
         value: {
             type: Object,
+            required: true
+        },
+        mode: {
+            type: String,
             required: true
         }
     },

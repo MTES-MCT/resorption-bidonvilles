@@ -10,6 +10,7 @@
         rules="required"
         data-cy-field="address"
         :defaultValue="value"
+        :disabled="disabled"
     ></AutocompleteV2>
 </template>
 
@@ -27,6 +28,11 @@ export default {
                     citycode: undefined
                 };
             }
+        },
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
 

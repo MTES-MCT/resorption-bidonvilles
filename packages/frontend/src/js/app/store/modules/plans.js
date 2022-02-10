@@ -26,6 +26,14 @@ export default {
         setPlansLocationFilter(state, filter) {
             state.currentPage = 1;
             state.locationFilter = filter;
+        },
+        addPlan(state, plan) {
+            const index = state.items.findIndex(item => item.id === plan.id);
+            if (index === -1) {
+                state.items.push(plan);
+            } else {
+                state.items.splice(index, 1, plan);
+            }
         }
     },
 

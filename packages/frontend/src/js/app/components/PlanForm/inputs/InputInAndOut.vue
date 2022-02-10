@@ -12,12 +12,14 @@
             label="Oui"
             v-model="checked"
             :checkValue="true"
+            :disabled="disabled"
         ></Radio>
         <Radio
             variant="card"
             label="Non"
             v-model="checked"
             :checkValue="false"
+            :disabled="disabled"
         ></Radio>
     </CheckableGroup>
 </template>
@@ -29,6 +31,11 @@ export default {
             type: Boolean,
             required: false,
             default: undefined
+        },
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
 
