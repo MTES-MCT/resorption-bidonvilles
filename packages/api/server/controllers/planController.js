@@ -169,8 +169,8 @@ function sanitizeState(plan, data) {
 
     function extractAudience(key) {
         return {
-            total: parseInt(audience[key].people, 10),
-            families: parseInt(audience[key].households, 10),
+            total: parseInt(audience[key].total, 10),
+            families: parseInt(audience[key].families, 10),
             women: parseInt(audience[key].women, 10),
             minors: parseInt(audience[key].minors, 10),
         };
@@ -195,7 +195,7 @@ function sanitizeState(plan, data) {
     const topics = plan.topics.map(({ uid }) => uid);
 
     function getIntOrNull(value) {
-        return value !== '' && value !== undefined ? parseInt(value, 10) : null;
+        return value !== '' && value !== undefined && value !== null ? parseInt(value, 10) : null;
     }
 
     // indicateurs droit commun
@@ -890,9 +890,14 @@ module.exports = models => ({
             return next(error);
         }
 
-        return res.status(200).send({
-            id: finalPlanId,
-        });
+        let plan = null;
+        try {
+            plan = await models.plan.findOne(req.user, finalPlanId);
+        } catch (error) {
+            // ignore
+        }
+
+        return res.status(200).send(plan);
     },
 
     async update(req, res, next) {
@@ -1132,7 +1137,15 @@ module.exports = models => ({
             return next(error);
         }
 
-        return res.status(200).send({});
+
+        let updatedPlan = null;
+        try {
+            updatedPlan = await models.plan.findOne(req.user, req.params.id);
+        } catch (error) {
+            // ignore
+        }
+
+        return res.status(200).send(updatedPlan);
     },
 
     async addState(req, res, next) {

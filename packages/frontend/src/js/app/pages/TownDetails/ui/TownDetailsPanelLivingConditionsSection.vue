@@ -1,5 +1,5 @@
 <template>
-    <TownDetailsPanelSection>
+    <DetailsPanelSection>
         <div :class="[colorClass, 'flex items-center']">
             <Icon :class="['mr-1', 'font-bold']" :icon="icon" />
             <div>
@@ -91,16 +91,16 @@
                 </div>
             </div>
         </div>
-    </TownDetailsPanelSection>
+    </DetailsPanelSection>
 </template>
 
 <script>
-import TownDetailsPanelSection from "./TownDetailsPanelSection";
+import DetailsPanelSection from "#app/components/ui/details/DetailsPanelSection.vue";
 import TownDetailsPanelLivingConditionsDetails from "./TownDetailsPanelLivingConditionsDetails";
 export default {
     components: {
         TownDetailsPanelLivingConditionsDetails,
-        TownDetailsPanelSection
+        DetailsPanelSection
     },
     props: {
         title: {

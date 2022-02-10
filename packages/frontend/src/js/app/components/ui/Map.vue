@@ -38,6 +38,12 @@ export default {
             type: Number,
             required: false,
             default: 5
+        },
+
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
 
@@ -146,7 +152,7 @@ export default {
         },
 
         handleClick({ latlng: { lat, lng } }) {
-            if (this.marker === null) {
+            if (this.marker === null || this.disabled === true) {
                 return;
             }
 

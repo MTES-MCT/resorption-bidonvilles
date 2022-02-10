@@ -25,17 +25,7 @@
 
             <TownsListHeader :search="filters.location" class="mb-6">
                 <template slot="filters">
-                    <TownsListHeaderTab
-                        :active="filters.status === 'open'"
-                        @click="onClickOpenTab"
-                        class="mr-8"
-                        >Sites existants</TownsListHeaderTab
-                    >
-                    <TownsListHeaderTab
-                        :active="filters.status === 'close'"
-                        @click="onClickCloseTab"
-                        >Sites fermés</TownsListHeaderTab
-                    >
+                    <TabList :tabs="tabs" v-model="currentTab" />
                 </template>
                 <template slot="title">
                     <div class="flex justify-between items-start">
@@ -390,7 +380,7 @@ import EventBannerWaterAccess from "#app/components/EventBannerWaterAccess";
 import TownCard from "./TownCard";
 import GeoSearchbar from "#app/components/GeoSearchbar/GeoSearchbar.vue";
 import TownsListHeader from "./TownsListHeader/TownsListHeader";
-import TownsListHeaderTab from "./TownsListHeader/TownsListHeaderTab";
+import TabList from "#app/components/TabList/TabList.vue";
 import TownsListFilters from "./TownsListFilters/TownsListFilters";
 import {
     get as getConfig,
@@ -415,7 +405,7 @@ export default {
         PrivateLayout,
         GeoSearchbar,
         TownsListHeader,
-        TownsListHeaderTab,
+        TabList,
         TownsListFilters,
         Export
     },
@@ -484,8 +474,24 @@ export default {
                         label: `Date d'actualisation`
                     }
                 ]
-            }
+            },
+            tabs: [
+                { id: "open", label: "Sites existants" },
+                { id: "close", label: "Sites fermés" }
+            ],
+            currentTab: "open"
         };
+    },
+    watch: {
+        currentTab() {
+            this.updateFilters("status", this.currentTab);
+
+            if (this.currentTab === "close") {
+                this.updateSort("closedAt");
+            } else {
+                this.updateSort("cityName");
+            }
+        }
     },
     methods: {
         refreshActivities() {
@@ -526,14 +532,6 @@ export default {
                 location: data.value,
                 search: data.search
             });
-        },
-        onClickCloseTab() {
-            this.updateFilters("status", "close");
-            this.updateSort("closedAt");
-        },
-        onClickOpenTab() {
-            this.updateFilters("status", "open");
-            this.updateSort("cityName");
         },
         updateSort(val) {
             this.$store.commit("setSort", val);

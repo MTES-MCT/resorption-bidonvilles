@@ -61,10 +61,41 @@ module.exports = models => ({
             };
         }
 
+        const search = [];
+        if (req.query.q !== undefined) {
+            search.push({
+                first_name: {
+                    query: 'users.first_name',
+                    operator: 'ILIKE',
+                    value: `${req.query.q}%`,
+                },
+                last_name: {
+                    query: 'users.last_name',
+                    operator: 'ILIKE',
+                    value: `${req.query.q}%`,
+                },
+                organization_name: {
+                    query: 'organizations.name',
+                    operator: 'ILIKE',
+                    value: `${req.query.q}%`,
+                },
+                organization_abbreviation: {
+                    query: 'organizations.abbreviation',
+                    operator: 'ILIKE',
+                    value: `${req.query.q}%`,
+                },
+            });
+        }
+
         return res.status(200).send({
             success: true,
             response: {
-                users: await models.user.findByOrganizationCategory(req.params.categoryId, geographicFilter),
+                users: await models.user.findByOrganizationCategory(
+                    req.params.categoryId,
+                    geographicFilter,
+                    {},
+                    search,
+                ),
             },
         });
     },

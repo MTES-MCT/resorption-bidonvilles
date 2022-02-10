@@ -1,8 +1,8 @@
 <template>
-    <TownDetailsPanel>
+    <DetailsPanel>
         <template v-slot:title>Habitants</template>
         <template v-slot:body>
-            <TownDetailsPanelSection>
+            <DetailsPanelSection>
                 <div class="italic mb-4">
                     Le nombre de personnes sur un site est mouvant, les données
                     fournies par les acteurs, même des estimations, participent
@@ -94,8 +94,8 @@
                         </div>
                     </div>
                 </div>
-            </TownDetailsPanelSection>
-            <TownDetailsPanelSection>
+            </DetailsPanelSection>
+            <DetailsPanelSection>
                 <div class="flex items-center justify-between">
                     <div class="w-96">
                         <div class="font-bold">Diagnostic social</div>
@@ -109,14 +109,14 @@
                         contexte territorial et les acteurs en présence.
                     </div>
                 </div>
-            </TownDetailsPanelSection>
+            </DetailsPanelSection>
         </template>
-    </TownDetailsPanel>
+    </DetailsPanel>
 </template>
 
 <script>
-import TownDetailsPanel from "./ui/TownDetailsPanel.vue";
-import TownDetailsPanelSection from "./ui/TownDetailsPanelSection.vue";
+import DetailsPanel from "#app/components/ui/details/DetailsPanel.vue";
+import DetailsPanelSection from "#app/components/ui/details/DetailsPanelSection.vue";
 import flagFR from "#app/pages/TownsList/assets/fr.png";
 import flagEU from "#app/pages/TownsList/assets/eu.png";
 import flagExtraCommunautaires from "#app/pages/TownsList/assets/extra-communautaires.png";
@@ -153,7 +153,7 @@ export default {
             ]
         };
     },
-    components: { TownDetailsPanel, TownDetailsPanelSection },
+    components: { DetailsPanel, DetailsPanelSection },
     methods: {
         /**
          * @see index.js
