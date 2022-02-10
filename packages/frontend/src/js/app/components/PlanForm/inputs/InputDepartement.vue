@@ -44,48 +44,18 @@ export default {
                 return [];
             }
 
-            // NEW-GEN PERMISSIONS:
-            // ==
-            // if (this.permission.allow_all === true) {
-            //     return this.departements;
-            // } else {
-            //     return [
-            //         ...this.getFullDepartementsFor(
-            //             this.permission.allowed_on.departements
-            //         ),
-            //         ...this.getDepartementsOfRegions(
-            //             this.permission.allowed_on.regions
-            //         )
-            //     ];
-            // }
-
-            // OLD-GEN PERMISSIONS
-            // ==
-            const { user } = getConfig();
-            const userLevel = user.organization.location.type;
-
-            // permission nationale
-            if (
-                this.permission.geographic_level === "nation" ||
-                userLevel === "nation"
-            ) {
+            if (this.permission.allow_all === true) {
                 return this.departements;
+            } else {
+                return [
+                    ...this.getFullDepartementsFor(
+                        this.permission.allowed_on.departements
+                    ),
+                    ...this.getDepartementsOfRegions(
+                        this.permission.allowed_on.regions
+                    )
+                ];
             }
-
-            // permission régionale
-            if (userLevel === "region") {
-                return this.getDepartementsOfRegions([
-                    user.organization.location.region.code
-                ]);
-            }
-
-            // permission départementale
-            if (userLevel === "departement") {
-                return [user.organization.location.departement];
-            }
-
-            // tout le reste
-            return [];
         }
     },
 
