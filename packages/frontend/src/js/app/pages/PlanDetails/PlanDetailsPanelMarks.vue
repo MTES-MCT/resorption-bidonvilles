@@ -36,7 +36,7 @@ export default {
     },
     methods: {
         routeToUpdateMarks() {
-            this.$router.push(`/dispositif/${this.planId}/indicateurs`);
+            this.$router.push(`/action/${this.planId}/indicateurs`);
         }
     }
 };

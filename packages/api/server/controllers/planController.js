@@ -564,15 +564,15 @@ module.exports = models => ({
         }
 
         if (!planData.name) {
-            addError('name', 'Le nom du dispositif est obligatoire');
+            addError('name', 'Le nom de l\'action est obligatoire');
         }
 
         if (!planData.startedAt) {
-            addError('startedAt', 'La date de début du dispositif est obligatoire');
+            addError('startedAt', 'La date de début de l\'action est obligatoire');
         }
 
         if (planData.expectedToEndAt && planData.expectedToEndAt <= planData.startedAt) {
-            addError('expectedToEndAt', 'La date de fin du dispositif ne peut pas être antérieure à la date de début');
+            addError('expectedToEndAt', 'La date de fin de l\'action ne peut pas être antérieure à la date de début');
         }
 
         if (typeof planData.inAndOut !== 'boolean') {
@@ -627,7 +627,7 @@ module.exports = models => ({
 
             case 'other':
                 if (!planData.locationDetails) {
-                    addError('locationDetails', 'Vous devez préciser les lieux de déroulement du dispositif');
+                    addError('locationDetails', 'Vous devez préciser les lieux de déroulement de l\'action');
                 }
                 break;
 
@@ -635,17 +635,17 @@ module.exports = models => ({
         }
 
         if (!planData.government) {
-            addError('government', 'Vous devez désigner la personne en charge du pilotage du dispositif');
+            addError('government', 'Vous devez désigner la personne en charge du pilotage de l\'action');
         } else {
             try {
                 const user = await models.user.findOne(planData.government.id);
                 if (user === null) {
-                    addError('government', 'La personne désignée comme pilote du dispositif n\'a pas été retrouvée en base de données');
+                    addError('government', 'La personne désignée comme pilote de l\'action n\'a pas été retrouvée en base de données');
                 } else if (user.organization.category.uid !== 'public_establishment') {
-                    addError('government', 'Le pilote du dispositif doit faire partie d\'un service de l\'état');
+                    addError('government', 'Le pilote de l\'action doit faire partie d\'un service de l\'état');
                 }
             } catch (error) {
-                addError('government', 'Une erreur est survenue lors de la validation du pilote du dispositif');
+                addError('government', 'Une erreur est survenue lors de la validation du pilote de l\'action');
             }
         }
 
@@ -873,7 +873,7 @@ module.exports = models => ({
                         },
                     ),
 
-                    // pour le manager (utilisateur), on octroie les droits suivants sur le dispositif :
+                    // pour le manager (utilisateur), on octroie les droits suivants sur l'action :
                     // list, read, update, et close
                     ...['list', 'read', 'update', 'close'].map(
                         feature => addAttachments([{ type: 'plan', id: planId }])
@@ -881,7 +881,7 @@ module.exports = models => ({
                             .onFeature(feature, 'plan', t),
                     ),
 
-                    // pour l'opérateur (structure), on octroie les droits suivants sur le dispositif :
+                    // pour l'opérateur (structure), on octroie les droits suivants sur l'action :
                     // list, read, updateMarks
                     ...['list', 'read', 'updateMarks'].map(
                         feature => addAttachments([{ type: 'plan', id: planId }])
@@ -973,15 +973,15 @@ module.exports = models => ({
         }
 
         if (!planData.name) {
-            addError('name', 'Le nom du dispositif est obligatoire');
+            addError('name', 'Le nom de l\'action est obligatoire');
         }
 
         if (!planData.startedAt) {
-            addError('startedAt', 'La date de début du dispositif est obligatoire');
+            addError('startedAt', 'La date de début de l\'action est obligatoire');
         }
 
         if (planData.expectedToEndAt && planData.expectedToEndAt <= planData.startedAt) {
-            addError('expectedToEndAt', 'La date de fin du dispositif ne peut pas être antérieure à la date de début');
+            addError('expectedToEndAt', 'La date de fin de l\'action ne peut pas être antérieure à la date de début');
         }
 
         if (planData.topics.length === 0) {
@@ -998,17 +998,17 @@ module.exports = models => ({
         }
 
         if (!planData.government) {
-            addError('government', 'Vous devez désigner la personne en charge du pilotage du dispositif');
+            addError('government', 'Vous devez désigner la personne en charge du pilotage de l\'action');
         } else {
             try {
                 const user = await models.user.findOne(planData.government.id);
                 if (user === null) {
-                    addError('government', 'La personne désignée comme pilote du dispositif n\'a pas été retrouvée en base de données');
+                    addError('government', 'La personne désignée comme pilote de l\'action n\'a pas été retrouvée en base de données');
                 } else if (user.organization.category.uid !== 'public_establishment') {
-                    addError('government', 'Le pilote du dispositif doit faire partie d\'un service de l\'état');
+                    addError('government', 'Le pilote de l\'action doit faire partie d\'un service de l\'état');
                 }
             } catch (error) {
-                addError('government', 'Une erreur est survenue lors de la validation du pilote du dispositif');
+                addError('government', 'Une erreur est survenue lors de la validation du pilote de l\'action');
             }
         }
 
@@ -1266,7 +1266,7 @@ module.exports = models => ({
 
         if (plan.states.length === 0) {
             if (Number.isNaN(stateData.audience.in.total) || stateData.audience.in.total <= 0) {
-                addError('audience', 'Vous devez préciser le nombre de personnes intégrées au dispositif');
+                addError('audience', 'Vous devez préciser le nombre de personnes intégrées à l\'action');
             }
 
             if (Number.isNaN(stateData.audience.in.families)) {
@@ -1301,16 +1301,16 @@ module.exports = models => ({
             });
 
             if (newAudience.total < 0) {
-                addError('audience', `Selon cette saisie, le nouveau nombre de personnes dans le dispositif passerait à ${newAudience.total}, ce qui est impossible`);
+                addError('audience', `Selon cette saisie, le nouveau nombre de personnes dans l'action passerait à ${newAudience.total}, ce qui est impossible`);
             }
             if (newAudience.families < 0) {
-                addError('audience', `Selon cette saisie, le nouveau nombre de ménages dans le dispositif passerait à ${newAudience.families}, ce qui est impossible`);
+                addError('audience', `Selon cette saisie, le nouveau nombre de ménages dans l'action passerait à ${newAudience.families}, ce qui est impossible`);
             }
             if (newAudience.women < 0) {
-                addError('audience', `Selon cette saisie, le nouveau nombre de femmes dans le dispositif passerait à ${newAudience.women}, ce qui est impossible`);
+                addError('audience', `Selon cette saisie, le nouveau nombre de femmes dans l'action passerait à ${newAudience.women}, ce qui est impossible`);
             }
             if (newAudience.minors < 0) {
-                addError('audience', `Selon cette saisie, le nouveau nombre de mineurs dans le dispositif passerait à ${newAudience.minors}, ce qui est impossible`);
+                addError('audience', `Selon cette saisie, le nouveau nombre de mineurs dans l'action passerait à ${newAudience.minors}, ce qui est impossible`);
             }
 
             if (newAudience.total < newAudience.families) {
@@ -1788,7 +1788,7 @@ module.exports = models => ({
         if (plan === null) {
             return res.status(404).send({
                 error: {
-                    user_message: 'Le dispositif à mettre à jour n\'a pas été trouvé en base de données',
+                    user_message: 'L\'action à mettre à jour n\'a pas été trouvée en base de données',
                     developer_message: `Could not find plan #${req.params.id}`,
                 },
             });
@@ -1798,7 +1798,7 @@ module.exports = models => ({
         if (plan.canClose !== true) {
             return res.status(400).send({
                 error: {
-                    user_message: 'Vous n\'avez pas les droits nécessaires pour fermer ce dispositif',
+                    user_message: 'Vous n\'avez pas les droits nécessaires pour fermer cette action',
                 },
             });
         }
@@ -1807,7 +1807,7 @@ module.exports = models => ({
         if (plan.closed_at !== null) {
             return res.status(400).send({
                 error: {
-                    user_message: 'Ce dispositif est déjà fermé',
+                    user_message: 'Cette action est déjà fermée',
                 },
             });
         }
@@ -1873,7 +1873,7 @@ module.exports = models => ({
         } else if (planData.closedAt >= new Date()) {
             addError('closedAt', 'La date de fermeture ne peut pas être future');
         } else if (planData.closedAt <= new Date(plan.started_at)) {
-            addError('closedAt', 'La date de fermeture ne peut pas être antérieure à la date de début du dispositif');
+            addError('closedAt', 'La date de fermeture ne peut pas être antérieure à la date de début de l\'action');
         }
 
         // ensure the comment is not empty

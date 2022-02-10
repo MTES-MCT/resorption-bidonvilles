@@ -79,7 +79,7 @@ module.exports = (oldVersion, newVersion) => {
         firePreventionMeasures: 'Y a-t-il des mesures “prévention incendie” ?',
         firePreventionDiagnostic: 'Est-ce qu’un diagnostic prévention incendie par le SDIS a été réalisé ?',
         firePreventionSiteAccessible: 'Est-ce que le site est accessible aux pompiers ?',
-        firePreventionDevices: 'Est-ce que des dispositifs spécifiques ont été mises en place ?',
+        firePreventionDevices: 'Est-ce que des dispositifs spécifiques ont été mis en place ?',
         firePreventionComments: 'Prévention incendie : Préciser',
     };
 

@@ -1,7 +1,7 @@
 <template>
     <Modal :isOpen="isOpen" :closeModal="closeModal" class="modalContainer">
         <template v-slot:title>
-            <div>Confirmez-vous la fermeture du dispositif ?</div>
+            <div>Confirmez-vous la fermeture de l'action ?</div>
         </template>
         <template v-slot:body>
             <ValidationObserver ref="form" v-slot="{ handleSubmit, errors }">
@@ -16,7 +16,7 @@
 
                         <div v-if="step === 1">
                             <p>
-                                Avant de fermer définitivement le dispositif,
+                                Avant de fermer définitivement l'action,
                                 assurez-vous que les indicateurs de suivi
                                 renseignés par l'opérateur sont à jour.
                                 <span v-if="plan.last_update !== null"
@@ -48,8 +48,8 @@
                             <DatepickerV2
                                 width="w-64"
                                 id="closedAt"
-                                label="Date de fermeture du dispositif"
-                                info="La date de fermeture du dispositif doit être postérieure - ou égale - à la dernière date de mise à jour des indicateurs."
+                                label="Date de fermeture de l'action"
+                                info="La date de fermeture de l'action doit être postérieure - ou égale - à la dernière date de mise à jour des indicateurs."
                                 v-model="form.closedAt"
                                 :showMandatoryStar="true"
                                 rules="required"
@@ -57,7 +57,7 @@
                                     to: new Date(plan.last_update),
                                     from: new Date()
                                 }"
-                                validationName="Date de fermeture du dispositif"
+                                validationName="Date de fermeture de l'action"
                             />
                             <TextArea
                                 rows="5"
@@ -168,16 +168,16 @@ export default {
                 remainingAudience.women === 0 &&
                 remainingAudience.minors === 0
             ) {
-                return "Précisez les raisons de la fermeture du dispositif";
+                return "Précisez les raisons de la fermeture de l'action";
             }
 
-            return `À la fermeture du dispositif, ${
+            return `À la fermeture de l'action, ${
                 remainingAudience.families
             } ménage${
                 remainingAudience.families > 1 ? "s" : ""
             } (pour un total de ${remainingAudience.total} personne${
                 remainingAudience.total > 1 ? "s" : ""
-            }) sont identifiés dans le dispositif. Merci de préciser les solutions mobilisées pour ces personnes et les raisons de la fermeture du dispositif. Merci de respecter les règles de confidentialité : ne pas citer l'identité des individus (Nom, âge, sexe, origine...)`;
+            }) sont identifiés dans l'action. Merci de préciser les solutions mobilisées pour ces personnes et les raisons de la fermeture de l'action. Merci de respecter les règles de confidentialité : ne pas citer l'identité des individus (Nom, âge, sexe, origine...)`;
         }
     },
 
@@ -247,8 +247,8 @@ export default {
                 notify({
                     group: "notifications",
                     type: "success",
-                    title: "Dispositif fermé",
-                    text: "Le dispositif a bien été fermé"
+                    title: "Action fermée",
+                    text: "L'action a bien été fermée"
                 });
 
                 setTimeout(() => {

@@ -1,5 +1,5 @@
 <template>
-    <FormGroup title="Entrées et sorties du dispositif">
+    <FormGroup title="Entrées et sorties de l'action">
         <FormParagraph :title="title">
             <div class="mb-3 text-G600">
                 <p v-if="dateOfLastState === null">
@@ -11,28 +11,27 @@
                 </p>
                 <div v-else>
                     <p v-if="plan.in_and_out === true">
-                        Les entrées et sorties du dispositif sont suivies, car
-                        le pilote de l’action au sein des services de l’Etat a
+                        Les entrées et sorties de l'action sont suivies, car le
+                        pilote de l’action au sein des services de l’Etat a
                         renseigné qu’il existe un système d’entrées et de
                         sorties.
                     </p>
                     <p v-else>
-                        Seules les sorties du dispositif sont suivies, car le
+                        Seules les sorties de l'action sont suivies, car le
                         pilote de l’action au sein des services de l’Etat a
                         renseigné qu’il n’existe pas de système d’entrées et de
-                        sorties du dispositif : le dispositif concerne un seul
-                        groupe de personne, ayant débuté le projet à la même
-                        période.
+                        sorties de l'action : l'action concerne un seul groupe
+                        de personne, ayant débuté le projet à la même période.
                     </p>
                     <p class="font-bold">
                         Attention : le remplissage de ce tableau a un impact sur
-                        le nombre de personnes identifiées dans ce dispositif.
+                        le nombre de personnes identifiées dans cette action.
                         Merci de le renseigner avec attention.
                     </p>
                     <p class="mt-4">
                         Au {{ dateOfLastState }}, date de la dernière mise à
-                        jour des informations, sont intégrés dans le dispositif
-                        : {{ plan.audience.families }} ménages,
+                        jour des informations, sont intégrés dans l'action :
+                        {{ plan.audience.families }} ménages,
                         {{ plan.audience.total }} personnes dont
                         {{ plan.audience.women }} femmes et
                         {{ plan.audience.minors }} mineurs
@@ -43,7 +42,7 @@
             <InputAudience
                 v-model="input"
                 :mode="mode"
-                validationName="Entrées et sorties du dispositif"
+                validationName="Entrées et sorties de l'action"
                 id="audience"
             />
         </FormParagraph>
@@ -92,10 +91,10 @@ export default {
         },
         title() {
             if (this.dateOfLastState === null) {
-                return "Qui sont les publics ayant intégré le dispositif ?";
+                return "Qui sont les publics ayant intégré l'action ?";
             }
 
-            return `Quelles ont été les entrées et sorties du dispositif depuis la date du ${this.dateOfLastState} ?`;
+            return `Quelles ont été les entrées et sorties de l'action depuis la date du ${this.dateOfLastState} ?`;
         },
         mode() {
             if (this.plan.states.length === 0) {

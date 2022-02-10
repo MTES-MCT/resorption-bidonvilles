@@ -1,6 +1,6 @@
 <template>
     <FormGroup title="Intervention">
-        <FormParagraph title="Nom du dispositif" :showMandatoryStar="true">
+        <FormParagraph title="Nom de l'action" :showMandatoryStar="true">
             <InputName v-model="input.name"></InputName>
         </FormParagraph>
 
@@ -16,7 +16,7 @@
             </div>
         </FormParagraph>
 
-        <FormParagraph title="Quelles sont les dates clés du dispositif ?">
+        <FormParagraph title="Quelles sont les dates clés de l'action ?">
             <div class="w-64">
                 <InputStartedAt
                     v-model="input.started_at"

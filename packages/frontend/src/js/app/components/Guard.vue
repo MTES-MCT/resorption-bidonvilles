@@ -71,7 +71,13 @@ export default {
         const beforeEnter = this.$route.meta.beforeEnter;
 
         if (beforeEnter?.action === "redirect") {
-            this.$router.push(beforeEnter.to);
+            this.$router.push(
+                Object.keys(this.$route.params).reduce(
+                    (path, key) =>
+                        path.replaceAll(`:${key}`, this.$route.params[key]),
+                    beforeEnter.to
+                )
+            );
             return;
         }
 

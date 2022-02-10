@@ -189,7 +189,7 @@ module.exports = models => ({
             const result = Object.values(groupByKey([
                 ...averageCompletion.map(r => ({ Département: r.fk_departement, 'Taux de completion': `${(r.avg * 100).toFixed(2)}%` })),
                 ...people.map(r => ({ Département: r.fk_departement, 'Nombre habitants': r.total })),
-                ...plans.map(r => ({ Département: r.fk_departement, 'Nombre de dispositifs': r.total })),
+                ...plans.map(r => ({ Département: r.fk_departement, 'Nombre d\'actions': r.total })),
                 ...resorbedShantytowns.map(r => ({ Département: r.fk_departement, 'Nombre de résorptions': r.total })),
                 ...shantytowns.map(r => ({ Département: r.fk_departement, 'Nombre de sites': r.total })),
                 ...users.filter(r => r.fk_departement !== null).map(r => ({ Département: r.fk_departement, "Nombre d'utilisateurs": r.count })),

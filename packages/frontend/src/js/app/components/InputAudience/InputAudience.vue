@@ -69,8 +69,8 @@ export default {
                 {
                     label:
                         this.mode === "in_only"
-                            ? "Publics intégrés au dispositif"
-                            : "Entrées dans le dispositif",
+                            ? "Publics intégrés à l'action"
+                            : "Entrées dans l'action",
                     type: "in"
                 }
             ];
@@ -78,11 +78,11 @@ export default {
             const outRows = [
                 {
                     label: `Sorties positivement
-                        fin d'accompagnement social et/ou prise en charge dans un autre dispositif`,
+                        fin d'accompagnement social et/ou prise en charge dans une autre action`,
                     type: "out_positive"
                 },
                 {
-                    label: "Exclusion du dispositif",
+                    label: "Exclusion de l'action",
                     type: "out_excluded"
                 },
                 {

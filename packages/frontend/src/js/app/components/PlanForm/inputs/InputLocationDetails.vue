@@ -2,7 +2,7 @@
     <TextInput
         id="location_details"
         label="Préciser"
-        validationName="Précisions sur le cadre du dispositif"
+        validationName="Précisions sur le cadre de l'action"
         :showMandatoryStar="true"
         rules="required"
         v-model="input"

@@ -1,6 +1,6 @@
 <template>
     <CheckableGroup
-        label="Ce dispositif implique-t-il un système d'entrées et de sorties des personnes ?"
+        label="Cette action implique-t-elle un système d'entrées et de sorties des personnes ?"
         direction="horizontal"
         id="in_and_out"
         validationName="Système d'entrée et sorties de personnes"

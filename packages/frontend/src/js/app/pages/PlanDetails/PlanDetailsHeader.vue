@@ -32,7 +32,7 @@
                 variant="primaryOutline"
                 class="ml-8"
                 @click="$emit('closePlan')"
-                >Fermer le dispositif</Button
+                >Fermer l'action</Button
             >
             <Button
                 variant="primary"
@@ -79,10 +79,10 @@ export default {
             return window.App.formatDate.apply(window, args);
         },
         routeToUpdate() {
-            this.$router.push(`/modifier-dispositif/${this.plan.id}/`);
+            this.$router.push(`/modifier-action/${this.plan.id}/`);
         },
         routeToUpdateMarks() {
-            this.$router.push(`/dispositif/${this.plan.id}/indicateurs`);
+            this.$router.push(`/action/${this.plan.id}/indicateurs`);
         }
     }
 };

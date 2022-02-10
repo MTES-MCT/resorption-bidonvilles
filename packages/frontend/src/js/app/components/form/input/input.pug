@@ -68,9 +68,6 @@
         //- address with location
         <AddressWithLocation v-if="type === 'addressWithLocation'" :data-cy-field="id" v-bind="props" v-model="data" :disabled="disabled"></AddressWithLocation>
 
-        //- town or list of towns
-        <TownList v-if="type === 'townList'" v-bind="props" v-model="data" :disabled="disabled"></TownList>
-
         //- plan funding
         <PlanFunding v-if="type === 'planFunding'" v-bind="props" v-model="data" :disabled="disabled"></PlanFunding>
 

@@ -9,8 +9,8 @@
         v-model="input"
     >
         <template v-slot:info
-            >Merci de sélectionner les sites concernés par le dispositif. Si
-            vous ne trouvez pas un site, vous pouvez
+            >Merci de sélectionner les sites concernés par l'action. Si vous ne
+            trouvez pas un site, vous pouvez
             <router-link class="link" to="/nouveau-site" target="_blank"
                 >déclarer un nouveau site</router-link
             >.</template
