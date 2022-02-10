@@ -307,7 +307,6 @@ describe.only('townController.createHighCovidComment()', () => {
         it('responds with the proper error message', async () => {
             expect(res.send).to.have.been.calledOnceWith({
                 user_message: 'Vous n\'avez pas les droits nécessaires pour créer un commentaire',
-                developer_message: 'National user can\'t create high covid comments',
             });
         });
 
@@ -342,7 +341,6 @@ describe.only('townController.createHighCovidComment()', () => {
             it('responds with the proper error message', () => {
                 expect(res.send).to.have.been.calledOnceWith({
                     user_message: 'Vous ne pouvez pas déposer un commentaire pour le(s) département(s) : 33, 52',
-                    developer_message: 'User tried to create a comment on forbidden departements: 33, 52',
                 });
             });
 
@@ -374,7 +372,6 @@ describe.only('townController.createHighCovidComment()', () => {
         it('responds with the proper error message', () => {
             expect(res.send).to.have.been.calledOnceWith({
                 user_message: 'Le commentaire ne peut être vide',
-                developer_message: 'The comment is empty',
             });
         });
 
@@ -405,7 +402,6 @@ describe.only('townController.createHighCovidComment()', () => {
         it('responds with the proper error message', () => {
             expect(res.send).to.have.been.calledOnceWith({
                 user_message: 'Le commentaire ne peut être vide',
-                developer_message: `The comment is not a string (got ${typeof reqArg.body.description})`,
             });
         });
 
@@ -456,7 +452,6 @@ describe.only('townController.createHighCovidComment()', () => {
                 it('responds with the proper error message', () => {
                     expect(res.send).to.have.been.calledOnceWith({
                         user_message: 'Vous devez désigner les départements concernés par ce commentaire',
-                        developer_message: error,
                     });
                 });
 

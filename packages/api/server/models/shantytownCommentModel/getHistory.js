@@ -4,10 +4,11 @@ const { formatName } = require('#server/models/userModel')();
 const { getUsenameOf, serializeComment } = require('#server/models/shantytownModel')();
 const { restrict } = require('#server/utils/permission');
 
-module.exports = async (user, location) => {
+module.exports = async (user, location, numberOfActivities, lastDate, onlyCovid = false) => {
     // apply geographic level restrictions
     const where = [];
     const replacements = {};
+    const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
 
     const restrictedLocations = {
         public: restrict(location).for(user).askingTo('list', 'shantytown_comment'),
@@ -33,6 +34,8 @@ module.exports = async (user, location) => {
         where.push(`private = true AND ${fromGeoLevelToTableName(restrictedLocations.private.type)}.code = :privateShantytownCommentLocationCode`);
         replacements.privateShantytownCommentLocationCode = restrictedLocations.private[restrictedLocations.private.type].code;
     }
+
+    const whereLastDate = `${where.length > 0 ? 'AND' : 'WHERE'} comments.created_at < '${lastDate}'`;
 
     const activities = await sequelize.query(
         `
@@ -81,7 +84,10 @@ module.exports = async (user, location) => {
             LEFT JOIN departements ON cities.fk_departement = departements.code
             LEFT JOIN regions ON departements.fk_region = regions.code
             ${where.length > 0 ? `WHERE ((${where.join(') OR (')}))` : ''}
+            ${whereLastDate}
+            ${onlyCovid ? 'AND covid_comments.shantytown_covid_comment_id IS NOT NULL' : ''}
             ORDER BY comments.created_at DESC
+            ${limit}
             `,
         {
             type: sequelize.QueryTypes.SELECT,
@@ -90,46 +96,42 @@ module.exports = async (user, location) => {
     );
 
     return activities
-        .map((activity) => {
-            const o = {
-                entity: 'comment',
-                action: 'creation',
-                date: activity.commentCreatedAt.getTime() / 1000,
-                author: {
-                    name: formatName({
-                        first_name: activity.userFirstName,
-                        last_name: activity.userLastName,
-                    }),
-                    organization: activity.organizationId,
+        .map(activity => ({
+            entity: 'comment',
+            action: 'creation',
+            date: activity.commentCreatedAt.getTime() / 1000,
+            author: {
+                name: formatName({
+                    first_name: activity.userFirstName,
+                    last_name: activity.userLastName,
+                }),
+                organization: activity.organizationId,
+            },
+
+            shantytown: {
+                id: activity.shantytownId,
+                usename: getUsenameOf({
+                    addressSimple: activity.shantytownAddressSimple,
+                    name: activity.shantytownName,
+                }),
+                city: {
+                    code: activity.cityCode,
+                    name: activity.cityName,
                 },
-
-                shantytown: {
-                    id: activity.shantytownId,
-                    usename: getUsenameOf({
-                        addressSimple: activity.shantytownAddressSimple,
-                        name: activity.shantytownName,
-                    }),
-                    city: {
-                        code: activity.cityCode,
-                        name: activity.cityName,
-                    },
-                    epci: {
-                        code: activity.epciCode,
-                        name: activity.epciName,
-                    },
-                    departement: {
-                        code: activity.departementCode,
-                        name: activity.departementName,
-                    },
-                    region: {
-                        code: activity.regionCode,
-                        name: activity.regionName,
-                    },
+                epci: {
+                    code: activity.epciCode,
+                    name: activity.epciName,
                 },
+                departement: {
+                    code: activity.departementCode,
+                    name: activity.departementName,
+                },
+                region: {
+                    code: activity.regionCode,
+                    name: activity.regionName,
+                },
+            },
 
-                comment: serializeComment(activity),
-            };
-
-            return o;
-        });
+            comment: serializeComment(activity),
+        }));
 };

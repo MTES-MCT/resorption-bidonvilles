@@ -4,7 +4,8 @@
         <CustomFilter
             title="Type d'activités"
             :options="options.activityTypes"
-            v-model="activityTypes"
+            :disabled="$store.state.activities.loading"
+            v-model="activityFilter"
         />
     </div>
 </template>
@@ -17,23 +18,23 @@ export default {
                 activityTypes: [
                     {
                         label: "Nouveaux sites",
-                        value: "shantytown-creation"
+                        value: "shantytownCreation"
                     },
                     {
                         label: "Fermetures de sites",
-                        value: "shantytown-closing"
+                        value: "shantytownClosing"
                     },
                     {
                         label: "Modifications de sites",
-                        value: "shantytown-update"
+                        value: "shantytownUpdate"
                     },
                     {
                         label: "Nouveaux messages",
-                        value: "comment-creation"
+                        value: "shantytownComment_highCovidComment"
                     },
                     {
                         label: "Nouveaux utilisateurs",
-                        value: "user-creation"
+                        value: "user"
                     }
                 ]
             }
@@ -41,7 +42,7 @@ export default {
     },
 
     computed: {
-        activityTypes: {
+        activityFilter: {
             get() {
                 return this.$store.state.activities.filters.activityTypes;
             },

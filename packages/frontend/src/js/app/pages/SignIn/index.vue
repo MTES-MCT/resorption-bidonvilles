@@ -73,6 +73,7 @@ export default {
             try {
                 this.error = null;
                 this.loading = true;
+                this.$store.commit("reset");
                 await login(this.email, this.password);
                 this.$trackMatomoEvent("Login", "Connection");
 

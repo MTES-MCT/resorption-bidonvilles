@@ -7,7 +7,7 @@
 <script>
 export default {
     components: {
-        Page: () => import("./covid.vue")
+        Page: () => import("./CovidHistory.vue")
     }
 };
 </script>
