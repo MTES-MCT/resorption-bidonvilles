@@ -114,14 +114,12 @@ function request(method, url, data, headers = {}) {
         xhr.onload = handleRequestResponse.bind(xhr, success, failure);
         xhr.onerror = handleRequestFailure.bind(xhr, failure);
         xhr.ontimeout = handleRequestFailure.bind(xhr, failure);
-
         if (data !== undefined) {
             if (
                 !Object.prototype.hasOwnProperty.call(headers, "Content-Type")
             ) {
                 xhr.setRequestHeader("Content-Type", "application/json");
             }
-
             xhr.send(JSON.stringify(data));
         } else {
             xhr.send();

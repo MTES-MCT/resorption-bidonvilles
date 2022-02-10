@@ -1,6 +1,6 @@
 <template>
     <div class="flex justify-between">
-        <HistoryFilters></HistoryFilters>
+        <HistoryFilters />
         <Button
             v-if="hasPermission('shantytown_comment.export')"
             icon="file-excel"

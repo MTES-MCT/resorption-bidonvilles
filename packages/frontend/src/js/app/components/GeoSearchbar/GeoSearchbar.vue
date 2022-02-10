@@ -12,6 +12,7 @@
                 prefixIcon="search"
                 :inputClasses="['rounded-full shadow-sm']"
                 :placeholder="placeholder"
+                :disabled="disabled"
                 ref="autocomplete"
             >
                 <template v-slot:cta>
@@ -98,6 +99,11 @@ export default {
             type: String,
             default: "Adresse, nom d’un site, ville, code postal…",
             required: false
+        },
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
     data() {

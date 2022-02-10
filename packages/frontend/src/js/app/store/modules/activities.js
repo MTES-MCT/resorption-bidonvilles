@@ -5,16 +5,25 @@ export default {
         loading: false,
         error: null,
         items: [],
-        sort: "date",
+        lastActivityDate: new Date(),
         filters: {
             activityTypes: [],
             location: null
         },
-        currentPage: 1,
-        itemsPerPage: 5
+        loaded: {
+            locationType: null,
+            locationCode: null,
+            filters: ""
+        },
+        endOfActivities: false
     },
 
     mutations: {
+        setActivitiesLoadedSignature(state, signature) {
+            state.loaded.locationType = signature.locationType;
+            state.loaded.locationCode = signature.locationCode;
+            state.loaded.filters = signature.filters;
+        },
         setActivitiesLoading(state, loading) {
             state.loading = loading;
         },
@@ -24,17 +33,17 @@ export default {
         setActivities(state, items) {
             state.items = items;
         },
-        setActivitiesSort(state, sort) {
-            state.sort = sort;
+        setActivitiesLastDate(state, date) {
+            state.lastActivityDate = date;
+        },
+        setActivitiesEndReached(state, reached) {
+            this.endOfActivities = reached === true;
         },
         setActivityTypesFilter(state, filters) {
             state.filters.activityTypes = filters;
         },
         setActivityLocationFilter(state, location) {
             state.filters.location = location;
-        },
-        setActivitiesPage(state, page) {
-            state.currentPage = page;
         },
         removeComment(state, commentId) {
             const index = state.items.findIndex(({ comment }) => {
@@ -48,15 +57,34 @@ export default {
     },
 
     actions: {
-        async fetchActivities({ commit }) {
+        async fetchActivities({ commit, state }) {
             commit("setActivitiesLoading", true);
             commit("setActivitiesError", null);
 
             try {
-                const activities = await listRegular();
-                commit("setActivities", activities);
+                const activities = await listRegular(
+                    state.lastActivityDate * 1000,
+                    state.filters.activityTypes.map(v => v.split("_")).flat(),
+                    10,
+                    state.loaded.locationType,
+                    state.loaded.locationCode
+                );
+
+                if (activities.length > 0) {
+                    commit(
+                        "setActivitiesLastDate",
+                        activities.slice(-1)[0].date
+                    );
+                } else {
+                    commit("setActivitiesEndReached", true);
+                }
+
+                commit("setActivities", [...state.items, ...activities]);
             } catch (error) {
-                commit("setActivitiesError", "Une erreur est survenue");
+                commit(
+                    "setActivitiesError",
+                    (error && error.user_message) || "Une erreur est survenue"
+                );
             }
 
             commit("setActivitiesLoading", false);
@@ -64,56 +92,32 @@ export default {
     },
 
     getters: {
-        activities(state) {
-            return state.items;
-        },
         activitiesLoading(state) {
             return state.loading;
         },
         activitiesError(state) {
             return state.error;
         },
-        activitiesFilteredItems(state) {
-            const { filters } = state;
-
-            return state.items.filter(item => {
-                // activity type filter
-                if (filters.activityTypes.length > 0) {
-                    if (
-                        !filters.activityTypes.includes(
-                            `${item.entity}-${item.action}`
-                        )
-                    ) {
-                        return false;
-                    }
-                }
-
-                // location filter
-                if (filters.location !== null) {
-                    const { code, type } = filters.location.data;
-                    if (item.shantytown) {
-                        const shantytownLocation = item.shantytown[type];
-                        const shantytownCode =
-                            shantytownLocation.main || shantytownLocation.code;
-
-                        return shantytownCode === code;
-                    }
-
-                    if (item.user) {
-                        const userLocation = item.user.location[type];
-
-                        const userCode = userLocation
-                            ? userLocation.main || userLocation.code
-                            : null;
-
-                        return userCode === code;
-                    }
-
-                    return false;
-                }
-
-                return true;
-            });
+        activities(state) {
+            return state.items;
+        },
+        lastActivityDate(state) {
+            return state.lastActivityDate;
+        },
+        endOfActivities(state) {
+            return state.endOfActivities;
+        },
+        activitiesFilters(state) {
+            return state.filters.activityTypes;
+        },
+        activitiesLoadedLocationType(state) {
+            return state.loaded.locationType;
+        },
+        activitiesLoadedLocationCode(state) {
+            return state.loaded.locationCode;
+        },
+        activitiesLoadedFilters(state) {
+            return state.loaded.filters;
         }
     }
 };

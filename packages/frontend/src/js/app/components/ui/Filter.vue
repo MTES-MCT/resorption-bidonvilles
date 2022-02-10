@@ -23,6 +23,7 @@
                     class="flex items-center whitespace-no-wrap text-sm menuWidth"
                 >
                     <Checkbox
+                        :disabled="disabled"
                         :checkValue="option.value"
                         :value="value"
                         @input="$emit('input', $event)"
@@ -71,6 +72,11 @@ export default {
         },
         value: {
             type: Array
+        },
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
     computed: {
