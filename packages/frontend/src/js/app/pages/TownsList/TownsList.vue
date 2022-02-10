@@ -426,12 +426,7 @@ export default {
         window.onafterprint = () => {
             this.printMode = false;
         };
-        this.getActivities(
-            this.filters.location !== null
-                ? this.filters.location.locationType
-                : "nation",
-            this.filters.location !== null ? this.filters.location.code : null
-        );
+        this.refreshActivities();
     },
     data() {
         const { field_types: fieldTypes } = getConfig();
@@ -493,6 +488,16 @@ export default {
         };
     },
     methods: {
+        refreshActivities() {
+            this.getActivities(
+                this.filters.location !== null
+                    ? this.filters.location.locationType
+                    : "nation",
+                this.filters.location !== null
+                    ? this.filters.location.code
+                    : null
+            );
+        },
         async getActivities(locationType, locationCode) {
             this.lastActivities = [];
             this.activitiesLoading = true;
@@ -514,7 +519,7 @@ export default {
             this.activitiesLoading = false;
         },
         handleSearchBlur(data) {
-            this.getActivities(data.value.locationType, data.value.code);
+            this.refreshActivities();
             this.$trackMatomoEvent("Liste des sites", "Recherche");
             this.$store.commit("setFilters", {
                 ...this.filters,
