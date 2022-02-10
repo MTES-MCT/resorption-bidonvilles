@@ -7,7 +7,7 @@
 <script>
 export default {
     components: {
-        Page: () => import("./plans.list.vue")
+        Page: () => import("./PlanList.vue")
     }
 };
 </script>
