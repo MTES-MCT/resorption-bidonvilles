@@ -1,3 +1,4 @@
+<!-- A renommer Navbar, ainsi que le répertoire, une fois toute référence à navbar (v1) supprimées -->
 <template>
     <nav class="container px-10 mx-auto bg-white my-4">
         <div ref="menu" class="flex lg:flex-row-reverse justify-between">
