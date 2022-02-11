@@ -37,6 +37,7 @@
                         :plan="plan"
                         class="mb-10"
                         id="financial"
+                        v-if="hasPermission('plan_finances.access')"
                     />
                     <PlanDetailsPanelTeam
                         :plan="plan"
@@ -135,6 +136,7 @@ import PlanDetailsPanelMarks from "./PlanDetailsPanelMarks.vue";
 import PlanDetailsInfo from "./PlanDetailsInfo.vue";
 import PlanDetailsCloseModal from "./PlanDetailsCloseModal.vue";
 import { get } from "#helpers/api/plan";
+import { hasPermission } from "#helpers/api/config";
 
 export default {
     components: {
@@ -262,6 +264,7 @@ export default {
     },
 
     methods: {
+        hasPermission,
         async fetchData() {
             if (this.loading === true) {
                 return;
