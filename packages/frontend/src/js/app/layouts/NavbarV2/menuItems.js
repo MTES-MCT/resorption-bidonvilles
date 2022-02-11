@@ -1,19 +1,25 @@
+const primaryClass = "text-display-xs font-normal no-underline py-5 px-3";
+const emphasedClass = "text-display-xs no-underline py-5 px-3";
+const covidClass = "text-red700 font-bold uppercase px-4";
+
 export default {
     anonymous: [
         {
             label: "Connexion",
             target: "/connexion",
+            classes: primaryClass,
             menu: "primary"
         },
         {
             label: "Demander un accès",
             target: "/contact",
+            classes: primaryClass,
             menu: "primary"
         },
         {
             label: "Aide",
             target: "/conditions-d-utilisation",
-            classes: "text-display-xs no-underline py-5 px-3",
+            classes: emphasedClass,
             menu: "emphased"
         }
     ],
@@ -21,13 +27,13 @@ export default {
         {
             label: "Aide",
             target: "/conditions-d-utilisation",
-            classes: "text-display-xs no-underline py-5 px-3",
+            classes: emphasedClass,
             menu: "emphased"
         },
         {
             label: "Déconnexion",
             target: "/deconnexion",
-            classes: "text-display-xs no-underline py-5 px-3",
+            classes: emphasedClass,
             menu: "emphased"
         }
     ],
@@ -35,53 +41,53 @@ export default {
         {
             label: "Covid-19",
             target: "/covid-19",
-            classes: "text-red-700 font-bold uppercase px-4",
+            classes: covidClass,
             menu: "primary"
         },
         {
             label: "Sites",
             target: "/liste-des-sites",
             group: "townList",
-            classes: "text-display-xs font-normal no-underline py-5 px-3",
+            classes: primaryClass,
             menu: "primary"
         },
         {
             label: "Dispositifs",
             target: "/liste-des-dispositifs",
-            classes: "text-display-xs font-normal no-underline py-5 px-3",
+            classes: primaryClass,
             menu: "primary"
         },
         {
             label: "Annuaire",
             target: "/annuaire",
             group: "directory",
-            classes: "text-display-xs font-normal no-underline py-5 px-3",
+            classes: primaryClass,
             menu: "primary"
         },
         {
             label: "Statistiques",
             target: "/statistiques",
             group: "stats",
-            classes: "text-display-xs font-normal no-underline py-5 px-3",
+            classes: primaryClass,
             menu: "primary"
         },
         {
             label: "Mon compte",
             target: "/mon-compte",
             group: "me",
-            classes: "text-display-xs no-underline py-5 px-3",
+            classes: emphasedClass,
             menu: "emphased"
         },
         // {
         //     label: "Déconnexion",
         //     target: "/deconnexion",
-        //     classes: "text-display-xs no-underline py-5 px-3",
+        //     classes: emphasedClass,
         //     menu: "emphased"
         // },
         {
             label: "Aide",
             target: "/mentions-legales",
-            classes: "text-display-xs no-underline py-5 px-3",
+            classes: emphasedClass,
             menu: "emphased"
         }
     ]
