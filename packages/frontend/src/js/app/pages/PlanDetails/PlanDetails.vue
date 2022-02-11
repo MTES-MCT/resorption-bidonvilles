@@ -275,7 +275,14 @@ export default {
             this.plan = null;
 
             try {
-                this.plan = await get(this.$route.params.id);
+                const plan = await get(this.$route.params.id);
+                if (!plan) {
+                    throw {
+                        user_message:
+                            "Ce dispositif n'existe pas, ou son accès vous est interdit"
+                    };
+                }
+                this.plan = plan;
                 setTimeout(this.goToAnchor, 50);
             } catch (error) {
                 this.error =
