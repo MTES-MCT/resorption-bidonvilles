@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="v1 print:hidden">
+        <div class="print:hidden">
             <NavBar />
         </div>
         <slot />
@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import NavBar from "#app/layouts/navbar/navbar.vue";
+import NavBar from "#app/layouts/Navbar/Navbar.vue";
 
 export default {
     components: {
