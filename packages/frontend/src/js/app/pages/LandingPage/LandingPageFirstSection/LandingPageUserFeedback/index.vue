@@ -1,21 +1,28 @@
 <template>
     <div>
         <div class="max-w-screen-sm mx-auto relative mt-16">
-            <LandingPageUserFeedbackSection
-                :active="active === 1"
-                :text="$t('landingPage.firstSection.feedback.1.text')"
-                :author="$t('landingPage.firstSection.feedback.1.author')"
-            />
-            <LandingPageUserFeedbackSection
-                :active="active === 2"
-                :text="$t('landingPage.firstSection.feedback.2.text')"
-                :author="$t('landingPage.firstSection.feedback.2.author')"
-            />
-            <LandingPageUserFeedbackSection
-                :active="active === 3"
-                :text="$t('landingPage.firstSection.feedback.3.text')"
-                :author="$t('landingPage.firstSection.feedback.3.author')"
-            />
+            <h2>
+                <span class="text-display-lg font-normal">{{
+                    $t("landingPage.firstSection.feedback.title")
+                }}</span>
+            </h2>
+            <div class="mt-8">
+                <LandingPageUserFeedbackSection
+                    :active="active === 1"
+                    :text="$t('landingPage.firstSection.feedback.1.text')"
+                    :author="$t('landingPage.firstSection.feedback.1.author')"
+                />
+                <LandingPageUserFeedbackSection
+                    :active="active === 2"
+                    :text="$t('landingPage.firstSection.feedback.2.text')"
+                    :author="$t('landingPage.firstSection.feedback.2.author')"
+                />
+                <LandingPageUserFeedbackSection
+                    :active="active === 3"
+                    :text="$t('landingPage.firstSection.feedback.3.text')"
+                    :author="$t('landingPage.firstSection.feedback.3.author')"
+                />
+            </div>
         </div>
         <div class="mt-2 text-center">
             <LandingPageUserFeedbackBullet
@@ -30,6 +37,7 @@
                 :onClick="() => setSection(3)"
                 :active="active === 3"
             />
+            <LandingPageUserFeedbackVideos />
         </div>
     </div>
 </template>
@@ -37,6 +45,7 @@
 <script>
 import LandingPageUserFeedbackBullet from "./LandingPageUserFeedbackBullet.vue";
 import LandingPageUserFeedbackSection from "./LandingPageUserFeedbackSection.vue";
+import LandingPageUserFeedbackVideos from "./LandingPageUserFeedbackVideos.vue";
 
 export default {
     data() {
@@ -70,7 +79,8 @@ export default {
     },
     components: {
         LandingPageUserFeedbackBullet,
-        LandingPageUserFeedbackSection
+        LandingPageUserFeedbackSection,
+        LandingPageUserFeedbackVideos
     }
 };
 </script>
