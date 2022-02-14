@@ -4,7 +4,6 @@
             {{ comments.length }} message{{ comments.length > 1 ? "s" : "" }}
         </div>
         <CommentBlock
-            class="pre-line"
             v-for="comment in sortedComments"
             :key="comment.id"
             :id="`message${comment.id}`"
