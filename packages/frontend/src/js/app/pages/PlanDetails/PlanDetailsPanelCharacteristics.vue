@@ -51,7 +51,7 @@
                 </aside>
                 <section>
                     <span class="font-bold">Objectifs de l'intervention</span>
-                    <p class="pre-line">{{ plan.goals }}</p>
+                    <p class="whitespace-pre-line">{{ plan.goals }}</p>
                 </section>
             </DetailsPanelSection>
 
@@ -63,7 +63,7 @@
                     <span class="font-bold"
                         >Commentaires suite à la fermeture du dispositif</span
                     >
-                    <p class="pre-line">{{ plan.final_comment }}</p>
+                    <p class="whitespace-pre-line">{{ plan.final_comment }}</p>
                 </section>
             </DetailsPanelSection>
         </template>
