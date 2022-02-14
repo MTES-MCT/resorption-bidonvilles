@@ -474,9 +474,5 @@ module.exports = async (user, feature, filters = {}) => {
         });
     });
 
-    return rows
-        .map(serializePlan.bind(this, user, {
-            plan: user.permissions.plan[feature],
-            finances: (user.permissions.plan_finances && user.permissions.plan_finances.access) || null,
-        }));
+    return rows.map(serializePlan.bind(this, user));
 };

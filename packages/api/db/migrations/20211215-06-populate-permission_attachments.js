@@ -1,7 +1,7 @@
 async function insertPermissionWithAttachment(queryInterface, transaction, feature, userId, organizationId, planIds) {
     const [[{ user_permission_id: fk_permission }]] = await queryInterface.sequelize.query(
         `INSERT INTO user_permissions (fk_user, fk_organization, fk_feature, fk_entity, allowed, allow_all, is_cumulative)
-        VALUES (:fk_user, :fk_organization, :feature, 'plan', true, false, true)
+        VALUES (:fk_user, :fk_organization, :feature, 'plan', true, false, false)
         RETURNING user_permission_id`,
         {
             transaction,
