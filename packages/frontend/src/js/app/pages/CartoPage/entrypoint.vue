@@ -7,7 +7,7 @@
 <script>
 export default {
     components: {
-        Page: () => import("./dashboard.vue")
+        Page: () => import("./CartoPage.vue")
     }
 };
 </script>

@@ -139,7 +139,7 @@ const loggedRoutes = [
         path: "/cartographie",
         component: path.join(
             __dirname,
-            "./src/js/app/pages/dashboard/entrypoint.vue"
+            "./src/js/app/pages/CartoPage/entrypoint.vue"
         ),
         route: {
             meta: {

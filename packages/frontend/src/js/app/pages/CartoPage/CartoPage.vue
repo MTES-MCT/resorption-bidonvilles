@@ -1,18 +1,76 @@
+<template>
+    <PrivateLayout>
+        <div v-if="loading">
+            <FullBottomSection
+                :centered="true"
+                class="text-primary text-display-lg"
+            >
+                <template>
+                    <Spinner />
+                </template>
+            </FullBottomSection>
+        </div>
+
+        <div v-else>
+            <TownView
+                :town="quickview.town"
+                :origin="quickview.originEvent"
+                @outside-click="hideQuickview"
+            >
+            </TownView>
+            <POIView
+                :poi="poiview.poi"
+                :origin="poiview.originEvent"
+                @outside-click="hidePOIView"
+            >
+            </POIView>
+            <div class="dashboard">
+                <simplebar
+                    class="filters"
+                    ref="filters"
+                    data-simplebar-auto-hide="false"
+                >
+                    <FilterCard
+                        v-for="filterGroup in allowedFilters"
+                        :id="filterGroup.id"
+                        :key="filterGroup.id"
+                        :filter="filterGroup"
+                    >
+                    </FilterCard>
+                </simplebar>
+
+                <div
+                    v-bind:style="{ width: !loading && !error ? 'auto' : 0 }"
+                    class="content"
+                    ref="main"
+                >
+                    <Map
+                        v-bind="rendererProps"
+                        @town-click="showQuickview"
+                        @poi-click="showPOIView"
+                        @on-row-click="routeToTown"
+                        ref="map"
+                    >
+                    </Map>
+                </div>
+            </div>
+        </div>
+    </PrivateLayout>
+</template>
+
+<script>
+import PrivateLayout from "#app/components/PrivateLayout";
+import FilterCard from "./FilterCard.vue";
 import simplebar from "simplebar-vue";
-import NavBar from "#app/layouts/navbar/navbar.vue";
-import FilterGroup from "./filterGroup/filterGroup.vue";
 import Map from "#app/components/map/map.vue";
-import Quickview from "#app/components/quickview/quickview.vue";
+import TownView from "./TownView/TownView.vue";
 import POIView from "./POIView.vue";
+import "#app/components/map/map.scss"; // on importe le scss ici pour que le html généré par le js y ait accès
+
 import { mapGetters } from "vuex";
 import { all as fetchAllPois } from "#helpers/api/poi";
 import { get as getConfig, getPermission } from "#helpers/api/config";
 import { open } from "#helpers/tabHelper";
-
-import iconType from "../../../../../static/img/type.svg";
-import iconPeople from "../../../../../static/img/people.svg";
-import iconStatus from "../../../../../static/img/status.svg";
-import iconPin from "../../../../../static/img/pin.svg";
 
 /**
  * Returns the appropriate zoom level for the given location type
@@ -37,10 +95,10 @@ function getDefaultZoomFor(locationType) {
 
 export default {
     components: {
-        NavBar,
-        FilterGroup,
+        PrivateLayout,
+        FilterCard,
         Map,
-        Quickview,
+        TownView,
         POIView,
         simplebar
     },
@@ -101,14 +159,14 @@ export default {
                     opened: true
                 },
                 {
-                    icon: iconType,
+                    faIcon: "home",
                     label: "Types de site",
                     id: "fieldType",
                     options: [],
                     opened: true
                 },
                 {
-                    icon: iconPeople,
+                    faIcon: "users",
                     label: "Nombre de personnes",
                     id: "population",
                     options: [
@@ -131,16 +189,16 @@ export default {
                     ]
                 },
                 {
-                    icon: iconStatus,
+                    faIcon: "ban",
                     label: "Statut des sites",
                     id: "status",
                     options: [
-                        { value: "closed", label: "Disparus", checked: false },
+                        { value: "closed", label: "Fermés", checked: false },
                         { value: "opened", label: "Existants", checked: true }
                     ]
                 },
                 {
-                    icon: iconPeople,
+                    faIcon: "users",
                     label: "Type de propriétaire",
                     id: "ownerType",
                     options: getConfig().owner_types.map(type => ({
@@ -150,7 +208,7 @@ export default {
                     }))
                 },
                 {
-                    icon: iconPin,
+                    faIcon: "map-marker-alt",
                     label: "Points d'intérêts",
                     id: "poi",
                     options: [
@@ -342,6 +400,9 @@ export default {
         window.removeEventListener("resize", this.resize);
     },
     methods: {
+        onLocationChange() {
+            return;
+        },
         sortNumber(x, y) {
             if (x === "inconnu" && y === "inconnu") {
                 return 0;
@@ -402,11 +463,12 @@ export default {
             this.stretchToBottom(this.$refs.filters.$el);
         },
         stretchToBottom(element) {
+            var space =
+                window.innerHeight -
+                this.absoluteOffsetTop(element) -
+                element.offsetHeight;
             const height = element.offsetHeight;
-            const newHeight =
-                height +
-                (document.body.offsetHeight -
-                    (this.absoluteOffsetTop(element) + height));
+            const newHeight = height + space;
 
             // eslint-disable-next-line
             element.style.height = `${newHeight}px`;
@@ -438,7 +500,6 @@ export default {
             ])
                 .then(([, pois]) => {
                     const { field_types: fieldTypes } = getConfig();
-
                     this.loading = false;
 
                     // build the field-type filter
@@ -451,7 +512,11 @@ export default {
                             id: fieldType.id,
                             value: fieldType.id,
                             label: fieldType.label,
-                            checked: true
+                            checked: true,
+                            icon: {
+                                id: "square",
+                                color: fieldType.color.slice(1)
+                            }
                         }))
                     ];
 
@@ -468,3 +533,4 @@ export default {
         }
     }
 };
+</script>
