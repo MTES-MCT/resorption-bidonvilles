@@ -7,15 +7,9 @@
             ref="quickviewPanel"
             data-simplebar-auto-hide="false"
         >
-            <header class="quickview-header" v-if="poi">
-                <div class="px-4">
-                    <div class="text-right">
-                        <a href="#" @click="$emit('outside-click')"
-                            ><svg class="icon icon-cross">
-                                <use xlink:href="#round-cross"></use></svg
-                        ></a>
-                    </div>
-                    <h1 class="quickview-title">
+            <header class="" v-if="poi">
+                <div class="px-4 pt-5">
+                    <h1 class="text-display-md pb-2">
                         Point de distribution alimentaire
                     </h1>
                     <div class="text-G600 uppercase text-sm my-2 ">
@@ -49,7 +43,7 @@
                     </div>
                     <a
                         v-if="poi.lieu_id"
-                        class="my-2"
+                        class="my-2 text-primary underline"
                         target="_blank"
                         @click="trackOpenSoliguide"
                         :href="'https://soliguide.fr/fiche/' + poi.lieu_id"
@@ -124,74 +118,51 @@ export default {
 <style scoped lang="scss">
 @import "#src/css/v1/config/colors.scss";
 
-.v1 {
+.shadow {
+    visibility: hidden;
+    z-index: 6000;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transition: opacity 0.4s linear;
+    -webkit-transition: opacity 0.4s linear;
+}
+
+.quickview {
+    z-index: 7000;
+    position: fixed;
+    top: 71px;
+    bottom: 0;
+    right: -320px;
+    width: 320px;
+    color: $NILE_BLUE;
+    transition: right 0.4s ease-in-out;
+    -webkit-transition: right 0.4s ease-in-out;
+    background: #ffffff;
+    border-left: 1px solid #c9d3df;
+
+    .quickview-subtitle,
+    .quickview-name,
+    .quickview-time {
+        margin: 0;
+        font-weight: normal;
+        font-size: 0.8rem;
+        letter-spacing: 0.05em;
+    }
+}
+
+.active {
     .shadow {
-        visibility: hidden;
-        z-index: 6000;
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.3);
-        opacity: 0;
-        transition: opacity 0.4s linear;
-        -webkit-transition: opacity 0.4s linear;
+        visibility: visible;
+        opacity: 1;
     }
 
     .quickview {
-        z-index: 7000;
-        position: fixed;
-        top: 71px;
-        bottom: 0;
-        right: -300px;
-        width: 300px;
-        color: $NILE_BLUE;
-        transition: right 0.4s ease-in-out;
-        -webkit-transition: right 0.4s ease-in-out;
-        background: #ffffff;
-        border-left: 1px solid #c9d3df;
-
-        .quickview-header {
-            padding: 15px 0;
-            background: #f4f8fc;
-
-            .quickview-title {
-                margin: 0;
-                font-weight: normal;
-                font-size: 1.3rem;
-                letter-spacing: 0.05em;
-
-                > a {
-                    color: $NILE_BLUE;
-                    text-decoration: none;
-
-                    &:hover {
-                        text-decoration: underline;
-                    }
-                }
-            }
-
-            .quickview-subtitle,
-            .quickview-name,
-            .quickview-time {
-                margin: 0;
-                font-weight: normal;
-                font-size: 0.8rem;
-                letter-spacing: 0.05em;
-            }
-        }
-    }
-
-    .active {
-        .shadow {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        .quickview {
-            right: 0;
-        }
+        right: 0;
     }
 }
 </style>

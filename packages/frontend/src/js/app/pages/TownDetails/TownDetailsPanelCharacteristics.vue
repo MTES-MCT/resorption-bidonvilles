@@ -171,25 +171,23 @@
                     </DetailsPanelSection>
                 </div>
                 <div class="w-1/2">
-                    <div class="v1">
-                        <Map
-                            :display-searchbar="false"
-                            :towns="[
-                                {
-                                    ...town,
-                                    style: `opacity: 1`
-                                },
-                                ...nearbyTowns.map(t => ({
-                                    ...t,
-                                    style: `opacity: 0.8`
-                                }))
-                            ]"
-                            :default-view="center"
-                            :load-territory-layers="false"
-                            @town-click="goTo"
-                            layer-name="Satellite"
-                        ></Map>
-                    </div>
+                    <Map
+                        :display-searchbar="false"
+                        :towns="[
+                            {
+                                ...town,
+                                style: `opacity: 1`
+                            },
+                            ...nearbyTowns.map(t => ({
+                                ...t,
+                                style: `opacity: 0.8`
+                            }))
+                        ]"
+                        :default-view="center"
+                        :load-territory-layers="false"
+                        @town-click="goTo"
+                        layer-name="Satellite"
+                    ></Map>
                 </div>
             </div>
         </template>

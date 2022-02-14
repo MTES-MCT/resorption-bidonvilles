@@ -1,3 +1,67 @@
+<template>
+    <div v-bind:class="{ active }">
+        <div class="shadow"></div>
+
+        <simplebar
+            class="quickview"
+            v-bind:class="{
+                'quickview--closed': town && town.status !== 'open'
+            }"
+            ref="quickviewPanel"
+            data-simplebar-auto-hide="false"
+        >
+            <header class="quickview-header" v-if="town">
+                <div class="quickview-actions">
+                    <Button
+                        variant="primaryText"
+                        icon="arrow-right"
+                        iconPosition="right"
+                        @click="showTown"
+                        class="text-display-sm hover:underline -mb-1"
+                    >
+                        Voir la fiche du site
+                    </Button>
+                </div>
+
+                <div class="text-md px-6">
+                    <div class="text-display-md">
+                        <span
+                            @click="showTown"
+                            class="text-primary font-bold hover:underline cursor-pointer"
+                        >
+                            {{ town.addressSimple }}
+                            <span v-if="town.name"> « {{ town.name }} » </span>
+                        </span>
+                        <span class="text-primary font-normal">
+                            {{ town.city.name }}
+                        </span>
+                    </div>
+                </div>
+                <div class="text-sm text-G600 pl-6 pt-3">
+                    Dernière modification le {{ formatDate(town.updatedAt) }}
+                </div>
+            </header>
+
+            <section v-for="(section, index) in sections" :key="index">
+                <div class="font-bold text-display-sm pb-3">
+                    {{ section.title }}
+                </div>
+                <div
+                    class="items-end"
+                    v-for="row in section.rows"
+                    :key="row.value"
+                >
+                    <span class="font-bold" v-if="row.label">
+                        {{ row.label }} :
+                    </span>
+                    <span>{{ row.value }}</span>
+                </div>
+            </section>
+        </simplebar>
+    </div>
+</template>
+
+<script>
 import simplebar from "simplebar-vue";
 import { hasPermission } from "#helpers/api/config";
 import { open } from "#helpers/tabHelper";
@@ -80,54 +144,6 @@ export default {
                     value:
                         this.town.populationMinors !== null
                             ? this.town.populationMinors
-                            : "inconnu"
-                });
-            }
-            if (this.town.populationMinors0To3 !== undefined) {
-                rows.push({
-                    label: "Nombre de mineurs (0-3 ans)",
-                    value:
-                        this.town.populationMinors0To3 !== null
-                            ? this.town.populationMinors0To3
-                            : "inconnu"
-                });
-            }
-            if (this.town.populationMinors3To6 !== undefined) {
-                rows.push({
-                    label: "Nombre de mineurs (3-6 ans)",
-                    value:
-                        this.town.populationMinors3To6 !== null
-                            ? this.town.populationMinors3To6
-                            : "inconnu"
-                });
-            }
-
-            if (this.town.populationMinors6To12 !== undefined) {
-                rows.push({
-                    label: "Nombre de mineurs (6-12 ans)",
-                    value:
-                        this.town.populationMinors6To12 !== null
-                            ? this.town.populationMinors6To12
-                            : "inconnu"
-                });
-            }
-
-            if (this.town.populationMinors12To16 !== undefined) {
-                rows.push({
-                    label: "Nombre de mineurs (12-16 ans)",
-                    value:
-                        this.town.populationMinors12To16 !== null
-                            ? this.town.populationMinors12To16
-                            : "inconnu"
-                });
-            }
-
-            if (this.town.populationMinors16To18 !== undefined) {
-                rows.push({
-                    label: "Nombre de mineurs (16-18 ans)",
-                    value:
-                        this.town.populationMinors16To18 !== null
-                            ? this.town.populationMinors16To18
                             : "inconnu"
                 });
             }
@@ -224,6 +240,9 @@ export default {
         document.removeEventListener("click", this.checkOutsideClick);
     },
     methods: {
+        closePanel() {
+            this.$emit("outside-click");
+        },
         hasPermission,
         formatDate: ts => App.formatDate(ts),
         checkOutsideClick(event) {
@@ -264,3 +283,8 @@ export default {
         }
     }
 };
+</script>
+
+<style lang="scss" scoped>
+@import "./TownView.scss";
+</style>
