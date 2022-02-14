@@ -37,6 +37,7 @@
                         :plan="plan"
                         class="mb-10"
                         id="financial"
+                        v-if="hasPermission('plan_finances.access')"
                     />
                     <PlanDetailsPanelTeam
                         :plan="plan"
@@ -135,6 +136,7 @@ import PlanDetailsPanelMarks from "./PlanDetailsPanelMarks.vue";
 import PlanDetailsInfo from "./PlanDetailsInfo.vue";
 import PlanDetailsCloseModal from "./PlanDetailsCloseModal.vue";
 import { get } from "#helpers/api/plan";
+import { hasPermission } from "#helpers/api/config";
 
 export default {
     components: {
@@ -262,6 +264,7 @@ export default {
     },
 
     methods: {
+        hasPermission,
         async fetchData() {
             if (this.loading === true) {
                 return;
@@ -272,7 +275,14 @@ export default {
             this.plan = null;
 
             try {
-                this.plan = await get(this.$route.params.id);
+                const plan = await get(this.$route.params.id);
+                if (!plan) {
+                    throw {
+                        user_message:
+                            "Ce dispositif n'existe pas, ou son accès vous est interdit"
+                    };
+                }
+                this.plan = plan;
                 setTimeout(this.goToAnchor, 50);
             } catch (error) {
                 this.error =

@@ -7,7 +7,7 @@ const locationTypes = {
     other: 'dans plusieurs lieux (hébergement, permanence, rue...)',
 };
 
-module.exports = (user, permissions, plan) => {
+module.exports = (user, plan) => {
     const base = {
         type: 'plan',
         id: plan.id,
@@ -57,7 +57,8 @@ module.exports = (user, permissions, plan) => {
     base.canUpdateMarks = can(user).do('updateMarks', 'plan').on(base);
     base.canClose = can(user).do('close', 'plan').on(base);
 
-    if (!plan.finances || permissions.finances === null || permissions.finances.allowed !== true) {
+
+    if (!Array.isArray(plan.finances) || !can(user).do('access', 'plan_finances').on(base)) {
         base.finances = [];
     } else {
         const minYear = plan.finances.slice(-1)[0].year;

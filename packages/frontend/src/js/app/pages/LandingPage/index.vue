@@ -4,6 +4,7 @@
             <a href="#plateforme">La plateforme</a>
             <a href="#strategie">La stratégie de résorption</a>
             <a href="#faq">FAQ</a>
+            <a href="#equipe">{{ $t("footer.aboutUs") }}</a>
         </template>
 
         <PublicContainer>

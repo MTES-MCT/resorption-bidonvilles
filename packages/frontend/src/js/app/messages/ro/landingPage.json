@@ -24,6 +24,7 @@
     "before": "Înainte",
     "after": "După",
     "feedback": {
+      "title": "Mărturii ale utilizatorilor",
       "1": {
         "text": "Este foarte bine pentru că aveți informațiile online, nu vă confruntați cu un tabel Excel cu coduri pe care nu le înțelegeți.",
         "author": "Prefectura Seine-Saint-Denis"
