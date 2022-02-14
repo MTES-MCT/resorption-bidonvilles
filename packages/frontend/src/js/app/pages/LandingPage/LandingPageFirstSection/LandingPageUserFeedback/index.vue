@@ -37,7 +37,7 @@
                 :onClick="() => setSection(3)"
                 :active="active === 3"
             />
-            <LandingPageUserFeedbackVideos />
+            <LandingPageUserFeedbackVideos v-if="$i18n.locale === 'fr'" />
         </div>
     </div>
 </template>
