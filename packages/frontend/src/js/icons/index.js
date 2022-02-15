@@ -19,6 +19,7 @@ import {
     faEyeSlash,
     faPencilAlt,
     faTimes,
+    faTimesCircle,
     faMapMarkedAlt,
     faChartLine,
     faComments,
@@ -67,6 +68,7 @@ import {
     faSearch,
     faPlus,
     faCheck,
+    faCheckCircle,
     faPen,
     faExclamation,
     faExclamationTriangle,
@@ -98,6 +100,7 @@ library.add(faEye);
 library.add(faEyeSlash);
 library.add(faPencilAlt);
 library.add(faTimes);
+library.add(faTimesCircle);
 library.add(faMapMarkedAlt);
 library.add(faChartLine);
 library.add(faComments);
@@ -149,6 +152,7 @@ library.add(faFacebookSquare);
 library.add(faSearch);
 library.add(faPlus);
 library.add(faCheck);
+library.add(faCheckCircle);
 library.add(faPen);
 library.add(faExclamation);
 library.add(faExclamationTriangle);
