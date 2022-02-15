@@ -47,7 +47,7 @@ export default {
 
     getters: {
         dashboardGlobalStatsLoading: state => {
-            return state.dashboard.globalStats.loading;
+            return state.dashboard.globalStats.isLoading;
         },
         dashboardGlobalStatsFilter(state) {
             return state.dashboard.globalStats.filter;

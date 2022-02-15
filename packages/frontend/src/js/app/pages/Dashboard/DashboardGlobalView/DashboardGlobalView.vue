@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <DashboardSection title="Vue d'ensemble">
         <div class="py-10">
             <span class="font-bold">
                 Bienvenue {{ user.first_name }} {{ user.last_name }} <br /><br
@@ -8,17 +8,14 @@
             <Icon icon="map-marker-alt" :style="'color: #000091'" />
             <span> Localisation : {{ locationName }} </span>
         </div>
+        <template slot="header_left">
+            <DashboardGlobalViewFilters />
+        </template>
 
-        <DashboardSection title="Vue d'ensemble">
-            <template slot="header_left">
-                <DashboardGlobalViewFilters />
-            </template>
-
-            <template slot="body">
-                <DashboardGlobalViewStatsList />
-            </template>
-        </DashboardSection>
-    </div>
+        <template slot="body">
+            <DashboardGlobalViewStatsList />
+        </template>
+    </DashboardSection>
 </template>
 
 <script>
