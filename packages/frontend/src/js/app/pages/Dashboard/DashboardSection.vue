@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <section class="pb-10">
         <header class="md:flex items-center mb-5">
             <h1 class="text-xl font-bold">{{ title }}</h1>
             <nav class="flex flex-1 justify-between items-center mt-1">
