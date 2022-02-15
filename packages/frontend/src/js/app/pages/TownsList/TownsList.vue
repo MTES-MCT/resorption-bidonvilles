@@ -405,10 +405,7 @@ export default {
         PrivateLayout,
         GeoSearchbar,
         TownsListHeader,
-<<<<<<< HEAD
         TabList,
-=======
->>>>>>> bd604d97 ((1338) POC vue d'ensemble)
         TownsListFilters,
         Export
     },

@@ -380,18 +380,6 @@ const loggedRoutes = [
         }
     },
     {
-        path: "/tableau-de-bord",
-        component: path.join(
-            __dirname,
-            "./src/js/app/pages/DashboardPOC/entrypoint.vue"
-        ),
-        route: {
-            meta: {
-                beforeEnter: "loadedAndUpToDate"
-            }
-        }
-    },
-    {
         path: "/activites",
         component: path.join(
             __dirname,

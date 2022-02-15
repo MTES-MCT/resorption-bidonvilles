@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import FilterItem from "./DashboardShantytownsFilterItem";
+import FilterItem from "../DashboardComponents/DashboardFilterItem";
 import { mapGetters } from "vuex";
 
 export default {
