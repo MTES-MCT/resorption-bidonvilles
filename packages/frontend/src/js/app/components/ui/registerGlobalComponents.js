@@ -41,7 +41,7 @@ const MapV2 = () => import("./Map.vue");
 const InfoBanner = () => import("./InfoBanner.vue");
 const Tooltip = () => import("./Tooltip.vue");
 const AutocompleteVue = () => import("@trevoreyre/autocomplete-vue");
-
+const HeaderTab = () => import("./HeaderTab.vue");
 export default function(vueInstance) {
     vueInstance.component("Button", Button);
     vueInstance.component("TextInput", TextInput);
@@ -79,6 +79,7 @@ export default function(vueInstance) {
     vueInstance.component("Tooltip", Tooltip);
     vueInstance.component("Accordion", Accordion);
     vueInstance.component("AccordionItem", AccordionItem);
+    vueInstance.component("HeaderTab", HeaderTab);
 
     vueInstance.use(notifications);
     vueInstance.component("NotificationsGroup", NotificationsGroup);
