@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import DashboardShantytownsFilter from "./DashboardShantytownsFilter";
-import DashboardShantytownsFiltersSeparator from "./DashboardShantytownsFiltersSeparator";
+import DashboardFilter from "./DashboardFilter";
+import DashboardFiltersSeparator from "./DashboardFiltersSeparator";
 
 export default {
     props: {
@@ -16,14 +16,14 @@ export default {
         }
     },
     components: {
-        DashboardShantytownsFilter,
-        DashboardShantytownsFiltersSeparator
+        DashboardFilter,
+        DashboardFiltersSeparator
     },
     computed: {
         component() {
             return this.item.type === "separator"
-                ? DashboardShantytownsFiltersSeparator
-                : DashboardShantytownsFilter;
+                ? DashboardFiltersSeparator
+                : DashboardFilter;
         }
     }
 };

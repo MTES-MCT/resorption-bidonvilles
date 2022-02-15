@@ -1,5 +1,6 @@
 import { get as getConfig } from "#helpers/api/config";
 import getSince from "#app/utils/getSince";
+import { getDashboardStats } from "#helpers/api/dashboard";
 
 export default {
     state: {
@@ -8,11 +9,29 @@ export default {
                 filter: "my_shantytowns",
                 sort: "updatedAt",
                 page: 1
+            },
+            globalStats: {
+                filter: "my_globalStats",
+                data: [],
+                error: null,
+                isLoading: false
             }
         }
     },
 
     mutations: {
+        setDashboardGlobalStatsFilter(state, filter) {
+            state.dashboard.globalStats.filter = filter;
+        },
+        setGlobalStats(state, stats) {
+            state.dashboard.globalStats.data = stats;
+        },
+        setGlobalStatsError(state, error) {
+            state.dashboard.globalStats.error = error;
+        },
+        setGlobalStatsLoading(state, value) {
+            state.dashboard.globalStats.isLoading = value;
+        },
         setDashboardShantytownsFilter(state, filter) {
             state.dashboard.shantytowns.page = 1;
             state.dashboard.shantytowns.filter = filter;
@@ -27,6 +46,18 @@ export default {
     },
 
     getters: {
+        dashboardGlobalStatsLoading: state => {
+            return state.dashboard.globalStats.loading;
+        },
+        dashboardGlobalStatsFilter(state) {
+            return state.dashboard.globalStats.filter;
+        },
+        dashboardGlobalStats(state) {
+            return state.dashboard.globalStats.data;
+        },
+        dashboardGlobalStatsError(state) {
+            return state.dashboard.globalStats.error;
+        },
         dashboardShantytownsFilter(state) {
             return state.dashboard.shantytowns.filter;
         },
@@ -69,6 +100,22 @@ export default {
             }
 
             return getters.dashboardMyShantytowns;
+        }
+    },
+    actions: {
+        async fetchGlobalStats({ commit }) {
+            commit("setGlobalStatsLoading", true);
+            try {
+                const stats = await getDashboardStats();
+                commit("setGlobalStatsLoading", false);
+                commit("setGlobalStats", stats);
+            } catch (error) {
+                commit("setGlobalStatsLoading", false);
+                commit(
+                    "setGlobalStatsError",
+                    (error && error.user_message) || "Une erreur est survenue"
+                );
+            }
         }
     }
 };
