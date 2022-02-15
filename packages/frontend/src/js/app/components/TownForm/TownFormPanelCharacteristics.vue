@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import { get as getConfig, hasPermission } from "#helpers/api/config";
 import InputBuiltAt from "./inputs/InputBuiltAt.vue";
 import InputDeclaredAt from "./inputs/InputDeclaredAt.vue";
 import InputFieldType from "./inputs/InputFieldType.vue";
@@ -66,7 +67,6 @@ import InputOwner from "./inputs/InputOwner.vue";
 import InputIsReinstallation from "./inputs/InputIsReinstallation.vue";
 import InputReinstallationComments from "./inputs/InputReinstallationComments.vue";
 import TownFormClosedShantytowns from "./TownFormClosedShantytowns.vue";
-import { hasPermission } from "#helpers/api/config";
 
 export default {
     components: {
@@ -92,7 +92,9 @@ export default {
     },
 
     data() {
+        const { owner_types } = getConfig();
         return {
+            values: owner_types,
             isMounted: false,
             input: this.value
         };
@@ -104,20 +106,34 @@ export default {
 
     computed: {
         ownerTypeIsUnknown() {
-            if (!this.isMounted) {
+            if (
+                this.input.owner_type === undefined ||
+                this.input.owner_type < 1
+            ) {
                 return true;
             }
 
-            const value = this.input.owner_type;
-            if (this.$refs.ownerType === undefined) {
-                return true;
-            }
+            return this.isUnknown(this.input.owner_type);
+        }
+    },
 
-            return this.$refs.ownerType.isUnknown(value);
+    methods: {
+        isUnknown(value) {
+            const label = this.getLabelFor(value);
+            return label === undefined || label === "Inconnu";
         },
 
         hasOwnerPermission() {
             return hasPermission("shantytown_owner.access");
+        },
+
+        getLabelFor(ownerTypeId) {
+            const value = this.values.find(({ id }) => id === ownerTypeId);
+            if (value === undefined) {
+                return undefined;
+            }
+
+            return value.label;
         }
     }
 };
