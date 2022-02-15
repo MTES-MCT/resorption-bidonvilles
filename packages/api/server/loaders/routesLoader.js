@@ -638,4 +638,10 @@ module.exports = (app) => {
         middlewares.appVersion.sync,
         controllers.contactFormReferral.export,
     );
+
+    // Matomo
+    app.get(
+        '/test-matomo',
+        controllers.matomo.test,
+    );
 };
