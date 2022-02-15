@@ -168,17 +168,6 @@ export default {
                 return;
             }
 
-            // on reset l'état
-            this.$store.commit("setActivitiesLoading", false);
-            this.$store.commit("setActivitiesLastDate", Date.now() / 1000);
-            this.$store.commit("setActivitiesEndReached", false);
-            this.$store.commit("setActivities", []);
-            this.$store.commit("setActivitiesLoadedSignature", {
-                locationType: this.locationType,
-                locationCode: this.locationCode,
-                filters: strFilters
-            });
-
             // on fetch les activités
             this.$store.dispatch("fetchActivities", {
                 locationType: this.locationType,
@@ -221,10 +210,7 @@ export default {
             }
 
             // on fetch les activités
-            this.$store.dispatch("fetchActivities", {
-                locationType: this.locationType,
-                locationCode: this.locationCode
-            });
+            this.$store.dispatch("fetchActivities");
         },
 
         getLocationName() {

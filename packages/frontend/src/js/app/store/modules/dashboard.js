@@ -15,6 +15,9 @@ export default {
                 data: [],
                 error: null,
                 isLoading: false
+            },
+            activities: {
+                filter: "all"
             }
         }
     },
@@ -42,6 +45,9 @@ export default {
         setDashboardShantytownsSort(state, sort) {
             state.dashboard.shantytowns.page = 1;
             state.dashboard.shantytowns.sort = sort;
+        },
+        setDashboardActivitiesFilter(state, filter) {
+            state.dashboard.activities.filter = filter;
         }
     },
 
