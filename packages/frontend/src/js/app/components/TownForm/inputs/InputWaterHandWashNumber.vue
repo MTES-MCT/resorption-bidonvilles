@@ -22,9 +22,9 @@ export default {
     components: { InlineTextInput },
     props: {
         value: {
-            type: String,
+            type: Number,
             required: false,
-            default: ""
+            default: undefined
         },
         population: {
             type: Object
