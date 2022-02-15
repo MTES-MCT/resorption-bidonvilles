@@ -100,10 +100,6 @@ export default {
         };
     },
 
-    mounted() {
-        this.isMounted = true;
-    },
-
     computed: {
         ownerTypeIsUnknown() {
             if (
