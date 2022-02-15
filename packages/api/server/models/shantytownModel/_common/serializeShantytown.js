@@ -151,6 +151,46 @@ module.exports = (town, user) => {
         resorptionTarget: town.resorptionTarget,
     };
 
+    let completionTotal = 0;
+    if (serializedTown.addressSimple !== 'Pas d\'adresse précise') {
+        completionTotal += 1;
+    }
+    if (town.fieldTypeLabel !== 'Inconnu') {
+        completionTotal += 1;
+    }
+    if (town.ownerTypeLabel !== 'Inconnu') {
+        completionTotal += 1;
+    }
+    if (town.censusStatus !== null) {
+        completionTotal += 1;
+    }
+    if (town.populationTotal !== null) {
+        completionTotal += 1;
+    }
+    if (town.populationCouples !== null) {
+        completionTotal += 1;
+    }
+    if (town.populationMinors !== null) {
+        completionTotal += 1;
+    }
+    if (serializedTown.socialOrigins.length > 0) {
+        completionTotal += 1;
+    }
+    if (town.electricityTypeLabel !== 'Inconnu') {
+        completionTotal += 1;
+    }
+    if (town.accessToWater !== null) {
+        completionTotal += 1;
+    }
+    if (town.accessToSanitary !== null) {
+        completionTotal += 1;
+    }
+    if (town.trashEvacuation !== null) {
+        completionTotal += 1;
+    }
+
+    serializedTown.completionRate = Math.floor((completionTotal / 12) * 100) / 100;
+
     const location = {
         type: 'city',
         city: serializedTown.city,

@@ -1,4 +1,4 @@
-import getSince from "#app/pages/TownsList/getSince";
+import getSince from "./getSince";
 
 export default function formatDate(date) {
     const { days } = getSince(date);
