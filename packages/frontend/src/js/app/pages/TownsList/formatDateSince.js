@@ -1,4 +1,4 @@
-import getSince from "./getSince";
+import getSince from "../../utils/getSince";
 
 export default function formatDateSince(date) {
     const { days, years, months } = getSince(date);

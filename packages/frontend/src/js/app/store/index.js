@@ -11,6 +11,7 @@ import {
 import enrichShantytown from "#app/pages/TownsList/enrichShantytown";
 
 import activities from "./modules/activities";
+import dashboard from "./modules/dashboard";
 import locations from "./modules/locations";
 import directory from "./modules/directory";
 import highCovidComments from "./modules/highCovidComments";
@@ -25,6 +26,7 @@ export default function(Vue) {
     const localStore = new Vuex.Store({
         modules: {
             activities,
+            dashboard,
             locations,
             directory,
             highCovidComments,
@@ -101,9 +103,14 @@ export default function(Vue) {
                     state.detailedTown.actors = actors;
                 }
 
-                const town = state.towns.data.find(({ id }) => id === townId);
-                if (town !== undefined) {
-                    town.actors = actors;
+                const townIndex = state.towns.data.findIndex(
+                    ({ id }) => id === townId
+                );
+                if (townIndex !== undefined) {
+                    state.towns.data.splice(townIndex, 1, {
+                        ...state.towns.data[townIndex],
+                        actors: actors
+                    });
                 }
             },
             updateShantytownActorThemes(state, { townId, userId, themes }) {
