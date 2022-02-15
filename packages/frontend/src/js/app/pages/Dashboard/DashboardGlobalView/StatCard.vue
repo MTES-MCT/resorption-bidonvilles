@@ -1,20 +1,32 @@
 <template>
     <div
-        class="border flex flex-col justify-between rounded-md border-cardBorder bg-blue100 w-56 h-40 mr-5"
+        class="border flex flex-col p-4 rounded-md border-cardBorder bg-blue100 w-56 mr-5"
     >
-        <div>
-            <span class="text-primary text-display-md pl-10">
-                {{ cardStats.figures[0] }}
-            </span>
-            <span class="text-green float-right" v-if="isEvolutionPositive">
-                +{{ cardStats.evolution !== null ? cardStats.evolution : 0 }} %
-            </span>
-            <span class="text-red float-right" v-else>
-                {{ cardStats.evolution }} %
-            </span>
+        <div class="flex pb-4">
+            <div class="pr-4 text-primary text-xl">
+                <Icon :icon="icon" />
+            </div>
+            <div class="flex-1">
+                <div class="flex justify-between items-center font-bold">
+                    <span class="text-primary text-xl">
+                        {{ cardStats.figures[0] }}
+                    </span>
+                    <span class="text-green" v-if="isEvolutionPositive">
+                        +{{
+                            cardStats.evolution !== null
+                                ? cardStats.evolution
+                                : 0
+                        }}
+                        %
+                    </span>
+                    <span class="text-red" v-else>
+                        {{ cardStats.evolution }} %
+                    </span>
+                </div>
+                <span>{{ cardStats.label }} </span>
+            </div>
         </div>
-        <span class="pl-10">{{ cardStats.label }} </span>
-        <div class="mb-2">
+        <div class="mt-auto">
             <div class="flex justify-center items-end">
                 <div v-for="(figure, index) in columns" :key="figure">
                     <Bar
@@ -47,6 +59,10 @@ export default {
         Bar
     },
     props: {
+        icon: {
+            type: String,
+            required: true
+        },
         cardStats: {
             type: Object
         },

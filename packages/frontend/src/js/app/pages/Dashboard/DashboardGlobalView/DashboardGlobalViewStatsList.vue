@@ -14,6 +14,7 @@
             <StatCard
                 v-for="stat in stats"
                 :cardStats="stat"
+                :icon="stat.icon"
                 :key="stat.label"
                 :period="currentFilter"
             />
@@ -21,6 +22,7 @@
         <router-link
             class="text-primary underline flex justify-center pt-10"
             :to="`statistiques`"
+            v-if="hasPermission('stats.read')"
         >
             Voir plus de statistiques
         </router-link>
@@ -30,6 +32,7 @@
 <script>
 import { mapGetters } from "vuex";
 import StatCard from "./StatCard";
+import { hasPermission } from "#helpers/api/config";
 
 export default {
     components: {
@@ -48,6 +51,9 @@ export default {
             stats: "dashboardGlobalStats",
             isLoading: "dashboardGlobalStatsLoading"
         })
+    },
+    methods: {
+        hasPermission
     }
 };
 </script>

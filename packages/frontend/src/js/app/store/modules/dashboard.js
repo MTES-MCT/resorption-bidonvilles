@@ -114,7 +114,13 @@ export default {
             try {
                 const stats = await getDashboardStats();
                 commit("setGlobalStatsLoading", false);
-                commit("setGlobalStats", stats);
+                commit("setGlobalStats", [
+                    { ...stats[0], icon: "male" },
+                    { ...stats[1], icon: "child" },
+                    { ...stats[2], icon: "times" },
+                    { ...stats[3], icon: "check" },
+                    { ...stats[4], icon: "user" }
+                ]);
             } catch (error) {
                 commit("setGlobalStatsLoading", false);
                 commit(

@@ -1,7 +1,7 @@
 <template>
     <section class="pb-10">
         <header class="md:flex items-center mb-5">
-            <h1 class="text-xl font-bold">{{ title }}</h1>
+            <h1 :class="`text-${size} font-bold`">{{ title }}</h1>
             <nav class="flex flex-1 justify-between items-center mt-1">
                 <slot name="header_left" />
                 <slot name="header_right" />
@@ -18,6 +18,11 @@ export default {
         title: {
             type: String,
             required: true
+        },
+        size: {
+            type: String,
+            required: false,
+            default: "xl"
         }
     }
 };

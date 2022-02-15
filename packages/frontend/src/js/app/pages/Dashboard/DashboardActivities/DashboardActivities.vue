@@ -1,5 +1,5 @@
 <template>
-    <DashboardSection title="Activité">
+    <DashboardSection title="Activité" id="activite">
         <template slot="body">
             <section class="flex">
                 <DashboardActivitiesFilters />

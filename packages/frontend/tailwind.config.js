@@ -43,6 +43,12 @@ module.exports = {
                     lineHeight: "1.375em"
                 }
             ],
+            "size-2xl": [
+                "2.5rem",
+                {
+                    lineHeight: "2.5em"
+                }
+            ],
             "size-xl": [
                 "1.5rem",
                 {
