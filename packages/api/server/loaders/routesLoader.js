@@ -576,6 +576,16 @@ module.exports = (app) => {
         '/epci/:id/departements',
         controllers.geo.getDepartementsForEpci,
     );
+    // dashboard
+
+    app.get(
+        '/stats/getStats',
+        middlewares.auth.authenticate,
+        (...args) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        controllers.stats.getDashboardStats,
+    );
 
     // stats
     app.get(

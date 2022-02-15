@@ -210,4 +210,15 @@ module.exports = models => ({
             });
         }
     },
+    async getDashboardStats(req, res, next) {
+        try {
+            const townStats = await models.stats.getStats();
+            return res.status(200).send(townStats);
+        } catch (error) {
+            res.status(500).send({
+                user_message: 'Une erreur est survenue lors de la lecture en base de données',
+            });
+            return next(error);
+        }
+    },
 });
