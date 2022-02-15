@@ -95,13 +95,8 @@ export default {
         const { owner_types } = getConfig();
         return {
             values: owner_types,
-            isMounted: false,
             input: this.value
         };
-    },
-
-    mounted() {
-        this.isMounted = true;
     },
 
     computed: {
