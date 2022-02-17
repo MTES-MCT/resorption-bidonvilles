@@ -46,22 +46,6 @@ export default {
         checked() {
             this.$emit("input", this.checked);
         }
-    },
-
-    methods: {
-        isUnknown(value) {
-            const label = this.getLabelFor(value);
-            return label === undefined || label === "Inconnu";
-        },
-
-        getLabelFor(ownerTypeId) {
-            const value = this.values.find(({ id }) => id === ownerTypeId);
-            if (value === undefined) {
-                return undefined;
-            }
-
-            return value.label;
-        }
     }
 };
 </script>
