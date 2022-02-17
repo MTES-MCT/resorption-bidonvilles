@@ -37,7 +37,7 @@
                     :tag="tag"
                 />
             </div>
-            <div>{{ comment.description }}</div>
+            <div class="whitespace-pre-line">{{ comment.description }}</div>
         </div>
     </div>
 </template>

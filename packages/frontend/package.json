@@ -1,6 +1,6 @@
 {
   "name": "@resorptionbidonvilles/frontend",
-  "version": "1.25.1",
+  "version": "1.26.0",
   "description": "Frontend de Résorption Bidonvilles",
   "resolutions": {
     "sharp": "^0.29.0"

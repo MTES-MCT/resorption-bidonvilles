@@ -5,9 +5,9 @@
 
             <RbTable :columns="columns" :data="rows">
                 <template v-slot:cell="{ column, row, content }">
-                    <span v-if="column === 'label'" class="pre-line">{{
-                        content
-                    }}</span>
+                    <span v-if="column === 'label'" class="whitespace-pre-line">
+                        {{ content }}
+                    </span>
                     <TextInput
                         v-else
                         type="number"

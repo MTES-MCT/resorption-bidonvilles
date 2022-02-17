@@ -29,6 +29,13 @@
                 </mj-text>
             </mj-column>
         </mj-section>
+        <mj-section>
+            <mj-column>
+                <mj-text>
+                    Ce mail a été envoyé à tous les utilisateurs de la plateforme sur votre département. Pour connaître qui a accès à la plateforme sur votre département, <a href="{{var:rootAnnuaireUrl}}" class="link font-italic">rendez-vous sur l'annuaire</a>.
+                </mj-text>
+            </mj-column>
+        </mj-section>
         <mj-include path='common/footer.mjml' />
     </mj-body>
 </mjml>
