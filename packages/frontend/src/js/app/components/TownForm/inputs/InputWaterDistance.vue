@@ -39,7 +39,7 @@ export default {
     components: { SubQuestionWrapper },
     props: {
         value: {
-            type: Number,
+            type: String,
             required: false,
             default: undefined
         }
