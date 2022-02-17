@@ -1,5 +1,5 @@
 <template>
-    <DashboardSection title="Sites">
+    <DashboardSection title="Sites" id="sites">
         <template slot="header_left">
             <DashboardShantytownsFilters />
             <DashboardShantytownsSorts />

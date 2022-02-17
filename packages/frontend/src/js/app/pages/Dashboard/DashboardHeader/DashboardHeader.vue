@@ -25,7 +25,7 @@ export default {
 
     data() {
         return {
-            links: []
+            links: [{ id: "sites", label: "Sites" }]
         };
     },
 
