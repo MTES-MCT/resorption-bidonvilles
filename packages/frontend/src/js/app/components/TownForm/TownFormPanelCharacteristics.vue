@@ -101,13 +101,6 @@ export default {
 
     computed: {
         ownerTypeIsUnknown() {
-            if (
-                this.input.owner_type === undefined ||
-                this.input.owner_type < 1
-            ) {
-                return true;
-            }
-
             return this.isUnknown(this.input.owner_type);
         }
     },
