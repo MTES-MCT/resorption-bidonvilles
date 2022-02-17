@@ -192,7 +192,7 @@ export default {
                     return this.$router.push(entrypoint);
                 }
 
-                return this.$router.push("/cartographie");
+                return this.$router.push("/tableau-de-bord");
             }
         }
     }
