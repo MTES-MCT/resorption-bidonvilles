@@ -12,6 +12,7 @@ import enrichShantytown from "#app/pages/TownsList/enrichShantytown";
 import { get as getConfig } from "#helpers/api/config";
 
 import activities from "./modules/activities";
+import dashboard from "./modules/dashboard";
 import locations from "./modules/locations";
 import directory from "./modules/directory";
 import highCovidComments from "./modules/highCovidComments";
@@ -23,6 +24,7 @@ export default function(Vue) {
     return new Vuex.Store({
         modules: {
             activities,
+            dashboard,
             locations,
             directory,
             highCovidComments,
