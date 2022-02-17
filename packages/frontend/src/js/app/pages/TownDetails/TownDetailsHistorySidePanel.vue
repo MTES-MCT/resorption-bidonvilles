@@ -71,7 +71,9 @@
                                 :key="diff.field"
                                 class="changelogContent my-2"
                             >
-                                <div class="text-green">{{ diff.field }}</div>
+                                <div class="text-green500">
+                                    {{ diff.field }}
+                                </div>
                                 <div>
                                     <span class="line-through">{{
                                         diff.oldValue || "non renseigné"

@@ -19,7 +19,7 @@
         </div>
         <div>
             <div class="changelogContent my-2">
-                <div class="text-green">{{ title }}</div>
+                <div class="text-green500">{{ title }}</div>
             </div>
         </div>
     </div>
