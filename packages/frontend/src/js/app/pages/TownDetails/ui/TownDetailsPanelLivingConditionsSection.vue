@@ -152,7 +152,7 @@ export default {
                 (this.value === true && !this.inverted) ||
                 (this.value === false && this.inverted)
             ) {
-                return "text-green";
+                return "text-green500";
             }
 
             return "text-red";

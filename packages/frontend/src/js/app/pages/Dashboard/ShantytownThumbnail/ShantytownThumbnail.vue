@@ -1,6 +1,6 @@
 <template>
     <article
-        class="border border-blue300 px-4 pb-4 cursor-pointer hover:bg-blue200"
+        class="border border-blue300 px-4 pb-4 cursor-pointer hover:bg-blue200 flex flex-col"
         @click="routeToDetailPage"
     >
         <header class="-mt-1">
@@ -33,7 +33,7 @@
             </p>
         </header>
 
-        <main>
+        <main class="mb-12">
             <!-- population -->
             <TownPopulation
                 class="mt-4 text-lg font-bold"
@@ -43,21 +43,23 @@
             <!-- conditions de vie -->
             <ul v-if="stableConditions.length > 0" class="mt-4">
                 <li v-for="(condition, index) in stableConditions" :key="index">
-                    <span class="text-lg align-middle text-green"
-                        ><Icon icon="check-circle" class="mr-1"
+                    <span
+                        class="inline-block text-xs rounded-full border-2 border-green500 text-green500 mr-1 mb-1"
+                        style="padding: 0.2em"
+                        ><Icon icon="check"
                     /></span>
                     {{ condition }}
                 </li>
             </ul>
             <p v-else class="mt-4">
-                <span class="text-lg align-middle text-red"
-                    ><Icon icon="times-circle" class="mr-1"
+                <span class="text-xl align-middle text-red"
+                    ><Icon icon="times" class="mr-1"
                 /></span>
                 Urgence à sécuriser les conditions de vie
             </p>
 
             <!-- journal du site -->
-            <p v-if="shantytown.comments.regular.length === 0" class="mt-6">
+            <p v-if="shantytown.comments.regular.length > 0" class="mt-6">
                 <router-link
                     :to="`/site/${shantytown.id}#newComment`"
                     class="text-info underline font-bold hover:no-underline"
@@ -69,7 +71,7 @@
             </p>
         </main>
 
-        <footer class="mt-12">
+        <footer class="mt-auto">
             <router-link
                 :to="`/site/${shantytown.id}`"
                 class="font-bold text-primary hover:underline"
