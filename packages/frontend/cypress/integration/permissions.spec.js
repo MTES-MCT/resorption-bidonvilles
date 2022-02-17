@@ -42,7 +42,7 @@ describe("Permissions tests", () => {
                     allowedRoutes
                 } = getAllowedAndForbiddenRoutes(userPermissions);
 
-                describe(`L'utilisateur ${key} doit etre redirigé sur la cartographie pour les pages sans accès`, () => {
+                describe(`L'utilisateur ${key} doit etre redirigé sur le tableau de bord pour les pages sans accès`, () => {
                     beforeEach(() => {
                         cy.restoreLocalStorage();
                     });
@@ -50,7 +50,7 @@ describe("Permissions tests", () => {
                     for (const route of forbiddenRoutes) {
                         it(`L'utilisateur ${key} n'a pas le droit d'accéder à ${route}`, () => {
                             cy.visit(route);
-                            cy.url().should("include", "/cartographie");
+                            cy.url().should("include", "/tableau-de-bord");
                         });
                     }
                 });
