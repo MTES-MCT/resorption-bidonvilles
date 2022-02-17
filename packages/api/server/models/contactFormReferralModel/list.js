@@ -14,15 +14,16 @@ module.exports = (where = []) => {
 
     return sequelize.query(
         `SELECT 
-                INITCAP(first_name) AS first_name,
-                UPPER(last_name) AS last_name,
-                email,
+                INITCAP(users.first_name) AS first_name,
+                UPPER(users.last_name) AS last_name,
+                users.email,
                 departement_code,
-                name AS organization_name,
-                reason,
-                reason_other,
-                reason_word_of_mouth
-            FROM contact_form_referrals
+                localized_organizations.name AS organization_name,
+                cfr.reason,
+                cfr.reason_other,
+                cfr.reason_word_of_mouth
+            FROM
+                contact_form_referrals AS cfr
             LEFT JOIN users ON fk_user = user_id
             LEFT JOIN localized_organizations ON fk_organization = organization_id
             LEFT JOIN regions ON localized_organizations.region_code = regions.code
