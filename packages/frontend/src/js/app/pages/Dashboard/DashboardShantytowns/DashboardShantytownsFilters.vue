@@ -36,25 +36,18 @@ export default {
             const rawItems = [
                 {
                     type: "link",
-                    label: "Nouveaux sites",
+                    label: "Mes sites",
+                    id: "my_shantytowns"
+                },
+                { type: "separator", label: "", id: "separator_1" },
+                {
+                    type: "link",
+                    label: "Sites nouvellement déclarés",
                     id: "new_shantytowns"
                 },
                 { type: "separator", label: "", id: "separator_2" },
                 { type: "link", label: "Mon territoire", id: "my_territory" }
             ];
-
-            if (this.myShantytowns.length > 0) {
-                rawItems.unshift(
-                    ...[
-                        {
-                            type: "link",
-                            label: "Mes sites",
-                            id: "my_shantytowns"
-                        },
-                        { type: "separator", label: "", id: "separator_1" }
-                    ]
-                );
-            }
 
             return rawItems.map(item => {
                 return {
