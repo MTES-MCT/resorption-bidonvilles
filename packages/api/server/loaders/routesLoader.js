@@ -618,6 +618,11 @@ module.exports = (app) => {
         controllers.stats.directoryView,
     );
 
+    app.get(
+        '/statistics/wau',
+        controllers.matomo.getWeeklyActiveUsers,
+    );
+
     // user activities
     app.get(
         '/activities',
@@ -637,11 +642,5 @@ module.exports = (app) => {
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.contactFormReferral.export,
-    );
-
-    // Matomo
-    app.get(
-        '/test-matomo',
-        controllers.matomo.test,
     );
 };
