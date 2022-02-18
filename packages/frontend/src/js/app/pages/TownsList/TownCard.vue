@@ -260,7 +260,7 @@ import ClosingSolutionsList from "./ClosingSolutionsList";
 import flagEU from "./assets/eu.png";
 import flagFR from "./assets/fr.png";
 import flagExtraCommunautaires from "./assets/extra-communautaires.png";
-import formatDateSinceActivity from "#app/utils/formatDateSinceActivity";
+import formatLastUpdatedAt from "#app/utils/formatLastUpdatedAt";
 import { formatLivingConditions } from "#app/pages/TownDetails/formatLivingConditions";
 import { isSolved, isClosed } from "./common/SolvedOrClosed";
 
@@ -342,9 +342,7 @@ export default {
             );
         },
         lastUpdate() {
-            return `Dernière mise à jour ${formatDateSinceActivity(
-                this.shantytown.updatedAt
-            )}`;
+            return `${formatLastUpdatedAt(this.shantytown)}`;
         },
         showLivingConditionDetails() {
             return !(isSolved(this.shantytown) || isClosed(this.shantytown));

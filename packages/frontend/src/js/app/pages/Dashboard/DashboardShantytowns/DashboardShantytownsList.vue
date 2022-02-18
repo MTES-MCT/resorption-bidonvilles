@@ -1,69 +1,80 @@
 <template>
-    <p v-if="isLoading"><Spinner /></p>
+    <section>
+        <p v-if="isLoading"><Spinner /></p>
 
-    <p v-else-if="error" class="text-red">
-        <Icon icon="times-circle" />
-        <span class="ml-2 font-bold"
-            >Erreur lors de la collecte des données :</span
+        <p v-else-if="error" class="text-red">
+            <Icon icon="times-circle" />
+            <span class="ml-2 font-bold"
+                >Erreur lors de la collecte des données :</span
+            >
+            {{ error }}
+        </p>
+
+        <p
+            v-else-if="
+                rawShantytowns.length === 0 &&
+                    currentFilter === 'my_shantytowns'
+            "
+            class="text-primary p-4 bg-blue200"
         >
-        {{ error }}
-    </p>
+            Vous n'intervenez sur aucun site. Rendez-vous sur la fiche d'un site
+            pour vous déclarer intervenant(e).
+        </p>
 
-    <p
-        v-else-if="
-            rawShantytowns.length === 0 && currentFilter === 'my_shantytowns'
-        "
-        class="text-primary p-4 bg-blue200"
-    >
-        Retrouvez ici les sites sur lesquels vous intervenez le plus souvent en
-        vous déclarant intervenant(e) directement depuis la fiche des sites
-        concernés.
-    </p>
+        <p v-else-if="rawShantytowns.length === 0" class="text-G600 italic">
+            Aucune donnée à afficher
+        </p>
 
-    <p v-else-if="rawShantytowns.length === 0" class="text-G600 italic">
-        Aucune donnée à afficher
-    </p>
-
-    <section v-else>
-        <section class="grid grid-cols-3 gap-x-8 gap-y-6">
-            <ShantytownThumbnail
-                v-for="shantytown in pageContent"
-                :key="shantytown.id"
-                :shantytown="shantytown"
-            />
+        <section class="-ml-16 -mr-16 flex justify-between" v-else>
+            <div class="w-12 mr-4">
+                <PaginationButton
+                    icon="arrow-left"
+                    :disabled="currentPage === 1"
+                    @click.native="onChangePage(currentPage - 1)"
+                />
+            </div>
+            <div class="grid grid-cols-3 gap-x-8 gap-y-6 flex-1">
+                <ShantytownThumbnail
+                    v-for="shantytown in pageContent"
+                    :key="shantytown.id"
+                    :shantytown="shantytown"
+                />
+            </div>
+            <div class="w-12 ml-4">
+                <PaginationButton
+                    icon="arrow-right"
+                    :disabled="currentPage === nbPages"
+                    @click.native="onChangePage(currentPage + 1)"
+                />
+            </div>
         </section>
-        <Pagination
-            class="mt-10 justify-center"
-            :currentPage="currentPage"
-            :nbPages="nbPages"
-            :onChangePage="onChangePage"
-        />
+
+        <footer
+            class="mt-10 text-center"
+            v-if="currentFilter !== 'my_shantytowns'"
+        >
+            <router-link to="/liste-des-sites" class="link"
+                >Voir tous les sites</router-link
+            >
+        </footer>
     </section>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import ShantytownThumbnail from "../ShantytownThumbnail/ShantytownThumbnail";
+import PaginationButton from "./ui/PaginationButton";
 
 const ITEMS_PER_PAGE = 6;
 
 export default {
     components: {
-        ShantytownThumbnail
+        ShantytownThumbnail,
+        PaginationButton
     },
     async created() {
         if (!this.$store.state.towns.data.length) {
             await this.$store.dispatch("fetchTowns");
-        }
-
-        if (
-            this.myShantytowns.length === 0 &&
-            this.currentFilter === "my_shantytowns"
-        ) {
-            this.$store.commit(
-                "setDashboardShantytownsFilter",
-                "new_shantytowns"
-            );
         }
     },
     computed: {
@@ -110,7 +121,7 @@ export default {
         onChangePage(page) {
             this.$store.commit(
                 "setDashboardShantytownsPage",
-                Math.min(Math.max(0, page), this.nbPages)
+                Math.min(Math.max(1, page), this.nbPages)
             );
         }
     }
