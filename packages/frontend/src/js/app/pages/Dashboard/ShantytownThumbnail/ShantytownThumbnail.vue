@@ -5,7 +5,7 @@
     >
         <header class="-mt-1">
             <Tag display="inline-block" class="mb-3" :variant="pinVariant">
-                Mis à jour {{ formatDateSinceActivity(shantytown.updatedAt) }}
+                {{ formatLastUpdatedAt(shantytown) }}
             </Tag>
 
             <h1 class="font-bold text-lg">{{ shantytown.usename }}</h1>
@@ -36,9 +36,16 @@
         <main class="mb-12">
             <!-- population -->
             <TownPopulation
+                v-if="
+                    shantytown.populationTotal ||
+                        shantytown.populationTotal === 0
+                "
                 class="mt-4 text-lg font-bold"
                 :population="shantytown.populationTotal"
             />
+            <p class="mt-4" v-else>
+                <span class="font-bold">Population :</span> inconnue
+            </p>
 
             <!-- conditions de vie -->
             <ul v-if="stableConditions.length > 0" class="mt-4">
@@ -51,8 +58,8 @@
                     {{ condition }}
                 </li>
             </ul>
-            <p v-else class="mt-4">
-                <span class="text-xl align-middle text-red"
+            <p v-else class="mt-4 text-red">
+                <span class="text-xl align-middle"
                     ><Icon icon="times" class="mr-1"
                 /></span>
                 Urgence à sécuriser les conditions de vie
@@ -84,7 +91,7 @@
 
 <script>
 import getSince from "#app/utils/getSince";
-import formatDateSinceActivity from "#app/utils/formatDateSinceActivity";
+import formatLastUpdatedAt from "#app/utils/formatLastUpdatedAt";
 import TownPopulation from "#app/components/TownPopulation/TownPopulation";
 import { formatLivingConditions } from "#app/pages/TownDetails/formatLivingConditions";
 
@@ -144,7 +151,7 @@ export default {
     },
 
     methods: {
-        formatDateSinceActivity,
+        formatLastUpdatedAt,
 
         routeToDetailPage() {
             this.$router.push(`/site/${this.shantytown.id}`);
