@@ -42,7 +42,9 @@
             >
                 <Icon icon="comment" class="mr-2" />
                 <div>
-                    {{ this.town.comments.covid.length || 0 }} commentaires
+                    {{ this.town.comments.covid.length || 0 }} commentaire{{
+                        this.town.comments.covid.length > 1 ? "s" : ""
+                    }}
                     covid
                 </div>
             </div>

@@ -12,7 +12,7 @@
         </div>
         <div v-if="comment.private" class="font-bold">
             <Icon icon="lock" class="text-red" />
-            Message réservé aux membres de la préfecture et DDCS de votre
+            Message réservé aux membres de la préfecture et DDETS de votre
             territoire.
         </div>
         <div class="text-primary font-bold mb-1">

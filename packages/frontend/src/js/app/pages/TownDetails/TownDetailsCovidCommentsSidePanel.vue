@@ -120,7 +120,9 @@
             </div>
             <div class="bg-orange200 px-8 py-4 mt-4">
                 <div class="font-bold mb-4">
-                    {{ this.town.comments.covid.length }} commentaires
+                    {{ this.town.comments.covid.length }} commentaire{{
+                        this.town.comments.covid.length > 1 ? "s" : ""
+                    }}
                 </div>
                 <CommentBlock
                     v-for="comment in sortedComments"
