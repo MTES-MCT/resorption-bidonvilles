@@ -1,5 +1,5 @@
 // const request = require('request-promise');
-const fetch = require('node-fetch');
+const nodeFetch = require('node-fetch');
 
 module.exports = () => ({
     // For test purpose, this method returns the number of weekly active user for the last week of december 2021
@@ -24,7 +24,7 @@ module.exports = () => ({
             const MATOMO_AUTH_TOKEN = process.env.VUE_APP_MATOMO_AUTH_TOKEN;
 
             const url = `https://stats.data.gouv.fr/index.php?module=API&method=VisitsSummary.getUniqueVisitors&idSite=86&period=week&date=${date}&format=JSON&${segment}&token_auth=${MATOMO_AUTH_TOKEN}`;
-            const response = await fetch(url);
+            const response = await nodeFetch(url);
 
             const result = await response.json();
             return result.value;
