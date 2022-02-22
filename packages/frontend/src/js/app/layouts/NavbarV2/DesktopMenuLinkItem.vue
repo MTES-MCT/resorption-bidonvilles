@@ -1,6 +1,6 @@
 <template>
     <router-link :to="target">
-        <p :class="classes" class="hover:text-gray-600">
+        <p :class="classes">
             {{ label }}
         </p>
     </router-link>
