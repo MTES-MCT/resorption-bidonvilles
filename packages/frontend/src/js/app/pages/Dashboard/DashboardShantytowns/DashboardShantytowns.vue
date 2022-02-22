@@ -3,6 +3,7 @@
         <template slot="header_left">
             <DashboardShantytownsFilters />
             <DashboardShantytownsSorts />
+            <DashboardShantytownsDisplay />
         </template>
 
         <template slot="body">
@@ -15,6 +16,7 @@
 import DashboardSection from "../DashboardSection";
 import DashboardShantytownsFilters from "./DashboardShantytownsFilters";
 import DashboardShantytownsSorts from "./DashboardShantytownsSorts";
+import DashboardShantytownsDisplay from "./DashboardShantytownsDisplay";
 import DashboardShantytownsList from "./DashboardShantytownsList";
 
 export default {
@@ -22,6 +24,7 @@ export default {
         DashboardSection,
         DashboardShantytownsFilters,
         DashboardShantytownsSorts,
+        DashboardShantytownsDisplay,
         DashboardShantytownsList
     }
 };

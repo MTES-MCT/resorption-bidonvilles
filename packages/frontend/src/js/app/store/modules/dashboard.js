@@ -7,7 +7,12 @@ export default {
             shantytowns: {
                 filter: "my_shantytowns",
                 sort: "updatedAt",
-                page: 1
+                display: "thumbnail",
+                page: 1,
+                mapSetup: {
+                    center: [46.7755829, 2.0497727],
+                    zoom: 6
+                }
             }
         }
     },
@@ -23,6 +28,13 @@ export default {
         setDashboardShantytownsSort(state, sort) {
             state.dashboard.shantytowns.page = 1;
             state.dashboard.shantytowns.sort = sort;
+        },
+        setDashboardShantytownsDisplay(state, display) {
+            state.dashboard.shantytowns.page = 1;
+            state.dashboard.shantytowns.display = display;
+        },
+        setDashboardShantytownsMapSetup(state, setup) {
+            state.dashboard.shantytowns.mapSetup = setup;
         }
     },
 
@@ -35,6 +47,12 @@ export default {
         },
         dashboardShantytownsSort(state) {
             return state.dashboard.shantytowns.sort;
+        },
+        dashboardShantytownsDisplay(state) {
+            return state.dashboard.shantytowns.display;
+        },
+        DashboardShantytownsMapSetup(state) {
+            return state.dashboard.shantytowns.mapSetup;
         },
         dashboardMyShantytowns(state, getters, rootState) {
             const { user } = getConfig();
