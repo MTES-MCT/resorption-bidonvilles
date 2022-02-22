@@ -1,7 +1,7 @@
 <template>
     <div class="border-b-2 border-gray-300 py-3">
         <router-link :to="target">
-            <p class="no-underline text-display-sm text-black">
+            <p class="text-display-xs font-normal text-black">
                 {{ label }}
             </p>
         </router-link>
