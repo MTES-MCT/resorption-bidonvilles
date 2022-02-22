@@ -41,25 +41,6 @@ export default {
     ],
     loaded: [
         {
-            label: "Mon compte",
-            target: "/mon-compte",
-            group: "me",
-            classes: upperMenuItemClass,
-            menu: "upper"
-        },
-        {
-            label: "Aide",
-            target: "/mentions-legales",
-            classes: upperMenuItemClass,
-            menu: "upper"
-        },
-        {
-            label: "Déconnexion",
-            target: "/deconnexion",
-            classes: upperMenuItemClass,
-            menu: "upper"
-        },
-        {
             label: "Accueil",
             target: "/",
             classes: lowerMenuItemClass,
@@ -116,6 +97,25 @@ export default {
             group: "directory",
             classes: lowerMenuItemClass,
             menu: "lower"
+        },
+        {
+            label: "Mon compte",
+            target: "/mon-compte",
+            group: "me",
+            classes: upperMenuItemClass,
+            menu: "upper"
+        },
+        {
+            label: "Aide",
+            target: "/mentions-legales",
+            classes: upperMenuItemClass,
+            menu: "upper"
+        },
+        {
+            label: "Déconnexion",
+            target: "/deconnexion",
+            classes: upperMenuItemClass,
+            menu: "upper"
         }
     ]
 };
