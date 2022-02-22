@@ -175,6 +175,8 @@
                 <div class="w-1/2">
                     <Map
                         :display-searchbar="false"
+                        :displayAddressToggler="false"
+                        :displayPrinter="false"
                         :towns="[
                             {
                                 ...town,
