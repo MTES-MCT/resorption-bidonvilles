@@ -5,7 +5,12 @@ export default {
         dashboard: {
             shantytowns: {
                 filter: "my_shantytowns",
-                page: 1
+                display: "thumbnail",
+                page: 1,
+                mapSetup: {
+                    center: [46.7755829, 2.0497727],
+                    zoom: 6
+                }
             }
         }
     },
@@ -17,6 +22,13 @@ export default {
         },
         setDashboardShantytownsPage(state, page) {
             state.dashboard.shantytowns.page = page;
+        },
+        setDashboardShantytownsDisplay(state, display) {
+            state.dashboard.shantytowns.page = 1;
+            state.dashboard.shantytowns.display = display;
+        },
+        setDashboardShantytownsMapSetup(state, setup) {
+            state.dashboard.shantytowns.mapSetup = setup;
         }
     },
 
@@ -26,6 +38,13 @@ export default {
         },
         dashboardShantytownsCurrentPage(state) {
             return state.dashboard.shantytowns.page;
+        },
+
+        dashboardShantytownsDisplay(state) {
+            return state.dashboard.shantytowns.display;
+        },
+        DashboardShantytownsMapSetup(state) {
+            return state.dashboard.shantytowns.mapSetup;
         },
         dashboardMyShantytowns(state, getters, rootState) {
             const { user } = rootState.config.configuration;
