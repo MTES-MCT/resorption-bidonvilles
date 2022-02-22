@@ -1,39 +1,11 @@
 <!-- A renommer Navbar, ainsi que le répertoire, une fois toute référence à navbar (v1) supprimées -->
 <template>
     <nav class="container px-10 mx-auto bg-white my-4">
-        <div ref="menu" class="flex lg:flex-row-reverse justify-between">
-            <div class="hidden lg:flex space-x-4">
-                <div class="flex flex-row-reverse items-center">
-                    <!-- Navigation items - emphased menu items -->
-                    <div
-                        v-for="item in emphasedMenuItems.reverse().slice()"
-                        :key="item.target"
-                    >
-                        <DesktopMenuLinkItem
-                            :target="item.target"
-                            :label="item.label"
-                            :classes="item.classes"
-                            :group="item.group"
-                        ></DesktopMenuLinkItem>
-                    </div>
-                    <span>|</span>
-                    <!-- Navigation items - normal menu items -->
-                    <div
-                        class="flex items-center"
-                        v-for="item in primaryMenuItems.reverse().slice()"
-                        :key="item.target"
-                    >
-                        <DesktopMenuLinkItem
-                            :target="item.target"
-                            :label="item.label"
-                            :classes="item.classes"
-                            :group="item.group"
-                        ></DesktopMenuLinkItem>
-                    </div>
-                </div>
-            </div>
+        <div
+            class="flex lg:justify-items-start justify-between lg:py-6 lg:border-g300 lg:border-b-1"
+        >
             <!-- logos -->
-            <div class="flex flex-shrink-0 items-center lg:space-x-8 xl:ml-8">
+            <div class="flex flex-shrink-0 items-center xl:space-x-8">
                 <img
                     class="hidden xl:block h-20 mb-4 lg:mb-0"
                     src="./assets/logo-marianne.png"
@@ -44,6 +16,21 @@
                         src="./assets/logo-resorption-bidonvilles.png"
                     />
                 </router-link>
+            </div>
+            <div class="hidden lg:flex space-x-4">
+                <!-- Navigation items - upper menu items -->
+                <div
+                    class="flex flex-row items-center"
+                    v-for="item in upperMenuItems"
+                    :key="item.target"
+                >
+                    <DesktopMenuLinkItem
+                        :target="item.target"
+                        :label="item.label"
+                        :classes="item.classes"
+                        :group="item.group"
+                    ></DesktopMenuLinkItem>
+                </div>
             </div>
             <!-- Mobile button goes here -->
             <div class="lg:hidden flex items-center">
@@ -61,6 +48,23 @@
                         />
                     </svg>
                 </button>
+            </div>
+        </div>
+        <div class="flex lg:justify-items-start justify-between">
+            <div class="hidden lg:flex space-x-4">
+                <!-- Navigation items - lower menu items -->
+                <div
+                    class="flex flex-row items-center"
+                    v-for="item in lowerMenuItems"
+                    :key="item.target"
+                >
+                    <DesktopMenuLinkItem
+                        :target="item.target"
+                        :label="item.label"
+                        :classes="item.classes"
+                        :group="item.group"
+                    ></DesktopMenuLinkItem>
+                </div>
             </div>
         </div>
         <!-- mobile menu side panel -->
@@ -81,7 +85,7 @@ import {
     hasPermission,
     hasAcceptedCharte
 } from "#helpers/api/config";
-import ITEMS from "./menuItems";
+import menuItems from "./menuItems";
 
 export default {
     components: {
@@ -96,20 +100,20 @@ export default {
     computed: {
         items() {
             if (isLoggedIn() !== true) {
-                return ITEMS.anonymous;
+                return menuItems.anonymous;
             }
 
             if (isConfigLoaded() !== true || hasAcceptedCharte() !== true) {
-                return ITEMS.loading;
+                return menuItems.loading;
             }
 
-            return this.filterItems(ITEMS.loaded);
+            return this.filterItems(menuItems.loaded);
         },
-        primaryMenuItems() {
-            return this.filterMenuItems(this.items, "primary");
+        upperMenuItems() {
+            return this.filterMenuItems(this.items, "upper");
         },
-        emphasedMenuItems() {
-            return this.filterMenuItems(this.items, "emphased");
+        lowerMenuItems() {
+            return this.filterMenuItems(this.items, "lower");
         }
     },
     methods: {
