@@ -478,3 +478,14 @@ input[type="checkbox"]:checked::before {
     transition: transform 0.2s ease-out;
     transition: transform 0.2s ease-out, -webkit-transform 0.2s ease-out;
 }
+
+.leaflet-popup-content-wrapper {
+    padding: 0px !important;
+    border-width: 1px;
+    border-color: #BFBFE3;
+    .leaflet-popup-content {
+        margin-top: 0px;
+        margin-right: 19px;
+        margin-left: 19px;
+    }
+}

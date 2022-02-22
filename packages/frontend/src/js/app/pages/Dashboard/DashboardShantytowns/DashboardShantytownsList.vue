@@ -25,7 +25,10 @@
             Aucune donnée à afficher
         </p>
 
-        <section class="-ml-16 -mr-16 flex justify-between" v-else>
+        <section
+            class="-ml-16 -mr-16 flex justify-between"
+            v-else-if="display === 'thumbnail'"
+        >
             <div class="w-12 mr-4">
                 <PaginationButton
                     icon="arrow-left"
@@ -49,6 +52,18 @@
             </div>
         </section>
 
+        <section v-else-if="display === 'map'">
+            <Map
+                :display-searchbar="false"
+                :towns="rawShantytowns"
+                :default-view="mapSetup"
+                :displayPopupOnTownClick="true"
+                :displayAddressToggler="false"
+                :displayPrinter="false"
+            >
+            </Map>
+        </section>
+
         <footer
             class="mt-10 text-center"
             v-if="currentFilter !== 'my_shantytowns'"
@@ -64,13 +79,15 @@
 import { mapGetters } from "vuex";
 import ShantytownThumbnail from "../ShantytownThumbnail/ShantytownThumbnail";
 import PaginationButton from "./ui/PaginationButton";
+import Map from "#app/components/map/map.vue";
 
 const ITEMS_PER_PAGE = 6;
 
 export default {
     components: {
         ShantytownThumbnail,
-        PaginationButton
+        PaginationButton,
+        Map
     },
     async created() {
         if (!this.$store.state.towns.data.length) {
@@ -85,7 +102,14 @@ export default {
             myShantytowns: "dashboardMyShantytowns",
             rawShantytowns: "dashboardContent",
             pageContent: "dashboardPageContent",
+<<<<<<< HEAD
             currentPage: "dashboardShantytownsCurrentPage"
+=======
+            sort: "dashboardShantytownsSort",
+            display: "dashboardShantytownsDisplay",
+            currentPage: "dashboardShantytownsCurrentPage",
+            mapSetup: "DashboardShantytownsMapSetup"
+>>>>>>> 1819807b ((1350) POC TB Vue carto des sites)
         }),
         nbPages() {
             return Math.ceil(this.rawShantytowns.length / ITEMS_PER_PAGE);
