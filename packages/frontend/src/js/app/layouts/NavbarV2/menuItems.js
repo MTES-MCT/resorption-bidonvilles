@@ -1,94 +1,121 @@
-const primaryClass = "text-display-xs font-normal no-underline py-5 px-3";
-const emphasedClass = "text-display-xs no-underline py-5 px-3";
-const covidClass = "text-red700 font-bold uppercase px-4";
+const upperMenuItemClass =
+    "text-display-xs font-normal text-french-blue hover:text-french-blue hover:bg-gray-300 h-8 pt-2 pb-8 rounded-full hover:rounded-full py-5 px-3";
+const lowerMenuItemClass = "font-normal hover:bg-gray-300 py-5 px-3";
+const covidClass =
+    "hover:bg-gray-300 text-red700 font-bold uppercase py-5 px-3";
 
 export default {
     anonymous: [
         {
             label: "Connexion",
             target: "/connexion",
-            classes: primaryClass,
-            menu: "primary"
+            classes: upperMenuItemClass,
+            menu: "upper"
         },
         {
             label: "Demander un accès",
             target: "/contact",
-            classes: primaryClass,
-            menu: "primary"
+            classes: upperMenuItemClass,
+            menu: "upper"
         },
         {
             label: "Aide",
             target: "/conditions-d-utilisation",
-            classes: emphasedClass,
-            menu: "emphased"
+            classes: upperMenuItemClass,
+            menu: "upper"
         }
     ],
     loading: [
         {
             label: "Aide",
             target: "/conditions-d-utilisation",
-            classes: emphasedClass,
-            menu: "emphased"
+            classes: upperMenuItemClass,
+            menu: "upper"
         },
         {
             label: "Déconnexion",
             target: "/deconnexion",
-            classes: emphasedClass,
-            menu: "emphased"
+            classes: upperMenuItemClass,
+            menu: "upper"
         }
     ],
     loaded: [
         {
+            label: "Mon compte",
+            target: "/mon-compte",
+            group: "me",
+            classes: upperMenuItemClass,
+            menu: "upper"
+        },
+        {
+            label: "Aide",
+            target: "/mentions-legales",
+            classes: upperMenuItemClass,
+            menu: "upper"
+        },
+        {
+            label: "Déconnexion",
+            target: "/deconnexion",
+            classes: upperMenuItemClass,
+            menu: "upper"
+        },
+        {
+            label: "Accueil",
+            target: "/",
+            classes: lowerMenuItemClass,
+            menu: "lower"
+        },
+        {
             label: "Covid-19",
             target: "/covid-19",
             classes: covidClass,
-            menu: "primary"
+            menu: "lower"
+        },
+        {
+            label: "Carte",
+            target: "/cartographie",
+            classes: lowerMenuItemClass,
+            menu: "lower"
         },
         {
             label: "Sites",
             target: "/liste-des-sites",
             group: "townList",
-            classes: primaryClass,
-            menu: "primary"
+            classes: lowerMenuItemClass,
+            menu: "lower"
         },
         {
-            label: "Dispositifs",
+            label: "Actions",
             target: "/liste-des-dispositifs",
-            classes: primaryClass,
-            menu: "primary"
+            classes: lowerMenuItemClass,
+            menu: "lower"
         },
         {
-            label: "Annuaire",
-            target: "/annuaire",
-            group: "directory",
-            classes: primaryClass,
-            menu: "primary"
+            label: "Dernières activités",
+            target: "/activites",
+            classes: lowerMenuItemClass,
+            menu: "lower"
         },
         {
             label: "Statistiques",
             target: "/statistiques",
             group: "stats",
-            classes: primaryClass,
-            menu: "primary"
+            classes: lowerMenuItemClass,
+            menu: "lower"
         },
         {
-            label: "Mon compte",
-            target: "/mon-compte",
-            group: "me",
-            classes: emphasedClass,
-            menu: "emphased"
+            label: "Annuaire",
+            target: "/annuaire",
+            group: "directory",
+            classes: lowerMenuItemClass,
+            menu: "lower"
         },
-        // {
-        //     label: "Déconnexion",
-        //     target: "/deconnexion",
-        //     classes: emphasedClass,
-        //     menu: "emphased"
-        // },
         {
-            label: "Aide",
-            target: "/mentions-legales",
-            classes: emphasedClass,
-            menu: "emphased"
+            label: "Administration",
+            target: "/liste-des-utilisateurs",
+            group: "directory",
+            classes: lowerMenuItemClass,
+            menu: "lower"
         }
     ]
 };
