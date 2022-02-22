@@ -800,7 +800,7 @@ module.exports = (models) => {
                 },
                 updatedAt: {
                     title: 'Site mis à jour le',
-                    data: ({ updatedAt }) => (updatedAt ? tsToString(updatedAt, 'd/m/Y à h:i') : ''),
+                    data: ({ updatedAt }) => (updatedAt ? tsToString(updatedAt, 'd/m/Y') : ''),
                     width: COLUMN_WIDTHS.SMALL,
                 },
                 actors: {
