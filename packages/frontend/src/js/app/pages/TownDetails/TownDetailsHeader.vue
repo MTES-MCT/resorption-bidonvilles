@@ -42,8 +42,11 @@
             >
                 <Icon icon="comment" class="mr-2" />
                 <div>
-                    {{ this.town.comments.covid.length || 0 }} commentaire{{
-                        this.town.comments.covid.length > 1 ? "s" : ""
+                    {{ this.town.comments.covid.length || 0 }}
+                    {{
+                        this.town.comments.covid.length > 1
+                            ? "commentaires"
+                            : "commentaire"
                     }}
                     covid
                 </div>

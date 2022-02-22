@@ -120,8 +120,11 @@
             </div>
             <div class="bg-orange200 px-8 py-4 mt-4">
                 <div class="font-bold mb-4">
-                    {{ this.town.comments.covid.length }} commentaire{{
-                        this.town.comments.covid.length > 1 ? "s" : ""
+                    {{ this.town.comments.covid.length }}
+                    {{
+                        this.town.comments.covid.length > 1
+                            ? "commentaires"
+                            : "commentaire"
                     }}
                 </div>
                 <CommentBlock
