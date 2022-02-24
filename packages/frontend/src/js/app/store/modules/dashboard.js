@@ -1,5 +1,6 @@
 import getSince from "#app/utils/getSince";
-
+import formatStats from "#app/utils/formatStats";
+import { getDashboardStats } from "#helpers/api/dashboard";
 export default {
     namespaced: true,
 
@@ -16,11 +17,25 @@ export default {
             },
             activities: {
                 filter: "comment_creation"
+            },
+            globalStats: {
+                data: [],
+                error: null,
+                isLoading: false
             }
         }
     },
 
     mutations: {
+        setGlobalStats(state, stats) {
+            state.dashboard.globalStats.data = stats;
+        },
+        setGlobalStatsError(state, error) {
+            state.dashboard.globalStats.error = error;
+        },
+        setGlobalStatsLoading(state, value) {
+            state.dashboard.globalStats.isLoading = value;
+        },
         setDashboardShantytownsFilter(state, filter) {
             state.dashboard.shantytowns.page = 1;
             state.dashboard.shantytowns.filter = filter;
@@ -40,6 +55,15 @@ export default {
     },
 
     getters: {
+        dashboardGlobalStatsLoading: state => {
+            return state.dashboard.globalStats.loading;
+        },
+        dashboardGlobalStats(state) {
+            return state.dashboard.globalStats.data;
+        },
+        dashboardGlobalStatsError(state) {
+            return state.dashboard.globalStats.error;
+        },
         dashboardShantytownsFilter(state) {
             return state.dashboard.shantytowns.filter;
         },
@@ -150,6 +174,22 @@ export default {
 
                 return [...acc, activity];
             }, []);
+        }
+    },
+    actions: {
+        async fetchGlobalStats({ commit }) {
+            commit("setGlobalStatsLoading", true);
+            try {
+                const stats = await getDashboardStats();
+                commit("setGlobalStatsLoading", false);
+                commit("setGlobalStats", formatStats(stats));
+            } catch (error) {
+                commit("setGlobalStatsLoading", false);
+                commit(
+                    "setGlobalStatsError",
+                    (error && error.user_message) || "Une erreur est survenue"
+                );
+            }
         }
     }
 };
