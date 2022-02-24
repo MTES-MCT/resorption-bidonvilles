@@ -26,6 +26,7 @@ export default {
     data() {
         return {
             links: [
+                { id: "global_view", label: "Vue d'ensemble" },
                 { id: "sites", label: "Sites" },
                 { id: "activite", label: "Activité" }
             ]
