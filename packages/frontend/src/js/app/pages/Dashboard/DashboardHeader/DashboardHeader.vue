@@ -29,7 +29,10 @@ export default {
 
         return {
             user,
-            links: [{ id: "sites", label: "Sites" }]
+            links: [
+                { id: "sites", label: "Sites" },
+                { id: "global_view", label: "Vue d'ensemble" }
+            ]
         };
     },
 
