@@ -42,7 +42,6 @@
 </template>
 
 <script>
-import { getDashboardStats } from "#helpers/api/dashboard";
 import { hasPermission } from "#helpers/api/config";
 import { mapGetters } from "vuex";
 import StatCard from "./StatCard.vue";
@@ -61,11 +60,7 @@ export default {
         }
     },
     methods: {
-        hasPermission,
-        async load() {
-            const res = await getDashboardStats();
-            this.stats = res;
-        }
+        hasPermission
     },
     computed: {
         ...mapGetters({
