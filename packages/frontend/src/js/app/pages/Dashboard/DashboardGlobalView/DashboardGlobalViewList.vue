@@ -67,9 +67,9 @@ export default {
     },
     computed: {
         ...mapGetters({
-            error: "dashboardGlobalStatsError",
-            stats: "dashboardGlobalStats",
-            isLoading: "dashboardGlobalStatsLoading"
+            error: "dashboard/dashboardGlobalStatsError",
+            stats: "dashboard/dashboardGlobalStats",
+            isLoading: "dashboard/dashboardGlobalStatsLoading"
         }),
         currentDate() {
             const date = new Date();
