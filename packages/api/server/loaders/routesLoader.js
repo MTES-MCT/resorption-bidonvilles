@@ -372,6 +372,15 @@ module.exports = (app) => {
             return controller(req, res, next);
         },
     );
+    app.get(
+        '/exportplans',
+        middlewares.auth.authenticate,
+        (...args) => middlewares.auth.checkPermissions(['plan.export'], ...args),
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        controllers.plan.listExport,
+    );
+
 
     // towns
     app.get(
