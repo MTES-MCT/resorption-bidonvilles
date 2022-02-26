@@ -1,4 +1,5 @@
 const { trim } = require('validator');
+const JSONToCSV = require('json2csv');
 const { sequelize } = require('#db/models');
 const { addAttachments, removeAttachments } = require('#server/models/permissionModel')();
 
@@ -476,7 +477,7 @@ module.exports = models => ({
         } catch (error) {
             res.status(500).send({
                 error: {
-                    user_message: 'Une erreur est survenue lors de la récupération des données en base',
+                    user_message: '[list] Une erreur est survenue lors de la récupération des données en base',
                     developer_message: error.message,
                 },
             });
@@ -490,7 +491,7 @@ module.exports = models => ({
         } catch (error) {
             res.status(500).send({
                 error: {
-                    user_message: 'Une erreur est survenue lors de la récupération des données en base',
+                    user_message: '[find] Une erreur est survenue lors de la récupération des données en base',
                     developer_message: error.message,
                 },
             });
@@ -916,7 +917,7 @@ module.exports = models => ({
         } catch (error) {
             res.status(500).send({
                 error: {
-                    user_message: 'Une erreur est survenue lors de la récupération des données en base',
+                    user_message: '[update] Une erreur est survenue lors de la récupération des données en base',
                     developer_message: `Could not fetch plan #${req.params.id}`,
                 },
             });
@@ -1164,7 +1165,7 @@ module.exports = models => ({
         } catch (error) {
             res.status(500).send({
                 error: {
-                    user_message: 'Une erreur est survenue lors de la récupération des données en base',
+                    user_message: '[addState]Une erreur est survenue lors de la récupération des données en base',
                     developer_message: `Could not fetch plan #${req.params.id}`,
                 },
             });
@@ -1776,7 +1777,7 @@ module.exports = models => ({
         } catch (error) {
             res.status(500).send({
                 error: {
-                    user_message: 'Une erreur est survenue lors de la récupération des données en base',
+                    user_message: '[close] Une erreur est survenue lors de la récupération des données en base',
                     developer_message: `Could not fetch plan #${req.params.id}`,
                 },
             });
@@ -1958,5 +1959,22 @@ module.exports = models => ({
 
         return res.status(200).send({});
     },
+    async listExport(req, res) {
+        try {
+            const actions = await models.plan.listExport();
+            const csv = JSONToCSV.parse(actions);
 
+            // The frontend expect a JSON for every API calls, so we wrap the CSV in a json entry
+            res.status(200).send({
+                csv,
+            });
+        } catch (error) {
+            res.status(500).send({
+                error: {
+                    user_message: 'Une erreur est survenue lors de la récupération des actions',
+                    developer_message: error.message,
+                },
+            });
+        }
+    },
 });
