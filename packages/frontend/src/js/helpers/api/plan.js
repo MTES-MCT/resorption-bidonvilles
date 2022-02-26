@@ -63,3 +63,10 @@ export async function close(planId, data) {
         data
     });
 }
+
+/**
+ *
+ */
+export function exportPlans() {
+    return getApi("/exportplans");
+}
