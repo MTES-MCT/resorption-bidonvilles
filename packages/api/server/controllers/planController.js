@@ -2,6 +2,7 @@ const { trim } = require('validator');
 const JSONToCSV = require('json2csv');
 const { sequelize } = require('#db/models');
 const { addAttachments, removeAttachments } = require('#server/models/permissionModel')();
+const { listExport } = require('#server/models/planModel')();
 
 function sanitize(data) {
     const sanitizedData = {};
@@ -1961,10 +1962,10 @@ module.exports = models => ({
     },
     async listExport(req, res) {
         try {
-            const actions = await models.plan.listExport();
+            const actions = await listExport();
             const csv = JSONToCSV.parse(actions);
 
-            // The frontend expect a JSON for every API calls, so we wrap the CSV in a json entry
+            // The frontend expects a JSON for every API calls, so we wrap the CSV in a json entry
             res.status(200).send({
                 csv,
             });
