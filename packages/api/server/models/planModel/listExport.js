@@ -1,90 +1,71 @@
 const { sequelize } = require('#db/models');
 
 module.exports = async () => sequelize.query(
-    `SELECT
-            p.plan_id AS action_id,
-            p."name" AS action_desc,
-            TO_CHAR(p.started_at :: DATE, 'dd/mm/yyyy') AS action_date_debut,
-            TO_CHAR(p.closed_at :: DATE, 'dd/mm/yyyy') AS action_date_fermeture,
-            TO_CHAR(p.expected_to_end_at :: DATE, 'dd/mm/yyyy') AS action_date_fermeture_supposee,
-            p.created_by AS action_auteur_saisie_id,
-            INITCAP(uc.first_name) AS action_auteur_saisie_prenom,
-            UPPER(uc.last_name) AS action_auteur_saisie_nom,
-            TO_CHAR(p.created_at :: DATE, 'dd/mm/yyyy') AS action_saisie_date,
-            p.updated_by AS action_auteur_maj_id,
-            INITCAP(uu.first_name) AS action_auteur_maj_prenom,
-            UPPER(uu.last_name) AS action_auteur_maj_nom,
-            TO_CHAR(p.updated_at :: DATE, 'dd/mm/yyyy') AS action_maj_date,
-            pmu.managers AS pilotes,
-            pou.operators AS operateurs,
-            pt.topics,
-            TO_CHAR(ps.last_date_reference_indicators :: DATE, 'dd/mm/yyyy') AS date_reference_indicateurs,
-            TO_CHAR(ps.last_effective_date_indicators :: DATE, 'dd/mm/yyyy') AS date_saisie_effective_indicateurs
-    FROM 
-            plans2 p
-    LEFT JOIN
-            plan_departements pd ON pd.fk_plan = p.plan_id 
-    LEFT JOIN
-            (
-                SELECT
-                        p2.plan_id AS fk_plan,
-                        string_agg(t."name", E'\n') AS topics
-                FROM
-                        topics t
-                LEFT JOIN
-                        plan_topics pt ON pt.fk_topic = t.uid 
-                LEFT JOIN 
-                        plans2 p2 ON p2.plan_id = pt.fk_plan
-                GROUP BY
-                        p2.plan_id 
-            ) AS pt ON pt.fk_plan = p.plan_id 
-    LEFT JOIN
-            users uc ON uc.user_id = p.created_by 
-    LEFT JOIN
-            users uu ON uu.user_id = p.updated_by 
-    LEFT JOIN
-            (
-                SELECT
-                        pm.fk_plan,
-                        string_agg(CONCAT(INITCAP(pmu2.first_name), ' ', UPPER(pmu2.last_name)), E'\n') AS managers
-                FROM
-                        plan_managers pm
-                LEFT JOIN
-                        users pmu2 ON pmu2.user_id  = pm.fk_user
-                GROUP BY
-                        pm.fk_plan
-            ) AS pmu ON pmu.fk_plan = p.plan_id 
-    LEFT JOIN
-            (
-                SELECT
-                        po2.fk_plan,
-                        string_agg(CONCAT(INITCAP(pou2.first_name), ' ', UPPER(pou2.last_name)), E'\n') AS operators
-                FROM
-                        plan_operators po2
-                LEFT JOIN
-                        users pou2 ON pou2.user_id  = po2.fk_user
-                GROUP BY
-                        po2.fk_plan
-            ) AS pou ON pou.fk_plan = p.plan_id 
-    LEFT JOIN
-            (
-                SELECT 
-                        psi.fk_plan,
-                        psi.date AS last_date_reference_indicators,
-                        psi.created_at AS last_effective_date_indicators
-                FROM
-                        plan_states psi
-                WHERE
-                        psi.date = 
-                        (
-                            SELECT
-                                    MAX(psi2.date)
-                            FROM
-                                    plan_states psi2
-                            WHERE
-                                    psi2.fk_plan  = psi.fk_plan
-                        )
-            ) AS ps ON ps.fk_plan = p.plan_id ;`,
+    `WITH
+    grouped_topics AS (
+        SELECT
+            fk_plan,
+            string_agg(name, E'\n') AS topics
+        FROM plan_topics
+        LEFT JOIN topics ON plan_topics.fk_topic = topics.uid
+        GROUP BY plan_topics.fk_plan
+    ),
+    grouped_managers AS (
+        SELECT
+            fk_plan,
+            string_agg(CONCAT(INITCAP(first_name), ' ', UPPER(last_name)), E'\n') AS managers
+        FROM plan_managers
+        LEFT JOIN users ON users.user_id = plan_managers.fk_user
+        GROUP BY fk_plan
+    ),
+    grouped_operators AS (
+        SELECT
+            fk_plan,
+            string_agg(CONCAT(INITCAP(first_name), ' ', UPPER(last_name)), E'\n') AS operators
+        FROM plan_operators
+        LEFT JOIN users ON users.user_id  = plan_operators.fk_user
+        GROUP BY fk_plan
+    ),
+    last_plan_states AS (
+        SELECT
+            fk_plan,
+            last_date_reference_indicators,
+            last_effective_date_indicators
+        FROM (
+            SELECT 
+                fk_plan,
+                DATE AS last_date_reference_indicators,
+                created_at AS last_effective_date_indicators,
+                RANK() OVER(PARTITION BY fk_plan ORDER BY DATE DESC) AS "rank"
+            FROM plan_states
+        ) AS t
+        WHERE RANK = 1
+    )
+
+    SELECT
+        actions.plan_id AS "Identifiant",
+        actions."name" AS "Description",
+        TO_CHAR(actions.started_at::DATE, 'dd/mm/yyyy') AS "Date de début",
+        TO_CHAR(actions.expected_to_end_at::DATE, 'dd/mm/yyyy') AS "Date de fin prévue",
+        TO_CHAR(actions.closed_at::DATE, 'dd/mm/yyyy') AS "Date de fin effective",
+        actions.created_by AS "Saisie par (identifiant)",
+        UPPER(creators.last_name) || ' ' || INITCAP(creators.first_name) AS "Saisie par (nom)",
+        TO_CHAR(actions.created_at::DATE, 'dd/mm/yyyy') AS "Saisie le",
+        actions.updated_by AS "Dernière mise à jour par (identifiant)",
+        UPPER(updators.last_name) || ' ' || INITCAP(updators.first_name) AS "Dernière mise à jour par (nom)",
+        TO_CHAR(actions.updated_at::DATE, 'dd/mm/yyyy') AS "Dernière mise à jour le",
+        grouped_managers.managers AS "Pilotes",
+        grouped_operators.operators AS "Opérateurs",
+        topics.topics AS "Champs d'intervention",
+        TO_CHAR(last_plan_states.last_date_reference_indicators::DATE, 'dd/mm/yyyy') AS "Derniers indicateurs correspondant à la date du",
+        TO_CHAR(last_plan_states.last_effective_date_indicators::DATE, 'dd/mm/yyyy') AS "Derniers indicateurs saisis le"
+    FROM plans2 actions
+    LEFT JOIN users creators ON creators.user_id = actions.created_by
+    LEFT JOIN users updators ON updators.user_id = actions.updated_by
+    LEFT JOIN grouped_topics AS topics ON topics.fk_plan = actions.plan_id
+    LEFT JOIN grouped_managers ON grouped_managers.fk_plan = actions.plan_id
+    LEFT JOIN grouped_operators ON grouped_operators.fk_plan = actions.plan_id
+    LEFT JOIN last_plan_states ON last_plan_states.fk_plan = actions.plan_id`,
     {
         type: sequelize.QueryTypes.SELECT,
     },
