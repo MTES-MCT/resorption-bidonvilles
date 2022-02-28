@@ -25,6 +25,7 @@
                 variant="primary"
                 class="mr-6"
                 @click="exportPlans"
+                :loading="exportIsPending"
                 >Exporter</Button
             >
         </div>
@@ -43,6 +44,12 @@ export default {
             return hasPermission(...args);
         },
         async exportPlans() {
+            if (this.exportIsPending === true) {
+                return;
+            }
+
+            this.exportIsPending = true;
+
             try {
                 const { csv } = await exportPlans();
                 const hiddenElement = document.createElement("a");
@@ -59,7 +66,15 @@ export default {
                     text: "Une erreur est survenue durant l'export des actions"
                 });
             }
+
+            this.exportIsPending = false;
         }
+    },
+
+    data() {
+        return {
+            exportIsPending: false
+        };
     },
 
     computed: {
