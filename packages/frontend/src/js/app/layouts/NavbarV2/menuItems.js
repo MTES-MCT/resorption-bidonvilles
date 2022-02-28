@@ -1,8 +1,7 @@
 const upperMenuItemClass =
     "text-display-xs font-normal text-french-blue hover:text-french-blue hover:bg-gray-300 h-8 pt-2 pb-8 rounded-full hover:rounded-full py-5 px-3";
-const lowerMenuItemClass = "font-normal hover:bg-gray-300 py-5 px-3";
-const covidClass =
-    "hover:bg-gray-300 text-red700 font-bold uppercase py-5 px-3";
+const lowerMenuItemClass = "font-normal hover:bg-gray-300 py-2 px-3";
+const covidClass = "hover:bg-gray-300 text-red700 font-bold uppercase p-2";
 
 export default {
     anonymous: [
@@ -53,12 +52,6 @@ export default {
             menu: "lower"
         },
         {
-            label: "Carte",
-            target: "/cartographie",
-            classes: lowerMenuItemClass,
-            menu: "lower"
-        },
-        {
             label: "Sites",
             target: "/liste-des-sites",
             group: "townList",
@@ -72,6 +65,19 @@ export default {
             menu: "lower"
         },
         {
+            label: "Annuaire",
+            target: "/annuaire",
+            group: "directory",
+            classes: lowerMenuItemClass,
+            menu: "lower"
+        },
+        {
+            label: "Carte",
+            target: "/cartographie",
+            classes: lowerMenuItemClass,
+            menu: "lower"
+        },
+        {
             label: "Dernières activités",
             target: "/activites",
             classes: lowerMenuItemClass,
@@ -81,13 +87,6 @@ export default {
             label: "Statistiques",
             target: "/statistiques",
             group: "stats",
-            classes: lowerMenuItemClass,
-            menu: "lower"
-        },
-        {
-            label: "Annuaire",
-            target: "/annuaire",
-            group: "directory",
             classes: lowerMenuItemClass,
             menu: "lower"
         },
