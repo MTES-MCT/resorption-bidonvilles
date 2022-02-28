@@ -6,7 +6,6 @@ export default {
         dashboard: {
             shantytowns: {
                 filter: "my_shantytowns",
-                sort: "updatedAt",
                 page: 1
             }
         }
@@ -19,10 +18,6 @@ export default {
         },
         setDashboardShantytownsPage(state, page) {
             state.dashboard.shantytowns.page = page;
-        },
-        setDashboardShantytownsSort(state, sort) {
-            state.dashboard.shantytowns.page = 1;
-            state.dashboard.shantytowns.sort = sort;
         }
     },
 
@@ -32,9 +27,6 @@ export default {
         },
         dashboardShantytownsCurrentPage(state) {
             return state.dashboard.shantytowns.page;
-        },
-        dashboardShantytownsSort(state) {
-            return state.dashboard.shantytowns.sort;
         },
         dashboardMyShantytowns(state, getters, rootState) {
             const { user } = getConfig();
