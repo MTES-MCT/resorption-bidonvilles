@@ -1,18 +1,18 @@
 <!-- A renommer Navbar, ainsi que le répertoire, une fois toute référence à navbar (v1) supprimées -->
 <template>
-    <nav class="container px-10 mx-auto bg-white my-4">
+    <nav class="container px-10 mx-auto bg-white my-1">
         <div
             class="flex lg:justify-items-start justify-between lg:py-6 lg:border-g300 lg:border-b-1"
         >
             <!-- logos -->
             <div class="flex flex-shrink-0 items-center xl:space-x-8">
                 <img
-                    class="hidden xl:block h-20 mb-4 lg:mb-0"
+                    class="hidden xl:block h-16 mb-4 lg:mb-0"
                     src="./assets/logo-marianne.png"
                 />
                 <router-link to="/">
                     <img
-                        class="h-16"
+                        class="h-12"
                         src="./assets/logo-resorption-bidonvilles.png"
                     />
                 </router-link>
@@ -50,7 +50,7 @@
                 </button>
             </div>
         </div>
-        <div class="flex lg:justify-items-start justify-between">
+        <div class="flex lg:justify-items-start -mt-4 -mb-5">
             <div class="hidden lg:flex space-x-4">
                 <!-- Navigation items - lower menu items -->
                 <div
