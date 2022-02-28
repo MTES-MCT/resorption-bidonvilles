@@ -42,7 +42,7 @@ export default {
                 { type: "separator", label: "", id: "separator_1" },
                 {
                     type: "link",
-                    label: "Sites nouvellement déclarés",
+                    label: "Nouveaux sites déclarés",
                     id: "new_shantytowns"
                 },
                 { type: "separator", label: "", id: "separator_2" },
