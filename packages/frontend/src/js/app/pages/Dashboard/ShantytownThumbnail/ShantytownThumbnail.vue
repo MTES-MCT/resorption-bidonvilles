@@ -33,7 +33,7 @@
             </p>
         </header>
 
-        <main class="mb-12">
+        <main class="mb-4">
             <!-- population -->
             <TownPopulation
                 v-if="
