@@ -85,33 +85,13 @@ export default {
             myShantytowns: "dashboardMyShantytowns",
             rawShantytowns: "dashboardContent",
             pageContent: "dashboardPageContent",
-            sort: "dashboardShantytownsSort",
             currentPage: "dashboardShantytownsCurrentPage"
         }),
         nbPages() {
             return Math.ceil(this.rawShantytowns.length / ITEMS_PER_PAGE);
         },
-        sortFn() {
-            if (this.sort === "cityName") {
-                return (a, b) => {
-                    if (a.city.name < b.city.name) {
-                        return -1;
-                    }
-                    if (a.city.name > b.city.name) {
-                        return 1;
-                    }
-                    return 0;
-                };
-            }
-            return (a, b) => {
-                return b[this.sort] - a[this.sort];
-            };
-        },
-        orderedShantytowns() {
-            return [...this.rawShantytowns].sort(this.sortFn);
-        },
         pageContent() {
-            return this.orderedShantytowns.slice(
+            return this.rawShantytowns.slice(
                 (this.currentPage - 1) * ITEMS_PER_PAGE,
                 this.currentPage * ITEMS_PER_PAGE
             );
