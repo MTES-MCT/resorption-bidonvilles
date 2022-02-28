@@ -2,31 +2,20 @@ const nodeFetch = require('node-fetch');
 
 module.exports = () => ({
     async findAll(req, res, next) {
-        class HTTPResponseError extends Error {
-            constructor(response, ...args) {
-                super(`HTTP Error Response: ${response.status} ${response.statusText}`, ...args);
-                this.response = response;
-            }
-        }
-
-        const checkStatus = (response) => {
-            if (response.ok) {
-                // response.status >= 200 && response.status < 300
-                return response;
-            }
-            throw new HTTPResponseError(response);
-        };
-
         const authKey = process.env.RB_API_SOLIGUIDE_KEY;
         try {
             if (!authKey) {
                 return res.status(200).send([]);
             }
-            const url = 'https://api.soliguide.fr/new-search';
-            const body = { location: { geoType: 'pays', geoValue: 'France' }, categorie: 601, options: { limit: 1000 } };
-            const response = await nodeFetch(url, {
+
+            // docs: https://solinum.gitbook.io/soliguide-api/detail-de-lapi/lieu-et-services
+            const response = await nodeFetch('https://api.soliguide.fr/new-search', {
                 method: 'POST',
-                body: JSON.stringify(body),
+                body: JSON.stringify({
+                    location: { geoType: 'pays', geoValue: 'France' },
+                    categorie: 601,
+                    options: { limit: 1000 },
+                }),
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: authKey,
@@ -34,15 +23,13 @@ module.exports = () => ({
                 json: true,
             });
 
-            try {
-                checkStatus(response);
-                const { places } = await response.json();
-                return res.status(200).send(places);
-            } catch (error) {
-                const errorBody = await error.response.text();
-                res.status(500).send({ error_message: errorBody });
+            if (!response.ok) {
+                res.status(500).send({ user_message: 'Une erreur inconnue est survenue' });
+                return next(new Error(`Call soliguide échoué : ${response.status} ${response.statusText}`));
             }
-            return next({ user_message: 'Erreur inconue !!!' });
+
+            const { places } = await response.json();
+            return res.status(200).send(places || []);
         } catch (error) {
             res.status(500).send({ user_message: 'Une erreur est survenue lors de la récupération des points de distribution alimentaire' });
             return next(error);
