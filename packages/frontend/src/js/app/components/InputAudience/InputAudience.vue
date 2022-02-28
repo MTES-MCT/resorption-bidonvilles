@@ -83,11 +83,11 @@ export default {
                 },
                 {
                     label: "Exclusion du dispositif",
-                    type: "out_abandoned"
+                    type: "out_excluded"
                 },
                 {
                     label: "Abandon / départ volontaire",
-                    type: "out_excluded"
+                    type: "out_abandoned"
                 }
             ];
 

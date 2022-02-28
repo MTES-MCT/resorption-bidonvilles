@@ -3,10 +3,14 @@ const path = require('path');
 
 const createShantytownComment = require('./shantytownCommentController/create');
 const exportShantytownComment = require('./shantytownCommentController/export');
+const getWeeklyActiveUsers = require('./matomoController/getWeeklyActiveUsers');
 
 module.exports = (models) => {
     const basename = path.basename(module.filename);
     const controllers = {
+        matomo: {
+            getWeeklyActiveUsers,
+        },
         shantytownComment: {
             create: createShantytownComment,
             export: exportShantytownComment,
