@@ -477,7 +477,7 @@ module.exports = models => ({
         } catch (error) {
             res.status(500).send({
                 error: {
-                    user_message: '[list] Une erreur est survenue lors de la récupération des données en base',
+                    user_message: 'Une erreur est survenue lors de la récupération des données en base',
                     developer_message: error.message,
                 },
             });
@@ -491,7 +491,7 @@ module.exports = models => ({
         } catch (error) {
             res.status(500).send({
                 error: {
-                    user_message: '[find] Une erreur est survenue lors de la récupération des données en base',
+                    user_message: 'Une erreur est survenue lors de la récupération des données en base',
                     developer_message: error.message,
                 },
             });
@@ -917,7 +917,7 @@ module.exports = models => ({
         } catch (error) {
             res.status(500).send({
                 error: {
-                    user_message: '[update] Une erreur est survenue lors de la récupération des données en base',
+                    user_message: 'Une erreur est survenue lors de la récupération des données en base',
                     developer_message: `Could not fetch plan #${req.params.id}`,
                 },
             });
@@ -1165,7 +1165,7 @@ module.exports = models => ({
         } catch (error) {
             res.status(500).send({
                 error: {
-                    user_message: '[addState]Une erreur est survenue lors de la récupération des données en base',
+                    user_message: 'Une erreur est survenue lors de la récupération des données en base',
                     developer_message: `Could not fetch plan #${req.params.id}`,
                 },
             });
@@ -1777,7 +1777,7 @@ module.exports = models => ({
         } catch (error) {
             res.status(500).send({
                 error: {
-                    user_message: '[close] Une erreur est survenue lors de la récupération des données en base',
+                    user_message: 'Une erreur est survenue lors de la récupération des données en base',
                     developer_message: `Could not fetch plan #${req.params.id}`,
                 },
             });
