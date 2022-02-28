@@ -298,6 +298,14 @@ module.exports = (app) => {
         controllers.plan.list,
     );
     app.get(
+        '/plans/export',
+        middlewares.auth.authenticate,
+        (...args) => middlewares.auth.checkPermissions(['plan.export'], ...args),
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        controllers.plan.listExport,
+    );
+    app.get(
         '/plans/:id',
         middlewares.auth.authenticate,
         (...args) => middlewares.auth.checkPermissions(['plan.read'], ...args),
