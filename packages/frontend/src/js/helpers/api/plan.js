@@ -68,5 +68,5 @@ export async function close(planId, data) {
  *
  */
 export function exportPlans() {
-    return getApi("/exportplans");
+    return getApi("/plans/export");
 }
