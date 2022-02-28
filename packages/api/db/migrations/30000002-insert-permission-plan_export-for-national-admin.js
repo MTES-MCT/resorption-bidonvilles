@@ -17,13 +17,13 @@ module.exports = {
 
     down: queryInterface => queryInterface.sequelize.transaction(
         transaction => queryInterface.sequelize.query(
-            'DELETE FROM features WHERE name = \'access\' AND fk_entity = \'contact_form_referral\'',
+            'DELETE FROM role_permissions WHERE fk_role_admin = \'national_admin\' AND fk_feature = \'export\' AND fk_entity = \'plan\'',
             {
                 transaction,
             },
         )
             .then(() => queryInterface.sequelize.query(
-                'DELETE FROM role_permissions WHERE fk_role_admin = \'national_admin\' AND fk_feature = \'export\' AND fk_entity = \'plan\'',
+                'DELETE FROM features WHERE name = \'export\' AND fk_entity = \'plan\'',
                 {
                     transaction,
                 },
