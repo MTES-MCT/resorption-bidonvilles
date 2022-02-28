@@ -1,4 +1,5 @@
 const nodeFetch = require('node-fetch');
+const { matomo } = require('#server/config');
 
 module.exports = async (req, res) => {
     const getLastSunday = (d) => {
@@ -18,9 +19,7 @@ module.exports = async (req, res) => {
             'superuser:false',
         )}`;
 
-        const MATOMO_AUTH_TOKEN = process.env.VUE_APP_MATOMO_AUTH_TOKEN;
-
-        const url = `https://stats.data.gouv.fr/index.php?module=API&method=VisitsSummary.getUniqueVisitors&idSite=86&period=week&date=${date}&format=JSON&${segment}&token_auth=${MATOMO_AUTH_TOKEN}`;
+        const url = `https://stats.data.gouv.fr/index.php?module=API&method=VisitsSummary.getUniqueVisitors&idSite=86&period=week&date=${encodeURIComponent(date)}&format=JSON&${segment}&token_auth=${encodeURIComponent(matomo.token)}`;
         const response = await nodeFetch(url);
 
         const result = await response.json();
