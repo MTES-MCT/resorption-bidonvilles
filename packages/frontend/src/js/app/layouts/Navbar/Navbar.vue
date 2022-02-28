@@ -7,12 +7,12 @@
             <!-- logos -->
             <div class="flex flex-shrink-0 items-center xl:space-x-8">
                 <img
-                    class="hidden xl:block h-16 mb-4 lg:mb-0"
-                    src="./assets/logo-marianne.png"
+                    class="hidden xl:block h-20 mb-4 lg:mb-0"
+                    src="./assets/marque-etat.png"
                 />
                 <router-link to="/">
                     <img
-                        class="h-12"
+                        class="hidden xl:block h-16"
                         src="./assets/logo-resorption-bidonvilles.png"
                     />
                 </router-link>
