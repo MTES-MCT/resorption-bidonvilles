@@ -1973,7 +1973,6 @@ module.exports = models => ({
             res.status(500).send({
                 error: {
                     user_message: 'Une erreur est survenue lors de la récupération des actions',
-                    developer_message: error.message,
                 },
             });
         }
