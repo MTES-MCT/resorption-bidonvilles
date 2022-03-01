@@ -340,6 +340,12 @@
                         :key="shantytown.id"
                         :shantytown="shantytown"
                         :hasJusticePermission="hasJusticePermission"
+                        :hasUpdateShantytownPermission="
+                            hasLocalizedPermission(
+                                'shantytown.update',
+                                shantytown
+                            )
+                        "
                         class="mb-6"
                     />
                     <div
@@ -385,7 +391,8 @@ import TownsListFilters from "./TownsListFilters/TownsListFilters";
 import {
     get as getConfig,
     getPermission,
-    hasPermission
+    hasPermission,
+    hasLocalizedPermission
 } from "#helpers/api/config";
 import { filterShantytowns } from "./filterShantytowns";
 import Export from "#app/components/export2/Export.vue";
@@ -494,6 +501,7 @@ export default {
         }
     },
     methods: {
+        hasLocalizedPermission,
         refreshActivities() {
             this.getActivities(
                 this.filters.location !== null
