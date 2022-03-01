@@ -156,6 +156,34 @@ export function hasPermission(permissionName) {
 }
 
 /**
+ * Checks if the current user has a specific permission on a specific shantytown
+ *
+ * @param {String} permission
+ * @param {Object} shantytown
+ *
+ * @returns {boolean}
+ */
+export function hasLocalizedPermission(permissionName, town) {
+    const permission = getPermission(permissionName);
+    if (permission === null) {
+        return false;
+    }
+
+    if (permission.allow_all) {
+        return true;
+    }
+
+    return (
+        permission.allowed_on.regions.includes(town.region.code) ||
+        permission.allowed_on.departements.includes(town.departement.code) ||
+        permission.allowed_on.epci.includes(town.epci.code) ||
+        permission.allowed_on.cities.includes(town.city.code) ||
+        permission.allowed_on.cities.includes(town.city.main) ||
+        permission.allowed_on.shantytowns.includes(town.id)
+    );
+}
+
+/**
  * Marks a changelog as read
  *
  * @param {Number} version The latest version read by the user
