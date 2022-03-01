@@ -3,13 +3,17 @@ module.exports = stats => {
         {
             ...stats.population,
             icon: "male",
-            label: `personnes sur ${stats.openShantytowns.figures[0]} sites`,
+            label: "personnes sur",
+            label_secondary: "sites",
+            figure_secondary: stats.openShantytowns.figures[0],
             color: stats.population.evolution >= 0 ? "red" : "green"
         },
         {
             ...stats.minors,
             icon: "child",
-            label: `enfants dont ${stats.minorsInSchool.figures[0]} scolarisés`,
+            label: `enfants dont`,
+            label_secondary: "scolarisés",
+            figure_secondary: stats.minorsInSchool.figures[0],
             color: stats.minors.evolution >= 0 ? "red" : "green"
         },
         {
