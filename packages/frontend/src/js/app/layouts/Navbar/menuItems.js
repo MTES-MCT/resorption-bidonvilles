@@ -19,7 +19,7 @@ export default {
         },
         {
             label: "Aide",
-            target: "/conditions-d-utilisation",
+            target: "/mentions-legales",
             classes: upperMenuItemClass,
             menu: "upper"
         }
@@ -27,7 +27,7 @@ export default {
     loading: [
         {
             label: "Aide",
-            target: "/conditions-d-utilisation",
+            target: "/mentions-legales",
             classes: upperMenuItemClass,
             menu: "upper"
         },
