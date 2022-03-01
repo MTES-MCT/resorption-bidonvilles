@@ -11,7 +11,7 @@ const changelog = {
         },
         {
             title: 'Partagez vos actions anti-Covid dans la rubrique “Commentaires Covid-19” d’un site !',
-            description: '<p>Simplifiez vos remontées d’information en utilisant la plateforme. Partager directement à tous les acteurs les actions que vous menez contre le Covid-19 en utilisant la rubrique “Commentaires Covid-19” du site où vous intervenez. Exportez les données grâce à “Exporter” et en filtrant sur “Commentaires Covid-19”.</p>',
+            description: '<p>Simplifiez vos remontées d’information en utilisant la plateforme. Partagez directement à tous les acteurs les actions que vous menez contre le Covid-19 en utilisant la rubrique “Commentaires Covid-19” du site où vous intervenez. Exportez les données grâce à “Exporter” et en filtrant sur “Commentaires Covid-19”.</p>',
             image: `${backUrl}/assets/changelog/1.19.0/commentaires-covid.png`,
         },
     ],
