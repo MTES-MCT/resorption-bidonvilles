@@ -1,5 +1,5 @@
 <template>
-    <article>
+    <a :href="`/site/${this.shantytown.id}`">
         <header>
             <Tag display="inline-block" class="mb-3" :variant="pinVariant">
                 {{ formatLastUpdatedAt(shantytown) }}
@@ -46,37 +46,40 @@
             <!-- conditions de vie -->
             <ul v-if="stableConditions.length > 0" class="mt-4">
                 <li v-for="(condition, index) in stableConditions" :key="index">
-                    <span class="text-lg align-middle text-green"
-                        ><Icon icon="check-circle" class="mr-1"
+                    <span
+                        class="inline-block text-xs rounded-full border-2 border-green500 text-green500 mr-1 mb-1"
+                        style="padding: 0.2em"
+                        ><Icon icon="check"
                     /></span>
                     {{ condition }}
                 </li>
             </ul>
-            <p v-else class="mt-4">
-                <span class="text-lg align-middle text-red"
-                    ><Icon icon="times-circle" class="mr-1"
+            <p v-else class="mt-4 text-red">
+                <span class="text-xl align-middle"
+                    ><Icon icon="times" class="mr-1"
                 /></span>
                 Urgence à sécuriser les conditions de vie
             </p>
             <!-- journal du site -->
             <p v-if="shantytown.comments.regular.length > 0" class="mt-6">
-                <a
-                    :href="`/site/${shantytown.id}#newComment`"
-                    class="text-info underline font-bold hover:no-underline"
-                    >{{ shantytown.comments.regular.length }} message{{
-                        shantytown.comments.regular.length !== 1 ? "s" : ""
-                    }}
+                <a :href="`/site/${shantytown.id}#newComment`">
+                    <span
+                        class="text-info underline font-bold hover:no-underline"
+                        >{{ shantytown.comments.regular.length }} message{{
+                            shantytown.comments.regular.length !== 1 ? "s" : ""
+                        }}
+                    </span>
                 </a>
             </p>
         </main>
         <footer class="mt-5">
-            <a
-                :href="`/site/${this.shantytown.id}`"
-                class="font-bold text-primary hover:underline"
-                >Voir la fiche du site <Icon icon="arrow-right"
-            /></a>
+            <a :href="`/site/${this.shantytown.id}`">
+                <span class="font-bold text-primary hover:underline">
+                    Voir la fiche du site <Icon icon="arrow-right" />
+                </span>
+            </a>
         </footer>
-    </article>
+    </a>
 </template>
 
 <script>
