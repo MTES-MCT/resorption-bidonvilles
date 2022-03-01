@@ -55,8 +55,6 @@ img {
     border-radius: 2px;
   }
 
-
-
 .circle {
     border-color: rgba(181, 226, 140, 0.6);
     background-color: rgba(158, 199, 134, 0.8);
@@ -480,12 +478,28 @@ input[type="checkbox"]:checked::before {
 }
 
 .leaflet-popup-content-wrapper {
+    font-family: Marianne;
     padding: 0px !important;
+    // box-shadow: none !important;
+    border-radius: 0 !important;
     border-width: 1px;
     border-color: #BFBFE3;
+    &:hover {
+        cursor: pointer;
+        background-color: #E5E5F4;
+    }
     .leaflet-popup-content {
         margin-top: 0px;
         margin-right: 19px;
         margin-left: 19px;
     }
+
 }
+
+.leaflet-container a {
+    color: #000 !important;
+    text-decoration: none !important;
+}
+
+
+

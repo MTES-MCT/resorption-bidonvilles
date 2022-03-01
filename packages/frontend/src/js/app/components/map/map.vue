@@ -69,7 +69,7 @@ import departements from "#src/geojson/departements.json";
 import regions from "#src/geojson/regions.json";
 import { formatLivingConditions } from "#app/pages/TownDetails/formatLivingConditions";
 
-const newPopup = Vue.extend(ShantytownPopupVue);
+const popup = Vue.extend(ShantytownPopupVue);
 const DEFAULT_VIEW = [46.7755829, 2.0497727];
 const POI_ZOOM_LEVEL = 13;
 const REGION_MAX_ZOOM_LEVEL = 7;
@@ -900,7 +900,7 @@ export default {
                 })
             });
             if (this.displayPopupOnTownClick) {
-                const component = new newPopup({
+                const component = new popup({
                     propsData: { shantytown: town }
                 }).$mount();
                 marker.bindPopup(component.$el);
