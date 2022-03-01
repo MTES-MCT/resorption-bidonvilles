@@ -181,8 +181,8 @@ export default {
             commit("setGlobalStatsLoading", true);
             try {
                 const stats = await getDashboardStats();
-                commit("setGlobalStatsLoading", false);
                 commit("setGlobalStats", formatStats(stats));
+                commit("setGlobalStatsLoading", false);
             } catch (error) {
                 commit("setGlobalStatsLoading", false);
                 commit(

@@ -86,7 +86,8 @@ import {
     faBullseye,
     faSquare,
     faBars,
-    faChild
+    faChild,
+    faArrowAltCircleRight
 } from "@fortawesome/free-solid-svg-icons";
 library.add(faChalkboardTeacher);
 library.add(faFlag);
@@ -173,3 +174,4 @@ library.add(faBullseye);
 library.add(faSquare);
 library.add(faBars);
 library.add(faChild);
+library.add(faArrowAltCircleRight);

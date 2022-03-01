@@ -1,5 +1,5 @@
 <template>
-    <p v-if="isLoading"><Spinner /></p>
+    <p v-if="statLoading"><Spinner /></p>
 
     <p v-else-if="error" class="text-red">
         <Icon icon="times-circle" />
@@ -69,7 +69,7 @@ export default {
         ...mapGetters({
             error: "dashboard/dashboardGlobalStatsError",
             stats: "dashboard/dashboardGlobalStats",
-            isLoading: "dashboard/dashboardGlobalStatsLoading"
+            statLoading: "dashboard/dashboardGlobalStatsLoading"
         }),
         currentDate() {
             const date = new Date();

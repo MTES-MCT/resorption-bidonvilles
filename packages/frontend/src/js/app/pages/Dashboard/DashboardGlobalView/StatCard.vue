@@ -1,17 +1,25 @@
 <template>
     <div
-        class="border border-cardBorder bg-blue100 w-56 h-32 py-4 ml-5 statCardBorder"
+        class="border border-cardBorder bg-blue100 w-56 h-40 py-4 ml-5 statCardBorder"
     >
         <div class="flex flex-col text-center">
             <div class="text-primary text-xl mb-4">
-                <Icon :icon="icon" />
+                <Icon v-if="icon === 'male'" class="fa-lg" :icon="icon" />
+                <Icon v-else :icon="icon" />
                 <div class="inline-block font-bold ml-4">
                     <span>
-                        {{ formatedStat }}
+                        {{ formatStat(cardStats.figures[0]) }}
                     </span>
                 </div>
             </div>
             <span>{{ cardStats.label }} </span>
+            <div v-if="cardStats.figure_secondary">
+                <span class="text-primary font-bold ml-4">
+                    {{ formatStat(cardStats.figure_secondary) }}
+                </span>
+                <br />
+                {{ cardStats.label_secondary }}
+            </div>
         </div>
     </div>
 </template>
@@ -32,11 +40,9 @@ export default {
             isEvolutionPositive: this.cardStats.evolution >= 0
         };
     },
-    computed: {
-        formatedStat() {
-            return new Intl.NumberFormat("fr-FR").format(
-                this.cardStats.figures[0]
-            );
+    methods: {
+        formatStat(number) {
+            return new Intl.NumberFormat("fr-FR").format(number);
         }
     }
 };
