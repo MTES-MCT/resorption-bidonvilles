@@ -49,7 +49,7 @@
                 </button>
             </div>
         </div>
-        <div class="px-10 hidden lg:flex space-x-4 -mt-4 -mb-5">
+        <div class="px-10 hidden lg:flex space-x-4">
             <!-- Navigation items - lower menu items -->
             <div
                 class="flex flex-row items-center"
