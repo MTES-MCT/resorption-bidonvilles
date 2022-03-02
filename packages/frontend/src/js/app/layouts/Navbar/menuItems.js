@@ -1,7 +1,7 @@
 const upperMenuItemClass =
     "text-display-xs font-normal text-french-blue hover:text-french-blue hover:bg-gray-300 h-8 pt-2 pb-8 rounded-full hover:rounded-full py-5 px-3";
-const lowerMenuItemClass = "font-normal hover:bg-gray-300 py-2 px-3";
-const covidClass = "hover:bg-gray-300 text-red700 font-bold uppercase p-2";
+const lowerMenuItemClass = "font-normal hover:bg-gray-300 px-3";
+const covidClass = "hover:bg-gray-300 text-red700 font-bold uppercase";
 
 export default {
     anonymous: [
