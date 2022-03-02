@@ -9,6 +9,20 @@ module.exports = {
         purgeLayersByDefault: true
     },
     theme: {
+        borderWidth: {
+            default: "1px",
+            "0": "0",
+            "1": "1px",
+            "2": "2px",
+            "3": "3px",
+            "4": "4px",
+            "6": "6px",
+            "8": "8px",
+            "10": "10px",
+            "12": "12px",
+            "14": "14px",
+            "16": "16px"
+        },
         fontFamily: {
             body: ["Marianne", "arial", "sans-serif"]
         },
@@ -137,6 +151,7 @@ module.exports = {
                 green: "#169B62 ",
                 red: "#D63626",
                 cardBorder: "rgba(0,0,145,0.2)",
+                "french-blue": "#000091",
 
                 // Deprecated values : TO DELETE
                 inputHover: "#D9D9E6",
