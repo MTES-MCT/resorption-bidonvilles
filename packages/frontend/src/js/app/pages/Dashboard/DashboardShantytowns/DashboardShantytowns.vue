@@ -2,7 +2,7 @@
     <DashboardSection title="Sites" id="sites">
         <template slot="header_left">
             <DashboardShantytownsFilters />
-            <TabList :tabs="tabs" v-model="currentTab" />
+            <TabList :tabs="tabs" :value="display" @input="changeDisplay" />
         </template>
 
         <template slot="body">
@@ -16,6 +16,7 @@ import TabList from "#app/components/TabList/TabList.vue";
 import DashboardSection from "../DashboardSection";
 import DashboardShantytownsFilters from "./DashboardShantytownsFilters";
 import DashboardShantytownsList from "./DashboardShantytownsList";
+import { mapGetters } from "vuex";
 
 export default {
     components: {
@@ -29,17 +30,18 @@ export default {
             tabs: [
                 { id: "thumbnail", label: "Vignettes" },
                 { id: "map", label: "Carte" }
-            ],
-            currentTab: "thumbnail"
+            ]
         };
     },
-    watch: {
-        currentTab() {
-            this.$store.commit(
-                "setDashboardShantytownsDisplay",
-                this.currentTab
-            );
+    methods: {
+        changeDisplay(id) {
+            this.$store.commit("setDashboardShantytownsDisplay", id);
         }
+    },
+    computed: {
+        ...mapGetters({
+            display: "dashboardShantytownsDisplay"
+        })
     }
 };
 </script>
