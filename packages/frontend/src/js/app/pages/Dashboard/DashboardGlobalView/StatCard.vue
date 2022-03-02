@@ -1,9 +1,9 @@
 <template>
     <div
-        class="border border-cardBorder bg-blue100 w-56 h-40 py-4 ml-5 statCardBorder"
+        class="border border-cardBorder bg-blue100 w-56 h-32 py-4 ml-5 statCardBorder"
     >
         <div class="flex flex-col text-center">
-            <div class="text-primary text-xl mb-4">
+            <div class="text-primary text-xl mb-2">
                 <Icon v-if="icon === 'male'" class="fa-lg" :icon="icon" />
                 <Icon v-else :icon="icon" />
                 <div class="inline-block font-bold ml-4">
@@ -14,11 +14,11 @@
             </div>
             <span>{{ cardStats.label }} </span>
             <div v-if="cardStats.figure_secondary">
-                <span class="text-primary font-bold ml-4">
+                {{ cardStats.label_secondary }}
+                <span class="text-primary font-bold">
                     {{ formatStat(cardStats.figure_secondary) }}
                 </span>
-                <br />
-                {{ cardStats.label_secondary }}
+                {{ cardStats.label_tertiary }}
             </div>
         </div>
     </div>

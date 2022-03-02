@@ -1,8 +1,8 @@
 <template>
     <div
-        class="border border-cardBorder bg-blue100 w-56 pt-5 h-40 ml-5 barCardBorder"
+        class="border border-cardBorder bg-blue100 w-56 pt-5 h-32 ml-5 barCardBorder"
     >
-        <div class="flex justify-center items-end mt-5">
+        <div class="flex justify-center items-end">
             <Bar
                 :height="figure"
                 v-for="(figure, index) in columns"

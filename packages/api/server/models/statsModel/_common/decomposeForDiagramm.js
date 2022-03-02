@@ -1,6 +1,7 @@
 const moment = require('moment');
 
 module.exports = (towns, users, listOfDates) => {
+    const date2019 = moment(new Date('2019-01-01T00:00:00')).format('YYYY-MM-DD HH:mm:ss ZZ');
     const userStats = {
         evolution: 0,
         figures: [],
@@ -49,9 +50,10 @@ module.exports = (towns, users, listOfDates) => {
                             minorsTotal += town.minors;
                             minorsInSchoolTotal += town.minors_in_school;
                             openShantytownsTotal += 1;
-                        } else {
+                        } else if (town.resorbed === 'yes' && moment(town.closed_at).format('YYYY-MM-DD HH:mm:ss ZZ') >= date2019) {
+                            resorbedShantytownsTotal += 1;
+                        } else if (moment(town.closed_at).format('YYYY-MM-DD HH:mm:ss ZZ') > date2019) {
                             closedShantytownsTotal += 1;
-                            resorbedShantytownsTotal += town.resorbed === 'yes' ? 1 : 0;
                         }
                     }
                 },
