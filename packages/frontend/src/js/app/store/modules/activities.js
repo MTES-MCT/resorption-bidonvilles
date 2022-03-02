@@ -57,14 +57,27 @@ export default {
     },
 
     actions: {
-        async fetchActivities({ commit, state }) {
+        async fetchActivities({ commit, state }, location = null) {
             commit("setActivitiesLoading", true);
             commit("setActivitiesError", null);
+
+            if (location !== null) {
+                commit("setActivitiesLastDate", Date.now() / 1000);
+                commit("setActivitiesEndReached", false);
+                commit("setActivities", []);
+                commit("setActivitiesLoadedSignature", {
+                    locationType: location.locationType,
+                    locationCode: location.locationCode,
+                    filters: state.filters.activityTypes
+                        .map(v => v.split("_"))
+                        .flat()
+                });
+            }
 
             try {
                 const activities = await listRegular(
                     state.lastActivityDate * 1000,
-                    state.filters.activityTypes.map(v => v.split("_")).flat(),
+                    state.loaded.filters,
                     10,
                     state.loaded.locationType,
                     state.loaded.locationCode
