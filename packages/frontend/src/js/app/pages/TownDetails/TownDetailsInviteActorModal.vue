@@ -18,7 +18,7 @@
                                 plateforme Résorption-bidonvilles ?</span
                             ><br />
                             Cherchez le nom de la personne en tapant au minimum
-                            les premières lettre de son nom ou prénom
+                            les 3 premières lettres de son nom ou de son prénom.
                         </p>
 
                         <div class="w-128">
@@ -40,7 +40,7 @@
                             <span class="font-bold"
                                 >L'intervenant n'est pas présent dans cette
                                 liste ?</span
-                            ><br />Saisissez son courriel pour l'inviter
+                            ><br />Saisissez son courriel pour l'inviter.
                         </p>
 
                         <TextInput
