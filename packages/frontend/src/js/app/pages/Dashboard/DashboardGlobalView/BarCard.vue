@@ -1,7 +1,9 @@
 <template>
     <div
-        class="border border-cardBorder bg-blue100 w-56 pt-5 h-40 ml-5 barCardBorder"
+        class="border border-cardBorder bg-blue100 w-56 pb-6 ml-5 barCardBorder"
     >
+        <span class="block h-px bg-blue300"></span>
+        <!--<h1 class="pl-8 my-2 font-bold text-sm">Évolution</h1>-->
         <div class="flex justify-center items-end mt-5">
             <Bar
                 :height="figure"
@@ -9,16 +11,17 @@
                 :key="index"
             ></Bar>
         </div>
-        <div class=" w-1/2 text-center ml-auto mr-auto my-4">
+        <div class="text-center ml-auto mr-auto mt-4 bg-red200 text-red600">
             <Icon
                 class="up"
                 v-if="isEvolutionPositive"
                 icon="arrow-alt-circle-right"
             />
             <Icon class="down" v-else icon="arrow-alt-circle-right" />
-            <span class="ml-2" ref="evolution">
+            <span class="ml-2 align-top">
                 {{ isEvolutionPositive ? "+" : "-" }}
                 {{ Math.abs(cardStats.evolution) }} %
+                <span class="text-xs">en 3 mois</span>
             </span>
         </div>
     </div>
@@ -43,9 +46,6 @@ export default {
     },
     mounted() {
         this.setColumns();
-        this.$refs.evolution.style.color = this.cardStats.color;
-        this.$refs.evolution.parentNode.style.backgroundColor =
-            this.$refs.evolution.style.color === "red" ? "#F7BFC3" : "#9ae6b4";
     },
     methods: {
         setColumns() {
