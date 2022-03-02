@@ -42,7 +42,12 @@
             >
                 <Icon icon="comment" class="mr-2" />
                 <div>
-                    {{ this.town.comments.covid.length || 0 }} commentaires
+                    {{ this.town.comments.covid.length || 0 }}
+                    {{
+                        this.town.comments.covid.length > 1
+                            ? "commentaires"
+                            : "commentaire"
+                    }}
                     covid
                 </div>
             </div>
@@ -51,7 +56,7 @@
             <Button
                 data-cy="closeTown"
                 v-if="
-                    hasLocalizedPermission('shantytown.close') &&
+                    hasLocalizedPermission('shantytown.close', town) &&
                         town.status === 'open'
                 "
                 variant="primaryOutline"
@@ -67,7 +72,7 @@
                 icon="pen"
                 iconPosition="left"
                 v-if="
-                    hasLocalizedPermission('shantytown.update') &&
+                    hasLocalizedPermission('shantytown.update', town) &&
                         town.status === 'open'
                 "
                 @click="routeToUpdate"
@@ -77,8 +82,11 @@
                 to="#newComment"
                 @click.native="scrollFix('#newComment')"
                 v-if="
-                    hasLocalizedPermission('shantytown_comment.list') ||
-                        hasLocalizedPermission('shantytown_comment.create')
+                    hasLocalizedPermission('shantytown_comment.list', town) ||
+                        hasLocalizedPermission(
+                            'shantytown_comment.create',
+                            town
+                        )
                 "
             >
                 <Button variant="secondary" icon="comment" iconPosition="left"
@@ -87,7 +95,7 @@
             </router-link>
             <Button
                 data-cy="deleteTown"
-                v-if="hasLocalizedPermission('shantytown.delete')"
+                v-if="hasLocalizedPermission('shantytown.delete', town)"
                 class="ml-8"
                 variant="secondary"
                 icon="trash-alt"
@@ -101,7 +109,7 @@
 </template>
 
 <script>
-import { get as getConfig, getPermission } from "#helpers/api/config";
+import { get as getConfig, hasLocalizedPermission } from "#helpers/api/config";
 
 export default {
     props: {
@@ -116,27 +124,7 @@ export default {
         };
     },
     methods: {
-        hasLocalizedPermission(permissionName) {
-            const permission = getPermission(permissionName);
-            if (permission === null) {
-                return false;
-            }
-
-            if (permission.allow_all === true) {
-                return true;
-            }
-
-            return (
-                permission.allowed_on.regions.includes(this.town.region.code) ||
-                permission.allowed_on.departements.includes(
-                    this.town.departement.code
-                ) ||
-                permission.allowed_on.epci.includes(this.town.epci.code) ||
-                permission.allowed_on.cities.includes(this.town.city.code) ||
-                permission.allowed_on.cities.includes(this.town.city.main) ||
-                permission.allowed_on.shantytowns.includes(this.town.id)
-            );
-        },
+        hasLocalizedPermission,
         // Force scroll even if hash is already present in url
         scrollFix(to) {
             if (to === this.$route.hash) {

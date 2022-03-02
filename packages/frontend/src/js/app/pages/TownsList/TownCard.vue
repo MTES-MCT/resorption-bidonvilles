@@ -222,7 +222,10 @@
                 </div>
                 <div class="flex justify-end px-4 pt-4 print:hidden">
                     <div class="print:hidden">
-                        <transition name="fade" v-if="isOpen">
+                        <transition
+                            name="fade"
+                            v-if="isOpen && hasUpdateShantytownPermission"
+                        >
                             <router-link
                                 v-if="isHover"
                                 :to="`/site/${shantytown.id}/mise-a-jour`"
@@ -267,6 +270,9 @@ export default {
             type: Object
         },
         hasJusticePermission: {
+            type: Boolean
+        },
+        hasUpdateShantytownPermission: {
             type: Boolean
         }
     },

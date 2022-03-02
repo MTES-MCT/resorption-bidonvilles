@@ -24,7 +24,7 @@
                 <div class="text-sm mr-4">
                     <Icon icon="lock" class="text-red" />
                     Je souhaite réserver ce message à mes collègues en
-                    Préfecture et DDCS
+                    Préfecture et DDETS
                 </div>
                 <CheckableGroup direction="horizontal" id="private_comments">
                     <Radio

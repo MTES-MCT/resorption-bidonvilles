@@ -22,16 +22,11 @@
                     <Icon icon="info-circle" /> Information
                 </div>
                 <div>
-                    L'annuaire répertorie tous les utilisateurs de la
-                    plateforme.
-                </div>
-                <div>
-                    <span class="text-info"
-                        ><Icon icon="user-shield" /> Les administrateurs
-                        locaux</span
-                    >
-                    gèrent les accès des utilisateurs de leur territoire et sont
-                    à solliciter pour toute question sur la plateforme.
+                    Ce pictogramme
+                    <span class="text-info"><Icon icon="user-shield"/></span>
+                    identifie les administrateurs locaux, qui gèrent les accès
+                    des utilisateurs de leur territoire et sont sollicités pour
+                    toute question sur la plate-forme.
                 </div>
             </div>
         </div>
