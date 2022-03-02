@@ -11,6 +11,9 @@ export default {
                     center: [46.7755829, 2.0497727],
                     zoom: 6
                 }
+            },
+            activities: {
+                filter: "comment_creation"
             }
         }
     },
@@ -28,6 +31,9 @@ export default {
         },
         setDashboardShantytownsMapSetup(state, setup) {
             state.dashboard.shantytowns.mapSetup = setup;
+        },
+        setDashboardActivitiesFilter(state, filter) {
+            state.dashboard.activities.filter = filter;
         }
     },
 
