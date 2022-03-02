@@ -162,6 +162,7 @@ module.exports = async (user, location, shantytownFilter, numberOfActivities, la
                 o.action = 'creation';
             } else if (previousVersion.closedAt === null && activity.closedAt !== null) {
                 o.action = 'closing';
+                o.shantytown.closedWithSolutions = activity.closedWithSolutions === 'yes';
             } else {
                 o.action = 'update';
                 // on utilise le nom du site dans la précédente version (au cas ou ce dernier aurait changé)
