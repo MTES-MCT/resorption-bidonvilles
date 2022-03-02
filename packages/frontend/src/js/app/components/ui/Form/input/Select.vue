@@ -92,6 +92,15 @@ export default {
                 default: [
                     "appearance-none",
                     ...getInputClasses("default", inputOptions)
+                ],
+                link: [
+                    "appearance-none",
+                    "font-bold",
+                    "bg-transparent",
+                    "text-info",
+                    "underline",
+                    "pr-8",
+                    "cursor-pointer"
                 ]
             }[this.variant];
         }
