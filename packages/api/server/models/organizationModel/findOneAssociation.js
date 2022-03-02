@@ -13,7 +13,7 @@ module.exports = async (name, code) => {
         WHERE
             organization_types.fk_category = 'association'
             AND
-            organizations.name ILIKE :name
+            UNACCENT(organizations.name) ILIKE UNACCENT(:name)
             AND
             organizations.departement_code = :code`,
         {

@@ -43,7 +43,7 @@ function generateSearch(table) {
         ${table === 'cities' ? 'AND fk_main IS NULL' : ''}
     ORDER BY
         CASE
-            WHEN REPLACE(name, '-', ' ') ILIKE REPLACE(?, '-', ' ') THEN 1
+            WHEN UNACCENT(REPLACE(name, '-', ' ')) ILIKE UNACCENT(REPLACE(?, '-', ' ')) THEN 1
             ELSE 2
         END,
         name ASC
