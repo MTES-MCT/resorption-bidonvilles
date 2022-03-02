@@ -1,6 +1,8 @@
 import getSince from "#app/utils/getSince";
 
 export default {
+    namespaced: true,
+
     state: {
         dashboard: {
             shantytowns: {
@@ -84,6 +86,9 @@ export default {
             }
 
             return getters.dashboardMyShantytowns;
+        },
+        activities(state, getters, rootState, rootGetters) {
+            return rootGetters.activities;
         }
     }
 };

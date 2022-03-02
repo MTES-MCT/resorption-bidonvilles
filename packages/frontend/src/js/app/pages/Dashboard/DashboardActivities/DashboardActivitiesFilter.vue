@@ -36,7 +36,10 @@ export default {
 
     methods: {
         setFilter() {
-            this.$store.commit("setDashboardActivitiesFilter", this.id);
+            this.$store.commit(
+                "dashboard/setDashboardActivitiesFilter",
+                this.id
+            );
         }
     }
 };
