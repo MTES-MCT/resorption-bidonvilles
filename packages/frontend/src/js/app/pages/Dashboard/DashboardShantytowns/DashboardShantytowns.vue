@@ -2,7 +2,6 @@
     <DashboardSection title="Sites" id="sites">
         <template slot="header_left">
             <DashboardShantytownsFilters />
-            <DashboardShantytownsDisplay />
             <TabList :tabs="tabs" v-model="currentTab" />
         </template>
 
@@ -16,7 +15,6 @@
 import TabList from "#app/components/TabList/TabList.vue";
 import DashboardSection from "../DashboardSection";
 import DashboardShantytownsFilters from "./DashboardShantytownsFilters";
-import DashboardShantytownsDisplay from "./DashboardShantytownsDisplay";
 import DashboardShantytownsList from "./DashboardShantytownsList";
 
 export default {
@@ -24,7 +22,6 @@ export default {
         TabList,
         DashboardSection,
         DashboardShantytownsFilters,
-        DashboardShantytownsDisplay,
         DashboardShantytownsList
     },
     data() {

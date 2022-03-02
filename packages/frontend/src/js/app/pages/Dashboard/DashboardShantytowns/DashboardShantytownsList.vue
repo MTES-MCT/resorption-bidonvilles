@@ -102,14 +102,9 @@ export default {
             myShantytowns: "dashboardMyShantytowns",
             rawShantytowns: "dashboardContent",
             pageContent: "dashboardPageContent",
-<<<<<<< HEAD
-            currentPage: "dashboardShantytownsCurrentPage"
-=======
-            sort: "dashboardShantytownsSort",
             display: "dashboardShantytownsDisplay",
             currentPage: "dashboardShantytownsCurrentPage",
             mapSetup: "DashboardShantytownsMapSetup"
->>>>>>> 1819807b ((1350) POC TB Vue carto des sites)
         }),
         nbPages() {
             return Math.ceil(this.rawShantytowns.length / ITEMS_PER_PAGE);
