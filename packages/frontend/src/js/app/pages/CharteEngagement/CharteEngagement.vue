@@ -1,6 +1,6 @@
 <template>
-    <div class="object-center">
-        <div class="v1 print:hidden">
+    <div>
+        <div class="print:hidden">
             <NavBar />
         </div>
         <slot />
@@ -137,7 +137,7 @@
 <script>
 import { get as getConfig, set as setConfig } from "#helpers/api/config";
 import { acceptCharte } from "#helpers/api/user";
-import NavBar from "#app/layouts/navbar/navbar.vue";
+import NavBar from "#app/layouts/Navbar/Navbar.vue";
 
 export default {
     components: {

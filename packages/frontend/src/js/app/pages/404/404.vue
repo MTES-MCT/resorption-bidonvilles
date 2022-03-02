@@ -1,19 +1,20 @@
 <template>
-    <PrivateLayout>
+    <div>
+        <NavBar />
         <LoadingError>
             La page demandée n'existe pas
         </LoadingError>
-    </PrivateLayout>
+    </div>
 </template>
 
 <script>
-import PrivateLayout from "#app/components/PrivateLayout";
 import LoadingError from "#app/components/PrivateLayout/LoadingError.vue";
+import NavBar from "#app/layouts/Navbar/Navbar.vue";
 
 export default {
     components: {
-        PrivateLayout,
-        LoadingError
+        LoadingError,
+        NavBar
     }
 };
 </script>

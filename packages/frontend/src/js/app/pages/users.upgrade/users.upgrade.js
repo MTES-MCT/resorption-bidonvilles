@@ -1,4 +1,4 @@
-import NavBar from "#app/layouts/navbar/navbar.vue";
+import NavBar from "#app/layouts/Navbar/Navbar.vue";
 import Form from "#app/components/form/form.vue";
 import { get as getConfig, load } from "#helpers/api/config";
 import { upgrade } from "#helpers/api/user";

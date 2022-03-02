@@ -12,7 +12,7 @@
                 isOpen ? 'translate-x-0' : 'translate-x-full'
             ]"
         >
-            <div :class="['min-h-screen w-128 bg-white']">
+            <div :class="['min-h-screen w-auto max-w-xl bg-white']">
                 <slot />
             </div>
         </div>

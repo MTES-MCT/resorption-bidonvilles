@@ -69,7 +69,7 @@ const anonymousRoutes = [
         path: "/mentions-legales",
         component: path.join(
             __dirname,
-            "./src/js/app/pages/legalMentions/entrypoint.vue"
+            "./src/js/app/pages/LegalMentions/entrypoint.vue"
         ),
         route: {
             meta: {
