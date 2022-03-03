@@ -37,7 +37,7 @@ export default {
             state.lastActivityDate = date;
         },
         setActivitiesEndReached(state, reached) {
-            this.endOfActivities = reached === true;
+            state.endOfActivities = reached === true;
         },
         setActivityTypesFilter(state, filters) {
             state.filters.activityTypes = filters;
