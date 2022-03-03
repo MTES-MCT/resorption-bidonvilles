@@ -74,7 +74,6 @@ export default {
             loading: "activitiesLoading",
             error: "activitiesError",
             activities: "activities",
-            lastActivityDate: "lastActivityDate",
             endOfActivities: "endOfActivities",
             loadedLocationType: "activitiesLoadedLocationType",
             loadedLocationCode: "activitiesLoadedLocationCode",
