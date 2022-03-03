@@ -86,8 +86,6 @@ export default {
                         acc.currentWeek.push(activity);
                     } else if (activity.date >= this.aMonthAgo) {
                         acc.previousMonth.push(activity);
-                    } else {
-                        acc.previousMonth.push(activity);
                     }
 
                     return acc;
@@ -100,15 +98,25 @@ export default {
         }
     },
 
-    created() {
-        if (
-            this.$store.state.activities.items.length === 0 ||
-            this.$store.state.activities.loaded.locationType !== "nation"
-        ) {
-            this.$store.dispatch("fetchActivities", {
-                locationType: "nation",
-                locationCode: null
-            });
+    mounted() {
+        this.load();
+    },
+
+    methods: {
+        load() {
+            if (
+                this.$store.state.activities.items.length === 0 ||
+                this.$store.state.activities.loaded.locationType !== "nation"
+            ) {
+                this.$store.dispatch("fetchActivities", {
+                    location: {
+                        locationType: "nation",
+                        locationCode: null
+                    },
+                    maxDate: this.aMonthAgo * 1000,
+                    numberOfActivities: -1
+                });
+            }
         }
     }
 };

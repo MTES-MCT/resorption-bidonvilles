@@ -78,7 +78,7 @@ export default {
                 const activities = await listRegular(
                     state.lastActivityDate * 1000,
                     state.loaded.filters,
-                    10,
+                    target.numberOfActivities || 10,
                     state.loaded.locationType,
                     state.loaded.locationCode,
                     target.maxDate
@@ -89,7 +89,12 @@ export default {
                         "setActivitiesLastDate",
                         activities.slice(-1)[0].date
                     );
-                } else {
+                }
+
+                if (
+                    activities.length === 0 ||
+                    target.numberOfActivities === -1
+                ) {
                     commit("setActivitiesEndReached", true);
                 }
 
