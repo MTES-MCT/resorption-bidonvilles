@@ -39,11 +39,11 @@ function generateSearch(table) {
         ${table}
     ${table === 'epci' ? 'LEFT JOIN epci_to_departement ON epci.code = epci_to_departement.fk_epci' : ''}     
     WHERE
-        REPLACE(REPLACE(name, '-', ' '), 'Î', 'I') ILIKE REPLACE(?, '-', ' ')
+        UNACCENT(REPLACE(name, '-', ' ')) ILIKE UNACCENT(REPLACE(?, '-', ' '))
         ${table === 'cities' ? 'AND fk_main IS NULL' : ''}
     ORDER BY
         CASE
-            WHEN REPLACE(name, '-', ' ') ILIKE REPLACE(?, '-', ' ') THEN 1
+            WHEN UNACCENT(REPLACE(name, '-', ' ')) ILIKE UNACCENT(REPLACE(?, '-', ' ')) THEN 1
             ELSE 2
         END,
         name ASC

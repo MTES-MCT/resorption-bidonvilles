@@ -81,10 +81,10 @@ module.exports = models => ({
                 LEFT JOIN
                     departements ON cities.fk_departement = departements.code
                 WHERE
-                    REPLACE(cities.name, '-', ' ') ILIKE REPLACE(?, '-', ' ')
+                    UNACCENT(REPLACE(cities.name, '-', ' ')) ILIKE UNACCENT(REPLACE(?, '-', ' '))
                 ORDER BY
                     CASE
-                        WHEN REPLACE(cities.name, '-', ' ') ILIKE REPLACE(?, '-', ' ') THEN 1
+                        WHEN UNACCENT(REPLACE(cities.name, '-', ' ')) ILIKE UNACCENT(REPLACE(?, '-', ' ')) THEN 1
                         ELSE 2
                     END,
                     cities.name ASC
@@ -131,10 +131,10 @@ module.exports = models => ({
                 FROM
                     epci
                 WHERE
-                    REPLACE(epci.name, '-', ' ') ILIKE REPLACE(?, '-', ' ')
+                    UNACCENT(REPLACE(epci.name, '-', ' ')) ILIKE UNACCENT(REPLACE(?, '-', ' '))
                 ORDER BY
                     CASE
-                        WHEN REPLACE(epci.name, '-', ' ') ILIKE REPLACE(?, '-', ' ') THEN 1
+                        WHEN UNACCENT(REPLACE(epci.name, '-', ' ')) ILIKE UNACCENT(REPLACE(?, '-', ' ')) THEN 1
                         ELSE 2
                     END,
                     epci.name ASC
