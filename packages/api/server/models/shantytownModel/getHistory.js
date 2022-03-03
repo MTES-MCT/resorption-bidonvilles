@@ -7,10 +7,12 @@ const getDiff = require('./_common/getDiff');
 const SQL = require('./_common/SQL');
 const { restrict } = require('#server/utils/permission');
 
-module.exports = async (user, location, shantytownFilter, numberOfActivities, lastDate) => {
+module.exports = async (user, location, shantytownFilter, numberOfActivities, lastDate, maxDate) => {
     // apply geographic level restrictions
     const where = [];
-    const replacements = {};
+    const replacements = {
+        maxDate,
+    };
     const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
 
     const restrictedLocation = restrict(location).for(user).askingTo('list', 'shantytown');
@@ -60,6 +62,7 @@ module.exports = async (user, location, shantytownFilter, numberOfActivities, la
                 )) activities
             LEFT JOIN users author ON activities.author_id = author.user_id
             WHERE activities.date < '${lastDate}'
+            ${maxDate ? ' AND activities.date >= :maxDate' : ''}
             ${shantytownFilter.includes('shantytownCreation') ? '' : 'AND activities.date - activities.created_at > \'00:00:01\''}
             ${shantytownFilter.includes('shantytownClosing') ? '' : 'AND activities.closed_at IS NULL'}
             ${shantytownFilter.includes('shantytownUpdate') ? '' : 'AND (activities.closed_at IS NOT NULL OR activities.date - activities.created_at < \'00:00:01\')'}

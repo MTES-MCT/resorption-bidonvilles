@@ -4,10 +4,12 @@ const { formatName } = require('#server/models/userModel')();
 const { getUsenameOf, serializeComment } = require('#server/models/shantytownModel')();
 const { restrict } = require('#server/utils/permission');
 
-module.exports = async (user, location, numberOfActivities, lastDate, onlyCovid = false) => {
+module.exports = async (user, location, numberOfActivities, lastDate, maxDate, onlyCovid = false) => {
     // apply geographic level restrictions
     const where = [];
-    const replacements = {};
+    const replacements = {
+        maxDate,
+    };
     const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
 
     const restrictedLocations = {
@@ -85,6 +87,7 @@ module.exports = async (user, location, numberOfActivities, lastDate, onlyCovid 
             LEFT JOIN regions ON departements.fk_region = regions.code
             ${where.length > 0 ? `WHERE ((${where.join(') OR (')}))` : ''}
             ${whereLastDate}
+            ${maxDate ? ' AND comments.created_at >= :maxDate' : ''}
             ${onlyCovid ? 'AND covid_comments.shantytown_covid_comment_id IS NOT NULL' : ''}
             ORDER BY comments.created_at DESC
             ${limit}

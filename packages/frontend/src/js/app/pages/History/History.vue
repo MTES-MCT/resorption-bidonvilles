@@ -172,8 +172,10 @@ export default {
 
             // on fetch les activités
             this.$store.dispatch("fetchActivities", {
-                locationType: this.locationType,
-                locationCode: this.locationCode
+                location: {
+                    locationType: this.locationType,
+                    locationCode: this.locationCode
+                }
             });
 
             // on fetch le nom de la location, si elle n'est pas déjà dans le $store
