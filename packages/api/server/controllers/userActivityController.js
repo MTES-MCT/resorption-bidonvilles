@@ -2,7 +2,9 @@ const moment = require('moment');
 
 module.exports = models => ({
     async regular(req, res, next) {
-        const { lastActivityDate, numberOfActivities, filter } = req.query;
+        const {
+            lastActivityDate, maxActivityDate, numberOfActivities, filter,
+        } = req.query;
 
         try {
             return res.status(200).send(
@@ -12,6 +14,7 @@ module.exports = models => ({
                     filter,
                     numberOfActivities,
                     moment(lastActivityDate).format('YYYY-MM-DD HH:mm:ss ZZ'),
+                    maxActivityDate ? moment(maxActivityDate).format('YYYY-MM-DD HH:mm:ss ZZ') : null,
                 ),
             );
         } catch (error) {

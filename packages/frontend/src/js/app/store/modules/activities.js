@@ -57,17 +57,17 @@ export default {
     },
 
     actions: {
-        async fetchActivities({ commit, state }, location = null) {
+        async fetchActivities({ commit, state }, target = {}) {
             commit("setActivitiesLoading", true);
             commit("setActivitiesError", null);
 
-            if (location !== null) {
+            if (target.location) {
                 commit("setActivitiesLastDate", Date.now() / 1000);
                 commit("setActivitiesEndReached", false);
                 commit("setActivities", []);
                 commit("setActivitiesLoadedSignature", {
-                    locationType: location.locationType,
-                    locationCode: location.locationCode,
+                    locationType: target.location.locationType,
+                    locationCode: target.location.locationCode,
                     filters: state.filters.activityTypes
                         .map(v => v.split("_"))
                         .flat()
@@ -80,7 +80,8 @@ export default {
                     state.loaded.filters,
                     10,
                     state.loaded.locationType,
-                    state.loaded.locationCode
+                    state.loaded.locationCode,
+                    target.maxDate
                 );
 
                 if (activities.length > 0) {
