@@ -19,7 +19,7 @@ module.exports = async (categoryUid, search = null) => {
             LEFT JOIN organization_types ON organizations.fk_type = organization_types.organization_type_id
             WHERE
                 organization_types.fk_category = :categoryUid
-                ${search !== null ? ' AND (organizations.name ILIKE :search OR organizations.abbreviation ILIKE :search)' : ''}
+                ${search !== null ? ' AND (UNACCENT(organizations.name) ILIKE UNACCENT(:search) OR UNACCENT(organizations.abbreviation) ILIKE UNACCENT(:search))' : ''}
             ORDER BY
                 CASE organization_types.fk_category
                     WHEN 'association' THEN organizations.name
