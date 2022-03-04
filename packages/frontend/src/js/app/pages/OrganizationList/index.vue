@@ -15,12 +15,13 @@
                         <div class="py-1 text-right">
                             <Button
                                 variant="primaryText"
+                                v-if="
+                                    currentUser.organization.location.type !==
+                                        'nation'
+                                "
                                 @click="
                                     () => {
-                                        $store.state.directory.filters
-                                            .location ||
-                                        currentUser.organization.location
-                                            .type === 'nation'
+                                        $store.state.directory.filters.location
                                             ? removeItem()
                                             : $store.dispatch(
                                                   'setUserLocation'
@@ -30,9 +31,7 @@
                                 size="sm"
                                 class="font-bold"
                                 >{{
-                                    $store.state.directory.filters.location ||
-                                    currentUser.organization.location.type ===
-                                        "nation"
+                                    $store.state.directory.filters.location
                                         ? "Voir tous les utilisateurs de France"
                                         : "Voir tous les utilisateurs de mon territoire"
                                 }}</Button
