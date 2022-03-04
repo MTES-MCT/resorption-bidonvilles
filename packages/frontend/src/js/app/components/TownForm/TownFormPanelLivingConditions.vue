@@ -108,6 +108,7 @@
 
         <FormParagraph
             title="Y a-t-il des nuisibles sur le site ou à proximité ?"
+            :showMandatoryStar="true"
         >
             <InputVermin v-model="input.vermin"></InputVermin>
             <div class="ml-12">
@@ -117,7 +118,10 @@
             </div>
         </FormParagraph>
 
-        <FormParagraph title="Y a-t-il des mesures prévention incendie ?">
+        <FormParagraph
+            title="Y a-t-il des mesures prévention incendie ?"
+            :showMandatoryStar="true"
+        >
             <InputFirePreventionMeasures
                 v-model="input.fire_prevention_measures"
             ></InputFirePreventionMeasures>

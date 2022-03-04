@@ -160,7 +160,17 @@
             <div class="text-center mt-8">
                 <a
                     target="_blank"
+                    v-if="$i18n.locale === 'fr'"
                     href="https://www.gouvernement.fr/sites/default/files/contenu/piece-jointe/2021/10/point_detape_2019-2020_-_resorption_des_bidonvilles_vweb.pdf"
+                >
+                    <Button variant="secondary">
+                        {{ $t("landingPage.secondSection.bilan.cta") }}
+                    </Button>
+                </a>
+                <a
+                    target="_blank"
+                    v-else
+                    href="https://www.gouvernement.fr/sites/default/files/contenu/piece-jointe/2022/01/eng_slum_clearance_-_progress_report_2021.pdf"
                 >
                     <Button variant="secondary">
                         {{ $t("landingPage.secondSection.bilan.cta") }}

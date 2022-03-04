@@ -10,7 +10,9 @@
             Partager une info
         </div>
         <div class="bg-white p-6 customShadow">
-            <div class="mb-4"><Icon icon="user" /> {{ user.first_name }}</div>
+            <div class="mb-4">
+                <Icon icon="user" /> {{ user.first_name }} {{ user.last_name }}
+            </div>
             <TextArea
                 rows="5"
                 name="newComment"
