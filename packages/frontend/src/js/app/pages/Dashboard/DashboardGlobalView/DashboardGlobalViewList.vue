@@ -10,11 +10,7 @@
     </p>
 
     <section v-else>
-        <section class="flex justify-between">
-            <div class="w-40 m-auto">
-                <span>Au {{ currentDate }}</span>
-                <Icon class="ml-3" icon="arrow-right" />
-            </div>
+        <section class="flex">
             <StatCard
                 v-for="stat in stats"
                 :key="stat.label"
@@ -22,14 +18,6 @@
                 :cardStats="stat"
             >
             </StatCard>
-        </section>
-        <DashboardGlobalViewSeparator />
-        <section class="flex">
-            <div class="w-40 m-auto">
-                Sur les 3 derniers mois <Icon class="ml-3" icon="arrow-right" />
-            </div>
-            <BarCard v-for="stat in stats" :key="stat.label" :cardStats="stat">
-            </BarCard>
         </section>
         <router-link
             class="text-primary underline flex justify-center pt-10"
@@ -45,14 +33,10 @@
 import { getDashboardStats } from "#helpers/api/dashboard";
 import { mapGetters } from "vuex";
 import StatCard from "./StatCard.vue";
-import BarCard from "./BarCard.vue";
-import DashboardGlobalViewSeparator from "./DashboardGlobalViewSeparator.vue";
 
 export default {
     components: {
-        StatCard,
-        BarCard,
-        DashboardGlobalViewSeparator
+        StatCard
     },
     async created() {
         if (!this.stats.length) {

@@ -2,6 +2,7 @@ module.exports = stats => {
     return [
         {
             ...stats.population,
+            id: "population",
             icon: "male",
             label: "personnes ",
             label_secondary: "sur",
@@ -11,6 +12,7 @@ module.exports = stats => {
         },
         {
             ...stats.minors,
+            id: "children",
             icon: "child",
             label: `enfants`,
             label_secondary: "dont",
@@ -20,19 +22,22 @@ module.exports = stats => {
         },
         {
             ...stats.resorbedShantytowns,
+            id: "resorbed",
             icon: "check",
-            label: "sites résorbés",
+            label: "résorptions",
             color: stats.resorbedShantytowns.evolution >= 0 ? "green" : "red"
         },
         {
             ...stats.closedShantytowns,
+            id: "closed",
             icon: "ban",
-            label: "sites fermés (hors résorption)",
+            label: "fermetures",
             color: stats.closedShantytowns.evolution >= 0 ? "green" : "red"
         },
 
         {
             ...stats.userStats,
+            id: "users",
             icon: "user",
             label: "utilisateurs",
             color: stats.userStats.evolution >= 0 ? "green" : "red"
