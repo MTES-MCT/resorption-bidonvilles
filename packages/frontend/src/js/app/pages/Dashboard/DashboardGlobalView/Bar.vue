@@ -1,5 +1,5 @@
 <template>
-    <div ref="bar" class="rounded-sm w-2 mr-1 bg-blue600"></div>
+    <div ref="bar" class="rounded-sm w-2 mr-1"></div>
 </template>
 
 <script>
