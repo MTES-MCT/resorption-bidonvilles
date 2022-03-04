@@ -99,7 +99,7 @@
                             <li>
                                 <a
                                     class="link"
-                                    href="https://eig.etalab.gouv.fr/defis/"
+                                    href="https://eig.etalab.gouv.fr/defis/resorption-bidonvilles/"
                                     >{{
                                         $t(
                                             "landingPage.thirdSection.firstParagraph.items.1.link"
@@ -230,7 +230,7 @@
             /></a>
             <a
                 class="pl-12"
-                href="https://entrepreneur-interet-general.etalab.gouv.fr/defis/2019/resorption-bidonvilles.html"
+                href="https://eig.etalab.gouv.fr/defis/resorption-bidonvilles/"
                 ><g-image
                     width="330"
                     class="h-auto m-2"
