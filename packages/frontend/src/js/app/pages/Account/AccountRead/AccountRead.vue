@@ -56,6 +56,7 @@
                     <div>
                         Si vous souhaitez changer de courriel, écrivez-nous à
                         <a
+                            class="link cursor-pointer font-bold"
                             href="mailto:contact@resorption-bidonvilles.beta.gouv.fr"
                             >contact@resorption-bidonvilles.beta.gouv.fr</a
                         >
