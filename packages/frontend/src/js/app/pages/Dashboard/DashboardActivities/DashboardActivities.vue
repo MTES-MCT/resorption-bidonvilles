@@ -3,7 +3,7 @@
         <template slot="body">
             <section class="flex">
                 <DashboardActivitiesFilters class="w-48" />
-                <DashboardActivitiesList class="ml-24 -mt-1" />
+                <DashboardActivitiesList class="ml-24 -mt-1 flex-1" />
             </section>
         </template>
     </DashboardSection>

@@ -10,7 +10,7 @@
     </p>
 
     <section v-else>
-        <h1 class="font-bold text-lg mb-8">Sur les 7 derniers jours</h1>
+        <h1 class="font-bold text-lg">Sur les 7 derniers jours</h1>
         <p
             v-if="splitActivities.currentWeek.length === 0"
             class="text-G600 italic"
@@ -24,7 +24,7 @@
             :activity="activity"
         />
 
-        <h1 class="font-bold text-lg mt-16 mb-8">Sur le dernier mois</h1>
+        <h1 class="font-bold text-lg mt-8">Sur le dernier mois</h1>
         <p
             v-if="splitActivities.previousMonth.length === 0"
             class="text-G600 italic"
