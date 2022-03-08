@@ -1,5 +1,12 @@
 <template>
-    <article :class="`flex mb-8 ${!activity.shantytown ? 'items-center' : ''}`">
+    <article
+        :class="
+            `flex py-4 ${
+                !activity.shantytown ? 'items-center' : ''
+            } hover:bg-G200 cursor-pointer`
+        "
+        @click="routeToDetails"
+    >
         <aside class="mr-6">
             <span
                 :class="
@@ -196,6 +203,36 @@ export default {
 
                 default:
                     return this.colors.gray;
+            }
+        }
+    },
+
+    methods: {
+        routeToDetails() {
+            if (this.activity.entity === "comment") {
+                if (this.activity.highCovidComment) {
+                    return this.$router.push("/covid-19");
+                } else {
+                    return this.$router.push(
+                        `/site/${this.activity.shantytown.id}#message${this.activity.comment.id}`
+                    );
+                }
+            }
+
+            if (this.activity.entity === "user") {
+                if (this.activity.users.length === 1) {
+                    return this.$router.push(
+                        `/annuaire/${this.activity.users[0].organization}`
+                    );
+                }
+
+                return this.$router.push("/annuaire");
+            }
+
+            if (this.activity.shantytown) {
+                return this.$router.push(
+                    `/site/${this.activity.shantytown.id}`
+                );
             }
         }
     }
