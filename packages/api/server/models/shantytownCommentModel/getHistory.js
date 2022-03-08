@@ -27,6 +27,8 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate, o
     } else if (restrictedLocations.public.type !== 'nation') {
         where.push(`private = false AND ${fromGeoLevelToTableName(restrictedLocations.public.type)}.code = :shantytownCommentLocationCode`);
         replacements.shantytownCommentLocationCode = restrictedLocations.public[restrictedLocations.public.type].code;
+    } else {
+        where.push('private = false');
     }
 
     // private comments
@@ -35,6 +37,8 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate, o
     } else if (restrictedLocations.private.type !== 'nation') {
         where.push(`private = true AND ${fromGeoLevelToTableName(restrictedLocations.private.type)}.code = :privateShantytownCommentLocationCode`);
         replacements.privateShantytownCommentLocationCode = restrictedLocations.private[restrictedLocations.private.type].code;
+    } else {
+        where.push('private = true');
     }
 
     const whereLastDate = `${where.length > 0 ? 'AND' : 'WHERE'} comments.created_at < '${lastDate}'`;
