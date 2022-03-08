@@ -42,6 +42,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { get as getConfig } from "#helpers/api/config";
 import DashboardActivity from "./DashboardActivity";
 
 export default {
@@ -50,6 +51,8 @@ export default {
     },
 
     data() {
+        const { user } = getConfig();
+
         const monday = new Date();
         monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
         monday.setHours(0);
@@ -65,6 +68,7 @@ export default {
         aMonthAgo.setMilliseconds(0);
 
         return {
+            user,
             monday: monday.getTime() / 1000,
             aMonthAgo: aMonthAgo.getTime() / 1000
         };
@@ -119,19 +123,21 @@ export default {
 
     methods: {
         load() {
-            if (
-                this.$store.state.activities.items.length === 0 ||
-                this.$store.state.activities.loaded.locationType !== "nation"
-            ) {
-                this.$store.dispatch("fetchActivities", {
-                    location: {
-                        locationType: "nation",
-                        locationCode: null
-                    },
-                    maxDate: this.aMonthAgo * 1000,
-                    numberOfActivities: -1
-                });
+            const { type } = this.user.organization.location;
+            let code = null;
+
+            if (type !== "nation") {
+                ({ code } = this.user.organization.location[type]);
             }
+
+            this.$store.dispatch("fetchActivities", {
+                location: {
+                    locationType: type,
+                    locationCode: code
+                },
+                maxDate: this.aMonthAgo * 1000,
+                numberOfActivities: -1
+            });
         }
     }
 };
