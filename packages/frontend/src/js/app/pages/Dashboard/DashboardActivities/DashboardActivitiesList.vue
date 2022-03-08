@@ -78,9 +78,24 @@ export default {
         }),
 
         splitActivities() {
+            const { filter } = this.$store.state.dashboard.dashboard.activities;
+
             return this.activities.reduce(
                 (argAcc, activity) => {
                     const acc = { ...argAcc };
+                    let signature = `${activity.entity}_${activity.action}`;
+
+                    if (
+                        activity.action === "closing" &&
+                        activity.shantytown &&
+                        activity.shantytown.closedWithSolutions
+                    ) {
+                        signature += `_with_solutions`;
+                    }
+
+                    if (filter !== "all" && filter !== signature) {
+                        return acc;
+                    }
 
                     if (activity.date >= this.monday) {
                         acc.currentWeek.push(activity);
