@@ -20,7 +20,7 @@
         <DashboardActivity
             v-else
             v-for="activity in splitActivities.currentWeek"
-            :key="activity.date"
+            :key="`${activity.entity}-${activity.action}-${activity.date}`"
             :activity="activity"
         />
 
@@ -34,7 +34,7 @@
         <DashboardActivity
             v-else
             v-for="activity in splitActivities.previousMonth"
-            :key="activity.date"
+            :key="`${activity.entity}-${activity.action}-${activity.date}`"
             :activity="activity"
         />
     </section>

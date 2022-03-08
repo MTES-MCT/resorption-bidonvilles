@@ -70,8 +70,19 @@ export default {
         },
         title() {
             switch (this.event) {
-                case "user-creation":
-                    return this.activity.user.name;
+                case "user-creation": {
+                    const { users } = this.activity;
+                    const names = users.map(({ name }) => name);
+                    if (users.length === 1) {
+                        return names[0];
+                    }
+
+                    return [
+                        names.slice(0, names.length - 1).join(", "),
+                        "et",
+                        names.slice(-1)[0]
+                    ].join(" ");
+                }
 
                 case "shantytown-creation":
                     return "Nouveau site";
@@ -83,8 +94,26 @@ export default {
 
                     return "Site fermé";
 
-                case "comment-creation":
-                    return "Nouveau message";
+                case "comment-creation": {
+                    const title = "Nouveau message";
+                    if (this.activity.highCovidComment) {
+                        return `${title} COVID-19`;
+                    }
+
+                    return title;
+                }
+
+                case "electricity-creation":
+                    return "Nouvel accès à l'électricité";
+
+                case "electricity-closing":
+                    return "Accès à l'électricité perdu";
+
+                case "water-creation":
+                    return "Nouvel accès à l'eau";
+
+                case "water-closing":
+                    return "Accès à l'eau perdu";
 
                 default:
                     return "Événement inconnu";
@@ -94,9 +123,15 @@ export default {
         subtitle() {
             switch (this.event) {
                 case "user-creation":
-                    return "a rejoint la plateforme";
+                    return `${
+                        this.activity.users.length > 1 ? "ont" : "a"
+                    } rejoint la plateforme`;
 
                 case "comment-creation":
+                    if (this.activity.highCovidComment) {
+                        return "";
+                    }
+
                     return "dans le journal du site";
 
                 case "shantytown-creation":
@@ -129,7 +164,11 @@ export default {
             }
 
             if (this.activity.action === "creation") {
-                return "plus";
+                return this.activity.entity === "comment" ? "plus" : "check";
+            }
+
+            if (this.activity.closing === "closing") {
+                return "times";
             }
 
             return "check";
@@ -150,6 +189,10 @@ export default {
                     }
 
                     return this.colors.gray;
+
+                case "electricity-creation":
+                case "water-creation":
+                    return this.colors.green;
 
                 default:
                     return this.colors.gray;
