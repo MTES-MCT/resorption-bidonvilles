@@ -16,6 +16,7 @@
                 <GeoSearchbar
                     data-cy-input="geoFilter"
                     :value="filters.location"
+                    :allowFreeInput="true"
                     @blur="handleSearchBlur"
                 />
             </PrivateContainer>

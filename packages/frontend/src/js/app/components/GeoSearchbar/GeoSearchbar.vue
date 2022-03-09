@@ -2,7 +2,7 @@
     <div class="-mb-6 flex flex-1 justify-center">
         <div class="searchbox">
             <AutocompleteV2
-                :defaultValue="this.$props.value"
+                :defaultValue="originalValue"
                 :search="search"
                 v-model="result"
                 @blur="data => $emit('blur', data)"
@@ -13,6 +13,7 @@
                 :inputClasses="['rounded-full shadow-sm']"
                 :placeholder="placeholder"
                 :disabled="disabled"
+                :allowFreeInput="allowFreeInput"
                 ref="autocomplete"
             >
                 <template v-slot:cta>
@@ -100,6 +101,10 @@ export default {
             default: "Adresse, nom d’un site, ville, code postal…",
             required: false
         },
+        allowFreeInput: {
+            type: Boolean,
+            default: false
+        },
         disabled: {
             type: Boolean,
             required: false,
@@ -108,6 +113,7 @@ export default {
     },
     data() {
         return {
+            originalValue: this.value,
             input: "",
             result: "",
             results: [],
