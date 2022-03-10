@@ -60,6 +60,7 @@
                 :displayPopupOnTownClick="true"
                 :displayAddressToggler="false"
                 :displayPrinter="false"
+                @leaveMap="leaveMap"
             >
             </Map>
         </section>
@@ -117,6 +118,12 @@ export default {
         }
     },
     methods: {
+        leaveMap(center, zoom) {
+            this.$store.commit("setDashboardShantytownsMapSetup", {
+                center,
+                zoom
+            });
+        },
         onChangePage(page) {
             this.$store.commit(
                 "setDashboardShantytownsPage",

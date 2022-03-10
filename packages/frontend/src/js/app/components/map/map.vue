@@ -444,13 +444,9 @@ export default {
     },
 
     beforeDestroy() {
-        // before destroying, in case we are in the dashboard page we register position in the store
-        if (this.displayPopupOnTownClick) {
-            this.$store.commit("setDashboardShantytownsMapSetup", {
-                center: this.map.getCenter(),
-                zoom: this.map.getZoom()
-            });
-        }
+        // before destroying, we emit this event to enable registration of position in the store
+        // only used in dashboard at the moment
+        this.$emit("leaveMap", this.map.getCenter(), this.map.getZoom());
     },
 
     methods: {
