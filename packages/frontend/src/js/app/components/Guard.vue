@@ -22,7 +22,6 @@ import {
     hasAcceptedCharte,
     load
 } from "#helpers/api/config";
-import { isLoggedIn, logout } from "#helpers/api/user";
 import * as Sentry from "@sentry/vue";
 import { setCustomVariables } from "#matomo/matomo";
 import PrivateLayout from "#app/components/PrivateLayout";
@@ -88,14 +87,14 @@ export default {
         }
 
         if (beforeEnter?.action === "signout") {
-            logout(this.$piwik);
+            this.$store.dispatch("logout", this.$piwik);
             this.$router.push("/");
             return;
         }
 
         const guards = (beforeEnter && guardGroups[beforeEnter]) || [];
         for (const guard of guards) {
-            if (guard === "isLoggedIn" && !isLoggedIn()) {
+            if (guard === "isLoggedIn" && !this.$store.state.user.loggedIn) {
                 this.$store.commit("setEntrypoint", this.$route.path);
                 return this.$router.push("/connexion?r=1");
             }
@@ -185,7 +184,7 @@ export default {
             return permissions.every(permission => hasPermission(permission));
         },
         home() {
-            if (isLoggedIn()) {
+            if (this.$store.state.user.loggedIn) {
                 const { entrypoint } = this.$store.state;
                 if (entrypoint !== null) {
                     this.$store.commit("setEntrypoint", null);
