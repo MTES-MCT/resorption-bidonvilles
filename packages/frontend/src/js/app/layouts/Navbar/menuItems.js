@@ -55,9 +55,9 @@ export default {
         {
             label: "Sites",
             target: "/liste-des-sites",
-            group: "townList",
             classes: lowerMenuItemClass,
-            menu: "lower"
+            menu: "lower",
+            group: "townList"
         },
         {
             label: "Actions",
@@ -68,9 +68,9 @@ export default {
         {
             label: "Annuaire",
             target: "/annuaire",
-            group: "directory",
             classes: lowerMenuItemClass,
-            menu: "lower"
+            menu: "lower",
+            group: "directory"
         },
         {
             label: "Carte",
@@ -87,23 +87,23 @@ export default {
         {
             label: "Statistiques",
             target: "/statistiques",
-            group: "stats",
             classes: lowerMenuItemClass,
-            menu: "lower"
+            menu: "lower",
+            group: "stats"
         },
         {
             label: "Administration",
             target: "/liste-des-utilisateurs",
-            group: "directory",
             classes: lowerMenuItemClass,
-            menu: "lower"
+            menu: "lower",
+            group: "users"
         },
         {
             label: "Mon compte",
             target: "/mon-compte",
-            group: "me",
             classes: upperMenuItemClass,
-            menu: "upper"
+            menu: "upper",
+            group: "me"
         },
         {
             label: "Aide",

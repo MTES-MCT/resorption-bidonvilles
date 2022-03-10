@@ -54,7 +54,6 @@
 
 <script>
 import LoginLayout from "#app/components/LoginLayout";
-import { login } from "#helpers/api/user";
 
 export default {
     components: {
@@ -73,14 +72,17 @@ export default {
             try {
                 this.error = null;
                 this.loading = true;
-                this.$store.commit("reset");
-                await login(this.email, this.password);
+                // this.$store.commit("reset"); ???
+                await this.$store.dispatch("login", {
+                    email: this.email,
+                    password: this.password
+                });
                 this.$trackMatomoEvent("Login", "Connection");
 
                 const d = new Date();
                 d.setTime(d.getTime() + 365 * 24 * 60 * 60 * 1000); // cookie is valid for 365 days
                 document.cookie = `logged_once=1;expires={d.toUTCString()};path=/`;
-
+                console.log("Redirected to / from SignIn.vue.onLogin");
                 this.$router.push({ path: "/" });
                 this.loading = false;
             } catch (err) {

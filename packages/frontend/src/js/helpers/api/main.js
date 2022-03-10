@@ -1,5 +1,4 @@
 import Vue from "vue";
-import { getToken, logout } from "#helpers/api/user";
 import { open as openTab } from "#helpers/tabHelper";
 import { VUE_APP_API_URL, APP_VERSION } from "#src/js/env.js";
 
@@ -45,8 +44,16 @@ function handleRequestResponse(success, failure) {
             // handle generic errors
             case ERRORS.MISSING_TOKEN:
             case ERRORS.EXPIRED_OR_INVALID_TOKEN:
-                logout(Vue.prototype.$piwik);
                 // TODO: TO FIX
+                localStorage.removeItem("token");
+                {
+                    const piwik = Vue.prototype.$piwik;
+                    if (piwik) {
+                        piwik.resetUserId();
+                        piwik.setCustomVariable(1, "user", null);
+                        piwik.setCustomVariable(5, "departement_code", null);
+                    }
+                }
                 // router.push("/");
                 break;
 
@@ -103,8 +110,9 @@ function request(method, url, data, headers = {}) {
         });
 
         if (!Object.prototype.hasOwnProperty.call(headers, "x-access-token")) {
-            const token = getToken();
+            const token = localStorage.getItem("token");
             if (token !== null) {
+                console.log(`=====token is ${token} in main.js======`);
                 xhr.setRequestHeader("x-access-token", token);
             }
         }
@@ -208,6 +216,6 @@ export function open(url) {
     return openTab(
         `${url}${
             url.indexOf("?") === -1 ? "?" : "&"
-        }accessToken=${encodeURIComponent(getToken())}`
+        }accessToken=${encodeURIComponent(localStorage.getItem("token"))}`
     );
 }

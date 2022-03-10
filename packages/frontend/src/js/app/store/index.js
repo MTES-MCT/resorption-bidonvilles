@@ -16,6 +16,8 @@ import locations from "./modules/locations";
 import directory from "./modules/directory";
 import highCovidComments from "./modules/highCovidComments";
 import plans from "./modules/plans";
+import user from "./modules/user";
+import config from "./modules/config";
 
 export default function(Vue) {
     Vue.use(Vuex);
@@ -26,7 +28,9 @@ export default function(Vue) {
             locations,
             directory,
             highCovidComments,
-            plans
+            plans,
+            user,
+            config
         },
         state: {
             entrypoint: null,

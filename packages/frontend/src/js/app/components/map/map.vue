@@ -1234,10 +1234,7 @@ export default {
  */
 </script>
 
-<style>
-@import "https://unpkg.com/leaflet@1.3.4/dist/leaflet.css";
-</style>
-
 <style lang="scss" scoped>
+@import "https://unpkg.com/leaflet@1.3.4/dist/leaflet.css";
 @import "./map.scss";
 </style>

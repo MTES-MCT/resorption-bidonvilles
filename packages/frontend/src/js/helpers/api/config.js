@@ -1,5 +1,4 @@
 import { getApi, postApi } from "#helpers/api/main";
-import { refreshToken } from "#helpers/api/user";
 
 /**
  * Loaded configuration
@@ -32,12 +31,25 @@ export function isLoaded() {
  *
  * @returns {Promise}
  */
+// {
+//     actions: {
+//         async load({ commit, dispatch }) {
+//             const response = await load();
+//             commit("setConfig", response);
+//             dispatch("refreshToken");
+//         }
+//     }
+// }
+
 export function load() {
     return getApi("/config").then(response => {
         // refresh the token, by the way
-        refreshToken();
+        // this.$store.dispatch("refreshToken");
+        // refreshToken();
 
         configuration = response;
+        console.log(`response from helpers/api/config/load: ${JSON.stringify(response)}`);
+        // localStorage.setItem("token", token);
         return response;
     });
 }
