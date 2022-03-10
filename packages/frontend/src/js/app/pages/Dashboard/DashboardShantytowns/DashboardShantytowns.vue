@@ -2,7 +2,7 @@
     <DashboardSection title="Sites" id="sites">
         <template slot="header_left">
             <DashboardShantytownsFilters />
-            <TabList :tabs="tabs" :value="display" @input="changeDisplay" />
+            <DashboardShantytownsDisplay :tabs="tabs" />
         </template>
 
         <template slot="body">
@@ -12,18 +12,17 @@
 </template>
 
 <script>
-import TabList from "#app/components/TabList/TabList.vue";
 import DashboardSection from "../DashboardSection";
 import DashboardShantytownsFilters from "./DashboardShantytownsFilters";
 import DashboardShantytownsList from "./DashboardShantytownsList";
-import { mapGetters } from "vuex";
+import DashboardShantytownsDisplay from "./DashboardShantytownsDisplay.vue";
 
 export default {
     components: {
-        TabList,
         DashboardSection,
         DashboardShantytownsFilters,
-        DashboardShantytownsList
+        DashboardShantytownsList,
+        DashboardShantytownsDisplay
     },
     data() {
         return {
@@ -32,16 +31,6 @@ export default {
                 { id: "map", label: "Carte" }
             ]
         };
-    },
-    methods: {
-        changeDisplay(id) {
-            this.$store.commit("setDashboardShantytownsDisplay", id);
-        }
-    },
-    computed: {
-        ...mapGetters({
-            display: "dashboardShantytownsDisplay"
-        })
     }
 };
 </script>

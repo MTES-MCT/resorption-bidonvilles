@@ -24,7 +24,6 @@ export default {
             state.dashboard.shantytowns.page = page;
         },
         setDashboardShantytownsDisplay(state, display) {
-            state.dashboard.shantytowns.page = 1;
             state.dashboard.shantytowns.display = display;
         },
         setDashboardShantytownsMapSetup(state, setup) {
