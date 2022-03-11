@@ -1,19 +1,28 @@
 import { login, refreshToken } from "#helpers/api/user";
-import { unload as unloadConfig } from "#helpers/api/config";
 
 export default {
     state: {
-        loggedIn: localStorage.getItem("token") !== null
+        accessToken: process.isServer ? null : localStorage.getItem("token")
     },
 
     mutations: {
         SET_ACCESS_TOKEN(state, token) {
+            console.log(`==========IN SET_ACCESS_TOKEN MUTATION=========="`);
             if (!token) {
                 localStorage.removeItem("token");
-                state.loggedIn = false;
+                console.log(`==========localStorage.removeItem("token)"`);
+                state.accessToken = null;
             } else {
+                console.log(
+                    `==========localStorage.setItem("token"): ${token}`
+                );
                 localStorage.setItem("token", token);
-                state.loggedIn = token !== null;
+                state.accessToken = token;
+                console.log(
+                    `==========localStorage.getItem("token"): ${localStorage.getItem(
+                        "token"
+                    )}`
+                );
             }
         }
     },
@@ -29,8 +38,8 @@ export default {
             commit("SET_ACCESS_TOKEN", response.token);
         },
 
-        logout({ commit }, piwik) {
-            unloadConfig();
+        logout({ commit, dispatch }, piwik) {
+            dispatch("unloadConfig");
             commit("SET_ACCESS_TOKEN", null);
 
             if (piwik) {
@@ -40,14 +49,9 @@ export default {
             }
         }
     },
-
     getters: {
-        accessToken() {
-            if (process.isServer) {
-                return false;
-            }
-
-            return localStorage.getItem("token");
+        loggedIn(state) {
+            return state.accessToken !== null;
         }
     }
 };
