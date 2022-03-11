@@ -181,6 +181,7 @@ export default {
                     this.confidentiality_agreement[0]
                 );
                 setConfig("user.charte_engagement_a_jour", true);
+                this.$store.commit("SET_CHARTE_ENGAGEMENT_A_JOUR", true);
                 this.loading = false;
                 this.$router.push("/");
             } catch ({ user_message: message }) {
