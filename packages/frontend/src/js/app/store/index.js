@@ -16,17 +16,21 @@ import locations from "./modules/locations";
 import directory from "./modules/directory";
 import highCovidComments from "./modules/highCovidComments";
 import plans from "./modules/plans";
+import user from "./modules/user";
+import config from "./modules/config";
 
 export default function(Vue) {
     Vue.use(Vuex);
 
-    return new Vuex.Store({
+    const localStore = new Vuex.Store({
         modules: {
             activities,
             locations,
             directory,
             highCovidComments,
-            plans
+            plans,
+            user,
+            config
         },
         state: {
             entrypoint: null,
@@ -267,4 +271,6 @@ export default function(Vue) {
             }
         }
     });
+    Vue.prototype.$store = localStore;
+    return localStore;
 }
