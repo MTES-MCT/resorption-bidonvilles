@@ -7,22 +7,12 @@ export default {
 
     mutations: {
         SET_ACCESS_TOKEN(state, token) {
-            console.log(`==========IN SET_ACCESS_TOKEN MUTATION=========="`);
             if (!token) {
                 localStorage.removeItem("token");
-                console.log(`==========localStorage.removeItem("token)"`);
                 state.accessToken = null;
             } else {
-                console.log(
-                    `==========localStorage.setItem("token"): ${token}`
-                );
                 localStorage.setItem("token", token);
                 state.accessToken = token;
-                console.log(
-                    `==========localStorage.getItem("token"): ${localStorage.getItem(
-                        "token"
-                    )}`
-                );
             }
         }
     },
