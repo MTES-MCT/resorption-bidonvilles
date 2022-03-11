@@ -72,7 +72,7 @@ export default {
             try {
                 this.error = null;
                 this.loading = true;
-                // this.$store.commit("reset"); ???
+                this.$store.commit("reset");
                 await this.$store.dispatch("login", {
                     email: this.email,
                     password: this.password
