@@ -15,13 +15,7 @@
 </template>
 
 <script>
-import {
-    get as getConfig,
-    hasPermission,
-    isLoaded as isConfigLoaded,
-    hasAcceptedCharte,
-    load
-} from "#helpers/api/config";
+import { hasPermission, hasAcceptedCharte } from "#helpers/api/config";
 import * as Sentry from "@sentry/vue";
 import { setCustomVariables } from "#matomo/matomo";
 import PrivateLayout from "#app/components/PrivateLayout";
@@ -88,12 +82,12 @@ export default {
 
         const guards = (beforeEnter && guardGroups[beforeEnter]) || [];
         for (const guard of guards) {
-            if (guard === "isLoggedIn" && !this.$store.state.user.loggedIn) {
+            if (guard === "isLoggedIn" && !this.$store.getters.loggedIn) {
                 this.$store.commit("setEntrypoint", this.$route.path);
                 return this.$router.push("/connexion?r=1");
             }
 
-            if (guard === "isConfigLoaded" && !isConfigLoaded()) {
+            if (guard === "isConfigLoaded" && !this.$store.getters.loaded) {
                 try {
                     await this.loadConfig();
                 } catch (response) {
@@ -130,12 +124,11 @@ export default {
 
     methods: {
         async loadConfig() {
-            if (isConfigLoaded() === true) {
-                this.configLoaded = true;
+            if (this.$store.getters.loaded === true) {
                 return;
             }
             this.error = null;
-            const { user } = await load();
+            const { user } = await this.$store.dispatch("loadConfig");
             try {
                 Sentry.setUser({ id: user.id });
                 setCustomVariables(this.$piwik, user);
@@ -149,7 +142,7 @@ export default {
          * @returns {boolean}
          */
         hasPendingChangelog() {
-            const { changelog } = getConfig();
+            const { changelog } = this.$store.state.config.configuration;
             return changelog && changelog.length > 0;
         },
         /**
@@ -160,7 +153,7 @@ export default {
         isUpgraded() {
             const {
                 user: { position }
-            } = getConfig();
+            } = this.$store.state.config.configuration;
             return position !== "";
         },
         /**
@@ -178,7 +171,7 @@ export default {
             return permissions.every(permission => hasPermission(permission));
         },
         home() {
-            if (this.$store.state.user.loggedIn) {
+            if (this.$store.getters.loggedIn) {
                 const { entrypoint } = this.$store.state;
                 if (entrypoint !== null) {
                     this.$store.commit("setEntrypoint", null);
