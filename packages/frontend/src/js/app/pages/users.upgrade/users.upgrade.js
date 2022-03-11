@@ -1,6 +1,5 @@
 import NavBar from "#app/layouts/Navbar/Navbar.vue";
 import Form from "#app/components/form/form.vue";
-import { get as getConfig, load } from "#helpers/api/config";
 import { upgrade } from "#helpers/api/user";
 
 export default {
@@ -12,7 +11,7 @@ export default {
     data() {
         const {
             user: { id: userId, email }
-        } = getConfig();
+        } = this.$store.state.config.configuration;
 
         return {
             formData: {
@@ -80,7 +79,8 @@ export default {
 
     methods: {
         onComplete() {
-            load()
+            this.$store
+                .dispatch("loadConfig")
                 .then(() => {
                     this.$router.push({ path: "/" });
                 })
