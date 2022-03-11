@@ -89,11 +89,11 @@
 import PrivateLayout from "#app/components/PrivateLayout";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
 
-import { closeChangelog, get as getConfig, load } from "#helpers/api/config";
+import { closeChangelog } from "#helpers/api/config";
 
 export default {
     data() {
-        const { changelog } = getConfig();
+        const { changelog } = this.$store.state.config.configuration;
 
         return {
             pending: false,
@@ -136,7 +136,8 @@ export default {
 
             closeChangelog(this.changelog.slice(-1)[0].app_version)
                 .then(() => {
-                    load()
+                    this.$store
+                        .dispatch("loadConfig")
                         .then(() => {
                             this.pending = false;
                             this.$router.push("/");
