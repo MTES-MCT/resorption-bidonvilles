@@ -30,9 +30,7 @@ export function login(email, password) {
  * @returns {Promise}
  */
 export function refreshToken() {
-    return getApi("/refreshToken").then(response => {
-        localStorage.setItem("token", response.token);
-    });
+    return getApi("/refreshToken");
 }
 
 /**
