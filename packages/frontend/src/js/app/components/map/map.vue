@@ -16,7 +16,11 @@
 
             <div ref="legends" class="leaflet-legend">
                 <h1>Légende</h1>
-                <p v-for="fieldType in fieldTypes" :key="fieldType.label">
+                <p
+                    class="fieldType"
+                    v-for="fieldType in fieldTypes"
+                    :key="fieldType.label"
+                >
                     <span
                         v-bind:style="{ 'background-color': fieldType.color }"
                     ></span>
@@ -1234,10 +1238,7 @@ export default {
  */
 </script>
 
-<style>
-@import "https://unpkg.com/leaflet@1.3.4/dist/leaflet.css";
-</style>
-
 <style lang="scss" scoped>
+@import "https://unpkg.com/leaflet@1.3.4/dist/leaflet.css";
 @import "./map.scss";
 </style>
