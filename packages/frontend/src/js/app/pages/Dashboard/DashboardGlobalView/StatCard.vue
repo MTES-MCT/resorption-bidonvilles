@@ -67,6 +67,8 @@
 <script>
 import Bar from "./Bar.vue";
 
+const MAX_HEIGHT = 50;
+
 export default {
     components: {
         Bar
@@ -95,18 +97,20 @@ export default {
             return new Intl.NumberFormat("fr-FR").format(number);
         },
         setColumns() {
-            this.columns = this.cardStats.figures.slice(1);
-            this.columns.reverse();
+            this.columns = this.cardStats.figures.slice(0, -1);
             if (this.maxNumber !== 0) {
                 this.columns = this.columns.map(
-                    number => (number * 50) / this.maxNumber
+                    number => (number * MAX_HEIGHT) / this.maxNumber
                 );
             }
         }
     },
     computed: {
         latestFigureHeight() {
-            return (this.cardStats.figures[0] * 50) / this.maxNumber;
+            return (
+                (this.cardStats.figures.slice(-1)[0] * MAX_HEIGHT) /
+                this.maxNumber
+            );
         },
         evolutionColor() {
             return this.cardStats.color === "red"

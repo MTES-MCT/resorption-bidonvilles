@@ -3,6 +3,7 @@ const {
     Stats_Exports,
     Stats_Directory_Views,
 } = require('#db/models');
+const { getStats } = require('../models/statsModel')();
 
 const groupByKey = (list, key) => list.reduce((hash, obj) => ({ ...hash, [obj[key]]: { ...hash[obj[key]], ...obj } }), {});
 
@@ -212,7 +213,7 @@ module.exports = models => ({
     },
     async getDashboardStats(req, res, next) {
         try {
-            const townStats = await models.stats.getStats();
+            const townStats = await getStats();
             return res.status(200).send(townStats);
         } catch (error) {
             res.status(500).send({
