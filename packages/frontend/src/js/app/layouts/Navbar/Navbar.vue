@@ -27,7 +27,6 @@
                         :target="item.target"
                         :label="item.label"
                         :classes="item.classes"
-                        :group="item.group"
                     ></DesktopMenuLinkItem>
                 </div>
             </div>
@@ -60,7 +59,6 @@
                     :target="item.target"
                     :label="item.label"
                     :classes="item.classes"
-                    :group="item.group"
                 ></DesktopMenuLinkItem>
             </div>
         </div>
@@ -73,15 +71,11 @@
         />
     </nav>
 </template>
+
 <script>
-import { isLoggedIn } from "#helpers/api/user";
 import MobileMenuSidePanel from "./MobileMenuSidePanel.vue";
 import DesktopMenuLinkItem from "./DesktopMenuLinkItem.vue";
-import {
-    isLoaded as isConfigLoaded,
-    hasPermission,
-    hasAcceptedCharte
-} from "#helpers/api/config";
+import { hasPermission } from "#helpers/api/config";
 import menuItems from "./menuItems";
 
 export default {
@@ -96,11 +90,14 @@ export default {
     },
     computed: {
         items() {
-            if (isLoggedIn() !== true) {
+            if (!this.$store.getters.loggedIn) {
                 return menuItems.anonymous;
             }
 
-            if (isConfigLoaded() !== true || hasAcceptedCharte() !== true) {
+            if (
+                this.$store.getters.loaded !== true ||
+                this.$store.getters.hasAcceptedCharte !== true
+            ) {
                 return menuItems.loading;
             }
 
@@ -118,25 +115,9 @@ export default {
             return items.filter(elt => elt.menu === itemType);
         },
         filterItems(items) {
-            return items
-                .map(item => {
-                    if (item.items) {
-                        return Object.assign(item, {
-                            items: item.items.filter(subitem =>
-                                this.isItemAllowed(subitem)
-                            )
-                        });
-                    }
-
-                    return item;
-                })
-                .filter(item => {
-                    if (item.items) {
-                        return item.items.length > 0;
-                    }
-
-                    return this.isItemAllowed(item);
-                });
+            return items.filter(item => {
+                return this.isItemAllowed(item);
+            });
         },
         isItemAllowed(item) {
             const requiredPermissions = this.$router.resolve({
