@@ -86,14 +86,9 @@
 import getSince from "#app/utils/getSince";
 import formatLastUpdatedAt from "#app/utils/formatLastUpdatedAt";
 import TownPopulation from "#app/components/TownPopulation/TownPopulation";
-import { formatLivingConditions } from "#app/pages/TownDetails/formatLivingConditions";
+import { lifeConditionsMixin } from "#app/mixins/lifeConditionsMixin";
 export default {
-    props: {
-        shantytown: {
-            type: Object,
-            required: true
-        }
-    },
+    mixins: [lifeConditionsMixin],
     components: {
         TownPopulation
     },
@@ -101,41 +96,6 @@ export default {
         pinVariant() {
             const { months } = getSince(this.shantytown.updatedAt);
             return months >= 1 ? "pin_red" : "pin";
-        },
-        stableConditions() {
-            const details = formatLivingConditions(this.shantytown);
-            const conditions = [];
-            if (
-                this.shantytown.accessToWater === true &&
-                details.water.negative.length === 0
-            ) {
-                conditions.push("eau");
-            }
-            if (
-                this.shantytown.accessToSanitary === true &&
-                details.sanitary.negative.length === 0
-            ) {
-                conditions.push("toilettes");
-            }
-            if (this.shantytown.electricityType.value === true) {
-                conditions.push("électricité");
-            }
-            if (
-                this.shantytown.trashEvacuation === true &&
-                details.trash.negative.length === 0
-            ) {
-                conditions.push("évacuation des déchets");
-            }
-            if (this.shantytown.vermin === false) {
-                conditions.push("prévention des nuisibles");
-            }
-            if (
-                this.shantytown.firePreventionMeasures === true &&
-                details.firePrevention.negative.length === 0
-            ) {
-                conditions.push("prévention incendie");
-            }
-            return conditions;
         }
     },
     methods: {
