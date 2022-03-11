@@ -177,7 +177,11 @@ export default {
         }
     },
     actions: {
-        async fetchGlobalStats({ commit }) {
+        async fetchGlobalStats({ commit, state }) {
+            if (state.dashboard.globalStats.isLoading) {
+                return;
+            }
+            commit("setGlobalStatsError", null);
             commit("setGlobalStatsLoading", true);
             try {
                 const stats = await getDashboardStats();

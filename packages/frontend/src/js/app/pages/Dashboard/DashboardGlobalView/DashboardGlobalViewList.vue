@@ -38,9 +38,9 @@ export default {
     components: {
         StatCard
     },
-    async created() {
+    created() {
         if (!this.stats.length) {
-            await this.$store.dispatch("dashboard/fetchGlobalStats");
+            this.$store.dispatch("dashboard/fetchGlobalStats");
         }
     },
     methods: {
