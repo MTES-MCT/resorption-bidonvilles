@@ -1,5 +1,4 @@
 import Vue from "vue";
-import { getToken, logout } from "#helpers/api/user";
 import { open as openTab } from "#helpers/tabHelper";
 import { VUE_APP_API_URL, APP_VERSION } from "#src/js/env.js";
 
@@ -45,8 +44,16 @@ function handleRequestResponse(success, failure) {
             // handle generic errors
             case ERRORS.MISSING_TOKEN:
             case ERRORS.EXPIRED_OR_INVALID_TOKEN:
-                logout(Vue.prototype.$piwik);
                 // TODO: TO FIX
+                Vue.prototype.$store.commit("SET_ACCESS_TOKEN", null);
+                {
+                    const piwik = Vue.prototype.$piwik;
+                    if (piwik) {
+                        piwik.resetUserId();
+                        piwik.setCustomVariable(1, "user", null);
+                        piwik.setCustomVariable(5, "departement_code", null);
+                    }
+                }
                 // router.push("/");
                 break;
 
@@ -103,7 +110,7 @@ function request(method, url, data, headers = {}) {
         });
 
         if (!Object.prototype.hasOwnProperty.call(headers, "x-access-token")) {
-            const token = getToken();
+            const token = Vue.prototype.$store.state.user.accessToken;
             if (token !== null) {
                 xhr.setRequestHeader("x-access-token", token);
             }
@@ -205,9 +212,10 @@ export function putApi(url, data, headers) {
  * @param {String} url
  */
 export function open(url) {
+    const token = Vue.prototype.$store.state.user.accessToken;
     return openTab(
         `${url}${
             url.indexOf("?") === -1 ? "?" : "&"
-        }accessToken=${encodeURIComponent(getToken())}`
+        }accessToken=${encodeURIComponent(token)}`
     );
 }
