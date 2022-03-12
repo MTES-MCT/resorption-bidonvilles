@@ -80,7 +80,7 @@ export default {
     methods: {
         onComplete() {
             this.$store
-                .dispatch("loadConfig")
+                .dispatch("config/load")
                 .then(() => {
                     this.$router.push({ path: "/" });
                 })

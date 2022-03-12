@@ -29,7 +29,7 @@ export default {
         },
 
         logout({ commit, dispatch }, piwik) {
-            dispatch("unloadConfig");
+            dispatch("config/unload");
             commit("SET_ACCESS_TOKEN", null);
 
             if (piwik) {

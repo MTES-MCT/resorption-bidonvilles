@@ -97,7 +97,10 @@ export default {
                 return this.$router.push("/connexion?r=1");
             }
 
-            if (guard === "isConfigLoaded" && !this.$store.getters.loaded) {
+            if (
+                guard === "isConfigLoaded" &&
+                !this.$store.getters["config/loaded"]
+            ) {
                 try {
                     await this.loadConfig();
                 } catch (response) {
@@ -111,7 +114,7 @@ export default {
             }
             if (
                 guard === "hasAcceptedCharte" &&
-                !this.$store.getters.hasAcceptedCharte
+                !this.$store.getters["config/hasAcceptedCharte"]
             ) {
                 this.$store.commit("setEntrypoint", this.$route.path);
                 return this.$router.push("/signature-charte-engagement");
@@ -137,11 +140,11 @@ export default {
 
     methods: {
         async loadConfig() {
-            if (this.$store.getters.loaded === true) {
+            if (this.$store.getters["config/loaded"] === true) {
                 return;
             }
             this.error = null;
-            const { user } = await this.$store.dispatch("loadConfig");
+            const { user } = await this.$store.dispatch("config/load");
             try {
                 Sentry.setUser({ id: user.id });
                 setCustomVariables(this.$piwik, user);
