@@ -27,7 +27,7 @@ export default {
         async load({ commit, dispatch }) {
             const response = await load();
             commit("SET_CONFIG", response);
-            dispatch("refreshToken", null, { root: true });
+            dispatch("user/refreshToken", null, { root: true });
             return response;
         },
         unload({ commit }) {

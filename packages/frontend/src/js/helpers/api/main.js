@@ -45,7 +45,7 @@ function handleRequestResponse(success, failure) {
             case ERRORS.MISSING_TOKEN:
             case ERRORS.EXPIRED_OR_INVALID_TOKEN:
                 // TODO: TO FIX
-                Vue.prototype.$store.commit("SET_ACCESS_TOKEN", null);
+                Vue.prototype.$store.commit("user/SET_ACCESS_TOKEN", null);
                 {
                     const piwik = Vue.prototype.$piwik;
                     if (piwik) {
