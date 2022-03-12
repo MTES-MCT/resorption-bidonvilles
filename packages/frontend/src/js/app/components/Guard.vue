@@ -88,6 +88,10 @@ export default {
 
         const guards = (beforeEnter && guardGroups[beforeEnter]) || [];
         for (const guard of guards) {
+            if (guard === "anonymous" && this.$store.getters.loggedIn) {
+                return this.$router.push("/");
+            }
+
             if (guard === "isLoggedIn" && !this.$store.getters.loggedIn) {
                 this.$store.commit("setEntrypoint", this.$route.path);
                 return this.$router.push("/connexion?r=1");
