@@ -137,7 +137,7 @@ export default {
             closeChangelog(this.changelog.slice(-1)[0].app_version)
                 .then(() => {
                     this.$store
-                        .dispatch("loadConfig")
+                        .dispatch("config/load")
                         .then(() => {
                             this.pending = false;
                             this.$router.push("/");

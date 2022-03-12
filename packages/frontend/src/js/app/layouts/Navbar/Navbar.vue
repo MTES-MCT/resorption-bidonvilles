@@ -95,8 +95,8 @@ export default {
             }
 
             if (
-                this.$store.getters.loaded !== true ||
-                this.$store.getters.hasAcceptedCharte !== true
+                this.$store.getters["config/loaded"] !== true ||
+                this.$store.getters["config/hasAcceptedCharte"] !== true
             ) {
                 return menuItems.loading;
             }

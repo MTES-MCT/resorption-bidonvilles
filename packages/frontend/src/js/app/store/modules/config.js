@@ -1,6 +1,8 @@
 import { load, unload } from "#helpers/api/config";
 
 export default {
+    namespaced: true,
+
     state: {
         configuration: null
     },
@@ -22,13 +24,13 @@ export default {
     },
 
     actions: {
-        async loadConfig({ commit, dispatch }) {
+        async load({ commit, dispatch }) {
             const response = await load();
             commit("SET_CONFIG", response);
-            dispatch("refreshToken");
+            dispatch("refreshToken", null, { root: true });
             return response;
         },
-        unloadConfig({ commit }) {
+        unload({ commit }) {
             commit("SET_CONFIG", null);
             unload();
         }
