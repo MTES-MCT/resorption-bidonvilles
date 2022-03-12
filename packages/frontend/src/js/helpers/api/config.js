@@ -8,23 +8,6 @@ import { getApi, postApi } from "#helpers/api/main";
 let configuration = null;
 
 /**
- * Checks if the configuration for the current user is loaded
- *
- * The configuration consists in:
- * - data specific to the current user (email, name, etc., this kind of stuff)
- * - static data that can be reused all over the app (list of town's field types, owner types, and so on)
- *
- * The reason behind loading the static data is to avoid fetching it each time a component needs it,
- * which we can assume will be VERY OFTEN.
- * It makes us save a few useless HTTP requests in the future.
- *
- * @returns {boolean}
- */
-export function isLoaded() {
-    return configuration !== null;
-}
-
-/**
  * Loads the configuration for the current user
  *
  * If there is no user currently logged in, this request will fail.
