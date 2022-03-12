@@ -161,27 +161,3 @@ export function hasPermission(permissionName) {
 export function closeChangelog(version) {
     return postApi("/changelog", { version });
 }
-
-/**
- * Indicates whether the current user has accepted the charte
- *
- * @returns {Boolean}
- */
-export function hasAcceptedCharte() {
-    if (configuration === null) {
-        return false;
-    }
-
-    return configuration.user.charte_engagement_a_jour;
-}
-
-/**
- * @typedef {Object} Configuration
- * @property {UserConfiguration} user
- * @property {Array}             field_types
- */
-
-/**
- * @typedef {Object} UserConfiguration
- * @property {string} email
- */

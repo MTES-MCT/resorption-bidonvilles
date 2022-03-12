@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { hasPermission, hasAcceptedCharte } from "#helpers/api/config";
+import { hasPermission } from "#helpers/api/config";
 import * as Sentry from "@sentry/vue";
 import { setCustomVariables } from "#matomo/matomo";
 import PrivateLayout from "#app/components/PrivateLayout";
@@ -99,7 +99,10 @@ export default {
             if (guard === "isPermitted" && !this.isPermitted()) {
                 return this.$router.push("/");
             }
-            if (guard === "hasAcceptedCharte" && !hasAcceptedCharte()) {
+            if (
+                guard === "hasAcceptedCharte" &&
+                !this.$store.getters.hasAcceptedCharte
+            ) {
                 this.$store.commit("setEntrypoint", this.$route.path);
                 return this.$router.push("/signature-charte-engagement");
             }
