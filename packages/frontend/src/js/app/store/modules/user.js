@@ -30,8 +30,8 @@ export default {
             commit("SET_ACCESS_TOKEN", response.token);
         },
 
-        logout({ commit, dispatch }, piwik) {
-            dispatch("config/unload", null, { root: true });
+        async logout({ commit, dispatch }, piwik) {
+            await dispatch("config/unload", null, { root: true });
             commit("SET_ACCESS_TOKEN", null);
 
             if (piwik) {
