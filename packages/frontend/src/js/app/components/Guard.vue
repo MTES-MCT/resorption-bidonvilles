@@ -75,7 +75,7 @@ export default {
         }
 
         if (beforeEnter?.action === "signout") {
-            this.$store.dispatch("user/logout", this.$piwik);
+            await this.$store.dispatch("user/logout", this.$piwik);
             this.$router.push("/");
             return;
         }
