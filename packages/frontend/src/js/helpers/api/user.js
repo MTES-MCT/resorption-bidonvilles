@@ -19,9 +19,7 @@ import {
  * @returns {Promise}
  */
 export function login(email, password) {
-    return postApi("/signin", { email, password }).then(response => {
-        return response;
-    });
+    return postApi("/signin", { email, password });
 }
 
 /**
