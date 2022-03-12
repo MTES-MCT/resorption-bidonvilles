@@ -90,7 +90,7 @@ export default {
     },
     computed: {
         items() {
-            if (!this.$store.getters.loggedIn) {
+            if (!this.$store.getters["user/loggedIn"]) {
                 return menuItems.anonymous;
             }
 

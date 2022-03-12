@@ -1,6 +1,8 @@
 import { login, refreshToken } from "#helpers/api/user";
 
 export default {
+    namespaced: true,
+
     state: {
         accessToken: process.isServer ? null : localStorage.getItem("token")
     },
@@ -29,7 +31,7 @@ export default {
         },
 
         logout({ commit, dispatch }, piwik) {
-            dispatch("config/unload");
+            dispatch("config/unload", null, { root: true });
             commit("SET_ACCESS_TOKEN", null);
 
             if (piwik) {

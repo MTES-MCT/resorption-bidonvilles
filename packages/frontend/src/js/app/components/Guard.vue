@@ -75,18 +75,21 @@ export default {
         }
 
         if (beforeEnter?.action === "signout") {
-            this.$store.dispatch("logout", this.$piwik);
+            this.$store.dispatch("user/logout", this.$piwik);
             this.$router.push("/");
             return;
         }
 
         const guards = (beforeEnter && guardGroups[beforeEnter]) || [];
         for (const guard of guards) {
-            if (guard === "anonymous" && this.$store.getters.loggedIn) {
+            if (guard === "anonymous" && this.$store.getters["user/loggedIn"]) {
                 return this.$router.push("/");
             }
 
-            if (guard === "isLoggedIn" && !this.$store.getters.loggedIn) {
+            if (
+                guard === "isLoggedIn" &&
+                !this.$store.getters["user/loggedIn"]
+            ) {
                 this.$store.commit("setEntrypoint", this.$route.path);
                 return this.$router.push("/connexion?r=1");
             }
@@ -181,7 +184,7 @@ export default {
             return permissions.every(permission => hasPermission(permission));
         },
         home() {
-            if (this.$store.getters.loggedIn) {
+            if (this.$store.getters["user/loggedIn"]) {
                 const { entrypoint } = this.$store.state;
                 if (entrypoint !== null) {
                     this.$store.commit("setEntrypoint", null);
