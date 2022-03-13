@@ -151,7 +151,6 @@ module.exports = {
                 green: "#169B62 ",
                 red: "#D63626",
                 cardBorder: "rgba(0,0,145,0.2)",
-                "french-blue": "#000091",
 
                 // Deprecated values : TO DELETE
                 inputHover: "#D9D9E6",
