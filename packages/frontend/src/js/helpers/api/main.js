@@ -44,17 +44,34 @@ function handleRequestResponse(success, failure) {
             // handle generic errors
             case ERRORS.MISSING_TOKEN:
             case ERRORS.EXPIRED_OR_INVALID_TOKEN:
-                // TODO: TO FIX
-                Vue.prototype.$store.commit("user/SET_ACCESS_TOKEN", null);
                 {
-                    const piwik = Vue.prototype.$piwik;
-                    if (piwik) {
-                        piwik.resetUserId();
-                        piwik.setCustomVariable(1, "user", null);
-                        piwik.setCustomVariable(5, "departement_code", null);
+                    Vue.prototype.$store.commit("user/SET_ACCESS_TOKEN", null);
+                    {
+                        const piwik = Vue.prototype.$piwik;
+                        if (piwik) {
+                            piwik.resetUserId();
+                            piwik.setCustomVariable(1, "user", null);
+                            piwik.setCustomVariable(
+                                5,
+                                "departement_code",
+                                null
+                            );
+                        }
                     }
+
+                    Vue.prototype.$store.commit(
+                        "setEntrypoint",
+                        window.location.pathname
+                    );
+                    window.dispatchEvent(
+                        new CustomEvent("callRouter", {
+                            detail: {
+                                routerMethod: "push",
+                                routerArgs: ["/connexion?r=1"]
+                            }
+                        })
+                    );
                 }
-                // router.push("/");
                 break;
 
             // for everything else, let the current component decide what's best
