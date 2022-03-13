@@ -1,4 +1,4 @@
-import { load, unload } from "#helpers/api/config";
+import { load } from "#helpers/api/config";
 
 export default {
     namespaced: true,
@@ -32,7 +32,6 @@ export default {
         },
         unload({ commit }) {
             commit("SET_CONFIG", null);
-            unload();
         }
     },
     getters: {
@@ -45,6 +44,51 @@ export default {
             }
 
             return state.configuration.user.charte_engagement_a_jour;
+        },
+        getPermission(state) {
+            return permissionName => {
+                if (
+                    state.configuration === null ||
+                    state.configuration.user === null
+                ) {
+                    return null;
+                }
+
+                const [entity, feature] = permissionName.split(".");
+                if (
+                    !Object.prototype.hasOwnProperty.call(
+                        state.configuration.user.permissions,
+                        entity
+                    ) ||
+                    !Object.prototype.hasOwnProperty.call(
+                        state.configuration.user.permissions[entity],
+                        feature
+                    )
+                ) {
+                    return null;
+                }
+
+                const permission =
+                    state.configuration.user.permissions[entity][feature];
+                if (permission.allowed !== true) {
+                    return null;
+                }
+
+                return permission;
+            };
+        },
+        hasPermission(state, getters) {
+            return permissionName => {
+                const [entity, feature, data] = permissionName.split(".");
+                const permission = getters.getPermission(
+                    `${entity}.${feature}`
+                );
+
+                return (
+                    permission !== null &&
+                    (data === undefined || permission[data] === true)
+                );
+            };
         }
     }
 };

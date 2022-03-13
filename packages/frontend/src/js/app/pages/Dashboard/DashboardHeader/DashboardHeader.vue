@@ -17,7 +17,6 @@
 
 <script>
 import DashboardSection from "../DashboardSection";
-import { get as getConfig } from "#helpers/api/config";
 
 export default {
     components: {
@@ -25,15 +24,15 @@ export default {
     },
 
     data() {
-        const { user } = getConfig();
-
         return {
-            user,
             links: []
         };
     },
 
     computed: {
+        user() {
+            return this.$store.state.config.configuration.user;
+        },
         title() {
             return `Bienvenue ${this.user.first_name
                 .slice(0, 1)

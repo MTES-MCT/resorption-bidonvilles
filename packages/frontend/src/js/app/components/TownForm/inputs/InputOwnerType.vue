@@ -18,8 +18,6 @@
 </template>
 
 <script>
-import { get as getConfig } from "#helpers/api/config";
-
 export default {
     props: {
         value: {
@@ -30,12 +28,15 @@ export default {
     },
 
     data() {
-        const { owner_types } = getConfig();
-
         return {
-            values: owner_types,
             checked: this.value
         };
+    },
+
+    computed: {
+        values() {
+            return this.$store.state.config.configuration.owner_types;
+        }
     },
 
     watch: {

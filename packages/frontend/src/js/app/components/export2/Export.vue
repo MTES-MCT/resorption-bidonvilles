@@ -68,7 +68,6 @@
 
 <script>
 import { open } from "#helpers/api/main";
-import { getPermission } from "#helpers/api/config";
 import Checkbox from "#app/components/ui/Form/input/Checkbox";
 import { VUE_APP_API_URL } from "#src/js/env.js";
 
@@ -152,7 +151,7 @@ export default {
                     }
 
                     return (
-                        getPermission(
+                        this.$store.getters["config/getPermission"](
                             `${permission.entity}.${permission.feature}`
                         ) !== null
                     );

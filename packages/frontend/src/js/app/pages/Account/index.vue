@@ -16,7 +16,6 @@ import PrivateLayout from "#app/components/PrivateLayout";
 import LoadingError from "#app/components/PrivateLayout/LoadingError.vue";
 import AccountRead from "./AccountRead/AccountRead";
 import AccountEdit from "./AccountEdit/AccountEdit";
-import { get as getConfig } from "#helpers/api/config";
 import { get as getUser } from "#helpers/api/user";
 import LoadingPage from "#app/components/PrivateLayout/LoadingPage";
 
@@ -42,12 +41,10 @@ export default {
             this.error = null;
             this.edit = false;
 
-            const { user: connectedUser } = getConfig();
-
             try {
                 this.user = this.$route.params.id
                     ? await getUser(this.$route.params.id)
-                    : connectedUser;
+                    : this.$store.state.config.configuration.user;
 
                 if (!this.user) {
                     this.error =

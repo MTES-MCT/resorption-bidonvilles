@@ -77,7 +77,6 @@
 </template>
 
 <script>
-import { get as getConfig } from "#helpers/api/config";
 import { notify } from "#helpers/notificationHelper";
 
 export default {
@@ -97,7 +96,7 @@ export default {
     },
 
     data() {
-        const { actor_themes: themes, user } = getConfig();
+        const { user } = this.$store.state.config.configuration;
         const actor = this.town.actors.find(({ id }) => id === user.id);
         let value = actor !== undefined ? actor.themes : [];
         const autre = value.find(({ id }) => id === "autre");
@@ -105,7 +104,6 @@ export default {
         return {
             loading: false,
             error: null,
-            themes,
             userId: user.id,
             mode: actor === undefined ? "add" : "update",
             form: {
@@ -116,6 +114,9 @@ export default {
     },
 
     computed: {
+        themes() {
+            return this.$store.state.config.configuration.actor_themes;
+        },
         title() {
             return this.variant === "default"
                 ? "J'interviens sur ce site"

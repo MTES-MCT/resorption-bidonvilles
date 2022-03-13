@@ -75,7 +75,6 @@
 <script>
 import MobileMenuSidePanel from "./MobileMenuSidePanel.vue";
 import DesktopMenuLinkItem from "./DesktopMenuLinkItem.vue";
-import { hasPermission } from "#helpers/api/config";
 import menuItems from "./menuItems";
 
 export default {
@@ -129,7 +128,7 @@ export default {
             }
 
             return requiredPermissions.every(permission =>
-                hasPermission(permission)
+                this.$store.getters["config/hasPermission"](permission)
             );
         },
         openMobileMenu() {

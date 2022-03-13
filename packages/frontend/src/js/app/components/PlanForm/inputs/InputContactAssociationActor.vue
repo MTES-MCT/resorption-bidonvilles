@@ -15,7 +15,7 @@
             ><br />
             <a
                 href="#"
-                v-if="hasPermission('user.create')"
+                v-if="$store.getters['config/hasPermission']('user.create')"
                 @click="openUserCreationForm"
                 class="link"
                 >Vous pouvez créer un compte à cette personne en cliquant
@@ -45,7 +45,6 @@
 <script>
 import InputLabel from "#app/components/ui/Form/utils/InputLabel.vue";
 import { notify } from "#helpers/notificationHelper";
-import { hasPermission } from "#helpers/api/config";
 import { getMembers } from "#helpers/api/organization";
 
 export default {
@@ -110,7 +109,6 @@ export default {
     },
 
     methods: {
-        hasPermission,
         async load() {
             this.loaded = false;
             const { users } = await getMembers(this.associationId);

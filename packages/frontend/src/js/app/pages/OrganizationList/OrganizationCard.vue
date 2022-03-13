@@ -50,8 +50,6 @@
 </template>
 
 <script>
-import { get as getConfig } from "#helpers/api/config";
-
 export default {
     props: {
         organization: {
@@ -59,13 +57,14 @@ export default {
         }
     },
     data() {
-        const { user } = getConfig();
         return {
-            isHover: false,
-            currentUser: user
+            isHover: false
         };
     },
     computed: {
+        currentUser() {
+            return this.$store.state.config.configuration.user;
+        },
         name() {
             // Only display territory for associations
             if (this.organization.type.category === "association") {

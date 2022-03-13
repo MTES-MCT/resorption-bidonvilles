@@ -101,23 +101,17 @@
 </template>
 
 <script>
-import { get as getConfig, getPermission } from "#helpers/api/config";
-
 export default {
     props: {
         town: {
             type: Object
         }
     },
-    data() {
-        const { user } = getConfig();
-        return {
-            user
-        };
-    },
     methods: {
         hasLocalizedPermission(permissionName) {
-            const permission = getPermission(permissionName);
+            const permission = this.$store.getters["config/getPermission"](
+                permissionName
+            );
             if (permission === null) {
                 return false;
             }

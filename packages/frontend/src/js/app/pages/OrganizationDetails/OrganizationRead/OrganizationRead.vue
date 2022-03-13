@@ -47,7 +47,6 @@
     </div>
 </template>
 <script>
-import { get as getConfig } from "#helpers/api/config";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
 import OrganizationDetailsUser from "#app/pages/OrganizationDetails/OrganizationUser/OrganizationDetailsUser";
 import OrganizationHeader from "#app/pages/OrganizationDetails/ui/OrganizationHeader";
@@ -58,18 +57,18 @@ export default {
         PrivateContainer,
         OrganizationHeader
     },
-    data() {
-        const { user } = getConfig();
-        return {
-            isNationalAdmin: user.role_id === "national_admin"
-        };
-    },
     props: {
         organization: {
             type: Object
         }
     },
     computed: {
+        isNationalAdmin() {
+            return (
+                this.$store.state.config.configuration.user.role_id ===
+                "national_admin"
+            );
+        },
         beingFundedDate() {
             return App.formatDate(
                 new Date(this.organization.being_funded_at).getTime() / 1000,

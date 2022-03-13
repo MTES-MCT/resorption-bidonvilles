@@ -92,7 +92,6 @@
 </template>
 
 <script>
-import { get as getConfig, getPermission } from "#helpers/api/config";
 import formatDate from "./utils/formatDate";
 import ActivityCardIcon from "./ActivityCardIcon.vue";
 import ActivityCardBodyShantytownUpdated from "./ActivityCardBody/ActivityCardBodyShantytownUpdated.vue";
@@ -120,16 +119,18 @@ export default {
     },
 
     data() {
-        const { user } = getConfig();
-
         return {
-            user,
-            permission: getPermission("shantytown_comment.moderate"),
+            permission: this.$store.getters["config/getPermission"](
+                "shantytown_comment.moderate"
+            ),
             isHover: false
         };
     },
 
     computed: {
+        user() {
+            return this.$store.state.config.configuration.user;
+        },
         showDepartementCode() {
             const userLocation = this.user.organization.location;
             if (["nation", "region"].includes(userLocation.type)) {
