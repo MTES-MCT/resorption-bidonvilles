@@ -9,14 +9,13 @@ import {
     inviteNewActor
 } from "#helpers/api/town";
 import enrichShantytown from "#app/pages/TownsList/enrichShantytown";
-import { get as getConfig } from "#helpers/api/config";
 
 import activities from "./modules/activities";
 import locations from "./modules/locations";
 import directory from "./modules/directory";
 import highCovidComments from "./modules/highCovidComments";
 import plans from "./modules/plans";
-import user from "./modules/user";
+import userModule from "./modules/user";
 import config from "./modules/config";
 
 export default function(Vue) {
@@ -29,7 +28,7 @@ export default function(Vue) {
             directory,
             highCovidComments,
             plans,
-            user,
+            user: userModule,
             config
         },
         state: {
@@ -138,10 +137,13 @@ export default function(Vue) {
             }
         },
         actions: {
-            async fetchTowns({ commit }) {
+            async fetchTowns({ commit, state }) {
                 commit("setLoading", true);
                 try {
-                    const { user, field_types: fieldTypes } = getConfig();
+                    const {
+                        user,
+                        field_types: fieldTypes
+                    } = state.config.configuration;
 
                     if (
                         user.organization.location.type !== "nation" &&
@@ -184,9 +186,11 @@ export default function(Vue) {
                 }
             },
 
-            async fetchTownDetails({ commit }, id) {
-                const { field_types: fieldTypes } = getConfig();
-                const town = enrichShantytown(await fetchOne(id), fieldTypes);
+            async fetchTownDetails({ commit, state }, id) {
+                const town = enrichShantytown(
+                    await fetchOne(id),
+                    state.config.configuration.field_types
+                );
                 commit("setDetailedTown", town);
             },
 

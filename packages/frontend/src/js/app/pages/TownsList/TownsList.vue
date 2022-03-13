@@ -121,7 +121,11 @@
                         >Imprimer</Button
                     >
                     <Button
-                        v-if="hasPermission('shantytown.export')"
+                        v-if="
+                            $store.getters['config/hasPermission'](
+                                'shantytown.export'
+                            )
+                        "
                         icon="file-excel"
                         iconPosition="left"
                         variant="primary"
@@ -132,7 +136,11 @@
                     >
                     <router-link
                         to="/nouveau-site"
-                        v-if="hasPermission('shantytown.create')"
+                        v-if="
+                            $store.getters['config/hasPermission'](
+                                'shantytown.create'
+                            )
+                        "
                         ><Button
                             icon="plus"
                             iconPosition="left"
@@ -389,12 +397,6 @@ import GeoSearchbar from "#app/components/GeoSearchbar/GeoSearchbar.vue";
 import TownsListHeader from "./TownsListHeader/TownsListHeader";
 import TabList from "#app/components/TabList/TabList.vue";
 import TownsListFilters from "./TownsListFilters/TownsListFilters";
-import {
-    get as getConfig,
-    getPermission,
-    hasPermission,
-    hasLocalizedPermission
-} from "#helpers/api/config";
 import { filterShantytowns } from "./filterShantytowns";
 import Export from "#app/components/export2/Export.vue";
 import Spinner from "#app/components/ui/Spinner";
@@ -427,14 +429,9 @@ export default {
         this.refreshActivities();
     },
     data() {
-        const { field_types: fieldTypes } = getConfig();
-        const permission = getPermission("shantytown_justice.access");
-
         return {
             lastActivities: [],
             activitiesLoading: false,
-            hasJusticePermission: permission !== null,
-            fieldTypes,
             closingReasons: [
                 {
                     id: "closed_by_justice",
@@ -502,7 +499,6 @@ export default {
         }
     },
     methods: {
-        hasLocalizedPermission,
         refreshActivities() {
             if (this.filters.location !== undefined) {
                 this.getActivities(
@@ -557,9 +553,6 @@ export default {
         onChangePage(page) {
             this.$store.commit("setCurrentPage", page);
         },
-        hasPermission(...args) {
-            return hasPermission(...args);
-        },
         load() {
             if (!this.shantytowns.length) {
                 this.$store.dispatch("fetchTowns");
@@ -595,7 +588,8 @@ export default {
             error: "townsError",
             filters: "townsFilters",
             currentPage: "townsCurrentPage",
-            activities: "activities"
+            activities: "activities",
+            hasLocalizedPermission: "config/hasLocalizedPermission"
         }),
         sort: {
             get() {
@@ -604,6 +598,16 @@ export default {
             set(value) {
                 this.updateSort(value);
             }
+        },
+        hasJusticePermission() {
+            return (
+                this.$store.getters["config/getPermission"](
+                    "shantytown_justice.access"
+                ) !== null
+            );
+        },
+        fieldTypes() {
+            return this.$store.state.config.configuration.field_types;
         },
         isLoading() {
             return this.townsLoading;

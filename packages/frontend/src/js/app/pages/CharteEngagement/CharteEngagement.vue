@@ -135,7 +135,6 @@
 </template>
 
 <script>
-import { get as getConfig, set as setConfig } from "#helpers/api/config";
 import { acceptCharte } from "#helpers/api/user";
 import NavBar from "#app/layouts/Navbar/Navbar.vue";
 
@@ -148,7 +147,7 @@ export default {
         const {
             user: { id: userId },
             version_charte_engagement: charte
-        } = getConfig();
+        } = this.$store.state.config.configuration;
 
         return {
             user: userId,
@@ -180,7 +179,6 @@ export default {
                     this.charte_agreement[0],
                     this.confidentiality_agreement[0]
                 );
-                setConfig("user.charte_engagement_a_jour", true);
                 this.$store.commit("config/SET_CHARTE_ENGAGEMENT_A_JOUR", true);
                 this.loading = false;
                 this.$router.push("/");

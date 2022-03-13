@@ -2,7 +2,11 @@
     <div class="flex justify-between">
         <HistoryFilters />
         <Button
-            v-if="hasPermission('shantytown_comment.export')"
+            v-if="
+                $store.getters['config/hasPermission'](
+                    'shantytown_comment.export'
+                )
+            "
             icon="file-excel"
             iconPosition="left"
             :loading="exportLoading"
@@ -16,7 +20,6 @@
 <script>
 import HistoryFilters from "./HistoryFilters.vue";
 import { getAll } from "#helpers/api/comment";
-import { hasPermission } from "#helpers/api/config";
 
 export default {
     components: {
@@ -30,7 +33,6 @@ export default {
     },
 
     methods: {
-        hasPermission,
         async exportComments() {
             if (this.exportLoading === true) {
                 return;

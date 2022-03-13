@@ -111,7 +111,6 @@ import TownFormPanelLivingConditions from "./TownFormPanelLivingConditions";
 import TownFormPanelJudicial from "./TownFormPanelJudicial";
 import FormLeftColumn from "#app/components/ui/Form/FormLeftColumn";
 import FormErrorLog from "#app/components/ui/Form/FormErrorLog";
-import { get as getConfig, hasPermission } from "#helpers/api/config";
 import { add, edit } from "#helpers/api/town";
 import { notify } from "#helpers/notificationHelper";
 
@@ -141,8 +140,6 @@ export default {
     },
 
     data() {
-        const { field_types: fieldTypes, user } = getConfig();
-
         return {
             nearbyClosedShantytowns: [],
             mainError: null,
@@ -318,13 +315,17 @@ export default {
                         : undefined,
                     bailiff: this.data.bailiff || undefined
                 }
-            },
-            fieldTypes,
-            user
+            }
         };
     },
 
     computed: {
+        fieldTypes() {
+            return this.$store.state.config.configuration.field_types;
+        },
+        user() {
+            return this.$store.state.config.configuration.user;
+        },
         submitWording() {
             return this.mode === "create"
                 ? "Déclarer un site"
@@ -346,7 +347,9 @@ export default {
         },
 
         hasJusticePermission() {
-            return hasPermission("shantytown_justice.access");
+            return this.$store.getters["config/hasPermission"](
+                "shantytown_justice.access"
+            );
         }
     },
 

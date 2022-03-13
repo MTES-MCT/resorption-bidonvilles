@@ -52,7 +52,6 @@ import DetailsPanelSection from "#app/components/ui/details/DetailsPanelSection.
 import Map from "#app/components/map/map.vue";
 import TownField from "#app/components/TownField/TownField.vue";
 import enrichShantytown from "#app/pages/TownsList/enrichShantytown";
-import { get as getConfig } from "#helpers/api/config";
 
 export default {
     props: {
@@ -68,15 +67,10 @@ export default {
         TownField
     },
 
-    data() {
-        const { field_types: fieldTypes } = getConfig();
-
-        return {
-            fieldTypes
-        };
-    },
-
     computed: {
+        fieldTypes() {
+            return this.$store.state.config.configuration.field_types;
+        },
         address() {
             return {
                 latitude: this.plan.location.latitude,

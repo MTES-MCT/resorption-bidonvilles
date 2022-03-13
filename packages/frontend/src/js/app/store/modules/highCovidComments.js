@@ -2,7 +2,6 @@ import {
     getDepartementsForRegion,
     getDepartementsForEpci
 } from "#helpers/api/geo";
-import { get as getConfig } from "#helpers/api/config";
 
 export default {
     state: {
@@ -22,12 +21,12 @@ export default {
     },
 
     actions: {
-        async fetchAllowedDepartements({ commit, state }) {
+        async fetchAllowedDepartements({ commit, state, rootState }) {
             if (state.isFetched === true) {
                 return;
             }
 
-            const { user } = getConfig();
+            const { user } = rootState.config.configuration;
 
             switch (user.organization.location.type) {
                 case "region":

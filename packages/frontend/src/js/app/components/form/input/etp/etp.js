@@ -1,5 +1,3 @@
-import { get as getConfig } from "#helpers/api/config";
-
 export default {
     props: {
         /**
@@ -28,15 +26,15 @@ export default {
     },
 
     data() {
-        const { etp_types: types } = getConfig();
-
         return {
-            rows: this.value,
-            types
+            rows: this.value
         };
     },
 
     computed: {
+        types() {
+            return this.$store.state.config.configuration.etp_types;
+        },
         parsedRows() {
             return this.rows.map(row => ({
                 type: row.type ? row.type : null,

@@ -69,7 +69,6 @@ import "#app/components/map/map.scss"; // on importe le scss ici pour que le htm
 
 import { mapGetters } from "vuex";
 import { all as fetchAllPois } from "#helpers/api/poi";
-import { get as getConfig, getPermission } from "#helpers/api/config";
 import { open } from "#helpers/tabHelper";
 
 /**
@@ -103,7 +102,10 @@ export default {
         simplebar
     },
     data() {
-        const { user } = getConfig();
+        const {
+            user,
+            owner_types: ownerTypes
+        } = this.$store.state.config.configuration;
 
         return {
             error: undefined,
@@ -124,7 +126,9 @@ export default {
                 poi: null,
                 originEvent: null
             },
-            permission: getPermission("shantytown.list"),
+            permission: this.$store.getters["config/getPermission"](
+                "shantytown.list"
+            ),
             filters: [
                 {
                     faIcon: "tint",
@@ -201,7 +205,7 @@ export default {
                     faIcon: "users",
                     label: "Type de propriétaire",
                     id: "ownerType",
-                    options: getConfig().owner_types.map(type => ({
+                    options: ownerTypes.map(type => ({
                         value: type.id,
                         label: type.label,
                         checked: true
@@ -227,6 +231,9 @@ export default {
         ...mapGetters({
             towns: "towns"
         }),
+        fieldTypes() {
+            return this.$store.state.config.configuration.field_types;
+        },
         allowedFilters() {
             if (!this.permission) {
                 return [];
@@ -499,7 +506,6 @@ export default {
                 fetchAllPois().catch(() => [])
             ])
                 .then(([, pois]) => {
-                    const { field_types: fieldTypes } = getConfig();
                     this.loading = false;
 
                     // build the field-type filter
@@ -508,7 +514,7 @@ export default {
                     )[0];
                     fieldTypeFilter.options = [
                         // options based on field-types returned by the api
-                        ...fieldTypes.map(fieldType => ({
+                        ...this.fieldTypes.map(fieldType => ({
                             id: fieldType.id,
                             value: fieldType.id,
                             label: fieldType.label,

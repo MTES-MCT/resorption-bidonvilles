@@ -66,19 +66,15 @@
 import { create } from "#helpers/api/highCovidComment";
 import CheckableGroup from "#app/components/ui/Form/CheckableGroup";
 import { mapGetters } from "vuex";
-import { get as getConfig } from "#helpers/api/config";
 
 export default {
     components: { CheckableGroup },
     data() {
-        const { user } = getConfig();
-
         return {
             error: null,
             loading: false,
             newComment: "",
-            departements: [],
-            user
+            departements: []
         };
     },
     mounted() {
@@ -88,6 +84,9 @@ export default {
         ...mapGetters({
             allowedDepartements: "allowedDepartements"
         }),
+        user() {
+            return this.$store.state.config.configuration.user;
+        },
         inputDepartements() {
             if (this.allowedDepartements.length === 1) {
                 return [this.allowedDepartements[0].code];

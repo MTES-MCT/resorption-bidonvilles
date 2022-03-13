@@ -121,7 +121,6 @@
 <script>
 import { fr } from "vuejs-datepicker/dist/locale";
 import { get, close } from "#helpers/api/town";
-import { get as getConfig } from "#helpers/api/config";
 import { notify } from "#helpers/notificationHelper";
 import InlineTextInput from "#app/components/ui/Form/input/InlineTextInput";
 import CheckableGroup from "#app/components/ui/Form/CheckableGroup";
@@ -217,7 +216,9 @@ export default {
         }
     },
     data() {
-        const { closing_solutions: closingSolutions } = getConfig();
+        const {
+            closing_solutions: closingSolutions
+        } = this.$store.state.config.configuration;
 
         return {
             loading: false,

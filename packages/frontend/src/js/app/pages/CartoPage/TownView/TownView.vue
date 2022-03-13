@@ -63,7 +63,6 @@
 
 <script>
 import simplebar from "simplebar-vue";
-import { hasPermission } from "#helpers/api/config";
 import { open } from "#helpers/tabHelper";
 
 export default {
@@ -243,7 +242,6 @@ export default {
         closePanel() {
             this.$emit("outside-click");
         },
-        hasPermission,
         formatDate: ts => App.formatDate(ts),
         checkOutsideClick(event) {
             if (!this.town) {

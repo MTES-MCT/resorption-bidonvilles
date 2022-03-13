@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import { hasPermission } from "#helpers/api/config";
 import * as Sentry from "@sentry/vue";
 import { setCustomVariables } from "#matomo/matomo";
 import PrivateLayout from "#app/components/PrivateLayout";
@@ -187,7 +186,9 @@ export default {
                 return true;
             }
             // ensure all permissions are given
-            return permissions.every(permission => hasPermission(permission));
+            return permissions.every(permission =>
+                this.$store.getters["config/hasPermission"](permission)
+            );
         },
         home() {
             if (this.$store.getters["user/loggedIn"]) {
