@@ -48,7 +48,7 @@ export default {
             group: "townList"
         },
         {
-            label: "Actions",
+            label: "Dispositifs",
             target: "/liste-des-dispositifs",
             menu: "lower"
         },
