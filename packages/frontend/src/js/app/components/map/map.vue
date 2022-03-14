@@ -9,7 +9,11 @@
         </Address>
 
         <div id="map">
-            <div ref="adressToggler" class="leaflet-address-toggler">
+            <div
+                ref="adressToggler"
+                class="leaflet-address-toggler"
+                v-show="displayAddressToggler"
+            >
                 <input type="checkbox" v-model="showAddresses" />
                 Voir les adresses des sites
             </div>
@@ -32,6 +36,7 @@
                 ref="printer"
                 class="leaflet-printer"
                 @click="printMapScreenshot"
+                v-show="displayPrinter"
             >
                 <Icon icon="print" /> Imprimer la carte
             </div>
@@ -42,8 +47,10 @@
 <script>
 /* eslint-disable no-underscore-dangle */
 
+import Vue from "vue";
 import L from "leaflet";
 import Address from "#app/components/address/address.vue";
+import ShantytownPopupVue from "../ShantytownPopup/ShantytownPopup.vue";
 import "leaflet-providers";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
@@ -62,6 +69,7 @@ import departements from "#src/geojson/departements.json";
 import regions from "#src/geojson/regions.json";
 import { formatLivingConditions } from "#app/pages/TownDetails/formatLivingConditions";
 
+const popup = Vue.extend(ShantytownPopupVue);
 const DEFAULT_VIEW = [46.7755829, 2.0497727];
 const POI_ZOOM_LEVEL = 13;
 const REGION_MAX_ZOOM_LEVEL = 7;
@@ -114,6 +122,16 @@ export default {
             default() {
                 return [];
             }
+        },
+
+        /**
+         * Indique s'il faut afficher en mode popup lorsque l'on clique sur le marqueur d'un site
+         *
+         */
+        displayPopupOnTownClick: {
+            type: Boolean,
+            required: false,
+            default: false
         },
 
         /* *****************************
@@ -170,6 +188,16 @@ export default {
             type: String,
             required: false,
             default: "Dessin"
+        },
+        displayPrinter: {
+            type: Boolean,
+            default: true,
+            required: false
+        },
+        displayAddressToggler: {
+            type: Boolean,
+            default: true,
+            required: false
         }
     },
 
@@ -413,6 +441,12 @@ export default {
         window.onafterprint = () => {
             this.onAfterPrint(false);
         };
+    },
+
+    beforeDestroy() {
+        // before destroying, we emit this event to enable registration of position in the store
+        // only used in dashboard at the moment
+        this.$emit("leaveMap", this.map.getCenter(), this.map.getZoom());
     },
 
     methods: {
@@ -861,6 +895,12 @@ export default {
                     iconAnchor: [13, 28]
                 })
             });
+            if (this.displayPopupOnTownClick) {
+                const component = new popup({
+                    propsData: { shantytown: town }
+                }).$mount();
+                marker.bindPopup(component.$el);
+            }
             marker.on("click", this.handleTownMarkerClick.bind(this, town));
             marker.on("add", () => {
                 if (marker.searchResult === true) {

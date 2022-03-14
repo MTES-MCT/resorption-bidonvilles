@@ -1,9 +1,6 @@
 <template>
-    <article
-        class="border border-blue300 px-4 pb-4 cursor-pointer hover:bg-blue200 flex flex-col"
-        @click="routeToDetailPage"
-    >
-        <header class="-mt-1">
+    <a :href="`/site/${this.shantytown.id}`">
+        <header>
             <Tag display="inline-block" class="mb-3" :variant="pinVariant">
                 {{ formatLastUpdatedAt(shantytown) }}
             </Tag>
@@ -26,14 +23,13 @@
                     display="inline-block"
                     variant="highlight"
                     :uppercase="false"
-                    class="mt-2"
                 >
                     Site à compléter
                 </Tag>
             </p>
         </header>
 
-        <main class="mb-4">
+        <main>
             <!-- population -->
             <TownPopulation
                 v-if="
@@ -64,29 +60,26 @@
                 /></span>
                 Urgence à sécuriser les conditions de vie
             </p>
-
             <!-- journal du site -->
             <p v-if="shantytown.comments.regular.length > 0" class="mt-6">
-                <router-link
-                    :to="`/site/${shantytown.id}#newComment`"
-                    class="text-info underline font-bold hover:no-underline"
-                    @click.native.stop
-                    >{{ shantytown.comments.regular.length }} message{{
-                        shantytown.comments.regular.length !== 1 ? "s" : ""
-                    }}
-                </router-link>
+                <a :href="`/site/${shantytown.id}#newComment`">
+                    <span
+                        class="text-info underline font-bold hover:no-underline"
+                        >{{ shantytown.comments.regular.length }} message{{
+                            shantytown.comments.regular.length !== 1 ? "s" : ""
+                        }}
+                    </span>
+                </a>
             </p>
         </main>
-
-        <footer class="mt-auto">
-            <router-link
-                :to="`/site/${shantytown.id}`"
-                class="font-bold text-primary hover:underline"
-                @click.native.stop
-                >Voir la fiche du site <Icon icon="arrow-right"
-            /></router-link>
+        <footer class="mt-5">
+            <a :href="`/site/${this.shantytown.id}`">
+                <span class="font-bold text-primary hover:underline">
+                    Voir la fiche du site <Icon icon="arrow-right" />
+                </span>
+            </a>
         </footer>
-    </article>
+    </a>
 </template>
 
 <script>
@@ -94,26 +87,19 @@ import getSince from "#app/utils/getSince";
 import formatLastUpdatedAt from "#app/utils/formatLastUpdatedAt";
 import TownPopulation from "#app/components/TownPopulation/TownPopulation";
 import { lifeConditionsMixin } from "#app/mixins/lifeConditionsMixin";
-
 export default {
     mixins: [lifeConditionsMixin],
     components: {
         TownPopulation
     },
-
     computed: {
         pinVariant() {
             const { months } = getSince(this.shantytown.updatedAt);
             return months >= 1 ? "pin_red" : "pin";
         }
     },
-
     methods: {
-        formatLastUpdatedAt,
-
-        routeToDetailPage() {
-            this.$router.push(`/site/${this.shantytown.id}`);
-        }
+        formatLastUpdatedAt
     }
 };
 </script>

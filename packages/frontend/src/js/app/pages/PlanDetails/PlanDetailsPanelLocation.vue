@@ -15,6 +15,8 @@
                         <Map
                             class="v1"
                             :display-searchbar="false"
+                            :displayAddressToggler="false"
+                            :displayPrinter="false"
                             :towns="[address]"
                             :default-view="center"
                             :load-territory-layers="false"
