@@ -152,7 +152,6 @@ import TownDetailsPanelLivingConditions from "./TownDetailsPanelLivingConditions
 import TownDetailsPanelJudicial from "./TownDetailsPanelJudicial";
 import TownDetailsPanelPlans from "./TownDetailsPanelPlans";
 import TownDetailsPanelActors from "./TownDetailsPanelActors";
-import { get as getConfig, getPermission } from "#helpers/api/config";
 import TownDetailsNewComment from "./TownDetailsNewComment";
 import TownDetailsComments from "./TownDetailsComments";
 import TownDetailsNewCommentLeftColumn from "./TownDetailsNewCommentLeftColumn";
@@ -189,9 +188,6 @@ export default {
         LoadingError
     },
     data() {
-        const permission = getPermission("shantytown_justice.access");
-        const { field_types: fieldTypes, user } = getConfig();
-
         return {
             historyOpen: false,
             closeOpen: false,
@@ -201,13 +197,23 @@ export default {
             actorAlertVisible: true,
             inviteActorOpen: false,
             error: null,
-            loading: false,
-            fieldTypes,
-            user,
-            hasJusticePermission: permission !== null
+            loading: false
         };
     },
     computed: {
+        user() {
+            return this.$store.state.config.configuration.user;
+        },
+        fieldTypes() {
+            return this.$store.state.config.configuration.field_types;
+        },
+        hasJusticePermission() {
+            return (
+                this.$store.getters["config/getPermission"](
+                    "shantytown_justice.access"
+                ) !== null
+            );
+        },
         comments() {
             if (!this.town) {
                 return [];

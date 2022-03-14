@@ -44,7 +44,6 @@
 
 <script>
 import TownDetailsSelfTag from "./TownDetailsSelfTag.vue";
-import { get as getConfig } from "#helpers/api/config";
 import { notify } from "#helpers/notificationHelper";
 
 export default {
@@ -59,11 +58,14 @@ export default {
         }
     },
     data() {
-        const { actor_themes: themes } = getConfig();
         return {
-            loading: false,
-            themes
+            loading: false
         };
+    },
+    computed: {
+        themes() {
+            return this.$store.state.config.configuration.actor_themes;
+        }
     },
     components: {
         TownDetailsSelfTag

@@ -11,8 +11,6 @@
 </template>
 
 <script>
-import { get as getConfig } from "#helpers/api/config";
-
 export default {
     props: {
         value: {
@@ -26,12 +24,15 @@ export default {
     },
 
     data() {
-        const { etp_types: etpTypes } = getConfig();
-
         return {
-            input: this.value,
-            etpTypes
+            input: this.value
         };
+    },
+
+    computed: {
+        etpTypes() {
+            return this.$store.state.config.configuration.etp_types;
+        }
     },
 
     watch: {

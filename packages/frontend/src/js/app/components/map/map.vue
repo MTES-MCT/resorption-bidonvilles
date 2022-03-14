@@ -16,7 +16,11 @@
 
             <div ref="legends" class="leaflet-legend">
                 <h1>Légende</h1>
-                <p v-for="fieldType in fieldTypes" :key="fieldType.label">
+                <p
+                    class="fieldType"
+                    v-for="fieldType in fieldTypes"
+                    :key="fieldType.label"
+                >
                     <span
                         v-bind:style="{ 'background-color': fieldType.color }"
                     ></span>
@@ -40,7 +44,6 @@
 
 import L from "leaflet";
 import Address from "#app/components/address/address.vue";
-import { get as getConfig } from "#helpers/api/config";
 import "leaflet-providers";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
@@ -285,13 +288,6 @@ export default {
             showAddressesBeforePrint: false,
 
             /**
-             * Liste des types de terrains existants
-             *
-             * @type {Array.<FieldType>}
-             */
-            fieldTypes: getConfig().field_types,
-
-            /**
              * Total of shantytowns per region and departement
              *
              * @type {Object}
@@ -312,6 +308,10 @@ export default {
     },
 
     computed: {
+        fieldTypes() {
+            return this.$store.state.config.configuration.field_types;
+        },
+
         /**
          * Codes couleur des types de terrain, hashés par id
          *
@@ -1234,10 +1234,7 @@ export default {
  */
 </script>
 
-<style>
-@import "https://unpkg.com/leaflet@1.3.4/dist/leaflet.css";
-</style>
-
 <style lang="scss" scoped>
+@import "https://unpkg.com/leaflet@1.3.4/dist/leaflet.css";
 @import "./map.scss";
 </style>

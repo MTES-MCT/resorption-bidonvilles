@@ -66,7 +66,6 @@ import InputOwner from "./inputs/InputOwner.vue";
 import InputIsReinstallation from "./inputs/InputIsReinstallation.vue";
 import InputReinstallationComments from "./inputs/InputReinstallationComments.vue";
 import TownFormClosedShantytowns from "./TownFormClosedShantytowns.vue";
-import { hasPermission } from "#helpers/api/config";
 
 export default {
     components: {
@@ -117,7 +116,9 @@ export default {
         },
 
         hasOwnerPermission() {
-            return hasPermission("shantytown_owner.access");
+            return this.$store.getters["config/hasPermission"](
+                "shantytown_owner.access"
+            );
         }
     }
 };

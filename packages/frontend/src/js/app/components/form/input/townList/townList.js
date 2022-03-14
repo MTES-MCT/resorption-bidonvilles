@@ -1,4 +1,3 @@
-import { get as getConfig, getPermission } from "#helpers/api/config";
 import { all as fetchAll } from "#helpers/api/town";
 import Table from "#app/components/Table/table.vue";
 import CollectivityInput from "#app/components/form/input/collectivity/collectivity.vue";
@@ -45,8 +44,10 @@ export default {
     },
 
     data() {
-        const { field_types: fieldTypes, user } = getConfig();
-        const permission = getPermission("shantytown.list");
+        const { user } = this.$store.state.config.configuration;
+        const permission = this.$store.getters["config/getPermission"](
+            "shantytown.list"
+        );
 
         const userLocation = {
             id:
@@ -107,11 +108,6 @@ export default {
                 { id: "people", label: "Nombre de personnes" }
             ],
 
-            fieldTypes: fieldTypes.reduce(
-                (acc, fieldType) => ({ ...acc, [fieldType.id]: fieldType }),
-                {}
-            ),
-
             /**
              * Data loading status
              *
@@ -150,6 +146,13 @@ export default {
     },
 
     computed: {
+        fieldTypes() {
+            return this.$store.state.config.configuration.field_types.reduce(
+                (acc, fieldType) => ({ ...acc, [fieldType.id]: fieldType }),
+                {}
+            );
+        },
+
         currentLocation() {
             return this.location || this.defaultLocation;
         },

@@ -15,14 +15,6 @@
 </template>
 
 <script>
-import {
-    get as getConfig,
-    hasPermission,
-    isLoaded as isConfigLoaded,
-    hasAcceptedCharte,
-    load
-} from "#helpers/api/config";
-import { isLoggedIn, logout } from "#helpers/api/user";
 import * as Sentry from "@sentry/vue";
 import { setCustomVariables } from "#matomo/matomo";
 import PrivateLayout from "#app/components/PrivateLayout";
@@ -82,19 +74,29 @@ export default {
         }
 
         if (beforeEnter?.action === "signout") {
-            logout(this.$piwik);
+            await this.$store.dispatch("user/logout", this.$piwik);
             this.$router.push("/");
             return;
         }
 
         const guards = (beforeEnter && guardGroups[beforeEnter]) || [];
         for (const guard of guards) {
-            if (guard === "isLoggedIn" && !isLoggedIn()) {
+            if (guard === "anonymous" && this.$store.getters["user/loggedIn"]) {
+                return this.$router.push("/");
+            }
+
+            if (
+                guard === "isLoggedIn" &&
+                !this.$store.getters["user/loggedIn"]
+            ) {
                 this.$store.commit("setEntrypoint", this.$route.path);
                 return this.$router.push("/connexion?r=1");
             }
 
-            if (guard === "isConfigLoaded" && !isConfigLoaded()) {
+            if (
+                guard === "isConfigLoaded" &&
+                !this.$store.getters["config/loaded"]
+            ) {
                 try {
                     await this.loadConfig();
                 } catch (response) {
@@ -106,7 +108,10 @@ export default {
             if (guard === "isPermitted" && !this.isPermitted()) {
                 return this.$router.push("/");
             }
-            if (guard === "hasAcceptedCharte" && !hasAcceptedCharte()) {
+            if (
+                guard === "hasAcceptedCharte" &&
+                !this.$store.getters["config/hasAcceptedCharte"]
+            ) {
                 this.$store.commit("setEntrypoint", this.$route.path);
                 return this.$router.push("/signature-charte-engagement");
             }
@@ -131,12 +136,11 @@ export default {
 
     methods: {
         async loadConfig() {
-            if (isConfigLoaded() === true) {
-                this.configLoaded = true;
+            if (this.$store.getters["config/loaded"] === true) {
                 return;
             }
             this.error = null;
-            const { user } = await load();
+            const { user } = await this.$store.dispatch("config/load");
             try {
                 Sentry.setUser({ id: user.id });
                 setCustomVariables(this.$piwik, user);
@@ -150,7 +154,7 @@ export default {
          * @returns {boolean}
          */
         hasPendingChangelog() {
-            const { changelog } = getConfig();
+            const { changelog } = this.$store.state.config.configuration;
             return changelog && changelog.length > 0;
         },
         /**
@@ -161,7 +165,7 @@ export default {
         isUpgraded() {
             const {
                 user: { position }
-            } = getConfig();
+            } = this.$store.state.config.configuration;
             return position !== "";
         },
         /**
@@ -176,10 +180,12 @@ export default {
                 return true;
             }
             // ensure all permissions are given
-            return permissions.every(permission => hasPermission(permission));
+            return permissions.every(permission =>
+                this.$store.getters["config/hasPermission"](permission)
+            );
         },
         home() {
-            if (isLoggedIn()) {
+            if (this.$store.getters["user/loggedIn"]) {
                 const { entrypoint } = this.$store.state;
                 if (entrypoint !== null) {
                     this.$store.commit("setEntrypoint", null);

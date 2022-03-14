@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-console */
-import { get as getConfig } from "#helpers/api/config";
+import Vue from "vue";
 
 const defaultOptions = {
     debug: false,
@@ -70,7 +70,7 @@ function trackEvent($piwik, eventCategory, eventName, eventArgs) {
         return;
     }
 
-    const { user } = getConfig() || {};
+    const { user } = Vue.prototype.$store.state.config.configuration || {};
 
     if (user) {
         setCustomVariables($piwik, user);

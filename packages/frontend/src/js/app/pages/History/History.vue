@@ -49,7 +49,6 @@ import HistoryEmpty from "./HistoryEmpty.vue";
 import HistoryModerationPanel from "./HistoryModerationPanel.vue";
 
 import { mapGetters } from "vuex";
-import { get as getConfig, hasPermission } from "#helpers/api/config";
 
 export default {
     components: {
@@ -64,7 +63,9 @@ export default {
     },
     data() {
         return {
-            canModerate: hasPermission("shantytown_comment.moderate"),
+            canModerate: this.$store.getters["config/hasPermission"](
+                "shantytown_comment.moderate"
+            ),
             locationName: "Inconnu"
         };
     },
@@ -122,8 +123,9 @@ export default {
             return this.$route.params.locationCode || null;
         },
         defaultPath() {
-            const { user } = getConfig();
-            const { location } = user.organization;
+            const {
+                location
+            } = this.$store.state.config.configuration.user.organization;
             return `/activites/${location.type}/${location[location.type]
                 ?.code || ""}`;
         }

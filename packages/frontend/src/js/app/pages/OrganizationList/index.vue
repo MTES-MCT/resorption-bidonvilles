@@ -88,7 +88,6 @@ import OrganizationListFiltersPagination from "./OrganizationListFiltersPaginati
 import OrganizationCard from "./OrganizationCard";
 import Pagination from "#app/components/ui/Pagination";
 import { mapGetters } from "vuex";
-import { get as getConfig } from "#helpers/api/config";
 
 export default {
     components: {
@@ -100,12 +99,6 @@ export default {
         OrganizationListFiltersPagination,
         OrganizationCard,
         LoadingPage
-    },
-    data() {
-        const { user } = getConfig();
-        return {
-            currentUser: user
-        };
     },
     methods: {
         async load() {
@@ -140,6 +133,9 @@ export default {
             directoryFilteredItems: "directoryFilteredItems",
             locations: "locations"
         }),
+        currentUser() {
+            return this.$store.state.config.configuration.user;
+        },
         locationImg() {
             // Guadeloupe, Martinique, Guyane, Réunion, Mayotte
             const unsupportedRegions = ["01", "02", "03", "04", "06"];

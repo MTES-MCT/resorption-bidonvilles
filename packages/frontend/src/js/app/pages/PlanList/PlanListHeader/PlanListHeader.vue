@@ -22,19 +22,13 @@
 </template>
 
 <script>
-import { hasPermission } from "#helpers/api/config";
 import { mapGetters } from "vuex";
 
 export default {
-    methods: {
-        hasPermission(...args) {
-            return hasPermission(...args);
-        }
-    },
-
     computed: {
         ...mapGetters({
-            location: "plansLocationFilter"
+            location: "plansLocationFilter",
+            hasPermission: "config/hasPermission"
         })
     }
 };

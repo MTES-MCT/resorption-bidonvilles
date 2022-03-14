@@ -1,5 +1,3 @@
-import { get as getConfig } from "#helpers/api/config";
-
 export default {
     props: {
         /**
@@ -70,13 +68,6 @@ export default {
 
         return {
             /**
-             * List of funding-types
-             *
-             * @type {Array.<FinanceType>}
-             */
-            financeTypes: getConfig().finance_types || [],
-
-            /**
              *
              */
             showRealAmount,
@@ -88,6 +79,12 @@ export default {
             realAmount: showRealAmount ? this.value.realAmount : null,
             details: this.value.details
         };
+    },
+
+    computed: {
+        financeTypes() {
+            return this.$store.state.config.configuration.finance_types || [];
+        }
     },
 
     watch: {

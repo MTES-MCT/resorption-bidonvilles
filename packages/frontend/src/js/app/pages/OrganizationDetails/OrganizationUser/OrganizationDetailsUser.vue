@@ -3,7 +3,8 @@
         <div
             :class="[
                 'bg-G200 p-4 grid grid-cols-2 grid-gap-32',
-                hasPermission('user.read') && 'hover:bg-blue200'
+                $store.getters['config/hasPermission']('user.read') &&
+                    'hover:bg-blue200'
             ]"
         >
             <div>
@@ -27,7 +28,6 @@
 <script>
 import OrganizationDetailsUserIcon from "./OrganizationDetailsUserIcon";
 import OrganizationDetailsUserWrapper from "./OrganizationDetailsUserWrapper";
-import { hasPermission } from "#helpers/api/config";
 
 export default {
     components: { OrganizationDetailsUserWrapper, OrganizationDetailsUserIcon },
@@ -40,9 +40,6 @@ export default {
             type: Boolean,
             default: true
         }
-    },
-    methods: {
-        hasPermission
     }
 };
 </script>
