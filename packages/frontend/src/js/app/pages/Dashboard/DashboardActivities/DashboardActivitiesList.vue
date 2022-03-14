@@ -42,7 +42,6 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { get as getConfig } from "#helpers/api/config";
 import DashboardActivity from "./DashboardActivity";
 
 export default {
@@ -51,8 +50,6 @@ export default {
     },
 
     data() {
-        const { user } = getConfig();
-
         const monday = new Date();
         monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
         monday.setHours(0);
@@ -68,7 +65,6 @@ export default {
         aMonthAgo.setMilliseconds(0);
 
         return {
-            user,
             monday: monday.getTime() / 1000,
             aMonthAgo: aMonthAgo.getTime() / 1000
         };
@@ -80,6 +76,10 @@ export default {
             error: "activitiesError",
             activities: "dashboard/activities"
         }),
+
+        user() {
+            return this.$store.state.config.configuration.user;
+        },
 
         splitActivities() {
             const { filter } = this.$store.state.dashboard.dashboard.activities;
