@@ -310,7 +310,7 @@ export default {
                 if (!this.value) {
                     this.onItemSelect(null);
                 } else if (
-                    this.allowFreeInput === true &&
+                    this.allowFreeInput &&
                     this.searchInput !== this.originalSearchInput
                 ) {
                     this.value = null;
