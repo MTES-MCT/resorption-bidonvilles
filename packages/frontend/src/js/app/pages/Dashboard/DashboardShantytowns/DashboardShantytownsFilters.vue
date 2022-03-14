@@ -20,10 +20,10 @@ export default {
     },
     computed: {
         ...mapGetters({
-            myShantytowns: "dashboardMyShantytowns",
-            newShantytowns: "dashboardNewShantytowns",
-            myTerritory: "dashboardMyTerritory",
-            currentFilter: "dashboardShantytownsFilter"
+            myShantytowns: "dashboard/dashboardMyShantytowns",
+            newShantytowns: "dashboard/dashboardNewShantytowns",
+            myTerritory: "dashboard/dashboardMyTerritory",
+            currentFilter: "dashboard/dashboardShantytownsFilter"
         }),
         total() {
             return {
@@ -63,7 +63,7 @@ export default {
                 return;
             }
 
-            this.$store.commit("setDashboardShantytownsFilter", id);
+            this.$store.commit("dashboard/setDashboardShantytownsFilter", id);
         }
     }
 };

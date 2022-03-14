@@ -50,7 +50,7 @@ export default {
         dashboardShantytownsDisplay(state) {
             return state.dashboard.shantytowns.display;
         },
-        DashboardShantytownsMapSetup(state) {
+        dashboardShantytownsMapSetup(state) {
             return state.dashboard.shantytowns.mapSetup;
         },
         dashboardMyShantytowns(state, getters, rootState) {

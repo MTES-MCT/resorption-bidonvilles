@@ -99,13 +99,13 @@ export default {
         ...mapGetters({
             isLoading: "townsLoading",
             error: "townsError",
-            currentFilter: "dashboardShantytownsFilter",
-            myShantytowns: "dashboardMyShantytowns",
-            rawShantytowns: "dashboardContent",
-            pageContent: "dashboardPageContent",
-            display: "dashboardShantytownsDisplay",
-            currentPage: "dashboardShantytownsCurrentPage",
-            mapSetup: "DashboardShantytownsMapSetup"
+            currentFilter: "dashboard/dashboardShantytownsFilter",
+            myShantytowns: "dashboard/dashboardMyShantytowns",
+            rawShantytowns: "dashboard/dashboardContent",
+            pageContent: "dashboard/dashboardPageContent",
+            display: "dashboard/dashboardShantytownsDisplay",
+            currentPage: "dashboard/dashboardShantytownsCurrentPage",
+            mapSetup: "dashboard/dashboardShantytownsMapSetup"
         }),
         nbPages() {
             return Math.ceil(this.rawShantytowns.length / ITEMS_PER_PAGE);
@@ -119,14 +119,14 @@ export default {
     },
     methods: {
         leaveMap(center, zoom) {
-            this.$store.commit("setDashboardShantytownsMapSetup", {
+            this.$store.commit("dashboard/setDashboardShantytownsMapSetup", {
                 center,
                 zoom
             });
         },
         onChangePage(page) {
             this.$store.commit(
-                "setDashboardShantytownsPage",
+                "dashboard/setDashboardShantytownsPage",
                 Math.min(Math.max(1, page), this.nbPages)
             );
         }

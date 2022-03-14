@@ -17,12 +17,12 @@ export default {
     },
     methods: {
         changeDisplay(id) {
-            this.$store.commit("setDashboardShantytownsDisplay", id);
+            this.$store.commit("dashboard/setDashboardShantytownsDisplay", id);
         }
     },
     computed: {
         ...mapGetters({
-            display: "dashboardShantytownsDisplay"
+            display: "dashboard/dashboardShantytownsDisplay"
         })
     }
 };
