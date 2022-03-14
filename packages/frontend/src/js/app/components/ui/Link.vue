@@ -1,8 +1,8 @@
 <template>
-    <router-link v-if="internalLink" :to="to" :class="classes"
+    <router-link v-if="internalLink" :to="to" :class="linkClasses"
         ><slot></slot
     ></router-link>
-    <a v-else :href="to" :class="classes"><slot></slot></a>
+    <a v-else :href="to" :class="linkClasses"><slot></slot></a>
 </template>
 
 <script>
@@ -11,12 +11,27 @@ export default {
         to: {
             type: String,
             required: true
+        },
+        classes: {
+            type: String,
+            required: false,
+            default: ""
+        },
+        color: {
+            type: String,
+            required: false,
+            default: "primary"
+        },
+        hoverColor: {
+            type: String,
+            required: false,
+            default: "primaryDark"
         }
     },
 
     data() {
         return {
-            classes: "text-primary hover:text-primaryDark"
+            linkClasses: `text-${this.color} hover:text-${this.hoverColor} ${this.classes}`
         };
     },
 

@@ -1,91 +1,78 @@
 <template>
-    <nav class="mx-auto bg-white my-1">
-        <div
-            class="px-10 flex lg:justify-items-start justify-between lg:py-6 lg:border-g300 lg:border-b-1"
+    <header>
+        <nav
+            class="p-4 flex items-start justify-between border-b lg:px-10 lg:py-6 lg:items-center"
         >
-            <!-- logos -->
-            <div class="flex flex-shrink-0 items-center xl:space-x-8">
+            <div class="flex items-center">
                 <img
-                    class="hidden xl:block h-20 mb-4 lg:mb-0"
+                    class="h-20"
                     src="./assets/bm_rp.png"
+                    alt="République Française"
                 />
-                <router-link to="/">
+                <router-link class="ml-6 lg:ml-12" to="/">
                     <img
-                        class="hidden lg:block h-16"
+                        alt="Résorption-bidonvilles"
+                        class="h-12 lg:h-16"
                         src="./assets/logo-resorption-bidonvilles.png"
                     />
                 </router-link>
             </div>
-            <div class="hidden lg:flex space-x-4">
-                <!-- Navigation items - upper menu items -->
-                <div
-                    class="flex flex-row items-center"
-                    v-for="item in upperMenuItems"
-                    :key="item.target"
+            <ul class="hidden lg:flex items-center space-x-6">
+                <li
+                    v-for="(item, index) in upperMenuItems"
+                    :key="item.target || `separator${index}`"
                 >
-                    <DesktopMenuLinkItem
-                        :target="item.target"
-                        :label="item.label"
-                        :classes="item.classes"
-                    ></DesktopMenuLinkItem>
-                </div>
-            </div>
-            <!-- Mobile button goes here -->
-            <div class="lg:hidden flex items-center my-6">
-                <button class="mobile-menu-button" @click="openMobileMenu">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-10 w-10"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                    >
-                        <path
-                            fill-rule="evenodd"
-                            d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                            clip-rule="evenodd"
-                        />
-                    </svg>
-                </button>
-            </div>
-        </div>
-        <div class="px-10 hidden lg:flex space-x-4">
-            <!-- Navigation items - lower menu items -->
-            <div
-                class="flex flex-row items-center"
-                v-for="item in lowerMenuItems"
-                :key="item.target"
+                    <span
+                        v-if="item.type === 'separator'"
+                        class="w-px bg-G400 h-4 block"
+                    ></span>
+                    <Link v-else :to="item.target">
+                        {{ item.label }}
+                    </Link>
+                </li>
+            </ul>
+            <button
+                class="lg:hidden -mt-2 text-xl"
+                @click="$store.commit('navigation/openMobileMenu')"
             >
-                <DesktopMenuLinkItem
-                    :target="item.target"
-                    :label="item.label"
-                    :classes="item.classes"
-                ></DesktopMenuLinkItem>
-            </div>
-        </div>
-        <!-- mobile menu side panel -->
+                <Icon icon="bars" />
+            </button>
+        </nav>
+
+        <nav class="hidden lg:block">
+            <ul class="px-6 flex xl:space-x-6 border-b">
+                <li v-for="item in lowerMenuItems" :key="item.target">
+                    <Link
+                        :to="item.target"
+                        :color="item.color || 'G800'"
+                        :hoverColor="item.color || 'G800'"
+                        :class="
+                            `inline-block py-4 px-3 xl:px-4 hover:bg-G200 ${item.classes ||
+                                ''}`
+                        "
+                    >
+                        {{ item.label }}
+                    </Link>
+                </li>
+            </ul>
+        </nav>
+
+        <!--side panel-->
         <MobileMenuSidePanel
-            :items="items"
             class="lg:hidden"
-            :isOpen="mobileMenuOpen"
-            :closePanel="() => (mobileMenuOpen = false)"
+            v-show="$store.state.navigation.mobileMenuIsOpen"
+            :items="items"
         />
-    </nav>
+    </header>
 </template>
 
 <script>
 import MobileMenuSidePanel from "./MobileMenuSidePanel.vue";
-import DesktopMenuLinkItem from "./DesktopMenuLinkItem.vue";
 import menuItems from "./menuItems";
 
 export default {
     components: {
-        DesktopMenuLinkItem,
         MobileMenuSidePanel
-    },
-    data() {
-        return {
-            mobileMenuOpen: false
-        };
     },
     computed: {
         items() {
@@ -103,7 +90,15 @@ export default {
             return this.filterItems(menuItems.loaded);
         },
         upperMenuItems() {
-            return this.filterMenuItems(this.items, "upper");
+            const items = this.filterMenuItems(this.items, "upper");
+
+            return [
+                ...items
+                    .slice(0, items.length - 1)
+                    .map(item => [item, { type: "separator" }])
+                    .flat(),
+                items[items.length - 1]
+            ];
         },
         lowerMenuItems() {
             return this.filterMenuItems(this.items, "lower");
@@ -130,9 +125,6 @@ export default {
             return requiredPermissions.every(permission =>
                 this.$store.getters["config/hasPermission"](permission)
             );
-        },
-        openMobileMenu() {
-            this.mobileMenuOpen = true;
         }
     }
 };
