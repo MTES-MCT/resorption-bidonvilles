@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import { getDashboardStats } from "#helpers/api/dashboard";
 import { mapGetters } from "vuex";
 import StatCard from "./StatCard.vue";
 
@@ -41,12 +40,6 @@ export default {
     created() {
         if (!this.stats.length) {
             this.$store.dispatch("dashboard/fetchGlobalStats");
-        }
-    },
-    methods: {
-        async load() {
-            const res = await getDashboardStats();
-            this.stats = res;
         }
     },
     computed: {
