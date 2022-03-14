@@ -14,6 +14,7 @@ import activities from "./modules/activities";
 import locations from "./modules/locations";
 import directory from "./modules/directory";
 import highCovidComments from "./modules/highCovidComments";
+import navigation from "./modules/navigation/navigation";
 import plans from "./modules/plans";
 import userModule from "./modules/user";
 import config from "./modules/config";
@@ -27,6 +28,7 @@ export default function(Vue) {
             locations,
             directory,
             highCovidComments,
+            navigation,
             plans,
             user: userModule,
             config

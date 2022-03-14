@@ -1,11 +1,11 @@
 <template>
-    <div class="border-b-2 border-gray-300 py-3">
-        <router-link :to="target">
-            <p class="text-display-xs font-normal text-black">
-                {{ label }}
-            </p>
-        </router-link>
-    </div>
+    <li class="border-b border-gray-300 py-3 px-2">
+        <Link
+            :to="target"
+            @click.native="$store.commit('navigation/closeMobileMenu')"
+            >{{ label }}</Link
+        >
+    </li>
 </template>
 <script>
 export default {
