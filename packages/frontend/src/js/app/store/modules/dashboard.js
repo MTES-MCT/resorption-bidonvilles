@@ -1,4 +1,3 @@
-import { get as getConfig } from "#helpers/api/config";
 import getSince from "#app/utils/getSince";
 
 export default {
@@ -29,7 +28,7 @@ export default {
             return state.dashboard.shantytowns.page;
         },
         dashboardMyShantytowns(state, getters, rootState) {
-            const { user } = getConfig();
+            const { user } = rootState.config.configuration;
 
             return rootState.towns.data.filter(town => {
                 return (
