@@ -37,7 +37,7 @@ export default {
             state.lastActivityDate = date;
         },
         setActivitiesEndReached(state, reached) {
-            this.endOfActivities = reached === true;
+            state.endOfActivities = reached === true;
         },
         setActivityTypesFilter(state, filters) {
             state.filters.activityTypes = filters;
@@ -57,17 +57,31 @@ export default {
     },
 
     actions: {
-        async fetchActivities({ commit, state }) {
+        async fetchActivities({ commit, state }, target = {}) {
             commit("setActivitiesLoading", true);
             commit("setActivitiesError", null);
+
+            if (target.location) {
+                commit("setActivitiesLastDate", Date.now() / 1000);
+                commit("setActivitiesEndReached", false);
+                commit("setActivities", []);
+                commit("setActivitiesLoadedSignature", {
+                    locationType: target.location.locationType,
+                    locationCode: target.location.locationCode,
+                    filters: state.filters.activityTypes
+                        .map(v => v.split("_"))
+                        .flat()
+                });
+            }
 
             try {
                 const activities = await listRegular(
                     state.lastActivityDate * 1000,
-                    state.filters.activityTypes.map(v => v.split("_")).flat(),
-                    10,
+                    state.loaded.filters,
+                    target.numberOfActivities || 10,
                     state.loaded.locationType,
-                    state.loaded.locationCode
+                    state.loaded.locationCode,
+                    target.maxDate
                 );
 
                 if (activities.length > 0) {
@@ -75,7 +89,12 @@ export default {
                         "setActivitiesLastDate",
                         activities.slice(-1)[0].date
                     );
-                } else {
+                }
+
+                if (
+                    activities.length === 0 ||
+                    target.numberOfActivities === -1
+                ) {
                     commit("setActivitiesEndReached", true);
                 }
 

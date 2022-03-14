@@ -4,10 +4,12 @@ const { formatName } = require('#server/models/userModel')();
 const { getUsenameOf, serializeComment } = require('#server/models/shantytownModel')();
 const { restrict } = require('#server/utils/permission');
 
-module.exports = async (user, location, numberOfActivities, lastDate, onlyCovid = false) => {
+module.exports = async (user, location, numberOfActivities, lastDate, maxDate, onlyCovid = false) => {
     // apply geographic level restrictions
     const where = [];
-    const replacements = {};
+    const replacements = {
+        maxDate,
+    };
     const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
 
     const restrictedLocations = {
@@ -25,6 +27,8 @@ module.exports = async (user, location, numberOfActivities, lastDate, onlyCovid 
     } else if (restrictedLocations.public.type !== 'nation') {
         where.push(`private = false AND ${fromGeoLevelToTableName(restrictedLocations.public.type)}.code = :shantytownCommentLocationCode`);
         replacements.shantytownCommentLocationCode = restrictedLocations.public[restrictedLocations.public.type].code;
+    } else {
+        where.push('private = false');
     }
 
     // private comments
@@ -33,6 +37,8 @@ module.exports = async (user, location, numberOfActivities, lastDate, onlyCovid 
     } else if (restrictedLocations.private.type !== 'nation') {
         where.push(`private = true AND ${fromGeoLevelToTableName(restrictedLocations.private.type)}.code = :privateShantytownCommentLocationCode`);
         replacements.privateShantytownCommentLocationCode = restrictedLocations.private[restrictedLocations.private.type].code;
+    } else {
+        where.push('private = true');
     }
 
     const whereLastDate = `${where.length > 0 ? 'AND' : 'WHERE'} comments.created_at < '${lastDate}'`;
@@ -85,6 +91,7 @@ module.exports = async (user, location, numberOfActivities, lastDate, onlyCovid 
             LEFT JOIN regions ON departements.fk_region = regions.code
             ${where.length > 0 ? `WHERE ((${where.join(') OR (')}))` : ''}
             ${whereLastDate}
+            ${maxDate ? ' AND comments.created_at >= :maxDate' : ''}
             ${onlyCovid ? 'AND covid_comments.shantytown_covid_comment_id IS NOT NULL' : ''}
             ORDER BY comments.created_at DESC
             ${limit}

@@ -74,7 +74,6 @@ export default {
             loading: "activitiesLoading",
             error: "activitiesError",
             activities: "activities",
-            lastActivityDate: "lastActivityDate",
             endOfActivities: "endOfActivities",
             loadedLocationType: "activitiesLoadedLocationType",
             loadedLocationCode: "activitiesLoadedLocationCode",
@@ -170,21 +169,12 @@ export default {
                 return;
             }
 
-            // on reset l'état
-            this.$store.commit("setActivitiesLoading", false);
-            this.$store.commit("setActivitiesLastDate", Date.now() / 1000);
-            this.$store.commit("setActivitiesEndReached", false);
-            this.$store.commit("setActivities", []);
-            this.$store.commit("setActivitiesLoadedSignature", {
-                locationType: this.locationType,
-                locationCode: this.locationCode,
-                filters: strFilters
-            });
-
             // on fetch les activités
             this.$store.dispatch("fetchActivities", {
-                locationType: this.locationType,
-                locationCode: this.locationCode
+                location: {
+                    locationType: this.locationType,
+                    locationCode: this.locationCode
+                }
             });
 
             // on fetch le nom de la location, si elle n'est pas déjà dans le $store
@@ -223,10 +213,7 @@ export default {
             }
 
             // on fetch les activités
-            this.$store.dispatch("fetchActivities", {
-                locationType: this.locationType,
-                locationCode: this.locationCode
-            });
+            this.$store.dispatch("fetchActivities");
         },
 
         getLocationName() {

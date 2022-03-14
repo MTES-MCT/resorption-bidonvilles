@@ -1,6 +1,8 @@
 import getSince from "#app/utils/getSince";
 
 export default {
+    namespaced: true,
+
     state: {
         dashboard: {
             shantytowns: {
@@ -11,6 +13,9 @@ export default {
                     center: [46.7755829, 2.0497727],
                     zoom: 6
                 }
+            },
+            activities: {
+                filter: "comment_creation"
             }
         }
     },
@@ -28,6 +33,9 @@ export default {
         },
         setDashboardShantytownsMapSetup(state, setup) {
             state.dashboard.shantytowns.mapSetup = setup;
+        },
+        setDashboardActivitiesFilter(state, filter) {
+            state.dashboard.activities.filter = filter;
         }
     },
 
@@ -42,7 +50,7 @@ export default {
         dashboardShantytownsDisplay(state) {
             return state.dashboard.shantytowns.display;
         },
-        DashboardShantytownsMapSetup(state) {
+        dashboardShantytownsMapSetup(state) {
             return state.dashboard.shantytowns.mapSetup;
         },
         dashboardMyShantytowns(state, getters, rootState) {
@@ -78,6 +86,70 @@ export default {
             }
 
             return getters.dashboardMyShantytowns;
+        },
+        activities(state, getters, rootState, rootGetters) {
+            return rootGetters.activities.reduce((acc, argActivity) => {
+                const activity = { ...argActivity };
+                if (activity.user) {
+                    const lastActivity = acc.slice(-1)[0];
+                    if (lastActivity && lastActivity.users) {
+                        const newAcc = [...acc];
+                        newAcc[newAcc.length - 1].users.push(activity.user);
+                        return newAcc;
+                    }
+
+                    activity.users = [activity.user];
+                    delete activity.user;
+                }
+
+                if (
+                    activity.entity === "shantytown" &&
+                    activity.action === "update"
+                ) {
+                    const updates = activity.diff.reduce((diffAcc, diff) => {
+                        if (
+                            !["accessToWater", "electricityType"].includes(
+                                diff.fieldKey
+                            )
+                        ) {
+                            return diffAcc;
+                        }
+
+                        const oldValue = diff.oldValue.toLowerCase();
+                        const newValue = diff.newValue.toLowerCase();
+                        let action = null;
+
+                        if (oldValue !== "oui" && newValue === "oui") {
+                            action = "creation";
+                        } else if (oldValue === "oui" && newValue !== "oui") {
+                            action = "closing";
+                        } else {
+                            return diffAcc;
+                        }
+
+                        return [
+                            ...diffAcc,
+                            {
+                                entity:
+                                    diff.fieldKey === "electricityType"
+                                        ? "electricity"
+                                        : "water",
+                                action,
+                                date: activity.date,
+                                shantytown: activity.shantytown
+                            }
+                        ];
+                    }, []);
+
+                    if (updates.length === 0) {
+                        return acc;
+                    }
+
+                    return [...acc, ...updates];
+                }
+
+                return [...acc, activity];
+            }, []);
         }
     }
 };
