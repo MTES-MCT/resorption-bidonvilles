@@ -21,7 +21,7 @@
         </section>
         <router-link
             class="text-primary underline flex justify-center pt-10"
-            :to="`statistiques`"
+            to="/statistiques"
             v-if="$store.getters['config/hasPermission']('stats.read')"
         >
             Voir plus de statistiques
