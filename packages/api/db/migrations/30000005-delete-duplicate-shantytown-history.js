@@ -226,9 +226,8 @@ module.exports = {
         }, []));
         return transaction.commit();
     },
-    async down(queryInterface) {
+    async down() {
         // no need to do anything here
-        const transaction = await queryInterface.sequelize.transaction();
-        return transaction.commit();
+        return Promise.resolve();
     },
 };
