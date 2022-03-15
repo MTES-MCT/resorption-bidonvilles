@@ -38,7 +38,7 @@ export default {
             label: "Covid-19",
             target: "/covid-19",
             classes: "font-bold uppercase",
-            color: "red700",
+            color: "red600",
             menu: "lower"
         },
         {
