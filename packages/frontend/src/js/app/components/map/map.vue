@@ -9,6 +9,11 @@
         </Address>
 
         <div id="map">
+            <div ref="cadastreToggler" class="leaflet-cadastre-toggler">
+                <input type="checkbox" v-model="showCadastre" />
+                Voir le cadastre
+            </div>
+
             <div ref="adressToggler" class="leaflet-address-toggler">
                 <input type="checkbox" v-model="showAddresses" />
                 Voir les adresses des sites
@@ -289,6 +294,20 @@ export default {
             showAddresses: false,
 
             /**
+             * Indique s'il faut afficher la parcelle cadastrale ou non
+             *
+             * Cette valeur est contrôlée par une checkbox directement sur la carte
+             *
+             * @type {Boolean}
+             */
+            showCadastre: false,
+
+            /**
+             *
+             */
+            cadastreTogglerControl: null,
+
+            /**
              * Value of showAddresses before the print
              *
              * Used to restore the original value after the print
@@ -416,6 +435,8 @@ export default {
         },
 
         cadastre() {
+            this.setupCadastreTogglerControl();
+
             if (this.cadastreLayer) {
                 this.map.removeLayer(this.cadastreLayer);
                 delete this.cadastreLayer;
@@ -427,7 +448,18 @@ export default {
             }
 
             this.cadastreLayer = L.geoJSON(this.cadastre);
-            this.map.addLayer(this.cadastreLayer);
+
+            if (this.showCadastre === true) {
+                this.map.addLayer(this.cadastreLayer);
+            }
+        },
+
+        showCadastre() {
+            if (this.showCadastre === true) {
+                this.map.addLayer(this.cadastreLayer);
+            } else {
+                this.map.removeLayer(this.cadastreLayer);
+            }
         }
     },
 
@@ -665,6 +697,45 @@ export default {
         },
 
         /**
+         * Initialise le contrôle "Voir les adresses des sites"
+         *
+         * @returns {undefined}
+         */
+        setupCadastreTogglerControl() {
+            if (!this.cadastre) {
+                if (!this.cadastreTogglerControl) {
+                    return;
+                }
+
+                this.cadastreTogglerControl.remove();
+                return;
+            }
+
+            if (!this.cadastreTogglerControl) {
+                const { cadastreToggler } = this.$refs;
+                const CadastreToggler = L.Control.extend({
+                    options: {
+                        position: "topright"
+                    },
+
+                    onAdd(map) {
+                        map.cadastreToggler = this;
+                        return cadastreToggler;
+                    },
+
+                    onRemove(map) {
+                        delete map.cadastreToggler;
+                    }
+                });
+                this.cadastreTogglerControl = new CadastreToggler();
+            }
+
+            if (!this.map.cadastreToggler) {
+                this.map.addControl(this.cadastreTogglerControl);
+            }
+        },
+
+        /**
          * Initialise le contrôle "Légende"
          *
          * @returns {undefined}
@@ -720,7 +791,6 @@ export default {
 
             if (this.cadastre) {
                 this.cadastreLayer = L.geoJSON(this.cadastre);
-                this.map.addLayer(this.cadastreLayer);
             }
 
             this.map.on("zoomend", this.onZoomEnd);

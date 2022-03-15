@@ -28,7 +28,8 @@
             display: none;
         }
 
-        .leaflet-address-toggler {
+        .leaflet-address-toggler,
+        .leaflet-cadastre-toggler {
             display: none;
         }
     }
@@ -250,7 +251,8 @@ img {
 }
 
 
-.leaflet-address-toggler {
+.leaflet-address-toggler,
+.leaflet-cadastre-toggler {
     font-family: Marianne;
     padding: 5px 10px;
     background: white;
