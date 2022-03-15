@@ -776,18 +776,23 @@ export default {
         onZoomEnd() {
             const zoomLevel = this.map.getZoom();
 
-            if (zoomLevel <= REGION_MAX_ZOOM_LEVEL) {
-                this.displayShantytownsLevel = false;
-                this.loadRegionalData();
-                this.showRegionalLayer();
-            } else if (zoomLevel <= DEPT_MAX_ZOOM_LEVEL) {
-                this.displayShantytownsLevel = false;
-                this.loadDepartementalData();
-                this.showDepartementalLayer();
-            } else if (zoomLevel <= CITY_MAX_ZOOM_LEVEL) {
-                this.displayShantytownsLevel = false;
-                this.loadCityData();
-                this.showCityLayer();
+            if (this.loadTerritoryLayers) {
+                if (zoomLevel <= REGION_MAX_ZOOM_LEVEL) {
+                    this.displayShantytownsLevel = false;
+                    this.loadRegionalData();
+                    this.showRegionalLayer();
+                } else if (zoomLevel <= DEPT_MAX_ZOOM_LEVEL) {
+                    this.displayShantytownsLevel = false;
+                    this.loadDepartementalData();
+                    this.showDepartementalLayer();
+                } else if (zoomLevel <= CITY_MAX_ZOOM_LEVEL) {
+                    this.displayShantytownsLevel = false;
+                    this.loadCityData();
+                    this.showCityLayer();
+                } else {
+                    this.displayShantytownsLevel = true;
+                    this.showTownsLayer();
+                }
             } else {
                 this.displayShantytownsLevel = true;
                 this.showTownsLayer();
