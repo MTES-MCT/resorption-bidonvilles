@@ -134,55 +134,67 @@ const intermediary = selectModificationValues.map(value => `modifications.${valu
 const where = selectModificationValues.map(value => `((${value} IS NULL AND lag_${value} is NULL) OR ${value} = lag_${value})`);
 
 const finalRequest = `
-    WITH table_duplicates AS (SELECT 
-        modifications.date, lag(modifications.date) over (ORDER BY modifications.shantytown_id asc, modifications.date asc) AS lag_date,
-        modifications.hid, lag(modifications.hid) over (ORDER BY modifications.shantytown_id asc, modifications.date asc) AS lag_hid,
-        modifications.updated_by, lag(modifications.updated_by) over (ORDER BY modifications.shantytown_id asc, modifications.date asc) AS lag_updated_by,
-        ${intermediary.join(', ')}
-    FROM 
-    (
-        (WITH 
-        shantytown_histories_computed_origins AS (SELECT 
-            sh.hid AS fk_shantytown, 
-            string_to_array(array_to_string(array_agg(soo.social_origin_id::VARCHAR || '|' || soo.label), ','), ',') AS origins 
-        FROM "ShantytownHistories" sh
-        LEFT JOIN "ShantytownOriginHistories" so ON so.fk_shantytown = sh.hid
-        LEFT JOIN social_origins soo ON so.fk_social_origin = soo.social_origin_id
-        GROUP BY sh.hid
-        )
-    SELECT
-    shantytowns.hid,
-    ${selectShantytownsValues.join(', ')}
-    FROM "ShantytownHistories" shantytowns
-    LEFT JOIN field_types ON shantytowns.fk_field_type = field_types.field_type_id
-    LEFT JOIN owner_types ON shantytowns.fk_owner_type = owner_types.owner_type_id
-    LEFT JOIN electricity_types ON shantytowns.fk_electricity_type = electricity_types.electricity_type_id
-    LEFT JOIN shantytown_histories_computed_origins sco ON sco.fk_shantytown = shantytowns.hid
-    WHERE shantytowns.closed_at IS NULL
+    WITH table_duplicates AS (
+        SELECT
+            modifications.date,
+            lag(modifications.date) OVER (ORDER BY modifications.shantytown_id ASC, modifications.date ASC) AS lag_date,
+            modifications.hid,
+            lag(modifications.hid) OVER (ORDER BY modifications.shantytown_id ASC, modifications.date ASC) AS lag_hid,
+            modifications.updated_by,
+            lag(modifications.updated_by) OVER (ORDER BY modifications.shantytown_id ASC, modifications.date ASC) AS lag_updated_by,
+            ${intermediary.join(', ')}
+        FROM (
+            (
+                WITH shantytown_histories_computed_origins AS (
+                    SELECT
+                        sh.hid AS fk_shantytown,
+                        string_to_array(array_to_string(array_agg(soo.social_origin_id::VARCHAR || '|' || soo.label), ','), ',') AS origins
+                    FROM "ShantytownHistories" sh
+                    LEFT JOIN "ShantytownOriginHistories" so ON so.fk_shantytown = sh.hid
+                    LEFT JOIN social_origins soo ON so.fk_social_origin = soo.social_origin_id
+                    GROUP BY sh.hid
+                )
+
+                SELECT
+                    shantytowns.hid,
+                    ${selectShantytownsValues.join(', ')}
+                    FROM "ShantytownHistories" shantytowns
+                    LEFT JOIN field_types ON shantytowns.fk_field_type = field_types.field_type_id
+                    LEFT JOIN owner_types ON shantytowns.fk_owner_type = owner_types.owner_type_id
+                    LEFT JOIN electricity_types ON shantytowns.fk_electricity_type = electricity_types.electricity_type_id
+                    LEFT JOIN shantytown_histories_computed_origins sco ON sco.fk_shantytown = shantytowns.hid
+                    WHERE shantytowns.closed_at IS NULL
+            )
+
+            UNION ALL
+
+            (
+                WITH shantytown_computed_origins AS (
+                    SELECT
+                        sh.shantytown_id AS fk_shantytown,
+                        string_to_array(array_to_string(array_agg(soo.social_origin_id::VARCHAR || '|' || soo.label), ','), ',') AS origins
+                    FROM shantytowns sh
+                    LEFT JOIN shantytown_origins so ON so.fk_shantytown = sh.shantytown_id
+                    LEFT JOIN social_origins soo ON so.fk_social_origin = soo.social_origin_id
+                    GROUP BY sh.shantytown_id
+                )
+
+                SELECT
+                    0 AS hid,
+                    ${selectShantytownsValues.join(', ')}
+                FROM shantytowns shantytowns
+                LEFT JOIN field_types ON shantytowns.fk_field_type = field_types.field_type_id
+                LEFT JOIN owner_types ON shantytowns.fk_owner_type = owner_types.owner_type_id
+                LEFT JOIN electricity_types ON shantytowns.fk_electricity_type = electricity_types.electricity_type_id
+                LEFT JOIN shantytown_computed_origins sco ON sco.fk_shantytown = shantytowns.shantytown_id
+                WHERE shantytowns.closed_at IS NULL
+            )
+        ) modifications
+        ORDER BY modifications.date DESC
     )
 
-    UNION ALL
-
-    (with shantytown_computed_origins as (SELECT
-            sh.shantytown_id AS fk_shantytown, 
-            string_to_array(array_to_string(array_agg(soo.social_origin_id::VARCHAR || '|' || soo.label), ','), ',') AS origins 
-        FROM shantytowns sh
-        LEFT JOIN shantytown_origins so ON so.fk_shantytown = sh.shantytown_id 
-        LEFT JOIN social_origins soo ON so.fk_social_origin = soo.social_origin_id
-        GROUP BY sh.shantytown_id 
-        )
-    SELECT
-    0 AS hid,
-    ${selectShantytownsValues.join(', ')}
-    FROM shantytowns shantytowns
-    LEFT JOIN field_types ON shantytowns.fk_field_type = field_types.field_type_id
-    LEFT JOIN owner_types ON shantytowns.fk_owner_type = owner_types.owner_type_id
-    LEFT JOIN electricity_types ON shantytowns.fk_electricity_type = electricity_types.electricity_type_id
-    LEFT JOIN shantytown_computed_origins sco ON sco.fk_shantytown = shantytowns.shantytown_id
-    WHERE shantytowns.closed_at IS NULL
-    )) modifications
-    ORDER BY modifications.date DESC)
-    SELECT hid, lag_hid, date, lag_date, shantytown_id, updated_by, lag_updated_by FROM table_duplicates
+    SELECT hid, lag_hid, date, lag_date, shantytown_id, updated_by, lag_updated_by
+    FROM table_duplicates
     WHERE ${where.join(' AND ')}
     ORDER BY date DESC`;
 
@@ -226,6 +238,7 @@ module.exports = {
         }, []));
         return transaction.commit();
     },
+
     async down() {
         // no need to do anything here
         return Promise.resolve();
