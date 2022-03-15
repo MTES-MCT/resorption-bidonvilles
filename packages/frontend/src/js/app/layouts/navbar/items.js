@@ -46,15 +46,15 @@ export default {
             ]
         },
         {
-            label: "Dispositifs",
+            label: "Actions",
             items: [
                 {
-                    label: "Liste des dispositifs",
-                    target: "/liste-des-dispositifs"
+                    label: "Liste des actions",
+                    target: "/liste-des-actions"
                 },
                 {
-                    label: "Déclarer un dispositif",
-                    target: "/nouveau-dispositif"
+                    label: "Déclarer une action",
+                    target: "/nouvelle-action"
                 }
             ]
         },

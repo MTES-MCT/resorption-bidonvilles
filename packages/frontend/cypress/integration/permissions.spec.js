@@ -10,7 +10,7 @@ const getAllowedAndForbiddenRoutes = ({ shantytown, plan, admin }) => {
     const forbiddenRoutes = [];
 
     (shantytown.create ? allowedRoutes : forbiddenRoutes).push(`/nouveau-site`);
-    (plan.create ? allowedRoutes : forbiddenRoutes).push(`/nouveau-dispositif`);
+    (plan.create ? allowedRoutes : forbiddenRoutes).push(`/nouvelle-action`);
     (admin.stats ? allowedRoutes : forbiddenRoutes).push(`/statistiques`);
     (admin.listUsers ? allowedRoutes : forbiddenRoutes).push(
         `/liste-des-utilisateurs`
@@ -209,8 +209,8 @@ describe("Permissions tests", () => {
                     }
                 });
 
-                describe(`L'utilisateur ${key} ne doit voir que certaines actions sur la liste des dispositifs`, () => {
-                    const planListURL = "/liste-des-dispositifs";
+                describe(`L'utilisateur ${key} ne doit voir que certaines actions sur la liste des actions`, () => {
+                    const planListURL = "/liste-des-actions";
 
                     beforeEach(() => {
                         cy.restoreLocalStorage();
@@ -220,38 +220,38 @@ describe("Permissions tests", () => {
                     });
 
                     if (userPermissions.plan.create) {
-                        it(`L'utilisateur ${key} doit voir le bouton nouveau dispositif`, () => {
+                        it(`L'utilisateur ${key} doit voir le bouton nouvelle action`, () => {
                             cy.url().should("include", planListURL);
-                            cy.get("a[href='/nouveau-dispositif']").should(
+                            cy.get("a[href='/nouvelle-action']").should(
                                 "exist"
                             );
                         });
                     } else {
-                        it(`L'utilisateur ${key} ne doit pas voir le bouton nouveau dispositif`, () => {
+                        it(`L'utilisateur ${key} ne doit pas voir le bouton nouvelle action`, () => {
                             cy.url().should("include", planListURL);
-                            cy.get("a[href='/nouveau-dispositif']").should(
+                            cy.get("a[href='/nouvelle-action']").should(
                                 "not.exist"
                             );
                         });
                     }
                 });
 
-                describe(`L'utilisateur ${key} ne doit voir que certaines actions sur la fiche d'un dispositif`, () => {
+                describe(`L'utilisateur ${key} ne doit voir que certaines actions sur la fiche d'une action`, () => {
                     beforeEach(() => {
                         cy.restoreLocalStorage();
                         cy.intercept("GET", `/plans/*`).as("getPlan");
-                        cy.visit("/dispositif/999999");
+                        cy.visit("/action/999999");
                         cy.wait("@getPlan");
                     });
 
                     if (userPermissions.plan.update) {
-                        it(`L'utilisateur ${key} peut mettre à jour le dispositif`, () => {
-                            cy.url().should("include", "/dispositif/999999");
+                        it(`L'utilisateur ${key} peut mettre à jour l'action`, () => {
+                            cy.url().should("include", "/action/999999");
                             cy.get("[data-cy='planUpdate']").should("exist");
                         });
                     } else {
-                        it(`L'utilisateur ${key} ne doit pas pouvoir mettre à jour le dispositif`, () => {
-                            cy.url().should("include", "/dispositif/999999");
+                        it(`L'utilisateur ${key} ne doit pas pouvoir mettre à jour l'action`, () => {
+                            cy.url().should("include", "/action/999999");
                             cy.get("[data-cy='planUpdate']").should(
                                 "not.exist"
                             );
@@ -260,24 +260,24 @@ describe("Permissions tests", () => {
 
                     if (userPermissions.plan.updateMarks) {
                         it(`L'utilisateur ${key} peut mettre à jour les indicateurs`, () => {
-                            cy.url().should("include", "/dispositif/999999");
+                            cy.url().should("include", "/action/999999");
                             cy.get("[data-cy='planMarks']").should("exist");
                         });
                     } else {
                         it(`L'utilisateur ${key} ne doit pas pouvoir mettre à jour les indicateurs`, () => {
-                            cy.url().should("include", "/dispositif/999999");
+                            cy.url().should("include", "/action/999999");
                             cy.get("[data-cy='planMarks']").should("not.exist");
                         });
                     }
 
                     if (userPermissions.plan.close) {
-                        it(`L'utilisateur ${key} peut fermer un dispositif`, () => {
-                            cy.url().should("include", "/dispositif/999999");
+                        it(`L'utilisateur ${key} peut fermer une action`, () => {
+                            cy.url().should("include", "/action/999999");
                             cy.get("[data-cy='planClose']").should("exist");
                         });
                     } else {
-                        it(`L'utilisateur ${key} ne doit pas pouvoir fermer un dispositif`, () => {
-                            cy.url().should("include", "/dispositif/999999");
+                        it(`L'utilisateur ${key} ne doit pas pouvoir fermer une action`, () => {
+                            cy.url().should("include", "/action/999999");
                             cy.get("[data-cy='planClose']").should("not.exist");
                         });
                     }

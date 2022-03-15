@@ -1087,7 +1087,7 @@ module.exports = (models) => {
                     width: COLUMN_WIDTHS.SMALL,
                 },
                 firePreventionDevices: {
-                    title: 'Est-ce que des dispositifs spécifiques ont été mises en place ?',
+                    title: 'Est-ce que des dispositifs spécifiques ont été mis en place ?',
                     data: ({ firePreventionDevices }) => {
                         if (firePreventionDevices === true) {
                             return 'oui';
@@ -1108,7 +1108,7 @@ module.exports = (models) => {
                 },
 
                 hasPlan: {
-                    title: 'Le site fait-il l’objet d’un dispositif ?',
+                    title: 'Le site fait-il l’objet d’une action ?',
                     data: ({ plans }) => (plans.length > 0 ? 'oui' : 'non'),
                     width: COLUMN_WIDTHS.SMALL,
                 },

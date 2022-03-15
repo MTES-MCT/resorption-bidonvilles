@@ -3,7 +3,7 @@ module.exports = {
         description: 'L\'acteur national est en charge de la mise en oeuvre du cadre national. Pour cela, il suit et évalue les actions. Il peut, le cas échéant, apporter un soutien financier ou un appui technique.',
         national_permissions: [
             [{ type: 'view', label: 'Consulter les %sites%', comments: 'dont les procédures judiciaires' }],
-            [{ type: 'view', label: 'Consulter les %dispositifs%', comments: 'dont les financements' }],
+            [{ type: 'view', label: 'Consulter les %actions%', comments: 'dont les financements' }],
         ],
         local_permissions: [],
         options: [],
@@ -12,11 +12,11 @@ module.exports = {
         description: 'Le correspondant est le représentant local de l\'Etat en charge de la question des bidonvilles à l\'échelle du territoire. Il pilote les actions menées et est également l\'interlocuteur privilégié de la Dihal sur le sujet.',
         national_permissions: [
             [{ type: 'view', label: 'Consulter les %sites%', comments: 'dont les procédures judiciaires' }],
-            [{ type: 'view', label: 'Consulter les %dispositifs%', comments: 'hors financements' }],
+            [{ type: 'view', label: 'Consulter les %actions%', comments: 'hors financements' }],
         ],
         local_permissions: [
             [{ type: 'edit', label: 'Créer, mettre à jour les %sites%', comments: 'dont les procédures judiciaires' }],
-            [{ type: 'edit', label: 'Mettre à jour les %dispositifs%', comments: 'dont les financements' }],
+            [{ type: 'edit', label: 'Mettre à jour les %actions%', comments: 'dont les financements' }],
             [{ type: 'edit', label: 'Consulter et ajouter des %commentaires%', comments: null }],
         ],
         options: [],
@@ -34,7 +34,7 @@ module.exports = {
                     type: 'deny', label: 'hors procédures judiciaires', comments: null, option: 'access_justice',
                 },
             ],
-            [{ type: 'edit', label: 'Mettre à jour les %dispositifs%', comments: 'hors financements' }],
+            [{ type: 'edit', label: 'Mettre à jour les %actions%', comments: 'hors financements' }],
         ],
         options: [
             { id: 'close_shantytown', label: 'Autoriser le partenaire à créer un site et déclarer la fermeture d\'un site' },
@@ -57,7 +57,7 @@ module.exports = {
                     type: 'deny', label: 'hors procédures judiciaires', comments: null, option: 'access_justice',
                 },
             ],
-            [{ type: 'view', label: 'Mettre à jour les %dispositifs%', comments: 'hors financements' }],
+            [{ type: 'view', label: 'Mettre à jour les %actions%', comments: 'hors financements' }],
         ],
         options: [
             { id: 'create_and_close_shantytown', label: 'Autoriser l\'opérateur à créer un site et déclarer la fermeture d\'un site' },
@@ -83,18 +83,18 @@ module.exports = {
                     type: 'deny', label: 'Ne peut pas modifier les données d\'un site (Caractéristiques du site, Habitants, Conditions de vie et environnement)', comments: null,
                 },
             ],
-            [{ type: 'view', label: 'Consulter les %dispositifs%', comments: null }],
+            [{ type: 'view', label: 'Consulter les %actions%', comments: null }],
         ],
         options: [
             { id: 'access_justice', label: 'Accéder aux procédures judiciaires' },
         ],
     },
     external_observator: {
-        description: 'L\'accès observateur externe permet à l\'utilisateur de connaître la situation d\'un site et d\'accéder aux informations des dispositifs',
+        description: 'L\'accès observateur externe permet à l\'utilisateur de connaître la situation d\'un site et d\'accéder aux informations des actions',
         national_permissions: [],
         local_permissions: [
             [{ type: 'view', label: 'Consulter les %sites%', comments: null }],
-            [{ type: 'view', label: 'Consulter les %dispositifs%', comments: null }],
+            [{ type: 'view', label: 'Consulter les %actions%', comments: null }],
         ],
         options: [],
     },

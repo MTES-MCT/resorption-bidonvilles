@@ -54,7 +54,7 @@
                                 />
                                 <KeyMetric
                                     :value="stats.numberOfPlans || 0"
-                                    label="dispositifs"
+                                    label="actions"
                                 />
                                 <KeyMetric
                                     :value="stats.numberOfUsers || 0"
@@ -149,7 +149,7 @@
 
                     <div>
                         <h2 class="text-display-md text-primary  mt-16 mb-4">
-                            Suivi des dispositifs
+                            Suivi des actions
                         </h2>
                         <CreditsRepartition
                             v-if="stats"

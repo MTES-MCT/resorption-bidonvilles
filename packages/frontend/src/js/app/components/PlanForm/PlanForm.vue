@@ -212,22 +212,22 @@ export default {
     computed: {
         submitWording() {
             return this.mode === "create"
-                ? "Déclarer un dispositif"
+                ? "Déclarer une action"
                 : "Mettre à jour";
         },
 
         successNotificationWording() {
             return this.mode === "create"
-                ? "La déclaration du dispositif a réussi"
-                : "Le dispositif a bien été modifié";
+                ? "La déclaration de l'action a réussi"
+                : "L'action a bien été modifiée";
         },
 
         backPage() {
             if (this.mode === "create") {
-                return "/liste-des-dispositifs";
+                return "/liste-des-actions";
             }
 
-            return `/dispositif/${this.data.id}`;
+            return `/action/${this.data.id}`;
         }
     },
 
@@ -326,7 +326,7 @@ export default {
                 this.loading = false;
 
                 this.$store.commit("addPlan", plan);
-                this.$router.push(`/dispositif/${plan.id}`);
+                this.$router.push(`/action/${plan.id}`);
 
                 notify({
                     group: "notifications",

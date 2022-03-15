@@ -2,7 +2,7 @@
     <TextInput
         id="name"
         label=""
-        validationName="Nom du dispositif"
+        validationName="Nom de l'action"
         rules="required"
         v-model="input"
     ></TextInput>

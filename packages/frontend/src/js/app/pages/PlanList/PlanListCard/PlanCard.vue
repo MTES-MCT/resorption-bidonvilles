@@ -72,7 +72,7 @@
                             icon="arrow-right"
                             class="text-display-sm hover:underline -mb-1"
                         >
-                            Voir la fiche du dispositif
+                            Voir la fiche de l'action
                         </Button>
                     </div>
                 </div>
@@ -115,7 +115,7 @@ export default {
          * @param {Object}
          */
         routeToPlan() {
-            this.$router.push(`/dispositif/${this.plan.id}`);
+            this.$router.push(`/action/${this.plan.id}`);
         },
         formatDate(value) {
             const date = new Date();

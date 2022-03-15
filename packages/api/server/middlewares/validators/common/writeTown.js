@@ -918,7 +918,7 @@ module.exports = mode => ([
     body('fire_prevention_devices')
         .optional({ nullable: true })
         .toInt()
-        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Est-ce que des dispositifs spécifiques ont été mises en place ?" est invalide')
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Est-ce que des dispositifs spécifiques ont été mis en place ?" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
 
     /* **********************************************************************************************

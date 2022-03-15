@@ -1,12 +1,12 @@
 <template>
     <DetailsPanel>
-        <template v-slot:title>Dispositifs</template>
+        <template v-slot:title>Actions</template>
         <template v-slot:body>
             <DetailsPanelSection v-for="plan in town.plans" :key="plan.plan_id">
                 <div class="flex">
                     <div class="w-2/3">
                         <div class="font-bold mb-2">
-                            Dispositif « {{ plan.name }} »
+                            Action « {{ plan.name }} »
                         </div>
                         <Tag
                             v-for="(topic, index) in plan.topics"
@@ -30,8 +30,8 @@
                     <div class="w-1/3">
                         <Button
                             variant="primaryText"
-                            :href="'/dispositif/' + plan.plan_id"
-                            >Voir les résultats de ce dispositif</Button
+                            :href="'/action/' + plan.plan_id"
+                            >Voir les résultats de cette action</Button
                         >
                     </div>
                 </div>

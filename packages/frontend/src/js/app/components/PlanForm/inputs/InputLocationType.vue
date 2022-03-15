@@ -2,7 +2,7 @@
     <CheckableGroup
         label=""
         id="location_type"
-        validationName="Cadre du dispositif"
+        validationName="Cadre de l'action"
         rules="required"
     >
         <Radio

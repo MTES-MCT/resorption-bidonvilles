@@ -279,7 +279,7 @@ export default {
                 if (!plan) {
                     throw {
                         user_message:
-                            "Ce dispositif n'existe pas, ou son accès vous est interdit"
+                            "Cette action n'existe pas, ou son accès vous est interdit"
                     };
                 }
                 this.plan = plan;

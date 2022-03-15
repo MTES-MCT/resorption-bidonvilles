@@ -1,20 +1,21 @@
 <template>
     <div>
-        <h1 class="text-display-lg mb-4 whitespace-nowrap">Dispositifs</h1>
+        <h1 class="text-display-lg mb-4 whitespace-nowrap">Actions</h1>
         <h2 class="mb-4">
-            L'ensemble des dispositifs sur votre territoire :
+            L'ensemble des actions sur votre territoire :
             <span class="font-bold">{{ location.label }}</span>
         </h2>
+
         <div class="md:flex md:flex-row-reverse mb-6">
             <div v-if="hasPermission('plan.create')">
-                <router-link to="/nouveau-dispositif">
+                <router-link to="/nouvelle-action">
                     <Button
                         icon="plus"
                         iconPosition="left"
                         variant="secondary"
                         class="whitespace-no-wrap mb-4 md:mb-0"
                     >
-                        Déclarer un nouveau dispositif</Button
+                        Déclarer une nouvelle action</Button
                     >
                 </router-link>
             </div>
