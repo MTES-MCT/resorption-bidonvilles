@@ -486,6 +486,9 @@ export default {
         showCadastre() {
             if (this.showCadastre === true) {
                 this.map.addLayer(this.cadastreLayer);
+
+                const { center } = this.defaultView;
+                this.centerMap(center, 18);
             } else {
                 this.map.removeLayer(this.cadastreLayer);
             }
