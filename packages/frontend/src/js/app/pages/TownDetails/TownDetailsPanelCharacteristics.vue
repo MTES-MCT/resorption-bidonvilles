@@ -230,7 +230,14 @@ export default {
                     type: "Point",
                     coordinates: [this.town.longitude, this.town.latitude]
                 });
-                this.cadastre = await this.cadastrePromise;
+                const response = await this.cadastrePromise;
+
+                if (
+                    Number.isInteger(response.totalFeatures) &&
+                    response.totalFeatures > 0
+                ) {
+                    this.cadastre = response;
+                }
             } catch (error) {
                 // ignore
             }
