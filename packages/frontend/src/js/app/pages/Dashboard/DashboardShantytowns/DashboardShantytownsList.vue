@@ -91,8 +91,16 @@ export default {
         Map
     },
     async created() {
-        if (!this.$store.state.towns.data.length) {
-            await this.$store.dispatch("fetchTowns");
+        if (this.$store.state.towns.data.length) {
+            return;
+        }
+
+        await this.$store.dispatch("fetchTowns");
+        if (this.rawShantytowns.length === 0) {
+            this.$store.commit(
+                "dashboard/setDashboardShantytownsFilter",
+                "my_territory"
+            );
         }
     },
     computed: {

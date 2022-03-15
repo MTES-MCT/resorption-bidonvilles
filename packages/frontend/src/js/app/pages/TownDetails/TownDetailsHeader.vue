@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vue";
+import { mapGetters } from "vuex";
 
 export default {
     props: {
