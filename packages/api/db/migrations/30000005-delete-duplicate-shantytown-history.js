@@ -135,7 +135,7 @@ const where = selectModificationValues.map(value => `((${value} IS NULL AND lag_
 
 const finalRequest = `
     WITH table_duplicates AS (SELECT 
-        modifications.date,
+        modifications.date, lag(modifications.date) over (ORDER BY modifications.shantytown_id asc, modifications.date asc) AS lag_date,
         modifications.hid, lag(modifications.hid) over (ORDER BY modifications.shantytown_id asc, modifications.date asc) AS lag_hid,
         modifications.updated_by, lag(modifications.updated_by) over (ORDER BY modifications.shantytown_id asc, modifications.date asc) AS lag_updated_by,
         ${intermediary.join(', ')}
@@ -182,8 +182,9 @@ const finalRequest = `
     WHERE shantytowns.closed_at IS NULL
     )) modifications
     ORDER BY modifications.date DESC)
-    SELECT hid, lag_hid, shantytown_id, updated_by, lag_updated_by FROM table_duplicates
-    WHERE ${where.join(' AND ')}`;
+    SELECT hid, lag_hid, date, lag_date, shantytown_id, updated_by, lag_updated_by FROM table_duplicates
+    WHERE ${where.join(' AND ')}
+    ORDER BY date DESC`;
 
 
 module.exports = {
@@ -212,9 +213,10 @@ module.exports = {
                         hid: town.lag_hid,
                     },
                 }));
-                acc.push(queryInterface.sequelize.query('UPDATE shantytowns SET updated_by = :updated_by WHERE shantytown_id = :id', {
+                acc.push(queryInterface.sequelize.query('UPDATE shantytowns SET updated_by = :updated_by, updated_at = :updated_at WHERE shantytown_id = :id', {
                     transaction,
                     replacements: {
+                        updated_at: town.lag_date,
                         updated_by: town.lag_updated_by,
                         id: town.shantytown_id,
                     },
