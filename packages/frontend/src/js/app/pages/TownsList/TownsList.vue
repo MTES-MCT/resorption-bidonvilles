@@ -29,84 +29,24 @@
                     <TabList :tabs="tabs" v-model="currentTab" />
                 </template>
                 <template slot="title">
-                    <div class="flex justify-between items-start">
+                    <div class="text-display-xl mb-2">{{ title }}</div>
+                    <div class="flex items-center" v-if="!isLoading">
+                        <div class="mr-4">
+                            <img :src="locationImg" width="80" height="80" />
+                        </div>
                         <div>
-                            <div class="text-display-xl mb-2">{{ title }}</div>
-                            <div class="flex items-center" v-if="!isLoading">
-                                <div class="mr-4">
-                                    <img
-                                        :src="locationImg"
-                                        width="80"
-                                        height="80"
-                                    />
+                            <div>
+                                <div>{{ populationTotal }} personnes</div>
+                                <div data-cy="nbSites">
+                                    {{ filteredShantytowns.length }}
+                                    sites
                                 </div>
-                                <div>
-                                    <div>
-                                        <div>
-                                            {{ populationTotal }} personnes
-                                        </div>
-                                        <div data-cy="nbSites">
-                                            {{ filteredShantytowns.length }}
-                                            sites
-                                        </div>
-                                        <div
-                                            v-if="
-                                                hasJusticePermission &&
-                                                    justiceTotal
-                                            "
-                                        >
-                                            {{ justiceTotal }} site(s) avec une
-                                            procédure judiciaire
-                                        </div>
-                                    </div>
+                                <div
+                                    v-if="hasJusticePermission && justiceTotal"
+                                >
+                                    {{ justiceTotal }} site(s) avec une
+                                    procédure judiciaire
                                 </div>
-                            </div>
-                        </div>
-                        <div
-                            class="flex-1 text-center text-primary text-display-md"
-                            v-if="activitiesLoading"
-                        >
-                            <Spinner />
-                        </div>
-                        <div class="flex-1 mt-6 pl-12 max-w-2xl" v-else>
-                            <div v-if="lastActivities.length > 0">
-                                <h1 class="font-bold text-md border-b mb-2">
-                                    Les activités des derniers jours
-                                </h1>
-                                <ActivityCard
-                                    v-for="(activity, index) in lastActivities"
-                                    :key="index"
-                                    variant="small"
-                                    :activity="activity"
-                                />
-                                <Button
-                                    variant="primaryText"
-                                    class="text-display-sm hover:underline mt-4"
-                                    :padding="false"
-                                    :href="historyPath"
-                                    >Voir toutes les activités sur ce
-                                    territoire</Button
-                                >
-                            </div>
-
-                            <div v-else class="mt-12">
-                                <h1 class="font-bold text-xl">
-                                    Aucune activité sur ce territoire depuis 1
-                                    semaine
-                                </h1>
-                                <p>
-                                    Vous ou vos équipes, avez-vous effectué des
-                                    actions ?<br />Si oui, informez-en la
-                                    communauté !
-                                </p>
-                                <Button
-                                    variant="primaryText"
-                                    class="text-display-sm hover:underline mt-4"
-                                    :padding="false"
-                                    :href="historyPath"
-                                    >Voir toutes les activités sur ce
-                                    territoire</Button
-                                >
                             </div>
                         </div>
                     </div>
@@ -388,7 +328,6 @@
 </template>
 
 <script>
-import ActivityCard from "#app/components/ActivityCard/ActivityCard.vue";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer.vue";
 import PrivateLayout from "#app/components/PrivateLayout";
 import EventBannerWaterAccess from "#app/components/EventBannerWaterAccess";
@@ -401,7 +340,6 @@ import { filterShantytowns } from "./filterShantytowns";
 import Export from "#app/components/export2/Export.vue";
 import Spinner from "#app/components/ui/Spinner";
 import { mapGetters } from "vuex";
-import { listRegular } from "#helpers/api/userActivity";
 
 const PER_PAGE = 20;
 
@@ -409,7 +347,6 @@ export default {
     components: {
         Spinner,
         TownCard,
-        ActivityCard,
         EventBannerWaterAccess,
         PrivateContainer,
         PrivateLayout,
@@ -426,12 +363,9 @@ export default {
         window.onafterprint = () => {
             this.printMode = false;
         };
-        this.refreshActivities();
     },
     data() {
         return {
-            lastActivities: [],
-            activitiesLoading: false,
             closingReasons: [
                 {
                     id: "closed_by_justice",
@@ -499,38 +433,6 @@ export default {
         }
     },
     methods: {
-        refreshActivities() {
-            if (this.filters.location !== undefined) {
-                this.getActivities(
-                    this.filters.location !== null
-                        ? this.filters.location.locationType
-                        : "nation",
-                    this.filters.location !== null
-                        ? this.filters.location.code
-                        : null
-                );
-            }
-        },
-        async getActivities(locationType, locationCode) {
-            this.lastActivities = [];
-            this.activitiesLoading = true;
-            const date = new Date();
-            const currentDate = date.getTime() / 1000;
-            const tempLastActivities = await listRegular(
-                currentDate * 1000,
-                [],
-                5,
-                locationType,
-                locationCode
-            );
-            tempLastActivities.forEach(activity => {
-                if (currentDate - activity.date < 604800) {
-                    // on ne prend que les activités de la semaine passée
-                    this.lastActivities.push(activity);
-                }
-            });
-            this.activitiesLoading = false;
-        },
         handleSearchBlur(data) {
             this.$trackMatomoEvent("Liste des sites", "Recherche");
             this.$store.commit("setFilters", {
@@ -710,10 +612,6 @@ export default {
                     : start + (this.filteredShantytowns.length % PER_PAGE) - 1;
 
             return `${start} - ${end} sur ${this.filteredShantytowns.length}`;
-        },
-        historyPath() {
-            const { type, code } = this.currentLocation.data;
-            return `/activites/${type}${code ? `/${code}` : ""}`;
         }
     }
 };
