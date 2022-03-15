@@ -48,8 +48,8 @@ export default {
             group: "townList"
         },
         {
-            label: "Dispositifs",
-            target: "/liste-des-dispositifs",
+            label: "Actions",
+            target: "/liste-des-actions",
             menu: "lower"
         },
         {
