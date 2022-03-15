@@ -189,6 +189,7 @@
                         ]"
                         :default-view="center"
                         :load-territory-layers="false"
+                        :cadastre="cadastre"
                         @town-click="goTo"
                         layer-name="Satellite"
                     ></Map>
@@ -199,6 +200,7 @@
 </template>
 
 <script>
+import { getCadastre } from "#helpers/ignHelper";
 import Map from "#app/components/map/map.vue";
 import DetailsPanel from "#app/components/ui/details/DetailsPanel.vue";
 import DetailsPanelSection from "#app/components/ui/details/DetailsPanelSection.vue";
@@ -214,11 +216,30 @@ export default {
     },
     data() {
         return {
-            nearbyTowns: []
+            nearbyTowns: [],
+            cadastre: null,
+            cadastrePromise: null
         };
     },
     components: { DetailsPanel, DetailsPanelSection, Map },
     methods: {
+        async loadCadastre() {
+            if (this.cadastre !== null || this.cadastrePromise !== null) {
+                return;
+            }
+
+            try {
+                this.cadastrePromise = getCadastre({
+                    type: "Point",
+                    coordinates: [this.town.longitude, this.town.latitude]
+                });
+                this.cadastre = await this.cadastrePromise;
+            } catch (error) {
+                // ignore
+            }
+
+            this.cadastrePromise = null;
+        },
         boolToStr(bool) {
             if (bool === null) {
                 return "non communiqué";
@@ -254,6 +275,8 @@ export default {
         }
     },
     async created() {
+        this.loadCadastre();
+
         try {
             const { towns } = await findNearby(
                 this.town.latitude,
@@ -263,6 +286,11 @@ export default {
             this.nearbyTowns = towns.filter(town => town.id !== this.town.id);
             // eslint-disable-next-line no-empty
         } catch (err) {}
+    },
+    beforeDestroy() {
+        if (this.cadastrePromise) {
+            this.cadastrePromise.abort();
+        }
     },
     computed: {
         buildAt() {

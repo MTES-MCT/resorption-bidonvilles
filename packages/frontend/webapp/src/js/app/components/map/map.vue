@@ -46,7 +46,6 @@
 
 <script>
 /* eslint-disable no-underscore-dangle */
-
 import Vue from "vue";
 import L from "leaflet";
 import Address from "#app/components/address/address.vue";
@@ -189,6 +188,7 @@ export default {
             required: false,
             default: "Dessin"
         },
+
         displayPrinter: {
             type: Boolean,
             default: true,
@@ -198,6 +198,15 @@ export default {
             type: Boolean,
             default: true,
             required: false
+        },
+
+        /* *****************************
+         * Options pour le cadastre
+         * ************************** */
+        cadastre: {
+            type: Object,
+            required: false,
+            default: null
         }
     },
 
@@ -227,6 +236,11 @@ export default {
              * @type {L.layerGroup}
              */
             cityLayer: this.loadTerritoryLayers ? L.layerGroup() : false,
+
+            /**
+             * La couche cadastrale
+             */
+            cadastreLayer: null,
 
             /**
              * La carte
@@ -428,6 +442,21 @@ export default {
             this.$nextTick(() => {
                 this.setSearchMarker(type, label, [lat, lon]);
             });
+        },
+
+        cadastre() {
+            if (this.cadastreLayer) {
+                this.map.removeLayer(this.cadastreLayer);
+                delete this.cadastreLayer;
+                this.cadastreLayer = null;
+            }
+
+            if (!this.cadastre) {
+                return;
+            }
+
+            this.cadastreLayer = L.geoJSON(this.cadastre);
+            this.map.addLayer(this.cadastreLayer);
         }
     },
 
@@ -723,6 +752,11 @@ export default {
                 layers: this.mapLayers[this.layerName], // fond de carte à afficher
                 scrollWheelZoom: false // interdire le zoom via la molette de la souris
             });
+
+            if (this.cadastre) {
+                this.cadastreLayer = L.geoJSON(this.cadastre);
+                this.map.addLayer(this.cadastreLayer);
+            }
 
             this.map.on("zoomend", this.onZoomEnd);
             if (this.loadTerritoryLayers) {
