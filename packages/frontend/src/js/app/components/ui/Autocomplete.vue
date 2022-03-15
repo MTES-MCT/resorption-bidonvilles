@@ -206,6 +206,10 @@ export default {
         showMandatoryStar: {
             type: Boolean,
             default: false
+        },
+        allowFreeInput: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {
@@ -223,14 +227,18 @@ export default {
         }
     },
     data() {
+        const searchInput = this.defaultValue
+            ? this.getResultValue(this.defaultValue)
+            : "";
+
         return {
             show: true,
             focused: false,
             value: this.defaultValue || null,
-            searchInput: this.defaultValue
-                ? this.getResultValue(this.defaultValue)
-                : "",
-            results: []
+            searchInput,
+            originalSearchInput: searchInput,
+            results: [],
+            blurTimeout: null
         };
     },
     watch: {
@@ -240,6 +248,10 @@ export default {
     },
     mounted() {
         this.$refs.provider.syncValue(this.value);
+    },
+    unmounted() {
+        clearTimeout(this.blurTimeout);
+        this.blurTimeout = null;
     },
     methods: {
         setValue(value) {
@@ -269,24 +281,51 @@ export default {
 
             this.$emit("submit", newValue);
             this.$emit("input", newValue);
+            this.$emit("blur", {
+                value: this.value,
+                search: this.searchInput
+            });
             this.$refs.provider.syncValue(newValue);
             this.$refs.provider.validate();
             this.$refs.searchInput.blur();
+
+            clearTimeout(this.blurTimeout);
+            this.blurTimeout = null;
         },
         handleFocus() {
+            clearTimeout(this.blurTimeout);
+            this.blurTimeout = null;
+
             this.focused = true;
+            this.originalSearchInput = this.searchInput;
         },
 
         handleBlur() {
-            // If user has deleted his input, delete the selected value
-            if (!this.value) {
-                this.onItemSelect(null);
-            } else {
-                // If user has changed his last input, restore to last value
-                this.searchInput = this.getResultValue(this.value);
+            if (this.blurTimeout !== null) {
+                clearTimeout(this.blurTimeout);
             }
-            this.focused = false;
-            this.$emit("blur", { value: this.value, search: this.searchInput });
+
+            this.blurTimeout = setTimeout(() => {
+                // If user has deleted his input, delete the selected value
+                if (!this.value) {
+                    this.onItemSelect(null);
+                } else if (
+                    this.allowFreeInput &&
+                    this.searchInput !== this.originalSearchInput
+                ) {
+                    this.value = null;
+                } else {
+                    // restore to last selected value
+                    this.searchInput = this.getResultValue(this.value);
+                }
+
+                this.focused = false;
+                this.$emit("blur", {
+                    value: this.value,
+                    search: this.searchInput
+                });
+                this.blurTimeout = null;
+            }, 100);
         }
     }
 };

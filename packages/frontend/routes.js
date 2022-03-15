@@ -296,7 +296,7 @@ const loggedRoutes = [
         }
     },
     {
-        path: "/liste-des-dispositifs",
+        path: "/liste-des-actions",
         component: path.join(
             __dirname,
             "./src/js/app/pages/PlanList/entrypoint.vue"
@@ -310,7 +310,7 @@ const loggedRoutes = [
         }
     },
     {
-        path: "/nouveau-dispositif",
+        path: "/nouvelle-action",
         component: path.join(
             __dirname,
             "./src/js/app/pages/PlanCreate/entrypoint.vue"
@@ -324,7 +324,7 @@ const loggedRoutes = [
         }
     },
     {
-        path: "/modifier-dispositif/:id",
+        path: "/modifier-action/:id",
         component: path.join(
             __dirname,
             "./src/js/app/pages/PlanUpdate/entrypoint.vue"
@@ -338,7 +338,7 @@ const loggedRoutes = [
         }
     },
     {
-        path: "/dispositif/:id",
+        path: "/action/:id",
         component: path.join(
             __dirname,
             "./src/js/app/pages/PlanDetails/entrypoint.vue"
@@ -352,7 +352,7 @@ const loggedRoutes = [
         }
     },
     {
-        path: "/dispositif/:id/indicateurs",
+        path: "/action/:id/indicateurs",
         component: path.join(
             __dirname,
             "./src/js/app/pages/PlanMarks/entrypoint.vue"
@@ -600,6 +600,81 @@ const redirects = [
                 beforeEnter: {
                     action: "redirect",
                     to: "/"
+                }
+            }
+        }
+    },
+    {
+        path: "/liste-des-dispositifs",
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/EmptyPage/index.vue"
+        ),
+        route: {
+            meta: {
+                beforeEnter: {
+                    action: "redirect",
+                    to: "/liste-des-actions"
+                }
+            }
+        }
+    },
+    {
+        path: "/nouveau-dispositif",
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/EmptyPage/index.vue"
+        ),
+        route: {
+            meta: {
+                beforeEnter: {
+                    action: "redirect",
+                    to: "/nouvelle-action"
+                }
+            }
+        }
+    },
+    {
+        path: "/modifier-dispositif/:id",
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/EmptyPage/index.vue"
+        ),
+        route: {
+            meta: {
+                beforeEnter: {
+                    action: "redirect",
+                    to: "/modifier-action/:id"
+                }
+            }
+        }
+    },
+    {
+        path: "/dispositif/:id",
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/EmptyPage/index.vue"
+        ),
+        route: {
+            meta: {
+                beforeEnter: {
+                    action: "redirect",
+                    to: "/action/:id"
+                }
+            }
+        }
+    },
+    {
+        path: "/dispositif/:id/indicateurs",
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/EmptyPage/index.vue"
+        ),
+        route: {
+            meta: {
+                beforeEnter: {
+                    action: "redirect",
+                    to: "/action/:id/indicateurs"
                 }
             }
         }

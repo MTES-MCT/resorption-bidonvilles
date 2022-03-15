@@ -4,7 +4,6 @@ import Autocompleter from "./autocompleter/autocompleter.vue";
 import Address from "./address/address.vue";
 import Location from "./location/location.vue";
 import AddressWithLocation from "./address-with-location/address-with-location.vue";
-import TownList from "./townList/townList.vue";
 import PlanFunding from "./planFunding/planFunding.vue";
 import PlanHousing from "./planHousing/planHousing.vue";
 import Collectivity from "./collectivity/collectivity.vue";
@@ -21,7 +20,6 @@ const multipleValueInputs = [
     "selectMultiple",
     "checkbox",
     "autocompleter",
-    "townList",
     "planFunding",
     "etp"
 ];
@@ -33,7 +31,6 @@ export default {
         Address,
         Location,
         AddressWithLocation,
-        TownList,
         PlanFunding,
         Collectivity,
         Organization,
@@ -81,7 +78,6 @@ export default {
          *  'address',
          *  'location',
          *  'addressWithLocation',
-         *  'townList',
          *  'planFunding',
          *  'collectivity',
          *  'organization',

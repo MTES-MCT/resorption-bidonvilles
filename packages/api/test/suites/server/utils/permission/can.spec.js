@@ -79,7 +79,7 @@ describe.only('utils/permission.can()', () => {
             expect(can(user).do('write', 'something').on(fakeShantytown(paris.city()))).to.be.true;
         });
 
-        it('retourne true pour un dispositif situé dans cette région', () => {
+        it('retourne true pour une action située dans cette région', () => {
             expect(can(user).do('write', 'something').on(fakePlan(paris.departement()))).to.be.true;
         });
 
@@ -99,7 +99,7 @@ describe.only('utils/permission.can()', () => {
             expect(can(user).do('write', 'something').on(fakeShantytown(marseille.city()))).to.be.false;
         });
 
-        it('retourne false pour un dispositif situé dans une autre région', () => {
+        it('retourne false pour une action située dans une autre région', () => {
             expect(can(user).do('write', 'something').on(fakePlan(marseille.departement()))).to.be.false;
         });
     });
@@ -134,7 +134,7 @@ describe.only('utils/permission.can()', () => {
             expect(can(user).do('write', 'something').on(fakeShantytown(paris.city()))).to.be.true;
         });
 
-        it('retourne true pour un dispositif situé dans ce département', () => {
+        it('retourne true pour une action située dans ce département', () => {
             expect(can(user).do('write', 'something').on(fakePlan(paris.departement()))).to.be.true;
         });
 
@@ -158,7 +158,7 @@ describe.only('utils/permission.can()', () => {
             expect(can(user).do('write', 'something').on(fakeShantytown(marseille.city()))).to.be.false;
         });
 
-        it('retourne false pour un dispositif situé dans un autre département', () => {
+        it('retourne false pour une action située dans un autre département', () => {
             expect(can(user).do('write', 'something').on(fakePlan(marseille.departement()))).to.be.false;
         });
     });
@@ -217,7 +217,7 @@ describe.only('utils/permission.can()', () => {
             expect(can(user).do('write', 'something').on(fakeShantytown(marseille.city()))).to.be.false;
         });
 
-        it('retourne false pour n\'importe quel dispositif', () => {
+        it('retourne false pour n\'importe quelle action', () => {
             expect(can(user).do('write', 'something').on(fakePlan(paris.departement()))).to.be.false;
         });
     });
@@ -276,7 +276,7 @@ describe.only('utils/permission.can()', () => {
             expect(can(user).do('write', 'something').on(fakeShantytown(marseille.city()))).to.be.false;
         });
 
-        it('retourne false pour n\'importe quel dispositif', () => {
+        it('retourne false pour n\'importe quelle action', () => {
             expect(can(user).do('write', 'something').on(fakePlan(paris.departement()))).to.be.false;
         });
     });
@@ -327,7 +327,7 @@ describe.only('utils/permission.can()', () => {
             expect(can(user).do('write', 'something').on(fakeShantytown(marseille.city(), { id: 2 }))).to.be.false;
         });
 
-        it('retourne false pour n\'importe quel dispositif', () => {
+        it('retourne false pour n\'importe quelle action', () => {
             expect(can(user).do('write', 'something').on(fakePlan(paris.departement()))).to.be.false;
         });
     });

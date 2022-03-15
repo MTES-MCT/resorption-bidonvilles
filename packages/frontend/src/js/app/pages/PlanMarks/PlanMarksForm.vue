@@ -345,7 +345,7 @@ export default {
 
     methods: {
         back() {
-            this.$router.replace(`/dispositif/${this.data.id}`);
+            this.$router.replace(`/action/${this.data.id}`);
         },
 
         closeInfo() {
@@ -385,7 +385,7 @@ export default {
                 });
 
                 this.loading = false;
-                this.$router.push(`/dispositif/${this.data.id}`);
+                this.$router.push(`/action/${this.data.id}`);
 
                 notify({
                     group: "notifications",

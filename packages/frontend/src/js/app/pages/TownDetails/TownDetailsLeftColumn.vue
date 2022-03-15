@@ -11,7 +11,7 @@
                 v-if="town.plans.length"
                 to="#plans"
                 :activeSection="activeSection === 'plans'"
-                >Dispositifs</LeftColumnNavLink
+                >Actions</LeftColumnNavLink
             >
             <LeftColumnNavLink
                 to="#people"

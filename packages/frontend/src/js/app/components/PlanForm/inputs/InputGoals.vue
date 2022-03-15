@@ -24,7 +24,7 @@ export default {
     data() {
         return {
             input: this.value,
-            placeholder: `Précisez les objectifs, les enjeux, le contexte du dispositif
+            placeholder: `Précisez les objectifs, les enjeux, le contexte de l'action
 
 Par exemple : résorber le bidonville, scolariser 80% des enfants identifiés en bidonvilles`
         };

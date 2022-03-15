@@ -16,6 +16,7 @@
                 <GeoSearchbar
                     data-cy-input="geoFilter"
                     :value="filters.location"
+                    :allowFreeInput="true"
                     @blur="handleSearchBlur"
                 />
             </PrivateContainer>
@@ -503,14 +504,16 @@ export default {
     methods: {
         hasLocalizedPermission,
         refreshActivities() {
-            this.getActivities(
-                this.filters.location !== null
-                    ? this.filters.location.locationType
-                    : "nation",
-                this.filters.location !== null
-                    ? this.filters.location.code
-                    : null
-            );
+            if (this.filters.location !== undefined) {
+                this.getActivities(
+                    this.filters.location !== null
+                        ? this.filters.location.locationType
+                        : "nation",
+                    this.filters.location !== null
+                        ? this.filters.location.code
+                        : null
+                );
+            }
         },
         async getActivities(locationType, locationCode) {
             this.lastActivities = [];
@@ -533,13 +536,13 @@ export default {
             this.activitiesLoading = false;
         },
         handleSearchBlur(data) {
-            this.refreshActivities();
             this.$trackMatomoEvent("Liste des sites", "Recherche");
             this.$store.commit("setFilters", {
                 ...this.filters,
                 location: data.value,
                 search: data.search
             });
+            this.refreshActivities();
         },
         updateSort(val) {
             this.$store.commit("setSort", val);

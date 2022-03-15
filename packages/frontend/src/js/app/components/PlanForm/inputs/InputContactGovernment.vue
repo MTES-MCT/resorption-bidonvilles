@@ -1,7 +1,7 @@
 <template>
     <AutocompleteV2
         id="government"
-        label="Pilote du dispositif"
+        label="Pilote de l'action"
         info="Tapez les premières lettres du nom ou du prénom de la personne"
         prefixIcon="user"
         :search="autocomplete"

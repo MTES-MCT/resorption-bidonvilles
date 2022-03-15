@@ -1,6 +1,6 @@
 <template>
     <FormGroup title="Financements">
-        <FormParagraph title="Comment est financé le dispositif ?">
+        <FormParagraph title="Comment est financée l'action ?">
             <InputFinances
                 v-model="input.finances"
                 :realAmount="realAmount"

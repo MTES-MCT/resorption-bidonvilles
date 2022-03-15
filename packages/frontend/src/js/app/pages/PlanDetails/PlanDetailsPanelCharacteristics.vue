@@ -61,7 +61,7 @@
                 </aside>
                 <section>
                     <span class="font-bold"
-                        >Commentaires suite à la fermeture du dispositif</span
+                        >Commentaires suite à la fermeture de l'action</span
                     >
                     <p class="whitespace-pre-line">{{ plan.final_comment }}</p>
                 </section>

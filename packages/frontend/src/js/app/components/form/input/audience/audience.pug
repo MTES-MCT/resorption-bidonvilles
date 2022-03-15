@@ -12,22 +12,22 @@
 
         <tbody>
             <tr v-if="!outOnly">
-                <td v-if="!inOnly"><strong>Entrées</strong> dans le dispositif</td>
-                <td v-if="inOnly">Publics intégrés au dispositif</td>
+                <td v-if="!inOnly"><strong>Entrées</strong> dans l'action</td>
+                <td v-if="inOnly">Publics intégrés à l'action</td>
                 <td><input type="number" v-model="data.in.households" :disabled="disabled" /></td>
                 <td><input type="number" v-model="data.in.people" :disabled="disabled" /></td>
                 <td><input type="number" v-model="data.in.women" :disabled="disabled" /></td>
                 <td><input type="number" v-model="data.in.minors" :disabled="disabled" /></td>
             </tr>
             <tr v-if="!inOnly">
-                <td><strong>Sorties positivement</strong><br/>fin accompagnement social et/ou<br/>prise en charge dans un autre dispositif</td>
+                <td><strong>Sorties positivement</strong><br/>fin accompagnement social et/ou<br/>prise en charge dans une autre action</td>
                 <td><input type="number" v-model="data.out_positive.households" :disabled="disabled" /></td>
                 <td><input type="number" v-model="data.out_positive.people" :disabled="disabled" /></td>
                 <td><input type="number" v-model="data.out_positive.women" :disabled="disabled" /></td>
                 <td><input type="number" v-model="data.out_positive.minors" :disabled="disabled" /></td>
             </tr>
             <tr v-if="!inOnly">
-                <td><strong>Exclusion</strong> du dispositif</td>
+                <td><strong>Exclusion</strong> de l'action</td>
                 <td><input type="number" v-model="data.out_excluded.households" :disabled="disabled" /></td>
                 <td><input type="number" v-model="data.out_excluded.people" :disabled="disabled" /></td>
                 <td><input type="number" v-model="data.out_excluded.women" :disabled="disabled" /></td>
