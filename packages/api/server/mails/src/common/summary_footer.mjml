@@ -4,6 +4,6 @@
     <mj-text mj-class='pt-4'>Pour rappel : <span class='text-secondary font-bold'>{{ summary.shantytowns_total }} site</span> et <span class='text-secondary font-bold'>{{ summary.population_total }} habitants</span> en bidonvilles ou squats</mj-text>
 <mj-raw>{% endif %}</mj-raw>
 
-<mj-button align="left" mj-class="button-primary" href="{{var:connexionUrl}}">
+<mj-button align="left" mj-class="button-primary" href="{{var:connexionUrl}}" rel="noopener noreferrer">
     Me connecter
 </mj-button>

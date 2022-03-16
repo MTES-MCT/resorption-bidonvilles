@@ -14,7 +14,7 @@
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
-                    Nous vous remercions de l’intérêt que vous portez à la <a href="{{var:frontUrl}}" class="link font-italic">politique de résorption des bidonvilles</a>. Notre équipe traitera votre demande dans les meilleurs délais.
+                    Nous vous remercions de l’intérêt que vous portez à la <a href="{{var:frontUrl}}" class="link font-italic" target="_blank" rel="noopener noreferrer">politique de résorption des bidonvilles</a>. Notre équipe traitera votre demande dans les meilleurs délais.
                 </mj-text>
             </mj-column>
         </mj-section>

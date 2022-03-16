@@ -14,7 +14,7 @@
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
-                    Nous sommes heureux de vous informer que <span class="font-bold">{{var:userName}}</span> vient d’activer son accès à la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a>. Cette personne est désormais utilisatrice de l’outil numérique d’information, de partage et de coordination des acteurs de la résorption des bidonvilles.
+                    Nous sommes heureux de vous informer que <span class="font-bold">{{var:userName}}</span> vient d’activer son accès à la plateforme <a href="{{var:frontUrl}}" class="link font-italic" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a>. Cette personne est désormais utilisatrice de l’outil numérique d’information, de partage et de coordination des acteurs de la résorption des bidonvilles.
                 </mj-text>
                 <mj-include path="common/formation_text_other.mjml" />
                 <mj-include path="common/formation_cta_other.mjml" />

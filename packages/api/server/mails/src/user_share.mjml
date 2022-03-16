@@ -14,9 +14,9 @@
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text>
-                    Et si vous faisiez connaître à vos partenaires la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a> ? Comme vous, si ils ont accès, ils pourront utiliser cet outil numérique de travail collaboratif pour accélérer la résorption des bidonvilles.
+                    Et si vous faisiez connaître à vos partenaires la plateforme <a href="{{var:frontUrl}}" class="link font-italic" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a> ? Comme vous, si ils ont accès, ils pourront utiliser cet outil numérique de travail collaboratif pour accélérer la résorption des bidonvilles.
                 </mj-text>
-                <mj-button mj-class="button-secondary" href="{{var:invitationUrl}}">
+                <mj-button mj-class="button-secondary" href="{{var:invitationUrl}}" rel="noopener noreferrer">
                     Inviter vos partenaires à rejoindre la plateforme Résorption-bidonvilles
                 </mj-button>
                 <mj-text mj-class="text-primary text-lg">

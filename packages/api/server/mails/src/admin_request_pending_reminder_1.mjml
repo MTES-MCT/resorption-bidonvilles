@@ -14,12 +14,12 @@
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
-                    Une demande d’accès à la plateforme <a href="{{var:frontUrl}}" class="font-italic link">Résorption-bidonvilles</a> est en attente depuis 3 jours. Nous vous rappelons qu’il est important d’y répondre rapidement.
+                    Une demande d’accès à la plateforme <a href="{{var:frontUrl}}" class="font-italic link" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a> est en attente depuis 3 jours. Nous vous rappelons qu’il est important d’y répondre rapidement.
                 </mj-text>
                 <mj-text>
-                    Nous vous invitons à <a href="{{var:adminUrl}}" class="font-bold link">vous rendre sur l’onglet administration de la plateforme</a> pour ouvrir et paramétrer l’accès.
+                    Nous vous invitons à <a href="{{var:adminUrl}}" class="font-bold link" target="_blank" rel="noopener noreferrer">vous rendre sur l’onglet administration de la plateforme</a> pour ouvrir et paramétrer l’accès.
                 </mj-text>
-                <mj-button mj-class="button-primary" href="{{var:connexionUrl}}">
+                <mj-button mj-class="button-primary" href="{{var:connexionUrl}}" rel="noopener noreferrer">
                     Traiter la demande
                 </mj-button>
                 <mj-include path="common/admin_access_request_info.mjml" />

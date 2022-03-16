@@ -14,12 +14,12 @@
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
-                    {{var:inviterName}} vous a invité·e à valoriser votre intervention sur le site <a href="{{var:siteUrl}}" class="link">{{var:siteAddress}}</a> sur la plateforme <a href="{{var:frontUrl}}" class="font-italic link">Résorption-bidonvilles</a>.
+                    {{var:inviterName}} vous a invité·e à valoriser votre intervention sur le site <a href="{{var:siteUrl}}" class="link" target="_blank" rel="noopener noreferrer">{{var:siteAddress}}</a> sur la plateforme <a href="{{var:frontUrl}}" class="font-italic link" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a>.
                 </mj-text>
                 <mj-text>
                     Dès maintenant connectez-vous pour confirmer votre intervention sur ce site. Ainsi, vous rejoindrez {{var:inviterName}} et recevrez en temps réel les messages transmis par les autres acteurs et actrices du site.
                 </mj-text>
-                <mj-button mj-class="button-primary" href="{{var:actionUrl}}">
+                <mj-button mj-class="button-primary" href="{{var:actionUrl}}" rel="noopener noreferrer">
                     Confirmer mon intervention
                 </mj-button>
                 <mj-include path="common/contact_interlocutor_user.mjml" />

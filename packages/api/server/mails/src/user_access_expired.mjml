@@ -14,7 +14,7 @@
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
-                    Votre lien d’accès à la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a> a expiré.
+                    Votre lien d’accès à la plateforme <a href="{{var:frontUrl}}" class="link font-italic" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a> a expiré.
                 </mj-text>
                 <mj-text mj-class="text-primary text-lg pb-4">
                     Bonne nouvelle, vous pouvez demander un nouveau lien !

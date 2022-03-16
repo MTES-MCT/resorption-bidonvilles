@@ -14,12 +14,12 @@
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
-                    Nous avons le plaisir de vous informer que votre accès à la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a> a été ouvert par une personne administratrice locale sur votre territoire :  {{var:adminName}}.
+                    Nous avons le plaisir de vous informer que votre accès à la plateforme <a href="{{var:frontUrl}}" class="link font-italic" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a> a été ouvert par une personne administratrice locale sur votre territoire :  {{var:adminName}}.
                 </mj-text>
                 <mj-text>
                     Vous pouvez dès maintenant rejoindre la communauté des acteurs et actrices de la résorption des bidonvilles en cliquant sur le bouton ci-dessous.
                 </mj-text>
-                <mj-button mj-class="button-primary" href="{{var:activationUrl}}">
+                <mj-button mj-class="button-primary" href="{{var:activationUrl}}" rel="noopener noreferrer">
                     Activer mon compte
                 </mj-button>
                 <mj-text mj-class="font-bold pb-4">
