@@ -6,3 +6,4 @@ docker-compose.yml
 node_modules
 schema_*
 dist
+config.js.sample
