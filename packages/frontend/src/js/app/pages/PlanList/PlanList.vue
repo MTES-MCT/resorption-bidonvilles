@@ -10,12 +10,15 @@
             <PlanListHeader class="pt-10" />
 
             <div v-if="pageContent.length >= 1">
-                <Pagination
-                    class="md:mt-0 mb-6 justify-end"
-                    :currentPage="currentPage"
-                    :nbPages="nbPages"
-                    :onChangePage="onChangePage"
-                />
+                <div class="flex justify-between items-end mb-4">
+                    <PlanFilters class="mb-1" />
+                    <Pagination
+                        class="md:mt-0 justify-end"
+                        :currentPage="currentPage"
+                        :nbPages="nbPages"
+                        :onChangePage="onChangePage"
+                    />
+                </div>
                 <PlanCard
                     v-for="plan in pageContent"
                     :key="plan.id"
@@ -47,6 +50,7 @@ import PlanListLoader from "./PlanListLoader.vue";
 import PlanListHeader from "./PlanListHeader/PlanListHeader.vue";
 import PlanListEmpty from "./PlanListEmpty.vue";
 import PlanCard from "./PlanListCard/PlanCard.vue";
+import PlanFilters from "./PlanFilters.vue";
 import LoadingError from "#app/components/PrivateLayout/LoadingError.vue";
 import { mapGetters } from "vuex";
 
@@ -61,7 +65,8 @@ export default {
         PlanListLoader,
         PlanListHeader,
         PlanCard,
-        PlanListEmpty
+        PlanListEmpty,
+        PlanFilters
     },
 
     methods: {

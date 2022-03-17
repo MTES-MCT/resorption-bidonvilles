@@ -5,6 +5,7 @@ export default {
         state: null,
         error: null,
         currentPage: 1,
+        topicFilter: [],
         locationFilter: null,
         items: []
     },
@@ -25,6 +26,10 @@ export default {
         setPlansLocationFilter(state, filter) {
             state.currentPage = 1;
             state.locationFilter = filter;
+        },
+        setTopicFilter(state, filter) {
+            state.currentPage = 1;
+            state.topicFilter = filter;
         },
         addPlan(state, plan) {
             const index = state.items.findIndex(item => item.id === plan.id);
@@ -80,18 +85,35 @@ export default {
             return state.currentPage;
         },
         plansItems(state, getters) {
-            const openPlans = state.items.filter(
-                ({ closed_at: closedAt }) => closedAt === null
-            );
-            if (getters.plansLocationFilter.data.type === "nation") {
-                return openPlans;
-            }
+            return state.items.filter(plan => {
+                // keep open plans only
+                if (plan.closed_at !== null) {
+                    return false;
+                }
 
-            return openPlans.filter(plan => {
-                const l = plan[getters.plansLocationFilter.data.type];
-                return (
-                    l && l.code === `${getters.plansLocationFilter.data.code}`
-                );
+                // geographic filter
+                if (getters.plansLocationFilter.data.type !== "nation") {
+                    const l = plan[getters.plansLocationFilter.data.type];
+                    if (
+                        !l ||
+                        l.code !== `${getters.plansLocationFilter.data.code}`
+                    ) {
+                        return false;
+                    }
+                }
+
+                // topic filter
+                if (state.topicFilter.length > 0) {
+                    if (
+                        !plan.topics.some(({ uid }) =>
+                            state.topicFilter.includes(uid)
+                        )
+                    ) {
+                        return false;
+                    }
+                }
+
+                return true;
             });
         },
         plansLocationFilter(state) {
