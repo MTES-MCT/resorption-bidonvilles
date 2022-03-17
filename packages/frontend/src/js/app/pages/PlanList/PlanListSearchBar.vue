@@ -1,7 +1,7 @@
 <template>
     <div class="bg-G100 py-6">
         <h1 class="text-display-md text-center">
-            Rechercher une commune, un département... ?
+            Rechercher une action, une commune, un département... ?
         </h1>
 
         <GeoSearchbar
@@ -10,7 +10,7 @@
             v-model="location"
             @blur="handleBlur"
             :allowFreeInput="true"
-            placeholder="Nom d'une commune, département..."
+            placeholder="Nom d'une action, commune, département..."
         ></GeoSearchbar>
     </div>
 </template>
