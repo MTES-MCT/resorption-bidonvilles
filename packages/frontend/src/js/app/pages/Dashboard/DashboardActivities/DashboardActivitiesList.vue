@@ -24,12 +24,12 @@
             :activity="activity"
         />
 
-        <h1 class="font-bold text-lg mt-8">Sur le dernier mois</h1>
+        <h1 class="font-bold text-lg mt-8">Sur les 30 derniers jours</h1>
         <p
             v-if="splitActivities.previousMonth.length === 0"
             class="text-G600 italic"
         >
-            Il n'y a eu aucune activité sur le dernier mois
+            Il n'y a eu aucune activité sur les 30 derniers jours
         </p>
         <DashboardActivity
             v-else
@@ -58,7 +58,7 @@ export default {
         monday.setMilliseconds(0);
 
         const aMonthAgo = new Date();
-        aMonthAgo.setDate(aMonthAgo.getDate() - 31);
+        aMonthAgo.setDate(aMonthAgo.getDate() - 30);
         aMonthAgo.setHours(0);
         aMonthAgo.setMinutes(0);
         aMonthAgo.setSeconds(0);
