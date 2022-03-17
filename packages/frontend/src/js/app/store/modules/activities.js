@@ -3,6 +3,7 @@ import { listRegular } from "#helpers/api/userActivity";
 export default {
     state: {
         loading: false,
+        fetchPromise: null,
         error: null,
         items: [],
         lastActivityDate: new Date(),
@@ -24,8 +25,9 @@ export default {
             state.loaded.locationCode = signature.locationCode;
             state.loaded.filters = signature.filters;
         },
-        setActivitiesLoading(state, loading) {
-            state.loading = loading;
+        setFetchPromise(state, promise) {
+            state.fetchPromise = promise;
+            state.loading = promise !== null;
         },
         setActivitiesError(state, error) {
             state.error = error;
@@ -58,7 +60,10 @@ export default {
 
     actions: {
         async fetchActivities({ commit, state }, target = {}) {
-            commit("setActivitiesLoading", true);
+            if (state.fetchPromise !== null) {
+                state.fetchPromise.abort();
+            }
+
             commit("setActivitiesError", null);
 
             if (target.location) {
@@ -75,7 +80,7 @@ export default {
             }
 
             try {
-                const activities = await listRegular(
+                const fetchPromise = listRegular(
                     state.lastActivityDate * 1000,
                     state.loaded.filters,
                     target.numberOfActivities || 10,
@@ -83,6 +88,8 @@ export default {
                     state.loaded.locationCode,
                     target.maxDate
                 );
+                commit("setFetchPromise", fetchPromise);
+                const activities = await fetchPromise;
 
                 if (activities.length > 0) {
                     commit(
@@ -106,7 +113,7 @@ export default {
                 );
             }
 
-            commit("setActivitiesLoading", false);
+            commit("setFetchPromise", null);
         }
     },
 
