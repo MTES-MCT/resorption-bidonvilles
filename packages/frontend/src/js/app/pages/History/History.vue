@@ -147,7 +147,7 @@ export default {
         window.addEventListener("scroll", this.reachBottom);
     },
 
-    unmounted() {
+    destroyed() {
         window.removeEventListener("scroll", this.reachBottom);
     },
 
