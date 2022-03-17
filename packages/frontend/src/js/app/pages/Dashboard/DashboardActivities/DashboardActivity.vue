@@ -63,6 +63,10 @@ export default {
                     background: "bg-orange100",
                     text: "text-orange500"
                 },
+                red: {
+                    background: "bg-error",
+                    text: "text-white"
+                },
                 gray: {
                     background: "bg-G300",
                     text: "text-G800"
@@ -167,18 +171,33 @@ export default {
 
         icon() {
             if (this.activity.entity === "shantytown") {
-                return "map-pin";
+                return "map-marker-alt";
             }
 
-            if (this.activity.action === "creation") {
-                return this.activity.entity === "comment" ? "plus" : "check";
+            if (this.activity.entity === "user") {
+                return "user";
             }
 
-            if (this.activity.closing === "closing") {
-                return "times";
+            if (this.activity.entity === "comment") {
+                if (
+                    (this.activity.comment && this.activity.comment.covid) ||
+                    this.activity.highCovidComment
+                ) {
+                    return "exclamation";
+                }
+
+                return "comment";
             }
 
-            return "check";
+            if (this.activity.entity === "electricity") {
+                return "bolt";
+            }
+
+            if (this.activity.entity === "water") {
+                return "tint";
+            }
+
+            return "question";
         },
 
         iconColor() {
@@ -187,6 +206,16 @@ export default {
                     return this.colors.orange;
 
                 case "comment-creation":
+                    if (
+                        (this.activity.comment &&
+                            this.activity.comment.covid) ||
+                        this.activity.highCovidComment
+                    ) {
+                        return this.colors.red;
+                    }
+
+                    return this.colors.blue;
+
                 case "shantytown-creation":
                     return this.colors.blue;
 
