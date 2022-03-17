@@ -74,6 +74,11 @@ export default {
                 return [];
             }
         },
+        defaultTab: {
+            type: String,
+            required: false,
+            default: "open"
+        },
         validationName: {
             type: String
         },
@@ -108,7 +113,7 @@ export default {
                 { id: "fieldType", label: "Type de site" },
                 { id: "population", label: "Nombre de personnes" }
             ],
-            currentTab: "open",
+            currentTab: this.defaultTab,
             search: ""
         };
     },
