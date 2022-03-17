@@ -1,12 +1,14 @@
 <template>
-    <div>
-        <h1 class="text-display-lg mb-4 whitespace-nowrap">Actions</h1>
-        <h2 class="mb-4">
-            L'ensemble des actions sur votre territoire :
-            <span class="font-bold">{{ location.label }}</span>
-        </h2>
+    <div class="flex justify-between items-start mb-8">
+        <div>
+            <h1 class="text-display-lg mb-2 whitespace-nowrap">Actions</h1>
+            <h2 v-if="state !== 'loading'">
+                L'ensemble des actions sur votre territoire :
+                <span class="font-bold">{{ location.label }}</span>
+            </h2>
+        </div>
 
-        <div class="md:flex md:flex-row-reverse mb-6">
+        <div class="flex items-end space-x-6">
             <div v-if="hasPermission('plan.create')">
                 <router-link to="/nouvelle-action">
                     <Button
@@ -24,7 +26,6 @@
                 icon="file-excel"
                 iconPosition="left"
                 variant="primary"
-                class="mr-6"
                 @click="exportPlans"
                 :loading="exportIsPending"
                 >Exporter</Button
@@ -60,25 +61,26 @@ export default {
                     group: "notifications",
                     type: "error",
                     title: "Une erreur est survenue",
-                    text: "Une erreur est survenue durant l'export des actions"
+                    text: "Une erreur est survenue durant l'export des actions",
                 });
             }
 
             this.exportIsPending = false;
-        }
+        },
     },
 
     data() {
         return {
-            exportIsPending: false
+            exportIsPending: false,
         };
     },
 
     computed: {
         ...mapGetters({
             location: "plansLocationFilter",
-            hasPermission: "config/hasPermission"
-        })
-    }
+            hasPermission: "config/hasPermission",
+            state: "plansState",
+        }),
+    },
 };
 </script>

@@ -1,14 +1,15 @@
 <template>
     <PrivateLayout>
         <PlanListSearchBar />
+        <PrivateContainer>
+            <PlanListHeader class="pt-10" />
+        </PrivateContainer>
 
-        <PrivateContainer v-if="state == 'loading'">
+        <PrivateContainer v-if="state === 'loading'">
             <PlanListLoader></PlanListLoader>
         </PrivateContainer>
 
         <PrivateContainer v-else-if="state == 'loaded'">
-            <PlanListHeader class="pt-10" />
-
             <div v-if="pageContent.length >= 1">
                 <div class="flex justify-between items-end mb-4">
                     <PlanFilters class="mb-1" />
