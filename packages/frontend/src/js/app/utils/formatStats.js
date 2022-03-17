@@ -24,7 +24,7 @@ module.exports = stats => {
             ...stats.resorbedShantytowns,
             id: "resorbed",
             icon: "check",
-            label: "résorptions",
+            label: "résorptions déclarées",
             color: stats.resorbedShantytowns.evolution >= 0 ? "green" : "red"
         },
         {

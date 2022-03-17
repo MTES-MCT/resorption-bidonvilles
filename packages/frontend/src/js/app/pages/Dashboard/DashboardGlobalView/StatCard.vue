@@ -1,6 +1,6 @@
 <template>
     <div class="border border-cardBorder rounded-lg bg-blue100 py-1 w-64 mr-10">
-        <div class="flex px-4 customHeight mb-2">
+        <div class="flex px-4 customHeight">
             <div class="text-primary text-xl mr-4" style="opacity: 0.4">
                 <Icon
                     v-if="cardStats.id === 'population'"
@@ -10,12 +10,12 @@
                 <Icon v-else :icon="icon" />
             </div>
             <div>
-                <div class="inline-block font-bold text-primary text-xl">
+                <div class="font-bold text-primary text-xl -mb-1">
                     <span>
-                        {{ formatStat(cardStats.figures[0]) }}
+                        {{ formatStat(cardStats.figures.slice(-1)[0]) }}
                     </span>
                 </div>
-                <p>
+                <p class="leading-tight">
                     {{ cardStats.label }}
                     <span v-if="cardStats.figure_secondary">
                         {{ cardStats.label_secondary }} <br />
@@ -25,13 +25,16 @@
                         {{ cardStats.label_tertiary }}
                     </span>
                 </p>
-                <span v-if="cardStats.id === 'closed'"> hors résorption</span>
-                <span
+                <p v-if="cardStats.id === 'closed'">hors résorption</p>
+                <p
                     v-if="['resorbed', 'closed'].includes(cardStats.id)"
                     class="text-xs"
                 >
-                    depuis janvier 2019</span
-                >
+                    depuis
+                    {{
+                        cardStats.id === "closed" ? "janvier 2019" : "sept 2020"
+                    }}
+                </p>
             </div>
         </div>
         <div class="customHeight">
