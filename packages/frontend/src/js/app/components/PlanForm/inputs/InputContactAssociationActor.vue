@@ -104,7 +104,7 @@ export default {
         this.load();
     },
 
-    unmounted() {
+    beforeDestroy() {
         window.removeEventListener("message", this.onUserCreated, false);
     },
 
