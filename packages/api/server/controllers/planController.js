@@ -1092,8 +1092,9 @@ module.exports = models => ({
                     },
                 );
 
-                // reset finances and managers
+                // reset shantytowns, finances and managers
                 await Promise.all([
+                    sequelize.query('DELETE FROM plan_shantytowns WHERE fk_plan = :planId', { replacements: { planId: plan.id }, transaction: t }),
                     sequelize.query('DELETE FROM finances WHERE fk_plan = :planId', { replacements: { planId: plan.id }, transaction: t }),
                     sequelize.query('DELETE FROM plan_managers WHERE fk_plan = :planId', { replacements: { planId: plan.id }, transaction: t }),
                     ...['list', 'read', 'update', 'close'].map(
@@ -1102,6 +1103,23 @@ module.exports = models => ({
                             .onFeature(feature, 'plan', t),
                     ),
                 ]);
+
+                // insert into plan_shantytowns
+                if (plan.location_type.id === 'shantytowns') {
+                    await sequelize.query(
+                        `INSERT INTO plan_shantytowns(fk_plan, fk_shantytown, created_by)
+                        VALUES ${planData.locationShantytowns.map(() => '(?, ?, ?)').join(', ')}`,
+                        {
+                            replacements: planData.locationShantytowns.reduce((acc, id) => [
+                                ...acc,
+                                plan.id,
+                                id,
+                                req.user.id,
+                            ], []),
+                            transaction: t,
+                        },
+                    );
+                }
 
                 // insert into finances
                 const financeIds = await Promise.all(
