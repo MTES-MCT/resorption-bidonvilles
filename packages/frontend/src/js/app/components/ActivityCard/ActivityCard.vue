@@ -97,8 +97,11 @@ import ActivityCardIcon from "./ActivityCardIcon.vue";
 import ActivityCardBodyShantytownUpdated from "./ActivityCardBody/ActivityCardBodyShantytownUpdated.vue";
 import ActivityCardBodyCommentCreated from "./ActivityCardBody/ActivityCardBodyCommentCreated.vue";
 import ActivityCardModerationModal from "./ActivityCardModerationModal.vue";
+import showActivityDepartementCode from "#app/mixins/showActivityDepartementCode";
 
 export default {
+    mixins: [showActivityDepartementCode],
+
     components: {
         ActivityCardIcon,
         ActivityCardBodyShantytownUpdated,
@@ -128,24 +131,6 @@ export default {
     },
 
     computed: {
-        user() {
-            return this.$store.state.config.configuration.user;
-        },
-        showDepartementCode() {
-            const userLocation = this.user.organization.location;
-            if (["nation", "region"].includes(userLocation.type)) {
-                return true;
-            }
-
-            if (
-                userLocation.departement?.code !==
-                this.activity.shantytown.departement.code
-            ) {
-                return true;
-            }
-
-            return false;
-        },
         colors() {
             if (this.activity.entity === "shantytown") {
                 if (this.activity.action === "update") {

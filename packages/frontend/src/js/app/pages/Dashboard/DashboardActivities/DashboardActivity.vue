@@ -25,9 +25,12 @@
             </h1>
             <p class="mt-1" v-if="activity.shantytown">
                 <span class="font-bold">{{ activity.shantytown.usename }}</span>
-                <span class="ml-1 italic">{{
-                    activity.shantytown.city.name
-                }}</span>
+                <span class="ml-1 italic"
+                    >{{ activity.shantytown.city.name }}
+                    <span v-if="showDepartementCode"
+                        >({{ activity.shantytown.departement.code }})</span
+                    >
+                </span>
             </p>
             <!-- eslint-disable prettier/prettier -->
             <blockquote
@@ -40,7 +43,11 @@
 </template>
 
 <script>
+import showActivityDepartementCode from "#app/mixins/showActivityDepartementCode";
+
 export default {
+    mixins: [showActivityDepartementCode],
+
     props: {
         activity: {
             type: Object,
