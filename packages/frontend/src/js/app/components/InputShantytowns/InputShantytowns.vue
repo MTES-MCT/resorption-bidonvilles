@@ -108,10 +108,6 @@ export default {
                 { id: "fieldType", label: "Type de site" },
                 { id: "population", label: "Nombre de personnes" }
             ],
-            tabs: [
-                { id: "open", label: "Sites ouverts" },
-                { id: "closed", label: "Sites fermés" }
-            ],
             currentTab: "open",
             search: ""
         };
@@ -122,6 +118,16 @@ export default {
             shantytowns: "towns",
             townsLoading: "townsLoading"
         }),
+        tabs() {
+            return [
+                {
+                    id: "selected",
+                    label: `Sites sélectionnés (${this.input.length})`
+                },
+                { id: "open", label: "Sites ouverts" },
+                { id: "closed", label: "Sites fermés" }
+            ];
+        },
         data() {
             if (!this.shantytowns) {
                 return [];
@@ -129,14 +135,21 @@ export default {
 
             const reg = new RegExp(this.search, "i");
             return this.shantytowns
-                .filter(({ status, city, usename }) => {
+                .filter(({ id, status, city, usename }) => {
                     // filter by status
                     if (this.currentTab === "open") {
                         if (status !== "open") {
                             return false;
                         }
-                    } else if (status === "open") {
-                        return false;
+                    } else if (this.currentTab === "closed") {
+                        if (status === "open") {
+                            return false;
+                        }
+                    } else {
+                        // currentTab === "selected" here
+                        if (!this.input.includes(id)) {
+                            return false;
+                        }
                     }
 
                     // filter by search
