@@ -440,7 +440,6 @@ export default {
                 location: data.value,
                 search: data.search
             });
-            this.refreshActivities();
         },
         updateSort(val) {
             this.$store.commit("setSort", val);
@@ -490,7 +489,6 @@ export default {
             error: "townsError",
             filters: "townsFilters",
             currentPage: "townsCurrentPage",
-            activities: "activities",
             hasLocalizedPermission: "config/hasLocalizedPermission"
         }),
         sort: {
