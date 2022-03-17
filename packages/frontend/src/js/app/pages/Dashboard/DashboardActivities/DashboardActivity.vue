@@ -245,6 +245,8 @@ export default {
 
     methods: {
         routeToDetails() {
+            this.$trackMatomoEvent("TB", "Visite activité");
+
             if (this.activity.entity === "comment") {
                 if (this.activity.highCovidComment) {
                     return this.$router.push("/covid-19");
