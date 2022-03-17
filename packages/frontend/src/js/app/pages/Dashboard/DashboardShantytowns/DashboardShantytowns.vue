@@ -27,8 +27,8 @@ export default {
     data() {
         return {
             tabs: [
-                { id: "thumbnail", label: "Vignettes" },
-                { id: "map", label: "Carte" }
+                { id: "thumbnail", label: "Vignettes", track_id: "vignettes" },
+                { id: "map", label: "Carte", track_id: "carto" }
             ]
         };
     }
