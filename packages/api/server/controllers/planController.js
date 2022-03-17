@@ -390,6 +390,32 @@ async function historize(planId, transaction) {
     );
 
     await sequelize.query(
+        `INSERT INTO plan_shantytowns_history(
+            fk_plan,
+            fk_shantytown,
+            created_by,
+            created_at,
+            updated_by,
+            updated_at
+        ) (SELECT
+            :hid,
+            fk_shantytown,
+            created_by,
+            created_at,
+            updated_by,
+            updated_at
+        FROM plan_shantytowns
+        WHERE fk_plan = :planId)`,
+        {
+            replacements: {
+                hid,
+                planId,
+            },
+            transaction,
+        },
+    );
+
+    await sequelize.query(
         `INSERT INTO finances_history(
             fk_plan,
             year,
