@@ -130,14 +130,21 @@ export default {
                 ({ code } = this.user.organization.location[type]);
             }
 
-            this.$store.dispatch("fetchActivities", {
-                location: {
-                    locationType: type,
-                    locationCode: code
-                },
-                maxDate: this.aMonthAgo * 1000,
-                numberOfActivities: -1
-            });
+            const { loaded } = this.$store.state.activities;
+            if (
+                loaded.locationType !== type ||
+                loaded.locationCode !== code ||
+                this.$store.state.activities.endOfActivities !== true
+            ) {
+                this.$store.dispatch("fetchActivities", {
+                    location: {
+                        locationType: type,
+                        locationCode: code
+                    },
+                    maxDate: this.aMonthAgo * 1000,
+                    numberOfActivities: -1
+                });
+            }
         }
     }
 };
