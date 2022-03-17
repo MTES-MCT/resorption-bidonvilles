@@ -7,7 +7,7 @@ export default {
         currentPage: 1,
         topicFilter: [],
         locationFilter: null,
-        items: []
+        items: [],
     },
 
     mutations: {
@@ -32,13 +32,13 @@ export default {
             state.topicFilter = filter;
         },
         addPlan(state, plan) {
-            const index = state.items.findIndex(item => item.id === plan.id);
+            const index = state.items.findIndex((item) => item.id === plan.id);
             if (index === -1) {
                 state.items.push(plan);
             } else {
                 state.items.splice(index, 1, plan);
             }
-        }
+        },
     },
 
     actions: {
@@ -71,7 +71,7 @@ export default {
                 );
                 commit("setPlansState", "error");
             }
-        }
+        },
     },
 
     getters: {
@@ -85,7 +85,13 @@ export default {
             return state.currentPage;
         },
         plansItems(state, getters) {
-            return state.items.filter(plan => {
+            let searchReg;
+            if (!getters.plansLocationFilter.data) {
+                const { label: search } = getters.plansLocationFilter;
+                searchReg = new RegExp(search, "ig");
+            }
+
+            return state.items.filter((plan) => {
                 // keep open plans only
                 if (plan.closed_at !== null) {
                     return false;
@@ -113,6 +119,11 @@ export default {
                     }
                 }
 
+                // recherche textuelle
+                if (searchReg && !!plan.name?.match(searchReg)) {
+                    return false;
+                }
+
                 return true;
             });
         },
@@ -125,11 +136,11 @@ export default {
                       category: "Pays",
                       data: {
                           code: null,
-                          type: "nation"
-                      }
+                          type: "nation",
+                      },
                   };
-        }
-    }
+        },
+    },
 };
 
 function getUserDefaultLocation(rootState) {
@@ -155,7 +166,7 @@ function getUserDefaultLocation(rootState) {
                 userLocationType === "nation"
                     ? null
                     : user.organization.location[userLocationType].code,
-            type: userLocationType
-        }
+            type: userLocationType,
+        },
     };
 }

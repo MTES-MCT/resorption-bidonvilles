@@ -77,10 +77,18 @@ export default {
 
     computed: {
         ...mapGetters({
-            location: "plansLocationFilter",
             hasPermission: "config/hasPermission",
             state: "plansState",
+            rawLocation: "plansLocationFilter",
         }),
+
+        location() {
+            if (!this.rawLocation.data) {
+                return `« ${this.rawLocation.label} »`;
+            }
+
+            return this.rawLocation.label;
+        },
     },
 };
 </script>
