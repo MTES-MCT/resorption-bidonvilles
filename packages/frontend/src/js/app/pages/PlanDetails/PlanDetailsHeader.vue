@@ -57,19 +57,11 @@
 </template>
 
 <script>
-import { get as getConfig } from "#helpers/api/config";
-
 export default {
     props: {
         plan: {
             type: Object
         }
-    },
-    data() {
-        const { user } = getConfig();
-        return {
-            user
-        };
     },
     methods: {
         /**

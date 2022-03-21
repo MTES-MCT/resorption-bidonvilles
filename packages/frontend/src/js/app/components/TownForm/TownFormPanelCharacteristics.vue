@@ -57,7 +57,6 @@
 </template>
 
 <script>
-import { get as getConfig, hasPermission } from "#helpers/api/config";
 import InputBuiltAt from "./inputs/InputBuiltAt.vue";
 import InputDeclaredAt from "./inputs/InputDeclaredAt.vue";
 import InputFieldType from "./inputs/InputFieldType.vue";
@@ -92,14 +91,15 @@ export default {
     },
 
     data() {
-        const { owner_types } = getConfig();
         return {
-            values: owner_types,
             input: this.value
         };
     },
 
     computed: {
+        values() {
+            return this.$store.state.config.configuration.owner_types;
+        },
         ownerTypeIsUnknown() {
             return this.isUnknown(this.input.owner_type);
         }
@@ -112,7 +112,9 @@ export default {
         },
 
         hasOwnerPermission() {
-            return hasPermission("shantytown_owner.access");
+            return this.$store.getters["config/hasPermission"](
+                "shantytown_owner.access"
+            );
         },
 
         getLabelFor(ownerTypeId) {

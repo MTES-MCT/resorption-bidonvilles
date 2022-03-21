@@ -19,6 +19,7 @@ import {
     faEyeSlash,
     faPencilAlt,
     faTimes,
+    faTimesCircle,
     faMapMarkedAlt,
     faChartLine,
     faComments,
@@ -67,6 +68,7 @@ import {
     faSearch,
     faPlus,
     faCheck,
+    faCheckCircle,
     faPen,
     faExclamation,
     faExclamationTriangle,
@@ -82,7 +84,11 @@ import {
     faPhone,
     faSchool,
     faBullseye,
-    faSquare
+    faSquare,
+    faBars,
+    faChild,
+    faArrowAltCircleRight,
+    faBolt
 } from "@fortawesome/free-solid-svg-icons";
 library.add(faChalkboardTeacher);
 library.add(faFlag);
@@ -98,6 +104,7 @@ library.add(faEye);
 library.add(faEyeSlash);
 library.add(faPencilAlt);
 library.add(faTimes);
+library.add(faTimesCircle);
 library.add(faMapMarkedAlt);
 library.add(faChartLine);
 library.add(faComments);
@@ -149,6 +156,7 @@ library.add(faFacebookSquare);
 library.add(faSearch);
 library.add(faPlus);
 library.add(faCheck);
+library.add(faCheckCircle);
 library.add(faPen);
 library.add(faExclamation);
 library.add(faExclamationTriangle);
@@ -165,3 +173,7 @@ library.add(faGithub);
 library.add(faSchool);
 library.add(faBullseye);
 library.add(faSquare);
+library.add(faBars);
+library.add(faChild);
+library.add(faArrowAltCircleRight);
+library.add(faBolt);

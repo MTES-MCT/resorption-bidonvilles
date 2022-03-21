@@ -1,5 +1,4 @@
 import { list } from "#helpers/api/plan";
-import { get as getConfig } from "#helpers/api/config";
 
 export default {
     state: {
@@ -38,7 +37,7 @@ export default {
     },
 
     actions: {
-        async fetchPlans({ state, commit }) {
+        async fetchPlans({ state, commit, rootState }) {
             if (state.state === "loading") {
                 return;
             }
@@ -50,7 +49,10 @@ export default {
 
             try {
                 // initialize location filter
-                commit("setPlansLocationFilter", getUserDefaultLocation());
+                commit(
+                    "setPlansLocationFilter",
+                    getUserDefaultLocation(rootState)
+                );
 
                 // actually fetch data
                 const plans = await list();
@@ -108,8 +110,8 @@ export default {
     }
 };
 
-function getUserDefaultLocation() {
-    const { user } = getConfig();
+function getUserDefaultLocation(rootState) {
+    const { user } = rootState.config.configuration;
 
     let userLocationType = user.organization.location.type;
     if (userLocationType === "epci" || userLocationType === "city") {

@@ -79,7 +79,6 @@ import PrivateLayout from "#app/components/PrivateLayout";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer.vue";
 import LoadingError from "#app/components/PrivateLayout/LoadingError.vue";
 import CovidHistorySearchbar from "./CovidHistorySearchbar.vue";
-import { get as getConfig, getPermission } from "#helpers/api/config";
 import { listRegular } from "#helpers/api/userActivity";
 import { mapGetters } from "vuex";
 
@@ -101,16 +100,7 @@ export default {
     },
 
     data() {
-        const { user } = getConfig();
-
         return {
-            /**
-             * Current user
-             *
-             * @type {User}
-             */
-            user,
-
             /**
              * Current filter
              *
@@ -150,6 +140,9 @@ export default {
             locations: "locations",
             allowedDepartements: "allowedDepartements"
         }),
+        user() {
+            return this.$store.state.config.configuration.user;
+        },
         nbPages() {
             return Math.ceil(this.filteredActivities.length / PER_PAGE);
         },
@@ -224,7 +217,9 @@ export default {
             );
         },
         initLocation() {
-            const permission = getPermission("shantytown.list");
+            const permission = this.$store.getters["config/getPermission"](
+                "shantytown.list"
+            );
             if (permission && permission.allow_all === true) {
                 this.locationType = "nation";
             } else {

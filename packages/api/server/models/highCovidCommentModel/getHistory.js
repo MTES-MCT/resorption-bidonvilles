@@ -2,10 +2,12 @@ const { sequelize } = require('#db/models');
 const userModel = require('#server/models/userModel')();
 const { restrict } = require('#server/utils/permission');
 
-module.exports = async (user, location, numberOfActivities, lastDate) => {
+module.exports = async (user, location, numberOfActivities, lastDate, maxDate) => {
     // apply geographic level restrictions
     const where = [];
-    const replacements = {};
+    const replacements = {
+        maxDate,
+    };
     const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
 
     const restrictedLocation = restrict(location).for(user).askingTo('list', 'covid_comment');
@@ -22,6 +24,9 @@ module.exports = async (user, location, numberOfActivities, lastDate) => {
     }
 
     where.push(`comments.created_at < '${lastDate}'`);
+    if (maxDate) {
+        where.push('comments.created_at >= :maxDate');
+    }
 
     const activities = await sequelize.query(
         `

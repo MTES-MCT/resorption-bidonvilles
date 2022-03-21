@@ -158,7 +158,6 @@ import PlanMarksFormPanelLogement from "./PanelLogement/PlanMarksFormPanelLogeme
 import PlanMarksFormPanelSecurite from "./PanelSecurite/PlanMarksFormPanelSecurite";
 import FormLeftColumn from "#app/components/ui/Form/FormLeftColumn";
 import FormErrorLog from "#app/components/ui/Form/FormErrorLog";
-import { get as getConfig } from "#helpers/api/config";
 import { addState } from "#helpers/api/plan";
 import { notify } from "#helpers/notificationHelper";
 
@@ -189,7 +188,6 @@ export default {
     },
 
     data() {
-        const { etp_types: etpTypes } = getConfig();
         const states = this.data.states || [];
         const lastState = states.length > 0 ? states.slice(-1)[0] : null;
 
@@ -284,8 +282,7 @@ export default {
                     wc: null,
                     nombre_bennes: null
                 }
-            },
-            etpTypes
+            }
         };
     },
 

@@ -1,4 +1,3 @@
-import { unload as unloadConfig } from "#helpers/api/config";
 import {
     postApi,
     putApi,
@@ -13,7 +12,6 @@ import {
  * Please note that in case of success, a JWT token is stored in the local storage,
  * which is the only way we have to detect wether the current user is logged in
  * or not.
- * @see isLoggedIn()
  *
  * @param {string} email
  * @param {string} password
@@ -21,10 +19,7 @@ import {
  * @returns {Promise}
  */
 export function login(email, password) {
-    return postApi("/signin", { email, password }).then(response => {
-        localStorage.setItem("token", response.token);
-        return response;
-    });
+    return postApi("/signin", { email, password });
 }
 
 /**
@@ -33,56 +28,7 @@ export function login(email, password) {
  * @returns {Promise}
  */
 export function refreshToken() {
-    return getApi("/refreshToken").then(response => {
-        localStorage.setItem("token", response.token);
-    });
-}
-
-/**
- * Logs the user out
- *
- * Basically, all we have to do is remove the token from local storage.
- *
- * @param {Matomo} piwik
- */
-export function logout(piwik) {
-    unloadConfig();
-    localStorage.removeItem("token");
-
-    if (piwik) {
-        piwik.resetUserId();
-        piwik.setCustomVariable(1, "user", null);
-        piwik.setCustomVariable(5, "departement_code", null);
-    }
-}
-
-/**
- * Checks if the current user is logged in or not
- *
- * This check is only based on the existence of an 'auth_token' entry in the local storage,
- * NOT on its validity.
- * This should not cause safety issues as the backend should always validate that token before
- * accepting any requests.
- *
- * @returns {boolean}
- */
-export function isLoggedIn() {
-    if (process.isServer) {
-        return false;
-    }
-    return localStorage.getItem("token") !== null;
-}
-
-/**
- * Returns the access token of the current session (if any)
- *
- * @returns {string|null}
- */
-export function getToken() {
-    if (process.isServer) {
-        return false;
-    }
-    return localStorage.getItem("token");
+    return getApi("/refreshToken");
 }
 
 /**

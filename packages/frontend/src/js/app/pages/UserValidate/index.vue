@@ -178,7 +178,6 @@ import UserValidateDetails from "./UserValidateDetails/UserValidateDetails";
 import UserValidateAccessStatus from "./UserValidateAccessStatus/UserValidateAccessStatus";
 import UserValidateRequestMessage from "./UserValidateRequestMessage";
 import UserValidateAccessSettings from "./UserValidateAccessSettings/UserValidateAccessSettings";
-import { get as getConfig } from "#helpers/api/config";
 import {
     denyAccess,
     get,
@@ -189,8 +188,6 @@ import {
 } from "#helpers/api/user";
 
 import { notify } from "#helpers/notificationHelper";
-
-let permissions;
 
 export default {
     components: {
@@ -205,12 +202,7 @@ export default {
         LoadingError
     },
     data() {
-        const { permissions_description, user: loggedUser } = getConfig();
-        permissions = permissions_description;
-
         return {
-            loggedUser,
-
             /**
              * @type {User}
              */
@@ -258,6 +250,15 @@ export default {
     },
 
     computed: {
+        loggedUser() {
+            return this.$store.state.config.configuration.user;
+        },
+
+        permissions() {
+            return this.$store.state.config.configuration
+                .permissions_description;
+        },
+
         /**
          * Details about the permissions requested by the user
          *
@@ -268,7 +269,7 @@ export default {
                 return null;
             }
 
-            return permissions[this.user.role_id];
+            return this.permissions[this.user.role_id];
         },
 
         /**

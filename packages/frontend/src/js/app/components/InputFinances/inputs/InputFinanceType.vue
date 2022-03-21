@@ -11,8 +11,6 @@
 </template>
 
 <script>
-import { get as getConfig } from "#helpers/api/config";
-
 export default {
     props: {
         value: {
@@ -23,9 +21,14 @@ export default {
 
     data() {
         return {
-            options: getConfig().finance_types,
             input: this.value
         };
+    },
+
+    computed: {
+        options() {
+            return this.$store.state.config.configuration.finance_types;
+        }
     },
 
     watch: {

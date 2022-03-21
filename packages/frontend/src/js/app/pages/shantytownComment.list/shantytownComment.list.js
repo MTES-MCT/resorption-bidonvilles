@@ -1,6 +1,6 @@
 import { VueGoodTable as Table } from "vue-good-table";
 import { getRecentComments } from "#helpers/api/town";
-import NavBar from "#app/layouts/navbar/navbar.vue";
+import NavBar from "#app/layouts/Navbar/Navbar.vue";
 import { open } from "#helpers/tabHelper";
 import "vue-good-table/dist/vue-good-table.css";
 

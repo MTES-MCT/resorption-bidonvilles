@@ -10,7 +10,6 @@
 <script>
 import DetailsPanel from "#app/components/ui/details/DetailsPanel.vue";
 import RbTable from "#app/components/Table/RbTable.vue";
-import { get as getConfig } from "#helpers/api/config";
 
 export default {
     props: {
@@ -24,15 +23,10 @@ export default {
         RbTable
     },
 
-    data() {
-        const { etp_types: etpTypes } = getConfig();
-
-        return {
-            etpTypes
-        };
-    },
-
     computed: {
+        etpTypes() {
+            return this.$store.state.config.configuration.etp_types;
+        },
         columns() {
             return [
                 { id: "label", label: "" },

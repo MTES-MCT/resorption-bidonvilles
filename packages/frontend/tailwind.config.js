@@ -9,6 +9,20 @@ module.exports = {
         purgeLayersByDefault: true
     },
     theme: {
+        borderWidth: {
+            default: "1px",
+            "0": "0",
+            "1": "1px",
+            "2": "2px",
+            "3": "3px",
+            "4": "4px",
+            "6": "6px",
+            "8": "8px",
+            "10": "10px",
+            "12": "12px",
+            "14": "14px",
+            "16": "16px"
+        },
         fontFamily: {
             body: ["Marianne", "arial", "sans-serif"]
         },
@@ -106,6 +120,10 @@ module.exports = {
 
                 // Green / Tertiary palette
                 tertiary: "#00AC8C",
+                green600: "#1f8d49",
+                green500: "#27A658",
+                green200: "#c2fdce",
+                green100: "#E9F6EE",
 
                 // Red palette
                 red700: "#A9000B",

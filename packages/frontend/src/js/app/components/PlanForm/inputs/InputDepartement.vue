@@ -18,8 +18,6 @@
 </template>
 
 <script>
-import { get as getConfig, getPermission } from "#helpers/api/config";
-
 export default {
     props: {
         value: {
@@ -35,16 +33,18 @@ export default {
     },
 
     data() {
-        const { departements } = getConfig();
-
         return {
-            departements,
-            permission: getPermission("plan.create"),
+            permission: this.$store.getters["config/getPermission"](
+                "plan.create"
+            ),
             input: this.value
         };
     },
 
     computed: {
+        departements() {
+            return this.$store.state.config.configuration.departements;
+        },
         values() {
             if (!this.permission) {
                 return [];

@@ -63,7 +63,11 @@
                     Exporter</Button
                 >
                 <Button
-                    v-if="hasPermission('contact_form_referral.access')"
+                    v-if="
+                        $store.getters['config/hasPermission'](
+                            'contact_form_referral.access'
+                        )
+                    "
                     @click="exportReferrals"
                     :loading="loading"
                     icon="file-excel"
@@ -74,7 +78,11 @@
                     Exporter "Comment avez-vous connu..."</Button
                 >
                 <Button
-                    v-if="hasPermission('shantytown_actor.export')"
+                    v-if="
+                        $store.getters['config/hasPermission'](
+                            'shantytown_actor.export'
+                        )
+                    "
                     @click="exportActors"
                     :loading="loading"
                     icon="file-excel"
@@ -99,7 +107,6 @@
 </template>
 
 <script>
-import { get as getConfig, hasPermission } from "#helpers/api/config";
 import { listExport } from "#helpers/api/user";
 import { fetchCSV } from "#helpers/api/contactFormReferral";
 import { exportActors } from "#helpers/api/actor";
@@ -113,19 +120,19 @@ export default {
         }
     },
     data() {
-        const { user } = getConfig();
-
         return {
-            user,
             loading: false
         };
     },
     components: {
         UserListHeaderSearch
     },
-    computed: {},
+    computed: {
+        user() {
+            return this.$store.state.config.configuration.user;
+        }
+    },
     methods: {
-        hasPermission,
         async exportUsers() {
             if (this.loading) {
                 return;

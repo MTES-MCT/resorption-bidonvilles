@@ -11,7 +11,7 @@ export default {
         titleTemplate: "%s - Résorption Bidonvilles"
     },
     components: {
-        Page: () => import("./legalMentions.vue")
+        Page: () => import("./index.vue")
     }
 };
 </script>

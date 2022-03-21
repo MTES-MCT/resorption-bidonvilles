@@ -28,8 +28,6 @@
 </template>
 
 <script>
-import { get as getConfig } from "#helpers/api/config";
-
 export default {
     props: {
         actor: {
@@ -37,11 +35,10 @@ export default {
             required: false
         }
     },
-    data() {
-        const { actor_themes: themes } = getConfig();
-        return {
-            themes
-        };
+    computed: {
+        themes() {
+            return this.$store.state.config.configuration.actor_themes;
+        }
     }
 };
 </script>
