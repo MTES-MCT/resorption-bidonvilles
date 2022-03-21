@@ -19,8 +19,6 @@
 </template>
 
 <script>
-import { get as getConfig } from "#helpers/api/config";
-
 export default {
     props: {
         value: {
@@ -36,12 +34,15 @@ export default {
     },
 
     data() {
-        const { topics } = getConfig();
-
         return {
-            values: topics,
             checked: this.value
         };
+    },
+
+    computed: {
+        values() {
+            return this.$store.state.config.configuration.topics;
+        }
     },
 
     watch: {

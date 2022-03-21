@@ -2,11 +2,10 @@ require('module-alias/register');
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
+const config = require('./config');
 
 global.db = () => new Sequelize({
-    username: 'fabnum',
-    password: 'fabnum',
-    database: 'action_bidonvilles_test',
+    ...config,
     host: 'localhost',
     port: 5432,
     dialect: 'postgres',

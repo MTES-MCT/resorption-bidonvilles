@@ -102,7 +102,9 @@
                     <DetailsPanelSection
                         v-if="
                             town.ownerType.label !== 'Inconnu' &&
-                                hasPermission('shantytown_owner.access')
+                                $store.getters['config/hasPermission'](
+                                    'shantytown_owner.access'
+                                )
                         "
                     >
                         <div class="grid grid-cols-2">
@@ -173,6 +175,8 @@
                 <div class="w-1/2">
                     <Map
                         :display-searchbar="false"
+                        :displayAddressToggler="false"
+                        :displayPrinter="false"
                         :towns="[
                             {
                                 ...town,
@@ -201,7 +205,6 @@ import DetailsPanelSection from "#app/components/ui/details/DetailsPanelSection.
 import formatDateSince from "../TownsList/formatDateSince";
 import { notify } from "#helpers/notificationHelper";
 import { findNearby } from "#helpers/api/town";
-import { hasPermission } from "#helpers/api/config";
 
 export default {
     props: {
@@ -222,7 +225,6 @@ export default {
             }
             return bool ? "Oui" : "Non";
         },
-        hasPermission,
         goTo(town) {
             if (town.id && town.id !== this.town.id) {
                 this.$router.push(`/site/${town.id}`);

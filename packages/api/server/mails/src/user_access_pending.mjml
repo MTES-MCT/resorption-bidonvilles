@@ -14,7 +14,7 @@
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
-                    Sauf erreur de notre part, vous n’avez pas encore activé votre lien d’accès à la plateforme <a href="{{var:frontUrl}}" class="link font-italic">Résorption-bidonvilles</a>.
+                    Sauf erreur de notre part, vous n’avez pas encore activé votre lien d’accès à la plateforme <a href="{{var:frontUrl}}" class="link font-italic" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a>.
                 </mj-text>
                 <mj-text>
                     Nous vous invitons à l'activer dès maintenant.
@@ -22,7 +22,7 @@
                 <mj-text mj-class="font-bold">
                     Le lien expirera dans 48h ({{var:activationUrlExpDate}}).
                 </mj-text>
-                <mj-button mj-class="button-primary" href="{{var:activationUrl}}">
+                <mj-button mj-class="button-primary" href="{{var:activationUrl}}" rel="noopener noreferrer">
                     Activer mon compte
                 </mj-button>
                 <mj-include path="common/contact_interlocutor_user.mjml"/>

@@ -2,7 +2,6 @@
 .git*
 cypress
 dist
-docs
 node_modules
 .dockerignore
 .env*

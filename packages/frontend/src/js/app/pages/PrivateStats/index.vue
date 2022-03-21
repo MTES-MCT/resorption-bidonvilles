@@ -189,7 +189,6 @@
 <script>
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer.vue";
 import PrivateLayout from "#app/components/PrivateLayout";
-import { get as getConfig } from "#helpers/api/config";
 import LeftColumn from "#app/pages/PrivateStats/LeftColumn";
 import KeyMetric from "#app/pages/PrivateStats/KeyMetric";
 import {
@@ -261,11 +260,7 @@ export default {
         }
     },
     data() {
-        const config = getConfig();
-
         return {
-            loggedUser: config.user,
-            departements: config.departements,
             stats: null,
             matomoStats: null,
             fetching: true,
@@ -273,6 +268,12 @@ export default {
         };
     },
     computed: {
+        loggedUser() {
+            return this.$store.state.config.configuration.user;
+        },
+        departements() {
+            return this.$store.state.config.configuration.departements;
+        },
         territory() {
             const territory = this.departements.find(
                 d => d.code === this.$route.params.code

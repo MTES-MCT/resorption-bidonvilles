@@ -34,7 +34,7 @@
     }
 }
 
-p {
+p.fieldType {
     margin-block-start: 1em;
     margin-block-end: 1em;
   }
@@ -54,8 +54,6 @@ img {
     color: black;
     border-radius: 2px;
   }
-
-
 
 .circle {
     border-color: rgba(181, 226, 140, 0.6);
@@ -478,3 +476,29 @@ input[type="checkbox"]:checked::before {
     transition: transform 0.2s ease-out;
     transition: transform 0.2s ease-out, -webkit-transform 0.2s ease-out;
 }
+
+.leaflet-popup-content-wrapper {
+    font-family: Marianne;
+    padding: 0px !important;
+    border-radius: 0 !important;
+    border-width: 1px;
+    border-color: #BFBFE3;
+    &:hover {
+        cursor: pointer;
+        background-color: #E5E5F4;
+    }
+    .leaflet-popup-content {
+        margin-top: 0px;
+        margin-right: 19px;
+        margin-left: 19px;
+    }
+
+}
+
+.leaflet-container a {
+    color: #000 !important;
+    text-decoration: none !important;
+}
+
+
+

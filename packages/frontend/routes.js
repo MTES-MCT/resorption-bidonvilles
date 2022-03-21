@@ -69,7 +69,7 @@ const anonymousRoutes = [
         path: "/mentions-legales",
         component: path.join(
             __dirname,
-            "./src/js/app/pages/legalMentions/entrypoint.vue"
+            "./src/js/app/pages/LegalMentions/entrypoint.vue"
         ),
         route: {
             meta: {
@@ -442,6 +442,19 @@ const loggedRoutes = [
         route: {
             meta: {
                 group: "directory",
+                beforeEnter: "loadedAndUpToDate"
+            }
+        }
+    },
+    {
+        path: "/tableau-de-bord",
+        component: path.join(
+            __dirname,
+            "./src/js/app/pages/Dashboard/entrypoint.vue"
+        ),
+        route: {
+            meta: {
+                group: "dashboard",
                 beforeEnter: "loadedAndUpToDate"
             }
         }

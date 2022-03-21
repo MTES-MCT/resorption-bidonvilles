@@ -1,4 +1,5 @@
 import agendaJobs from './agendaJobsLoader';
+import rateLimiter from './rateLimiterLoader';
 
 const express = require('./expressLoader');
 const routes = require('./routesLoader');
@@ -9,4 +10,5 @@ export default {
     routes,
     agenda,
     agendaJobs,
+    rateLimiter,
 };

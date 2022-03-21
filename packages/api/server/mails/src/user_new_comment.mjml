@@ -22,8 +22,8 @@
         </mj-section>
         <mj-section>
             <mj-column>
-                <mj-button href="{{var:messageUrl}}" mj-class="button-primary">Voir le message</mj-button><br/>
-                <mj-button href="{{var:annuaireUrl}}" mj-class="button-secondary" padding="0 0 2rem 0">Contacter {{var:createdBy.name}}</mj-button>
+                <mj-button href="{{var:messageUrl}}" mj-class="button-primary" rel="noopener noreferrer">Voir le message</mj-button><br/>
+                <mj-button href="{{var:annuaireUrl}}" mj-class="button-secondary" padding="0 0 2rem 0" rel="noopener noreferrer">Contacter {{var:createdBy.name}}</mj-button>
                 <mj-text mj-class="pb-4">
                     En tant que personne intervenant sur ce site, vous êtes informé(e) en temps réel de tout nouveau message.<br/>
                 </mj-text>
@@ -32,7 +32,7 @@
         <mj-section>
             <mj-column>
                 <mj-text>
-                    Ce mail a été envoyé à tous les utilisateurs de la plateforme sur votre département. Pour connaître qui a accès à la plateforme sur votre département, <a href="{{var:rootAnnuaireUrl}}" class="link font-italic">rendez-vous sur l'annuaire</a>.
+                    Ce mail a été envoyé à tous les utilisateurs de la plateforme sur votre département. Pour connaître qui a accès à la plateforme sur votre département, <a href="{{var:rootAnnuaireUrl}}" class="link font-italic" target="_blank" rel="noopener noreferrer">rendez-vous sur l'annuaire</a>.
                 </mj-text>
             </mj-column>
         </mj-section>

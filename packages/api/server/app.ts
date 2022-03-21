@@ -36,6 +36,7 @@ export default {
 
         sentryContextHandlers(app);
 
+        loaders.rateLimiter(app);
         loaders.routes(app);
 
         sentryErrorHandlers(app);

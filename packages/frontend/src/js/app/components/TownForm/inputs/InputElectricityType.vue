@@ -19,8 +19,6 @@
 </template>
 
 <script>
-import { get as getConfig } from "#helpers/api/config";
-
 export default {
     props: {
         value: {
@@ -31,12 +29,15 @@ export default {
     },
 
     data() {
-        const { electricity_types } = getConfig();
-
         return {
-            values: electricity_types,
             checked: this.value
         };
+    },
+
+    computed: {
+        values() {
+            return this.$store.state.config.configuration.electricity_types;
+        }
     },
 
     watch: {

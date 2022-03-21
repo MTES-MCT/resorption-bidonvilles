@@ -13,8 +13,6 @@
 </template>
 
 <script>
-import { get as getConfig } from "#helpers/api/config";
-
 export default {
     props: {
         value: {
@@ -25,12 +23,15 @@ export default {
     },
 
     data() {
-        const { social_origins } = getConfig();
-
         return {
-            values: social_origins,
             checked: this.value
         };
+    },
+
+    computed: {
+        values() {
+            return this.$store.state.config.configuration.social_origins;
+        }
     },
 
     watch: {

@@ -21,7 +21,11 @@
             />
             <div
                 class="flex ml-4"
-                v-if="hasPermission('shantytown_comment.createPrivate')"
+                v-if="
+                    $store.getters['config/hasPermission'](
+                        'shantytown_comment.createPrivate'
+                    )
+                "
             >
                 <div class="text-sm mr-4">
                     <Icon icon="lock" class="text-red" />
@@ -60,7 +64,6 @@
 
 <script>
 import { addComment as apiAddComment } from "#helpers/api/town";
-import { hasPermission } from "#helpers/api/config";
 
 export default {
     data() {
@@ -81,7 +84,6 @@ export default {
         }
     },
     methods: {
-        hasPermission,
         cancelComment() {
             this.newComment = "";
         },

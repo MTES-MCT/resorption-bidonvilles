@@ -1,5 +1,4 @@
 import { getDirectory } from "#helpers/api/user";
-import { get as getConfig } from "#helpers/api/config";
 
 export default {
     state: {
@@ -51,8 +50,8 @@ export default {
     },
 
     actions: {
-        setUserLocation({ commit }) {
-            const { user } = getConfig();
+        setUserLocation({ commit, rootState }) {
+            const { user } = rootState.config.configuration;
             if (user.organization.location.type !== "nation") {
                 commit("setDirectoryLocationFilter", {
                     id:

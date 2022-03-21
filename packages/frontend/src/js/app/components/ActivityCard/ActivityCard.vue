@@ -92,14 +92,16 @@
 </template>
 
 <script>
-import { get as getConfig, getPermission } from "#helpers/api/config";
 import formatDate from "./utils/formatDate";
 import ActivityCardIcon from "./ActivityCardIcon.vue";
 import ActivityCardBodyShantytownUpdated from "./ActivityCardBody/ActivityCardBodyShantytownUpdated.vue";
 import ActivityCardBodyCommentCreated from "./ActivityCardBody/ActivityCardBodyCommentCreated.vue";
 import ActivityCardModerationModal from "./ActivityCardModerationModal.vue";
+import showActivityDepartementCode from "#app/mixins/showActivityDepartementCode";
 
 export default {
+    mixins: [showActivityDepartementCode],
+
     components: {
         ActivityCardIcon,
         ActivityCardBodyShantytownUpdated,
@@ -120,31 +122,15 @@ export default {
     },
 
     data() {
-        const { user } = getConfig();
-
         return {
-            user,
-            permission: getPermission("shantytown_comment.moderate"),
+            permission: this.$store.getters["config/getPermission"](
+                "shantytown_comment.moderate"
+            ),
             isHover: false
         };
     },
 
     computed: {
-        showDepartementCode() {
-            const userLocation = this.user.organization.location;
-            if (["nation", "region"].includes(userLocation.type)) {
-                return true;
-            }
-
-            if (
-                userLocation.departement?.code !==
-                this.activity.shantytown.departement.code
-            ) {
-                return true;
-            }
-
-            return false;
-        },
         colors() {
             if (this.activity.entity === "shantytown") {
                 if (this.activity.action === "update") {

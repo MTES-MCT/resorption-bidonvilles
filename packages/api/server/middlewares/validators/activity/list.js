@@ -20,6 +20,15 @@ module.exports = [
     query('numberOfActivities')
         .customSanitizer(value => value || 10),
 
+    // max activity date
+    query('maxActivityDate')
+        .optional()
+        .toInt()
+        .isInt().bail().withMessage('La date doit être un timestamp'),
+
+    query('maxActivityDate')
+        .customSanitizer(value => value || null),
+
     // last activity date
     query('lastActivityDate')
         .optional()

@@ -1,6 +1,6 @@
 {
   "name": "@resorptionbidonvilles/frontend",
-  "version": "1.27.5",
+  "version": "1.28.0",
   "description": "Frontend de Résorption Bidonvilles",
   "resolutions": {
     "sharp": "^0.29.0"
@@ -9,7 +9,7 @@
     "dev": "gridsome develop --port 80 --host 0.0.0.0",
     "build": "gridsome build",
     "lint": "eslint --max-warnings=0 --ext .js,.vue",
-    "lint:all": "eslint --max-warnings=0 --ext .js,.vue src cypress docs",
+    "lint:all": "eslint --max-warnings=0 --ext .js,.vue src cypress",
     "test": "cypress run",
     "test:unit": "docker exec rb_frontend yarn vue-cli-service test:unit",
     "setup": "husky install"

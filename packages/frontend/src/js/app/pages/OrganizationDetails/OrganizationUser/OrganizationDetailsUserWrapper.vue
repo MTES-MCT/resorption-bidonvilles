@@ -10,8 +10,6 @@
 </template>
 
 <script>
-import { hasPermission } from "#helpers/api/config";
-
 export default {
     props: {
         user: {
@@ -23,16 +21,13 @@ export default {
             default: true
         }
     },
-    methods: {
-        hasPermission
-    },
     computed: {
         hasLinkPermission() {
             if (this.linkToUser !== true) {
                 return true;
             }
 
-            return hasPermission("user.read");
+            return this.$store.getters["config/hasPermission"]("user.read");
         },
         to() {
             if (this.linkToUser === true) {

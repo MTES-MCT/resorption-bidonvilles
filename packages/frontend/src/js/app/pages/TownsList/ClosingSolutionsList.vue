@@ -39,19 +39,16 @@
 </template>
 
 <script>
-import { get as getConfig } from "#helpers/api/config";
-
 export default {
     props: {
         shantytownClosingSolutions: {
             type: Array
         }
     },
-    data() {
-        const { closing_solutions: closingSolutions } = getConfig();
-        return {
-            closingSolutions
-        };
+    computed: {
+        closingSolutions() {
+            return this.$store.state.config.configuration.closing_solutions;
+        }
     },
     methods: {
         getClosingSolutionLabel(id) {

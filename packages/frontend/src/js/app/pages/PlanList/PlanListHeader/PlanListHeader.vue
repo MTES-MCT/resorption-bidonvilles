@@ -35,15 +35,11 @@
 
 <script>
 import { exportPlans } from "#helpers/api/plan";
-import { hasPermission } from "#helpers/api/config";
 import { mapGetters } from "vuex";
 import { notify } from "#helpers/notificationHelper";
 
 export default {
     methods: {
-        hasPermission(...args) {
-            return hasPermission(...args);
-        },
         async exportPlans() {
             if (this.exportIsPending === true) {
                 return;
@@ -80,7 +76,8 @@ export default {
 
     computed: {
         ...mapGetters({
-            location: "plansLocationFilter"
+            location: "plansLocationFilter",
+            hasPermission: "config/hasPermission"
         })
     }
 };

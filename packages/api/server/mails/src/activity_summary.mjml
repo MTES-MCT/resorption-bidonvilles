@@ -27,7 +27,7 @@
                     <span class='text-secondary'>Connectez-vous dès maintenant à la plateforme !</span> <span class='font-bold'>et participez à la résorption des bidonvilles en partageant les changements dont vous auriez eu connaissance ces derniers jours sur les sites de votre territoire.</span>
                 </mj-text>
                 <mj-text mj-class='pb-4'>Une fermeture, un nouveau site, un accès à l'eau endommagé, de nouvelles arrivées, le passage d’un médiateur scolaire, une procédure judiciaire en cours…</mj-text>
-                <mj-text mj-class='font-italic pb-4'>Les données de ce mail sont issues de la plateforme <a href="{{var:frontUrl}}?{{var:utm}}" class="link">Résorption-bidonvilles</a>.</mj-text>
+                <mj-text mj-class='font-italic pb-4'>Les données de ce mail sont issues de la plateforme <a href="{{var:frontUrl}}?{{var:utm}}" class="link" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a>.</mj-text>
                 <mj-text mj-class='font-italic pb-4'>Ce courriel a été envoyé à tous les utilisateurs de la plateforme présents dans votre département et votre région ainsi qu'aux acteurs nationaux comme la Dihal.</mj-text>
             </mj-column>
         </mj-section>
@@ -36,7 +36,7 @@
 
         <mj-section>
             <mj-column>
-                <mj-text mj-class='text-sm font-italic pt-4'>Pour ne plus recevoir ces récapitulatifs hebdomadaires, veuillez <a href="{{var:frontUrl}}/mon-compte?{{var:utm}}" class="link">le signaler dans votre espace "Mon compte"</a>.</mj-text>
+                <mj-text mj-class='text-sm font-italic pt-4'>Pour ne plus recevoir ces récapitulatifs hebdomadaires, veuillez <a href="{{var:frontUrl}}/mon-compte?{{var:utm}}" target="_blank" rel="noopener noreferrer" class="link">le signaler dans votre espace "Mon compte"</a>.</mj-text>
             </mj-column>
         </mj-section>
     </mj-body>

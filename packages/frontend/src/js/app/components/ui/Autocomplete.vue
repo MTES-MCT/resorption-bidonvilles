@@ -249,7 +249,7 @@ export default {
     mounted() {
         this.$refs.provider.syncValue(this.value);
     },
-    unmounted() {
+    beforeDestroy() {
         clearTimeout(this.blurTimeout);
         this.blurTimeout = null;
     },

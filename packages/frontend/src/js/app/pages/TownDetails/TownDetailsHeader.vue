@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import { get as getConfig, hasLocalizedPermission } from "#helpers/api/config";
+import { mapGetters } from "vuex";
 
 export default {
     props: {
@@ -117,14 +117,7 @@ export default {
             type: Object
         }
     },
-    data() {
-        const { user } = getConfig();
-        return {
-            user
-        };
-    },
     methods: {
-        hasLocalizedPermission,
         // Force scroll even if hash is already present in url
         scrollFix(to) {
             if (to === this.$route.hash) {
@@ -145,6 +138,9 @@ export default {
         }
     },
     computed: {
+        ...mapGetters({
+            hasLocalizedPermission: "config/hasLocalizedPermission"
+        }),
         isClosed() {
             return (
                 this.town.closedAt && this.town.closedWithSolutions !== "yes"

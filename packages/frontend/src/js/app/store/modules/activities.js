@@ -3,6 +3,7 @@ import { listRegular } from "#helpers/api/userActivity";
 export default {
     state: {
         loading: false,
+        fetchPromise: null,
         error: null,
         items: [],
         lastActivityDate: new Date(),
@@ -24,8 +25,9 @@ export default {
             state.loaded.locationCode = signature.locationCode;
             state.loaded.filters = signature.filters;
         },
-        setActivitiesLoading(state, loading) {
-            state.loading = loading;
+        setFetchPromise(state, promise) {
+            state.fetchPromise = promise;
+            state.loading = promise !== null;
         },
         setActivitiesError(state, error) {
             state.error = error;
@@ -37,7 +39,7 @@ export default {
             state.lastActivityDate = date;
         },
         setActivitiesEndReached(state, reached) {
-            this.endOfActivities = reached === true;
+            state.endOfActivities = reached === true;
         },
         setActivityTypesFilter(state, filters) {
             state.filters.activityTypes = filters;
@@ -57,25 +59,49 @@ export default {
     },
 
     actions: {
-        async fetchActivities({ commit, state }) {
-            commit("setActivitiesLoading", true);
+        async fetchActivities({ commit, state }, target = {}) {
+            if (state.fetchPromise !== null) {
+                state.fetchPromise.abort();
+            }
+
             commit("setActivitiesError", null);
 
+            if (target.location) {
+                commit("setActivitiesLastDate", Date.now() / 1000);
+                commit("setActivitiesEndReached", false);
+                commit("setActivities", []);
+                commit("setActivitiesLoadedSignature", {
+                    locationType: target.location.locationType,
+                    locationCode: target.location.locationCode,
+                    filters: state.filters.activityTypes
+                        .map(v => v.split("_"))
+                        .flat()
+                });
+            }
+
             try {
-                const activities = await listRegular(
+                const fetchPromise = listRegular(
                     state.lastActivityDate * 1000,
-                    state.filters.activityTypes.map(v => v.split("_")).flat(),
-                    10,
+                    state.loaded.filters,
+                    target.numberOfActivities || 10,
                     state.loaded.locationType,
-                    state.loaded.locationCode
+                    state.loaded.locationCode,
+                    target.maxDate
                 );
+                commit("setFetchPromise", fetchPromise);
+                const activities = await fetchPromise;
 
                 if (activities.length > 0) {
                     commit(
                         "setActivitiesLastDate",
                         activities.slice(-1)[0].date
                     );
-                } else {
+                }
+
+                if (
+                    activities.length === 0 ||
+                    target.numberOfActivities === -1
+                ) {
                     commit("setActivitiesEndReached", true);
                 }
 
@@ -87,7 +113,7 @@ export default {
                 );
             }
 
-            commit("setActivitiesLoading", false);
+            commit("setFetchPromise", null);
         }
     },
 
