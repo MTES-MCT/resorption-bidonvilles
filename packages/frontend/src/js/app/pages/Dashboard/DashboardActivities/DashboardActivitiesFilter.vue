@@ -22,6 +22,10 @@ export default {
         label: {
             type: String,
             required: true
+        },
+        track_id: {
+            type: String,
+            required: true
         }
     },
 
@@ -36,6 +40,11 @@ export default {
 
     methods: {
         setFilter() {
+            if (this.isActive) {
+                return;
+            }
+
+            this.$trackMatomoEvent("TB", `Activité ${this.track_id}`);
             this.$store.commit(
                 "dashboard/setDashboardActivitiesFilter",
                 this.id

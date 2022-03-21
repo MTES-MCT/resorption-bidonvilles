@@ -37,16 +37,23 @@ export default {
                 {
                     type: "link",
                     label: "Mes sites",
-                    id: "my_shantytowns"
+                    id: "my_shantytowns",
+                    track_id: "Mes sites"
                 },
                 { type: "separator", label: "", id: "separator_1" },
                 {
                     type: "link",
                     label: "Nouveaux sites déclarés",
-                    id: "new_shantytowns"
+                    id: "new_shantytowns",
+                    track_id: "Nouveaux sites"
                 },
                 { type: "separator", label: "", id: "separator_2" },
-                { type: "link", label: "Mon territoire", id: "my_territory" }
+                {
+                    type: "link",
+                    label: "Mon territoire",
+                    id: "my_territory",
+                    track_id: "Tout le territoire"
+                }
             ];
 
             return rawItems.map(item => {
@@ -59,10 +66,14 @@ export default {
     },
     methods: {
         setFilter(id) {
-            if (!id) {
+            if (!id || id === this.currentFilter) {
                 return;
             }
 
+            const { track_id: trackId } = this.items.find(
+                item => item.id === id
+            );
+            this.$trackMatomoEvent("TB", `Sites ${trackId}`);
             this.$store.commit("dashboard/setDashboardShantytownsFilter", id);
         }
     }

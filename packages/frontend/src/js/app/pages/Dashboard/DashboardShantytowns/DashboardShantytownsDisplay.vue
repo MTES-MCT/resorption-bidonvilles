@@ -17,6 +17,12 @@ export default {
     },
     methods: {
         changeDisplay(id) {
+            if (id === this.display) {
+                return;
+            }
+
+            const { track_id: trackId } = this.tabs.find(tab => tab.id === id);
+            this.$trackMatomoEvent("TB", `Vue ${trackId}`);
             this.$store.commit("dashboard/setDashboardShantytownsDisplay", id);
         }
     },

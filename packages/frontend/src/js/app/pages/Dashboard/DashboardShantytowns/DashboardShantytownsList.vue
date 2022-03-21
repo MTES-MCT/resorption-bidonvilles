@@ -133,6 +133,7 @@ export default {
             });
         },
         onChangePage(page) {
+            this.$trackMatomoEvent("TB", "Pagination sites");
             this.$store.commit(
                 "dashboard/setDashboardShantytownsPage",
                 Math.min(Math.max(1, page), this.nbPages)
