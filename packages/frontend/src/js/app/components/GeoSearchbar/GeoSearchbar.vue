@@ -33,6 +33,15 @@
                                 >Voir tous les sites de France</Button
                             >
                         </div>
+                        <div class="py-1 text-right" v-if="allowEraseSearch">
+                            <Button
+                                variant="primaryText"
+                                @click="removeItem"
+                                size="sm"
+                                class="font-bold"
+                                >Effacer la recherche</Button
+                            >
+                        </div>
                     </slot>
                 </template>
                 <template
@@ -106,6 +115,11 @@ export default {
             default: false
         },
         disabled: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
+        allowEraseSearch: {
             type: Boolean,
             required: false,
             default: false
