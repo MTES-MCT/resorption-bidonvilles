@@ -7,7 +7,7 @@ module.exports = stats => {
             label: "personnes ",
             label_secondary: "sur",
             label_tertiary: "sites",
-            figure_secondary: stats.openShantytowns.figures[0],
+            figure_secondary: stats.openShantytowns.figures.slice(-1)[0],
             color: stats.population.evolution >= 0 ? "red" : "green"
         },
         {
@@ -17,7 +17,7 @@ module.exports = stats => {
             label: `enfants`,
             label_secondary: "dont",
             label_tertiary: "scolarisés",
-            figure_secondary: stats.minorsInSchool.figures[0],
+            figure_secondary: stats.minorsInSchool.figures.slice(-1)[0],
             color: stats.minors.evolution >= 0 ? "red" : "green"
         },
         {
