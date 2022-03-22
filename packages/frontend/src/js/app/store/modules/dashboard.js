@@ -1,4 +1,5 @@
 import getSince from "#app/utils/getSince";
+import isTownPartOfTerritory from "#app/utils/isTownPartOfTerritory";
 import formatStats from "#app/utils/formatStats";
 import { getDashboardStats } from "#helpers/api/dashboard";
 export default {
@@ -6,6 +7,13 @@ export default {
 
     state: {
         dashboard: {
+            filters: {
+                location: {
+                    locationType: "nation",
+                    locationCode: null,
+                    locationName: "France"
+                }
+            },
             shantytowns: {
                 filter: "my_shantytowns",
                 display: "thumbnail",
@@ -51,10 +59,19 @@ export default {
         },
         setDashboardActivitiesFilter(state, filter) {
             state.dashboard.activities.filter = filter;
+        },
+        setDashboardLocationFilter(state, location) {
+            state.dashboard.filters.location.locationType =
+                location.locationType;
+            state.dashboard.filters.location.locationCode = location.code;
+            state.dashboard.filters.location.locationName = location.label;
         }
     },
 
     getters: {
+        dashboardLocationFilter(state) {
+            return state.dashboard.filters.location;
+        },
         dashboardGlobalStatsLoading: state => {
             return state.dashboard.globalStats.loading;
         },
@@ -94,11 +111,24 @@ export default {
                 }
 
                 const { days } = getSince(town.createdAt);
-                return days < 30;
+                return (
+                    days < 30 &&
+                    isTownPartOfTerritory(
+                        town,
+                        state.dashboard.filters.location
+                    )
+                );
             });
         },
         dashboardMyTerritory(state, getters, rootState) {
-            return rootState.towns.data.filter(town => town.status === "open");
+            return rootState.towns.data.filter(
+                town =>
+                    town.status === "open" &&
+                    isTownPartOfTerritory(
+                        town,
+                        state.dashboard.filters.location
+                    )
+            );
         },
         dashboardContent(state, getters) {
             if (state.dashboard.shantytowns.filter === "my_territory") {
@@ -184,8 +214,18 @@ export default {
             commit("setGlobalStatsError", null);
             commit("setGlobalStatsLoading", true);
             try {
-                const stats = await getDashboardStats();
-                commit("setGlobalStats", formatStats(stats));
+                const stats = await getDashboardStats(
+                    state.dashboard.filters.location.locationType,
+                    state.dashboard.filters.location.locationCode
+                );
+                if (stats === "") {
+                    commit(
+                        "setGlobalStatsError",
+                        "Vous n'avez accès à aucune donnée sur le territoire concerné"
+                    );
+                } else {
+                    commit("setGlobalStats", formatStats(stats));
+                }
                 commit("setGlobalStatsLoading", false);
             } catch (error) {
                 commit("setGlobalStatsLoading", false);

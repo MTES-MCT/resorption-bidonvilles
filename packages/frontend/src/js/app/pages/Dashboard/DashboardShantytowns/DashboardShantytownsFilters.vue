@@ -23,7 +23,8 @@ export default {
             myShantytowns: "dashboard/dashboardMyShantytowns",
             newShantytowns: "dashboard/dashboardNewShantytowns",
             myTerritory: "dashboard/dashboardMyTerritory",
-            currentFilter: "dashboard/dashboardShantytownsFilter"
+            currentFilter: "dashboard/dashboardShantytownsFilter",
+            locationFilter: "dashboard/dashboardLocationFilter"
         }),
         total() {
             return {
@@ -31,6 +32,28 @@ export default {
                 new_shantytowns: this.newShantytowns.length,
                 my_territory: this.myTerritory.length
             };
+        },
+        isUserLocation() {
+            // on test si la location filtrée par la barre de recherche est identique au territoire d'intervention
+            switch (this.locationFilter.locationType) {
+                case "nation":
+                    return (
+                        this.$store.state.config.configuration.user.organization
+                            .location.type === "nation"
+                    );
+                default:
+                    return (
+                        this.locationFilter.locationType ===
+                            this.$store.state.config.configuration.user
+                                .organization.location.type &&
+                        this.locationFilter.locationCode ===
+                            this.$store.state.config.configuration.user
+                                .organization.location[
+                                this.$store.state.config.configuration.user
+                                    .organization.location.type
+                            ].code
+                    );
+            }
         },
         items() {
             const rawItems = [
@@ -50,7 +73,9 @@ export default {
                 { type: "separator", label: "", id: "separator_2" },
                 {
                     type: "link",
-                    label: "Mon territoire",
+                    label: this.isUserLocation
+                        ? "Mon territoire"
+                        : this.locationFilter.locationName,
                     id: "my_territory",
                     track_id: "Tout le territoire"
                 }
