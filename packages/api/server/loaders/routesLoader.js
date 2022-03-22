@@ -593,6 +593,7 @@ module.exports = (app) => {
         (...args) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
+        validators.dashboard.location,
         controllers.stats.getDashboardStats,
     );
 
