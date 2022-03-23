@@ -53,8 +53,6 @@ export default {
         GeoSearchbar
     },
     created() {
-        console.log("created");
-        console.log(this.userLocation);
         this.$store.commit(
             "dashboard/setDashboardLocationFilter",
             this.userLocation
