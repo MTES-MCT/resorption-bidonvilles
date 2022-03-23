@@ -29,7 +29,7 @@ export default {
             globalStats: {
                 data: [],
                 error: null,
-                isLoading: false
+                loading: false
             }
         }
     },
@@ -42,7 +42,7 @@ export default {
             state.dashboard.globalStats.error = error;
         },
         setGlobalStatsLoading(state, value) {
-            state.dashboard.globalStats.isLoading = value;
+            state.dashboard.globalStats.loading = value;
         },
         setDashboardShantytownsFilter(state, filter) {
             state.dashboard.shantytowns.page = 1;
