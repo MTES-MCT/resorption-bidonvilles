@@ -8,11 +8,7 @@ export default {
     state: {
         dashboard: {
             filters: {
-                location: {
-                    locationType: "nation",
-                    locationCode: null,
-                    locationName: "France"
-                }
+                location: null
             },
             shantytowns: {
                 filter: "my_shantytowns",
@@ -61,10 +57,11 @@ export default {
             state.dashboard.activities.filter = filter;
         },
         setDashboardLocationFilter(state, location) {
-            state.dashboard.filters.location.locationType =
-                location.locationType;
-            state.dashboard.filters.location.locationCode = location.code;
-            state.dashboard.filters.location.locationName = location.label;
+            state.dashboard.filters.location = {
+                locationType: location.locationType,
+                locationCode: location.code,
+                locationName: location.label
+            };
         }
     },
 
