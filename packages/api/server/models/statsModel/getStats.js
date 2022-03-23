@@ -37,21 +37,20 @@ module.exports = async (user, location) => {
             shantytowns.updated_at,
             shantytowns.closed_at,
             resorbed,
+            ${restrictedLocation.type !== 'nation' ? 'code,' : '0 as code,'}
             shantytowns.shantytown_id as id
         FROM 
             (
                 (
-                    SELECT shantytowns.updated_at, closed_at, CAST(closed_with_solutions AS text) as resorbed, shantytown_id, population_total, population_minors, minors_in_school 
+                    SELECT shantytowns.updated_at, closed_at, CAST(closed_with_solutions AS text) as resorbed, shantytown_id, population_total, population_minors, minors_in_school${restrictedLocation.type !== 'nation' ? `, ${fromGeoLevelToTableName(restrictedLocation.type)}.code` : ''}
                     FROM shantytowns
                     ${joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
-                    ${where.length > 0 ? `WHERE (${where.join(') OR (')})` : ''}
                 )
                 UNION
                 (
-                    SELECT shantytowns.updated_at, closed_at, CAST(closed_with_solutions AS text) as resorbed, shantytown_id, population_total, population_minors, minors_in_school 
+                    SELECT shantytowns.updated_at, closed_at, CAST(closed_with_solutions AS text) as resorbed, shantytown_id, population_total, population_minors, minors_in_school${restrictedLocation.type !== 'nation' ? `, ${fromGeoLevelToTableName(restrictedLocation.type)}.code` : ''}
                     FROM "ShantytownHistories" shantytowns
                     ${joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
-                    ${where.length > 0 ? `WHERE (${where.join(') OR (')})` : ''}
                 )
             ) shantytowns
         ORDER BY shantytowns.updated_at DESC`,
@@ -72,6 +71,6 @@ module.exports = async (user, location) => {
         },
     );
     const listOfDates = getArrayOfDates(otherDate, date);
-    const stats = decomposeForDiagramm(shantytownStats, users, listOfDates);
+    const stats = decomposeForDiagramm(shantytownStats, users, listOfDates, restrictedLocation);
     return stats;
 };
