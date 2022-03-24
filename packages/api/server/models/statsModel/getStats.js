@@ -59,13 +59,14 @@ module.exports = async (user, location) => {
             replacements,
         },
     );
-
     const users = await sequelize.query(
         `SELECT 
-            created_at
-        FROM users
-        WHERE fk_status = 'active'
-        ORDER BY created_at DESC`,
+            u.created_at
+        FROM users u
+        LEFT JOIN organizations o ON u.fk_organization = o.organization_id
+        WHERE u.fk_status = 'active'
+        ${restrictedLocation.type !== 'nation' ? `AND o.fk_${restrictedLocation.type}='${restrictedLocation[restrictedLocation.type].code}'` : ''}
+        ORDER BY u.created_at DESC`,
         {
             type: sequelize.QueryTypes.SELECT,
         },
