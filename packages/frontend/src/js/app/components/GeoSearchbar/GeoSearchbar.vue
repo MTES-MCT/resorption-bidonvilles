@@ -33,7 +33,10 @@
                                 >Voir tous les sites de France</Button
                             >
                         </div>
-                        <div class="py-1 text-right" v-if="allowEraseSearch">
+                        <div
+                            class="py-1 text-right"
+                            v-if="allowEraseSearch && result !== null"
+                        >
                             <Button
                                 variant="primaryText"
                                 @click="removeItem"
@@ -129,7 +132,7 @@ export default {
         return {
             originalValue: this.value,
             input: "",
-            result: "",
+            result: null,
             results: [],
             loading: false
         };
