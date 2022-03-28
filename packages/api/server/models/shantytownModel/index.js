@@ -7,6 +7,8 @@ const getHistory = require('./getHistory');
 const getUsenameOf = require('./_common/getUsenameOf');
 const update = require('./update');
 const serializeComment = require('./_common/serializeComment');
+const deleteShantytown = require('./delete');
+
 
 module.exports = () => ({
     createCovidComment,
@@ -18,4 +20,5 @@ module.exports = () => ({
     getUsenameOf,
     serializeComment,
     update,
+    deleteShantytown,
 });
