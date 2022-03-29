@@ -10,22 +10,17 @@
 </template>
 
 <script>
-import { get as getConfig } from "#helpers/api/config";
-
 export default {
-    data() {
-        const { topics } = getConfig();
-
-        return {
-            topicOptions: topics.map(({ uid, name }) => ({
-                id: uid,
-                value: uid,
-                label: name
-            }))
-        };
-    },
-
     computed: {
+        topicOptions() {
+            return this.$store.config.configuration.topics.map(
+                ({ uid, name }) => ({
+                    id: uid,
+                    value: uid,
+                    label: name
+                })
+            );
+        },
         topicFilter: {
             get() {
                 return this.$store.state.plans.topicFilter;

@@ -7,7 +7,7 @@ export default {
         currentPage: 1,
         topicFilter: [],
         locationFilter: null,
-        items: [],
+        items: []
     },
 
     mutations: {
@@ -32,13 +32,13 @@ export default {
             state.topicFilter = filter;
         },
         addPlan(state, plan) {
-            const index = state.items.findIndex((item) => item.id === plan.id);
+            const index = state.items.findIndex(item => item.id === plan.id);
             if (index === -1) {
                 state.items.push(plan);
             } else {
                 state.items.splice(index, 1, plan);
             }
-        },
+        }
     },
 
     actions: {
@@ -71,7 +71,7 @@ export default {
                 );
                 commit("setPlansState", "error");
             }
-        },
+        }
     },
 
     getters: {
@@ -91,7 +91,7 @@ export default {
                 searchReg = new RegExp(search, "ig");
             }
 
-            return state.items.filter((plan) => {
+            return state.items.filter(plan => {
                 // keep open plans only
                 if (plan.closed_at !== null) {
                     return false;
@@ -136,11 +136,11 @@ export default {
                       category: "Pays",
                       data: {
                           code: null,
-                          type: "nation",
-                      },
+                          type: "nation"
+                      }
                   };
-        },
-    },
+        }
+    }
 };
 
 function getUserDefaultLocation(rootState) {
@@ -166,7 +166,7 @@ function getUserDefaultLocation(rootState) {
                 userLocationType === "nation"
                     ? null
                     : user.organization.location[userLocationType].code,
-            type: userLocationType,
-        },
+            type: userLocationType
+        }
     };
 }

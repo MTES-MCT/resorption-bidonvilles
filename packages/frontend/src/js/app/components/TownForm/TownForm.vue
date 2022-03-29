@@ -119,14 +119,14 @@ const isEqual = require("lodash");
 export default {
     props: {
         mode: {
-            type: String,
+            type: String
         },
         data: {
             type: Object,
             default() {
                 return {};
-            },
-        },
+            }
+        }
     },
 
     components: {
@@ -138,7 +138,7 @@ export default {
         TownFormPanelCharacteristics,
         TownFormPanelPeople,
         TownFormPanelLivingConditions,
-        TownFormPanelJudicial,
+        TownFormPanelJudicial
     },
 
     data() {
@@ -152,12 +152,12 @@ export default {
                 { id: "people", label: "Habitants" },
                 {
                     id: "living_conditions",
-                    label: "Conditions de vie et environnement",
+                    label: "Conditions de vie et environnement"
                 },
-                { id: "judicial", label: "Procédure judiciaire" },
+                { id: "judicial", label: "Procédure judiciaire" }
             ],
             initialTown: this.formatTown(this.data),
-            town: this.formatTown(this.data),
+            town: this.formatTown(this.data)
         };
     },
 
@@ -192,7 +192,7 @@ export default {
             return this.$store.getters["config/hasPermission"](
                 "shantytown_justice.access"
             );
-        },
+        }
     },
 
     methods: {
@@ -284,14 +284,14 @@ export default {
                         this.town.characteristics.declared_at
                     ),
                     field_type: this.town.characteristics.field_type,
-                    detailed_address:
-                        this.town.characteristics.detailed_address,
+                    detailed_address: this.town.characteristics
+                        .detailed_address,
                     owner_type: this.town.characteristics.owner_type,
                     owner: this.town.characteristics.owner,
-                    is_reinstallation:
-                        this.town.characteristics.is_reinstallation,
-                    reinstallation_comments:
-                        this.town.characteristics.reinstallation_comments,
+                    is_reinstallation: this.town.characteristics
+                        .is_reinstallation,
+                    reinstallation_comments: this.town.characteristics
+                        .reinstallation_comments,
                     population_total: this.strToInt(
                         this.town.people.population.populationTotal
                     ),
@@ -344,7 +344,7 @@ export default {
                     police_granted_at: this.formatDate(
                         this.town.judicial.police_granted_at
                     ),
-                    bailiff: this.town.judicial.bailiff,
+                    bailiff: this.town.judicial.bailiff
                 });
 
                 this.loading = false;
@@ -362,7 +362,7 @@ export default {
                     group: "notifications",
                     type: "success",
                     title: "Succès",
-                    text: this.successNotificationWording,
+                    text: this.successNotificationWording
                 });
             } catch (err) {
                 this.loading = false;
@@ -402,8 +402,8 @@ export default {
         },
         showClosedTowns(closedTowns) {
             this.nearbyClosedShantytowns = closedTowns;
-        },
-    },
+        }
+    }
 };
 </script>
 

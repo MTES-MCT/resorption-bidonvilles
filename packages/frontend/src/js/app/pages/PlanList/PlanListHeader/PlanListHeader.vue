@@ -42,7 +42,7 @@ import { notify } from "#helpers/notificationHelper";
 
 export default {
     components: {
-        TabList,
+        TabList
     },
     methods: {
         async exportPlans() {
@@ -65,17 +65,17 @@ export default {
                     group: "notifications",
                     type: "error",
                     title: "Une erreur est survenue",
-                    text: "Une erreur est survenue durant l'export des actions",
+                    text: "Une erreur est survenue durant l'export des actions"
                 });
             }
 
             this.exportIsPending = false;
-        },
+        }
     },
 
     data() {
         return {
-            exportIsPending: false,
+            exportIsPending: false
         };
     },
 
@@ -83,7 +83,7 @@ export default {
         ...mapGetters({
             hasPermission: "config/hasPermission",
             state: "plansState",
-            rawLocation: "plansLocationFilter",
+            rawLocation: "plansLocationFilter"
         }),
 
         location() {
@@ -92,7 +92,7 @@ export default {
             }
 
             return this.rawLocation.label;
-        },
-    },
+        }
+    }
 };
 </script>
