@@ -44,7 +44,6 @@ module.exports = async (user, location, shantytownFilter, numberOfActivities, la
                     FROM "ShantytownHistories" shantytowns
                     LEFT JOIN shantytowns AS s ON shantytowns.shantytown_id = s.shantytown_id
                     ${SQL.joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
-                    WHERE s.shantytown_id IS NOT NULL /* filter out history of deleted shantytowns */
                     ${where.length > 0 ? `AND ((${where.join(') OR (')}))` : ''}
                 )
                 UNION
