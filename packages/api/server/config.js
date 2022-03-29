@@ -1,10 +1,13 @@
 const path = require('path');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const config = {
     assetsSrc: path.resolve(__dirname, '../assets'),
-    frontUrl: process.env.RB_API_FRONT_URL,
+    frontUrl: `https://${process.env.RB_API_FRONT_DOMAIN}`,
     backUrl: process.env.RB_API_BACK_URL,
-    port: 80,
+    port: process.env.RB_API_PORT,
     auth: {
         secret: process.env.RB_API_AUTH_SECRET,
         expiresIn: process.env.RB_API_AUTH_EXPIRES_IN,
@@ -16,7 +19,7 @@ const config = {
         privateKey: process.env.RB_API_MAILJET_PRIVATE_KEY,
     },
     agenda: {
-        mongo_address: `mongodb://${process.env.RB_API_MONGO_USERNAME}:${process.env.RB_API_MONGO_PASSWORD}@rb_database_agenda`,
+        mongo_address: `mongodb://${process.env.RB_API_MONGO_USERNAME}:${process.env.RB_API_MONGO_PASSWORD}@${process.env.RB_API_MONGO_HOST}`,
     },
     mattermost: {},
     sentry: {

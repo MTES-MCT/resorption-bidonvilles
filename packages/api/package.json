@@ -18,6 +18,7 @@
     "agenda": "^3.1.0",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
     "escape-html": "^1.0.3",
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.16.0",
@@ -84,7 +85,7 @@
     ]
   },
   "scripts": {
-    "db:create": "docker exec rb_api yarn sequelize db:migrate && yarn sequelize db:seed:all",
+    "db:create": "sequelize db:migrate && sequelize db:seed:all",
     "dev": "ts-node-dev server/index.ts",
     "build": "tsc && tsc-alias && cp -r server/mails/dist dist/server/mails && cp -r assets dist",
     "start": "nodemon dist/server/index.js",
