@@ -13,17 +13,21 @@ const joins = [
 
 
 module.exports = async (user, location) => {
-    const where = [];
-    const replacements = {
-    };
     const restrictedLocation = restrict(location).for(user).askingTo('list', 'shantytown');
     if (restrictedLocation === null) {
         return null;
     }
 
-    if (restrictedLocation.type !== 'nation') {
-        where.push(`${fromGeoLevelToTableName(restrictedLocation.type)}.code = :shantytownLocationCode`);
-        replacements.shantytownLocationCode = restrictedLocation[restrictedLocation.type].code;
+    let where = '';
+    switch (location.type) {
+        case 'nation':
+            break;
+        case 'region':
+            where = `AND lo.region_code = '${location.region.code}'`;
+            break;
+        default:
+            where = `AND lo.departement_code = '${location.departement.code}'`;
+            break;
     }
 
     const date = new Date();
@@ -56,16 +60,15 @@ module.exports = async (user, location) => {
         ORDER BY shantytowns.updated_at DESC`,
         {
             type: sequelize.QueryTypes.SELECT,
-            replacements,
         },
     );
     const users = await sequelize.query(
         `SELECT 
             u.created_at
         FROM users u
-        LEFT JOIN organizations o ON u.fk_organization = o.organization_id
+        LEFT JOIN localized_organizations lo ON u.fk_organization = lo.organization_id
         WHERE u.fk_status = 'active'
-        ${restrictedLocation.type !== 'nation' ? `AND o.fk_${restrictedLocation.type}='${restrictedLocation[restrictedLocation.type].code}'` : ''}
+        ${where}
         ORDER BY u.created_at DESC`,
         {
             type: sequelize.QueryTypes.SELECT,
