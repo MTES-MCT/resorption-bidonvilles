@@ -36,7 +36,7 @@
                         <div class="flex">
                             <div class="relative flex-1">
                                 <InputIcon
-                                    class="text-primary pl-6"
+                                    class="text-primary pl-6 z-10"
                                     position="before"
                                     :icon="prefixIcon"
                                     v-if="prefixIcon"

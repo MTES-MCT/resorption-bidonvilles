@@ -9,7 +9,6 @@
             :allowShowAll="false"
             :allowEraseSearch="true"
             :value="locationFilter"
-            :disabled="false"
             placeholder="Nom d'une commune, département..."
             @blur="handleSearchBlur"
         ></GeoSearchbar>
