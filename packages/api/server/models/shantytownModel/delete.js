@@ -1,23 +1,24 @@
 const { sequelize } = require('#db/models');
 
 module.exports = async (id) => {
-    const promises = [
-        sequelize.query(
-            'DELETE FROM shantytowns WHERE shantytown_id = :id',
-            {
-                replacements: {
-                    id,
-                },
+    const transaction = await sequelize.transaction();
+    await sequelize.query(
+        'DELETE FROM shantytowns WHERE shantytown_id = :id',
+        {
+            transaction,
+            replacements: {
+                id,
             },
-        ),
-        sequelize.query(
+        },
+    )
+        .then(sequelize.query(
             'DELETE FROM "ShantytownHistories" WHERE shantytown_id = :id',
             {
+                transaction,
                 replacements: {
                     id,
                 },
             },
-        ),
-    ];
-    await Promise.all(promises);
+        ));
+    await transaction.commit();
 };
