@@ -6,7 +6,7 @@
     "sharp": "^0.29.0"
   },
   "scripts": {
-    "dev": "gridsome develop --port 80 --host 0.0.0.0",
+    "dev": "gridsome develop --port 8091 --host 0.0.0.0",
     "build": "gridsome build",
     "lint": "eslint --max-warnings=0 --ext .js,.vue",
     "lint:all": "eslint --max-warnings=0 --ext .js,.vue src cypress",
