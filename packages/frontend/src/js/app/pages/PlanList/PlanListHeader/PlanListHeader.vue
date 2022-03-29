@@ -1,45 +1,49 @@
 <template>
-    <div class="flex justify-between items-start mb-8">
-        <div>
-            <h1 class="text-display-lg mb-2 whitespace-nowrap">Actions</h1>
-            <h2 v-if="state !== 'loading'">
-                L'ensemble des actions sur votre territoire :
-                <span class="font-bold">{{ location.label }}</span>
-            </h2>
-        </div>
+    <div>
+        <TabList :tabs="[{ id: 'open', label: 'Actions existantes' }]" />
 
-        <div class="flex items-end space-x-6">
-            <div v-if="hasPermission('plan.create')">
-                <router-link to="/nouvelle-action">
-                    <Button
-                        icon="plus"
-                        iconPosition="left"
-                        variant="secondary"
-                        class="whitespace-no-wrap mb-4 md:mb-0"
-                    >
-                        Déclarer une nouvelle action</Button
-                    >
-                </router-link>
+        <div class="flex justify-between items-start mb-8">
+            <h1 class="text-display-xl my-4 whitespace-nowrap">
+                <span v-if="state !== 'loading'">{{ location }}</span>
+            </h1>
+
+            <div class="flex items-end space-x-6">
+                <div v-if="hasPermission('plan.create')">
+                    <router-link to="/nouvelle-action">
+                        <Button
+                            icon="plus"
+                            iconPosition="left"
+                            variant="secondary"
+                            class="whitespace-no-wrap mb-4 md:mb-0"
+                        >
+                            Déclarer une nouvelle action</Button
+                        >
+                    </router-link>
+                </div>
+                <Button
+                    v-if="hasPermission('plan.export')"
+                    icon="file-excel"
+                    iconPosition="left"
+                    variant="primary"
+                    @click="exportPlans"
+                    :loading="exportIsPending"
+                    >Exporter</Button
+                >
             </div>
-            <Button
-                v-if="hasPermission('plan.export')"
-                icon="file-excel"
-                iconPosition="left"
-                variant="primary"
-                @click="exportPlans"
-                :loading="exportIsPending"
-                >Exporter</Button
-            >
         </div>
     </div>
 </template>
 
 <script>
+import TabList from "#app/components/TabList/TabList.vue";
 import { exportPlans } from "#helpers/api/plan";
 import { mapGetters } from "vuex";
 import { notify } from "#helpers/notificationHelper";
 
 export default {
+    components: {
+        TabList,
+    },
     methods: {
         async exportPlans() {
             if (this.exportIsPending === true) {
@@ -77,10 +81,18 @@ export default {
 
     computed: {
         ...mapGetters({
-            location: "plansLocationFilter",
             hasPermission: "config/hasPermission",
             state: "plansState",
+            rawLocation: "plansLocationFilter",
         }),
+
+        location() {
+            if (!this.rawLocation.data) {
+                return `« ${this.rawLocation.label} »`;
+            }
+
+            return this.rawLocation.label;
+        },
     },
 };
 </script>
