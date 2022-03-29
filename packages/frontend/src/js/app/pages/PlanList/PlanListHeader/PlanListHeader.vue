@@ -1,12 +1,13 @@
 <template>
-    <div class="flex justify-between items-start mb-8">
-        <div>
-            <h1 class="text-display-lg mb-2 whitespace-nowrap">Actions</h1>
-            <h2 v-if="state !== 'loading'">
-                L'ensemble des actions sur votre territoire :
-                <span class="font-bold">{{ location.label }}</span>
-            </h2>
-        </div>
+    <div>
+        <TabList :tabs="[{ id: 'open', label: 'Actions existantes' }]" />
+
+        <h1
+            class="text-display-xl my-4 whitespace-nowrap"
+            v-if="state !== 'loading'"
+        >
+            {{ location }}
+        </h1>
 
         <div class="flex items-end space-x-6">
             <div v-if="hasPermission('plan.create')">
@@ -35,11 +36,15 @@
 </template>
 
 <script>
+import TabList from "#app/components/TabList/TabList.vue";
 import { exportPlans } from "#helpers/api/plan";
 import { mapGetters } from "vuex";
 import { notify } from "#helpers/notificationHelper";
 
 export default {
+    components: {
+        TabList,
+    },
     methods: {
         async exportPlans() {
             if (this.exportIsPending === true) {
