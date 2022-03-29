@@ -7,6 +7,7 @@
         rules="required"
         :disabled="disabled"
         v-model="input"
+        :defaultTab="defaultTab"
     >
         <template v-slot:info
             >Merci de sélectionner les sites concernés par l'action. Si vous ne
@@ -34,6 +35,11 @@ export default {
             type: Boolean,
             required: false,
             default: false
+        },
+        defaultTab: {
+            type: String,
+            required: false,
+            default: "open"
         }
     },
 
