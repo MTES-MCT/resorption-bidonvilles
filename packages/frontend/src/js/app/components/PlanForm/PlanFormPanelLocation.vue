@@ -12,7 +12,7 @@
             <InputLocationShantytowns
                 v-if="input.location_type === 'shantytowns'"
                 v-model="input.location_shantytowns"
-                :disabled="mode !== 'create'"
+                :defaultTab="mode === 'create' ? 'open' : 'selected'"
             />
 
             <InputLocationAddress

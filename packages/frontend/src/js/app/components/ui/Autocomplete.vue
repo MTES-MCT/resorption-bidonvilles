@@ -36,7 +36,7 @@
                         <div class="flex">
                             <div class="relative flex-1">
                                 <InputIcon
-                                    class="text-primary pl-6"
+                                    class="text-primary pl-6 z-10"
                                     position="before"
                                     :icon="prefixIcon"
                                     v-if="prefixIcon"
@@ -272,6 +272,12 @@ export default {
             this.$emit("blur", { value: null, search: "" });
         },
         onItemSelect(newValue) {
+            if (newValue === undefined) {
+                // case of "enter" from input, handled by a blur
+                this.$refs.searchInput.blur();
+                return;
+            }
+
             // Update local new value & Emit
             this.value = newValue;
             // If user has selected an item, update search input
@@ -306,13 +312,12 @@ export default {
             }
 
             this.blurTimeout = setTimeout(() => {
+                if (this.searchInput === this.originalSearchInput) {
+                    return;
+                }
+
                 // If user has deleted his input, delete the selected value
-                if (!this.value) {
-                    this.onItemSelect(null);
-                } else if (
-                    this.allowFreeInput &&
-                    this.searchInput !== this.originalSearchInput
-                ) {
+                if (this.allowFreeInput) {
                     this.value = null;
                 } else {
                     // restore to last selected value

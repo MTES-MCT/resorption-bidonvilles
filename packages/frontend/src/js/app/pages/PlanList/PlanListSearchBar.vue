@@ -1,14 +1,16 @@
 <template>
-    <div class="bg-G100 py-6">
+    <div class="bg-G200 py-6">
         <h1 class="text-display-md text-center">
-            Rechercher une commune, un département... ?
+            Rechercher une action, une commune, un département... ?
         </h1>
 
         <GeoSearchbar
             class="mt-4"
             :allowShowAll="false"
             v-model="location"
-            placeholder="Nom d'une commune, département..."
+            @blur="handleBlur"
+            :allowFreeInput="true"
+            placeholder="Nom d'une action, commune, département..."
         ></GeoSearchbar>
     </div>
 </template>
@@ -27,8 +29,25 @@ export default {
                 return this.$store.state.plans.locationFilter;
             },
             set(value) {
+                if (value === undefined) {
+                    // case of native submit, which is handled by blur
+                    return;
+                }
+
                 this.$store.commit("setPlansLocationFilter", value);
             }
+        }
+    },
+
+    methods: {
+        handleBlur(data) {
+            if (data.value !== null) {
+                return;
+            }
+
+            this.$store.commit("setPlansLocationFilter", {
+                label: data.search
+            });
         }
     }
 };

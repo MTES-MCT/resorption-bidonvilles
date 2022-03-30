@@ -74,7 +74,8 @@ export default {
         ...mapGetters({
             isLoading: "activitiesLoading",
             error: "activitiesError",
-            activities: "dashboard/activities"
+            activities: "dashboard/activities",
+            locationFilter: "dashboard/dashboardLocationFilter"
         }),
 
         user() {
@@ -123,23 +124,16 @@ export default {
 
     methods: {
         load() {
-            const { type } = this.user.organization.location;
-            let code = null;
-
-            if (type !== "nation") {
-                ({ code } = this.user.organization.location[type]);
-            }
-
             const { loaded } = this.$store.state.activities;
             if (
-                loaded.locationType !== type ||
-                loaded.locationCode !== code ||
+                loaded.locationType !== this.locationFilter.locationType ||
+                loaded.locationCode !== this.locationFilter.locationCode ||
                 this.$store.state.activities.endOfActivities !== true
             ) {
                 this.$store.dispatch("fetchActivities", {
                     location: {
-                        locationType: type,
-                        locationCode: code
+                        locationType: this.locationFilter.locationType,
+                        locationCode: this.locationFilter.locationCode
                     },
                     maxDate: this.aMonthAgo * 1000,
                     numberOfActivities: -1

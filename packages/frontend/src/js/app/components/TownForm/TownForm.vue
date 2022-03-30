@@ -113,6 +113,8 @@ import FormLeftColumn from "#app/components/ui/Form/FormLeftColumn";
 import FormErrorLog from "#app/components/ui/Form/FormErrorLog";
 import { add, edit } from "#helpers/api/town";
 import { notify } from "#helpers/notificationHelper";
+import formatTown from "./utils/formatTown";
+const isEqual = require("lodash");
 
 export default {
     props: {
@@ -154,168 +156,8 @@ export default {
                 },
                 { id: "judicial", label: "Procédure judiciaire" }
             ],
-            town: {
-                location: {
-                    address: {
-                        label: this.data.address
-                            ? this.data.address
-                            : undefined,
-                        citycode: this.data.city
-                            ? this.data.city.code
-                            : undefined
-                    },
-                    name: this.data.name || undefined,
-                    coordinates: this.data.latitude
-                        ? [this.data.latitude, this.data.longitude]
-                        : undefined
-                },
-                characteristics: {
-                    built_at: this.data.builtAt
-                        ? new Date(this.data.builtAt * 1000)
-                        : undefined,
-                    declared_at: this.data.declaredAt
-                        ? new Date(this.data.declaredAt * 1000)
-                        : undefined,
-                    field_type: this.data.fieldType
-                        ? this.data.fieldType.id
-                        : undefined,
-                    detailed_address: this.data.addressDetails,
-                    owner_type: this.data.ownerType
-                        ? this.data.ownerType.id
-                        : undefined,
-                    owner: this.data.owner,
-                    is_reinstallation: this.boolToInt(
-                        this.data.isReinstallation
-                    ),
-                    reinstallation_comments:
-                        this.data.reinstallationComments || undefined
-                },
-                people: {
-                    population: {
-                        populationTotal: this.intToStr(
-                            this.data.populationTotal
-                        ),
-                        populationCouples: this.intToStr(
-                            this.data.populationCouples
-                        ),
-                        populationMinors: this.intToStr(
-                            this.data.populationMinors
-                        )
-                    },
-                    populationMinors: {
-                        populationMinors0To3: this.intToStr(
-                            this.data.populationMinors0To3
-                        ),
-                        populationMinors3To6: this.intToStr(
-                            this.data.populationMinors3To6
-                        ),
-                        populationMinors6To12: this.intToStr(
-                            this.data.populationMinors6To12
-                        ),
-                        populationMinors12To16: this.intToStr(
-                            this.data.populationMinors12To16
-                        ),
-                        populationMinors16To18: this.intToStr(
-                            this.data.populationMinors16To18
-                        ),
-                        minorsInSchool: this.intToStr(this.data.minorsInSchool)
-                    },
-                    social_origins: this.data.socialOrigins
-                        ? this.data.socialOrigins.map(({ id }) => id)
-                        : [],
-                    census_status: this.toNullableStr(this.data.censusStatus),
-                    census_conducted_at: this.data.censusConductedAt
-                        ? new Date(this.data.censusConductedAt * 1000)
-                        : undefined,
-                    census_conducted_by: this.data.censusConductedBy
-                },
-                living_conditions: {
-                    access_to_water: this.boolToInt(this.data.accessToWater),
-                    water_comments: this.data.waterComments || undefined,
-                    electricity_type: this.data.electricityType
-                        ? this.data.electricityType.id
-                        : undefined,
-                    electricity_comments:
-                        this.data.electricityComments || undefined,
-                    access_to_sanitary: this.boolToInt(
-                        this.data.accessToSanitary
-                    ),
-                    sanitary_comments: this.data.sanitaryComments || undefined,
-                    trash_evacuation: this.boolToInt(this.data.trashEvacuation),
-                    water_potable: this.boolToInt(this.data.waterPotable),
-                    water_public_point: this.boolToInt(
-                        this.data.waterPublicPoint
-                    ),
-                    water_continuous_access: this.boolToInt(
-                        this.data.waterContinuousAccess
-                    ),
-                    water_distance: this.data.waterDistance,
-                    water_roads_to_cross: this.boolToInt(
-                        this.data.waterRoadsToCross
-                    ),
-                    water_everyone_has_access: this.boolToInt(
-                        this.data.waterEveryoneHasAccess
-                    ),
-                    water_stagnant_water: this.boolToInt(
-                        this.data.waterStagnantWater
-                    ),
-                    water_hand_wash_access: this.boolToInt(
-                        this.data.waterHandWashAccess
-                    ),
-                    water_hand_wash_access_number: this.data
-                        .waterHandWashAccessNumber,
-                    sanitary_number: this.data.sanitaryNumber,
-                    sanitary_insalubrious: this.boolToInt(
-                        this.data.sanitaryInsalubrious
-                    ),
-                    sanitary_on_site: this.boolToInt(this.data.sanitaryOnSite),
-                    trash_cans_on_site: this.data.trashCansOnSite,
-                    trash_accumulation: this.boolToInt(
-                        this.data.trashAccumulation
-                    ),
-                    trash_evacuation_regular: this.boolToInt(
-                        this.data.trashEvacuationRegular
-                    ),
-                    vermin: this.boolToInt(this.data.vermin),
-                    vermin_comments: this.data.verminComments,
-                    fire_prevention_measures: this.boolToInt(
-                        this.data.firePreventionMeasures
-                    ),
-                    fire_prevention_diagnostic: this.boolToInt(
-                        this.data.firePreventionDiagnostic
-                    ),
-                    fire_prevention_devices: this.boolToInt(
-                        this.data.firePreventionDevices
-                    ),
-                    fire_prevention_site_accessible: this.boolToInt(
-                        this.data.firePreventionSiteAccessible
-                    ),
-                    fire_prevention_comments: this.data.firePreventionComments
-                },
-                judicial: {
-                    owner_complaint: this.boolToInt(this.data.ownerComplaint),
-                    justice_procedure: this.boolToInt(
-                        this.data.justiceProcedure
-                    ),
-                    justice_rendered: this.boolToInt(this.data.justiceRendered),
-                    justice_rendered_at: this.data.justiceRenderedAt
-                        ? new Date(this.data.justiceRenderedAt * 1000)
-                        : undefined,
-                    justice_rendered_by:
-                        this.data.justiceRenderedBy || undefined,
-                    justice_challenged: this.boolToInt(
-                        this.data.justiceChallenged
-                    ),
-                    police_status: this.toNullableStr(this.data.policeStatus),
-                    police_requested_at: this.data.policeRequestedAt
-                        ? new Date(this.data.policeRequestedAt * 1000)
-                        : undefined,
-                    police_granted_at: this.data.policeGrantedAt
-                        ? new Date(this.data.policeGrantedAt * 1000)
-                        : undefined,
-                    bailiff: this.data.bailiff || undefined
-                }
-            }
+            initialTown: this.formatTown(this.data),
+            town: this.formatTown(this.data)
         };
     },
 
@@ -354,36 +196,13 @@ export default {
     },
 
     methods: {
+        formatTown,
         back() {
             this.$router.replace(this.backPage);
         },
 
         closeInfo() {
             this.showInfo = false;
-        },
-
-        boolToInt(bool) {
-            if (bool === undefined) {
-                return undefined;
-            }
-
-            if (bool === true) {
-                return 1;
-            }
-
-            if (bool === false) {
-                return 0;
-            }
-
-            return -1;
-        },
-
-        intToStr(int) {
-            if (typeof int === "number") {
-                return `${int}`;
-            }
-
-            return undefined;
         },
 
         strToInt(str) {
@@ -400,14 +219,6 @@ export default {
             }
 
             return str;
-        },
-
-        toNullableStr(value) {
-            if (value === undefined || value === null) {
-                return "null";
-            }
-
-            return value;
         },
 
         formatDate(d) {
@@ -430,7 +241,14 @@ export default {
                 );
                 return;
             }
-
+            if (isEqual(this.town, this.initialTown)) {
+                this.mainError =
+                    "Modification impossible : aucun champ n'a été modifié";
+                this.$router.replace("#top", () =>
+                    this.$router.replace("#erreurs")
+                );
+                return;
+            }
             this.loading = true;
             this.mainError = null;
             this.$router.replace("#top");

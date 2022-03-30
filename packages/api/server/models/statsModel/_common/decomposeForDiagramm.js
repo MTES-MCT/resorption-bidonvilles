@@ -1,6 +1,6 @@
 const moment = require('moment');
 
-module.exports = (towns, users, listOfDates) => {
+module.exports = (towns, users, listOfDates, location) => {
     const date2019 = moment(new Date('2019-01-01T00:00:00')).format('YYYY-MM-DD HH:mm:ss ZZ');
 
     const userStats = {
@@ -46,15 +46,17 @@ module.exports = (towns, users, listOfDates) => {
                 (town) => {
                     if (!listOfId.includes(town.id) && moment(town.updated_at).format('YYYY-MM-DD HH:mm:ss ZZ') <= date) {
                         listOfId.push(town.id);
-                        if (town.closed_at === null) {
-                            populationTotal += town.population;
-                            minorsTotal += town.minors;
-                            minorsInSchoolTotal += town.minors_in_school;
-                            openShantytownsTotal += 1;
-                        } else if (town.resorbed === 'yes' && moment(town.closed_at).format('YYYY-MM-DD HH:mm:ss ZZ') >= date2019) {
-                            resorbedShantytownsTotal += 1;
-                        } else if (moment(town.closed_at).format('YYYY-MM-DD HH:mm:ss ZZ') > date2019) {
-                            closedShantytownsTotal += 1;
+                        if (location.type === 'nation' || town.code === location[location.type].code) {
+                            if (town.closed_at === null) {
+                                populationTotal += town.population;
+                                minorsTotal += town.minors;
+                                minorsInSchoolTotal += town.minors_in_school;
+                                openShantytownsTotal += 1;
+                            } else if (town.resorbed === 'yes' && moment(town.closed_at).format('YYYY-MM-DD HH:mm:ss ZZ') >= date2019) {
+                                resorbedShantytownsTotal += 1;
+                            } else if (moment(town.closed_at).format('YYYY-MM-DD HH:mm:ss ZZ') > date2019) {
+                                closedShantytownsTotal += 1;
+                            }
                         }
                     }
                 },

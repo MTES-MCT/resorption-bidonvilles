@@ -11,6 +11,7 @@ const { sendUserCommentDeletion } = require('#server/mails/mails');
 const { can } = require('#server/utils/permission');
 const mattermostUtils = require('#server/utils/mattermost');
 const userModel = require('#server/models/userModel')(sequelize);
+const { deleteShantytown } = require('#server/models/shantytownModel')();
 const mails = require('#server/mails/mails');
 const shantytownService = require('#server/services/shantytown');
 const shantytownActorThemes = require('#server/config/shantytown_actor_themes');
@@ -181,7 +182,7 @@ module.exports = (models) => {
 
             // delete the town
             try {
-                await town.destroy();
+                deleteShantytown(town.id);
                 return res.status(200).send({});
             } catch (e) {
                 res.status(500).send({

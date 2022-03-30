@@ -4,9 +4,15 @@ module.exports = stats => {
             ...stats.population,
             id: "population",
             icon: "male",
-            label: "personnes ",
+            label:
+                stats.population.figures.slice(-1)[0] > 1
+                    ? "personnes "
+                    : "personne",
             label_secondary: "sur",
-            label_tertiary: "sites",
+            label_tertiary:
+                stats.openShantytowns.figures.slice(-1)[0] > 1
+                    ? "sites"
+                    : "site",
             figure_secondary: stats.openShantytowns.figures.slice(-1)[0],
             color: stats.population.evolution >= 0 ? "red" : "green"
         },
@@ -14,9 +20,12 @@ module.exports = stats => {
             ...stats.minors,
             id: "children",
             icon: "child",
-            label: `enfants`,
+            label: stats.minors.figures.slice(-1)[0] > 1 ? "enfants" : "enfant",
             label_secondary: "dont",
-            label_tertiary: "scolarisés",
+            label_tertiary:
+                stats.minorsInSchool.figures.slice(-1)[0] > 1
+                    ? "scolarisés"
+                    : "scolarisé",
             figure_secondary: stats.minorsInSchool.figures.slice(-1)[0],
             color: stats.minors.evolution >= 0 ? "red" : "green"
         },
@@ -24,14 +33,20 @@ module.exports = stats => {
             ...stats.resorbedShantytowns,
             id: "resorbed",
             icon: "check",
-            label: "résorptions déclarées",
+            label:
+                stats.resorbedShantytowns.figures.slice(-1)[0] > 1
+                    ? "résorptions déclarées"
+                    : "résorption déclarée",
             color: stats.resorbedShantytowns.evolution >= 0 ? "green" : "red"
         },
         {
             ...stats.closedShantytowns,
             id: "closed",
             icon: "ban",
-            label: "fermetures",
+            label:
+                stats.closedShantytowns.figures.slice(-1)[0] > 1
+                    ? "fermetures"
+                    : "fermeture",
             color: stats.closedShantytowns.evolution >= 0 ? "green" : "red"
         },
 
@@ -39,7 +54,10 @@ module.exports = stats => {
             ...stats.userStats,
             id: "users",
             icon: "user",
-            label: "utilisateurs",
+            label:
+                stats.userStats.figures.slice(-1)[0] > 1
+                    ? "utilisateurs"
+                    : "utilisateur",
             color: stats.userStats.evolution >= 0 ? "green" : "red"
         }
     ];

@@ -17,6 +17,7 @@
 
 <script>
 import DashboardSection from "../DashboardSection";
+import { mapGetters } from "vuex";
 
 export default {
     components: {
@@ -34,6 +35,9 @@ export default {
     },
 
     computed: {
+        ...mapGetters({
+            locationFilter: "dashboard/dashboardLocationFilter"
+        }),
         user() {
             return this.$store.state.config.configuration.user;
         },
@@ -45,13 +49,7 @@ export default {
             }`;
         },
         locationName() {
-            if (this.user.organization.location.type === "nation") {
-                return "France";
-            }
-
-            return this.user.organization.location[
-                this.user.organization.location.type
-            ].name;
+            return this.locationFilter.locationName;
         }
     }
 };

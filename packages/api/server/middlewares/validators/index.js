@@ -12,6 +12,7 @@ const inviteShantytownActor = require('./shantytownActors/inviteShantytownActor'
 const invite = require('./invite');
 const createShantytownComment = require('./shantytownComment/create');
 const activityList = require('./activity/list');
+const dashboardLocation = require('./dashboard/location');
 const findNearbyTowns = require('./findNearbyTowns');
 const setUserAdminComments = require('./setUserAdminComments');
 const editOrganization = require('./editOrganization');
@@ -38,6 +39,9 @@ module.exports = {
     invite,
     activity: {
         list: activityList,
+    },
+    dashboard: {
+        location: dashboardLocation,
     },
     user: {
         setRoleRegular: userSetRoleRegular,
