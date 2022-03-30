@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-G100 py-6">
+    <div class="bg-G200 py-6">
         <h1 class="text-display-md text-center">
             Rechercher une action, une commune, un département... ?
         </h1>

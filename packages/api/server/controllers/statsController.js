@@ -212,8 +212,9 @@ module.exports = models => ({
         }
     },
     async getDashboardStats(req, res, next) {
+        const { location } = req.body;
         try {
-            const townStats = await getStats();
+            const townStats = await getStats(req.user, location);
             return res.status(200).send(townStats);
         } catch (error) {
             res.status(500).send({

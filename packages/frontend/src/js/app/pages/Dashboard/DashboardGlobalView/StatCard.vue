@@ -37,8 +37,8 @@
                 </p>
             </div>
         </div>
-        <div class="customHeight">
-            <span class="block h-px bg-blue300"></span>
+        <span class="block h-px bg-blue300"></span>
+        <div class="border customHeight flex flex-col justify-end">
             <div class="flex justify-center items-end mt-3">
                 <Bar
                     :height="figure"
@@ -48,7 +48,7 @@
                 ></Bar>
                 <Bar :height="latestFigureHeight" :class="barColor"></Bar>
             </div>
-            <div class="text-center ml-auto mr-auto mt-4">
+            <div class="text-center mt-4">
                 <div :class="evolutionColor">
                     <Icon
                         class="up"

@@ -37,10 +37,8 @@ export default {
     components: {
         StatCard
     },
-    created() {
-        if (!this.stats.length) {
-            this.$store.dispatch("dashboard/fetchGlobalStats");
-        }
+    mounted() {
+        this.$store.dispatch("dashboard/fetchGlobalStats");
     },
     computed: {
         ...mapGetters({
