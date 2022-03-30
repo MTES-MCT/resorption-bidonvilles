@@ -13,7 +13,7 @@
 export default {
     computed: {
         topicOptions() {
-            return this.$store.config.configuration.topics.map(
+            return this.$store.state.config.configuration.topics.map(
                 ({ uid, name }) => ({
                     id: uid,
                     value: uid,
