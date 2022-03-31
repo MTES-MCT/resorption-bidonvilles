@@ -98,7 +98,10 @@ export default {
                 }
 
                 // geographic filter
-                if (getters.plansLocationFilter.data.type !== "nation") {
+                if (
+                    getters.plansLocationFilter.data &&
+                    getters.plansLocationFilter.data.type !== "nation"
+                ) {
                     const l = plan[getters.plansLocationFilter.data.type];
                     if (
                         !l ||
@@ -120,7 +123,7 @@ export default {
                 }
 
                 // recherche textuelle
-                if (searchReg && !!plan.name?.match(searchReg)) {
+                if (searchReg && !plan.name.match(searchReg)) {
                     return false;
                 }
 
