@@ -1535,19 +1535,13 @@ module.exports = (models) => {
     );
 
     // eslint-disable-next-line global-require
-    methods.addActor = require('./townController/addActor')(
-        models,
-    );
+    methods.addActor = require('./townController/addActor');
 
     // eslint-disable-next-line global-require
-    methods.updateActor = require('./townController/updateActor')(
-        models,
-    );
+    methods.updateActor = require('./townController/updateActor');
 
     // eslint-disable-next-line global-require
-    methods.removeActorTheme = require('./townController/removeActorTheme')(
-        models,
-    );
+    methods.removeActorTheme = require('./townController/removeActorTheme');
 
     // eslint-disable-next-line global-require
     methods.inviteNewActor = require('./townController/inviteNewActor')(
@@ -1555,9 +1549,7 @@ module.exports = (models) => {
     );
 
     // eslint-disable-next-line global-require
-    methods.removeActor = require('./townController/removeActor')(
-        models,
-    );
+    methods.removeActor = require('./townController/removeActor');
 
     // eslint-disable-next-line global-require
     methods.exportActors = require('./townController/exportActors');
