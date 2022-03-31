@@ -27,5 +27,4 @@ jobs:
             ${{ runner.os }}-yarn-
       - run: yarn install --frozen-lockfile --check-files
         if: steps.yarn-cache.outputs.cache-hit != 'true'
-      - run: yarn lerna bootstrap
       - run: yarn lint:all

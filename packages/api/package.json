@@ -86,7 +86,7 @@
   },
   "scripts": {
     "db:create": "sequelize db:migrate && sequelize db:seed:all",
-    "dev": "ts-node-dev server/index.ts",
+    "dev": "ts-node-dev ./server/index.ts",
     "build": "tsc && tsc-alias && cp -r server/mails/dist dist/server/mails && cp -r assets dist",
     "start": "nodemon dist/server/index.js",
     "test": "mocha --recursive --require ./test/bootstrap.js --bail",
@@ -95,12 +95,5 @@
     "lint": "eslint  --max-warnings=0",
     "lint:all": "eslint  --max-warnings=0 server",
     "emails:build": "node server/mails/build.js"
-  },
-  "_moduleAliases": {
-    "#server": "./server",
-    "#db": "./db",
-    "#fixtures": "./test/fixtures",
-    "#test": "./test",
-    "#root": "."
   }
 }
