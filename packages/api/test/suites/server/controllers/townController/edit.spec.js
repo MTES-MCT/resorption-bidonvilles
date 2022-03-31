@@ -5,8 +5,7 @@ const proxyquire = require('proxyquire');
 const { mockReq, mockRes } = require('sinon-express-mock');
 const { serialized: generateUser } = require('#test/utils/user');
 
-const sequelize = require('#db/sequelize');
-const shantytownModel = require('#server/models/shantytownModel')(sequelize);
+const shantytownModel = require('#server/models/shantytownModel');
 
 const edit = proxyquire('#server/controllers/townController/edit', {
     '#server/models/shantytownModel': () => shantytownModel,

@@ -1,5 +1,4 @@
-const sequelize = require('#db/sequelize');
-const shantytownModel = require('#server/models/shantytownModel')(sequelize);
+const shantytownModel = require('#server/models/shantytownModel');
 
 module.exports = () => async (req, res, next) => {
     let town;

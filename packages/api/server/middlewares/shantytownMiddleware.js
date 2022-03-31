@@ -1,5 +1,6 @@
+const { findOne } = require('#server/models/shantytownModel');
 
-module.exports = models => ({
+module.exports = () => ({
     async checkReadPermission(req, res, next) {
         if (!req.user || !req.user.isAllowedTo('read', 'shantytown')) {
             res.status(400).send({
@@ -9,7 +10,7 @@ module.exports = models => ({
         }
 
         try {
-            req.shantytown = await models.shantytown.findOne(req.user, parseInt(req.params.id, 10));
+            req.shantytown = await findOne(req.user, parseInt(req.params.id, 10));
         } catch (error) {
             res.status(500).send({
                 user_message: 'Une erreur de lecture en base de données est survenue',

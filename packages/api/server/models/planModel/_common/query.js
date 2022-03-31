@@ -1,6 +1,6 @@
 const sequelize = require('#db/sequelize');
 const userModel = require('#server/models/userModel')();
-const shantytownModel = require('#server/models/shantytownModel')();
+const shantytownModel = require('#server/models/shantytownModel');
 const { where } = require('#server/utils/permission');
 const stringifyWhereClause = require('#server/models/_common/stringifyWhereClause');
 const serializePlan = require('./serializePlan');

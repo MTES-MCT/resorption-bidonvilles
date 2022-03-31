@@ -14,7 +14,7 @@ const { mockReq, mockRes } = require('sinon-express-mock');
  * *********************************************************************************************** */
 
 const models = {
-    shantytown: require('#server/models/shantytownModel')(),
+    shantytown: require('#server/models/shantytownModel'),
 };
 const stubs = {};
 const { createCovidComment } = require('#server/controllers/townController')(stubs);
