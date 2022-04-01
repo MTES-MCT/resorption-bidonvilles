@@ -47,7 +47,7 @@ const guardGroups = {
     ],
     home: ["home"]
 };
-
+import { insert } from "#helpers/api/navigationLogs";
 export default {
     components: {
         PrivateLayout,
@@ -110,6 +110,11 @@ export default {
                         response?.user_message || "Une erreur est survenue.";
                     return;
                 }
+                // Insertion d'un log dans la table user_navigation_logs
+                insert({
+                    user_id: this.$store.state.config.configuration.user.id,
+                    page: this.$route.path
+                });
             }
             if (guard === "isPermitted" && !this.isPermitted()) {
                 return this.$router.push("/");
