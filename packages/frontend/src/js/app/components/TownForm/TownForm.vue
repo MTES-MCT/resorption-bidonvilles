@@ -114,7 +114,7 @@ import FormErrorLog from "#app/components/ui/Form/FormErrorLog";
 import { add, edit } from "#helpers/api/town";
 import { notify } from "#helpers/notificationHelper";
 import formatTown from "./utils/formatTown";
-const isEqual = require("lodash");
+const { isEqual } = require("lodash");
 
 export default {
     props: {
