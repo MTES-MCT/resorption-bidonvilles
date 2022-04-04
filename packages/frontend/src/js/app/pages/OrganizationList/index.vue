@@ -87,6 +87,8 @@ import OrganizationListFiltersPagination from "./OrganizationListFiltersPaginati
 import OrganizationCard from "./OrganizationCard";
 import Pagination from "#app/components/ui/Pagination";
 import { mapGetters } from "vuex";
+import departementsImg from "#src/img/departements/export.js";
+import regionsImg from "#src/img/regions/export.js";
 
 export default {
     components: {
@@ -148,18 +150,18 @@ export default {
                 isRegion && unsupportedRegions.includes(locationFilter.code);
 
             if (!locationFilter || isNation || isUnsupportedRegion) {
-                return "/img/regions/fallback.svg";
+                return regionsImg.fallback;
             }
 
             if (isRegion) {
-                return `/img/regions/${locationFilter.code}.svg`;
+                return regionsImg[locationFilter.code];
             }
 
             if (isDepartement) {
-                return `/img/departements/${locationFilter.code}.svg`;
+                return departementsImg[locationFilter.code];
             }
 
-            return `/img/departements/${locationFilter.departement}.svg`;
+            return departementsImg[locationFilter.departement];
         },
         title() {
             const {

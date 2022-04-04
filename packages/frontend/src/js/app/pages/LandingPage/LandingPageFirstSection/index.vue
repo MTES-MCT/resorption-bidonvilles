@@ -1,6 +1,6 @@
 <template>
     <div>
-        <g-image
+        <img
             width="1024"
             class="full-width mx-auto"
             src="./assets/resorption-bidonvilles-dessin.png"
@@ -60,19 +60,19 @@
                 <LandingPageContextImage
                     :label="$t('landingPage.firstSection.before')"
                 >
-                    <g-image
+                    <img
                         width="430"
                         v-if="$i18n.locale === 'fr'"
                         src="./assets/fr/before-fr.jpg"/>
-                    <g-image
+                    <img
                         width="430"
                         v-if="$i18n.locale === 'en'"
                         src="./assets/en/before-en.png"/>
-                    <g-image
+                    <img
                         width="430"
                         v-if="$i18n.locale === 'bg'"
                         src="./assets/bg/before-bg.png"/>
-                    <g-image
+                    <img
                         width="430"
                         v-if="$i18n.locale === 'ro'"
                         src="./assets/ro/before-ro.png"
@@ -83,19 +83,19 @@
                 <LandingPageContextImage
                     :label="$t('landingPage.firstSection.after')"
                 >
-                    <g-image
+                    <img
                         width="430"
                         v-if="$i18n.locale === 'fr'"
                         src="./assets/fr/after-fr.jpg"/>
-                    <g-image
+                    <img
                         width="430"
                         v-if="$i18n.locale === 'en'"
                         src="./assets/en/after-en.png"/>
-                    <g-image
+                    <img
                         width="430"
                         v-if="$i18n.locale === 'bg'"
                         src="./assets/bg/after-bg.png"/>
-                    <g-image
+                    <img
                         width="430"
                         v-if="$i18n.locale === 'ro'"
                         src="./assets/ro/after-ro.png"

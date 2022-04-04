@@ -164,11 +164,7 @@
                 </div>
 
                 <div class="mt-10 lg:w-6/12 lg:mt-0 lg:pl-6">
-                    <g-image
-                        width="1124"
-                        class="h-auto"
-                        src="./assets/team.jpg"
-                    />
+                    <img width="1124" class="h-auto" src="./assets/team.jpg" />
                     <ul class="mt-4">
                         <li>
                             <span class="font-bold">Manuel Demougeot</span> :
@@ -205,25 +201,25 @@
             class="flex flex-row flex-wrap items-center justify-center mt-8 lg:flex-no-wrap lg:justify-between"
         >
             <a href="https://solidarites-sante.gouv.fr/"
-                ><g-image
+                ><img
                     width="200"
                     class="h-auto m-2"
                     src="./assets/logo-gouvernement.jpg"
             /></a>
             <a href="https://ec.europa.eu/info/index_en"
-                ><g-image
+                ><img
                     width="460"
                     class="h-auto m-2"
                     src="./assets/logo-commission-europenne.png"
             /></a>
             <a href="https://beta.gouv.fr/approche/incubateurs/mtes.html"
-                ><g-image
+                ><img
                     width="96"
                     class="h-auto m-2"
                     src="./assets/logo-fabrique-numerique.png"
             /></a>
             <a class="pl-12" href="https://beta.gouv.fr/"
-                ><g-image
+                ><img
                     width="160"
                     class="h-auto m-2"
                     src="./assets/logo_beta-gouv-fr.jpg"
@@ -231,7 +227,7 @@
             <a
                 class="pl-12"
                 href="https://eig.etalab.gouv.fr/defis/resorption-bidonvilles/"
-                ><g-image
+                ><img
                     width="330"
                     class="h-auto m-2"
                     src="./assets/logo-entrepreneur-interet-general.png"

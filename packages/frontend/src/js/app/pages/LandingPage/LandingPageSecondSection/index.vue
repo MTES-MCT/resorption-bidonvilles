@@ -61,25 +61,25 @@
                 {{ $t("landingPage.secondSection.thirdParagraph.normal") }}
             </div>
 
-            <g-image
+            <img
                 width="640"
                 v-if="$i18n.locale === 'fr'"
                 class="mt-20 w-full"
                 src="./assets/map-fr.jpg"
             />
-            <g-image
+            <img
                 width="640"
                 v-if="$i18n.locale === 'en'"
                 class="mt-20 w-full"
                 src="./assets/map-en.jpg"
             />
-            <g-image
+            <img
                 width="640"
                 v-if="$i18n.locale === 'bg'"
                 class="mt-20 w-full"
                 src="./assets/map-bg.jpg"
             />
-            <g-image
+            <img
                 width="640"
                 v-if="$i18n.locale === 'ro'"
                 class="mt-20 w-full"

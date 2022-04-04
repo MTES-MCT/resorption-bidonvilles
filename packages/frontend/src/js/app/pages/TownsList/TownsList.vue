@@ -340,6 +340,8 @@ import { filterShantytowns } from "./filterShantytowns";
 import Export from "#app/components/export2/Export.vue";
 import Spinner from "#app/components/ui/Spinner";
 import { mapGetters } from "vuex";
+import departementsImg from "#src/img/departements/export.js";
+import regionsImg from "#src/img/regions/export.js";
 
 const PER_PAGE = 20;
 
@@ -528,14 +530,14 @@ export default {
                 isInvalidDepartement ||
                 isUnsupportedRegion
             ) {
-                return "/img/regions/fallback.svg";
+                return regionsImg.fallback;
             }
 
             if (isRegion) {
-                return `/img/regions/${this.filters.location.code}.svg`;
+                return regionsImg[this.filters.location.code];
             }
 
-            return `/img/departements/${this.filters.location.departement}.svg`;
+            return departementsImg[this.filters.location.departement];
         },
         currentLocation() {
             return (

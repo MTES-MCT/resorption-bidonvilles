@@ -85,7 +85,8 @@ export default {
                 this.$router.push({ path: "/" });
                 this.loading = false;
             } catch (err) {
-                this.error = err.user_message;
+                this.error =
+                    err.user_message || "Une erreur inconnue est survenue";
                 this.loading = false;
                 if (err.fields) {
                     this.$refs.form.setErrors(err.fields);

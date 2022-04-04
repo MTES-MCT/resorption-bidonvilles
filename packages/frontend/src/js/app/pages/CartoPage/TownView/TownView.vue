@@ -49,7 +49,7 @@
                 <div
                     class="items-end"
                     v-for="row in section.rows"
-                    :key="row.value"
+                    :key="row.label"
                 >
                     <span class="font-bold" v-if="row.label">
                         {{ row.label }} :

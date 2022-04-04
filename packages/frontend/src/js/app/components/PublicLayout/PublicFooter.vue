@@ -33,7 +33,9 @@
 
                     <ul>
                         <li>
-                            <a href="#equipe">{{ $t("footer.aboutUs") }}</a>
+                            <router-link to="#equipe">{{
+                                $t("footer.aboutUs")
+                            }}</router-link>
                         </li>
                         <li v-if="$i18n.locale === 'fr'">
                             <router-link to="/conditions-d-utilisation">{{

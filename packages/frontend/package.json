@@ -6,8 +6,8 @@
     "sharp": "^0.29.0"
   },
   "scripts": {
-    "dev": "gridsome develop --port 8091 --host 0.0.0.0",
-    "build": "gridsome build",
+    "dev": "vue-cli-service serve --port 8091 --host 0.0.0.0",
+    "build": "vue-cli-service build",
     "lint": "eslint --max-warnings=0 --ext .js,.vue",
     "lint:all": "eslint --max-warnings=0 --ext .js,.vue src cypress",
     "test": "cypress run",
@@ -57,10 +57,6 @@
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-vue": "^7.10.0",
-    "gridsome": "^0.7.23",
-    "gridsome-plugin-bundle-analyzer": "^1.0.0",
-    "gridsome-plugin-pug": "^0.0.3",
-    "gridsome-plugin-tailwindcss": "^4.1.1",
     "json-loader": "^0.5.7",
     "leaflet": "^1.3.4",
     "leaflet-providers": "^1.5.0",

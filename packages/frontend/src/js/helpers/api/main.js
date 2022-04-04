@@ -1,4 +1,5 @@
 import Vue from "vue";
+import store from "#app/store/index";
 import { open as openTab } from "#helpers/tabHelper";
 import { VUE_APP_API_URL, APP_VERSION } from "#src/js/env.js";
 
@@ -45,7 +46,7 @@ function handleRequestResponse(success, failure) {
             case ERRORS.MISSING_TOKEN:
             case ERRORS.EXPIRED_OR_INVALID_TOKEN:
                 {
-                    Vue.prototype.$store.commit("user/SET_ACCESS_TOKEN", null);
+                    store.commit("user/SET_ACCESS_TOKEN", null);
                     {
                         const piwik = Vue.prototype.$piwik;
                         if (piwik) {
@@ -59,10 +60,7 @@ function handleRequestResponse(success, failure) {
                         }
                     }
 
-                    Vue.prototype.$store.commit(
-                        "setEntrypoint",
-                        window.location.pathname
-                    );
+                    store.commit("setEntrypoint", window.location.pathname);
                     window.dispatchEvent(
                         new CustomEvent("callRouter", {
                             detail: {
@@ -127,7 +125,7 @@ function request(method, url, data, headers = {}) {
         });
 
         if (!Object.prototype.hasOwnProperty.call(headers, "x-access-token")) {
-            const token = Vue.prototype.$store.state.user.accessToken;
+            const token = store.state.user.accessToken;
             if (token !== null) {
                 xhr.setRequestHeader("x-access-token", token);
             }
@@ -229,7 +227,7 @@ export function putApi(url, data, headers) {
  * @param {String} url
  */
 export function open(url) {
-    const token = Vue.prototype.$store.state.user.accessToken;
+    const token = store.state.user.accessToken;
     return openTab(
         `${url}${
             url.indexOf("?") === -1 ? "?" : "&"

@@ -4,7 +4,7 @@
     >
         <div class="lg:flex">
             <div class="lg:flex-shrink-0 justify-center">
-                <g-image
+                <img
                     width="260"
                     class="m-4 h-40"
                     src="./assets/decouvrir_23.03.09.jpg"

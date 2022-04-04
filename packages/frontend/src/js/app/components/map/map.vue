@@ -58,11 +58,11 @@ import "leaflet.markercluster/dist/leaflet.markercluster";
 import html2canvas from "html2canvas";
 import "./map.scss"; // on importe le scss ici pour que le html généré par le js y ait accès
 
-import utensils from "../../../../../static/img/utensils.png";
-import waterYes from "../../../../../static/img/water-yes.png";
-import waterNo from "../../../../../static/img/water-no.png";
-import waterToImprove from "../../../../../static/img/water-to-improve.png";
-import waterNull from "../../../../../static/img/water-null.png";
+import utensils from "../../../../img/utensils.png";
+import waterYes from "../../../../img/water-yes.png";
+import waterNo from "../../../../img/water-no.png";
+import waterToImprove from "../../../../img/water-to-improve.png";
+import waterNull from "../../../../img/water-null.png";
 
 // données tirées de https://github.com/gregoiredavid/france-geojson
 import departements from "#src/geojson/departements.json";

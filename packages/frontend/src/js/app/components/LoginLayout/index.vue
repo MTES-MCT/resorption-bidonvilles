@@ -4,10 +4,9 @@
 
         <div class="container px-10 mx-auto mb-4">
             <div class="max-w-sm mx-auto py-10">
-                <img
-                    class="h-24 mx-auto mb-8"
-                    src="../../../../../static/img/town.png"
-                />
+                <div class="text-center mb-8">
+                    <img class="h-24" :src="town" />
+                </div>
 
                 <h1 class="text-display-lg text-center mb-8">
                     {{ title }}
@@ -27,6 +26,7 @@
 </template>
 
 <script>
+import town from "#src/img/town.png";
 import LoginNavBar from "./LoginNavBar/index.vue";
 
 export default {
@@ -38,6 +38,11 @@ export default {
             type: String,
             required: true
         }
+    },
+    data() {
+        return {
+            town
+        };
     }
 };
 </script>

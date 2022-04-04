@@ -5,10 +5,12 @@
         </div>
         <slot />
         <div class="object-center max-w-3xl mx-8 lg:mx-auto">
-            <img
-                src="./assets/A_mini_bidon.png"
-                class="mx-auto my-8 max-w-sm"
-            />
+            <div class="text-center">
+                <img
+                    src="./assets/A_mini_bidon.png"
+                    class="mx-auto my-8 max-w-sm"
+                />
+            </div>
             <h1 class="text-display-lg text-center mb-8">
                 Agir pour résorber les bidonvilles
             </h1>

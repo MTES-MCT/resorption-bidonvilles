@@ -5,7 +5,7 @@
     >
         <div class="lg:flex">
             <div class="lg:flex-shrink-0 justify-center">
-                <g-image
+                <img
                     class="m-4"
                     width="240"
                     src="./assets/appel-a-contribution-inclusion-roms.jpg"
