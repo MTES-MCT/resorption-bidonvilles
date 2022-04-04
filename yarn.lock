@@ -1920,9 +1920,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@resorptionbidonvilles/frontend@workspace:packages/frontend":
+"@resorptionbidonvilles/fullstack@workspace:.":
   version: 0.0.0-use.local
-  resolution: "@resorptionbidonvilles/frontend@workspace:packages/frontend"
+  resolution: "@resorptionbidonvilles/fullstack@workspace:."
+  dependencies:
+    "@vue/cli-service": ^5.0.4
+    husky: ^6.0.0
+  languageName: unknown
+  linkType: soft
+
+"@resorptionbidonvilles/webapp@workspace:packages/webapp":
+  version: 0.0.0-use.local
+  resolution: "@resorptionbidonvilles/webapp@workspace:packages/webapp"
   dependencies:
     "@babel/core": ^7.2.2
     "@babel/polyfill": ^7.0.0
@@ -1980,15 +1989,6 @@ __metadata:
     vue-template-compiler: ^2.5.21
     vuejs-datepicker: ^1.5.4
     vuex: ^3.6.0
-  languageName: unknown
-  linkType: soft
-
-"@resorptionbidonvilles/fullstack@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "@resorptionbidonvilles/fullstack@workspace:."
-  dependencies:
-    "@vue/cli-service": ^5.0.4
-    husky: ^6.0.0
   languageName: unknown
   linkType: soft
 
