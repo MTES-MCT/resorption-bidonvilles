@@ -1,16 +1,6 @@
 require('../module_alias');
 const fs = require('fs');
 const path = require('path');
-const Sequelize = require('sequelize');
-const config = require('./config');
-
-global.db = () => new Sequelize({
-    ...config,
-    host: 'localhost',
-    port: 5432,
-    dialect: 'postgres',
-    logging: false,
-});
 
 /**
  * A set of functions that can generate random values of a certain type
