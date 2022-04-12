@@ -1,5 +1,7 @@
 /* eslint-disable no-throw-literal */
 const { trim } = require('validator');
+const geoModel = require('#server/models/geoModel');
+
 
 module.exports = (models) => {
     /**
@@ -52,7 +54,7 @@ module.exports = (models) => {
                 };
             }
 
-            const allowedDepartements = (await models.geo.getDepartementsFor(
+            const allowedDepartements = (await geoModel.getDepartementsFor(
                 locationType,
                 user.organization.location[locationType].code,
             )).map(({ code }) => code);

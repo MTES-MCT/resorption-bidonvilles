@@ -5,7 +5,7 @@ const sequelize = require('#db/sequelize');
 const { can } = require('#server/utils/permission');
 // models
 const fieldTypeModel = require('#server/models/fieldTypeModel')(sequelize);
-const geoModel = require('#server/models/geoModel')(sequelize);
+const geoModel = require('#server/models/geoModel');
 const ownerTypeModel = require('#server/models/ownerTypeModel')(sequelize);
 const socialOriginModel = require('#server/models/socialOriginModel')(sequelize);
 const electricityTypeModel = require('#server/models/electricityTypeModel')(sequelize);

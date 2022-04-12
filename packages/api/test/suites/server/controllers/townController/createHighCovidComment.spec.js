@@ -14,7 +14,7 @@ const { mockReq, mockRes } = require('sinon-express-mock');
  * *********************************************************************************************** */
 
 const models = {
-    geo: require('#server/models/geoModel')({}),
+    geo: require('#server/models/geoModel'),
     highCovidComment: require('#server/models/highCovidCommentModel')({}),
 };
 const stubs = {};
