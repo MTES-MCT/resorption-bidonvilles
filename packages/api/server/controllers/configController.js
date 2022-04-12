@@ -2,6 +2,8 @@ const permissionsDescription = require('#server/permissions_description');
 const { activationTokenExpiresIn } = require('#server/config');
 const themes = require('#server/config/shantytown_actor_themes');
 const userModel = require('#server/models/userModel');
+const closingSolutionModel = require('#server/models/closingSolutionModel');
+
 
 module.exports = models => ({
     async list(req, res, next) {
@@ -11,7 +13,7 @@ module.exports = models => ({
             social_origins: models.socialOrigin.findAll(),
             departements: models.departement.findAll(),
             regions: models.region.findAll(),
-            closing_solutions: models.closingSolution.findAll(),
+            closing_solutions: closingSolutionModel.findAll(),
             etp_types: models.etpType.findAll(),
             finance_types: models.financeType.findAll(),
             plan_categories: models.planCategory.findAll(),
