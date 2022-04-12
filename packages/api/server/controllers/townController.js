@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const validator = require('validator');
 const sequelize = require('#db/sequelize');
 const statsExportsModel = require('#server/models/statsExports');
@@ -23,96 +24,34 @@ function addError(errors, field, error) {
 
     errors[field].push(error);
 }
+=======
+>>>>>>> 4a1afea5 ((tests) suppression de logique métier dans townController.js)
 
 module.exports = (models) => {
-    const methods = {
-        async list(req, res, next) {
-            try {
-                // filters
-                const filters = [];
-                if (req.query.status) {
-                    filters.push({
-                        status: req.query.status.split(','),
-                    });
-                }
+    const methods = {};
+    // eslint-disable-next-line global-require
+    methods.list = require('./townController/list');
 
-                // order
-                let order;
-                const orderableColumns = {
-                    address: 'shantytowns.address',
-                    city: 'cities.name',
-                    departement: 'departements.code',
-                    population: 'shantytowns.population_total',
-                };
-                if (req.query.order) {
-                    order = [];
-                    req.query.order.split(',').forEach((q) => {
-                        const [column, direction] = q.split('.');
-                        if (orderableColumns[column] !== undefined && (direction === 'asc' || direction === 'desc')) {
-                            order.push(`${orderableColumns[column]} ${direction.toUpperCase()}${direction === 'desc' ? ' NULLS LAST' : ''}`);
-                        }
-                    });
-                }
+    // eslint-disable-next-line global-require
+    methods.find = require('./townController/find');
 
-                return res.status(200).send(
-                    await models.shantytown.findAll(req.user, filters, 'list', order),
-                );
-            } catch (error) {
-                res.status(500).send(error.message);
-                return next(error);
-            }
-        },
+    // eslint-disable-next-line global-require
+    methods.create = require('./townController/create');
 
-        async find(req, res, next) {
-            try {
-                const town = await models.shantytown.findOne(req.user, req.params.id);
+    // eslint-disable-next-line global-require
+    methods.close = require('./townController/close');
 
-                if (town === null) {
-                    return res.status(404).send({
-                        error: {
-                            developer_message: 'The requested town does not exist',
-                            user_message: 'Le site demandé n\'existe pas en base de données',
-                        },
-                    });
-                }
+    // eslint-disable-next-line global-require
+    methods.deleteTown = require('./townController/deleteTown');
 
-                return res.status(200).send(town);
-            } catch (error) {
-                res.status(500).send(error.message);
-                return next(error);
-            }
-        },
+    // eslint-disable-next-line global-require
+    methods.deleteComment = require('./townController/deleteComment');
 
-        async create(req, res, next) {
-            try {
-                return res.status(200).send({
-                    town: await shantytownService.create(req.body, req.user),
-                });
-            } catch (e) {
-                res.status(500).send({
-                    error: {
-                        developer_message: e.message,
-                        user_message: 'Une erreur est survenue dans l\'enregistrement du site en base de données',
-                    },
-                });
-                return next(e);
-            }
-        },
+    // eslint-disable-next-line global-require
+    methods.export = require('./townController/export');
 
-        async close(req, res, next) {
-            // close the town
-            try {
-                await models.shantytown.update(
-                    req.user,
-                    req.body.shantytown.id,
-                    {
-                        closed_at: req.body.closed_at,
-                        closed_with_solutions: req.body.closed_with_solutions,
-                        status: req.body.status,
-                        closing_solutions: req.body.solutions,
-                    },
-                );
 
+<<<<<<< HEAD
                 const updatedTown = await models.shantytown.findOne(req.user, req.body.shantytown.id);
 
                 // Send a mattermost alert, if it fails, do nothing
@@ -1523,6 +1462,10 @@ module.exports = (models) => {
             });
         },
     };
+=======
+    // eslint-disable-next-line global-require
+    methods.createCovidComment = require('./townController/createCovidComment');
+>>>>>>> 4a1afea5 ((tests) suppression de logique métier dans townController.js)
 
     // eslint-disable-next-line global-require
     methods.edit = require('./townController/edit')(
