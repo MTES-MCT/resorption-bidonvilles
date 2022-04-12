@@ -1,4 +1,5 @@
-const shantytownCommentModel = require('#server/models/shantytownCommentModel')();
+
+const shantytownCommentModel = require('#server/models/shantytownCommentModel');
 const shantytownModel = require('#server/models/shantytownModel');
 const mattermostUtils = require('#server/utils/mattermost');
 
