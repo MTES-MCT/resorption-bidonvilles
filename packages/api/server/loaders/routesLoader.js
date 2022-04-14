@@ -1,9 +1,10 @@
+
 const path = require('path');
 const express = require('express');
+const sequelize = require('#db/sequelize');
+const models = require('#server/models')(sequelize);
 
 // controllers
-const { sequelize } = require('#db/models');
-const models = require('#server/models')(sequelize);
 const middlewares = require('#server/middlewares')(models);
 const controllers = require('#server/controllers')(models);
 const validators = require('#server/middlewares/validators');
