@@ -1,10 +1,9 @@
 /* eslint-disable newline-per-chained-call */
 const { body } = require('express-validator');
 const { isLatLong, trim } = require('validator');
-
-// models
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 const { can } = require('#server/utils/permission');
+// models
 const fieldTypeModel = require('#server/models/fieldTypeModel')(sequelize);
 const geoModel = require('#server/models/geoModel')(sequelize);
 const ownerTypeModel = require('#server/models/ownerTypeModel')(sequelize);
