@@ -1,3 +1,4 @@
+const create = require('./create');
 const createCovidComment = require('./createCovidComment');
 const findAll = require('./findAll');
 const findNearby = require('./findNearby');
@@ -11,6 +12,7 @@ const deleteShantytown = require('./delete');
 
 
 module.exports = () => ({
+    create,
     createCovidComment,
     findAll,
     findNearby,
