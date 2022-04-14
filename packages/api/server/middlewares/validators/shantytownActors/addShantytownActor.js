@@ -1,7 +1,11 @@
 /* eslint-disable newline-per-chained-call */
 const { body } = require('express-validator');
 const sequelize = require('#db/sequelize');
+<<<<<<< HEAD
 
+=======
+const themesValidator = require('./utils/themes');
+>>>>>>> 2ada4146 ((1396) utilisation de #db/sequelize)
 // models
 const userModel = require('#server/models/userModel')(sequelize);
 const themesValidator = require('./utils/themes');
