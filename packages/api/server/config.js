@@ -5,7 +5,8 @@ dotenv.config();
 
 const config = {
     assetsSrc: path.resolve(__dirname, '../assets'),
-    frontUrl: `https://${process.env.RB_API_FRONT_DOMAIN}`,
+    wwwUrl: `https://${process.env.RB_API_FRONT_DOMAIN}`,
+    webappUrl: `https://app.${process.env.RB_API_FRONT_DOMAIN}`,
     backUrl: process.env.RB_API_BACK_URL,
     port: process.env.RB_API_PORT,
     auth: {

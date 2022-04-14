@@ -1,7 +1,7 @@
 Prise en compte de votre demande
 Bonjour {{var:recipientName}},
 Nous vous remercions de l’intérêt que vous portez à la politique de résorption
-des bidonvilles [{{var:frontUrl}}]. Notre équipe traitera votre demande dans les
+des bidonvilles [{{var:wwwUrl}}]. Notre équipe traitera votre demande dans les
 meilleurs délais.
 
 Cordialement,

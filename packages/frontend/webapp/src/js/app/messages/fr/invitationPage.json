@@ -1,0 +1,19 @@
+{
+  "title": "Vous connaissez des personnes impliquées dans la résorption des bidonvilles ? Invitez-les à découvrir la plateforme !",
+  "email": "Email",
+  "firstname": "Prénom",
+  "lastname": "Nom de famille",
+  "cancel": "Annuler",
+  "add": "Ajouter un nouveau contact",
+  "delete": "Supprimer",
+  "reset": "Réinitialiser",
+  "invite": "Inviter",
+  "firstParagraph": {
+    "bold": "En invitant vos contacts, vous participez au développement de la communauté d'utilisateurs ",
+    "normal": "et à la création d'une véritable dynamique pour résorber les bidonvilles. Merci à vous !"
+  },
+  "secondParagraph": {
+    "normal": "Un email sera envoyé aux personnes indiquées et leurs coordonnées seront utilisées exclusivement par l'équipe de Résorption-Bidonvilles."
+  },
+  "error": "Votre demande comprend des erreurs:"
+}

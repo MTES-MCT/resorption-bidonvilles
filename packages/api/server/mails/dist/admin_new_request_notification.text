@@ -2,7 +2,7 @@ Vous avez reçu une nouvelle demande d'accès à la plateforme
 Résorption-bidonvilles de {{var:userName}}, {{var:orgName}}
 Bonjour {{var:recipientName}},
 Vous avez reçu une nouvelle demande d’accès à la plateforme
-Résorption-bidonvilles [{{var:frontUrl}}].
+Résorption-bidonvilles [{{var:webappUrl}}].
 Nous vous invitons à vous rendre sur l’onglet administration de la plateforme
 [{{var:adminUrl}}] pour ouvrir et paramétrer l’accès. Une réponse est souhaitée
 sous 7 jours.

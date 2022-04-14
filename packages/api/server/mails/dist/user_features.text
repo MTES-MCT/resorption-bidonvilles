@@ -1,7 +1,7 @@
 Et si vous partagiez votre intervention sur un site aux autres acteurs et
 actrices ?
 Bonjour {{var:recipientName}},
-Vous utilisez la plateforme Résorption-bidonvilles [{{var:frontUrl}}] depuis un
+Vous utilisez la plateforme Résorption-bidonvilles [{{var:webappUrl}}] depuis un
 mois.
 Avez-vous utilisé les fonctionnalités “J’interviens sur ce site” et "Le journal
 du site” ?

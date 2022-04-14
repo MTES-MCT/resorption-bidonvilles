@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 
 const fakeConfig = {
-    frontUrl: global.generate('string'),
+    webappUrl: global.generate('string'),
     auth: {
         secret: global.generate('string'),
         expiresIn: `${global.generate('number')}h`,
@@ -103,7 +103,7 @@ describe('[Utils] Auth', () => {
             const token = generateAccessTokenFor(fakeUser, fakeConfig.activationTokenExpiresIn);
 
             expect(getAccountActivationLink(fakeUser)).to.be.eql(
-                `${fakeConfig.frontUrl}/activer-mon-compte/${encodeURIComponent(token)}`,
+                `${fakeConfig.webappUrl}/activer-mon-compte/${encodeURIComponent(token)}`,
             );
         });
     });

@@ -2,7 +2,7 @@
 /* eslint-disable global-require */
 const fs = require('fs');
 const path = require('path');
-const { frontUrl, backUrl } = require('#server/config');
+const { wwwUrl, webappUrl, backUrl } = require('#server/config');
 
 const { send: sendMail } = require('#server/utils/mail');
 const { testEmail } = require('#server/config');
@@ -43,7 +43,8 @@ module.exports = {
                 Subject: subject.toString(),
                 TemplateLanguage: true,
                 Variables: {
-                    frontUrl,
+                    wwwUrl,
+                    webappUrl,
                     backUrl,
                     recipientName: `${recipient.first_name} ${recipient.last_name}`,
                     ...variables,

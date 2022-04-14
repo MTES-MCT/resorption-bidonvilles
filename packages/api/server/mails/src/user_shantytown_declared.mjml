@@ -14,7 +14,7 @@
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text>
-                    Un nouveau site a été déclaré aujourd’hui à {{var:hour}} sur la plateforme <a href="{{var:frontUrl}}" class="link font-italic" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a> par {{var:creatorName}} :
+                    Un nouveau site a été déclaré aujourd’hui à {{var:hour}} sur la plateforme <a href="{{var:webappUrl}}" class="link font-italic" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a> par {{var:creatorName}} :
                 </mj-text>
                 <mj-text mj-class="pb-4"><a href="{{var:townUrl}}" class="link" target="_blank" rel="noopener noreferrer">{{var:townFullAddress}}</a></mj-text>
                 <mj-text mj-class="font-bold">Connaissez-vous ce site ? Avez-vous effectué des actions sur ce site ?</mj-text>

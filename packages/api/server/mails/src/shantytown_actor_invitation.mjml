@@ -14,7 +14,7 @@
                 </mj-text>
                 <mj-text mj-class="pb-4">Bonjour,</mj-text>
                 <mj-text mj-class="pb-4">
-                    {{var:inviterName}} vous a invité à rejoindre la communauté des acteurs de terrain sur la plateforme <a href="{{var:frontUrl}}" class="font-italic link" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a> en valorisant votre intervention sur le site {{var:siteAddress}}.
+                    {{var:inviterName}} vous a invité à rejoindre la communauté des acteurs de terrain sur la plateforme <a href="{{var:webappUrl}}" class="font-italic link" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a> en valorisant votre intervention sur le site {{var:siteAddress}}.
                 </mj-text>
                 <mj-text>
                     Dès maintenant rejoignez {{var:inviterName}} sur la plateforme et signalez votre intervention :

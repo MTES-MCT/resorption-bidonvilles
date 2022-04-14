@@ -1,4 +1,5 @@
 const dotenv = require('dotenv');
+const pg = require('pg');
 
 dotenv.config();
 
@@ -9,6 +10,7 @@ module.exports = {
     host: process.env.POSTGRES_HOST,
     port: process.env.POSTGRES_PORT,
     dialect: 'postgres',
+    dialectModule: pg,
     logging: false,
     define: {
         timestamps: true,

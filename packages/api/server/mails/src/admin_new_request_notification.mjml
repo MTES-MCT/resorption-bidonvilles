@@ -14,7 +14,7 @@
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
-                    Vous avez reçu une nouvelle demande d’accès à la plateforme <a href="{{var:frontUrl}}" class="link font-italic" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a>.
+                    Vous avez reçu une nouvelle demande d’accès à la plateforme <a href="{{var:webappUrl}}" class="link font-italic" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a>.
                 </mj-text>
                 <mj-text>
                     Nous vous invitons à <a href="{{var:adminUrl}}" class="link font-bold" target="_blank" rel="noopener noreferrer">vous rendre sur l’onglet administration de la plateforme</a> pour ouvrir et paramétrer l’accès. Une réponse est souhaitée sous 7 jours.

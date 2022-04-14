@@ -5,7 +5,8 @@
   "version": "1.29.5",
   "license": "AGPL-3.0-or-later",
   "workspaces": [
-    "packages/*"
+    "packages/api",
+    "packages/frontend/*"
   ],
   "devDependencies": {
     "@vue/cli-service": "^5.0.4",
@@ -15,6 +16,7 @@
     "prepare": "husky install",
     "lint:all": "yarn workspaces foreach --verbose run lint:all",
     "lint:staged": "yarn workspaces foreach --verbose run lint-staged",
-    "test:unit": "yarn workspaces foreach --verbose run test:unit"
+    "test:unit": "yarn workspaces foreach --verbose run test:unit",
+    "www:build": "npx nuxi build ./packages/frontend/www"
   }
 }

@@ -1,7 +1,7 @@
 Participez à une session de formation à la plateforme Résorption-bidonvilles
 Bonjour {{var:recipientName}},
 Vous venez de rejoindre les utilisateurs et utilisatrices de la plateforme
-Résorption-bidonvilles [{{var:frontUrl}}].
+Résorption-bidonvilles [{{var:webappUrl}}].
 Pour vous accompagner dans son utilisation, nous proposons des sessions de
 formation personnalisée. En 45 minutes, vous saurez prendre en main la
 plateforme et l’utiliser en fonction de vos besoins. Nous profiterons également

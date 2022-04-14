@@ -1,7 +1,7 @@
 Vous utilisez la plateforme Résorption-bidonvilles depuis trois mois, votre avis
 nous intéresse !
 Bonjour {{var:recipientName}},
-Vous utilisez la plateforme Résorption-bidonvilles [{{var:frontUrl}}] depuis
+Vous utilisez la plateforme Résorption-bidonvilles [{{var:webappUrl}}] depuis
 trois mois. Donnez-nous votre avis en répondant à ce court questionnaire
 [{{var:surveyUrl}}].
 

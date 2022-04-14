@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const {
-    frontUrl, auth: authConfig, activationTokenExpiresIn, passwordResetDuration,
+    webappUrl, auth: authConfig, activationTokenExpiresIn, passwordResetDuration,
 } = require('#server/config');
 
 /**
@@ -71,7 +71,7 @@ module.exports = {
             },
         );
 
-        return `${frontUrl}/activer-mon-compte/${encodeURIComponent(token)}`;
+        return `${webappUrl}/activer-mon-compte/${encodeURIComponent(token)}`;
     },
 
     /**
@@ -100,7 +100,7 @@ module.exports = {
         const token = generateAccessTokenFor(user, 'password_reset', passwordResetDuration);
 
         return {
-            link: `${frontUrl}/renouveler-mot-de-passe/${encodeURIComponent(token)}`,
+            link: `${webappUrl}/renouveler-mot-de-passe/${encodeURIComponent(token)}`,
             expiracyDate: new Date(Date.now() + (parseInt(passwordResetDuration, 10) * 60 * 60 * 1000)),
         };
     },
