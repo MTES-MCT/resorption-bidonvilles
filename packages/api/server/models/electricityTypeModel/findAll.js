@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 const serializeElectricityType = require('./_common/serializeElectricityType');
 
 module.exports = async () => {

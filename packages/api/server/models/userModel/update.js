@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 
 module.exports = async (userId, values, transaction = undefined) => {
     if (userId === undefined) {

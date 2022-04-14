@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 
 /**
  * @param {Location} [location] Location filter. If set to null, no filter is applied and all

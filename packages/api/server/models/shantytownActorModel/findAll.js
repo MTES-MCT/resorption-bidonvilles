@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 
 module.exports = (shantytownIds, transaction = undefined) => {
     const ids = Array.isArray(shantytownIds) ? shantytownIds : [shantytownIds];

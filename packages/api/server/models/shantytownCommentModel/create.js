@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 
 /**
  * @typedef {Object} Model_ShantytownComment_Data

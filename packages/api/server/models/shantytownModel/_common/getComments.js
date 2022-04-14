@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 const serializeComment = require('./serializeComment');
 
 module.exports = async (user, shantytownIds, covid = false) => {

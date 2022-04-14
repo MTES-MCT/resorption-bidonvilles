@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 const { backUrl } = require('#server/config');
 
 module.exports = async () => {

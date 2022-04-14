@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 const serializeRole = require('./_common/serializeRole');
 
 module.exports = async () => {
