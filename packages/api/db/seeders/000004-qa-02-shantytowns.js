@@ -1,8 +1,7 @@
 /* eslint-disable newline-per-chained-call,no-await-in-loop, no-restricted-syntax */
 require('module-alias/register');
-const {
-    Shantytown: ShantyTowns,
-} = require('#db/models');
+
+const { create: createShantyTown } = require('#server/models/shantytownModel')();
 
 const { create } = require('#server/models/shantytownCommentModel')();
 
@@ -42,7 +41,7 @@ const comments = [
 module.exports = {
     up: async (queryInterface) => {
         for (const shantytown of shantytowns) {
-            await ShantyTowns.create(shantytown);
+            await createShantyTown(shantytown);
         }
 
         for (const comment of comments) {
