@@ -14,7 +14,7 @@ describe.only('ChangelogModel', () => {
             sequelizeStub.QueryTypes = SequelizeMock.QueryTypes;
 
             ({ getChangelogFor } = rewiremock.proxy('#server/models/changelogModel', {
-                '#db/models': {
+                '#db/sequelize': {
                     sequelize: sequelizeStub,
                 },
             })());

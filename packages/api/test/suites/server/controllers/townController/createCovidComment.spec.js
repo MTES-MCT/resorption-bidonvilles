@@ -14,7 +14,7 @@ const { mockReq, mockRes } = require('sinon-express-mock');
  * *********************************************************************************************** */
 
 const models = {
-    shantytown: require('#server/models/shantytownModel')({}),
+    shantytown: require('#server/models/shantytownModel')(),
 };
 const stubs = {};
 const { createCovidComment } = require('#server/controllers/townController')(stubs);
@@ -89,7 +89,6 @@ describe.only('townController.createCovidComment()', () => {
                 description: 'lorem ipsum',
             },
         };
-
         stubs.shantytown = sinon.stub(models.shantytown);
 
         stubs.shantytown.findOne.withArgs(reqArg.user, reqArg.params.id).resolves({
