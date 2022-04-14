@@ -1,6 +1,5 @@
-/* eslint-disable newline-per-chained-call */
 const { body, param } = require('express-validator');
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 const shantytownModel = require('#server/models/shantytownModel')(sequelize);
 
 module.exports = [
