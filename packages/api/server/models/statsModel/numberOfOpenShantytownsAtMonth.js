@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 
 module.exports = async (departement, date = '2020-06-01') => {
     const rows = await sequelize.query(

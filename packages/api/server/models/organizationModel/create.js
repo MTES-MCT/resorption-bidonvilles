@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 
 module.exports = async (name, abbreviation = null, type, region = null, departement = null, epci = null, city = null, active = false, argTransaction = undefined) => {
     let transaction = argTransaction;

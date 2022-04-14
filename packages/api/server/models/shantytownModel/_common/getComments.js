@@ -1,5 +1,5 @@
+const sequelize = require('#db/sequelize');
 const serializeComment = require('./serializeComment');
-const { sequelize } = require('#db/models');
 
 module.exports = async (user, shantytownIds, covid = false) => {
     const comments = shantytownIds.reduce((acc, id) => Object.assign({}, acc, {

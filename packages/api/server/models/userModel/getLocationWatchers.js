@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 const { mailBlacklist } = require('#server/config');
 
 module.exports = async (location, applyBlacklist = false) => {

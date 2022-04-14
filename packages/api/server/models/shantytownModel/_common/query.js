@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 const shantytownActorModel = require('#server/models/shantytownActorModel')();
 const planShantytownModel = require('#server/models/planShantytownModel')();
 const stringifyWhereClause = require('#server/models/_common/stringifyWhereClause');

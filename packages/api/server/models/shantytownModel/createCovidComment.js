@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 
 module.exports = async (user, shantytownId, data) => sequelize.transaction(async (transaction) => {
     const [[{ id }]] = await sequelize.query(

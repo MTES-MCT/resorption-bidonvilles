@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 const convertToDateMapping = require('./_common/convertToDateMapping');
 
 module.exports = async (departement = null, startDateStr = '2019-06-01') => {

@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 
 module.exports = (attachments, userPermissionId, transaction) => Promise.all(
     attachments.map(attachment => sequelize.query(

@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 const decomposeForDiagramm = require('./_common/decomposeForDiagramm');
 const getArrayOfDates = require('./_common/getArrayOfDates');
 const { restrict } = require('#server/utils/permission');
