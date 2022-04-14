@@ -33,7 +33,7 @@ describe.only('services/shantytownComment', () => {
         dependencies.sendMail = sinon.stub();
 
         createComment = rewiremock.proxy('#server/services/shantytownComment/createComment', {
-            '#db/models': {
+            '#db/sequelize': {
                 sequelize: sequelizeStub,
             },
             '#server/models/shantytownModel': () => ({
