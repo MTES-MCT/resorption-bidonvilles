@@ -1,5 +1,4 @@
-
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 const { triggerDeclaredActor, triggerInvitedActor } = require('#server/utils/mattermost');
 const {
     sendUserShantytownActorNotification,

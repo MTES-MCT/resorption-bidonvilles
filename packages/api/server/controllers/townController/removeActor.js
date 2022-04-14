@@ -1,5 +1,4 @@
-
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 const { triggerRemoveDeclaredActor } = require('#server/utils/mattermost');
 
 module.exports = models => async (req, res, next) => {

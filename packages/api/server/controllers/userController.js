@@ -1,6 +1,7 @@
 const semver = require('semver');
 const jwt = require('jsonwebtoken');
 const JSONToCSV = require('json2csv');
+const sequelize = require('#db/sequelize');
 const sanitize = require('#server/controllers/userController/helpers/sanitize');
 const checkPassword = require('#server/controllers/userController/helpers/checkPassword');
 const validate = require('#server/controllers/userController/helpers/validate');
@@ -21,7 +22,6 @@ const {
 } = require('#server/mails/mails');
 
 const { auth: authConfig } = require('#server/config');
-const { sequelize } = require('#db/models');
 
 module.exports = models => ({
     async list(req, res) {
