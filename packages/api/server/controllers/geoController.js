@@ -1,5 +1,5 @@
 const url = require('url');
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 
 function trim(str) {
     if (typeof str !== 'string') {

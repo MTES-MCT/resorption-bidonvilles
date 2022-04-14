@@ -1,9 +1,7 @@
 const validator = require('validator');
-const {
-    sequelize,
-    Shantytown: ShantyTowns,
-    Stats_Exports,
-} = require('#db/models');
+const sequelize = require('#db/sequelize');
+const statsExportsModel = require('#server/models/statsExports');
+const shantytownModel = require('#server/models/shantytownModel')(sequelize);
 const { fromTsToFormat: tsToString, toFormat: dateToString } = require('#server/utils/date');
 const { createExport } = require('#server/utils/excel');
 const { fromGeoLevelToTableName } = require('#server/utils/geo');
@@ -165,7 +163,7 @@ module.exports = (models) => {
 
         async delete(req, res, next) {
             // check if the town exists
-            const town = await ShantyTowns.findOne({
+            const town = await shantytownModel.findOne({
                 where: {
                     shantytown_id: req.params.id,
                 },
@@ -1377,7 +1375,7 @@ module.exports = (models) => {
             }
 
             try {
-                await Stats_Exports.create(stat);
+                await statsExportsModel.create(stat);
             } catch (error) {
                 res.status(500).send({
                     success: false,
