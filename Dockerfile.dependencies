@@ -1,26 +1,2 @@
-FROM node:16-alpine AS dependencies
+FROM node:16-alpine
 ENV NODE_ENV production
-
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-# libintl is needed by gettext
-# gettext provides ensubst binary (used to inject env vars in some config files)
-RUN apk update || : && apk add --no-cache gettext libintl libc6-compat
-
-RUN mkdir -p \
-    /home/node/app/ \
-    /home/node/app/packages/api \
-    /home/node/app/packages/frontend/ui \
-    /home/node/app/packages/frontend/webapp \
-    /home/node/app/packages/frontend/www \
-    && chown -R node:node /home/node/app/
-USER node
-
-WORKDIR /home/node/app/
-COPY --chown=node:node packages/frontend/www/package.json ./packages/frontend/www/
-COPY --chown=node:node packages/frontend/ui/package.json ./packages/frontend/ui/
-COPY --chown=node:node packages/frontend/webapp/package.json ./packages/frontend/webapp/
-COPY --chown=node:node packages/api/package.json ./packages/api/
-COPY --chown=node:node package.json yarn.lock .yarnrc.yml ./
-COPY --chown=node:node .yarn ./.yarn/
-
-RUN yarn install --frozen-lockfile --silent && yarn cache clean
