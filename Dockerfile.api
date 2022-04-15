@@ -1,0 +1,8 @@
+FROM resorptionbidonvilles/dependencies:latest
+
+ADD ./packages/api ./packages/api/
+
+WORKDIR /home/node/app/packages/api/
+RUN yarn build
+
+ENTRYPOINT ["yarn", "start"]

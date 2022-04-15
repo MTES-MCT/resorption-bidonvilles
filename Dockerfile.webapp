@@ -1,0 +1,18 @@
+# build
+FROM resorptionbidonvilles/dependencies:latest AS build
+
+ADD --chown=node:node ./packages/frontend/ui ./packages/frontend/ui/
+ADD --chown=node:node ./packages/frontend/webapp ./packages/frontend/webapp/
+USER node
+
+WORKDIR /home/node/app/packages/frontend/webapp
+RUN yarn build
+
+# production
+FROM nginx:1.19-alpine AS production
+
+COPY ./packages/frontend/webapp/docker/nginx-entrypoint.sh /
+COPY ./packages/frontend/webapp/docker/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build --chown=nginx:nginx /home/node/app/packages/frontend/webapp/dist /usr/share/nginx/html
+
+ENTRYPOINT [ "sh", "/nginx-entrypoint.sh" ]

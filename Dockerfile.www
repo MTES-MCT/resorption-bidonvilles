@@ -1,0 +1,15 @@
+FROM resorptionbidonvilles/dependencies:latest
+
+ADD --chown=node:node ./packages/frontend/ui ./packages/frontend/ui/
+ADD --chown=node:node ./packages/frontend/www ./packages/frontend/www/
+USER node
+
+WORKDIR /home/node/app/packages/frontend/www
+RUN yarn www:build
+
+ENV HOST=0.0.0.0
+ENV PORT=80
+
+EXPOSE 80
+
+ENTRYPOINT [ "/bin/sh", "/home/node/app/packages/frontend/www/entrypoint.sh" ]

@@ -36,7 +36,7 @@ export default defineNuxtConfig({
         ]
     },
     publicRuntimeConfig: {
-        API_URL: process.env.NUXT_API_URL,
-        WEBAPP_URL: process.env.NUXT_WEBAPP_URL,
+        API_URL: process.env.NUXT_API_URL || "${NUXT_API_URL}",
+        WEBAPP_URL: process.env.NUXT_WEBAPP_URL || "${NUXT_WEBAPP_URL}",
     }
 });
