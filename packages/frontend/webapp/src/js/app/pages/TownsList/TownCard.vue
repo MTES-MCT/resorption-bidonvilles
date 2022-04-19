@@ -353,10 +353,10 @@ export default {
 
 <style scoped lang="scss">
 .cardGridTemplateColumns {
-    grid-template-columns: 160px 208px 164px 200px auto;
+    grid-template-columns: 160px 208px 170px 200px auto;
 
     @media print {
-        grid-template-columns: 160px 208px 164px 200px 236px;
+        grid-template-columns: 160px 208px 17px 200px 236px;
     }
 }
 
