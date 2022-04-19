@@ -9,6 +9,11 @@
         </Address>
 
         <div id="map">
+            <div ref="cadastreToggler" class="leaflet-cadastre-toggler">
+                <input type="checkbox" v-model="showCadastre" />
+                Voir le cadastre
+            </div>
+
             <div
                 ref="adressToggler"
                 class="leaflet-address-toggler"
@@ -189,6 +194,16 @@ export default {
             required: false,
             default: "Dessin"
         },
+
+        /* *****************************
+         * Options pour le cadastre
+         * ************************** */
+        cadastre: {
+            type: Object,
+            required: false,
+            default: null
+        },
+
         displayPrinter: {
             type: Boolean,
             default: true,
@@ -227,6 +242,11 @@ export default {
              * @type {L.layerGroup}
              */
             cityLayer: this.loadTerritoryLayers ? L.layerGroup() : false,
+
+            /**
+             * La couche cadastrale
+             */
+            cadastreLayer: null,
 
             /**
              * La carte
@@ -305,6 +325,20 @@ export default {
              * @type {Boolean}
              */
             showAddresses: false,
+
+            /**
+             * Indique s'il faut afficher la parcelle cadastrale ou non
+             *
+             * Cette valeur est contrôlée par une checkbox directement sur la carte
+             *
+             * @type {Boolean}
+             */
+            showCadastre: false,
+
+            /**
+             *
+             */
+            cadastreTogglerControl: null,
 
             /**
              * Value of showAddresses before the print
@@ -428,6 +462,37 @@ export default {
             this.$nextTick(() => {
                 this.setSearchMarker(type, label, [lat, lon]);
             });
+        },
+
+        cadastre() {
+            this.setupCadastreTogglerControl();
+
+            if (this.cadastreLayer) {
+                this.map.removeLayer(this.cadastreLayer);
+                delete this.cadastreLayer;
+                this.cadastreLayer = null;
+            }
+
+            if (!this.cadastre) {
+                return;
+            }
+
+            this.cadastreLayer = L.geoJSON(this.cadastre);
+
+            if (this.showCadastre === true) {
+                this.map.addLayer(this.cadastreLayer);
+            }
+        },
+
+        showCadastre() {
+            if (this.showCadastre === true) {
+                this.map.addLayer(this.cadastreLayer);
+
+                const { center } = this.defaultView;
+                this.centerMap(center, 18);
+            } else {
+                this.map.removeLayer(this.cadastreLayer);
+            }
         }
     },
 
@@ -671,6 +736,45 @@ export default {
         },
 
         /**
+         * Initialise le contrôle "Voir les adresses des sites"
+         *
+         * @returns {undefined}
+         */
+        setupCadastreTogglerControl() {
+            if (!this.cadastre) {
+                if (!this.cadastreTogglerControl) {
+                    return;
+                }
+
+                this.cadastreTogglerControl.remove();
+                return;
+            }
+
+            if (!this.cadastreTogglerControl) {
+                const { cadastreToggler } = this.$refs;
+                const CadastreToggler = L.Control.extend({
+                    options: {
+                        position: "topright"
+                    },
+
+                    onAdd(map) {
+                        map.cadastreToggler = this;
+                        return cadastreToggler;
+                    },
+
+                    onRemove(map) {
+                        delete map.cadastreToggler;
+                    }
+                });
+                this.cadastreTogglerControl = new CadastreToggler();
+            }
+
+            if (!this.map.cadastreToggler) {
+                this.map.addControl(this.cadastreTogglerControl);
+            }
+        },
+
+        /**
          * Initialise le contrôle "Légende"
          *
          * @returns {undefined}
@@ -724,6 +828,10 @@ export default {
                 scrollWheelZoom: false // interdire le zoom via la molette de la souris
             });
 
+            if (this.cadastre) {
+                this.cadastreLayer = L.geoJSON(this.cadastre);
+            }
+
             this.map.on("zoomend", this.onZoomEnd);
             if (this.loadTerritoryLayers) {
                 this.countNumberOfTowns();
@@ -742,18 +850,23 @@ export default {
         onZoomEnd() {
             const zoomLevel = this.map.getZoom();
 
-            if (zoomLevel <= REGION_MAX_ZOOM_LEVEL) {
-                this.displayShantytownsLevel = false;
-                this.loadRegionalData();
-                this.showRegionalLayer();
-            } else if (zoomLevel <= DEPT_MAX_ZOOM_LEVEL) {
-                this.displayShantytownsLevel = false;
-                this.loadDepartementalData();
-                this.showDepartementalLayer();
-            } else if (zoomLevel <= CITY_MAX_ZOOM_LEVEL) {
-                this.displayShantytownsLevel = false;
-                this.loadCityData();
-                this.showCityLayer();
+            if (this.loadTerritoryLayers) {
+                if (zoomLevel <= REGION_MAX_ZOOM_LEVEL) {
+                    this.displayShantytownsLevel = false;
+                    this.loadRegionalData();
+                    this.showRegionalLayer();
+                } else if (zoomLevel <= DEPT_MAX_ZOOM_LEVEL) {
+                    this.displayShantytownsLevel = false;
+                    this.loadDepartementalData();
+                    this.showDepartementalLayer();
+                } else if (zoomLevel <= CITY_MAX_ZOOM_LEVEL) {
+                    this.displayShantytownsLevel = false;
+                    this.loadCityData();
+                    this.showCityLayer();
+                } else {
+                    this.displayShantytownsLevel = true;
+                    this.showTownsLayer();
+                }
             } else {
                 this.displayShantytownsLevel = true;
                 this.showTownsLayer();
