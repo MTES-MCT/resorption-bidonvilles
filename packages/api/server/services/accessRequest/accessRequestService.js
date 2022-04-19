@@ -1,5 +1,4 @@
-const sequelize = require('#db/sequelize');
-const { user: userModel } = require('#server/models/index')(sequelize);
+const { user: userModel } = require('#server/models/index');
 const { getAccountActivationLink } = require('#server/utils/auth');
 const sendEmail = require('./mailer');
 const { scheduleEvent, cancelEvent } = require('./scheduler');
