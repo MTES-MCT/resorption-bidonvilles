@@ -1,7 +1,7 @@
 Une nouvelle personne a rejoint la plateforme
 Bonjour {{var:recipientName}},
 Nous sommes heureux de vous informer que {{var:userName}} vient d’activer son
-accès à la plateforme Résorption-bidonvilles [{{var:frontUrl}}]. Cette personne
+accès à la plateforme Résorption-bidonvilles [{{var:webappUrl}}]. Cette personne
 est désormais utilisatrice de l’outil numérique d’information, de partage et de
 coordination des acteurs de la résorption des bidonvilles.
 Pour l’accompagner à prendre en main la plateforme, vous pouvez l’inviter à

@@ -14,7 +14,7 @@
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text>
-                    Vous utilisez la plateforme <a href="{{var:frontUrl}}" class="link font-italic" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a> depuis trois mois. Donnez-nous votre avis en répondant à ce court <a href="{{var:surveyUrl}}" class="link" target="_blank" rel="noopener noreferrer">questionnaire</a>.
+                    Vous utilisez la plateforme <a href="{{var:webappUrl}}" class="link font-italic" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a> depuis trois mois. Donnez-nous votre avis en répondant à ce court <a href="{{var:surveyUrl}}" class="link" target="_blank" rel="noopener noreferrer">questionnaire</a>.
                 </mj-text>
                 <mj-button mj-class="button-secondary" href="{{var:surveyUrl}}" rel="noopener noreferrer">
                     Contribuez à améliorer la plateforme en 5 questions

@@ -1,16 +1,16 @@
 const moment = require('moment');
 const { formatName } = require('#server/models/userModel')();
 const mailService = require('#server/services/mailService');
-const { frontUrl, backUrl } = require('#server/config');
+const { wwwUrl, webappUrl, backUrl } = require('#server/config');
 
 const generateTrackingUTM = require('./generateTrackingUTM');
 
 const formationUrl = 'https://app.evalandgo.com/s/index.php?id=JTk5aSU5M2slOTklQUI%3D&a=JTk2cCU5N2slOUElQjA%3D';
-const connexionUrl = `${frontUrl}/connexion`;
-const contactUrl = `${frontUrl}/contact`;
+const connexionUrl = `${webappUrl}/connexion`;
+const contactUrl = `${webappUrl}/contact`;
 const adminGuideUrl = `${backUrl}/assets/guide_utilisateur/guide_admin_2020_06.pdf`;
 const userGuideUrl = `${backUrl}/assets/guide_utilisateur/guide_utilisateur_2021_02.pdf`;
-const invitationUrl = `${frontUrl}/invitation`;
+const invitationUrl = `${webappUrl}/invitation`;
 const idealcoUrl = 'https://www.idealco.fr/campagne/?utm_campaign=g-386-3036d540';
 const surveyUrl = 'https://app.evalandgo.com/s/index.php?id=JTk4ciU5MXAlOUUlQUU%3D&a=JTk2cCU5N2slOUElQjA%3D';
 
@@ -35,7 +35,7 @@ module.exports = {
             variables: {
                 recipientName: formatName(recipient),
                 userName: variables.userName,
-                frontUrl: `${frontUrl}?${utm}`,
+                webappUrl: `${webappUrl}?${utm}`,
                 formationUrl,
                 backUrl,
             },
@@ -58,7 +58,7 @@ module.exports = {
                 recipientName: formatName(recipient),
                 userName: variables.userName,
                 activationUrlSentDate: variables.activationUrlSentDate,
-                frontUrl: `${frontUrl}?${utm}`,
+                webappUrl: `${webappUrl}?${utm}`,
                 adminUrl: `${variables.adminUrl}?${utm}`,
                 connexionUrl: `${variables.adminUrl}?${utm}`,
                 backUrl,
@@ -101,7 +101,7 @@ module.exports = {
                 recipientName: formatName(recipient),
                 userName: variables.userName,
                 orgName: variables.orgName,
-                frontUrl: `${frontUrl}?${utm}`,
+                webappUrl: `${webappUrl}?${utm}`,
                 adminUrl: `${variables.adminUrl}?${utm}`,
                 connexionUrl: `${variables.adminUrl}?${utm}`,
                 formationUrl,
@@ -128,7 +128,7 @@ module.exports = {
                 recipientName: formatName(recipient),
                 userName: variables.userName,
                 orgName: variables.orgName,
-                frontUrl: `${frontUrl}?${utm}`,
+                webappUrl: `${webappUrl}?${utm}`,
                 adminUrl: `${variables.adminUrl}?${utm}`,
                 connexionUrl: `${variables.adminUrl}?${utm}`,
                 backUrl,
@@ -154,7 +154,7 @@ module.exports = {
                 recipientName: formatName(recipient),
                 userName: variables.userName,
                 orgName: variables.orgName,
-                frontUrl: `${frontUrl}?${utm}`,
+                webappUrl: `${webappUrl}?${utm}`,
                 adminUrl: `${variables.adminUrl}?${utm}`,
                 connexionUrl: `${variables.adminUrl}?${utm}`,
                 backUrl,
@@ -180,7 +180,7 @@ module.exports = {
                 connexionUrl: `${connexionUrl}?${utm}`,
                 adminGuideUrl,
                 backUrl,
-                frontUrl: `${frontUrl}?${utm}`,
+                webappUrl: `${webappUrl}?${utm}`,
             },
             preserveRecipient,
         });
@@ -201,7 +201,7 @@ module.exports = {
                 recipientName: formatName(recipient),
                 formationUrl,
                 backUrl,
-                frontUrl: `${frontUrl}?${utm}`,
+                webappUrl: `${webappUrl}?${utm}`,
             },
             preserveRecipient,
         });
@@ -221,7 +221,7 @@ module.exports = {
             variables: {
                 recipientName: formatName(recipient),
                 inviterName: variables.inviterName,
-                frontUrl: `${frontUrl}?${utm}`,
+                wwwUrl: `${wwwUrl}?${utm}`,
                 backUrl,
                 contactUrl: `${contactUrl}?${utm}`,
                 formationUrl,
@@ -243,12 +243,12 @@ module.exports = {
             recipient,
             variables: {
                 inviterName: variables.inviterName,
-                siteUrl: `${frontUrl}/site/${variables.shantytown.id}?${utm}`,
+                siteUrl: `${webappUrl}/site/${variables.shantytown.id}?${utm}`,
                 siteAddress: `${variables.shantytown.addressSimple}${variables.shantytown.name ? ` « ${variables.shantytown.name} »` : ''}`,
                 connexionUrl: `${connexionUrl}?${utm}`,
                 contactUrl: `${contactUrl}?${utm}`,
                 backUrl,
-                frontUrl: `${frontUrl}?${utm}`,
+                webappUrl: `${webappUrl}?${utm}`,
             },
             preserveRecipient,
         });
@@ -268,12 +268,12 @@ module.exports = {
             variables: {
                 recipientName: formatName(recipient),
                 inviterName: variables.inviterName,
-                siteUrl: `${frontUrl}/site/${variables.shantytown.id}?${utm}`,
-                actionUrl: `${frontUrl}/site/${variables.shantytown.id}?${utm}&action=new_actor`,
+                siteUrl: `${webappUrl}/site/${variables.shantytown.id}?${utm}`,
+                actionUrl: `${webappUrl}/site/${variables.shantytown.id}?${utm}&action=new_actor`,
                 siteAddress: `${variables.shantytown.addressSimple}${variables.shantytown.name ? ` « ${variables.shantytown.name} »` : ''}`,
                 contactUrl,
                 backUrl,
-                frontUrl: `${frontUrl}?${utm}`,
+                webappUrl: `${webappUrl}?${utm}`,
             },
             preserveRecipient,
         });
@@ -293,7 +293,7 @@ module.exports = {
             variables: {
                 recipientName: formatName(recipient),
                 userGuideUrl,
-                frontUrl: `${frontUrl}?${utm}`,
+                webappUrl: `${webappUrl}?${utm}`,
                 backUrl,
                 formationUrl,
                 connexionUrl: `${connexionUrl}?${utm}`,
@@ -316,7 +316,7 @@ module.exports = {
             variables: {
                 recipientName: formatName(recipient),
                 adminName: variables.adminName,
-                frontUrl: `${frontUrl}?${utm}`,
+                wwwUrl: `${wwwUrl}?${utm}`,
                 backUrl,
             },
             preserveRecipient,
@@ -338,7 +338,7 @@ module.exports = {
             recipient,
             variables: {
                 recipientName: formatName(recipient),
-                frontUrl: `${frontUrl}?${utm}`,
+                wwwUrl: `${wwwUrl}?${utm}`,
                 backUrl,
                 formationUrl,
             },
@@ -360,7 +360,7 @@ module.exports = {
             variables: {
                 recipientName: formatName(recipient),
                 adminName: variables.adminName,
-                frontUrl: `${frontUrl}?${utm}`,
+                wwwUrl: `${wwwUrl}?${utm}`,
                 backUrl,
                 formationUrl,
                 activationUrl: `${variables.activationUrl}?${utm}`,
@@ -389,7 +389,7 @@ module.exports = {
                 activationUrl: `${variables.activationUrl}?${utm}`,
                 activationUrlExpDate: variables.activationUrlExpDate,
                 formationUrl,
-                frontUrl: `${frontUrl}?${utm}`,
+                wwwUrl: `${wwwUrl}?${utm}`,
                 backUrl,
             },
             preserveRecipient,
@@ -413,7 +413,7 @@ module.exports = {
             recipient,
             variables: {
                 recipientName: formatName(recipient),
-                frontUrl: `${frontUrl}?${utm}`,
+                wwwUrl: `${wwwUrl}?${utm}`,
                 backUrl,
             },
             preserveRecipient,
@@ -426,7 +426,6 @@ module.exports = {
      */
     sendUserCommentDeletion: (recipient, options = {}) => {
         const { variables, preserveRecipient } = options;
-        const utm = generateTrackingUTM(USER_CAMPAIGN, 'suppression-commentaire');
 
         return mailService.send('user_comment_deletion', {
             recipient,
@@ -435,7 +434,6 @@ module.exports = {
                 comment: variables.comment,
                 message: variables.message,
                 backUrl,
-                frontUrl: `${frontUrl}?${utm}`,
             },
             preserveRecipient,
         });
@@ -456,7 +454,7 @@ module.exports = {
                 recipientName: formatName(recipient),
                 connexionUrl: `${connexionUrl}?${utm}`,
                 backUrl,
-                frontUrl: `${frontUrl}?${utm}`,
+                webappUrl: `${webappUrl}?${utm}`,
             },
             preserveRecipient,
         });
@@ -477,7 +475,7 @@ module.exports = {
                 recipientName: formatName(recipient),
                 idealcoUrl,
                 backUrl,
-                frontUrl: `${frontUrl}?${utm}`,
+                webappUrl: `${webappUrl}?${utm}`,
             },
             preserveRecipient,
         });
@@ -497,16 +495,16 @@ module.exports = {
             variables: {
                 recipientName: formatName(recipient),
                 backUrl,
-                frontUrl: `${frontUrl}?${utm}`,
+                wwwUrl: `${wwwUrl}?${utm}`,
                 shantytown: variables.shantytown,
                 createdBy: {
                     name: formatName(variables.comment.createdBy),
                     organization: variables.comment.createdBy.organization,
                 },
                 comment: variables.comment.description,
-                rootAnnuaireUrl: `${frontUrl}/annuaire?${utm}`,
-                annuaireUrl: `${frontUrl}/annuaire/${variables.comment.createdBy.organization_id}?${utm}`,
-                messageUrl: `${frontUrl}/site/${variables.shantytown.id}#newComment`,
+                rootAnnuaireUrl: `${webappUrl}/annuaire?${utm}`,
+                annuaireUrl: `${webappUrl}/annuaire/${variables.comment.createdBy.organization_id}?${utm}`,
+                messageUrl: `${webappUrl}/site/${variables.shantytown.id}#newComment`,
             },
             preserveRecipient,
         });
@@ -543,7 +541,7 @@ module.exports = {
             variables: {
                 surveyUrl,
                 backUrl,
-                frontUrl: `${frontUrl}?${utm}`,
+                webappUrl: `${webappUrl}?${utm}`,
                 connexionUrl: `${connexionUrl}?${utm}`,
                 recipientName: formatName(recipient),
             },
@@ -570,9 +568,9 @@ module.exports = {
                 hour: moment(variables.shantytown.createdAt).utcOffset(2).format('HH:mm'),
                 creatorName: formatName(variables.creator),
                 townFullAddress: variables.shantytown.address,
-                frontUrl: `${frontUrl}?${utm.regular}`,
+                webappUrl: `${webappUrl}?${utm.regular}`,
                 connexionUrl: `${connexionUrl}?${utm.connexion}`,
-                townUrl: `${frontUrl}/site/${variables.shantytown.id}?${utm.regular}`,
+                townUrl: `${webappUrl}/site/${variables.shantytown.id}?${utm.regular}`,
             },
             preserveRecipient,
         });
@@ -597,9 +595,9 @@ module.exports = {
                 hour: moment(variables.shantytown.closedAt).utcOffset(2).format('HH:mm'),
                 editorName: formatName(variables.editor),
                 townFullAddress: variables.shantytown.address,
-                frontUrl: `${frontUrl}?${utm.regular}`,
+                webappUrl: `${webappUrl}?${utm.regular}`,
                 connexionUrl: `${connexionUrl}?${utm.connexion}`,
-                townUrl: `${frontUrl}/site/${variables.shantytown.id}?${utm.regular}`,
+                townUrl: `${webappUrl}/site/${variables.shantytown.id}?${utm.regular}`,
             },
             preserveRecipient,
         });
@@ -620,7 +618,7 @@ module.exports = {
                 recipientName: formatName(recipient),
                 invitationUrl: `${invitationUrl}?email=${encodeURIComponent(recipient.email)}&first_name=${encodeURIComponent(recipient.first_name)}&last_name=${encodeURIComponent(recipient.last_name)}&from=push_mail&${utm}`,
                 backUrl,
-                frontUrl: `${frontUrl}?${utm}`,
+                webappUrl: `${webappUrl}?${utm}`,
             },
             preserveRecipient,
         });
@@ -637,7 +635,6 @@ module.exports = {
             recipient,
             variables: {
                 email: variables.email,
-                frontUrl,
                 backUrl,
             },
             preserveRecipient,
@@ -659,7 +656,8 @@ module.exports = {
                 connexionUrl: `${connexionUrl}?${utm}`,
                 showDetails: variables.showDetails || false,
                 summaries: variables.summaries,
-                frontUrl,
+                wwwUrl,
+                webappUrl,
                 utm,
             },
             preserveRecipient,

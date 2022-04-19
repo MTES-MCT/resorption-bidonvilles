@@ -1,0 +1,12 @@
+{
+  "projectId": "dyzf1o",
+  "baseUrl": "https://app.resorption-bidonvilles.localhost",
+  "pluginsFile": false,
+  "video": false,
+  "numTestsKeptInMemory": 0,
+  "defaultCommandTimeout": 6000,
+  "retries": {
+    "runMode": 2,
+    "openMode": 2
+  }
+}

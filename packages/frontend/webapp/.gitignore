@@ -1,0 +1,6 @@
+.cache
+cypress/videos
+cypress/screenshots
+src/.temp
+dist/*
+.env

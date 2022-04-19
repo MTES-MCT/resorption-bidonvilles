@@ -1,7 +1,7 @@
 Bienvenue sur la plateforme Résorption-bidonvilles !
 Bonjour {{var:recipientName}},
 Nous sommes heureux de vous compter parmi les utilisateurs et utilisatrices de
-la plateforme Résorption-bidonvilles [{{var:frontUrl}}].
+la plateforme Résorption-bidonvilles [{{var:webappUrl}}].
 Pour prendre en main rapidement la plateforme, téléchargez le court guide de
 l’utilisateur et participez à une session de formation personnalisée, nous
 répondrons à toutes vos questions.

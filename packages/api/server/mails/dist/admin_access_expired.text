@@ -1,7 +1,7 @@
 En savoir plus sur une demande d’accès non activée
 Bonjour {{var:recipientName}},
 Vous avez ouvert un accès à la plateforme Résorption-bidonvilles
-[{{var:frontUrl}}] à {{var:userName}} le {{var:activationUrlSentDate}}. Cette
+[{{var:webappUrl}}] à {{var:userName}} le {{var:activationUrlSentDate}}. Cette
 personne n’a pas activé son accès dans le délai des 7 jours, son lien est
 dorénavant expiré.
 Nous vous invitons à prendre contact avec elle pour comprendre la raison de

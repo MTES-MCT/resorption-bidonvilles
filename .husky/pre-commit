@@ -2,5 +2,4 @@
 . "$(dirname "$0")/_/husky.sh"
 
 # on lint les fichiers staged
-# on le fait séquentiellement (--concurrency 1) car sinon il y a un conflit sur l'utilisation de git pour récupérer la liste des fichiers staged
-yarn lerna exec --concurrency 1 yarn lint-staged
+yarn lint:staged

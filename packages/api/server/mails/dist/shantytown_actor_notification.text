@@ -3,7 +3,7 @@ Vous êtes invité·e à confirmer votre intervention sur le site
 Bonjour {{var:recipientName}},
 {{var:inviterName}} vous a invité·e à valoriser votre intervention sur le site
 {{var:siteAddress}} [{{var:siteUrl}}] sur la plateforme Résorption-bidonvilles
-[{{var:frontUrl}}].
+[{{var:webappUrl}}].
 Dès maintenant connectez-vous pour confirmer votre intervention sur ce site.
 Ainsi, vous rejoindrez {{var:inviterName}} et recevrez en temps réel les
 messages transmis par les autres acteurs et actrices du site.

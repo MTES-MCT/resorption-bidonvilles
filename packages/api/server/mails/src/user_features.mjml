@@ -14,7 +14,7 @@
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
-                    Vous utilisez la plateforme <a href="{{var:frontUrl}}" class="link font-italic" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a> depuis un mois.
+                    Vous utilisez la plateforme <a href="{{var:webappUrl}}" class="link font-italic" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a> depuis un mois.
                 </mj-text>
                 <mj-text mj-class="text-secondary font-bold pb-4">
                     Avez-vous utilisé les fonctionnalités  “J’interviens sur ce site” et "Le journal du site” ?

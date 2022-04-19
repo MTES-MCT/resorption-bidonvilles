@@ -1,7 +1,7 @@
 Activez votre compte pour accéder à la plateforme Résorption-bidonvilles
 Bonjour {{var:recipientName}},
 Nous avons le plaisir de vous informer que votre accès à la plateforme
-Résorption-bidonvilles [{{var:frontUrl}}] a été ouvert par une personne
+Résorption-bidonvilles [{{var:wwwUrl}}] a été ouvert par une personne
 administratrice locale sur votre territoire : {{var:adminName}}.
 Vous pouvez dès maintenant rejoindre la communauté des acteurs et actrices de la
 résorption des bidonvilles en cliquant sur le bouton ci-dessous.

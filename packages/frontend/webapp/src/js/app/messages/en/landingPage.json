@@ -1,0 +1,157 @@
+{
+  "header": {
+    "connect": "Sign in",
+    "contact": "Contact us"
+  },
+  "hero": {
+    "title": "Taking action for slum clearance",
+    "subtitle": "Ask a question or request an access",
+    "review": "slums cleared"
+  },
+  "firstSection": {
+    "features": {
+      "position": "Useful information on slums at a glance",
+      "actions": "The projects carried out available at any time",
+      "exchange": "Facilitating dialogue between parties involved"
+    },
+    "before": "Before",
+    "after": "After",
+    "context": {
+      "title_part1": "",
+      "title_part2": "Résorption-bidonvilles",
+      "title_part3": "what and who is it for?",
+      "text_1": "A tool for information, sharing and steering, the platform offers a high-performance and effective solution for slum clearance.",
+      "text_2": "It enables the collaboration of all local stakeholders involved in the slum clearance policy."
+    },
+    "feedback": {
+      "title": "User testimonials",
+      "1": {
+        "text": "It's great because you have the info online, you're not faced with an excel spreadsheet with codes you don't understand.",
+        "author": "Prefecture Seine-Saint-Denis"
+      },
+      "2": {
+        "text": "The platform made the information more reliable because, before the Excel table was not shared. The more collaborative tools we have, the better it is.",
+        "author": "City of Poitiers"
+      },
+      "3": {
+        "text": "I was able to direct the family of a person I was accompanying to a solidarity house from the location of their slum.",
+        "author": "Haute-Garonne Association"
+      }
+    },
+    "video": {
+      "text": "Get a preview of Résorption-bidonvilles in 1 min"
+    }
+  },
+  "firstBanner": {
+    "text": "Involved Stakeholders in slum clearance, please share and highlight your projects",
+    "cta": "Request access"
+  },
+  "secondSection": {
+    "title": "What is the slum resorption policy?",
+    "data": {
+      "1": {
+        "line1": "More than",
+        "line2": "300 slums",
+        "line3": "in mainland France"
+      },
+      "2": {
+        "line1": "More than",
+        "line2": "16 000 people",
+        "line3": "including 5,000 minors"
+      },
+      "3": {
+        "line1": "Mostly",
+        "line2": "Europeans",
+        "line3": "Romanian and Bulgarian citizens"
+      }
+    },
+    "firstParagraph": {
+      "bold": "The government sets a clear objective of slum resorption by moving away from an evacuation-centred approach to a global approach.",
+      "normal": "combining social inclusion, respect for public order and prevention of resettlement. In all the territories concerned, effective, humane and pragmatic multi-partner actions must be implemented.",
+      "link": "More about the slum resorption policy"
+    },
+    "secondParagraph": {
+      "bold": "What is a slum?",
+      "normal": "A slum is an area that usually lacks basic services (water, electricity, waste management) and is illegally occupied by several families."
+    },
+    "thirdParagraph": "",
+    "video": {
+      "text": "Understanding slum clearance in 2 minutes"
+    },
+    "bilan": {
+      "title": "Actions in figures",
+      "firstParagraph": {
+        "bold": "In 2019, more than 30 slum clearance projects have been carried out by 35 NGOs",
+        "normal": "They have been financed 75% by the State, 15% by local authorities and 10% by private or European funds. Families living in slums have been supported in order to access to health, housing, employment, education and sanitation."
+      },
+      "figures": {
+        "1": {
+          "text": "16 slums cleared"
+        },
+        "2": {
+          "text": "8,600 beneficiaries of the actions"
+        },
+        "3": {
+          "text": "1,464 people re-housed"
+        },
+        "4": {
+          "text": "3,125 children in school"
+        },
+        "5": {
+          "text": "2,000 beneficiaries",
+          "info": "of health support"
+        },
+        "6": {
+          "text": "1078 employment contracts signed"
+        }
+      },
+      "cta": "Download the latest report"
+    }
+  },
+  "secondBanner": {
+    "text": "Neighbour, citizen, slum dweller... Any news? A question ? An alert?",
+    "cta": "Contact us"
+  },
+  "thirdSection": {
+    "firstParagraph": {
+      "body": {
+        "text1": "The digital platform",
+        "text2": "Résorption-bidonvilles",
+        "text3": "is led by the interministerial delegation for access to housing",
+        "text4": "The platform continues to be developed in close collaboration with its users",
+        "text5": "To learn more about the beginning of the project, please visit",
+        "link1": "the official website about Start-up d'Etat"
+      },
+      "items": {
+        "title": "The project was the winner of several calls for proposals:",
+        "1": {
+          "link": "General interest entrepreneur",
+          "text": "of the Future Investment Program in 2019"
+        },
+        "2": {
+          "link": "European Commission's \"rights, citizenship and equality\" program",
+          "text": "in 2020"
+        },
+        "3": {
+          "link": "State Start-up Acceleration Fund 3",
+          "text": "of DINUM in April 2020"
+        },
+        "4": {
+          "link": "French policy transformation fund",
+          "text": "of DITP in October 2020"
+        }
+      }
+    }
+  },
+  "contactForm": {
+    "email": "Your email",
+    "cta": "Contact us"
+  },
+  "newsletter": {
+    "title": "Subscribe to our monthly newsletter (in French)",
+    "text": "Do you want to be informed of the platform's news, events, best practices in the field and news on the subject of slums? Subscribe !",
+    "cta": "I subscribe",
+    "link": "",
+    "viewAll": ""
+  }
+}

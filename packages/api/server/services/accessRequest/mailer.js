@@ -1,5 +1,5 @@
 const { toString: dateToString } = require('#server/utils/date');
-const { frontUrl } = require('#server/config');
+const { webappUrl } = require('#server/config');
 
 const {
     sendAdminNewRequestNotification,
@@ -23,7 +23,7 @@ module.exports = {
             return Promise.all(
                 admins.map(admin => sendAdminNewRequestNotification(admin, {
                     variables: {
-                        adminUrl: `${frontUrl}/nouvel-utilisateur/${user.id}`,
+                        adminUrl: `${webappUrl}/nouvel-utilisateur/${user.id}`,
                         userName: formatName(user),
                         orgName: user.organization.abbreviation || user.organization.name,
                     },
@@ -35,7 +35,7 @@ module.exports = {
             return Promise.all(
                 admins.map(admin => sendAdminRequestPendingReminder1(admin, {
                     variables: {
-                        adminUrl: `${frontUrl}/nouvel-utilisateur/${user.id}`,
+                        adminUrl: `${webappUrl}/nouvel-utilisateur/${user.id}`,
                         userName: formatName(user),
                         orgName: user.organization.abbreviation || user.organization.name,
                     },
@@ -47,7 +47,7 @@ module.exports = {
             return Promise.all(
                 admins.map(admin => sendAdminRequestPendingReminder2(admin, {
                     variables: {
-                        adminUrl: `${frontUrl}/nouvel-utilisateur/${user.id}`,
+                        adminUrl: `${webappUrl}/nouvel-utilisateur/${user.id}`,
                         userName: formatName(user),
                         orgName: user.organization.abbreviation || user.organization.name,
                     },
@@ -60,7 +60,7 @@ module.exports = {
                 variables: {
                     userName: formatName(user),
                     activationUrlSentDate: dateToString(submitDate),
-                    adminUrl: `${frontUrl}/nouvel-utilisateur/${user.id}`,
+                    adminUrl: `${webappUrl}/nouvel-utilisateur/${user.id}`,
                 },
             });
         },

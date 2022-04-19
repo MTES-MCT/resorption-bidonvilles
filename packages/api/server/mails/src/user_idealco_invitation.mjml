@@ -14,7 +14,7 @@
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
-                    Nous sommes heureux de vous compter parmi les utilisateurs et utilisatrices de la plateforme <a href="{{var:frontUrl}}" class="link font-italic" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a>.
+                    Nous sommes heureux de vous compter parmi les utilisateurs et utilisatrices de la plateforme <a href="{{var:webappUrl}}" class="link font-italic" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a>.
                 </mj-text>
                 <mj-text>
                     ➔ Pour être informé des dernières nouveautés de la plateforme
