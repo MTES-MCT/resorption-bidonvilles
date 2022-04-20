@@ -1,13 +1,6 @@
 import userNavigationLogsModel from '#server/models/userNavigationLogsModel';
 const ServiceError = require('#server/errors/ServiceError');
 
-
-/**
- * @param fk_user Identifiant de l'utilisateur connecté 
- * @param page Page consultée
- *
- * @returns identifiant de la ligne insérée dans la table user_navigation_logs
- */
 export default async (fk_user: number, page: String): Promise<number> => {
     // on insère le log
     let logId: number;
