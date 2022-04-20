@@ -356,7 +356,7 @@ export default {
     grid-template-columns: 160px 208px 170px 200px auto;
 
     @media print {
-        grid-template-columns: 160px 208px 17px 200px 236px;
+        grid-template-columns: 160px 208px 170px 200px 236px;
     }
 }
 
