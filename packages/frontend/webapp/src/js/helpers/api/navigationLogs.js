@@ -1,7 +1,7 @@
 import { postApi } from "#helpers/api/main";
 
 /**
- * POST /me
+ * POST /me/navigationLogs
  */
 export function insert(data) {
     return postApi("/me/navigationLogs", data);
