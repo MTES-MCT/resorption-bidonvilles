@@ -1,18 +1,15 @@
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const proxyquire = require('proxyquire');
+
+const { expect } = chai;
+chai.use(sinonChai);
 const { mockReq, mockRes } = require('sinon-express-mock');
 const { serialized: generateUser } = require('#test/utils/user');
 
 const shantytownModel = require('#server/models/shantytownModel');
 
-const edit = proxyquire('#server/controllers/townController/edit', {
-    '#server/models/shantytownModel': () => shantytownModel,
-})();
-
-const { expect } = chai;
-chai.use(sinonChai);
+const edit = require('#server/controllers/townController/edit');
 
 describe.only('townController.edit()', () => {
     const dependencies = {

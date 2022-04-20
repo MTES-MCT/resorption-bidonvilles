@@ -5,19 +5,22 @@
  * *********************************************************************************************** */
 
 const sinon = require('sinon');
-const { expect } = require('chai');
+const chai = require('chai');
+const sinonChai = require('sinon-chai');
+
+const { expect } = chai;
+chai.use(sinonChai);
+
+
 const { mockReq, mockRes } = require('sinon-express-mock');
 
 
-/* **************************************************************************************************
- * FIXTURES
- * *********************************************************************************************** */
+const shantytownService = require('#server/services/shantytown');
 
-const models = {
-    shantytown: require('#server/models/shantytownModel'),
-};
-const stubs = {};
-const { createCovidComment } = require('#server/controllers/townController')(stubs);
+
+const createCovidCommentController = require('#server/controllers/townController/createCovidComment');
+
+const ServiceError = require('#server/errors/ServiceError');
 
 
 /* **************************************************************************************************
@@ -29,47 +32,12 @@ describe.only('townController.createCovidComment()', () => {
      * Common resources
      * **************** */
 
-    const metadata = {
-        date: {
-            label: 'La date',
-            badFormat: global.generate().not('stringdate'),
-        },
-        action_mediation_sante: {
-            label: 'Le champ "Action de médiation en santé"',
-            badFormat: global.generate().not('boolean'),
-        },
-        sensibilisation_vaccination: {
-            label: 'Le champ "Sensibilisation à la vaccination"',
-            badFormat: global.generate().not('boolean'),
-        },
-        equipe_mobile_depistage: {
-            label: 'Le champ "Équipe mobile de dépistage"',
-            badFormat: global.generate().not('boolean'),
-        },
-        equipe_mobile_vaccination: {
-            label: 'Le champ "Équipe mobile de vaccination"',
-            badFormat: global.generate().not('boolean'),
-        },
-        personnes_orientees: {
-            label: 'Le champ "Personne(s) orientée(s) vers un centre d\'hébergement spécialisé (desserrement)"',
-            badFormat: global.generate().not('boolean'),
-        },
-        personnes_avec_symptomes: {
-            label: 'Le champ "Personnes avec des symptômes Covid-19"',
-            badFormat: global.generate().not('boolean'),
-        },
-        besoin_action: {
-            label: 'Le champ "Besoin d\'une action prioritaire"',
-            badFormat: global.generate().not('boolean'),
-        },
-        description: {
-            label: 'Le commentaire',
-            badFormat: global.generate().not(['string', 'stringdate']),
-        },
-    };
 
     let reqArg;
+    let comments;
+    let createCovidCommentStub;
     beforeEach(() => {
+        comments = [{}, {}, {}];
         reqArg = {
             user: {
                 id: 42,
@@ -89,25 +57,11 @@ describe.only('townController.createCovidComment()', () => {
                 description: 'lorem ipsum',
             },
         };
-        stubs.shantytown = sinon.stub(models.shantytown);
-
-        stubs.shantytown.findOne.withArgs(reqArg.user, reqArg.params.id).resolves({
-            builtAt: (new Date(1999, 0, 1)).getTime() / 1000,
-        });
-        stubs.shantytown.getComments.withArgs(reqArg.user, [reqArg.params.id], false).resolves({
-            [reqArg.params.id]: [{}],
-        });
-        stubs.shantytown.getComments.withArgs(reqArg.user, [reqArg.params.id], true).resolves({
-            [reqArg.params.id]: [{}],
-        });
+        createCovidCommentStub = sinon.stub(shantytownService, 'createCovidComment');
     });
 
     afterEach(() => {
-        Object.keys(stubs).forEach((key) => {
-            Object.keys(stubs[key]).forEach((method) => {
-                stubs[key][method].restore();
-            });
-        });
+        createCovidCommentStub.restore();
     });
 
 
@@ -116,91 +70,64 @@ describe.only('townController.createCovidComment()', () => {
      * **************** */
     it('saves the new comment in database', async () => {
         // setup
+        createCovidCommentStub.withArgs(reqArg.user, reqArg.params.id, reqArg.body).resolves([{}, {}, {}]);
         const req = mockReq(reqArg);
         const res = mockRes();
 
         // execute
-        await createCovidComment(req, res);
+        await createCovidCommentController(req, res);
 
         // assert
-        expect(stubs.shantytown.createCovidComment).to.have.been.calledOnceWith(
+        expect(createCovidCommentStub).to.have.been.calledOnceWith(
             req.user,
             req.params.id,
-            Object.assign({}, reqArg.body, { date: new Date(reqArg.body.date) }),
-        );
-    });
-
-    it('trims the description', async () => {
-        // setup
-        reqArg.body.description = `  
-           lorem ipsum     `;
-        const req = mockReq(reqArg);
-        const res = mockRes();
-
-        // execute
-        await createCovidComment(req, res);
-
-        // assert
-        expect(stubs.shantytown.createCovidComment).to.have.been.calledOnceWith(
-            req.user,
-            req.params.id,
-            Object.assign({}, reqArg.body, {
-                date: new Date(reqArg.body.date),
-                description: 'lorem ipsum',
-            }),
+            reqArg.body,
         );
     });
 
     it('responds with status 200', async () => {
         // setup
+        createCovidCommentStub.withArgs(reqArg.user, reqArg.params.id, reqArg.body).resolves([{}, {}, {}]);
         const req = mockReq(reqArg);
         const res = mockRes();
 
         // execute
-        await createCovidComment(req, res);
+        await createCovidCommentController(req, res);
 
         // assert
-        expect(res.status).to.have.been.calledOnceWith(200);
+        expect(createCovidCommentStub).to.have.been.calledOnceWith(
+            req.user,
+            req.params.id,
+            reqArg.body,
+        ); expect(res.status).to.have.been.calledOnceWith(200);
     });
 
     it('responds with the refreshed list of comments', async () => {
         // setup
+        createCovidCommentStub.withArgs(reqArg.user, reqArg.params.id, reqArg.body).resolves([{}, {}, {}]);
         const req = mockReq(reqArg);
         const res = mockRes();
 
-        const regularComments = [{}, {}, {}];
-        const covidComments = [{}, {}, {}];
-        stubs.shantytown.getComments
-            .withArgs(reqArg.user, [reqArg.params.id], false)
-            .resolves({
-                [reqArg.params.id]: regularComments,
-            });
-        stubs.shantytown.getComments
-            .withArgs(reqArg.user, [reqArg.params.id], true)
-            .resolves({
-                [reqArg.params.id]: covidComments,
-            });
 
         // execute
-        await createCovidComment(req, res);
+        await createCovidCommentController(req, res);
 
         // assert
-        expect(stubs.shantytown.getComments).to.have.been.calledTwice;
-        expect(res.send).to.have.been.calledOnceWith({
-            comments: {
-                regular: regularComments,
-                covid: covidComments,
-            },
-        });
+        expect(createCovidCommentStub).to.have.been.calledOnceWith(
+            req.user,
+            req.params.id,
+            reqArg.body,
+        ); expect(res.send).to.have.been.calledOnceWith(comments);
     });
 
     it('returns the response object', async () => {
         // setup
+        createCovidCommentStub.withArgs(reqArg.user, reqArg.params.id, reqArg.body).resolves([{}, {}, {}]);
         const req = mockReq(reqArg);
         const res = mockRes();
 
         // execute
-        const returnValue = await createCovidComment(req, res);
+        const returnValue = await createCovidCommentController(req, res);
 
         // assert
         expect(returnValue).to.be.eql(res);
@@ -208,303 +135,55 @@ describe.only('townController.createCovidComment()', () => {
 
 
     /* *******************
-     * Error cases
+     * Error case
      * **************** */
-
-    describe('if the shantytown id does not match an existing town', () => {
-        let req;
-        let res;
-        let returnValue;
+    describe('En cas de dysfonctionnement du service', () => {
+        let next;
         beforeEach(async () => {
-            // setup
-            req = mockReq(reqArg);
-            res = mockRes();
-            stubs.shantytown.findOne.withArgs(reqArg.user, reqArg.params.id).resolves(null);
-
-            // execute
-            returnValue = await createCovidComment(req, res);
+            next = sinon.stub();
         });
 
-        it('does not try to save the comment in database', () => {
-            expect(stubs.shantytown.createCovidComment).to.not.have.been.called;
-        });
+        it('répond une 404 si le ervice renvoie une exception fetch_failed', async () => {
+            const req = mockReq(reqArg);
+            const res = mockRes();
 
-        it('responds with status 404', () => {
+            createCovidCommentStub.rejects(new ServiceError('fetch_failed', {}));
+            await createCovidCommentController(req, res, next);
             expect(res.status).to.have.been.calledOnceWith(404);
         });
 
-        it('responds with a proper error message', () => {
-            expect(res.send).to.have.been.calledOnceWith({
-                user_message: `Le site #${reqArg.params.id} n'existe pas`,
-                developer_message: `Shantytown #${reqArg.params.id} does not exist`,
-            });
+        it('répond une 400 si le ervice renvoie une exception data_incomplete', async () => {
+            const req = mockReq(reqArg);
+            const res = mockRes();
+
+            createCovidCommentStub.rejects(new ServiceError('data_incomplete', {}));
+            await createCovidCommentController(req, res, next);
+            expect(res.status).to.have.been.calledOnceWith(400);
         });
 
-        it('returns the response object', () => {
-            expect(returnValue).to.be.eql(res);
-        });
-    });
+        it('répond une 500 si le ervice renvoie une exception fetch_failed', async () => {
+            const req = mockReq(reqArg);
+            const res = mockRes();
 
-    // --
-    describe('if fetching the town from database fails', () => {
-        let req;
-        let res;
-        beforeEach(async () => {
-            // setup
-            req = mockReq(reqArg);
-            res = mockRes();
-            stubs.shantytown.findOne.withArgs(reqArg.user, reqArg.params.id).rejects(
-                new Error('Something went wrong'),
-            );
-
-            // execute
-            await createCovidComment(req, res, sinon.stub());
-        });
-
-        it('responds with status 500', () => {
+            createCovidCommentStub.rejects(new ServiceError('write_failed', {}));
+            await createCovidCommentController(req, res, next);
             expect(res.status).to.have.been.calledOnceWith(500);
         });
 
-        it('responds with a proper error message', () => {
+        it('retourne un message d\'erreur générique dans les autres cas d\'erreur', async () => {
+            const req = mockReq(reqArg);
+            const res = mockRes();
+            createCovidCommentStub.rejects(new Error('Une erreur'));
+            await createCovidCommentController(req, res, next);
             expect(res.send).to.have.been.calledOnceWith({
-                user_message: `Une erreur est survenue lors de la vérification de l'existence du site #${reqArg.params.id} en base de données`,
-                developer_message: `Failed fetching shantytown #${reqArg.params.id}`,
-                details: {
-                    error_message: 'Something went wrong',
-                },
-            });
-        });
-    });
-
-    // --
-    Object.keys(metadata).forEach((name) => {
-        describe(`if argument "${name}" is missing`, () => {
-            let req;
-            let res;
-            let returnValue;
-            beforeEach(async () => {
-                // setup
-                delete reqArg.body[name];
-                req = mockReq(reqArg);
-                res = mockRes();
-
-                // execute
-                returnValue = await createCovidComment(req, res);
-            });
-
-            it('responds with status 400', () => {
-                expect(res.status).to.have.been.calledOnceWith(400);
-            });
-
-            it('responds with the proper error message', () => {
-                expect(res.send).to.have.been.calledOnceWith({
-                    user_message: 'Certains champs du formulaire comportent des erreurs',
-                    developer_message: 'Submitted data contains errors',
-                    fields: {
-                        [name]: [`${metadata[name].label} est obligatoire`],
+                success: false,
+                response: {
+                    error: {
+                        user_message: 'Une erreur est survenue pendant l\'écriture du commentaire en base de données',
+                        developer_message: 'Une erreur',
                     },
-                });
-            });
-
-            it('returns the response object', () => {
-                expect(returnValue).to.be.eql(res);
-            });
-        });
-
-        describe(`if argument "${name}" is not of good type`, () => {
-            let req;
-            let res;
-            let returnValue;
-            beforeEach(async () => {
-                // setup
-                reqArg.body[name] = metadata[name].badFormat;
-                req = mockReq(reqArg);
-                res = mockRes();
-
-                // execute
-                returnValue = await createCovidComment(req, res);
-            });
-
-            it('responds with status 400', () => {
-                expect(res.status).to.have.been.calledOnceWith(400);
-            });
-
-            it('responds with the proper error message', () => {
-                expect(res.send).to.have.been.calledOnceWith({
-                    user_message: 'Certains champs du formulaire comportent des erreurs',
-                    developer_message: 'Submitted data contains errors',
-                    fields: {
-                        [name]: [`${metadata[name].label} est obligatoire`],
-                    },
-                });
-            });
-
-            it('returns the response object', () => {
-                expect(returnValue).to.be.eql(res);
-            });
-        });
-    });
-
-    // --
-    describe('if the date is future', () => {
-        let req;
-        let res;
-        beforeEach(async () => {
-            // setup
-            const today = new Date();
-            reqArg.body.date = (new Date(today.getFullYear() + 1, today.getMonth(), today.getDate())).toString();
-            req = mockReq(reqArg);
-            res = mockRes();
-
-            // execute
-            await createCovidComment(req, res);
-        });
-
-        it('responds with status 400', () => {
-            expect(res.status).to.have.been.calledOnceWith(400);
-        });
-
-        it('responds with the proper error message', () => {
-            expect(res.send).to.have.been.calledOnceWith({
-                user_message: 'Certains champs du formulaire comportent des erreurs',
-                developer_message: 'Submitted data contains errors',
-                fields: {
-                    date: ['La date ne peut être future'],
                 },
             });
-        });
-    });
-
-    // --
-    describe('if the date is older than the town\'s declaration date', () => {
-        let req;
-        let res;
-        beforeEach(async () => {
-            // setup
-            reqArg.body.date = (new Date(1900, 0, 1)).toString();
-            req = mockReq(reqArg);
-            res = mockRes();
-
-            // execute
-            await createCovidComment(req, res);
-        });
-
-        it('responds with status 400', () => {
-            expect(res.status).to.have.been.calledOnceWith(400);
-        });
-
-        it('responds with the proper error message', () => {
-            expect(res.send).to.have.been.calledOnceWith({
-                user_message: 'Certains champs du formulaire comportent des erreurs',
-                developer_message: 'Submitted data contains errors',
-                fields: {
-                    date: ['La date ne peut être antérieure à la date d\'installation du site'],
-                },
-            });
-        });
-    });
-
-    // --
-    describe('if the description is empty', () => {
-        let req;
-        let res;
-        beforeEach(async () => {
-            // setup
-            reqArg.body.description = '                 ';
-            req = mockReq(reqArg);
-            res = mockRes();
-
-            // execute
-            await createCovidComment(req, res);
-        });
-
-        it('responds with status 400', () => {
-            expect(res.status).to.have.been.calledOnceWith(400);
-        });
-
-        it('responds with the proper error message', () => {
-            expect(res.send).to.have.been.calledOnceWith({
-                user_message: 'Certains champs du formulaire comportent des erreurs',
-                developer_message: 'Submitted data contains errors',
-                fields: {
-                    description: ['Le commentaire est obligatoire'],
-                },
-            });
-        });
-    });
-
-    // --
-    describe('if saving the comment in database fails', () => {
-        let req;
-        let res;
-        beforeEach(async () => {
-            // setup
-            req = mockReq(reqArg);
-            res = mockRes();
-
-            stubs.shantytown.createCovidComment
-                .withArgs(
-                    req.user,
-                    req.params.id,
-                    Object.assign({}, reqArg.body, {
-                        date: new Date(reqArg.body.date),
-                        description: 'lorem ipsum',
-                    }),
-                )
-                .rejects(new Error('Something went really wrong'));
-
-            // execute
-            await createCovidComment(req, res, sinon.stub());
-        });
-
-        it('responds with status 500', () => {
-            expect(res.status).to.have.been.calledOnceWith(500);
-        });
-
-        it('responds with a proper error message', async () => {
-            expect(res.send).to.have.been.calledOnceWith({
-                user_message: 'Une erreur est survenue lors de l\'écriture du commentaire en base de données',
-                developer_message: `Failed writing a covid comment for shantytown #${reqArg.params.id}`,
-                details: {
-                    error_message: 'Something went really wrong',
-                },
-            });
-        });
-    });
-
-    // --
-    describe('if fetching the refreshed list of comments fails', () => {
-        let req;
-        let res;
-        let returnValue;
-        beforeEach(async () => {
-            // setup
-            req = mockReq(reqArg);
-            res = mockRes();
-
-            stubs.shantytown.getComments
-                .withArgs(reqArg.user, [reqArg.params.id], true)
-                .rejects(new Error('Something went awfully wrong'));
-
-            // execute
-            returnValue = await createCovidComment(req, res);
-        });
-
-        it('responds with status 200', () => {
-            expect(res.status).to.have.been.calledOnceWith(200);
-        });
-
-        it('responds with an empty array', async () => {
-            expect(res.send).to.have.been.calledOnceWith({
-                comments: {
-                    regular: [],
-                    covid: [],
-                },
-            });
-        });
-
-        it('returns the response object', async () => {
-            expect(returnValue).to.be.eql(res);
         });
     });
 });

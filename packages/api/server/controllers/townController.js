@@ -1468,9 +1468,7 @@ module.exports = (models) => {
 >>>>>>> 4a1afea5 ((tests) suppression de logique métier dans townController.js)
 
     // eslint-disable-next-line global-require
-    methods.edit = require('./townController/edit')(
-        models,
-    );
+    methods.edit = require('./townController/edit');
 
     // eslint-disable-next-line global-require
     methods.createHighCovidComment = require('./townController/createHighCovidComment')(
