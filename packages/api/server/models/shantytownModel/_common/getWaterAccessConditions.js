@@ -13,7 +13,6 @@ module.exports = (shantytown) => {
         if (
             !shantytown.waterPotable
             || !shantytown.waterContinuousAccess
-            || !shantytown.waterPublicPoint
             || !shantytown.waterDistance
             || shantytown.waterDistance !== '0-20'
             || shantytown.waterRoadsToCross === null
