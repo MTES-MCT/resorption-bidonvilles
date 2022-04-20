@@ -1,8 +1,7 @@
 /* eslint-disable newline-per-chained-call */
 const { body } = require('express-validator');
-const newUser = require('./common/newUser');
-
 const ALLOWED_TYPES = require('#server/config/contact_request_types');
+const newUser = require('./common/newUser');
 
 module.exports = newUser(
     [

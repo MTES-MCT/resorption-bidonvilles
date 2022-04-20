@@ -1,11 +1,11 @@
 const { sequelize } = require('#db/models');
 const { fromGeoLevelToTableName } = require('#server/utils/geo');
 const userModel = require('#server/models/userModel')();
+const { restrict } = require('#server/utils/permission');
 const getUsenameOf = require('./_common/getUsenameOf');
 const serializeShantytown = require('./_common/serializeShantytown');
 const getDiff = require('./_common/getDiff');
 const SQL = require('./_common/SQL');
-const { restrict } = require('#server/utils/permission');
 
 module.exports = async (user, location, shantytownFilter, numberOfActivities, lastDate, maxDate) => {
     // apply geographic level restrictions

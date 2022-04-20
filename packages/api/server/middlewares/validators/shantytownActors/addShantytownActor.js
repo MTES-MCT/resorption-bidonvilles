@@ -1,10 +1,8 @@
 /* eslint-disable newline-per-chained-call */
 const { body } = require('express-validator');
-const themesValidator = require('./utils/themes');
-
-// models
 const { sequelize } = require('#db/models');
 const userModel = require('#server/models/userModel')(sequelize);
+const themesValidator = require('./utils/themes');
 
 module.exports = [
     body('user_id')
