@@ -5,7 +5,7 @@ module.exports = async (req, res, next) => {
 
     try {
         userNavigationLogsId = await userNavigationLogs.insert(
-            req.body.user_id,
+            req.user.id,
             req.body.page,
         );
     } catch (error) {

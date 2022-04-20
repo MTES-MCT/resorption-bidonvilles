@@ -56,11 +56,7 @@ function hasAcceptedCharte() {
 }
 
 function logNavigation(to) {
-    insertNavigationLog({
-        user_id: store.state.config.configuration.user.id,
-        page: to
-    });
-
+    insertNavigationLog(to.path);
     return true;
 }
 
