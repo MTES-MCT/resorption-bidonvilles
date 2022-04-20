@@ -5,10 +5,10 @@ export default async (fk_user: number, page: String): Promise<number> => {
     // on insère le log
     let logId: number;
     try {
-        logId = await userNavigationLogsModel.insert({
+        logId = await userNavigationLogsModel.insert(
             fk_user,
             page,
-        });
+        );
     } catch (error) {
         throw new ServiceError('insert_failed', error);
     }
