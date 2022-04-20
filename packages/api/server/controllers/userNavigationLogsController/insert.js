@@ -25,7 +25,7 @@ module.exports = async (req, res, next) => {
         return next((error && error.nativeError) || error);
     }
 
-    return res.status(200).send({
+    return res.status(201).send({
         userNavigationLogsId,
     });
 };
