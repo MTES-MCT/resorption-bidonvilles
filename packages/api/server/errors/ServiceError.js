@@ -5,6 +5,7 @@ module.exports = class ServiceError extends Error {
      */
     constructor(code, nativeError) {
         super(nativeError.message, nativeError.fileName, nativeError.lineNumber);
+        Object.setPrototypeOf(this, ServiceError.prototype);
 
         this.code = code;
         this.nativeError = nativeError;

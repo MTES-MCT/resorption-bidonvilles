@@ -1,6 +1,5 @@
 import { Transaction } from "sequelize";
-import { sequelize } from "#db/models";
-
+import * as sequelize from "#db/sequelize";
 
 export default async (fk_user: Number, page: String): Promise<number> => {
     const response = await sequelize.query(
