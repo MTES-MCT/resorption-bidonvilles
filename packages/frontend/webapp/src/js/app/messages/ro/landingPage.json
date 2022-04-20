@@ -1,0 +1,157 @@
+{
+  "header": {
+    "connect": "Pentru a vă conecta",
+    "contact": "Contactați-ne"
+  },
+  "hero": {
+    "title": "Acționăm pentru resorbția de bidonville",
+    "subtitle": "Puneți o întrebare sau solicitați accesul",
+    "review": "platz resorbite"
+  },
+  "firstSection": {
+    "features": {
+      "position": "Găsiți informații utile foarterapid pe site",
+      "actions": "Esențialul acțiunilor disponibil în orice moment",
+      "exchange": "Schimb de informatie rapidă intre participanţi"
+    },
+    "context": {
+      "title_part1": "Platforma digitală ",
+      "title_part2": "Résorption-bidonvilles",
+      "title_part3": "De ce, pentru cine?",
+      "text_1": "Un instrument de informare, partajare și ghidare , platforma oferă o soluție puternică și eficientă pentru resorbția de bidonville.",
+      "text_2": "Acesta permite crearea unei dinamici reale de colaborare, într-un teritoriu si între actorii dedicați obiectivului de resorbția de bidonville."
+    },
+    "before": "Înainte",
+    "after": "După",
+    "feedback": {
+      "title": "Mărturii ale utilizatorilor",
+      "1": {
+        "text": "Este foarte bine pentru că aveți informațiile online, nu vă confruntați cu un tabel Excel cu coduri pe care nu le înțelegeți.",
+        "author": "Prefectura Seine-Saint-Denis"
+      },
+      "2": {
+        "text": "Platforma a făcut informațiile mai accesibile, deoarece tabelul Excelnu era partajat. Cu cât avem mai multeinstrumente de colaborare, cu atât mai bine.",
+        "author": "Orașul Poitiers"
+      },
+      "3": {
+        "text": "Am fost în măsură să direcționez familia unei persoane pe care o acomapaniez la o casă de solidaritate de la locația lor situata într-un bidonville.",
+        "author": "Asociația din Haute-Garonne"
+      }
+    },
+    "video": {
+      "text": "Descoperiți Résorption-bidonvilles în 1 min"
+    }
+  },
+  "firstBanner": {
+    "text": "Actori ai resorbției de bidonville, partajați și faceţi cunoscute acțiunile voastre",
+    "cta": "Solicitaţi accesul"
+  },
+  "secondSection": {
+    "title": "Care este politica de modernizare a mahalalelor?",
+    "data": {
+      "1": {
+        "line1": "Peste",
+        "line2": "300 de platzur",
+        "line3": "în Franța metropolitană"
+      },
+      "2": {
+        "line1": "Peste",
+        "line2": "16 000 de persoane",
+        "line3": "inclusiv 5.000 de minori"
+      },
+      "3": {
+        "line1": "Majoritatea",
+        "line2": "europeni",
+        "line3": "români și bulgari"
+      }
+    },
+    "firstParagraph": {
+      "bold": "In 2018, Guvernul și-a stabilit un obiectiv clar pentru resorbția de bidonville, depășind abordarea centrată pe evacuare, într-o abordare cuprinzătoare care combină integrarea socială, respectarea ordinii publice și prevenirea reinstralarii.",
+      "normal": "În toateteritoriile în cauză, trebuie instituite acțiuni eficiente, umane și pragmatice multi-parteneriale.",
+      "link": "Aflați mai multe despre politica de resorbției de bidonville"
+    },
+    "secondParagraph": {
+      "bold": "Ce este o bidonville?",
+      "normal": "Un bidonville este un teren, un maidan sau o clădire construită care în general e lipsită de servicii de bază (apă, electricitate, gestionarea deșeurilor) și ocupată ilegal de mai multe familii. Un bidonville mai est denumit si „plaț” în limbaj familiar."
+    },
+    "thirdParagraph": "",
+    "video": {
+      "text": "Înțelegerea resorbției de bidonville în 2 minute"
+    },
+    "bilan": {
+      "title": "Acţiunile desfăşurate in cifre",
+      "firstParagraph": {
+        "bold": "Peste 30 de acțiuni desfășurate în 2019 de catre 35 de operatori.",
+        "normal": "Acestea sunt 75% finanțate de stat, 15% de autoritățile locale și 10% din fonduri private sau europene. Echipe de profesioniști însoțesc familiile în bidonville, cladirile dezafectate sau în locuință cuprinzând toate aspectele: sănătate, locuința, ocuparea forței de muncă, educație, stabilizare și securitatea locului."
+      },
+      "figures": {
+        "1": {
+          "text": "16 platz resorbite"
+        },
+        "2": {
+          "text": "8 600 de beneficiari ai acestor actiuni"
+        },
+        "3": {
+          "text": "1 464 de persoane relocate"
+        },
+        "4": {
+          "text": "3 125 elevi"
+        },
+        "5": {
+          "text": "2 000 de beneficiari",
+          "info": "de sprijin medical"
+        },
+        "6": {
+          "text": "1078 contracte de muncă semnate"
+        }
+      },
+      "cta": "Încarcaţi ultimul bilanţ"
+    }
+  },
+  "secondBanner": {
+    "text": "Vecin, cetățean, rezident într-un bidonville... O informaţie? O întrebare? O alertă?",
+    "cta": "Contactaţi-ne"
+  },
+  "thirdSection": {
+    "firstParagraph": {
+      "body": {
+        "text1": "Platforma digitală",
+        "text2": "„resorbția de bidonville”",
+        "text3": "este realizat de Delegația Interministerială privind cazarea și accesul la locuințe",
+        "text4": "Evoluțiile platformei continuă în strânsă colaborare cu utilizatorii săi",
+        "text5": "Doriți să aflați mai multe despre crearea proiectului? Accesați fişa proiectulu",
+        "link1": "pe site-ul oficial: Start-Up de stat"
+      },
+      "items": {
+        "title": "Proiectul a fost câștigătorul mai multor cereri de proiecte :",
+        "1": {
+          "link": "Antreprenor de interes general",
+          "text": "al Programului de investiții de viitor in2019"
+        },
+        "2": {
+          "link": "rogramul Comisiei Europene \"drepturi, cetățenie și egalitate\"",
+          "text": "în primul trimestru al anului 2020"
+        },
+        "3": {
+          "link": "Fonduri de Accelerare pentru Start-up de stat 3",
+          "text": "de la DINUM în aprilie 2020"
+        },
+        "4": {
+          "link": "Fondul de transformare a politicii franceze",
+          "text": "de la DITP în octombrie 2020"
+        }
+      }
+    }
+  },
+  "contactForm": {
+    "email": "E-mailul dumneavoastră",
+    "cta": "Contactaţi-ne"
+  },
+  "newsletter": {
+    "title": "Abonați-vă la newsletter-ul nostru lunar (in franceza)",
+    "text": "Doriți să fiți informat cu privire la știrile platformei, evenimentele, cele mai bune practici în domeniu și știrile pe subiectul mahalalelor? Abonati-va !",
+    "cta": "Mă abonez",
+    "link": "",
+    "viewAll": ""
+  }
+}

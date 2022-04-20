@@ -1,5 +1,5 @@
 /* eslint-disable newline-per-chained-call,no-await-in-loop, no-restricted-syntax */
-require('module-alias/register');
+require('../../module_alias');
 const crypto = require('crypto');
 const { create } = require('#server/models/organizationModel')();
 const { setPermissionOptions } = require('#server/models/userModel')();

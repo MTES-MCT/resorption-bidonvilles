@@ -14,7 +14,7 @@
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
-                    Sauf erreur de notre part, vous n’avez pas encore activé votre lien d’accès à la plateforme <a href="{{var:frontUrl}}" class="link font-italic" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a>.
+                    Sauf erreur de notre part, vous n’avez pas encore activé votre lien d’accès à la plateforme <a href="{{var:wwwUrl}}" class="link font-italic" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a>.
                 </mj-text>
                 <mj-text>
                     Nous vous invitons à l'activer dès maintenant.

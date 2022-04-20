@@ -1,0 +1,160 @@
+{
+  "header": {
+    "connect": "Se connecter",
+    "contact": "Nous contacter"
+  },
+  "hero": {
+    "title": "Agir pour résorber les bidonvilles",
+    "subtitle": "Posez-nous une question ou demandez un accès",
+    "review": "sites résorbés en 2020"
+  },
+  "firstSection": {
+    "features": {
+      "position": "L'information utile sur les sites en un clin d'oeil",
+      "actions": "L’essentiel des actions accessible à tout moment",
+      "exchange": "Des échanges facilités entre les acteurs"
+    },
+    "before": "Avant",
+    "after": "Après",
+    "context": {
+      "title_part1": "La plateforme numérique",
+      "title_part2": "Résorption-bidonvilles",
+      "title_part3": "pourquoi, pour qui ?",
+      "text_1": "Outil d’information, de partage et de pilotage, la plateforme offre une solution performante et efficace pour accélérer la résorption des bidonvilles.",
+      "text_2": "Elle vise la transformation de l’action publique et permet de créer une véritable dynamique collaborative, au sein d’un territoire, entre les acteurs engagés vers l’objectif de résorption."
+    },
+    "feedback": {
+      "title": "Témoignages d'utilisateurs",
+      "1": {
+        "text": "C’est super parce que vous avez l’info en ligne, vous n’êtes pas face à un tableau excel avec des codes que vous ne comprenez pas.",
+        "author": "Chargée de mission en Préfecture de Seine-Saint-Denis"
+      },
+      "2": {
+        "text": "La plateforme a fiabilisé l’information, parce que le tableau Excel n’était pas partagé. Plus on aura des outils collaboratifs, mieux ça sera.",
+        "author": "Responsable hygiène publique à la ville de Poitiers"
+      },
+      "3": {
+        "text": "J’ai pu orienter la famille d’une personne que j’accompagne vers une maison des solidarités à partir de la localisation de leur bidonville.",
+        "author": "Travailleur social au sein d'une association à Toulouse"
+      }
+    },
+    "video": {
+      "text": "Découvrir la plateforme Résorption-bidonvilles en 1 min"
+    }
+  },
+  "firstBanner": {
+    "text": "Acteurs de la résorption des bidonvilles, partagez et faites connaître vos actions",
+    "cta": "Demander un accès"
+  },
+  "secondSection": {
+    "title": "Quelle est la politique de résorption des bidonvilles ?",
+    "data": {
+      "1": {
+        "line1": "Plus de",
+        "line2": "300 bidonvilles",
+        "line3": "en France métropolitaine"
+      },
+      "2": {
+        "line1": "Plus de",
+        "line2": "16 000 personnes",
+        "line3": "dont 5 000 mineurs"
+      },
+      "3": {
+        "line1": "Majoritairement",
+        "line2": "européens",
+        "line3": "Roumains et Bulgares"
+      }
+    },
+    "firstParagraph": {
+      "bold": "Le gouvernement fixe un objectif clair de résorption des bidonvilles en dépassant l’approche centrée sur les évacuations au profit d’une approche globale",
+      "normal": "alliant insertion sociale, respect de l’ordre public et prévention des réinstallations. Dans tous les territoires concernés, des actions multi-partenariales efficaces, humaines et pragmatiques doivent être mises en place.",
+      "link": "En savoir plus sur la politique de résorption des bidonvilles"
+    },
+    "secondParagraph": {
+      "bold": "Qu’est-ce qu’un bidonville ?",
+      "normal": "Un bidonville est un terrain, une friche ou un immeuble bâti généralement dépourvu des services de base (eau, électricité, gestion des déchets) et occupé illégalement par plusieurs familles."
+    },
+    "thirdParagraph": {
+      "bold": "Qu'est-ce qu'une résorption ?",
+      "normal": "Un site est considéré comme résorbé si une solution pérenne en logement ou hébergement est mise en place pour 66 % des habitants du site."
+    },
+    "video": {
+      "text": "Comprendre la résorption des bidonvilles en 2 minutes"
+    },
+    "bilan": {
+      "title": "Les actions en chiffres",
+      "firstParagraph": {
+        "bold": "Plus de 30 actions de résorption des bidonvilles menées en 2019 par 35 opérateurs.",
+        "normal": "Ces actions sont financées à 75 % par l’État, à 15 % par les collectivités territoriales et à 10 % par des fonds privés ou européens. \nLes équipes de professionnels accompagnent les familles sur bidonville, en squat ou dans le logement sur tous les aspects : santé, logement, emploi, éducation, stabilisation et sécurisation du site."
+      },
+      "figures": {
+        "1": {
+          "text": "16 sites résorbés"
+        },
+        "2": {
+          "text": "8600 bénéficiaires"
+        },
+        "3": {
+          "text": "1 464 personnes relogées"
+        },
+        "4": {
+          "text": "3 125 enfants scolarisés"
+        },
+        "5": {
+          "text": "2 000 bénéficiaires",
+          "info": "d'un accompagnement santé"
+        },
+        "6": {
+          "text": "1078 contrats de travail signés"
+        }
+      },
+      "cta": "Télécharger le dernier bilan"
+    }
+  },
+  "secondBanner": {
+    "text": "Voisin, citoyen, habitant d’un bidonville… Une info ? Une question ? Une alerte ?",
+    "cta": "Nous contacter"
+  },
+  "thirdSection": {
+    "firstParagraph": {
+      "body": {
+        "text1": "La plateforme numérique",
+        "text2": "Résorption-bidonvilles",
+        "text3": "est portée par la Délégation Interministérielle à l'hébergement et l'accès au logement",
+        "text4": "Lancée en 2018, elle s'inscrit dans un objectif de transformation de l'action publique et est développée en lien étroit avec ses usagers",
+        "text5": "En savoir plus sur la génèse du projet : rendez-vous sur ",
+        "link1": "le site officiel des start-ups d’Etat"
+      },
+      "items": {
+        "title": "Le projet a été lauréat de plusieurs appels à projet :",
+        "1": {
+          "link": "Entrepreneur d’intérêt général",
+          "text": "du Programme d’investissement d’avenir en 2019"
+        },
+        "2": {
+          "link": "Programme “rights, citizenship and equality”",
+          "text": "de la commission européenne au premier trimestre 2020"
+        },
+        "3": {
+          "link": "Fonds d’accélération des Start-up d’État 3",
+          "text": "de la DINUM en avril 2020"
+        },
+        "4": {
+          "link": "Fonds de transformation de l'action publique",
+          "text": "de la DITP en octobre 2020"
+        }
+      }
+    }
+  },
+  "contactForm": {
+    "email": "Votre email",
+    "cta": "Nous contacter"
+  },
+  "newsletter": {
+    "title": "Abonnez-vous à notre lettre d'information mensuelle",
+    "text": "Vous souhaitez être informé des nouveautés de la plateforme, des évènements, des bonnes pratiques de terrain et de l’actualité sur le sujet des bidonvilles ? Abonnez-vous !",
+    "cta": "Je m'abonne",
+    "link": "Voir la lettre",
+    "viewAll": "Voir toutes les lettres d'information"
+  }
+}

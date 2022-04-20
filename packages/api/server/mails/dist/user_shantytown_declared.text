@@ -1,7 +1,7 @@
 {{var:departementName}} - Un nouveau site a été déclaré
 Bonjour {{var:recipientName}},
 Un nouveau site a été déclaré aujourd’hui à {{var:hour}} sur la plateforme
-Résorption-bidonvilles [{{var:frontUrl}}] par {{var:creatorName}} :
+Résorption-bidonvilles [{{var:webappUrl}}] par {{var:creatorName}} :
 {{var:townFullAddress}} [{{var:townUrl}}]
 Connaissez-vous ce site ? Avez-vous effectué des actions sur ce site ?
 Connectez-vous dès maintenant à la plateforme et participez à la résorption des

@@ -1,4 +1,4 @@
-require('module-alias/register');
+require('../module_alias');
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
 import { version } from '#root/package.json';

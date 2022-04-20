@@ -4,7 +4,7 @@
 <mj-text mj-class='font-bold pt-2'>{{ summary.new_shantytowns_length }} nouveau site</mj-text>
 <mj-raw>{% endif %}</mj-raw>
 <mj-raw>{% for shantytown in summary.new_shantytowns %}</mj-raw>
-<mj-text><a href="{{var:frontUrl}}/site/{{shantytown.id}}?{{var:utm}}-nouveau-site" class="link" target="_blank" rel="noopener noreferrer">{{ shantytown.usename }}, {{ shantytown.city }}</a></mj-text>
+<mj-text><a href="{{var:webappUrl}}/site/{{shantytown.id}}?{{var:utm}}-nouveau-site" class="link" target="_blank" rel="noopener noreferrer">{{ shantytown.usename }}, {{ shantytown.city }}</a></mj-text>
 <mj-raw>{% endfor %}</mj-raw>
 
 <mj-raw>{% if summary.closed_shantytowns_length > 1 %}</mj-raw>
@@ -13,7 +13,7 @@
 <mj-text mj-class='font-bold pt-2'>{{ summary.closed_shantytowns_length }} site fermé</mj-text>
 <mj-raw>{% endif %}</mj-raw>
 <mj-raw>{% for shantytown in summary.closed_shantytowns %}</mj-raw>
-<mj-text><a href="{{var:frontUrl}}/site/{{shantytown.id}}?{{var:utm}}-site-ferme" class="link" target="_blank" rel="noopener noreferrer">{{ shantytown.usename }}, {{ shantytown.city }}</a></mj-text>
+<mj-text><a href="{{var:webappUrl}}/site/{{shantytown.id}}?{{var:utm}}-site-ferme" class="link" target="_blank" rel="noopener noreferrer">{{ shantytown.usename }}, {{ shantytown.city }}</a></mj-text>
 <mj-raw>{% endfor %}</mj-raw>
 
 <mj-raw>{% if summary.updated_shantytowns_length > 1 %}</mj-raw>
@@ -22,7 +22,7 @@
 <mj-text mj-class='font-bold pt-2'>{{ summary.updated_shantytowns_length }} site mis à jour</mj-text>
 <mj-raw>{% endif %}</mj-raw>
 <mj-raw>{% for shantytown in summary.updated_shantytowns %}</mj-raw>
-<mj-text><a href="{{var:frontUrl}}/site/{{shantytown.id}}?{{var:utm}}-site-mis-a-jour" class="link" target="_blank" rel="noopener noreferrer">{{ shantytown.usename }}, {{ shantytown.city }}</a></mj-text>
+<mj-text><a href="{{var:webappUrl}}/site/{{shantytown.id}}?{{var:utm}}-site-mis-a-jour" class="link" target="_blank" rel="noopener noreferrer">{{ shantytown.usename }}, {{ shantytown.city }}</a></mj-text>
 <mj-raw>{% endfor %}</mj-raw>
 
 <mj-raw>{% if summary.new_comments_length > 1 %}</mj-raw>
@@ -31,7 +31,7 @@
 <mj-text mj-class='font-bold pt-2'>{{ summary.new_comments_length }} message dans le journal du site</mj-text>
 <mj-raw>{% endif %}</mj-raw>
 <mj-raw>{% for comment in summary.new_comments %}</mj-raw>
-<mj-text><a href="{{var:frontUrl}}/site/{{comment.shantytownId}}?{{var:utm}}-nouveau-message#message{{comment.id}}" class="link" target="_blank" rel="noopener noreferrer">{{ comment.shantytownUsename }}, {{ comment.city }}</a></mj-text>
+<mj-text><a href="{{var:webappUrl}}/site/{{comment.shantytownId}}?{{var:utm}}-nouveau-message#message{{comment.id}}" class="link" target="_blank" rel="noopener noreferrer">{{ comment.shantytownUsename }}, {{ comment.city }}</a></mj-text>
 <mj-raw>{% endfor %}</mj-raw>
 
 <mj-raw>{% if summary.new_users_length > 1 %}</mj-raw>
@@ -40,7 +40,7 @@
 <mj-text mj-class='font-bold pt-2'>{{ summary.new_users_length }} nouvel utilisateur</mj-text>
 <mj-raw>{% endif %}</mj-raw>
 <mj-raw>{% for user in summary.new_users %}</mj-raw>
-<mj-text><a href="{{var:frontUrl}}/annuaire/{{user.organizationId}}?{{var:utm}}-nouvel-utilisateur" class="link" target="_blank" rel="noopener noreferrer">{{ user.name }}</a></mj-text>
+<mj-text><a href="{{var:webappUrl}}/annuaire/{{user.organizationId}}?{{var:utm}}-nouvel-utilisateur" class="link" target="_blank" rel="noopener noreferrer">{{ user.name }}</a></mj-text>
 <mj-raw>{% endfor %}</mj-raw>
 
 <mj-include path="summary_footer.mjml" />

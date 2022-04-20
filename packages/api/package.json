@@ -1,6 +1,6 @@
 {
   "name": "@resorptionbidonvilles/api",
-  "version": "1.29.5",
+  "version": "1.29.6",
   "description": "API d'Action Bidonvilles",
   "main": "server/index.ts",
   "repository": "git+https://github.com/MTES-MCT/action-bidonvilles.git",
@@ -18,6 +18,7 @@
     "agenda": "^3.1.0",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
     "escape-html": "^1.0.3",
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.16.0",
@@ -41,7 +42,7 @@
     "node-mailjet": "^3.3.1",
     "node-mattermost": "^0.0.1",
     "nodemon": "^2.0.7",
-    "pg": "^8.0",
+    "pg": "^8.7.3",
     "pg-hstore": "^2.3.2",
     "request": "^2.88.0",
     "semver": "^6.3.0",
@@ -84,8 +85,8 @@
     ]
   },
   "scripts": {
-    "db:create": "docker exec rb_api yarn sequelize db:migrate && yarn sequelize db:seed:all",
-    "dev": "ts-node-dev server/index.ts",
+    "db:create": "sequelize db:migrate && sequelize db:seed:all",
+    "dev": "ts-node-dev ./server/index.ts",
     "build": "tsc && tsc-alias && cp -r server/mails/dist dist/server/mails && cp -r assets dist",
     "start": "nodemon dist/server/index.js",
     "test": "mocha --recursive --require ./test/bootstrap.js --bail",
@@ -94,12 +95,5 @@
     "lint": "eslint  --max-warnings=0",
     "lint:all": "eslint  --max-warnings=0 server",
     "emails:build": "node server/mails/build.js"
-  },
-  "_moduleAliases": {
-    "#server": "./server",
-    "#db": "./db",
-    "#fixtures": "./test/fixtures",
-    "#test": "./test",
-    "#root": "."
   }
 }

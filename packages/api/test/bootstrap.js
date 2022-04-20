@@ -1,4 +1,4 @@
-require('module-alias/register');
+require('../module_alias');
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');

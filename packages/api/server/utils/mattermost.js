@@ -1,10 +1,10 @@
 const IncomingWebhook = require('node-mattermost');
 const { mattermost } = require('#server/config');
-const { frontUrl } = require('#server/config');
+const { webappUrl } = require('#server/config');
 
 const formatAddress = town => `${town.address} ${town.name ? `« ${town.name} » ` : ''}`;
 const formatUsername = user => `${user.first_name} ${user.last_name} `;
-const formatTownLink = (townID, text) => `[${text}](${frontUrl}/site/${townID})`;
+const formatTownLink = (townID, text) => `[${text}](${webappUrl}/site/${townID})`;
 
 const formatDate = ((dateToFormat) => {
     const day = dateToFormat.getDate();
@@ -114,7 +114,7 @@ async function triggerNewUserAlert(user) {
     const newUserAlert = new IncomingWebhook(mattermost);
 
     const username = formatUsername(user);
-    const usernameLink = `<${frontUrl}/nouvel-utilisateur/${user.id}|${username}>`;
+    const usernameLink = `<${webappUrl}/nouvel-utilisateur/${user.id}|${username}>`;
 
     const { location } = user.organization;
 
@@ -163,7 +163,7 @@ async function triggerActorInvitedAlert(town, host, invited) {
     const townLink = formatTownLink(town.id, town.usename);
 
     const username = formatUsername(host);
-    const usernameLink = `<${frontUrl}/nouvel-utilisateur/${host.id}|${username}>`;
+    const usernameLink = `<${webappUrl}/nouvel-utilisateur/${host.id}|${username}>`;
 
     const mattermostMessage = {
         channel: '#notif-invitations-intervenants',

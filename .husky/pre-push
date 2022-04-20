@@ -1,5 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-yarn lerna run --scope @resorptionbidonvilles/api test
-yarn lerna run test:unit
+yarn test:unit

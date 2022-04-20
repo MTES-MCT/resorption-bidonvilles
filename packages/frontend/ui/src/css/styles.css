@@ -1,0 +1,88 @@
+@tailwind base;
+
+@font-face {
+    font-family: Marianne;
+    font-weight: 700;
+    src: url("../fonts/Marianne-Bold.otf") format("opentype");
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Marianne;
+    font-weight: 400;
+    src: url("../fonts/Marianne-Regular.otf") format("opentype");
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Marianne;
+    font-weight: 300;
+    src: url("../fonts/Marianne-Light.otf") format("opentype");
+    font-display: swap;
+}
+
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        @apply text-size-md font-body font-normal text-G700 overflow-y-scroll
+    }
+}
+
+@layer utilities {
+    .text-display-xl {
+        @apply text-size-display-xl
+    }
+
+    .text-display-lg {
+        @apply text-size-display-lg
+    }
+
+    .text-display-md {
+        @apply text-size-display-md
+    }
+
+    .text-display-sm {
+        @apply text-size-display-sm
+    }
+
+    .text-display-xs {
+        @apply text-size-display-xs
+    }
+
+    .text-xl {
+        @apply text-size-xl
+    }
+
+    .text-lg {
+        @apply text-size-lg
+    }
+
+    .text-md {
+        @apply text-size-md
+    }
+
+    .text-sm {
+        @apply text-size-sm
+    }
+
+    .text-xs {
+        @apply text-size-xs font-light
+    }
+
+    .link {
+        @apply text-blueFrance underline
+    }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity .5s;
+}
+
+/* .fade-leave-active below version 2.1.8 */
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
+}

@@ -1,4 +1,4 @@
-const { backUrl, frontUrl } = require('../../server/config');
+const { backUrl, webappUrl } = require('../../server/config');
 
 const changelog = {
     app_version: '1.8.0',
@@ -11,7 +11,7 @@ const changelog = {
         },
         {
             title: 'Retrouvez la fiche "Recommandations vaccination personnes en situation de grande précarité" du Ministère des Solidarités et de la Santé sur l\'onglet Covid-19',
-            description: `<p><a href="${frontUrl}/doc/covid-19-recommandations-vaccination.pdf" class="link">Recommandations vaccination personnes en situation de grande précarité</a></p>`,
+            description: `<p><a href="${webappUrl}/doc/covid-19-recommandations-vaccination.pdf" class="link">Recommandations vaccination personnes en situation de grande précarité</a></p>`,
             image: `${backUrl}/assets/changelog/1.8.0/item_2.jpg`,
         },
     ],

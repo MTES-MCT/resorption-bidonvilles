@@ -22,7 +22,6 @@ jobs:
           username: ${{ secrets.PREPROD_USERNAME }}
           key: ${{ secrets.PREPROD_KEY }}
           port: ${{ secrets.PREPROD_PORT }}
-          # fingerprint: ${{ secrets.PREPROD_FINGERPRINT }}
           script: |
             cd /srv/resorption-bidonvilles
             scripts/deploy.sh ${{ github.event.inputs.branch }} ${{ github.event.inputs.tag }}
