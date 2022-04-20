@@ -8,8 +8,16 @@ chai.use(sinonChai);
 
 const { expect } = chai;
 const ServiceError = require('#server/errors/ServiceError');
+const shantytownCommentModel = require('#server/models/shantytownCommentModel');
+const shantytownModel = require('#server/models/shantytownModel');
+const userModel = require('#server/models/userModel');
+const mattermostUtils = require('#server/utils/mattermost');
+const mails = require('#server/mails/mails');
+
 
 const sequelizeStub = new Sequelize();
+
+const createComment = require('#server/services/shantytownComment/createComment');
 
 const { serialized: fakeUser } = require('#test/utils/user');
 const { serialized: fakeComment } = require('#test/utils/shantytownComment');
@@ -23,36 +31,16 @@ describe.only('services/shantytownComment', () => {
         getShantytownWatchers: undefined,
         sendMail: undefined,
     };
-    let createComment;
     beforeEach(() => {
-        dependencies.getComments = sinon.stub();
-        dependencies.getShantytownWatchers = sinon.stub();
-        dependencies.createComment = sinon.stub();
-        dependencies.findOneComment = sinon.stub();
-        dependencies.triggerNewComment = sinon.stub();
-        dependencies.sendMail = sinon.stub();
-
-        createComment = rewiremock.proxy('#server/services/shantytownComment/createComment', {
-            '#db/sequelize': {
-                sequelize: sequelizeStub,
-            },
-            '#server/models/shantytownModel': () => ({
-                getComments: dependencies.getComments,
-            }),
-            '#server/models/userModel': () => ({
-                getShantytownWatchers: dependencies.getShantytownWatchers,
-            }),
-            '#server/models/shantytownCommentModel': () => ({
-                create: dependencies.createComment,
-                findOne: dependencies.findOneComment,
-            }),
-            '#server/utils/mattermost': {
-                triggerNewComment: dependencies.triggerNewComment,
-            },
-            '#server/mails/mails': {
-                sendUserNewComment: dependencies.sendMail,
-            },
-        });
+        dependencies.getComments = sinon.stub(shantytownModel, 'getComments');
+        dependencies.getShantytownWatchers = sinon.stub(userModel, 'getShantytownWatchers');
+        dependencies.createComment = sinon.stub(shantytownCommentModel, 'create');
+        dependencies.findOneComment = sinon.stub(shantytownCommentModel, 'findOne');
+        dependencies.triggerNewComment = sinon.stub(mattermostUtils, 'triggerNewComment');
+        dependencies.sendMail = sinon.stub(mails, 'sendUserNewComment');
+    });
+    afterEach(() => {
+        sinon.restore();
     });
 
     describe('createComment()', () => {
