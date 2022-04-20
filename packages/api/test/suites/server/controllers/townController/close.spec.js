@@ -1,41 +1,21 @@
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const proxyquire = require('proxyquire');
 const { mockReq, mockRes } = require('sinon-express-mock');
 const { serialized: generateUser } = require('#test/utils/user');
-const { default: generateWatcher } = require('#test/utils/shantytownWatcher');
 
-const sequelize = require('#db/sequelize');
-const models = require('#server/models')(sequelize);
-const userModel = require('#server/models/userModel');
-const mattermostUtils = require('#server/utils/mattermost');
-const mails = require('#server/mails/mails');
+const shantytownService = require('#server/services/shantytown');
 
-const { close } = proxyquire('#server/controllers/townController', {
-    '#server/models/userModel': () => userModel,
-})(models);
+const closeStub = sinon.stub(shantytownService, 'close');
+
+const closeController = require('#server/controllers/townController/close');
 
 const { expect } = chai;
 chai.use(sinonChai);
 
 describe.only('townController.close()', () => {
-    const dependencies = {
-        shantytownUpdate: undefined,
-        shantytownFindOne: undefined,
-        triggerShantytownCloseAlert: undefined,
-        getLocationWatchers: undefined,
-        sendUserShantytownClosed: undefined,
-    };
-    beforeEach(() => {
-        dependencies.shantytownUpdate = sinon.stub(models.shantytown, 'update');
-        dependencies.shantytownFindOne = sinon.stub(models.shantytown, 'findOne');
-        dependencies.triggerShantytownCloseAlert = sinon.stub(mattermostUtils, 'triggerShantytownCloseAlert');
-        dependencies.getLocationWatchers = sinon.stub(userModel, 'getLocationWatchers');
-        dependencies.sendUserShantytownClosed = sinon.stub(mails, 'sendUserShantytownClosed');
-    });
     afterEach(() => {
-        Object.values(dependencies).forEach(stub => stub && stub.restore());
+        closeStub.restore();
     });
 
     describe('Avec un input valide', () => {
@@ -84,68 +64,35 @@ describe.only('townController.close()', () => {
             };
 
             output = {
-                watchers: [
-                    generateWatcher(),
-                    generateWatcher({ user_id: 3 }),
-                    generateWatcher({ user_id: 4 }),
-                ],
-                shantytown: {
-                    id: 1,
-                    ...location,
-                    closedAt: input.body.closed_at.getTime() / 1000,
-                }, // @todo: remplacer par une donnée générée via utils/shantytown dès que cet utils sera mergé dans develop...
-            };
+                id: 1,
+                ...location,
+                closedAt: input.body.closed_at.getTime() / 1000,
+            };// @todo: remplacer par une donnée générée via utils/shantytown dès que cet utils sera mergé dans develop...
 
-            dependencies.getLocationWatchers
-                .withArgs({ type: 'city', ...location }, true)
-                .resolves(output.watchers);
-            dependencies.shantytownFindOne
-                .withArgs(input.user, 1)
-                .resolves(output.shantytown);
+            closeStub.resolves(output);
 
             res = mockRes();
-            await close(mockReq(input), res);
+            await closeController(mockReq(input), res);
         });
 
-        it('met à jour le site', async () => {
-            expect(dependencies.shantytownUpdate).to.have.been.calledOnceWithExactly(
+        it('fait appel au service shantytown/close', async () => {
+            expect(closeStub).to.have.been.calledOnceWithExactly(
                 input.user,
-                1,
-                {
-                    closed_at: input.body.closed_at,
-                    closed_with_solutions: input.body.closed_with_solutions,
-                    status: input.body.status,
-                    closing_solutions: input.body.solutions,
-                },
+                input.body,
             );
         });
 
-        it('envoie une alerte Mattermost', () => {
-            expect(dependencies.triggerShantytownCloseAlert).to.have.been.calledOnce;
-        });
-
-        it('envoie une notification mél à tous les watchers, excepté l\'utilisateur courant', () => {
-            expect(dependencies.sendUserShantytownClosed).to.have.been.calledWith(
-                output.watchers[1],
-                sinon.match.any,
-            );
-            expect(dependencies.sendUserShantytownClosed).to.have.been.calledWith(
-                output.watchers[2],
-                sinon.match.any,
-            );
-            expect(dependencies.sendUserShantytownClosed).to.have.been.callCount(2);
-        });
 
         it('répond une 200', () => {
             expect(res.status).to.have.been.calledOnceWith(200);
         });
 
         it('retourne le site en question mis à jour', () => {
-            expect(res.send).to.have.been.calledOnceWith(output.shantytown);
+            expect(res.send).to.have.been.calledOnceWith(output);
         });
     });
 
-    describe('En cas de dysfonctionnement de la requête de mise à jour du site', () => {
+    describe('En cas de dysfonctionnement du service', () => {
         let res;
         let next;
         beforeEach(async () => {
@@ -174,11 +121,11 @@ describe.only('townController.close()', () => {
                 user: generateUser(),
             };
 
-            dependencies.shantytownUpdate.rejects(new Error('Une erreur'));
+            closeStub.rejects(new Error('Une erreur'));
 
             res = mockRes();
             next = sinon.stub();
-            await close(mockReq(input), res, next);
+            await closeController(mockReq(input), res, next);
         });
 
         it('répond une 500', () => {
