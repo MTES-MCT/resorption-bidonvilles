@@ -6,7 +6,7 @@ const organizationCategoryModel = require('#server/models/organizationCategoryMo
 const organizationTypeModel = require('#server/models/organizationTypeModel')(sequelize);
 const organizationModel = require('#server/models/organizationModel')(sequelize);
 const departementModel = require('#server/models/departementModel')(sequelize);
-const userModel = require('#server/models/userModel')(sequelize);
+const userModel = require('#server/models/userModel');
 
 module.exports = (additionalValidators = [], isAUserCreationCallback = (() => true)) => ([
     ...additionalValidators,

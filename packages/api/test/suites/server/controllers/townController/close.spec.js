@@ -8,7 +8,7 @@ const { default: generateWatcher } = require('#test/utils/shantytownWatcher');
 
 const sequelize = require('#db/sequelize');
 const models = require('#server/models')(sequelize);
-const userModel = require('#server/models/userModel')(sequelize);
+const userModel = require('#server/models/userModel');
 const mattermostUtils = require('#server/utils/mattermost');
 const mails = require('#server/mails/mails');
 

@@ -23,7 +23,7 @@ const setPermissionOptions = require('./setPermissionOptions');
 const update = require('./update');
 const upgradeLocalAdmin = require('./upgradeLocalAdmin');
 
-module.exports = () => ({
+module.exports = {
     create,
     deactivate,
     delete: deleteUser,
@@ -48,4 +48,4 @@ module.exports = () => ({
     setPermissionOptions,
     update,
     upgradeLocalAdmin,
-});
+};

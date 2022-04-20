@@ -1,5 +1,5 @@
 const sequelize = require('#db/sequelize');
-const userModel = require('#server/models/userModel')(sequelize);
+const userModel = require('#server/models/userModel');
 const organizationModel = require('#server/models/organizationModel')(sequelize);
 const organizationTypeModel = require('#server/models/organizationTypeModel')(sequelize);
 const { generateSalt } = require('#server/utils/auth');

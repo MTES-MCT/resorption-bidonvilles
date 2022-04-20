@@ -4,6 +4,8 @@ const sequelize = require('#db/sequelize');
 
 const { addAttachments, removeAttachments } = require('#server/models/permissionModel')();
 const { listExport } = require('#server/models/planModel')();
+const shantytownModel = require('#server/models/shantytownModel');
+
 
 function sanitize(data) {
     const sanitizedData = {};
@@ -631,7 +633,7 @@ module.exports = models => ({
                     addError('locationShantytowns', 'Vous devez sélectionner au moins un site');
                 } else {
                     try {
-                        const ids = await models.shantytown.findAll(req.user, [
+                        const ids = await shantytownModel.findAll(req.user, [
                             {
                                 shantytown_id: planData.locationShantytowns,
                             },

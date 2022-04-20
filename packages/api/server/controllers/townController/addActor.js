@@ -5,7 +5,7 @@ const { triggerDeclaredActor, triggerInvitedActor } = require('#server/utils/mat
 const {
     sendUserShantytownActorNotification,
 } = require('#server/mails/mails');
-const { formatName } = require('#server/models/userModel')(sequelize);
+const { formatName } = require('#server/models/userModel');
 
 module.exports = async (req, res, next) => {
     // if the actor to be added is the current user, proceed

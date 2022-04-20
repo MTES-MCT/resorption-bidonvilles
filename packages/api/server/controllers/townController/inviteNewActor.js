@@ -3,7 +3,7 @@ const { triggerActorInvitedAlert } = require('#server/utils/mattermost');
 const {
     sendUserShantytownActorInvitation,
 } = require('#server/mails/mails');
-const { formatName } = require('#server/models/userModel')();
+const { formatName } = require('#server/models/userModel');
 
 module.exports = () => async (req, res, next) => {
     try {
