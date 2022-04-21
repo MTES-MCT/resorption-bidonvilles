@@ -1,11 +1,12 @@
-FROM node:16-alpine AS dependencies
+###
+# BUILD STAGE
+###
+FROM node:16-alpine AS build
 ENV NODE_ENV production
 
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-# libintl is needed by gettext
-# gettext provides ensubst binary (used to inject env vars in some config files)
 # python3, make, and g++ are needed for building node-gyp (itself required by a bunch of our dependencies)
-RUN apk update && apk add --no-cache python3 make g++ gettext libintl libc6-compat
+RUN apk update && apk add --no-cache python3 make g++ libc6-compat
 
 RUN mkdir -p \
     /home/node/app/ \
@@ -33,9 +34,24 @@ USER node
 WORKDIR /home/node/app/packages/frontend/www
 RUN yarn www:build
 
+###
+# PRODUCTION STAGE
+###
+FROM node:16-alpine AS production
+ENV NODE_ENV production
 ENV HOST=0.0.0.0
-ENV PORT=80
 
-EXPOSE 80
+# libintl is needed by gettext
+# gettext provides ensubst binary (used to inject env vars in config files)
+RUN apk update && apk add --no-cache gettext libintl
 
-ENTRYPOINT [ "/bin/sh", "/home/node/app/packages/frontend/www/entrypoint.sh" ]
+RUN mkdir -p \
+    /home/node/app/ \
+    && chown -R node:node /home/node/app/
+USER node
+
+WORKDIR /home/node/app/
+COPY --chown=node:node ./packages/frontend/www/entrypoint.sh ./
+COPY --from=build --chown=node:node /home/node/app/packages/frontend/www/.output ./.output
+
+ENTRYPOINT [ "/bin/sh", "/home/node/app/entrypoint.sh" ]
