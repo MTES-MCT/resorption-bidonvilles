@@ -163,11 +163,7 @@ module.exports = (models) => {
 
         async delete(req, res, next) {
             // check if the town exists
-            const town = await shantytownModel.findOne({
-                where: {
-                    shantytown_id: req.params.id,
-                },
-            });
+            const town = await shantytownModel.findOne(req.user, req.params.id);
 
             if (town === null) {
                 return res.status(400).send({
