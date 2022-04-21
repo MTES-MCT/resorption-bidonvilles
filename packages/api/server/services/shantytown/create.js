@@ -1,9 +1,8 @@
-const sequelize = require('#db/sequelize');
-const shantytownModel = require('#server/models/shantytownModel')(sequelize);
-const socialOriginModel = require('#server/models/socialOriginModel')(sequelize);
+const shantytownModel = require('#server/models/shantytownModel')();
+const socialOriginModel = require('#server/models/socialOriginModel')();
 const { mattermost } = require('#server/config');
 const { triggerShantytownCreationAlert } = require('#server/utils/mattermost');
-const { getLocationWatchers } = require('#server/models/userModel')(sequelize);
+const { getLocationWatchers } = require('#server/models/userModel')();
 const { sendUserShantytownDeclared } = require('#server/mails/mails');
 
 module.exports = async (townData, user) => {
