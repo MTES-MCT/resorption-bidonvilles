@@ -1555,6 +1555,8 @@ module.exports = (models) => {
         models,
     );
 
+    // eslint-disable-next-line global-require
+    methods.exportOne = require('./townController/exportOne');
 
     return methods;
 };
