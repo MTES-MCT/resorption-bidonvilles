@@ -5,6 +5,7 @@ const close = require('./close');
 const deleteTown = require('./deleteTown');
 const deleteComment = require('./deleteComment');
 const exportTown = require('./export');
+const exportOne = require('./exportOne');
 const createCovidComment = require('./createCovidComment');
 const fixClosedStatus = require('./fixClosedStatus');
 const edit = require('./edit');
@@ -28,6 +29,7 @@ module.exports = {
     deleteTown,
     deleteComment,
     exportTown,
+    exportOne,
     createCovidComment,
     fixClosedStatus,
     edit,
