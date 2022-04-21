@@ -1,5 +1,6 @@
 const VERSION = process.env.APP_VERSION;
-const VUE_APP_WEBAPP_HOST = process.env.VUE_APP_WEBAPP_HOST || "${VUE_APP_WEBAPP_HOST}";
+const VUE_APP_WEBAPP_HOST =
+    process.env.VUE_APP_WEBAPP_HOST || "${VUE_APP_WEBAPP_HOST}";
 
 module.exports = {
     VUE_APP_WWW_URL: process.env.VUE_APP_WWW_URL || "${VUE_APP_WWW_URL}",

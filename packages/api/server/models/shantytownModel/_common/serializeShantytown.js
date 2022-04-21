@@ -1,7 +1,7 @@
+const { can } = require('#server/utils/permission');
 const getAddressSimpleOf = require('./getAddressSimpleOf');
 const getUsenameOf = require('./getUsenameOf');
 const getWaterAccessConditions = require('./getWaterAccessConditions');
-const { can } = require('#server/utils/permission');
 
 function fromDateToTimestamp(date) {
     return date !== null ? (new Date(`${date}T00:00:00`).getTime() / 1000) : null;

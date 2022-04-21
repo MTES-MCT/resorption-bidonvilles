@@ -1,6 +1,6 @@
 const { param } = require('express-validator');
-const selfUserIdValidator = require('./utils/selfUserId');
 const ACTOR_THEMES = require('#server/config/shantytown_actor_themes');
+const selfUserIdValidator = require('./utils/selfUserId');
 
 const ACTOR_THEME_IDS = Object.keys(ACTOR_THEMES);
 

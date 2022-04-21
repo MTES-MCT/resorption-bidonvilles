@@ -2,7 +2,7 @@
   "packageManager": "yarn@3.2.0",
   "name": "@resorptionbidonvilles/fullstack",
   "description": "Dépôt fullstack de la plateforme Résorption Bidonvilles, par la DIHAL",
-  "version": "1.29.6",
+  "version": "1.30.0",
   "license": "AGPL-3.0-or-later",
   "workspaces": [
     "packages/api",
@@ -10,7 +10,8 @@
   ],
   "devDependencies": {
     "@vue/cli-service": "^5.0.4",
-    "husky": "^6.0.0"
+    "husky": "^6.0.0",
+    "node-gyp": "^9.0.0"
   },
   "scripts": {
     "prepare": "husky install",

@@ -1,8 +1,8 @@
 const { sequelize } = require('#db/models');
-const decomposeForDiagramm = require('./_common/decomposeForDiagramm');
-const getArrayOfDates = require('./_common/getArrayOfDates');
 const { restrict } = require('#server/utils/permission');
 const { fromGeoLevelToTableName } = require('#server/utils/geo');
+const decomposeForDiagramm = require('./_common/decomposeForDiagramm');
+const getArrayOfDates = require('./_common/getArrayOfDates');
 
 const joins = [
     { table: 'cities', on: 'shantytowns.fk_city = cities.code' },

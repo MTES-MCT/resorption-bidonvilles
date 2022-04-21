@@ -1,7 +1,7 @@
 const { sequelize } = require('#db/models');
 const stringifyWhereClause = require('#server/models/_common/stringifyWhereClause');
-const getUsenameOf = require('./_common/getUsenameOf');
 const { where } = require('#server/utils/permission');
+const getUsenameOf = require('./_common/getUsenameOf');
 
 module.exports = async (user, latitude, longitude, distance, closed = false) => {
     const replacements = {};

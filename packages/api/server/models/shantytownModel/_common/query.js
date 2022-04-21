@@ -2,11 +2,11 @@ const { sequelize } = require('#db/models');
 const shantytownActorModel = require('#server/models/shantytownActorModel')();
 const planShantytownModel = require('#server/models/planShantytownModel')();
 const stringifyWhereClause = require('#server/models/_common/stringifyWhereClause');
+const { where: pWhere } = require('#server/utils/permission');
 const getComments = require('./getComments');
 const serializeShantytown = require('./serializeShantytown');
 const getDiff = require('./getDiff');
 const SQL = require('./SQL');
-const { where: pWhere } = require('#server/utils/permission');
 
 function getBaseSql(table, whereClause = null, order = null) {
     const tables = {

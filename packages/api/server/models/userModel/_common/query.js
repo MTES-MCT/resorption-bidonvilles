@@ -1,8 +1,8 @@
 const { sequelize } = require('#db/models');
 const charteEngagementModel = require('#server/models/charteEngagementModel')();
 const permissionModel = require('#server/models/permissionModel')();
-const serializeUser = require('./serializeUser');
 const { where: fWhere } = require('#server/utils/permission');
+const serializeUser = require('./serializeUser');
 
 module.exports = async (where = [], filters, user = null, feature, transaction) => {
     const replacements = {};
