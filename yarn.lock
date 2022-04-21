@@ -3029,6 +3029,7 @@ __metadata:
   dependencies:
     "@vue/cli-service": ^5.0.4
     husky: ^6.0.0
+    node-gyp: ^9.0.0
   languageName: unknown
   linkType: soft
 
@@ -21183,7 +21184,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-gyp@npm:latest":
+"node-gyp@npm:^9.0.0, node-gyp@npm:latest":
   version: 9.0.0
   resolution: "node-gyp@npm:9.0.0"
   dependencies:
