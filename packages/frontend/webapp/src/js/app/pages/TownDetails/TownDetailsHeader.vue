@@ -66,6 +66,14 @@
                 >Fermer le site</Button
             >
             <Button
+                icon="file-excel"
+                iconPosition="left"
+                variant="primary"
+                class="mr-8"
+                @click="generateExport"
+                >Exporter</Button
+            >
+            <Button
                 data-cy="updateTown"
                 variant="primary"
                 class="mr-8"
@@ -111,6 +119,7 @@
 <script>
 import { mapGetters } from "vuex";
 import ResorptionTargetTag from "#app/components/ResorptionTargetTag/ResorptionTargetTag.vue";
+import { getExports } from "#helpers/api/town";
 
 export default {
     props: {
@@ -139,6 +148,9 @@ export default {
         },
         routeToUpdate() {
             this.$router.push(`/site/${this.town.id}/mise-a-jour`);
+        },
+        generateExport() {
+            getExports(this.town.id);
         }
     },
     computed: {
