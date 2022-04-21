@@ -6,11 +6,11 @@ module.exports = async ({
     await sequelize.query(
         `INSERT INTO stats_directory_views(
             organization, 
-            viewed_by,
+            viewed_by
         ) VALUES (
             :organization, 
-            :viewed_by,,
-        ) RETURNING user_access_id AS id`, {
+            :viewed_by
+        )`, {
             replacements: {
                 organization,
                 viewed_by,
