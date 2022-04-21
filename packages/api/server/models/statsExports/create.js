@@ -10,15 +10,15 @@ module.exports = async ({
             fk_epci,
             fk_city,
             closed_shantytowns,
-            exported_by,
+            exported_by
         ) VALUES (
             :fk_region,
             :fk_departement,
             :fk_epci,
             :fk_city,
             :closed_shantytowns,
-            :exported_by,
-        ) RETURNING user_access_id AS id`, {
+            :exported_by
+        )`, {
             replacements: {
                 fk_region,
                 fk_departement,
