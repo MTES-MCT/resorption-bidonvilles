@@ -2,10 +2,13 @@
 const { body } = require('express-validator');
 const sequelize = require('#db/sequelize');
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 const themesValidator = require('./utils/themes');
 >>>>>>> 2ada4146 ((1396) utilisation de #db/sequelize)
+=======
+>>>>>>> 1d277352 ((1396) feed: fix lint errors)
 // models
 const userModel = require('#server/models/userModel')(sequelize);
 const themesValidator = require('./utils/themes');
