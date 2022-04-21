@@ -1,7 +1,17 @@
 const shantytownModel = require('#server/models/shantytownModel');
+const ServiceError = require('#server/errors/ServiceError');
 
 
 module.exports = async (user) => {
-    const shantytowns = await shantytownModel.findAll(user, [], 'list');
+    let shantytowns;
+    try {
+        shantytowns = await shantytownModel.findAll(user, [], 'list');
+    } catch (error) {
+        throw new ServiceError('fetch_failed', {
+            developer_message: 'Failed to fetch towns',
+            user_message: 'Une erreur est survenue pendant la récupération des sites en base de données',
+        });
+    }
+
     return shantytowns;
 };

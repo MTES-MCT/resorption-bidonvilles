@@ -1,5 +1,5 @@
 const userModel = require('#server/models/userModel');
-const { sendUserShantytownClosed } = require('#server/mails/mails');
+const mails = require('#server/mails/mails');
 
 module.exports = async (shantytown, updatedTown, user) => {
     const {
@@ -15,7 +15,7 @@ module.exports = async (shantytown, updatedTown, user) => {
     watchers
         .filter(({ user_id }) => user_id !== user.id) // do not send an email to the user who closed the town
         .forEach((watcher) => {
-            sendUserShantytownClosed(watcher, {
+            mails.sendUserShantytownClosed(watcher, {
                 variables: {
                     departement,
                     shantytown: updatedTown,
