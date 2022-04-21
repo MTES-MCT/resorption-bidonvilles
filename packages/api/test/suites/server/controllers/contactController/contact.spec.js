@@ -18,6 +18,7 @@ const userService = require('#server/services/userService');
 const mailService = require('#server/services/mailService');
 const agenda = require('#server/loaders/agendaLoader');
 
+// eslint-disable-next-line no-unused-vars
 const agendaStub = sinon.stub(agenda, 'getAgenda');
 const accessRequestService = require('#server/services/accessRequest/accessRequestService');
 
