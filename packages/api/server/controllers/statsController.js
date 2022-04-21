@@ -146,10 +146,10 @@ module.exports = models => ({
         }
 
         try {
-            await statsDirectoryViewsModel.create({
-                organization: organizationId,
-                viewed_by: req.user.id,
-            });
+            await statsDirectoryViewsModel.create(
+                organizationId,
+                req.user.id,
+            );
         } catch (error) {
             res.status(500).send({
                 success: false,
