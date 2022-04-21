@@ -1,9 +1,8 @@
 const sequelize = require('#db/sequelize');
 
-module.exports = async (townData) => {
+module.exports = async (townData, transaction = undefined) => {
     const result = await sequelize.query(
         `INSERT INTO shantytowns(
-            shantytown_id,
             latitude,
             longitude,
             address,
@@ -67,11 +66,9 @@ module.exports = async (townData) => {
             fire_prevention_site_accessible,
             fire_prevention_devices,
             fire_prevention_comments,
-            resorption_target,
             is_reinstallation,
             reinstallation_comments
         ) VALUES (
-            :shantytown_id,
             :latitude,
             :longitude,
             :address,
@@ -135,12 +132,11 @@ module.exports = async (townData) => {
             :fire_prevention_site_accessible,
             :fire_prevention_devices,
             :fire_prevention_comments,
-            :resorption_target,
             :is_reinstallation,
             :reinstallation_comments
         ) RETURNING shantytown_id AS id`, {
+            transaction,
             replacements: {
-                shantytown_id: townData.id || null,
                 latitude: townData.latitude,
                 longitude: townData.longitude,
                 address: townData.address,
@@ -204,7 +200,6 @@ module.exports = async (townData) => {
                 fire_prevention_site_accessible: townData.firePreventionSiteAccessible || null,
                 fire_prevention_devices: townData.firePreventionDevices || null,
                 fire_prevention_comments: townData.firePreventionComments || null,
-                resorption_target: townData.resorption_target || null,
                 is_reinstallation: townData.isReinstallation || null,
                 reinstallation_comments: townData.reinstallationComments || null,
             },

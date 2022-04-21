@@ -1,3 +1,4 @@
+const sequelize = require('#db/sequelize');
 const shantytownModel = require('#server/models/shantytownModel')();
 const socialOriginModel = require('#server/models/socialOriginModel')();
 const { mattermost } = require('#server/config');
@@ -6,6 +7,8 @@ const { getLocationWatchers } = require('#server/models/userModel')();
 const { sendUserShantytownDeclared } = require('#server/mails/mails');
 
 module.exports = async (townData, user) => {
+    const transaction = await sequelize.transaction();
+
     const baseTown = {
         name: townData.name,
         latitude: townData.latitude,
@@ -93,11 +96,14 @@ module.exports = async (townData, user) => {
                 }
                 : {},
         ),
+        transaction,
     );
 
     if (townData.social_origins.length > 0) {
-        townData.social_origins.forEach(async socialOrigin => socialOriginModel.create(shantytown_id, socialOrigin));
+        await socialOriginModel.create(shantytown_id, townData.social_origins, transaction);
     }
+
+    await transaction.commit();
 
     const town = shantytownModel.findOne(user, shantytown_id);
 
