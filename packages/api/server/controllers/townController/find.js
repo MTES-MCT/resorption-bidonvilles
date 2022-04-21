@@ -1,10 +1,10 @@
-const { find } = require('#server/services/shantytown');
+const shantytownService = require('#server/services/shantytown');
 
 
 module.exports = async (req, res, next) => {
     let town;
     try {
-        town = await find(req.user, req.params.id);
+        town = await shantytownService.find(req.user, req.params.id);
     } catch (error) {
         if (error && error.code === 'fetch_failed') {
             return res.status(404).send({
