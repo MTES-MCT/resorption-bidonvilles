@@ -1,7 +1,7 @@
 const create = require('./create');
 const count = require('./count');
 
-module.exports = () => ({
+module.exports = {
     create,
     count,
-});
+};
