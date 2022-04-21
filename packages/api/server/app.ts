@@ -47,7 +47,7 @@ export default {
         });
 
         // agenda
-        const agenda = loaders.agenda();
+        const agenda = loaders.agenda.getAgenda();
         loaders.agendaJobs(agenda);
 
         try {

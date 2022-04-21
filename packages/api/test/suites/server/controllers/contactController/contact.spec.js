@@ -14,9 +14,12 @@ const { mockRes } = require('sinon-express-mock');
 
 const userModel = require('#server/models/userModel');
 const userService = require('#server/services/userService');
-const accessRequestService = require('#server/services/accessRequest/accessRequestService');
-const mailService = require('#server/services/mailService');
 
+const mailService = require('#server/services/mailService');
+const agenda = require('#server/loaders/agendaLoader');
+
+const agendaStub = sinon.stub(agenda, 'getAgenda');
+const accessRequestService = require('#server/services/accessRequest/accessRequestService');
 
 function generateFakeUser() {
     return {
@@ -50,10 +53,6 @@ const mockModels = {
     '#server/services/accessRequest/accessRequestService': {
 
     },
-};
-
-
-const controllerMockModels = {
 };
 
 
@@ -102,7 +101,7 @@ describe.only('contactController.contact()', () => {
 
     describe('Success cases', () => {
         it('Should a simple message', async () => {
-            const controller = rewiremock.proxy('#server/controllers/contactController', mockModels)(controllerMockModels);
+            const controller = rewiremock.proxy('#server/controllers/contactController', mockModels)({});
 
             req.body = {
                 access_request_message: 'ceci est un message',
@@ -122,7 +121,7 @@ describe.only('contactController.contact()', () => {
         });
 
         it('Should handle an access request for a non actor', async () => {
-            const controller = rewiremock.proxy('#server/controllers/contactController', mockModels)(controllerMockModels);
+            const controller = rewiremock.proxy('#server/controllers/contactController', mockModels)({});
 
             req.body = {
                 access_request_message: 'ceci est un message',
@@ -165,7 +164,7 @@ describe.only('contactController.contact()', () => {
                 }),
                 '#server/services/createUser': module.exports = createUserStub,
                 '#server/services/accessRequest/accessRequestService': module.exports = accessRequestStub,
-            })(controllerMockModels);
+            })({});
 
             req.body = {
                 request_type: ['access-request'],
@@ -225,7 +224,7 @@ describe.only('contactController.contact()', () => {
                     findOneByLocation: () => ({ fk_category: 'territorial_collectivity' }),
                 }),
                 '#server/services/createUser': module.exports = createUserStub,
-            })(controllerMockModels);
+            })({});
 
             req.body = {
                 request_type: ['access-request'],
@@ -288,7 +287,7 @@ describe.only('contactController.contact()', () => {
                     findOneById: () => ({ fk_category: 'administration' }),
                 }),
                 '#server/services/createUser': module.exports = createUserStub,
-            })(controllerMockModels);
+            })({});
 
             req.body = {
                 request_type: ['access-request'],
@@ -348,7 +347,7 @@ describe.only('contactController.contact()', () => {
                     findOne: () => 'something',
                 }),
                 '#server/services/createUser': module.exports = createUserStub,
-            })(controllerMockModels);
+            })({});
 
             req.body = {
                 request_type: ['access-request'],
@@ -413,7 +412,7 @@ describe.only('contactController.contact()', () => {
                     findOne: () => 'something',
                 }),
                 '#server/services/createUser': module.exports = createUserStub,
-            })(controllerMockModels);
+            })({});
 
             req.body = {
                 request_type: ['access-request'],

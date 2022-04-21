@@ -1,4 +1,4 @@
-const agenda = require('#server/loaders/agendaLoader')();
+const agenda = require('#server/loaders/agendaLoader').getAgenda();
 
 module.exports = {
     scheduleEvent: {
