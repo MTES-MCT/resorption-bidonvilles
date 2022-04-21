@@ -417,6 +417,12 @@ export default (app) => {
         middlewares.appVersion.sync,
         controllers.town.find,
     );
+    app.get(
+        '/towns/:id/exports',
+        middlewares.auth.authenticate,
+        middlewares.shantytown.checkReadPermission,
+        controllers.town.exportOne,
+    );
     app.post(
         '/towns',
         middlewares.auth.authenticate,
