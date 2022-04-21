@@ -6,9 +6,8 @@ const geoUtils = require('#server/utils/geo');
 const shantytownModel = require('#server/models/shantytownModel');
 const closingSolutionModel = require('#server/models/closingSolutionModel');
 const excelUtils = require('#server/utils/excel');
-const {
-    Stats_Exports,
-} = require('#db/models');
+const statsExportsModel = require('#server/models/statsExports');
+
 
 const serializeExportProperties = require('./_common/serializeExportProperties');
 const createExportSections = require('./_common/createExportSections');
@@ -131,7 +130,7 @@ module.exports = async (user, data) => {
     };
 
     try {
-        await Stats_Exports.create(stat);
+        await statsExportsModel.create(stat);
     } catch (error) {
         throw new ServiceError('write_failed', {
             user_message: 'Une erreur est survenue lors de l\'écriture en base de données',

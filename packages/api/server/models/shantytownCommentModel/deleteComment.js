@@ -1,6 +1,6 @@
 const {
     sequelize,
-} = require('#db/models');
+} = require('#db/sequelize');
 
 /**
  * @param {Number} id A shantytown_comment_id

@@ -1,23 +1,7 @@
 /* eslint-disable newline-per-chained-call */
 const { body } = require('express-validator');
-<<<<<<< HEAD
-const sequelize = require('#db/sequelize');
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
-const themesValidator = require('./utils/themes');
->>>>>>> 2ada4146 ((1396) utilisation de #db/sequelize)
-=======
->>>>>>> 1d277352 ((1396) feed: fix lint errors)
-// models
-const userModel = require('#server/models/userModel')(sequelize);
-=======
 const userModel = require('#server/models/userModel');
->>>>>>> 9d691b05 ((tests) import userModel as object)
 const themesValidator = require('./utils/themes');
-
-// models
 
 module.exports = [
     body('user_id')

@@ -2,10 +2,6 @@
 const { body } = require('express-validator');
 const ALLOWED_TYPES = require('#server/config/contact_request_types');
 const newUser = require('./common/newUser');
-<<<<<<< HEAD
-=======
-
->>>>>>> 1d277352 ((1396) feed: fix lint errors)
 
 module.exports = newUser(
     [
