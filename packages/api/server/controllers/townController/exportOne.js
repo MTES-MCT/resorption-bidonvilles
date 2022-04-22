@@ -1,4 +1,6 @@
 const exportShantytown = require('#server/services/shantytown/export');
+const { normalizeTownName } = require('#server/utils/string');
+const { toFormat: dateToString } = require('#server/utils/date');
 
 module.exports = async (req, res, next) => {
     let buffer;
@@ -12,6 +14,6 @@ module.exports = async (req, res, next) => {
         return;
     }
 
-    res.attachment('fiche-de-site.docx');
+    res.attachment(`${dateToString(new Date(), 'Y-m-d')}-fiche-site-${normalizeTownName(req.shantytown.usename)}.docx`);
     res.end(buffer);
 };
