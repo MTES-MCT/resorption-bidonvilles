@@ -12,7 +12,6 @@ import VueRouter from "vue-router";
 import messages from "#app/messages";
 import { router } from "#app/router";
 import store from "#app/store/index";
-// import store from "#app/store";
 import Vue from "vue";
 
 Vue.use(VueRouter);
