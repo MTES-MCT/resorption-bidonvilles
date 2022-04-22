@@ -1,7 +1,7 @@
 const sequelize = require('#db/sequelize');
 const shantytownModel = require('#server/models/shantytownModel');
-const socialOriginModel = require('#server/models/socialOriginModel')();
-const { mattermost } = require('#server/config');
+const socialOriginModel = require('#server/models/socialOriginModel');
+const config = require('#server/config');
 const mattermostUtils = require('#server/utils/mattermost');
 const userModel = require('#server/models/userModel');
 const mails = require('#server/mails/mails');
@@ -109,7 +109,7 @@ module.exports = async (townData, user) => {
 
     // Send a Mattermost alert, if it fails, do nothing
     try {
-        if (mattermost) {
+        if (config.mattermost) {
             await mattermostUtils.triggerShantytownCreationAlert(town, user);
         }
     } catch (err) {

@@ -3,6 +3,7 @@ const { activationTokenExpiresIn } = require('#server/config');
 const themes = require('#server/config/shantytown_actor_themes');
 const userModel = require('#server/models/userModel');
 const closingSolutionModel = require('#server/models/closingSolutionModel');
+const socialOriginModel = require('#server/models/socialOriginModel');
 
 
 module.exports = models => ({
@@ -10,7 +11,7 @@ module.exports = models => ({
         const queries = {
             field_types: models.fieldType.findAll(),
             owner_types: models.ownerType.findAll(),
-            social_origins: models.socialOrigin.findAll(),
+            social_origins: socialOriginModel.findAll(),
             departements: models.departement.findAll(),
             regions: models.region.findAll(),
             closing_solutions: closingSolutionModel.findAll(),
