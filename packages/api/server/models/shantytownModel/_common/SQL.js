@@ -103,6 +103,7 @@ module.exports = {
         'regionChiefTown.latitude': 'regionChiefTownLatitude',
         'regionChiefTown.longitude': 'regionChiefTownLongitude',
         'electricity_types.electricity_type_id': 'electricityTypeId',
+        'electricity_types.uid': 'electricityTypeUid',
         'electricity_types.label': 'electricityTypeLabel',
         'shantytowns.electricity_comments': 'electricityComments',
         'field_types.field_type_id': 'fieldTypeId',
