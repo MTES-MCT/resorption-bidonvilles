@@ -1,4 +1,3 @@
-import { Transaction } from "sequelize";
 import * as sequelize from "#db/sequelize";
 
 export default async (fk_user: Number, page: String): Promise<number> => {
