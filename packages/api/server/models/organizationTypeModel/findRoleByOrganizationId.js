@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 
 module.exports = async (organization_id, transaction = undefined) => {
     const result = await sequelize.query(

@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 const formatName = require('./_common/formatName');
 
 module.exports = async (location, numberOfActivities, lastDate, maxDate) => {

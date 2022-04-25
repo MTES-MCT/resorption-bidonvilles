@@ -1,6 +1,6 @@
 const { isEmail } = require('validator');
+const sequelize = require('#db/sequelize');
 const checkPassword = require('#server/controllers/userController/helpers/checkPassword');
-const { sequelize } = require('#db/models/index');
 const userModel = require('#server/models/userModel')(sequelize);
 const organizationCategoryModel = require('#server/models/organizationCategoryModel')(sequelize);
 const organizationTypeModel = require('#server/models/organizationTypeModel')(sequelize);

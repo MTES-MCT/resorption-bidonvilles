@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 const geoModel = require('#server/models/geoModel')();
 
 function serialize(comment) {

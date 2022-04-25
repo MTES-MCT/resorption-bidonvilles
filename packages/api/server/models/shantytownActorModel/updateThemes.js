@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 const processThemes = require('./_common/processThemes');
 
 module.exports = (shantytownId, userId, themes, updatedBy, transaction = undefined) => {

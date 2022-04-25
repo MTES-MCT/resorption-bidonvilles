@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 const { fromGeoLevelToTableName } = require('#server/utils/geo');
 const userModel = require('#server/models/userModel')();
 const { restrict } = require('#server/utils/permission');

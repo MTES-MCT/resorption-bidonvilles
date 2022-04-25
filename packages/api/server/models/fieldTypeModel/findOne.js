@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 const serializeFieldType = require('./_common/serializeFieldType');
 
 module.exports = async (id) => {

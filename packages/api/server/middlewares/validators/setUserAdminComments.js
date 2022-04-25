@@ -1,5 +1,5 @@
 const { body, param } = require('express-validator');
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 const userModel = require('#server/models/userModel')(sequelize);
 
 module.exports = [

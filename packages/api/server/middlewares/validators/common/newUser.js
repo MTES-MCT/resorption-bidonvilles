@@ -1,8 +1,7 @@
 /* eslint-disable newline-per-chained-call */
 const { body } = require('express-validator');
-
+const sequelize = require('#db/sequelize');
 // models
-const { sequelize } = require('#db/models');
 const organizationCategoryModel = require('#server/models/organizationCategoryModel')(sequelize);
 const organizationTypeModel = require('#server/models/organizationTypeModel')(sequelize);
 const organizationModel = require('#server/models/organizationModel')(sequelize);

@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 const { updateBeingFunded } = require('#server/models/organizationModel')();
 
 function trim(str) {
