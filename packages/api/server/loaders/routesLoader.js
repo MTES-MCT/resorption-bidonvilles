@@ -1,9 +1,9 @@
 const path = require('path');
 const express = require('express');
+const sequelize = require('#db/sequelize');
+const models = require('#server/models')(sequelize);
 
 // controllers
-const { sequelize } = require('#db/models');
-const models = require('#server/models')(sequelize);
 const middlewares = require('#server/middlewares')(models);
 const controllers = require('#server/controllers')(models);
 const validators = require('#server/middlewares/validators');
@@ -76,6 +76,15 @@ module.exports = (app) => {
         validators.editUser,
         middlewares.validation,
         controllers.user.edit,
+    );
+    app.post(
+        '/me/navigationLogs',
+        middlewares.auth.authenticate,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        validators.me.postNavigationLogs,
+        middlewares.validation,
+        controllers.userNavigationLogs.insert,
     );
     app.get(
         '/users/:id',

@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 
 module.exports = (shantytownId, userId, transaction = undefined) => sequelize.query(
     `DELETE

@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 const averageCompletionQuery = require('./_common/averageCompletion');
 
 module.exports = async (departement) => {

@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const { serialized: generateUser } = require('#test/utils/user');
 
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 const { update } = require('#server/models/shantytownModel')(sequelize);
 
 const { expect } = chai;

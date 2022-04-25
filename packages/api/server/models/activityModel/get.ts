@@ -1,4 +1,4 @@
-import { sequelize } from '#db/models';
+import * as sequelize from '#db/sequelize';
 import * as moment from 'moment';
 import { ActivityNationalSummary } from './types/ActivityNationalSummary';
 

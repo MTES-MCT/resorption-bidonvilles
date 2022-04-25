@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 
 module.exports = async (shantytownId, canListPrivateComments) => sequelize.query(
     `WITH constants(departement, epci) AS (

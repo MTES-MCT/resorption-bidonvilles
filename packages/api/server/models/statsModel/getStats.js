@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 const { restrict } = require('#server/utils/permission');
 const { fromGeoLevelToTableName } = require('#server/utils/geo');
 const decomposeForDiagramm = require('./_common/decomposeForDiagramm');

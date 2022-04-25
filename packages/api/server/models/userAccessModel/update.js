@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 
 module.exports = (user_access_id, data, transaction = undefined) => {
     const params = ['used_at', 'sent_by'];

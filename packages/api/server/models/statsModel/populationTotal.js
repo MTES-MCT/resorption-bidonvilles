@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 const { toFormat } = require('#server/utils/date');
 
 module.exports = async (departement) => {

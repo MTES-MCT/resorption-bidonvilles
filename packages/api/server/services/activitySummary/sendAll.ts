@@ -1,9 +1,9 @@
+import * as sequelize from '#db/sequelize';
 import activityModel from '#server/models/activityModel';
 import sendNationalSummary from './sendNationalSummary';
 import sendRegionalSummary from './sendRegionalSummary';
 import sendDepartementalSummary from './sendDepartementalSummary';
 
-const { sequelize } = require('#db/models');
 const userModel = require('#server/models/userModel')(sequelize);
 
 // @todo: créer une fonction qui permet de générer facilement from et to

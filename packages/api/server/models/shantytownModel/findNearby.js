@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 const stringifyWhereClause = require('#server/models/_common/stringifyWhereClause');
 const { where } = require('#server/utils/permission');
 const getUsenameOf = require('./_common/getUsenameOf');

@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models/index');
+const sequelize = require('#db/sequelize');
 const userModel = require('#server/models/userModel')(sequelize);
 const organizationModel = require('#server/models/organizationModel')(sequelize);
 const organizationTypeModel = require('#server/models/organizationTypeModel')(sequelize);

@@ -6,7 +6,7 @@ const { mockReq, mockRes } = require('sinon-express-mock');
 const { serialized: generateUser } = require('#test/utils/user');
 const { default: generateWatcher } = require('#test/utils/shantytownWatcher');
 
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 const models = require('#server/models')(sequelize);
 const userModel = require('#server/models/userModel')(sequelize);
 const mattermostUtils = require('#server/utils/mattermost');

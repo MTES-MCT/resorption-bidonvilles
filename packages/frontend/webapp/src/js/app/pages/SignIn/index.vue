@@ -79,9 +79,6 @@ export default {
                 });
                 this.$trackMatomoEvent("Login", "Connection");
 
-                const d = new Date();
-                d.setTime(d.getTime() + 365 * 24 * 60 * 60 * 1000); // cookie is valid for 365 days
-                document.cookie = `logged_once=1;expires={d.toUTCString()};path=/`;
                 this.$router.push({ path: "/" });
                 this.loading = false;
             } catch (err) {

@@ -1,8 +1,6 @@
 const JSONToCSV = require('json2csv');
-const {
-    Stats_Exports,
-    Stats_Directory_Views,
-} = require('#db/models');
+const statsExportsModel = require('#server/models/statsExports');
+const statsDirectoryViewsModel = require('#server/models/statsDirectoryViews');
 const { getStats } = require('../models/statsModel')();
 
 const groupByKey = (list, key) => list.reduce((hash, obj) => ({ ...hash, [obj[key]]: { ...hash[obj[key]], ...obj } }), {});
@@ -86,9 +84,9 @@ module.exports = models => ({
             models.stats.numberOfCollaboratorAndAssociationUsers(),
             models.stats.numberOfCollaboratorAndAssociationOrganizations(),
             models.stats.numberOfShantytownOperations(),
-            Stats_Exports.count(),
+            statsExportsModel.count(),
             models.stats.numberOfComments(),
-            Stats_Directory_Views.count(),
+            statsDirectoryViewsModel.count(),
             models.stats.meanTimeBeforeCreationDeclaration(),
             models.stats.meanTimeBeforeClosingDeclaration(),
             models.stats.numberOfReviewedComments(),
@@ -148,11 +146,10 @@ module.exports = models => ({
         }
 
         try {
-            await Stats_Directory_Views.create({
-                organization: organizationId,
-                viewed_by: req.user.id,
-                created_at: new Date(),
-            });
+            await statsDirectoryViewsModel.create(
+                organizationId,
+                req.user.id,
+            );
         } catch (error) {
             res.status(500).send({
                 success: false,

@@ -1,4 +1,4 @@
-const { sequelize } = require('#db/models');
+const sequelize = require('#db/sequelize');
 const getUserPermission = require('./_common/getUserPermission');
 
 async function removeAttachments(attachments, feature, entity, userId = null, organizationId = null, transaction = undefined) {

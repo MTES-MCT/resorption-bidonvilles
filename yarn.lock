@@ -2962,7 +2962,9 @@ __metadata:
     "@sentry/node": ^6.2.2
     "@sentry/tracing": ^6.2.2
     "@supercharge/promise-pool": ^1.7.0
+    "@types/mocha": ^9.1.1
     "@types/node": "*"
+    "@types/sinon-chai": ^3.2.8
     "@types/superagent": ^4.1.13
     agenda: ^3.1.0
     body-parser: ^1.18.3
@@ -4762,6 +4764,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/chai@npm:*":
+  version: 4.3.1
+  resolution: "@types/chai@npm:4.3.1"
+  checksum: 2ee246b76c469cd620a7a1876a73bc597074361b67d547b4bd96a0c1adb43597ede2d8589ab626192e14349d83cbb646cc11e2c179eeeb43ff11596de94d82c4
+  languageName: node
+  linkType: hard
+
 "@types/chai@npm:4":
   version: 4.3.0
   resolution: "@types/chai@npm:4.3.0"
@@ -5158,6 +5167,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/mocha@npm:^9.1.1":
+  version: 9.1.1
+  resolution: "@types/mocha@npm:9.1.1"
+  checksum: 516077c0acd9806dc78317f88aaac0df5aaf0bdc2f63dfdadeabdf0b0137953b6ca65472e6ff7c30bc93ce4e0ae76eae70e8d46764b9a8eae4877a928b6ef49a
+  languageName: node
+  linkType: hard
+
 "@types/node-fetch@npm:^2.5.7":
   version: 2.6.1
   resolution: "@types/node-fetch@npm:2.6.1"
@@ -5334,6 +5350,32 @@ __metadata:
     "@types/mime": ^1
     "@types/node": "*"
   checksum: eaca858739483e3ded254cad7d7a679dc2c8b3f52c8bb0cd845b3b7eb1984bde0371fdcb0a5c83aa12e6daf61b6beb762545021f520f08a1fe882a3fa4ea5554
+  languageName: node
+  linkType: hard
+
+"@types/sinon-chai@npm:^3.2.8":
+  version: 3.2.8
+  resolution: "@types/sinon-chai@npm:3.2.8"
+  dependencies:
+    "@types/chai": "*"
+    "@types/sinon": "*"
+  checksum: a0f7a8cef24904db25a695f3c3adcc03ae72bab89a954c9b6e23fe7e541228e67fe4119cec069e8b36c80e9af33102b626129ff538efade9391cc0f65f1d4933
+  languageName: node
+  linkType: hard
+
+"@types/sinon@npm:*":
+  version: 10.0.11
+  resolution: "@types/sinon@npm:10.0.11"
+  dependencies:
+    "@types/sinonjs__fake-timers": "*"
+  checksum: 196f3e26985dca5dfb593592e4b64463e536c047a9f43aa2b328b16024a3b0e3fb27b7a3f3972c6ef75749f55012737eb6c63a1c2e9782b7fe5cbbd25f75fd62
+  languageName: node
+  linkType: hard
+
+"@types/sinonjs__fake-timers@npm:*":
+  version: 8.1.2
+  resolution: "@types/sinonjs__fake-timers@npm:8.1.2"
+  checksum: bbc73a5ab6c0ec974929392f3d6e1e8db4ebad97ec506d785301e1c3d8a4f98a35b1aa95b97035daef02886fd8efd7788a2fa3ced2ec7105988bfd8dce61eedd
   languageName: node
   linkType: hard
 

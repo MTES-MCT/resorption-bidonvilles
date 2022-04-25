@@ -50,6 +50,7 @@
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
 import OrganizationDetailsUser from "#app/pages/OrganizationDetails/OrganizationUser/OrganizationDetailsUser";
 import OrganizationHeader from "#app/pages/OrganizationDetails/ui/OrganizationHeader";
+import { directoryViews } from "#helpers/api/statistics";
 
 export default {
     components: {
@@ -61,6 +62,9 @@ export default {
         organization: {
             type: Object
         }
+    },
+    mounted() {
+        directoryViews(this.organization.id);
     },
     computed: {
         isNationalAdmin() {
