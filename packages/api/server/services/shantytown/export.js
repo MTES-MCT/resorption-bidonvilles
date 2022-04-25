@@ -1,19 +1,13 @@
-const {
-    Document, Paragraph, TextRun, Packer,
-} = require('docx');
+const { Document, Packer } = require('docx');
+const context = require('./export/1_section_context');
+const lifeConditions = require('./export/2_section_life_conditions');
 
-module.exports = () => {
+module.exports = (user, shantytown) => {
     const doc = new Document({
-        sections: [{
-            properties: {},
-            children: [
-                new Paragraph({
-                    children: [
-                        new TextRun('Hello world'),
-                    ],
-                }),
-            ],
-        }],
+        sections: [
+            context(user, shantytown),
+            lifeConditions(shantytown),
+        ],
     });
 
     return Packer.toBuffer(doc);
