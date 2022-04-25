@@ -5,10 +5,11 @@ const models = require('#server/models')(sequelize);
 
 // controllers
 const middlewares = require('#server/middlewares')(models);
-const controllers = require('#server/controllers')(models);
+import controllersFn from '#server/controllers';
 const validators = require('#server/middlewares/validators');
+const controllers = controllersFn(models);
 
-module.exports = (app) => {
+export default (app) => {
     app.use('/assets', express.static(path.resolve(__dirname, '../../assets')));
 
     app.get(

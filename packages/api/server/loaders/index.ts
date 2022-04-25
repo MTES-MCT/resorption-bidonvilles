@@ -1,8 +1,8 @@
 import agendaJobs from './agendaJobsLoader';
 import rateLimiter from './rateLimiterLoader';
+import routes from './routesLoader';
 
 const express = require('./expressLoader');
-const routes = require('./routesLoader');
 const agenda = require('./agendaLoader');
 
 export default {

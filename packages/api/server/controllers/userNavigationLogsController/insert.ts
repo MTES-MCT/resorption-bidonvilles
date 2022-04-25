@@ -1,6 +1,6 @@
-import userNavigationLogs from '#server/services/userNavigationLogs/index.ts';
+import userNavigationLogs from '#server/services/userNavigationLogs/index';
 
-module.exports = async (req, res, next) => {
+export default async (req, res, next) => {
     let userNavigationLogsId = 0;
 
     try {
