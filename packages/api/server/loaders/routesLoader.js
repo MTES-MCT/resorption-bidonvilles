@@ -77,6 +77,15 @@ module.exports = (app) => {
         middlewares.validation,
         controllers.user.edit,
     );
+    app.post(
+        '/me/navigationLogs',
+        middlewares.auth.authenticate,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        validators.me.postNavigationLogs,
+        middlewares.validation,
+        controllers.userNavigationLogs.insert,
+    );
     app.get(
         '/users/:id',
         middlewares.auth.authenticate,

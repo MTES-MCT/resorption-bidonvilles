@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "#app/store/index";
+import { insert as insertNavigationLog } from "#helpers/api/navigationLogs";
 
 import SignIn from "#app/pages/SignIn/index.vue";
 import Contact from "#app/pages/Contact/index.vue";
@@ -52,6 +53,11 @@ function hasPermission(...args) {
 
 function hasAcceptedCharte() {
     return store.getters["config/hasAcceptedCharte"] === true;
+}
+
+function logNavigation(to) {
+    insertNavigationLog(to.path);
+    return true;
 }
 
 /**
@@ -145,18 +151,23 @@ const guardians = {
     anonymous: guard.bind(this, [
         { checker: () => !isLoggedIn(), target: "/", saveEntryPoint: false }
     ]),
-    loggedIn: guard.bind(this, [{ checker: isLoggedIn, target: "/connexion" }]),
+    loggedIn: guard.bind(this, [
+        { checker: isLoggedIn, target: "/connexion" },
+        { checker: logNavigation }
+    ]),
     loaded: guard.bind(this, [
         { checker: isLoggedIn, target: "/connexion" },
         { checker: isConfigLoaded, target: "/launcher" },
-        { checker: isPermitted, target: "/", saveEntrypoint: false }
+        { checker: isPermitted, target: "/", saveEntrypoint: false },
+        { checker: logNavigation }
     ]),
     loadedAndUpgraded: guard.bind(this, [
         { checker: isLoggedIn, target: "/connexion" },
         { checker: isConfigLoaded, target: "/launcher" },
         { checker: isPermitted, target: "/", saveEntrypoint: false },
         { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
-        { checker: isUpgraded, target: "/mise-a-niveau" }
+        { checker: isUpgraded, target: "/mise-a-niveau" },
+        { checker: logNavigation }
     ]),
     loadedAndUpToDate: guard.bind(this, [
         { checker: isLoggedIn, target: "/connexion" },
@@ -164,7 +175,8 @@ const guardians = {
         { checker: isPermitted, target: "/", saveEntrypoint: false },
         { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
         { checker: isUpgraded, target: "/mise-a-niveau" },
-        { checker: hasNoPendingChangelog, target: "/nouvelle-version" }
+        { checker: hasNoPendingChangelog, target: "/nouvelle-version" },
+        { checker: logNavigation }
     ])
 };
 

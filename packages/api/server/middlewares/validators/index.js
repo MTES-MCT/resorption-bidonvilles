@@ -17,6 +17,7 @@ const findNearbyTowns = require('./findNearbyTowns');
 const setUserAdminComments = require('./setUserAdminComments');
 const editOrganization = require('./editOrganization');
 const userSetRoleRegular = require('./users/setRoleRegular');
+const mePostNavigationLogs = require('./me/post.navigationLogs');
 
 module.exports = {
     closeTown,
@@ -45,6 +46,9 @@ module.exports = {
     },
     user: {
         setRoleRegular: userSetRoleRegular,
+    },
+    me: {
+        postNavigationLogs: mePostNavigationLogs,
     },
     setUserAdminComments,
     editOrganization,
