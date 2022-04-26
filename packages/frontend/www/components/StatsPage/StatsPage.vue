@@ -71,8 +71,8 @@
                 </h2>
                 <div class="chartWrapper">
                     <LineChart
-                        v-if="matomoStats !== null"
-                        :chartData="matomoStats"
+                        v-if="wauData !== null"
+                        :chartData="wauData"
                         :chartOptions="{ maintainAspectRatio: false }"
                         :height="250"
                     />
@@ -159,7 +159,6 @@ export default {
         return {
             state: null,
             stats: null,
-            matomoStats: null,
             API_URL
         };
     },
@@ -300,6 +299,28 @@ export default {
 
         numberOfShantytownOperations() {
             return this.stats ? this.stats.numberOfShantytownOperations : "...";
+        },
+
+        wauData() {
+            if (!this.stats) {
+                return null;
+            }
+
+            return {
+                scales: {
+                    y: {
+                        min: 0
+                    }
+                },
+                labels: this.stats.wau.map(({ monday }) => monday),
+                datasets: [
+                    {
+                        backgroundColor: "#E5E5F4",
+                        data: this.stats.wau.map(({ wau }) => wau),
+                        label: "Nombre d'utilisateurs par semaine"
+                    }
+                ]
+            };
         }
     },
     methods: {
@@ -324,10 +345,6 @@ export default {
             }
         },
 
-        async getMatomoStats() {
-            this.matomoStats = await (await fetch(`${this.API_URL}/statistics/wau`)).json();
-        },
-
         /**
          * Tries fetching the data from the API
          *
@@ -340,8 +357,6 @@ export default {
             }
 
             this.state = "loading";
-
-            this.getMatomoStats();
 
             fetch(`${this.API_URL}/stats`)
                 .then((response) => response.json())
