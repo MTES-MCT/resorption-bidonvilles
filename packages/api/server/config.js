@@ -31,9 +31,6 @@ const config = {
         ? process.env.RB_API_EMAIL_BLACKLIST.split(',').map(id => parseInt(id, 10))
         : [],
     sendActivitySummary: process.env.RB_API_SEND_ACTIVITY_SUMMARY === '1',
-    matomo: {
-        token: process.env.RB_API_MATOMO_AUTH_TOKEN,
-    },
 };
 
 config.mattermost = process.env.RB_API_MATTERMOST_WEBHOOK;
