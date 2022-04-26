@@ -5,31 +5,31 @@ module.exports = (towns, users, listOfDates, location) => {
 
     const userStats = {
         evolution: 0,
-        figures: [],
+        data: [],
     };
     const population = {
         evolution: 0,
-        figures: [],
+        data: [],
     };
     const minors = {
         evolution: 0,
-        figures: [],
+        data: [],
     };
     const minorsInSchool = {
         evolution: 0,
-        figures: [],
+        data: [],
     };
     const openShantytowns = {
         evolution: 0,
-        figures: [],
+        data: [],
     };
     const closedShantytowns = {
         evolution: 0,
-        figures: [],
+        data: [],
     };
     const resorbedShantytowns = {
         evolution: 0,
-        figures: [],
+        data: [],
     };
 
     listOfDates.forEach(
@@ -68,20 +68,23 @@ module.exports = (towns, users, listOfDates, location) => {
                     }
                 },
             );
-            population.figures.unshift(populationTotal);
-            minors.figures.unshift(minorsTotal);
-            minorsInSchool.figures.unshift(minorsInSchoolTotal);
-            closedShantytowns.figures.unshift(closedShantytownsTotal);
-            resorbedShantytowns.figures.unshift(resorbedShantytownsTotal);
-            openShantytowns.figures.unshift(openShantytownsTotal);
-            userStats.figures.unshift(usersTotal);
+            const formatedDate = moment(date).format('DD/MM');
+
+            population.data.unshift({ figure: populationTotal, formatedDate });
+            minors.data.unshift({ figure: minorsTotal, formatedDate });
+            minorsInSchool.data.unshift({ figure: minorsInSchoolTotal, formatedDate });
+            closedShantytowns.data.unshift({ figure: closedShantytownsTotal, formatedDate });
+            resorbedShantytowns.data.unshift({ figure: resorbedShantytownsTotal, formatedDate });
+            openShantytowns.data.unshift({ figure: openShantytownsTotal, formatedDate });
+            userStats.data.unshift({ figure: usersTotal, formatedDate });
         },
     );
-    population.evolution = Math.round((((population.figures.slice(-1)[0] - population.figures[0]) * 100) / population.figures[0]).toFixed(2));
-    minors.evolution = Math.round((((minors.figures.slice(-1)[0] - minors.figures[0]) * 100) / minors.figures[0]).toFixed(2));
-    closedShantytowns.evolution = Math.round((((closedShantytowns.figures.slice(-1)[0] - closedShantytowns.figures[0]) * 100) / closedShantytowns.figures[0]).toFixed(2));
-    resorbedShantytowns.evolution = Math.round((((resorbedShantytowns.figures.slice(-1)[0] - resorbedShantytowns.figures[0]) * 100) / resorbedShantytowns.figures[0]).toFixed(2));
-    userStats.evolution = Math.round((((userStats.figures.slice(-1)[0] - userStats.figures[0]) * 100) / userStats.figures[0]).toFixed(2));
+    population.evolution = Math.round((((population.data.slice(-1)[0].figure - population.data[0].figure) * 100) / population.data[0].figure).toFixed(2));
+    minors.evolution = Math.round((((minors.data.slice(-1)[0].figure - minors.data[0].figure) * 100) / minors.data[0].figure).toFixed(2));
+    closedShantytowns.evolution = Math.round((((closedShantytowns.data.slice(-1)[0].figure - closedShantytowns.data[0].figure) * 100) / closedShantytowns.data[0].figure).toFixed(2));
+    resorbedShantytowns.evolution = Math.round((((resorbedShantytowns.data.slice(-1)[0].figure - resorbedShantytowns.data[0].figure) * 100) / resorbedShantytowns.data[0].figure).toFixed(2));
+    userStats.evolution = Math.round((((userStats.data.slice(-1)[0].figure - userStats.data[0].figure) * 100) / userStats.data[0].figure).toFixed(2));
+
     return {
         population, minors, closedShantytowns, resorbedShantytowns, userStats, openShantytowns, minorsInSchool,
     };

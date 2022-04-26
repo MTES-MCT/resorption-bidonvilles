@@ -45,7 +45,14 @@ function getMonthDiffBetween(d1, d2) {
     return (d2.getMonth() - d1.getMonth()) + ((d2.getFullYear() - d1.getFullYear()) * 12);
 }
 
+function substractWeek(date) {
+    const newDate = new Date(date.valueOf());
+    newDate.setDate(newDate.getDate() - 7);
+    return newDate;
+}
+
 module.exports = {
+    substractWeek,
     toString,
     toFormat,
     fromTsToFormat,
