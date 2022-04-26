@@ -20,6 +20,7 @@ module.exports = async (req, res) => {
         meanTimeBeforeCreationDeclaration,
         meanTimeBeforeClosingDeclaration,
         numberOfReviewedComments,
+        wau,
     ] = await Promise.all([
         statsModel.numberOfDepartements(),
         statsModel.numberOfActiveUsers(),
@@ -34,6 +35,7 @@ module.exports = async (req, res) => {
         statsModel.meanTimeBeforeCreationDeclaration(),
         statsModel.meanTimeBeforeClosingDeclaration(),
         statsModel.numberOfReviewedComments(),
+        statsModel.wau(),
     ]);
 
     return res.status(200).send({
@@ -54,6 +56,7 @@ module.exports = async (req, res) => {
                 meanTimeBeforeCreationDeclaration,
                 meanTimeBeforeClosingDeclaration,
                 numberOfReviewedComments,
+                wau,
             },
         },
     });

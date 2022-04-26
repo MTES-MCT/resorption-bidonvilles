@@ -16,6 +16,7 @@ module.exports = async (req, res) => {
         averageCompletionPercentage,
         numberOfShantytownsOnJune2019,
         populationTotal,
+        wau,
     ] = await Promise.all([
         statsModel.numberOfPeople(departement),
         statsModel.numberOfShantytown(departement),
@@ -29,6 +30,7 @@ module.exports = async (req, res) => {
         statsModel.averageCompletionPercentage(departement),
         statsModel.numberOfOpenShantytownsAtMonth(departement, '2019-06-01'),
         statsModel.populationTotal(departement),
+        statsModel.wau(),
     ]);
 
     return res.status(200).send({
@@ -47,6 +49,7 @@ module.exports = async (req, res) => {
                 averageCompletionPercentage,
                 numberOfShantytownsOnJune2019,
                 populationTotal,
+                wau,
             },
         },
     });
