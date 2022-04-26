@@ -665,11 +665,6 @@ export default (app) => {
         controllers.stats.directoryView,
     );
 
-    app.get(
-        '/statistics/wau',
-        controllers.matomo.getWeeklyActiveUsers,
-    );
-
     // user activities
     app.get(
         '/activities',

@@ -16,8 +16,6 @@ const geoSearchCities = require('./geoController/searchCities');
 const geoSearchEpci = require('./geoController/searchEpci');
 // invite
 const inviteInvite = require('./inviteController/invite');
-// matomo
-const getWeeklyActiveUsers = require('./matomoController/getWeeklyActiveUsers');
 // organization
 const organizationCategories = require('./organizationController/categories');
 const organizationGetByCategory = require('./organizationController/getByCategory');
@@ -125,9 +123,6 @@ export default {
     },
     poi: {
         findAll: poiFindAll,
-    },
-    matomo: {
-        getWeeklyActiveUsers,
     },
     shantytownComment: {
         create: createShantytownComment,
