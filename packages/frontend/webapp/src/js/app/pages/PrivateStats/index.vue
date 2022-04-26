@@ -171,10 +171,10 @@
                             Suivi plateforme
                         </h2>
                         <div>
-                            <Spinner v-if="!matomoStats" />
+                            <Spinner v-if="!stats" />
                             <div class="chartWrapper" v-else>
                                 <LineChart
-                                    :chartData="matomoStats"
+                                    :chartData="wauData"
                                     :options="{
                                         maintainAspectRatio: false,
                                         scales: {
@@ -199,11 +199,7 @@ import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer.vue
 import PrivateLayout from "#app/components/PrivateLayout";
 import LeftColumn from "#app/pages/PrivateStats/LeftColumn";
 import KeyMetric from "#app/pages/PrivateStats/KeyMetric";
-import {
-    all,
-    exportStats,
-    wau as getWeeklyActiveUsers
-} from "#helpers/api/stats";
+import { all, exportStats } from "#helpers/api/stats";
 import Spinner from "#app/components/ui/Spinner";
 import BarChart from "#app/pages/PrivateStats/BarChart";
 import LineChart from "#app/pages/PrivateStats/LineChart";
@@ -252,7 +248,6 @@ export default {
             window.print();
         },
         loadData() {
-            this.getMatomoStats();
             all(this.$route.params.code)
                 .then(({ statistics: stats }) => {
                     this.stats = stats;
@@ -262,15 +257,11 @@ export default {
                     this.fetching = false;
                     this.error = userMessage;
                 });
-        },
-        async getMatomoStats() {
-            this.matomoStats = await getWeeklyActiveUsers();
         }
     },
     data() {
         return {
             stats: null,
-            matomoStats: null,
             fetching: true,
             exportLoading: false
         };
@@ -446,6 +437,19 @@ export default {
                         data: totalEULivingInTownsBiggerThan10,
                         label:
                             "Nombre de ressortissants UE vivant dans des sites de 10 personnes ou plus"
+                    }
+                ]
+            };
+        },
+
+        wauData() {
+            return {
+                labels: this.stats.wau.map(({ monday }) => monday),
+                datasets: [
+                    {
+                        backgroundColor: "#E5E5F4",
+                        data: this.stats.wau.map(({ wau }) => wau),
+                        label: "Nombre d'utilisateurs par semaine"
                     }
                 ]
             };
