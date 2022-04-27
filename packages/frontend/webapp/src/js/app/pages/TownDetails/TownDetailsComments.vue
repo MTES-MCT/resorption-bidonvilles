@@ -8,6 +8,7 @@
             :key="comment.id"
             :id="`message${comment.id}`"
             :comment="comment"
+            :showActionIcons="true"
         />
     </div>
 </template>

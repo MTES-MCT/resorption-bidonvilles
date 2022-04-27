@@ -4,7 +4,7 @@
             <div class="text-G600 text-sm mb-1">
                 {{ formatDate(comment.createdAt, "d M y à h:i") }}
             </div>
-            <span
+            <span v-if="showActionIcons"
                 ><Icon
                     class="text-red cursor-pointer"
                     icon="trash-alt"
@@ -62,6 +62,11 @@ export default {
     props: {
         comment: {
             type: Object
+        },
+        // on moderation modal, the comment block is shown
+        showActionIcons: {
+            type: Boolean,
+            default: false
         }
     },
     methods: {

@@ -131,6 +131,7 @@
                     v-for="comment in sortedComments"
                     :key="comment.id"
                     :comment="comment"
+                    :showActionIcons="true"
                 />
             </div>
         </div>
