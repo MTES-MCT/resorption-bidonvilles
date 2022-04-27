@@ -119,7 +119,7 @@ jobs:
           context: .
           file: Dockerfile.webapp
           push: true
-          tags: resorptionbidonvilles/webapp:qa-${{ github.event.inputs.tag }}
+          tags: resorptionbidonvilles/frontend:qa-${{ github.event.inputs.tag }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 

@@ -1,6 +1,6 @@
 {
   "name": "@resorptionbidonvilles/webapp",
-  "version": "1.30.3",
+  "version": "1.30.4",
   "description": "Frontend de Résorption Bidonvilles",
   "resolutions": {
     "sharp": "^0.29.0"
