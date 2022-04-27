@@ -3,6 +3,7 @@ const sequelize = require('#db/sequelize');
 module.exports = async (townData, transaction = undefined) => {
     const result = await sequelize.query(
         `INSERT INTO shantytowns(
+            status,
             latitude,
             longitude,
             address,
@@ -69,6 +70,7 @@ module.exports = async (townData, transaction = undefined) => {
             is_reinstallation,
             reinstallation_comments
         ) VALUES (
+            'open',
             :latitude,
             :longitude,
             :address,

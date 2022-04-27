@@ -105,7 +105,7 @@ module.exports = async (townData, user) => {
 
     await transaction.commit();
 
-    const town = shantytownModel.findOne(user, shantytown_id);
+    const town = await shantytownModel.findOne(user, shantytown_id);
 
     // Send a Mattermost alert, if it fails, do nothing
     try {
