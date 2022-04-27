@@ -1,7 +1,16 @@
 <template>
     <div class="border-t-1 border-G400 py-4">
-        <div class="text-G600 text-sm mb-1">
-            {{ formatDate(comment.createdAt, "d M y à h:i") }}
+        <div class="flex justify-between">
+            <div class="text-G600 text-sm mb-1">
+                {{ formatDate(comment.createdAt, "d M y à h:i") }}
+            </div>
+            <span
+                ><Icon
+                    class="text-red cursor-pointer"
+                    icon="trash-alt"
+                    alt="Supprimer le message"
+                    v-if="canDeleteMessage"
+            /></span>
         </div>
         <div
             class="text-G600 text-sm mb-1"
@@ -72,6 +81,20 @@ export default {
             return covidTags.filter(t => {
                 return !!this.comment.covid[t.prop];
             });
+        },
+        isOwner() {
+            return (
+                this.comment.createdBy.id ===
+                this.$store.state.config.configuration.user.id
+            );
+        },
+        canDeleteMessage() {
+            return (
+                this.isOwner === true ||
+                this.$store.getters["config/hasPermission"](
+                    "shantytown_comment.moderate"
+                )
+            );
         }
     }
 };
