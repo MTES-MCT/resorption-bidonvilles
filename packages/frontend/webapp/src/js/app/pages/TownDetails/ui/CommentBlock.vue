@@ -1,15 +1,18 @@
 <template>
-    <div class="border-t-1 border-G400 py-4">
+    <div
+        class="border-t-1 border-G400 py-4"
+        @mouseenter="isHover = true"
+        @mouseleave="isHover = false"
+    >
         <div class="flex justify-between">
             <div class="text-G600 text-sm mb-1">
                 {{ formatDate(comment.createdAt, "d M y à h:i") }}
             </div>
-            <span v-if="showActionIcons"
-                ><Icon
-                    class="text-red cursor-pointer"
-                    icon="trash-alt"
-                    alt="Supprimer le message"
-                    v-if="canDeleteMessage"
+            <span
+                class="text-red font-bold cursor-pointer"
+                v-if="showActionIcons && (isOwner || (canModerate && isHover))"
+                >Supprimer {{ isOwner ? "mon" : "le" }} message
+                <Icon icon="trash-alt" alt="Supprimer le message"
             /></span>
         </div>
         <div
@@ -69,6 +72,11 @@ export default {
             default: false
         }
     },
+    data() {
+        return {
+            isHover: false
+        };
+    },
     methods: {
         /**
          * @see index.js
@@ -93,12 +101,9 @@ export default {
                 this.$store.state.config.configuration.user.id
             );
         },
-        canDeleteMessage() {
-            return (
-                this.isOwner === true ||
-                this.$store.getters["config/hasPermission"](
-                    "shantytown_comment.moderate"
-                )
+        canModerate() {
+            return this.$store.getters["config/hasPermission"](
+                "shantytown_comment.moderate"
             );
         }
     }
