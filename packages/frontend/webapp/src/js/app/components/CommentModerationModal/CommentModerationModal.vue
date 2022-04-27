@@ -5,10 +5,7 @@
         </template>
 
         <template v-slot:body>
-            <CommentBlock
-                :comment="activity.comment"
-                class="bg-G100 p-6 border-1"
-            />
+            <CommentBlock :comment="comment" class="bg-G100 p-6 border-1" />
             <div class="mt-6">
                 <TextArea
                     :disabled="loading"
@@ -45,7 +42,7 @@ export default {
     },
 
     props: {
-        activity: {
+        comment: {
             type: Object,
             required: true
         }
@@ -77,8 +74,8 @@ export default {
 
             try {
                 await deleteComment(
-                    this.activity.comment.shantytown,
-                    this.activity.comment.id,
+                    this.comment.shantytown,
+                    this.comment.id,
                     this.reason
                 );
 
@@ -92,7 +89,7 @@ export default {
                     text: "L'auteur du message en a été notifié par mail"
                 });
 
-                this.$store.commit("removeComment", this.activity.comment.id);
+                this.$store.commit("removeComment", this.comment.id);
             } catch (error) {
                 this.error =
                     (error && error.user_message) ||

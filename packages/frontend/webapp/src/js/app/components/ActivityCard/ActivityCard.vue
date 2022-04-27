@@ -4,10 +4,10 @@
         @mouseenter="isHover = true"
         @mouseleave="isHover = false"
     >
-        <ActivityCardModerationModal
+        <CommentModerationModal
             v-if="activity.comment"
             ref="moderationModal"
-            :activity="activity"
+            :comment="activity.comment"
         />
 
         <div :class="classes.column">
@@ -96,7 +96,7 @@ import formatDate from "./utils/formatDate";
 import ActivityCardIcon from "./ActivityCardIcon.vue";
 import ActivityCardBodyShantytownUpdated from "./ActivityCardBody/ActivityCardBodyShantytownUpdated.vue";
 import ActivityCardBodyCommentCreated from "./ActivityCardBody/ActivityCardBodyCommentCreated.vue";
-import ActivityCardModerationModal from "./ActivityCardModerationModal.vue";
+import CommentModerationModal from "#app/components/CommentModerationModal/CommentModerationModal.vue";
 import showActivityDepartementCode from "#app/mixins/showActivityDepartementCode";
 
 export default {
@@ -106,7 +106,7 @@ export default {
         ActivityCardIcon,
         ActivityCardBodyShantytownUpdated,
         ActivityCardBodyCommentCreated,
-        ActivityCardModerationModal
+        CommentModerationModal
     },
 
     props: {
