@@ -101,7 +101,16 @@ export default {
             switch (this.event) {
                 case "user-creation": {
                     const { users } = this.activity;
-                    const names = users.map(({ name }) => name);
+                    const names = users.map(({ name, location }) => {
+                        if (
+                            !this.showDepartementCode ||
+                            !location.departement
+                        ) {
+                            return name;
+                        }
+
+                        return `${name} (${location.departement.code})`;
+                    });
                     if (users.length === 1) {
                         return names[0];
                     }
