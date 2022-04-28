@@ -81,6 +81,11 @@ export default {
             group: "users"
         },
         {
+            label: "Blog",
+            target: "https://blog-resorption-bidonvilles.fr",
+            menu: "upper"
+        },
+        {
             label: "Mon compte",
             target: "/mon-compte",
             menu: "upper",
