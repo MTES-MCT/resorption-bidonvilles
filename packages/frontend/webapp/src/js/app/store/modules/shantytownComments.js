@@ -1,4 +1,4 @@
-import { addComment } from "#helpers/api/town";
+import { addComment, addCovidComment } from "#helpers/api/town";
 import Vue from "vue";
 
 export default {
@@ -13,10 +13,24 @@ export default {
                 { townId, comments },
                 { root: true }
             );
-
             Vue.prototype.$trackMatomoEvent(
                 "Site",
                 "Création commentaire",
+                `S${townId}`
+            );
+        },
+
+        async publishCovidComment({ commit }, { townId, comment }) {
+            const { comments } = await addCovidComment(townId, comment);
+
+            commit(
+                "updateShantytownComments",
+                { townId, comments },
+                { root: true }
+            );
+            Vue.prototype.$trackMatomoEvent(
+                "Site",
+                "Création commentaire Covid",
                 `S${townId}`
             );
         }
