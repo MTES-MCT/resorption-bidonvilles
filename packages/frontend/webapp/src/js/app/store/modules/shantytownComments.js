@@ -7,47 +7,37 @@ export default {
 
     actions: {
         async publishComment({ commit }, { townId, comment }) {
-            const { comments } = await addComment(townId, comment);
-            notify({
-                group: "notifications",
-                type: "success",
-                title: "Message publié",
-                text:
-                    "Votre message est bien enregistré et a été envoyé aux acteurs de votre département par mail."
-            });
-
-            commit(
-                "updateShantytownComments",
-                { townId, comments },
-                { root: true }
-            );
-            Vue.prototype.$trackMatomoEvent(
-                "Site",
+            publish(
+                addComment,
+                townId,
+                comment,
                 "Création commentaire",
-                `S${townId}`
+                commit
             );
         },
 
         async publishCovidComment({ commit }, { townId, comment }) {
-            const { comments } = await addCovidComment(townId, comment);
-            notify({
-                group: "notifications",
-                type: "success",
-                title: "Message publié",
-                text:
-                    "Votre message est bien enregistré et a été envoyé aux acteurs de votre département par mail."
-            });
-
-            commit(
-                "updateShantytownComments",
-                { townId, comments },
-                { root: true }
-            );
-            Vue.prototype.$trackMatomoEvent(
-                "Site",
+            publish(
+                addCovidComment,
+                townId,
+                comment,
                 "Création commentaire Covid",
-                `S${townId}`
+                commit
             );
         }
     }
 };
+
+async function publish(apiMethod, townId, comment, matomoAction, commit) {
+    const { comments } = await apiMethod(townId, comment);
+    notify({
+        group: "notifications",
+        type: "success",
+        title: "Message publié",
+        text:
+            "Votre message est bien enregistré et a été envoyé aux acteurs de votre département par mail."
+    });
+
+    commit("updateShantytownComments", { townId, comments }, { root: true });
+    Vue.prototype.$trackMatomoEvent("Site", matomoAction, `S${townId}`);
+}
