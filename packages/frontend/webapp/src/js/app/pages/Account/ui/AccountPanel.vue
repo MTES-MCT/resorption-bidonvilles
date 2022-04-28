@@ -1,5 +1,5 @@
 <template>
-    <div class="accountPanelShadow py-5 px-6 mt-8 max-w-4xl ml-auto">
+    <div class="accountPanelShadow py-5 px-6 mt-8 ml-auto">
         <div class="text-primary text-display-lg font-bold border-b-1 pb-4">
             {{ title }}
         </div>
