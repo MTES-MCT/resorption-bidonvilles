@@ -300,7 +300,10 @@ module.exports = (models) => {
             }
 
             return res.status(200).send({
-                comments: town.comments.regular.filter(({ id }) => id !== parseInt(req.params.commentId, 10)),
+                comments: {
+                    regular: town.comments.regular.filter(({ id }) => id !== parseInt(req.params.commentId, 10)),
+                    covid: town.comments.covid.filter(({ id }) => id !== parseInt(req.params.commentId, 10)),
+                },
             });
         },
 
