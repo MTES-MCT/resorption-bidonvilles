@@ -32,6 +32,10 @@
                     >
                 </span>
             </p>
+            <ResorptionTargetTag
+                v-if="resorptionTarget"
+                :target="resorptionTarget"
+            />
             <!-- eslint-disable prettier/prettier -->
             <blockquote
                 v-if="description"
@@ -44,6 +48,7 @@
 
 <script>
 import showActivityDepartementCode from "#app/mixins/showActivityDepartementCode";
+import ResorptionTargetTag from "#app/components/ResorptionTargetTag/ResorptionTargetTag.vue";
 
 export default {
     mixins: [showActivityDepartementCode],
@@ -53,6 +58,10 @@ export default {
             type: Object,
             required: true
         }
+    },
+
+    components: {
+        ResorptionTargetTag
     },
 
     data() {
@@ -165,6 +174,14 @@ export default {
                 default:
                     return "";
             }
+        },
+
+        resorptionTarget() {
+            if (this.activity.entity === "shantytown") {
+                return this.activity.shantytown.resorptionTarget || null;
+            }
+
+            return null;
         },
 
         description() {
