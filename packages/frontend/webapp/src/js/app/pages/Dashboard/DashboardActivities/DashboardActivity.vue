@@ -36,6 +36,7 @@
                 v-if="resorptionTarget"
                 :target="resorptionTarget"
             />
+            <p class="text-G500">{{ formatActivityDate(activity.date) }}</p>
             <!-- eslint-disable prettier/prettier -->
             <blockquote
                 v-if="description"
@@ -47,6 +48,7 @@
 </template>
 
 <script>
+import formatActivityDate from "#app/utils/formatActivityDate";
 import showActivityDepartementCode from "#app/mixins/showActivityDepartementCode";
 import ResorptionTargetTag from "#app/components/ResorptionTargetTag/ResorptionTargetTag.vue";
 
@@ -261,6 +263,7 @@ export default {
     },
 
     methods: {
+        formatActivityDate,
         routeToDetails() {
             this.$trackMatomoEvent("TB", "Visite activité");
 
