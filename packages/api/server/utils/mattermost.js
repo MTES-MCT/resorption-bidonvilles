@@ -96,11 +96,11 @@ async function triggerShantytownCreationAlert(town, user) {
                     },
                     {
                         short: false,
-                        value: `*Date d'installation du site* : ${town.builtAt}`,
+                        value: `*Date d'installation du site* : ${formatDate(new Date(town.builtAt * 1000))}`,
                     },
                     {
                         short: false,
-                        value: `*Date de signalement du site* : ${town.declaredAt}`,
+                        value: `*Date de signalement du site* : ${formatDate(new Date(town.declaredAt * 1000))}`,
                     },
 
                 ],
