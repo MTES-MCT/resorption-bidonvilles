@@ -63,8 +63,6 @@
 </template>
 
 <script>
-import { addComment as apiAddComment } from "#helpers/api/town";
-
 export default {
     data() {
         return {
@@ -94,11 +92,17 @@ export default {
             this.loading = true;
 
             try {
-                const response = await apiAddComment(this.$route.params.id, {
-                    description: this.newComment,
-                    private: this.isPrivate
-                });
-                this.$emit("submit", response.comments);
+                await this.$store.dispatch(
+                    "shantytownComments/publishComment",
+                    {
+                        townId: parseInt(this.$route.params.id, 10),
+                        comment: {
+                            description: this.newComment,
+                            private: this.isPrivate
+                        }
+                    }
+                );
+
                 this.newComment = "";
             } catch (response) {
                 this.commentError = response.user_message;
