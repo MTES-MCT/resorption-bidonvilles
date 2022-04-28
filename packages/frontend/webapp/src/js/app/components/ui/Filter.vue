@@ -27,6 +27,12 @@
                         :checkValue="option.value"
                         :value="value"
                         @input="$emit('input', $event)"
+                        @checkedItem="
+                            $emit('checkedItem', {
+                                value: $event.value,
+                                label: option.label
+                            })
+                        "
                         variant="invisible"
                         containerClasses="w-full"
                         labelClasses="w-full block"
