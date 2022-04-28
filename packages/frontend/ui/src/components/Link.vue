@@ -1,6 +1,6 @@
 <template>
     <span>
-        <Icon icon="external-link-alt" v-if="!internalLink" :class="linkClasses" />
+        <Icon icon="external-link-alt" v-if="!internalLink" :class="`mr-1 ${linkClasses}`" />
         <router-link v-if="internalLink" :to="to" :class="linkClasses"
             ><slot></slot
         ></router-link>
@@ -42,7 +42,7 @@ export default {
 
     data() {
         return {
-            linkClasses: `${this.color} hover:${this.hoverColor} ${this.classes}`
+            linkClasses: `${this.color} hover:${this.hoverColor} ${this.classes} cursor-pointer`
         };
     },
 
