@@ -5,7 +5,10 @@
         </template>
 
         <template v-slot:body>
-            <CommentBlock :comment="comment" class="bg-G100 p-6 border-1" />
+            <CommentBlock
+                :comment="comment"
+                class="bg-G100 p-6 border-1 max-w-2xl"
+            />
             <div class="mt-6">
                 <TextArea
                     :disabled="loading"
