@@ -20,14 +20,12 @@
                     >
                         {{ lastUpdate }}
                     </Tag>
-                    <Tag
-                        :class="['ml-4 py-1 px-3', isHover ? 'shadow-md' : '']"
-                        variant="highlight"
+                    <ResorptionTargetTag
+                        class="ml-4"
                         v-if="shantytown.resorptionTarget"
-                    >
-                        Objectif résorption
-                        {{ shantytown.resorptionTarget }} par la Préfecture
-                    </Tag>
+                        :target="shantytown.resorptionTarget"
+                        :isHover="isHover"
+                    />
                 </div>
                 <div class="text-md px-6">
                     <div class="text-primary text-display-md font-bold">
@@ -254,6 +252,7 @@
 
 <script>
 import TownCardIcon from "./TownCardIcon";
+import ResorptionTargetTag from "#app/components/ResorptionTargetTag/ResorptionTargetTag.vue";
 import TownField from "#app/components/TownField/TownField.vue";
 import TownPopulation from "#app/components/TownPopulation/TownPopulation.vue";
 import ClosingSolutionsList from "./ClosingSolutionsList";
@@ -286,7 +285,8 @@ export default {
         TownCardIcon,
         ClosingSolutionsList,
         TownField,
-        TownPopulation
+        TownPopulation,
+        ResorptionTargetTag
     },
     methods: {
         /**
