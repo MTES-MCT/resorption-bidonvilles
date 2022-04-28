@@ -13,6 +13,7 @@ const { deleteShantytown } = require('#server/models/shantytownModel')();
 const mails = require('#server/mails/mails');
 const shantytownService = require('#server/services/shantytown');
 const shantytownActorThemes = require('#server/config/shantytown_actor_themes');
+const { webappUrl } = require('#server/config');
 
 function addError(errors, field, error) {
     if (!Object.prototype.hasOwnProperty.call(errors, field)) {
@@ -469,6 +470,9 @@ module.exports = (models) => {
                 address: {
                     title: 'Adresse',
                     data: ({ addressSimple }) => addressSimple,
+                    link({ id }) {
+                        return `${webappUrl}/site/${id}`;
+                    },
                     bold: true,
                     align: 'left',
                     width: COLUMN_WIDTHS.MEDIUM,
