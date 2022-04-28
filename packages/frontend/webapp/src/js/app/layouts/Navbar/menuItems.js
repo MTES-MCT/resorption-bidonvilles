@@ -83,7 +83,11 @@ export default {
         {
             label: "Blog",
             target: "https://blog-resorption-bidonvilles.fr",
-            menu: "upper"
+            menu: "upper",
+            matomo: {
+                category: "Blog",
+                action: "Clic sur le lien"
+            }
         },
         {
             label: "Mon compte",
