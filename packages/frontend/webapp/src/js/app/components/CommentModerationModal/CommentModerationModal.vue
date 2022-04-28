@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import CommentBlock from "#app/pages/TownDetails/ui/CommentBlock.vue";
+import CommentBlock from "#app/components/CommentBlock/CommentBlock.vue";
 import { notify } from "#helpers/notificationHelper";
 import { deleteComment } from "#helpers/api/town";
 

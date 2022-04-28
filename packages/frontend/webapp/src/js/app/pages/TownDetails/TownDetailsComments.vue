@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import CommentBlock from "./ui/CommentBlock";
+import CommentBlock from "#app/components/CommentBlock/CommentBlock.vue";
 
 export default {
     components: {
