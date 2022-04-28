@@ -96,7 +96,7 @@ import formatDate from "./utils/formatDate";
 import ActivityCardIcon from "./ActivityCardIcon.vue";
 import ActivityCardBodyShantytownUpdated from "./ActivityCardBody/ActivityCardBodyShantytownUpdated.vue";
 import ActivityCardBodyCommentCreated from "./ActivityCardBody/ActivityCardBodyCommentCreated.vue";
-import CommentModerationModal from "#app/components/CommentModerationModal/CommentModerationModal.vue";
+import CommentModerationModal from "#app/components/CommentBlock/CommentModerationModal.vue";
 import showActivityDepartementCode from "#app/mixins/showActivityDepartementCode";
 
 export default {

@@ -11,6 +11,7 @@
             <span
                 class="text-red font-bold cursor-pointer"
                 v-if="showActionIcons && (isOwner || (canModerate && isHover))"
+                @click="deleteMessage"
                 >Supprimer {{ isOwner ? "mon" : "le" }} message
                 <Icon icon="trash-alt" alt="Supprimer le message"
             /></span>
@@ -83,6 +84,10 @@ export default {
          */
         formatDate(...args) {
             return window.App.formatDate.apply(window, args);
+        },
+
+        deleteMessage() {
+            this.$emit("moderate");
         }
     },
     computed: {
