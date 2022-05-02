@@ -200,7 +200,7 @@
 </template>
 
 <script>
-import { getCadastre } from "#helpers/ignHelper";
+import { generateSquare, getCadastre } from "#helpers/ignHelper";
 import Map from "#app/components/map/map.vue";
 import DetailsPanel from "#app/components/ui/details/DetailsPanel.vue";
 import DetailsPanelSection from "#app/components/ui/details/DetailsPanelSection.vue";
@@ -229,10 +229,12 @@ export default {
             }
 
             try {
-                this.cadastrePromise = getCadastre({
-                    type: "Point",
-                    coordinates: [this.town.longitude, this.town.latitude]
-                });
+                this.cadastrePromise = getCadastre(
+                    generateSquare(
+                        [this.town.longitude, this.town.latitude],
+                        0.06
+                    )
+                );
                 const response = await this.cadastrePromise;
 
                 if (
