@@ -8,6 +8,7 @@
                 </h1>
                 <GeoSearchbar
                     :value="$store.state.directory.filters.location"
+                    :allowFreeInput="true"
                     @blur="handleSearchBlur"
                     placeholder="Département, nom de la structure"
                 >
