@@ -60,6 +60,7 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster/dist/leaflet.markercluster";
 import html2canvas from "html2canvas";
+import { notify } from "#helpers/notificationHelper";
 import "./map.scss"; // on importe le scss ici pour que le html généré par le js y ait accès
 
 import utensils from "../../../../img/utensils.png";
@@ -476,7 +477,7 @@ export default {
                 return;
             }
 
-            this.cadastreLayer = L.geoJSON(this.cadastre);
+            this.cadastreLayer = this.createCadastreLayer();
 
             if (this.showCadastre === true) {
                 this.map.addLayer(this.cadastreLayer);
@@ -514,6 +515,38 @@ export default {
     },
 
     methods: {
+        createCadastreLayer() {
+            return L.geoJSON(this.cadastre, {
+                onEachFeature(feature, layer) {
+                    const {
+                        numero,
+                        feuille,
+                        section,
+                        code_insee
+                    } = feature.properties;
+                    layer.bindTooltip(
+                        `N°${numero}<br/>Feuille ${feuille}<br/>Section ${section}<br/>N°INSEE ${code_insee}`
+                    );
+
+                    layer.on("click", () => {
+                        const input = document.createElement("textarea");
+                        input.value = `N°${numero}\nFeuille ${feuille}\nSection ${section}\nN°INSEE ${code_insee}`;
+                        document.body.appendChild(input);
+                        input.select();
+                        document.execCommand("copy");
+                        document.body.removeChild(input);
+
+                        notify({
+                            group: "notifications",
+                            type: "success",
+                            title: "Succès",
+                            text:
+                                "Le cadastre a été copié dans le presse-papier"
+                        });
+                    });
+                }
+            });
+        },
         printMapScreenshot() {
             this.onBeforePrint(true);
             // timeout nécessaire pour Chrome
@@ -828,7 +861,7 @@ export default {
             });
 
             if (this.cadastre) {
-                this.cadastreLayer = L.geoJSON(this.cadastre);
+                this.cadastreLayer = this.createCadastreLayer();
             }
 
             this.map.on("zoomend", this.onZoomEnd);
