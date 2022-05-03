@@ -13,6 +13,8 @@ export default function(Vue) {
             // Configure your matomo server and site by providing
             host: "https://stats.data.gouv.fr",
             siteId: 86,
+            cookieDomain: "*.resorption-bidonvilles.beta.gouv.fr",
+            domains: "*.resorption-bidonvilles.beta.gouv.fr",
 
             // Changes the default .js and .php endpoint's filename
             // Default: 'piwik'
