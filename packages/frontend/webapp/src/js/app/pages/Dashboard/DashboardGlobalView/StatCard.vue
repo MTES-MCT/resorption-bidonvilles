@@ -2,7 +2,7 @@
     <div
         class="border-1 border-cardBorder rounded-lg bg-blue100 py-1 w-64 mr-10"
     >
-        <div class="flex px-4 customHeight">
+        <div class="flex px-4 customHeight mb-2">
             <div class="text-primary text-xl mr-4" style="opacity: 0.4">
                 <Icon
                     v-if="cardStats.id === 'population'"
@@ -18,13 +18,22 @@
                     </span>
                 </div>
                 <p class="leading-tight">
-                    {{ cardStats.label }}
+                    {{ cardStats.label }}<br />
                     <span v-if="cardStats.figure_secondary">
-                        {{ cardStats.label_secondary }} <br />
+                        <span
+                            v-if="cardStats.id === 'population'"
+                            class="text-xs"
+                        >
+                            (toutes origines) <br />
+                        </span>
+                        {{ cardStats.label_secondary }}
                         <span class="text-primary font-bold">
                             {{ formatStat(cardStats.figure_secondary) }}
                         </span>
-                        {{ cardStats.label_tertiary }}
+                        {{ cardStats.label_tertiary }} <br />
+                    </span>
+                    <span v-if="cardStats.id === 'population'" class="text-xs">
+                        (toutes tailles)
                     </span>
                 </p>
                 <p v-if="cardStats.id === 'closed'">hors résorption</p>
