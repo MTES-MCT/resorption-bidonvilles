@@ -4,6 +4,9 @@
             <p class="-mt-5 mb-5">
                 <Icon icon="map-marker-alt" class="text-primary" />
                 <span class="ml-2">Localisation : {{ locationName }} </span>
+                <span v-if="locationName === 'France'">
+                    (métropolitaine et ultramarine)
+                </span>
             </p>
 
             <ul class="flex">
