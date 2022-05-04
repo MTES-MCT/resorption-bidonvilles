@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const Excel = require('exceljs');
 const { assetsSrc } = require('#server/config');
-const { toFormat: dateToString } = require('#server/utils/date');
 
 /**
  * @typedef {Object} CellContent
@@ -208,7 +207,7 @@ function column(i) {
  * @param {String}   locationName
  * @param {String}   title
  */
-function writeHeader(workbook, sheet, lastFrozenColumn, locationName, title) {
+function writeHeader(workbook, sheet, lastFrozenColumn, locationName, title, dateOfExport) {
     // first row
     writeTo(sheet, 'A1', [
         { bold: true, color: COLORS.WHITE, text: 'SITUATION DES BIDONVILLES' },
@@ -233,7 +232,7 @@ function writeHeader(workbook, sheet, lastFrozenColumn, locationName, title) {
 
     writeTo(sheet, 'A4', {
         bold: true,
-        text: `à la date du ${dateToString(new Date(), 'd/m/Y')}`,
+        text: `à la date du ${dateOfExport}`,
     });
 
     // logo
@@ -434,7 +433,7 @@ module.exports = {
      *
      * @returns {Promise} The promise responds with a Buffer
      */
-    createExport(title, locationName, sections, shantytowns) {
+    createExport(title, locationName, sections, shantytowns, dateOfExport) {
         // create a whole workbook
         const workbook = new Excel.Workbook();
 
@@ -461,7 +460,7 @@ module.exports = {
         );
 
         // create the header
-        writeHeader(workbook, sheet, lastFrozenColumn, locationName, title);
+        writeHeader(workbook, sheet, lastFrozenColumn, locationName, title, dateOfExport);
 
         // write each section
         const lastColumnIndex = sections.reduce((colIndex, section) => {
