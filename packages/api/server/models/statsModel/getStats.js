@@ -68,15 +68,7 @@ module.exports = async (user, location) => {
             replacements: shantytownReplacements,
         },
     );
-<<<<<<< HEAD
 
-    const users = await sequelize.query(
-        `SELECT 
-            u.created_at
-        FROM users u
-        LEFT JOIN localized_organizations lo ON u.fk_organization = lo.organization_id
-        WHERE u.fk_status = 'active'
-=======
     const connectedUsers = await sequelize.query(
         `SELECT
                 unl.fk_user AS user_id,
@@ -88,7 +80,6 @@ module.exports = async (user, location) => {
                 users u ON u.user_id = unl.fk_user
         LEFT JOIN
                 localized_organizations lo ON u.fk_organization = lo.organization_id
->>>>>>> fa8df349 ((1421) Nb users connectés sur vue d'ensemble du TB)
         ${where}
         GROUP BY
                 date_log,
@@ -100,11 +91,7 @@ module.exports = async (user, location) => {
             type: sequelize.QueryTypes.SELECT,
         },
     );
+
     const listOfDates = getArrayOfDates(otherDate, date);
-<<<<<<< HEAD
-    const stats = decomposeForDiagramm(shantytownStats, users, listOfDates);
-=======
-    const stats = decomposeForDiagramm(shantytownStats, connectedUsers, listOfDates, restrictedLocation);
->>>>>>> fa8df349 ((1421) Nb users connectés sur vue d'ensemble du TB)
-    return stats;
+    return decomposeForDiagramm(shantytownStats, connectedUsers, listOfDates);
 };
