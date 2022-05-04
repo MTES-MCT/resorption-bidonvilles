@@ -1,9 +1,9 @@
 const moment = require('moment');
 
-module.exports = (towns, users, listOfDates) => {
+module.exports = (towns, connectedUsers, listOfDates) => {
     const date2019 = moment(new Date('2019-01-01T00:00:00')).format('YYYY-MM-DD HH:mm:ss ZZ');
 
-    const userStats = {
+    const connectedUserStats = {
         evolution: 0,
         data: [],
     };
@@ -41,7 +41,8 @@ module.exports = (towns, users, listOfDates) => {
             let openShantytownsTotal = 0;
             let closedShantytownsTotal = 0;
             let resorbedShantytownsTotal = 0;
-            let usersTotal = 0;
+            let connectedUsersTotal = 0;
+
             towns.forEach(
                 (town) => {
                     if (!listOfId.includes(town.id) && moment(town.updated_at).format('YYYY-MM-DD HH:mm:ss ZZ') <= date) {
@@ -60,10 +61,18 @@ module.exports = (towns, users, listOfDates) => {
                     }
                 },
             );
-            users.forEach(
-                (user) => {
-                    if (moment(user.created_at).format('YYYY-MM-DD HH:mm:ss ZZ') <= date) {
-                        usersTotal += 1;
+            const weekStartDate = new Date(date.valueOf());
+            weekStartDate.setDate(weekStartDate.getDate() - 7);
+            // Calcul des utilisateurs actifs (au moins une connexion par semaine)
+            const countedUsers = [];
+            connectedUsers.forEach(
+                (connectedUser) => {
+                    if ((moment(connectedUser.date_log).format('YYYY-MM-DD HH:mm:ss ZZ') <= date)
+                        && (moment(connectedUser.date_log).format('YYYY-MM-DD HH:mm:ss ZZ') > moment(weekStartDate).format('YYYY-MM-DD HH:mm:ss ZZ'))) {
+                        if (countedUsers.indexOf(connectedUser.user_id) === -1) {
+                            countedUsers.push(connectedUser.user_id);
+                            connectedUsersTotal += 1;
+                        }
                     }
                 },
             );
@@ -75,16 +84,16 @@ module.exports = (towns, users, listOfDates) => {
             closedShantytowns.data.unshift({ figure: closedShantytownsTotal, formatedDate });
             resorbedShantytowns.data.unshift({ figure: resorbedShantytownsTotal, formatedDate });
             openShantytowns.data.unshift({ figure: openShantytownsTotal, formatedDate });
-            userStats.data.unshift({ figure: usersTotal, formatedDate });
+            connectedUserStats.data.unshift({ figure: connectedUsersTotal, formatedDate });
         },
     );
     population.evolution = Math.round((((population.data.slice(-1)[0].figure - population.data[0].figure) * 100) / population.data[0].figure).toFixed(2));
     minors.evolution = Math.round((((minors.data.slice(-1)[0].figure - minors.data[0].figure) * 100) / minors.data[0].figure).toFixed(2));
     closedShantytowns.evolution = Math.round((((closedShantytowns.data.slice(-1)[0].figure - closedShantytowns.data[0].figure) * 100) / closedShantytowns.data[0].figure).toFixed(2));
     resorbedShantytowns.evolution = Math.round((((resorbedShantytowns.data.slice(-1)[0].figure - resorbedShantytowns.data[0].figure) * 100) / resorbedShantytowns.data[0].figure).toFixed(2));
-    userStats.evolution = Math.round((((userStats.data.slice(-1)[0].figure - userStats.data[0].figure) * 100) / userStats.data[0].figure).toFixed(2));
+    connectedUserStats.evolution = Math.round((((connectedUserStats.data.slice(-1)[0].figure - connectedUserStats.data[0].figure) * 100) / connectedUserStats.data[0].figure).toFixed(2));
 
     return {
-        population, minors, closedShantytowns, resorbedShantytowns, userStats, openShantytowns, minorsInSchool,
+        population, minors, closedShantytowns, resorbedShantytowns, connectedUserStats, openShantytowns, minorsInSchool,
     };
 };
