@@ -34,7 +34,15 @@
             </div>
         </template>
         <template v-slot:body>
-            <div>
+            <div v-if="user.is_superuser === true" class="w-64">
+                Vous souhaitez exporter les données des sites à la date:
+                <DatepickerV2
+                    id="export_at"
+                    label="Date d'export"
+                    v-model="dateInput"
+                ></DatepickerV2>
+            </div>
+            <div class="mt-4">
                 <div class="font-bold mb-1">
                     Les données exportées par défaut
                 </div>
@@ -48,7 +56,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="mt-4">
+            <div v-if="showOptions" class="mt-4">
                 <p class="font-bold mb-1">
                     Cochez les informations supplémentaires que vous souhaitez
                     exporter
@@ -70,6 +78,7 @@
 import { open } from "#helpers/api/main";
 import Checkbox from "#app/components/ui/Form/input/Checkbox";
 import { VUE_APP_API_URL } from "#src/js/env.js";
+const moment = require("moment");
 
 export default {
     components: { Checkbox },
@@ -131,10 +140,26 @@ export default {
                     }
                 }
             ],
+            dateInput: new Date(),
             options: []
         };
     },
+    watch: {
+        dateInput() {
+            this.options = [];
+        }
+    },
     computed: {
+        showOptions() {
+            const today = new Date();
+            return (
+                moment(this.dateInput).format("YYYY-MM-DD") ===
+                moment(today).format("YYYY-MM-DD")
+            );
+        },
+        user() {
+            return this.$store.state.config.configuration.user;
+        },
         title() {
             return this.closedTowns ? "fermés" : "existants";
         },
@@ -165,7 +190,7 @@ export default {
                 type
             )}&locationCode=${encodeURIComponent(code)}&closedTowns=${
                 this.closedTowns ? "1" : "0"
-            }`;
+            }&date=${encodeURIComponent(this.dateInput.getTime())}`;
 
             if (this.options.length > 0) {
                 url += `&options=${encodeURIComponent(this.options.join(","))}`;
