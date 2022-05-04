@@ -7,6 +7,8 @@ const shantytownModel = require('#server/models/shantytownModel');
 const closingSolutionModel = require('#server/models/closingSolutionModel');
 const excelUtils = require('#server/utils/excel');
 const statsExportsModel = require('#server/models/statsExports');
+const moment = require('moment');
+const serializeShantytown = require('#server/models/shantytownModel/_common/serializeShantytown');
 
 
 const serializeExportProperties = require('./_common/serializeExportProperties');
@@ -30,6 +32,11 @@ module.exports = async (user, data) => {
         throw new ServiceError('permission_denied', new Error('Vous n\'êtes pas autorisé(e) à exporter le périmètre géographique demandé'));
     }
 
+    const today = new Date();
+
+    if (user.is_superuser === false && moment(data.date).format('YYYY-MM-DD') !== moment(today).format('YYYY-MM-DD')) {
+        throw new ServiceError('permission_denied', new Error('Vous n\'êtes pas autorisé(e) à exporter des données passées'));
+    }
     const closedTowns = parseInt(data.closedTowns, 10) === 1;
     const filters = [
         {
@@ -60,11 +67,27 @@ module.exports = async (user, data) => {
 
     let shantytowns;
     try {
-        shantytowns = await shantytownModel.findAll(
-            user,
-            filters,
-            'export',
-        );
+        if (moment(data.date).format('YYYY-MM-DD') === moment(today).format('YYYY-MM-DD')) {
+            shantytowns = await shantytownModel.findAll(
+                user,
+                filters,
+                'export',
+            );
+        } else {
+            shantytowns = await shantytownModel.getExportHistory(user, geoModel.getLocation(location.type, location.code), moment(data.date).format('YYYY-MM-DD HH:mm:ss ZZ'));
+            const listOfId = [];
+            shantytowns = shantytowns.filter(({ id, closed_at }) => {
+                if (listOfId.includes(id)) {
+                    return false;
+                }
+                listOfId.push(id);
+                if (closedTowns ? closed_at === null : closed_at !== null) {
+                    return false;
+                }
+                return true;
+            });
+            shantytowns = shantytowns.map(town => serializeShantytown(town, user));
+        }
     } catch (error) {
         throw new ServiceError('fetch_failed', new Error('Une erreur est survenue lors de la lecture en base de données'));
     }
@@ -99,6 +122,7 @@ module.exports = async (user, data) => {
         locationName,
         sections,
         shantytowns,
+        moment(data.date).format('DD/MM/YYYY'),
     );
     // add that export to the stats
 
