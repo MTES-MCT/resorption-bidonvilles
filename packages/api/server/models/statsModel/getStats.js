@@ -15,10 +15,10 @@ module.exports = async (user, location) => {
         case 'nation':
             break;
         case 'region':
-            where = `AND lo.region_code = '${location.region.code}'`;
+            where = `WHERE lo.region_code = '${location.region.code}'`;
             break;
         default:
-            where = `AND lo.departement_code = '${location.departement.code}'`;
+            where = `WHERE lo.departement_code = '${location.departement.code}'`;
             break;
     }
 
@@ -68,6 +68,7 @@ module.exports = async (user, location) => {
             replacements: shantytownReplacements,
         },
     );
+<<<<<<< HEAD
 
     const users = await sequelize.query(
         `SELECT 
@@ -75,13 +76,35 @@ module.exports = async (user, location) => {
         FROM users u
         LEFT JOIN localized_organizations lo ON u.fk_organization = lo.organization_id
         WHERE u.fk_status = 'active'
+=======
+    const connectedUsers = await sequelize.query(
+        `SELECT
+                unl.fk_user AS user_id,
+                TO_CHAR(unl.datetime, 'YYYY-MM-DD') AS date_log,
+                COUNT(*)
+        FROM
+                user_navigation_logs unl 
+        LEFT JOIN
+                users u ON u.user_id = unl.fk_user
+        LEFT JOIN
+                localized_organizations lo ON u.fk_organization = lo.organization_id
+>>>>>>> fa8df349 ((1421) Nb users connectés sur vue d'ensemble du TB)
         ${where}
-        ORDER BY u.created_at DESC`,
+        GROUP BY
+                date_log,
+                fk_user
+        ORDER BY
+                date_log DESC,
+                fk_user`,
         {
             type: sequelize.QueryTypes.SELECT,
         },
     );
     const listOfDates = getArrayOfDates(otherDate, date);
+<<<<<<< HEAD
     const stats = decomposeForDiagramm(shantytownStats, users, listOfDates);
+=======
+    const stats = decomposeForDiagramm(shantytownStats, connectedUsers, listOfDates, restrictedLocation);
+>>>>>>> fa8df349 ((1421) Nb users connectés sur vue d'ensemble du TB)
     return stats;
 };
