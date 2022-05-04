@@ -72,8 +72,7 @@ module.exports = async (user, location) => {
     const connectedUsers = await sequelize.query(
         `SELECT
                 unl.fk_user AS user_id,
-                TO_CHAR(unl.datetime, 'YYYY-MM-DD') AS date_log,
-                COUNT(*)
+                TO_CHAR(unl.datetime, 'YYYY-MM-DD') AS date_log
         FROM
                 user_navigation_logs unl 
         LEFT JOIN
