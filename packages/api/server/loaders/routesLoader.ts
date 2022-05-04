@@ -397,7 +397,8 @@ export default (app) => {
         middlewares.auth.authenticate,
         (...args) => middlewares.auth.checkPermissions(['shantytown.export'], ...args),
         middlewares.charte.check,
-        controllers.town.exportTown,
+        validators.exportTowns,
+        controllers.town.export,
     );
     app.get(
         '/towns',
