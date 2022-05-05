@@ -26,7 +26,11 @@
                         v-if="item.type === 'separator'"
                         class="w-px bg-G400 h-4 block"
                     ></span>
-                    <Link v-else :to="item.target">
+                    <Link
+                        v-else
+                        :to="item.target"
+                        @click.native="handleTracking(item.matomo)"
+                    >
                         {{ item.label }}
                     </Link>
                 </li>
@@ -105,6 +109,13 @@ export default {
         }
     },
     methods: {
+        handleTracking(tracking) {
+            if (!tracking) {
+                return;
+            }
+
+            this.$trackMatomoEvent(tracking.category, tracking.action);
+        },
         filterMenuItems(items, itemType) {
             return items.filter(elt => elt.menu === itemType);
         },

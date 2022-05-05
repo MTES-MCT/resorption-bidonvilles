@@ -18,6 +18,9 @@
       {{ $t("footer.RGAA") }}
     </li>
     <li>
+      <Link to="https://blog-resorption-bidonvilles.fr" color="text-white" hoverColor="text-white">Blog</Link>
+    </li>
+    <li>
       <a href="https://github.com/MTES-MCT/resorption-bidonvilles">
         <Icon :icon="['fab', 'github']" width="16" height="16" /> GitHub
       </a>
