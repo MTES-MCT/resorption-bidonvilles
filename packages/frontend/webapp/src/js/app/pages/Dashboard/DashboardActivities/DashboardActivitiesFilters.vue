@@ -20,9 +20,9 @@ export default {
         return {
             sections: [
                 {
-                    id: "all",
-                    label: "Toutes les activités",
-                    track_id: "toutes les activités"
+                    id: "comment_creation",
+                    label: "Nouveaux messages",
+                    track_id: "nouveaux messages"
                 },
                 {
                     id: "shantytown_creation",
@@ -45,9 +45,9 @@ export default {
                     track_id: "nouveaux utilisateurs"
                 },
                 {
-                    id: "comment_creation",
-                    label: "Nouveaux messages",
-                    track_id: "nouveaux messages"
+                    id: "all",
+                    label: "Toutes les activités",
+                    track_id: "toutes les activités"
                 }
             ]
         };

@@ -15,7 +15,7 @@
                 rawShantytowns.length === 0 &&
                     currentFilter === 'my_shantytowns'
             "
-            class="text-primary p-4 bg-blue200"
+            class="text-primary p-4 bg-blue200 text-center font-bold"
         >
             Vous n'intervenez sur aucun site. Rendez-vous sur la fiche d'un site
             pour vous déclarer intervenant(e).
@@ -65,10 +65,7 @@
             </Map>
         </section>
 
-        <footer
-            class="mt-10 text-center"
-            v-if="currentFilter !== 'my_shantytowns'"
-        >
+        <footer class="mt-10 text-center">
             <router-link to="/liste-des-sites" class="link"
                 >Voir tous les sites</router-link
             >
