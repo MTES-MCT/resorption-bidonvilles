@@ -16,6 +16,7 @@
             <TextArea
                 rows="5"
                 name="newComment"
+                :disabled="loading"
                 v-model="newComment"
                 placeholder="Partagez votre passage sur le site, le contexte sanitaire, la situation des habitants, difficultés rencontrées lors de votre intervention…"
             />
@@ -86,6 +87,10 @@ export default {
             this.newComment = "";
         },
         async addComment() {
+            if (this.loading === true) {
+                return;
+            }
+
             // clean previous errors
             this.commentError = null;
             this.commentErrors = {};
@@ -108,6 +113,7 @@ export default {
                 this.commentError = response.user_message;
                 this.commentErrors = response.fields || {};
             }
+
             this.loading = false;
         }
     }

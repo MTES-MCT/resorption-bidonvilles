@@ -100,6 +100,7 @@
                             validationName="Ecrire un message"
                             placeholder="Partagez votre passage sur le site, le contexte sanitaire, la situation des habitants, difficultés rencontrées lors de votre intervention…"
                             :showMandatoryStar="true"
+                            :disabled="loading"
                         />
                         <div class="flex items-center justify-between">
                             <Button
@@ -188,7 +189,7 @@ export default {
             });
         },
         async addCovidComment() {
-            if (this.loading) {
+            if (this.loading === true) {
                 return;
             }
 
