@@ -46,7 +46,7 @@ function getMonthDiffBetween(d1, d2) {
 }
 
 function substractWeek(date) {
-    const newDate = new Date(date.valueOf());
+    const newDate = new Date(date);
     newDate.setDate(newDate.getDate() - 7);
     return newDate;
 }
