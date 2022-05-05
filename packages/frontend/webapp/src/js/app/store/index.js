@@ -95,6 +95,24 @@ export default new Vuex.Store({
                 state.towns.data[index] = town;
             }
         },
+        updateShantytownComments(state, { townId, comments }) {
+            if (
+                state.detailedTown !== null &&
+                state.detailedTown.id === townId
+            ) {
+                state.detailedTown.comments = comments;
+            }
+
+            const townIndex = state.towns.data.findIndex(
+                ({ id }) => id === townId
+            );
+            if (townIndex !== undefined) {
+                state.towns.data.splice(townIndex, 1, {
+                    ...state.towns.data[townIndex],
+                    comments: comments
+                });
+            }
+        },
         updateShantytownActors(state, { townId, actors }) {
             if (
                 state.detailedTown !== null &&

@@ -39,7 +39,9 @@
                             </div>
                         </div>
                     </slot>
-                    <div class="px-10 pt-6 pb-10"><slot name="body" /></div>
+                    <div class="px-10 pt-6 pb-10 max-w-2xl">
+                        <slot name="body" />
+                    </div>
 
                     <div
                         v-if="$slots.footer"

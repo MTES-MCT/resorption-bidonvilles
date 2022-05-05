@@ -235,7 +235,8 @@ module.exports = (models) => {
                 epci: town.epci,
                 city: town.city,
             };
-            if (author.id !== req.user.id && !can(req.user).do('moderate', 'shantytown_comment').on(location)) {
+            const isOwner = author.id === req.user.id;
+            if (!isOwner && !can(req.user).do('moderate', 'shantytown_comment').on(location)) {
                 return res.status(400).send({
                     error: {
                         user_message: 'Vous n\'avez pas accès à ces données',
@@ -244,14 +245,18 @@ module.exports = (models) => {
                 });
             }
 
-            const message = validator.trim(req.body.message || '');
-            if (message === '') {
-                return res.status(400).send({
-                    error: {
-                        user_message: 'Vous devez préciser le motif de suppression du commentaire',
-                        developer_message: 'Message is missing',
-                    },
-                });
+            let message;
+            if (!isOwner) {
+                message = validator.trim(req.body.message || '');
+
+                if (message === '') {
+                    return res.status(400).send({
+                        error: {
+                            user_message: 'Vous devez préciser le motif de suppression du commentaire',
+                            developer_message: 'Message is missing',
+                        },
+                    });
+                }
             }
 
             try {
@@ -274,27 +279,32 @@ module.exports = (models) => {
             }
 
             try {
-                await sendUserCommentDeletion(author, {
-                    variables: {
-                        town: {
-                            usename: town.usename,
-                            city: {
-                                name: town.city.name,
+                if (!isOwner) {
+                    await sendUserCommentDeletion(author, {
+                        variables: {
+                            town: {
+                                usename: town.usename,
+                                city: {
+                                    name: town.city.name,
+                                },
                             },
+                            comment: {
+                                description: comment.description,
+                                created_at: tsToString(comment.createdAt, 'd/m/Y'),
+                            },
+                            message,
                         },
-                        comment: {
-                            description: comment.description,
-                            created_at: tsToString(comment.createdAt, 'd/m/Y'),
-                        },
-                        message,
-                    },
-                });
+                    });
+                }
             } catch (error) {
                 // ignore
             }
 
             return res.status(200).send({
-                comments: town.comments.regular.filter(({ id }) => id !== parseInt(req.params.commentId, 10)),
+                comments: {
+                    regular: town.comments.regular.filter(({ id }) => id !== parseInt(req.params.commentId, 10)),
+                    covid: town.comments.covid.filter(({ id }) => id !== parseInt(req.params.commentId, 10)),
+                },
             });
         },
 

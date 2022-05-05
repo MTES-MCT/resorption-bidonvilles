@@ -141,7 +141,7 @@
 import { fr } from "vuejs-datepicker/dist/locale";
 import CheckableGroup from "#app/components/ui/Form/CheckableGroup";
 import { addCovidComment } from "#helpers/api/town";
-import CommentBlock from "#app/pages/TownDetails/ui/CommentBlock";
+import CommentBlock from "#app/components/CommentBlock/CommentBlock.vue";
 
 export default {
     components: { CommentBlock, CheckableGroup },

@@ -3,7 +3,7 @@
         <div class="text-display-md font-bold pb-2">
             {{ comments.length }} message{{ comments.length > 1 ? "s" : "" }}
         </div>
-        <CommentBlock
+        <ModerableCommentBlock
             v-for="comment in sortedComments"
             :key="comment.id"
             :id="`message${comment.id}`"
@@ -13,11 +13,11 @@
 </template>
 
 <script>
-import CommentBlock from "./ui/CommentBlock";
+import ModerableCommentBlock from "#app/components/CommentBlock/ModerableCommentBlock.vue";
 
 export default {
     components: {
-        CommentBlock
+        ModerableCommentBlock
     },
     props: {
         comments: {
