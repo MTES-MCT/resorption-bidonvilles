@@ -55,12 +55,18 @@
                 {{ displayFigure.date }}
             </div>
             <div class="flex justify-center items-end mt-2">
-                <Bar
-                    :stat="stat"
+                <div
                     v-for="(stat, index) in columns"
                     :key="index"
-                    @hover="onMouseHover"
-                ></Bar>
+                    @mouseenter="onMouseOver(stat)"
+                    @mouseleave="onMouseLeave()"
+                >
+                    <Bar
+                        :height="stat.height"
+                        :color="stat.color"
+                        :hoverColor="stat.hoverColor"
+                    ></Bar>
+                </div>
             </div>
             <div class="text-center mt-4">
                 <div :class="evolutionColor">
@@ -104,6 +110,7 @@ export default {
             isEvolutionPositive: this.cardStats.evolution >= 0,
             columns: [],
             maxNumber: 0,
+            hover: false,
             displayFigure: {
                 show: false,
                 figure: 50,
@@ -115,11 +122,15 @@ export default {
         this.maxNumber = Math.max(...this.figures);
         this.setColumns();
     },
+
     methods: {
-        onMouseHover(value) {
-            this.displayFigure.show = value.show;
+        onMouseOver(value) {
+            this.displayFigure.show = true;
             this.displayFigure.figure = value.figure;
             this.displayFigure.date = value.date;
+        },
+        onMouseLeave() {
+            this.displayFigure.show = false;
         },
         formatStat(number) {
             return new Intl.NumberFormat("fr-FR").format(number);
