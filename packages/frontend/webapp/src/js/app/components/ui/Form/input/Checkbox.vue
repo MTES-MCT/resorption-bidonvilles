@@ -89,6 +89,10 @@ export default {
             let currentValue = [...this.value];
             if (e.target.checked) {
                 currentValue.push(this.checkValue);
+                this.$emit("checkedItem", {
+                    value: this.checkValue,
+                    label: this.label
+                });
             } else {
                 currentValue = currentValue.filter(
                     item => item !== this.checkValue
