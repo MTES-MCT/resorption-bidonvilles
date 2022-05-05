@@ -117,6 +117,15 @@ export default {
                 );
             });
         },
+        dashboardShantytownsWithTarget(state, getters, rootState) {
+            return rootState.towns.data.filter(town => {
+                if (town.status !== "open") {
+                    return false;
+                }
+
+                return town.resorptionTarget !== null;
+            });
+        },
         dashboardMyTerritory(state, getters, rootState) {
             return rootState.towns.data.filter(
                 town =>
@@ -134,6 +143,12 @@ export default {
 
             if (state.dashboard.shantytowns.filter === "new_shantytowns") {
                 return getters.dashboardNewShantytowns;
+            }
+
+            if (
+                state.dashboard.shantytowns.filter === "shantytowns_with_target"
+            ) {
+                return getters.dashboardShantytownsWithTarget;
             }
 
             return getters.dashboardMyShantytowns;
