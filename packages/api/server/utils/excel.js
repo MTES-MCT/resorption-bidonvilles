@@ -73,6 +73,7 @@ const COLORS = {
     XPALE_GREY: { argb: 'FFF3F3F3' },
     WHITE: { argb: 'FFFFFFFF' },
     YELLOW: { argb: 'FFFFFF00' },
+    LINK: { argb: 'FF0020F8' },
 };
 
 /**
@@ -112,6 +113,11 @@ function writeTo(sheet, cellReference, content) {
             cell.value = {
                 formula: content.formula,
             };
+        } else if (content.link) {
+            cell.value = {
+                text: content.text,
+                hyperlink: content.link,
+            };
         } else {
             cell.value = content.text;
         }
@@ -123,6 +129,11 @@ function writeTo(sheet, cellReference, content) {
             color: content.color || COLORS.BLACK,
             name: FONT_NAME,
         };
+
+        if (content.link) {
+            cell.font.color = COLORS.LINK;
+            cell.font.underline = true;
+        }
     }
 }
 
@@ -242,11 +253,12 @@ function writeHeader(workbook, sheet, lastFrozenColumn, locationName, title) {
  * @param {Sheet}                  sheet
  * @param {String}                 cellReference
  * @param {String|Number}          data
+ * @param {String|null}            link
  * @param {Property}               style
  * @param {Array.<BorderPosition>} [borders]
  * @param {Boolean}                [shouldFill]   Wether the cell should be filled with a bgColor or not
  */
-function writeData(sheet, cellReference, data, style, borders = [], shouldFill = false) {
+function writeData(sheet, cellReference, data, link, style, borders = [], shouldFill = false) {
     align(sheet, cellReference, {
         vertical: 'middle',
         horizontal: style.align || 'center',
@@ -268,6 +280,7 @@ function writeData(sheet, cellReference, data, style, borders = [], shouldFill =
         italic,
         text,
         color,
+        link,
     });
 
     if (borders.length > 0) {
@@ -289,7 +302,9 @@ function writeData(sheet, cellReference, data, style, borders = [], shouldFill =
  * @param {Array.<Shantytown>} shantytowns
  */
 function writeProperty(sheet, property, columnIndex, drawBorder, shantytowns) {
-    const { title, width, data } = property;
+    const {
+        title, width, data, link,
+    } = property;
     const rowIndex = 7;
     const colRef = column(columnIndex);
     const cellRef = `${colRef}${rowIndex}`;
@@ -329,6 +344,7 @@ function writeProperty(sheet, property, columnIndex, drawBorder, shantytowns) {
             sheet,
             `${colRef}${rowIndex + shantytownIndex + 1}`,
             data(shantytown),
+            link ? link(shantytown) : null,
             property,
             borders,
             shantytownIndex % 2 !== 0,

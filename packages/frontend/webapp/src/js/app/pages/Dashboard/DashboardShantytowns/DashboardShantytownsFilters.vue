@@ -22,6 +22,7 @@ export default {
         ...mapGetters({
             myShantytowns: "dashboard/dashboardMyShantytowns",
             newShantytowns: "dashboard/dashboardNewShantytowns",
+            shantytownsWithTarget: "dashboard/dashboardShantytownsWithTarget",
             myTerritory: "dashboard/dashboardMyTerritory",
             currentFilter: "dashboard/dashboardShantytownsFilter",
             locationFilter: "dashboard/dashboardLocationFilter"
@@ -30,6 +31,7 @@ export default {
             return {
                 my_shantytowns: this.myShantytowns.length,
                 new_shantytowns: this.newShantytowns.length,
+                shantytowns_with_target: this.shantytownsWithTarget.length,
                 my_territory: this.myTerritory.length
             };
         },
@@ -71,6 +73,13 @@ export default {
                     track_id: "Nouveaux sites"
                 },
                 { type: "separator", label: "", id: "separator_2" },
+                {
+                    type: "link",
+                    label: "Objectifs de résorption",
+                    id: "shantytowns_with_target",
+                    track_id: "Objectifs de résorption"
+                },
+                { type: "separator", label: "", id: "separator_3" },
                 {
                     type: "link",
                     label: this.isUserLocation

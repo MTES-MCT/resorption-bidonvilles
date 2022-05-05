@@ -1,7 +1,20 @@
 <template>
-    <div class="border-t-1 border-G400 py-4">
-        <div class="text-G600 text-sm mb-1">
-            {{ formatDate(comment.createdAt, "d M y à h:i") }}
+    <div
+        class="border-t-1 border-G400 py-4"
+        @mouseenter="isHover = true"
+        @mouseleave="isHover = false"
+    >
+        <div class="flex justify-between">
+            <div class="text-G600 text-sm mb-1">
+                {{ formatDate(comment.createdAt, "d M y à h:i") }}
+            </div>
+            <span
+                class="text-red font-bold cursor-pointer"
+                v-if="showActionIcons && (isOwner || (canModerate && isHover))"
+                @click="deleteMessage"
+                >Supprimer {{ isOwner ? "mon" : "le" }} message
+                <Icon icon="trash-alt" alt="Supprimer le message"
+            /></span>
         </div>
         <div
             class="text-G600 text-sm mb-1"
@@ -53,7 +66,17 @@ export default {
     props: {
         comment: {
             type: Object
+        },
+        // on moderation modal, the comment block is shown
+        showActionIcons: {
+            type: Boolean,
+            default: false
         }
+    },
+    data() {
+        return {
+            isHover: false
+        };
     },
     methods: {
         /**
@@ -61,6 +84,10 @@ export default {
          */
         formatDate(...args) {
             return window.App.formatDate.apply(window, args);
+        },
+
+        deleteMessage() {
+            this.$emit("moderate");
         }
     },
     computed: {
@@ -72,6 +99,17 @@ export default {
             return covidTags.filter(t => {
                 return !!this.comment.covid[t.prop];
             });
+        },
+        isOwner() {
+            return (
+                this.comment.createdBy.id ===
+                this.$store.state.config.configuration.user.id
+            );
+        },
+        canModerate() {
+            return this.$store.getters["config/hasPermission"](
+                "shantytown_comment.moderate"
+            );
         }
     }
 };

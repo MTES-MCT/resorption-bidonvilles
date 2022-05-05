@@ -104,6 +104,7 @@
                             class="mr-2 mb-2"
                             :value="filters.fieldType"
                             @input="val => updateFilters('fieldType', val)"
+                            @checkedItem="trackFilter('Type de sites', $event)"
                             :options="
                                 fieldTypes.map(f => ({
                                     label: f.label,
@@ -116,6 +117,9 @@
                             class="mr-2 mb-2"
                             :value="filters.population"
                             @input="val => updateFilters('population', val)"
+                            @checkedItem="
+                                trackFilter('Nombre de personnes', $event)
+                            "
                             :options="[
                                 { value: null, label: 'Inconnu' },
                                 { value: '-9', label: 'Moins de 10 personnes' },
@@ -134,6 +138,7 @@
                             class="mr-2 mb-2"
                             :value="filters.origin"
                             @input="val => updateFilters('origin', val)"
+                            @checkedItem="trackFilter('Origines', $event)"
                             :options="[
                                 {
                                     value: 1,
@@ -159,6 +164,9 @@
                             class="mr-2 mb-2"
                             :value="filters.conditions"
                             @input="val => updateFilters('conditions', val)"
+                            @checkedItem="
+                                trackFilter('Conditions de vie', $event)
+                            "
                             :options="[
                                 {
                                     value: 'accessToWater',
@@ -205,6 +213,9 @@
                             class="mr-2 mb-2"
                             :value="filters.closingReason"
                             @input="val => updateFilters('closingReason', val)"
+                            @checkedItem="
+                                trackFilter('Cause de la fermeture', $event)
+                            "
                             :options="
                                 closingReasons.map(f => ({
                                     label: f.label,
@@ -218,6 +229,9 @@
                             class="mr-2 mb-2"
                             :value="filters.solvedOrClosed"
                             @input="val => updateFilters('solvedOrClosed', val)"
+                            @checkedItem="
+                                trackFilter('Résorbé / fermé', $event)
+                            "
                             :options="[
                                 {
                                     value: 'closed',
@@ -235,6 +249,9 @@
                             class="mr-2 mb-2"
                             :value="filters.justice"
                             @input="val => updateFilters('justice', val)"
+                            @checkedItem="
+                                trackFilter('Procédure judiciaire', $event)
+                            "
                             :options="[
                                 { value: null, label: 'Inconnu' },
                                 { value: 'none', label: 'Aucune' },
@@ -257,6 +274,7 @@
                             class="mr-2 mb-2"
                             :value="filters.actors"
                             @input="val => updateFilters('actors', val)"
+                            @checkedItem="trackFilter('Intervenants', $event)"
                             :options="[
                                 { value: 'yes', label: 'Oui' },
                                 { value: 'no', label: 'Non' }
@@ -267,6 +285,9 @@
                             class="mr-2 mb-2"
                             :value="filters.target"
                             @input="val => updateFilters('target', val)"
+                            @checkedItem="
+                                trackFilter('Objectif résorption', $event)
+                            "
                             :options="[
                                 { value: 'yes', label: 'Oui' },
                                 { value: 'no', label: 'Non' }
@@ -440,6 +461,24 @@ export default {
         }
     },
     methods: {
+        trackFilter(eventAction, { label: eventName }) {
+            let eventCategory;
+            let eventActionPrefix;
+
+            if (this.currentTab === "close") {
+                eventCategory = "Filtre des sites fermés";
+                eventActionPrefix = "FDSF";
+            } else {
+                eventCategory = "Filtre des sites ouverts";
+                eventActionPrefix = "FDSO";
+            }
+
+            this.$trackMatomoEvent(
+                eventCategory,
+                `${eventActionPrefix} — ${eventAction}`,
+                eventName
+            );
+        },
         handleSearchBlur(data) {
             this.$trackMatomoEvent("Liste des sites", "Recherche");
             this.$store.commit("setFilters", {

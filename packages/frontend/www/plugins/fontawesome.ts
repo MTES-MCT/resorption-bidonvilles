@@ -22,10 +22,15 @@ import {
     faSync,
     faUserPlus,
     faUsers,
-    faUserShield
+    faUserShield,
+    faArrowUpRightFromSquare
 } from "@fortawesome/free-solid-svg-icons";
 
 export default defineNuxtPlugin((nuxtApp) => {
+    // the UI library uses an icon name "external-link-alt" that exists in v5 (used in webapp) but
+    // not in v6 (used here)
+    faArrowUpRightFromSquare.iconName = "external-link-alt";
+
     config.autoAddCss = false;
     library.add(
         faAddressBook,
@@ -47,7 +52,8 @@ export default defineNuxtPlugin((nuxtApp) => {
         faSync,
         faUserPlus,
         faUsers,
-        faUserShield
+        faUserShield,
+        faArrowUpRightFromSquare
     );
     nuxtApp.vueApp.component('font-awesome-icon', FontAwesomeIcon);
 });

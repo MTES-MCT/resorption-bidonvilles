@@ -15,48 +15,6 @@
                 Agir pour résorber les bidonvilles
             </h1>
 
-            <p class="mb-4">
-                <em>Résorption-bidonvilles</em> a pour vocation d'<strong
-                    >accélérer la politique de résorption des
-                    bidonvilles</strong
-                >
-                telle que décrite par
-                <a
-                    class="link"
-                    href="https://www.legifrance.gouv.fr/download/pdf/circ?id=42949"
-                    target="_blank"
-                >
-                    l'instruction du 25 janvier 2018.
-                </a>
-                Il s'agit pour cela de dépasser l'approche centrée sur les
-                évacuations au profit d'une
-                <strong>
-                    approche globale alliant insertion sociale, respect de
-                    l'ordre public et prévention des réinstallations.
-                </strong>
-            </p>
-
-            <p class="mb-4">
-                <strong>
-                    Les données partagées sur la plateforme doivent être
-                    utilisées uniquement pour servir cet objectif de résorption,
-                </strong>
-                ne doivent pas être nominatives ni faire référence à l'origine
-                ethnique ou culturelle des personnes et doivent respecter la
-                dignité des habitants des bidonvilles.
-            </p>
-
-            <p>
-                <strong>La plateforme est un outil collaboratif</strong> où
-                chaque utilisateur, à sa place, s'engage à contribuer, à être
-                actif.
-            </p>
-
-            <div class="my-4">
-                <a class="link" :href="charte.fichier" target="_blank">
-                    Charte d'engagement détaillée
-                </a>
-            </div>
             <div class="bg-yellow-200 flex flex-row p-5 mb-8">
                 <div>
                     <Checkbox
@@ -67,7 +25,8 @@
                     />
                 </div>
                 <div>
-                    En validant mon accès,
+                    En validant mon accès à
+                    <span class="italic">Résorption-bidonvilles</span>,
                     <strong
                         >je m’engage à contribuer et à utiliser la plateforme
                         dans une optique de résorption des bidonvilles selon
@@ -94,14 +53,22 @@
                     />
                 </div>
                 <div>
-                    Je m'engage à
-                    <strong>
-                        respecter la charte d'engagement, à exploiter les
-                        informations présentes sur la plateforme exclusivement
-                        pour les besoins propres de mon organisation ; à ne pas
-                        communiquer
-                    </strong>
-                    sous aucune forme (orale, écrite, copie) à un tiers.
+                    <p>
+                        Je m'engage à
+                        <strong>
+                            respecter la charte d'engagement, à exploiter les
+                            informations présentes sur la plateforme
+                            exclusivement pour les besoins propres de mon
+                            organisation ; à ne pas communiquer
+                        </strong>
+                        sous aucune forme (orale, écrite, copie) à un tiers.
+                    </p>
+
+                    <p class="mt-4 font-bold">
+                        <a class="link" :href="charte.fichier" target="_blank">
+                            Consulter la charte d'engagement
+                        </a>
+                    </p>
                 </div>
             </div>
 

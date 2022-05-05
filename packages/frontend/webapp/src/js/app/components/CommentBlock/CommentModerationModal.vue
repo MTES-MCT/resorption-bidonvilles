@@ -6,10 +6,10 @@
 
         <template v-slot:body>
             <CommentBlock
-                :comment="activity.comment"
-                class="bg-G100 p-6 border-1"
+                :comment="comment"
+                class="bg-G100 p-6 border-1 max-w-2xl"
             />
-            <div class="mt-6">
+            <div class="mt-6" v-if="!isOwner">
                 <TextArea
                     :disabled="loading"
                     label="Pourquoi souhaitez-vous supprimer ce message ?"
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import CommentBlock from "#app/pages/TownDetails/ui/CommentBlock.vue";
+import CommentBlock from "./CommentBlock.vue";
 import { notify } from "#helpers/notificationHelper";
 import { deleteComment } from "#helpers/api/town";
 
@@ -45,7 +45,7 @@ export default {
     },
 
     props: {
-        activity: {
+        comment: {
             type: Object,
             required: true
         }
@@ -60,12 +60,22 @@ export default {
         };
     },
 
+    computed: {
+        isOwner() {
+            return (
+                this.comment.createdBy.id ===
+                this.$store.state.config.configuration.user.id
+            );
+        }
+    },
+
     methods: {
         open() {
             this.isOpen = true;
         },
         onClose() {
             this.isOpen = false;
+            this.$emit("close");
         },
         async remove() {
             if (this.loading) {
@@ -76,23 +86,30 @@ export default {
             this.error = null;
 
             try {
-                await deleteComment(
-                    this.activity.comment.shantytown,
-                    this.activity.comment.id,
+                const { comments } = await deleteComment(
+                    this.comment.shantytown,
+                    this.comment.id,
                     this.reason
                 );
 
                 this.reason = "";
                 this.isOpen = false;
+                this.$emit("close");
 
                 notify({
                     group: "notifications",
                     type: "success",
                     title: "Message supprimé",
-                    text: "L'auteur du message en a été notifié par mail"
+                    text: !this.isOwner
+                        ? "L'auteur du message en a été notifié par mail"
+                        : ""
                 });
 
-                this.$store.commit("removeComment", this.activity.comment.id);
+                this.$store.commit("removeComment", this.comment.id);
+                this.$store.commit("updateShantytownComments", {
+                    townId: this.comment.shantytown,
+                    comments
+                });
             } catch (error) {
                 this.error =
                     (error && error.user_message) ||

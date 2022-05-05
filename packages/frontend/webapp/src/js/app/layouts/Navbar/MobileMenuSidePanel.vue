@@ -16,6 +16,7 @@
                 :key="item.target"
                 :target="item.target"
                 :label="item.label"
+                :matomo="item.matomo"
             >
             </MobileMenuLinkItem>
         </ul>
