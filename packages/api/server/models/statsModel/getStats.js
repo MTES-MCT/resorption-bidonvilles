@@ -75,10 +75,12 @@ module.exports = async (user, location) => {
                 TO_CHAR(unl.datetime, 'YYYY-MM-DD') AS date_log
         FROM
                 user_navigation_logs unl 
+        ${where !== null ? `
         LEFT JOIN
-                users u ON u.user_id = unl.fk_user
+            users u ON u.user_id = unl.fk_user
         LEFT JOIN
-                localized_organizations lo ON u.fk_organization = lo.organization_id
+            localized_organizations lo ON u.fk_organization = lo.organization_id
+        ` : ''}
         ${where}
         GROUP BY
                 date_log,
