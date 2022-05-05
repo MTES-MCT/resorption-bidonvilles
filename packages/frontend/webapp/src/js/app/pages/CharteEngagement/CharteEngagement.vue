@@ -25,7 +25,8 @@
                     />
                 </div>
                 <div>
-                    En validant mon accès,
+                    En validant mon accès à
+                    <span class="italic">Résorption-bidonvilles</span>,
                     <strong
                         >je m’engage à contribuer et à utiliser la plateforme
                         dans une optique de résorption des bidonvilles selon
