@@ -111,6 +111,10 @@ module.exports = async (user, data) => {
         exported_by: user.id,
     };
 
+    if (location.type !== 'nation') {
+        stat[`fk_${location.type}`] = location[location.type].code;
+    }
+
     try {
         await statsExportsModel.create(stat);
     } catch (error) {
