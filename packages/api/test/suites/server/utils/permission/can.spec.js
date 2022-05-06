@@ -1,12 +1,16 @@
 /* eslint-disable no-use-before-define */
 const { expect } = require('chai');
-const { can } = require('#server/utils/permission/index');
-const { serialized: fakeUser } = require('#test/utils/user');
+import permission/indexUtils from '#server/utils/permission/index';
+const { can } = permission/indexUtils;
+import userUtils from '#test/utils/user';
+const { serialized: fakeUser } = userUtils;
 const {
     nation, paris, marseille,
 } = require('#test/utils/location');
-const { serialized: fakeShantytown } = require('#test/utils/shantytown');
-const { serialized: fakePlan } = require('#test/utils/plan');
+import shantytownUtils from '#test/utils/shantytown';
+const { serialized: fakeShantytown } = shantytownUtils;
+import planUtils from '#test/utils/plan';
+const { serialized: fakePlan } = planUtils;
 
 describe.only('utils/permission.can()', () => {
     let user;

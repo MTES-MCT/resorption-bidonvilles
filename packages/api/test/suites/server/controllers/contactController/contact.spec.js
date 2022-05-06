@@ -143,20 +143,20 @@ describe.only('contactController.contact()', () => {
             });
             const controller = rewiremock.proxy('#server/controllers/contactController', {
                 // Fake userService db models calls
-                '#server/models/userModel': module.exports = () => ({
+                '#server/models/userModel': export default () => ({
                     findOneByEmail: () => null,
                 }),
-                '#server/models/organizationCategoryModel': module.exports = () => ({
+                '#server/models/organizationCategoryModel': export default () => ({
                     findOneById: () => 'something',
                 }),
-                '#server/models/organizationTypeModel': module.exports = () => ({
+                '#server/models/organizationTypeModel': export default () => ({
                     findOneById: () => ({ organization_category: 'public_establishment' }),
                 }),
-                '#server/models/organizationModel': module.exports = () => ({
+                '#server/models/organizationModel': export default () => ({
                     findOneById: () => ({ fk_type: 12 }),
                 }),
-                '#server/services/createUser': module.exports = createUserStub,
-                '#server/services/accessRequest/accessRequestService': module.exports = accessRequestStub,
+                '#server/services/createUser': export default createUserStub,
+                '#server/services/accessRequest/accessRequestService': export default accessRequestStub,
             })(controllerMockModels);
 
             req.body = {
@@ -210,18 +210,18 @@ describe.only('contactController.contact()', () => {
             });
             const controller = rewiremock.proxy('#server/controllers/contactController', {
                 // Fake userService db models calls
-                '#server/models/userModel': module.exports = () => ({
+                '#server/models/userModel': export default () => ({
                     findOneByEmail: () => null,
                 }),
-                '#server/models/organizationCategoryModel': module.exports = () => ({
+                '#server/models/organizationCategoryModel': export default () => ({
                     findOneById: () => 'something',
                 }),
-                '#server/models/organizationModel': module.exports = () => ({
+                '#server/models/organizationModel': export default () => ({
                     findOneById: () => ({ organization_category: 'territorial_collectivity' }),
                     findOneByLocation: () => ({ fk_category: 'territorial_collectivity' }),
                 }),
-                '#server/services/createUser': module.exports = createUserStub,
-                '#server/services/accessRequest/accessRequestService': module.exports = accessRequestStub,
+                '#server/services/createUser': export default createUserStub,
+                '#server/services/accessRequest/accessRequestService': export default accessRequestStub,
             })(controllerMockModels);
 
             req.body = {
@@ -279,17 +279,17 @@ describe.only('contactController.contact()', () => {
             });
             const controller = rewiremock.proxy('#server/controllers/contactController', {
                 // Fake userService db models calls
-                '#server/models/userModel': module.exports = () => ({
+                '#server/models/userModel': export default () => ({
                     findOneByEmail: () => null,
                 }),
-                '#server/models/organizationCategoryModel': module.exports = () => ({
+                '#server/models/organizationCategoryModel': export default () => ({
                     findOneById: () => 'something',
                 }),
-                '#server/models/organizationModel': module.exports = () => ({
+                '#server/models/organizationModel': export default () => ({
                     findOneById: () => ({ fk_category: 'administration' }),
                 }),
-                '#server/services/createUser': module.exports = createUserStub,
-                '#server/services/accessRequest/accessRequestService': module.exports = accessRequestStub,
+                '#server/services/createUser': export default createUserStub,
+                '#server/services/accessRequest/accessRequestService': export default accessRequestStub,
             })(controllerMockModels);
 
             req.body = {
@@ -340,20 +340,20 @@ describe.only('contactController.contact()', () => {
             });
             const controller = rewiremock.proxy('#server/controllers/contactController', {
                 // Fake userService db models calls
-                '#server/models/userModel': module.exports = () => ({
+                '#server/models/userModel': export default () => ({
                     findOneByEmail: () => null,
                 }),
-                '#server/models/organizationCategoryModel': module.exports = () => ({
+                '#server/models/organizationCategoryModel': export default () => ({
                     findOneById: () => 'something',
                 }),
-                '#server/models/organizationModel': module.exports = () => ({
+                '#server/models/organizationModel': export default () => ({
                     findAssociationName: () => 'something',
                 }),
-                '#server/models/departementModel': module.exports = () => ({
+                '#server/models/departementModel': export default () => ({
                     findOne: () => 'something',
                 }),
-                '#server/services/createUser': module.exports = createUserStub,
-                '#server/services/accessRequest/accessRequestService': module.exports = accessRequestStub,
+                '#server/services/createUser': export default createUserStub,
+                '#server/services/accessRequest/accessRequestService': export default accessRequestStub,
             })(controllerMockModels);
 
             req.body = {
@@ -408,20 +408,20 @@ describe.only('contactController.contact()', () => {
             });
             const controller = rewiremock.proxy('#server/controllers/contactController', {
                 // Fake userService db models calls
-                '#server/models/userModel': module.exports = () => ({
+                '#server/models/userModel': export default () => ({
                     findOneByEmail: () => null,
                 }),
-                '#server/models/organizationCategoryModel': module.exports = () => ({
+                '#server/models/organizationCategoryModel': export default () => ({
                     findOneById: () => 'something',
                 }),
-                '#server/models/organizationModel': module.exports = () => ({
+                '#server/models/organizationModel': export default () => ({
                     findAssociationName: () => null,
                 }),
-                '#server/models/departementModel': module.exports = () => ({
+                '#server/models/departementModel': export default () => ({
                     findOne: () => 'something',
                 }),
-                '#server/services/createUser': module.exports = createUserStub,
-                '#server/services/accessRequest/accessRequestService': module.exports = accessRequestStub,
+                '#server/services/createUser': export default createUserStub,
+                '#server/services/accessRequest/accessRequestService': export default accessRequestStub,
             })(controllerMockModels);
 
             req.body = {

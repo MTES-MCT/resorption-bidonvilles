@@ -1,10 +1,10 @@
-require('../module_alias');
+import '../module_alias';
 import * as Sentry from '@sentry/node';
-import * as Tracing from '@sentry/tracing';
+import Tracing from '@sentry/tracing';
+import app from '#server/app';
 import { version } from '#root/package.json';
 
-const config = require('./config.js');
-import app from '#server/app';
+import config from './config';
 
 app.start().then((expressApp) => {
     if (config.sentry.dsn) {

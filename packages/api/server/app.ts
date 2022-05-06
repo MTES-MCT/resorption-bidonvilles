@@ -1,12 +1,13 @@
 import * as Sentry from '@sentry/node';
 import loaders from '#server/loaders';
-import { port, sendActivitySummary } from '#server/config';
+import config from '#server/config';
+
+const { port, sendActivitySummary } = config;
 
 const sentryContextHandlers = (app) => {
     app.use(Sentry.Handlers.requestHandler());
     app.use(Sentry.Handlers.tracingHandler());
 };
-
 
 const sentryErrorHandlers = (app) => {
     // Report handled errors with next(error)
@@ -54,7 +55,7 @@ export default {
             await agenda.start();
 
             if (sendActivitySummary) {
-                await agenda.every("00 00 07 * * 1", "send_activity_summary"); // every monday at 7AM
+                await agenda.every('00 00 07 * * 1', 'send_activity_summary'); // every monday at 7AM
             }
 
             // eslint-disable-next-line no-console

@@ -1,9 +1,23 @@
 {
-    "extends": "airbnb-base",
+    "extends": [
+        "airbnb-base",
+        "airbnb-typescript/base"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "project": "./tsconfig.json"
+    },
     "env": {
         "mocha": true
     },
     "rules": {
+        "@typescript-eslint/indent": [
+            "error",
+            4
+        ],
+        "@typescript-eslint/naming-convention": [
+            "off"
+        ],
         "indent": [
             "error",
             4,
@@ -11,7 +25,7 @@
                 "SwitchCase": 1
             }
         ],
-        "import/no-extraneous-dependencies": false,
+        "import/no-extraneous-dependencies": 2,
         "prefer-promise-reject-errors": 0,
         "max-len": "off",
         "camelcase": "off"
@@ -38,7 +52,8 @@
                     ]
                 ],
                 "extensions": [
-                    ".js"
+                    ".js",
+                    ".ts"
                 ]
             }
         }

@@ -1,7 +1,9 @@
 /* eslint-disable no-use-before-define */
 const { expect } = require('chai');
-const { restrict } = require('#server/utils/permission/index');
-const { serialized: fakeUser } = require('#test/utils/user');
+import permission/indexUtils from '#server/utils/permission/index';
+const { restrict } = permission/indexUtils;
+import userUtils from '#test/utils/user';
+const { serialized: fakeUser } = userUtils;
 const {
     nation, paris, marseille,
 } = require('#test/utils/location');

@@ -1,0 +1,31 @@
+import * as expressValidator from 'express-validator';
+import shantytownModelFactory from '#server/models/shantytownModel';
+
+const { body, param } = expressValidator;
+const shantytownModel = shantytownModelFactory();
+
+export default [
+    param('id')
+        .custom(async (value, { req }) => {
+            let shantytown;
+            try {
+                shantytown = await shantytownModel.findOne(req.user, value);
+            } catch (error) {
+                throw new Error('Impossible de retrouver le site concerné en base de données');
+            }
+
+            if (shantytown === null) {
+                throw new Error('Le site concerné par le commentaire n\'existe pas');
+            }
+
+            req.body.shantytown = shantytown;
+            return true;
+        }),
+
+    body('description')
+        .trim()
+        .notEmpty().withMessage('La description est obligatoire'),
+
+    body('private')
+        .customSanitizer(value => value !== false),
+];

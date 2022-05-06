@@ -1,9 +1,13 @@
-import * as sequelize from '#db/sequelize';
-import * as moment from 'moment';
+import { sequelize } from '#db/sequelize';
+import moment from 'moment';
+
+import userModelFactory from '#server/models/userModel';
+import shantytownModelFactory from '#server/models/shantytownModel';
 import { ActivityNationalSummary } from './types/ActivityNationalSummary';
 
-const { formatName } = require('#server/models/userModel')();
-const { getUsenameOf } = require('#server/models/shantytownModel')(sequelize);
+const { formatName } = userModelFactory();
+
+const { getUsenameOf } = shantytownModelFactory();
 
 export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSummary> => {
     const from = moment(argFrom);
@@ -218,7 +222,7 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
                 organizationId: row.userOrganizationId,
             });
             // obligatoire pour les mails car la propriété .length y est inaccessible...
-            acc[row.regionCode][row.departementCode][`new_users_length`] += 1;
+            acc[row.regionCode][row.departementCode].new_users_length += 1;
 
             return acc;
         }
@@ -236,7 +240,7 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
                 id: row.shantytownCommentId,
                 city: row.city,
                 shantytownId,
-                shantytownUsename: shantytownUsename,
+                shantytownUsename,
             };
         } else {
             summary = {

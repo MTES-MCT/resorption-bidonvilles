@@ -1,0 +1,253 @@
+import JSONToCSV from 'json2csv';
+import statsExportsModel from '#server/models/statsExports';
+import statsDirectoryViewsModel from '#server/models/statsDirectoryViews';
+import statsModelFactory from '../models/statsModel';
+
+const { getStats } = statsModelFactory();
+
+const groupByKey = (list, key) => list.reduce((hash, obj) => ({
+    ...hash,
+    [obj[key]]: { ...hash[obj[key]], ...obj },
+}), {});
+
+export default models => ({
+    all: async (req, res) => {
+        const { departement } = req.params;
+
+        const [
+            numberOfPeople,
+            numberOfShantytown,
+            numberOfResorbedShantytown,
+            numberOfPlans,
+            numberOfUsers,
+            numberOfClosedShantytownsPerMonth,
+            numberOfNewShantytownsPerMonth,
+            numberOfResorbedShantytownsPerMonth,
+            numberOfCreditsPerYear,
+            averageCompletionPercentage,
+            numberOfShantytownsOnJune2019,
+            populationTotal,
+        ] = await Promise.all([
+            models.stats.numberOfPeople(departement),
+            models.stats.numberOfShantytown(departement),
+            models.stats.numberOfResorbedShantytown(departement),
+            models.stats.numberOfPlans(departement),
+            models.stats.numberOfUsers(departement),
+            models.stats.numberOfClosedShantytownsPerMonth(departement),
+            models.stats.numberOfNewShantytownsPerMonth(departement),
+            models.stats.numberOfResorbedShantytownsPerMonth(departement),
+            models.stats.numberOfCreditsPerYear(departement),
+            models.stats.averageCompletionPercentage(departement),
+            models.stats.numberOfOpenShantytownsAtMonth(departement, '2019-06-01'),
+            models.stats.populationTotal(departement),
+        ]);
+
+        return res.status(200).send({
+            success: true,
+            response: {
+                statistics: {
+                    numberOfPeople,
+                    numberOfShantytown,
+                    numberOfResorbedShantytown,
+                    numberOfPlans,
+                    numberOfUsers,
+                    numberOfClosedShantytownsPerMonth,
+                    numberOfNewShantytownsPerMonth,
+                    numberOfResorbedShantytownsPerMonth,
+                    numberOfCreditsPerYear,
+                    averageCompletionPercentage,
+                    numberOfShantytownsOnJune2019,
+                    populationTotal,
+                },
+            },
+        });
+    },
+
+    public: async (req, res) => {
+        // date used for numberOfUsersPerMonth & numberOfUsersAtMonth
+        const startDate = '2020-06-01';
+
+        const [
+            numberOfDepartements,
+            numberOfActiveUsers,
+            numberOfUsersOnJune2020,
+            numberOfNewUsersPerMonth,
+            numberOfCollaboratorAndAssociationUsers,
+            numberOfCollaboratorAndAssociationOrganizations,
+            numberOfShantytownOperations,
+            numberOfExports,
+            numberOfComments,
+            numberOfDirectoryViews,
+            meanTimeBeforeCreationDeclaration,
+            meanTimeBeforeClosingDeclaration,
+            numberOfReviewedComments,
+        ] = await Promise.all([
+            models.stats.numberOfDepartements(),
+            models.stats.numberOfActiveUsers(),
+            models.stats.numberOfUsersAtMonth(startDate),
+            models.stats.numberOfNewUsersPerMonth(startDate),
+            models.stats.numberOfCollaboratorAndAssociationUsers(),
+            models.stats.numberOfCollaboratorAndAssociationOrganizations(),
+            models.stats.numberOfShantytownOperations(),
+            statsExportsModel.count(),
+            models.stats.numberOfComments(),
+            statsDirectoryViewsModel.count(),
+            models.stats.meanTimeBeforeCreationDeclaration(),
+            models.stats.meanTimeBeforeClosingDeclaration(),
+            models.stats.numberOfReviewedComments(),
+        ]);
+
+        return res.status(200).send({
+            success: true,
+            response: {
+                statistics: {
+                    numberOfDepartements,
+                    numberOfActiveUsers,
+                    numberOfUsersOnJune2020,
+                    numberOfNewUsersPerMonth,
+                    numberOfCollaboratorAndAssociationUsers,
+                    numberOfCollaboratorAndAssociationOrganizations,
+                    numberOfShantytownOperations: Object.values(numberOfShantytownOperations)
+                        .reduce((sum, rows) => sum + Object.values(rows).reduce((subtotal, { total }) => subtotal + parseInt(total, 10), 0), 0),
+                    numberOfExports,
+                    numberOfComments,
+                    numberOfDirectoryViews,
+                    meanTimeBeforeCreationDeclaration,
+                    meanTimeBeforeClosingDeclaration,
+                    numberOfReviewedComments,
+                },
+            },
+        });
+    },
+
+    async directoryView(req, res, next) {
+        const organizationId = parseInt(req.body.organization, 10);
+
+        try {
+            const organization = await models.organization.findOneById(organizationId);
+
+            if (organization === null) {
+                return res.status(400).send({
+                    success: false,
+                    response: {
+                        error: {
+                            user_message: 'La structure consultée n\'a pas été trouvéee en base de données',
+                            developer_message: `Could not find the organization ${organizationId}`,
+                        },
+                    },
+                });
+            }
+        } catch (error) {
+            res.status(500).send({
+                success: false,
+                response: {
+                    error: {
+                        user_message: 'Une erreur est survenue lors de la lecture en base de données',
+                        developer_message: error.message,
+                    },
+                },
+            });
+            return next(error);
+        }
+
+        try {
+            await statsDirectoryViewsModel.create(
+                organizationId,
+                req.user.id,
+            );
+        } catch (error) {
+            res.status(500).send({
+                success: false,
+                response: {
+                    error: {
+                        user_message: 'Une erreur est survenue lors de l\'écriture en base de données',
+                        developer_message: error.message,
+                    },
+                },
+            });
+            return next(error);
+        }
+
+        return res.status(201).send({});
+    },
+
+    async export(req, res) {
+        try {
+            const [
+                averageCompletion,
+                people,
+                plans,
+                resorbedShantytowns,
+                shantytowns,
+                users,
+            ] = await Promise.all([
+                models.stats.averageCompletionPercentageByDepartement(),
+                models.stats.numberOfPeopleByDepartement(),
+                models.stats.numberOfPlansByDepartement(),
+                models.stats.numberOfResorbedShantytownByDepartement(),
+                models.stats.numberOfShantytownByDepartement(),
+                models.stats.numberOfUsersByDepartement(),
+            ]);
+
+            interface Stat {
+                Département: string,
+            }
+            interface AverageCompletionStat extends Stat {
+                'Taux de completion': string
+            }
+            interface PeopleStat extends Stat {
+                'Nombre habitants': number
+            }
+            interface PlansStat extends Stat {
+                'Nombre d\'actions': number
+            }
+            interface ResorbedShantytownsStat extends Stat {
+                'Nombre de résorptions': number
+            }
+            interface ShantytownsStat extends Stat {
+                'Nombre de sites': number
+            }
+            interface UsersStat extends Stat {
+                'Nombre d\'utilisateurs': number
+            }
+
+            const stats: {
+                [key: string]: Stat
+            } = groupByKey([
+                ...averageCompletion.map(r => <AverageCompletionStat>({ Département: r.fk_departement, 'Taux de completion': `${(r.avg * 100).toFixed(2)}%` })),
+                ...people.map(r => <PeopleStat>({ Département: r.fk_departement, 'Nombre habitants': r.total })),
+                ...plans.map(r => <PlansStat>({ Département: r.fk_departement, 'Nombre d\'actions': r.total })),
+                ...resorbedShantytowns.map(r => <ResorbedShantytownsStat>({ Département: r.fk_departement, 'Nombre de résorptions': r.total })),
+                ...shantytowns.map(r => <ShantytownsStat>({ Département: r.fk_departement, 'Nombre de sites': r.total })),
+                ...users.filter(r => r.fk_departement !== null).map(r => <UsersStat>({ Département: r.fk_departement, "Nombre d'utilisateurs": r.count })),
+            ], 'Département');
+            const result = Object.values(stats).sort((a, b) => a.Département.localeCompare(b.Département));
+
+            const csv = JSONToCSV.parse(result);
+
+            // The frontend expect a JSON for every API calls, so we wrap the CSV in a json entry
+            res.status(200).send({
+                csv,
+            });
+        } catch (error) {
+            res.status(500).send({
+                error: {
+                    user_message: 'Une erreur est survenue lors de la récupération des données en base',
+                    developer_message: error.message,
+                },
+            });
+        }
+    },
+    async getDashboardStats(req, res, next) {
+        const { location } = req.body;
+        try {
+            const townStats = await getStats(req.user, location);
+            return res.status(200).send(townStats);
+        } catch (error) {
+            res.status(500).send({
+                user_message: 'Une erreur est survenue lors de la lecture en base de données',
+            });
+            return next(error);
+        }
+    },
+});

@@ -1,8 +1,8 @@
+import { permissionOption } from '#server/models/permissionModel/types/permissionOption';
+import { Permissions } from '#server/models/permissionModel/types/Permissions';
 import { userStatus } from './userStatus';
 import type { UserAccess } from './UserAccess';
 import { userLocationType } from './userLocationType';
-import { permissionOption } from '#server/models/permissionModel/types/permissionOption';
-import { Permissions } from '#server/models/permissionModel/types/Permissions';
 
 export interface User {
     id: number,

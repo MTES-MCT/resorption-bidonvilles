@@ -1,3 +1,8 @@
+import ServiceError from '#server/errors/ServiceError';
+
+import userUtils from '#test/utils/user';
+import shantytownCommentUtils from '#test/utils/shantytownComment';
+
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
@@ -7,12 +12,11 @@ const Sequelize = require('sequelize-mock');
 chai.use(sinonChai);
 
 const { expect } = chai;
-const ServiceError = require('#server/errors/ServiceError');
 
 const sequelizeStub = new Sequelize();
+const { serialized: fakeUser } = userUtils;
 
-const { serialized: fakeUser } = require('#test/utils/user');
-const { serialized: fakeComment } = require('#test/utils/shantytownComment');
+const { serialized: fakeComment } = shantytownCommentUtils;
 
 describe.only('services/shantytownComment', () => {
     const dependencies = {

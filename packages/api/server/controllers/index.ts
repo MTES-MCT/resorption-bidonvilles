@@ -1,35 +1,44 @@
-const fs = require('fs');
-const path = require('path');
+import matomoCtlr_getWeeklyActiveUsers from './matomoController/getWeeklyActiveUsers';
+import shantytownCommentCtlr_create from './shantytownCommentController/create';
+import shantytownCommentCtlr_export from './shantytownCommentController/export';
+import userNavigationLogsCtlr_insert from './userNavigationLogsController/insert';
 
-const createShantytownComment = require('./shantytownCommentController/create');
-const exportShantytownComment = require('./shantytownCommentController/export');
-const getWeeklyActiveUsers = require('./matomoController/getWeeklyActiveUsers');
-import insertUserNavigationLogs from './userNavigationLogsController/insert';
+import configController from './configController';
+import contactController from './contactController';
+import contactFormReferralController from './contactFormReferralController';
+import directoryController from './directoryController';
+import geoController from './geoController';
+import inviteController from './inviteController';
+import organizationController from './organizationController';
+import planController from './planController';
+import poiController from './poiController';
+import statsController from './statsController';
+import townController from './townController';
+import userActivityController from './userActivityController';
+import userController from './userController';
 
-export default (models) => {
-    const basename = path.basename(module.filename);
-    const controllers = {
-        matomo: {
-            getWeeklyActiveUsers,
-        },
-        shantytownComment: {
-            create: createShantytownComment,
-            export: exportShantytownComment,
-        },
-        userNavigationLogs: {
-            insert: insertUserNavigationLogs,
-        },
-    };
-
-    // instanciate all controllers
-    return fs
-        .readdirSync(__dirname)
-        .filter(file => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))
-        .reduce((acc, file) => {
-            return {
-                ...acc,
-                /* eslint-disable-next-line */
-                [file.replace('Controller.js', '')]: require(path.join(__dirname, file))(models)
-            };
-        }, controllers);
-};
+export default models => ({
+    config: configController(models),
+    contact: contactController(models),
+    contactFormReferral: contactFormReferralController(),
+    directory: directoryController(models),
+    geo: geoController(models),
+    invite: inviteController(),
+    matomo: {
+        getWeeklyActiveUsers: matomoCtlr_getWeeklyActiveUsers,
+    },
+    organization: organizationController(models),
+    plan: planController(models),
+    poi: poiController(),
+    shantytownComment: {
+        create: shantytownCommentCtlr_create,
+        export: shantytownCommentCtlr_export,
+    },
+    stats: statsController(models),
+    town: townController(models),
+    user: userController(models),
+    userActivity: userActivityController(models),
+    userNavigationLogs: {
+        insert: userNavigationLogsCtlr_insert,
+    },
+});

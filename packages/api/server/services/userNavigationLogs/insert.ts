@@ -1,5 +1,5 @@
 import userNavigationLogsModel from '#server/models/userNavigationLogsModel';
-const ServiceError = require('#server/errors/ServiceError');
+import ServiceError from '#server/errors/ServiceError';
 
 export default async (fk_user: number, page: String): Promise<number> => {
     // on insère le log

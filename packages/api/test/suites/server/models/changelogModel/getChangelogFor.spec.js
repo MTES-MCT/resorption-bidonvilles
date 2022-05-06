@@ -1,9 +1,13 @@
+import userUtils from '#test/utils/user';
+import changelogUtils from '#test/utils/changelog';
+
 const SequelizeMock = require('sequelize-mock');
 const rewiremock = require('rewiremock/node');
 const { expect } = require('chai');
 
-const { serialized: createUser } = require('#test/utils/user');
-const { raw: createChangelogItem } = require('#test/utils/changelog');
+const { serialized: createUser } = userUtils;
+
+const { raw: createChangelogItem } = changelogUtils;
 
 describe.only('ChangelogModel', () => {
     describe('.getChangelogFor()', () => {
