@@ -17,14 +17,13 @@ module.exports = async (user, shantytownId, data) => {
     let shantytown;
     try {
         shantytown = await shantytownModel.findOne(user, shantytownId);
-
-        if (shantytown === null) {
-            throw new ServiceError('fetch_failed', new Error(`Le site #${shantytownId} n'existe pas`));
-        }
     } catch (error) {
         throw new ServiceError('fetch_failed', new Error(`Une erreur est survenue lors de la vérification de l'existence du site #${shantytownId} en base de données`));
     }
 
+    if (shantytown === null) {
+        throw new ServiceError('shantytown_unfound', new Error(`Le site #${shantytownId} n'existe pas`));
+    }
     // sanitize input
     function sanitize(body) {
         const date = new Date(body.date);

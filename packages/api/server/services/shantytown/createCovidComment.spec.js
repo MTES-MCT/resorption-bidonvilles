@@ -88,14 +88,7 @@ describe.only('services/shantytown', () => {
             sinon.restore();
         });
         describe('récupération du site', () => {
-            it('récupère le site en base de données', async () => {
-                stubs.findOne.withArgs(data.user, data.params.id).resolves({});
-                await createCovidCommentService(data.user, data.params.id, data.body);
-
-                // eslint-disable-next-line no-unused-expressions
-                expect(stubs.findOne).to.have.been.calledOnce;
-            });
-            it('si le site n\'existe pas en base de données, renvoie une exception ServiceError \'fetch_failed\'', async () => {
+            it('si le site n\'existe pas en base de données, renvoie une exception ServiceError \'shantytown_unfound\'', async () => {
                 stubs.findOne.withArgs(data.user, data.params.id).resolves(null);
                 let responseError;
                 try {
@@ -107,7 +100,7 @@ describe.only('services/shantytown', () => {
                 // eslint-disable-next-line no-unused-expressions
                 expect(stubs.createCovidComment).to.not.have.been.called;
                 expect(responseError).to.be.instanceOf(ServiceError);
-                expect(responseError.code).to.be.eql('fetch_failed');
+                expect(responseError.code).to.be.eql('shantytown_unfound');
             });
             it('si le modèle échoue, renvoie une exception ServiceError \'fetch_failed\'', async () => {
                 stubs.findOne.withArgs(data.user, data.params.id).rejects(new Error());
