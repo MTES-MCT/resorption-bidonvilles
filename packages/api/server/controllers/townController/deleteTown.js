@@ -9,7 +9,7 @@ const ERROR_RESPONSES = {
 module.exports = async (req, res, next) => {
     try {
         await deleteTown(req.user, req.params.id);
-        return res.status(200).send({});
+        return res.status(204).send({});
     } catch (error) {
         const { code, message } = ERROR_RESPONSES[error && error.code];
         res.status(code).send({
