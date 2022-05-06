@@ -50,7 +50,7 @@
         </div>
         <span class="block h-px bg-blue300"></span>
         <div class="customHeight flex flex-col justify-end mt-2">
-            <div v-if="displayFigure.show" class="text-xs text-center">
+            <div v-if="displayFigure !== null" class="text-xs text-center">
                 {{ formatStat(displayFigure.figure) }} au
                 {{ displayFigure.date }}
             </div>
@@ -111,11 +111,7 @@ export default {
             columns: [],
             maxNumber: 0,
             hover: false,
-            displayFigure: {
-                show: false,
-                figure: 50,
-                date: null
-            }
+            displayFigure: null
         };
     },
     mounted() {
@@ -125,12 +121,13 @@ export default {
 
     methods: {
         onMouseOver(value) {
-            this.displayFigure.show = true;
-            this.displayFigure.figure = value.figure;
-            this.displayFigure.date = value.date;
+            this.displayFigure = {
+                figure: value.figure,
+                date: value.date
+            };
         },
         onMouseLeave() {
-            this.displayFigure.show = false;
+            this.displayFigure = null;
         },
         formatStat(number) {
             return new Intl.NumberFormat("fr-FR").format(number);
