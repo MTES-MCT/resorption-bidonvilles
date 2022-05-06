@@ -5,7 +5,6 @@ const sinonChai = require('sinon-chai');
 const { expect } = chai;
 chai.use(sinonChai);
 
-const sequelize = require('#db/sequelize');
 const shantytownModel = require('#server/models/shantytownModel');
 const socialOriginModel = require('#server/models/socialOriginModel');
 const mattermostUtils = require('#server/utils/mattermost');
@@ -20,7 +19,6 @@ const createService = require('./create');
 describe.only('services/shantytown', () => {
     describe('create()', () => {
         let stubs;
-        let transaction;
         const shantytownId = global.generate('string');
         const user = {
             id: global.generate('string'),
@@ -107,7 +105,6 @@ describe.only('services/shantytown', () => {
 
         beforeEach(() => {
             stubs = {
-                transaction: sinon.stub(sequelize, 'transaction'),
                 shantytownCreate: sinon.stub(shantytownModel, 'create'),
                 findOne: sinon.stub(shantytownModel, 'findOne'),
                 triggerShantytownCreationAlert: sinon.stub(mattermostUtils, 'triggerShantytownCreationAlert'),
@@ -115,8 +112,6 @@ describe.only('services/shantytown', () => {
                 sendUserShantytownDeclared: sinon.stub(mails, 'sendUserShantytownDeclared'),
                 socialOriginCreate: sinon.stub(socialOriginModel, 'create'),
             };
-            transaction = { commit: sinon.stub() };
-            stubs.transaction.resolves(transaction);
         });
 
         afterEach(() => {
@@ -206,7 +201,7 @@ describe.only('services/shantytown', () => {
                         bailiff: justiceData.bailiff,
                     },
                     owner,
-                }, transaction);
+                });
             });
             it('n\'enregistre pas les données judiciaires et du propriétaire si l\'utilisateur n\'y a pas accès', async () => {
                 user.isAllowedTo.returns(false);
@@ -291,7 +286,7 @@ describe.only('services/shantytown', () => {
                 ...townData, ...justiceData, owner, social_origins,
             }, user);
             // eslint-disable-next-line no-unused-expressions
-            expect(stubs.socialOriginCreate).to.have.been.calledOnceWith(shantytownId, social_origins, transaction);
+            expect(stubs.socialOriginCreate).to.have.been.calledOnceWith(shantytownId, social_origins);
         });
 
         it('si la connexion à mattermost est établie, envoie une alerte', async () => {
