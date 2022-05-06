@@ -143,16 +143,16 @@ describe.only('townController.createCovidComment()', () => {
             next = sinon.stub();
         });
 
-        it('répond une 404 si le ervice renvoie une exception fetch_failed', async () => {
+        it('répond une 400 si le service renvoie une exception fetch_failed', async () => {
             const req = mockReq(reqArg);
             const res = mockRes();
 
             createCovidCommentStub.rejects(new ServiceError('fetch_failed', {}));
             await createCovidCommentController(req, res, next);
-            expect(res.status).to.have.been.calledOnceWith(404);
+            expect(res.status).to.have.been.calledOnceWith(400);
         });
 
-        it('répond une 400 si le ervice renvoie une exception data_incomplete', async () => {
+        it('répond une 400 si le service renvoie une exception data_incomplete', async () => {
             const req = mockReq(reqArg);
             const res = mockRes();
 
@@ -161,7 +161,7 @@ describe.only('townController.createCovidComment()', () => {
             expect(res.status).to.have.been.calledOnceWith(400);
         });
 
-        it('répond une 500 si le ervice renvoie une exception fetch_failed', async () => {
+        it('répond une 500 si le service renvoie une exception fetch_failed', async () => {
             const req = mockReq(reqArg);
             const res = mockRes();
 
@@ -176,12 +176,8 @@ describe.only('townController.createCovidComment()', () => {
             createCovidCommentStub.rejects(new Error('Une erreur'));
             await createCovidCommentController(req, res, next);
             expect(res.send).to.have.been.calledOnceWith({
-                success: false,
-                response: {
-                    error: {
-                        user_message: 'Une erreur est survenue pendant l\'écriture du commentaire en base de données',
-                        developer_message: 'Une erreur',
-                    },
+                error: {
+                    user_message: 'Une erreur inconnue est survenue',
                 },
             });
         });
