@@ -1,9 +1,8 @@
 const shantytownService = require('#server/services/shantytown');
 
 module.exports = async (req, res, next) => {
-    let comments;
     try {
-        comments = await shantytownService.createCovidComment(req.user, req.params.id, req.body);
+        const comments = await shantytownService.createCovidComment(req.user, req.params.id, req.body);
         return res.status(200).send(comments);
     } catch (error) {
         if (error && error.code === 'fetch_failed') {
