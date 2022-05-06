@@ -35,8 +35,8 @@ describe.only('services/shantytown', () => {
 
             expect(stubs.deleteShantytown).to.have.been.calledOnceWith(town.id);
         });
-        it('renvoie une exception ServiceError \'fetch_failed\' si le site à supprimer n\'existe pas en bdd', async () => {
-            stubs.findOne.resolves(null);
+        it('renvoie une exception ServiceError \'fetch_failed\' si le modèle échoue', async () => {
+            stubs.findOne.rejects(new Error());
             let responseError;
             try {
                 await deleteTownService();
@@ -45,6 +45,17 @@ describe.only('services/shantytown', () => {
             }
             expect(responseError).to.be.instanceOf(ServiceError);
             expect(responseError.code).to.be.eql('fetch_failed');
+        });
+        it('renvoie une exception ServiceError \'shantytown_unfound\' si le site à supprimer n\'existe pas en bdd', async () => {
+            stubs.findOne.resolves(null);
+            let responseError;
+            try {
+                await deleteTownService();
+            } catch (error) {
+                responseError = error;
+            }
+            expect(responseError).to.be.instanceOf(ServiceError);
+            expect(responseError.code).to.be.eql('shantytown_unfound');
         });
     });
 });

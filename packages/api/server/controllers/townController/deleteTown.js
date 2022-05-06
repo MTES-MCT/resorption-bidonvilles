@@ -2,6 +2,8 @@ const { deleteTown } = require('#server/services/shantytown');
 
 const ERROR_RESPONSES = {
     fetch_failed: { code: 400, message: 'Une lecture en base de données a échoué' },
+    shantytown_unfound: { code: 400, message: 'Le site n\'existe pas en base de données' },
+    delete_failed: { code: 500, message: 'Une suppression en base de données a échoué' },
     [undefined]: { code: 500, message: 'Une erreur inconnue est survenue' },
 };
 
