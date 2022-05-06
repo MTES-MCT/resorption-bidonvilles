@@ -1,35 +1,27 @@
 
 const { deleteComment } = require('#server/services/shantytown');
 
+const ERROR_RESPONSES = {
+    fetch_failed: { code: 400, message: 'Une lecture en base de données a échoué' },
+    data_incomplete: { code: 400, message: 'Données manquantes' },
+    permission_denied: { code: 403, message: 'Permission refusée' },
+    delete_failed: { code: 500, message: 'Une suppression en base de données a échoué' },
+    [undefined]: { code: 500, message: 'Une erreur inconnue est survenue' },
+};
 
-module.exports = async (req, res) => {
+
+module.exports = async (req, res, next) => {
     let comments;
     try {
         comments = await deleteComment(req.user, req.params.id, req.params.commentId, req.body.message);
     } catch (error) {
-        if (error && error.code === 'fetch_failed') {
-            return res.status(404).send({
-                error: error.nativeError,
-            });
-        } if (error && error.code === 'data_incomplete') {
-            return res.status(400).send({
-                error: error.nativeError,
-            });
-        } if (error && error.code === 'permission_denied') {
-            return res.status(403).send({
-                error: error.nativeError,
-            });
-        } if (error && error.code === 'delete_failed') {
-            return res.status(500).send({
-                error: error.nativeError,
-            });
-        }
-        return res.status(500).send({
+        const { code, message } = ERROR_RESPONSES[error && error.code];
+        res.status(code).send({
             error: {
-                developer_message: error.message,
-                user_message: 'Une erreur est survenue pendant la suppression du site de la base de données',
+                user_message: message,
             },
         });
+        return next(error.nativeError || error);
     }
 
     return res.status(200).send(comments);

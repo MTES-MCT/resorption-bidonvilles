@@ -1,22 +1,22 @@
 const { deleteTown } = require('#server/services/shantytown');
 
+const ERROR_RESPONSES = {
+    fetch_failed: { code: 400, message: 'Une lecture en base de données a échoué' },
+    [undefined]: { code: 500, message: 'Une erreur inconnue est survenue' },
+};
+
+
 module.exports = async (req, res, next) => {
     try {
-        deleteTown(req.user, req.params.id);
+        await deleteTown(req.user, req.params.id);
         return res.status(200).send({});
     } catch (error) {
-        if (error && error.code === 'fetch_failed') {
-            return res.status(400).send({
-                error: error.nativeError,
-            });
-        }
-
-        res.status(500).send({
+        const { code, message } = ERROR_RESPONSES[error && error.code];
+        res.status(code).send({
             error: {
-                developer_message: error.message,
-                user_message: 'Une erreur est survenue pendant la suppression du site de la base de données',
+                user_message: message,
             },
         });
-        return next(error);
+        return next(error.nativeError || error);
     }
 };

@@ -1,18 +1,22 @@
 const shantytownService = require('#server/services/shantytown');
 
+const ERROR_RESPONSES = {
+    fetch_failed: { code: 400, message: 'Une lecture en base de données a échoué' },
+    [undefined]: { code: 500, message: 'Une erreur inconnue est survenue' },
+};
 
 module.exports = async (req, res, next) => {
     let town;
     try {
         town = await shantytownService.find(req.user, req.params.id);
     } catch (error) {
-        if (error && error.code === 'fetch_failed') {
-            return res.status(404).send({
-                error: error.nativeError,
-            });
-        }
-        res.status(500).send(error.message);
-        return next(error);
+        const { code, message } = ERROR_RESPONSES[error && error.code];
+        res.status(code).send({
+            error: {
+                user_message: message,
+            },
+        });
+        return next(error.nativeError || error);
     }
     return res.status(200).send(town);
 };
