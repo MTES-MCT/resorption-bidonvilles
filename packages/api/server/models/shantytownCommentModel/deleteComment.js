@@ -1,6 +1,4 @@
-const {
-    sequelize,
-} = require('#db/sequelize');
+const sequelize = require('#db/sequelize');
 
 /**
  * @param {Number} id A shantytown_comment_id
