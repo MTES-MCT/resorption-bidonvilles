@@ -43,7 +43,6 @@ describe.only('services/shantytown', () => {
             }
             expect(responseError).to.be.instanceOf(ServiceError);
             expect(responseError.code).to.be.eql('fetch_failed');
-            expect(responseError.nativeError.developer_message).to.be.eql('Failed to fetch towns');
         });
     });
 });

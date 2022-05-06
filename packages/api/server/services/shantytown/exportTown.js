@@ -16,27 +16,18 @@ const createExportSections = require('./_common/createExportSections');
 module.exports = async (user, data) => {
     if (!Object.prototype.hasOwnProperty.call(data, 'locationType')
         || !Object.prototype.hasOwnProperty.call(data, 'locationCode')) {
-        throw new ServiceError('data_incomplete', {
-            user_message: 'Le périmètre géographique à exporter est obligatoire',
-            developer_message: 'locationType and/or locationCode are missing',
-        });
+        throw new ServiceError('data_incomplete', new Error('Le périmètre géographique à exporter est obligatoire'));
     }
 
     let location;
     try {
         location = await geoModel.getLocation(data.locationType, data.locationCode);
     } catch (error) {
-        throw new ServiceError('fetch_failed', {
-            user_message: 'Une erreur est survenue lors de la lecture en base de données',
-            developer_message: 'could not get location',
-        });
+        throw new ServiceError('fetch_failed', new Error('Une erreur est survenue lors de la lecture en base de données'));
     }
 
     if (!permissionUtils.can(user).do('export', 'shantytown').on(location)) {
-        throw new ServiceError('permission_denied', {
-            user_message: 'Vous n\'êtes pas autorisé(e) à exporter le périmètre géographique demandé',
-            developer_message: 'the requested location is not allowed to current user',
-        });
+        throw new ServiceError('permission_denied', new Error('Vous n\'êtes pas autorisé(e) à exporter le périmètre géographique demandé'));
     }
 
     const closedTowns = parseInt(data.closedTowns, 10) === 1;
@@ -75,27 +66,18 @@ module.exports = async (user, data) => {
             'export',
         );
     } catch (error) {
-        throw new ServiceError('fetch_failed', {
-            user_message: 'Une erreur est survenue lors de la lecture en base de données',
-            developer_message: 'Failed to fetch towns',
-        });
+        throw new ServiceError('fetch_failed', new Error('Une erreur est survenue lors de la lecture en base de données'));
     }
 
     if (shantytowns.length === 0) {
-        throw new ServiceError('fetch_failed', {
-            user_message: 'Il n\'y a aucun site à exporter pour le périmètre géographique demandé',
-            developer_message: 'no shantytown to be exported',
-        });
+        throw new ServiceError('fetch_failed', new Error('Il n\'y a aucun site à exporter pour le périmètre géographique demandé'));
     }
 
     let closingSolutions;
     try {
         closingSolutions = await closingSolutionModel.findAll();
     } catch (error) {
-        throw new ServiceError('fetch_failed', {
-            user_message: 'Une erreur est survenue lors de la lecture en base de données',
-            developer_message: 'Failed to fetch closing solutions',
-        });
+        throw new ServiceError('fetch_failed', new Error('Une erreur est survenue lors de la lecture en base de données'));
     }
 
     const properties = serializeExportProperties(closingSolutions);
@@ -132,10 +114,7 @@ module.exports = async (user, data) => {
     try {
         await statsExportsModel.create(stat);
     } catch (error) {
-        throw new ServiceError('write_failed', {
-            user_message: 'Une erreur est survenue lors de l\'écriture en base de données',
-            developer_message: 'Failed to store statistics',
-        });
+        throw new ServiceError('write_failed', new Error('Une erreur est survenue lors de l\'écriture en base de données'));
     }
 
     return buffer;

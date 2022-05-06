@@ -12,26 +12,17 @@ module.exports = async (user, shantytownId, commentId, deletionMessage) => {
     try {
         town = await shantytownModel.findOne(user, shantytownId);
     } catch (error) {
-        throw new ServiceError('fetch_failed', {
-            developer_message: 'Failed to retrieve the comment',
-            user_message: 'Impossible de retrouver le site en base de données',
-        });
+        throw new ServiceError('fetch_failed', new Error('Impossible de retrouver le site en base de données'));
     }
     const comment = town.comments.regular.find(({ id }) => id === parseInt(commentId, 10));
     if (comment === undefined) {
-        throw new ServiceError('fetch_failed', {
-            developer_message: 'The comment to be deleted does not exist',
-            user_message: 'Le commentaire à supprimer n\'a pas été retrouvé en base de données',
-        });
+        throw new ServiceError('fetch_failed', new Error('Le commentaire à supprimer n\'a pas été retrouvé en base de données'));
     }
     let author;
     try {
         author = await userModel.findOne(comment.createdBy.id);
     } catch (error) {
-        throw new ServiceError('fetch_failed', {
-            developer_message: 'Failed to retrieve the author of the comment',
-            user_message: 'Une erreur est survenue lors de la lecture en base de données',
-        });
+        throw new ServiceError('fetch_failed', new Error('Une erreur est survenue lors de la lecture en base de données'));
     }
     const location = {
         type: 'city',
@@ -42,27 +33,17 @@ module.exports = async (user, shantytownId, commentId, deletionMessage) => {
     };
 
     if (author.id !== user.id && !permissionUtils.can(user).do('moderate', 'shantytown_comment').on(location)) {
-        throw new ServiceError('permission_denied', {
-            user_message: 'Vous n\'avez pas accès à ces données',
-            developer_message: 'Tried to access a secured page without authentication',
-        });
+        throw new ServiceError('permission_denied', new Error('Vous n\'avez pas accès à ces données'));
     }
     const message = validator.trim(deletionMessage || '');
     if (message === '') {
-        throw new ServiceError('data_incomplete', {
-            user_message: 'Vous devez préciser le motif de suppression du commentaire',
-            developer_message: 'Message is missing',
-        });
+        throw new ServiceError('data_incomplete', new Error('Vous devez préciser le motif de suppression du commentaire'));
     }
 
     try {
         await shantytownCommentModel.deleteComment(commentId);
     } catch (error) {
-        throw new ServiceError('delete_failed',
-            {
-                developer_message: 'Failed to delete the comment',
-                user_message: 'Impossible de supprimer le commentaire',
-            });
+        throw new ServiceError('delete_failed', new Error('Impossible de supprimer le commentaire'));
     }
 
     try {

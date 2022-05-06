@@ -97,7 +97,6 @@ describe.only('services/shantytown', () => {
                 }
                 expect(responseError).to.be.instanceOf(ServiceError);
                 expect(responseError.code).to.be.eql('fetch_failed');
-                expect(responseError.nativeError.developer_message).to.be.eql('could not get location');
             });
         });
         describe('traite les permissions', () => {
@@ -121,7 +120,6 @@ describe.only('services/shantytown', () => {
                 }
                 expect(responseError).to.be.instanceOf(ServiceError);
                 expect(responseError.code).to.be.eql('permission_denied');
-                expect(responseError.nativeError.developer_message).to.be.eql('the requested location is not allowed to current user');
             });
         });
         describe('récupère les sites et closingSolutions', () => {
@@ -164,7 +162,6 @@ describe.only('services/shantytown', () => {
                 }
                 expect(responseError).to.be.instanceOf(ServiceError);
                 expect(responseError.code).to.be.eql('fetch_failed');
-                expect(responseError.nativeError.developer_message).to.be.eql('Failed to fetch towns');
             });
             it('renvoie une exception ServiceError \'fetch_failed\' si la liste des sites est vide', async () => {
                 stubs.shantytownModelFindAll.resolves([]);
@@ -176,7 +173,6 @@ describe.only('services/shantytown', () => {
                 }
                 expect(responseError).to.be.instanceOf(ServiceError);
                 expect(responseError.code).to.be.eql('fetch_failed');
-                expect(responseError.nativeError.developer_message).to.be.eql('no shantytown to be exported');
             });
             it('récupère les closingSolutions', async () => {
                 try {
@@ -197,7 +193,6 @@ describe.only('services/shantytown', () => {
                 }
                 expect(responseError).to.be.instanceOf(ServiceError);
                 expect(responseError.code).to.be.eql('fetch_failed');
-                expect(responseError.nativeError.developer_message).to.be.eql('Failed to fetch closing solutions');
             });
         });
         describe('gère l\'export des données', () => {
@@ -244,7 +239,6 @@ describe.only('services/shantytown', () => {
                 expect(stubs.create).to.have.been.calledOnce;
                 expect(responseError).to.be.instanceOf(ServiceError);
                 expect(responseError.code).to.be.eql('write_failed');
-                expect(responseError.nativeError.developer_message).to.be.eql('Failed to store statistics');
             });
         });
     });

@@ -19,19 +19,10 @@ module.exports = async (user, shantytownId, data) => {
         shantytown = await shantytownModel.findOne(user, shantytownId);
 
         if (shantytown === null) {
-            throw new ServiceError('fetch_failed', {
-                user_message: `Le site #${shantytownId} n'existe pas`,
-                developer_message: `Shantytown #${shantytownId} does not exist`,
-            });
+            throw new ServiceError('fetch_failed', new Error(`Le site #${shantytownId} n'existe pas`));
         }
     } catch (error) {
-        throw new ServiceError('fetch_failed', {
-            user_message: `Une erreur est survenue lors de la vérification de l'existence du site #${shantytownId} en base de données`,
-            developer_message: `Failed fetching shantytown #${shantytownId}`,
-            details: {
-                error_message: error.message,
-            },
-        });
+        throw new ServiceError('fetch_failed', new Error(`Une erreur est survenue lors de la vérification de l'existence du site #${shantytownId} en base de données`));
     }
 
     // sanitize input
@@ -91,24 +82,14 @@ module.exports = async (user, shantytownId, data) => {
     }
 
     if (Object.keys(errors).length > 0) {
-        throw new ServiceError('data_incomplete', {
-            user_message: 'Certains champs du formulaire comportent des erreurs',
-            developer_message: 'Submitted data contains errors',
-            fields: errors,
-        });
+        throw new ServiceError('data_incomplete', new Error('Certains champs du formulaire comportent des erreurs'));
     }
 
     // try creating the new comment
     try {
         await shantytownModel.createCovidComment(user, shantytownId, sanitizedData);
     } catch (error) {
-        throw new ServiceError('write_failed', {
-            user_message: 'Une erreur est survenue lors de l\'écriture du commentaire en base de données',
-            developer_message: `Failed writing a covid comment for shantytown #${shantytownId}`,
-            details: {
-                error_message: error.message,
-            },
-        });
+        throw new ServiceError('write_failed', new Error('Une erreur est survenue lors de l\'écriture du commentaire en base de données'));
     }
 
     // fetch refreshed comments
