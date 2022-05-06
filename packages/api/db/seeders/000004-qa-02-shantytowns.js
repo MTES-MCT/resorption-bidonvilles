@@ -1,6 +1,6 @@
 /* eslint-disable newline-per-chained-call,no-await-in-loop, no-restricted-syntax */
 require('../../module_alias');
-const { create: createShantyTown } = require('#server/models/shantytownModel')();
+const { create: createShantyTown } = require('#server/models/shantytownModel');
 const { create } = require('#server/models/shantytownCommentModel');
 
 const shantytowns = [
