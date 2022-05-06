@@ -4,6 +4,7 @@ const path = require('path');
 const createShantytownComment = require('./shantytownCommentController/create');
 const exportShantytownComment = require('./shantytownCommentController/export');
 const getWeeklyActiveUsers = require('./matomoController/getWeeklyActiveUsers');
+const townController = require('./townController');
 import insertUserNavigationLogs from './userNavigationLogsController/insert';
 
 export default (models) => {
@@ -16,6 +17,7 @@ export default (models) => {
             create: createShantytownComment,
             export: exportShantytownComment,
         },
+        town: townController,
         userNavigationLogs: {
             insert: insertUserNavigationLogs,
         },
