@@ -18,7 +18,7 @@ const models = {
     highCovidComment: require('#server/models/highCovidCommentModel')({}),
 };
 const stubs = {};
-const { createHighCovidComment } = require('#server/controllers/townController')(stubs);
+const { createHighCovidComment } = require('#server/controllers/townController');
 
 
 /* **************************************************************************************************
