@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-const { sequelize } = require('../models');
+const { sequelize } = require('../config/sequelize');
 
 /**
  * Return regions

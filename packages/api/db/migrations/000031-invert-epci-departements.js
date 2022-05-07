@@ -1,7 +1,7 @@
 const parser = require('neat-csv');
 const fs = require('fs');
 const path = require('path');
-const { sequelize } = require('../models');
+const { sequelize } = require('../config/sequelize');
 
 /**
  * Adds a column fk_departement to cities
@@ -217,6 +217,7 @@ module.exports = {
                     'ARTICLCT',
                     'NCCCT',
                 ],
+                // eslint-disable-next-line no-tabs
                 separator: '	',
             },
         ))

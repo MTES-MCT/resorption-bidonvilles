@@ -23,11 +23,8 @@
         ]
     },
     "include": [
-        "."
-    ],
-    "exclude": [
-        "node_modules",
-        "test",
-        "dist"
+        "db/**/*.js",
+        "db/**/*.ts",
+        "server/**/*.ts"
     ]
 }

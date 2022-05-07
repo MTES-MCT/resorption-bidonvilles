@@ -152,8 +152,8 @@ module.exports = {
                     const createdAtTime = (new Date(poi.createdAt)).getTime();
                     const updatedAtTime = (new Date(poi['Mise à jour'])).getTime();
 
-                    const createdAt = isNaN(createdAtTime) ? null : createdAtTime / 1000;
-                    const updatedAt = isNaN(updatedAtTime) ? null : updatedAtTime / 1000;
+                    const createdAt = Number.isNaN(createdAtTime) ? null : createdAtTime / 1000;
+                    const updatedAt = Number.isNaN(updatedAtTime) ? null : updatedAtTime / 1000;
 
                     return {
                         solinum_id: parseInt(poi['Numéro'], 10),

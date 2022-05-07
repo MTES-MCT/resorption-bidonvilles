@@ -81,7 +81,7 @@ module.exports = {
                     type: Sequelize.TEXT,
                     allowNull: true,
                 },
-                temporary_hours:{
+                temporary_hours: {
                     type: Sequelize.TEXT,
                     allowNull: true,
                 },
@@ -125,7 +125,7 @@ module.exports = {
                     type: Sequelize.BOOLEAN,
                     allowNull: true,
                 },
-                price:{
+                price: {
                     type: Sequelize.TEXT,
                     allowNull: true,
                 },
@@ -152,8 +152,8 @@ module.exports = {
                     const createdAtTime = (new Date(poi.createdAt)).getTime();
                     const updatedAtTime = (new Date(poi['Mise à jour'])).getTime();
 
-                    const createdAt = isNaN(createdAtTime) ? null : createdAtTime / 1000;
-                    const updatedAt = isNaN(updatedAtTime) ? null : updatedAtTime / 1000;
+                    const createdAt = Number.isNaN(createdAtTime) ? null : createdAtTime / 1000;
+                    const updatedAt = Number.isNaN(updatedAtTime) ? null : updatedAtTime / 1000;
 
                     return {
                         solinum_id: parseInt(poi['Numéro'], 10),
@@ -161,17 +161,17 @@ module.exports = {
                         temporary_hours: poi['Horaire temporaire'],
                         temporary_hour_start: poi['Début Horaire temporaire'],
                         temporary_hour_end: poi['Fin Horaire temporaire'],
-                        asile: toBool(poi['asile']),
-                        refugie: toBool(poi['refugie']),
-                        family: toBool(poi['family']),
-                        age_min: poi['age_min'] ? parseInt(poi['age_min'], 10) : 0,
-                        age_max: poi['age_max'] ? parseInt(poi['age_max'], 10) : 99,
-                        sexe: poi['Sexe'],
-                        animals: poi['animals'],
-                        rdv_required: toBool(poi['sur_rdv']),
-                        price: poi['price'],
-                        info: poi['conditions_other'],
-                        language: poi['Langues'],
+                        asile: toBool(poi.asile),
+                        refugie: toBool(poi.refugie),
+                        family: toBool(poi.family),
+                        age_min: poi.age_min ? parseInt(poi.age_min, 10) : 0,
+                        age_max: poi.age_max ? parseInt(poi.age_max, 10) : 99,
+                        sexe: poi.Sexe,
+                        animals: poi.animals,
+                        rdv_required: toBool(poi.sur_rdv),
+                        price: poi.price,
+                        info: poi.conditions_other,
+                        language: poi.Langues,
                         solinum_created_at: createdAt,
                         solinum_updated_at: updatedAt,
                         // // Fix mistakes between Lat & Lng in the export
@@ -180,13 +180,13 @@ module.exports = {
                         verified: toBool(poi['Vérifié']),
                         categories: poi['Catégories'].split(',').map(text => text.trim()),
                         name: poi['Nom de la structure'],
-                        address: poi['Adresse'],
-                        city: poi['Ville'],
+                        address: poi.Adresse,
+                        city: poi.Ville,
                         postal_code: poi['Code Postal'],
                         closed: toBool(poi['Fermé']),
                         temporarily_closed: poi['Fermeture temporaire'],
                         phone: poi['Numéro de téléphone'],
-                        email: poi['Email'],
+                        email: poi.Email,
                     };
                 }),
                 { transaction },

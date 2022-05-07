@@ -89,7 +89,7 @@
     }
   },
   "lint-staged": {
-    "server/**/*.{js,ts}": [
+    "{server,db}/**/*.{js,ts}": [
       "yarn lint"
     ]
   },
@@ -104,7 +104,7 @@
     "test:unit:ts": "yarn mocha --require ./test/bootstrap.js -r ts-node/register 'server/**/*.spec.ts' 'test/**/*.spec.ts'",
     "test:integration": "yarn test --grep '.*server/models.*'",
     "lint": "eslint --max-warnings=0 --ext .ts,.js",
-    "lint:all": "eslint --max-warnings=0 --ext .ts,.js server",
+    "lint:all": "eslint --max-warnings=0 --ext .ts,.js server db",
     "emails:build": "ts-node server/mails/build.ts"
   }
 }

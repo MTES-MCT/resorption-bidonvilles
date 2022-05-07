@@ -6,7 +6,7 @@ const typedConfig: Options = {
     dialect: 'postgres',
 };
 
-export const sequelize = new Sequelize(
+export const sequelize: Sequelize = new Sequelize(
     typedConfig.database,
     typedConfig.username,
     typedConfig.password,
