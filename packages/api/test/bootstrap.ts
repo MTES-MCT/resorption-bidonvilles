@@ -1,4 +1,4 @@
-require('../module_alias');
+import '../module_alias';
 
 /**
  * A set of functions that can generate random values of a certain type
@@ -76,8 +76,8 @@ function getAllTypesOtherThan(types) {
 global.generate = (types) => {
     if (types === undefined) {
         return {
-            not(types) {
-                return getRandomValue(getAllTypesOtherThan(Array.isArray(types) ? types : [types]));
+            not(argTypes) {
+                return getRandomValue(getAllTypesOtherThan(Array.isArray(argTypes) ? argTypes : [argTypes]));
             },
         };
     }

@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default () => sequelize.query(
     `SELECT
@@ -6,6 +7,6 @@ export default () => sequelize.query(
         closing_solutions.label AS label
     FROM closing_solutions`,
     {
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
     },
 );

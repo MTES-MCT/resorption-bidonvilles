@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default async (categoryUid, search = null) => {
     const rows = await sequelize.query(
@@ -27,7 +28,7 @@ export default async (categoryUid, search = null) => {
                 ASC,
                 departement_code ASC, REPLACE(region_name, 'Î', 'I') ASC, epci_name ASC, city_name ASC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 categoryUid,
                 search: `%${search}%`,

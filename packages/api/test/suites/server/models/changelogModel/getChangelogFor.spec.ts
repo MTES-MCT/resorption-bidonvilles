@@ -1,9 +1,9 @@
 import userUtils from '#test/utils/user';
 import changelogUtils from '#test/utils/changelog';
 
-const SequelizeMock = require('sequelize-mock');
-const rewiremock = require('rewiremock/node');
-const { expect } = require('chai');
+import SequelizeMock from 'sequelize-mock';
+import rewiremock from 'rewiremock/node';
+import { expect } from 'chai';
 
 const { serialized: createUser } = userUtils;
 
@@ -17,9 +17,9 @@ describe.only('ChangelogModel', () => {
             sequelizeStub = new SequelizeMock();
             sequelizeStub.QueryTypes = SequelizeMock.QueryTypes;
 
-            ({ getChangelogFor } = rewiremock.proxy('#server/models/changelogModel', {
+            ({ getChangelogFor } = rewiremock.proxy<any>('#server/models/changelogModel', {
                 '#db/sequelize': sequelizeStub,
-            })());
+            }).default());
         });
 
         it('Si l\'utilisateur se connecte à l\'application pour la première fois, on ne lui retourne aucun changelog', async () => {

@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default async (departement, date = '2020-06-01') => {
     const rows = await sequelize.query(
@@ -12,7 +13,7 @@ export default async (departement, date = '2020-06-01') => {
             ${departement ? `AND fk_departement = '${departement}'` : ''}
             `,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 

@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default typeId => sequelize.query(
     `SELECT
@@ -25,7 +26,7 @@ export default typeId => sequelize.query(
         ASC,
         departement_code ASC, REPLACE(region_name, 'Î', 'I') ASC, epci_name ASC, city_name ASC`,
     {
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
         replacements: {
             typeId,
         },

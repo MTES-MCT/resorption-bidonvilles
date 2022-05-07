@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default async (departement) => {
     const rows = await sequelize.query(
@@ -15,7 +16,7 @@ export default async (departement) => {
             GROUP BY year, type
         `,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 

@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default async (feature, entity, userId, transaction = undefined) => {
     const rows = await sequelize.query(
@@ -16,7 +17,7 @@ export default async (feature, entity, userId, transaction = undefined) => {
         LEFT JOIN role_permissions rp ON (rp.fk_role_regular = u.fk_role_regular AND rp.fk_feature = :feature AND rp.fk_entity = :entity)
         WHERE u.user_id = :userId`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 feature,
                 entity,

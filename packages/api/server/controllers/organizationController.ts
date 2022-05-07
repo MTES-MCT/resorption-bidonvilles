@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 import organizationModelFactory from '#server/models/organizationModel';
 
 const { updateBeingFunded } = organizationModelFactory();
@@ -169,7 +170,7 @@ export default models => ({
                 LIMIT 10`,
                 {
                     replacements: [...queryAtoms, ...queryAtoms],
-                    type: sequelize.QueryTypes.SELECT,
+                    type: QueryTypes.SELECT,
                 },
             );
 
@@ -206,7 +207,7 @@ export default models => ({
                 LIMIT 10`,
                 {
                     replacements: [...queryAtoms, ...queryAtoms],
-                    type: sequelize.QueryTypes.SELECT,
+                    type: QueryTypes.SELECT,
                 },
             );
 

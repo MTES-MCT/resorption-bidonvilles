@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default (shantytownIds, transaction = undefined) => {
     const ids = Array.isArray(shantytownIds) ? shantytownIds : [shantytownIds];
@@ -23,7 +24,7 @@ export default (shantytownIds, transaction = undefined) => {
         WHERE ps.fk_shantytown in (:ids)
         GROUP BY ps.fk_plan, ps.fk_shantytown, plans2.name, plans2.fk_category, organizations.organization_id`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 ids,
             },

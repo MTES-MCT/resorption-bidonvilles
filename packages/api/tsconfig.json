@@ -16,6 +16,9 @@
             ],
             "#root/*": [
                 "*"
+            ],
+            "#test/*": [
+                "test/*"
             ]
         },
         "lib": [
@@ -25,6 +28,7 @@
     "include": [
         "db/**/*.js",
         "db/**/*.ts",
-        "server/**/*.ts"
+        "server/**/*.ts",
+        "test/**/*.ts"
     ]
 }

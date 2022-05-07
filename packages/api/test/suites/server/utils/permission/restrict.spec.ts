@@ -1,12 +1,15 @@
 /* eslint-disable no-use-before-define */
-const { expect } = require('chai');
-import permission/indexUtils from '#server/utils/permission/index';
-const { restrict } = permission/indexUtils;
+import { expect } from 'chai';
+import permissionUtils from '#server/utils/permission/index';
 import userUtils from '#test/utils/user';
+import locationUtils from '#test/utils/location';
+
+const { restrict } = permissionUtils;
+
 const { serialized: fakeUser } = userUtils;
 const {
     nation, paris, marseille,
-} = require('#test/utils/location');
+} = locationUtils;
 
 describe.only('utils/permission.restrict()', () => {
     let user;
@@ -35,6 +38,41 @@ describe.only('utils/permission.restrict()', () => {
         };
         expect(restrict(nation()).for(user).askingTo('do', 'something')).to.be.null;
     });
+
+    function getLevelLimitsFor(location) {
+        switch (location.type) {
+            case 'region':
+                return {
+                    above: nation(),
+                    below: paris.departement(),
+                };
+
+            case 'departement':
+                return {
+                    above: paris.region(),
+                    below: paris.epci(),
+                };
+
+            case 'epci':
+                return {
+                    above: paris.departement(),
+                    below: paris.city(),
+                };
+
+            case 'city':
+                return {
+                    above: paris.epci(),
+                    below: paris.district(),
+                };
+
+            case 'nation':
+            default:
+                return {
+                    above: null,
+                    below: marseille.region(),
+                };
+        }
+    }
 
     describe('cas valides', () => {
         const cases = {
@@ -294,7 +332,7 @@ describe.only('utils/permission.restrict()', () => {
                     });
                 }
 
-                it(`si un ${userLevel} avec une ${permissionLevel} demande accès au niveau ${below.type}, retourne ce niveau à l\'identique`, () => {
+                it(`si un ${userLevel} avec une ${permissionLevel} demande accès au niveau ${below.type}, retourne ce niveau à l'identique`, () => {
                     user.permissions.something = {
                         do: {
                             allowed: true,
@@ -324,39 +362,4 @@ describe.only('utils/permission.restrict()', () => {
             });
         });
     });
-
-    function getLevelLimitsFor(location) {
-        switch (location.type) {
-            case 'region':
-                return {
-                    above: nation(),
-                    below: paris.departement(),
-                };
-
-            case 'departement':
-                return {
-                    above: paris.region(),
-                    below: paris.epci(),
-                };
-
-            case 'epci':
-                return {
-                    above: paris.departement(),
-                    below: paris.city(),
-                };
-
-            case 'city':
-                return {
-                    above: paris.epci(),
-                    below: paris.district(),
-                };
-
-            case 'nation':
-            default:
-                return {
-                    above: null,
-                    below: marseille.region(),
-                };
-        }
-    }
 });

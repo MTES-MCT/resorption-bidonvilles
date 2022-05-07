@@ -3,11 +3,13 @@ import ServiceError from '#server/errors/ServiceError';
 import userUtils from '#test/utils/user';
 import shantytownCommentUtils from '#test/utils/shantytownComment';
 
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
-const rewiremock = require('rewiremock/node');
-const Sequelize = require('sequelize-mock');
+import chai from 'chai';
+import sinon from 'sinon';
+
+import sinonChai from 'sinon-chai';
+import rewiremock from 'rewiremock/node';
+
+import Sequelize from 'sequelize-mock';
 
 chai.use(sinonChai);
 
@@ -36,7 +38,7 @@ describe.only('services/shantytownComment', () => {
         dependencies.triggerNewComment = sinon.stub();
         dependencies.sendMail = sinon.stub();
 
-        createComment = rewiremock.proxy('#server/services/shantytownComment/createComment', {
+        createComment = rewiremock.proxy<any>('#server/services/shantytownComment/createComment', {
             '#db/sequelize': {
                 sequelize: sequelizeStub,
             },
@@ -56,7 +58,7 @@ describe.only('services/shantytownComment', () => {
             '#server/mails/mails': {
                 sendUserNewComment: dependencies.sendMail,
             },
-        });
+        }).default;
     });
 
     describe('createComment()', () => {

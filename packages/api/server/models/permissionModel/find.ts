@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 /**
  * @param {Array.<Number>} owners User ids
@@ -24,7 +25,7 @@ export default async (owners) => {
         WHERE uap.user_id IN (:owners)
         ORDER BY user_id ASC, entity ASC, feature ASC
     `, {
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
         replacements: {
             owners,
         },

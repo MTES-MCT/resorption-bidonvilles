@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 import serializeElectricityType from './_common/serializeElectricityType';
 
 export default async () => {
@@ -11,7 +12,7 @@ export default async () => {
         FROM electricity_types
         ORDER BY position ASC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 

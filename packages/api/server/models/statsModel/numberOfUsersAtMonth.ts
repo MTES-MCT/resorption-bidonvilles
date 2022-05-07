@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default async (date = '2020-06-01') => {
     const rows = await sequelize.query(
@@ -10,7 +11,7 @@ export default async (date = '2020-06-01') => {
             AND
             ua.used_at < '${date}'`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 

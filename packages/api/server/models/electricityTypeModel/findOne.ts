@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 import serializeElectricityType from './_common/serializeElectricityType';
 
 export default async (id) => {
@@ -11,7 +12,7 @@ export default async (id) => {
         FROM electricity_types
         WHERE electricity_types.electricity_type_id = :id`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 id,
             },

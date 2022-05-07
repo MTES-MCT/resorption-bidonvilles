@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default async () => {
     const rows = await sequelize.query(
@@ -6,7 +7,7 @@ export default async () => {
             count(*) as total
         FROM stats_exports`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 

@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default (categoryUid, withTotalOfOrganizations = false) => {
     const columns = {
@@ -22,7 +23,7 @@ export default (categoryUid, withTotalOfOrganizations = false) => {
         ${withTotalOfOrganizations ? 'GROUP BY organization_types.organization_type_id' : ''}
         ORDER BY organization_types.name_singular`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 categoryUid,
             },

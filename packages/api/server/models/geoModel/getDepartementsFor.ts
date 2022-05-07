@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default (locationType, locationCode) => sequelize.query(
     `SELECT
@@ -10,7 +11,7 @@ export default (locationType, locationCode) => sequelize.query(
         GROUP BY departements.code, departements.name
         ORDER BY departements.code ASC`,
     {
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
         replacements: {
             locationCode,
         },

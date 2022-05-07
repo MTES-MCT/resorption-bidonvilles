@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 type Replacements = {
     role_id: string,
@@ -21,7 +22,7 @@ export default async (id, type = null) => {
         FROM roles
         WHERE ${Object.keys(replacements).map(col => `${col} = :${col}`).join(' AND ')}`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements,
         },
     );

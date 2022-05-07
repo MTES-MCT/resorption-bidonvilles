@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 import geoModelFactory from '#server/models/geoModel';
 
 const geoModel = geoModelFactory();
@@ -75,7 +76,7 @@ export default async (user) => {
         LEFT JOIN organizations ON users.fk_organization = organizations.organization_id
         ${where.prop !== null ? `WHERE ${where.prop} IN :territory` : ''}`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 territory: where.value,
             },

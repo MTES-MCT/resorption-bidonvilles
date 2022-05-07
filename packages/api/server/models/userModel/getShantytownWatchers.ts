@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default async (shantytownId, canListPrivateComments) => sequelize.query(
     `WITH constants(departement, epci) AS (
@@ -41,7 +42,7 @@ export default async (shantytownId, canListPrivateComments) => sequelize.query(
     ${canListPrivateComments === true ? 'AND up.allowed IS TRUE' : ''}
     `,
     {
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
         replacements: {
             shantytownId,
         },

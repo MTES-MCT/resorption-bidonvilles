@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default async (code) => {
     const departement = await sequelize.query(
@@ -8,7 +9,7 @@ export default async (code) => {
         FROM departements
         WHERE code = :code`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 code,
             },

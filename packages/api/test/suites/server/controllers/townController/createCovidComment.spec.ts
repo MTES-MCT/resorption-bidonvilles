@@ -1,23 +1,27 @@
-/* eslint-disable global-require */
-
 /* **************************************************************************************************
  * TOOLS
  * *********************************************************************************************** */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const { mockReq, mockRes } = require('sinon-express-mock');
+import sinon from 'sinon';
+
+import { expect } from 'chai';
+import { mockReq, mockRes } from 'sinon-express-mock';
 
 
 /* **************************************************************************************************
  * FIXTURES
  * *********************************************************************************************** */
 
+import shantytownModelFactory from '#server/models/shantytownModel';
+import townControllerFactory from '#server/controllers/townController';
+
 const models = {
-    shantytown: require('#server/models/shantytownModel')(),
+    shantytown: shantytownModelFactory(),
 };
-const stubs = {};
-const { createCovidComment } = require('#server/controllers/townController')(stubs);
+const stubs: {
+    [key: string]: sinon.SinonStubbedInstance<any>,
+} = {};
+const { createCovidComment } = townControllerFactory(stubs);
 
 
 /* **************************************************************************************************

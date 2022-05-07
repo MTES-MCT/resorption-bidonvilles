@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 import formatName from './_common/formatName';
 
 export default async (location, numberOfActivities, lastDate, maxDate) => {
@@ -35,7 +36,7 @@ export default async (location, numberOfActivities, lastDate, maxDate) => {
             ${limit}
             `,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 maxDate,
             },

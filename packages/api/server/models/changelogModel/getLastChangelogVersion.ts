@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default async () => {
     const changelogs = await sequelize.query(
@@ -8,7 +9,7 @@ export default async () => {
         ORDER BY regexp_split_to_array(changelogs.app_version, '\\.')::int[] DESC
         LIMIT 1`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 

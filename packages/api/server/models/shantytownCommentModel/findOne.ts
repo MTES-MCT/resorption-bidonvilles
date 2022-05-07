@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 import shantytownModelFactory from '#server/models/shantytownModel';
 
 const { serializeComment } = shantytownModelFactory();
@@ -30,7 +31,7 @@ export default async (id) => {
         WHERE
             sc.shantytown_comment_id = :id`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 id,
             },

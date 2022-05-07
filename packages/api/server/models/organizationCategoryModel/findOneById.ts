@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default async (uid) => {
     const result = await sequelize.query(
@@ -9,7 +10,7 @@ export default async (uid) => {
         FROM organization_categories
         WHERE uid = :uid`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 uid,
             },

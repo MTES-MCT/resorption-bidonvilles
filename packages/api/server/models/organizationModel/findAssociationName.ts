@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default async (name) => {
     const result = await sequelize.query(
@@ -13,7 +14,7 @@ export default async (name) => {
             AND
             UNACCENT(organizations.name) ILIKE UNACCENT(:name)`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 name,
             },

@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 import config from '#server/config';
 
 const { backUrl } = config;
@@ -12,7 +13,7 @@ export default async () => {
         ORDER BY version DESC
         LIMIT 1`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 

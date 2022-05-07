@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 import averageCompletionQuery from './_common/averageCompletion';
 
 export default async () => sequelize.query(
@@ -9,6 +10,6 @@ export default async () => sequelize.query(
             GROUP BY fk_departement
             ORDER BY fk_departement`,
     {
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
     },
 );

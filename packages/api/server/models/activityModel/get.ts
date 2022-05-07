@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 import moment from 'moment';
 
 import userModelFactory from '#server/models/userModel';
@@ -171,7 +172,7 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
         ORDER BY d.code ASC
         `,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 from: from.format('YYYY-MM-DD'),
                 to: to.format('YYYY-MM-DD'),

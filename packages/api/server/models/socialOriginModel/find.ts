@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default ids => sequelize.query(
     `SELECT
@@ -7,7 +8,7 @@ export default ids => sequelize.query(
     FROM social_origins
     WHERE social_origins.social_origin_id IN (:ids)`,
     {
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
         replacements: {
             ids,
         },

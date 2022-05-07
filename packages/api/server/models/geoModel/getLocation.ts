@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 const methods = {
     nation: () => ({
@@ -12,7 +13,7 @@ const methods = {
         const [region] = await sequelize.query(
             'SELECT name, code FROM regions WHERE code = :code',
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: { code },
             },
         );
@@ -43,7 +44,7 @@ const methods = {
             LEFT JOIN regions ON departements.fk_region = regions.code
             WHERE departements.code = :code`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: { code },
             },
         );
@@ -81,7 +82,7 @@ const methods = {
             LEFT JOIN regions ON departements.fk_region = regions.code
             WHERE epci.code = :code`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: { code },
             },
         );
@@ -124,7 +125,7 @@ const methods = {
             LEFT JOIN regions ON departements.fk_region = regions.code
             WHERE cities.code = :code`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: { code },
             },
         );

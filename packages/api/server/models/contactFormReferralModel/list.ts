@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default (where = []) => {
     const replacements = {};
@@ -32,7 +33,7 @@ export default (where = []) => {
             LEFT JOIN cities ON localized_organizations.city_code = cities.code
             ${whereClause ? `WHERE ${whereClause}` : ''}`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements,
         },
     );

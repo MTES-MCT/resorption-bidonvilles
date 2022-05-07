@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 import dateUtils from '#server/utils/date';
 
 const { toFormat } = dateUtils;
@@ -134,7 +135,7 @@ export default async (departement) => {
     WHERE t2.opened_at IS NOT NULL AND t2.month_rank = '1'
     ORDER BY t2.shantytown_id ASC, t2.input_date ASC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 departement,
             },

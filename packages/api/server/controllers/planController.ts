@@ -1,6 +1,7 @@
 import validator from 'validator';
 import JSONToCSV from 'json2csv';
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 import permissionModelFactory from '#server/models/permissionModel';
 import planModelFactory from '#server/models/planModel';
@@ -455,7 +456,7 @@ async function historize(planId, transaction) {
         LEFT JOIN finances ON (finances.fk_plan = :planId AND finances.year = finances_history.year)
         WHERE finances_history.fk_plan = :hid`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 hid,
                 planId,

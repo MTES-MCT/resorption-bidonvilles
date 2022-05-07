@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 /**
  * @param {Location} [location] Location filter. If set to null, no filter is applied and all
@@ -79,7 +80,7 @@ export default (location = null, privateLocation = null) => {
 }
         ORDER BY sc.created_at DESC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements,
         },
     );

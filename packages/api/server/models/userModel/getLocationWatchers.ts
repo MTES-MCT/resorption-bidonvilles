@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 import config from '#server/config';
 
 const { mailBlacklist } = config;
@@ -21,7 +22,7 @@ export default async (location, applyBlacklist = false) => {
             AND u.fk_status = 'active'
             AND lo.active = TRUE`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 departementCode: location.departement.code,
                 epciCode: location.epci.code,

@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 import shantytownActorModelFactory from '#server/models/shantytownActorModel';
 import planShantytownModelFactory from '#server/models/planShantytownModel';
 import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
@@ -59,7 +60,7 @@ export default async (where = [], order = ['departements.code ASC', 'cities.name
             order.join(', '),
         ),
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements,
         },
     );
@@ -91,7 +92,7 @@ export default async (where = [], order = ['departements.code ASC', 'cities.name
                     ['shantytowns.shantytown_id ASC', 'shantytowns."archivedAt" ASC'].join(', '),
                 ),
                 {
-                    type: sequelize.QueryTypes.SELECT,
+                    type: QueryTypes.SELECT,
                     replacements,
                 },
             ),
@@ -114,7 +115,7 @@ export default async (where = [], order = ['departements.code ASC', 'cities.name
             LEFT JOIN closing_solutions ON shantytown_closing_solutions.fk_closing_solution = closing_solutions.closing_solution_id
             WHERE shantytown_closing_solutions.fk_shantytown IN (:ids)`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: { ids: Object.keys(serializedTowns.hash) },
             },
         ),

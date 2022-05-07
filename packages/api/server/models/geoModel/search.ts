@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 function generateSearch(table) {
     const map = {
@@ -63,6 +64,6 @@ export default query => sequelize.query(
             `%${query}%`,
             `${query}%`,
         ],
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
     },
 );

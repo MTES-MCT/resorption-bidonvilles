@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 import averageCompletionQuery from './_common/averageCompletion';
 
 export default async (departement) => {
@@ -9,7 +10,7 @@ export default async (departement) => {
         ${averageCompletionQuery(departement)}
         `,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 

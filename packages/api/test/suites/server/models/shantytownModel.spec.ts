@@ -3,9 +3,10 @@ import shantytownModelFactory from '#server/models/shantytownModel';
 import { sequelize } from '#db/sequelize';
 import userUtils from '#test/utils/user';
 
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
+import chai from 'chai';
+import sinon from 'sinon';
+
+import sinonChai from 'sinon-chai';
 
 const { serialized: generateUser } = userUtils;
 

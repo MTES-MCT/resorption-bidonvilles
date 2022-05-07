@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 import convertToDateMapping from './_common/convertToDateMapping';
 
 export default async (departement = null, startDateStr = '2019-06-01') => {
@@ -15,7 +16,7 @@ export default async (departement = null, startDateStr = '2019-06-01') => {
         GROUP BY year, month
         ORDER BY year ASC ,month ASC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 

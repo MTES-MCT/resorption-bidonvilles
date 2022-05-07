@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default (where = []) => {
     const replacements = {};
@@ -38,7 +39,7 @@ export default (where = []) => {
         WHERE u.fk_status = 'active'${whereClause !== '' ? `AND ${whereClause}` : ''}
         ORDER BY sa.created_at DESC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements,
         },
     );

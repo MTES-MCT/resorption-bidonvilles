@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default async () => {
     const rows = await sequelize.query(
@@ -17,7 +18,7 @@ export default async () => {
         GROUP BY organization_types.fk_category    
         `,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 

@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default async () => {
     const rows = await sequelize.query(
@@ -15,7 +16,7 @@ export default async () => {
             d >= '2019-09-01'::date /* date of official opening to actual users */
         `,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 

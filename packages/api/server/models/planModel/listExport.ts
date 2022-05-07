@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default async () => sequelize.query(
     `WITH
@@ -67,6 +68,6 @@ export default async () => sequelize.query(
     LEFT JOIN grouped_operators ON grouped_operators.fk_plan = actions.plan_id
     LEFT JOIN last_plan_states ON last_plan_states.fk_plan = actions.plan_id`,
     {
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
     },
 );

@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default async (id) => {
     const rows = await sequelize.query(
@@ -10,7 +11,7 @@ export default async (id) => {
         WHERE owner_types.owner_type_id = :id
         ORDER BY position ASC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 id,
             },

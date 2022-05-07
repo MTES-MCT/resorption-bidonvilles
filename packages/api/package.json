@@ -89,7 +89,7 @@
     }
   },
   "lint-staged": {
-    "{server,db}/**/*.{js,ts}": [
+    "{server,db,test}/**/*.{js,ts}": [
       "yarn lint"
     ]
   },
@@ -98,13 +98,10 @@
     "dev": "ts-node-dev ./server/index.ts",
     "build": "tsc && tsc-alias && cp -r server/mails/dist dist/server/mails && cp -r assets dist && cp .sequelizerc dist",
     "start": "nodemon dist/server/index.js",
-    "test": "mocha --recursive --require ./test/bootstrap.js --bail",
-    "test:unit": "yarn test:unit:js && yarn test:unit:ts",
-    "test:unit:js": "yarn test --invert --grep '.*server/models.*'",
-    "test:unit:ts": "yarn mocha --require ./test/bootstrap.js -r ts-node/register 'server/**/*.spec.ts' 'test/**/*.spec.ts'",
-    "test:integration": "yarn test --grep '.*server/models.*'",
+    "test": "mocha --require ts-node/register --require ./test/bootstrap.ts --recursive --bail",
+    "test:unit": "mocha --require ts-node/register --require ./test/bootstrap.ts 'server/**/*.spec.ts' 'test/**/*.spec.ts'",
     "lint": "eslint --max-warnings=0 --ext .ts,.js",
-    "lint:all": "eslint --max-warnings=0 --ext .ts,.js server db",
+    "lint:all": "eslint --max-warnings=0 --ext .ts,.js server db test",
     "emails:build": "ts-node server/mails/build.ts"
   }
 }

@@ -1,17 +1,16 @@
-/* eslint-disable global-require */
-
 /* **************************************************************************************************
  * TOOLS
  * *********************************************************************************************** */
 
-const chai = require('chai');
-const sinon = require('sinon');
-chai.use(require('sinon-chai'));
-const rewiremock = require('rewiremock/node');
+import chai, { expect } from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
+import rewiremock from 'rewiremock/node';
 
-const { expect } = require('chai');
-const { mockRes } = require('sinon-express-mock');
+import { mockRes } from 'sinon-express-mock';
+import { FakeReq } from '#test/types/FakeReq';
 
+chai.use(sinonChai);
 
 function generateFakeUser() {
     return {
@@ -68,7 +67,7 @@ const controllerMockModels = {
  * *********************************************************************************************** */
 
 describe.only('contactController.contact()', () => {
-    const req = {};
+    const req: FakeReq = {};
     let res;
 
     const user = generateFakeUser();
@@ -94,7 +93,7 @@ describe.only('contactController.contact()', () => {
 
     describe('Success cases', () => {
         it('Should a simple message', async () => {
-            const controller = rewiremock.proxy('#server/controllers/contactController', mockModels)(controllerMockModels);
+            const controller = rewiremock.proxy<any>('#server/controllers/contactController', mockModels).default(controllerMockModels);
 
             req.body = {
                 access_request_message: 'ceci est un message',
@@ -114,7 +113,7 @@ describe.only('contactController.contact()', () => {
         });
 
         it('Should handle an access request for a non actor', async () => {
-            const controller = rewiremock.proxy('#server/controllers/contactController', mockModels)(controllerMockModels);
+            const controller = rewiremock.proxy<any>('#server/controllers/contactController', mockModels).default(controllerMockModels);
 
             req.body = {
                 access_request_message: 'ceci est un message',
@@ -141,23 +140,24 @@ describe.only('contactController.contact()', () => {
             const accessRequestStub = sinon.stub({
                 handleNewAccessRequest: () => {},
             });
-            const controller = rewiremock.proxy('#server/controllers/contactController', {
+
+            const controller = rewiremock.proxy<any>('#server/controllers/contactController', {
                 // Fake userService db models calls
-                '#server/models/userModel': export default () => ({
+                '#server/models/userModel': () => ({
                     findOneByEmail: () => null,
                 }),
-                '#server/models/organizationCategoryModel': export default () => ({
+                '#server/models/organizationCategoryModel': () => ({
                     findOneById: () => 'something',
                 }),
-                '#server/models/organizationTypeModel': export default () => ({
+                '#server/models/organizationTypeModel': () => ({
                     findOneById: () => ({ organization_category: 'public_establishment' }),
                 }),
-                '#server/models/organizationModel': export default () => ({
+                '#server/models/organizationModel': () => ({
                     findOneById: () => ({ fk_type: 12 }),
                 }),
-                '#server/services/createUser': export default createUserStub,
-                '#server/services/accessRequest/accessRequestService': export default accessRequestStub,
-            })(controllerMockModels);
+                '#server/services/createUser': createUserStub,
+                '#server/services/accessRequest/accessRequestService': accessRequestStub,
+            }).default(controllerMockModels);
 
             req.body = {
                 request_type: ['access-request'],
@@ -208,21 +208,21 @@ describe.only('contactController.contact()', () => {
             const accessRequestStub = sinon.stub({
                 handleNewAccessRequest: () => {},
             });
-            const controller = rewiremock.proxy('#server/controllers/contactController', {
+            const controller = rewiremock.proxy<any>('#server/controllers/contactController', {
                 // Fake userService db models calls
-                '#server/models/userModel': export default () => ({
+                '#server/models/userModel': () => ({
                     findOneByEmail: () => null,
                 }),
-                '#server/models/organizationCategoryModel': export default () => ({
+                '#server/models/organizationCategoryModel': () => ({
                     findOneById: () => 'something',
                 }),
-                '#server/models/organizationModel': export default () => ({
+                '#server/models/organizationModel': () => ({
                     findOneById: () => ({ organization_category: 'territorial_collectivity' }),
                     findOneByLocation: () => ({ fk_category: 'territorial_collectivity' }),
                 }),
-                '#server/services/createUser': export default createUserStub,
-                '#server/services/accessRequest/accessRequestService': export default accessRequestStub,
-            })(controllerMockModels);
+                '#server/services/createUser': createUserStub,
+                '#server/services/accessRequest/accessRequestService': accessRequestStub,
+            }).default(controllerMockModels);
 
             req.body = {
                 request_type: ['access-request'],
@@ -277,20 +277,20 @@ describe.only('contactController.contact()', () => {
             const accessRequestStub = sinon.stub({
                 handleNewAccessRequest: () => {},
             });
-            const controller = rewiremock.proxy('#server/controllers/contactController', {
+            const controller = rewiremock.proxy<any>('#server/controllers/contactController', {
                 // Fake userService db models calls
-                '#server/models/userModel': export default () => ({
+                '#server/models/userModel': () => ({
                     findOneByEmail: () => null,
                 }),
-                '#server/models/organizationCategoryModel': export default () => ({
+                '#server/models/organizationCategoryModel': () => ({
                     findOneById: () => 'something',
                 }),
-                '#server/models/organizationModel': export default () => ({
+                '#server/models/organizationModel': () => ({
                     findOneById: () => ({ fk_category: 'administration' }),
                 }),
-                '#server/services/createUser': export default createUserStub,
-                '#server/services/accessRequest/accessRequestService': export default accessRequestStub,
-            })(controllerMockModels);
+                '#server/services/createUser': createUserStub,
+                '#server/services/accessRequest/accessRequestService': accessRequestStub,
+            }).default(controllerMockModels);
 
             req.body = {
                 request_type: ['access-request'],
@@ -338,23 +338,23 @@ describe.only('contactController.contact()', () => {
             const accessRequestStub = sinon.stub({
                 handleNewAccessRequest: () => {},
             });
-            const controller = rewiremock.proxy('#server/controllers/contactController', {
+            const controller = rewiremock.proxy<any>('#server/controllers/contactController', {
                 // Fake userService db models calls
-                '#server/models/userModel': export default () => ({
+                '#server/models/userModel': () => ({
                     findOneByEmail: () => null,
                 }),
-                '#server/models/organizationCategoryModel': export default () => ({
+                '#server/models/organizationCategoryModel': () => ({
                     findOneById: () => 'something',
                 }),
-                '#server/models/organizationModel': export default () => ({
+                '#server/models/organizationModel': () => ({
                     findAssociationName: () => 'something',
                 }),
-                '#server/models/departementModel': export default () => ({
+                '#server/models/departementModel': () => ({
                     findOne: () => 'something',
                 }),
-                '#server/services/createUser': export default createUserStub,
-                '#server/services/accessRequest/accessRequestService': export default accessRequestStub,
-            })(controllerMockModels);
+                '#server/services/createUser': createUserStub,
+                '#server/services/accessRequest/accessRequestService': accessRequestStub,
+            }).default(controllerMockModels);
 
             req.body = {
                 request_type: ['access-request'],
@@ -406,23 +406,23 @@ describe.only('contactController.contact()', () => {
             const accessRequestStub = sinon.stub({
                 handleNewAccessRequest: () => {},
             });
-            const controller = rewiremock.proxy('#server/controllers/contactController', {
+            const controller = rewiremock.proxy<any>('#server/controllers/contactController', {
                 // Fake userService db models calls
-                '#server/models/userModel': export default () => ({
+                '#server/models/userModel': () => ({
                     findOneByEmail: () => null,
                 }),
-                '#server/models/organizationCategoryModel': export default () => ({
+                '#server/models/organizationCategoryModel': () => ({
                     findOneById: () => 'something',
                 }),
-                '#server/models/organizationModel': export default () => ({
+                '#server/models/organizationModel': () => ({
                     findAssociationName: () => null,
                 }),
-                '#server/models/departementModel': export default () => ({
+                '#server/models/departementModel': () => ({
                     findOne: () => 'something',
                 }),
-                '#server/services/createUser': export default createUserStub,
-                '#server/services/accessRequest/accessRequestService': export default accessRequestStub,
-            })(controllerMockModels);
+                '#server/services/createUser': createUserStub,
+                '#server/services/accessRequest/accessRequestService': accessRequestStub,
+            }).default(controllerMockModels);
 
             req.body = {
                 request_type: ['access-request'],

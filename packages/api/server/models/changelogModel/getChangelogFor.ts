@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 import dateUtils from '#server/utils/date';
 
 const { toFormat } = dateUtils;
@@ -35,7 +36,7 @@ export default async (user) => {
             regexp_split_to_array(changelogs.app_version, '\\.')::int[] <= regexp_split_to_array(:maxVersion, '\\.')::int[]
         ORDER BY regexp_split_to_array(changelogs.app_version, '\\.')::int[] ASC, items.position ASC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 minVersion: user.last_changelog,
                 maxVersion: user.last_version,

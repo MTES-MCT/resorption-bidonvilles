@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
 import permissionUtils from '#server/utils/permission';
 import getUsenameOf from './_common/getUsenameOf';
@@ -46,7 +47,7 @@ export default async (user, latitude, longitude, distance, closed = false) => {
     ORDER BY distance ASC
     `,
     {
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
         replacements: {
             ...replacements, latitude, longitude, distanceRadius: distance,
         },

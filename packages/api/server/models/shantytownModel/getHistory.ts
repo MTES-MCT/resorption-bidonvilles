@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 import geoUtils from '#server/utils/geo';
 import userModelFactory from '#server/models/userModel';
 import permissionUtils from '#server/utils/permission';
@@ -94,7 +95,7 @@ export default async (user, location, shantytownFilter, numberOfActivities, last
             ${limit}
             `,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements,
         },
     );
@@ -131,7 +132,7 @@ export default async (user, location, shantytownFilter, numberOfActivities, last
                )
             `,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements,
         },
     );

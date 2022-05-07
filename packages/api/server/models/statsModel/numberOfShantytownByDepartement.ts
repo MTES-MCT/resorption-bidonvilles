@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default async () => sequelize.query(
     `
@@ -10,6 +11,6 @@ export default async () => sequelize.query(
         ORDER BY fk_departement
         `,
     {
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
     },
 );

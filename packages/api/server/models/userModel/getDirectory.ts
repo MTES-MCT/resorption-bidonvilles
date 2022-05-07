@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default async () => {
     const users = await sequelize.query(
@@ -42,7 +43,7 @@ export default async () => {
         ORDER BY organizations.name, users.last_name, users.first_name
         `,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 

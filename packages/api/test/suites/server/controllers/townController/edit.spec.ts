@@ -1,13 +1,12 @@
-import { sequelize } from '#db/sequelize';
-
 import shantytownModelFactory from '#server/models/shantytownModel';
 import userUtils from '#test/utils/user';
 
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
-const proxyquire = require('proxyquire');
-const { mockReq, mockRes } = require('sinon-express-mock');
+import chai from 'chai';
+import sinon from 'sinon';
+
+import sinonChai from 'sinon-chai';
+import proxyquire from 'proxyquire';
+import { mockReq, mockRes } from 'sinon-express-mock';
 
 const { serialized: generateUser } = userUtils;
 
@@ -15,7 +14,7 @@ const shantytownModel = shantytownModelFactory();
 
 const edit = proxyquire('#server/controllers/townController/edit', {
     '#server/models/shantytownModel': () => shantytownModel,
-})();
+}).default();
 
 const { expect } = chai;
 chai.use(sinonChai);

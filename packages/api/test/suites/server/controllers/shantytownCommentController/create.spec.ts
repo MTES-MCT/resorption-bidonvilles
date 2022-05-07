@@ -4,10 +4,11 @@ import ctlCreate from '#server/controllers/shantytownCommentController/create';
 import ServiceError from '#server/errors/ServiceError';
 import userUtils from '#test/utils/user';
 
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
-const { mockReq, mockRes } = require('sinon-express-mock');
+import chai from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
+
+import { mockReq, mockRes } from 'sinon-express-mock';
 
 const { serialized: fakeUser } = userUtils;
 

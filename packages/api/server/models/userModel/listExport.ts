@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default async () => sequelize.query(
     `SELECT
@@ -41,6 +42,6 @@ export default async () => sequelize.query(
         used_at ASC,
         expires_at DESC;`,
     {
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
     },
 );

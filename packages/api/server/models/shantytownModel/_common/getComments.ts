@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 import serializeComment from './serializeComment';
 
 export default async (user, shantytownIds, covid = false) => {
@@ -48,7 +49,7 @@ export default async (user, shantytownIds, covid = false) => {
             ${filterPrivateComments === true ? 'AND private IS FALSE ' : ''}
         ORDER BY shantytown_comments.created_at DESC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: { ids: shantytownIds },
         },
     );

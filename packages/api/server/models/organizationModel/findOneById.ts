@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default async (id) => {
     const result = await sequelize.query(
@@ -13,7 +14,7 @@ export default async (id) => {
         LEFT JOIN organization_types ON organizations.fk_type = organization_types.organization_type_id
         WHERE organizations.organization_id = :id`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 id,
             },

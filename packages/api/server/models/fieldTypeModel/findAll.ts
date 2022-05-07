@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 import serializeFieldType from './_common/serializeFieldType';
 
 export default async () => {
@@ -11,7 +12,7 @@ export default async () => {
         FROM field_types
         ORDER BY position ASC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 

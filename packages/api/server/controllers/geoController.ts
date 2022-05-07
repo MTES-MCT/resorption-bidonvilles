@@ -1,5 +1,6 @@
 import url from 'url';
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 function trim(str) {
     if (typeof str !== 'string') {
@@ -94,7 +95,7 @@ export default models => ({
                         `%${query}%`,
                         `${query}%`,
                     ],
-                    type: sequelize.QueryTypes.SELECT,
+                    type: QueryTypes.SELECT,
                 },
             );
 
@@ -144,7 +145,7 @@ export default models => ({
                         `%${query}%`,
                         `${query}%`,
                     ],
-                    type: sequelize.QueryTypes.SELECT,
+                    type: QueryTypes.SELECT,
                 },
             );
 
@@ -194,7 +195,7 @@ export default models => ({
                 departements: await sequelize.query(
                     'SELECT code, name FROM departements ORDER BY code ASC',
                     {
-                        type: sequelize.QueryTypes.SELECT,
+                        type: QueryTypes.SELECT,
                     },
                 ),
             },

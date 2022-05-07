@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     serialized(override = {}) {
         const defaultUser = {
             id: 2,
@@ -114,6 +114,7 @@ module.exports = {
             permission_options: [],
             last_version: '0.0.0',
             last_changelog: '0.0.0',
+            isAllowedTo: undefined,
         };
 
         defaultUser.isAllowedTo = (feature, entity) => defaultUser.permissions && defaultUser.permissions[entity] && defaultUser.permissions[entity][feature] && defaultUser.permissions[entity][feature].allowed === true;

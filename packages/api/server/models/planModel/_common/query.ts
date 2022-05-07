@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 import userModelFactory from '#server/models/userModel';
 import shantytownModelFactory from '#server/models/shantytownModel';
 import permissionUtils from '#server/utils/permission';
@@ -66,7 +67,7 @@ export default async (user, feature, filters = {}) => {
         ${whereClause !== null ? `WHERE ${whereClause}` : ''}
         ORDER BY plans.plan_id ASC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements,
         },
     );
@@ -89,7 +90,7 @@ export default async (user, feature, filters = {}) => {
             WHERE fk_plan IN (:planIds)
             ORDER BY fk_plan ASC`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: Object.assign({}, replacements, {
                     planIds,
                 }),
@@ -98,7 +99,7 @@ export default async (user, feature, filters = {}) => {
         sequelize.query(
             'SELECT fk_plan, fk_user FROM plan_operators WHERE fk_plan IN (:planIds) ORDER BY fk_plan ASC',
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: {
                     planIds,
                 },
@@ -113,7 +114,7 @@ export default async (user, feature, filters = {}) => {
             LEFT JOIN topics ON plan_topics.fk_topic = topics.uid
             WHERE plan_topics.fk_plan IN (:planIds) ORDER BY plan_topics.fk_plan ASC`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: {
                     planIds,
                 },
@@ -200,7 +201,7 @@ export default async (user, feature, filters = {}) => {
             WHERE fk_plan IN (:planIds)
             ORDER BY fk_plan, date ASC`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: {
                     planIds,
                 },
@@ -209,7 +210,7 @@ export default async (user, feature, filters = {}) => {
         sequelize.query(
             'SELECT fk_plan, fk_shantytown FROM plan_shantytowns WHERE fk_plan IN (:planIds) ORDER BY fk_plan ASC',
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: {
                     planIds,
                 },
@@ -233,7 +234,7 @@ export default async (user, feature, filters = {}) => {
             WHERE finances.fk_plan IN (:planIds)
             ORDER BY fk_plan ASC, finances.year DESC`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: {
                     planIds,
                 },
@@ -291,7 +292,7 @@ export default async (user, feature, filters = {}) => {
             LEFT JOIN etp_types ON plan_state_etp.fk_etp_type = etp_types.uid
             WHERE plan_state_etp.fk_plan_state IN (:planStateIds)`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: {
                     planStateIds,
                 },

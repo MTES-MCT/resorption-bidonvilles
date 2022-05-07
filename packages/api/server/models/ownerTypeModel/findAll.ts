@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default () => sequelize.query(
     `SELECT
@@ -8,6 +9,6 @@ export default () => sequelize.query(
     FROM owner_types
     ORDER BY position ASC`,
     {
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
     },
 );

@@ -1,33 +1,31 @@
-import { sequelize } from '#db/sequelize';
-
-import modelsFactory from '#server/models';
+import models from '#server/models';
 import userModelFactory from '#server/models/userModel';
 import mattermostUtils from '#server/utils/mattermost';
 import mails from '#server/mails/mails';
 import userUtils from '#test/utils/user';
 import shantytownWatcherUtils from '#test/utils/shantytownWatcher';
 
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
-const proxyquire = require('proxyquire');
-const { mockReq, mockRes } = require('sinon-express-mock');
+import chai from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
+import { mockReq, mockRes } from 'sinon-express-mock';
+
+import proxyquire from 'proxyquire';
 
 const { serialized: generateUser } = userUtils;
 
 const { default: generateWatcher } = shantytownWatcherUtils;
 
-const models = modelsFactory();
 const userModel = userModelFactory();
 
 const { close } = proxyquire('#server/controllers/townController', {
     '#server/models/userModel': () => userModel,
-})(models);
+}).default(models);
 
 const { expect } = chai;
 chai.use(sinonChai);
 
-describe.only('townController.close()', () => {
+describe('townController.close()', () => {
     const dependencies = {
         shantytownUpdate: undefined,
         shantytownFindOne: undefined,

@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default async () => {
     const promises = [
@@ -19,7 +20,7 @@ export default async () => {
             GROUP BY departements.code, departements.name
             ORDER BY departements.code ASC`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
             },
         ),
         sequelize.query(
@@ -46,7 +47,7 @@ export default async () => {
             GROUP BY departements.code, departements.name
             ORDER BY departements.code ASC`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
             },
         ),
         sequelize.query(
@@ -83,7 +84,7 @@ export default async () => {
             GROUP BY departements.code, departements.name
             ORDER BY departements.code ASC`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
             },
         ),
     ];

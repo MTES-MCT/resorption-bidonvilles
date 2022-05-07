@@ -1,9 +1,9 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes, Transaction } from 'sequelize';
 import charteEngagementModelFactory from '#server/models/charteEngagementModel/index';
 import permissionModelFactory from '#server/models/permissionModel/index';
 import permissionUtils from '#server/utils/permission';
 import { Where } from '#server/models/_common/types/Where';
-import { Transaction } from 'sequelize';
 import serializeUser from './serializeUser';
 
 const charteEngagementModel = charteEngagementModelFactory();
@@ -130,7 +130,7 @@ export default async (where: Where = [], filters, user: string = null, feature: 
             upper(users.last_name) ASC,
             upper(users.first_name) ASC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements,
             transaction,
         },
@@ -162,7 +162,7 @@ export default async (where: Where = [], filters, user: string = null, feature: 
         WHERE user_accesses.fk_user IN (:userIds)
         ORDER BY user_accesses.fk_user ASC, user_accesses.created_at DESC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 userIds: users.map(({ id }) => id),
             },

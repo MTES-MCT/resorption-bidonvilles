@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     default(override = {}) {
         const defaultObj = {
             user_id: 2,

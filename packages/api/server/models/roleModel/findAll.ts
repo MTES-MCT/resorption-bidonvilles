@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 import serializeRole from './_common/serializeRole';
 
 export default async () => {
@@ -8,7 +9,7 @@ export default async () => {
             roles.name AS name
         FROM roles`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 

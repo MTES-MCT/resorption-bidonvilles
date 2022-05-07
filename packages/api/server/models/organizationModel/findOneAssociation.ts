@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default async (name, code) => {
     const result = await sequelize.query(
@@ -17,7 +18,7 @@ export default async (name, code) => {
             AND
             organizations.departement_code = :code`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 name,
                 code,

@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 export default (shantytownIds, transaction = undefined) => {
     const ids = Array.isArray(shantytownIds) ? shantytownIds : [shantytownIds];
@@ -21,7 +22,7 @@ export default (shantytownIds, transaction = undefined) => {
         WHERE sa.fk_shantytown IN (:ids) AND u.fk_status = 'active'
         ORDER BY sa.fk_shantytown ASC, u.first_name ASC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 ids,
             },

@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 import permissionUtils from '#server/utils/permission';
 import geoUtils from '#server/utils/geo';
 import decomposeForDiagramm from './_common/decomposeForDiagramm';
@@ -62,7 +63,7 @@ export default async (user, location) => {
             ) shantytowns
         ORDER BY shantytowns.updated_at DESC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
     const users = await sequelize.query(
@@ -74,7 +75,7 @@ export default async (user, location) => {
         ${where}
         ORDER BY u.created_at DESC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
     const listOfDates = getArrayOfDates(otherDate, date);

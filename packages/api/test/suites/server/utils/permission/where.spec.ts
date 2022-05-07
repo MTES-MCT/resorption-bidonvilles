@@ -1,13 +1,15 @@
-const { expect } = require('chai');
-import permission/indexUtils from '#server/utils/permission/index';
-const { where } = permission/indexUtils;
+import { expect } from 'chai';
+import permissionUtils from '#server/utils/permission/index';
 import userUtils from '#test/utils/user';
-const { serialized: fakeUser } = userUtils;
 import shantytownUtils from '#test/utils/shantytown';
-const { serialized: fakeShantytown } = shantytownUtils;
 import planUtils from '#test/utils/plan';
-const { serialized: fakePlan } = planUtils;
 import locationUtils from '#test/utils/location';
+
+const { where } = permissionUtils;
+const { serialized: fakeUser } = userUtils;
+const { serialized: fakeShantytown } = shantytownUtils;
+const { serialized: fakePlan } = planUtils;
+
 const { paris, marseille } = locationUtils;
 
 describe.only('utils/permission.where()', () => {
