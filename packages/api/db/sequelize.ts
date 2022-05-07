@@ -1,11 +1,16 @@
-const Sequelize = require('sequelize');
-const config = require('./config/config');
+import { Sequelize, Options } from 'sequelize';
+import config from './config/config';
+
+const typedConfig: Options = {
+    ...config,
+    dialect: 'postgres',
+};
 
 export const sequelize = new Sequelize(
-    config.database,
-    config.username,
-    config.password,
-    config,
+    typedConfig.database,
+    typedConfig.username,
+    typedConfig.password,
+    typedConfig,
 );
 
 export default sequelize;
