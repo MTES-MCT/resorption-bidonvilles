@@ -74,6 +74,9 @@ module.exports = async (user, shantytownId, commentId, deletionMessage) => {
     }
 
     return ({
-        comments: town.comments.regular.filter(({ id }) => id !== parseInt(commentId, 10)),
+        comments: {
+            regular: town.comments.regular.filter(({ id }) => id !== parseInt(commentId, 10)),
+            covid: town.comments.covid.filter(({ id }) => id !== parseInt(commentId, 10)),
+        },
     });
 };
