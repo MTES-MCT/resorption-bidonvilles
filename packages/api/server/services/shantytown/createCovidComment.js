@@ -92,13 +92,21 @@ module.exports = async (user, shantytownId, data) => {
     }
 
     // fetch refreshed comments
-    let comments;
+    let regularComments = {};
+    let covidComments = {};
     try {
-        const response = await shantytownModel.getComments(user, [shantytownId], true);
-        comments = response[shantytownId];
+        [regularComments, covidComments] = await Promise.all([
+            shantytownModel.getComments(user, [shantytownId], false),
+            shantytownModel.getComments(user, [shantytownId], true),
+        ]);
     } catch (error) {
-        comments = [];
+        // ignore
     }
 
-    return comments;
+    return {
+        comments: {
+            regular: regularComments[shantytownId] || [],
+            covid: covidComments[shantytownId] || [],
+        },
+    };
 };
