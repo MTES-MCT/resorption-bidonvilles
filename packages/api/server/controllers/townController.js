@@ -2,7 +2,6 @@ const validator = require('validator');
 const sequelize = require('#db/sequelize');
 const statsExportsModel = require('#server/models/statsExports');
 const shantytownModel = require('#server/models/shantytownModel')(sequelize);
-const geoModel = require('#server/models/geoModel')();
 
 const { fromTsToFormat: tsToString } = require('#server/utils/date');
 const { createExport } = require('#server/utils/excel');
@@ -345,8 +344,9 @@ module.exports = (models) => {
             }
 
             const today = new Date();
+            const exportIsToday = moment(req.query.date).format('YYYY-MM-DD') === moment(today).format('YYYY-MM-DD');
 
-            if (req.user.is_superuser === false && moment(req.query.date).format('YYYY-MM-DD') !== moment(today).format('YYYY-MM-DD')) {
+            if (!can(req.user).do('export', 'shantytown_history').on(location) && !exportIsToday) {
                 return res.status(400).send({
                     success: false,
                     response: {
@@ -387,23 +387,20 @@ module.exports = (models) => {
 
             let shantytowns;
             try {
-                if (moment(req.query.date).format('YYYY-MM-DD') === moment(today).format('YYYY-MM-DD')) {
+                if (exportIsToday) {
                     shantytowns = await models.shantytown.findAll(
                         req.user,
                         filters,
                         'export',
                     );
                 } else {
-                    shantytowns = await models.shantytown.getExportHistory(req.user, geoModel.getLocation(location.type, location.code), moment(req.query.date).format('YYYY-MM-DD HH:mm:ss ZZ'));
+                    shantytowns = await models.shantytown.getHistoryAtGivenDate(req.user, location, moment(req.query.date).format('YYYY-MM-DD HH:mm:ss ZZ'), closedTowns);
                     const listOfId = [];
-                    shantytowns = shantytowns.filter(({ id, closed_at }) => {
+                    shantytowns = shantytowns.filter(({ id }) => {
                         if (listOfId.includes(id)) {
                             return false;
                         }
                         listOfId.push(id);
-                        if (closedTowns ? closed_at === null : closed_at !== null) {
-                            return false;
-                        }
                         return true;
                     });
                     shantytowns = shantytowns.map(town => serializeShantytown(town, req.user));
