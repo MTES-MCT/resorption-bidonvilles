@@ -35,9 +35,13 @@ module.exports = async (comment, shantytown, author) => {
     }
 
     // on retourne la liste mise à jour des commentaires du site
-    let comments;
+    let regularComments;
+    let covidComments;
     try {
-        comments = await shantytownModel.getComments(author, [shantytown.id], false);
+        [regularComments, covidComments] = await Promise.all([
+            shantytownModel.getComments(author, [shantytown.id], false),
+            shantytownModel.getComments(author, [shantytown.id], true),
+        ]);
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }
@@ -55,5 +59,8 @@ module.exports = async (comment, shantytown, author) => {
         // ignore
     }
 
-    return comments[shantytown.id];
+    return {
+        regular: regularComments[shantytown.id] || [],
+        covid: covidComments[shantytown.id] || [],
+    };
 };

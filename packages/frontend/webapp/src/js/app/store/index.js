@@ -18,6 +18,7 @@ import directory from "./modules/directory";
 import highCovidComments from "./modules/highCovidComments";
 import navigation from "./modules/navigation/navigation";
 import plans from "./modules/plans";
+import shantytownComments from "./modules/shantytownComments";
 import userModule from "./modules/user";
 import config from "./modules/config";
 
@@ -32,6 +33,7 @@ export default new Vuex.Store({
         highCovidComments,
         navigation,
         plans,
+        shantytownComments,
         user: userModule,
         config
     },

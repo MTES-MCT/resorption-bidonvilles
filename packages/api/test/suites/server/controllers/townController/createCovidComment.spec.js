@@ -94,6 +94,12 @@ describe.only('townController.createCovidComment()', () => {
         stubs.shantytown.findOne.withArgs(reqArg.user, reqArg.params.id).resolves({
             builtAt: (new Date(1999, 0, 1)).getTime() / 1000,
         });
+        stubs.shantytown.getComments.withArgs(reqArg.user, [reqArg.params.id], false).resolves({
+            [reqArg.params.id]: [{}],
+        });
+        stubs.shantytown.getComments.withArgs(reqArg.user, [reqArg.params.id], true).resolves({
+            [reqArg.params.id]: [{}],
+        });
     });
 
     afterEach(() => {
@@ -162,21 +168,30 @@ describe.only('townController.createCovidComment()', () => {
         const req = mockReq(reqArg);
         const res = mockRes();
 
-        const comments = [{}, {}, {}];
+        const regularComments = [{}, {}, {}];
+        const covidComments = [{}, {}, {}];
+        stubs.shantytown.getComments
+            .withArgs(reqArg.user, [reqArg.params.id], false)
+            .resolves({
+                [reqArg.params.id]: regularComments,
+            });
         stubs.shantytown.getComments
             .withArgs(reqArg.user, [reqArg.params.id], true)
             .resolves({
-                [reqArg.params.id]: comments,
+                [reqArg.params.id]: covidComments,
             });
 
         // execute
         await createCovidComment(req, res);
 
         // assert
-        expect(stubs.shantytown.getComments).to.have.been.calledAfter(
-            stubs.shantytown.createCovidComment,
-        );
-        expect(res.send).to.have.been.calledOnceWith(comments);
+        expect(stubs.shantytown.getComments).to.have.been.calledTwice;
+        expect(res.send).to.have.been.calledOnceWith({
+            comments: {
+                regular: regularComments,
+                covid: covidComments,
+            },
+        });
     });
 
     it('returns the response object', async () => {
@@ -480,7 +495,12 @@ describe.only('townController.createCovidComment()', () => {
         });
 
         it('responds with an empty array', async () => {
-            expect(res.send).to.have.been.calledOnceWith([]);
+            expect(res.send).to.have.been.calledOnceWith({
+                comments: {
+                    regular: [],
+                    covid: [],
+                },
+            });
         });
 
         it('returns the response object', async () => {

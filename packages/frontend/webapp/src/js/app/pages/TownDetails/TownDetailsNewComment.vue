@@ -16,6 +16,7 @@
             <TextArea
                 rows="5"
                 name="newComment"
+                :disabled="loading"
                 v-model="newComment"
                 placeholder="Partagez votre passage sur le site, le contexte sanitaire, la situation des habitants, difficultés rencontrées lors de votre intervention…"
             />
@@ -63,8 +64,6 @@
 </template>
 
 <script>
-import { addComment as apiAddComment } from "#helpers/api/town";
-
 export default {
     data() {
         return {
@@ -88,22 +87,33 @@ export default {
             this.newComment = "";
         },
         async addComment() {
+            if (this.loading === true) {
+                return;
+            }
+
             // clean previous errors
             this.commentError = null;
             this.commentErrors = {};
             this.loading = true;
 
             try {
-                const response = await apiAddComment(this.$route.params.id, {
-                    description: this.newComment,
-                    private: this.isPrivate
-                });
-                this.$emit("submit", response.comments);
+                await this.$store.dispatch(
+                    "shantytownComments/publishComment",
+                    {
+                        townId: parseInt(this.$route.params.id, 10),
+                        comment: {
+                            description: this.newComment,
+                            private: this.isPrivate
+                        }
+                    }
+                );
+
                 this.newComment = "";
             } catch (response) {
                 this.commentError = response.user_message;
                 this.commentErrors = response.fields || {};
             }
+
             this.loading = false;
         }
     }
