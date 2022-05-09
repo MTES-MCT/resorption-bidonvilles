@@ -1,6 +1,6 @@
 const shantytownModel = require('#server/models/shantytownModel');
 const shantytownCommentModel = require('#server/models/shantytownCommentModel');
-const highCovidCommentModel = require('#server/models/highCovidCommentModel')();
+const highCovidCommentModel = require('#server/models/highCovidCommentModel');
 const userModel = require('#server/models/userModel');
 
 /**

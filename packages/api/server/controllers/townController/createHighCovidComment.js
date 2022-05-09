@@ -1,9 +1,10 @@
 /* eslint-disable no-throw-literal */
 const { trim } = require('validator');
 const geoModel = require('#server/models/geoModel');
+const highCovidCommentModel = require('#server/models/highCovidCommentModel');
 
 
-module.exports = (models) => {
+module.exports = () => {
     /**
      * Parses the request input and returns it sanitized and ready for database
      *
@@ -114,7 +115,7 @@ module.exports = (models) => {
 
         // create comment
         try {
-            await models.highCovidComment.create(req.user, input);
+            await highCovidCommentModel.create(req.user, input);
         } catch (error) {
             res.status(500).send({
                 user_message: 'Une erreur est survenue lors de l\'écriture en base de données',
