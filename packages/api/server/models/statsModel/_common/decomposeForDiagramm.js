@@ -63,7 +63,7 @@ module.exports = (towns, connectedUsers, listOfDates) => {
             );
             const weekStartDate = new Date(date.valueOf());
             weekStartDate.setDate(weekStartDate.getDate() - 7);
-            // Calcul des utilisateurs actifs (au moins une connexion par semaine)
+            // Calcul des utilisateurs actifs par semaine
             const countedUsers = [];
             connectedUsers.forEach(
                 (connectedUser) => {
@@ -77,6 +77,7 @@ module.exports = (towns, connectedUsers, listOfDates) => {
                 },
             );
             const formatedDate = moment(date).format('DD/MM');
+            const formatedDateFrom = moment(weekStartDate).format('DD/MM');
 
             population.data.unshift({ figure: populationTotal, formatedDate });
             minors.data.unshift({ figure: minorsTotal, formatedDate });
@@ -84,7 +85,7 @@ module.exports = (towns, connectedUsers, listOfDates) => {
             closedShantytowns.data.unshift({ figure: closedShantytownsTotal, formatedDate });
             resorbedShantytowns.data.unshift({ figure: resorbedShantytownsTotal, formatedDate });
             openShantytowns.data.unshift({ figure: openShantytownsTotal, formatedDate });
-            connectedUserStats.data.unshift({ figure: connectedUsersTotal, formatedDate });
+            connectedUserStats.data.unshift({ figure: connectedUsersTotal, formatedDate, formatedDateFrom });
         },
     );
     population.evolution = Math.round((((population.data.slice(-1)[0].figure - population.data[0].figure) * 100) / population.data[0].figure).toFixed(2));
