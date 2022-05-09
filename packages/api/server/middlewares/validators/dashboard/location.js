@@ -1,7 +1,7 @@
 /* eslint-disable newline-per-chained-call */
 
 const { query } = require('express-validator');
-const geoModel = require('#server/models/geoModel')();
+const geoModel = require('#server/models/geoModel');
 
 module.exports = [
     // location (type and code)

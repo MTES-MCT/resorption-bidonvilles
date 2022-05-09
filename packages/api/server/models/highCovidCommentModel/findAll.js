@@ -1,5 +1,5 @@
 const sequelize = require('#db/sequelize');
-const geoModel = require('#server/models/geoModel')();
+const geoModel = require('#server/models/geoModel');
 
 function serialize(comment) {
     return {

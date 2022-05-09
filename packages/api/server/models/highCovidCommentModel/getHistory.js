@@ -1,5 +1,5 @@
 const sequelize = require('#db/sequelize');
-const userModel = require('#server/models/userModel')();
+const userModel = require('#server/models/userModel');
 const { restrict } = require('#server/utils/permission');
 
 module.exports = async (user, location, numberOfActivities, lastDate, maxDate) => {

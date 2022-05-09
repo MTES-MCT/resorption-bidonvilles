@@ -11,7 +11,7 @@ const serializeComment = require('./_common/serializeComment');
 const deleteShantytown = require('./delete');
 
 
-module.exports = () => ({
+module.exports = {
     create,
     createCovidComment,
     findAll,
@@ -23,4 +23,4 @@ module.exports = () => ({
     serializeComment,
     update,
     deleteShantytown,
-});
+};

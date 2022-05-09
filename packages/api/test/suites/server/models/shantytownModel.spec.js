@@ -4,7 +4,7 @@ const sinonChai = require('sinon-chai');
 const { serialized: generateUser } = require('#test/utils/user');
 
 const sequelize = require('#db/sequelize');
-const { update } = require('#server/models/shantytownModel')(sequelize);
+const { update } = require('#server/models/shantytownModel');
 
 const { expect } = chai;
 chai.use(sinonChai);

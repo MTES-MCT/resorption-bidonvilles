@@ -1,17 +1,19 @@
 const sequelize = require('#db/sequelize');
+
+const shantytownActorModel = require('#server/models/shantytownActorModel');
 const { triggerRemoveDeclaredActor } = require('#server/utils/mattermost');
 
-module.exports = models => async (req, res, next) => {
+module.exports = async (req, res, next) => {
     let actors;
     try {
         actors = await sequelize.transaction(async (transaction) => {
-            await models.shantytownActor.removeActor(
+            await shantytownActorModel.removeActor(
                 req.shantytown.id,
                 req.body.user.id,
                 transaction,
             );
 
-            return models.shantytownActor.findAll(
+            return shantytownActorModel.findAll(
                 req.shantytown.id,
                 transaction,
             );
@@ -30,6 +32,6 @@ module.exports = models => async (req, res, next) => {
     }
 
     return res.status(200).send({
-        actors: actors.map(models.shantytownActor.serializeActor),
+        actors: actors.map(shantytownActorModel.serializeActor),
     });
 };

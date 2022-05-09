@@ -397,7 +397,7 @@ export default (app) => {
         middlewares.auth.authenticate,
         (...args) => middlewares.auth.checkPermissions(['shantytown.export'], ...args),
         middlewares.charte.check,
-        controllers.town.export,
+        controllers.town.exportTown,
     );
     app.get(
         '/towns',
@@ -451,7 +451,7 @@ export default (app) => {
         (...args) => middlewares.auth.checkPermissions(['shantytown.delete'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
-        controllers.town.delete,
+        controllers.town.deleteTown,
     );
     app.post(
         '/towns/:id/comments',

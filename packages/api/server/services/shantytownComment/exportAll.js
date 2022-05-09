@@ -1,5 +1,5 @@
 const moment = require('moment');
-const shantytownCommentModel = require('#server/models/shantytownCommentModel')();
+const shantytownCommentModel = require('#server/models/shantytownCommentModel');
 const ServiceError = require('#server/errors/ServiceError');
 const { restrict } = require('#server/utils/permission');
 

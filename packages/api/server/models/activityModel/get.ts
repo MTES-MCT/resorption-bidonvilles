@@ -2,8 +2,8 @@ import * as sequelize from '#db/sequelize';
 import * as moment from 'moment';
 import { ActivityNationalSummary } from './types/ActivityNationalSummary';
 
-const { formatName } = require('#server/models/userModel')();
-const { getUsenameOf } = require('#server/models/shantytownModel')(sequelize);
+const { formatName } = require('#server/models/userModel');
+const { getUsenameOf } = require('#server/models/shantytownModel');
 
 export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSummary> => {
     const from = moment(argFrom);

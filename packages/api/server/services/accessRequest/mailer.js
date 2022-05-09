@@ -15,7 +15,7 @@ const {
     sendUserAccessActivatedWelcome,
 } = require('#server/mails/mails');
 
-const { formatName } = require('#server/models/userModel')();
+const { formatName } = require('#server/models/userModel');
 
 module.exports = {
     toAdmin: {

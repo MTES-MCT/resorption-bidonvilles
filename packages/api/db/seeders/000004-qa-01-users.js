@@ -2,7 +2,7 @@
 require('../../module_alias');
 const crypto = require('crypto');
 const { create } = require('#server/models/organizationModel')();
-const { setPermissionOptions } = require('#server/models/userModel')();
+const { setPermissionOptions } = require('#server/models/userModel');
 
 function generate({
     email, password, first_name, last_name, fk_role, phone, position, fk_organization, fk_role_regular,

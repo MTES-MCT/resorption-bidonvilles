@@ -1,5 +1,7 @@
 const sequelize = require('#db/sequelize');
 const { updateBeingFunded } = require('#server/models/organizationModel')();
+const userModel = require('#server/models/userModel');
+const geoModel = require('#server/models/geoModel');
 
 function trim(str) {
     if (typeof str !== 'string') {
@@ -90,7 +92,7 @@ module.exports = models => ({
         return res.status(200).send({
             success: true,
             response: {
-                users: await models.user.findByOrganizationCategory(
+                users: await userModel.findByOrganizationCategory(
                     req.params.categoryId,
                     geographicFilter,
                     {},
@@ -104,7 +106,7 @@ module.exports = models => ({
         return res.status(200).send({
             success: true,
             response: {
-                users: await models.user.findByOrganization(req.params.organizationId),
+                users: await userModel.findByOrganization(req.params.organizationId),
             },
         });
     },
@@ -172,7 +174,7 @@ module.exports = models => ({
             );
 
             // look for locations
-            const locations = await models.geo.search(query);
+            const locations = await geoModel.search(query);
 
             // look for organizations
             const organizations = await sequelize.query(
@@ -217,7 +219,7 @@ module.exports = models => ({
                             label: 'Acteurs',
                         },
                         id: user.id,
-                        label: models.user.formatName(user),
+                        label: userModel.formatName(user),
                         organization: user.organization_id,
                     })),
                 );
