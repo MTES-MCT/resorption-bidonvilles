@@ -1,6 +1,7 @@
 const { fromTsToFormat: tsToString } = require('#server/utils/date');
 const userModel = require('#server/models/userModel');
 const shantytownActorThemes = require('#server/config/shantytown_actor_themes');
+const { webappUrl } = require('#server/config');
 
 module.exports = (closingSolutions) => {
     const COLUMN_WIDTHS = {
@@ -56,6 +57,9 @@ module.exports = (closingSolutions) => {
         address: {
             title: 'Adresse',
             data: ({ addressSimple }) => addressSimple,
+            link({ id }) {
+                return `${webappUrl}/site/${id}`;
+            },
             bold: true,
             align: 'left',
             width: COLUMN_WIDTHS.MEDIUM,
