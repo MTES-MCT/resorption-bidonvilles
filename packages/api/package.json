@@ -93,7 +93,7 @@
     "start": "nodemon dist/server/index.js",
     "test": "mocha --recursive --require ./test/bootstrap.js --bail",
     "test:unit": "yarn test:unit:js && yarn test:unit:ts",
-    "test:unit:js": "yarn test --invert --grep '.*server/models.*' && yarn test 'server/**/*.spec.js'",
+    "test:unit:js": "yarn test './**/*.spec.js'",
     "test:unit:ts": "yarn mocha --require ./test/bootstrap.js -r ts-node/register 'server/**/*.spec.ts' 'test/**/*.spec.ts'",
     "test:integration": "yarn test --grep '.*server/models.*'",
     "lint": "eslint  --max-warnings=0",
