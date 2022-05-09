@@ -32,12 +32,17 @@ module.exports = async (user, shantytownId, commentId, deletionMessage) => {
         city: town.city,
     };
 
-    if (author.id !== user.id && !permissionUtils.can(user).do('moderate', 'shantytown_comment').on(location)) {
+    const isOwner = author.id === user.id;
+    if (!isOwner && !permissionUtils.can(user).do('moderate', 'shantytown_comment').on(location)) {
         throw new ServiceError('permission_denied', new Error('Vous n\'avez pas accès à ces données'));
     }
-    const message = validator.trim(deletionMessage || '');
-    if (message === '') {
-        throw new ServiceError('data_incomplete', new Error('Vous devez préciser le motif de suppression du commentaire'));
+
+    let message;
+    if (!isOwner) {
+        message = validator.trim(deletionMessage || '');
+        if (message === '') {
+            throw new ServiceError('data_incomplete', new Error('Vous devez préciser le motif de suppression du commentaire'));
+        }
     }
 
     try {
@@ -47,24 +52,27 @@ module.exports = async (user, shantytownId, commentId, deletionMessage) => {
     }
 
     try {
-        await mails.sendUserCommentDeletion(author, {
-            variables: {
-                town: {
-                    usename: town.usename,
-                    city: {
-                        name: town.city.name,
+        if (!isOwner) {
+            await mails.sendUserCommentDeletion(author, {
+                variables: {
+                    town: {
+                        usename: town.usename,
+                        city: {
+                            name: town.city.name,
+                        },
                     },
+                    comment: {
+                        description: comment.description,
+                        created_at: tsToString(comment.createdAt, 'd/m/Y'),
+                    },
+                    message,
                 },
-                comment: {
-                    description: comment.description,
-                    created_at: tsToString(comment.createdAt, 'd/m/Y'),
-                },
-                message,
-            },
-        });
+            });
+        }
     } catch (error) {
         // ignore
     }
+
     return ({
         comments: town.comments.regular.filter(({ id }) => id !== parseInt(commentId, 10)),
     });
