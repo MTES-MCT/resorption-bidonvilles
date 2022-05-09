@@ -34,7 +34,7 @@
             </div>
         </template>
         <template v-slot:body>
-            <div v-if="user.is_superuser === true" class="w-64">
+            <div v-if="canExportHistory === true" class="w-64">
                 Vous souhaitez exporter les données des sites à la date:
                 <DatepickerV2
                     id="export_at"
@@ -88,6 +88,10 @@ export default {
     },
     data() {
         return {
+            today: new Date(),
+            canExportHistory: this.$store.getters["config/hasPermission"](
+                "shantytown_history.export"
+            ),
             existingOptions: [
                 {
                     id: "address_details",
@@ -151,10 +155,9 @@ export default {
     },
     computed: {
         showOptions() {
-            const today = new Date();
             return (
                 moment(this.dateInput).format("YYYY-MM-DD") ===
-                moment(today).format("YYYY-MM-DD")
+                moment(this.today).format("YYYY-MM-DD")
             );
         },
         user() {
