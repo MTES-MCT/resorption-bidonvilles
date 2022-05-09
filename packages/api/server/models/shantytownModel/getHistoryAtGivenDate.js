@@ -4,7 +4,7 @@ const { restrict } = require('#server/utils/permission');
 const SQL = require('./_common/SQL');
 
 
-module.exports = async (user, location, lastDate) => {
+module.exports = async (user, location, lastDate, closedTowns) => {
     const where = [];
     const replacements = {
     };
@@ -20,7 +20,10 @@ module.exports = async (user, location, lastDate) => {
     }
     const shantytown_history = await sequelize.query(
         `
+        SELECT * FROM 
+            (
             SELECT
+                rank() OVER(PARTITION BY id ORDER BY date DESC),
                 shantytown_history.*
             FROM
                 ((
@@ -71,6 +74,9 @@ module.exports = async (user, location, lastDate) => {
                 )) shantytown_history
             WHERE shantytown_history.date < '${lastDate}'
             ORDER BY shantytown_history.date DESC
+            ) ranked_shantytown_history
+            WHERE rank = 1
+            ${closedTowns === true ? 'AND closed_at is NOT NULL' : 'AND closed_at is NULL'}
             `,
         {
             type: sequelize.QueryTypes.SELECT,
