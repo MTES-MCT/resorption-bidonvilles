@@ -58,8 +58,8 @@ module.exports = stats => {
             icon: "user",
             label:
                 stats.connectedUserStats.data.slice(-1)[0].figure > 1
-                    ? "utilisateurs"
-                    : "utilisateur",
+                    ? "utilisateurs connectés"
+                    : "utilisateur connecté",
             color: stats.connectedUserStats.evolution >= 0 ? "green" : "red"
         }
     ];
