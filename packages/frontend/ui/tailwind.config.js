@@ -120,6 +120,7 @@ module.exports = {
                 tertiary: "#00AC8C",
                 green600: "#1f8d49",
                 green500: "#27A658",
+                green400: "#86EFAC",
                 green200: "#c2fdce",
                 green100: "#E9F6EE",
 

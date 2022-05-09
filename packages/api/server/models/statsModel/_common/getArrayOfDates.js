@@ -1,10 +1,6 @@
 const moment = require('moment');
+const { substractWeek } = require('#server/utils/date');
 
-function substractWeek(date) {
-    const newDate = new Date(date.valueOf());
-    newDate.setDate(newDate.getDate() - 7);
-    return newDate;
-}
 
 module.exports = (startDate, endDate) => {
     let currentDate = endDate;

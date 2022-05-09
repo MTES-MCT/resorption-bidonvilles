@@ -14,7 +14,7 @@
             <div>
                 <div class="font-bold text-primary text-xl -mb-1">
                     <span>
-                        {{ formatStat(cardStats.figures.slice(-1)[0]) }}
+                        {{ formatStat(cardStats.data.slice(-1)[0].figure) }}
                     </span>
                 </div>
                 <p class="leading-tight">
@@ -49,15 +49,24 @@
             </div>
         </div>
         <span class="block h-px bg-blue300"></span>
-        <div class="border-1 customHeight flex flex-col justify-end">
-            <div class="flex justify-center items-end mt-3">
-                <Bar
-                    :height="figure"
-                    v-for="(figure, index) in columns"
+        <div class="customHeight flex flex-col justify-end mt-2">
+            <div v-if="displayFigure !== null" class="text-xs text-center">
+                {{ formatStat(displayFigure.figure) }} au
+                {{ displayFigure.date }}
+            </div>
+            <div class="flex justify-center items-end mt-2">
+                <div
+                    v-for="(stat, index) in columns"
                     :key="index"
-                    class="bg-blue600"
-                ></Bar>
-                <Bar :height="latestFigureHeight" :class="barColor"></Bar>
+                    @mouseenter="onMouseOver(stat)"
+                    @mouseleave="onMouseLeave()"
+                >
+                    <Bar
+                        :height="stat.height"
+                        :color="stat.color"
+                        :hoverColor="stat.hoverColor"
+                    ></Bar>
+                </div>
             </div>
             <div class="text-center mt-4">
                 <div :class="evolutionColor">
@@ -100,31 +109,64 @@ export default {
         return {
             isEvolutionPositive: this.cardStats.evolution >= 0,
             columns: [],
-            maxNumber: Math.max(...this.cardStats.figures)
+            maxNumber: 0,
+            hover: false,
+            displayFigure: null
         };
     },
     mounted() {
+        this.maxNumber = Math.max(...this.figures);
         this.setColumns();
     },
+
     methods: {
+        onMouseOver(value) {
+            this.displayFigure = {
+                figure: value.figure,
+                date: value.date
+            };
+        },
+        onMouseLeave() {
+            this.displayFigure = null;
+        },
         formatStat(number) {
             return new Intl.NumberFormat("fr-FR").format(number);
         },
         setColumns() {
-            this.columns = this.cardStats.figures.slice(0, -1);
             if (this.maxNumber !== 0) {
-                this.columns = this.columns.map(
-                    number => (number * MAX_HEIGHT) / this.maxNumber
-                );
+                this.columns = [
+                    ...this.cardStats.data.slice(0, -1).map(stat => {
+                        return {
+                            figure: stat.figure,
+                            height: (stat.figure * MAX_HEIGHT) / this.maxNumber,
+                            date: stat.formatedDate,
+                            color: "bg-blue600",
+                            hoverColor: "bg-blue400"
+                        };
+                    }),
+                    {
+                        height:
+                            (this.cardStats.data.slice(-1)[0].figure *
+                                MAX_HEIGHT) /
+                            this.maxNumber,
+                        date: this.cardStats.data.slice(-1)[0].formatedDate,
+                        figure: this.cardStats.data.slice(-1)[0].figure,
+                        color:
+                            this.cardStats.color === "red"
+                                ? "bg-red"
+                                : "bg-green500",
+                        hoverColor:
+                            this.cardStats.color === "red"
+                                ? "bg-red400"
+                                : "bg-green400"
+                    }
+                ];
             }
         }
     },
     computed: {
-        latestFigureHeight() {
-            return (
-                (this.cardStats.figures.slice(-1)[0] * MAX_HEIGHT) /
-                this.maxNumber
-            );
+        figures() {
+            return this.cardStats.data.map(stat => stat.figure);
         },
         evolutionColor() {
             return this.cardStats.color === "red"
