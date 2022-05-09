@@ -32,7 +32,7 @@ describe.only('services/shantytown', () => {
             city: 0,
             comments: {
                 regular: [comment],
-
+                covid: [],
             },
         };
         beforeEach(() => {
@@ -74,14 +74,14 @@ describe.only('services/shantytown', () => {
         });
         it('si aucune exception n\'est soulevée, supprime le commentaire en bdd et renvoie la liste des commentaires du site à jour', async () => {
             stubs.on.returns(true);
-            let commentsUpdated;
-            try {
-                commentsUpdated = await deleteCommentService(user, shantytownId, commentId, deletionMessage);
-            } catch (error) {
-                // ignore
-            }
+            const commentsUpdated = await deleteCommentService(user, shantytownId, commentId, deletionMessage);
             expect(stubs.shantytownCommentModeldeleteComment).to.have.been.calledOnceWith(commentId);
-            expect(commentsUpdated).to.eql({ comments: [] });
+            expect(commentsUpdated).to.eql({
+                comments: {
+                    regular: [],
+                    covid: [],
+                },
+            });
         });
 
         it('renvoie une exception ServiceError \'fetch_failed\' si le site correspondant au commentaire n\'existe pas en bdd', async () => {

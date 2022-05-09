@@ -79,6 +79,7 @@ describe.only('services/shantytown', () => {
                 createCovidComment: sinon.stub(shantytownModel, 'createCovidComment'),
                 getComments: sinon.stub(shantytownModel, 'getComments'),
             };
+            stubs.getComments.resolves([]);
 
             stubs.findOne.withArgs(data.user, data.params.id).resolves({
                 builtAt: (new Date(1999, 0, 1)).getTime() / 1000,
@@ -164,6 +165,11 @@ describe.only('services/shantytown', () => {
 
                 const comments = [{}, {}, {}];
                 stubs.getComments
+                    .withArgs(data.user, [data.params.id], false)
+                    .resolves({
+                        [data.params.id]: [],
+                    });
+                stubs.getComments
                     .withArgs(data.user, [data.params.id], true)
                     .resolves({
                         [data.params.id]: comments,
@@ -176,7 +182,12 @@ describe.only('services/shantytown', () => {
                 expect(stubs.getComments).to.have.been.calledAfter(
                     stubs.createCovidComment,
                 );
-                expect(resultat).to.be.eql(comments);
+                expect(resultat).to.be.eql({
+                    comments: {
+                        regular: [],
+                        covid: comments,
+                    },
+                });
             });
         });
 
