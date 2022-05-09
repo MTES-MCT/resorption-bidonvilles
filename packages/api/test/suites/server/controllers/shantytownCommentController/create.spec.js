@@ -48,7 +48,10 @@ describe.only('controllers/shantytownComment', () => {
 
         it('répond une 200 et la liste des commentaires retournée par le service shantytownComment/createComment()', async () => {
             // le service createComment() retourne une liste de commentaires
-            const comments = []; // @todo: utiliser une liste de fakeComments() dès que l'utilitaire est mergé dans develop
+            const comments = {
+                regular: [],
+                covid: [],
+            }; // @todo: utiliser une liste de fakeComments() dès que l'utilitaire est mergé dans develop
             createCommentService.resolves(comments);
 
             const res = mockRes();

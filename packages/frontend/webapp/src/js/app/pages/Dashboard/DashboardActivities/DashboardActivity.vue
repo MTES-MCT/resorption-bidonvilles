@@ -32,6 +32,11 @@
                     >
                 </span>
             </p>
+            <ResorptionTargetTag
+                v-if="resorptionTarget"
+                :target="resorptionTarget"
+            />
+            <p class="text-G500">{{ formatActivityDate(activity.date) }}</p>
             <!-- eslint-disable prettier/prettier -->
             <blockquote
                 v-if="description"
@@ -43,7 +48,9 @@
 </template>
 
 <script>
+import formatActivityDate from "#app/utils/formatActivityDate";
 import showActivityDepartementCode from "#app/mixins/showActivityDepartementCode";
+import ResorptionTargetTag from "#app/components/ResorptionTargetTag/ResorptionTargetTag.vue";
 
 export default {
     mixins: [showActivityDepartementCode],
@@ -53,6 +60,10 @@ export default {
             type: Object,
             required: true
         }
+    },
+
+    components: {
+        ResorptionTargetTag
     },
 
     data() {
@@ -90,7 +101,16 @@ export default {
             switch (this.event) {
                 case "user-creation": {
                     const { users } = this.activity;
-                    const names = users.map(({ name }) => name);
+                    const names = users.map(({ name, location }) => {
+                        if (
+                            !this.showDepartementCode ||
+                            !location.departement
+                        ) {
+                            return name;
+                        }
+
+                        return `${name} (${location.departement.code})`;
+                    });
                     if (users.length === 1) {
                         return names[0];
                     }
@@ -165,6 +185,14 @@ export default {
                 default:
                     return "";
             }
+        },
+
+        resorptionTarget() {
+            if (this.activity.entity === "shantytown") {
+                return this.activity.shantytown.resorptionTarget || null;
+            }
+
+            return null;
         },
 
         description() {
@@ -244,6 +272,7 @@ export default {
     },
 
     methods: {
+        formatActivityDate,
         routeToDetails() {
             this.$trackMatomoEvent("TB", "Visite activité");
 

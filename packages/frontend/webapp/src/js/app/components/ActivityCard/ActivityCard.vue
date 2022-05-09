@@ -62,7 +62,9 @@
             ></component>
 
             <footer class="flex justify-between pt-2">
-                <span class="text-G500">{{ formatDate(activity.date) }}</span>
+                <span class="text-G500">{{
+                    formatActivityDate(activity.date)
+                }}</span>
                 <div>
                     <Button
                         variant="secondaryText"
@@ -92,7 +94,7 @@
 </template>
 
 <script>
-import formatDate from "./utils/formatDate";
+import formatActivityDate from "#app/utils/formatActivityDate";
 import ActivityCardIcon from "./ActivityCardIcon.vue";
 import ActivityCardBodyShantytownUpdated from "./ActivityCardBody/ActivityCardBodyShantytownUpdated.vue";
 import ActivityCardBodyCommentCreated from "./ActivityCardBody/ActivityCardBodyCommentCreated.vue";
@@ -302,7 +304,7 @@ export default {
     },
 
     methods: {
-        formatDate,
+        formatActivityDate,
         openModerationModal() {
             this.$refs.moderationModal.open();
         }

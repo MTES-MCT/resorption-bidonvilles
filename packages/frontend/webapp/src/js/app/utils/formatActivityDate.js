@@ -6,7 +6,7 @@ function isSameDay(now, then) {
     );
 }
 
-export default function formatDate(date) {
+export default function formatActivityDate(date) {
     const now = new Date();
     const then = new Date(date * 1000);
 

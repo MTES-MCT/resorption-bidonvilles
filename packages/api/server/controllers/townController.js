@@ -1504,15 +1504,23 @@ module.exports = (models) => {
             }
 
             // fetch refreshed comments
-            let comments;
+            let regularComments = {};
+            let covidComments = {};
             try {
-                const response = await models.shantytown.getComments(req.user, [req.params.id], true);
-                comments = response[req.params.id];
+                [regularComments, covidComments] = await Promise.all([
+                    models.shantytown.getComments(req.user, [req.params.id], false),
+                    models.shantytown.getComments(req.user, [req.params.id], true),
+                ]);
             } catch (error) {
-                comments = [];
+                // ignore
             }
 
-            return res.status(200).send(comments);
+            return res.status(200).send({
+                comments: {
+                    regular: regularComments[req.params.id] || [],
+                    covid: covidComments[req.params.id] || [],
+                },
+            });
         },
     };
 

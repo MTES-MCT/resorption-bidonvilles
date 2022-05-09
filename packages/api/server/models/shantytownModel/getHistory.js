@@ -156,6 +156,7 @@ module.exports = async (user, location, shantytownFilter, numberOfActivities, la
                 shantytown: {
                     id: activity.id,
                     usename: getUsenameOf(activity),
+                    resorptionTarget: activity.resorptionTarget,
                     city: {
                         code: activity.cityCode,
                         name: activity.cityName,

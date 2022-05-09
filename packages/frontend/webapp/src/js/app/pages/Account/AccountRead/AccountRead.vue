@@ -71,6 +71,13 @@
                         >
                     </div>
                 </div>
+
+                <div class="mt-8 font-bold" v-if="!$route.params.id">
+                    En utilisant la plateforme, vous vous engagez à respecter la
+                    <a class="link" :href="charte.fichier">
+                        charte d'engagement </a
+                    >.
+                </div>
             </AccountPanel>
         </PrivateContainer>
     </div>
@@ -92,6 +99,12 @@ export default {
     props: {
         user: {
             type: Object
+        }
+    },
+    computed: {
+        charte() {
+            return this.$store.state.config.configuration
+                .version_charte_engagement;
         }
     }
 };

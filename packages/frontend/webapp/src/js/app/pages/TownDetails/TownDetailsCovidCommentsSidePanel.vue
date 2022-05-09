@@ -100,6 +100,7 @@
                             validationName="Ecrire un message"
                             placeholder="Partagez votre passage sur le site, le contexte sanitaire, la situation des habitants, difficultés rencontrées lors de votre intervention…"
                             :showMandatoryStar="true"
+                            :disabled="loading"
                         />
                         <div class="flex items-center justify-between">
                             <Button
@@ -140,7 +141,6 @@
 <script>
 import { fr } from "vuejs-datepicker/dist/locale";
 import CheckableGroup from "#app/components/ui/Form/CheckableGroup";
-import { addCovidComment } from "#helpers/api/town";
 import CommentBlock from "#app/components/CommentBlock/CommentBlock.vue";
 
 export default {
@@ -188,8 +188,8 @@ export default {
                 this.$refs.form.reset();
             });
         },
-        addCovidComment() {
-            if (this.loading) {
+        async addCovidComment() {
+            if (this.loading === true) {
                 return;
             }
 
@@ -197,68 +197,56 @@ export default {
             this.covidErrors = [];
             this.loading = true;
 
-            addCovidComment(this.$route.params.id, {
-                date: this.form.date,
-                description: this.form.newComment,
-                action_mediation_sante: this.form.interventionType.includes(
-                    "action_mediation_sante"
-                ),
-                equipe_mobile_depistage: this.form.interventionType.includes(
-                    "equipe_mobile_depistage"
-                ),
-                equipe_mobile_vaccination: this.form.interventionType.includes(
-                    "equipe_mobile_vaccination"
-                ),
-                sensibilisation_vaccination: this.form.interventionType.includes(
-                    "sensibilisation_vaccination"
-                ),
-                personnes_orientees: this.form.interventionType.includes(
-                    "personnes_orientees"
-                ),
-                personnes_avec_symptomes: this.form.interventionType.includes(
-                    "personnes_avec_symptomes"
-                ),
-                besoin_action: this.form.interventionType.includes(
-                    "besoin_action"
-                )
-            })
-                .then(async response => {
-                    this.$trackMatomoEvent(
-                        "Site",
-                        "Création commentaire Covid",
-                        `S${this.town.id}`
-                    );
-
-                    try {
-                        await this.$store.dispatch("setDetailedTown", {
-                            ...this.town,
-                            comments: {
-                                ...this.town.comments,
-                                covid: response
-                            }
-                        });
-                    } catch (ignore) {
-                        //
+            try {
+                await this.$store.dispatch(
+                    "shantytownComments/publishCovidComment",
+                    {
+                        townId: parseInt(this.$route.params.id, 10),
+                        comment: {
+                            date: this.form.date,
+                            description: this.form.newComment,
+                            action_mediation_sante: this.form.interventionType.includes(
+                                "action_mediation_sante"
+                            ),
+                            equipe_mobile_depistage: this.form.interventionType.includes(
+                                "equipe_mobile_depistage"
+                            ),
+                            equipe_mobile_vaccination: this.form.interventionType.includes(
+                                "equipe_mobile_vaccination"
+                            ),
+                            sensibilisation_vaccination: this.form.interventionType.includes(
+                                "sensibilisation_vaccination"
+                            ),
+                            personnes_orientees: this.form.interventionType.includes(
+                                "personnes_orientees"
+                            ),
+                            personnes_avec_symptomes: this.form.interventionType.includes(
+                                "personnes_avec_symptomes"
+                            ),
+                            besoin_action: this.form.interventionType.includes(
+                                "besoin_action"
+                            )
+                        }
                     }
+                );
 
-                    this.form = {
-                        newComment: "",
-                        date: new Date(),
-                        interventionType: []
-                    };
-                    this.$nextTick(() => {
-                        this.$refs.form.reset();
-                    });
-                    this.loading = false;
-                })
-                .catch(response => {
-                    const fields = response.fields || {};
-                    this.loading = false;
-                    this.covidErrors = Object.keys(fields).reduce(
-                        (acc, key) => [...acc, ...fields[key]],
-                        []
-                    );
+                this.form = {
+                    newComment: "",
+                    date: new Date(),
+                    interventionType: []
+                };
+                this.$nextTick(() => {
+                    this.$refs.form.reset();
                 });
+            } catch (error) {
+                const fields = error.fields || {};
+                this.covidErrors = Object.keys(fields).reduce(
+                    (acc, key) => [...acc, ...fields[key]],
+                    []
+                );
+            }
+
+            this.loading = false;
         }
     }
 };

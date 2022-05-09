@@ -89,7 +89,6 @@
                 </div>
                 <TownDetailsNewComment
                     :class="['flex-1', comments.length === 0 && 'pb-32']"
-                    v-on:submit="handleNewComment($event)"
                     id="newComment"
                     :user="user"
                     :nbComments="comments.length"
@@ -261,14 +260,6 @@ export default {
         },
         openCovid() {
             this.covidOpen = true;
-        },
-        handleNewComment(comments) {
-            this.$trackMatomoEvent(
-                "Site",
-                "Création commentaire",
-                `S${this.town.id}`
-            );
-            this.town.comments.regular = comments;
         },
         deleteTown() {
             if (
