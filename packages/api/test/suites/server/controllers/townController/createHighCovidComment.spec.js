@@ -13,10 +13,9 @@ const { mockReq, mockRes } = require('sinon-express-mock');
  * FIXTURES
  * *********************************************************************************************** */
 
-const models = {
-    geo: require('#server/models/geoModel'),
-    highCovidComment: require('#server/models/highCovidCommentModel')({}),
-};
+const geoModel = require('#server/models/geoModel');
+const highCovidCommentModel = require('#server/models/highCovidCommentModel');
+
 const stubs = {};
 const { createHighCovidComment } = require('#server/controllers/townController');
 
@@ -129,20 +128,16 @@ describe.only('townController.createHighCovidComment()', () => {
             },
         };
 
-        stubs.geo = sinon.stub(models.geo);
-        stubs.highCovidComment = sinon.stub(models.highCovidComment);
+        stubs.getDepartementsFor = sinon.stub(geoModel, 'getDepartementsFor');
+        stubs.create = sinon.stub(highCovidCommentModel, 'create');
 
-        stubs.geo.getDepartementsFor.rejects(
+        stubs.getDepartementsFor.rejects(
             new Error('getDepartementsFor() should not have been called'),
         );
     });
 
     afterEach(() => {
-        Object.keys(stubs).forEach((key) => {
-            Object.keys(stubs[key]).forEach((method) => {
-                stubs[key][method].restore();
-            });
-        });
+        sinon.restore();
     });
 
 
@@ -162,7 +157,7 @@ describe.only('townController.createHighCovidComment()', () => {
                     await createHighCovidComment(req, res);
 
                     // assert
-                    expect(stubs.highCovidComment.create).to.have.been.calledOnceWith(
+                    expect(stubs.create).to.have.been.calledOnceWith(
                         req.user,
                         {
                             description: 'lorem ipsum',
@@ -182,7 +177,7 @@ describe.only('townController.createHighCovidComment()', () => {
                     await createHighCovidComment(req, res);
 
                     // assert
-                    expect(stubs.highCovidComment.create).to.have.been.calledOnceWith(
+                    expect(stubs.create).to.have.been.calledOnceWith(
                         req.user,
                         {
                             description: 'lorem ipsum',
@@ -198,7 +193,7 @@ describe.only('townController.createHighCovidComment()', () => {
                 it('saves the comment, using the departements passed in the request', async () => {
                     // setup
                     reqArg.user.organization.location = Object.assign({}, locations[level]);
-                    stubs.geo.getDepartementsFor.withArgs(level, locations[level][level].code).resolves(
+                    stubs.getDepartementsFor.withArgs(level, locations[level][level].code).resolves(
                         departements[level],
                     );
                     reqArg.body.departements = ['78'];
@@ -210,7 +205,7 @@ describe.only('townController.createHighCovidComment()', () => {
                     await createHighCovidComment(req, res);
 
                     // assert
-                    expect(stubs.highCovidComment.create).to.have.been.calledOnceWith(
+                    expect(stubs.create).to.have.been.calledOnceWith(
                         req.user,
                         {
                             description: 'lorem ipsum',
@@ -233,7 +228,7 @@ describe.only('townController.createHighCovidComment()', () => {
         await createHighCovidComment(req, res);
 
         // assert
-        expect(stubs.highCovidComment.create).to.have.been.calledOnceWith(
+        expect(stubs.create).to.have.been.calledOnceWith(
             req.user,
             {
                 description: 'lorem ipsum',
@@ -323,7 +318,7 @@ describe.only('townController.createHighCovidComment()', () => {
             beforeEach(async () => {
                 // setup
                 reqArg.user.organization.location = locations[level];
-                stubs.geo.getDepartementsFor.withArgs(level, locations[level][level].code).resolves(
+                stubs.getDepartementsFor.withArgs(level, locations[level][level].code).resolves(
                     departements[level],
                 );
                 reqArg.body.departements = ['33', '78', '52'];
@@ -429,7 +424,7 @@ describe.only('townController.createHighCovidComment()', () => {
             },
         ];
 
-        badValues.forEach(({ value, label, error }) => {
+        badValues.forEach(({ value, label }) => {
             describe(`departements are ${label}`, () => {
                 let req;
                 let res;
@@ -468,7 +463,7 @@ describe.only('townController.createHighCovidComment()', () => {
         beforeEach(async () => {
             // setup
             reqArg.user.organization.location = locations.departement;
-            stubs.highCovidComment.create.withArgs(
+            stubs.create.withArgs(
                 reqArg.user,
                 {
                     description: 'lorem ipsum',
