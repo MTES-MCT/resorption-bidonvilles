@@ -31,10 +31,10 @@
                 {{ formatDate(town.updatedAt, "d/m/y") }}
             </div>
             <div class="flex items-center uppercase text-sm mr-4">
-                <Tag variant="highlight" v-if="town.resorptionTarget">
-                    Objectif résorption
-                    {{ town.resorptionTarget }} par la Préfecture
-                </Tag>
+                <ResorptionTargetTag
+                    v-if="town.resorptionTarget"
+                    :target="town.resorptionTarget"
+                />
             </div>
             <div
                 class="flex items-center text-red uppercase text-xs font-bold cursor-pointer"
@@ -110,12 +110,16 @@
 
 <script>
 import { mapGetters } from "vuex";
+import ResorptionTargetTag from "#app/components/ResorptionTargetTag/ResorptionTargetTag.vue";
 
 export default {
     props: {
         town: {
             type: Object
         }
+    },
+    components: {
+        ResorptionTargetTag
     },
     methods: {
         // Force scroll even if hash is already present in url

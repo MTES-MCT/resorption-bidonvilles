@@ -9,14 +9,13 @@
             <h2 class="text-lg">{{ shantytown.city.name }}</h2>
 
             <p class="m-0">
-                <Tag
-                    variant="info"
-                    display="inline-block"
+                <ResorptionTargetTag
                     class="mt-2"
+                    display="inline-block"
+                    variant="short"
                     v-if="shantytown.resorptionTarget"
-                >
-                    Objectif résorption {{ shantytown.resorptionTarget }}
-                </Tag>
+                    :target="shantytown.resorptionTarget"
+                />
             </p>
             <p class="m-0" v-if="shantytown.completionRate < 0.8">
                 <Tag
@@ -86,11 +85,14 @@
 import getSince from "#app/utils/getSince";
 import formatLastUpdatedAt from "#app/utils/formatLastUpdatedAt";
 import TownPopulation from "#app/components/TownPopulation/TownPopulation";
+import ResorptionTargetTag from "#app/components/ResorptionTargetTag/ResorptionTargetTag.vue";
 import { lifeConditionsMixin } from "#app/mixins/lifeConditionsMixin";
+
 export default {
     mixins: [lifeConditionsMixin],
     components: {
-        TownPopulation
+        TownPopulation,
+        ResorptionTargetTag
     },
     computed: {
         pinVariant() {
