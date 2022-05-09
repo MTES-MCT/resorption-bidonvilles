@@ -208,9 +208,10 @@ export default {
         },
         hasJusticePermission() {
             return (
-                this.$store.getters["config/getPermission"](
-                    "shantytown_justice.access"
-                ) !== null
+                this.$store.getters["config/hasLocalizedPermission"](
+                    "shantytown_justice.access",
+                    this.town
+                ) === true
             );
         },
         comments() {
