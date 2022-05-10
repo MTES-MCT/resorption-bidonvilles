@@ -154,6 +154,11 @@ module.exports = (town, user) => {
         resorptionTarget: town.resorptionTarget,
     };
 
+    // generé par findNearby
+    if (town.distance !== undefined) {
+        serializedTown.distance = town.distance;
+    }
+
     let completionTotal = 0;
     if (serializedTown.addressSimple !== 'Pas d\'adresse précise') {
         completionTotal += 1;

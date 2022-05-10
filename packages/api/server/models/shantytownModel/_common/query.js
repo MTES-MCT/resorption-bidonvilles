@@ -8,12 +8,21 @@ const serializeShantytown = require('./serializeShantytown');
 const getDiff = require('./getDiff');
 const SQL = require('./SQL');
 
-function getBaseSql(table, whereClause = null, order = null) {
+function getBaseSql(table, whereClause = null, order = null, additionalSQL = {}) {
     const tables = {
         shantytowns: table === 'regular' ? 'shantytowns' : 'ShantytownHistories',
         shantytown_origins: table === 'regular' ? 'shantytown_origins' : 'ShantytownOriginHistories',
         origin_foreign_key: table === 'regular' ? 'shantytown_id' : 'hid',
     };
+
+    const selection = {
+        ...(additionalSQL.selection || {}),
+        ...SQL.selection,
+    };
+    const joins = [
+        ...(additionalSQL.joins || []),
+        ...SQL.joins,
+    ];
 
     return `
         WITH
@@ -25,17 +34,17 @@ function getBaseSql(table, whereClause = null, order = null) {
             LEFT JOIN social_origins soo ON so.fk_social_origin = soo.social_origin_id
             GROUP BY s.${tables.origin_foreign_key})
         SELECT
-            ${Object.keys(SQL.selection).map(key => `${key} AS "${SQL.selection[key]}"`).join(',')},
+            ${Object.keys(selection).map(key => `${key} AS "${selection[key]}"`).join(',')},
             sco.origins AS "socialOrigins"
         FROM "${tables.shantytowns}" AS shantytowns
-        ${SQL.joins.map(({ table: t, on }) => `LEFT JOIN ${t} ON ${on}`).join('\n')}
+        ${joins.map(({ table: t, on }) => `LEFT JOIN ${t} ON ${on}`).join('\n')}
         LEFT JOIN shantytown_computed_origins sco ON sco.fk_shantytown = shantytowns.${tables.origin_foreign_key}
         ${whereClause !== null ? `WHERE ${whereClause}` : ''}
         ${order !== null ? `ORDER BY ${order}` : ''}
     `;
 }
 
-module.exports = async (where = [], order = ['departements.code ASC', 'cities.name ASC'], user, feature, includeChangelog = false) => {
+module.exports = async (where = [], order = ['departements.code ASC', 'cities.name ASC'], user, feature, includeChangelog = false, additionalSQL = {}, argReplacements = {}) => {
     const permissionsClauseGroup = pWhere().can(user).do(feature, 'shantytown');
     if (permissionsClauseGroup === null) {
         return [];
@@ -45,13 +54,15 @@ module.exports = async (where = [], order = ['departements.code ASC', 'cities.na
         where.push(permissionsClauseGroup);
     }
 
-    const replacements = {};
+    const replacements = { ...argReplacements };
     const whereClause = stringifyWhereClause('shantytowns', where, replacements);
+
     const towns = await sequelize.query(
         getBaseSql(
             'regular',
             where.length > 0 ? whereClause : null,
             order.join(', '),
+            additionalSQL,
         ),
         {
             type: sequelize.QueryTypes.SELECT,
@@ -84,6 +95,7 @@ module.exports = async (where = [], order = ['departements.code ASC', 'cities.na
                     'history',
                     where.length > 0 ? whereClause : null,
                     ['shantytowns.shantytown_id ASC', 'shantytowns."archivedAt" ASC'].join(', '),
+                    additionalSQL,
                 ),
                 {
                     type: sequelize.QueryTypes.SELECT,
