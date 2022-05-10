@@ -59,6 +59,9 @@ module.exports = async (req, res, next) => {
                 police_requested_at: req.body.police_requested_at,
                 police_granted_at: req.body.police_granted_at,
                 bailiff: req.body.bailiff,
+
+                // tous les sites modifiés passent nécessairement en v2
+                living_conditions_version: 2,
             },
         );
         const updatedTown = await shantytownModel.findOne(req.user, req.params.id);

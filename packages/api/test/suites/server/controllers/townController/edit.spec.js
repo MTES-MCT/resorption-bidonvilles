@@ -153,6 +153,7 @@ describe.only('townController.edit()', () => {
                     police_requested_at: input.body.police_requested_at,
                     police_granted_at: input.body.police_granted_at,
                     bailiff: input.body.bailiff,
+                    living_conditions_version: 2,
                 },
             );
         });
