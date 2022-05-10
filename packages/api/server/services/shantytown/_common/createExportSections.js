@@ -67,43 +67,6 @@ module.exports = (user, data, properties, closedTowns, closingSolutions) => {
         ],
     });
 
-    if (options.indexOf('life_conditions') !== -1) {
-        sections.push({
-            title: 'Conditions de vie',
-            properties: [
-                properties.electricityType,
-                properties.electricityComments,
-                properties.accessToWater,
-                properties.waterComments,
-                properties.accessToSanitary,
-                properties.sanitaryComments,
-                properties.trashEvacuation,
-                properties.waterPotable,
-                properties.waterContinuousAccess,
-                properties.waterPublicPoint,
-                properties.waterDistance,
-                properties.waterRoadsToCross,
-                properties.waterEveryoneHasAccess,
-                properties.waterStagnantWater,
-                properties.waterHandWashAccess,
-                properties.waterHandWashAccessNumber,
-                properties.sanitaryNumber,
-                properties.sanitaryInsalubrious,
-                properties.sanitaryOnSite,
-                properties.trashCansOnSite,
-                properties.trashAccumulation,
-                properties.trashEvacuationRegular,
-                properties.vermin,
-                properties.verminComments,
-                properties.firePreventionMeasures,
-                properties.firePreventionDiagnostic,
-                properties.firePreventionSiteAccessible,
-                properties.firePreventionDevices,
-                properties.firePreventionComments,
-            ],
-        });
-    }
-
     if (options.indexOf('demographics') !== -1) {
         section = {
             title: 'Diagnostic',
