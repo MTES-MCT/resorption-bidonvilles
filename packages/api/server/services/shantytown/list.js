@@ -7,7 +7,7 @@ module.exports = async (user) => {
     try {
         shantytowns = await shantytownModel.findAll(user, [], 'list');
     } catch (error) {
-        throw new ServiceError('fetch_failed', new Error('Une erreur est survenue pendant la récupération des sites en base de données'));
+        throw new ServiceError('fetch_failed', error);
     }
 
     return shantytowns;

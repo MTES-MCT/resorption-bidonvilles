@@ -18,7 +18,7 @@ module.exports = async (user, shantytownId, data) => {
     try {
         shantytown = await shantytownModel.findOne(user, shantytownId);
     } catch (error) {
-        throw new ServiceError('fetch_failed', new Error(`Une erreur est survenue lors de la vérification de l'existence du site #${shantytownId} en base de données`));
+        throw new ServiceError('fetch_failed', error);
     }
 
     if (shantytown === null) {
@@ -88,7 +88,7 @@ module.exports = async (user, shantytownId, data) => {
     try {
         await shantytownModel.createCovidComment(user, shantytownId, sanitizedData);
     } catch (error) {
-        throw new ServiceError('write_failed', new Error('Une erreur est survenue lors de l\'écriture du commentaire en base de données'));
+        throw new ServiceError('write_failed', error);
     }
 
     // fetch refreshed comments

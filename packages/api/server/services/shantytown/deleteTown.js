@@ -11,7 +11,7 @@ module.exports = async (user, shantytown_id) => {
             shantytown_id,
         );
     } catch (error) {
-        throw new ServiceError('fetch_failed', new Error(`Impossible de retrouver le site #${shantytown_id} à supprimer en base de données`));
+        throw new ServiceError('fetch_failed', error);
     }
 
     if (town === null) {
@@ -22,6 +22,6 @@ module.exports = async (user, shantytown_id) => {
     try {
         await shantytownModel.deleteShantytown(town.id);
     } catch (error) {
-        throw new ServiceError('delete_failed', new Error(`Impossible de supprimer le site #${shantytown_id} en base de données`));
+        throw new ServiceError('delete_failed', error);
     }
 };
