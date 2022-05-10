@@ -41,7 +41,6 @@ module.exports = (towns, connectedUsers, listOfDates) => {
             let openShantytownsTotal = 0;
             let closedShantytownsTotal = 0;
             let resorbedShantytownsTotal = 0;
-            let connectedUsersTotal = 0;
 
             towns.forEach(
                 (town) => {
@@ -61,33 +60,22 @@ module.exports = (towns, connectedUsers, listOfDates) => {
                     }
                 },
             );
-            const weekStartDate = new Date(date.valueOf());
-            weekStartDate.setDate(weekStartDate.getDate() - 7);
-            // Calcul des utilisateurs actifs par semaine
-            const countedUsers = [];
-            connectedUsers.forEach(
-                (connectedUser) => {
-                    if ((moment(connectedUser.date_log).format('YYYY-MM-DD HH:mm:ss ZZ') <= date)
-                        && (moment(connectedUser.date_log).format('YYYY-MM-DD HH:mm:ss ZZ') > moment(weekStartDate).format('YYYY-MM-DD HH:mm:ss ZZ'))) {
-                        if (countedUsers.indexOf(connectedUser.user_id) === -1) {
-                            countedUsers.push(connectedUser.user_id);
-                            connectedUsersTotal += 1;
-                        }
-                    }
-                },
-            );
             const formatedDate = moment(date).format('DD/MM');
-            const formatedDateFrom = moment(weekStartDate).format('DD/MM');
-
             population.data.unshift({ figure: populationTotal, formatedDate });
             minors.data.unshift({ figure: minorsTotal, formatedDate });
             minorsInSchool.data.unshift({ figure: minorsInSchoolTotal, formatedDate });
             closedShantytowns.data.unshift({ figure: closedShantytownsTotal, formatedDate });
             resorbedShantytowns.data.unshift({ figure: resorbedShantytownsTotal, formatedDate });
             openShantytowns.data.unshift({ figure: openShantytownsTotal, formatedDate });
-            connectedUserStats.data.unshift({ figure: connectedUsersTotal, formatedDate, formatedDateFrom });
         },
     );
+
+    connectedUsers.forEach(
+        (connectedUser) => {
+            connectedUserStats.data.unshift({ figure: connectedUser.count, formatedDateFrom: connectedUser.date_debut, formatedDate: connectedUser.date_fin });
+        },
+    );
+
     population.evolution = Math.round((((population.data.slice(-1)[0].figure - population.data[0].figure) * 100) / population.data[0].figure).toFixed(2));
     minors.evolution = Math.round((((minors.data.slice(-1)[0].figure - minors.data[0].figure) * 100) / minors.data[0].figure).toFixed(2));
     closedShantytowns.evolution = Math.round((((closedShantytowns.data.slice(-1)[0].figure - closedShantytowns.data[0].figure) * 100) / closedShantytowns.data[0].figure).toFixed(2));
