@@ -184,18 +184,6 @@ module.exports = (town, user) => {
     if (serializedTown.socialOrigins.length > 0) {
         completionTotal += 1;
     }
-    if (town.electricityTypeLabel !== 'Inconnu') {
-        completionTotal += 1;
-    }
-    if (town.accessToWater !== null) {
-        completionTotal += 1;
-    }
-    if (town.accessToSanitary !== null) {
-        completionTotal += 1;
-    }
-    if (town.trashEvacuation !== null) {
-        completionTotal += 1;
-    }
 
     serializedTown.completionRate = Math.floor((completionTotal / 12) * 100) / 100;
 
