@@ -71,23 +71,26 @@ module.exports = async (user, location) => {
 
     const connectedUsers = await sequelize.query(
         `SELECT
-                unl.fk_user AS user_id,
-                TO_CHAR(unl.datetime, 'YYYY-MM-DD') AS date_log
-        FROM
-                user_navigation_logs unl 
+            COUNT(DISTINCT fk_user),
+            (floor((now()::date - datetime::date) / 7)) AS week,
+            TO_CHAR((now()::date - ((floor((now()::date - datetime::date) / 7)) * 7)::int) - integer '6', 'DD/MM') AS date_debut,
+            TO_CHAR(now()::date - ((floor((now()::date - datetime::date) / 7)) * 7)::int, 'DD/MM') AS date_fin
+            FROM 
+            user_navigation_logs
         ${where !== null ? `
         LEFT JOIN
-            users u ON u.user_id = unl.fk_user
+            users ON users.user_id = user_navigation_logs.fk_user
         LEFT JOIN
-            localized_organizations lo ON u.fk_organization = lo.organization_id
-        ` : ''}
+            localized_organizations ON users.fk_organization = localized_organizations.organization_id
+        ` : ''}        
         ${where}
         GROUP BY
-                date_log,
-                fk_user
+            (floor((now()::date - datetime::date) / 7)),
+            (now()::date - ((floor((now()::date - datetime::date) / 7)) * 7)::int) - integer '6',
+            now()::date - ((floor((now()::date - datetime::date) / 7)) * 7)::int
         ORDER BY
-                date_log DESC,
-                fk_user`,
+                (floor((now()::date - datetime::date) / 7)) + 1 ASC
+        LIMIT 13`,
         {
             type: sequelize.QueryTypes.SELECT,
         },
