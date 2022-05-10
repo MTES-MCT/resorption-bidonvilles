@@ -24,6 +24,7 @@ module.exports = {
         'shantytowns.minors_in_school': 'minorsInSchool',
         'shantytowns.caravans': 'caravans',
         'shantytowns.huts': 'huts',
+        'shantytowns.living_conditions_version': 'livingConditionsVersion',
         'shantytowns.access_to_sanitary': 'accessToSanitary',
         'shantytowns.sanitary_comments': 'sanitaryComments',
         'shantytowns.access_to_water': 'accessToWater',

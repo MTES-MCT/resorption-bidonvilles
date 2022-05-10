@@ -129,6 +129,7 @@ module.exports = (town, user) => {
                 id: town.updatedByOrganization,
             },
         },
+        livingConditionsVersion: town.livingConditionsVersion,
         waterPotable: town.waterPotable,
         waterContinuousAccess: town.waterContinuousAccess,
         waterPublicPoint: town.waterPublicPoint,
