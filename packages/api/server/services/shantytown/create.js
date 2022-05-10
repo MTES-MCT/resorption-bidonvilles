@@ -1,11 +1,14 @@
 const shantytownModel = require('#server/models/shantytownModel');
 const socialOriginModel = require('#server/models/socialOriginModel');
+const electricityTypeModel = require('#server/models/electricityTypeModel');
 const config = require('#server/config');
 const mattermostUtils = require('#server/utils/mattermost');
 const userModel = require('#server/models/userModel');
 const mails = require('#server/mails/mails');
 
 module.exports = async (townData, user) => {
+    const electricityType = await electricityTypeModel.findOneByUid('inconnu');
+
     const baseTown = {
         name: townData.name,
         latitude: townData.latitude,
@@ -24,13 +27,7 @@ module.exports = async (townData, user) => {
         minorsInSchool: townData.minors_in_school,
         caravans: townData.caravans,
         huts: townData.huts,
-        electricityType: townData.electricity_type,
-        electricityComments: townData.electricity_comments,
-        accessToSanitary: townData.access_to_sanitary,
-        sanitaryComments: townData.sanitary_comments,
-        accessToWater: townData.access_to_water,
-        waterComments: townData.water_comments,
-        trashEvacuation: townData.trash_evacuation,
+        electricityType: electricityType.id,
         fieldType: townData.field_type,
         ownerType: townData.owner_type,
         isReinstallation: townData.is_reinstallation,
@@ -41,34 +38,6 @@ module.exports = async (townData, user) => {
         censusStatus: townData.census_status,
         censusConductedAt: townData.census_conducted_at,
         censusConductedBy: townData.census_conducted_by,
-        // New fields
-        // Water
-        waterPotable: townData.water_potable,
-        waterContinuousAccess: townData.water_continuous_access,
-        waterPublicPoint: townData.water_public_point,
-        waterDistance: townData.water_distance,
-        waterRoadsToCross: townData.water_roads_to_cross,
-        waterEveryoneHasAccess: townData.water_everyone_has_access,
-        waterStagnantWater: townData.water_stagnant_water,
-        waterHandWashAccess: townData.water_hand_wash_access,
-        waterHandWashAccessNumber: townData.water_hand_wash_access_number,
-        // Sanitary
-        sanitaryNumber: townData.sanitary_number,
-        sanitaryInsalubrious: townData.sanitary_insalubrious,
-        sanitaryOnSite: townData.sanitary_on_site,
-        // Trash
-        trashCansOnSite: townData.trash_cans_on_site,
-        trashAccumulation: townData.trash_accumulation,
-        trashEvacuationRegular: townData.trash_evacuation_regular,
-        // Vermin
-        vermin: townData.vermin,
-        verminComments: townData.vermin_comments,
-        // Fire prevention
-        firePreventionMeasures: townData.fire_prevention_measures,
-        firePreventionDiagnostic: townData.fire_prevention_diagnostic,
-        firePreventionSiteAccessible: townData.fire_prevention_site_accessible,
-        firePreventionDevices: townData.fire_prevention_devices,
-        firePreventionComments: townData.fire_prevention_comments,
     };
 
     const shantytown_id = await shantytownModel.create(

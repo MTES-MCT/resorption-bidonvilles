@@ -19,11 +19,13 @@ export default function enrichShantytown(shantytown, fieldTypes) {
     );
 
     // electricity
-    let electricityValue = true;
-    if (shantytown.electricityType.label === "Inconnu") {
-        electricityValue = null;
-    } else if (shantytown.electricityType.label === "Non") {
-        electricityValue = false;
+    let electricityValue = null;
+    if (shantytown.electricityType && shantytown.electricityType.label) {
+        if (shantytown.electricityType.label.startsWith("Oui")) {
+            electricityValue = true;
+        } else if (shantytown.electricityType.label === "Non") {
+            electricityValue = false;
+        }
     }
 
     // justice statuses

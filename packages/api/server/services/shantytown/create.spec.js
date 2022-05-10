@@ -7,6 +7,7 @@ chai.use(sinonChai);
 
 const shantytownModel = require('#server/models/shantytownModel');
 const socialOriginModel = require('#server/models/socialOriginModel');
+const electricityTypeModel = require('#server/models/electricityTypeModel');
 const mattermostUtils = require('#server/utils/mattermost');
 const userModel = require('#server/models/userModel');
 const mails = require('#server/mails/mails');
@@ -42,13 +43,6 @@ describe.only('services/shantytown', () => {
             minors_in_school: global.generate('string'),
             caravans: global.generate('string'),
             huts: global.generate('string'),
-            electricity_type: global.generate('string'),
-            electricity_comments: global.generate('string'),
-            access_to_sanitary: global.generate('string'),
-            sanitary_comments: global.generate('string'),
-            access_to_water: global.generate('string'),
-            water_comments: global.generate('string'),
-            trash_evacuation: global.generate('string'),
             field_type: global.generate('string'),
             owner_type: global.generate('string'),
             is_reinstallation: global.generate('string'),
@@ -59,34 +53,6 @@ describe.only('services/shantytown', () => {
             census_status: global.generate('string'),
             census_conducted_at: global.generate('string'),
             census_conducted_by: global.generate('string'),
-            // New fields
-            // Water
-            water_potable: global.generate('string'),
-            water_continuous_access: global.generate('string'),
-            water_public_point: global.generate('string'),
-            water_distance: global.generate('string'),
-            water_roads_to_cross: global.generate('string'),
-            water_everyone_has_access: global.generate('string'),
-            water_stagnant_water: global.generate('string'),
-            water_hand_wash_access: global.generate('string'),
-            water_hand_wash_access_number: global.generate('string'),
-            // Sanitary
-            sanitary_number: global.generate('string'),
-            sanitary_insalubrious: global.generate('string'),
-            sanitary_on_site: global.generate('string'),
-            // Trash
-            trash_cans_on_site: global.generate('string'),
-            trash_accumulation: global.generate('string'),
-            trash_evacuation_regular: global.generate('string'),
-            // Vermin
-            vermin: global.generate('string'),
-            vermin_comments: global.generate('string'),
-            // Fire prevention
-            fire_prevention_measures: global.generate('string'),
-            fire_prevention_diagnostic: global.generate('string'),
-            fire_prevention_site_accessible: global.generate('string'),
-            fire_prevention_devices: global.generate('string'),
-            fire_prevention_comments: global.generate('string'),
         };
 
         const justiceData = {
@@ -107,6 +73,7 @@ describe.only('services/shantytown', () => {
 
         beforeEach(() => {
             stubs = {
+                electricityFindOneByUid: sinon.stub(electricityTypeModel, 'findOneByUid'),
                 shantytownCreate: sinon.stub(shantytownModel, 'create'),
                 findOne: sinon.stub(shantytownModel, 'findOne'),
                 triggerShantytownCreationAlert: sinon.stub(mattermostUtils, 'triggerShantytownCreationAlert'),
@@ -114,11 +81,16 @@ describe.only('services/shantytown', () => {
                 sendUserShantytownDeclared: sinon.stub(mails, 'sendUserShantytownDeclared'),
                 socialOriginCreate: sinon.stub(socialOriginModel, 'create'),
             };
+
+            stubs.electricityFindOneByUid.resolves({
+                id: 1,
+            });
         });
 
         afterEach(() => {
             sinon.restore();
         });
+
         describe('create()', () => {
             it('créer un site en bdd avec les données fournies par l\'utilisateur', async () => {
                 user.isAllowedTo.returns(true);
@@ -146,13 +118,7 @@ describe.only('services/shantytown', () => {
                         minorsInSchool: townData.minors_in_school,
                         caravans: townData.caravans,
                         huts: townData.huts,
-                        electricityType: townData.electricity_type,
-                        electricityComments: townData.electricity_comments,
-                        accessToSanitary: townData.access_to_sanitary,
-                        sanitaryComments: townData.sanitary_comments,
-                        accessToWater: townData.access_to_water,
-                        waterComments: townData.water_comments,
-                        trashEvacuation: townData.trash_evacuation,
+                        electricityType: 1,
                         fieldType: townData.field_type,
                         ownerType: townData.owner_type,
                         isReinstallation: townData.is_reinstallation,
@@ -163,34 +129,6 @@ describe.only('services/shantytown', () => {
                         censusStatus: townData.census_status,
                         censusConductedAt: townData.census_conducted_at,
                         censusConductedBy: townData.census_conducted_by,
-                        // New fields
-                        // Water
-                        waterPotable: townData.water_potable,
-                        waterContinuousAccess: townData.water_continuous_access,
-                        waterPublicPoint: townData.water_public_point,
-                        waterDistance: townData.water_distance,
-                        waterRoadsToCross: townData.water_roads_to_cross,
-                        waterEveryoneHasAccess: townData.water_everyone_has_access,
-                        waterStagnantWater: townData.water_stagnant_water,
-                        waterHandWashAccess: townData.water_hand_wash_access,
-                        waterHandWashAccessNumber: townData.water_hand_wash_access_number,
-                        // Sanitary
-                        sanitaryNumber: townData.sanitary_number,
-                        sanitaryInsalubrious: townData.sanitary_insalubrious,
-                        sanitaryOnSite: townData.sanitary_on_site,
-                        // Trash
-                        trashCansOnSite: townData.trash_cans_on_site,
-                        trashAccumulation: townData.trash_accumulation,
-                        trashEvacuationRegular: townData.trash_evacuation_regular,
-                        // Vermin
-                        vermin: townData.vermin,
-                        verminComments: townData.vermin_comments,
-                        // Fire prevention
-                        firePreventionMeasures: townData.fire_prevention_measures,
-                        firePreventionDiagnostic: townData.fire_prevention_diagnostic,
-                        firePreventionSiteAccessible: townData.fire_prevention_site_accessible,
-                        firePreventionDevices: townData.fire_prevention_devices,
-                        firePreventionComments: townData.fire_prevention_comments,
                     },
                     ...{
                         ownerComplaint: justiceData.owner_complaint,
@@ -233,13 +171,7 @@ describe.only('services/shantytown', () => {
                         minorsInSchool: townData.minors_in_school,
                         caravans: townData.caravans,
                         huts: townData.huts,
-                        electricityType: townData.electricity_type,
-                        electricityComments: townData.electricity_comments,
-                        accessToSanitary: townData.access_to_sanitary,
-                        sanitaryComments: townData.sanitary_comments,
-                        accessToWater: townData.access_to_water,
-                        waterComments: townData.water_comments,
-                        trashEvacuation: townData.trash_evacuation,
+                        electricityType: 1,
                         fieldType: townData.field_type,
                         ownerType: townData.owner_type,
                         isReinstallation: townData.is_reinstallation,
@@ -250,34 +182,6 @@ describe.only('services/shantytown', () => {
                         censusStatus: townData.census_status,
                         censusConductedAt: townData.census_conducted_at,
                         censusConductedBy: townData.census_conducted_by,
-                        // New fields
-                        // Water
-                        waterPotable: townData.water_potable,
-                        waterContinuousAccess: townData.water_continuous_access,
-                        waterPublicPoint: townData.water_public_point,
-                        waterDistance: townData.water_distance,
-                        waterRoadsToCross: townData.water_roads_to_cross,
-                        waterEveryoneHasAccess: townData.water_everyone_has_access,
-                        waterStagnantWater: townData.water_stagnant_water,
-                        waterHandWashAccess: townData.water_hand_wash_access,
-                        waterHandWashAccessNumber: townData.water_hand_wash_access_number,
-                        // Sanitary
-                        sanitaryNumber: townData.sanitary_number,
-                        sanitaryInsalubrious: townData.sanitary_insalubrious,
-                        sanitaryOnSite: townData.sanitary_on_site,
-                        // Trash
-                        trashCansOnSite: townData.trash_cans_on_site,
-                        trashAccumulation: townData.trash_accumulation,
-                        trashEvacuationRegular: townData.trash_evacuation_regular,
-                        // Vermin
-                        vermin: townData.vermin,
-                        verminComments: townData.vermin_comments,
-                        // Fire prevention
-                        firePreventionMeasures: townData.fire_prevention_measures,
-                        firePreventionDiagnostic: townData.fire_prevention_diagnostic,
-                        firePreventionSiteAccessible: townData.fire_prevention_site_accessible,
-                        firePreventionDevices: townData.fire_prevention_devices,
-                        firePreventionComments: townData.fire_prevention_comments,
                     },
                 );
             });
