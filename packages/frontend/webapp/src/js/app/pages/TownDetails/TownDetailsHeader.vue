@@ -66,6 +66,14 @@
                 >Fermer le site</Button
             >
             <Button
+                v-if="canFixStatus && town.status !== 'open'"
+                variant="primaryOutline"
+                class="mr-8"
+                iconPosition="left"
+                @click="$emit('openCancel')"
+                >Corriger la fermeture du site</Button
+            >
+            <Button
                 data-cy="updateTown"
                 variant="primary"
                 class="mr-8"
@@ -113,6 +121,13 @@ import { mapGetters } from "vuex";
 import ResorptionTargetTag from "#app/components/ResorptionTargetTag/ResorptionTargetTag.vue";
 
 export default {
+    data() {
+        return {
+            canFixStatus: this.$store.getters["config/hasPermission"](
+                "shantytown.fix_status"
+            )
+        };
+    },
     props: {
         town: {
             type: Object

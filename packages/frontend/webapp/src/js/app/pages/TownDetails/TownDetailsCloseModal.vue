@@ -1,7 +1,13 @@
 <template>
     <Modal :isOpen="isOpen" :closeModal="closeModal" class="modalContainer">
         <template v-slot:title>
-            <div>Fermer le site</div>
+            <div>
+                {{
+                    isAlreadyClosed
+                        ? "Corriger la fermeture du site"
+                        : "Fermer le site"
+                }}
+            </div>
         </template>
         <template v-slot:body>
             <ValidationObserver ref="form" v-slot="{ handleSubmit }">
@@ -9,6 +15,7 @@
                     <div class="scrollableContainer -mx-4 -mt-8 p-4">
                         <div class="w-64">
                             <DatepickerV2
+                                v-if="!isAlreadyClosed"
                                 label="Date de la fermeture du site"
                                 class=""
                                 v-model="form.closed_at"
@@ -21,6 +28,13 @@
                                 :format="'dd MMMM yyyy'"
                                 rules="required"
                             />
+                        </div>
+                        <div v-if="isAlreadyClosed" class="mb-4">
+                            <span class="font-bold">
+                                Date de fermeture du site :
+                            </span>
+
+                            {{ formatDate(form.closed_at, true) }}
                         </div>
 
                         <CheckableGroup
@@ -47,6 +61,7 @@
                         </CheckableGroup>
 
                         <CheckableGroup
+                            v-if="!isAlreadyClosed"
                             label="Cause de la disparition"
                             id="status"
                             direction="vertical"
@@ -62,7 +77,10 @@
                             />
                         </CheckableGroup>
 
-                        <CheckableGroup label="Orientations des ménages :">
+                        <CheckableGroup
+                            v-if="!isAlreadyClosed"
+                            label="Orientations des ménages :"
+                        >
                             <div
                                 v-for="(item, index) in closingSolutions"
                                 :key="item.id"
@@ -120,7 +138,7 @@
 
 <script>
 import { fr } from "vuejs-datepicker/dist/locale";
-import { get, close } from "#helpers/api/town";
+import { get, close, fixClosedStatus } from "#helpers/api/town";
 import { notify } from "#helpers/notificationHelper";
 import InlineTextInput from "#app/components/ui/Form/input/InlineTextInput";
 import CheckableGroup from "#app/components/ui/Form/CheckableGroup";
@@ -140,12 +158,14 @@ export default {
         closeModal() {
             this.$emit("closeModal");
         },
-        formatDate(d) {
+        formatDate(d, display = false) {
             const year = d.getFullYear();
             const month = `${d.getMonth() + 1}`.padStart(2, "0");
             const day = `${d.getDate()}`.padStart(2, "0");
 
-            return `${year}-${month}-${day}`;
+            return display === true
+                ? `${day}/${month}/${year}`
+                : `${year}-${month}-${day}`;
         },
         async submitClose() {
             // clean previous errors
@@ -153,43 +173,50 @@ export default {
             this.error = null;
 
             try {
-                await close(this.town.id, {
-                    ...this.form,
-                    closed_at: this.formatDate(this.form.closed_at),
-                    solutions: Object.keys(this.form.solutions)
-                        .filter(key => this.form.solutions[key].checked)
-                        .map(key => ({
-                            id: key,
-                            peopleAffected: this.form.solutions[key]
-                                .peopleAffected
-                                ? parseInt(
-                                      this.form.solutions[key].peopleAffected,
-                                      10
-                                  )
-                                : null,
-                            householdsAffected: this.form.solutions[key]
-                                .householdsAffected
-                                ? parseInt(
-                                      this.form.solutions[key]
-                                          .householdsAffected,
-                                      10
-                                  )
-                                : null
-                        }))
-                });
+                if (this.isAlreadyClosed) {
+                    await fixClosedStatus(this.town.id, {
+                        closed_with_solutions: this.form.closed_with_solutions
+                    });
+                } else {
+                    await close(this.town.id, {
+                        ...this.form,
+                        closed_at: this.formatDate(this.form.closed_at),
+                        solutions: Object.keys(this.form.solutions)
+                            .filter(key => this.form.solutions[key].checked)
+                            .map(key => ({
+                                id: key,
+                                peopleAffected: this.form.solutions[key]
+                                    .peopleAffected
+                                    ? parseInt(
+                                          this.form.solutions[key]
+                                              .peopleAffected,
+                                          10
+                                      )
+                                    : null,
+                                householdsAffected: this.form.solutions[key]
+                                    .householdsAffected
+                                    ? parseInt(
+                                          this.form.solutions[key]
+                                              .householdsAffected,
+                                          10
+                                      )
+                                    : null
+                            }))
+                    });
 
-                this.$trackMatomoEvent(
-                    "Site",
-                    "Fermeture site",
-                    `S${this.town.id}`
-                );
-
-                if (this.form.closed_with_solutions) {
                     this.$trackMatomoEvent(
                         "Site",
-                        "Résorption du site",
+                        "Fermeture site",
                         `S${this.town.id}`
                     );
+
+                    if (this.form.closed_with_solutions) {
+                        this.$trackMatomoEvent(
+                            "Site",
+                            "Résorption du site",
+                            `S${this.town.id}`
+                        );
+                    }
                 }
             } catch (err) {
                 this.loading = false;
@@ -221,11 +248,16 @@ export default {
         } = this.$store.state.config.configuration;
 
         return {
+            isAlreadyClosed: this.town.closedAt !== null,
             loading: false,
             error: null,
             form: {
-                closed_at: null,
-                closed_with_solutions: null,
+                closed_at: this.town.closedAt
+                    ? new Date(this.town.closedAt * 1000)
+                    : null,
+                closed_with_solutions: this.town.closedWithSolutions
+                    ? this.town.closedWithSolutions === "yes"
+                    : null,
                 status: null,
                 solutions: this.town.closingSolutions
                     ? closingSolutions.reduce((solutions, solution) => {
