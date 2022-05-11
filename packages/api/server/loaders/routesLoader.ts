@@ -447,6 +447,16 @@ export default (app) => {
         middlewares.validation,
         controllers.town.close,
     );
+    app.post(
+        '/towns/:id/fix_status',
+        middlewares.auth.authenticate,
+        (...args) => middlewares.auth.checkPermissions(['shantytown.fix_status'], ...args),
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        validators.fixClosedStatus,
+        middlewares.validation,
+        controllers.town.fixClosedStatus,
+    );
     app.delete(
         '/towns/:id',
         middlewares.auth.authenticate,
