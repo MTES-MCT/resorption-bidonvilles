@@ -24,7 +24,7 @@ module.exports = async (user, data) => {
     try {
         location = await geoModel.getLocation(data.locationType, data.locationCode);
     } catch (error) {
-        throw new ServiceError('fetch_failed', new Error('Une erreur est survenue lors de la lecture en base de données'));
+        throw new ServiceError('fetch_failed', error);
     }
 
     if (!permissionUtils.can(user).do('export', 'shantytown').on(location)) {
@@ -81,7 +81,7 @@ module.exports = async (user, data) => {
             );
         }
     } catch (error) {
-        throw new ServiceError('fetch_failed', new Error('Une erreur est survenue lors de la lecture en base de données'));
+        throw new ServiceError('fetch_failed', error);
     }
 
     if (shantytowns.length === 0) {
@@ -92,7 +92,7 @@ module.exports = async (user, data) => {
     try {
         closingSolutions = await closingSolutionModel.findAll();
     } catch (error) {
-        throw new ServiceError('fetch_failed', new Error('Une erreur est survenue lors de la lecture en base de données'));
+        throw new ServiceError('fetch_failed', error);
     }
 
     const properties = serializeExportProperties(closingSolutions);
@@ -134,7 +134,7 @@ module.exports = async (user, data) => {
     try {
         await statsExportsModel.create(stat);
     } catch (error) {
-        throw new ServiceError('write_failed', new Error('Une erreur est survenue lors de l\'écriture en base de données'));
+        throw new ServiceError('write_failed', error);
     }
 
     return buffer;
