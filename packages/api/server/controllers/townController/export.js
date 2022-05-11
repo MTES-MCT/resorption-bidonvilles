@@ -1,7 +1,8 @@
 
 
-const { toFormat: dateToString } = require('#server/utils/date');
 const { exportTown } = require('#server/services/shantytown');
+const moment = require('moment');
+
 
 const ERROR_RESPONSES = {
     fetch_failed: { code: 400, message: 'Une lecture en base de données a échoué' },
@@ -24,6 +25,7 @@ module.exports = async (req, res, next) => {
         });
         return next(error.nativeError || error);
     }
-    res.attachment(`${dateToString(new Date(), 'Y-m-d')}-sites-${closedTowns ? 'fermés' : 'existants'}-resorption-bidonvilles.xlsx`);
+    res.attachment(`${moment(req.query.date).format('YYYY-MM-DD')}-sites-${closedTowns ? 'fermés' : 'existants'}-resorption-bidonvilles.xlsx`);
+
     return res.end(buffer);
 };

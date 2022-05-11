@@ -7,6 +7,7 @@ const shantytownModel = require('#server/models/shantytownModel');
 const closingSolutionModel = require('#server/models/closingSolutionModel');
 const excelUtils = require('#server/utils/excel');
 const statsExportsModel = require('#server/models/statsExports');
+const moment = require('moment');
 
 
 const serializeExportProperties = require('./_common/serializeExportProperties');
@@ -23,13 +24,18 @@ module.exports = async (user, data) => {
     try {
         location = await geoModel.getLocation(data.locationType, data.locationCode);
     } catch (error) {
-        throw new ServiceError('fetch_failed', new Error('Une erreur est survenue lors de la lecture en base de données'));
+        throw new ServiceError('fetch_failed', error);
     }
 
     if (!permissionUtils.can(user).do('export', 'shantytown').on(location)) {
         throw new ServiceError('permission_denied', new Error('Vous n\'êtes pas autorisé(e) à exporter le périmètre géographique demandé'));
     }
 
+    const today = new Date();
+
+    if (user.is_superuser === false && moment(data.date).format('YYYY-MM-DD') !== moment(today).format('YYYY-MM-DD')) {
+        throw new ServiceError('permission_denied', new Error('Vous n\'êtes pas autorisé(e) à exporter des données passées'));
+    }
     const closedTowns = parseInt(data.closedTowns, 10) === 1;
     const filters = [
         {
@@ -60,13 +66,22 @@ module.exports = async (user, data) => {
 
     let shantytowns;
     try {
-        shantytowns = await shantytownModel.findAll(
-            user,
-            filters,
-            'export',
-        );
+        if (moment(data.date).format('YYYY-MM-DD') === moment(today).format('YYYY-MM-DD')) {
+            shantytowns = await shantytownModel.findAll(
+                user,
+                filters,
+                'export',
+            );
+        } else {
+            shantytowns = await shantytownModel.getHistoryAtGivenDate(
+                user,
+                location,
+                moment(data.date).format('YYYY-MM-DD HH:mm:ss ZZ'),
+                closedTowns,
+            );
+        }
     } catch (error) {
-        throw new ServiceError('fetch_failed', new Error('Une erreur est survenue lors de la lecture en base de données'));
+        throw new ServiceError('fetch_failed', error);
     }
 
     if (shantytowns.length === 0) {
@@ -77,7 +92,7 @@ module.exports = async (user, data) => {
     try {
         closingSolutions = await closingSolutionModel.findAll();
     } catch (error) {
-        throw new ServiceError('fetch_failed', new Error('Une erreur est survenue lors de la lecture en base de données'));
+        throw new ServiceError('fetch_failed', error);
     }
 
     const properties = serializeExportProperties(closingSolutions);
@@ -99,6 +114,7 @@ module.exports = async (user, data) => {
         locationName,
         sections,
         shantytowns,
+        moment(data.date).format('DD/MM/YYYY'),
     );
     // add that export to the stats
 
@@ -118,7 +134,7 @@ module.exports = async (user, data) => {
     try {
         await statsExportsModel.create(stat);
     } catch (error) {
-        throw new ServiceError('write_failed', new Error('Une erreur est survenue lors de l\'écriture en base de données'));
+        throw new ServiceError('write_failed', error);
     }
 
     return buffer;
