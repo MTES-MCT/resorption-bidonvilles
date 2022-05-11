@@ -36,7 +36,7 @@
                     icon="times"
                     class="text-primary text-display-sm font-bold cursor-pointer"
                     @click.native="clear"
-                    v-if="$attrs.value"
+                    :disabled="!$attrs.value"
                     data-cy-button="clear"
                 />
             </div>
