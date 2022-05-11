@@ -5,7 +5,11 @@ module.exports = (towns, connectedUsers, listOfDates) => {
 
     const connectedUserStats = {
         evolution: 0,
-        data: [],
+        data: connectedUsers.reverse().map(connectedUser => ({
+            figure: connectedUser.count,
+            formatedDateFrom: connectedUser.date_debut,
+            formatedDate: connectedUser.date_fin,
+        })),
     };
     const population = {
         evolution: 0,
@@ -67,12 +71,6 @@ module.exports = (towns, connectedUsers, listOfDates) => {
             closedShantytowns.data.unshift({ figure: closedShantytownsTotal, formatedDate });
             resorbedShantytowns.data.unshift({ figure: resorbedShantytownsTotal, formatedDate });
             openShantytowns.data.unshift({ figure: openShantytownsTotal, formatedDate });
-        },
-    );
-
-    connectedUsers.forEach(
-        (connectedUser) => {
-            connectedUserStats.data.unshift({ figure: connectedUser.count, formatedDateFrom: connectedUser.date_debut, formatedDate: connectedUser.date_fin });
         },
     );
 
