@@ -14,7 +14,10 @@ module.exports = async (user, shantytownId, commentId, deletionMessage) => {
     } catch (error) {
         throw new ServiceError('fetch_failed', new Error('Impossible de retrouver le site en base de données'));
     }
-    const comment = town.comments.regular.find(({ id }) => id === parseInt(commentId, 10));
+    const comment = [
+        ...town.comments.regular,
+        ...town.comments.covid,
+    ].find(({ id }) => id === parseInt(commentId, 10));
     if (comment === undefined) {
         throw new ServiceError('fetch_failed', new Error('Le commentaire à supprimer n\'a pas été retrouvé en base de données'));
     }
