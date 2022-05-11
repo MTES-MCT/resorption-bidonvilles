@@ -394,7 +394,12 @@ module.exports = (models) => {
                         'export',
                     );
                 } else {
-                    shantytowns = await models.shantytown.getHistoryAtGivenDate(req.user, location, moment(req.query.date).format('YYYY-MM-DD HH:mm:ss ZZ'), closedTowns);
+                    shantytowns = await models.shantytown.getHistoryAtGivenDate(
+                        req.user,
+                        location,
+                        moment(req.query.date).format('YYYY-MM-DD HH:mm:ss ZZ'),
+                        closedTowns,
+                    );
                     shantytowns = shantytowns.map(town => serializeShantytown(town, req.user));
                 }
             } catch (error) {
