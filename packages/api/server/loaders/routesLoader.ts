@@ -399,7 +399,7 @@ export default (app) => {
         middlewares.charte.check,
         validators.exportTowns,
         middlewares.validation,
-        controllers.town.export,
+        controllers.town.exportTown,
     );
     app.get(
         '/towns',

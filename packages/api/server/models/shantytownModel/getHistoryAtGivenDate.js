@@ -23,7 +23,7 @@ module.exports = async (user, location, lastDate, closedTowns) => {
         SELECT * FROM 
             (
             SELECT
-                rank() OVER(PARTITION BY id ORDER BY date DESC),
+                ROW_NUMBER() OVER(PARTITION BY id ORDER BY date DESC) AS row_number,
                 shantytown_history.*
             FROM
                 ((
@@ -75,7 +75,7 @@ module.exports = async (user, location, lastDate, closedTowns) => {
             WHERE shantytown_history.date < '${lastDate}'
             ORDER BY shantytown_history.date DESC
             ) ranked_shantytown_history
-            WHERE rank = 1
+            WHERE row_number = 1
             ${closedTowns === true ? 'AND closed_at is NOT NULL' : 'AND closed_at is NULL'}
             `,
         {

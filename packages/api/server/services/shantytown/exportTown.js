@@ -8,7 +8,6 @@ const closingSolutionModel = require('#server/models/closingSolutionModel');
 const excelUtils = require('#server/utils/excel');
 const statsExportsModel = require('#server/models/statsExports');
 const moment = require('moment');
-const serializeShantytown = require('#server/models/shantytownModel/_common/serializeShantytown');
 
 
 const serializeExportProperties = require('./_common/serializeExportProperties');
@@ -74,19 +73,12 @@ module.exports = async (user, data) => {
                 'export',
             );
         } else {
-            shantytowns = await shantytownModel.getExportHistory(user, geoModel.getLocation(location.type, location.code), moment(data.date).format('YYYY-MM-DD HH:mm:ss ZZ'));
-            const listOfId = [];
-            shantytowns = shantytowns.filter(({ id, closed_at }) => {
-                if (listOfId.includes(id)) {
-                    return false;
-                }
-                listOfId.push(id);
-                if (closedTowns ? closed_at === null : closed_at !== null) {
-                    return false;
-                }
-                return true;
-            });
-            shantytowns = shantytowns.map(town => serializeShantytown(town, user));
+            shantytowns = await shantytownModel.getHistoryAtGivenDate(
+                user,
+                location,
+                moment(data.date).format('YYYY-MM-DD HH:mm:ss ZZ'),
+                closedTowns,
+            );
         }
     } catch (error) {
         throw new ServiceError('fetch_failed', new Error('Une erreur est survenue lors de la lecture en base de données'));
