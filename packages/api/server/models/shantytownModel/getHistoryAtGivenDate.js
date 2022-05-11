@@ -1,8 +1,8 @@
 const sequelize = require('#db/sequelize');
 const { fromGeoLevelToTableName } = require('#server/utils/geo');
 const { restrict } = require('#server/utils/permission');
+const serializeShantytown = require('#server/models/shantytownModel/_common/serializeShantytown');
 const SQL = require('./_common/SQL');
-
 
 module.exports = async (user, location, lastDate, closedTowns) => {
     const where = [];
@@ -83,5 +83,6 @@ module.exports = async (user, location, lastDate, closedTowns) => {
             replacements,
         },
     );
-    return shantytown_history;
+
+    return shantytown_history.map(town => serializeShantytown(town, user));
 };

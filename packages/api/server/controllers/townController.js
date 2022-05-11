@@ -15,7 +15,6 @@ const mails = require('#server/mails/mails');
 const shantytownService = require('#server/services/shantytown');
 const shantytownActorThemes = require('#server/config/shantytown_actor_themes');
 const moment = require('moment');
-const serializeShantytown = require('#server/models/shantytownModel/_common/serializeShantytown');
 
 
 function addError(errors, field, error) {
@@ -400,7 +399,6 @@ module.exports = (models) => {
                         moment(req.query.date).format('YYYY-MM-DD HH:mm:ss ZZ'),
                         closedTowns,
                     );
-                    shantytowns = shantytowns.map(town => serializeShantytown(town, req.user));
                 }
             } catch (error) {
                 res.status(500).send({
