@@ -70,26 +70,24 @@ module.exports = async (user, location) => {
     );
 
     const connectedUsers = await sequelize.query(
-        `SELECT
+        `
+        SELECT
             COUNT(DISTINCT fk_user),
-            (floor((now()::date - datetime::date) / 7)) AS week,
-            TO_CHAR((now()::date - ((floor((now()::date - datetime::date) / 7)) * 7)::int) - integer '6', 'DD/MM') AS date_debut,
-            TO_CHAR(now()::date - ((floor((now()::date - datetime::date) / 7)) * 7)::int, 'DD/MM') AS date_fin
-            FROM 
-            user_navigation_logs
+            week,
+            TO_CHAR((now()::date - INTERVAL '1 day' * ((week * 7) + 6)), 'DD/MM') AS date_debut,
+            TO_CHAR((now()::date - INTERVAL '1 day' * (week * 7)), 'DD/MM') AS date_fin
+        FROM (
+            SELECT
+                fk_user,
+                (floor((now()::date - datetime::date) / 7)) AS week
+            FROM user_navigation_logs
+        ) t
         ${where !== null ? `
-        LEFT JOIN
-            users ON users.user_id = user_navigation_logs.fk_user
-        LEFT JOIN
-            localized_organizations ON users.fk_organization = localized_organizations.organization_id
-        ` : ''}        
-        ${where}
-        GROUP BY
-            (floor((now()::date - datetime::date) / 7)),
-            (now()::date - ((floor((now()::date - datetime::date) / 7)) * 7)::int) - integer '6',
-            now()::date - ((floor((now()::date - datetime::date) / 7)) * 7)::int
-        ORDER BY
-                (floor((now()::date - datetime::date) / 7)) + 1 ASC
+        LEFT JOIN users ON users.user_id = t.fk_user
+        LEFT JOIN localized_organizations ON users.fk_organization = localized_organizations.organization_id
+        ${where}` : ''}
+        GROUP BY week
+        ORDER BY week ASC
         LIMIT 13`,
         {
             type: sequelize.QueryTypes.SELECT,
