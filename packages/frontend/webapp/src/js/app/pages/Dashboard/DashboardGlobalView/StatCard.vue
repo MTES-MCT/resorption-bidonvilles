@@ -50,15 +50,10 @@
         </div>
         <span class="block h-px bg-blue300"></span>
         <div class="customHeight flex flex-col justify-end mt-2">
-            <div v-if="isFigureForConnectedUser" class="text-xs text-center">
-                {{ formatStat(displayFigure.figure) }} du
-                {{ displayFigure.dateFrom }} au
-                {{ displayFigure.date }}
-            </div>
-            <div v-else-if="displayFigure !== null" class="text-xs text-center">
-                {{ formatStat(displayFigure.figure) }} au
-                {{ displayFigure.date }}
-            </div>
+            <StatCardFigure
+                v-if="displayFigure !== null"
+                :figure="displayFigure"
+            />
             <div class="flex justify-center items-end mt-2">
                 <div
                     v-for="(stat, index) in columns"
@@ -99,12 +94,15 @@
 
 <script>
 import Bar from "./Bar.vue";
+import StatCardFigure from "./StatCardFigure.vue";
+import formatStat from "#app/utils/formatStat.js";
 
 const MAX_HEIGHT = 50;
 
 export default {
     components: {
-        Bar
+        Bar,
+        StatCardFigure
     },
     props: {
         icon: {
@@ -117,7 +115,6 @@ export default {
     },
     data() {
         return {
-            isConnectedUserCardStats: this.cardStats.id === "connectedUsers",
             isEvolutionPositive: this.cardStats.evolution >= 0,
             columns: [],
             maxNumber: 0,
@@ -141,9 +138,7 @@ export default {
         onMouseLeave() {
             this.displayFigure = null;
         },
-        formatStat(number) {
-            return new Intl.NumberFormat("fr-FR").format(number);
-        },
+        formatStat,
         setColumns() {
             if (this.maxNumber !== 0) {
                 this.columns = [
@@ -182,12 +177,6 @@ export default {
     computed: {
         figures() {
             return this.cardStats.data.map(stat => stat.figure);
-        },
-        isFigureForConnectedUser() {
-            if (this.displayFigure !== null && this.isConnectedUserCardStats) {
-                return true;
-            }
-            return false;
         },
         evolutionColor() {
             return this.cardStats.color === "red"
