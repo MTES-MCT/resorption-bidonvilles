@@ -395,14 +395,6 @@ module.exports = (models) => {
                     );
                 } else {
                     shantytowns = await models.shantytown.getHistoryAtGivenDate(req.user, location, moment(req.query.date).format('YYYY-MM-DD HH:mm:ss ZZ'), closedTowns);
-                    const listOfId = [];
-                    shantytowns = shantytowns.filter(({ id }) => {
-                        if (listOfId.includes(id)) {
-                            return false;
-                        }
-                        listOfId.push(id);
-                        return true;
-                    });
                     shantytowns = shantytowns.map(town => serializeShantytown(town, req.user));
                 }
             } catch (error) {
