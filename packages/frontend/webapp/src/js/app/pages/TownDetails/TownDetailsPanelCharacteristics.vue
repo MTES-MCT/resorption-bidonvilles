@@ -167,7 +167,7 @@
                                 Précisions sur la réinstallation
                             </div>
                             <!-- eslint-disable -->
-                            <div class="whitespace-pre" data-cy-data="reinstallation_comments">{{ town.reinstallationComments }}</div>
+                            <div data-cy-data="reinstallation_comments">{{ town.reinstallationComments }}</div>
                             <!-- eslint-enable -->
                         </div>
                     </DetailsPanelSection>
