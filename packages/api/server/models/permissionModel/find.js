@@ -54,6 +54,21 @@ module.exports = async (owners) => {
             } : null,
         };
 
+        // ugly patch for shantytown_justice.access.allow_all qui doit avoir la même valeur que
+        // shantytown.list.allow_all
+        // la vue user_actual_permissions default shantytown_justice.access.allow_all à false
+        if (row.entity === 'shantytown'
+            && row.feature === 'list'
+            && acc[row.user_id].shantytown_justice
+            && acc[row.user_id].shantytown_justice.access) {
+            acc[row.user_id].shantytown_justice.access.allow_all = permission.allow_all;
+        } else if (row.entity === 'shantytown_justice'
+            && row.feature === 'access'
+            && acc[row.user_id].shantytown
+            && acc[row.user_id].shantytown.list) {
+            permission.allow_all = acc[row.user_id].shantytown.list.allow_all;
+        }
+
         acc[row.user_id][row.entity][row.feature] = permission;
         return acc;
     }, {});

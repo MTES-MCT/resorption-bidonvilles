@@ -1,7 +1,6 @@
-const sequelize = require('#db/sequelize');
-const shantytownModel = require('#server/models/shantytownModel')(sequelize);
+const shantytownModel = require('#server/models/shantytownModel');
 
-module.exports = () => async (req, res, next) => {
+module.exports = async (req, res, next) => {
     let town;
     try {
         town = await shantytownModel.findOne(req.user, req.params.id);

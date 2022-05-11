@@ -1,4 +1,4 @@
-const { findNearby } = require('#server/models/shantytownModel')();
+const { findNearby } = require('#server/models/shantytownModel');
 
 module.exports = () => async (req, res, next) => {
     try {

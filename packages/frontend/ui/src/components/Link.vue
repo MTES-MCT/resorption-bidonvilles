@@ -48,7 +48,7 @@ export default {
 
     computed: {
         internalLink() {
-            return this.to && this.to[0] === "/";
+            return this.to && (this.to[0] === "/" || /(\/\/|\.)resorption-bidonvilles\./.test(this.to) === true);
         }
     }
 };

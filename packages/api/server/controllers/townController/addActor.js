@@ -1,17 +1,19 @@
 const sequelize = require('#db/sequelize');
+
+const shantytownActorModel = require('#server/models/shantytownActorModel');
 const { triggerDeclaredActor, triggerInvitedActor } = require('#server/utils/mattermost');
 const {
     sendUserShantytownActorNotification,
 } = require('#server/mails/mails');
-const { formatName } = require('#server/models/userModel')(sequelize);
+const { formatName } = require('#server/models/userModel');
 
-module.exports = models => async (req, res, next) => {
+module.exports = async (req, res, next) => {
     // if the actor to be added is the current user, proceed
     if (req.body.user.id === req.user.id) {
         let actors;
         try {
             actors = await sequelize.transaction(async (transaction) => {
-                await models.shantytownActor.addActor(
+                await shantytownActorModel.addActor(
                     req.shantytown.id,
                     req.body.user.id,
                     req.body.themes,
@@ -19,7 +21,7 @@ module.exports = models => async (req, res, next) => {
                     transaction,
                 );
 
-                return models.shantytownActor.findAll(
+                return shantytownActorModel.findAll(
                     req.shantytown.id,
                     transaction,
                 );
@@ -38,7 +40,7 @@ module.exports = models => async (req, res, next) => {
         }
 
         return res.status(201).send({
-            actors: actors.map(models.shantytownActor.serializeActor),
+            actors: actors.map(shantytownActorModel.serializeActor),
         });
     }
 

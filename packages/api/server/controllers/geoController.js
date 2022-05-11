@@ -1,5 +1,6 @@
 const url = require('url');
 const sequelize = require('#db/sequelize');
+const geoModel = require('#server/models/geoModel');
 
 function trim(str) {
     if (typeof str !== 'string') {
@@ -9,10 +10,10 @@ function trim(str) {
     return str.replace(/^\s*|\s*$/g, '');
 }
 
-module.exports = models => ({
+module.exports = () => ({
     async get(req, res, next) {
         try {
-            const location = await models.geo.getLocation(req.params.type, req.params.code);
+            const location = await geoModel.getLocation(req.params.type, req.params.code);
             if (location === null) {
                 return res.status(404).send({
                     user_message: 'Localisation géographique inconnue',
@@ -30,7 +31,7 @@ module.exports = models => ({
 
     async getDepartementsForRegion(req, res, next) {
         try {
-            const departements = await models.geo.getDepartementsFor('region', req.params.id);
+            const departements = await geoModel.getDepartementsFor('region', req.params.id);
             return res.status(200).send({
                 departements,
             });
@@ -46,7 +47,7 @@ module.exports = models => ({
     async getDepartementsForEpci(req, res, next) {
         try {
             return res.status(200).send({
-                departements: await models.geo.getDepartementsFor('epci', req.params.id),
+                departements: await geoModel.getDepartementsFor('epci', req.params.id),
             });
         } catch (error) {
             res.status(500).send({
@@ -174,7 +175,7 @@ module.exports = models => ({
         }
 
         try {
-            const results = await models.geo.search(query);
+            const results = await geoModel.search(query);
             return res.status(200).send(results);
         } catch (error) {
             res.status(500).send({

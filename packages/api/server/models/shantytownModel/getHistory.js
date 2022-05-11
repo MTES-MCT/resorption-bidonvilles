@@ -1,6 +1,6 @@
 const sequelize = require('#db/sequelize');
 const { fromGeoLevelToTableName } = require('#server/utils/geo');
-const userModel = require('#server/models/userModel')();
+const userModel = require('#server/models/userModel');
 const { restrict } = require('#server/utils/permission');
 const getUsenameOf = require('./_common/getUsenameOf');
 const serializeShantytown = require('./_common/serializeShantytown');

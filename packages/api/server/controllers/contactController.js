@@ -1,12 +1,13 @@
 const { toString: dateToString } = require('#server/utils/date');
 
+const userModel = require('#server/models/userModel');
 const userService = require('#server/services/userService');
 const accessRequestService = require('#server/services/accessRequest/accessRequestService');
 
 const { sendAdminContactMessage, sendContactNewsletterRegistration } = require('#server/mails/mails');
 
 const sendEmailNewContactMessageToAdmins = async (models, message) => {
-    const admins = await models.user.getNationalAdmins();
+    const admins = await userModel.getNationalAdmins();
 
     for (let i = 0; i < admins.length; i += 1) {
         sendAdminContactMessage(admins[i], {
@@ -93,7 +94,7 @@ module.exports = models => ({
             }
 
             try {
-                const user = await models.user.findOne(result.id, { extended: true });
+                const user = await userModel.findOne(result.id, { extended: true });
                 await accessRequestService.handleNewAccessRequest(user);
 
                 if (referral !== null) {

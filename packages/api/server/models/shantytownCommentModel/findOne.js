@@ -1,5 +1,5 @@
 const sequelize = require('#db/sequelize');
-const { serializeComment } = require('#server/models/shantytownModel')(sequelize);
+const { serializeComment } = require('#server/models/shantytownModel');
 
 /**
  * @param {Number} id A shantytown_comment_id

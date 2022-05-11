@@ -1,6 +1,6 @@
 const nodeMailjet = require('node-mailjet');
 const { mail: mailConfig, wwwUrl } = require('#server/config');
-const userModel = require('#server/models/userModel')();
+const userModel = require('#server/models/userModel');
 
 const mailjet = nodeMailjet.connect(
     mailConfig.publicKey || 'unknown',

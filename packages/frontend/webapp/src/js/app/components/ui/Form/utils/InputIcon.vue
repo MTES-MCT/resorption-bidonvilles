@@ -1,5 +1,12 @@
 <template>
-    <div :class="['absolute inset-y-0 flex items-center', positionClasses]">
+    <div
+        :class="[
+            'absolute inset-y-0 flex items-center',
+            positionClasses,
+            disabledClasses
+        ]"
+        @click="onClick"
+    >
         <slot>
             <Icon v-if="icon" :icon="icon" />
         </slot>
@@ -14,6 +21,10 @@ export default {
         },
         position: {
             type: String
+        },
+        disabled: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {
@@ -23,6 +34,20 @@ export default {
             }
 
             return "left-0 pl-3 ";
+        },
+        disabledClasses() {
+            if (this.disabled) {
+                return "cursor-not-allowed opacity-25";
+            }
+
+            return "";
+        }
+    },
+    methods: {
+        onClick(event) {
+            if (this.disabled) {
+                event.stopPropagation();
+            }
         }
     }
 };

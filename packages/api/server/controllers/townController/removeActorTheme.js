@@ -1,10 +1,12 @@
 const sequelize = require('#db/sequelize');
 
-module.exports = models => async (req, res, next) => {
+const shantytownActorModel = require('#server/models/shantytownActorModel');
+
+module.exports = async (req, res, next) => {
     let actors;
     try {
         actors = await sequelize.transaction(async (transaction) => {
-            await models.shantytownActor.removeTheme(
+            await shantytownActorModel.removeTheme(
                 req.shantytown.id,
                 req.body.user.id,
                 req.params.theme_id,
@@ -12,7 +14,7 @@ module.exports = models => async (req, res, next) => {
                 transaction,
             );
 
-            return models.shantytownActor.findAll(
+            return shantytownActorModel.findAll(
                 req.shantytown.id,
                 transaction,
             );
@@ -25,7 +27,7 @@ module.exports = models => async (req, res, next) => {
     }
 
     const actor = actors
-        .map(models.shantytownActor.serializeActor)
+        .map(shantytownActorModel.serializeActor)
         .find(({ id }) => id === req.body.user.id);
 
     return res.status(200).send(actor);

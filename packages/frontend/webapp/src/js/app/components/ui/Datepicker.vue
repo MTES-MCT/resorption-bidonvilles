@@ -36,7 +36,7 @@
                     icon="times"
                     class="text-primary text-display-sm font-bold cursor-pointer"
                     @click.native="clear"
-                    v-if="$attrs.value"
+                    :disabled="!canBeCleared"
                     data-cy-button="clear"
                 />
             </div>
@@ -86,6 +86,11 @@ export default {
         width: {
             type: String,
             required: false
+        },
+        clearValue: {
+            type: Date,
+            required: false,
+            default: undefined
         }
     },
     components: {
@@ -119,11 +124,26 @@ export default {
                 default: getInputClasses("default", inputOptions),
                 town: getInputClasses("town", inputOptions)
             }[this.variant];
+        },
+        canBeCleared() {
+            if (this.clearValue instanceof Date) {
+                return (
+                    !this.$attrs.value ||
+                    this.clearValue.toDateString() !==
+                        this.$attrs.value.toDateString()
+                );
+            }
+
+            return !!this.$attrs.value;
         }
     },
     methods: {
         clear() {
-            this.$refs.datepicker.clearDate();
+            if (this.clearValue instanceof Date) {
+                this.$refs.datepicker.setDate(this.clearValue);
+            } else {
+                this.$refs.datepicker.clearDate();
+            }
         }
     }
 };

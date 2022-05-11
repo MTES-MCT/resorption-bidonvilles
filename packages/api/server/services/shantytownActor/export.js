@@ -1,10 +1,10 @@
 const moment = require('moment');
 const ServiceError = require('#server/errors/ServiceError');
 const shantytownActorModel = require('#server/models/shantytownActorModel');
-const { where: fWhere } = require('#server/utils/permission');
+const permissionUtils = require('#server/utils/permission');
 
 module.exports = async (user) => {
-    const permissionClauseGroup = fWhere().can(user).do('export', 'shantytown_actor');
+    const permissionClauseGroup = permissionUtils.where().can(user).do('export', 'shantytown_actor');
     if (permissionClauseGroup === null) {
         return [];
     }
@@ -16,7 +16,7 @@ module.exports = async (user) => {
 
     let actors;
     try {
-        actors = await shantytownActorModel().findAllByLocation(where);
+        actors = await shantytownActorModel.findAllByLocation(where);
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }

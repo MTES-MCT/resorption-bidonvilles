@@ -9,6 +9,7 @@ const userService = require('#server/services/userService');
 const { triggerNewUserAlert } = require('#server/utils/mattermost');
 const { mattermost } = require('#server/config');
 const { toString: dateToString } = require('#server/utils/date');
+const userModel = require('#server/models/userModel');
 
 const {
     generateAccessTokenFor, hashPassword, getPasswordResetLink,
@@ -26,7 +27,7 @@ const { auth: authConfig } = require('#server/config');
 module.exports = models => ({
     async list(req, res) {
         try {
-            const users = await models.user.findAll(req.user);
+            const users = await userModel.findAll(req.user);
             res.status(200).send(users);
         } catch (error) {
             res.status(500).send({
@@ -40,7 +41,7 @@ module.exports = models => ({
 
     async listExport(req, res) {
         try {
-            const users = await models.user.listExport();
+            const users = await userModel.listExport();
             const csv = JSONToCSV.parse(users);
 
             // The frontend expect a JSON for every API calls, so we wrap the CSV in a json entry
@@ -59,7 +60,7 @@ module.exports = models => ({
 
     async get(req, res) {
         try {
-            const user = await models.user.findOne(req.params.id, { extended: true }, req.user);
+            const user = await userModel.findOne(req.params.id, { extended: true }, req.user);
             res.status(200).send(user);
         } catch (error) {
             res.status(500).send({
@@ -100,7 +101,7 @@ module.exports = models => ({
             });
         }
 
-        const user = await models.user.findOneByEmail(email, {
+        const user = await userModel.findOneByEmail(email, {
             auth: true,
         });
 
@@ -153,7 +154,7 @@ module.exports = models => ({
      * Returns information about... yourself!
      */
     async me(req, res) {
-        const user = await models.user.findOne(req.user.id, {
+        const user = await userModel.findOne(req.user.id, {
             extended: true,
         });
         return res.status(200).send(user);
@@ -172,7 +173,7 @@ module.exports = models => ({
             first_name: firstName, last_name: lastName, email, phone, position,
             subscribed_to_summary: subscribedToSummary,
         } = req.body;
-        const user = await models.user.findOne(userId, { auth: true });
+        const user = await userModel.findOne(userId, { auth: true });
 
         if (user === null) {
             res.status(500).send({
@@ -199,7 +200,7 @@ module.exports = models => ({
         }
 
         try {
-            await models.user.update(userId, data);
+            await userModel.update(userId, data);
             return res.status(200).send({
                 id: user.userId,
                 email: user.email,
@@ -251,7 +252,7 @@ module.exports = models => ({
      */
     async setAdminComments(req, res, next) {
         try {
-            await models.user.update(req.params.id, {
+            await userModel.update(req.params.id, {
                 admin_comments: req.body.comment,
             });
             return res.status(200).send({
@@ -281,7 +282,7 @@ module.exports = models => ({
         }
 
         try {
-            await models.user.update(req.user.id, {
+            await userModel.update(req.user.id, {
                 defaultExport: exportValue,
             });
         } catch (error) {
@@ -324,9 +325,9 @@ module.exports = models => ({
 
         let user;
         if (decoded.userId !== undefined) {
-            user = await models.user.findOne(decoded.userId);
+            user = await userModel.findOne(decoded.userId);
         } else {
-            user = await models.user.findOneByAccessId(decoded.id);
+            user = await userModel.findOneByAccessId(decoded.id);
         }
 
         if (user === null) {
@@ -384,7 +385,7 @@ module.exports = models => ({
             });
         }
 
-        const user = await models.user.findOne(decoded.userId);
+        const user = await userModel.findOne(decoded.userId);
         if (user === null) {
             return res.status(400).send({
                 error: {
@@ -403,7 +404,7 @@ module.exports = models => ({
     async sendActivationLink(req, res, next) {
         let user;
         try {
-            user = await models.user.findOne(req.params.id, { extended: true }, req.user, 'activate');
+            user = await userModel.findOne(req.params.id, { extended: true }, req.user, 'activate');
         } catch (error) {
             res.status(500).send({
                 error: {
@@ -438,10 +439,10 @@ module.exports = models => ({
                 const requestedOptions = options
                     .filter(({ id }) => req.body.options && req.body.options[id] === true)
                     .map(({ id }) => id);
-                await models.user.setPermissionOptions(user.id, requestedOptions, transaction);
+                await userModel.setPermissionOptions(user.id, requestedOptions, transaction);
 
                 // reload the user to take options into account (they might have changed above)
-                user = await models.user.findOne(
+                user = await userModel.findOne(
                     req.params.id,
                     { extended: true },
                     req.user,
@@ -484,7 +485,7 @@ module.exports = models => ({
     async denyAccess(req, res, next) {
         let user;
         try {
-            user = await models.user.findOne(req.params.id, undefined, req.user, 'activate');
+            user = await userModel.findOne(req.params.id, undefined, req.user, 'activate');
         } catch (error) {
             res.status(500).send({
                 error: {
@@ -526,7 +527,7 @@ module.exports = models => ({
         }
 
         try {
-            await models.user.delete(req.params.id);
+            await userModel.delete(req.params.id);
         } catch (error) {
             res.status(500).send({
                 error: {
@@ -564,9 +565,9 @@ module.exports = models => ({
 
         let user;
         if (decoded.userId !== undefined) {
-            user = await models.user.findOne(decoded.userId, { auth: true });
+            user = await userModel.findOne(decoded.userId, { auth: true });
         } else {
-            user = await models.user.findOneByAccessId(decoded.id, { auth: true });
+            user = await userModel.findOneByAccessId(decoded.id, { auth: true });
         }
 
         if (user === null) {
@@ -614,7 +615,7 @@ module.exports = models => ({
                 const now = new Date();
 
                 await models.organization.activate(user.organization.id, transaction);
-                await models.user.update(user.id, {
+                await userModel.update(user.id, {
                     password: hashPassword(req.body.password, user.salt),
                     fk_status: 'active',
                 }, transaction);
@@ -678,7 +679,7 @@ module.exports = models => ({
             });
         }
 
-        const user = await models.user.findOne(decoded.userId, { auth: true });
+        const user = await userModel.findOne(decoded.userId, { auth: true });
         if (user === null) {
             return res.status(400).send({
                 error: {
@@ -711,7 +712,7 @@ module.exports = models => ({
         }
 
         try {
-            await models.user.update(user.id, {
+            await userModel.update(user.id, {
                 password: hashPassword(req.body.password, user.salt),
             });
         } catch (error) {
@@ -731,7 +732,7 @@ module.exports = models => ({
         // ensure the user exists and actually needs an upgrade
         let user;
         try {
-            user = await models.user.findOne(req.params.id, { auth: true });
+            user = await userModel.findOne(req.params.id, { auth: true });
         } catch (error) {
             res.status(500).send({
                 error: {
@@ -785,7 +786,7 @@ module.exports = models => ({
         }
 
         try {
-            await models.user.update(user.id, Object.assign({}, sanitizedData, {
+            await userModel.update(user.id, Object.assign({}, sanitizedData, {
                 password: hashPassword(sanitizedData.password, user.salt),
             }));
         } catch (error) {
@@ -804,7 +805,7 @@ module.exports = models => ({
     async remove(req, res, next) {
         let user;
         try {
-            user = await models.user.findOne(req.params.id, undefined, req.user, 'deactivate');
+            user = await userModel.findOne(req.params.id, undefined, req.user, 'deactivate');
         } catch (error) {
             res.status(500).send({
                 error: {
@@ -825,7 +826,7 @@ module.exports = models => ({
         }
 
         try {
-            await models.user.deactivate(req.params.id);
+            await userModel.deactivate(req.params.id);
         } catch (error) {
             res.status(500).send({
                 error: {
@@ -843,13 +844,13 @@ module.exports = models => ({
         const { admin } = req.body;
 
         try {
-            const user = await models.user.findOne(req.params.id);
+            const user = await userModel.findOne(req.params.id);
 
             if (user && admin) {
-                await models.user.upgradeLocalAdmin(req.params.id);
+                await userModel.upgradeLocalAdmin(req.params.id);
                 await sendAdminWelcome(user);
             } else if (user) {
-                await models.user.downgradeLocalAdmin(req.params.id);
+                await userModel.downgradeLocalAdmin(req.params.id);
             }
         } catch (error) {
             res.status(500).send({
@@ -866,7 +867,7 @@ module.exports = models => ({
 
     async setRoleRegular(req, res, next) {
         try {
-            await models.user.update(req.body.user.id, {
+            await userModel.update(req.body.user.id, {
                 fk_role_regular: req.body.role.id,
             });
         } catch (error) {
@@ -900,7 +901,7 @@ module.exports = models => ({
 
         let user;
         try {
-            user = await models.user.findOneByEmail(sanitizedData.email);
+            user = await userModel.findOneByEmail(sanitizedData.email);
         } catch (error) {
             res.status(500).send({
                 error: {
@@ -952,7 +953,7 @@ module.exports = models => ({
         }
 
         try {
-            await models.user.update(req.user.id, {
+            await userModel.update(req.user.id, {
                 last_changelog: changelog,
             });
         } catch (error) {
@@ -989,7 +990,7 @@ module.exports = models => ({
 
         if (req.user.charte_engagement_a_jour !== true) {
             try {
-                await models.user.update(req.user.id, {
+                await userModel.update(req.user.id, {
                     charte_engagement_signee: req.body.version_de_charte,
                 });
             } catch (error) {

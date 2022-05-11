@@ -1,6 +1,7 @@
 const semver = require('semver');
+const userModel = require('#server/models/userModel');
 
-module.exports = (models) => {
+module.exports = () => {
     const appVersionMiddleware = {};
 
     appVersionMiddleware.sync = async (req, res, next, respond = true) => {
@@ -26,7 +27,7 @@ module.exports = (models) => {
 
         if (updateUser === true) {
             try {
-                await models.user.update(req.user.id, {
+                await userModel.update(req.user.id, {
                     last_version: version,
                     last_changelog: !req.user.last_changelog ? version : undefined,
                 });

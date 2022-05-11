@@ -6,7 +6,7 @@ const removeActor = require('./removeActor');
 const updateThemes = require('./updateThemes');
 const removeTheme = require('./removeTheme');
 
-module.exports = () => ({
+module.exports = {
     serializeActor,
     findAll,
     findAllByLocation,
@@ -14,4 +14,4 @@ module.exports = () => ({
     removeActor,
     updateThemes,
     removeTheme,
-});
+};

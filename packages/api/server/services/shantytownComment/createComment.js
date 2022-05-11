@@ -1,8 +1,9 @@
-const sequelize = require('#db/sequelize');
-const shantytownCommentModel = require('#server/models/shantytownCommentModel')();
-const shantytownModel = require('#server/models/shantytownModel')(sequelize);
+
+const shantytownCommentModel = require('#server/models/shantytownCommentModel');
+const shantytownModel = require('#server/models/shantytownModel');
 const mattermostUtils = require('#server/utils/mattermost');
-const userModel = require('#server/models/userModel')(sequelize);
+
+const userModel = require('#server/models/userModel');
 const mails = require('#server/mails/mails');
 const ServiceError = require('#server/errors/ServiceError');
 

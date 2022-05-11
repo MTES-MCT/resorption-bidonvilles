@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const Sentry = require('@sentry/node');
 const { auth: authConfig } = require('#server/config');
+const userModel = require('#server/models/userModel');
 
 class AuthenticateError extends Error {
     constructor(details, ...args) {
@@ -9,7 +10,7 @@ class AuthenticateError extends Error {
     }
 }
 
-module.exports = (models) => {
+module.exports = () => {
     async function authenticate(req) {
         const token = (req.headers && req.headers['x-access-token']) || req.query.accessToken;
 
@@ -32,7 +33,7 @@ module.exports = (models) => {
             });
         }
 
-        const user = await models.user.findOne(decoded.userId, {
+        const user = await userModel.findOne(decoded.userId, {
             extended: true,
             app: true,
         });
@@ -55,7 +56,7 @@ module.exports = (models) => {
         Sentry.setUser({ id: user.id });
 
         const now = new Date();
-        await models.user.update(user.id, {
+        await userModel.update(user.id, {
             last_access: now,
         });
 

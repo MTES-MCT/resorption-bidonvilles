@@ -8,24 +8,8 @@ import { getApi, postApi, putApi, deleteApi } from "#helpers/api/main";
  *
  * @returns {Promise}
  */
-export function all(filters = {}, order = []) {
-    const queries = [];
-
-    // filters
-    Object.keys(filters).forEach(filterName => {
-        queries.push(
-            `${filterName}=${encodeURIComponent(filters[filterName])}`
-        );
-    });
-
-    // order
-    if (order.length > 0) {
-        queries.push(
-            `order=${order.map(s => encodeURIComponent(s)).join(",")}`
-        );
-    }
-
-    return getApi(`/towns${queries.length > 0 ? `?${queries.join("&")}` : ""}`);
+export function all() {
+    return getApi("/towns");
 }
 
 /**

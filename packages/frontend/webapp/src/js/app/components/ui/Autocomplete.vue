@@ -307,6 +307,8 @@ export default {
         },
 
         handleBlur() {
+            this.focused = false;
+
             if (this.blurTimeout !== null) {
                 clearTimeout(this.blurTimeout);
             }
@@ -324,7 +326,6 @@ export default {
                     this.searchInput = this.getResultValue(this.value);
                 }
 
-                this.focused = false;
                 this.$emit("blur", {
                     value: this.value,
                     search: this.searchInput

@@ -34,7 +34,18 @@
             </div>
         </template>
         <template v-slot:body>
-            <div>
+            <DatepickerV2
+                v-if="canExportHistory === true"
+                id="export_at"
+                width="w-64"
+                label="Date d'export"
+                info="Vous souhaitez exporter les données des sites à la date :"
+                v-model="dateInput"
+                :clearValue="today"
+                :disabled-dates="{ from: today }"
+            ></DatepickerV2>
+
+            <div class="mt-4">
                 <div class="font-bold mb-1">
                     Les données exportées par défaut
                 </div>
@@ -48,7 +59,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="mt-4">
+            <div v-if="showOptions" class="mt-4">
                 <p class="font-bold mb-1">
                     Cochez les informations supplémentaires que vous souhaitez
                     exporter
@@ -70,6 +81,7 @@
 import { open } from "#helpers/api/main";
 import Checkbox from "#app/components/ui/Form/input/Checkbox";
 import { VUE_APP_API_URL } from "#src/js/env.js";
+const moment = require("moment");
 
 export default {
     components: { Checkbox },
@@ -79,6 +91,10 @@ export default {
     },
     data() {
         return {
+            today: new Date(),
+            canExportHistory: this.$store.getters["config/hasPermission"](
+                "shantytown_history.export"
+            ),
             existingOptions: [
                 {
                     id: "address_details",
@@ -131,10 +147,25 @@ export default {
                     }
                 }
             ],
+            dateInput: new Date(),
             options: []
         };
     },
+    watch: {
+        dateInput() {
+            this.options = [];
+        }
+    },
     computed: {
+        showOptions() {
+            return (
+                moment(this.dateInput).format("YYYY-MM-DD") ===
+                moment(this.today).format("YYYY-MM-DD")
+            );
+        },
+        user() {
+            return this.$store.state.config.configuration.user;
+        },
         title() {
             return this.closedTowns ? "fermés" : "existants";
         },
@@ -165,7 +196,7 @@ export default {
                 type
             )}&locationCode=${encodeURIComponent(code)}&closedTowns=${
                 this.closedTowns ? "1" : "0"
-            }`;
+            }&date=${encodeURIComponent(this.dateInput.getTime())}`;
 
             if (this.options.length > 0) {
                 url += `&options=${encodeURIComponent(this.options.join(","))}`;

@@ -1,14 +1,11 @@
-const sequelize = require('#db/sequelize');
-const shantytownModel = require('#server/models/shantytownModel')();
-const socialOriginModel = require('#server/models/socialOriginModel')();
-const { mattermost } = require('#server/config');
-const { triggerShantytownCreationAlert } = require('#server/utils/mattermost');
-const { getLocationWatchers } = require('#server/models/userModel')();
-const { sendUserShantytownDeclared } = require('#server/mails/mails');
+const shantytownModel = require('#server/models/shantytownModel');
+const socialOriginModel = require('#server/models/socialOriginModel');
+const config = require('#server/config');
+const mattermostUtils = require('#server/utils/mattermost');
+const userModel = require('#server/models/userModel');
+const mails = require('#server/mails/mails');
 
 module.exports = async (townData, user) => {
-    const transaction = await sequelize.transaction();
-
     const baseTown = {
         name: townData.name,
         latitude: townData.latitude,
@@ -96,21 +93,19 @@ module.exports = async (townData, user) => {
                 }
                 : {},
         ),
-        transaction,
     );
 
     if (townData.social_origins.length > 0) {
-        await socialOriginModel.create(shantytown_id, townData.social_origins, transaction);
+        await socialOriginModel.create(shantytown_id, townData.social_origins);
     }
 
-    await transaction.commit();
 
     const town = await shantytownModel.findOne(user, shantytown_id);
 
     // Send a Mattermost alert, if it fails, do nothing
     try {
-        if (mattermost) {
-            await triggerShantytownCreationAlert(town, user);
+        if (config.mattermost) {
+            await mattermostUtils.triggerShantytownCreationAlert(town, user);
         }
     } catch (err) {
         // eslint-disable-next-line no-console
@@ -119,11 +114,11 @@ module.exports = async (townData, user) => {
 
     // Send a notification to all users of the related departement
     try {
-        const watchers = await getLocationWatchers(townData.city, true);
+        const watchers = await userModel.getLocationWatchers(townData.city, true);
         watchers
             .filter(({ user_id }) => user_id !== user.id) // do not send an email to the user who created the town
             .forEach((watcher) => {
-                sendUserShantytownDeclared(watcher, {
+                mails.sendUserShantytownDeclared(watcher, {
                     variables: {
                         departement: townData.city.departement,
                         shantytown: town,

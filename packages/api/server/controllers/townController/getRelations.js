@@ -1,8 +1,9 @@
+const userModel = require('#server/models/userModel');
 
-module.exports = models => async (req, res, next) => {
+module.exports = () => async (req, res, next) => {
     let users;
     try {
-        users = await models.user.findForRegion(req.shantytown.region.code, req.query.q || undefined);
+        users = await userModel.findForRegion(req.shantytown.region.code, req.query.q || undefined);
     } catch (error) {
         res.status(500).send({
             user_message: 'Une erreur est survenue lors de la lecture en base de données',
