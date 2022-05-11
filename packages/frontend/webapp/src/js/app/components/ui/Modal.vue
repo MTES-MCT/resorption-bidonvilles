@@ -17,7 +17,7 @@
                 ref="dialog"
                 aria-modal="true"
                 aria-labelledby="modal-headline"
-                class="opacity-100 z-50 shadow-xl overflow-hidden "
+                class="opacity-100 z-50 shadow-xl"
             >
                 <div class="bg-white">
                     <slot name="header">
