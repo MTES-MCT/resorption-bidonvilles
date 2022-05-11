@@ -41,6 +41,7 @@
                 label="Date d'export"
                 info="Vous souhaitez exporter les données des sites à la date :"
                 v-model="dateInput"
+                :clearValue="today"
             ></DatepickerV2>
 
             <div class="mt-4">
