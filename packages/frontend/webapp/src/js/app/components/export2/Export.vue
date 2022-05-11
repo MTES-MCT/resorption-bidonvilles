@@ -34,14 +34,15 @@
             </div>
         </template>
         <template v-slot:body>
-            <div v-if="canExportHistory === true" class="w-64">
-                Vous souhaitez exporter les données des sites à la date:
-                <DatepickerV2
-                    id="export_at"
-                    label="Date d'export"
-                    v-model="dateInput"
-                ></DatepickerV2>
-            </div>
+            <DatepickerV2
+                v-if="canExportHistory === true"
+                id="export_at"
+                width="w-64"
+                label="Date d'export"
+                info="Vous souhaitez exporter les données des sites à la date :"
+                v-model="dateInput"
+            ></DatepickerV2>
+
             <div class="mt-4">
                 <div class="font-bold mb-1">
                     Les données exportées par défaut
