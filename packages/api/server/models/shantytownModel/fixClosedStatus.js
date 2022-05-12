@@ -1,7 +1,7 @@
 const sequelize = require('#db/sequelize');
 
-module.exports = async (shantytownId, closedWithSolutions) => {
-    await sequelize.query(
+module.exports = (shantytownId, closedWithSolutions) => {
+    sequelize.query(
         `UPDATE shantytowns
         SET 
             closed_with_solutions = :closed_with_solutions
