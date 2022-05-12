@@ -11,8 +11,7 @@ module.exports = async (user, data) => {
         data.shantytown.id,
         data.closed_with_solutions,
     );
-    const updatedTown = await shantytownModel.findOne(user, data.shantytown.id);
 
-
-    return updatedTown;
+    // eslint-disable-next-line no-return-await
+    return await shantytownModel.findOne(user, data.shantytown.id);
 };
