@@ -1,6 +1,6 @@
 <template>
     <span>
-        <Icon icon="external-link-alt" v-if="!internalLink" :class="`mr-1 ${linkClasses}`" />
+        <Icon icon="external-link-alt" v-if="!internalLink && !toRB" :class="`mr-1 ${linkClasses}`" />
         <router-link v-if="internalLink" :to="to" :class="linkClasses"
             ><slot></slot
         ></router-link>
@@ -47,8 +47,11 @@ export default {
     },
 
     computed: {
+        toRB() {
+            return /(\/\/|\.)resorption-bidonvilles\./.test(this.to) === true;
+        },
         internalLink() {
-            return this.to && (this.to[0] === "/" || /(\/\/|\.)resorption-bidonvilles\./.test(this.to) === true);
+            return this.to && this.to[0] === "/" ;
         }
     }
 };
