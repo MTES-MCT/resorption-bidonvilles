@@ -129,7 +129,7 @@ jobs:
           context: .
           file: Dockerfile.webapp
           push: true
-          tags: resorptionbidonvilles/webapp:v${{ needs['upgrade-version'].outputs.new_tag }}
+          tags: resorptionbidonvilles/frontend:v${{ needs['upgrade-version'].outputs.new_tag }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: Image digest
