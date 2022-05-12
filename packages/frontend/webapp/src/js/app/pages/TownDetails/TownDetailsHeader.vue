@@ -66,7 +66,10 @@
                 >Fermer le site</Button
             >
             <Button
-                v-if="canFixStatus && town.status !== 'open'"
+                v-if="
+                    hasLocalizedPermission('shantytown.fix_status', town) &&
+                        town.status !== 'open'
+                "
                 variant="primaryOutline"
                 class="mr-8"
                 iconPosition="left"
@@ -121,13 +124,6 @@ import { mapGetters } from "vuex";
 import ResorptionTargetTag from "#app/components/ResorptionTargetTag/ResorptionTargetTag.vue";
 
 export default {
-    data() {
-        return {
-            canFixStatus: this.$store.getters["config/hasPermission"](
-                "shantytown.fix_status"
-            )
-        };
-    },
     props: {
         town: {
             type: Object
