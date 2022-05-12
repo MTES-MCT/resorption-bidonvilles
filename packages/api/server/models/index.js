@@ -18,6 +18,11 @@ module.exports = (database) => {
                         [file.replace('Model', '')]: exp(database),
                     };
                 }
+
+                return {
+                    ...models,
+                    [file.replace('Model', '')]: exp,
+                };
             }
 
             return models;
