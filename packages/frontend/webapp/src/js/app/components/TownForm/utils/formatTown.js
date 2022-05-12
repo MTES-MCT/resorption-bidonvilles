@@ -86,42 +86,81 @@ export default function formatTown(data) {
                 : undefined,
             census_conducted_by: data.censusConductedBy
         },
-        living_conditions: {
-            access_to_water: boolToInt(data.accessToWater),
-            water_comments: data.waterComments || undefined,
-            electricity_type: data.electricityType
-                ? data.electricityType.id
-                : undefined,
-            electricity_comments: data.electricityComments || undefined,
-            access_to_sanitary: boolToInt(data.accessToSanitary),
-            sanitary_comments: data.sanitaryComments || undefined,
-            trash_evacuation: boolToInt(data.trashEvacuation),
-            water_potable: boolToInt(data.waterPotable),
-            water_public_point: boolToInt(data.waterPublicPoint),
-            water_continuous_access: boolToInt(data.waterContinuousAccess),
-            water_distance: data.waterDistance,
-            water_roads_to_cross: boolToInt(data.waterRoadsToCross),
-            water_everyone_has_access: boolToInt(data.waterEveryoneHasAccess),
-            water_stagnant_water: boolToInt(data.waterStagnantWater),
-            water_hand_wash_access: boolToInt(data.waterHandWashAccess),
-            water_hand_wash_access_number: data.waterHandWashAccessNumber,
-            sanitary_number: data.sanitaryNumber,
-            sanitary_insalubrious: boolToInt(data.sanitaryInsalubrious),
-            sanitary_on_site: boolToInt(data.sanitaryOnSite),
-            trash_cans_on_site: data.trashCansOnSite,
-            trash_accumulation: boolToInt(data.trashAccumulation),
-            trash_evacuation_regular: boolToInt(data.trashEvacuationRegular),
-            vermin: boolToInt(data.vermin),
-            vermin_comments: data.verminComments,
-            fire_prevention_measures: boolToInt(data.firePreventionMeasures),
-            fire_prevention_diagnostic: boolToInt(
-                data.firePreventionDiagnostic
-            ),
-            fire_prevention_devices: boolToInt(data.firePreventionDevices),
-            fire_prevention_site_accessible: boolToInt(
-                data.firePreventionSiteAccessible
-            ),
-            fire_prevention_comments: data.firePreventionComments
+        livingConditions: {
+            electricity: {
+                status: null,
+                type: data.livingConditions
+                    ? data.livingConditions.electricity.type.id
+                    : undefined,
+                comments:
+                    data.livingConditions?.electricity.comments || undefined
+            },
+            water: {
+                status: null,
+                access: boolToInt(data.livingConditions?.water.access),
+                comments: data.livingConditions?.water.comments || undefined,
+                potable: boolToInt(data.livingConditions?.water.potable),
+                continuousAccess: boolToInt(
+                    data.livingConditions?.water.continuousAccess
+                ),
+                publicPoint: boolToInt(
+                    data.livingConditions?.water.publicPoint
+                ),
+                distance: data.livingConditions?.water.distance,
+                roadsToCross: boolToInt(
+                    data.livingConditions?.water.roadsToCross
+                ),
+                everyoneHasAccess: boolToInt(
+                    data.livingConditions?.water.everyoneHasAccess
+                ),
+                stagnantWater: boolToInt(
+                    data.livingConditions?.water.stagnantWater
+                ),
+                handWashAccess: boolToInt(
+                    data.livingConditions?.water.handWashAccess
+                ),
+                handWashAccessNumber:
+                    data.livingConditions?.water.handWashAccessNumber
+            },
+            trash: {
+                status: null,
+                evacuation: boolToInt(data.livingConditions?.trash.evacuation),
+                cansOnSite: data.livingConditions?.trash.cansOnSite,
+                accumulation: boolToInt(
+                    data.livingConditions?.trash.accumulation
+                ),
+                evacuationRegular: boolToInt(
+                    data.livingConditions?.trash.evacuationRegular
+                )
+            },
+            sanitary: {
+                access: boolToInt(data.livingConditions?.sanitary.access),
+                comments: data.livingConditions?.sanitary.comments || undefined,
+                number: data.livingConditions?.sanitary.number,
+                insalubrious: boolToInt(
+                    data.livingConditions?.sanitary.insalubrious
+                ),
+                onSite: boolToInt(data.livingConditions?.sanitary.onSite)
+            },
+            vermin: {
+                vermin: boolToInt(data.livingConditions?.vermin.vermin),
+                comments: data.livingConditions?.vermin.comments
+            },
+            firePrevention: {
+                measures: boolToInt(
+                    data.livingConditions?.firePrevention.measures
+                ),
+                diagnostic: boolToInt(
+                    data.livingConditions?.firePrevention.diagnostic
+                ),
+                siteAccessible: boolToInt(
+                    data.livingConditions?.firePrevention.siteAccessible
+                ),
+                devices: boolToInt(
+                    data.livingConditions?.firePrevention.devices
+                ),
+                comments: data.livingConditions?.firePrevention.comments
+            }
         },
         judicial: {
             owner_complaint: boolToInt(data.ownerComplaint),

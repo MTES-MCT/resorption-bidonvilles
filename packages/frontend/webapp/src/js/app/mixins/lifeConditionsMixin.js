@@ -12,31 +12,34 @@ export const lifeConditionsMixin = {
             const details = formatLivingConditions(this.shantytown);
             const conditions = [];
             if (
-                this.shantytown.accessToWater === true &&
+                this.shantytown.livingConditions.water.access === true &&
                 details.water.negative.length === 0
             ) {
                 conditions.push("eau");
             }
             if (
-                this.shantytown.accessToSanitary === true &&
+                this.shantytown.livingConditions.sanitary.access === true &&
                 details.sanitary.negative.length === 0
             ) {
                 conditions.push("toilettes");
             }
-            if (this.shantytown.electricityType.value === true) {
+            if (
+                this.shantytown.livingConditions.electricity.type.value === true
+            ) {
                 conditions.push("électricité");
             }
             if (
-                this.shantytown.trashEvacuation === true &&
+                this.shantytown.livingConditions.trash.evacuation === true &&
                 details.trash.negative.length === 0
             ) {
                 conditions.push("évacuation des déchets");
             }
-            if (this.shantytown.vermin === false) {
+            if (this.shantytown.livingConditions.vermin.vermin === false) {
                 conditions.push("prévention des nuisibles");
             }
             if (
-                this.shantytown.firePreventionMeasures === true &&
+                this.shantytown.livingConditions.firePrevention.measures ===
+                    true &&
                 details.firePrevention.negative.length === 0
             ) {
                 conditions.push("prévention incendie");

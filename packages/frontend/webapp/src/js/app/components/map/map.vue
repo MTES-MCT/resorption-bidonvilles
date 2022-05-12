@@ -72,7 +72,6 @@ import waterNull from "../../../../img/water-null.png";
 // données tirées de https://github.com/gregoiredavid/france-geojson
 import departements from "#src/geojson/departements.json";
 import regions from "#src/geojson/regions.json";
-import { formatLivingConditions } from "#app/pages/TownDetails/formatLivingConditions";
 
 const popup = Vue.extend(ShantytownPopupVue);
 const DEFAULT_VIEW = [46.7755829, 2.0497727];
@@ -982,19 +981,15 @@ export default {
         },
 
         getTownWaterImage(town) {
-            const { water } = formatLivingConditions(town);
+            const { status } = town.livingConditions.water;
+            const hash = {
+                [null]: waterNull,
+                true: waterYes,
+                false: waterNo,
+                toImprove: waterToImprove
+            };
 
-            if (town.accessToWater === null) {
-                return waterNull;
-            }
-            if (town.accessToWater === true) {
-                if (water.negative.length > 0 || water.unknown.length > 0) {
-                    return waterToImprove;
-                } else {
-                    return waterYes;
-                }
-            }
-            return waterNo;
+            return hash[status] || waterNull;
         },
 
         /**

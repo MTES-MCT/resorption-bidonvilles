@@ -285,7 +285,7 @@ export default {
                             visibleTowns = visibleTowns.filter(
                                 town =>
                                     allowed.indexOf(
-                                        town.waterAccessConditions
+                                        town.livingConditions.water.status
                                     ) !== -1
                             );
                         }

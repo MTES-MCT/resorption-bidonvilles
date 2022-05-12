@@ -174,9 +174,10 @@ export default {
                 ) {
                     const updates = activity.diff.reduce((diffAcc, diff) => {
                         if (
-                            !["accessToWater", "electricityType"].includes(
-                                diff.fieldKey
-                            )
+                            ![
+                                "livingConditions.water.access",
+                                "livingConditions.electricity.type"
+                            ].includes(diff.fieldKey)
                         ) {
                             return diffAcc;
                         }
@@ -201,7 +202,8 @@ export default {
                             ...diffAcc,
                             {
                                 entity:
-                                    diff.fieldKey === "electricityType"
+                                    diff.fieldKey ===
+                                    "livingConditions.electricity.type"
                                         ? "electricity"
                                         : "water",
                                 action,

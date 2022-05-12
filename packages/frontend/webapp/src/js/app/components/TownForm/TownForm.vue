@@ -66,7 +66,7 @@
                         class="mt-10 townPanelShadow"
                         id="living_conditions"
                         :population="town.people.population"
-                        v-model="town.living_conditions"
+                        v-model="town.livingConditions"
                     ></TownFormPanelLivingConditions>
 
                     <TownFormPanelJudicial
@@ -303,20 +303,6 @@ export default {
                 const [lat, lon] = this.town.location.coordinates;
 
                 const result = await this.submitFn({
-                    ...this.town.living_conditions,
-                    water_hand_wash_access_number: this.town.living_conditions
-                        .water_hand_wash_access
-                        ? this.strToInt(
-                              this.town.living_conditions
-                                  .water_hand_wash_access_number
-                          )
-                        : null,
-                    trash_cans_on_site: this.strToInt(
-                        this.town.living_conditions.trash_cans_on_site
-                    ),
-                    sanitary_number: this.strToInt(
-                        this.town.living_conditions.sanitary_number
-                    ),
                     address: this.town.location.address.label,
                     citycode: this.town.location.address.citycode,
                     name: this.town.location.name,

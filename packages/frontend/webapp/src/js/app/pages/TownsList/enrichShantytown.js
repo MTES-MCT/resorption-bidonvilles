@@ -20,10 +20,17 @@ export default function enrichShantytown(shantytown, fieldTypes) {
 
     // electricity
     let electricityValue = null;
-    if (shantytown.electricityType && shantytown.electricityType.label) {
-        if (shantytown.electricityType.label.startsWith("Oui")) {
+    if (
+        shantytown.livingConditions.electricity.type &&
+        shantytown.livingConditions.electricity.type.label
+    ) {
+        if (
+            shantytown.livingConditions.electricity.type.label.startsWith("Oui")
+        ) {
             electricityValue = true;
-        } else if (shantytown.electricityType.label === "Non") {
+        } else if (
+            shantytown.livingConditions.electricity.type.label === "Non"
+        ) {
             electricityValue = false;
         }
     }
@@ -127,6 +134,9 @@ export default function enrichShantytown(shantytown, fieldTypes) {
     );
 
     // final object
+    const livingConditions = { ...shantytown.livingConditions };
+    livingConditions.electricity.type.value = electricityValue;
+
     return {
         ...shantytown,
         statusName,
@@ -137,10 +147,7 @@ export default function enrichShantytown(shantytown, fieldTypes) {
             ...shantytown.fieldType,
             color: fieldTypeColors[shantytown.fieldType.id]
         },
-        electricityType: {
-            ...shantytown.electricityType,
-            value: electricityValue
-        },
+        livingConditions,
         justiceStatuses,
         totalSolutions
     };

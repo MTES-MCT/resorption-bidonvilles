@@ -8,24 +8,31 @@ const getWaterHandWashAccessPopulationRatio = require('./getWaterHandWashAccessP
  * @returns {string || null}
  */
 module.exports = (shantytown) => {
-    if (shantytown.accessToWater) {
-        const waterHandWashAccessPopulationRatio = getWaterHandWashAccessPopulationRatio(shantytown.populationTotal, shantytown.waterHandWashAccessNumber);
+    const { water } = shantytown.livingConditions;
+    if (water.access) {
+        const handWashAccessPopulationRatio = getWaterHandWashAccessPopulationRatio(
+            shantytown.populationTotal,
+            water.handWashAccessNumber,
+        );
+
         if (
-            !shantytown.waterPotable
-            || !shantytown.waterContinuousAccess
-            || !shantytown.waterDistance
-            || shantytown.waterDistance !== '0-20'
-            || shantytown.waterRoadsToCross === null
-            || shantytown.waterRoadsToCross
-            || !shantytown.waterEveryoneHasAccess
-            || shantytown.waterStagnantWater === null
-            || shantytown.waterStagnantWater
-            || !shantytown.waterHandWashAccess
-            || waterHandWashAccessPopulationRatio > 20
+            !water.potable
+            || !water.continuousAccess
+            || !water.distance
+            || water.distance !== '0-20'
+            || water.roadsToCross === null
+            || water.roadsToCross
+            || !water.everyoneHasAccess
+            || water.stagnantWater === null
+            || water.stagnantWater
+            || !water.handWashAccess
+            || handWashAccessPopulationRatio > 20
         ) {
             return 'toImprove';
         }
+
         return 'true';
     }
-    return shantytown.accessToWater === false ? 'false' : null;
+
+    return water.access === false ? 'false' : null;
 };

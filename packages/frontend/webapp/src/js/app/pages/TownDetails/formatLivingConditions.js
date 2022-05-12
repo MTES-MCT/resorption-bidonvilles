@@ -24,8 +24,8 @@ export function formatLivingConditions(town) {
 
     // Eau potable
     const wordingWaterPotable = "Eau potable";
-    if (town.waterPotable !== null) {
-        town.waterPotable
+    if (town.livingConditions.water.potable !== null) {
+        town.livingConditions.water.potable
             ? result.water.positive.push({ text: wordingWaterPotable })
             : result.water.negative.push({ text: "Eau non potable" });
     } else {
@@ -35,8 +35,8 @@ export function formatLivingConditions(town) {
     // Eau continu
     const wordingWaterContinuousAccess =
         "Accès continu, c’est-à-dire qu’il ne varie pas en qualité et quantité dans la journée et les saisons, sans limite dans le temps";
-    if (town.waterContinuousAccess !== null) {
-        town.waterContinuousAccess
+    if (town.livingConditions.water.continuousAccess !== null) {
+        town.livingConditions.water.continuousAccess
             ? result.water.positive.push({ text: wordingWaterContinuousAccess })
             : result.water.negative.push({
                   text:
@@ -47,8 +47,8 @@ export function formatLivingConditions(town) {
     }
 
     // Point d'eau public
-    if (town.waterPublicPoint !== null) {
-        town.waterPublicPoint
+    if (town.livingConditions.water.publicPoint !== null) {
+        town.livingConditions.water.publicPoint
             ? result.water.negative.push({ text: "Point d'eau public" })
             : result.water.positive.push({ text: "Point d'eau public" });
     } else {
@@ -56,8 +56,8 @@ export function formatLivingConditions(town) {
     }
 
     // Distance du point d'eau
-    if (town.waterDistance !== null) {
-        town.waterDistance === "0-20"
+    if (town.livingConditions.water.distance !== null) {
+        town.livingConditions.water.distance === "0-20"
             ? result.water.positive.push({
                   text: "Accès situé sur site ou à moins de 20 mètres"
               })
@@ -71,8 +71,8 @@ export function formatLivingConditions(town) {
     // Franchissement de rues
     const wordingWaterRoadsToCross =
         "Pas de franchissement de rue ou route pour accéder aux points d’eau";
-    if (town.waterRoadsToCross !== null) {
-        !town.waterRoadsToCross
+    if (town.livingConditions.water.roadsToCross !== null) {
+        !town.livingConditions.water.roadsToCross
             ? result.water.positive.push({ text: wordingWaterRoadsToCross })
             : result.water.negative.push({
                   text: "Franchissement de rue ou route nécessaire"
@@ -83,8 +83,8 @@ export function formatLivingConditions(town) {
 
     // Acces pour tous
     const wordingWaterEveryoneHasAccess = "Accès pour tous les habitants";
-    if (town.waterEveryoneHasAccess !== null) {
-        town.waterEveryoneHasAccess
+    if (town.livingConditions.water.everyoneHasAccess !== null) {
+        town.livingConditions.water.everyoneHasAccess
             ? result.water.positive.push({
                   text: wordingWaterEveryoneHasAccess
               })
@@ -98,8 +98,8 @@ export function formatLivingConditions(town) {
     // Eau stagnante
     const wordingWaterStagnantWater =
         "Pas d’eaux stagnantes autour du point de distribution";
-    if (town.waterStagnantWater !== null) {
-        !town.waterStagnantWater
+    if (town.livingConditions.water.stagnantWater !== null) {
+        !town.livingConditions.water.stagnantWater
             ? result.water.positive.push({ text: wordingWaterStagnantWater })
             : result.water.negative.push({
                   text: "Eaux stagnantes autour du point de distribution"
@@ -110,24 +110,24 @@ export function formatLivingConditions(town) {
 
     // Présence de bacs de lavage & nombre
     const waterHandWashAccessPopulationRatio =
-        town.populationTotal && town.waterHandWashAccessNumber
+        town.populationTotal && town.livingConditions.water.handWashAccessNumber
             ? Math.floor(
                   Number(town.populationTotal) /
-                      Number(town.waterHandWashAccessNumber)
+                      Number(town.livingConditions.water.handWashAccessNumber)
               )
             : null;
     const wordingRatio = waterHandWashAccessPopulationRatio
         ? ` - soit 1 bac de lavage pour ${waterHandWashAccessPopulationRatio} personnes`
         : "";
-    const wordingWaterHandWashAccess = `${town.waterHandWashAccessNumber ||
-        "Présence de"} bac${
-        town.waterHandWashAccessNumber > 1 ? "s" : ""
+    const wordingWaterHandWashAccess = `${town.livingConditions.water
+        .handWashAccessNumber || "Présence de"} bac${
+        town.livingConditions.water.andWashAccessNumber > 1 ? "s" : ""
     } de lavage des mains${wordingRatio}`;
     const infoWaterHandWashAccess =
         "il est conseillé au moins 1 bac de lavage pour 20 personnes";
 
     if (
-        town.waterHandWashAccess &&
+        town.livingConditions.water.handWashAccess &&
         waterHandWashAccessPopulationRatio &&
         waterHandWashAccessPopulationRatio < 20
     ) {
@@ -136,7 +136,7 @@ export function formatLivingConditions(town) {
             info: infoWaterHandWashAccess
         });
     } else if (
-        town.waterHandWashAccess &&
+        town.livingConditions.water.handWashAccess &&
         waterHandWashAccessPopulationRatio &&
         waterHandWashAccessPopulationRatio > 20
     ) {
@@ -145,13 +145,13 @@ export function formatLivingConditions(town) {
             info: infoWaterHandWashAccess
         });
     } else if (
-        town.waterHandWashAccess &&
+        town.livingConditions.water.handWashAccess &&
         !waterHandWashAccessPopulationRatio
     ) {
         result.water.positive.push({
             text: wordingWaterHandWashAccess
         });
-    } else if (town.waterHandWashAccess === false) {
+    } else if (town.livingConditions.water.handWashAccess === false) {
         result.water.negative.push({
             text: "Pas de de bacs de lavage des mains",
             info: infoWaterHandWashAccess
@@ -165,8 +165,8 @@ export function formatLivingConditions(town) {
 
     // Toilettes sur site
     const wordingSanitaryOnSite = "Accès sur site";
-    if (town.sanitaryOnSite !== null) {
-        town.sanitaryOnSite
+    if (town.livingConditions.sanitary.onSite !== null) {
+        town.livingConditions.sanitary.onSite
             ? result.sanitary.positive.push({ text: wordingSanitaryOnSite })
             : result.sanitary.negative.push({
                   text: "Accès aux abords du site"
@@ -177,24 +177,31 @@ export function formatLivingConditions(town) {
 
     // Nombre de toilettes & Ratio
     const sanitaryNumberPopulationRatio = Math.floor(
-        Number(town.populationTotal) / Number(town.sanitaryNumber)
+        Number(town.populationTotal) /
+            Number(town.livingConditions.sanitary.number)
     );
-    const wordingSanitaryRatio = town.sanitaryNumber
+    const wordingSanitaryRatio = town.livingConditions.sanitary.number
         ? ` - soit 1 toilette pour ${sanitaryNumberPopulationRatio} personnes`
         : "";
-    const wordingSanitaryNumber = `${town.sanitaryNumber ||
+    const wordingSanitaryNumber = `${town.livingConditions.sanitary.number ||
         "Présence de"} toilette${
-        town.sanitaryNumber > 1 ? "s" : ""
+        town.livingConditions.sanitary.number > 1 ? "s" : ""
     }${wordingSanitaryRatio}`;
     const infoSanitaryNumber =
         "il est conseillé au moins 1 toilette pour 20 personnes";
 
-    if (town.sanitaryNumber && sanitaryNumberPopulationRatio < 20) {
+    if (
+        town.livingConditions.sanitary.number &&
+        sanitaryNumberPopulationRatio < 20
+    ) {
         result.sanitary.positive.push({
             text: wordingSanitaryNumber,
             info: infoSanitaryNumber
         });
-    } else if (town.sanitaryNumber && sanitaryNumberPopulationRatio > 20) {
+    } else if (
+        town.livingConditions.sanitary.number &&
+        sanitaryNumberPopulationRatio > 20
+    ) {
         result.sanitary.negative.push({
             text: wordingSanitaryNumber,
             info: infoSanitaryNumber
@@ -209,8 +216,8 @@ export function formatLivingConditions(town) {
     // Sanitaire Insalubre
     const wordingSanitaryInsalubrious =
         "Pas de marques de défécation à l’air libre";
-    if (town.sanitaryInsalubrious !== null) {
-        !town.sanitaryInsalubrious
+    if (town.livingConditions.sanitary.insalubrious !== null) {
+        !town.livingConditions.sanitary.insalubrious
             ? result.sanitary.positive.push({
                   text: wordingSanitaryInsalubrious
               })
@@ -223,14 +230,15 @@ export function formatLivingConditions(town) {
 
     // Nombre de poubelles/bennes
     const trashCansRatio = Math.floor(
-        Number(town.populationTotal) / Number(town.trashCansOnSite)
+        Number(town.populationTotal) /
+            Number(town.livingConditions.trash.cansOnSite)
     );
-    if (town.trashCansOnSite !== null) {
+    if (town.livingConditions.trash.cansOnSite !== null) {
         result.trash.positive.push({
-            text: `${town.trashCansOnSite} poubelle${
-                town.trashCansOnSite > 1 ? "s" : ""
+            text: `${town.livingConditions.trash.cansOnSite} poubelle${
+                town.livingConditions.trash.cansOnSite > 1 ? "s" : ""
             } / benne${
-                town.trashCansOnSite > 1 ? "s" : ""
+                town.livingConditions.trash.cansOnSite > 1 ? "s" : ""
             } sont à proximité immédiate du site (moins de 100 mètres) - soit 1 pour ${trashCansRatio} personnes`
         });
     } else {
@@ -243,8 +251,8 @@ export function formatLivingConditions(town) {
     // Evacuation régulière des déchets
     const wordingTrashEvacuationRegular =
         "Collecte régulière des poubelles / bennes. C’est-à-dire au moins une fois par semaine, à partir d’un point de dépôt spécialement aménagé sur le site ou à proximité immédiate";
-    if (town.trashEvacuationRegular !== null) {
-        town.trashEvacuationRegular
+    if (town.livingConditions.trash.evacuationRegular !== null) {
+        town.livingConditions.trash.evacuationRegular
             ? result.trash.positive.push({
                   text: wordingTrashEvacuationRegular
               })
@@ -258,8 +266,8 @@ export function formatLivingConditions(town) {
     // Accumulation des déchets
     const wordingTrashAccumulation =
         "Pas d’accumulation de déchets sur le site ou aux abords";
-    if (town.trashAccumulation !== null) {
-        !town.trashAccumulation
+    if (town.livingConditions.trash.accumulation !== null) {
+        !town.livingConditions.trash.accumulation
             ? result.trash.positive.push({ text: wordingTrashAccumulation })
             : result.trash.negative.push({
                   text: "Accumulation de déchets sur le site ou aux abords"
@@ -271,8 +279,8 @@ export function formatLivingConditions(town) {
     // Diagnostic de prévention
     const wordingFirePreventionDiagnostic =
         "Diagnostic prévention incendie par le SDIS réalisé";
-    if (town.firePreventionDiagnostic !== null) {
-        town.firePreventionDiagnostic
+    if (town.livingConditions.firePrevention.diagnostic !== null) {
+        town.livingConditions.firePrevention.diagnostic
             ? result.firePrevention.positive.push({
                   text: wordingFirePreventionDiagnostic
               })
@@ -288,8 +296,8 @@ export function formatLivingConditions(town) {
 
     // Mesure spécifiques
     const wordingFirePreventionDevices = "Mesures spécifiques en place";
-    if (town.firePreventionDevices !== null) {
-        town.firePreventionDevices
+    if (town.livingConditions.firePrevention.devices !== null) {
+        town.livingConditions.firePrevention.devices
             ? result.firePrevention.positive.push({
                   text: wordingFirePreventionDevices
               })
@@ -305,8 +313,8 @@ export function formatLivingConditions(town) {
 
     // Site accessible aux pompiers
     const wordingFirePreventionSiteAccessible = "Site accessible aux pompiers";
-    if (town.firePreventionSiteAccessible !== null) {
-        town.firePreventionSiteAccessible
+    if (town.livingConditions.firePrevention.siteAccessible !== null) {
+        town.livingConditions.firePrevention.siteAccessible
             ? result.firePrevention.positive.push({
                   text: wordingFirePreventionSiteAccessible
               })

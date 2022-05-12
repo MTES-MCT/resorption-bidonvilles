@@ -5,36 +5,36 @@
             <div>
                 <TownDetailsPanelLivingConditionsSection
                     title="Accès à l’eau"
-                    :value="town.accessToWater"
+                    :value="town.livingConditions.water.access"
                     cypressName="access_to_water"
                     cypressComments="water_comments"
                     cypressDetailsPrefix="water"
-                    :comments="town.waterComments"
+                    :comments="town.livingConditions.water.comments"
                     :details="details.water"
                 />
 
                 <TownDetailsPanelLivingConditionsSection
                     title="Accès aux toilettes"
-                    :value="town.accessToSanitary"
+                    :value="town.livingConditions.sanitary.access"
                     cypressName="access_to_sanitary"
                     cypressComments="sanitary_comments"
                     cypressDetailsPrefix="sanitary"
-                    :comments="town.sanitaryComments"
+                    :comments="town.livingConditions.sanitary.comments"
                     :details="details.sanitary"
                 />
 
                 <TownDetailsPanelLivingConditionsSection
                     title="Accès à l’électricité"
-                    :value="town.electricityType.value"
+                    :value="town.livingConditions.electricity.type.value"
                     cypressName="electricity_type"
                     cypressComments="electricity_comments"
                     cypressDetailsPrefix="electricity"
-                    :comments="town.electricityComments"
+                    :comments="town.livingConditions.electricity.comments"
                 />
 
                 <TownDetailsPanelLivingConditionsSection
                     title="Évacuation des déchets"
-                    :value="town.trashEvacuation"
+                    :value="town.livingConditions.trash.evacuation"
                     cypressName="trash_evacuation"
                     cypressComments="trash_comments"
                     cypressDetailsPrefix="trash"
@@ -43,21 +43,21 @@
 
                 <TownDetailsPanelLivingConditionsSection
                     title="Présence de nuisibles"
-                    :value="town.vermin"
+                    :value="town.livingConditions.vermin.vermin"
                     cypressName="vermin"
                     inverted
                     cypressComments="vermin_comments"
                     cypressDetailsPrefix="vermin"
-                    :comments="town.verminComments"
+                    :comments="town.livingConditions.vermin.comments"
                 />
 
                 <TownDetailsPanelLivingConditionsSection
                     title="Prévention des incendies"
-                    :value="town.firePreventionMeasures"
+                    :value="town.livingConditions.firePrevention.measures"
                     cypressName="fire_prevention_measures"
                     cypressComments="fire_prevention_comments"
                     cypressDetailsPrefix="fire_prevention"
-                    :comments="town.firePreventionComments"
+                    :comments="town.livingConditions.firePrevention.comments"
                     :details="details.firePrevention"
                 />
             </div>

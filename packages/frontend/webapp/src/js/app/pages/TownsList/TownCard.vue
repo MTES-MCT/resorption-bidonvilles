@@ -103,34 +103,48 @@
                     <div v-if="showLivingConditionDetails">
                         <div>
                             <TownCardIcon
-                                :value="shantytown.accessToWater"
+                                :value="
+                                    shantytown.livingConditions.water.access
+                                "
                                 :details="details.water"
                                 >eau</TownCardIcon
                             >
                             <TownCardIcon
-                                :value="shantytown.accessToSanitary"
+                                :value="
+                                    shantytown.livingConditions.sanitary.access
+                                "
                                 :details="details.sanitary"
                                 >toilettes</TownCardIcon
                             >
                             <TownCardIcon
-                                :value="shantytown.electricityType.value"
+                                :value="
+                                    shantytown.livingConditions.electricity.type
+                                        .value
+                                "
                                 >électricité</TownCardIcon
                             >
 
                             <TownCardIcon
-                                :value="shantytown.trashEvacuation"
+                                :value="
+                                    shantytown.livingConditions.trash.evacuation
+                                "
                                 :details="details.trash"
                                 >évac. des déchets</TownCardIcon
                             >
 
                             <TownCardIcon
-                                :value="shantytown.vermin"
+                                :value="
+                                    shantytown.livingConditions.vermin.vermin
+                                "
                                 :details="details.vermin"
                                 inverted
                                 >pres. de nuisibles</TownCardIcon
                             >
                             <TownCardIcon
-                                :value="shantytown.firePreventionMeasures"
+                                :value="
+                                    shantytown.livingConditions.firePrevention
+                                        .measures
+                                "
                                 :details="details.firePrevention"
                                 >prev. incendie</TownCardIcon
                             >
