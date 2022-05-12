@@ -447,8 +447,8 @@ export default (app) => {
         middlewares.validation,
         controllers.town.close,
     );
-    app.post(
-        '/towns/:id/fix_status',
+    app.put(
+        '/towns/:id/closedWithSolutions',
         middlewares.auth.authenticate,
         (...args) => middlewares.auth.checkPermissions(['shantytown.fix_status'], ...args),
         middlewares.charte.check,

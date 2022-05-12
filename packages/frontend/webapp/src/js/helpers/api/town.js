@@ -67,7 +67,7 @@ export function close(id, data) {
  * @returns {Promise}
  */
 export function fixClosedStatus(id, data) {
-    return postApi(`/towns/${id}/fix_status`, data);
+    return putApi(`/towns/${id}/closedWithSolutions`, data);
 }
 
 /**
