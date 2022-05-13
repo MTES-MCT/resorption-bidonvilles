@@ -1,6 +1,7 @@
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
+const { serialized: fakeUser } = require('#test/utils/user');
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -17,18 +18,13 @@ const fixClosedStatusService = require('./fixClosedStatus');
 
 describe.only('services/shantytown', () => {
     describe('fixClosedStatus()', () => {
-        const user = {
-            id: global.generate('string'),
-            permissions: {
-                shantytown: {
-                    fix_status: {
-                        allowed: true,
-                        allow_all: true,
-                        allowed_on: [],
-                    },
-                },
-            },
+        const user = fakeUser();
+        user.permissions.shantytown.fix_status = {
+            allowed: true,
+            allow_all: true,
+            allowed_on: [],
         };
+
         const data = {
             shantytown: fakeShantytown(paris.city(), { closed_with_solutions: false }),
             closed_with_solutions: 'yes',
