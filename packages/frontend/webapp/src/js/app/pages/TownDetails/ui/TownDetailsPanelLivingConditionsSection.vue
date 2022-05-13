@@ -24,7 +24,7 @@
                             details.positive.length ||
                             details.unknown.length)
                 "
-                class="border-1 border-primary rounded px-8 mt-4"
+                class="border-1 border-cardBorder rounded px-8 mt-4"
             >
                 <div
                     class="border-b-2 border-G200 py-2 font-bold text-primary flex items-center justify-between"
@@ -130,7 +130,7 @@ export default {
     },
     data() {
         return {
-            collapsed: false
+            collapsed: true
         };
     },
     methods: {
