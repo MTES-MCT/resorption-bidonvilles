@@ -8,7 +8,7 @@
         </div>
         <Button
             variant="primary"
-            href="https://email.developpement-durable.gouv.fr/users/subscribe/js_id/5n4i/id/1"
+            href="https://email.developpement-durable.gouv.fr/users/subscribe/js_id/5n4i/id/3"
             >{{ $t("landingPage.newsletter.cta") }}</Button
         >
         <div class="mt-6">
