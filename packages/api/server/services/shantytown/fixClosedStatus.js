@@ -12,6 +12,5 @@ module.exports = async (user, data) => {
         data.closed_with_solutions,
     );
 
-    // eslint-disable-next-line no-return-await
-    return await shantytownModel.findOne(user, data.shantytown.id);
+    return shantytownModel.findOne(user, data.shantytown.id);
 };
