@@ -6,6 +6,7 @@ export default {
         error: null,
         currentPage: 1,
         topicFilter: [],
+        interventionLocationFilter: [],
         locationFilter: null,
         items: []
     },
@@ -30,6 +31,10 @@ export default {
         setTopicFilter(state, filter) {
             state.currentPage = 1;
             state.topicFilter = filter;
+        },
+        setInterventionLocationFilter(state, filter) {
+            state.currentPage = 1;
+            state.interventionLocationFilter = filter;
         },
         addPlan(state, plan) {
             const index = state.items.findIndex(item => item.id === plan.id);
@@ -122,6 +127,17 @@ export default {
                     }
                 }
 
+                // intervention location filter
+                if (state.interventionLocationFilter.length > 0) {
+                    if (
+                        !state.interventionLocationFilter.includes(
+                            plan.location_type.id
+                        )
+                    ) {
+                        return false;
+                    }
+                }
+
                 // recherche textuelle
                 if (searchReg && !plan.name.match(searchReg)) {
                     return false;
@@ -142,6 +158,20 @@ export default {
                           type: "nation"
                       }
                   };
+        },
+        plansInterventionLocation() {
+            return [
+                { value: "shantytowns", label: "Sur Site" },
+                { value: "location", label: "Sur terrain d'insertion" },
+                {
+                    value: "housing",
+                    label: "Dans le logement"
+                },
+                {
+                    value: "other",
+                    label: "Dans plusieurs lieux(hébergement, permanence, rue)"
+                }
+            ];
         }
     }
 };
