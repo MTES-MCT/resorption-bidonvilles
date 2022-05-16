@@ -28,13 +28,6 @@
                     v-on:openHistory="openHistory"
                 />
                 <div class="flex-1">
-                    <TownDetailsActorAlert
-                        v-if="
-                            isNotAnActor && actorAlertVisible && !town.closedAt
-                        "
-                        @click="openActorThemes"
-                        @close="actorAlertVisible = false"
-                    ></TownDetailsActorAlert>
                     <TownDetailsPanelCharacteristics
                         :town="town"
                         class="mb-10"
@@ -156,7 +149,6 @@ import TownDetailsComments from "./TownDetailsComments";
 import TownDetailsNewCommentLeftColumn from "./TownDetailsNewCommentLeftColumn";
 import TownDetailsHistorySidePanel from "./TownDetailsHistorySidePanel";
 import TownDetailsCovidCommentsSidePanel from "./TownDetailsCovidCommentsSidePanel";
-import TownDetailsActorAlert from "./TownDetailsActorAlert";
 import TownDetailsCloseModal from "./TownDetailsCloseModal";
 import TownDetailsActorThemesModal from "./TownDetailsActorThemesModal";
 import TownDetailsInviteActorModal from "./TownDetailsInviteActorModal";
@@ -165,7 +157,6 @@ import { notify } from "#helpers/notificationHelper";
 
 export default {
     components: {
-        TownDetailsActorAlert,
         TownDetailsPanelActors,
         TownDetailsCloseModal,
         TownDetailsActorThemesModal,
@@ -193,7 +184,6 @@ export default {
             covidOpen: false,
             actorThemesOpen: false,
             actorThemesVariant: "default",
-            actorAlertVisible: true,
             inviteActorOpen: false,
             error: null,
             loading: false
@@ -226,9 +216,6 @@ export default {
         },
         town() {
             return this.$store.state.detailedTown;
-        },
-        isNotAnActor() {
-            return !this.town.actors.some(({ id }) => id === this.user.id);
         }
     },
     mounted() {
