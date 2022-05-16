@@ -103,49 +103,47 @@
                     <div v-if="showLivingConditionDetails">
                         <div>
                             <TownCardIcon
-                                :value="
-                                    shantytown.livingConditions.water.access
+                                :status="
+                                    shantytown.livingConditions.water.status
+                                        .status
                                 "
-                                :details="details.water"
                                 >eau</TownCardIcon
                             >
                             <TownCardIcon
-                                :value="
-                                    shantytown.livingConditions.sanitary.access
+                                :status="
+                                    shantytown.livingConditions.sanitary.status
+                                        .status
                                 "
-                                :details="details.sanitary"
                                 >toilettes</TownCardIcon
                             >
                             <TownCardIcon
-                                :value="
-                                    shantytown.livingConditions.electricity.type
-                                        .value
+                                :status="
+                                    shantytown.livingConditions.electricity
+                                        .status.status
                                 "
                                 >électricité</TownCardIcon
                             >
 
                             <TownCardIcon
-                                :value="
-                                    shantytown.livingConditions.trash.evacuation
+                                :status="
+                                    shantytown.livingConditions.trash.status
+                                        .status
                                 "
-                                :details="details.trash"
                                 >évac. des déchets</TownCardIcon
                             >
 
                             <TownCardIcon
-                                :value="
-                                    shantytown.livingConditions.vermin.vermin
+                                :status="
+                                    shantytown.livingConditions.vermin.status
+                                        .status
                                 "
-                                :details="details.vermin"
-                                inverted
                                 >pres. de nuisibles</TownCardIcon
                             >
                             <TownCardIcon
-                                :value="
+                                :status="
                                     shantytown.livingConditions.firePrevention
-                                        .measures
+                                        .status.status
                                 "
-                                :details="details.firePrevention"
                                 >prev. incendie</TownCardIcon
                             >
                         </div>
@@ -276,7 +274,6 @@ import flagFR from "./assets/fr.png";
 import flagExtraCommunautaires from "./assets/extra-communautaires.png";
 import getSince from "#app/utils/getSince";
 import formatLastUpdatedAt from "#app/utils/formatLastUpdatedAt";
-import { formatLivingConditions } from "#app/pages/TownDetails/formatLivingConditions";
 import { isSolved, isClosed } from "./common/SolvedOrClosed";
 
 export default {
@@ -293,8 +290,7 @@ export default {
     },
     data() {
         return {
-            isHover: false,
-            details: formatLivingConditions(this.shantytown)
+            isHover: false
         };
     },
     components: {

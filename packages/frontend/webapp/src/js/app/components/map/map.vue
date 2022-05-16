@@ -981,11 +981,11 @@ export default {
         },
 
         getTownWaterImage(town) {
-            const { status } = town.livingConditions.water;
+            const { status } = town.livingConditions.water.status;
             const hash = {
-                [null]: waterNull,
-                true: waterYes,
-                false: waterNo,
+                unknown: waterNull,
+                good: waterYes,
+                bad: waterNo,
                 toImprove: waterToImprove
             };
 

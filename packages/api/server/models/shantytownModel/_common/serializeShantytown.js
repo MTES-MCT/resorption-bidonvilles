@@ -1,7 +1,7 @@
 const { can } = require('#server/utils/permission');
 const getAddressSimpleOf = require('./getAddressSimpleOf');
 const getUsenameOf = require('./getUsenameOf');
-const getWaterAccessConditions = require('./getWaterAccessConditions');
+const formatLivingConditions = require('./livingConditions/formatLivingConditions');
 
 function fromDateToTimestamp(date) {
     return date !== null ? (new Date(`${date}T00:00:00`).getTime() / 1000) : null;
@@ -173,7 +173,10 @@ module.exports = (town, user) => {
         resorptionTarget: town.resorptionTarget,
     };
 
-    serializedTown.livingConditions.water.status = getWaterAccessConditions(serializedTown);
+    const livingConditionsStatuses = formatLivingConditions(town);
+    Object.keys(livingConditionsStatuses).forEach((key) => {
+        serializedTown.livingConditions[key].status = livingConditionsStatuses[key];
+    });
 
     // generé par findNearby
     if (town.distance !== undefined) {

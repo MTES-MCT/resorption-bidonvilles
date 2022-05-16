@@ -97,6 +97,7 @@ import { lifeConditionsMixin } from "#app/mixins/lifeConditionsMixin";
 
 export default {
     mixins: [lifeConditionsMixin],
+
     components: {
         TownPopulation,
         ResorptionTargetTag

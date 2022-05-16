@@ -136,7 +136,7 @@ export default {
                     id: "waterAccessConditions",
                     options: [
                         {
-                            value: "true",
+                            value: "good",
                             label: "Oui",
                             checked: true,
                             icon: { id: "tint", color: "00a0e3" }
@@ -148,13 +148,13 @@ export default {
                             icon: { id: "tint", color: "ff6f4c" }
                         },
                         {
-                            value: "false",
+                            value: "bad",
                             label: "Non",
                             checked: true,
                             icon: { id: "tint-slash", color: "ADB9C9" }
                         },
                         {
-                            value: null,
+                            value: "unknown",
                             label: "Inconnu",
                             checked: true,
                             icon: { id: "question", color: "ADB9C9" }
@@ -286,6 +286,7 @@ export default {
                                 town =>
                                     allowed.indexOf(
                                         town.livingConditions.water.status
+                                            .status
                                     ) !== -1
                             );
                         }

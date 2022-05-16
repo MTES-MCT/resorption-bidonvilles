@@ -8,6 +8,7 @@
 
 import policeSiren from "./assets/police_siren.svg";
 import formatDateSince from "./formatDateSince";
+import getLabelForLivingConditionDetail from "./getLabelForLivingConditionDetail";
 
 export default function enrichShantytown(shantytown, fieldTypes) {
     const fieldTypeColors = fieldTypes.reduce(
@@ -17,23 +18,6 @@ export default function enrichShantytown(shantytown, fieldTypes) {
             }),
         {}
     );
-
-    // electricity
-    let electricityValue = null;
-    if (
-        shantytown.livingConditions.electricity.type &&
-        shantytown.livingConditions.electricity.type.label
-    ) {
-        if (
-            shantytown.livingConditions.electricity.type.label.startsWith("Oui")
-        ) {
-            electricityValue = true;
-        } else if (
-            shantytown.livingConditions.electricity.type.label === "Non"
-        ) {
-            electricityValue = false;
-        }
-    }
 
     // justice statuses
     const justiceStatuses = [];
@@ -135,7 +119,29 @@ export default function enrichShantytown(shantytown, fieldTypes) {
 
     // final object
     const livingConditions = { ...shantytown.livingConditions };
-    livingConditions.electricity.type.value = electricityValue;
+    const conditions = [
+        "water",
+        "electricity",
+        "trash",
+        "sanitary",
+        "firePrevention",
+        "vermin"
+    ];
+    conditions.forEach(conditionKey => {
+        const status = livingConditions[conditionKey].status;
+
+        ["positive", "negative", "unknown"].forEach(
+            statusKey =>
+                (status[statusKey] = status[statusKey].map(key =>
+                    getLabelForLivingConditionDetail(
+                        conditionKey,
+                        key,
+                        statusKey,
+                        shantytown
+                    )
+                ))
+        );
+    });
 
     return {
         ...shantytown,

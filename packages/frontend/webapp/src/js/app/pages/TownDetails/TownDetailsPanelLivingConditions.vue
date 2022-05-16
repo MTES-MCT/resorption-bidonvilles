@@ -5,27 +5,26 @@
             <div>
                 <TownDetailsPanelLivingConditionsSection
                     title="Accès à l’eau"
-                    :value="town.livingConditions.water.access"
+                    :status="town.livingConditions.water.status"
                     cypressName="access_to_water"
                     cypressComments="water_comments"
                     cypressDetailsPrefix="water"
                     :comments="town.livingConditions.water.comments"
-                    :details="details.water"
                 />
 
                 <TownDetailsPanelLivingConditionsSection
                     title="Accès aux toilettes"
-                    :value="town.livingConditions.sanitary.access"
+                    :status="town.livingConditions.sanitary.status"
                     cypressName="access_to_sanitary"
                     cypressComments="sanitary_comments"
                     cypressDetailsPrefix="sanitary"
                     :comments="town.livingConditions.sanitary.comments"
-                    :details="details.sanitary"
                 />
 
                 <TownDetailsPanelLivingConditionsSection
                     title="Accès à l’électricité"
-                    :value="town.livingConditions.electricity.type.value"
+                    sanitary
+                    :status="town.livingConditions.electricity.status"
                     cypressName="electricity_type"
                     cypressComments="electricity_comments"
                     cypressDetailsPrefix="electricity"
@@ -34,31 +33,29 @@
 
                 <TownDetailsPanelLivingConditionsSection
                     title="Évacuation des déchets"
-                    :value="town.livingConditions.trash.evacuation"
+                    :status="town.livingConditions.trash.status"
                     cypressName="trash_evacuation"
                     cypressComments="trash_comments"
                     cypressDetailsPrefix="trash"
-                    :details="details.trash"
                 />
 
                 <TownDetailsPanelLivingConditionsSection
                     title="Présence de nuisibles"
-                    :value="town.livingConditions.vermin.vermin"
+                    :status="town.livingConditions.vermin.status"
                     cypressName="vermin"
-                    inverted
                     cypressComments="vermin_comments"
                     cypressDetailsPrefix="vermin"
                     :comments="town.livingConditions.vermin.comments"
+                    :inverted="true"
                 />
 
                 <TownDetailsPanelLivingConditionsSection
                     title="Prévention des incendies"
-                    :value="town.livingConditions.firePrevention.measures"
+                    :status="town.livingConditions.firePrevention.status"
                     cypressName="fire_prevention_measures"
                     cypressComments="fire_prevention_comments"
                     cypressDetailsPrefix="fire_prevention"
                     :comments="town.livingConditions.firePrevention.comments"
-                    :details="details.firePrevention"
                 />
             </div>
         </template>
@@ -68,18 +65,12 @@
 <script>
 import DetailsPanel from "#app/components/ui/details/DetailsPanel.vue";
 import TownDetailsPanelLivingConditionsSection from "./ui/TownDetailsPanelLivingConditionsSection";
-import { formatLivingConditions } from "./formatLivingConditions.js";
 
 export default {
     props: {
         town: {
             type: Object
         }
-    },
-    data() {
-        return {
-            details: formatLivingConditions(this.town)
-        };
     },
     components: { TownDetailsPanelLivingConditionsSection, DetailsPanel }
 };
