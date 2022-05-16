@@ -1,7 +1,7 @@
 <template>
     <FormGroup title="Lieu">
         <FormParagraph
-            title="Dans quel cadre l'action se déroule-t-ell ?"
+            title="Dans quel cadre l'action se déroule-t-elle ?"
             :showMandatoryStar="true"
         >
             <InputLocationType

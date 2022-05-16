@@ -6,37 +6,20 @@
         rules="required"
     >
         <Radio
+            v-for="locationType in interventionLocationTypes"
+            :key="locationType.id"
             variant="card"
-            label="Sur site(s) : bidonville ou squat"
+            :label="locationType.label"
             v-model="checked"
-            checkValue="shantytowns"
-            :disabled="disabled"
-        ></Radio>
-        <Radio
-            variant="card"
-            label="Sur terrain d'insertion"
-            v-model="checked"
-            checkValue="location"
-            :disabled="disabled"
-        ></Radio>
-        <Radio
-            variant="card"
-            label="Dans le logement"
-            v-model="checked"
-            checkValue="housing"
-            :disabled="disabled"
-        ></Radio>
-        <Radio
-            variant="card"
-            label="Dans plusieurs lieux (hébergement, permanence, rue...)"
-            v-model="checked"
-            checkValue="other"
+            :checkValue="locationType.value"
             :disabled="disabled"
         ></Radio>
     </CheckableGroup>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
     props: {
         value: {
@@ -56,7 +39,11 @@ export default {
             checked: this.value
         };
     },
-
+    computed: {
+        ...mapGetters({
+            interventionLocationTypes: "plansInterventionLocation"
+        })
+    },
     watch: {
         value() {
             this.checked = this.value;
