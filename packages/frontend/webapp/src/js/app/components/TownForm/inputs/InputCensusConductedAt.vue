@@ -17,7 +17,7 @@ import { extend } from "vee-validate";
 extend("censusConductedAfterCreation", {
     params: ["target"],
     validate(conductedAt, { target: builtAt }) {
-        return conductedAt >= builtAt;
+        return builtAt ? conductedAt >= builtAt : true;
     },
     message:
         "La date du diagnostic doit être ultérieure à la date d'installation"
