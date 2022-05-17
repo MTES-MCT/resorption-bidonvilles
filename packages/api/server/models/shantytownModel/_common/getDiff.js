@@ -7,7 +7,7 @@ function getDeepProperty(obj, path) {
 module.exports = (oldVersion, newVersion) => {
     const baseProcessors = {
         default(value) {
-            if (value === null || value === '') {
+            if (value === null || value === '' || value === undefined) {
                 return 'non renseigné';
             }
 
@@ -21,7 +21,7 @@ module.exports = (oldVersion, newVersion) => {
             return fromTsToFormat(ts, 'd M Y');
         },
         bool(b) {
-            if (b === null) {
+            if (b === null || b === undefined) {
                 return 'inconnu';
             }
 
@@ -50,7 +50,7 @@ module.exports = (oldVersion, newVersion) => {
         fieldType: {
             label: 'Type de site',
             processor(f) {
-                if (f === null) {
+                if (!f) {
                     return 'non renseigné';
                 }
 
@@ -60,7 +60,7 @@ module.exports = (oldVersion, newVersion) => {
         ownerType: {
             label: 'Type de propriétaire',
             processor(o) {
-                if (o === null) {
+                if (!o) {
                     return 'non renseigné';
                 }
 
@@ -198,7 +198,7 @@ module.exports = (oldVersion, newVersion) => {
         'livingConditions.electricity.type': {
             label: "Accès à l'électricité",
             processor(e) {
-                if (e === null) {
+                if (!e) {
                     return 'non renseigné';
                 }
 
