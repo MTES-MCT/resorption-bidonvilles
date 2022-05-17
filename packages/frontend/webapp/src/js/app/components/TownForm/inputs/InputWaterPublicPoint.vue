@@ -9,6 +9,7 @@
                 type="checkbox"
                 :checkValue="1"
                 cypressName="water_public_point"
+                disabled
             ></Radio>
             <Radio
                 label="Non"
@@ -16,6 +17,7 @@
                 type="checkbox"
                 :checkValue="0"
                 cypressName="water_public_point"
+                disabled
             ></Radio>
         </CheckableGroup>
     </SubQuestionWrapper>

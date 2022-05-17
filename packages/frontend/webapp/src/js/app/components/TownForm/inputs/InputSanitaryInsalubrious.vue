@@ -9,6 +9,7 @@
                 v-model="checked"
                 :checkValue="1"
                 cypressName="sanitary_insalubrious"
+                disabled
             ></Radio>
             <Radio
                 type="checkbox"
@@ -16,6 +17,7 @@
                 v-model="checked"
                 :checkValue="0"
                 cypressName="sanitary_insalubrious"
+                disabled
             ></Radio>
         </CheckableGroup>
     </SubQuestionWrapper>

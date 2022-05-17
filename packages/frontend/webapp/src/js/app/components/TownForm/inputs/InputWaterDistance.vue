@@ -7,6 +7,7 @@
                 checkValue="0-20"
                 type="checkbox"
                 cypressName="water_distance"
+                disabled
             ></Radio>
             <Radio
                 label="entre 20 et 50 mètres du site"
@@ -14,6 +15,7 @@
                 checkValue="20-50"
                 type="checkbox"
                 cypressName="water_distance"
+                disabled
             ></Radio>
             <Radio
                 label="entre 50 et 100 mètres du site"
@@ -21,6 +23,7 @@
                 checkValue="50-100"
                 type="checkbox"
                 cypressName="water_distance"
+                disabled
             ></Radio>
             <Radio
                 label="à plus de 100 mètres du site"
@@ -28,6 +31,7 @@
                 checkValue="100+"
                 type="checkbox"
                 cypressName="water_distance"
+                disabled
             ></Radio>
         </CheckableGroup>
     </SubQuestionWrapper>

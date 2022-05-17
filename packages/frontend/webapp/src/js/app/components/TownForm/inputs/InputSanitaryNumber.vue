@@ -7,6 +7,7 @@
                 size="sm"
                 type="number"
                 class="w-16"
+                disabled
             />
             <div
                 class="ml-4"

@@ -6,6 +6,7 @@
             cypressName="water_hand_wash_access_number"
             size="sm"
             class="w-16"
+            disabled
         />
         <div
             class="ml-4"

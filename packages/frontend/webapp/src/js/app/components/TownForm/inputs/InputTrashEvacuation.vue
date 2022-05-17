@@ -12,6 +12,7 @@
             v-model="checked"
             :checkValue="1"
             cypressName="trash_evacuation"
+            disabled
         ></Radio>
         <Radio
             variant="card"
@@ -19,6 +20,7 @@
             v-model="checked"
             :checkValue="0"
             cypressName="trash_evacuation"
+            disabled
         ></Radio>
         <Radio
             variant="card"
@@ -26,6 +28,7 @@
             v-model="checked"
             :checkValue="-1"
             cypressName="trash_evacuation"
+            disabled
         ></Radio>
     </CheckableGroup>
 </template>

@@ -7,6 +7,7 @@
         placeholder="Votre message"
         v-model="input"
         cypressName="water_comments"
+        disabled
     ></TextArea>
 </template>
 

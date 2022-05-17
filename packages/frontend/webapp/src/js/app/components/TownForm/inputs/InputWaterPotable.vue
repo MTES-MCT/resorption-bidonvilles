@@ -7,6 +7,7 @@
                 v-model="checked"
                 :checkValue="1"
                 cypressName="water_potable"
+                disabled
             ></Radio>
             <Radio
                 type="checkbox"
@@ -14,6 +15,7 @@
                 v-model="checked"
                 :checkValue="0"
                 cypressName="water_potable"
+                disabled
             ></Radio>
         </CheckableGroup>
     </SubQuestionWrapper>

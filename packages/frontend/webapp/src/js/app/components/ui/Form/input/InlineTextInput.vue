@@ -21,6 +21,7 @@
                     v-bind="filteredProps"
                     :class="classes"
                     :data-cy-field="cypressName"
+                    :disabled="disabled"
                 />
                 <InputIcon
                     position="after"
@@ -80,6 +81,10 @@ export default {
         },
         cypressName: {
             type: String
+        },
+        disabled: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {

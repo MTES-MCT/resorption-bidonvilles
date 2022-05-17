@@ -9,6 +9,7 @@
                 :checkValue="1"
                 type="checkbox"
                 cypressName="water_continuous_access"
+                disabled
             ></Radio>
             <Radio
                 label="Non"
@@ -16,6 +17,7 @@
                 :checkValue="0"
                 type="checkbox"
                 cypressName="water_continuous_access"
+                disabled
             ></Radio>
         </CheckableGroup>
     </SubQuestionWrapper>

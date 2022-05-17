@@ -3,7 +3,7 @@
         <!-- Card Variant -->
         <CheckableCard
             v-if="variant === 'card' || variant === 'townCard'"
-            :variant="variant"
+            :variant="disabled ? 'disabled' : variant"
             :isChecked="isChecked"
             :data-cy-field="cypressName"
             :data-cy-label="label"
@@ -24,7 +24,7 @@
         <label
             v-else
             :class="[
-                'inline-flex cursor-pointer',
+                'inline-flex',
                 info ? 'items-start' : 'items-center',
                 ...labelClasses
             ]"
@@ -109,11 +109,17 @@ export default {
             return this.value === this.checkValue;
         },
         radioClasses() {
-            return {
+            const base = {
                 classic: "form-checkbox h-5 w-5",
                 invisible: "appearance-none absolute invisible",
                 default: "radio-town-input"
             }[this.variant];
+
+            const disabledClasses = "cursor-default bg-G100";
+
+            return `${base} ${
+                this.disabled ? disabledClasses : "cursor-pointer"
+            }`;
         }
     }
 };
@@ -122,7 +128,7 @@ export default {
 <!-- Custom checkbox style -->
 <style>
 .radio-town-input {
-    @apply w-5 h-5 appearance-none border-2 border-G200 relative outline-none cursor-pointer rounded-full;
+    @apply w-5 h-5 appearance-none border-2 border-G200 relative outline-none rounded-full;
 }
 
 .radio-town-input:checked {

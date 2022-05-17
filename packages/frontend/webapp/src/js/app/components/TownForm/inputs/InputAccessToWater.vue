@@ -13,6 +13,7 @@
             v-model="checked"
             :checkValue="1"
             cypressName="access_to_water"
+            disabled
         ></Radio>
         <Radio
             variant="card"
@@ -20,6 +21,7 @@
             v-model="checked"
             :checkValue="0"
             cypressName="access_to_water"
+            disabled
         ></Radio>
         <Radio
             variant="card"
@@ -27,6 +29,7 @@
             v-model="checked"
             :checkValue="-1"
             cypressName="access_to_water"
+            disabled
         ></Radio>
     </CheckableGroup>
 </template>

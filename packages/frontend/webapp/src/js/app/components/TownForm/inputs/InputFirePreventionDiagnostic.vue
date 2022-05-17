@@ -9,6 +9,7 @@
                 v-model="checked"
                 :checkValue="1"
                 cypressName="fire_prevention_diagnostic"
+                disabled
             ></Radio>
             <Radio
                 label="Non"
@@ -16,6 +17,7 @@
                 v-model="checked"
                 :checkValue="0"
                 cypressName="fire_prevention_diagnostic"
+                disabled
             ></Radio>
         </CheckableGroup>
     </SubQuestionWrapper>
