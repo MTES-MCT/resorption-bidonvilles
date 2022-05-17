@@ -1,7 +1,7 @@
 const { can } = require('#server/utils/permission');
 const getAddressSimpleOf = require('./getAddressSimpleOf');
 const getUsenameOf = require('./getUsenameOf');
-const formatLivingConditions = require('./livingConditions/formatLivingConditions');
+const serializeLivingConditions = require('./livingConditions/serializeLivingConditions');
 
 function fromDateToTimestamp(date) {
     return date !== null ? (new Date(`${date}T00:00:00`).getTime() / 1000) : null;
@@ -70,59 +70,7 @@ module.exports = (town, user) => {
         minorsInSchool: town.minorsInSchool,
         caravans: town.caravans,
         huts: town.huts,
-        livingConditions: {
-            version: town.livingConditionsVersion,
-            electricity: {
-                status: null,
-                type: {
-                    id: town.electricityTypeId,
-                    label: town.electricityTypeLabel,
-                },
-                comments: town.electricityComments,
-            },
-            water: {
-                status: null,
-                access: town.accessToWater,
-                comments: town.waterComments,
-                potable: town.waterPotable,
-                continuousAccess: town.waterContinuousAccess,
-                publicPoint: town.waterPublicPoint,
-                distance: town.waterDistance,
-                roadsToCross: town.waterRoadsToCross,
-                everyoneHasAccess: town.waterEveryoneHasAccess,
-                stagnantWater: town.waterStagnantWater,
-                handWashAccess: town.waterHandWashAccess,
-                handWashAccessNumber: town.waterHandWashAccessNumber,
-            },
-            trash: {
-                status: null,
-                evacuation: town.trashEvacuation,
-                cansOnSite: town.trashCansOnSite,
-                accumulation: town.trashAccumulation,
-                evacuationRegular: town.trashEvacuationRegular,
-            },
-            sanitary: {
-                status: null,
-                access: town.accessToSanitary,
-                comments: town.sanitaryComments,
-                number: town.sanitaryNumber,
-                insalubrious: town.sanitaryInsalubrious,
-                onSite: town.sanitaryOnSite,
-            },
-            vermin: {
-                status: null,
-                vermin: town.vermin,
-                comments: town.verminComments,
-            },
-            firePrevention: {
-                status: null,
-                measures: town.firePreventionMeasures,
-                diagnostic: town.firePreventionDiagnostic,
-                siteAccessible: town.firePreventionSiteAccessible,
-                devices: town.firePreventionDevices,
-                comments: town.firePreventionComments,
-            },
-        },
+        livingConditions: serializeLivingConditions(town),
         censusStatus: town.censusStatus,
         censusConductedBy: town.censusConductedBy,
         censusConductedAt: fromDateToTimestamp(town.censusConductedAt),
@@ -172,11 +120,6 @@ module.exports = (town, user) => {
         },
         resorptionTarget: town.resorptionTarget,
     };
-
-    const livingConditionsStatuses = formatLivingConditions(town);
-    Object.keys(livingConditionsStatuses).forEach((key) => {
-        serializedTown.livingConditions[key].status = livingConditionsStatuses[key];
-    });
 
     // generé par findNearby
     if (town.distance !== undefined) {
