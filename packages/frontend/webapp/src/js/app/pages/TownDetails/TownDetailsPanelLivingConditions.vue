@@ -2,7 +2,7 @@
     <DetailsPanel>
         <template v-slot:title>Conditions de vie et environnement</template>
         <template v-slot:body>
-            <div>
+            <div v-if="town.livingConditions.version === 1">
                 <TownDetailsPanelLivingConditionsSection
                     title="Accès à l’eau"
                     :status="town.livingConditions.water.status"

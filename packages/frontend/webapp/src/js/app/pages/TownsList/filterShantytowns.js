@@ -91,31 +91,18 @@ export function filterShantytowns(shantytowns, filters) {
 
 function checkConditions(shantytown, filters) {
     return filters.some(filter => {
-        if (filter === "accessToSanitary") {
-            return !shantytown.livingConditions.sanitary.access;
-        }
+        let filterToCondition = {
+            accessToSanitary: "sanitary",
+            accessToWater: "water",
+            accessToTrash: "trash",
+            accessToElectricity: "electricity",
+            vermin: "vermin",
+            firePreventionMeasures: "firePrevention"
+        };
 
-        if (filter === "accessToWater") {
-            return !shantytown.livingConditions.water.access;
-        }
-
-        if (filter === "accessToTrash") {
-            return !shantytown.livingConditions.trash.evacuation;
-        }
-
-        if (filter === "accessToElectricity") {
-            return !shantytown.livingConditions.electricity.type.value;
-        }
-
-        if (filter === "vermin") {
-            return shantytown.livingConditions.vermin.vermin;
-        }
-
-        if (filter === "firePreventionMeasures") {
-            return !shantytown.livingConditions.firePrevention.measures;
-        }
-
-        return true;
+        return ["bad", "unknown"].includes(
+            shantytown.livingConditions[filterToCondition[filter]].status.status
+        );
     });
 }
 

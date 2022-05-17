@@ -63,6 +63,7 @@
                     ></TownFormPanelPeople>
 
                     <TownFormPanelLivingConditions
+                        v-if="town.livingConditions.version === 1"
                         class="mt-10 townPanelShadow"
                         id="living_conditions"
                         :population="town.people.population"

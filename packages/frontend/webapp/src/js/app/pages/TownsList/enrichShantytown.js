@@ -132,7 +132,7 @@ export default function enrichShantytown(shantytown, fieldTypes) {
 
         ["positive", "negative", "unknown"].forEach(
             statusKey =>
-                (status[statusKey] = status[statusKey].map(key =>
+                (status[statusKey] = (status[statusKey] || []).map(key =>
                     getLabelForLivingConditionDetail(
                         conditionKey,
                         key,
