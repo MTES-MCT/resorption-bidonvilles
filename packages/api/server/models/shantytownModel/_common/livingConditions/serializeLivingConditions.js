@@ -1,4 +1,4 @@
-const formatLivingConditions = require('./formatLivingConditions');
+const getLivingConditionsStatuses = require('./getLivingConditionsStatuses');
 
 module.exports = (town) => {
     const livingConditions = {
@@ -55,7 +55,7 @@ module.exports = (town) => {
         },
     };
 
-    const statuses = formatLivingConditions(town);
+    const statuses = getLivingConditionsStatuses(town);
     Object.keys(statuses).forEach((key) => {
         livingConditions[key].status = statuses[key];
     });
