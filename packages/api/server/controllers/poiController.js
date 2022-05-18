@@ -1,4 +1,5 @@
 const nodeFetch = require('node-fetch');
+const findAllRegions = require('#server/models/regionModel/findAll');
 
 module.exports = () => ({
     async findAll(req, res, next) {
@@ -8,28 +9,33 @@ module.exports = () => ({
                 return res.status(200).send([]);
             }
 
-            // docs: https://solinum.gitbook.io/soliguide-api/detail-de-lapi/lieu-et-services
-            const response = await nodeFetch('https://api.soliguide.fr/new-search', {
-                method: 'POST',
-                body: JSON.stringify({
-                    location: { geoType: 'pays', geoValue: 'France' },
-                    categorie: 601,
-                    options: { limit: 1000 },
-                }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: authKey,
-                },
-                json: true,
-            });
+            const regions = await findAllRegions();
 
-            if (!response.ok) {
-                res.status(500).send({ user_message: 'Une erreur inconnue est survenue' });
-                return next(new Error(`Call soliguide échoué : ${response.status} ${response.statusText}`));
-            }
+            // docs: https://apisolidarite.soliguide.fr
 
-            const { places } = await response.json();
-            return res.status(200).send(places || []);
+            // request the data for each region and keep only successful requests
+            const rawResponses = (await Promise.all(
+                regions.map(({ name }) => nodeFetch('https://api.soliguide.fr/new-search', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        location: { geoType: 'region', geoValue: name },
+                        categorie: 601,
+                        options: { limit: 1000 },
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: authKey,
+                    },
+                    json: true,
+                })),
+            ))
+                .filter(response => !!response.ok);
+
+            // parse the successul responses as json and merge all places into a single array
+            const parsedResponses = await Promise.all(rawResponses.map(response => response.json()));
+            const mergedPlaces = parsedResponses.reduce((acc, { places }) => [...acc, ...places], []);
+
+            return res.status(200).send(mergedPlaces || []);
         } catch (error) {
             res.status(500).send({ user_message: 'Une erreur est survenue lors de la récupération des points de distribution alimentaire' });
             return next(error);
