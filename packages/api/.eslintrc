@@ -45,7 +45,10 @@
     },
     "overrides": [
         {
-            "files": "test/**/*.spec.js",
+            "files": [
+                "test/**/*.spec.js",
+                "server/**/*.spec.js"
+            ],
             "rules": {
                 "no-unused-expressions": "off"
             }
