@@ -34,15 +34,25 @@
                 @click="$emit('closePlan')"
                 >Fermer l'action</Button
             >
-            <Button
-                variant="primary"
-                class="ml-8"
-                icon="pen"
-                iconPosition="left"
-                v-if="plan.canUpdate === true && plan.closed_at === null"
-                @click="routeToUpdate"
-                >Mettre à jour</Button
+            <Tooltip
+                text="Accessible uniquement aux pilotes de cette action"
+                :disabled="plan.canUpdate === true"
             >
+                <Button
+                    variant="primary"
+                    class="ml-8"
+                    icon="pen"
+                    iconPosition="left"
+                    v-if="
+                        (plan.canUpdate === true ||
+                            plan.canUpdateMarks === true) &&
+                            plan.closed_at === null
+                    "
+                    :disabled="plan.canUpdate !== true"
+                    @click="routeToUpdate"
+                    >Mettre à jour</Button
+                >
+            </Tooltip>
             <Button
                 variant="primary"
                 class="ml-8"
