@@ -59,6 +59,18 @@ export function close(id, data) {
 }
 
 /**
+ * Fixes the status of a closed town
+ *
+ * @param {string}    id
+ * @param {Town_Data} data
+ *
+ * @returns {Promise}
+ */
+export function fixClosedStatus(id, data) {
+    return putApi(`/towns/${id}/closedWithSolutions`, data);
+}
+
+/**
  * Deletes a town
  *
  * @param {string} id

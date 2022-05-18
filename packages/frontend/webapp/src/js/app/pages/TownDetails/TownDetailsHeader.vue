@@ -66,6 +66,17 @@
                 >Fermer le site</Button
             >
             <Button
+                v-if="
+                    hasLocalizedPermission('shantytown.fix_status', town) &&
+                        town.status !== 'open'
+                "
+                variant="primaryOutline"
+                class="mr-8"
+                iconPosition="left"
+                @click="$emit('openCancel')"
+                >Corriger la fermeture du site</Button
+            >
+            <Button
                 data-cy="updateTown"
                 variant="primary"
                 class="mr-8"
