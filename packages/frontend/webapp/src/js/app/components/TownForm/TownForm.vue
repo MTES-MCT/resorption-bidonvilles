@@ -305,12 +305,29 @@ export default {
             }
             this.loading = true;
             this.mainError = null;
+            this.errors = [];
             this.$router.replace("#top");
 
             try {
                 const [lat, lon] = this.town.location.coordinates;
 
                 const result = await this.submitFn({
+                    // flatten living conditions into a deep-1 object (electricity.access becomes electricity_access)
+                    ...Object.keys(this.town.livingConditions.v2).reduce(
+                        (acc, mainKey) => {
+                            return Object.keys(
+                                this.town.livingConditions.v2[mainKey]
+                            ).reduce(
+                                (subAcc, subKey) => ({
+                                    ...subAcc,
+                                    [`${mainKey}_${subKey}`]: this.town
+                                        .livingConditions.v2[mainKey][subKey]
+                                }),
+                                { ...acc }
+                            );
+                        },
+                        {}
+                    ),
                     address: this.town.location.address.label,
                     citycode: this.town.location.address.citycode,
                     name: this.town.location.name,
