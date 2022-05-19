@@ -1,5 +1,5 @@
 <template>
-    <FormGroup title="Conditions de vie et environnement">
+    <FormGroup title="Conditions de vie et environnement (anciennes questions)">
         <FormParagraph
             title="Les habitants ont-ils accès à l'eau ?"
             :showMandatoryStar="true"

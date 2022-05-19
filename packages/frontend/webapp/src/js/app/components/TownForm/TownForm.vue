@@ -65,10 +65,15 @@
                     <TownFormPanelLivingConditions
                         v-if="town.livingConditions.version === 1"
                         class="mt-10 townPanelShadow"
-                        id="living_conditions"
                         :population="town.people.population"
-                        v-model="town.livingConditions"
+                        v-model="town.livingConditions.v1"
                     ></TownFormPanelLivingConditions>
+
+                    <TownFormPanelNewLivingConditions
+                        class="mt-10 townPanelShadow"
+                        id="living_conditions"
+                        v-model="town.livingConditions.v2"
+                    ></TownFormPanelNewLivingConditions>
 
                     <TownFormPanelJudicial
                         class="mt-10 townPanelShadow"
@@ -111,6 +116,7 @@ import TownFormPanelLocation from "./TownFormPanelLocation";
 import TownFormPanelCharacteristics from "./TownFormPanelCharacteristics";
 import TownFormPanelPeople from "./TownFormPanelPeople";
 import TownFormPanelLivingConditions from "./TownFormPanelLivingConditions";
+import TownFormPanelNewLivingConditions from "./TownFormPanelNewLivingConditions";
 import TownFormPanelJudicial from "./TownFormPanelJudicial";
 import FormLeftColumn from "#app/components/ui/Form/FormLeftColumn";
 import FormErrorLog from "#app/components/ui/Form/FormErrorLog";
@@ -142,6 +148,7 @@ export default {
         TownFormPanelCharacteristics,
         TownFormPanelPeople,
         TownFormPanelLivingConditions,
+        TownFormPanelNewLivingConditions,
         TownFormPanelJudicial
     },
 
