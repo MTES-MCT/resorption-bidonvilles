@@ -60,6 +60,7 @@
                 :displayPopupOnTownClick="true"
                 :displayAddressToggler="false"
                 :displayPrinter="false"
+                mapHeight="500px"
                 @leaveMap="leaveMap"
             >
             </Map>
