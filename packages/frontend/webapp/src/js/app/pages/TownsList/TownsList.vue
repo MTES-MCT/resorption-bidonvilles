@@ -363,7 +363,7 @@ import TownsListHeader from "./TownsListHeader/TownsListHeader";
 import TabList from "#app/components/TabList/TabList.vue";
 import TownsListFilters from "./TownsListFilters/TownsListFilters";
 import { filterShantytowns } from "./filterShantytowns";
-import Export from "#app/components/export2/Export.vue";
+import Export from "#app/components/export2/TownListExport.vue";
 import Spinner from "#app/components/ui/Spinner";
 import { mapGetters } from "vuex";
 import departementsImg from "#src/img/departements/export.js";
