@@ -1,6 +1,4 @@
-const {
-    SectionType, Table, Paragraph, TextRun,
-} = require('docx');
+const { Table, SectionType } = require('docx');
 const accessToWater = require('./2_section_life_conditions/accessToWater');
 const trashEvacuation = require('./2_section_life_conditions/trashEvacuation');
 const accessToElectricity = require('./2_section_life_conditions/accessToElectricity');
@@ -11,24 +9,11 @@ const firePrevention = require('./2_section_life_conditions/firePrevention');
 
 module.exports = shantytown => ({
     properties: {
-        type: SectionType.NEXT_PAGE,
+        type: SectionType.CONTINUOUS,
     },
     children: [
-        heading('Description du site, des besoins et problématiques repérées'),
-        new Paragraph({
-            spacing: {
-                before: 300,
-                after: 100,
-            },
-            children: [
-                new TextRun({
-                    text: 'Aspects techniques',
-                    bold: true,
-                    size: 22,
-                    font: 'Arial',
-                }),
-            ],
-        }),
+        heading('Conditions de vie'),
+
         new Table({
             columnWidths: [2410, 7228], // total page width is 9638 DXA for A4 portrait
             rows: [

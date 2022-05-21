@@ -1,4 +1,4 @@
-const lifeCondition = require('./lifeCondition');
+const createRow = require('../create_row');
 
 module.exports = (shantytown) => {
     let text;
@@ -14,5 +14,5 @@ module.exports = (shantytown) => {
         text = `${text} – ${shantytown.verminComments}`;
     }
 
-    return lifeCondition('Présence nuisibles', text);
+    return createRow(['Présence nuisibles', text]);
 };
