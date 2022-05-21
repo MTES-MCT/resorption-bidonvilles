@@ -1,15 +1,15 @@
 const { Paragraph, TextRun } = require('docx');
 
-module.exports = total => new Paragraph({
+module.exports = (latitude, longitude) => new Paragraph({
     children: [
         new TextRun({
-            text: 'Nombre de personnes : ',
+            text: '    -    Coordonnées GPS : ',
             bold: true,
             size: 22,
             font: 'Arial',
         }),
         new TextRun({
-            text: Number.isFinite(total) ? total : 'non renseigné',
+            text: `Lat ${latitude}, Long ${longitude}`,
             size: 22,
             font: 'Arial',
         }),

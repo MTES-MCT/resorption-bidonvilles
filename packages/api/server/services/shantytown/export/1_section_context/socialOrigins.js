@@ -3,7 +3,7 @@ const { Paragraph, TextRun } = require('docx');
 module.exports = origins => new Paragraph({
     children: [
         new TextRun({
-            text: 'Origine(s) des habitant(e)s : ',
+            text: 'Origine',
             bold: true,
             size: 22,
             font: 'Arial',

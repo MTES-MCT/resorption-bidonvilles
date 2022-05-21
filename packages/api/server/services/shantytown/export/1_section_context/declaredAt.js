@@ -3,12 +3,12 @@ const { Paragraph, TextRun } = require('docx');
 const formatDateSince = require('../../_common/formatDateSince');
 
 
-module.exports = (builtAt) => {
-    const builtDate = builtAt ? moment(builtAt * 1000).utcOffset(2).locale('fr') : null;
+module.exports = (declaredAt) => {
+    const builtDate = declaredAt ? moment(declaredAt * 1000).utcOffset(2).locale('fr') : null;
     return new Paragraph({
         children: [
             new TextRun({
-                text: `    -    Installé depuis ${formatDateSince(builtAt)}, `,
+                text: `    -    Signalé depuis ${formatDateSince(declaredAt)}, `,
                 bold: true,
                 size: 22,
                 font: 'Arial',
