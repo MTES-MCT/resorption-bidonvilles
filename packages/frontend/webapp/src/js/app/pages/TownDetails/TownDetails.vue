@@ -12,12 +12,20 @@
     </PrivateLayout>
 
     <PrivateLayout v-else>
+        <Export
+            class=""
+            v-if="exportIsVisible"
+            @close="hideExport"
+            :shantytownId="town.id"
+            :townLabel="town.addressSimple"
+        ></Export>
         <PrivateContainer v-if="town" class="py-10">
             <TownDetailsHeader
                 :town="town"
                 v-on:openCancel="openCancel"
                 v-on:openCovid="openCovid"
                 v-on:deleteTown="deleteTown"
+                v-on:showExport="showExport"
             />
             <div class="flex pt-10 ">
                 <TownDetailsLeftColumn
@@ -152,6 +160,7 @@ import TownDetailsCovidCommentsSidePanel from "./TownDetailsCovidCommentsSidePan
 import TownDetailsCloseModal from "./TownDetailsCloseModal";
 import TownDetailsActorThemesModal from "./TownDetailsActorThemesModal";
 import TownDetailsInviteActorModal from "./TownDetailsInviteActorModal";
+import Export from "#app/components/export2/TownExport.vue";
 import LoadingError from "#app/components/PrivateLayout/LoadingError";
 import { notify } from "#helpers/notificationHelper";
 
@@ -175,6 +184,7 @@ export default {
         TownDetailsCovidCommentsSidePanel,
         TownDetailsInviteActorModal,
         TownDetailsNewCommentLeftColumn,
+        Export,
         LoadingError
     },
     data() {
@@ -184,6 +194,7 @@ export default {
             covidOpen: false,
             actorThemesOpen: false,
             actorThemesVariant: "default",
+            exportIsVisible: false,
             inviteActorOpen: false,
             error: null,
             loading: false
@@ -248,6 +259,15 @@ export default {
         },
         openCovid() {
             this.covidOpen = true;
+        },
+        showExport() {
+            setTimeout(() => {
+                this.exportIsVisible = true;
+            }, 100);
+        },
+
+        hideExport() {
+            this.exportIsVisible = false;
         },
         deleteTown() {
             if (
