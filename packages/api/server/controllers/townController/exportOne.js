@@ -5,7 +5,7 @@ const { toFormat: dateToString } = require('#server/utils/date');
 module.exports = async (req, res, next) => {
     let buffer;
     try {
-        buffer = await exportShantytown(req.user, req.shantytown);
+        buffer = await exportShantytown(req.user, req.shantytown, req.query.options);
     } catch (error) {
         res.status(500).send({
             user_message: 'Une erreur inconnue est survenue',

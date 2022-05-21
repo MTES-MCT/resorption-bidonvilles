@@ -191,8 +191,12 @@ export function findClosedNearby(latitude, longitude) {
 /**
  * GET /towns/:id/exports
  */
-export function getExports(townId) {
-    return open(`${VUE_APP_API_URL}/towns/${townId}/exports`);
+export function getExports(townId, options) {
+    return open(
+        `${VUE_APP_API_URL}/towns/${townId}/exports?options=${encodeURIComponent(
+            options.join(",")
+        )}`
+    );
 }
 
 /**
