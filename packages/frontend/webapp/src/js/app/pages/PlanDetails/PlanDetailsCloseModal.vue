@@ -271,7 +271,7 @@ export default {
 
 <style>
 .modalContainer {
-    z-index: 1000;
+    z-index: 2000;
 }
 .scrollableContainer {
     max-height: 60vh;
