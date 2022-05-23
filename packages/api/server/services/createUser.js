@@ -3,6 +3,7 @@ const userModel = require('#server/models/userModel');
 const organizationModel = require('#server/models/organizationModel')(sequelize);
 const organizationTypeModel = require('#server/models/organizationTypeModel')(sequelize);
 const { generateSalt } = require('#server/utils/auth');
+const mattermostUtils = require('#server/utils/mattermost');
 
 async function createUser(data) {
     const userId = await sequelize.transaction(async (t) => {
@@ -34,7 +35,16 @@ async function createUser(data) {
         }), t);
     });
 
-    return userModel.findOne(userId);
+    const user = await userModel.findOne(userId);
+    if (user.organization.type.uid === 'rectorat') {
+        try {
+            await mattermostUtils.triggerNotifyNewUserFromRectorat(user);
+        } catch (error) {
+            // ignore this error
+        }
+    }
+
+    return user;
 }
 
 module.exports = createUser;

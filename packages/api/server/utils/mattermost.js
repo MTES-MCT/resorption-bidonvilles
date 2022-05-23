@@ -3,7 +3,7 @@ const { mattermost } = require('#server/config');
 const { webappUrl } = require('#server/config');
 
 const formatAddress = town => `${town.address} ${town.name ? `« ${town.name} » ` : ''}`;
-const formatUsername = user => `${user.first_name} ${user.last_name} `;
+const formatUsername = user => `[${user.first_name} ${user.last_name}](${webappUrl}/nouvel-utilisateur/${user.id}) `;
 const formatTownLink = (townID, text) => `[${text}](${webappUrl}/site/${townID})`;
 
 const formatDate = ((dateToFormat) => {
@@ -315,6 +315,24 @@ async function triggerRemoveDeclaredActor(town, user) {
     await removeDeclaredActor.send(mattermostMessage);
 }
 
+async function triggerNotifyNewUserFromRectorat(user) {
+    if (!mattermost) {
+        return;
+    }
+
+    const webhook = new IncomingWebhook(mattermost);
+    const username = formatUsername(user);
+
+    const mattermostMessage = {
+        channel: '#tech',
+        username: 'Alerte Résorption Bidonvilles',
+        icon_emoji: ':robot:',
+        text: `:rotating_light: L'utilisateur(ice) ${username}, membre de Rectorat, a été créé(e). Merci de lui étendre ses droits d'accès à toute son académie`,
+        fields: [],
+    };
+
+    await webhook.send(mattermostMessage);
+}
 
 module.exports = {
     triggerShantytownCloseAlert,
@@ -326,4 +344,5 @@ module.exports = {
     triggerDeclaredActor,
     triggerInvitedActor,
     triggerRemoveDeclaredActor,
+    triggerNotifyNewUserFromRectorat,
 };
