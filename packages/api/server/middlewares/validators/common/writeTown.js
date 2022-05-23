@@ -663,4 +663,388 @@ module.exports = mode => ([
 
     body('bailiff')
         .customSanitizer(value => value || null),
+
+    /* *********************************************************************************************
+     * Conditions de vie
+     ******************************************************************************************** */
+
+    // water
+    body('water_access_type')
+        .exists().bail().withMessage('Le champ "Les habitants ont-ils accès à l\'eau ?" est obligatoire')
+        .custom((value) => {
+            if (![
+                'fontaine_publique',
+                'borne_incendie',
+                'achat_bouteille',
+                'reservoir',
+                'robinet_connecte_au_reseau',
+                'autre',
+                'inconnu',
+            ].includes(value)) {
+                throw new Error('Le type d\'accès à l\'eau sélectionné n\'est pas reconnu');
+            }
+
+            return true;
+        })
+        .customSanitizer(value => (value === 'inconnu' ? null : value)),
+
+    body('water_access_type_details')
+        .if((value, { req }) => req.body.water_access_type === 'autre')
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Veuillez préciser les modalités d\'accès à l\'eau" est obligatoire')
+        .isString().bail().withMessage('Le champ "Veuillez préciser les modalités d\'accès à l\'eau" est invalide')
+        .trim()
+        .notEmpty().withMessage('Le champ "Veuillez préciser les modalités d\'accès à l\'eau" est obligatoire'),
+
+    body('water_access_type_details')
+        .customSanitizer((value, { req }) => {
+            if (req.body.water_access_type !== 'autre') {
+                return null;
+            }
+
+            return value;
+        }),
+
+    body('water_access_is_public')
+        .if((value, { req }) => ['autre', 'robinet_connecte_au_reseau'].includes(req.body.water_access_type))
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Est-ce un point d\'eau sur la voie publique ?" est obligatoire')
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Est-ce un point d\'eau sur la voie publique ?" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
+    body('water_access_is_public')
+        .customSanitizer((value, { req }) => {
+            if (!['robinet_connecte_au_reseau', 'autre'].includes(req.body.water_access_type)) {
+                return null;
+            }
+
+            return value;
+        }),
+
+    body('water_access_is_continuous')
+        .if((value, { req }) => req.body.water_access_is_public === false)
+        .exists({ checkNull: true }).bail().withMessage('Le champ "L\'accès est-il continu ?" est obligatoire')
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "L\'accès est-il continu ?" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
+    body('water_access_is_continuous')
+        .customSanitizer((value, { req }) => {
+            if (req.body.water_access_is_public !== false) {
+                return null;
+            }
+
+            return value;
+        }),
+
+    body('water_access_is_continuous_details')
+        .if((value, { req }) => req.body.water_access_is_continuous === false)
+        .isString().bail().withMessage('Le champ "Veuillez préciser la discontinuité de l\'accès à l\'eau" est invalide')
+        .trim()
+        .notEmpty().withMessage('Le champ "Veuillez préciser la discontinuité de l\'accès à l\'eau" est obligatoire'),
+
+    body('water_access_is_continuous_details')
+        .customSanitizer((value, { req }) => {
+            if (req.body.water_access_is_continuous !== false) {
+                return null;
+            }
+
+            return value;
+        }),
+
+    body('water_access_is_local')
+        .if((value, { req }) => req.body.water_access_is_public === false)
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Où se situe l’accès ?" est obligatoire')
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Où se situe l’accès ?" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
+    body('water_access_is_local')
+        .customSanitizer((value, { req }) => {
+            if (req.body.water_access_is_public !== false) {
+                return null;
+            }
+
+            return value;
+        }),
+
+    body('water_access_is_close')
+        .if((value, { req }) => req.body.water_access_is_local === true)
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Distance point d’eau / habitation la plus éloignée ?" est obligatoire')
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Distance point d’eau / habitation la plus éloignée ?" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
+    body('water_access_is_close')
+        .customSanitizer((value, { req }) => {
+            if (req.body.water_access_is_local !== true) {
+                return null;
+            }
+
+            return value;
+        }),
+
+    body('water_access_is_unequal')
+        .if((value, { req }) => req.body.water_access_is_local === true)
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Des inégalités d\'accès ont-elles été constatées ?" est obligatoire')
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Des inégalités d\'accès ont-elles été constatées ?" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
+    body('water_access_is_unequal')
+        .customSanitizer((value, { req }) => {
+            if (req.body.water_access_is_local !== true) {
+                return null;
+            }
+
+            return value;
+        }),
+
+    body('water_access_is_unequal_details')
+        .if((value, { req }) => req.body.water_access_is_unequal === true)
+        .isString().bail().withMessage('Le champ "Veuillez préciser l\'inégalité de l\'accès à l\'eau" est invalide')
+        .trim()
+        .notEmpty().withMessage('Le champ "Veuillez préciser l\'inégalité de l\'accès à l\'eau" est obligatoire'),
+
+    body('water_access_is_unequal_details')
+        .customSanitizer((value, { req }) => {
+            if (req.body.water_access_is_unequal !== true) {
+                return null;
+            }
+
+            return value;
+        }),
+
+    body('water_access_has_stagnant_water')
+        .if((value, { req }) => req.body.water_access_is_local === true)
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Existe-t-il des eaux stagnantes autour du point de distribution ?" est obligatoire')
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Existe-t-il des eaux stagnantes autour du point de distribution ?" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
+    body('water_access_has_stagnant_water')
+        .customSanitizer((value, { req }) => {
+            if (req.body.water_access_is_local !== true) {
+                return null;
+            }
+
+            return value;
+        }),
+
+    body('water_access_comments')
+        .optional({ nullable: true })
+        .isString().bail().withMessage('Le champ "Informations complémentaires concernant l\'accès à l\'eau" est invalide')
+        .trim(),
+
+    body('water_access_comments')
+        .customSanitizer(value => value || null),
+
+    // sanitary
+    body('sanitary_open_air_defecation')
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Constate-t-on des marques de défécation à l’air libre ?" est obligatoire')
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Constate-t-on des marques de défécation à l’air libre ?" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
+    body('sanitary_working_toilets')
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Présence de toilettes fonctionnelles et utilisées ?" est obligatoire')
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Présence de toilettes fonctionnelles et utilisées ?" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
+    body('sanitary_toilet_types')
+        .if((value, { req }) => req.body.sanitary_working_toilets === true)
+        .customSanitizer(value => (value === undefined || value === null ? [] : value))
+        .isArray().bail().withMessage('Le champ "Quels sont les types de toilettes installées ?" est invalide')
+        .custom((value) => {
+            if (value.some(item => !['latrines', 'toilettes_chimiques', 'toilettes_seches', 'toilettes_a_chasse'].includes(item))) {
+                throw new Error('Certains types de toilettes sélectionnés ne sont pas reconnus');
+            }
+
+            return true;
+        }),
+
+    body('sanitary_toilet_types')
+        .customSanitizer((value, { req }) => {
+            if (req.body.sanitary_working_toilets !== true) {
+                return [];
+            }
+
+            return value;
+        }),
+
+    body('sanitary_toilets_are_inside')
+        .if((value, { req }) => req.body.sanitary_toilet_types.length > 1 || (req.body.sanitary_toilet_types.length === 1 && !req.body.sanitary_toilet_types.includes('latrines')))
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Les toilettes sont-elles à l’intérieur du site ?" est obligatoire')
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Les toilettes sont-elles à l’intérieur du site ?" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
+    body('sanitary_toilets_are_inside')
+        .customSanitizer((value, { req }) => {
+            if (req.body.sanitary_toilet_types.length === 0 || (req.body.sanitary_toilet_types.length === 1 && req.body.sanitary_toilet_types.includes('latrines'))) {
+                return null;
+            }
+
+            return value;
+        }),
+
+    body('sanitary_toilets_are_lighted')
+        .if((value, { req }) => req.body.sanitary_toilet_types.length > 1 || (req.body.sanitary_toilet_types.length === 1 && !req.body.sanitary_toilet_types.includes('latrines')))
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Ces toilettes sont-elles éclairées et verrouillables de l’intérieur ?" est obligatoire')
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Ces toilettes sont-elles éclairées et verrouillables de l’intérieur ?" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
+    body('sanitary_toilets_are_lighted')
+        .customSanitizer((value, { req }) => {
+            if (req.body.sanitary_toilet_types.length === 0 || (req.body.sanitary_toilet_types.length === 1 && req.body.sanitary_toilet_types.includes('latrines'))) {
+                return null;
+            }
+
+            return value;
+        }),
+
+    body('sanitary_hand_washing')
+        .if((value, { req }) => req.body.sanitary_toilet_types.length > 1 || (req.body.sanitary_toilet_types.length === 1 && !req.body.sanitary_toilet_types.includes('latrines')))
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Y a-t-il un point de lavage des mains à proximité des toilettes ?" est obligatoire')
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Y a-t-il un point de lavage des mains à proximité des toilettes ?" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
+    body('sanitary_hand_washing')
+        .customSanitizer((value, { req }) => {
+            if (req.body.sanitary_toilet_types.length === 0 || (req.body.sanitary_toilet_types.length === 1 && req.body.sanitary_toilet_types.includes('latrines'))) {
+                return null;
+            }
+
+            return value;
+        }),
+
+    // electricity
+    body('electricity_access')
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Y a-t-il présence d’une installation électrique ?" est obligatoire')
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Y a-t-il présence d’une installation électrique ?" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
+    body('electricity_access_types')
+        .if((value, { req }) => req.body.electricity_access === true)
+        .customSanitizer(value => (value === undefined || value === null ? [] : value))
+        .isArray().bail().withMessage('Le champ "Quelle est la source de l’accès à l\'électricité ?" est invalide')
+        .custom((value) => {
+            if (value.some(item => !['electrogene', 'reseau_urbain', 'installation_du_bati'].includes(item))) {
+                throw new Error('Certaines sources d\'accès sélectionnées ne sont pas reconnues');
+            }
+
+            return true;
+        }),
+
+    body('electricity_access_types')
+        .customSanitizer((value, { req }) => {
+            if (req.body.electricity_access !== true) {
+                return [];
+            }
+
+            return value;
+        }),
+
+    body('electricity_access_is_unequal')
+        .if((value, { req }) => req.body.electricity_access_types.length > 0)
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Des inégalités d’accès ont-elles été constatées ?" est obligatoire')
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Des inégalités d’accès ont-elles été constatées ?" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
+    body('electricity_access_is_unequal')
+        .customSanitizer((value, { req }) => {
+            if (req.body.electricity_access_types.length === 0) {
+                return null;
+            }
+
+            return value;
+        }),
+
+    // trash
+    body('trash_is_piling')
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Constate-t-on une accumulation de déchets type ordures ménagères ?" est obligatoire')
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Constate-t-on une accumulation de déchets type ordures ménagères ?" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
+    body('trash_evacuation_is_close')
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Y a-t-il des dispositifs de ramassage des ordures ménagères ?" est obligatoire')
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Y a-t-il des dispositifs de ramassage des ordures ménagères ?" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
+    body('trash_evacuation_is_safe')
+        .if((value, { req }) => req.body.trash_evacuation_is_close === true)
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Les dispositifs de ramassage des ordures ménagères sont-ils en bon état ?" est obligatoire')
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Les dispositifs de ramassage des ordures ménagères sont-ils en bon état ?" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
+    body('trash_evacuation_is_safe')
+        .customSanitizer((value, { req }) => {
+            if (req.body.trash_evacuation_is_close !== true) {
+                return null;
+            }
+
+            return value;
+        }),
+
+    body('trash_evacuation_is_regular')
+        .if((value, { req }) => req.body.trash_evacuation_is_close === true)
+        .exists({ checkNull: true }).bail().withMessage('Le champ "La collecte des poubelles est-elle réalisée de manière régulière ?" est obligatoire')
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "La collecte des poubelles est-elle réalisée de manière régulière ?" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
+    body('trash_evacuation_is_regular')
+        .customSanitizer((value, { req }) => {
+            if (req.body.trash_evacuation_is_close !== true) {
+                return null;
+            }
+
+            return value;
+        }),
+
+    body('trash_bulky_is_piling')
+        .if((value, { req }) => req.body.trash_evacuation_is_close === true)
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Constate-t-on une accumulation de déchets type encombrants ?" est obligatoire')
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Constate-t-on une accumulation de déchets type encombrants ?" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
+    body('trash_bulky_is_piling')
+        .customSanitizer((value, { req }) => {
+            if (req.body.trash_evacuation_is_close !== true) {
+                return null;
+            }
+
+            return value;
+        }),
+
+    // pest animals
+    body('pest_animals_presence')
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Y a-t-il des nuisibles sur le site ou à proximité ?" est obligatoire')
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Y a-t-il des nuisibles sur le site ou à proximité ?" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
+    body('pest_animals_details')
+        .optional({ nullable: true })
+        .isString().bail().withMessage('Le champ "Informations complémentaires concernant la présence de nuisibles" est invalide')
+        .trim(),
+
+    body('pest_animals_details')
+        .customSanitizer(value => value || null),
+
+    // fire prevention
+    body('fire_prevention_diagnostic')
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Un diagnostic prévention incendie a-t-il été réalisé ?" est obligatoire')
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Un diagnostic prévention incendie a-t-il été réalisé ?" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
 ]);
