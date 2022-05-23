@@ -421,6 +421,8 @@ export default (app) => {
         '/towns/:id/exports',
         middlewares.auth.authenticate,
         middlewares.shantytown.checkReadPermission,
+        validators.exportTown,
+        middlewares.validation,
         controllers.town.exportOne,
     );
     app.post(
