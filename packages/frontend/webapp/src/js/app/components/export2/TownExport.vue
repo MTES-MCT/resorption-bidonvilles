@@ -75,9 +75,6 @@ export default {
     },
     data() {
         return {
-            canExportHistory: this.$store.getters["config/hasPermission"](
-                "shantytown_history.export"
-            ),
             existingOptions: [
                 {
                     id: "actions",
