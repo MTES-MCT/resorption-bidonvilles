@@ -381,7 +381,7 @@ const router = new VueRouter({
             meta: {
                 group: "users",
                 permissions: ["user.list"],
-                title: "Résorption-bidonvilles — Liste des utilisateurs"
+                title: "Résorption-bidonvilles — Découvrez la communauté"
             },
             path: "/liste-des-utilisateurs",
             component: UserList,

@@ -75,7 +75,7 @@ export default {
             group: "stats"
         },
         {
-            label: "Administration",
+            label: "Communauté",
             target: "/liste-des-utilisateurs",
             menu: "lower",
             group: "users"
