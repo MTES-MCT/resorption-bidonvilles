@@ -261,11 +261,8 @@ export default {
             this.covidOpen = true;
         },
         showExport() {
-            setTimeout(() => {
-                this.exportIsVisible = true;
-            }, 100);
+            this.exportIsVisible = true;
         },
-
         hideExport() {
             this.exportIsVisible = false;
         },
