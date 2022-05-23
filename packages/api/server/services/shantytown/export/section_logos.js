@@ -9,7 +9,7 @@ const {
 
 module.exports = () => {
     const marianne = new ImageRun({
-        data: fs.readFileSync(path.join(assetsSrc, 'marianne.jpg')),
+        data: fs.readFileSync(path.join(assetsSrc, 'logo_gouvernement.jpg')),
         transformation: {
             width: 180,
             height: 100,
