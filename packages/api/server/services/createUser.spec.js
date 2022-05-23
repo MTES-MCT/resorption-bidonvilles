@@ -25,7 +25,7 @@ const createUser = rewiremock.proxy('./createUser.js', {
     '#server/models/userModel': userModel,
 });
 
-describe('userService.createUser()', () => {
+describe.only('userService.createUser()', () => {
     afterEach(() => {
         sinon.reset();
     });
