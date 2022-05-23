@@ -13,7 +13,6 @@
 
     <PrivateLayout v-else>
         <Export
-            class=""
             v-if="exportIsVisible"
             @close="hideExport"
             :shantytownId="town.id"
