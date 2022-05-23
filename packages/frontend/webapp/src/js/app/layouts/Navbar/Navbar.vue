@@ -48,12 +48,9 @@
                 <li v-for="item in lowerMenuItems" :key="item.target">
                     <Link
                         :to="item.target"
-                        :color="item.color || 'G800'"
+                        :color="getColor(item)"
                         :hoverColor="item.color || 'G800'"
-                        :class="
-                            `inline-block py-4 px-3 xl:px-4 hover:bg-G200 ${item.classes ||
-                                ''}`
-                        "
+                        :class="getClass(item)"
                     >
                         {{ item.label }}
                     </Link>
@@ -136,6 +133,25 @@ export default {
             return requiredPermissions.every(permission =>
                 this.$store.getters["config/hasPermission"](permission)
             );
+        },
+        isCurrentPage(target) {
+            return (
+                this.$router.currentRoute.path === target ||
+                (this.$router.currentRoute.path === "/tableau-de-bord" &&
+                    target === "/")
+            );
+        },
+        getColor(item) {
+            return this.isCurrentPage(item.target)
+                ? item.color || "text-primary"
+                : item.color || "G800";
+        },
+        getClass(item) {
+            return this.isCurrentPage(item.target)
+                ? `inline-block py-4 px-3 xl:px-4 hover:bg-G200 border-b-2 border-primary  ${item.classes ||
+                      ""}`
+                : `inline-block py-4 px-3 xl:px-4 hover:bg-G200 ${item.classes ||
+                      ""}`;
         }
     }
 };
