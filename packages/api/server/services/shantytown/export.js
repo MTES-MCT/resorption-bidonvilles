@@ -15,7 +15,6 @@ module.exports = (user, shantytown, options) => {
         context(user, shantytown),
         people(shantytown),
         lifeConditions(shantytown),
-
     ];
 
     if (options.includes('actors')) {
@@ -33,8 +32,8 @@ module.exports = (user, shantytown, options) => {
     if (options.includes('history')) {
         sections.push(changelog(shantytown));
     }
-    const doc = new Document({
 
+    const doc = new Document({
         sections,
     });
 
