@@ -132,7 +132,6 @@ export default {
     },
     methods: {
         download() {
-            console.log("on download ! ");
             getExports(this.shantytownId, this.options);
             this.$trackMatomoEvent("Export", "Export fiche sites");
         },
