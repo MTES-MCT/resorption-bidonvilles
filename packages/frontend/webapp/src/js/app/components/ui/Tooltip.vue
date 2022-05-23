@@ -1,5 +1,5 @@
 <template>
-    <div class="has-tooltip inline-block">
+    <div class="inline-block" v-bind:class="disabled ? [] : 'has-tooltip'">
         <div
             class="tooltip mt-10 ml-5 bg-yellow-200 shadow-md text-black py-4 px-6"
         >
@@ -14,6 +14,10 @@ export default {
     props: {
         text: {
             type: String
+        },
+        disabled: {
+            type: Boolean,
+            default: false
         }
     }
 };

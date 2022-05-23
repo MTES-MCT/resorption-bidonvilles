@@ -33,6 +33,7 @@ module.exports = {
                 active: true,
                 type: {
                     id: 10,
+                    uid: 'delegation_interministerielle',
                     name_singular: 'Délégation interministérielle',
                     name_plural: 'Délégations interministérielles',
                     abbreviation: null,

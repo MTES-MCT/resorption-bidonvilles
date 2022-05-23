@@ -190,6 +190,7 @@
                         :default-view="center"
                         :load-territory-layers="false"
                         :cadastre="cadastre"
+                        mapHeight="500px"
                         @town-click="goTo"
                         layer-name="Satellite"
                     ></Map>

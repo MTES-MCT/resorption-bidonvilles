@@ -21,6 +21,7 @@
                             :default-view="center"
                             :load-territory-layers="false"
                             layer-name="Satellite"
+                            mapHeight="500px"
                         />
                     </div>
                     <div

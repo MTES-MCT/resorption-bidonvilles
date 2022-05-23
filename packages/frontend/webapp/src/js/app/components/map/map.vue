@@ -8,7 +8,7 @@
         >
         </Address>
 
-        <div id="map">
+        <div id="map" :style="mapStyle">
             <div ref="cadastreToggler" class="leaflet-cadastre-toggler">
                 <input type="checkbox" v-model="showCadastre" />
                 Voir le cadastre
@@ -213,6 +213,11 @@ export default {
             type: Object,
             required: false,
             default: null
+        },
+        mapHeight: {
+            type: String,
+            required: false,
+            default: "100%"
         }
     },
 
@@ -403,6 +408,9 @@ export default {
                 Satellite: L.tileLayer.provider("Esri.WorldImagery"),
                 Dessin: L.tileLayer.provider("OpenStreetMap.Mapnik")
             };
+        },
+        mapStyle() {
+            return { height: this.mapHeight };
         }
     },
 
