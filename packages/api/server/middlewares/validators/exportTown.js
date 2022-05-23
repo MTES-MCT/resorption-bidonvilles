@@ -5,7 +5,8 @@ module.exports = [
     query('options')
         .optional({ nullable: true })
         .isString().bail().withMessage('Les options sont au mauvais format')
-        .customSanitizer(value => value.split(','))
+        .trim()
+        .customSanitizer(value => (value ? value.split(',') : []))
         .custom((value) => {
             if (value.some(option => !['actors', 'actions', 'justice', 'comments', 'history'].includes(option))) {
                 throw new Error('Certaines options ne sont pas reconnues');
