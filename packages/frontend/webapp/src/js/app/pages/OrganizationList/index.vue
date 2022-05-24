@@ -42,7 +42,7 @@
                 </GeoSearchbar>
             </PrivateContainer>
         </div>
-        <PrivateContainer class="pt-4 pb-16">
+        <PrivateContainer class="pt-16 pb-16">
             <OrganizationListHeader
                 class="mb-8"
                 :title="title"
@@ -58,6 +58,10 @@
                 :currentPage="currentPage"
                 :onChangePage="onChangePage"
             />
+            <div v-if="!nbPages" class="text-center text-G600 italic pt-12">
+                Aucun acteur ne correspond à votre recherche, essayez d'autres
+                filtres ou périmètre géographique
+            </div>
             <div v-if="!directoryLoading">
                 <OrganizationCard
                     v-for="organization in filteredOrganizationsByPage"
