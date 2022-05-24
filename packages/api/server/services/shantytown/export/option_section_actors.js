@@ -17,53 +17,64 @@ module.exports = shantytown => ({
                 before: 300,
                 after: 100,
             },
-            children: [
-                ...shantytown.actors.reduce((acc, actor) => [
-                    ...acc,
+            children: shantytown.actors.length > 0
+                ? [
+                    ...shantytown.actors.reduce((acc, actor) => [
+                        ...acc,
+                        new TextRun({
+                            text: `    -    ${actor.first_name} ${actor.last_name}, `,
+                            break: 1,
+                            bold: true,
+                            size: 22,
+                            font: 'Arial',
+                        }),
+                        new TextRun({
+                            text: `${actor.organization.name}`,
+                            bold: false,
+                            size: 22,
+                            font: 'Arial',
+                        }),
+                        new TextRun({
+                            text: `         ${actor.themes.map(theme => `«${theme.value || themes[theme.id]}»`).join(' , ')}`,
+                            bold: false,
+                            break: 1,
+                            size: 22,
+                            font: 'Arial',
+                        }),
+                    ], []),
+                ]
+                : [
                     new TextRun({
-                        text: `    -    ${actor.first_name} ${actor.last_name}, `,
+                        text: 'Aucun intervenant déclaré',
                         break: 1,
-                        bold: true,
+                        color: '605F5F',
                         size: 22,
                         font: 'Arial',
                     }),
+                ],
+        }),
+        shantytown.actors.length > 0
+            ? new Paragraph({
+                spacing: {
+                    before: 300,
+                    after: 100,
+                },
+                children: [
                     new TextRun({
-                        text: `${actor.organization.name}`,
+                        text: 'Pour consulter les coordonnées des intervenants, rendez-vous sur l\'annuaire de la plateforme ',
                         bold: false,
                         size: 22,
                         font: 'Arial',
                     }),
                     new TextRun({
-                        text: `         ${actor.themes.map(theme => `«${theme.value || themes[theme.id]}»`).join(' , ')}`,
+                        text: 'Résorption-bidonvilles',
                         bold: false,
-                        break: 1,
+                        italics: true,
                         size: 22,
                         font: 'Arial',
                     }),
-                ], []),
-
-            ],
-        }),
-        new Paragraph({
-            spacing: {
-                before: 300,
-                after: 100,
-            },
-            children: [
-                new TextRun({
-                    text: 'Pour consulter les coordonnées des intervenants, rendez-vous sur l\'annuaire de la plateforme ',
-                    bold: false,
-                    size: 22,
-                    font: 'Arial',
-                }),
-                new TextRun({
-                    text: 'Résorption-bidonvilles',
-                    bold: false,
-                    italics: true,
-                    size: 22,
-                    font: 'Arial',
-                }),
-            ],
-        }),
+                ],
+            })
+            : undefined,
     ],
 });
