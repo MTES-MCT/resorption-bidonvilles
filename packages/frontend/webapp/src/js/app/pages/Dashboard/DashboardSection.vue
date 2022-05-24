@@ -1,8 +1,10 @@
 <template>
     <section>
-        <header class="md:flex items-center mb-5">
-            <h1 class="text-xl font-bold">{{ title }}</h1>
-            <nav class="flex flex-1 justify-between items-center mt-1">
+        <header class="md:flex items-start mb-5">
+            <h1 class="text-xl font-bold" style="margin-top: -0.32em">
+                {{ title }}
+            </h1>
+            <nav class="flex flex-1 justify-between items-start">
                 <slot name="header_left" />
                 <slot name="header_right" />
             </nav>
