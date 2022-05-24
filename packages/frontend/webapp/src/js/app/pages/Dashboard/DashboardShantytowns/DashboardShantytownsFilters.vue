@@ -5,8 +5,15 @@
             :key="item.id"
             :item="item"
             @click.native="setFilter(item.id)"
-            >{{ item.label }} ({{ total[item.id] }})</FilterItem
-        >
+            >{{ item.label }} ({{ total[item.id] }})
+            <template v-if="item.sublabel"
+                ><br /><span
+                    class="inline-block w-full font-normal text-center"
+                    :class="item.active ? 'visible' : 'invisible'"
+                    >{{ item.sublabel }}</span
+                ></template
+            >
+        </FilterItem>
     </ul>
 </template>
 
@@ -69,6 +76,7 @@ export default {
                 {
                     type: "link",
                     label: "Nouveaux sites déclarés",
+                    sublabel: "Sur les 30 derniers jours",
                     id: "new_shantytowns",
                     track_id: "Nouveaux sites"
                 },
