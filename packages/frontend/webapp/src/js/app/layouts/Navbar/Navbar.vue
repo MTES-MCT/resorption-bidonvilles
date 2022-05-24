@@ -135,61 +135,47 @@ export default {
             );
         },
         isCurrentPage(item) {
-            console.log(`item.links: ${JSON.stringify(item.links)}`);
-            return (
-                // this.$router.currentRoute.path === target ||
-                item.links.includes(
-                    `/${this.$router.currentRoute.path.split("/")[1]}`
-                ) ||
-                (this.$router.currentRoute.path === "/tableau-de-bord" &&
-                    item.target === "/")
-            );
+            return this.$router.currentRoute.meta.group === item.id;
         },
         getColor(item) {
-            return this.isCurrentPage(item)
-                ? item.color || "text-primary"
-                : item.color || "text-G800";
+            return (
+                item.color ||
+                (this.isCurrentPage(item) ? "text-primary" : "text-G800")
+            );
         },
         getClass(item) {
-            return this.isCurrentPage(item)
-                ? `link actif ${item.classes || ""}`
-                : `link inactif ${item.classes || ""}`;
-            /*
-                ? `inline-block py-4 px-3 xl:px-4 border-t-2 border-b-2 border-primary hover:bg-G200 ${item.classes ||
-                    ""}`
-                : `inline-block py-4 px-3 xl:px-4 border-t-2 border-b-2 border-transparent hover:bg-G200 ${item.classes ||
-                    ""}`;
-            */
+            let classes =
+                "relative inline-block py-4 px-3 xl:px-4 hover:bg-G200";
+            if (item.classes) {
+                classes += " " + item.classes;
+            }
+
+            if (this.isCurrentPage(item)) {
+                classes += " active";
+            }
+
+            return classes;
         }
     }
 };
 </script>
+
 <style scoped>
-.link {
-    display: inline-block;
-    padding-top: 1rem; /* 16px */
-    padding-bottom: 1rem; /* 16px */
-    padding-left: 0.75rem; /* 12px */
-    padding-right: 0.75rem; /* 12px */
-    border-top-width: 2px;
-    border-bottom-width: 2px;
-    text-decoration: none;
+.covid {
+    @apply font-bold uppercase;
 }
 
-.actif {
-    border-bottom-color: #000091;
-    border-top-color: transparent;
+.active::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 0.1rem;
+    width: 100%;
+    @apply bg-primary;
 }
 
-.inactif {
-    border-color: transparent;
-}
-
-.actif:hover {
-    background-color: #f0f0f0;
-}
-
-.inactif:hover {
-    background-color: #f0f0f0;
+.covid.active::before {
+    @apply bg-red600;
 }
 </style>

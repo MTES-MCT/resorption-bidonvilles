@@ -284,7 +284,7 @@ const router = new VueRouter({
         },
         {
             meta: {
-                group: "townList",
+                group: "carte",
                 title: "Résorption-bidonvilles — Carte des sites"
             },
             path: "/cartographie",
@@ -293,7 +293,7 @@ const router = new VueRouter({
         },
         {
             meta: {
-                group: "townList",
+                group: "sites",
                 title: "Résorption-bidonvilles — Liste des sites"
             },
             path: "/liste-des-sites",
@@ -302,7 +302,7 @@ const router = new VueRouter({
         },
         {
             meta: {
-                group: "townCreation",
+                group: "sites",
                 permissions: ["shantytown.create"],
                 title: "Résorption-bidonvilles — Déclarer un site"
             },
@@ -312,7 +312,7 @@ const router = new VueRouter({
         },
         {
             meta: {
-                group: "townList",
+                group: "sites",
                 title: "Résorption-bidonvilles — Fiche de site"
             },
             path: "/site/:id",
@@ -321,7 +321,7 @@ const router = new VueRouter({
         },
         {
             meta: {
-                group: "townList",
+                group: "sites",
                 title: "Résorption-bidonvilles — Mise à jour de site"
             },
             path: "/site/:id/mise-a-jour",
@@ -362,7 +362,7 @@ const router = new VueRouter({
         },
         {
             meta: {
-                group: "account",
+                group: "mon-compte",
                 title: "Résorption-bidonvilles — Gestion de mon compte"
             },
             path: "/mon-compte",
@@ -371,6 +371,7 @@ const router = new VueRouter({
         },
         {
             meta: {
+                group: "administration",
                 title: "Résorption-bidonvilles — Fiche d'un utilisateur"
             },
             path: "/utilisateur/:id",
@@ -379,7 +380,7 @@ const router = new VueRouter({
         },
         {
             meta: {
-                group: "users",
+                group: "administration",
                 permissions: ["user.list"],
                 title: "Résorption-bidonvilles — Découvrez la communauté"
             },
@@ -389,7 +390,7 @@ const router = new VueRouter({
         },
         {
             meta: {
-                group: "userCreation",
+                group: "administration",
                 permissions: ["user.create"],
                 title: "Résorption-bidonvilles — Créer un utilisateur"
             },
@@ -417,7 +418,7 @@ const router = new VueRouter({
         },
         {
             meta: {
-                group: "users",
+                group: "administration",
                 permissions: ["user.activate"],
                 title: "Résorption-bidonvilles — Fiche de demande d'accès"
             },
@@ -427,7 +428,6 @@ const router = new VueRouter({
         },
         {
             meta: {
-                group: "users",
                 title: "Résorption-bidonvilles — Mise à niveau de votre compte"
             },
             path: "/mise-a-niveau",
@@ -436,7 +436,6 @@ const router = new VueRouter({
         },
         {
             meta: {
-                group: "users",
                 title:
                     "Résorption-bidonvilles — Demande de nouveau mot de passe"
             },
@@ -446,7 +445,6 @@ const router = new VueRouter({
         },
         {
             meta: {
-                group: "users",
                 title:
                     "Résorption-bidonvilles — Réinitialisation de mon mot de passe"
             },
@@ -456,7 +454,6 @@ const router = new VueRouter({
         },
         {
             meta: {
-                group: "account",
                 title: "Résorption-bidonvilles — Activation de mon compte"
             },
             path: "/activer-mon-compte/:token",
@@ -466,7 +463,7 @@ const router = new VueRouter({
         {
             meta: {
                 title: "Résorption-bidonvilles — Liste des actions",
-                group: "plans",
+                group: "actions",
                 permissions: ["plan.list"]
             },
             path: "/liste-des-actions",
@@ -480,7 +477,7 @@ const router = new VueRouter({
         {
             meta: {
                 title: "Résorption-bidonvilles — Déclarer une action",
-                group: "plans",
+                group: "actions",
                 permissions: ["plan.create"]
             },
             path: "/nouvelle-action",
@@ -494,7 +491,7 @@ const router = new VueRouter({
         {
             meta: {
                 title: "Résorption-bidonvilles — Modifier une action",
-                group: "plans",
+                group: "actions",
                 permissions: ["plan.update"]
             },
             path: "/modifier-action/:id",
@@ -513,7 +510,7 @@ const router = new VueRouter({
         {
             meta: {
                 title: "Résorption-bidonvilles — Fiche d'une action",
-                group: "plans",
+                group: "actions",
                 permissions: ["plan.read"]
             },
             path: "/action/:id",
@@ -533,7 +530,7 @@ const router = new VueRouter({
             meta: {
                 title:
                     "Résorption-bidonvilles — Saisir les indicateurs d'une action",
-                group: "plans",
+                group: "actions",
                 permissions: ["plan.updateMarks"]
             },
             path: "/action/:id/indicateurs",
@@ -553,7 +550,7 @@ const router = new VueRouter({
             path: "/statistiques/:code?",
             meta: {
                 title: "Résorption-bidonvilles — Statistiques",
-                group: "stats",
+                group: "statistiques",
                 permissions: ["stats.read"]
             },
             component: PrivateStats,
@@ -563,7 +560,7 @@ const router = new VueRouter({
             path: "/activites",
             meta: {
                 title: "Résorption-bidonvilles — Historique des activités",
-                group: "history",
+                group: "activites",
                 permissions: ["shantytown.list"]
             },
             component: History,
@@ -573,7 +570,7 @@ const router = new VueRouter({
             path: "/activites/:locationType/:locationCode?",
             meta: {
                 title: "Résorption-bidonvilles — Historique des activités",
-                group: "history",
+                group: "activites",
                 permissions: ["shantytown.list"]
             },
             component: History,
@@ -591,7 +588,7 @@ const router = new VueRouter({
         {
             meta: {
                 title: "Résorption-bidonvilles — Annuaire",
-                group: "directory"
+                group: "annuaire"
             },
             path: "/annuaire/",
             component: OrganizationList,
@@ -600,7 +597,7 @@ const router = new VueRouter({
         {
             meta: {
                 title: "Résorption-bidonvilles — Fiche d'annuaire",
-                group: "directory"
+                group: "annuaire"
             },
             path: "/annuaire/:id",
             component: OrganizationDetails,
@@ -609,7 +606,7 @@ const router = new VueRouter({
         {
             meta: {
                 title: "Résorption-bidonvilles — Tableau de bord",
-                group: "dashboard"
+                group: "tableau-de-bord"
             },
             path: "/tableau-de-bord",
             component: Dashboard,

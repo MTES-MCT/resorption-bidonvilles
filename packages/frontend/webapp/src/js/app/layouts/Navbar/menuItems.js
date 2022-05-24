@@ -32,71 +32,58 @@ export default {
         {
             label: "Accueil",
             target: "/",
-            links: ["/"],
+            id: "tableau-de-bord",
             menu: "lower"
         },
         {
             label: "Covid-19",
             target: "/covid-19",
-            links: ["/covid-19"],
-            classes: "font-bold uppercase",
+            id: "covid",
+            classes: "covid",
             color: "text-red600",
             menu: "lower"
         },
         {
             label: "Sites",
             target: "/liste-des-sites",
-            links: ["/liste-des-sites", "/site", "/nouveau-site"],
-            menu: "lower",
-            group: "townList"
+            id: "sites",
+            menu: "lower"
         },
         {
             label: "Actions",
             target: "/liste-des-actions",
-            links: [
-                "/liste-des-actions",
-                "/nouvelle-action",
-                "/action",
-                "/modifier-action"
-            ],
+            id: "actions",
             menu: "lower"
         },
         {
             label: "Annuaire",
             target: "/annuaire",
-            links: ["/annuaire"],
-            menu: "lower",
-            group: "directory"
+            id: "annuaire",
+            menu: "lower"
         },
         {
             label: "Carte",
             target: "/cartographie",
-            links: ["/cartographie"],
+            id: "carte",
             menu: "lower"
         },
         {
             label: "Dernières activités",
             target: "/activites",
-            links: ["/activites"],
+            id: "activites",
             menu: "lower"
         },
         {
             label: "Statistiques",
             target: "/statistiques",
-            links: ["/statistiques"],
-            menu: "lower",
-            group: "stats"
+            id: "statistiques",
+            menu: "lower"
         },
         {
             label: "Communauté",
             target: "/liste-des-utilisateurs",
-            links: [
-                "/liste-des-utilisateurs",
-                "/nouvel-utilisateur",
-                "/utilisateur"
-            ],
-            menu: "lower",
-            group: "users"
+            id: "administration",
+            menu: "lower"
         },
         {
             label: "Blog",
@@ -111,7 +98,7 @@ export default {
             label: "Mon compte",
             target: "/mon-compte",
             menu: "upper",
-            group: "me"
+            id: "mon-compte"
         },
         {
             label: "Aide",
