@@ -1,5 +1,5 @@
 <template>
-    <ValidationObserver ref="form" @submit.prevent="submit" v-slot="{ errors }">
+    <ValidationObserver ref="form" @submit.prevent="submit">
         <form>
             <div class="bg-G100 py-8">
                 <PrivateContainer class="flex justify-between items-baseline">
@@ -156,6 +156,7 @@ export default {
         return {
             nearbyClosedShantytowns: [],
             mainError: null,
+            errors: [],
             loading: false,
             showInfo: true,
             initialTown: this.formatTown(this.data),
@@ -290,6 +291,7 @@ export default {
         async submit() {
             const isValid = await this.$refs.form.validate();
             if (!isValid) {
+                this.errors = this.$refs.form.errors;
                 this.$router.replace("#top", () =>
                     this.$router.replace("#erreurs")
                 );
@@ -431,6 +433,7 @@ export default {
 
                 if (err && err.fields) {
                     this.$refs.form.setErrors(err.fields);
+                    this.errors = err.fields;
                 }
 
                 if (err && err.user_message) {
