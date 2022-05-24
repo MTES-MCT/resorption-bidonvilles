@@ -134,25 +134,62 @@ export default {
                 this.$store.getters["config/hasPermission"](permission)
             );
         },
-        isCurrentPage(target) {
+        isCurrentPage(item) {
+            console.log(`item.links: ${JSON.stringify(item.links)}`);
             return (
-                this.$router.currentRoute.path === target ||
+                // this.$router.currentRoute.path === target ||
+                item.links.includes(
+                    `/${this.$router.currentRoute.path.split("/")[1]}`
+                ) ||
                 (this.$router.currentRoute.path === "/tableau-de-bord" &&
-                    target === "/")
+                    item.target === "/")
             );
         },
         getColor(item) {
-            return this.isCurrentPage(item.target)
+            return this.isCurrentPage(item)
                 ? item.color || "text-primary"
-                : item.color || "G800";
+                : item.color || "text-G800";
         },
         getClass(item) {
-            return this.isCurrentPage(item.target)
-                ? `inline-block py-4 px-3 xl:px-4 hover:bg-G200 border-b-2 border-primary  ${item.classes ||
-                      ""}`
-                : `inline-block py-4 px-3 xl:px-4 hover:bg-G200 ${item.classes ||
-                      ""}`;
+            return this.isCurrentPage(item)
+                ? `link actif ${item.classes || ""}`
+                : `link inactif ${item.classes || ""}`;
+            /*
+                ? `inline-block py-4 px-3 xl:px-4 border-t-2 border-b-2 border-primary hover:bg-G200 ${item.classes ||
+                    ""}`
+                : `inline-block py-4 px-3 xl:px-4 border-t-2 border-b-2 border-transparent hover:bg-G200 ${item.classes ||
+                    ""}`;
+            */
         }
     }
 };
 </script>
+<style scoped>
+.link {
+    display: inline-block;
+    padding-top: 1rem; /* 16px */
+    padding-bottom: 1rem; /* 16px */
+    padding-left: 0.75rem; /* 12px */
+    padding-right: 0.75rem; /* 12px */
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    text-decoration: none;
+}
+
+.actif {
+    border-bottom-color: #000091;
+    border-top-color: transparent;
+}
+
+.inactif {
+    border-color: transparent;
+}
+
+.actif:hover {
+    background-color: #f0f0f0;
+}
+
+.inactif:hover {
+    background-color: #f0f0f0;
+}
+</style>
