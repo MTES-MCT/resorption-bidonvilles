@@ -51,7 +51,7 @@ module.exports = shantytown => ({
             },
             children: [
                 new TextRun({
-                    text: 'Pour consulter les coordonnées, rendez-vous sur l\'annuaire de la plateforme ',
+                    text: 'Pour consulter les coordonnées des intervenants, rendez-vous sur l\'annuaire de la plateforme ',
                     bold: false,
                     size: 22,
                     font: 'Arial',
