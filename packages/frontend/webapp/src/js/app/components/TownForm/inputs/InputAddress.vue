@@ -7,7 +7,7 @@
         :getResultValue="getResultValue"
         validationName="Adresse"
         @submit="submit"
-        rules="required"
+        rules="addressRequired"
         data-cy-field="address"
         :defaultValue="value"
         :disabled="disabled"
@@ -15,7 +15,15 @@
 </template>
 
 <script>
+import { extend } from "vee-validate";
 import { autocomplete } from "#helpers/addressHelper";
+
+extend("addressRequired", {
+    validate(value) {
+        return !!(value && value.citycode && value.label);
+    },
+    message: "L'adresse est obligatoire"
+});
 
 export default {
     props: {
