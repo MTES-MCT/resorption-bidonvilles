@@ -60,13 +60,17 @@ module.exports = async (owners) => {
         if (row.entity === 'shantytown'
             && row.feature === 'list'
             && acc[row.user_id].shantytown_justice
-            && acc[row.user_id].shantytown_justice.access) {
+            && acc[row.user_id].shantytown_justice.access
+            && acc[row.user_id].shantytown_justice.access.allowed === true) {
             acc[row.user_id].shantytown_justice.access.allow_all = permission.allow_all;
+            acc[row.user_id].shantytown_justice.access.allowed_on = permission.allowed_on;
         } else if (row.entity === 'shantytown_justice'
             && row.feature === 'access'
+            && row.allowed === true
             && acc[row.user_id].shantytown
             && acc[row.user_id].shantytown.list) {
             permission.allow_all = acc[row.user_id].shantytown.list.allow_all;
+            permission.allowed_on = acc[row.user_id].shantytown.list.allowed_on;
         }
 
         acc[row.user_id][row.entity][row.feature] = permission;
