@@ -5,4 +5,5 @@ module.exports = [
     'info-request',
     'access-request',
     'register-newsletter',
+    'submit-blog-post',
 ];
