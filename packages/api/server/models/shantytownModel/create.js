@@ -1,6 +1,6 @@
 const sequelize = require('#db/sequelize');
 
-module.exports = async (townData) => {
+module.exports = async (townData, transaction = undefined) => {
     const result = await sequelize.query(
         `INSERT INTO shantytowns(
             status,
@@ -133,6 +133,7 @@ module.exports = async (townData) => {
             :pest_animals_details,
             :fire_prevention
         ) RETURNING shantytown_id AS id`, {
+            transaction,
             replacements: {
                 latitude: townData.latitude,
                 longitude: townData.longitude,

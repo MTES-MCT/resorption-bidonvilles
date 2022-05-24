@@ -1,3 +1,4 @@
+const sequelize = require('#db/sequelize');
 const shantytownModel = require('#server/models/shantytownModel');
 const socialOriginModel = require('#server/models/socialOriginModel');
 const shantytownToiletTypesModel = require('#server/models/shantytownToiletTypesModel');
@@ -73,6 +74,7 @@ module.exports = async (townData, user) => {
         fire_prevention: townData.fire_prevention_diagnostic,
     };
 
+    const transaction = await sequelize.transaction();
     const shantytown_id = await shantytownModel.create(
         Object.assign(
             {},
@@ -97,17 +99,19 @@ module.exports = async (townData, user) => {
                 }
                 : {},
         ),
+        transaction,
     );
 
     const promises = [];
     if (townData.social_origins.length > 0) {
-        promises.push(socialOriginModel.create(shantytown_id, townData.social_origins));
+        promises.push(socialOriginModel.create(shantytown_id, townData.social_origins, transaction));
     }
 
     if (townData.sanitary_toilet_types.length > 0) {
         promises.push(shantytownToiletTypesModel.create(
             shantytown_id,
             townData.sanitary_toilet_types,
+            transaction,
         ));
     }
 
@@ -115,10 +119,12 @@ module.exports = async (townData, user) => {
         promises.push(electricityAccessTypesModel.create(
             shantytown_id,
             townData.electricity_access_types,
+            transaction,
         ));
     }
 
     await Promise.all(promises);
+    await transaction.commit();
 
     const town = await shantytownModel.findOne(user, shantytown_id);
 
