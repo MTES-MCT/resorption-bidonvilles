@@ -309,6 +309,13 @@ export default {
                     s.push({ id: "sante", label: "Santé" });
                 }
 
+                if (this.topics.includes("school")) {
+                    s.push({
+                        id: "education",
+                        label: "Éducation et scolarisation"
+                    });
+                }
+
                 if (this.topics.includes("work")) {
                     s.push({ id: "emploi", label: "Formation et emploi" });
                 }
