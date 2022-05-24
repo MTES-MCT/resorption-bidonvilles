@@ -14,7 +14,7 @@
                 </template>
 
                 <template v-slot:body>
-                    <div class="modalWrapper w-256">
+                    <div class="modalWrapper">
                         <div class="text-secondary">
                             {{ currentItem.date }}
                         </div>
@@ -80,7 +80,7 @@
 .modalWrapper {
     min-height: 50vh;
     max-height: 60vh;
-    max-width: 800px;
+    @apply max-w-2xl;
     overflow: hidden;
 }
 </style>
