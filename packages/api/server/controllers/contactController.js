@@ -36,6 +36,7 @@ function getObjetForContactMessage(requestType) {
         'help-request': "Demander de l'aide",
         'info-request': 'Demander des infos',
         'register-newsletter': 'Vous abonner à la lettre d\'info',
+        'submit-blog-post': 'proposer un article pour le blog',
     };
     return requestType.map(type => types[type]).join(' - ');
 }
