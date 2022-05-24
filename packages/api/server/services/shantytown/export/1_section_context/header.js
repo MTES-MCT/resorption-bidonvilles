@@ -1,6 +1,5 @@
 const moment = require('moment');
 const { Paragraph, TextRun, AlignmentType } = require('docx');
-// const getAddressSimpleOf = require('#server/models/shantytownModel/_common/getAddressSimpleOf');
 
 module.exports = (shantytown) => {
     const currentDate = moment().utcOffset(2).locale('fr');
