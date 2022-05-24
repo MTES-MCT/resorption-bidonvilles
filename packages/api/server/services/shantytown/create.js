@@ -1,14 +1,13 @@
 const shantytownModel = require('#server/models/shantytownModel');
 const socialOriginModel = require('#server/models/socialOriginModel');
-const electricityTypeModel = require('#server/models/electricityTypeModel');
+const shantytownToiletTypesModel = require('#server/models/shantytownToiletTypesModel');
+const electricityAccessTypesModel = require('#server/models/electricityAccessTypesModel');
 const config = require('#server/config');
 const mattermostUtils = require('#server/utils/mattermost');
 const userModel = require('#server/models/userModel');
 const mails = require('#server/mails/mails');
 
 module.exports = async (townData, user) => {
-    const electricityType = await electricityTypeModel.findOneByUid('inconnu');
-
     const baseTown = {
         name: townData.name,
         latitude: townData.latitude,
@@ -27,7 +26,6 @@ module.exports = async (townData, user) => {
         minorsInSchool: townData.minors_in_school,
         caravans: townData.caravans,
         huts: townData.huts,
-        electricityType: electricityType.id,
         fieldType: townData.field_type,
         ownerType: townData.owner_type,
         isReinstallation: townData.is_reinstallation,
@@ -38,6 +36,41 @@ module.exports = async (townData, user) => {
         censusStatus: townData.census_status,
         censusConductedAt: townData.census_conducted_at,
         censusConductedBy: townData.census_conducted_by,
+
+        // living conditions
+        living_conditions_version: 2,
+
+        water_access_type: townData.water_access_type,
+        water_access_type_details: townData.water_access_type_details,
+        water_access_is_public: townData.water_access_is_public,
+        water_access_is_continuous: townData.water_access_is_continuous,
+        water_access_is_continuous_details: townData.water_access_is_continuous_details,
+        water_access_is_local: townData.water_access_is_local,
+        water_access_is_close: townData.water_access_is_close,
+        water_access_is_unequal: townData.water_access_is_unequal,
+        water_access_is_unequal_details: townData.water_access_is_unequal_details,
+        water_access_has_stagnant_water: townData.water_access_has_stagnant_water,
+        water_access_comments: townData.water_access_comments,
+
+        sanitary_open_air_defecation: townData.sanitary_open_air_defecation,
+        sanitary_access_working_toilets: townData.sanitary_working_toilets,
+        sanitary_access_toilets_are_inside: townData.sanitary_toilets_are_inside,
+        sanitary_access_toilets_are_lighted: townData.sanitary_toilets_are_lighted,
+        sanitary_access_hand_washing: townData.sanitary_hand_washing,
+
+        electricity_access: townData.electricity_access,
+        electricity_access_is_unequal: townData.electricity_access_is_unequal,
+
+        trash_is_piling: townData.trash_is_piling,
+        trash_evacuation_is_close: townData.trash_evacuation_is_close,
+        trash_evacuation_is_safe: townData.trash_evacuation_is_safe,
+        trash_evacuation_is_regular: townData.trash_evacuation_is_regular,
+        trash_bulky_is_piling: townData.trash_bulky_is_piling,
+
+        pest_animals: townData.pest_animals_presence,
+        pest_animals_details: townData.pest_animals_details,
+
+        fire_prevention: townData.fire_prevention_diagnostic,
     };
 
     const shantytown_id = await shantytownModel.create(
@@ -66,10 +99,26 @@ module.exports = async (townData, user) => {
         ),
     );
 
+    const promises = [];
     if (townData.social_origins.length > 0) {
-        await socialOriginModel.create(shantytown_id, townData.social_origins);
+        promises.push(socialOriginModel.create(shantytown_id, townData.social_origins));
     }
 
+    if (townData.sanitary_toilet_types.length > 0) {
+        promises.push(shantytownToiletTypesModel.create(
+            shantytown_id,
+            townData.sanitary_toilet_types,
+        ));
+    }
+
+    if (townData.electricity_access_types.length > 0) {
+        promises.push(electricityAccessTypesModel.create(
+            shantytown_id,
+            townData.electricity_access_types,
+        ));
+    }
+
+    await Promise.all(promises);
 
     const town = await shantytownModel.findOne(user, shantytown_id);
 
