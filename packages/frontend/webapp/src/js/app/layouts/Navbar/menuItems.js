@@ -56,7 +56,7 @@ export default {
             menu: "lower"
         },
         {
-            label: "Annuaire",
+            label: "Communauté",
             target: "/annuaire",
             id: "annuaire",
             menu: "lower"
@@ -80,7 +80,7 @@ export default {
             menu: "lower"
         },
         {
-            label: "Communauté",
+            label: "Administration",
             target: "/liste-des-utilisateurs",
             id: "administration",
             menu: "lower"

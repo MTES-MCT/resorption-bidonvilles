@@ -6,7 +6,7 @@
                     <h2
                         class="text-display-lg font-bold mb-4 whitespace-nowrap"
                     >
-                        Découvrez la communauté
+                        Liste des utilisateurs
                     </h2>
                     <router-link to="/typologie-des-acces" class="link">
                         <Icon icon="file-pdf" />
