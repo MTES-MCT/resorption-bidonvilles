@@ -6,8 +6,8 @@ export default {
     namespaced: true,
 
     actions: {
-        async publishComment({ commit }, { townId, comment }) {
-            publish(
+        publishComment({ commit }, { townId, comment }) {
+            return publish(
                 addComment,
                 townId,
                 comment,
@@ -16,8 +16,8 @@ export default {
             );
         },
 
-        async publishCovidComment({ commit }, { townId, comment }) {
-            publish(
+        publishCovidComment({ commit }, { townId, comment }) {
+            return publish(
                 addCovidComment,
                 townId,
                 comment,
