@@ -103,12 +103,15 @@
                             :disabled="loading"
                         />
                         <div class="flex items-center justify-between">
-                            <Button
-                                variant="primaryText"
-                                type="button"
-                                @click="cancelComment"
-                                >Annuler</Button
-                            >
+                            <p>
+                                <Button
+                                    variant="primaryText"
+                                    type="button"
+                                    v-if="form.newComment"
+                                    @click="cancelComment"
+                                    >Annuler</Button
+                                >
+                            </p>
                             <Button
                                 variant="tertiary"
                                 type="primary"
