@@ -41,6 +41,7 @@ export default new Vuex.Store({
         entrypoint: null,
         towns: {
             data: [],
+            hash: {}, // an hash-table matching townId to an index in data
             loading: true,
             error: null,
             sort: "updatedAt",
@@ -71,6 +72,13 @@ export default new Vuex.Store({
         },
         setTowns(state, towns) {
             state.towns.data = towns;
+            state.towns.hash = towns.reduce(
+                (hash, { id }, index) => ({
+                    ...hash,
+                    [id]: index
+                }),
+                {}
+            );
         },
         setError(state, err) {
             state.towns.error = err;
@@ -90,10 +98,8 @@ export default new Vuex.Store({
         setDetailedTown(state, town) {
             state.detailedTown = town;
 
-            const index = state.towns.data.findIndex(
-                ({ id }) => id === town.id
-            );
-            if (index >= 0) {
+            const index = state.towns.hash[town.id];
+            if (index !== undefined) {
                 state.towns.data[index] = town;
             }
         },
@@ -105,12 +111,10 @@ export default new Vuex.Store({
                 state.detailedTown.comments = comments;
             }
 
-            const townIndex = state.towns.data.findIndex(
-                ({ id }) => id === townId
-            );
-            if (townIndex !== undefined) {
-                state.towns.data.splice(townIndex, 1, {
-                    ...state.towns.data[townIndex],
+            const index = state.towns.hash[townId];
+            if (index !== undefined) {
+                state.towns.data.splice(index, 1, {
+                    ...state.towns.data[index],
                     comments: comments
                 });
             }
@@ -123,12 +127,10 @@ export default new Vuex.Store({
                 state.detailedTown.actors = actors;
             }
 
-            const townIndex = state.towns.data.findIndex(
-                ({ id }) => id === townId
-            );
-            if (townIndex !== undefined) {
-                state.towns.data.splice(townIndex, 1, {
-                    ...state.towns.data[townIndex],
+            const index = state.towns.hash[townId];
+            if (index !== undefined) {
+                state.towns.data.splice(index, 1, {
+                    ...state.towns.data[index],
                     actors: actors
                 });
             }
@@ -146,9 +148,11 @@ export default new Vuex.Store({
                 }
             }
 
-            const town = state.towns.data.find(({ id }) => id === townId);
-            if (town !== undefined) {
-                const actor = town.actors.find(({ id }) => id === userId);
+            const index = state.towns.hash[townId];
+            if (index !== undefined) {
+                const actor = state.towns.data[index].actors.find(
+                    ({ id }) => id === userId
+                );
                 if (actor !== undefined) {
                     actor.themes = themes;
                 }
