@@ -49,9 +49,14 @@
                 </CheckableGroup>
             </div>
             <div class="flex items-center justify-between">
-                <Button variant="primaryText" @click="cancelComment"
-                    >Annuler</Button
-                >
+                <p>
+                    <Button
+                        variant="primaryText"
+                        @click="cancelComment"
+                        v-if="newComment"
+                        >Annuler</Button
+                    >
+                </p>
                 <Button
                     variant="tertiary"
                     @click="addComment"
