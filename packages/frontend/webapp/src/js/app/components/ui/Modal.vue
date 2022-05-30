@@ -72,8 +72,18 @@ export default {
             type: Array
         }
     },
+    data() {
+        return {
+            openedAt: null
+        };
+    },
     methods: {
         checkOutsideClick(event) {
+            // ignore outside clicks if the modal has been opened less than 100ms ago
+            if (Date.now() - this.openedAt <= 100) {
+                return;
+            }
+
             if (this.isOpen && !this.$refs.dialog.contains(event.target)) {
                 this.closeModal();
                 this.$emit("closeModal");
@@ -81,6 +91,8 @@ export default {
         }
     },
     mounted() {
+        this.openedAt = Date.now();
+
         if (this.closeClickOutside) {
             document.addEventListener("click", this.checkOutsideClick);
         }

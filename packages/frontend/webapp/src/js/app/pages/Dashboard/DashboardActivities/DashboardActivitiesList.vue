@@ -37,6 +37,12 @@
             :key="`${activity.entity}-${activity.action}-${activity.date}`"
             :activity="activity"
         />
+
+        <footer class="mt-10 text-center underline">
+            <Link to="/activites">
+                Voir toutes les activités
+            </Link>
+        </footer>
     </section>
 </template>
 

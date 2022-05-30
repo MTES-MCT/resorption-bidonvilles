@@ -69,6 +69,7 @@ module.exports = (town, user) => {
         populationMinors16To18: town.populationMinors16To18,
         minorsInSchool: town.minorsInSchool,
         electricityType: {
+            uid: town.electricityTypeUid,
             id: town.electricityTypeId,
             label: town.electricityTypeLabel,
         },
