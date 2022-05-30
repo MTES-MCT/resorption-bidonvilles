@@ -1,7 +1,7 @@
 <template>
     <div class="leftContainer">
         <h1 class="text-display-md font-bold mb-4">
-            Tableau de bord
+            Statistiques
         </h1>
 
         <div>

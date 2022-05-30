@@ -102,6 +102,13 @@
                                 v-if="isFrenchLocale"
                                 variant="card"
                             />
+                            <Checkbox
+                                checkValue="submit-blog-post"
+                                :label="$t('contactPage.submitBlogPost')"
+                                v-model="commonFields.request_type"
+                                v-if="isFrenchLocale"
+                                variant="card"
+                            />
                         </CheckableGroup>
                         <CheckableGroup
                             v-if="isRequestAccess"
