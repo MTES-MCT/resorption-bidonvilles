@@ -3,7 +3,7 @@
         <div class="flex items-center">
             <div
                 v-if="icon"
-                class="rounded-full bg-yellow-400 w-6 h-6 text-center text-xs leading-6"
+                class="rounded-full bg-yellow-400 w-6 h-6 text-center text-size-xs leading-6"
             >
                 <Icon :icon="icon"></Icon>
             </div>

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div
-            class="rounded-full inline-block bg-yellow-400 w-6 h-6 text-center text-xs align-middle leading-6"
+            class="rounded-full inline-block bg-yellow-400 w-6 h-6 text-center text-size-xs align-middle leading-6"
         >
             <Icon :icon="icon"></Icon>
         </div>
