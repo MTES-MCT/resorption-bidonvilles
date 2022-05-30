@@ -361,25 +361,35 @@ export default {
 }
 
 .closedShantytown {
+    .cardGridTemplateColumns {
+        @media print {
+            grid-template-columns: 140px 91px 150px 154px 0px;
+        }
+    }
+}
+
+.closedShantytown {
     position: relative;
     overflow: hidden;
 }
 
-.closedShantytown:before {
-    position: absolute;
-    pointer-events: none;
-    content: "";
-    background: linear-gradient(
-        to left bottom,
-        transparent 50%,
-        currentColor 49.8%,
-        currentColor 50.2%,
-        transparent 50%
-    );
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
+@media not print {
+    .closedShantytown:before {
+        position: absolute;
+        pointer-events: none;
+        content: "";
+        background: linear-gradient(
+            to left bottom,
+            transparent 50%,
+            currentColor 49.8%,
+            currentColor 50.2%,
+            transparent 50%
+        );
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    }
 }
 
 .preventPrintBreak {
