@@ -267,7 +267,7 @@ export default {
             this.searchInput = "";
             this.$emit("submit", null);
             this.$emit("input", null);
-            this.$refs.provider.syncValue(null);
+            this.$refs.provider.syncValue({});
             this.$refs.provider.validate();
             this.$emit("blur", { value: null, search: "" });
         },
