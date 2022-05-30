@@ -1,4 +1,5 @@
-import { getApi, postApi, putApi, deleteApi } from "#helpers/api/main";
+import { getApi, postApi, putApi, deleteApi, open } from "#helpers/api/main";
+import { VUE_APP_API_URL } from "#src/js/env.js";
 
 /**
  * Fetches all towns from the database
@@ -184,6 +185,17 @@ export function findNearby(latitude, longitude) {
 export function findClosedNearby(latitude, longitude) {
     return getApi(
         `/towns/findClosedNearby?latitude=${latitude}&longitude=${longitude}`
+    );
+}
+
+/**
+ * GET /towns/:id/exports
+ */
+export function getExports(townId, options) {
+    return open(
+        `${VUE_APP_API_URL}/towns/${townId}/exports?options=${encodeURIComponent(
+            options.join(",")
+        )}`
     );
 }
 

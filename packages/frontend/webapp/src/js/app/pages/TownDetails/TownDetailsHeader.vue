@@ -77,6 +77,14 @@
                 >Corriger la fermeture du site</Button
             >
             <Button
+                icon="file-excel"
+                iconPosition="left"
+                variant="primary"
+                class="mr-8"
+                @click="showExport"
+                >Exporter</Button
+            >
+            <Button
                 data-cy="updateTown"
                 variant="primary"
                 class="mr-8"
@@ -150,6 +158,9 @@ export default {
         },
         routeToUpdate() {
             this.$router.push(`/site/${this.town.id}/mise-a-jour`);
+        },
+        showExport() {
+            this.$emit("showExport");
         }
     },
     computed: {

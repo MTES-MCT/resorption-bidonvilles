@@ -16,6 +16,7 @@ const createShantytownComment = require('./shantytownComment/create');
 const activityList = require('./activity/list');
 const dashboardLocation = require('./dashboard/location');
 const findNearbyTowns = require('./findNearbyTowns');
+const exportTown = require('./exportTown');
 const setUserAdminComments = require('./setUserAdminComments');
 const editOrganization = require('./editOrganization');
 const userSetRoleRegular = require('./users/setRoleRegular');
@@ -31,6 +32,7 @@ module.exports = {
     createUser,
     editUser,
     findNearbyTowns,
+    exportTown,
     shantytownActors: {
         addShantytownActor,
         updateShantytownActor,
