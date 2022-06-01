@@ -1,4 +1,4 @@
-const { user: userModel } = require('#server/models/index');
+const userModel = require('#server/models/userModel/index');
 const { getAccountActivationLink } = require('#server/utils/auth');
 const sendEmail = require('./mailer');
 const { scheduleEvent, cancelEvent } = require('./scheduler');
