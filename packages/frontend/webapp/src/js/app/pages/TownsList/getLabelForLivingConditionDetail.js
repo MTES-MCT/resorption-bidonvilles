@@ -33,12 +33,12 @@ const LABELS = {
         everyoneHasAccess(status) {
             if (status === "negative") {
                 return {
-                    text: "Pas d’accès pour tous les habitants"
+                    text: "Il y a des inégalités d'accès entre les habitants"
                 };
             }
 
             return {
-                text: "Accès pour tous les habitants"
+                text: "Pas d'inégalité d'accès entre les habitants"
             };
         },
         handWashAccess(status, town) {
@@ -249,6 +249,164 @@ const LABELS = {
             };
         }
     }
+};
+
+// new properties
+LABELS.water.accessIsPublic = status => {
+    if (status === "negative") {
+        return {
+            text: "Le point d'accès est sur la voie publique"
+        };
+    }
+
+    if (status === "negative") {
+        return {
+            text: "Le point d'accès est-il sur la voie publique ?"
+        };
+    }
+
+    return {
+        text: "Le point d'accès n'est pas sur la voie publique"
+    };
+};
+LABELS.water.accessIsContinuous = LABELS.water.continuousAccess;
+LABELS.water.accessIsLocal = status => {
+    if (status === "negative") {
+        return {
+            text: "Le point d'accès est à l'extérieur du site"
+        };
+    }
+
+    if (status === "unknown") {
+        return {
+            text: "Localisation du point d'accès (sur site ou extérieur)"
+        };
+    }
+
+    return {
+        text: "Le point d'accès est sur le site"
+    };
+};
+LABELS.water.accessIsClose = status => {
+    if (status === "unkown") {
+        return {
+            text: "Distance point d’eau / habitation la plus éloignée"
+        };
+    }
+
+    if (status === "negative") {
+        return {
+            text:
+                "La plus grande distance point d'eau / habitation est de plus de 200 mètres"
+        };
+    }
+
+    return {
+        text:
+            "La plus grande distance point d'eau / habitation est de moins de 200 mètres"
+    };
+};
+LABELS.water.accessIsUnequal = LABELS.water.everyoneHasAccess;
+LABELS.water.accessHasStagnantWater = LABELS.water.stagnantWater;
+
+LABELS.sanitary.openAirDefecation = LABELS.sanitary.insalubrious;
+LABELS.sanitary.toiletTypes = status => {
+    if (status === "negative") {
+        return {
+            text: "Latrines uniquement"
+        };
+    }
+
+    if (status === "positive") {
+        return {
+            text: "Présence de toilettes fonctionnelles"
+        };
+    }
+
+    return {
+        text: "Types de toilettes"
+    };
+};
+LABELS.sanitary.toiletsAreInside = status => {
+    if (status === "negative") {
+        return {
+            text: "Pas de toilettes à l'intérieur du site"
+        };
+    }
+
+    return {
+        text: "Toilettes à l'intérieur du site"
+    };
+};
+LABELS.sanitary.toiletsAreLighted = status => {
+    if (status === "negative") {
+        return {
+            text: "Toilettes non éclairées et/ou verrouillables de l'intérieur"
+        };
+    }
+
+    return {
+        text: "Toilettes éclairées et verrouillables de l'intérieur"
+    };
+};
+LABELS.sanitary.handWashing = status => {
+    if (status === "negative") {
+        return {
+            text: "Pas de point de lavage des mains à proximité des toilettes"
+        };
+    }
+
+    return {
+        text: "Présence de points de lavage des mains à proximité des toilettes"
+    };
+};
+
+LABELS.electricity = {
+    accessTypes() {
+        return {
+            text: "Source d'accès"
+        };
+    },
+    accessIsUnequal() {
+        return {
+            text: "Inégalité d'accès à l'électricité"
+        };
+    }
+};
+
+LABELS.trash.isPiling = LABELS.trash.accumulation;
+LABELS.trash.evacuationIsRegular = LABELS.trash.evacuationRegular;
+LABELS.trash.evacuationIsSafe = status => {
+    if (status === "negative") {
+        return {
+            text:
+                "Les dispositifs de ramassage des ordures ménagères ne sont pas en bon état / sécurisés"
+        };
+    }
+
+    if (status === "unknown") {
+        return {
+            text: "État des dispositifs de ramassage des ordures ménagères"
+        };
+    }
+
+    return {
+        text:
+            "Les dispositifs de ramassage des ordures ménagères sont en bon état et sécurisés"
+    };
+};
+LABELS.trash.bulkyIsPiling = status => {
+    if (status === "positive") {
+        return {
+            text:
+                "Pas d'accumulation de déchets type encombrants (hors ferraille) / gravats"
+        };
+    }
+
+    return {
+        text:
+            "Accumulation de déchets type encombrants (hors ferraille) / gravats"
+    };
 };
 
 export default function getLabelForLivingConditionDetail(
