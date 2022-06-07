@@ -367,6 +367,7 @@ export default {
                     title: "Succès",
                     text: this.successNotificationWording
                 });
+                this.$store.dispatch("fetchTowns");
             } catch (err) {
                 this.loading = false;
 
