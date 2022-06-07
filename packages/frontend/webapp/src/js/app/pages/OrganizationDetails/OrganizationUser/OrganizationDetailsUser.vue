@@ -15,9 +15,12 @@
                 <div class="text-info">Rôle : {{ user.role }}</div>
             </div>
             <div>
-                <OrganizationDetailsUserIcon icon="envelope">{{
-                    user.email
-                }}</OrganizationDetailsUserIcon>
+                <OrganizationDetailsUserIcon
+                    class="text-primary hover:underline"
+                    icon="envelope"
+                    @click.native.prevent="mailTo"
+                    >{{ user.email }}</OrganizationDetailsUserIcon
+                >
                 <OrganizationDetailsUserIcon v-if="user.phone" icon="phone">{{
                     user.phone
                 }}</OrganizationDetailsUserIcon>
@@ -39,6 +42,12 @@ export default {
             // true pour rediriger vers la fiche utilisateur, false pour rediriger vers la fiche structure
             type: Boolean,
             default: true
+        }
+    },
+    methods: {
+        mailTo() {
+            location.href = `mailto:${this.user.email}`;
+            this.$trackMatomoEvent("Mail", "Envoi mail entre utilisateurs");
         }
     }
 };
