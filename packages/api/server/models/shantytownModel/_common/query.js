@@ -13,6 +13,10 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL = {})
         shantytowns: table === 'regular' ? 'shantytowns' : 'ShantytownHistories',
         shantytown_origins: table === 'regular' ? 'shantytown_origins' : 'ShantytownOriginHistories',
         origin_foreign_key: table === 'regular' ? 'shantytown_id' : 'hid',
+        shantytown_toilet_types: table === 'regular' ? 'shantytown_toilet_types' : 'shantytown_toilet_types_history',
+        toilet_types_foreign_key: table === 'regular' ? 'shantytown_id' : 'hid',
+        electricity_access_types: table === 'regular' ? 'electricity_access_types' : 'electricity_access_types_history',
+        electricity_foreign_key: table === 'regular' ? 'shantytown_id' : 'hid',
     };
 
     const selection = {
@@ -32,13 +36,32 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL = {})
             FROM "${tables.shantytowns}" s
             LEFT JOIN "${tables.shantytown_origins}" so ON so.fk_shantytown = s.${tables.origin_foreign_key}
             LEFT JOIN social_origins soo ON so.fk_social_origin = soo.social_origin_id
-            GROUP BY s.${tables.origin_foreign_key})
+            GROUP BY s.${tables.origin_foreign_key}),
+
+            electricity_access_types AS (SELECT
+                s.${tables.electricity_foreign_key} AS fk_shantytown,
+                array_agg(eat.electricity_access_type::text) AS electricity_access_types
+            FROM "${tables.shantytowns}" s
+            LEFT JOIN "${tables.electricity_access_types}" eat ON eat.fk_shantytown = s.${tables.electricity_foreign_key}
+            GROUP BY s.${tables.electricity_foreign_key}),
+
+            shantytown_toilet_types AS (SELECT
+                s.${tables.toilet_types_foreign_key} AS fk_shantytown,
+                array_agg(stt.toilet_type::text) AS toilet_types
+            FROM "${tables.shantytowns}" s
+            LEFT JOIN "${tables.shantytown_toilet_types}" stt ON stt.fk_shantytown = s.${tables.toilet_types_foreign_key}
+            GROUP BY s.${tables.toilet_types_foreign_key})
+
         SELECT
             ${Object.keys(selection).map(key => `${key} AS "${selection[key]}"`).join(',')},
-            sco.origins AS "socialOrigins"
+            sco.origins AS "socialOrigins",
+            eat.electricity_access_types AS "electricityAccessTypes",
+            stt.toilet_types AS "toiletTypes"
         FROM "${tables.shantytowns}" AS shantytowns
         ${joins.map(({ table: t, on }) => `LEFT JOIN ${t} ON ${on}`).join('\n')}
         LEFT JOIN shantytown_computed_origins sco ON sco.fk_shantytown = shantytowns.${tables.origin_foreign_key}
+        LEFT JOIN electricity_access_types eat ON eat.fk_shantytown = shantytowns.${tables.electricity_foreign_key}
+        LEFT JOIN shantytown_toilet_types stt ON stt.fk_shantytown = shantytowns.${tables.toilet_types_foreign_key}
         ${whereClause !== null ? `WHERE ${whereClause}` : ''}
         ${order !== null ? `ORDER BY ${order}` : ''}
     `;

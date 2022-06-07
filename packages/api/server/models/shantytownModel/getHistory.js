@@ -44,18 +44,37 @@ module.exports = async (user, location, shantytownFilter, numberOfActivities, la
                         FROM "ShantytownHistories" s
                         LEFT JOIN "ShantytownOriginHistories" so ON so.fk_shantytown = s.hid
                         LEFT JOIN social_origins soo ON so.fk_social_origin = soo.social_origin_id
+                        GROUP BY s.hid),
+
+                        electricity_access_types AS (SELECT
+                            s.hid AS fk_shantytown,
+                            array_agg(eat.electricity_access_type::text) AS electricity_access_types
+                        FROM "ShantytownHistories" s
+                        LEFT JOIN electricity_access_types_history eat ON eat.fk_shantytown = s.hid
+                        GROUP BY s.hid),
+
+                        shantytown_toilet_types AS (SELECT
+                            s.hid AS fk_shantytown,
+                            array_agg(stt.toilet_type::text) AS toilet_types
+                        FROM "ShantytownHistories" s
+                        LEFT JOIN shantytown_toilet_types_history stt ON stt.fk_shantytown = s.hid
                         GROUP BY s.hid)
+
                     SELECT
                         shantytowns.hid,
                         shantytowns.closed_at,
                         shantytowns.created_at,
                         shantytowns.updated_at AS "date",
                         sco.origins AS "socialOrigins",
+                        eat.electricity_access_types AS "electricityAccessTypes",
+                        stt.toilet_types AS "toiletTypes",
                         COALESCE(shantytowns.updated_by, shantytowns.created_by) AS author_id,
                         ${Object.keys(SQL.selection).map(key => `${key} AS "${SQL.selection[key]}"`).join(',')}
                     FROM "ShantytownHistories" shantytowns
                     LEFT JOIN shantytowns AS s ON shantytowns.shantytown_id = s.shantytown_id
                     LEFT JOIN shantytown_computed_origins sco ON sco.fk_shantytown = shantytowns.hid
+                    LEFT JOIN electricity_access_types eat ON eat.fk_shantytown = shantytowns.hid
+                    LEFT JOIN shantytown_toilet_types stt ON stt.fk_shantytown = shantytowns.hid
                     ${SQL.joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
                     ${where.length > 0 ? `WHERE ((${where.join(') OR (')}))` : ''}
                 )
@@ -68,17 +87,36 @@ module.exports = async (user, location, shantytownFilter, numberOfActivities, la
                         FROM shantytowns s
                         LEFT JOIN shantytown_origins so ON so.fk_shantytown = s.shantytown_id
                         LEFT JOIN social_origins soo ON so.fk_social_origin = soo.social_origin_id
+                        GROUP BY s.shantytown_id),
+
+                        electricity_access_types AS (SELECT
+                            s.shantytown_id AS fk_shantytown,
+                            array_agg(eat.electricity_access_type::text) AS electricity_access_types
+                        FROM shantytowns s
+                        LEFT JOIN electricity_access_types eat ON eat.fk_shantytown = s.shantytown_id
+                        GROUP BY s.shantytown_id),
+
+                        shantytown_toilet_types AS (SELECT
+                            s.shantytown_id AS fk_shantytown,
+                            array_agg(stt.toilet_type::text) AS toilet_types
+                        FROM shantytowns s
+                        LEFT JOIN shantytown_toilet_types stt ON stt.fk_shantytown = s.shantytown_id
                         GROUP BY s.shantytown_id)
+
                     SELECT
                         0 as hid,
                         shantytowns.closed_at,
                         shantytowns.created_at,
                         shantytowns.updated_at AS "date",
                         sco.origins AS "socialOrigins",
+                        eat.electricity_access_types AS "electricityAccessTypes",
+                        stt.toilet_types AS "toiletTypes",
                         COALESCE(shantytowns.updated_by, shantytowns.created_by) AS author_id,
                         ${Object.keys(SQL.selection).map(key => `${key} AS "${SQL.selection[key]}"`).join(', ')}
                     FROM shantytowns
                     LEFT JOIN shantytown_computed_origins sco ON sco.fk_shantytown = shantytowns.shantytown_id
+                    LEFT JOIN electricity_access_types eat ON eat.fk_shantytown = shantytowns.shantytown_id
+                    LEFT JOIN shantytown_toilet_types stt ON stt.fk_shantytown = shantytowns.shantytown_id
                     ${SQL.joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
                     ${where.length > 0 ? `WHERE (${where.join(') OR (')})` : ''}
                 )) activities

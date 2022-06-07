@@ -134,15 +134,15 @@
 
                             <TownCardIcon
                                 :status="
-                                    shantytown.livingConditions.vermin.status
-                                        .status
+                                    shantytown.livingConditions[verminKey]
+                                        .status.status
                                 "
                                 >pres. de nuisibles</TownCardIcon
                             >
                             <TownCardIcon
                                 :status="
-                                    shantytown.livingConditions.firePrevention
-                                        .status.status
+                                    shantytown.livingConditions[fireKey].status
+                                        .status
                                 "
                                 >prev. incendie</TownCardIcon
                             >
@@ -339,6 +339,16 @@ export default {
         pinVariant() {
             const { months } = getSince(this.shantytown.updatedAt);
             return months >= 3 ? "pin_red" : "pin";
+        },
+        verminKey() {
+            return this.shantytown.livingConditions.version === 2
+                ? "pest_animals"
+                : "vermin";
+        },
+        fireKey() {
+            return this.shantytown.livingConditions.version === 2
+                ? "fire_prevention"
+                : "firePrevention";
         },
         isOpen() {
             return this.shantytown.status === "open";

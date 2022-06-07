@@ -7,13 +7,20 @@ export const lifeConditionsMixin = {
     },
     computed: {
         stableConditions() {
+            let verminKey = "vermin";
+            let fireKey = "firePrevention";
+            if (this.shantytown.livingConditions.version === 2) {
+                verminKey = "pest_animals";
+                fireKey = "fire_prevention";
+            }
+
             const conditions = {
                 water: "eau",
                 sanitary: "toilettes",
                 electricity: "électricité",
                 trash: "évacuation des déchets",
-                vermin: "prévention des nuisibles",
-                firePrevention: "prévention incendie"
+                [verminKey]: "prévention des nuisibles",
+                [fireKey]: "prévention incendie"
             };
 
             return Object.keys(conditions)

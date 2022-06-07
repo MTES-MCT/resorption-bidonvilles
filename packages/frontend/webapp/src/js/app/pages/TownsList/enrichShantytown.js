@@ -125,9 +125,15 @@ export default function enrichShantytown(shantytown, fieldTypes) {
         "trash",
         "sanitary",
         "firePrevention",
-        "vermin"
+        "fire_prevention",
+        "vermin",
+        "pest_animals"
     ];
     conditions.forEach(conditionKey => {
+        if (!livingConditions[conditionKey]) {
+            return;
+        }
+
         const status = livingConditions[conditionKey].status;
 
         ["positive", "negative", "unknown"].forEach(
