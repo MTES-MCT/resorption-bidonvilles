@@ -47,7 +47,13 @@
             </p>
 
             <!-- conditions de vie -->
-            <ul v-if="stableConditions.length > 0" class="mt-4">
+            <ul
+                v-if="
+                    shantytown.livingConditions.version === 2 &&
+                        stableConditions.length > 0
+                "
+                class="mt-4"
+            >
                 <li v-for="(condition, index) in stableConditions" :key="index">
                     <span
                         class="inline-block text-xs rounded-full border-2 border-green500 text-green500 mr-1 mb-1"
@@ -61,7 +67,13 @@
                 <span class="text-xl align-middle"
                     ><Icon icon="times" class="mr-1"
                 /></span>
-                Urgence à sécuriser les conditions de vie
+                Urgence à
+                {{
+                    shantytown.livingConditions.version === 2
+                        ? "sécuriser"
+                        : "renseigner"
+                }}
+                les conditions de vie
             </p>
 
             <!-- journal du site -->

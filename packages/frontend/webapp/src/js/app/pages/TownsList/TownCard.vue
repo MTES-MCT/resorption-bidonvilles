@@ -101,7 +101,7 @@
                     </div>
                     <!-- third column - open shantytowns -->
                     <div v-if="showLivingConditionDetails">
-                        <div>
+                        <div v-if="shantytown.livingConditions.version === 2">
                             <TownCardIcon
                                 :status="
                                     shantytown.livingConditions.water.status
@@ -145,6 +145,11 @@
                                         .status
                                 "
                                 >prev. incendie</TownCardIcon
+                            >
+                        </div>
+                        <div v-else>
+                            <Tag variant="pin_red"
+                                >Conditions de vie à renseigner</Tag
                             >
                         </div>
                     </div>

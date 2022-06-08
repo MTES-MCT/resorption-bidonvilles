@@ -2,6 +2,10 @@
     <DetailsPanel>
         <template v-slot:title>Conditions de vie et environnement</template>
         <template v-slot:body>
+            <Tag variant="pin_red" v-if="town.livingConditions.version < 2"
+                >LES CONDITIONS DE VIE DOIVENT ÊTRE MISES A JOUR</Tag
+            >
+
             <TownDetailsPanelLivingConditionsSection
                 title="Accès à l’eau"
                 :status="town.livingConditions.water.status"
