@@ -71,6 +71,32 @@ module.exports = async (editor, shantytownId, data, argTransaction = undefined) 
                     sanitary_number,
                     sanitary_insalubrious,
                     sanitary_on_site,
+                    water_access_type,
+                    water_access_type_details,
+                    water_access_is_public,
+                    water_access_is_continuous,
+                    water_access_is_continuous_details,
+                    water_access_is_local,
+                    water_access_is_close,
+                    water_access_is_unequal,
+                    water_access_is_unequal_details,
+                    water_access_has_stagnant_water,
+                    water_access_comments,
+                    sanitary_access_open_air_defecation,
+                    sanitary_access_working_toilets,
+                    sanitary_access_toilets_are_inside,
+                    sanitary_access_toilets_are_lighted,
+                    sanitary_access_hand_washing,
+                    electricity_access,
+                    electricity_access_is_unequal,
+                    trash_is_piling,
+                    trash_evacuation_is_close,
+                    trash_evacuation_is_safe,
+                    trash_evacuation_is_regular,
+                    trash_bulky_is_piling,
+                    pest_animals,
+                    pest_animals_details,
+                    fire_prevention,
                     owner_complaint,
                     justice_procedure,
                     justice_rendered,
@@ -150,6 +176,32 @@ module.exports = async (editor, shantytownId, data, argTransaction = undefined) 
                 sanitary_number,
                 sanitary_insalubrious,
                 sanitary_on_site,
+                water_access_type::text::"enum_ShantytownHistories_water_access_type",
+                water_access_type_details,
+                water_access_is_public,
+                water_access_is_continuous,
+                water_access_is_continuous_details,
+                water_access_is_local,
+                water_access_is_close,
+                water_access_is_unequal,
+                water_access_is_unequal_details,
+                water_access_has_stagnant_water,
+                water_access_comments,
+                sanitary_access_open_air_defecation,
+                sanitary_access_working_toilets,
+                sanitary_access_toilets_are_inside,
+                sanitary_access_toilets_are_lighted,
+                sanitary_access_hand_washing,
+                electricity_access,
+                electricity_access_is_unequal,
+                trash_is_piling,
+                trash_evacuation_is_close,
+                trash_evacuation_is_safe,
+                trash_evacuation_is_regular,
+                trash_bulky_is_piling,
+                pest_animals,
+                pest_animals_details,
+                fire_prevention,
                 owner_complaint,
                 justice_procedure,
                 justice_rendered,
@@ -229,6 +281,50 @@ module.exports = async (editor, shantytownId, data, argTransaction = undefined) 
                 transaction,
             },
         ),
+        sequelize.query(
+            `INSERT INTO
+                    "shantytown_toilet_types_history"(
+                        fk_shantytown,
+                        toilet_type,
+                        created_at,
+                        archived_at
+                    )
+                SELECT
+                    :hid,
+                    toilet_type::text::"enum_shantytown_toilet_types_history_toilet_type",
+                    created_at,
+                    NOW()
+                FROM shantytown_toilet_types WHERE fk_shantytown = :id`,
+            {
+                replacements: {
+                    hid,
+                    id: shantytownId,
+                },
+                transaction,
+            },
+        ),
+        sequelize.query(
+            `INSERT INTO
+                "electricity_access_types_history"(
+                    fk_shantytown,
+                    electricity_access_type,
+                    created_at,
+                    archived_at
+                )
+            SELECT
+                :hid,
+                electricity_access_type::text::"enum_electricity_access_types_history_electricity_access_type",
+                created_at,
+                NOW()
+            FROM electricity_access_types WHERE fk_shantytown = :id`,
+            {
+                replacements: {
+                    hid,
+                    id: shantytownId,
+                },
+                transaction,
+            },
+        ),
     ]);
 
     // now, update the shantytown
@@ -247,7 +343,7 @@ module.exports = async (editor, shantytownId, data, argTransaction = undefined) 
     ];
     const { commonData, justiceData, ownerData } = Object.keys(data).reduce(
         (acc, key) => {
-            if (['social_origins', 'closing_solutions'].includes(key)) { // ignore social_origins, they are a special case
+            if (['social_origins', 'closing_solutions', 'sanitary_toilet_types', 'electricity_access_types'].includes(key)) { // ignore social_origins, they are a special case
                 return acc;
             }
 
@@ -334,6 +430,64 @@ module.exports = async (editor, shantytownId, data, argTransaction = undefined) 
                         ...arr,
                         shantytownId,
                         origin,
+                    ], []),
+                    transaction,
+                },
+            );
+        }
+    }
+
+    if (Array.isArray(data.sanitary_toilet_types)) {
+        await sequelize.query(
+            'DELETE FROM shantytown_toilet_types WHERE fk_shantytown = :id',
+            {
+                replacements: {
+                    id: shantytownId,
+                },
+                transaction,
+            },
+        );
+
+        if (data.sanitary_toilet_types.length > 0) {
+            await sequelize.query(
+                `INSERT INTO
+                    shantytown_toilet_types(fk_shantytown, toilet_type)
+                    VALUES
+                        ${data.sanitary_toilet_types.map(() => '(?, ?)').join(', ')}`,
+                {
+                    replacements: data.sanitary_toilet_types.reduce((arr, toiletType) => [
+                        ...arr,
+                        shantytownId,
+                        toiletType,
+                    ], []),
+                    transaction,
+                },
+            );
+        }
+    }
+
+    if (Array.isArray(data.electricity_access_types)) {
+        await sequelize.query(
+            'DELETE FROM electricity_access_types WHERE fk_shantytown = :id',
+            {
+                replacements: {
+                    id: shantytownId,
+                },
+                transaction,
+            },
+        );
+
+        if (data.electricity_access_types.length > 0) {
+            await sequelize.query(
+                `INSERT INTO
+                    electricity_access_types(fk_shantytown, electricity_access_types)
+                    VALUES
+                        ${data.electricity_access_types.map(() => '(?, ?)').join(', ')}`,
+                {
+                    replacements: data.electricity_access_types.reduce((arr, accessType) => [
+                        ...arr,
+                        shantytownId,
+                        accessType,
                     ], []),
                     transaction,
                 },

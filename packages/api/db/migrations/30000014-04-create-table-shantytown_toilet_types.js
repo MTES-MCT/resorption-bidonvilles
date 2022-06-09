@@ -15,10 +15,22 @@ module.exports = {
                 allowNull: false,
                 primaryKey: true,
             },
+            created_at: {
+                type: Sequelize.DATE,
+                allowNull: false,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+            },
         };
         await Promise.all([
             queryInterface.createTable('shantytown_toilet_types', definition, { transaction }),
-            queryInterface.createTable('shantytown_toilet_types_history', definition, { transaction }),
+            queryInterface.createTable('shantytown_toilet_types_history', {
+                ...definition,
+                archived_at: {
+                    type: Sequelize.DATE,
+                    allowNull: false,
+                    defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+                },
+            }, { transaction }),
         ]);
 
         // create foreign keys

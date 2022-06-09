@@ -60,8 +60,78 @@ module.exports = async (req, res, next) => {
                 police_granted_at: req.body.police_granted_at,
                 bailiff: req.body.bailiff,
 
+                // reset old living conditions fields
+                fk_electricity_type: null,
+                electricity_comments: null,
+                access_to_sanitary: null,
+                // Sanitary
+                sanitary_comments: null,
+                sanitary_number: null,
+                sanitary_insalubrious: null,
+                sanitary_on_site: null,
+                // Water
+                access_to_water: null,
+                water_comments: null,
+                water_potable: null,
+                water_continuous_access: null,
+                water_public_point: null,
+                water_distance: null,
+                water_roads_to_cross: null,
+                water_everyone_has_access: null,
+                water_stagnant_water: null,
+                water_hand_wash_access: null,
+                water_hand_wash_access_number: null,
+                // Trash
+                trash_evacuation: null,
+                trash_cans_on_site: null,
+                trash_accumulation: null,
+                trash_evacuation_regular: null,
+                // Vermin
+                vermin: null,
+                vermin_comments: null,
+                // Fire prevention
+                fire_prevention_measures: null,
+                fire_prevention_diagnostic: null,
+                fire_prevention_site_accessible: null,
+                fire_prevention_devices: null,
+                fire_prevention_comments: null,
+
                 // tous les sites modifiés passent nécessairement en v2
                 living_conditions_version: 2,
+
+                water_access_type: req.body.water_access_type,
+                water_access_type_details: req.body.water_access_type_details,
+                water_access_is_public: req.body.water_access_is_public,
+                water_access_is_continuous: req.body.water_access_is_continuous,
+                water_access_is_continuous_details: req.body.water_access_is_continuous_details,
+                water_access_is_local: req.body.water_access_is_local,
+                water_access_is_close: req.body.water_access_is_close,
+                water_access_is_unequal: req.body.water_access_is_unequal,
+                water_access_is_unequal_details: req.body.water_access_is_unequal_details,
+                water_access_has_stagnant_water: req.body.water_access_has_stagnant_water,
+                water_access_comments: req.body.water_access_comments,
+
+                sanitary_access_open_air_defecation: req.body.sanitary_open_air_defecation,
+                sanitary_access_working_toilets: req.body.sanitary_working_toilets,
+                sanitary_access_toilets_are_inside: req.body.sanitary_toilets_are_inside,
+                sanitary_access_toilets_are_lighted: req.body.sanitary_toilets_are_lighted,
+                sanitary_access_hand_washing: req.body.sanitary_hand_washing,
+                sanitary_toilet_types: req.body.sanitary_toilet_types,
+
+                electricity_access: req.body.electricity_access,
+                electricity_access_types: req.body.electricity_access_types,
+                electricity_access_is_unequal: req.body.electricity_access_is_unequal,
+
+                trash_is_piling: req.body.trash_is_piling,
+                trash_evacuation_is_close: req.body.trash_evacuation_is_close,
+                trash_evacuation_is_safe: req.body.trash_evacuation_is_safe,
+                trash_evacuation_is_regular: req.body.trash_evacuation_is_regular,
+                trash_bulky_is_piling: req.body.trash_bulky_is_piling,
+
+                pest_animals: req.body.pest_animals_presence,
+                pest_animals_details: req.body.pest_animals_details,
+
+                fire_prevention: req.body.fire_prevention_diagnostic,
             },
         );
         const updatedTown = await shantytownModel.findOne(req.user, req.params.id);
