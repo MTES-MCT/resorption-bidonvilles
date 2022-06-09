@@ -6,8 +6,8 @@ export default {
     namespaced: true,
 
     actions: {
-        async publishComment({ commit }, { townId, comment }) {
-            publish(
+        publishComment({ commit }, { townId, comment }) {
+            return publish(
                 addComment,
                 townId,
                 comment,
@@ -16,8 +16,8 @@ export default {
             );
         },
 
-        async publishCovidComment({ commit }, { townId, comment }) {
-            publish(
+        publishCovidComment({ commit }, { townId, comment }) {
+            return publish(
                 addCovidComment,
                 townId,
                 comment,
@@ -30,6 +30,8 @@ export default {
 
 async function publish(apiMethod, townId, comment, matomoAction, commit) {
     const { comments } = await apiMethod(townId, comment);
+    commit("updateShantytownComments", { townId, comments }, { root: true });
+
     notify({
         group: "notifications",
         type: "success",
@@ -38,6 +40,5 @@ async function publish(apiMethod, townId, comment, matomoAction, commit) {
             "Votre message est bien enregistré et a été envoyé aux acteurs de votre département par mail."
     });
 
-    commit("updateShantytownComments", { townId, comments }, { root: true });
     Vue.prototype.$trackMatomoEvent("Site", matomoAction, `S${townId}`);
 }

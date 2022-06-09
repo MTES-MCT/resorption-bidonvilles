@@ -1,7 +1,7 @@
 <template>
     <li
         :class="
-            `inline-block align-middle pl-4 cursor-pointer
+            `inline-block align-top pl-4 cursor-pointer
             ${
                 active
                     ? 'font-bold text-primary'
