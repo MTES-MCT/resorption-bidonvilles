@@ -1,4 +1,7 @@
 const { fromTsToFormat } = require('#server/utils/date');
+const electricityAccessTypes = require('#server/models/electricityAccessTypesModel/_common/electricityAccessTypes');
+const waterAccessTypes = require('#server/models/_common/waterAccessTypes');
+const toiletTypes = require('#server/models/shantytownToiletTypesModel/_common/toiletTypes');
 
 function getDeepProperty(obj, path) {
     return path.split('.').reduce((acc, curr) => acc && acc[curr], obj);
@@ -29,7 +32,7 @@ module.exports = (oldVersion, newVersion) => {
         },
     };
 
-    const toDiff = {
+    let toDiff = {
         name: {
             label: 'Appellation du site',
         },
@@ -195,138 +198,300 @@ module.exports = (oldVersion, newVersion) => {
         bailiff: {
             label: "Nom de l'étude d'huissiers",
         },
-        'livingConditions.electricity.type': {
-            label: "Accès à l'électricité",
-            processor(e) {
-                if (!e) {
-                    return 'non renseigné';
-                }
-
-                return e.label;
-            },
-        },
-        'livingConditions.electricity.comments': {
-            label: "Modalités d'accès à l'électricité",
-        },
-        'livingConditions.water.access': {
-            label: "Accès à l'eau",
-            processor: baseProcessors.bool,
-        },
-        'livingConditions.water.comments': {
-            label: "Modalités d'accès à l'eau",
-        },
-        'livingConditions.water.potable': {
-            label: 'L’eau est-elle potable ?',
-            processor: baseProcessors.bool,
-        },
-        'livingConditions.water.continuousAccess': {
-            label: "L'accès à l'eau est-il continu?",
-            processor: baseProcessors.bool,
-        },
-        'livingConditions.water.publicPoint': {
-            label: "Est-ce un point d'eau public?",
-            processor: baseProcessors.bool,
-        },
-        'livingConditions.water.distance': {
-            label: "Où se situe l'accès à l'eau?",
-        },
-        'livingConditions.water.roadsToCross': {
-            label: "L'accès nécessite-t-il un franchissement de rue ou de route ?",
-            processor: baseProcessors.bool,
-        },
-        'livingConditions.water.everyoneHasAccess': {
-            label: 'Tous les habitants ont-ils accès aux points d’eau ?',
-            processor: baseProcessors.bool,
-        },
-        'livingConditions.water.stagnantWater': {
-            label: 'Existe-t-il des eaux stagnantes autour du point de distribution ?',
-            processor: baseProcessors.bool,
-        },
-        'livingConditions.water.handWashAccess': {
-            label: 'Est-ce qu’il y a des bacs de lavage des mains ?',
-            processor: baseProcessors.bool,
-        },
-        'livingConditions.water.handWashAccessNumber': {
-            label: 'Quel est le nombre de bacs de lavage des mains ?',
-        },
-        'livingConditions.sanitary.access': {
-            label: 'Accès à des toilettes',
-            processor: baseProcessors.bool,
-        },
-        'livingConditions.sanitary.comments': {
-            label: "Modalités d'accès aux toilettes",
-        },
-        'livingConditions.sanitary.number': {
-            label: 'Nombre de toilettes ?',
-        },
-        'livingConditions.sanitary.insalubrious': {
-            label: 'Constate-t-on des marques de défécation à l’air libre ?',
-            processor: baseProcessors.bool,
-        },
-        'livingConditions.sanitary.onSite': {
-            label: 'Les toilettes se situent-elles sur le site ?',
-            processor: baseProcessors.bool,
-        },
-        'livingConditions.trash.evacuation': {
-            label: 'Évacuation des déchets',
-            processor: baseProcessors.bool,
-        },
-        'livingConditions.trash.cansOnSite': {
-            label: 'Combien de poubelles / bennes sont à proximité immédiate du site ?',
-        },
-        'livingConditions.trash.accumulation': {
-            label: 'Constate-t-on une accumulation de déchets sur le site ou aux abords ?',
-            processor: baseProcessors.bool,
-        },
-        'livingConditions.trash.evacuationRegular': {
-            label: 'La collecte des poubelles / bennes est-elle réalisée de manière régulière ?',
-            processor: baseProcessors.bool,
-        },
-        'livingConditions.vermin.vermin': {
-            label: 'Présence de nuisibles',
-            processor: baseProcessors.bool,
-        },
-        'livingConditions.vermin.comments': {
-            label: 'Précision concernant les nuisibles ?',
-        },
-        'livingConditions.firePrevention.measures': {
-            label: 'Y a-t-il des mesures “prévention incendie” ?',
-            processor: baseProcessors.bool,
-        },
-        'livingConditions.firePrevention.diagnostic': {
-            label: 'Est-ce qu’un diagnostic prévention incendie par le SDIS a été réalisé ?',
-            processor: baseProcessors.bool,
-        },
-        'livingConditions.firePrevention.siteAccessible': {
-            label: 'Est-ce que le site est accessible aux pompiers ?',
-            processor: baseProcessors.bool,
-        },
-        'livingConditions.firePrevention.devices': {
-            label: 'Est-ce que des dispositifs spécifiques ont été mis en place ?',
-            processor: baseProcessors.bool,
-        },
-        'livingConditions.firePrevention.comments': {
-            label: 'Prévention incendie : Préciser',
-        },
     };
 
-    return Object.keys(toDiff).reduce((diff, serializedKey) => {
-        const processor = toDiff[serializedKey].processor || baseProcessors.default;
-        const oldValue = processor(getDeepProperty(oldVersion, serializedKey));
-        const newValue = processor(getDeepProperty(newVersion, serializedKey));
-
-        if (oldValue === newValue) {
-            return diff;
-        }
-
-        return [
-            ...diff,
-            {
-                fieldKey: serializedKey,
-                field: toDiff[serializedKey].label,
-                oldValue,
-                newValue,
+    const finalDiff = [];
+    if (oldVersion.livingConditions.version === 1 && newVersion.livingConditions.version === 2) {
+        finalDiff.push({
+            fieldKey: 'livingConditions.version',
+            field: 'Conditions de vie',
+            oldValue: 'Ancien format',
+            newValue: 'Nouveau format',
+        });
+    } else if (oldVersion.livingConditions.version === 2) {
+        toDiff = {
+            ...toDiff,
+            'livingConditions.electricity.access': {
+                label: 'Y a-t-il présence d’une installation électrique ?',
+                processor: baseProcessors.bool,
             },
-        ];
-    }, []);
+            'livingConditions.electricity.access_types': {
+                label: "Quelle est la source de l'accès à l'électricité ?",
+                processor(accessTypes) {
+                    if (accessTypes.length === 0) {
+                        return 'non renseignée';
+                    }
+
+                    const labels = accessTypes.map(at => electricityAccessTypes[at]);
+                    if (labels.length === 1) {
+                        return labels[0];
+                    }
+
+                    return [
+                        labels.slice(0, labels.length - 1).join(', '),
+                        labels.slice(labels.length - 1),
+                    ].join(', et ');
+                },
+            },
+            'livingConditions.electricity.access_is_unequal': {
+                label: "Des inégalités d’accès à l'électricité ont-elles été constatées ?",
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.water.access_type': {
+                label: "Les habitants ont-ils accès à l'eau ?",
+                processor(accessType) {
+                    if (!accessType) {
+                        return 'non renseigné';
+                    }
+
+                    return waterAccessTypes[accessType];
+                },
+            },
+            'livingConditions.water.access_type_details': {
+                label: "Précisions concernant les modalités d'accès à l'eau",
+            },
+            'livingConditions.water.access_is_public': {
+                label: 'Est-ce un point d\'eau sur la voie publique ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.water.access_is_continuous': {
+                label: "L'accès à l'eau est-il continu ?",
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.water.access_is_continuous_details': {
+                label: "Précisions concernant la discontinuité de l'accès à l'eau",
+            },
+            'livingConditions.water.access_is_local': {
+                label: "Où se situe l'accès à l'eau ?",
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.water.access_is_close': {
+                label: 'Distance point d’eau / habitation la plus éloignée ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.water.access_is_unequal': {
+                label: 'Des inégalités d\'accès à l\'eau ont-elles été constatées ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.water.access_is_unequal_details': {
+                label: 'Précisions concernant les inégalités d\'accès à l\'eau',
+            },
+            'livingConditions.water.access_has_stagnant_water': {
+                label: 'Existe-t-il des eaux stagnantes autour du point de distribution ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.water.access_comments': {
+                label: 'Informations complémentaires sur l\'accès à l\'eau',
+            },
+            'livingConditions.sanitary.open_air_defecation': {
+                label: 'Constate-t-on des marques de défécation à l’air libre ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.sanitary.working_toilets': {
+                label: 'Présence de toilettes fonctionnelles et utilisées ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.sanitary.toilet_types': {
+                label: 'Quels sont les types de toilettes installées ?',
+                processor(types) {
+                    if (types.length === 0) {
+                        return 'non renseignée';
+                    }
+
+                    const labels = types.map(tt => toiletTypes[tt]);
+                    if (labels.length === 1) {
+                        return labels[0];
+                    }
+
+                    return [
+                        labels.slice(0, labels.length - 1).join(', '),
+                        labels.slice(labels.length - 1),
+                    ].join(', et ');
+                },
+            },
+            'livingConditions.sanitary.toilets_are_inside': {
+                label: 'Les toilettes sont-elles à l’intérieur du site ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.sanitary.toilets_are_lighted': {
+                label: 'Ces toilettes sont-elles éclairées et verrouillables de l’intérieur ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.sanitary.hand_washing': {
+                label: 'Y a-t-il un point de lavage des mains à proximité des toilettes ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.trash.is_piling': {
+                label: 'Constate-t-on une accumulation de déchets type ordures ménagères sur le site ou aux abords ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.trash.evacuation_is_close': {
+                label: 'Y a-t-il des dispositifs de ramassage des ordures ménagères à proximité immédiate ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.trash.evacuation_is_safe': {
+                label: 'Les dispositifs de ramassages des ordures sont-ils en bon état ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.trash.evacuation_is_regular': {
+                label: 'La collecte des poubelles est-elle réalisée de manière régulière ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.trash.bulky_is_piling': {
+                label: 'Constate-t-on une accumulation de déchets type encombrants ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.pest_animals.presence': {
+                label: 'Y a-t-il des nuisibles à proximité ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.pest_animals.details': {
+                label: 'Précision concernant les nuisibles',
+            },
+            'livingConditions.firePrevention.diagnostic': {
+                label: 'Est-ce qu’un diagnostic prévention incendie par le SDIS a été réalisé ?',
+                processor: baseProcessors.bool,
+            },
+        };
+    } else {
+        toDiff = {
+            ...toDiff,
+            'livingConditions.electricity.type': {
+                label: "Accès à l'électricité",
+                processor(e) {
+                    if (!e) {
+                        return 'non renseigné';
+                    }
+
+                    return e.label;
+                },
+            },
+            'livingConditions.electricity.comments': {
+                label: "Modalités d'accès à l'électricité",
+            },
+            'livingConditions.water.access': {
+                label: "Accès à l'eau",
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.water.comments': {
+                label: "Modalités d'accès à l'eau",
+            },
+            'livingConditions.water.potable': {
+                label: 'L’eau est-elle potable ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.water.continuousAccess': {
+                label: "L'accès à l'eau est-il continu?",
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.water.publicPoint': {
+                label: "Est-ce un point d'eau public?",
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.water.distance': {
+                label: "Où se situe l'accès à l'eau?",
+            },
+            'livingConditions.water.roadsToCross': {
+                label: "L'accès nécessite-t-il un franchissement de rue ou de route ?",
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.water.everyoneHasAccess': {
+                label: 'Tous les habitants ont-ils accès aux points d’eau ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.water.stagnantWater': {
+                label: 'Existe-t-il des eaux stagnantes autour du point de distribution ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.water.handWashAccess': {
+                label: 'Est-ce qu’il y a des bacs de lavage des mains ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.water.handWashAccessNumber': {
+                label: 'Quel est le nombre de bacs de lavage des mains ?',
+            },
+            'livingConditions.sanitary.access': {
+                label: 'Accès à des toilettes',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.sanitary.comments': {
+                label: "Modalités d'accès aux toilettes",
+            },
+            'livingConditions.sanitary.number': {
+                label: 'Nombre de toilettes ?',
+            },
+            'livingConditions.sanitary.insalubrious': {
+                label: 'Constate-t-on des marques de défécation à l’air libre ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.sanitary.onSite': {
+                label: 'Les toilettes se situent-elles sur le site ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.trash.evacuation': {
+                label: 'Évacuation des déchets',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.trash.cansOnSite': {
+                label: 'Combien de poubelles / bennes sont à proximité immédiate du site ?',
+            },
+            'livingConditions.trash.accumulation': {
+                label: 'Constate-t-on une accumulation de déchets sur le site ou aux abords ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.trash.evacuationRegular': {
+                label: 'La collecte des poubelles / bennes est-elle réalisée de manière régulière ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.vermin.vermin': {
+                label: 'Présence de nuisibles',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.vermin.comments': {
+                label: 'Précision concernant les nuisibles ?',
+            },
+            'livingConditions.firePrevention.measures': {
+                label: 'Y a-t-il des mesures “prévention incendie” ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.firePrevention.diagnostic': {
+                label: 'Est-ce qu’un diagnostic prévention incendie par le SDIS a été réalisé ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.firePrevention.siteAccessible': {
+                label: 'Est-ce que le site est accessible aux pompiers ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.firePrevention.devices': {
+                label: 'Est-ce que des dispositifs spécifiques ont été mis en place ?',
+                processor: baseProcessors.bool,
+            },
+            'livingConditions.firePrevention.comments': {
+                label: 'Prévention incendie : Préciser',
+            },
+        };
+    }
+
+    return [
+        ...finalDiff,
+        ...Object.keys(toDiff).reduce((diff, serializedKey) => {
+            const processor = toDiff[serializedKey].processor || baseProcessors.default;
+            const oldValue = processor(getDeepProperty(oldVersion, serializedKey));
+            const newValue = processor(getDeepProperty(newVersion, serializedKey));
+
+            if (oldValue === newValue) {
+                return diff;
+            }
+
+            return [
+                ...diff,
+                {
+                    fieldKey: serializedKey,
+                    field: toDiff[serializedKey].label,
+                    oldValue,
+                    newValue,
+                },
+            ];
+        }, []),
+    ];
 };
