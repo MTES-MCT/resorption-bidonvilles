@@ -67,6 +67,42 @@ module.exports = (user, data, properties, closedTowns, closingSolutions) => {
         ],
     });
 
+    if (options.indexOf('life_conditions') !== -1) {
+        sections.push({
+            title: 'Conditions de vie',
+            properties: [
+                properties.electricityAccess,
+                properties.electricityAccessTypes,
+                properties.electricityAccessIsUnequal,
+                properties.waterAccessType,
+                properties.waterAccessTypeDetails,
+                properties.waterAccessIsPublic,
+                properties.waterAccessIsContinuous,
+                properties.waterAccessIsContinuousDetails,
+                properties.waterAccessIsLocal,
+                properties.waterAccessIsClose,
+                properties.waterAccessIsUnequal,
+                properties.waterAccessIsUnequalDetails,
+                properties.waterAccessHasStagnantWater,
+                properties.waterAccessComments,
+                properties.sanitaryOpenAirDefecation,
+                properties.sanitaryWorkingToilets,
+                properties.sanitaryToiletTypes,
+                properties.sanitaryToiletsAreInside,
+                properties.sanitaryToiletsAreLighted,
+                properties.sanitaryHandWashing,
+                properties.trashIsPiling,
+                properties.trashEvacuationIsClose,
+                properties.trashEvacuationIsSafe,
+                properties.trashEvacuationIsRegular,
+                properties.trashBulkyIsPiling,
+                properties.pestAnimalsPresence,
+                properties.pestAnimalsDetails,
+                properties.firePreventionDiagnostic,
+            ],
+        });
+    }
+
     if (options.indexOf('demographics') !== -1) {
         section = {
             title: 'Diagnostic',
