@@ -44,8 +44,10 @@
                     ></FormErrorLog>
 
                     <TownFormPanelLocation
+                        v-if="town.characteristics.declared_at"
                         class="mt-10"
                         v-model="town.location"
+                        :declaredAt="town.characteristics.declared_at"
                         @shareClosedTowns="showClosedTowns"
                     ></TownFormPanelLocation>
 
@@ -53,9 +55,10 @@
                         class="mt-10 townPanelShadow"
                         id="characteristics"
                         v-model="town.characteristics"
-                        :nearbyClosedShantytowns="nearbyClosedShantytowns"
+                        @declaredAtChanged="swapIsReinstallation"
                     ></TownFormPanelCharacteristics>
 
+                    <<<<<<< HEAD
                     <TownFormPanelPeople
                         class="mt-10 townPanelShadow"
                         id="people"
@@ -81,6 +84,36 @@
                         v-model="town.judicial"
                         v-if="hasJusticePermission"
                     ></TownFormPanelJudicial>
+                    <template v-if="town.characteristics.declared_at">
+                        <TownFormPanelPeople
+                            class="mt-10 townPanelShadow"
+                            id="people"
+                            :nearbyClosedShantytowns="nearbyClosedShantytowns"
+                            v-model="town.people"
+                        ></TownFormPanelPeople>
+
+                        <TownFormPanelLivingConditions
+                            v-show="
+                                $store.state.townForm.showOldLivingConditions
+                            "
+                            class="mt-10 townPanelShadow"
+                            :population="town.people.population"
+                            v-model="town.living_conditions"
+                        ></TownFormPanelLivingConditions>
+
+                        <TownFormPanelNewLivingConditions
+                            class="mt-10 townPanelShadow"
+                            id="living_conditions"
+                            v-model="town.livingConditions"
+                        ></TownFormPanelNewLivingConditions>
+
+                        <TownFormPanelJudicial
+                            class="mt-10 townPanelShadow"
+                            id="judicial"
+                            v-model="town.judicial"
+                            v-if="hasJusticePermission"
+                        ></TownFormPanelJudicial>
+                    </template>
 
                     <div class="mt-8 text-right italic text-red font-bold">
                         * : Réponses obligatoires
@@ -154,6 +187,7 @@ export default {
 
     data() {
         return {
+            declaredAt: null,
             nearbyClosedShantytowns: [],
             mainError: null,
             errors: {},
@@ -349,8 +383,8 @@ export default {
                         .detailed_address,
                     owner_type: this.town.characteristics.owner_type,
                     owner: this.town.characteristics.owner,
-                    is_reinstallation: this.town.characteristics
-                        .is_reinstallation,
+                    is_reinstallation: this.town.people.is_reinstallation,
+                    location_shantytowns: this.town.people.location_shantytowns,
                     reinstallation_comments: this.town.characteristics
                         .reinstallation_comments,
                     population_total: this.strToInt(
@@ -469,6 +503,13 @@ export default {
         },
         showClosedTowns(closedTowns) {
             this.nearbyClosedShantytowns = closedTowns;
+        },
+        swapIsReinstallation() {
+            this.town.characteristics.is_reinstallation = null;
+        },
+        getDetailedClosedTown(id) {
+            const town = id;
+            return town;
         }
     }
 };
