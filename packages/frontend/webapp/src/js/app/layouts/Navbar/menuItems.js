@@ -32,53 +32,58 @@ export default {
         {
             label: "Accueil",
             target: "/",
+            id: "tableau-de-bord",
             menu: "lower"
         },
         {
             label: "Covid-19",
             target: "/covid-19",
-            classes: "font-bold uppercase",
+            id: "covid",
+            classes: "covid",
             color: "text-red600",
             menu: "lower"
         },
         {
             label: "Sites",
             target: "/liste-des-sites",
-            menu: "lower",
-            group: "townList"
+            id: "sites",
+            menu: "lower"
         },
         {
             label: "Actions",
             target: "/liste-des-actions",
+            id: "actions",
             menu: "lower"
         },
         {
-            label: "Annuaire",
+            label: "Communauté",
             target: "/annuaire",
-            menu: "lower",
-            group: "directory"
+            id: "annuaire",
+            menu: "lower"
         },
         {
             label: "Carte",
             target: "/cartographie",
+            id: "carte",
             menu: "lower"
         },
         {
             label: "Dernières activités",
             target: "/activites",
+            id: "activites",
             menu: "lower"
         },
         {
             label: "Statistiques",
             target: "/statistiques",
-            menu: "lower",
-            group: "stats"
+            id: "statistiques",
+            menu: "lower"
         },
         {
             label: "Administration",
             target: "/liste-des-utilisateurs",
-            menu: "lower",
-            group: "users"
+            id: "administration",
+            menu: "lower"
         },
         {
             label: "Blog",
@@ -93,7 +98,7 @@ export default {
             label: "Mon compte",
             target: "/mon-compte",
             menu: "upper",
-            group: "me"
+            id: "mon-compte"
         },
         {
             label: "Aide",

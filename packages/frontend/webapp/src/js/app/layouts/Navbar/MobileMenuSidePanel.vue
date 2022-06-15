@@ -17,6 +17,7 @@
                 :target="item.target"
                 :label="item.label"
                 :matomo="item.matomo"
+                :class="isCurrentPage(item) ? 'font-bold' : ''"
             >
             </MobileMenuLinkItem>
         </ul>
@@ -39,6 +40,11 @@ export default {
     props: {
         items: {
             type: Array
+        }
+    },
+    methods: {
+        isCurrentPage(item) {
+            return this.$router.currentRoute.meta.group === item.id;
         }
     }
 };

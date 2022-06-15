@@ -48,12 +48,9 @@
                 <li v-for="item in lowerMenuItems" :key="item.target">
                     <Link
                         :to="item.target"
-                        :color="item.color || 'G800'"
+                        :color="getColor(item)"
                         :hoverColor="item.color || 'G800'"
-                        :class="
-                            `inline-block py-4 px-3 xl:px-4 hover:bg-G200 ${item.classes ||
-                                ''}`
-                        "
+                        :class="getClass(item)"
                     >
                         {{ item.label }}
                     </Link>
@@ -136,7 +133,49 @@ export default {
             return requiredPermissions.every(permission =>
                 this.$store.getters["config/hasPermission"](permission)
             );
+        },
+        isCurrentPage(item) {
+            return this.$router.currentRoute.meta.group === item.id;
+        },
+        getColor(item) {
+            return (
+                item.color ||
+                (this.isCurrentPage(item) ? "text-primary" : "text-G800")
+            );
+        },
+        getClass(item) {
+            let classes =
+                "relative inline-block py-4 px-3 xl:px-4 hover:bg-G200";
+            if (item.classes) {
+                classes += " " + item.classes;
+            }
+
+            if (this.isCurrentPage(item)) {
+                classes += " active";
+            }
+
+            return classes;
         }
     }
 };
 </script>
+
+<style scoped>
+.covid {
+    @apply font-bold uppercase;
+}
+
+.active::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 0.1rem;
+    width: 100%;
+    @apply bg-primary;
+}
+
+.covid.active::before {
+    @apply bg-red600;
+}
+</style>
