@@ -3,7 +3,8 @@
         <div class="flex justify-between items-start">
             <div class="w-1/2 pr-16">
                 <div class="text-display-lg font-bold mb-2">
-                    Annuaire - <span class="text-info">{{ title }}</span>
+                    Découvrez notre communauté -
+                    <span class="text-info">{{ title }}</span>
                 </div>
                 <div class="flex items-center">
                     <div class="mr-4">

@@ -15,9 +15,18 @@
                 <div class="text-info">Rôle : {{ user.role }}</div>
             </div>
             <div>
-                <OrganizationDetailsUserIcon icon="envelope">{{
-                    user.email
-                }}</OrganizationDetailsUserIcon>
+                <OrganizationDetailsUserIcon icon="envelope"
+                    ><Link
+                        :to="`mailto:${user.email}`"
+                        @click.native.stop="
+                            $trackMatomoEvent(
+                                'Mail',
+                                'Envoi mail entre utilisateurs'
+                            )
+                        "
+                        >{{ user.email }}</Link
+                    ></OrganizationDetailsUserIcon
+                >
                 <OrganizationDetailsUserIcon v-if="user.phone" icon="phone">{{
                     user.phone
                 }}</OrganizationDetailsUserIcon>
