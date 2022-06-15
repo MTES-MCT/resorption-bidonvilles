@@ -15,14 +15,19 @@
                 ></InputDeclaredAt>
             </div>
 
-            <InputFieldType v-model="input.field_type"></InputFieldType>
+            <InputFieldType
+                v-if="input.declared_at"
+                v-model="input.field_type"
+            ></InputFieldType>
             <InputDetailedAddress
+                v-if="input.declared_at"
                 v-model="input.detailed_address"
             ></InputDetailedAddress>
         </FormParagraph>
 
         <FormParagraph
             title="Quel est le propriétaire ?"
+            v-if="input.declared_at"
             :showMandatoryStar="true"
             class="w-128"
         >
@@ -35,24 +40,6 @@
                 v-model="input.owner"
             ></InputOwner>
         </FormParagraph>
-        <FormParagraph
-            title="S'agit-il d'une réinstallation ?"
-            :showMandatoryStar="true"
-            class="w-128"
-        >
-            La majorité des habitants était déjà sur le territoire.
-            <TownFormClosedShantytowns
-                :nearbyClosedShantytowns="nearbyClosedShantytowns"
-            ></TownFormClosedShantytowns>
-            <InputIsReinstallation
-                v-model="input.is_reinstallation"
-            ></InputIsReinstallation>
-        </FormParagraph>
-        <div class="ml-12 mt-6" v-if="input.is_reinstallation === 1">
-            <InputReinstallationComments
-                v-model="input.reinstallation_comments"
-            ></InputReinstallationComments>
-        </div>
     </FormGroup>
 </template>
 
@@ -63,9 +50,6 @@ import InputFieldType from "./inputs/InputFieldType.vue";
 import InputDetailedAddress from "./inputs/InputDetailedAddress.vue";
 import InputOwnerType from "./inputs/InputOwnerType.vue";
 import InputOwner from "./inputs/InputOwner.vue";
-import InputIsReinstallation from "./inputs/InputIsReinstallation.vue";
-import InputReinstallationComments from "./inputs/InputReinstallationComments.vue";
-import TownFormClosedShantytowns from "./TownFormClosedShantytowns.vue";
 
 export default {
     components: {
@@ -74,16 +58,10 @@ export default {
         InputFieldType,
         InputDetailedAddress,
         InputOwnerType,
-        InputOwner,
-        InputIsReinstallation,
-        InputReinstallationComments,
-        TownFormClosedShantytowns
+        InputOwner
     },
 
     props: {
-        nearbyClosedShantytowns: {
-            type: Array
-        },
         value: {
             type: Object,
             required: true
@@ -124,6 +102,11 @@ export default {
             }
 
             return value.label;
+        }
+    },
+    watch: {
+        "input.declaredAt": async function() {
+            this.$emit("declaredAtChanged", this.input.declaredAt);
         }
     }
 };
