@@ -38,6 +38,29 @@
                 v-model="input.census_conducted_by"
             ></InputCensusConductedBy>
         </FormParagraph>
+        <FormParagraph
+            title="Tout ou partie des habitants viennent-ils d'un ou de plusieurs sites récemment fermés ?"
+            :showMandatoryStar="true"
+        >
+            <span class="mb-8">
+                La majorité des habitants était déjà sur le territoire.
+            </span>
+            <InputIsReinstallation
+                v-model="input.is_reinstallation"
+            ></InputIsReinstallation>
+            <InputLocationClosedShantytowns
+                v-if="input.is_reinstallation === 1"
+                v-model="input.location_shantytowns"
+                :nearbyClosedShantytowns="closedShantytowns"
+            >
+            </InputLocationClosedShantytowns>
+        </FormParagraph>
+        <div class="mt-6" v-if="input.is_reinstallation === 1">
+            <InputReinstallationComments
+                v-if="input.is_reinstallation === 1"
+                v-model="input.reinstallation_comments"
+            ></InputReinstallationComments>
+        </div>
     </FormGroup>
 </template>
 
@@ -49,6 +72,10 @@ import InputCaravansAndHuts from "./inputs/InputCaravansAndHuts.vue";
 import InputCensusStatus from "./inputs/InputCensusStatus.vue";
 import InputCensusConductedAt from "./inputs/InputCensusConductedAt.vue";
 import InputCensusConductedBy from "./inputs/InputCensusConductedBy.vue";
+import InputIsReinstallation from "./inputs/InputIsReinstallation.vue";
+import InputReinstallationComments from "./inputs/InputReinstallationComments.vue";
+// import TownFormClosedShantytowns from "./TownFormClosedShantytowns.vue";
+import InputLocationClosedShantytowns from "./inputs/InputLocationClosedShantytowns.vue";
 
 export default {
     components: {
@@ -58,13 +85,19 @@ export default {
         InputCaravansAndHuts,
         InputCensusStatus,
         InputCensusConductedAt,
-        InputCensusConductedBy
+        InputCensusConductedBy,
+        InputIsReinstallation,
+        InputReinstallationComments,
+        InputLocationClosedShantytowns
     },
 
     props: {
         value: {
             type: Object,
             required: true
+        },
+        nearbyClosedShantytowns: {
+            type: Array
         }
     },
 
@@ -78,6 +111,9 @@ export default {
         censusStatusIsUnknown() {
             const value = this.input.census_status;
             return value !== "scheduled" && value !== "done";
+        },
+        closedShantytowns() {
+            return this.nearbyClosedShantytowns;
         }
     }
 };
