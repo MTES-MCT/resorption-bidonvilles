@@ -1,6 +1,6 @@
 <template>
     <span>
-        <Icon icon="external-link-alt" v-if="!internalLink && !toRB" :class="`mr-1 ${linkClasses}`" />
+        <Icon icon="external-link-alt" v-if="!internalLink && !toRB && !isMailto" :class="`mr-1 ${linkClasses}`" />
         <router-link v-if="internalLink" :to="to" :class="linkClasses"
             ><slot></slot
         ></router-link>
@@ -52,6 +52,9 @@ export default {
         },
         internalLink() {
             return this.to && this.to[0] === "/" ;
+        },
+        isMailto() {
+            return this.to.startsWith("mailto:");
         }
     }
 };

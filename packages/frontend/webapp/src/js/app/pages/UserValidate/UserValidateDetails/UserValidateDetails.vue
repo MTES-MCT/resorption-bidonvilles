@@ -29,9 +29,16 @@
             <strong>{{ user.position }}</strong>
         </UserValidateDetailsLabel>
 
-        <UserValidateDetailsContact icon="envelope">{{
-            user.email
-        }}</UserValidateDetailsContact>
+        <UserValidateDetailsContact icon="envelope"
+            ><Link
+                :to="`mailto:${user.email}`"
+                @click.native.stop="
+                    $trackMatomoEvent('Mail', 'Envoi mail entre utilisateurs')
+                "
+                >{{ user.email }}</Link
+            ></UserValidateDetailsContact
+        >
+
         <UserValidateDetailsContact v-if="user.phone" icon="phone">{{
             user.phone
         }}</UserValidateDetailsContact>
