@@ -29,11 +29,14 @@
             <strong>{{ user.position }}</strong>
         </UserValidateDetailsLabel>
 
-        <UserValidateDetailsContact
-            class="text-primary cursor-pointer hover:underline"
-            @click.native="mailTo"
-            icon="envelope"
-            >{{ user.email }}</UserValidateDetailsContact
+        <UserValidateDetailsContact icon="envelope"
+            ><Link
+                :to="`mailto:${user.email}`"
+                @click.native.stop="
+                    $trackMatomoEvent('Mail', 'Envoi mail entre utilisateurs')
+                "
+                >{{ user.email }}</Link
+            ></UserValidateDetailsContact
         >
 
         <UserValidateDetailsContact v-if="user.phone" icon="phone">{{
@@ -65,12 +68,6 @@ export default {
             return this.user.organization.location[
                 this.user.organization.location.type
             ].name;
-        }
-    },
-    methods: {
-        mailTo() {
-            location.href = `mailto:${this.user.email}`;
-            this.$trackMatomoEvent("Mail", "Envoi mail entre utilisateurs");
         }
     }
 };
