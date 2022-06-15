@@ -46,7 +46,9 @@
 import InputAddress from "./inputs/InputAddress.vue";
 import InputName from "./inputs/InputName.vue";
 import InputCoordinates from "./inputs/InputCoordinates.vue";
-import { findNearby, findClosedNearby } from "#helpers/api/town";
+import { findNearby } from "#helpers/api/town";
+import { getDepartementForCity } from "#helpers/api/geo";
+import { mapGetters } from "vuex";
 
 export default {
     components: {
@@ -59,6 +61,10 @@ export default {
         value: {
             type: Object,
             required: true
+        },
+        declaredAt: {
+            type: Date,
+            required: true
         }
     },
 
@@ -70,30 +76,71 @@ export default {
     },
 
     methods: {
-        onAddressChange(coordinates) {
-            this.input.coordinates = coordinates;
+        onAddressChange(townInfos) {
+            const [lat, lng, citycode] = townInfos
+                ? townInfos
+                : [null, null, null];
+            this.input.coordinates = [lat, lng];
+            this.input.citycode = citycode;
+        },
+        load() {
+            if (!this.shantytowns.length) {
+                this.$store.dispatch("fetchTowns");
+            }
         }
+    },
+    created() {
+        this.load();
+    },
+    computed: {
+        ...mapGetters({
+            shantytowns: "towns",
+            townsLoading: "townsLoading"
+        })
     },
     watch: {
         "input.address": async function() {
             this.nearbyShantytowns = [];
         },
         "input.coordinates": async function() {
-            this.$emit("shareClosedTowns", []);
-
-            try {
+            if (this.input.coordinates) {
                 const latitude = this.input.coordinates[0];
                 const longitude = this.input.coordinates[1];
+                const citycode = this.input.citycode;
+                this.$emit("shareClosedTowns", []);
+                try {
+                    const { towns } = await findNearby(latitude, longitude);
 
-                const { towns } = await findNearby(latitude, longitude);
-                const { closedTowns } = await findClosedNearby(
-                    latitude,
-                    longitude
-                );
-                this.nearbyShantytowns = towns;
-                this.$emit("shareClosedTowns", closedTowns);
-                // eslint-disable-next-line no-empty
-            } catch (err) {}
+                    // Recherche du code du département dans lequel se situe le site déclaré
+                    const { departement } = await getDepartementForCity(
+                        citycode
+                    );
+
+                    // Recherche des sites fermés jusqu'à 90 jours avant la date de déclaration du site en cours de saisie
+                    const closedTowns = this.shantytowns.filter(
+                        town =>
+                            // town.statusName === "Fermé" &&
+                            // town.closedAt &&
+                            town.departement.code === departement.code &&
+                            Math.ceil(
+                                (new Date(this.declaredAt).getTime() -
+                                    town.closedAt * 1000) /
+                                    (1000 * 3600 * 24)
+                            ) < 90 &&
+                            Math.ceil(
+                                (new Date(this.declaredAt).getTime() -
+                                    town.closedAt * 1000) /
+                                    (1000 * 3600 * 24)
+                            ) > 0
+                    );
+                    this.nearbyShantytowns = towns;
+                    closedTowns.sort((a, b) => {
+                        return b.closedAt - a.closedAt;
+                    });
+                    this.$emit("shareClosedTowns", closedTowns);
+                    // eslint-disable-next-line no-empty
+                } catch (err) {}
+            }
         }
     }
 };
