@@ -24,7 +24,7 @@
             </div>
 
             <div>
-              <Link :to="`${WEBAPP_URL}/connexion`">
+              <Link :to="`${WEBAPP_URL}/connexion`" class="ml-2">
                 <Button variant="primary">{{
                   $t("landingPage.header.connect")
                 }}</Button>
