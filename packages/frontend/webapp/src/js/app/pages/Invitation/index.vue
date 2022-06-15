@@ -160,7 +160,7 @@ export default {
     },
     methods: {
         backHomeWithErrMsg(msg) {
-            this.$router.push("/");
+            this.$router.push("/").catch(() => {});
             notify({
                 group: "notifications",
                 type: "error",
@@ -200,7 +200,7 @@ export default {
             try {
                 await invite(data);
                 this.loading = false;
-                this.$router.push("/");
+                this.$router.push("/").catch(() => {});
                 notify({
                     group: "notifications",
                     type: "success",
@@ -220,7 +220,7 @@ export default {
         },
         omit() {
             this.loading = false;
-            this.$router.push("/");
+            this.$router.push("/").catch(() => {});
             notify({
                 group: "notifications",
                 type: "success",

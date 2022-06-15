@@ -140,7 +140,7 @@ export default {
                         .dispatch("config/load")
                         .then(() => {
                             this.pending = false;
-                            this.$router.push("/");
+                            this.$router.push("/").catch(() => {});
                         })
                         .catch(error => {
                             this.pending = false;
