@@ -150,7 +150,7 @@ export default {
                 );
                 this.$store.commit("config/SET_CHARTE_ENGAGEMENT_A_JOUR", true);
                 this.loading = false;
-                this.$router.push("/");
+                this.$router.push("/").catch(() => {});
             } catch ({ user_message: message }) {
                 this.loading = false;
                 this.form.status = "error";
