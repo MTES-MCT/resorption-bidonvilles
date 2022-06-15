@@ -108,7 +108,7 @@ export default {
                 label,
                 citycode
             };
-            this.$emit("change", [lat, lng]);
+            this.$emit("change", [lat, lng, citycode]);
         }
     }
 };
