@@ -24,9 +24,6 @@
             </div>
 
             <div>
-               <Link to="https://blog-resorption-bidonvilles.fr">
-                <Button variant="primary">Blog</Button>
-              </Link>
               <Link :to="`${WEBAPP_URL}/connexion`" class="ml-2">
                 <Button variant="primary">{{
                   $t("landingPage.header.connect")
