@@ -110,6 +110,25 @@
                     </div>
                 </div>
             </DetailsPanelSection>
+            <DetailsPanelSection>
+                <div class="font-bold">
+                    Tout ou partie des habitants viennent-ils d'un ou de
+                    plusieurs sites récemment fermés ?
+                </div>
+                <div data-cy-data="is_reinstallation">
+                    {{ boolToStr(town.isReinstallation) }}
+                </div>
+            </DetailsPanelSection>
+            <DetailsPanelSection v-if="town.reinstallationComments !== null">
+                <div>
+                    <div class="font-bold">
+                        Précisions sur la réinstallation
+                    </div>
+                    <!-- eslint-disable -->
+                    <div data-cy-data="reinstallation_comments">{{ town.reinstallationComments }}</div>
+                    <!-- eslint-enable -->
+                </div>
+            </DetailsPanelSection>
         </template>
     </DetailsPanel>
 </template>
@@ -197,6 +216,12 @@ export default {
             }
 
             return int;
+        },
+        boolToStr(bool) {
+            if (bool === null) {
+                return "Non communiqué";
+            }
+            return bool ? "Oui" : "Non";
         }
     },
     computed: {
