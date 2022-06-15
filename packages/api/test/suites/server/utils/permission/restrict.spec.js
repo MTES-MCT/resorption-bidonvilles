@@ -292,7 +292,7 @@ describe.only('utils/permission.restrict()', () => {
                     });
                 }
 
-                it(`si un ${userLevel} avec une ${permissionLevel} demande accès au niveau ${below.type}, retourne ce niveau à l\'identique`, () => {
+                it(`si un ${userLevel} avec une ${permissionLevel} demande accès au niveau ${below.type}, retourne ce niveau à l'identique`, () => {
                     user.permissions.something = {
                         do: {
                             allowed: true,
