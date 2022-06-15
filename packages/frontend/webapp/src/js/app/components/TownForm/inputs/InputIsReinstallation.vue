@@ -3,7 +3,7 @@
         label=" "
         direction="horizontal"
         id="is_reinstallation"
-        validationName="S'agit-il d'une réinstallation ?"
+        validationName="Tout ou partie des habitants viennent-ils d'un ou plusieurs sites récemment fermés ?"
         rules="required"
         :withoutMargin="true"
     >
