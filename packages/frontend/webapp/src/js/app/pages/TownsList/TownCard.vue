@@ -43,7 +43,7 @@
                 </div>
                 <!-- Site fermé ou résorbé ? -->
                 <div class="px-6" v-if="isClosed(shantytown)">
-                    Fermé le {{ formatDate(shantytown.closedAt, "d/m/y") }}
+                    Fermé le {{ (shantytown.closedAt, "d/m/y") }}
                 </div>
                 <div class="px-6" v-else-if="isSolved(shantytown)">
                     Résorbé le {{ formatDate(shantytown.closedAt, "d/m/y") }}
