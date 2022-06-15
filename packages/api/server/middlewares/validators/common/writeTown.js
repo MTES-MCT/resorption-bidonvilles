@@ -247,6 +247,19 @@ module.exports = mode => ([
         .customSanitizer(value => value || null),
 
     /* **********************************************************************************************
+     * Sites à l'origine de la réinstallation
+     ********************************************************************************************* */
+    body('location_shantytowns')
+        .customSanitizer((value) => {
+            if (value === undefined || value === null) {
+                return [];
+            }
+
+            return value;
+        })
+        .isArray().bail().withMessage('La liste des sites fermés dont sont originaires les habitants du site en cours de création est invalide'),
+
+    /* **********************************************************************************************
      * Statut du diagnostic social
      ********************************************************************************************* */
     body('census_status')
