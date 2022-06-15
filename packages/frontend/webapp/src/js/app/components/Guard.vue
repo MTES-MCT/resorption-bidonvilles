@@ -81,14 +81,14 @@ export default {
 
         if (beforeEnter?.action === "signout") {
             await this.$store.dispatch("user/logout", this.$piwik);
-            this.$router.push("/");
+            this.$router.push("/").catch(() => {});
             return;
         }
 
         const guards = (beforeEnter && guardGroups[beforeEnter]) || [];
         for (const guard of guards) {
             if (guard === "anonymous" && this.$store.getters["user/loggedIn"]) {
-                return this.$router.push("/");
+                return this.$router.push("/").catch(() => {});
             }
 
             if (
@@ -112,7 +112,7 @@ export default {
                 }
             }
             if (guard === "isPermitted" && !this.isPermitted()) {
-                return this.$router.push("/");
+                return this.$router.push("/").catch(() => {});
             }
             if (
                 guard === "hasAcceptedCharte" &&

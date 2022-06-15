@@ -436,7 +436,7 @@ export default {
                         )}&from=${from}`
                     );
                 } else {
-                    this.$router.push("/");
+                    this.$router.push("/").catch(() => {});
                 }
 
                 notify({
