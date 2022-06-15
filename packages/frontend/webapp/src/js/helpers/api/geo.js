@@ -29,3 +29,12 @@ export function getDepartementsForRegion(regionCode) {
 export function getDepartementsForEpci(epciCode) {
     return getApi(`/epci/${epciCode}/departements`);
 }
+
+/**
+ * Get the departement related to a specific city
+ *
+ * @returns {Promise}
+ */
+export function getDepartementForCity(cityCode) {
+    return getApi(`/cities/${cityCode}/departement`);
+}
