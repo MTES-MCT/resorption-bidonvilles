@@ -181,8 +181,12 @@ export default {
                             return diffAcc;
                         }
 
-                        const oldValue = diff.oldValue.toLowerCase();
-                        const newValue = diff.newValue.toLowerCase();
+                        const oldValue = diff.oldValue
+                            ? diff.oldValue.toLowerCase()
+                            : diff.oldValue;
+                        const newValue = diff.newValue
+                            ? diff.newValue.toLowerCase()
+                            : diff.newValue;
                         let action = null;
 
                         if (oldValue !== "oui" && newValue === "oui") {
