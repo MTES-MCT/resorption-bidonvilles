@@ -1,8 +1,8 @@
-import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "#app/store/index";
 import { insert as insertNavigationLog } from "#helpers/api/navigationLogs";
 
+import Logout from "#app/pages/Logout/Logout.vue";
 import SignIn from "#app/pages/SignIn/index.vue";
 import Contact from "#app/pages/Contact/index.vue";
 import Invitation from "#app/pages/Invitation/index.vue";
@@ -151,15 +151,11 @@ const guardians = {
     anonymous: guard.bind(this, [
         { checker: () => !isLoggedIn(), target: "/", saveEntryPoint: false }
     ]),
-    loggedIn: guard.bind(this, [
-        { checker: isLoggedIn, target: "/connexion" },
-        { checker: logNavigation }
-    ]),
+    loggedIn: guard.bind(this, [{ checker: isLoggedIn, target: "/connexion" }]),
     loaded: guard.bind(this, [
         { checker: isLoggedIn, target: "/connexion" },
         { checker: isConfigLoaded, target: "/launcher" },
-        { checker: isPermitted, target: "/", saveEntrypoint: false },
-        { checker: logNavigation }
+        { checker: isPermitted, target: "/", saveEntrypoint: false }
     ]),
     loadedAndUpgraded: guard.bind(this, [
         { checker: isLoggedIn, target: "/connexion" },
@@ -273,11 +269,7 @@ const router = new VueRouter({
         },
         {
             path: "/deconnexion",
-            beforeEnter: (to, from, next) => {
-                store.dispatch("user/logout", Vue.prototype.$piwik).then(() => {
-                    next("/");
-                });
-            },
+            component: Logout,
             meta: {
                 analyticsIgnore: true
             }
