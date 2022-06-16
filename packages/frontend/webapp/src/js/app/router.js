@@ -151,15 +151,11 @@ const guardians = {
     anonymous: guard.bind(this, [
         { checker: () => !isLoggedIn(), target: "/", saveEntryPoint: false }
     ]),
-    loggedIn: guard.bind(this, [
-        { checker: isLoggedIn, target: "/connexion" },
-        { checker: logNavigation }
-    ]),
+    loggedIn: guard.bind(this, [{ checker: isLoggedIn, target: "/connexion" }]),
     loaded: guard.bind(this, [
         { checker: isLoggedIn, target: "/connexion" },
         { checker: isConfigLoaded, target: "/launcher" },
-        { checker: isPermitted, target: "/", saveEntrypoint: false },
-        { checker: logNavigation }
+        { checker: isPermitted, target: "/", saveEntrypoint: false }
     ]),
     loadedAndUpgraded: guard.bind(this, [
         { checker: isLoggedIn, target: "/connexion" },
