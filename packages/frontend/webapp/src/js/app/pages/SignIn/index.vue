@@ -79,7 +79,7 @@ export default {
                 });
                 this.$trackMatomoEvent("Login", "Connection");
 
-                this.$router.push({ path: "/" });
+                this.$router.push({ path: "/" }).catch(() => {});
                 this.loading = false;
             } catch (err) {
                 this.error =

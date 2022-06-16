@@ -80,7 +80,7 @@ export default {
         redirect() {
             const { user } = this.$store.state.config.configuration;
             this.track(user);
-            this.$router.push(getEntryPoint());
+            this.$router.push(getEntryPoint()).catch(() => {});
         },
         track(user) {
             Sentry.setUser({ id: user.id });

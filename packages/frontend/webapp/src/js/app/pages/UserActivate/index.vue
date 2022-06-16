@@ -79,7 +79,7 @@ export default {
                 });
                 this.$trackMatomoEvent("Demande d'accès", "Création compte");
 
-                this.$router.push({ path: "/" });
+                this.$router.push({ path: "/" }).catch(() => {});
                 notify({
                     group: "notifications",
                     type: "success",

@@ -82,7 +82,7 @@ export default {
             this.$store
                 .dispatch("config/load")
                 .then(() => {
-                    this.$router.push({ path: "/" });
+                    this.$router.push({ path: "/" }).catch(() => {});
                 })
                 .catch(() => {
                     window.location.reload();
