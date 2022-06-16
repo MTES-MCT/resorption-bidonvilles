@@ -58,7 +58,7 @@ export default {
                 this.loading = true;
                 await requestNewPassword(this.email);
 
-                this.$router.push({ path: "/" });
+                this.$router.push({ path: "/" }).catch(() => {});
                 notify({
                     group: "notifications",
                     type: "success",
