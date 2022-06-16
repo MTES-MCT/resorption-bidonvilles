@@ -1,37 +1,38 @@
 <template>
-    <CheckableGroup
-        id="water_access_is_continuous"
+    <SubQuestionWrapper
         label="L'accès est-il continu ? C'est-à-dire qu'il ne varie pas en qualité et en quantité dans la journée et les saisons, sans limite dans le temps."
-        direction="horizontal"
-        validationName="L'accès est-il continu ?"
-        rules="required"
     >
-        <Radio
-            variant="card"
-            label="Oui"
-            v-model="checked"
-            :checkValue="1"
-            cypressName="water_access_is_continuous"
-        ></Radio>
-        <Radio
-            variant="card"
-            label="Non"
-            v-model="checked"
-            :checkValue="0"
-            cypressName="water_access_is_continuous"
-        ></Radio>
-        <Radio
-            variant="card"
-            label="Inconnu"
-            v-model="checked"
-            :checkValue="-1"
-            cypressName="water_access_is_continuous"
-        ></Radio>
-    </CheckableGroup>
+        <CheckableGroup
+            id="water_access_is_continuous"
+            direction="row"
+            withoutMargin
+            validationName="L'accès est-il continu ?"
+            rules="required"
+        >
+            <Radio
+                label="Oui"
+                v-model="checked"
+                type="checkbox"
+                :checkValue="1"
+                cypressName="water_access_is_continuous"
+            ></Radio>
+            <Radio
+                label="Non"
+                v-model="checked"
+                type="checkbox"
+                :checkValue="0"
+                cypressName="water_access_is_continuous"
+            ></Radio>
+        </CheckableGroup>
+    </SubQuestionWrapper>
 </template>
 
 <script>
+import SubQuestionWrapper from "#app/components/TownForm/ui/SubQuestionWrapper";
+
 export default {
+    components: { SubQuestionWrapper },
+
     props: {
         value: {
             type: Number,

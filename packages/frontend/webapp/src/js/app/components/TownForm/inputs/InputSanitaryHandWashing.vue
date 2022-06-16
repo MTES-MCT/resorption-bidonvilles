@@ -1,36 +1,38 @@
 <template>
-    <CheckableGroup
-        id="sanitary_hand_washing"
+    <SubQuestionWrapper
         label="Y a-t-il un point de lavage des mains à proximité des toilettes ?"
-        direction="horizontal"
-        rules="required"
     >
-        <Radio
-            variant="card"
-            label="Oui"
-            v-model="checked"
-            :checkValue="1"
-            cypressName="hand_washing"
-        ></Radio>
-        <Radio
-            variant="card"
-            label="Non"
-            v-model="checked"
-            :checkValue="0"
-            cypressName="hand_washing"
-        ></Radio>
-        <Radio
-            variant="card"
-            label="Inconnu"
-            v-model="checked"
-            :checkValue="-1"
-            cypressName="hand_washing"
-        ></Radio>
-    </CheckableGroup>
+        <CheckableGroup
+            id="sanitary_hand_washing"
+            validationName="Y a-t-il un point de lavage des mains à proximité des toilettes ?"
+            direction="row"
+            withoutMargin
+            rules="required"
+        >
+            <Radio
+                label="Oui"
+                v-model="checked"
+                type="checkbox"
+                :checkValue="1"
+                cypressName="hand_washing"
+            ></Radio>
+            <Radio
+                label="Non"
+                v-model="checked"
+                type="checkbox"
+                :checkValue="0"
+                cypressName="hand_washing"
+            ></Radio>
+        </CheckableGroup>
+    </SubQuestionWrapper>
 </template>
 
 <script>
+import SubQuestionWrapper from "#app/components/TownForm/ui/SubQuestionWrapper";
+
 export default {
+    components: { SubQuestionWrapper },
+
     props: {
         value: {
             type: Number,

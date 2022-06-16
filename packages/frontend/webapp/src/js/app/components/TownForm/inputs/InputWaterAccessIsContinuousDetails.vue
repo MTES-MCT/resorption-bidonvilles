@@ -1,7 +1,7 @@
 <template>
     <TextArea
         id="water_access_is_continuous_details"
-        label="Veuillez préciser"
+        info="Veuillez préciser :"
         validationName="Veuillez préciser la discontinuité de l'accès à l'eau"
         v-model="input"
         cypressName="water_access_is_continuous_details"

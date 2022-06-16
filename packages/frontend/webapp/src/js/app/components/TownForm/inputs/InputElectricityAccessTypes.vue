@@ -1,6 +1,6 @@
 <template>
     <CheckableGroup
-        label="Quelle est la source de l’accès ?"
+        info="Quelle est la source de l’accès ?"
         validationName="Quelle est la source de l'accès à l'électricité ?"
         id="electricity_access_types"
         rules="required"

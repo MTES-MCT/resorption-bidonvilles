@@ -1,7 +1,7 @@
 <template>
     <CheckableGroup
         id="trash_evacuation_is_close"
-        label="Y a-t-il des dispositifs de ramassage des ordures ménagères (poubelles, bacs, bennes, …) à proximité immédiate du site (moins de 100m) ?"
+        label="Y a-t-il des dispositifs de ramassage des ordures ménagères (poubelles, bacs, bennes...) à proximité immédiate du site (moins de 100m) ?"
         direction="horizontal"
         validationName="Y a-t-il des dispositifs de ramassage des ordures ménagères à proximité immédiate ?"
         rules="required"

@@ -1,36 +1,38 @@
 <template>
-    <CheckableGroup
-        id="water_access_has_stagnant_water"
+    <SubQuestionWrapper
         label="Existe-t-il des eaux stagnantes autour du point de distribution ?"
-        direction="horizontal"
-        rules="required"
     >
-        <Radio
-            variant="card"
-            label="Oui"
-            v-model="checked"
-            :checkValue="1"
-            cypressName="water_access_has_stagnant_water"
-        ></Radio>
-        <Radio
-            variant="card"
-            label="Non"
-            v-model="checked"
-            :checkValue="0"
-            cypressName="water_access_has_stagnant_water"
-        ></Radio>
-        <Radio
-            variant="card"
-            label="Inconnu"
-            v-model="checked"
-            :checkValue="-1"
-            cypressName="water_access_has_stagnant_water"
-        ></Radio>
-    </CheckableGroup>
+        <CheckableGroup
+            id="water_access_has_stagnant_water"
+            validationName="Existe-t-il des eaux stagnantes autour du point de distribution ?"
+            direction="row"
+            withoutMargin
+            rules="required"
+        >
+            <Radio
+                label="Oui"
+                v-model="checked"
+                type="checkbox"
+                :checkValue="1"
+                cypressName="water_access_has_stagnant_water"
+            ></Radio>
+            <Radio
+                label="Non"
+                v-model="checked"
+                type="checkbox"
+                :checkValue="0"
+                cypressName="water_access_has_stagnant_water"
+            ></Radio>
+        </CheckableGroup>
+    </SubQuestionWrapper>
 </template>
 
 <script>
+import SubQuestionWrapper from "#app/components/TownForm/ui/SubQuestionWrapper";
+
 export default {
+    components: { SubQuestionWrapper },
+
     props: {
         value: {
             type: Number,

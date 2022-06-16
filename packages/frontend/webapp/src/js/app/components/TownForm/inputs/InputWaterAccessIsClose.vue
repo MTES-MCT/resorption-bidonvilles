@@ -1,36 +1,38 @@
 <template>
-    <CheckableGroup
-        id="water_access_is_close"
-        label="Distance point d’eau / habitation la plus éloignée ?"
-        direction="horizontal"
-        rules="required"
+    <SubQuestionWrapper
+        label="Quelle est la distance entre le point d'eau et l'habitation la plus éloignée ?"
     >
-        <Radio
-            variant="card"
-            label="Moins de 200m"
-            v-model="checked"
-            :checkValue="1"
-            cypressName="water_access_is_close"
-        ></Radio>
-        <Radio
-            variant="card"
-            label="Plus de 200m"
-            v-model="checked"
-            :checkValue="0"
-            cypressName="water_access_is_close"
-        ></Radio>
-        <Radio
-            variant="card"
-            label="Inconnu"
-            v-model="checked"
-            :checkValue="-1"
-            cypressName="water_access_is_close"
-        ></Radio>
-    </CheckableGroup>
+        <CheckableGroup
+            id="water_access_is_close"
+            validationName="Quelle est la distance entre le point d'eau et l'habitation la plus éloignée ?"
+            direction="row"
+            withoutMargin
+            rules="required"
+        >
+            <Radio
+                label="Moins de 200m"
+                v-model="checked"
+                type="checkbox"
+                :checkValue="1"
+                cypressName="water_access_is_close"
+            ></Radio>
+            <Radio
+                label="Plus de 200m"
+                v-model="checked"
+                type="checkbox"
+                :checkValue="0"
+                cypressName="water_access_is_close"
+            ></Radio>
+        </CheckableGroup>
+    </SubQuestionWrapper>
 </template>
 
 <script>
+import SubQuestionWrapper from "#app/components/TownForm/ui/SubQuestionWrapper";
+
 export default {
+    components: { SubQuestionWrapper },
+
     props: {
         value: {
             type: Number,

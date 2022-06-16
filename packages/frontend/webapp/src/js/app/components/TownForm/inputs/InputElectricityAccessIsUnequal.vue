@@ -1,36 +1,38 @@
 <template>
-    <CheckableGroup
-        id="electricity_access_is_unequal"
+    <SubQuestionWrapper
         label="Des inégalités d’accès ont-elles été constatées ?"
-        direction="horizontal"
-        rules="required"
     >
-        <Radio
-            variant="card"
-            label="Oui"
-            v-model="checked"
-            :checkValue="1"
-            cypressName="electricity_access_is_unequal"
-        ></Radio>
-        <Radio
-            variant="card"
-            label="Non"
-            v-model="checked"
-            :checkValue="0"
-            cypressName="electricity_access_is_unequal"
-        ></Radio>
-        <Radio
-            variant="card"
-            label="Inconnu"
-            v-model="checked"
-            :checkValue="-1"
-            cypressName="electricity_access_is_unequal"
-        ></Radio>
-    </CheckableGroup>
+        <CheckableGroup
+            id="electricity_access_is_unequal"
+            validationName="Des inégalités d’accès ont-elles été constatées ?"
+            direction="row"
+            withoutMargin
+            rules="required"
+        >
+            <Radio
+                label="Oui"
+                v-model="checked"
+                type="checkbox"
+                :checkValue="1"
+                cypressName="electricity_access_is_unequal"
+            ></Radio>
+            <Radio
+                label="Non"
+                v-model="checked"
+                type="checkbox"
+                :checkValue="0"
+                cypressName="electricity_access_is_unequal"
+            ></Radio>
+        </CheckableGroup>
+    </SubQuestionWrapper>
 </template>
 
 <script>
+import SubQuestionWrapper from "#app/components/TownForm/ui/SubQuestionWrapper";
+
 export default {
+    components: { SubQuestionWrapper },
+
     props: {
         value: {
             type: Number,

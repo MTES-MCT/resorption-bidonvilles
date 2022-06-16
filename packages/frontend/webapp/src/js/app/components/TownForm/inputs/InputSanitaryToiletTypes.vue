@@ -1,6 +1,6 @@
 <template>
     <CheckableGroup
-        label="Quels sont les types de toilettes installées ?"
+        info="Quels sont les types de toilettes installées ?"
         id="sanitary_toilet_types"
     >
         <Checkbox

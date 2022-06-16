@@ -1,7 +1,7 @@
 <template>
     <CheckableGroup
         id="sanitary_working_toilets"
-        label="Présence de toilettes fonctionnelles et utilisées ?"
+        validationName="Y-a-t-il des toilettes fonctionnelles et utilisées ?"
         direction="horizontal"
         rules="required"
     >

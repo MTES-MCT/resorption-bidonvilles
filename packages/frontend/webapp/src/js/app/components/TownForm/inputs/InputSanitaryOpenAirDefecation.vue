@@ -1,36 +1,38 @@
 <template>
-    <CheckableGroup
-        id="sanitary_open_air_defecation"
+    <SubQuestionWrapper
         label="Constate-t-on des marques de défécation à l’air libre ?"
-        direction="horizontal"
-        rules="required"
     >
-        <Radio
-            variant="card"
-            label="Oui"
-            v-model="checked"
-            :checkValue="1"
-            cypressName="open_air_defecation"
-        ></Radio>
-        <Radio
-            variant="card"
-            label="Non"
-            v-model="checked"
-            :checkValue="0"
-            cypressName="open_air_defecation"
-        ></Radio>
-        <Radio
-            variant="card"
-            label="Inconnu"
-            v-model="checked"
-            :checkValue="-1"
-            cypressName="open_air_defecation"
-        ></Radio>
-    </CheckableGroup>
+        <CheckableGroup
+            id="sanitary_open_air_defecation"
+            validationName="Constate-t-on des marques de défécation à l’air libre ?"
+            direction="row"
+            withoutMargin
+            rules="required"
+        >
+            <Radio
+                label="Oui"
+                v-model="checked"
+                type="checkbox"
+                :checkValue="1"
+                cypressName="open_air_defecation"
+            ></Radio>
+            <Radio
+                label="Non"
+                v-model="checked"
+                type="checkbox"
+                :checkValue="0"
+                cypressName="open_air_defecation"
+            ></Radio>
+        </CheckableGroup>
+    </SubQuestionWrapper>
 </template>
 
 <script>
+import SubQuestionWrapper from "#app/components/TownForm/ui/SubQuestionWrapper";
+
 export default {
+    components: { SubQuestionWrapper },
+
     props: {
         value: {
             type: Number,

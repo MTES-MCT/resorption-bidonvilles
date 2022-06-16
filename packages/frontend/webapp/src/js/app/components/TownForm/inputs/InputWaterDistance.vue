@@ -1,6 +1,6 @@
 <template>
     <SubQuestionWrapper label="Où se situe l'accès ?">
-        <CheckableGroup direction="vertical" withoutMargin>
+        <CheckableGroup direction="row" withoutMargin>
             <Radio
                 label="sur site ou à moins de 20 mètres"
                 v-model="checked"

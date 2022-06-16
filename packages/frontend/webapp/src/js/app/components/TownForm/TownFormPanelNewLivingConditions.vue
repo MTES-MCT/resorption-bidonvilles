@@ -29,7 +29,7 @@
                         v-if="input.water.access_is_public === 0"
                         v-model="input.water.access_is_continuous"
                     />
-                    <div class="ml-12">
+                    <div class="mt-4 ml-12">
                         <InputWaterAccessIsContinuousDetails
                             v-if="
                                 input.water.access_is_public === 0 &&
@@ -59,7 +59,7 @@
                         "
                         v-model="input.water.access_is_unequal"
                     />
-                    <div class="ml-12">
+                    <div class="mt-4 ml-12">
                         <InputWaterAccessIsUnequalDetails
                             v-if="
                                 input.water.access_is_public === 0 &&
@@ -88,43 +88,48 @@
         </FormParagraph>
 
         <FormParagraph
-            title="Les habitants ont-ils accès à des toilettes ?"
+            title="Les habitants ont-ils accès à des toilettes fonctionnelles ?"
             :showMandatoryStar="true"
         >
-            <InputSanitaryOpenAirDefecation
-                v-model="input.sanitary.open_air_defecation"
-            />
             <InputSanitaryWorkingToilets
                 v-model="input.sanitary.working_toilets"
             />
-            <InputSanitaryToiletTypes
-                v-if="input.sanitary.working_toilets === 1"
-                v-model="input.sanitary.toilet_types"
-            />
-            <InputSanitaryToiletsAreInside
-                v-if="
-                    input.sanitary.working_toilets === 1 &&
-                        input.sanitary.toilet_types.length > 0 &&
-                        notOnlyLatrines
-                "
-                v-model="input.sanitary.toilets_are_inside"
-            />
-            <InputSanitaryToiletsAreLighted
-                v-if="
-                    input.sanitary.working_toilets === 1 &&
-                        input.sanitary.toilet_types.length > 0 &&
-                        notOnlyLatrines
-                "
-                v-model="input.sanitary.toilets_are_lighted"
-            />
-            <InputSanitaryHandWashing
-                v-if="
-                    input.sanitary.working_toilets === 1 &&
-                        input.sanitary.toilet_types.length > 0 &&
-                        notOnlyLatrines
-                "
-                v-model="input.sanitary.hand_washing"
-            />
+
+            <div class="ml-12">
+                <InputSanitaryOpenAirDefecation
+                    v-model="input.sanitary.open_air_defecation"
+                />
+                <div class="mt-2 mb-1">
+                    <InputSanitaryToiletTypes
+                        v-if="input.sanitary.working_toilets === 1"
+                        v-model="input.sanitary.toilet_types"
+                    />
+                </div>
+                <InputSanitaryToiletsAreInside
+                    v-if="
+                        input.sanitary.working_toilets === 1 &&
+                            input.sanitary.toilet_types.length > 0 &&
+                            notOnlyLatrines
+                    "
+                    v-model="input.sanitary.toilets_are_inside"
+                />
+                <InputSanitaryToiletsAreLighted
+                    v-if="
+                        input.sanitary.working_toilets === 1 &&
+                            input.sanitary.toilet_types.length > 0 &&
+                            notOnlyLatrines
+                    "
+                    v-model="input.sanitary.toilets_are_lighted"
+                />
+                <InputSanitaryHandWashing
+                    v-if="
+                        input.sanitary.working_toilets === 1 &&
+                            input.sanitary.toilet_types.length > 0 &&
+                            notOnlyLatrines
+                    "
+                    v-model="input.sanitary.hand_washing"
+                />
+            </div>
         </FormParagraph>
 
         <FormParagraph
@@ -132,17 +137,20 @@
             :showMandatoryStar="true"
         >
             <InputElectricityAccess v-model="input.electricity.access" />
-            <InputElectricityAccessTypes
-                v-if="input.electricity.access === 1"
-                v-model="input.electricity.access_types"
-            />
-            <InputElectricityAccessIsUnequal
-                v-if="
-                    input.electricity.access === 1 &&
-                        input.electricity.access_types.length > 0
-                "
-                v-model="input.electricity.access_is_unequal"
-            />
+
+            <div class="ml-12">
+                <InputElectricityAccessTypes
+                    v-if="input.electricity.access === 1"
+                    v-model="input.electricity.access_types"
+                />
+                <InputElectricityAccessIsUnequal
+                    v-if="
+                        input.electricity.access === 1 &&
+                            input.electricity.access_types.length > 0
+                    "
+                    v-model="input.electricity.access_is_unequal"
+                />
+            </div>
         </FormParagraph>
 
         <FormParagraph
@@ -153,18 +161,21 @@
             <InputTrashEvacuationIsClose
                 v-model="input.trash.evacuation_is_close"
             />
-            <InputTrashEvacuationIsSafe
-                v-model="input.trash.evacuation_is_safe"
-                v-if="input.trash.evacuation_is_close === 1"
-            />
-            <InputTrashEvacuationIsRegular
-                v-model="input.trash.evacuation_is_regular"
-                v-if="input.trash.evacuation_is_close === 1"
-            />
-            <InputTrashBulkyIsPiling
-                v-model="input.trash.bulky_is_piling"
-                v-if="input.trash.evacuation_is_close === 1"
-            />
+
+            <div class="ml-12">
+                <InputTrashEvacuationIsSafe
+                    v-model="input.trash.evacuation_is_safe"
+                    v-if="input.trash.evacuation_is_close === 1"
+                />
+                <InputTrashEvacuationIsRegular
+                    v-model="input.trash.evacuation_is_regular"
+                    v-if="input.trash.evacuation_is_close === 1"
+                />
+                <InputTrashBulkyIsPiling
+                    v-model="input.trash.bulky_is_piling"
+                    v-if="input.trash.evacuation_is_close === 1"
+                />
+            </div>
         </FormParagraph>
 
         <FormParagraph

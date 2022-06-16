@@ -1,7 +1,7 @@
 <template>
     <CheckableGroup
         id="electricity_access"
-        label="Y a-t-il présence d’une installation électrique ?"
+        validationName="Y a-t-il présence d’une installation électrique ?"
         direction="horizontal"
         rules="required"
     >
