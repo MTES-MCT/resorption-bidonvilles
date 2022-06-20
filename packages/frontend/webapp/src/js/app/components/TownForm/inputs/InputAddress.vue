@@ -7,7 +7,7 @@
         :getResultValue="getResultValue"
         validationName="Adresse"
         @submit="submit"
-        rules="addressRequired"
+        :rules="rule"
         data-cy-field="address"
         :defaultValue="value"
         :disabled="disabled"
@@ -18,9 +18,16 @@
 import { extend } from "vee-validate";
 import { autocomplete } from "#helpers/addressHelper";
 
-extend("addressRequired", {
+extend("cityAndLabelRequired", {
     validate(value) {
         return !!(value && value.citycode && value.label);
+    },
+    message: "L'adresse est obligatoire"
+});
+
+extend("labelRequired", {
+    validate(value) {
+        return !!(value && value.label);
     },
     message: "L'adresse est obligatoire"
 });
@@ -41,6 +48,11 @@ export default {
             type: Boolean,
             required: false,
             default: false
+        },
+        rule: {
+            type: String, // either "cityAndLabelRequired" or "labelRequired"
+            required: false,
+            default: "cityAndLabelRequired"
         }
     },
 

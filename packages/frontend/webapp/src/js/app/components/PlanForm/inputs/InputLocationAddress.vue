@@ -6,6 +6,7 @@
                     v-model="input.address"
                     @change="onAddressChange"
                     :disabled="disabled"
+                    rule="labelRequired"
                 ></InputAddress>
             </FormParagraph>
         </div>
