@@ -102,13 +102,23 @@ export default {
                 }
 
                 return (
-                    permission.allowed_on.regions.includes(town.region.code) ||
-                    permission.allowed_on.departements.includes(
-                        town.departement.code
-                    ) ||
-                    permission.allowed_on.epci.includes(town.epci.code) ||
-                    permission.allowed_on.cities.includes(town.city.code) ||
-                    permission.allowed_on.cities.includes(town.city.main) ||
+                    (town.region &&
+                        permission.allowed_on.regions.includes(
+                            town.region.code
+                        )) ||
+                    (town.departement &&
+                        permission.allowed_on.departements.includes(
+                            town.departement.code
+                        )) ||
+                    (town.epci &&
+                        permission.allowed_on.epci.includes(town.epci.code)) ||
+                    (town.city &&
+                        (permission.allowed_on.cities.includes(
+                            town.city.code
+                        ) ||
+                            permission.allowed_on.cities.includes(
+                                town.city.main
+                            ))) ||
                     permission.allowed_on.shantytowns.includes(town.id)
                 );
             };

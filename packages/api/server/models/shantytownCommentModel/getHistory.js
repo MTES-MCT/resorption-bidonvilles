@@ -26,6 +26,9 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate, o
         where.push('private != false AND false');
     } else if (restrictedLocations.public.type !== 'nation') {
         where.push(`private = false AND ${fromGeoLevelToTableName(restrictedLocations.public.type)}.code = :shantytownCommentLocationCode`);
+        if (restrictedLocations.public.type === 'city') {
+            where.push(`private = false AND ${fromGeoLevelToTableName(restrictedLocations.public.type)}.fk_main = :shantytownCommentLocationCode`);
+        }
         replacements.shantytownCommentLocationCode = restrictedLocations.public[restrictedLocations.public.type].code;
     } else {
         where.push('private = false');
@@ -36,6 +39,9 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate, o
         where.push('private != true AND false');
     } else if (restrictedLocations.private.type !== 'nation') {
         where.push(`private = true AND ${fromGeoLevelToTableName(restrictedLocations.private.type)}.code = :privateShantytownCommentLocationCode`);
+        if (restrictedLocations.public.type === 'city') {
+            where.push(`private = true AND ${fromGeoLevelToTableName(restrictedLocations.private.type)}.fk_main = :privateShantytownCommentLocationCode`);
+        }
         replacements.privateShantytownCommentLocationCode = restrictedLocations.private[restrictedLocations.private.type].code;
     } else {
         where.push('private = true');
