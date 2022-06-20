@@ -4,14 +4,6 @@ const { fromGeoLevelToTableName } = require('#server/utils/geo');
 const decomposeForDiagramm = require('./_common/decomposeForDiagramm');
 const getArrayOfDates = require('./_common/getArrayOfDates');
 
-const joins = [
-    { table: 'cities', on: 'shantytowns.fk_city = cities.code' },
-    { table: 'epci', on: 'cities.fk_epci = epci.code' },
-    { table: 'departements', on: 'cities.fk_departement = departements.code' },
-    { table: 'regions', on: 'departements.fk_region = regions.code' },
-];
-
-
 module.exports = async (user, location) => {
     const restrictedLocation = restrict(location).for(user).askingTo('list', 'shantytown');
     if (restrictedLocation === null) {
@@ -32,6 +24,17 @@ module.exports = async (user, location) => {
 
     const date = new Date();
     const otherDate = new Date();
+    const shantytownWhere = [];
+    const shantytownReplacements = {};
+    if (restrictedLocation.type !== 'nation') {
+        shantytownReplacements.locationCode = restrictedLocation[restrictedLocation.type].code;
+        shantytownWhere.push(`${fromGeoLevelToTableName(restrictedLocation.type)}.code = :locationCode`);
+
+        if (restrictedLocation.type === 'city') {
+            shantytownWhere.push(`${fromGeoLevelToTableName(restrictedLocation.type)}.fk_main = :locationCode`);
+        }
+    }
+
     otherDate.setMonth(date.getMonth() - 3);
     const shantytownStats = await sequelize.query(
         `SELECT 
@@ -41,27 +44,31 @@ module.exports = async (user, location) => {
             shantytowns.updated_at,
             shantytowns.closed_at,
             resorbed,
-            ${restrictedLocation.type !== 'nation' ? 'code,' : '0 as code,'}
             shantytowns.shantytown_id as id
         FROM 
             (
                 (
-                    SELECT shantytowns.updated_at, closed_at, CAST(closed_with_solutions AS text) as resorbed, shantytown_id, population_total, population_minors, minors_in_school${restrictedLocation.type !== 'nation' ? `, ${fromGeoLevelToTableName(restrictedLocation.type)}.code` : ''}
+                    SELECT shantytowns.updated_at, closed_at, CAST(closed_with_solutions AS text) as resorbed, shantytown_id, population_total, population_minors, minors_in_school, fk_city
                     FROM shantytowns
-                    ${joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
                 )
                 UNION
                 (
-                    SELECT shantytowns.updated_at, closed_at, CAST(closed_with_solutions AS text) as resorbed, shantytown_id, population_total, population_minors, minors_in_school${restrictedLocation.type !== 'nation' ? `, ${fromGeoLevelToTableName(restrictedLocation.type)}.code` : ''}
+                    SELECT shantytowns.updated_at, closed_at, CAST(closed_with_solutions AS text) as resorbed, shantytown_id, population_total, population_minors, minors_in_school, fk_city
                     FROM "ShantytownHistories" shantytowns
-                    ${joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
                 )
             ) shantytowns
+        LEFT JOIN cities ON shantytowns.fk_city = cities.code
+        LEFT JOIN epci ON cities.fk_epci = epci.code
+        LEFT JOIN departements ON cities.fk_departement = departements.code
+        LEFT JOIN regions ON departements.fk_region = regions.code
+        ${shantytownWhere.length > 0 ? `WHERE ${shantytownWhere.join(' OR ')}` : ''}
         ORDER BY shantytowns.updated_at DESC`,
         {
             type: sequelize.QueryTypes.SELECT,
+            replacements: shantytownReplacements,
         },
     );
+
     const users = await sequelize.query(
         `SELECT 
             u.created_at
@@ -75,6 +82,6 @@ module.exports = async (user, location) => {
         },
     );
     const listOfDates = getArrayOfDates(otherDate, date);
-    const stats = decomposeForDiagramm(shantytownStats, users, listOfDates, restrictedLocation);
+    const stats = decomposeForDiagramm(shantytownStats, users, listOfDates);
     return stats;
 };
