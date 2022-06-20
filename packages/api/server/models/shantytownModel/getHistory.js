@@ -22,6 +22,9 @@ module.exports = async (user, location, shantytownFilter, numberOfActivities, la
 
     if (restrictedLocation.type !== 'nation') {
         where.push(`${fromGeoLevelToTableName(restrictedLocation.type)}.code = :shantytownLocationCode`);
+        if (restrictedLocation.type === 'city') {
+            where.push(`${fromGeoLevelToTableName(restrictedLocation.type)}.fk_main = :shantytownLocationCode`);
+        }
         replacements.shantytownLocationCode = restrictedLocation[restrictedLocation.type].code;
     }
 
