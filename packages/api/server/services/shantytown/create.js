@@ -4,6 +4,23 @@ const config = require('#server/config');
 const mattermostUtils = require('#server/utils/mattermost');
 const userModel = require('#server/models/userModel');
 const mails = require('#server/mails/mails');
+const { fromTsToFormat } = require('#server/utils/date');
+
+async function getDetailedClosedShantytownsInDepartement(closedTowns, user) {
+    const detailedClosedShantytowns = [];
+    if (closedTowns.length > 0) {
+        await Promise.all(closedTowns.map(async (town) => {
+            const aTown = await shantytownModel.findOne(user, JSON.stringify(town));
+            const simplifiedTown = (({
+                id, city, address, closedAt,
+            }) => ({
+                id, city, address, closedAt,
+            }))(aTown);
+            detailedClosedShantytowns.push(simplifiedTown);
+        }));
+    }
+    return detailedClosedShantytowns;
+}
 
 module.exports = async (townData, user) => {
     const baseTown = {
@@ -101,13 +118,16 @@ module.exports = async (townData, user) => {
         await socialOriginModel.create(shantytown_id, townData.social_origins);
     }
 
-
     const town = await shantytownModel.findOne(user, shantytown_id);
+
+    let closedTownsInDepartement = await getDetailedClosedShantytownsInDepartement(townData.location_shantytowns, user);
+
+    closedTownsInDepartement = closedTownsInDepartement.map(shantytown => ({ ...shantytown, closedAt: fromTsToFormat(shantytown.closedAt, 'd/m/Y') }));
 
     // Send a Mattermost alert, if it fails, do nothing
     try {
         if (config.mattermost) {
-            await mattermostUtils.triggerShantytownCreationAlert(town, user);
+            await mattermostUtils.triggerShantytownCreationAlert(town, closedTownsInDepartement);
         }
     } catch (err) {
         // eslint-disable-next-line no-console
