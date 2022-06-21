@@ -2,22 +2,23 @@ const shantytownModel = require('#server/models/shantytownModel');
 const socialOriginModel = require('#server/models/socialOriginModel');
 const config = require('#server/config');
 const mattermostUtils = require('#server/utils/mattermost');
-const userModel = require('#server/models/userModel');
-const mails = require('#server/mails/mails');
+// const userModel = require('#server/models/userModel');
+// const mails = require('#server/mails/mails');
 const { fromTsToFormat } = require('#server/utils/date');
 
-async function getDetailedClosedShantytownsInDepartement(closedTowns, user) {
-    const detailedClosedShantytowns = [];
+function getDetailedClosedShantytownsInDepartement(closedTowns, user) {
+    let detailedClosedShantytowns = [];
     if (closedTowns.length > 0) {
-        await Promise.all(closedTowns.map(async (town) => {
-            const aTown = await shantytownModel.findOne(user, JSON.stringify(town));
-            const simplifiedTown = (({
-                id, city, address, closedAt,
-            }) => ({
-                id, city, address, closedAt,
-            }))(aTown);
-            detailedClosedShantytowns.push(simplifiedTown);
-        }));
+        detailedClosedShantytowns = Promise.all(closedTowns.map(town => shantytownModel.findOne(user, JSON.stringify(town))))
+            .then(towns => towns.map((
+                {
+                    id, address, city, closedAt,
+                },
+            ) => (
+                {
+                    id, address, city, closedAt: fromTsToFormat(closedAt, 'd/m/Y'),
+                }
+            )));
     }
     return detailedClosedShantytowns;
 }
@@ -29,7 +30,7 @@ module.exports = async (townData, user) => {
         longitude: townData.longitude,
         address: townData.address,
         addressDetails: townData.detailed_address,
-        builtAt: townData.built_at,
+        builtAt: townData.built_at || null,
         populationTotal: townData.population_total,
         populationCouples: townData.population_couples,
         populationMinors: townData.population_minors,
@@ -88,6 +89,23 @@ module.exports = async (townData, user) => {
         firePreventionComments: townData.fire_prevention_comments,
     };
 
+    let closedTownsInDepartement = null;
+    if (townData.location_shantytowns && townData.location_shantytowns.length > 0) {
+        closedTownsInDepartement = await getDetailedClosedShantytownsInDepartement(townData.location_shantytowns, user);
+
+        if (closedTownsInDepartement && closedTownsInDepartement.length > 0) {
+            baseTown.reinstallationComments = (baseTown.reinstallationComments.length > 0)
+                ? `${baseTown.reinstallationComments}
+    Liste des sites fermés dans le département:`
+                : '';
+            closedTownsInDepartement.forEach((town) => {
+                // eslint-disable-next-line no-unused-expressions
+                baseTown.reinstallationComments = `${baseTown.reinstallationComments}
+    - ${town.name ? town.name : ''} ${town.address} fermé le ${town.closedAt}.`;
+            });
+        }
+    }
+
     const shantytown_id = await shantytownModel.create(
         Object.assign(
             {},
@@ -120,19 +138,23 @@ module.exports = async (townData, user) => {
 
     const town = await shantytownModel.findOne(user, shantytown_id);
 
-    let closedTownsInDepartement = await getDetailedClosedShantytownsInDepartement(townData.location_shantytowns, user);
-
-    closedTownsInDepartement = closedTownsInDepartement.map(shantytown => ({ ...shantytown, closedAt: fromTsToFormat(shantytown.closedAt, 'd/m/Y') }));
-
     // Send a Mattermost alert, if it fails, do nothing
     try {
         if (config.mattermost) {
-            await mattermostUtils.triggerShantytownCreationAlert(town, closedTownsInDepartement);
+            if (closedTownsInDepartement && closedTownsInDepartement.length > 0) {
+                Promise.all(
+                    mattermostUtils.triggerShantytownCreationAlert(town, user),
+                    mattermostUtils.triggerReinstallation(town, closedTownsInDepartement),
+                );
+            } else {
+                await mattermostUtils.triggerShantytownCreationAlert(town, user);
+            }
         }
     } catch (err) {
         // eslint-disable-next-line no-console
-        console.log(`Error with shantytown creation Mattermost webhook : ${err.message}`);
+        console.log(`Error with shantytown creation Mattermost webhooks : ${err.message}`);
     }
+    /*
 
     // Send a notification to all users of the related departement
     try {
@@ -152,6 +174,7 @@ module.exports = async (townData, user) => {
     } catch (error) {
         // ignore
     }
+    */
 
     return town;
 };
