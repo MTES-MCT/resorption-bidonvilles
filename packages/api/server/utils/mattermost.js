@@ -6,12 +6,12 @@ const formatAddress = town => `${town.address} ${town.name ? `« ${town.name} »
 const formatUsername = user => `[${user.first_name} ${user.last_name}](${webappUrl}/nouvel-utilisateur/${user.id}) `;
 const formatTownLink = (townID, text) => `[${text}](${webappUrl}/site/${townID})`;
 
-const formatDate = ((dateToFormat) => {
+function formatDate(dateToFormat) {
     const day = dateToFormat.getDate();
     const month = dateToFormat.getMonth() + 1;
     const year = dateToFormat.getFullYear();
     return `${day}/${month}/${year}`;
-});
+}
 
 async function triggerShantytownCloseAlert(town, user) {
     if (!mattermost) {
@@ -82,7 +82,8 @@ async function triggerShantytownCreationAlert(town, user) {
     const townLink = formatTownLink(town.id, address);
 
     const mattermostMessage = {
-        channel: '#notif-ouverture-sites',
+        // channel: '#notif-ouverture-sites',
+        channel: '#notif-dev-test',
         username: 'Alerte Résorption Bidonvilles',
         icon_emoji: ':robot:',
         text: `:rotating_light: Site ouvert ${townLink} par ${username}`,
@@ -96,7 +97,7 @@ async function triggerShantytownCreationAlert(town, user) {
                     },
                     {
                         short: false,
-                        value: `*Date d'installation du site* : ${formatDate(new Date(town.builtAt * 1000))}`,
+                        value: `*Date d'installation du site* : ${town.buildAt ? formatDate(new Date(town.builtAt * 1000)) : 'Non renseigné'}`,
                     },
                     {
                         short: false,
@@ -334,6 +335,46 @@ async function triggerNotifyNewUserFromRectorat(user) {
     await webhook.send(mattermostMessage);
 }
 
+async function triggerReinstallation(createdTown, closedSourceTowns) {
+    if (!mattermost) {
+        return;
+    }
+
+    console.log('===== Envoi de la notif de reinstalation ! =====');
+    console.log(`createdTown: ${JSON.stringify(createdTown)}`);
+    console.log(`closedSourceTowns: ${JSON.stringify(closedSourceTowns)}`);
+
+    // Infos sur le site créé
+    const townLink = formatTownLink(createdTown.id, createdTown.address);
+
+    // Préparation d'un message par site fermé, dont la populaion alimente le site créé
+    const fields = [];
+    closedSourceTowns.forEach((town) => {
+        const closedTownLink = formatTownLink(town.id, town.address);
+        const text = `:rotating_light: ${closedTownLink} fermé le ${town.closedAt}.`;
+        const field = {
+            short: 'false',
+            value: text,
+        };
+        fields.push(field);
+    });
+
+    const mattermostMessage = {
+        channel: '#notif-dev-test',
+        username: 'Alerte Résorption Bidonvilles',
+        icon_emoji: ':robot:',
+        text: `:rotating_light:  Une partie des habitants de ${townLink} vivait précédemment dans ces sites, fermés au cours des 90 derniers jours dans le département:`,
+        attachments: [
+            {
+                color: '#f2c744',
+                fields,
+            },
+        ],
+    };
+    const reinstallationAlert = new IncomingWebhook(mattermost);
+    await reinstallationAlert.send(mattermostMessage);
+}
+
 module.exports = {
     triggerShantytownCloseAlert,
     triggerShantytownCreationAlert,
@@ -345,4 +386,5 @@ module.exports = {
     triggerInvitedActor,
     triggerRemoveDeclaredActor,
     triggerNotifyNewUserFromRectorat,
+    triggerReinstallation,
 };
