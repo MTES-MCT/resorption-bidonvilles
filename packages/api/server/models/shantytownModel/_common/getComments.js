@@ -13,7 +13,25 @@ module.exports = async (user, shantytownIds, covid = false) => {
     const filterPrivateComments = !user.isAllowedTo('listPrivate', 'shantytown_comment');
 
     const rows = await sequelize.query(
-        `SELECT
+        `WITH organization_comment_access AS (
+            SELECT 
+                scoa.fk_comment AS shantytown_comment_id,
+                ARRAY_AGG(lo.name) AS organization_target_name,
+                ARRAY_AGG(lo.organization_id) AS organization_target_id
+            FROM shantytown_comment_organization_access scoa 
+            LEFT JOIN localized_organizations lo ON lo.organization_id = scoa.fk_organization
+            GROUP BY scoa.fk_comment
+        ),
+        user_comment_access AS (
+            SELECT 
+                scua.fk_comment AS shantytown_comment_id,
+                ARRAY_AGG(CONCAT(users.first_name, ' ', users.last_name)) AS user_target_name,
+                ARRAY_AGG(users.user_id) AS user_target_id
+            FROM shantytown_comment_user_access scua 
+            LEFT JOIN users ON users.user_id = scua.fk_user
+            GROUP BY scua.fk_comment
+        )
+        SELECT
             shantytown_comments.shantytown_comment_id AS "commentId",
             shantytown_comments.fk_shantytown AS "shantytownId",
             shantytown_comments.description AS "commentDescription",
@@ -37,15 +55,19 @@ module.exports = async (user, shantytownIds, covid = false) => {
             users.position AS "userPosition",
             organizations.organization_id AS "organizationId",
             organizations.name AS "organizationName",
-            organizations.abbreviation AS "organizationAbbreviation"
+            organizations.abbreviation AS "organizationAbbreviation",
+            organization_comment_access.organization_target_name,
+            user_comment_access.user_target_name
         FROM shantytown_comments
         LEFT JOIN users ON shantytown_comments.created_by = users.user_id
         LEFT JOIN organizations ON users.fk_organization = organizations.organization_id
         LEFT JOIN shantytown_covid_comments ON shantytown_covid_comments.fk_comment = shantytown_comments.shantytown_comment_id
+        LEFT JOIN organization_comment_access ON organization_comment_access.shantytown_comment_id = shantytown_comments.shantytown_comment_id
+        LEFT JOIN user_comment_access ON user_comment_access.shantytown_comment_id = shantytown_comments.shantytown_comment_id
         WHERE
             shantytown_comments.fk_shantytown IN (:ids) 
             AND shantytown_covid_comment_id IS ${covid === true ? 'NOT ' : ''}NULL
-            ${filterPrivateComments === true ? 'AND private IS FALSE ' : ''}
+            ${filterPrivateComments === true ? `AND (private IS FALSE OR ${user.id} = ANY(user_comment_access.user_target_id) OR ${user.organization.id} = ANY(organization_comment_access.organization_target_id))` : ''}
         ORDER BY shantytown_comments.created_at DESC`,
         {
             type: sequelize.QueryTypes.SELECT,
