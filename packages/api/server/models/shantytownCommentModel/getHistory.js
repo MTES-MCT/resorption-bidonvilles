@@ -46,17 +46,37 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate, o
     } else {
         where.push('private = true');
     }
-
+    where.push(`${user.id} =  ANY(uca.user_target_id)`);
+    where.push(`${user.organization.id} = ANY(oca.organization_target_id)`);
     const whereLastDate = `${where.length > 0 ? 'AND' : 'WHERE'} comments.created_at < '${lastDate}'`;
 
     const activities = await sequelize.query(
-        `
+        `WITH organization_comment_access AS (
+           SELECT 
+                scoa.fk_comment AS shantytown_comment_id,
+                ARRAY_AGG(lo.name) AS organization_target_name,
+                ARRAY_AGG(lo.organization_id) AS organization_target_id
+            FROM shantytown_comment_organization_access scoa 
+            LEFT JOIN localized_organizations lo ON lo.organization_id = scoa.fk_organization
+            GROUP BY scoa.fk_comment
+        ),
+        user_comment_access AS (
+            SELECT 
+                scua.fk_comment AS shantytown_comment_id,
+                ARRAY_AGG(CONCAT(users.first_name, ' ', users.last_name)) AS user_target_name,
+                ARRAY_AGG(users.user_id) AS user_target_id
+            FROM shantytown_comment_user_access scua 
+            LEFT JOIN users ON users.user_id = scua.fk_user
+            GROUP BY scua.fk_comment
+        )
             SELECT
                 comments.shantytown_comment_id AS "commentId",
                 comments.description AS "commentDescription",
                 comments.created_at AS "commentCreatedAt",
                 comments.private AS "commentPrivate",
                 comments.created_by AS "commentCreatedBy",
+                oca.organization_target_name,
+                uca.user_target_name,
                 author.first_name AS "userFirstName",
                 author.last_name AS "userLastName",
                 author.position AS "userPosition",
@@ -87,6 +107,8 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate, o
                 regions.code AS "regionCode",
                 regions.name AS "regionName"
             FROM shantytown_comments comments
+            LEFT JOIN organization_comment_access oca ON comments.shantytown_comment_id = oca.shantytown_comment_id
+            LEFT JOIN user_comment_access uca ON comments.shantytown_comment_id = uca.shantytown_comment_id
             LEFT JOIN shantytowns ON comments.fk_shantytown = shantytowns.shantytown_id
             LEFT JOIN shantytown_covid_comments covid_comments ON covid_comments.fk_comment = comments.shantytown_comment_id
             LEFT JOIN users author ON comments.created_by = author.user_id
