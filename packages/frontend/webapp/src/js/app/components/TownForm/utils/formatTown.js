@@ -32,6 +32,11 @@ function toNullableStr(value) {
 
 export default function formatTown(data) {
     return {
+        // location data necessary for permission checks
+        region: data.region || null,
+        departement: data.departement || null,
+        epci: data.epci || null,
+        city: data.city || null,
         location: {
             address: {
                 label: data.address ? data.address : undefined,
