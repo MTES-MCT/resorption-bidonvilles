@@ -88,6 +88,7 @@
                             class="mt-10 townPanelShadow"
                             id="people"
                             :nearbyClosedShantytowns="nearbyClosedShantytowns"
+                            :mode="mode"
                             v-model="town.people"
                         ></TownFormPanelPeople>
 
@@ -384,7 +385,7 @@ export default {
                     owner: this.town.characteristics.owner,
                     is_reinstallation: this.town.people.is_reinstallation,
                     location_shantytowns: this.town.people.location_shantytowns,
-                    reinstallation_comments: this.town.characteristics
+                    reinstallation_comments: this.town.people
                         .reinstallation_comments,
                     population_total: this.strToInt(
                         this.town.people.population.populationTotal
