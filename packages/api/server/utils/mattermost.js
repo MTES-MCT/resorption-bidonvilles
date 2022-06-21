@@ -340,10 +340,6 @@ async function triggerReinstallation(createdTown, closedSourceTowns) {
         return;
     }
 
-    console.log('===== Envoi de la notif de reinstalation ! =====');
-    console.log(`createdTown: ${JSON.stringify(createdTown)}`);
-    console.log(`closedSourceTowns: ${JSON.stringify(closedSourceTowns)}`);
-
     // Infos sur le site créé
     const townLink = formatTownLink(createdTown.id, createdTown.address);
 
