@@ -49,7 +49,7 @@
                 v-model="input.is_reinstallation"
             ></InputIsReinstallation>
             <InputLocationClosedShantytowns
-                v-if="input.is_reinstallation === 1"
+                v-if="isReinstallationInCreationMode"
                 v-model="input.location_shantytowns"
                 :nearbyClosedShantytowns="closedShantytowns"
             >
@@ -74,7 +74,6 @@ import InputCensusConductedAt from "./inputs/InputCensusConductedAt.vue";
 import InputCensusConductedBy from "./inputs/InputCensusConductedBy.vue";
 import InputIsReinstallation from "./inputs/InputIsReinstallation.vue";
 import InputReinstallationComments from "./inputs/InputReinstallationComments.vue";
-// import TownFormClosedShantytowns from "./TownFormClosedShantytowns.vue";
 import InputLocationClosedShantytowns from "./inputs/InputLocationClosedShantytowns.vue";
 
 export default {
@@ -98,6 +97,9 @@ export default {
         },
         nearbyClosedShantytowns: {
             type: Array
+        },
+        mode: {
+            type: String
         }
     },
 
@@ -106,7 +108,6 @@ export default {
             input: this.value
         };
     },
-
     computed: {
         censusStatusIsUnknown() {
             const value = this.input.census_status;
@@ -114,6 +115,9 @@ export default {
         },
         closedShantytowns() {
             return this.nearbyClosedShantytowns;
+        },
+        isReinstallationInCreationMode() {
+            return this.input.is_reinstallation && this.mode === "create";
         }
     }
 };
