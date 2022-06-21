@@ -37,7 +37,25 @@ module.exports = (location = null, privateLocation = null) => {
     }
 
     return sequelize.query(
-        `SELECT
+        `WITH organization_comment_access AS (
+            SELECT 
+                 scoa.fk_comment AS shantytown_comment_id,
+                 ARRAY_AGG(lo.name) AS organization_target_name,
+                 ARRAY_AGG(lo.organization_id) AS organization_target_id
+             FROM shantytown_comment_organization_access scoa 
+             LEFT JOIN localized_organizations lo ON lo.organization_id = scoa.fk_organization
+             GROUP BY scoa.fk_comment
+         ),
+         user_comment_access AS (
+             SELECT 
+                 scua.fk_comment AS shantytown_comment_id,
+                 ARRAY_AGG(CONCAT(users.first_name, ' ', users.last_name)) AS user_target_name,
+                 ARRAY_AGG(users.user_id) AS user_target_id
+             FROM shantytown_comment_user_access scua 
+             LEFT JOIN users ON users.user_id = scua.fk_user
+             GROUP BY scua.fk_comment
+         )
+        SELECT
             sc.shantytown_comment_id AS "commentId",
             sc.description AS "commentDescription",
             sc.fk_shantytown AS "shantytownId",
@@ -53,7 +71,9 @@ module.exports = (location = null, privateLocation = null) => {
             o.name AS "organizationName",
             o.organization_id AS "organizationId",
             d.name AS "departementName",
-            s.resorption_target AS "shantytownResorptionTarget"
+            s.resorption_target AS "shantytownResorptionTarget",
+            oca.organization_target_name,
+            uca.user_target_name
         FROM
             shantytown_comments sc
         LEFT JOIN
@@ -68,6 +88,10 @@ module.exports = (location = null, privateLocation = null) => {
             cities c ON s.fk_city = c.code
         LEFT JOIN
             departements d ON c.fk_departement = d.code
+        LEFT JOIN 
+            organization_comment_access oca ON sc.shantytown_comment_id = oca.shantytown_comment_id
+        LEFT JOIN 
+            user_comment_access uca ON sc.shantytown_comment_id = uca.shantytown_comment_id
         ${additionalWhere.length > 0
         ? `WHERE ${additionalWhere.join(' AND ')}`
         : ''
