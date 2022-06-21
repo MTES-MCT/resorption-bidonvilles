@@ -2,8 +2,8 @@ const shantytownModel = require('#server/models/shantytownModel');
 const socialOriginModel = require('#server/models/socialOriginModel');
 const config = require('#server/config');
 const mattermostUtils = require('#server/utils/mattermost');
-// const userModel = require('#server/models/userModel');
-// const mails = require('#server/mails/mails');
+const userModel = require('#server/models/userModel');
+const mails = require('#server/mails/mails');
 const { fromTsToFormat } = require('#server/utils/date');
 
 function getDetailedClosedShantytownsInDepartement(closedTowns, user) {
@@ -154,7 +154,6 @@ module.exports = async (townData, user) => {
         // eslint-disable-next-line no-console
         console.log(`Error with shantytown creation Mattermost webhooks : ${err.message}`);
     }
-    /*
 
     // Send a notification to all users of the related departement
     try {
@@ -174,7 +173,6 @@ module.exports = async (townData, user) => {
     } catch (error) {
         // ignore
     }
-    */
 
     return town;
 };
