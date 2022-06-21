@@ -18,10 +18,9 @@
             </span>
             <span>
                 dans le département correspondant à cette adresse durant les 90
-                jours précédents la date de déclaration du site. Si la
-                déclaration actuelle correspond à la réouverture de l'un de ces
-                sites, merci de le cocher afin qu'il soit automatiquement ajouté
-                en commentaire.
+                jours précédents la date de déclaration du site. Si des
+                habitants du site en cours de déclaration vivaient précédemment
+                dans un de ces sites, merci de les sélectionner.
             </span>
         </template>
     </InputClosedShantytowns>
