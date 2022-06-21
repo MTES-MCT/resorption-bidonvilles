@@ -313,7 +313,7 @@ LABELS.sanitary.openAirDefecation = LABELS.sanitary.insalubrious;
 LABELS.sanitary.toiletTypes = status => {
     if (status === "negative") {
         return {
-            text: "Latrines uniquement"
+            text: "Présence de latrines"
         };
     }
 
