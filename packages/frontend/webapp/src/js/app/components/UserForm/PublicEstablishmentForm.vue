@@ -73,9 +73,6 @@ export default {
         const { types } = await getOrgTypes("public_establishment");
         this.orgTypesOptions = types
             .filter(({ numberOfOrganizations }) => numberOfOrganizations > 0)
-            .filter(
-                ({ name_singular: name }) => name !== "Gendarmerie nationale"
-            )
             .map(({ id, name_singular: name, abbreviation }) => ({
                 value: id,
                 label: abbreviation || name
