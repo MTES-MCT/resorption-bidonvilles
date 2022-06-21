@@ -55,9 +55,7 @@ export default function formatTown(data) {
             field_type: data.fieldType ? data.fieldType.id : undefined,
             detailed_address: data.addressDetails,
             owner_type: data.ownerType ? data.ownerType.id : undefined,
-            owner: data.owner,
-            is_reinstallation: boolToInt(data.isReinstallation),
-            reinstallation_comments: data.reinstallationComments || undefined
+            owner: data.owner
         },
         people: {
             population: {
@@ -84,7 +82,9 @@ export default function formatTown(data) {
             census_conducted_at: data.censusConductedAt
                 ? new Date(data.censusConductedAt * 1000)
                 : undefined,
-            census_conducted_by: data.censusConductedBy
+            census_conducted_by: data.censusConductedBy,
+            is_reinstallation: boolToInt(data.isReinstallation),
+            reinstallation_comments: data.reinstallationComments || undefined
         },
         living_conditions: {
             access_to_water: boolToInt(data.accessToWater),
