@@ -480,7 +480,7 @@ module.exports = async (editor, shantytownId, data, argTransaction = undefined) 
         if (data.electricity_access_types.length > 0) {
             await sequelize.query(
                 `INSERT INTO
-                    electricity_access_types(fk_shantytown, electricity_access_types)
+                    electricity_access_types(fk_shantytown, electricity_access_type)
                     VALUES
                         ${data.electricity_access_types.map(() => '(?, ?)').join(', ')}`,
                 {
