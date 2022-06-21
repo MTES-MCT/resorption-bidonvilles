@@ -7,7 +7,6 @@
             validationName="Y a-t-il un point de lavage des mains à proximité des toilettes ?"
             direction="row"
             withoutMargin
-            rules="required"
         >
             <Radio
                 label="Oui"

@@ -7,6 +7,7 @@
         cypressName="water_access_is_continuous_details"
         placeholder="Votre message"
         rules="required"
+        :showMandatoryStar="true"
     ></TextArea>
 </template>
 

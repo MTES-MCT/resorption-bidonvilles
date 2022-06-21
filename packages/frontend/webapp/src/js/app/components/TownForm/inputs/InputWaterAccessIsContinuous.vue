@@ -7,7 +7,6 @@
             direction="row"
             withoutMargin
             validationName="L'accès est-il continu ?"
-            rules="required"
         >
             <Radio
                 label="Oui"

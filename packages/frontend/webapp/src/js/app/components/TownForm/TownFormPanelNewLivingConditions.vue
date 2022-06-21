@@ -153,10 +153,7 @@
             </div>
         </FormParagraph>
 
-        <FormParagraph
-            title="Le ramassage des déchets est-il organisé ?"
-            :showMandatoryStar="true"
-        >
+        <FormParagraph title="Le ramassage des déchets est-il organisé ?">
             <InputTrashIsPiling v-model="input.trash.is_piling" />
             <InputTrashEvacuationIsClose
                 v-model="input.trash.evacuation_is_close"

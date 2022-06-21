@@ -7,7 +7,6 @@
             validationName="Des inégalités d'accès ont-elles été constatées ?"
             direction="row"
             withoutMargin
-            rules="required"
         >
             <Radio
                 label="Oui"

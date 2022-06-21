@@ -7,7 +7,6 @@
             validationName="Les toilettes sont-elles à l’intérieur du site ?"
             direction="row"
             withoutMargin
-            rules="required"
         >
             <Radio
                 label="Oui"

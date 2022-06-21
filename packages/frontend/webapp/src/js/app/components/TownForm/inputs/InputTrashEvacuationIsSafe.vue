@@ -7,7 +7,6 @@
             direction="row"
             withoutMargin
             validationName="Les dispositifs de ramassages des ordures sont-ils en bon état ?"
-            rules="required"
         >
             <Radio
                 label="Oui"

@@ -7,7 +7,6 @@
             validationName="Quelle est la distance entre le point d'eau et l'habitation la plus éloignée ?"
             direction="row"
             withoutMargin
-            rules="required"
         >
             <Radio
                 label="Moins de 200m"

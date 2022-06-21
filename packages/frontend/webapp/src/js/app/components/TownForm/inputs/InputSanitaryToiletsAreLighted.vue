@@ -7,7 +7,6 @@
             validationName="Ces toilettes sont-elles éclairées et verrouillables de l’intérieur ?"
             direction="row"
             withoutMargin
-            rules="required"
         >
             <Radio
                 label="Oui"

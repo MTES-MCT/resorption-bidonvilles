@@ -7,7 +7,6 @@
             direction="row"
             withoutMargin
             validationName="La collecte des poubelles est-elle réalisée de manière régulière ?"
-            rules="required"
         >
             <Radio
                 label="Oui"

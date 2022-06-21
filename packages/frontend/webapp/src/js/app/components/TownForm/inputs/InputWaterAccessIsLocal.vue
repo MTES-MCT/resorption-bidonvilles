@@ -5,7 +5,6 @@
             validationName="Où se situe l’accès ?"
             direction="row"
             withoutMargin
-            rules="required"
         >
             <Radio
                 label="Sur site"

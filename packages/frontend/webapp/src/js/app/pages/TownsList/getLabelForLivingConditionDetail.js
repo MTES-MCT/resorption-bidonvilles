@@ -14,7 +14,7 @@ const LABELS = {
             };
         },
         distance(status) {
-            if (status === "unkown") {
+            if (status === "unknown") {
                 return {
                     text: "Localisation de l'accès"
                 };
@@ -288,7 +288,7 @@ LABELS.water.accessIsLocal = status => {
     };
 };
 LABELS.water.accessIsClose = status => {
-    if (status === "unkown") {
+    if (status === "unknown") {
         return {
             text: "Distance point d’eau / habitation la plus éloignée"
         };

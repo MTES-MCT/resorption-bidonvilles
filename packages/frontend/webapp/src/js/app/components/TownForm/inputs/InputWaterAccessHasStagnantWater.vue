@@ -7,7 +7,6 @@
             validationName="Existe-t-il des eaux stagnantes autour du point de distribution ?"
             direction="row"
             withoutMargin
-            rules="required"
         >
             <Radio
                 label="Oui"

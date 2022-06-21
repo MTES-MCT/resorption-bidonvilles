@@ -7,7 +7,6 @@
             direction="row"
             withoutMargin
             validationName="Constate-t-on une accumulation de déchets type encombrants ?"
-            rules="required"
         >
             <Radio
                 label="Oui"

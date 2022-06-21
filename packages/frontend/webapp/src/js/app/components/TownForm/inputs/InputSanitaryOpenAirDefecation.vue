@@ -7,7 +7,6 @@
             validationName="Constate-t-on des marques de défécation à l’air libre ?"
             direction="row"
             withoutMargin
-            rules="required"
         >
             <Radio
                 label="Oui"

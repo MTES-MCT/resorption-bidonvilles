@@ -15,7 +15,7 @@ module.exports = (town) => {
         status.globalImpact = 'bad';
         status.details = 'negative';
     } else {
-        status.globalImpact = 'unkown';
+        status.globalImpact = 'unknown';
         status.details = 'unknown';
     }
 

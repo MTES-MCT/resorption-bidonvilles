@@ -4,7 +4,6 @@
             id="water_access_is_public"
             direction="row"
             withoutMargin
-            rules="required"
             validationName="Est-ce un point d'eau sur la voie publique ?"
         >
             <Radio

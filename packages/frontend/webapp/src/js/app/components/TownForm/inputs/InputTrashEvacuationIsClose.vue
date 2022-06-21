@@ -5,6 +5,7 @@
         direction="horizontal"
         validationName="Y a-t-il des dispositifs de ramassage des ordures ménagères à proximité immédiate ?"
         rules="required"
+        :showMandatoryStar="true"
     >
         <Radio
             variant="card"

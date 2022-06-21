@@ -4,6 +4,7 @@
         label="Constate-t-on une accumulation de déchets type ordures ménagères sur le site ou aux abords ?"
         direction="horizontal"
         rules="required"
+        :showMandatoryStar="true"
     >
         <Radio
             variant="card"

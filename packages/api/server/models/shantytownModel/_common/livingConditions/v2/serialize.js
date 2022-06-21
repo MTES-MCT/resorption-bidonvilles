@@ -5,7 +5,7 @@ module.exports = (town) => {
         version: town.livingConditionsVersion,
         electricity: {
             status: {
-                status: 'unkown',
+                status: 'unknown',
                 positive: [],
                 negative: [],
                 unknown: [],
@@ -16,7 +16,7 @@ module.exports = (town) => {
         },
         water: {
             status: {
-                status: 'unkown',
+                status: 'unknown',
                 positive: [],
                 negative: [],
                 unknown: [],
@@ -35,7 +35,7 @@ module.exports = (town) => {
         },
         trash: {
             status: {
-                status: 'unkown',
+                status: 'unknown',
                 positive: [],
                 negative: [],
                 unknown: [],
@@ -48,7 +48,7 @@ module.exports = (town) => {
         },
         sanitary: {
             status: {
-                status: 'unkown',
+                status: 'unknown',
                 positive: [],
                 negative: [],
                 unknown: [],
@@ -62,7 +62,7 @@ module.exports = (town) => {
         },
         pest_animals: {
             status: {
-                status: 'unkown',
+                status: 'unknown',
                 positive: [],
                 negative: [],
                 unknown: [],
@@ -72,7 +72,7 @@ module.exports = (town) => {
         },
         fire_prevention: {
             status: {
-                status: 'unkown',
+                status: 'unknown',
                 positive: [],
                 negative: [],
                 unknown: [],
