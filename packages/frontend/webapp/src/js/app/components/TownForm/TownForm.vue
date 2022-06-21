@@ -149,21 +149,30 @@ export default {
             mainError: null,
             loading: false,
             showInfo: true,
-            sections: [
-                { id: "characteristics", label: "Caractéristiques du site" },
-                { id: "people", label: "Habitants" },
-                {
-                    id: "living_conditions",
-                    label: "Conditions de vie et environnement"
-                },
-                { id: "judicial", label: "Procédure judiciaire" }
-            ],
             initialTown: this.formatTown(this.data),
             town: this.formatTown(this.data)
         };
     },
 
     computed: {
+        sections() {
+            const sections = [
+                { id: "characteristics", label: "Caractéristiques du site" },
+                { id: "people", label: "Habitants" },
+                {
+                    id: "living_conditions",
+                    label: "Conditions de vie et environnement"
+                }
+            ];
+            if (this.hasJusticePermission) {
+                sections.push({
+                    id: "judicial",
+                    label: "Procédure judiciaire"
+                });
+            }
+
+            return sections;
+        },
         fieldTypes() {
             return this.$store.state.config.configuration.field_types;
         },
