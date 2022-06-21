@@ -6,7 +6,25 @@ const { serializeComment } = require('#server/models/shantytownModel');
  */
 module.exports = async (id) => {
     const rows = await sequelize.query(
-        `SELECT
+        `WITH organization_comment_access AS (
+            SELECT 
+                 scoa.fk_comment AS shantytown_comment_id,
+                 ARRAY_AGG(lo.name) AS organization_target_name,
+                 ARRAY_AGG(lo.organization_id) AS organization_target_id
+             FROM shantytown_comment_organization_access scoa 
+             LEFT JOIN localized_organizations lo ON lo.organization_id = scoa.fk_organization
+             GROUP BY scoa.fk_comment
+         ),
+         user_comment_access AS (
+             SELECT 
+                 scua.fk_comment AS shantytown_comment_id,
+                 ARRAY_AGG(CONCAT(users.first_name, ' ', users.last_name)) AS user_target_name,
+                 ARRAY_AGG(users.user_id) AS user_target_id
+             FROM shantytown_comment_user_access scua 
+             LEFT JOIN users ON users.user_id = scua.fk_user
+             GROUP BY scua.fk_comment
+         )
+        SELECT
             sc.shantytown_comment_id AS "commentId",
             sc.description AS "commentDescription",
             sc.fk_shantytown AS "shantytownId",
@@ -18,13 +36,19 @@ module.exports = async (id) => {
             u.position AS "userPosition",
             o.abbreviation AS "organizationAbbreviation",
             o.name AS "organizationName",
-            o.organization_id AS "organizationId"
+            o.organization_id AS "organizationId",
+            oca.organization_target_name,
+            uca.user_target_name
         FROM
             shantytown_comments sc
         LEFT JOIN
             users u ON sc.created_by = u.user_id
         LEFT JOIN
             organizations o ON u.fk_organization = o.organization_id
+        LEFT JOIN 
+            organization_comment_access oca ON sc.shantytown_comment_id = oca.shantytown_comment_id
+        LEFT JOIN 
+            user_comment_access uca ON sc.shantytown_comment_id = uca.shantytown_comment_id
         WHERE
             sc.shantytown_comment_id = :id`,
         {

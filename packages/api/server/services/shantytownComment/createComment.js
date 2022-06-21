@@ -21,6 +21,8 @@ module.exports = async (comment, shantytown, author) => {
         commentId = await shantytownCommentModel.create({
             description: comment.description,
             private: comment.private,
+            privateChooseTarget: comment.privateChooseTarget,
+            targets: comment.targets,
             fk_shantytown: shantytown.id,
             created_by: author.id,
         });
@@ -49,7 +51,8 @@ module.exports = async (comment, shantytown, author) => {
 
     // on tente d'envoyer une notification mail à tous les intervenants du site
     try {
-        const watchers = await userModel.getShantytownWatchers(shantytown.id, comment.private);
+        const watchers = await userModel.getShantytownWatchers(shantytown.id, commentId, comment.private);
+
         if (watchers.length > 0) {
             const serializedComment = await shantytownCommentModel.findOne(commentId);
             await Promise.all(
