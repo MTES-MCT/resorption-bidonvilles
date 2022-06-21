@@ -685,8 +685,7 @@ module.exports = mode => ([
             }
 
             return true;
-        })
-        .customSanitizer(value => (value === 'inconnu' ? null : value)),
+        }),
 
     body('water_access_type_details')
         .if((value, { req }) => req.body.water_access_type === 'autre')

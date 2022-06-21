@@ -2,7 +2,7 @@ function getColumns(Sequelize) {
     return {
         // water
         water_access_type: {
-            type: Sequelize.ENUM('fontaine_publique', 'borne_incendie', 'achat_bouteille', 'reservoir', 'robinet_connecte_au_reseau', 'autre'),
+            type: Sequelize.ENUM('fontaine_publique', 'borne_incendie', 'achat_bouteille', 'reservoir', 'robinet_connecte_au_reseau', 'autre', 'inconnu'),
             allowNull: true,
         },
         water_access_type_details: {
