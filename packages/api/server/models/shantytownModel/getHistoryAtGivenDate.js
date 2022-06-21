@@ -38,14 +38,14 @@ module.exports = async (user, location, lastDate, closedTowns) => {
 
                         electricity_access_types AS (SELECT
                             s.hid AS fk_shantytown,
-                            array_agg(eat.electricity_access_type::text) AS electricity_access_types
+                            array_remove(array_agg(eat.electricity_access_type::text), NULL) AS electricity_access_types
                         FROM "ShantytownHistories" s
                         LEFT JOIN electricity_access_types_history eat ON eat.fk_shantytown = s.hid
                         GROUP BY s.hid),
 
                         shantytown_toilet_types AS (SELECT
                             s.hid AS fk_shantytown,
-                            array_agg(stt.toilet_type::text) AS toilet_types
+                            array_remove(array_agg(stt.toilet_type::text), NULL) AS toilet_types
                         FROM "ShantytownHistories" s
                         LEFT JOIN shantytown_toilet_types_history stt ON stt.fk_shantytown = s.hid
                         GROUP BY s.hid)
@@ -81,14 +81,14 @@ module.exports = async (user, location, lastDate, closedTowns) => {
 
                         electricity_access_types AS (SELECT
                             s.shantytown_id AS fk_shantytown,
-                            array_agg(eat.electricity_access_type::text) AS electricity_access_types
+                            array_remove(array_agg(eat.electricity_access_type::text), NULL) AS electricity_access_types
                         FROM shantytowns s
                         LEFT JOIN electricity_access_types eat ON eat.fk_shantytown = s.shantytown_id
                         GROUP BY s.shantytown_id),
 
                         shantytown_toilet_types AS (SELECT
                             s.shantytown_id AS fk_shantytown,
-                            array_agg(stt.toilet_type::text) AS toilet_types
+                            array_remove(array_agg(stt.toilet_type::text), NULL) AS toilet_types
                         FROM shantytowns s
                         LEFT JOIN shantytown_toilet_types stt ON stt.fk_shantytown = s.shantytown_id
                         GROUP BY s.shantytown_id)

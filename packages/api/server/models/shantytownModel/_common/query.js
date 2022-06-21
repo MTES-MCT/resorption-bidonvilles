@@ -40,14 +40,14 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL = {})
 
             electricity_access_types AS (SELECT
                 s.${tables.electricity_foreign_key} AS fk_shantytown,
-                array_agg(eat.electricity_access_type::text) AS electricity_access_types
+                array_remove(array_agg(eat.electricity_access_type::text), NULL) AS electricity_access_types
             FROM "${tables.shantytowns}" s
             LEFT JOIN "${tables.electricity_access_types}" eat ON eat.fk_shantytown = s.${tables.electricity_foreign_key}
             GROUP BY s.${tables.electricity_foreign_key}),
 
             shantytown_toilet_types AS (SELECT
                 s.${tables.toilet_types_foreign_key} AS fk_shantytown,
-                array_agg(stt.toilet_type::text) AS toilet_types
+                array_remove(array_agg(stt.toilet_type::text), NULL) AS toilet_types
             FROM "${tables.shantytowns}" s
             LEFT JOIN "${tables.shantytown_toilet_types}" stt ON stt.fk_shantytown = s.${tables.toilet_types_foreign_key}
             GROUP BY s.${tables.toilet_types_foreign_key})
