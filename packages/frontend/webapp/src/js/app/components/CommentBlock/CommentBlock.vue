@@ -23,12 +23,22 @@
             Date de l'intervention:
             {{ formatDate(comment.covid.date, "d M y à h:i") }}
         </div>
-        <div v-if="comment.private" class="font-bold">
+        <div v-if="comment.private">
             <Icon icon="lock" class="text-red" />
-            Message réservé aux membres de la préfecture et DDETS de votre
-            territoire.
+            <span class="font-bold"
+                >Message réservé aux structures et utilisateurs suivants :</span
+            >
+            <div v-for="user in comment.user_target_name" :key="user">
+                - {{ user }}
+            </div>
+            <div
+                v-for="organization in comment.organization_target_name"
+                :key="organization"
+            >
+                - {{ organization }}
+            </div>
         </div>
-        <div class="text-primary font-bold mb-1">
+        <div class="text-primary font-bold mb-1 mt-2">
             <router-link :to="`/annuaire/${comment.createdBy.organization_id}`">
                 <Icon icon="user" /> {{ comment.createdBy.first_name }}
                 {{ comment.createdBy.last_name }} -
