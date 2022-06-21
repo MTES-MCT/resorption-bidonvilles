@@ -21,33 +21,100 @@
                 placeholder="Partagez votre passage sur le site, le contexte sanitaire, la situation des habitants, difficultés rencontrées lors de votre intervention…"
             />
             <div
-                class="flex ml-4"
+                class="flex flex-col ml-4"
                 v-if="
                     $store.getters['config/hasPermission'](
                         'shantytown_comment.createPrivate'
                     )
                 "
             >
-                <div class="text-sm mr-4">
-                    <Icon icon="lock" class="text-red" />
-                    Je souhaite réserver ce message à mes collègues en
-                    Préfecture et DDETS
+                <div class="flex ml-4">
+                    <div class="text-sm mr-4">
+                        <Icon icon="lock" class="text-red" />
+                        Je souhaite réserver ce message à mes collègues en
+                        Préfecture et DDETS
+                    </div>
+                    <CheckableGroup
+                        direction="horizontal"
+                        id="private_comments"
+                    >
+                        <Radio
+                            label="Oui"
+                            v-model="isPrivate"
+                            :checkValue="true"
+                            cypressName="private_comments"
+                        ></Radio>
+                        <Radio
+                            label="Non"
+                            v-model="isPrivate"
+                            :checkValue="false"
+                            cypressName="private_comments"
+                        ></Radio>
+                    </CheckableGroup>
                 </div>
-                <CheckableGroup direction="horizontal" id="private_comments">
-                    <Radio
-                        label="Oui"
-                        v-model="isPrivate"
-                        :checkValue="true"
-                        cypressName="private_comments"
-                    ></Radio>
-                    <Radio
-                        label="Non"
-                        v-model="isPrivate"
-                        :checkValue="false"
-                        cypressName="private_comments"
-                    ></Radio>
-                </CheckableGroup>
+                <div class="flex ml-4">
+                    <div class="text-sm mr-4">
+                        <Icon icon="lock" class="text-red" />
+                        Je souhaite réserver ce message à certaines structures
+                        ou certains utilisateurs (*)
+                    </div>
+                    <CheckableGroup
+                        direction="horizontal"
+                        id="private_comments_choose_target"
+                    >
+                        <Radio
+                            label="Oui"
+                            v-model="isPrivateChooseTarget"
+                            :checkValue="true"
+                        ></Radio>
+                        <Radio
+                            label="Non"
+                            v-model="isPrivateChooseTarget"
+                            :checkValue="false"
+                        ></Radio>
+                    </CheckableGroup>
+                </div>
+                <div class="w-8/12" v-if="isPrivateChooseTarget">
+                    <AutocompleteV2
+                        id="target"
+                        :placeholder="'Nom d\'une structure, d\'un utilisateur'"
+                        prefixIcon="search"
+                        :search="search"
+                        :getResultValue="getResultValue"
+                        validationName="Cible"
+                        @submit="submit"
+                        rules=""
+                        :disabled="false"
+                    ></AutocompleteV2>
+                    <span
+                        >Liste des utilisateurs autorisés à lire le commentaire
+                        :</span
+                    >
+                    <div class="flex flex-col border my-4">
+                        <span class="ml-4"> Structures :</span>
+                        <div
+                            class="ml-12"
+                            v-for="organizationTarget in listOfTargets.organizations"
+                            :key="organizationTarget.id"
+                        >
+                            - {{ organizationTarget.label }}
+                        </div>
+                        <span class="ml-4">Utilisateurs : </span>
+                        <div
+                            class="ml-12"
+                            v-for="userTarget in listOfTargets.users"
+                            :key="userTarget.id"
+                        >
+                            - {{ userTarget.label }}
+                        </div>
+                    </div>
+                </div>
+                <span class="text-sm "
+                    >* Les administrateurs locaux et nationaux auront accès au
+                    message pour des fins de modération</span
+                >
             </div>
+
             <div class="flex items-center justify-between">
                 <p>
                     <Button
@@ -69,6 +136,8 @@
 </template>
 
 <script>
+import { autocompleteOrganization as autocompleter } from "#helpers/api/user";
+
 export default {
     data() {
         return {
@@ -76,7 +145,14 @@ export default {
             commentErrors: {},
             newComment: "",
             isPrivate: false,
-            loading: false
+            isPrivateChooseTarget: false,
+            loading: false,
+            input: "",
+            results: [],
+            listOfTargets: {
+                users: [],
+                organizations: []
+            }
         };
     },
     props: {
@@ -85,9 +161,46 @@ export default {
         },
         user: {
             type: Object
+        },
+        departementCode: {
+            type: Number
         }
     },
     methods: {
+        submit(result) {
+            if (
+                result &&
+                result.type.id === "user" &&
+                !this.listOfTargets.users.find(user => user.id === result.id)
+            ) {
+                this.listOfTargets.users.push(result);
+            }
+            if (
+                result &&
+                result.type.id === "organization" &&
+                !this.listOfTargets.organizations.find(
+                    organization => organization.id === result.id
+                )
+            ) {
+                this.listOfTargets.organizations.push(result);
+            }
+        },
+        async search(input) {
+            this.input = input;
+
+            if (input) {
+                this.results = await autocompleter(
+                    input,
+                    this.departementCode,
+                    true
+                );
+                return this.results;
+            }
+            return [];
+        },
+        getResultValue(input) {
+            return input.label;
+        },
         cancelComment() {
             this.newComment = "";
         },
@@ -108,12 +221,20 @@ export default {
                         townId: parseInt(this.$route.params.id, 10),
                         comment: {
                             description: this.newComment,
-                            private: this.isPrivate
+                            private: this.isPrivate,
+                            privateChooseTarget: this.isPrivateChooseTarget,
+                            targets: this.listOfTargets
                         }
                     }
                 );
 
                 this.newComment = "";
+                this.isPrivate = false;
+                this.isPrivateChooseTarget = false;
+                this.listOfTargets = {
+                    users: [],
+                    organizations: []
+                };
             } catch (response) {
                 this.commentError = response.user_message;
                 this.commentErrors = response.fields || {};
