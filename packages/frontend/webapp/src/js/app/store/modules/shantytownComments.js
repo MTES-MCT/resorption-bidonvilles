@@ -37,7 +37,7 @@ async function publish(apiMethod, townId, comment, matomoAction, commit) {
         type: "success",
         title: "Message publié",
         text:
-            "Votre message est bien enregistré et a été envoyé aux acteurs de votre département par mail."
+            "Votre message est bien enregistré et a été envoyé aux acteurs concernés de votre département par mail."
     });
 
     Vue.prototype.$trackMatomoEvent("Site", matomoAction, `S${townId}`);
