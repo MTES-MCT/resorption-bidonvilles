@@ -117,6 +117,7 @@ import { add, edit } from "#helpers/api/town";
 import { notify } from "#helpers/notificationHelper";
 import formatTown from "./utils/formatTown";
 const { isEqual } = require("lodash");
+import { get } from "#helpers/api/geo";
 
 export default {
     props: {
@@ -149,21 +150,30 @@ export default {
             mainError: null,
             loading: false,
             showInfo: true,
-            sections: [
-                { id: "characteristics", label: "Caractéristiques du site" },
-                { id: "people", label: "Habitants" },
-                {
-                    id: "living_conditions",
-                    label: "Conditions de vie et environnement"
-                },
-                { id: "judicial", label: "Procédure judiciaire" }
-            ],
             initialTown: this.formatTown(this.data),
             town: this.formatTown(this.data)
         };
     },
 
     computed: {
+        sections() {
+            const sections = [
+                { id: "characteristics", label: "Caractéristiques du site" },
+                { id: "people", label: "Habitants" },
+                {
+                    id: "living_conditions",
+                    label: "Conditions de vie et environnement"
+                }
+            ];
+            if (this.hasJusticePermission) {
+                sections.push({
+                    id: "judicial",
+                    label: "Procédure judiciaire"
+                });
+            }
+
+            return sections;
+        },
         fieldTypes() {
             return this.$store.state.config.configuration.field_types;
         },
@@ -193,8 +203,41 @@ export default {
         hasJusticePermission() {
             return this.$store.getters["config/hasLocalizedPermission"](
                 "shantytown_justice.access",
-                this.data
+                {
+                    ...this.data,
+                    region: this.town.region,
+                    departement: this.town.departement,
+                    epci: this.town.epci,
+                    city: this.town.city
+                }
             );
+        }
+    },
+
+    watch: {
+        // lorsqu'une nouvelle adresse est saisie, on ne dispose pas des informations de
+        // localisation précise (région, département, etc.)
+        // hors, ces informations sont nécessaires pour déterminer si les données judiciaires
+        // sont accessibles à l'utilisateur(ice)
+        // donc, on fetch ces informations à chaque changement d'adresse
+        "town.location.address.citycode": async function() {
+            // on reset les données de localisation immédiatement
+            this.town.region = null;
+            this.town.departement = null;
+            this.town.epci = null;
+            this.town.city = null;
+
+            const citycode = this.town?.location?.address?.citycode;
+            if (!citycode) {
+                return;
+            }
+
+            // on fetch les données depuis l'API
+            const data = await get("city", citycode);
+            this.town.region = data.region;
+            this.town.departement = data.departement;
+            this.town.epci = data.epci;
+            this.town.city = data.city;
         }
     },
 
