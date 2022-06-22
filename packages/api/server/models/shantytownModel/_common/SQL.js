@@ -22,6 +22,8 @@ module.exports = {
         'shantytowns.population_minors_12_16': 'populationMinors12To16',
         'shantytowns.population_minors_16_18': 'populationMinors16To18',
         'shantytowns.minors_in_school': 'minorsInSchool',
+        'shantytowns.caravans': 'caravans',
+        'shantytowns.huts': 'huts',
         'shantytowns.access_to_sanitary': 'accessToSanitary',
         'shantytowns.sanitary_comments': 'sanitaryComments',
         'shantytowns.access_to_water': 'accessToWater',
