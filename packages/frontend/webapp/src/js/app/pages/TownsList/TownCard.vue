@@ -13,6 +13,7 @@
             <div class="-mt-1 print:mt-0">
                 <div class="mb-4 px-6">
                     <Tag
+                        :variant="pinVariant"
                         :class="[
                             'text-xs uppercase text-primary',
                             isHover ? 'shadow-md' : ''
@@ -259,6 +260,7 @@ import ClosingSolutionsList from "./ClosingSolutionsList";
 import flagEU from "./assets/eu.png";
 import flagFR from "./assets/fr.png";
 import flagExtraCommunautaires from "./assets/extra-communautaires.png";
+import getSince from "#app/utils/getSince";
 import formatLastUpdatedAt from "#app/utils/formatLastUpdatedAt";
 import { formatLivingConditions } from "#app/pages/TownDetails/formatLivingConditions";
 import { isSolved, isClosed } from "./common/SolvedOrClosed";
@@ -324,6 +326,10 @@ export default {
         isClosed
     },
     computed: {
+        pinVariant() {
+            const { months } = getSince(this.shantytown.updatedAt);
+            return months >= 3 ? "pin_red" : "pin";
+        },
         isOpen() {
             return this.shantytown.status === "open";
         },
