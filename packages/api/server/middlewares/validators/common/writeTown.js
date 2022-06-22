@@ -321,6 +321,30 @@ module.exports = mode => ([
         .customSanitizer(value => (Number.isInteger(value) ? value : null)),
 
     /* **********************************************************************************************
+     * Nombre de caravanes
+     ********************************************************************************************* */
+    body('caravans')
+        .optional({ nullable: true })
+        .toInt()
+        .isInt().bail().withMessage('Le champ "Nombre de caravanes" est invalide')
+        .isInt({ min: 0 }).withMessage('Le champ "Nombre de caravanes" ne peut pas être inférieur à 0'),
+
+    body('caravans')
+        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+
+    /* **********************************************************************************************
+     * Nombre de cabanes
+     ********************************************************************************************* */
+    body('huts')
+        .optional({ nullable: true })
+        .toInt()
+        .isInt().bail().withMessage('Le champ "Nombre de cabanes" est invalide')
+        .isInt({ min: 0 }).withMessage('Le champ "Nombre de cabanes" ne peut pas être inférieur à 0'),
+
+    body('huts')
+        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+
+    /* **********************************************************************************************
      * Nombre de ménages
      ********************************************************************************************* */
     body('population_couples')
