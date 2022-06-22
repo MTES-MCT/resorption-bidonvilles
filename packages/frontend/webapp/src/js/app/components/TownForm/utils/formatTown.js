@@ -73,6 +73,10 @@ export default function formatTown(data) {
                 populationMinors16To18: intToStr(data.populationMinors16To18),
                 minorsInSchool: intToStr(data.minorsInSchool)
             },
+            caravansAndHuts: {
+                caravans: intToStr(data.caravans),
+                huts: intToStr(data.huts)
+            },
             social_origins: data.socialOrigins
                 ? data.socialOrigins.map(({ id }) => id)
                 : [],

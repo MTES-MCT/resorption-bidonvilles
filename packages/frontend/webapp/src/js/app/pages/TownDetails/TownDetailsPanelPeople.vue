@@ -149,11 +149,22 @@ export default {
                 {
                     title: "Inscrits en établissement scolaire",
                     data: "minorsInSchool"
+                },
+                {
+                    title: "Caravanes",
+                    data: "caravans"
+                },
+                {
+                    title: "Cabanes",
+                    data: "huts"
                 }
             ]
         };
     },
     components: { DetailsPanel, DetailsPanelSection },
+    mounted() {
+        console.log(this.populationHistory);
+    },
     methods: {
         /**
          * @see index.js
@@ -221,7 +232,9 @@ export default {
                     this.town.populationMinors16To18,
                     "-"
                 ),
-                minorsInSchool: this.intToStr(this.town.minorsInSchool, "-")
+                minorsInSchool: this.intToStr(this.town.minorsInSchool, "-"),
+                caravans: this.intToStr(this.town.caravans, "-"),
+                huts: this.intToStr(this.town.huts, "-")
             };
 
             // on traite le changelog pour n'y conserver que les étapes qui contiennent au moins un changement sur les champs de population
@@ -232,7 +245,9 @@ export default {
                         diff: entry.diff.filter(
                             ({ fieldKey }) =>
                                 fieldKey.startsWith("population") ||
-                                fieldKey === "minorsInSchool"
+                                fieldKey === "minorsInSchool" ||
+                                fieldKey === "caravans" ||
+                                fieldKey === "huts"
                         )
                     };
                 })
