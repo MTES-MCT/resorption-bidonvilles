@@ -40,6 +40,8 @@ module.exports = (town) => {
             '-',
         ),
         minorsInSchool: intToStr(town.minorsInSchool, '-'),
+        caravans: intToStr(town.caravans, '-'),
+        huts: intToStr(town.huts, '-'),
     };
 
     // on traite le changelog pour n'y conserver que les étapes qui contiennent au moins un changement sur les champs de population
@@ -48,7 +50,9 @@ module.exports = (town) => {
             ...entry,
             diff: entry.diff.filter(
                 ({ fieldKey }) => fieldKey.startsWith('population')
-                        || fieldKey === 'minorsInSchool',
+                        || fieldKey === 'minorsInSchool'
+                        || fieldKey === 'caravans'
+                        || fieldKey === 'huts',
             ),
         }))
         .filter(({ diff }) => diff.length > 0);
