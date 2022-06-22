@@ -193,6 +193,18 @@ module.exports = (closingSolutions) => {
             width: COLUMN_WIDTHS.SMALL,
             sum: true,
         },
+        caravans: {
+            title: 'Nombre de caravanes',
+            data: ({ caravans }) => caravans,
+            width: COLUMN_WIDTHS.SMALL,
+            sum: true,
+        },
+        huts: {
+            title: 'Nombre de cabanes',
+            data: ({ huts }) => huts,
+            width: COLUMN_WIDTHS.SMALL,
+            sum: true,
+        },
         socialOrigins: {
             title: 'Origines',
             data: ({ socialOrigins }) => (socialOrigins.length > 0 ? socialOrigins.map(({ label }) => label).join(';') : null),
