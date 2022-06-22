@@ -1,7 +1,6 @@
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const rewiremock = require('rewiremock/node');
 const Sequelize = require('sequelize-mock');
 
 chai.use(sinonChai);
@@ -51,7 +50,12 @@ describe.only('services/shantytownComment', () => {
             beforeEach(async () => {
                 // input data
                 input = {
-                    comment: { description: 'description', private: true },
+                    comment: {
+                        description: 'description',
+                        private: true,
+                        privateChooseTarget: false,
+                        targets: [],
+                    },
                     shantytown: { id: 1 },
                     user: fakeUser(),
                 };
@@ -87,7 +91,7 @@ describe.only('services/shantytownComment', () => {
 
                 // getShantytownWatchers() retourne une liste d'utilisateurs
                 dependencies.getShantytownWatchers
-                    .withArgs(input.shantytown.id, input.comment.private)
+                    .withArgs(input.shantytown.id, 1, input.comment.private)
                     .resolves(output.watchers);
 
                 sequelizeStub.$queueResult([[{ shantytown_comment_id: output.comment.id }]]);
@@ -98,6 +102,8 @@ describe.only('services/shantytownComment', () => {
                 expect(dependencies.createComment).to.have.been.calledOnceWith({
                     description: 'description',
                     private: true,
+                    privateChooseTarget: false,
+                    targets: [],
                     fk_shantytown: 1,
                     created_by: 2,
                 });
@@ -142,7 +148,12 @@ describe.only('services/shantytownComment', () => {
         });
 
         describe('si l\'insertion de commentaires échoue', () => {
-            const comment = { description: 'description', private: true };
+            const comment = {
+                description: 'description',
+                private: true,
+                privateChooseTarget: false,
+                targets: [],
+            };
             const user = fakeUser();
             const nativeError = new Error('une erreur');
             beforeEach(() => {
@@ -150,6 +161,8 @@ describe.only('services/shantytownComment', () => {
                     .withArgs({
                         description: comment.description,
                         private: comment.private,
+                        privateChooseTarget: comment.privateChooseTarget,
+                        targets: comment.targets,
                         fk_shantytown: 1,
                         created_by: user.id,
                     })
@@ -173,7 +186,12 @@ describe.only('services/shantytownComment', () => {
         });
 
         describe('si la notification mattermost échoue', () => {
-            const comment = { description: 'description', private: true };
+            const comment = {
+                description: 'description',
+                private: true,
+                privateChooseTarget: false,
+                targets: [],
+            };
             const user = fakeUser();
             const nativeError = new Error('une erreur');
             beforeEach(() => {
@@ -195,7 +213,12 @@ describe.only('services/shantytownComment', () => {
         });
 
         describe('si le fetch de commentaires échoue', () => {
-            const comment = { description: 'description', private: true };
+            const comment = {
+                description: 'description',
+                private: true,
+                privateChooseTarget: false,
+                targets: [],
+            };
             const user = fakeUser();
             const nativeError = new Error('une erreur');
             beforeEach(() => {

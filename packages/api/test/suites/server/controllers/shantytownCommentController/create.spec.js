@@ -31,6 +31,8 @@ describe.only('controllers/shantytownComment', () => {
                     body: {
                         description: 'description',
                         private: true,
+                        privateChooseTarget: false,
+                        targets: [],
                         shantytown,
                     },
                     user,
@@ -40,7 +42,12 @@ describe.only('controllers/shantytownComment', () => {
             );
 
             expect(createCommentService).to.have.been.calledOnceWith(
-                { description: 'description', private: true },
+                {
+                    description: 'description',
+                    private: true,
+                    privateChooseTarget: false,
+                    targets: [],
+                },
                 shantytown,
                 user,
             );
