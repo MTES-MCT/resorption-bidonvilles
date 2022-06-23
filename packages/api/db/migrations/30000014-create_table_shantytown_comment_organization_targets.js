@@ -10,10 +10,12 @@ module.exports = {
                 fk_organization: {
                     type: Sequelize.INTEGER,
                     allowNull: false,
+                    primaryKey: true,
                 },
                 fk_comment: {
                     type: Sequelize.INTEGER,
                     allowNull: false,
+                    primaryKey: true,
                 },
                 created_at: {
                     type: Sequelize.DATE,
