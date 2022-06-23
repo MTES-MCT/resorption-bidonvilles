@@ -96,9 +96,7 @@ module.exports = {
             queryInterface.removeConstraint('shantytown_comment_organization_access', 'fk_comment_organization', { transaction }),
         ]);
 
-        await Promise.all([
-            queryInterface.dropTable('shantytown_comment_organization_access', { transaction }),
-        ]);
+        await queryInterface.dropTable('shantytown_comment_organization_access', { transaction });
 
         return transaction.commit();
     },
