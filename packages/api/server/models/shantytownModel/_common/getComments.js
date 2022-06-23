@@ -24,12 +24,12 @@ module.exports = async (user, shantytownIds, covid = false) => {
         ),
         user_comment_access AS (
             SELECT 
-                scua.fk_comment AS shantytown_comment_id,
+                scut.fk_comment AS shantytown_comment_id,
                 ARRAY_AGG(CONCAT(users.first_name, ' ', users.last_name)) AS user_target_name,
                 ARRAY_AGG(users.user_id) AS user_target_id
-            FROM shantytown_comment_user_access scua 
-            LEFT JOIN users ON users.user_id = scua.fk_user
-            GROUP BY scua.fk_comment
+            FROM shantytown_comment_user_targets scut 
+            LEFT JOIN users ON users.user_id = scut.fk_user
+            GROUP BY scut.fk_comment
         )
         SELECT
             shantytown_comments.shantytown_comment_id AS "commentId",

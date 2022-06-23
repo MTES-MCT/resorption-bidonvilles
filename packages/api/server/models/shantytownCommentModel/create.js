@@ -66,7 +66,7 @@ module.exports = async (data) => {
         await Promise.all(
             [
                 sequelize.getQueryInterface().bulkInsert(
-                    'shantytown_comment_user_access',
+                    'shantytown_comment_user_targets',
                     data.targets.users.map(user => ({
                         fk_user: user.id,
                         fk_comment: shantytown_comment_id,

@@ -5,7 +5,7 @@ module.exports = {
         const transaction = await queryInterface.sequelize.transaction();
 
         await queryInterface.createTable(
-            'shantytown_comment_user_access',
+            'shantytown_comment_user_targets',
             {
                 fk_user: {
                     type: Sequelize.INTEGER,
@@ -28,7 +28,7 @@ module.exports = {
         // add constraints
         await Promise.all([
             queryInterface.addConstraint(
-                'shantytown_comment_user_access',
+                'shantytown_comment_user_targets',
                 ['fk_user'],
                 {
                     type: 'foreign key',
@@ -38,11 +38,12 @@ module.exports = {
                         field: 'user_id',
                     },
                     onDelete: 'cascade',
+                    onUpdate: 'cascade',
                     transaction,
                 },
             ),
             queryInterface.addConstraint(
-                'shantytown_comment_user_access',
+                'shantytown_comment_user_targets',
                 ['fk_comment'],
                 {
                     type: 'foreign key',
@@ -52,6 +53,7 @@ module.exports = {
                         field: 'shantytown_comment_id',
                     },
                     onDelete: 'cascade',
+                    onUpdate: 'cascade',
                     transaction,
                 },
             ),
@@ -64,11 +66,11 @@ module.exports = {
         const transaction = await queryInterface.sequelize.transaction();
 
         await Promise.all([
-            queryInterface.removeConstraint('shantytown_comment_user_access', 'fk_user_comment_access', { transaction }),
-            queryInterface.removeConstraint('shantytown_comment_user_access', 'fk_comment_user', { transaction }),
+            queryInterface.removeConstraint('shantytown_comment_user_targets', 'fk_user_comment_access', { transaction }),
+            queryInterface.removeConstraint('shantytown_comment_user_targets', 'fk_comment_user', { transaction }),
         ]);
 
-        await queryInterface.dropTable('shantytown_comment_user_access', { transaction });
+        await queryInterface.dropTable('shantytown_comment_user_targets', { transaction });
 
         return transaction.commit();
     },

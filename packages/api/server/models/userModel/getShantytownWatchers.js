@@ -18,9 +18,9 @@ module.exports = async (shantytownId, commentId, isPrivate) => {
             u.first_name,
             u.last_name
         FROM (
-            (SELECT scua.fk_user 
-            FROM shantytown_comment_user_access scua
-            WHERE scua.fk_comment = :commentId)
+            (SELECT scut.fk_user 
+            FROM shantytown_comment_user_targets scut
+            WHERE scut.fk_comment = :commentId)
 
             UNION
 
