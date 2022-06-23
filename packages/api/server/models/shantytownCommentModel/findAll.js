@@ -39,12 +39,12 @@ module.exports = (location = null, privateLocation = null) => {
     return sequelize.query(
         `WITH organization_comment_access AS (
             SELECT 
-                 scoa.fk_comment AS shantytown_comment_id,
+                 scot.fk_comment AS shantytown_comment_id,
                  ARRAY_AGG(lo.name) AS organization_target_name,
                  ARRAY_AGG(lo.organization_id) AS organization_target_id
-             FROM shantytown_comment_organization_access scoa 
-             LEFT JOIN localized_organizations lo ON lo.organization_id = scoa.fk_organization
-             GROUP BY scoa.fk_comment
+             FROM shantytown_comment_organization_targets scot 
+             LEFT JOIN localized_organizations lo ON lo.organization_id = scot.fk_organization
+             GROUP BY scot.fk_comment
          ),
          user_comment_access AS (
              SELECT 

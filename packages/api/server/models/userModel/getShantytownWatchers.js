@@ -27,8 +27,8 @@ module.exports = async (shantytownId, commentId, isPrivate) => {
             (SELECT u.user_id AS fk_user
             FROM users u
             LEFT JOIN localized_organizations lo ON u.fk_organization = lo.organization_id
-            LEFT JOIN shantytown_comment_organization_access scoa ON scoa.fk_organization = lo.organization_id
-            WHERE scoa.fk_comment = :commentId
+            LEFT JOIN shantytown_comment_organization_targets scot ON scot.fk_organization = lo.organization_id
+            WHERE scot.fk_comment = :commentId
             )
 
             UNION

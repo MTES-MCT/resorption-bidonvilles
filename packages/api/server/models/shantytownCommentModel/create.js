@@ -55,7 +55,7 @@ module.exports = async (data) => {
             },
         );
         await sequelize.getQueryInterface().bulkInsert(
-            'shantytown_comment_organization_access',
+            'shantytown_comment_organization_targets',
             collaborator_organizations.map(organization => ({
                 fk_organization: organization.organization_id,
                 fk_comment: shantytown_comment_id,
@@ -73,7 +73,7 @@ module.exports = async (data) => {
                     })),
                 ),
                 sequelize.getQueryInterface().bulkInsert(
-                    'shantytown_comment_organization_access',
+                    'shantytown_comment_organization_targets',
                     data.targets.organizations.map(organization => ({
                         fk_organization: organization.id,
                         fk_comment: shantytown_comment_id,

@@ -5,7 +5,7 @@ module.exports = {
         const transaction = await queryInterface.sequelize.transaction();
 
         await queryInterface.createTable(
-            'shantytown_comment_organization_access',
+            'shantytown_comment_organization_targets',
             {
                 fk_organization: {
                     type: Sequelize.INTEGER,
@@ -28,7 +28,7 @@ module.exports = {
         // add constraints
         await Promise.all([
             queryInterface.addConstraint(
-                'shantytown_comment_organization_access',
+                'shantytown_comment_organization_targets',
                 ['fk_organization'],
                 {
                     type: 'foreign key',
@@ -38,11 +38,12 @@ module.exports = {
                         field: 'organization_id',
                     },
                     onDelete: 'cascade',
+                    onUpdate: 'cascade',
                     transaction,
                 },
             ),
             queryInterface.addConstraint(
-                'shantytown_comment_organization_access',
+                'shantytown_comment_organization_targets',
                 ['fk_comment'],
                 {
                     type: 'foreign key',
@@ -52,12 +53,13 @@ module.exports = {
                         field: 'shantytown_comment_id',
                     },
                     onDelete: 'cascade',
+                    onUpdate: 'cascade',
                     transaction,
                 },
             ),
         ]);
 
-        // populate shantytown_comment_organization_access with existing comments reserved to prefectures and DDETS
+        // populate shantytown_comment_organization_targets with existing comments reserved to prefectures and DDETS
         const comments = await queryInterface.sequelize.query(
             `SELECT shantytown_comments.shantytown_comment_id AS comment_id, cities.fk_departement AS departement_code, departements.fk_region AS region_code
             FROM shantytown_comments left join shantytowns ON shantytowns.shantytown_id = shantytown_comments.fk_shantytown
@@ -76,7 +78,7 @@ module.exports = {
             OR localized_organizations.departement_code = '${departement_code}')`,
             { type: queryInterface.sequelize.QueryTypes.SELECT, transaction },
         ).then(organizations => queryInterface.bulkInsert(
-            'shantytown_comment_organization_access',
+            'shantytown_comment_organization_targets',
             organizations.map(({ organization_id }) => ({
                 fk_organization: organization_id,
                 fk_comment: comment_id,
@@ -92,11 +94,11 @@ module.exports = {
         const transaction = await queryInterface.sequelize.transaction();
 
         await Promise.all([
-            queryInterface.removeConstraint('shantytown_comment_organization_access', 'fk_organization_comment_access', { transaction }),
-            queryInterface.removeConstraint('shantytown_comment_organization_access', 'fk_comment_organization', { transaction }),
+            queryInterface.removeConstraint('shantytown_comment_organization_targets', 'fk_organization_comment_access', { transaction }),
+            queryInterface.removeConstraint('shantytown_comment_organization_targets', 'fk_comment_organization', { transaction }),
         ]);
 
-        await queryInterface.dropTable('shantytown_comment_organization_access', { transaction });
+        await queryInterface.dropTable('shantytown_comment_organization_targets', { transaction });
 
         return transaction.commit();
     },
