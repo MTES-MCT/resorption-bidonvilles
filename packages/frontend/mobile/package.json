@@ -1,0 +1,19 @@
+{
+  "name": "@resorptionbidonvilles/mobile",
+  "version": "1.30.26",
+  "dependencies": {
+    "@vue/cli-service": "^4.5.8",
+    "tailwindcss": "^1.8.10",
+    "vue-template-compiler": "^2.5.21"
+  },
+  "devDependencies": {
+    "vue": "^2.6.10"
+  },
+  "scripts": {
+    "dev": "vue-cli-service serve",
+    "build": "vue-cli-service build"
+  },
+  "installConfig": {
+    "hoistingLimits": "dependencies"
+  }
+}
