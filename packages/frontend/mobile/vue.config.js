@@ -35,4 +35,19 @@ module.exports = {
         config.resolve.alias
             .set("#src", path.resolve(__dirname, "./src/"));
     },
+
+    pwa: {
+        name: "Résorption-bidonvilles",
+        themeColor: "#00006D",
+        msTileColor: "#000000",
+        appleMobileWebAppCapable: "yes",
+
+        // configure the workbox plugin
+        workboxPluginMode: 'InjectManifest',
+        workboxOptions: {
+            // swSrc is required in InjectManifest mode.
+            swSrc: 'dev/sw.js',
+            // ...other Workbox options...
+        }
+    }
 };

@@ -1605,6 +1605,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.3.4":
+  version: 7.18.6
+  resolution: "@babel/runtime@npm:7.18.6"
+  dependencies:
+    regenerator-runtime: ^0.13.4
+  checksum: 8b707b64ae0524db617d0c49933b258b96376a38307dc0be8fb42db5697608bcc1eba459acce541e376cff5ed5c5287d24db5780bd776b7c75ba2c2e26ff8a2c
+  languageName: node
+  linkType: hard
+
 "@babel/standalone@npm:^7.17.7":
   version: 7.17.9
   resolution: "@babel/standalone@npm:7.17.9"
@@ -2038,7 +2047,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hapi/joi@npm:^15.0.1":
+"@hapi/joi@npm:^15.0.0, @hapi/joi@npm:^15.0.1":
   version: 15.1.1
   resolution: "@hapi/joi@npm:15.1.1"
   dependencies:
@@ -3052,6 +3061,7 @@ __metadata:
   resolution: "@resorptionbidonvilles/mobile@workspace:packages/frontend/mobile"
   dependencies:
     "@vue/cli": ^5.0.6
+    "@vue/cli-plugin-pwa": ~4.5.15
     "@vue/cli-service": ^4.5.8
     "@vue/eslint-config-prettier": ^6.0.0
     eslint: ^6.7.2
@@ -3060,6 +3070,7 @@ __metadata:
     eslint-plugin-prettier: ^3.4.0
     eslint-plugin-vue: ^7.10.0
     lint-staged: ^11.0.0
+    register-service-worker: ^1.7.2
     tailwindcss: ^1.8.10
     vue: ^2.6.10
     vue-template-compiler: ^2.5.21
@@ -5904,6 +5915,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@vue/cli-plugin-pwa@npm:~4.5.15":
+  version: 4.5.19
+  resolution: "@vue/cli-plugin-pwa@npm:4.5.19"
+  dependencies:
+    "@vue/cli-shared-utils": ^4.5.19
+    webpack: ^4.0.0
+    workbox-webpack-plugin: ^4.3.1
+  peerDependencies:
+    "@vue/cli-service": ^3.0.0 || ^4.0.0-0
+  checksum: e2e56a91cc5385c1a56f309ebe522b6dba67b065ea9af394c829aba0aa37dcf167254290096e013bbee1554e8576c0a9b4dcbf169617e5c83a0d622c5c5336cb
+  languageName: node
+  linkType: hard
+
 "@vue/cli-plugin-router@npm:^4.5.17":
   version: 4.5.17
   resolution: "@vue/cli-plugin-router@npm:4.5.17"
@@ -6158,6 +6182,26 @@ __metadata:
     semver: ^6.1.0
     strip-ansi: ^6.0.0
   checksum: 424b34ee92b1b7f94d570331c32b1118245f89e0ca2c8cfb5668af8d194f726178bc7dbab42cd33d4388ac7ec5a2727268348c79181d5a0ad0057e2ecb364802
+  languageName: node
+  linkType: hard
+
+"@vue/cli-shared-utils@npm:^4.5.19":
+  version: 4.5.19
+  resolution: "@vue/cli-shared-utils@npm:4.5.19"
+  dependencies:
+    "@achrinza/node-ipc": 9.2.2
+    "@hapi/joi": ^15.0.1
+    chalk: ^2.4.2
+    execa: ^1.0.0
+    launch-editor: ^2.2.1
+    lru-cache: ^5.1.1
+    open: ^6.3.0
+    ora: ^3.4.0
+    read-pkg: ^5.1.1
+    request: ^2.88.2
+    semver: ^6.1.0
+    strip-ansi: ^6.0.0
+  checksum: da635c983b1474cf629fcd562318e70b41a507b4556b0c7c5cdc153fb99d95349dea7e6b5a8597fd08b538a153b317c8d70a6cff102f6fedda247a136f32ab08
   languageName: node
   linkType: hard
 
@@ -8144,6 +8188,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"babel-extract-comments@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "babel-extract-comments@npm:1.0.0"
+  dependencies:
+    babylon: ^6.18.0
+  checksum: 6345c688ccb56a7b750223afb42c1ddc83865b8ac33d7b808b5ad5e3619624563cf8324fbacdcf41cf073a40d935468a05f806e1a7622b0186fa5dad1232a07b
+  languageName: node
+  linkType: hard
+
 "babel-jest@npm:^24.9.0":
   version: 24.9.0
   resolution: "babel-jest@npm:24.9.0"
@@ -8344,6 +8397,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"babel-plugin-syntax-object-rest-spread@npm:^6.8.0":
+  version: 6.13.0
+  resolution: "babel-plugin-syntax-object-rest-spread@npm:6.13.0"
+  checksum: 14083f2783c760f5f199160f48e42ad4505fd35fc7cf9c4530812b176705259562b77db6d3ddc5e3cbce9e9b2b61ec9db3065941f0949b68e77cae3e395a6eef
+  languageName: node
+  linkType: hard
+
 "babel-plugin-transform-es2015-modules-commonjs@npm:^6.26.0, babel-plugin-transform-es2015-modules-commonjs@npm:^6.26.2":
   version: 6.26.2
   resolution: "babel-plugin-transform-es2015-modules-commonjs@npm:6.26.2"
@@ -8353,6 +8413,16 @@ __metadata:
     babel-template: ^6.26.0
     babel-types: ^6.26.0
   checksum: 9cd93a84037855c1879bcc100229bee25b44c4805a9a9f040e8927f772c4732fa17a0706c81ea0db77b357dd9baf84388eec03ceb36597932c48fe32fb3d4171
+  languageName: node
+  linkType: hard
+
+"babel-plugin-transform-object-rest-spread@npm:^6.26.0":
+  version: 6.26.0
+  resolution: "babel-plugin-transform-object-rest-spread@npm:6.26.0"
+  dependencies:
+    babel-plugin-syntax-object-rest-spread: ^6.8.0
+    babel-runtime: ^6.26.0
+  checksum: aad583fb0d08073678838f77fa822788b9a0b842ba33e34f8d131246852f7ed31cfb5fdf57644dec952f84dcae862a27dbf3d12ccbee6bdb0aed6e7ed13ca9ba
   languageName: node
   linkType: hard
 
@@ -14523,6 +14593,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fs-extra@npm:^4.0.2":
+  version: 4.0.3
+  resolution: "fs-extra@npm:4.0.3"
+  dependencies:
+    graceful-fs: ^4.1.2
+    jsonfile: ^4.0.0
+    universalify: ^0.1.0
+  checksum: c5ae3c7043ad7187128e619c0371da01b58694c1ffa02c36fb3f5b459925d9c27c3cb1e095d9df0a34a85ca993d8b8ff6f6ecef868fd5ebb243548afa7fc0936
+  languageName: node
+  linkType: hard
+
 "fs-extra@npm:^7.0.1":
   version: 7.0.1
   resolution: "fs-extra@npm:7.0.1"
@@ -18564,6 +18645,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"json-stable-stringify@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "json-stable-stringify@npm:1.0.1"
+  dependencies:
+    jsonify: ~0.0.0
+  checksum: 65d6cbf0fca72a4136999f65f4401cf39a129f7aeff0fdd987ac3d3423a2113659294045fb8377e6e20d865cac32b1b8d70f3d87346c9786adcee60661d96ca5
+  languageName: node
+  linkType: hard
+
 "json-stringify-safe@npm:~5.0.1":
   version: 5.0.1
   resolution: "json-stringify-safe@npm:5.0.1"
@@ -18667,6 +18757,13 @@ __metadata:
     graceful-fs:
       optional: true
   checksum: 7af3b8e1ac8fe7f1eccc6263c6ca14e1966fcbc74b618d3c78a0a2075579487547b94f72b7a1114e844a1e15bb00d440e5d1720bfc4612d790a6f285d5ea8354
+  languageName: node
+  linkType: hard
+
+"jsonify@npm:~0.0.0":
+  version: 0.0.0
+  resolution: "jsonify@npm:0.0.0"
+  checksum: d8d4ed476c116e6987a460dcb82f22284686caae9f498ac87b0502c1765ac1522f4f450a4cad4cc368d202fd3b27a3860735140a82867fc6d558f5f199c38bce
   languageName: node
   linkType: hard
 
@@ -24213,7 +24310,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pretty-bytes@npm:^5.6.0":
+"pretty-bytes@npm:^5.1.0, pretty-bytes@npm:^5.6.0":
   version: 5.6.0
   resolution: "pretty-bytes@npm:5.6.0"
   checksum: 9c082500d1e93434b5b291bd651662936b8bd6204ec9fa17d563116a192d6d86b98f6d328526b4e8d783c07d5499e2614a807520249692da9ec81564b2f439cd
@@ -25460,6 +25557,13 @@ __metadata:
     unicode-match-property-ecmascript: ^2.0.0
     unicode-match-property-value-ecmascript: ^2.0.0
   checksum: 6151a9700dad512fadb5564ad23246d54c880eb9417efa5e5c3658b910c1ff894d622dfd159af2ed527ffd44751bfe98682ae06c717155c254d8e2b4bab62785
+  languageName: node
+  linkType: hard
+
+"register-service-worker@npm:^1.7.2":
+  version: 1.7.2
+  resolution: "register-service-worker@npm:1.7.2"
+  checksum: 53cabe99212e623b3e7bf3af90d82519c53566e56c77d6670f36f52bd40c4592c0e6b9b18036a540ad6ea573cb8b5a34aff71b71d4607f759190c54560d99026
   languageName: node
   linkType: hard
 
@@ -27598,7 +27702,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stringify-object@npm:3.3.0":
+"stringify-object@npm:3.3.0, stringify-object@npm:^3.3.0":
   version: 3.3.0
   resolution: "stringify-object@npm:3.3.0"
   dependencies:
@@ -27658,6 +27762,16 @@ __metadata:
   version: 3.0.0
   resolution: "strip-bom@npm:3.0.0"
   checksum: 8d50ff27b7ebe5ecc78f1fe1e00fcdff7af014e73cf724b46fb81ef889eeb1015fc5184b64e81a2efe002180f3ba431bdd77e300da5c6685d702780fbf0c8d5b
+  languageName: node
+  linkType: hard
+
+"strip-comments@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "strip-comments@npm:1.0.2"
+  dependencies:
+    babel-extract-comments: ^1.0.0
+    babel-plugin-transform-object-rest-spread: ^6.26.0
+  checksum: 19e6f659a617566aef011b29ef9ce50da0db24556073d9c8065c73072f89bf1238d1fcaaa485933fee038a50a09bb04493097f66e622cdfc3a114f5e9e99ee24
   languageName: node
   linkType: hard
 
@@ -31104,6 +31218,175 @@ __metadata:
   version: 1.0.0
   resolution: "wordwrap@npm:1.0.0"
   checksum: 2a44b2788165d0a3de71fd517d4880a8e20ea3a82c080ce46e294f0b68b69a2e49cff5f99c600e275c698a90d12c5ea32aff06c311f0db2eb3f1201f3e7b2a04
+  languageName: node
+  linkType: hard
+
+"workbox-background-sync@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "workbox-background-sync@npm:4.3.1"
+  dependencies:
+    workbox-core: ^4.3.1
+  checksum: 25564fb0adc36396ea60308c4f8184cffe245eca9bd931a8154fc25736297071448be43de85b0b477da74e61410cdf60a295b25d4d3e780fa36b73ef983cc678
+  languageName: node
+  linkType: hard
+
+"workbox-broadcast-update@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "workbox-broadcast-update@npm:4.3.1"
+  dependencies:
+    workbox-core: ^4.3.1
+  checksum: f62035645d37b0763f09a5b688dbdba14b28ac69c2b8d609b6a68be888c8a9c384186cde01fc1c41ac9d45e383320a6cf743a9209d7390d97d27c61c5ace64f3
+  languageName: node
+  linkType: hard
+
+"workbox-build@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "workbox-build@npm:4.3.1"
+  dependencies:
+    "@babel/runtime": ^7.3.4
+    "@hapi/joi": ^15.0.0
+    common-tags: ^1.8.0
+    fs-extra: ^4.0.2
+    glob: ^7.1.3
+    lodash.template: ^4.4.0
+    pretty-bytes: ^5.1.0
+    stringify-object: ^3.3.0
+    strip-comments: ^1.0.2
+    workbox-background-sync: ^4.3.1
+    workbox-broadcast-update: ^4.3.1
+    workbox-cacheable-response: ^4.3.1
+    workbox-core: ^4.3.1
+    workbox-expiration: ^4.3.1
+    workbox-google-analytics: ^4.3.1
+    workbox-navigation-preload: ^4.3.1
+    workbox-precaching: ^4.3.1
+    workbox-range-requests: ^4.3.1
+    workbox-routing: ^4.3.1
+    workbox-strategies: ^4.3.1
+    workbox-streams: ^4.3.1
+    workbox-sw: ^4.3.1
+    workbox-window: ^4.3.1
+  checksum: 3bf0f400512b621a67f2f7ab9f1beb7964c12cb12186da1a2a51ec456a8b63e0c9a2e0fbd31c003aecd2779fb4061e8cad73b8fe94e790e141aa110169d6504b
+  languageName: node
+  linkType: hard
+
+"workbox-cacheable-response@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "workbox-cacheable-response@npm:4.3.1"
+  dependencies:
+    workbox-core: ^4.3.1
+  checksum: c281f40388891a7920b7ecf73a61b0b9274174c17d703ef2a4c6ecb2e0a277ff447c24205594e50a922adca40de39767ebc34c79cfba9040abf10e4b879142b5
+  languageName: node
+  linkType: hard
+
+"workbox-core@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "workbox-core@npm:4.3.1"
+  checksum: c3e31bb24c4bfbc2be129c7745c12512c6e061dfa032b0dbe3620aa1b15fe12df433c6f39f17bcaebef2d2826a5ca18760b778d12c86876295e2cf121725ca09
+  languageName: node
+  linkType: hard
+
+"workbox-expiration@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "workbox-expiration@npm:4.3.1"
+  dependencies:
+    workbox-core: ^4.3.1
+  checksum: c1bfa47278720d1729a88562b1e2a5d0d7d27d6b625190ad6db2a3518ad4907833b1b9182a6e7dae687e4f12e13047b102b1b82f6fe9529523c82e74729d023a
+  languageName: node
+  linkType: hard
+
+"workbox-google-analytics@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "workbox-google-analytics@npm:4.3.1"
+  dependencies:
+    workbox-background-sync: ^4.3.1
+    workbox-core: ^4.3.1
+    workbox-routing: ^4.3.1
+    workbox-strategies: ^4.3.1
+  checksum: 225cea09758767bba9be553578e5d6f509ef055149a07df0b366c6f17dcd98220a939e48d1cacb3132f1d4d2e896d093a6ee00744498522b3aa25d48e9f21eb4
+  languageName: node
+  linkType: hard
+
+"workbox-navigation-preload@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "workbox-navigation-preload@npm:4.3.1"
+  dependencies:
+    workbox-core: ^4.3.1
+  checksum: 50c2bc59b66f980e5d5c9798f8e8883a6fd5af982ccfd4938e17de126cb2f4a614b143e3cff8862e140ccb7db3ce695162c98be8cf798d69e41266b20f74a74c
+  languageName: node
+  linkType: hard
+
+"workbox-precaching@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "workbox-precaching@npm:4.3.1"
+  dependencies:
+    workbox-core: ^4.3.1
+  checksum: afac7991d4f1d660d0fa97437f18a3e67ed978991c4f1f159b0bb3d267f3d6b6aa34f0a7f505e298acb0d66af33224b0f1b8eac0f05c39a319d1a3b4203c6ee5
+  languageName: node
+  linkType: hard
+
+"workbox-range-requests@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "workbox-range-requests@npm:4.3.1"
+  dependencies:
+    workbox-core: ^4.3.1
+  checksum: bf0a2daebc4611c97f83c068911f7724e8c92c7270ee40f1e815fc227eb29a920fced0ce88421b413ca688574d1b5731bc45b0c34a208f9e0eace4d2b302eb5f
+  languageName: node
+  linkType: hard
+
+"workbox-routing@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "workbox-routing@npm:4.3.1"
+  dependencies:
+    workbox-core: ^4.3.1
+  checksum: fb8bc5f67246c418b6fd15d9763a4200633cc099edb13d4a266ddf8c23f5a0c1fe2e2fc8380928eb1c1ee0d821d677355706e294113650638bd809c589ae24d4
+  languageName: node
+  linkType: hard
+
+"workbox-strategies@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "workbox-strategies@npm:4.3.1"
+  dependencies:
+    workbox-core: ^4.3.1
+  checksum: dc49af50ddc9c240160f997e195cbe57efe8cb764eb2652174778bc44f3697b9680784a00af2c55ad56d41ed507c4140c4985c2f74ee9d4b3f68e99c889a54f4
+  languageName: node
+  linkType: hard
+
+"workbox-streams@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "workbox-streams@npm:4.3.1"
+  dependencies:
+    workbox-core: ^4.3.1
+  checksum: 7a06e4a10eb30ed6ba90ed6647049355db251d970e9f3d1e3f4d20b4ca9d25082275301d31c0f506761bbc494956cd542c073db67d6a6bb4ff069f5e77bce510
+  languageName: node
+  linkType: hard
+
+"workbox-sw@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "workbox-sw@npm:4.3.1"
+  checksum: 349a9b1a3c9b57dc1925a8709f9af3e90d6c6b8e56f10c88c70236abdf5ba8e3a66f8c004356fc1cb7c24cfabf0f162b132930454e1fb390d29e2ce46696f3a5
+  languageName: node
+  linkType: hard
+
+"workbox-webpack-plugin@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "workbox-webpack-plugin@npm:4.3.1"
+  dependencies:
+    "@babel/runtime": ^7.0.0
+    json-stable-stringify: ^1.0.1
+    workbox-build: ^4.3.1
+  peerDependencies:
+    webpack: ^2.0.0 || ^3.0.0 || ^4.0.0
+  checksum: 7282d849d96c90a82b985784279d28bf1a95534429b3f95cc9f028142f10cea78e13a608f7e29a545e4f82cbe7b081a6e82ad57131dc09604c239a4b53a7a860
+  languageName: node
+  linkType: hard
+
+"workbox-window@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "workbox-window@npm:4.3.1"
+  dependencies:
+    workbox-core: ^4.3.1
+  checksum: 60b854fb0febdde236b0285eb050131043446a0c011629f8480224b1cee3a2f9f13f4c851f4a30dd8a76aa58503436c16f17662ef0eb40d0e1c630842165e718
   languageName: node
   linkType: hard
 
