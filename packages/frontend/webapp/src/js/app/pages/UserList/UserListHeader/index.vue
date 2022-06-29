@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import { listExport } from "#helpers/api/user";
+import { listExport } from "#frontend/common/api/user";
 import { fetchCSV } from "#helpers/api/contactFormReferral";
 import { exportActors } from "#helpers/api/actor";
 import UserListHeaderSearch from "#app/pages/UserList/UserListHeader/UserListHeaderSearch";
