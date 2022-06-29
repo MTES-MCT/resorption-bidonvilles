@@ -1,10 +1,9 @@
-
 const { sendUserPlatformInvitation } = require('#server/mails/mails');
 const { triggerPeopleInvitedAlert } = require('#server/utils/mattermost');
-const { mattermost } = require('#server/config');
 const { formatName } = require('#server/models/userModel');
+const { mattermost } = require('#server/config');
 
-const sendEmailsInvitations = async (guests, greeter) => {
+async function sendEmailsInvitations(guests, greeter) {
     for (let i = 0; i < guests.length; i += 1) {
         const guest = {
             first_name: guests[i].first_name,
@@ -23,9 +22,9 @@ const sendEmailsInvitations = async (guests, greeter) => {
             // Ignore
         }
     }
-};
+}
 
-const sendMattermostNotifications = async (guests, greeter, invite_from) => {
+async function sendMattermostNotifications(guests, greeter, invite_from) {
     if (!mattermost) {
         return;
     }
@@ -49,32 +48,30 @@ const sendMattermostNotifications = async (guests, greeter, invite_from) => {
             console.log(`Error with invited people mattermost webhook : ${Object.entries(err.message).flat()}`);
         }
     }
+}
+
+module.exports = async (req, res, next) => {
+    const { greeter, guests, invite_from } = req.body;
+
+    // Send an email to each guest
+    try {
+        await sendEmailsInvitations(guests, greeter);
+    } catch (err) {
+        res.status(500).send({
+            error: {
+                developer_message: 'Invitations could not be sent',
+                user_message: 'Impossible d\'envoyer les invitations',
+            },
+        });
+        return next(err);
+    }
+
+    // Send a mattermost alert for each guest
+    try {
+        await sendMattermostNotifications(guests, greeter, invite_from);
+    } catch (err) {
+        // ignore
+    }
+
+    return res.status(200).send({});
 };
-
-module.exports = () => ({
-    async invite(req, res, next) {
-        const { greeter, guests, invite_from } = req.body;
-
-        // Send an email to each guest
-        try {
-            await sendEmailsInvitations(guests, greeter);
-        } catch (err) {
-            res.status(500).send({
-                error: {
-                    developer_message: 'Invitations could not be sent',
-                    user_message: 'Impossible d\'envoyer les invitations',
-                },
-            });
-            return next(err);
-        }
-
-        // Send a mattermost alert for each guest
-        try {
-            await sendMattermostNotifications(guests, greeter, invite_from);
-        } catch (err) {
-            // ignore
-        }
-
-        return res.status(200).send({});
-    },
-});
