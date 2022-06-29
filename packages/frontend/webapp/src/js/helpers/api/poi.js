@@ -1,4 +1,4 @@
-import { getApi } from "#helpers/api/main";
+import { getApi } from "#src/js/api";
 
 /**
  * Fetches all pois  from the database

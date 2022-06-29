@@ -104,7 +104,7 @@
 </template>
 
 <script>
-import { acceptCharte } from "#helpers/api/user";
+import { acceptCharte } from "#frontend/common/api/user";
 import NavBar from "#app/layouts/Navbar/Navbar.vue";
 
 export default {

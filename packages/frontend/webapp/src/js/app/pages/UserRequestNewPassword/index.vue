@@ -37,7 +37,7 @@
 
 <script>
 import LoginLayout from "#app/components/LoginLayout";
-import { requestNewPassword } from "#helpers/api/user";
+import { requestNewPassword } from "#frontend/common/api/user";
 import { notify } from "#helpers/notificationHelper";
 
 export default {

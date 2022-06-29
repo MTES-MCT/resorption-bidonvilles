@@ -1,4 +1,4 @@
-import { getDirectory } from "#helpers/api/user";
+import { getDirectory } from "#frontend/common/api/user";
 
 export default {
     state: {

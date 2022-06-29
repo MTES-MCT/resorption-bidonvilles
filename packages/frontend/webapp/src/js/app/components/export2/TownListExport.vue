@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import { open } from "#helpers/api/main";
+import { open } from "#src/js/api";
 import Checkbox from "#app/components/ui/Form/input/Checkbox";
 import { VUE_APP_API_URL } from "#src/js/env.js";
 const moment = require("moment");

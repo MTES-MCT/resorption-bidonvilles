@@ -1,4 +1,4 @@
-import { postApi, getApi, patchApi } from "#helpers/api/main";
+import { postApi, getApi, patchApi } from "#src/js/api";
 
 /**
  * Lists all existing plans

@@ -1,4 +1,4 @@
-import { getApi, postApi, putApi, deleteApi, open } from "#helpers/api/main";
+import { getApi, postApi, putApi, deleteApi, open } from "#src/js/api";
 import { VUE_APP_API_URL } from "#src/js/env.js";
 
 /**

@@ -118,7 +118,7 @@ import AccountHeader from "../ui/AccountHeader";
 import AccountReadLabel from "../ui/AccountReadLabel";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
 
-import { edit } from "#helpers/api/user";
+import { edit } from "#frontend/common/api/user";
 
 export default {
     components: {

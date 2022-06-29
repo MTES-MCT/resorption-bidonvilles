@@ -31,7 +31,7 @@
 import PrivateLayout from "#app/components/PrivateLayout";
 import UserListHeader from "./UserListHeader/index.vue";
 import UserListTable from "./UserListTable";
-import { list } from "#helpers/api/user";
+import { list } from "#frontend/common/api/user";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
 import LoadingPage from "#app/components/PrivateLayout/LoadingPage";
 import LoadingError from "#app/components/PrivateLayout/LoadingError";

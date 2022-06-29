@@ -69,7 +69,7 @@ import "#app/components/map/map.scss"; // on importe le scss ici pour que le htm
 
 import { mapGetters } from "vuex";
 import { all as fetchAllPois } from "#helpers/api/poi";
-import { open } from "#helpers/tabHelper";
+import { open } from "#frontend/common/helpers/tabHelper";
 
 /**
  * Returns the appropriate zoom level for the given location type

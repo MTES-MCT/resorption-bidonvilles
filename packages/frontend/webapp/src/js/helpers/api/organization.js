@@ -1,4 +1,4 @@
-import { getApi, patchApi } from "#helpers/api/main";
+import { getApi, patchApi } from "#src/js/api";
 
 /**
  * Lists all categories

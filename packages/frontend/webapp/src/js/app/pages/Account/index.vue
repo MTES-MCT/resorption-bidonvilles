@@ -16,7 +16,7 @@ import PrivateLayout from "#app/components/PrivateLayout";
 import LoadingError from "#app/components/PrivateLayout/LoadingError.vue";
 import AccountRead from "./AccountRead/AccountRead";
 import AccountEdit from "./AccountEdit/AccountEdit";
-import { get as getUser } from "#helpers/api/user";
+import { get as getUser } from "#frontend/common/api/user";
 import LoadingPage from "#app/components/PrivateLayout/LoadingPage";
 
 export default {

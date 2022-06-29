@@ -10,6 +10,7 @@ import {
     inviteNewActor
 } from "#helpers/api/town";
 import enrichShantytown from "#app/pages/TownsList/enrichShantytown";
+import api from "#src/js/api";
 
 import activities from "./modules/activities";
 import dashboard from "./modules/dashboard";
@@ -19,12 +20,12 @@ import highCovidComments from "./modules/highCovidComments";
 import navigation from "./modules/navigation/navigation";
 import plans from "./modules/plans";
 import shantytownComments from "./modules/shantytownComments";
-import userModule from "./modules/user";
-import config from "./modules/config";
+import userModule from "#frontend/common/store/modules/user";
+import config from "#frontend/common/store/modules/config";
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
     modules: {
         activities,
         dashboard,
@@ -298,3 +299,7 @@ export default new Vuex.Store({
         }
     }
 });
+
+api.setStore(store);
+
+export default store;

@@ -1,5 +1,5 @@
 import Autocompleter from "../autocompleter/autocompleter.vue";
-import { autocompleteOrganization as autocompleter } from "#helpers/api/user";
+import { autocompleteOrganization as autocompleter } from "#frontend/common/api/user";
 
 export default {
     components: {

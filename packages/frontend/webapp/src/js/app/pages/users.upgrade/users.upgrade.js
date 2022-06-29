@@ -1,6 +1,6 @@
 import NavBar from "#app/layouts/Navbar/Navbar.vue";
 import Form from "#app/components/form/form.vue";
-import { upgrade } from "#helpers/api/user";
+import { upgrade } from "#frontend/common/api/user";
 
 export default {
     components: {

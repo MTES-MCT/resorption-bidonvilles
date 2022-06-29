@@ -1,4 +1,4 @@
-import { postApi } from "#helpers/api/main";
+import { postApi } from "#src/js/api";
 
 /**
  * Creates a high covid comment
