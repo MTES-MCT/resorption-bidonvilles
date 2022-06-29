@@ -52,7 +52,8 @@ module.exports = {
             .set("#app", path.resolve(__dirname, "./src/js/app/"))
             .set("#src", path.resolve(__dirname, "./src/"))
             .set("#helpers", path.resolve(__dirname, "./src/js/helpers"))
-            .set("#matomo", path.resolve(__dirname, "./src/js/matomo"));
+            .set("#matomo", path.resolve(__dirname, "./src/js/matomo"))
+            .set("#frontend", path.resolve(__dirname, ".."));
         config.plugins.delete("progress");
     },
 
