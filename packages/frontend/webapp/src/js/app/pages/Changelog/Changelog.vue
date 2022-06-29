@@ -89,7 +89,7 @@
 import PrivateLayout from "#app/components/PrivateLayout";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
 
-import { closeChangelog } from "#helpers/api/config";
+import { closeChangelog } from "#frontend/common/api/config";
 
 export default {
     data() {

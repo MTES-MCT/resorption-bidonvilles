@@ -38,7 +38,7 @@
     </div>
 </template>
 <script>
-import { setAdminComments } from "#helpers/api/user";
+import { setAdminComments } from "#frontend/common/api/user";
 
 export default {
     props: {

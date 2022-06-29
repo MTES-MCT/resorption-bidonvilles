@@ -187,7 +187,7 @@ import {
     sendActivationLink,
     updateLocalAdmin,
     setRoleRegular
-} from "#helpers/api/user";
+} from "#frontend/common/api/user";
 
 import { notify } from "#helpers/notificationHelper";
 

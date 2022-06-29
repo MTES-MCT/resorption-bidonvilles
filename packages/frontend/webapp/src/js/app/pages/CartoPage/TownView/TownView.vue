@@ -63,7 +63,7 @@
 
 <script>
 import simplebar from "simplebar-vue";
-import { open } from "#helpers/tabHelper";
+import { open } from "#frontend/common/helpers/tabHelper";
 
 export default {
     components: {

@@ -40,7 +40,7 @@
 
 <script>
 import LoginLayout from "#app/components/LoginLayout";
-import { checkPasswordToken, setPassword } from "#helpers/api/user";
+import { checkPasswordToken, setPassword } from "#frontend/common/api/user";
 import PasswordInfo from "#app/components/LoginLayout/PasswordInfo";
 import { notify } from "#helpers/notificationHelper";
 
