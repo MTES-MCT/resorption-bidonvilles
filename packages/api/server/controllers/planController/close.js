@@ -46,7 +46,6 @@ module.exports = async (req, res, next) => {
         res.status(500).send({
             error: {
                 user_message: 'Une erreur est survenue lors de la récupération des données en base',
-                developer_message: `Could not fetch plan #${req.params.id}`,
             },
         });
         return next(error);
@@ -56,7 +55,6 @@ module.exports = async (req, res, next) => {
         return res.status(404).send({
             error: {
                 user_message: 'L\'action à mettre à jour n\'a pas été trouvée en base de données',
-                developer_message: `Could not find plan #${req.params.id}`,
             },
         });
     }
@@ -219,7 +217,6 @@ module.exports = async (req, res, next) => {
         res.status(500).send({
             error: {
                 user_message: 'Une erreur est survenue lors de l\'écriture en base de données',
-                developer_message: error.message,
             },
         });
         return next(error);

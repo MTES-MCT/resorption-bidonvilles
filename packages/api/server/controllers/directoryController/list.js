@@ -9,7 +9,6 @@ module.exports = async (req, res, next) => {
             success: false,
             error: {
                 user_message: 'Une erreur est survenue lors de la lecture en base de données',
-                developer_message: error.message,
             },
         });
         return next(error);

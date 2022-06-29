@@ -33,7 +33,6 @@ module.exports = async (req, res, next) => {
         res.status(500).send({
             success: false,
             error: {
-                developer_message: 'Could not find the matching departement in database',
                 user_message: 'Une erreur de lecture en base de données est survenue',
             },
         });
@@ -49,7 +48,6 @@ module.exports = async (req, res, next) => {
         res.status(500).send({
             success: false,
             error: {
-                developer_message: 'Could not fetch the list of finance types from the database',
                 user_message: 'Une erreur de lecture en base de données est survenue',
             },
         });
@@ -65,7 +63,6 @@ module.exports = async (req, res, next) => {
         res.status(500).send({
             success: false,
             error: {
-                developer_message: 'Could not fetch the list of topics from the database',
                 user_message: 'Une erreur de lecture en base de données est survenue',
             },
         });
@@ -202,7 +199,6 @@ module.exports = async (req, res, next) => {
         return res.status(400).send({
             success: false,
             error: {
-                developer_message: 'The submitted data contains errors',
                 user_message: 'Certaines données sont invalides',
                 fields: errors,
             },
@@ -404,7 +400,6 @@ module.exports = async (req, res, next) => {
             success: false,
             error: {
                 user_message: 'Une erreur est survenue lors de l\'écriture en base de données',
-                developer_message: error,
             },
         });
         return next(error);

@@ -7,7 +7,6 @@ module.exports = async (req, res) => {
         return res.status(400).send({
             error: {
                 user_message: 'Le jeton d\'identification est manquant',
-                developer_message: 'The password token is missing',
             },
         });
     }
@@ -19,7 +18,6 @@ module.exports = async (req, res) => {
         return res.status(400).send({
             error: {
                 user_message: 'Le jeton d\'identification est invalide ou expiré.\nNous vous invitons à reprendre le formulaire de demande de renouvelement de mot de passe.',
-                developer_message: 'The password token is either invalid or expired',
             },
         });
     }
@@ -28,7 +26,6 @@ module.exports = async (req, res) => {
         return res.status(400).send({
             error: {
                 user_message: 'Le jeton d\'identification est invalide',
-                developer_message: 'The given token is not a password token',
             },
         });
     }
@@ -38,7 +35,6 @@ module.exports = async (req, res) => {
         return res.status(400).send({
             error: {
                 user_message: 'Le jeton d\'identification ne correspond à aucun utilisateur',
-                developer_message: 'The password token does not match a real user',
             },
         });
     }

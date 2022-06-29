@@ -59,7 +59,6 @@ module.exports = async (req, res, next) => {
     } catch (err) {
         res.status(500).send({
             error: {
-                developer_message: 'Invitations could not be sent',
                 user_message: 'Impossible d\'envoyer les invitations',
             },
         });

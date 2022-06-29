@@ -40,7 +40,6 @@ module.exports = async (req, res) => {
         res.status(500).send({
             error: {
                 user_message: 'Une erreur est survenue lors de la récupération des données en base',
-                developer_message: error.message,
             },
         });
     }

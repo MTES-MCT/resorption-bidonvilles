@@ -13,7 +13,6 @@ module.exports = async (req, res, next) => {
         res.status(500).send({
             error: {
                 user_message: 'Une erreur est survenue lors de la lecture en base de données',
-                developer_message: error.message,
             },
         });
         return next(error);
@@ -23,7 +22,6 @@ module.exports = async (req, res, next) => {
         return res.status(404).send({
             error: {
                 user_message: 'L\'utilisateur auquel envoyer un accès n\'a pas été trouvé en base de données',
-                developer_message: null,
             },
         });
     }
@@ -32,7 +30,6 @@ module.exports = async (req, res, next) => {
         return res.status(400).send({
             error: {
                 user_message: 'L\'utilisateur concerné n\'a pas de demande d\'accès en attente',
-                developer_message: null,
             },
         });
     }
@@ -77,7 +74,6 @@ module.exports = async (req, res, next) => {
         res.status(500).send({
             error: {
                 user_message: 'Une erreur est survenue lors de l\'envoi du lien d\'activation',
-                developer_message: error.message,
             },
         });
         return next(error);

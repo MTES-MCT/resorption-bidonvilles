@@ -14,7 +14,6 @@ userService.create = async (data, createdBy = null) => {
                 response: {
                     error: {
                         user_message: 'Une erreur est survenue lors de l\'écriture en base de données',
-                        developer_message: 'Failed inserting the new user into database',
                     },
                 },
             },

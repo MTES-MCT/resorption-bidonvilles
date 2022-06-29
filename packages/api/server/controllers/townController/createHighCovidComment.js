@@ -119,7 +119,6 @@ module.exports = () => {
         } catch (error) {
             res.status(500).send({
                 user_message: 'Une erreur est survenue lors de l\'écriture en base de données',
-                developer_message: `Failed saving the comment into database: ${error.message}`,
             });
             return next(error);
         }

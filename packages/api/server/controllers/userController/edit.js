@@ -17,7 +17,6 @@ module.exports = async (req, res, next) => {
         res.status(500).send({
             error: {
                 user_message: 'Impossible de trouver vos informations en bases de données.',
-                developer_message: `User #${userId} does not exist`,
             },
         });
         return next(new Error(`User #${userId} does not exist`));
@@ -52,7 +51,6 @@ module.exports = async (req, res, next) => {
         res.status(500).send({
             error: {
                 user_message: 'Une erreur est survenue dans l\'écriture de vos informations en base de données.',
-                developer_message: error.message,
             },
         });
         return next(error);
