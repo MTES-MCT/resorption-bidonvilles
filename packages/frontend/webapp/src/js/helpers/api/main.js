@@ -28,8 +28,7 @@ function handleRequestResponse(success, failure) {
             : this.responseText;
     } catch (error) {
         failure({
-            user_message: "Une erreur inconnue est survenue",
-            developer_message: "Failed to parsed the server's response"
+            user_message: "Une erreur inconnue est survenue"
         });
         return;
     }
@@ -78,9 +77,7 @@ function handleRequestResponse(success, failure) {
                     errorObject.user_message
                         ? errorObject
                         : {
-                              user_message: "Une erreur inconnue est survenue",
-                              developer_message:
-                                  "The server responded with an error status but did not provide error details"
+                              user_message: "Une erreur inconnue est survenue"
                           }
                 );
         }

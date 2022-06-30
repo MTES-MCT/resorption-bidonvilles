@@ -8,7 +8,6 @@ module.exports = async (req, res, next) => {
     } catch (e) {
         res.status(500).send({
             error: {
-                developer_message: e.message,
                 user_message: 'Une erreur est survenue dans l\'enregistrement du site en base de données',
             },
         });

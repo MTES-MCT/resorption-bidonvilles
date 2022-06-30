@@ -18,7 +18,6 @@ module.exports = () => {
             throw new AuthenticateError({
                 code: 1,
                 user_message: 'Vous devez être connecté pour accéder à ce contenu',
-                developer_message: 'The access token is missing',
             });
         }
 
@@ -29,7 +28,6 @@ module.exports = () => {
             throw new AuthenticateError({
                 code: 2,
                 user_message: 'Votre session a expiré',
-                developer_message: 'The access token is either invalid or expired',
             });
         }
 
@@ -41,7 +39,6 @@ module.exports = () => {
             throw new AuthenticateError({
                 code: 3,
                 user_message: 'Votre session a expiré',
-                developer_message: 'The access token is either invalid or expired',
             });
         }
 
@@ -49,7 +46,6 @@ module.exports = () => {
             throw new AuthenticateError({
                 code: 4,
                 user_message: 'Votre session a expiré',
-                developer_message: 'The access token is either invalid or expired',
             });
         }
 
@@ -110,7 +106,6 @@ module.exports = () => {
                 error: {
                     code: 4,
                     user_message: 'Vous n\'avez pas accès à ces données',
-                    developer_message: 'Tried to access a secured page without authentication',
                 },
             });
 
@@ -126,7 +121,6 @@ module.exports = () => {
                 error: {
                     code: 5,
                     user_message: 'Vous n\'avez pas accès à ces données',
-                    developer_message: 'Tried to access a secured page without all required permissions',
                 },
             });
 
