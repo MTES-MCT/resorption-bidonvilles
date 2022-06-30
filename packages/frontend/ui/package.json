@@ -13,5 +13,8 @@
   },
   "scripts": {
     "storybook": "start-storybook -p 6006"
+  },
+  "dependencies": {
+    "vee-validate": "^3.4.0"
   }
 }

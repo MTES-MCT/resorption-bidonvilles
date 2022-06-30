@@ -2,13 +2,12 @@
 import notifications from "vue-notification/dist/ssr";
 import NotificationsGroup from "./NotificationsGroup.vue";
 import registerVeeValidate from "./registerVeeValidate";
-import { Link } from "@resorptionbidonvilles/ui";
+import { Link, TextInput } from "@resorptionbidonvilles/ui";
 
 // Lazyloaded modules
 const Accordion = () => import("./Accordion");
 const AccordionItem = () => import("./AccordionItem");
 const Button = () => import("./Button");
-const TextInput = () => import("./Form/input/TextInput.vue");
 const PasswordInput = () => import("./Form/input/PasswordInput.vue");
 const InlineTextInput = () => import("./Form/input/InlineTextInput.vue");
 const TextArea = () => import("./Form/input/TextArea.vue");
