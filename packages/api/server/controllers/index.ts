@@ -1,6 +1,3 @@
-const fs = require('fs');
-const path = require('path');
-
 // config
 const configList = require('./configController/list');
 // contact
@@ -81,113 +78,98 @@ const userActivityRegular = require('./userActivityController/regular');
 // user navigation logs
 import insertUserNavigationLogs from './userNavigationLogsController/insert';
 
-export default (models) => {
-    const basename = path.basename(module.filename);
-    const controllers = {
-        config: {
-            list: configList,
-        },
-        contact: {
-            contact: contactContact,
-        },
-        contactFormReferral: {
-            export: contactFormReferralExport,
-        },
-        directory: {
-            list: directoryList,
-        },
-        geo: {
-            get: geoGet,
-            getDepartementsForEpci: geoGetDepartementsForEpci,
-            getDepartementsForRegion: geoGetDepartementsForRegion,
-            listDepartements: geoListDepartements,
-            search: geoSearch,
-            searchCities: geoSearchCities,
-            searchEpci: geoSearchEpci,
-        },
-        invite: {
-            invite: inviteInvite,
-        },
-        organization: {
-            categories: organizationCategories,
-            getByCategory: organizationGetByCategory,
-            getByType: organizationGetByType,
-            getMembers: organizationGetMembers,
-            getMembersByCategory: organizationGetMembersByCategory,
-            search: organizationSearch,
-            types: organizationTypes,
-            updateBeingFunded: organizationUpdateBeingFunded,
-        },
-        plan: {
-            addState: planAddState,
-            close: planClose,
-            create: planCreate,
-            delete: planDelete,
-            find: planFind,
-            list: planList,
-            listExport: planListExport,
-            update: planUpdate,
-        },
-        poi: {
-            findAll: poiFindAll,
-        },
-        matomo: {
-            getWeeklyActiveUsers,
-        },
-        shantytownComment: {
-            create: createShantytownComment,
-            export: exportShantytownComment,
-        },
-        stats: {
-            all: statsAll,
-            directoryView: statsDirectoryView,
-            export: statsExport,
-            getDashboardStats: statsGetDashboardStats,
-            public: statsPublic,
-        },
-        town: townController,
-        user: {
-            acceptCharte: userAcceptCharte,
-            activate: userActivate,
-            checkActivationToken: userCheckActivationToken,
-            checkPasswordToken: userCheckPasswordToken,
-            create: userCreate,
-            denyAccess: userDenyAccess,
-            edit: userEdit,
-            get: userGet,
-            list: userList,
-            listExport: userListExport,
-            me: userMe,
-            remove: userRemove,
-            renewToken: userRenewToken,
-            requestNewPassword: userRequestNewPassword,
-            sendActivationLink: userSendActivationLink,
-            setAdminComments: userSetAdminComments,
-            setDefaultExport: userSetDefaultExport,
-            setLastChangelog: userSetLastChangelog,
-            setNewPassword: userSetNewPassword,
-            setRoleRegular: userSetRoleRegular,
-            signin: userSignin,
-            updateLocalAdmin: userUpdateLocalAdmin,
-            upgrade: userUpgrade,
-        },
-        userActivity: {
-            regular: userActivityRegular,
-        },
-        userNavigationLogs: {
-            insert: insertUserNavigationLogs,
-        },
-    };
-
-    // instanciate all controllers
-    return fs
-        .readdirSync(__dirname)
-        .filter(file => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))
-        .reduce((acc, file) => {
-            return {
-                ...acc,
-                /* eslint-disable-next-line */
-                [file.replace('Controller.js', '')]: require(path.join(__dirname, file))(models)
-            };
-        }, controllers);
+export default {
+    config: {
+        list: configList,
+    },
+    contact: {
+        contact: contactContact,
+    },
+    contactFormReferral: {
+        export: contactFormReferralExport,
+    },
+    directory: {
+        list: directoryList,
+    },
+    geo: {
+        get: geoGet,
+        getDepartementsForEpci: geoGetDepartementsForEpci,
+        getDepartementsForRegion: geoGetDepartementsForRegion,
+        listDepartements: geoListDepartements,
+        search: geoSearch,
+        searchCities: geoSearchCities,
+        searchEpci: geoSearchEpci,
+    },
+    invite: {
+        invite: inviteInvite,
+    },
+    organization: {
+        categories: organizationCategories,
+        getByCategory: organizationGetByCategory,
+        getByType: organizationGetByType,
+        getMembers: organizationGetMembers,
+        getMembersByCategory: organizationGetMembersByCategory,
+        search: organizationSearch,
+        types: organizationTypes,
+        updateBeingFunded: organizationUpdateBeingFunded,
+    },
+    plan: {
+        addState: planAddState,
+        close: planClose,
+        create: planCreate,
+        delete: planDelete,
+        find: planFind,
+        list: planList,
+        listExport: planListExport,
+        update: planUpdate,
+    },
+    poi: {
+        findAll: poiFindAll,
+    },
+    matomo: {
+        getWeeklyActiveUsers,
+    },
+    shantytownComment: {
+        create: createShantytownComment,
+        export: exportShantytownComment,
+    },
+    stats: {
+        all: statsAll,
+        directoryView: statsDirectoryView,
+        export: statsExport,
+        getDashboardStats: statsGetDashboardStats,
+        public: statsPublic,
+    },
+    town: townController,
+    user: {
+        acceptCharte: userAcceptCharte,
+        activate: userActivate,
+        checkActivationToken: userCheckActivationToken,
+        checkPasswordToken: userCheckPasswordToken,
+        create: userCreate,
+        denyAccess: userDenyAccess,
+        edit: userEdit,
+        get: userGet,
+        list: userList,
+        listExport: userListExport,
+        me: userMe,
+        remove: userRemove,
+        renewToken: userRenewToken,
+        requestNewPassword: userRequestNewPassword,
+        sendActivationLink: userSendActivationLink,
+        setAdminComments: userSetAdminComments,
+        setDefaultExport: userSetDefaultExport,
+        setLastChangelog: userSetLastChangelog,
+        setNewPassword: userSetNewPassword,
+        setRoleRegular: userSetRoleRegular,
+        signin: userSignin,
+        updateLocalAdmin: userUpdateLocalAdmin,
+        upgrade: userUpgrade,
+    },
+    userActivity: {
+        regular: userActivityRegular,
+    },
+    userNavigationLogs: {
+        insert: insertUserNavigationLogs,
+    },
 };

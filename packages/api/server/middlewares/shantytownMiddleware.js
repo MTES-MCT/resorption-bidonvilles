@@ -1,6 +1,6 @@
 const shantytownModel = require('#server/models/shantytownModel');
 
-module.exports = () => ({
+module.exports = {
     async checkReadPermission(req, res, next) {
         if (!req.user || !req.user.isAllowedTo('read', 'shantytown')) {
             res.status(400).send({
@@ -27,4 +27,4 @@ module.exports = () => ({
 
         next();
     },
-});
+};
