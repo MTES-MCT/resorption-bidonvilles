@@ -1,10 +1,8 @@
 const semver = require('semver');
 const userModel = require('#server/models/userModel');
 
-module.exports = () => {
-    const appVersionMiddleware = {};
-
-    appVersionMiddleware.sync = async (req, res, next, respond = true) => {
+module.exports = {
+    async sync(req, res, next, respond = true) {
         const version = req.headers && req.headers['x-app-version'];
         const lastUsedVersion = req.user.last_version;
 
@@ -40,7 +38,5 @@ module.exports = () => {
         if (respond === true) {
             next();
         }
-    };
-
-    return appVersionMiddleware;
+    },
 };
