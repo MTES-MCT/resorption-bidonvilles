@@ -1,7 +1,7 @@
 <template>
   <div v-if="loading">Signin you in...</div>
   <div v-else-if="error !== null">Failed signin you in : {{ error }}</div>
-  <div v-else>Your access token is : {{ $store.state.user.accessToken }}</div>
+  <div class="text-primary" v-else>Your access token is : {{ $store.state.user.accessToken }}</div>
 </template>
 
 <script>
