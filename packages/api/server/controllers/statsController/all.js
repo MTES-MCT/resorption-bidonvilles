@@ -1,4 +1,4 @@
-const statsModel = require('#server/models/statsModel')();
+const statsModel = require('#server/models/statsModel');
 
 module.exports = async (req, res) => {
     const { departement } = req.params;

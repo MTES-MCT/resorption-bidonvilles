@@ -1,14 +1,13 @@
 /* eslint-disable newline-per-chained-call */
 const { body } = require('express-validator');
 const { isLatLong, trim } = require('validator');
-const sequelize = require('#db/sequelize');
 const { can } = require('#server/utils/permission');
 // models
-const fieldTypeModel = require('#server/models/fieldTypeModel')(sequelize);
+const fieldTypeModel = require('#server/models/fieldTypeModel');
 const geoModel = require('#server/models/geoModel');
-const ownerTypeModel = require('#server/models/ownerTypeModel')(sequelize);
+const ownerTypeModel = require('#server/models/ownerTypeModel');
 const socialOriginModel = require('#server/models/socialOriginModel');
-const electricityTypeModel = require('#server/models/electricityTypeModel')(sequelize);
+const electricityTypeModel = require('#server/models/electricityTypeModel');
 
 function fromIntToBoolSanitizer(value) {
     if (value === -1) {

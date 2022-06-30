@@ -1,6 +1,6 @@
 const sequelize = require('#db/sequelize');
-const planModel = require('#server/models/planModel')();
-const etpTypeModel = require('#server/models/etpTypeModel/index')();
+const planModel = require('#server/models/planModel');
+const etpTypeModel = require('#server/models/etpTypeModel/index');
 
 function sanitizeState(plan, data) {
     const sanitizedData = {};

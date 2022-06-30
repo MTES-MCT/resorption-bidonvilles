@@ -1,4 +1,4 @@
-const organizationModel = require('#server/models/organizationModel')();
+const organizationModel = require('#server/models/organizationModel');
 
 module.exports = async (req, res, next) => {
     try {

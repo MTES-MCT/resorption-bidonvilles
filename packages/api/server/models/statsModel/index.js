@@ -29,7 +29,7 @@ const numberOfUsersAtMonth = require('./numberOfUsersAtMonth');
 const populationTotal = require('./populationTotal');
 const getStats = require('./getStats');
 
-module.exports = () => ({
+module.exports = {
     averageCompletionPercentage,
     averageCompletionPercentageByDepartement,
     meanTimeBeforeClosingDeclaration,
@@ -60,4 +60,4 @@ module.exports = () => ({
     numberOfUsersAtMonth,
     populationTotal,
     getStats,
-});
+};

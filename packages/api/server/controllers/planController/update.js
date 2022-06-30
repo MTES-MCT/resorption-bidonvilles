@@ -1,9 +1,9 @@
 const sequelize = require('#db/sequelize');
-const planModel = require('#server/models/planModel')();
-const financeTypeModel = require('#server/models/financeTypeModel')();
-const topicModel = require('#server/models/topicModel')();
+const planModel = require('#server/models/planModel');
+const financeTypeModel = require('#server/models/financeTypeModel');
+const topicModel = require('#server/models/topicModel');
 const userModel = require('#server/models/userModel');
-const { addAttachments, removeAttachments } = require('#server/models/permissionModel')();
+const { addAttachments, removeAttachments } = require('#server/models/permissionModel');
 const historize = require('./_common/historize');
 const sanitize = require('./_common/sanitize');
 

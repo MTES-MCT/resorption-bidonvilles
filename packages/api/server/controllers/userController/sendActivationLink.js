@@ -1,6 +1,6 @@
 const sequelize = require('#db/sequelize');
 const userModel = require('#server/models/userModel');
-const userAccessModel = require('#server/models/userAccessModel')();
+const userAccessModel = require('#server/models/userAccessModel');
 const accessRequestService = require('#server/services/accessRequest/accessRequestService');
 const permissionsDescription = require('#server/permissions_description');
 const { getExpiracyDateForActivationTokenCreatedAt } = require('#server/utils/auth');

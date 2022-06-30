@@ -1,4 +1,4 @@
-const statsModel = require('#server/models/statsModel/index')();
+const statsModel = require('#server/models/statsModel/index');
 
 module.exports = async (req, res, next) => {
     const { location } = req.body;

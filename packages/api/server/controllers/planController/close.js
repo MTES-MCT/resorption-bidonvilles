@@ -1,6 +1,6 @@
 const { trim } = require('validator');
 const sequelize = require('#db/sequelize');
-const planModel = require('#server/models/planModel')();
+const planModel = require('#server/models/planModel');
 const historize = require('./_common/historize');
 
 function sanitizeClose(data) {

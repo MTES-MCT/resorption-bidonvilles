@@ -154,15 +154,15 @@ describe.only('contactController.contact()', () => {
             });
             const contact = rewiremock.proxy('#server/controllers/contactController/contact', {
                 // Fake userService db models calls
-                '#server/models/organizationCategoryModel': module.exports = () => ({
+                '#server/models/organizationCategoryModel': module.exports = {
                     findOneById: () => 'something',
-                }),
-                '#server/models/organizationTypeModel': module.exports = () => ({
+                },
+                '#server/models/organizationTypeModel': module.exports = {
                     findOneById: () => ({ organization_category: 'public_establishment' }),
-                }),
-                '#server/models/organizationModel': module.exports = () => ({
+                },
+                '#server/models/organizationModel': module.exports = {
                     findOneById: () => ({ fk_type: 12 }),
-                }),
+                },
                 '#server/services/createUser': module.exports = createUserStub,
                 '#server/services/accessRequest/accessRequestService': module.exports = accessRequestStub,
             });
@@ -217,13 +217,13 @@ describe.only('contactController.contact()', () => {
             stubs.handleNewAccessRequest.resolves({});
             const contact = rewiremock.proxy('#server/controllers/contactController/contact', {
                 // Fake userService db models calls
-                '#server/models/organizationCategoryModel': module.exports = () => ({
+                '#server/models/organizationCategoryModel': module.exports = {
                     findOneById: () => 'something',
-                }),
-                '#server/models/organizationModel': module.exports = () => ({
+                },
+                '#server/models/organizationModel': module.exports = {
                     findOneById: () => ({ organization_category: 'territorial_collectivity' }),
                     findOneByLocation: () => ({ fk_category: 'territorial_collectivity' }),
-                }),
+                },
                 '#server/services/createUser': module.exports = createUserStub,
             });
 
@@ -281,12 +281,12 @@ describe.only('contactController.contact()', () => {
             stubs.handleNewAccessRequest.resolves({});
             const contact = rewiremock.proxy('#server/controllers/contactController/contact', {
                 // Fake userService db models calls
-                '#server/models/organizationCategoryModel': module.exports = () => ({
+                '#server/models/organizationCategoryModel': module.exports = {
                     findOneById: () => 'something',
-                }),
-                '#server/models/organizationModel': module.exports = () => ({
+                },
+                '#server/models/organizationModel': module.exports = {
                     findOneById: () => ({ fk_category: 'administration' }),
-                }),
+                },
                 '#server/services/createUser': module.exports = createUserStub,
             });
 
@@ -338,15 +338,15 @@ describe.only('contactController.contact()', () => {
 
             const contact = rewiremock.proxy('#server/controllers/contactController/contact', {
                 // Fake userService db models calls
-                '#server/models/organizationCategoryModel': module.exports = () => ({
+                '#server/models/organizationCategoryModel': module.exports = {
                     findOneById: () => 'something',
-                }),
-                '#server/models/organizationModel': module.exports = () => ({
+                },
+                '#server/models/organizationModel': module.exports = {
                     findAssociationName: () => 'something',
-                }),
-                '#server/models/departementModel': module.exports = () => ({
+                },
+                '#server/models/departementModel': module.exports = {
                     findOne: () => 'something',
-                }),
+                },
                 '#server/services/createUser': module.exports = createUserStub,
             });
 
@@ -403,15 +403,15 @@ describe.only('contactController.contact()', () => {
 
             const contact = rewiremock.proxy('#server/controllers/contactController/contact', {
                 // Fake userService db models calls
-                '#server/models/organizationCategoryModel': module.exports = () => ({
+                '#server/models/organizationCategoryModel': module.exports = {
                     findOneById: () => 'something',
-                }),
-                '#server/models/organizationModel': module.exports = () => ({
+                },
+                '#server/models/organizationModel': module.exports = {
                     findAssociationName: () => null,
-                }),
-                '#server/models/departementModel': module.exports = () => ({
+                },
+                '#server/models/departementModel': module.exports = {
                     findOne: () => 'something',
-                }),
+                },
                 '#server/services/createUser': module.exports = createUserStub,
             });
 

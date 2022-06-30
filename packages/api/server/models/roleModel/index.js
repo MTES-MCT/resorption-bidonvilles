@@ -1,7 +1,7 @@
 const findAll = require('./findAll');
 const findOne = require('./findOne');
 
-module.exports = () => ({
+module.exports = {
     findAll,
     findOne,
-});
+};

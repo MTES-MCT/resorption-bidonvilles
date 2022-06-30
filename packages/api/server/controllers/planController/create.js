@@ -1,11 +1,11 @@
 const sequelize = require('#db/sequelize');
-const planModel = require('#server/models/planModel')();
+const planModel = require('#server/models/planModel');
 const shantytownModel = require('#server/models/shantytownModel');
-const departementModel = require('#server/models/departementModel')();
-const financeTypeModel = require('#server/models/financeTypeModel')();
-const topicModel = require('#server/models/topicModel')();
+const departementModel = require('#server/models/departementModel');
+const financeTypeModel = require('#server/models/financeTypeModel');
+const topicModel = require('#server/models/topicModel');
 const userModel = require('#server/models/userModel');
-const { addAttachments } = require('#server/models/permissionModel')();
+const { addAttachments } = require('#server/models/permissionModel');
 const sanitize = require('./_common/sanitize');
 
 module.exports = async (req, res, next) => {

@@ -1,6 +1,6 @@
 /* eslint-disable newline-per-chained-call */
 const { body, param } = require('express-validator');
-const roleModel = require('#server/models/roleModel')();
+const roleModel = require('#server/models/roleModel');
 const userModel = require('#server/models/userModel');
 
 module.exports = [
