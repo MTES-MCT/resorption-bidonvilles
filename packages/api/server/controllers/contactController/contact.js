@@ -1,7 +1,7 @@
 const { toString: dateToString } = require('#server/utils/date');
 
 const userModel = require('#server/models/userModel');
-const contactFormReferralModel = require('#server/models/contactFormReferralModel/index')();
+const contactFormReferralModel = require('#server/models/contactFormReferralModel/index');
 const userService = require('#server/services/userService');
 const accessRequestService = require('#server/services/accessRequest/accessRequestService');
 const { sendAdminContactMessage, sendContactNewsletterRegistration } = require('#server/mails/mails');

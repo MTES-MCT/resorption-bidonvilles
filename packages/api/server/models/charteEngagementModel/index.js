@@ -1,5 +1,5 @@
 const getLatest = require('./getLatest');
 
-module.exports = () => ({
+module.exports = {
     getLatest,
-});
+};

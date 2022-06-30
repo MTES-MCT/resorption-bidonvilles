@@ -1,6 +1,6 @@
 const sequelize = require('#db/sequelize');
-const charteEngagementModel = require('#server/models/charteEngagementModel')();
-const permissionModel = require('#server/models/permissionModel')();
+const charteEngagementModel = require('#server/models/charteEngagementModel');
+const permissionModel = require('#server/models/permissionModel');
 const { where: fWhere } = require('#server/utils/permission');
 const serializeUser = require('./serializeUser');
 

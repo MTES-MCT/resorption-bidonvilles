@@ -1,4 +1,4 @@
-const planModel = require('#server/models/planModel')();
+const planModel = require('#server/models/planModel');
 
 module.exports = async (req, res) => {
     try {

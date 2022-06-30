@@ -1,4 +1,4 @@
-const organizationModel = require('#server/models/organizationModel/index')();
+const organizationModel = require('#server/models/organizationModel/index');
 const statsDirectoryViewsModel = require('#server/models/statsDirectoryViews');
 
 module.exports = async (req, res, next) => {

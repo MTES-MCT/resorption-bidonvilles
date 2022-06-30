@@ -1,4 +1,4 @@
-const charteEngagementModel = require('#server/models/charteEngagementModel')();
+const charteEngagementModel = require('#server/models/charteEngagementModel');
 const userModel = require('#server/models/userModel');
 
 module.exports = async (req, res, next) => {

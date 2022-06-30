@@ -15,7 +15,7 @@ describe.only('ChangelogModel', () => {
 
             ({ getChangelogFor } = rewiremock.proxy('#server/models/changelogModel', {
                 '#db/sequelize': sequelizeStub,
-            })());
+            }));
         });
 
         it('Si l\'utilisateur se connecte à l\'application pour la première fois, on ne lui retourne aucun changelog', async () => {

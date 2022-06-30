@@ -2,8 +2,8 @@ const find = require('./find');
 const addAttachments = require('./addAttachments');
 const removeAttachments = require('./removeAttachments');
 
-module.exports = () => ({
+module.exports = {
     find,
     addAttachments,
     removeAttachments,
-});
+};

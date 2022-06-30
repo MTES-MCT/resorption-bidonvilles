@@ -2,7 +2,7 @@ const { trim } = require('validator');
 const sequelize = require('#db/sequelize');
 const userModel = require('#server/models/userModel');
 const geoModel = require('#server/models/geoModel');
-const organizationModel = require('#server/models/organizationModel')();
+const organizationModel = require('#server/models/organizationModel');
 
 module.exports = async (req, res, next) => {
     // parse query

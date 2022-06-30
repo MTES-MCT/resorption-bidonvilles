@@ -1,5 +1,5 @@
 const moment = require('moment');
-const userActivityModel = require('#server/models/userActivityModel')();
+const userActivityModel = require('#server/models/userActivityModel');
 
 module.exports = async (req, res, next) => {
     const {

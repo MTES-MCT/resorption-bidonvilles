@@ -1,4 +1,4 @@
-const organizationTypeModel = require('#server/models/organizationTypeModel')();
+const organizationTypeModel = require('#server/models/organizationTypeModel');
 
 module.exports = async (req, res) => res.status(200).send({
     success: true,

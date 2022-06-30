@@ -1,11 +1,10 @@
 const { isEmail } = require('validator');
-const sequelize = require('#db/sequelize');
 const checkPassword = require('#server/controllers/userController/helpers/checkPassword');
 const userModel = require('#server/models/userModel');
-const organizationCategoryModel = require('#server/models/organizationCategoryModel')(sequelize);
-const organizationTypeModel = require('#server/models/organizationTypeModel')(sequelize);
-const organizationModel = require('#server/models/organizationModel')(sequelize);
-const departementModel = require('#server/models/departementModel')(sequelize);
+const organizationCategoryModel = require('#server/models/organizationCategoryModel');
+const organizationTypeModel = require('#server/models/organizationTypeModel');
+const organizationModel = require('#server/models/organizationModel');
+const departementModel = require('#server/models/departementModel');
 
 class MultipleError extends Error {
     constructor(messages, ...args) {

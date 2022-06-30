@@ -1,5 +1,5 @@
 const JSONToCSV = require('json2csv');
-const { listExport } = require('#server/models/planModel')();
+const { listExport } = require('#server/models/planModel');
 
 module.exports = async (req, res) => {
     try {

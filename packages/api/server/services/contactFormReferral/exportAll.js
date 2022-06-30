@@ -1,5 +1,5 @@
 const ServiceError = require('#server/errors/ServiceError');
-const { list } = require('#server/models/contactFormReferralModel')();
+const { list } = require('#server/models/contactFormReferralModel');
 const { where: fWhere } = require('#server/utils/permission');
 
 module.exports = async (user) => {

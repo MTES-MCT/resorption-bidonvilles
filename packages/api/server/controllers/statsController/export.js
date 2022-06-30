@@ -1,5 +1,5 @@
 const JSONToCSV = require('json2csv');
-const statsModel = require('#server/models/statsModel')();
+const statsModel = require('#server/models/statsModel');
 
 const groupByKey = (list, key) => list.reduce((hash, obj) => ({ ...hash, [obj[key]]: { ...hash[obj[key]], ...obj } }), {});
 
