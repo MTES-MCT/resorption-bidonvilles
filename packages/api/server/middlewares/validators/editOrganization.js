@@ -1,6 +1,6 @@
 /* eslint-disable newline-per-chained-call */
 const { body, param } = require('express-validator');
-const organizationModel = require('#server/models/organizationModel')();
+const organizationModel = require('#server/models/organizationModel');
 
 module.exports = [
     param('id')

@@ -61,6 +61,8 @@ module.exports = (user, data, properties, closedTowns, closingSolutions) => {
             properties.populationMinors12To16,
             properties.populationMinors16To18,
             properties.minorsInSchool,
+            properties.caravans,
+            properties.huts,
             properties.socialOrigins,
         ],
     });

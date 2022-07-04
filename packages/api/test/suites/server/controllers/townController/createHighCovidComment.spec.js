@@ -484,7 +484,6 @@ describe.only('townController.createHighCovidComment()', () => {
         it('responds with the proper error message', () => {
             expect(res.send).to.have.been.calledOnceWith({
                 user_message: 'Une erreur est survenue lors de l\'écriture en base de données',
-                developer_message: 'Failed saving the comment into database: Something bad happened',
             });
         });
     });

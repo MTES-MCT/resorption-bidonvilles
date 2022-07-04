@@ -1,13 +1,10 @@
 const path = require('path');
 const express = require('express');
-const sequelize = require('#db/sequelize');
-const models = require('#server/models')(sequelize);
 
 // controllers
-const middlewares = require('#server/middlewares')(models);
-import controllersFn from '#server/controllers';
+const middlewares = require('#server/middlewares');
+import controllers from '#server/controllers';
 const validators = require('#server/middlewares/validators');
-const controllers = controllersFn(models);
 
 export default (app) => {
     app.use('/assets', express.static(path.resolve(__dirname, '../../assets')));

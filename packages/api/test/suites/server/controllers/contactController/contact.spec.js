@@ -102,7 +102,7 @@ describe.only('contactController.contact()', () => {
 
     describe('Success cases', () => {
         it('Should a simple message', async () => {
-            const controller = rewiremock.proxy('#server/controllers/contactController', mockModels)({});
+            const contact = rewiremock.proxy('#server/controllers/contactController/contact', mockModels);
 
             req.body = {
                 access_request_message: 'ceci est un message',
@@ -114,7 +114,7 @@ describe.only('contactController.contact()', () => {
             };
             res = mockRes();
 
-            await controller.contact(req, res, sinon.stub());
+            await contact(req, res, sinon.stub());
 
             // It should send a message to all national admins and ensure that it returns a 200
             expect(res.status).to.have.been.calledOnceWith(200);
@@ -122,7 +122,7 @@ describe.only('contactController.contact()', () => {
         });
 
         it('Should handle an access request for a non actor', async () => {
-            const controller = rewiremock.proxy('#server/controllers/contactController', mockModels)({});
+            const contact = rewiremock.proxy('#server/controllers/contactController/contact', mockModels);
 
             req.body = {
                 access_request_message: 'ceci est un message',
@@ -135,7 +135,7 @@ describe.only('contactController.contact()', () => {
             };
             res = mockRes();
 
-            await controller.contact(req, res, sinon.stub());
+            await contact(req, res, sinon.stub());
 
             // It should send a message to all national admins and ensure that it returns a 200
             expect(res.status).to.have.been.calledOnceWith(200);
@@ -152,20 +152,20 @@ describe.only('contactController.contact()', () => {
             const accessRequestStub = sinon.stub({
                 handleNewAccessRequest: () => {},
             });
-            const controller = rewiremock.proxy('#server/controllers/contactController', {
+            const contact = rewiremock.proxy('#server/controllers/contactController/contact', {
                 // Fake userService db models calls
-                '#server/models/organizationCategoryModel': module.exports = () => ({
+                '#server/models/organizationCategoryModel': module.exports = {
                     findOneById: () => 'something',
-                }),
-                '#server/models/organizationTypeModel': module.exports = () => ({
+                },
+                '#server/models/organizationTypeModel': module.exports = {
                     findOneById: () => ({ organization_category: 'public_establishment' }),
-                }),
-                '#server/models/organizationModel': module.exports = () => ({
+                },
+                '#server/models/organizationModel': module.exports = {
                     findOneById: () => ({ fk_type: 12 }),
-                }),
+                },
                 '#server/services/createUser': module.exports = createUserStub,
                 '#server/services/accessRequest/accessRequestService': module.exports = accessRequestStub,
-            })({});
+            });
 
             req.body = {
                 request_type: ['access-request'],
@@ -188,7 +188,7 @@ describe.only('contactController.contact()', () => {
             };
             res = mockRes();
 
-            await controller.contact(req, res, sinon.stub());
+            await contact(req, res, sinon.stub());
 
             // It should send a message to all admins and ensure that it returns a 200
             expect(createUserStub).to.have.been.calledOnceWith({
@@ -215,17 +215,17 @@ describe.only('contactController.contact()', () => {
             stubs.findOneByEmail = sinon.stub(userModel, 'findOneByEmail');
             stubs.findOneByEmail.resolves(null);
             stubs.handleNewAccessRequest.resolves({});
-            const controller = rewiremock.proxy('#server/controllers/contactController', {
+            const contact = rewiremock.proxy('#server/controllers/contactController/contact', {
                 // Fake userService db models calls
-                '#server/models/organizationCategoryModel': module.exports = () => ({
+                '#server/models/organizationCategoryModel': module.exports = {
                     findOneById: () => 'something',
-                }),
-                '#server/models/organizationModel': module.exports = () => ({
+                },
+                '#server/models/organizationModel': module.exports = {
                     findOneById: () => ({ organization_category: 'territorial_collectivity' }),
                     findOneByLocation: () => ({ fk_category: 'territorial_collectivity' }),
-                }),
+                },
                 '#server/services/createUser': module.exports = createUserStub,
-            })({});
+            });
 
             req.body = {
                 request_type: ['access-request'],
@@ -252,7 +252,7 @@ describe.only('contactController.contact()', () => {
             };
             res = mockRes();
 
-            await controller.contact(req, res, sinon.stub());
+            await contact(req, res, sinon.stub());
 
             // It should send a message to all admins and ensure that it returns a 200
             expect(createUserStub).to.have.been.calledOnceWith({
@@ -279,16 +279,16 @@ describe.only('contactController.contact()', () => {
             stubs.findOneByEmail = sinon.stub(userModel, 'findOneByEmail');
             stubs.findOneByEmail.resolves(null);
             stubs.handleNewAccessRequest.resolves({});
-            const controller = rewiremock.proxy('#server/controllers/contactController', {
+            const contact = rewiremock.proxy('#server/controllers/contactController/contact', {
                 // Fake userService db models calls
-                '#server/models/organizationCategoryModel': module.exports = () => ({
+                '#server/models/organizationCategoryModel': module.exports = {
                     findOneById: () => 'something',
-                }),
-                '#server/models/organizationModel': module.exports = () => ({
+                },
+                '#server/models/organizationModel': module.exports = {
                     findOneById: () => ({ fk_category: 'administration' }),
-                }),
+                },
                 '#server/services/createUser': module.exports = createUserStub,
-            })({});
+            });
 
             req.body = {
                 request_type: ['access-request'],
@@ -308,7 +308,7 @@ describe.only('contactController.contact()', () => {
             };
             res = mockRes();
 
-            await controller.contact(req, res, sinon.stub());
+            await contact(req, res, sinon.stub());
 
             // It should send a message to all admins and ensure that it returns a 200
             expect(createUserStub).to.have.been.calledOnceWith({
@@ -336,19 +336,19 @@ describe.only('contactController.contact()', () => {
             stubs.findOneByEmail.resolves(null);
             stubs.handleNewAccessRequest.resolves({});
 
-            const controller = rewiremock.proxy('#server/controllers/contactController', {
+            const contact = rewiremock.proxy('#server/controllers/contactController/contact', {
                 // Fake userService db models calls
-                '#server/models/organizationCategoryModel': module.exports = () => ({
+                '#server/models/organizationCategoryModel': module.exports = {
                     findOneById: () => 'something',
-                }),
-                '#server/models/organizationModel': module.exports = () => ({
+                },
+                '#server/models/organizationModel': module.exports = {
                     findAssociationName: () => 'something',
-                }),
-                '#server/models/departementModel': module.exports = () => ({
+                },
+                '#server/models/departementModel': module.exports = {
                     findOne: () => 'something',
-                }),
+                },
                 '#server/services/createUser': module.exports = createUserStub,
-            })({});
+            });
 
             req.body = {
                 request_type: ['access-request'],
@@ -372,7 +372,7 @@ describe.only('contactController.contact()', () => {
             };
             res = mockRes();
 
-            await controller.contact(req, res, sinon.stub());
+            await contact(req, res, sinon.stub());
 
             // It should send a message to all admins and ensure that it returns a 200
             expect(createUserStub).to.have.been.calledOnceWith({
@@ -401,19 +401,19 @@ describe.only('contactController.contact()', () => {
             stubs.findOneByEmail.resolves(null);
             stubs.handleNewAccessRequest.resolves({});
 
-            const controller = rewiremock.proxy('#server/controllers/contactController', {
+            const contact = rewiremock.proxy('#server/controllers/contactController/contact', {
                 // Fake userService db models calls
-                '#server/models/organizationCategoryModel': module.exports = () => ({
+                '#server/models/organizationCategoryModel': module.exports = {
                     findOneById: () => 'something',
-                }),
-                '#server/models/organizationModel': module.exports = () => ({
+                },
+                '#server/models/organizationModel': module.exports = {
                     findAssociationName: () => null,
-                }),
-                '#server/models/departementModel': module.exports = () => ({
+                },
+                '#server/models/departementModel': module.exports = {
                     findOne: () => 'something',
-                }),
+                },
                 '#server/services/createUser': module.exports = createUserStub,
-            })({});
+            });
 
             req.body = {
                 request_type: ['access-request'],
@@ -436,7 +436,7 @@ describe.only('contactController.contact()', () => {
             };
             res = mockRes();
 
-            await controller.contact(req, res, sinon.stub());
+            await contact(req, res, sinon.stub());
 
             // It should send a message to all admins and ensure that it returns a 200
             expect(createUserStub).to.have.been.calledOnceWith({

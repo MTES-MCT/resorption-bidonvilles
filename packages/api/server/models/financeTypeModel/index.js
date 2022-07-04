@@ -1,5 +1,5 @@
 const findAll = require('./findAll');
 
-module.exports = () => ({
+module.exports = {
     findAll,
-});
+};

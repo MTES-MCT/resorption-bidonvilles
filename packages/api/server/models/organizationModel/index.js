@@ -9,7 +9,7 @@ const findOneById = require('./findOneById');
 const findOneByLocation = require('./findOneByLocation');
 const getName = require('./getName');
 
-module.exports = () => ({
+module.exports = {
     activate,
     updateBeingFunded,
     create,
@@ -20,4 +20,4 @@ module.exports = () => ({
     findOneById,
     findOneByLocation,
     getName,
-});
+};

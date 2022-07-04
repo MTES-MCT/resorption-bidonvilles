@@ -1,7 +1,7 @@
 const getChangelogFor = require('./getChangelogFor');
 const getLastChangelogVersion = require('./getLastChangelogVersion');
 
-module.exports = () => ({
+module.exports = {
     getChangelogFor,
     getLastChangelogVersion,
-});
+};

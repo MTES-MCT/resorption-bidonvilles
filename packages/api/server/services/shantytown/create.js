@@ -22,6 +22,8 @@ module.exports = async (townData, user) => {
         populationMinors12To16: townData.population_minors_12_16,
         populationMinors16To18: townData.population_minors_16_18,
         minorsInSchool: townData.minors_in_school,
+        caravans: townData.caravans,
+        huts: townData.huts,
         electricityType: townData.electricity_type,
         electricityComments: townData.electricity_comments,
         accessToSanitary: townData.access_to_sanitary,

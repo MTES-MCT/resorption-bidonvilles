@@ -105,7 +105,7 @@ export default {
     computed: {
         pinVariant() {
             const { months } = getSince(this.shantytown.updatedAt);
-            return months >= 1 ? "pin_red" : "pin";
+            return months >= 3 ? "pin_red" : "pin";
         }
     },
 
