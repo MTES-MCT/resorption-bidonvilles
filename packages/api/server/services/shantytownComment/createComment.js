@@ -1,6 +1,7 @@
 
 const shantytownCommentModel = require('#server/models/shantytownCommentModel');
 const shantytownModel = require('#server/models/shantytownModel');
+const shantytownCommentTagModel = require('#server/models/shantytownCommentTagModel');
 const mattermostUtils = require('#server/utils/mattermost');
 
 const userModel = require('#server/models/userModel');
@@ -23,14 +24,21 @@ module.exports = async (comment, shantytown, author) => {
             targets: comment.targets,
             fk_shantytown: shantytown.id,
             created_by: author.id,
-        });
+        })
+            .then(async (id) => {
+                const { tags } = comment;
+                // Enregistrement des tags dans la table shantytown_comment_tags
+                await Promise.all(tags.map(async (tag) => {
+                    await shantytownCommentTagModel.create(id, tag);
+                }));
+            });
     } catch (error) {
         throw new ServiceError('insert_failed', error);
     }
 
     // on tente d'envoyer une notification Mattermost
     try {
-        await mattermostUtils.triggerNewComment(comment.description, shantytown, author);
+        await mattermostUtils.triggerNewComment(comment.description, comment.tagLabels, shantytown, author);
     } catch (error) {
         // ignore
     }
