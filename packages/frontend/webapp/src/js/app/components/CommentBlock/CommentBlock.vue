@@ -23,7 +23,12 @@
             Date de l'intervention:
             {{ formatDate(comment.covid.date, "d M y à h:i") }}
         </div>
-        <div v-if="comment.private">
+        <div
+            v-if="
+                comment.user_target_name.length > 0 ||
+                    comment.organization_target_name.length > 0
+            "
+        >
             <Icon icon="lock" class="text-red" />
             <span class="font-bold"
                 >Message réservé aux structures et utilisateurs suivants :</span

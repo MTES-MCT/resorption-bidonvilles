@@ -61,7 +61,6 @@ module.exports = (location = null, privateLocation = null) => {
             sc.fk_shantytown AS "shantytownId",
             sc.created_at AS "commentCreatedAt",
             sc.created_by "commentCreatedBy",
-            sc.private AS "commentPrivate",
             u.user_id AS "userId",
             u.first_name AS "userFirstName",
             u.last_name AS "userLastName",

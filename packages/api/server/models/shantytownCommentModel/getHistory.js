@@ -16,40 +16,40 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate, o
         public: restrict(location).for(user).askingTo('list', 'shantytown_comment'),
         private: restrict(location).for(user).askingTo('listPrivate', 'shantytown_comment'),
     };
-
     if (restrictedLocations.public === null && restrictedLocations.private === null) {
         return [];
     }
 
     // public comments
     if (restrictedLocations.public === null) {
-        where.push('private != false AND false');
+        where.push('(uca.user_target_id IS NULL AND oca.organization_target_id IS NULL) AND false');
     } else if (restrictedLocations.public.type !== 'nation') {
-        where.push(`private = false AND ${fromGeoLevelToTableName(restrictedLocations.public.type)}.code = :shantytownCommentLocationCode`);
+        where.push(`(uca.user_target_id IS NULL AND oca.organization_target_id IS NULL) AND ${fromGeoLevelToTableName(restrictedLocations.public.type)}.code = :shantytownCommentLocationCode`);
         if (restrictedLocations.public.type === 'city') {
-            where.push(`private = false AND ${fromGeoLevelToTableName(restrictedLocations.public.type)}.fk_main = :shantytownCommentLocationCode`);
+            where.push(`(uca.user_target_id IS NULL AND oca.organization_target_id IS NULL) AND ${fromGeoLevelToTableName(restrictedLocations.public.type)}.fk_main = :shantytownCommentLocationCode`);
         }
         replacements.shantytownCommentLocationCode = restrictedLocations.public[restrictedLocations.public.type].code;
     } else {
-        where.push('private = false');
+        where.push('(uca.user_target_id IS NULL AND oca.organization_target_id IS NULL)');
     }
 
-    // private comments
+    // private comments for user with listPrivate permission
     if (restrictedLocations.private === null) {
-        where.push('private != true AND false');
+        where.push('false');
     } else if (restrictedLocations.private.type !== 'nation') {
-        where.push(`private = true AND ${fromGeoLevelToTableName(restrictedLocations.private.type)}.code = :privateShantytownCommentLocationCode`);
+        where.push(`${fromGeoLevelToTableName(restrictedLocations.private.type)}.code = :privateShantytownCommentLocationCode`);
         if (restrictedLocations.public.type === 'city') {
-            where.push(`private = true AND ${fromGeoLevelToTableName(restrictedLocations.private.type)}.fk_main = :privateShantytownCommentLocationCode`);
+            where.push(`${fromGeoLevelToTableName(restrictedLocations.private.type)}.fk_main = :privateShantytownCommentLocationCode`);
         }
         replacements.privateShantytownCommentLocationCode = restrictedLocations.private[restrictedLocations.private.type].code;
     } else {
-        where.push('private = true');
+        where.push('true');
     }
-    where.push(`${user.id} =  ANY(uca.user_target_id)`);
-    where.push(`${user.organization.id} = ANY(oca.organization_target_id)`);
-    const whereLastDate = `${where.length > 0 ? 'AND' : 'WHERE'} comments.created_at < '${lastDate}'`;
 
+    // private comments for targeted users
+    where.push(`(${user.id} =  ANY(uca.user_target_id) OR ${user.organization.id} = ANY(oca.organization_target_id))`);
+
+    const whereLastDate = `${where.length > 0 ? 'AND' : 'WHERE'} comments.created_at < '${lastDate}'`;
     const activities = await sequelize.query(
         `WITH organization_comment_access AS (
            SELECT 
@@ -73,7 +73,6 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate, o
                 comments.shantytown_comment_id AS "commentId",
                 comments.description AS "commentDescription",
                 comments.created_at AS "commentCreatedAt",
-                comments.private AS "commentPrivate",
                 comments.created_by AS "commentCreatedBy",
                 oca.organization_target_name,
                 uca.user_target_name,

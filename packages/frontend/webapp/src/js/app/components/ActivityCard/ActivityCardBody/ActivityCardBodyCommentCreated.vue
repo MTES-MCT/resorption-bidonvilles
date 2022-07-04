@@ -9,7 +9,13 @@
                 :tag="tag"
             />
         </div>
-        <div class="mb-2" v-if="activity.comment.private">
+        <div
+            class="mb-2"
+            v-if="
+                activity.comment.user_target_name.length > 0 ||
+                    activity.comment.organization_target_name.length > 0
+            "
+        >
             <Icon icon="lock" class="text-red" />
             <span class="font-bold"
                 >Message réservé aux structures et utilisateurs suivants :</span

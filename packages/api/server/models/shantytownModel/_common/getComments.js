@@ -37,7 +37,6 @@ module.exports = async (user, shantytownIds, covid = false) => {
             shantytown_comments.description AS "commentDescription",
             shantytown_comments.created_at AS "commentCreatedAt",
             shantytown_comments.created_by AS "commentCreatedBy",
-            shantytown_comments.private AS "commentPrivate",
             shantytown_covid_comments.date AS "covidCommentDate",
             shantytown_covid_comments.equipe_maraude AS "covidEquipeMaraude",
             shantytown_covid_comments.equipe_sanitaire AS "covidEquipeSanitaire",
@@ -67,7 +66,7 @@ module.exports = async (user, shantytownIds, covid = false) => {
         WHERE
             shantytown_comments.fk_shantytown IN (:ids) 
             AND shantytown_covid_comment_id IS ${covid === true ? 'NOT ' : ''}NULL
-            ${filterPrivateComments === true ? `AND (private IS FALSE OR ${user.id} = ANY(user_comment_access.user_target_id) OR ${user.organization.id} = ANY(organization_comment_access.organization_target_id))` : ''}
+            ${filterPrivateComments === true ? `AND ((${user.id} = ANY(user_comment_access.user_target_id) OR ${user.organization.id} = ANY(organization_comment_access.organization_target_id)) OR (user_comment_access.user_target_id IS NULL AND organization_comment_access.organization_target_id IS NULL))` : ''}
         ORDER BY shantytown_comments.created_at DESC`,
         {
             type: sequelize.QueryTypes.SELECT,

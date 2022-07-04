@@ -8,7 +8,6 @@ module.exports = async (req, res, next) => {
             {
                 description: req.body.description,
                 private: req.body.private,
-                privateChooseTarget: req.body.privateChooseTarget,
                 targets: req.body.targets,
             },
             req.body.shantytown,

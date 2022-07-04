@@ -3,7 +3,6 @@ module.exports = comment => Object.assign(
         id: comment.commentId,
         description: comment.commentDescription,
         createdAt: comment.commentCreatedAt !== null ? (comment.commentCreatedAt.getTime() / 1000) : null,
-        private: comment.commentPrivate,
         organization_target_name: comment.organization_target_name || [],
         user_target_name: comment.user_target_name || [],
         createdBy: {

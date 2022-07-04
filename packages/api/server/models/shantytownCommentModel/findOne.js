@@ -30,7 +30,6 @@ module.exports = async (id) => {
             sc.fk_shantytown AS "shantytownId",
             sc.created_at AS "commentCreatedAt",
             sc.created_by "commentCreatedBy",
-            sc.private AS "commentPrivate",
             u.first_name AS "userFirstName",
             u.last_name AS "userLastName",
             u.position AS "userPosition",

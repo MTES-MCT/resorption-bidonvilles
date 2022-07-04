@@ -163,7 +163,7 @@ export default {
             type: Object
         },
         departementCode: {
-            type: Number
+            type: String
         }
     },
     methods: {
@@ -222,7 +222,6 @@ export default {
                         comment: {
                             description: this.newComment,
                             private: this.isPrivate,
-                            privateChooseTarget: this.isPrivateChooseTarget,
                             targets: this.listOfTargets
                         }
                     }

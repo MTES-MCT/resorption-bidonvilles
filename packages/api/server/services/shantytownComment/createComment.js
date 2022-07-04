@@ -21,7 +21,6 @@ module.exports = async (comment, shantytown, author) => {
         commentId = await shantytownCommentModel.create({
             description: comment.description,
             private: comment.private,
-            privateChooseTarget: comment.privateChooseTarget,
             targets: comment.targets,
             fk_shantytown: shantytown.id,
             created_by: author.id,
