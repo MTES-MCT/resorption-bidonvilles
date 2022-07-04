@@ -365,6 +365,10 @@ export default {
                     minors_in_school: this.strToInt(
                         this.town.people.populationMinors.minorsInSchool
                     ),
+                    caravans: this.strToInt(
+                        this.town.people.caravansAndHuts.caravans
+                    ),
+                    huts: this.strToInt(this.town.people.caravansAndHuts.huts),
                     social_origins: this.town.people.social_origins,
                     census_status: this.nullableStr(
                         this.town.people.census_status

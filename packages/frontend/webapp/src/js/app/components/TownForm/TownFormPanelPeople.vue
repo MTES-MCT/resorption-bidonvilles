@@ -14,6 +14,13 @@
         </FormParagraph>
 
         <FormParagraph
+            title="Combien y a-t-il de caravanes et de de cabanes sur le site ?"
+        >
+            <InputCaravansAndHuts v-model="input.caravansAndHuts">
+            </InputCaravansAndHuts>
+        </FormParagraph>
+
+        <FormParagraph
             title="Quel est le statut du diagnostic social ?"
             :showMandatoryStar="true"
         >
@@ -38,6 +45,7 @@
 import InputPopulation from "./inputs/InputPopulation.vue";
 import InputPopulationMinors from "./inputs/InputPopulationMinors.vue";
 import InputSocialOrigins from "./inputs/InputSocialOrigins.vue";
+import InputCaravansAndHuts from "./inputs/InputCaravansAndHuts.vue";
 import InputCensusStatus from "./inputs/InputCensusStatus.vue";
 import InputCensusConductedAt from "./inputs/InputCensusConductedAt.vue";
 import InputCensusConductedBy from "./inputs/InputCensusConductedBy.vue";
@@ -47,6 +55,7 @@ export default {
         InputPopulation,
         InputPopulationMinors,
         InputSocialOrigins,
+        InputCaravansAndHuts,
         InputCensusStatus,
         InputCensusConductedAt,
         InputCensusConductedBy

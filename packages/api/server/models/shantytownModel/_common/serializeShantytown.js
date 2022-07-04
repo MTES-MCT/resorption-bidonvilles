@@ -68,6 +68,8 @@ module.exports = (town, user) => {
         populationMinors12To16: town.populationMinors12To16,
         populationMinors16To18: town.populationMinors16To18,
         minorsInSchool: town.minorsInSchool,
+        caravans: town.caravans,
+        huts: town.huts,
         electricityType: {
             uid: town.electricityTypeUid,
             id: town.electricityTypeId,

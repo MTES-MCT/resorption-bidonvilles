@@ -39,6 +39,8 @@ module.exports = async (req, res, next) => {
                 population_minors_12_16: req.body.population_minors_12_16,
                 population_minors_16_18: req.body.population_minors_16_18,
                 minors_in_school: req.body.minors_in_school,
+                caravans: req.body.caravans,
+                huts: req.body.huts,
                 fk_electricity_type: req.body.electricity_type,
                 electricity_comments: req.body.electricity_comments,
                 access_to_sanitary: req.body.access_to_sanitary,
