@@ -185,7 +185,7 @@ async function triggerActorInvitedAlert(town, host, invited) {
     await actorInvitedAlert.send(mattermostMessage);
 }
 
-async function triggerNewComment(comment, town, author) {
+async function triggerNewComment(comment, tagLabels, town, author) {
     if (!mattermost) {
         return;
     }
@@ -196,20 +196,40 @@ async function triggerNewComment(comment, town, author) {
     const username = formatUsername(author);
     const townLink = formatTownLink(town.id, address);
 
+    const fields = [];
+
+    fields.push({
+        short: false,
+        value: `*Commentaire*: ${comment}`,
+    });
+
+    if (tagLabels) {
+        let tagsToDisplay = '';
+        let tagIterator = 1;
+        tagsToDisplay += `*Qualification${tagLabels.length > 1 ? 's' : ''} du commentaire*: `;
+        tagLabels.forEach((tag) => {
+            if (tagIterator < tagLabels.length) {
+                tagsToDisplay += `${tag.label}, `;
+            } else {
+                tagsToDisplay += `${tag.label}.`;
+            }
+            tagIterator += 1;
+        });
+        fields.push({
+            short: false,
+            value: tagsToDisplay,
+        });
+    }
     const mattermostMessage = {
-        channel: '#notif-nouveau-commentaire',
+        // channel: '#notif-nouveau-commentaire',
+        channel: '#notif-dev-test',
         username: 'Alerte Résorption Bidonvilles',
         icon_emoji: ':robot:',
         text: `:rotating_light: Commentaire sur le site: ${townLink} par ${username}`,
         attachments: [
             {
                 color: '#f2c744',
-                fields: [
-                    {
-                        short: false,
-                        value: `*Commentaire*: ${comment}`,
-                    },
-                ],
+                fields,
             },
         ],
     };
