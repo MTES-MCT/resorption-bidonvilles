@@ -8,6 +8,8 @@ module.exports = async (req, res, next) => {
             {
                 description: req.body.description,
                 targets: req.body.targets,
+                tags: req.body.tags,
+                tagLabels: req.body.tagLabels,
             },
             req.body.shantytown,
             req.user,
