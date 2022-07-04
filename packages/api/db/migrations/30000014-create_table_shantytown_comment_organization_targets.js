@@ -77,7 +77,8 @@ module.exports = {
             LEFT JOIN organization_types ON organization_types.organization_type_id = localized_organizations.fk_type
             WHERE fk_role = 'direct_collaborator'
             AND ((location_type = 'region' AND localized_organizations.region_code = '${region_code}')
-            OR localized_organizations.departement_code = '${departement_code}')`,
+            OR localized_organizations.departement_code = '${departement_code}'
+            OR location_type = 'nation')`,
             { type: queryInterface.sequelize.QueryTypes.SELECT, transaction },
         ).then(organizations => queryInterface.bulkInsert(
             'shantytown_comment_organization_targets',
