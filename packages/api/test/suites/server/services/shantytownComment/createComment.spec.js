@@ -53,7 +53,6 @@ describe.only('services/shantytownComment', () => {
                     comment: {
                         description: 'description',
                         private: true,
-                        privateChooseTarget: false,
                         targets: [],
                     },
                     shantytown: { id: 1 },
@@ -102,7 +101,6 @@ describe.only('services/shantytownComment', () => {
                 expect(dependencies.createComment).to.have.been.calledOnceWith({
                     description: 'description',
                     private: true,
-                    privateChooseTarget: false,
                     targets: [],
                     fk_shantytown: 1,
                     created_by: 2,
@@ -151,7 +149,6 @@ describe.only('services/shantytownComment', () => {
             const comment = {
                 description: 'description',
                 private: true,
-                privateChooseTarget: false,
                 targets: [],
             };
             const user = fakeUser();
@@ -161,7 +158,6 @@ describe.only('services/shantytownComment', () => {
                     .withArgs({
                         description: comment.description,
                         private: comment.private,
-                        privateChooseTarget: comment.privateChooseTarget,
                         targets: comment.targets,
                         fk_shantytown: 1,
                         created_by: user.id,
@@ -189,7 +185,6 @@ describe.only('services/shantytownComment', () => {
             const comment = {
                 description: 'description',
                 private: true,
-                privateChooseTarget: false,
                 targets: [],
             };
             const user = fakeUser();
@@ -216,7 +211,6 @@ describe.only('services/shantytownComment', () => {
             const comment = {
                 description: 'description',
                 private: true,
-                privateChooseTarget: false,
                 targets: [],
             };
             const user = fakeUser();

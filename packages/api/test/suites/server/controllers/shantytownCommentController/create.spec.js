@@ -31,7 +31,6 @@ describe.only('controllers/shantytownComment', () => {
                     body: {
                         description: 'description',
                         private: true,
-                        privateChooseTarget: false,
                         targets: [],
                         shantytown,
                     },
@@ -45,7 +44,6 @@ describe.only('controllers/shantytownComment', () => {
                 {
                     description: 'description',
                     private: true,
-                    privateChooseTarget: false,
                     targets: [],
                 },
                 shantytown,
