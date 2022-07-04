@@ -25,4 +25,11 @@ module.exports = [
 
     body('private')
         .customSanitizer(value => value !== false),
+
+    body('targets.organizations')
+        .customSanitizer(value => (Array.isArray(value) ? value : [])),
+
+    body('targets.users')
+        .customSanitizer(value => (Array.isArray(value) ? value : [])),
+
 ];
