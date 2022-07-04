@@ -42,7 +42,7 @@ export default {
                 pin: `px-2 py-1 bg-blue100 text-primary ${
                     this.uppercase ? "uppercase" : ""
                 } text-xs`,
-                pin_red: `px-2 py-1 bg-red200 text-red600 ${
+                pin_red: `px-2 py-1 bg-red600 text-white ${
                     this.uppercase ? "uppercase" : ""
                 } text-xs`,
                 info: "bg-blue100 text-primary px-2 py-1 text-xs"
