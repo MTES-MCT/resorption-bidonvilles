@@ -30,13 +30,29 @@ module.exports = async (user, shantytownIds, covid = false) => {
             FROM shantytown_comment_user_targets scut 
             LEFT JOIN users ON users.user_id = scut.fk_user
             GROUP BY scut.fk_comment
-        )
+        ),
+        comment_tags AS (
+                        SELECT
+                              sct.fk_shantytown_comment,
+                              ARRAY_AGG(sct.fk_comment_tag) AS tags
+                          FROM
+                              shantytown_comments AS sc
+                          LEFT JOIN
+                              shantytown_comment_tags AS sct
+                          ON
+                              sct.fk_shantytown_comment = sc.shantytown_comment_id
+                          WHERE
+                              fk_shantytown IN (:ids)
+                        GROUP BY
+                              sct.fk_shantytown_comment
+                    )
         SELECT
             shantytown_comments.shantytown_comment_id AS "commentId",
             shantytown_comments.fk_shantytown AS "shantytownId",
             shantytown_comments.description AS "commentDescription",
             shantytown_comments.created_at AS "commentCreatedAt",
             shantytown_comments.created_by AS "commentCreatedBy",
+            comment_tags.tags AS "tags",
             shantytown_covid_comments.date AS "covidCommentDate",
             shantytown_covid_comments.equipe_maraude AS "covidEquipeMaraude",
             shantytown_covid_comments.equipe_sanitaire AS "covidEquipeSanitaire",
@@ -58,6 +74,7 @@ module.exports = async (user, shantytownIds, covid = false) => {
             organization_comment_access.organization_target_name,
             user_comment_access.user_target_name
         FROM shantytown_comments
+        LEFT JOIN comment_tags ON comment_tags.fk_shantytown_comment = shantytown_comments.shantytown_comment_id
         LEFT JOIN users ON shantytown_comments.created_by = users.user_id
         LEFT JOIN organizations ON users.fk_organization = organizations.organization_id
         LEFT JOIN shantytown_covid_comments ON shantytown_covid_comments.fk_comment = shantytown_comments.shantytown_comment_id

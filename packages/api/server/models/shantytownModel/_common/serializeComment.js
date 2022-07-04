@@ -14,6 +14,7 @@ module.exports = comment => Object.assign(
             organization_id: comment.organizationId,
         },
         shantytown: comment.shantytownId,
+        tags: comment.tags,
     },
     comment.covidCommentDate
         ? {
