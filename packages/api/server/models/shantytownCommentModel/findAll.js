@@ -8,33 +8,39 @@ const sequelize = require('#db/sequelize');
  *                                     a subset of "location" (for instance, you are not expected to
  *                                     give a departement as location, and a region as privateLocation)
  */
-module.exports = (location = null, privateLocation = null) => {
+module.exports = (user, location = null, privateLocation = null) => {
     const additionalWhere = [];
     const replacements = {};
     if (location && location.type && location.code) {
         replacements.publicLocationCode = location.code;
 
         if (location.type === 'region') {
-            additionalWhere.push('d.fk_region = :publicLocationCode');
+            additionalWhere.push('(uca.user_target_id IS NULL AND oca.organization_target_id IS NULL) AND d.fk_region = :publicLocationCode');
         } else if (location.type === 'departement') {
-            additionalWhere.push('d.code = :publicLocationCode');
+            additionalWhere.push('(uca.user_target_id IS NULL AND oca.organization_target_id IS NULL) d.code = :publicLocationCode');
         }
     }
+
+    // private comments for user with listPrivate.shantytown_comment permission
 
     if (privateLocation && privateLocation.type && privateLocation.code) {
         replacements.privateLocationCode = privateLocation.code;
 
-        // private comments are a subset of public comments, hence the ("sc.private IS FALSE OR ...")
+        // private comments are a subset of public comments
         if (privateLocation.type === 'region') {
-            additionalWhere.push('(sc.private IS FALSE OR d.fk_region = :privateLocationCode)');
+            additionalWhere.push('(d.fk_region = :privateLocationCode)');
         } else if (privateLocation.type === 'departement') {
-            additionalWhere.push('(sc.private IS FALSE OR d.code = :privateLocationCode)');
+            additionalWhere.push('(OR d.code = :privateLocationCode)');
         } else if (privateLocation.type !== 'nation') {
-            additionalWhere.push('sc.private IS FALSE');
+            additionalWhere.push('false');
         }
     } else {
-        additionalWhere.push('sc.private IS FALSE');
+        additionalWhere.push('true');
     }
+
+    // private comments for targeted users
+    additionalWhere.push(`(${user.id} =  ANY(uca.user_target_id) OR ${user.organization.id} = ANY(oca.organization_target_id))`);
+    additionalWhere.push(`${user.id} = comments.created_by`);
 
     return sequelize.query(
         `WITH organization_comment_access AS (
@@ -92,7 +98,7 @@ module.exports = (location = null, privateLocation = null) => {
         LEFT JOIN 
             user_comment_access uca ON sc.shantytown_comment_id = uca.shantytown_comment_id
         ${additionalWhere.length > 0
-        ? `WHERE ${additionalWhere.join(' AND ')}`
+        ? `WHERE ${additionalWhere.join(' OR ')}`
         : ''
 }
         ORDER BY sc.created_at DESC`,

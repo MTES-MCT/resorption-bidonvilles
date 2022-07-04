@@ -33,7 +33,7 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate, o
         where.push('(uca.user_target_id IS NULL AND oca.organization_target_id IS NULL)');
     }
 
-    // private comments for user with listPrivate permission
+    // private comments for user with listPrivate.shantytown_comment permission
     if (restrictedLocations.private === null) {
         where.push('false');
     } else if (restrictedLocations.private.type !== 'nation') {
@@ -48,6 +48,7 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate, o
 
     // private comments for targeted users
     where.push(`(${user.id} =  ANY(uca.user_target_id) OR ${user.organization.id} = ANY(oca.organization_target_id))`);
+    where.push(`${user.id} = comments.created_by`);
 
     const whereLastDate = `${where.length > 0 ? 'AND' : 'WHERE'} comments.created_at < '${lastDate}'`;
     const activities = await sequelize.query(
