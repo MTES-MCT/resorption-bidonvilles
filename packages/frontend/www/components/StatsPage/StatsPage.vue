@@ -312,12 +312,12 @@ export default {
                         min: 0
                     }
                 },
-                labels: this.stats.wau.map(({ monday }) => monday),
+                labels: this.stats.wau.map(({ monday }) => `Semaine du ${monday}`),
                 datasets: [
                     {
                         backgroundColor: "#E5E5F4",
                         data: this.stats.wau.map(({ wau }) => wau),
-                        label: "Nombre d'utilisateurs par semaine"
+                        label: "Nombre d'utilisateurs sur la semaine"
                     }
                 ]
             };
