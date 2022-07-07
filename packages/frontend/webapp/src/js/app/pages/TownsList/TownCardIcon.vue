@@ -2,7 +2,7 @@
     <div class="flex items-center">
         <span
             :class="[
-                'flex rounded-full text-xs border-2 mr-2 mb-1 h-6 w-6 items-center justify-center',
+                'flex rounded-full text-xs border-2 mr-3 mb-1 h-6 w-6 items-center justify-center',
                 colorClass
             ]"
             style="padding: 0.2em"
