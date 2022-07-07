@@ -3080,6 +3080,7 @@ __metadata:
     vue: ^2.6.10
     vue-router: ^3.0.2
     vue-template-compiler: ^2.5.21
+    vueperslides: ^2.8.0
     vuex: ^3.6.0
   languageName: unknown
   linkType: soft
@@ -30503,6 +30504,13 @@ __metadata:
   peerDependencies:
     vue: ^2.6.10
   checksum: 9d047ef499683da8fb162bb3454b60369c63e9e149d8e5cc047be0df649475a8cd8cf5f8a22f76107bbdfcfb593f34bd9abce1b03ad2caaaf96da75d7546a4ef
+  languageName: node
+  linkType: hard
+
+"vueperslides@npm:^2.8.0":
+  version: 2.15.3
+  resolution: "vueperslides@npm:2.15.3"
+  checksum: 1303ccc0e298c05f25b6b4d139a378cf393e845b203ec7cf191c38df35841780f9f4c715691fe9e2643f1bb3423a6c1b862421fc08a88f331af89c62c85b6aec
   languageName: node
   linkType: hard
 
