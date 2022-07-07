@@ -36,11 +36,10 @@ module.exports = async (user, location) => {
     }
 
     otherDate.setMonth(date.getMonth() - 3);
-
     const [shantytownStats, connectedUsers] = await Promise.all([
         // Shantytown stats
         sequelize.query(
-            `SELECT 
+            `SELECT
                 population_total as population,
                 population_minors as minors,
                 minors_in_school,
@@ -87,7 +86,7 @@ module.exports = async (user, location) => {
             ) t
             ${where !== null ? `
             LEFT JOIN users ON users.user_id = t.fk_user
-            LEFT JOIN localized_organizations ON users.fk_organization = localized_organizations.organization_id
+            LEFT JOIN localized_organizations lo ON users.fk_organization = lo.organization_id
             ${where}` : ''}
             GROUP BY week
             ORDER BY week ASC
