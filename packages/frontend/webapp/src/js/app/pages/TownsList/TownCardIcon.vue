@@ -1,8 +1,13 @@
 <template>
-    <div :class="['flex items-center', colorClass]">
-        <div class="mr-2 w-4">
-            <Icon :icon="icon" />
-        </div>
+    <div class="flex items-center">
+        <span
+            :class="[
+                'flex rounded-full text-xs border-2 mr-3 mb-1 h-6 w-6 items-center justify-center',
+                colorClass
+            ]"
+            style="padding: 0.2em"
+            ><Icon :icon="icon"
+        /></span>
         <slot />
     </div>
 </template>
@@ -27,17 +32,17 @@ export default {
                 this.details &&
                 this.details.negative.length > 0
             ) {
-                return "text-secondary";
+                return "text-secondary border-secondary";
             }
 
             if (
                 (this.value === true && !this.inverted) ||
                 (this.value === false && this.inverted)
             ) {
-                return "text-green500";
+                return "text-green500 border-green500";
             }
 
-            return "text-red";
+            return "text-red border-red";
         },
         icon() {
             if (

@@ -50,10 +50,10 @@
         </div>
         <span class="block h-px bg-blue300"></span>
         <div class="customHeight flex flex-col justify-end mt-2">
-            <div v-if="displayFigure !== null" class="text-xs text-center">
-                {{ formatStat(displayFigure.figure) }} au
-                {{ displayFigure.date }}
-            </div>
+            <StatCardFigure
+                v-if="displayFigure !== null"
+                :figure="displayFigure"
+            />
             <div class="flex justify-center items-end mt-2">
                 <div
                     v-for="(stat, index) in columns"
@@ -79,7 +79,12 @@
                     <span class="ml-2 align-top">
                         {{ isEvolutionPositive ? "+" : "-" }}
                         {{ Math.abs(cardStats.evolution) }} %
-                        <span class="text-xs">en 3 mois</span>
+                        <span v-if="cardStats.data.length < 13" class="text-xs"
+                            >en {{ cardStats.data.length }} semaine{{
+                                cardStats.data.length > 1 ? "s" : ""
+                            }}</span
+                        >
+                        <span v-else class="text-xs">en 3 mois</span>
                     </span>
                 </div>
             </div>
@@ -89,12 +94,15 @@
 
 <script>
 import Bar from "./Bar.vue";
+import StatCardFigure from "./StatCardFigure.vue";
+import formatStat from "#app/utils/formatStat.js";
 
 const MAX_HEIGHT = 50;
 
 export default {
     components: {
-        Bar
+        Bar,
+        StatCardFigure
     },
     props: {
         icon: {
@@ -123,15 +131,14 @@ export default {
         onMouseOver(value) {
             this.displayFigure = {
                 figure: value.figure,
-                date: value.date
+                date: value.date,
+                dateFrom: value.dateFrom
             };
         },
         onMouseLeave() {
             this.displayFigure = null;
         },
-        formatStat(number) {
-            return new Intl.NumberFormat("fr-FR").format(number);
-        },
+        formatStat,
         setColumns() {
             if (this.maxNumber !== 0) {
                 this.columns = [
@@ -140,6 +147,7 @@ export default {
                             figure: stat.figure,
                             height: (stat.figure * MAX_HEIGHT) / this.maxNumber,
                             date: stat.formatedDate,
+                            dateFrom: stat.formatedDateFrom,
                             color: "bg-blue600",
                             hoverColor: "bg-blue400"
                         };
@@ -150,6 +158,8 @@ export default {
                                 MAX_HEIGHT) /
                             this.maxNumber,
                         date: this.cardStats.data.slice(-1)[0].formatedDate,
+                        dateFrom: this.cardStats.data.slice(-1)[0]
+                            .formatedDateFrom,
                         figure: this.cardStats.data.slice(-1)[0].figure,
                         color:
                             this.cardStats.color === "red"

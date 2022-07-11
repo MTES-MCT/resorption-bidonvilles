@@ -16,11 +16,4 @@ export function exportStats() {
     return getApi("/statistics/export");
 }
 
-/**
- * GET /statistics/wau
- */
-export function wau() {
-    return getApi("/statistics/wau");
-}
-
 export default all;

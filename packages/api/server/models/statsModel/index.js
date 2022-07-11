@@ -1,5 +1,6 @@
 const averageCompletionPercentage = require('./averageCompletionPercentage');
 const averageCompletionPercentageByDepartement = require('./averageCompletionPercentageByDepartement');
+const getStats = require('./getStats');
 const meanTimeBeforeClosingDeclaration = require('./meanTimeBeforeClosingDeclaration');
 const meanTimeBeforeCreationDeclaration = require('./meanTimeBeforeCreationDeclaration');
 const numberOfActiveUsers = require('./numberOfActiveUsers');
@@ -27,11 +28,12 @@ const numberOfUsers = require('./numberOfUsers');
 const numberOfUsersByDepartement = require('./numberOfUsersByDepartement');
 const numberOfUsersAtMonth = require('./numberOfUsersAtMonth');
 const populationTotal = require('./populationTotal');
-const getStats = require('./getStats');
+const wau = require('./wau');
 
 module.exports = {
     averageCompletionPercentage,
     averageCompletionPercentageByDepartement,
+    getStats,
     meanTimeBeforeClosingDeclaration,
     meanTimeBeforeCreationDeclaration,
     numberOfActiveUsers,
@@ -59,5 +61,5 @@ module.exports = {
     numberOfUsersByDepartement,
     numberOfUsersAtMonth,
     populationTotal,
-    getStats,
+    wau,
 };

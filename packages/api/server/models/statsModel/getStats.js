@@ -15,10 +15,10 @@ module.exports = async (user, location) => {
         case 'nation':
             break;
         case 'region':
-            where = `AND lo.region_code = '${location.region.code}'`;
+            where = `WHERE lo.region_code = '${location.region.code}'`;
             break;
         default:
-            where = `AND lo.departement_code = '${location.departement.code}'`;
+            where = `WHERE lo.departement_code = '${location.departement.code}'`;
             break;
     }
 
@@ -36,52 +36,67 @@ module.exports = async (user, location) => {
     }
 
     otherDate.setMonth(date.getMonth() - 3);
-    const shantytownStats = await sequelize.query(
-        `SELECT 
-            population_total as population,
-            population_minors as minors,
-            minors_in_school,
-            shantytowns.updated_at,
-            shantytowns.closed_at,
-            resorbed,
-            shantytowns.shantytown_id as id
-        FROM 
-            (
+    const [shantytownStats, connectedUsers] = await Promise.all([
+        // Shantytown stats
+        sequelize.query(
+            `SELECT
+                population_total as population,
+                population_minors as minors,
+                minors_in_school,
+                shantytowns.updated_at,
+                shantytowns.closed_at,
+                resorbed,
+                shantytowns.shantytown_id as id
+            FROM 
                 (
-                    SELECT shantytowns.updated_at, closed_at, CAST(closed_with_solutions AS text) as resorbed, shantytown_id, population_total, population_minors, minors_in_school, fk_city
-                    FROM shantytowns
-                )
-                UNION
-                (
-                    SELECT shantytowns.updated_at, closed_at, CAST(closed_with_solutions AS text) as resorbed, shantytown_id, population_total, population_minors, minors_in_school, fk_city
-                    FROM "ShantytownHistories" shantytowns
-                )
-            ) shantytowns
-        LEFT JOIN cities ON shantytowns.fk_city = cities.code
-        LEFT JOIN epci ON cities.fk_epci = epci.code
-        LEFT JOIN departements ON cities.fk_departement = departements.code
-        LEFT JOIN regions ON departements.fk_region = regions.code
-        ${shantytownWhere.length > 0 ? `WHERE ${shantytownWhere.join(' OR ')}` : ''}
-        ORDER BY shantytowns.updated_at DESC`,
-        {
-            type: sequelize.QueryTypes.SELECT,
-            replacements: shantytownReplacements,
-        },
-    );
+                    (
+                        SELECT shantytowns.updated_at, closed_at, CAST(closed_with_solutions AS text) as resorbed, shantytown_id, population_total, population_minors, minors_in_school, fk_city
+                        FROM shantytowns
+                    )
+                    UNION
+                    (
+                        SELECT shantytowns.updated_at, closed_at, CAST(closed_with_solutions AS text) as resorbed, shantytown_id, population_total, population_minors, minors_in_school, fk_city
+                        FROM "ShantytownHistories" shantytowns
+                    )
+                ) shantytowns
+            LEFT JOIN cities ON shantytowns.fk_city = cities.code
+            LEFT JOIN epci ON cities.fk_epci = epci.code
+            LEFT JOIN departements ON cities.fk_departement = departements.code
+            LEFT JOIN regions ON departements.fk_region = regions.code
+            ${shantytownWhere.length > 0 ? `WHERE ${shantytownWhere.join(' OR ')}` : ''}
+            ORDER BY shantytowns.updated_at DESC`,
+            {
+                type: sequelize.QueryTypes.SELECT,
+                replacements: shantytownReplacements,
+            },
+        ),
+        // WAU
+        sequelize.query(
+            `
+            SELECT
+                COUNT(DISTINCT fk_user),
+                week,
+                TO_CHAR((now()::date - INTERVAL '1 day' * ((week * 7) + 6)), 'DD/MM') AS date_debut,
+                TO_CHAR((now()::date - INTERVAL '1 day' * (week * 7)), 'DD/MM') AS date_fin
+            FROM (
+                SELECT
+                    fk_user,
+                    (floor((now()::date - datetime::date) / 7)) AS week
+                FROM user_navigation_logs
+            ) t
+            ${where !== null ? `
+            LEFT JOIN users ON users.user_id = t.fk_user
+            LEFT JOIN localized_organizations lo ON users.fk_organization = lo.organization_id
+            ${where}` : ''}
+            GROUP BY week
+            ORDER BY week ASC
+            LIMIT 13`,
+            {
+                type: sequelize.QueryTypes.SELECT,
+            },
+        ),
+    ]);
 
-    const users = await sequelize.query(
-        `SELECT 
-            u.created_at
-        FROM users u
-        LEFT JOIN localized_organizations lo ON u.fk_organization = lo.organization_id
-        WHERE u.fk_status = 'active'
-        ${where}
-        ORDER BY u.created_at DESC`,
-        {
-            type: sequelize.QueryTypes.SELECT,
-        },
-    );
     const listOfDates = getArrayOfDates(otherDate, date);
-    const stats = decomposeForDiagramm(shantytownStats, users, listOfDates);
-    return stats;
+    return decomposeForDiagramm(shantytownStats, connectedUsers, listOfDates);
 };

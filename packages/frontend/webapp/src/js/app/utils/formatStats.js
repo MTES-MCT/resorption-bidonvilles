@@ -52,16 +52,15 @@ module.exports = stats => {
                     : "fermeture",
             color: stats.closedShantytowns.evolution >= 0 ? "green" : "red"
         },
-
         {
-            ...stats.userStats,
-            id: "users",
+            ...stats.connectedUserStats,
+            id: "connectedUsers",
             icon: "user",
             label:
-                stats.userStats.data.slice(-1)[0].figure > 1
-                    ? "utilisateurs"
-                    : "utilisateur",
-            color: stats.userStats.evolution >= 0 ? "green" : "red"
+                stats.connectedUserStats.data.slice(-1)[0].figure > 1
+                    ? "utilisateurs connectés ces 7 derniers jours"
+                    : "utilisateur connecté ces 7 derniers jours",
+            color: stats.connectedUserStats.evolution >= 0 ? "green" : "red"
         }
     ];
 };
