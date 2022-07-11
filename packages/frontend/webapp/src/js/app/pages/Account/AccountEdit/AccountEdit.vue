@@ -90,9 +90,11 @@
                     withoutMargin
                 >
                     <Checkbox
-                        label="Le récapitulatif hebdomadaire des activités sur mon territoire"
+                        v-for="subscription in Object.keys(EMAIL_SUBSCRIPTIONS)"
+                        :key="subscription"
+                        :label="EMAIL_SUBSCRIPTIONS[subscription]"
+                        :checkValue="subscription"
                         v-model="edit.email_subscriptions"
-                        checkValue="weekly_summary"
                     />
                 </CheckableGroup>
 
@@ -110,6 +112,7 @@ import AccountPanel from "../ui/AccountPanel";
 import AccountHeader from "../ui/AccountHeader";
 import AccountReadLabel from "../ui/AccountReadLabel";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
+import EMAIL_SUBSCRIPTIONS from "#app/utils/email_subscriptions";
 
 import { edit } from "#helpers/api/user";
 
@@ -132,7 +135,8 @@ export default {
                 phone: this.user.phone || "",
                 password: "",
                 email_subscriptions: this.user.email_subscriptions
-            }
+            },
+            EMAIL_SUBSCRIPTIONS
         };
     },
     props: {
