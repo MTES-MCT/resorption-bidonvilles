@@ -11,9 +11,9 @@
     <mj-class name='button-primary' background-color="#000091" color="#FFFFFF" padding="2rem 0"/>
     <mj-class name='button-secondary' background-color="#FF6F4c" color="#FFFFFF" padding="2rem 0"/>
     <!-- text-size -->
-    <mj-class name='text-sm' font-size="0.75rem" line-height="1.5rem" font-weight="700" />
-    <mj-class name='text-lg' font-size="1.25rem" line-height="1.5rem" font-weight="700" />
-    <mj-class name='text-display' font-size="1.75rem" line-height="2rem" font-weight="700" />
+    <mj-class name='text-sm' font-size="12px" line-height="15px" font-weight="700" />
+    <mj-class name='text-lg' font-size="20px" line-height="24px" font-weight="700" />
+    <mj-class name='text-display' font-size="28px" line-height="32px" font-weight="700" />
     <!-- font-options -->
     <mj-class name='font-bold' font-weight='bold'/>
     <mj-class name='font-italic' font-style='italic'/>
