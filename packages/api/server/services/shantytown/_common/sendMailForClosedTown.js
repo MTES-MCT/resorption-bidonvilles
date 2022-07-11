@@ -11,7 +11,7 @@ module.exports = async (shantytown, updatedTown, user) => {
         departement,
         epci,
         city,
-    }, true);
+    }, 'shantytown_closure', true);
     watchers
         .filter(({ user_id }) => user_id !== user.id) // do not send an email to the user who closed the town
         .forEach((watcher) => {
