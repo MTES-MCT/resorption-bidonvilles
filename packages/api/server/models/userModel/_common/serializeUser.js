@@ -1,3 +1,4 @@
+const EMAIL_SUBSCRIPTIONS = require('#server/config/email_subscriptions');
 const serializeUserAccess = require('./serializeUserAccess');
 
 /**
@@ -64,7 +65,7 @@ module.exports = (user, latestCharte, filters, permissionMap) => {
             },
         },
         charte_engagement_a_jour: latestCharte === null || user.charte_engagement_signee === latestCharte,
-        email_subscriptions: user.email_subscriptions,
+        email_subscriptions: EMAIL_SUBSCRIPTIONS.filter(subscription => !user.email_unsubscriptions.includes(subscription)),
         last_access: user.last_access !== null ? user.last_access.getTime() / 1000 : null,
         admin_comments: user.admin_comments,
         is_admin: user.is_admin,

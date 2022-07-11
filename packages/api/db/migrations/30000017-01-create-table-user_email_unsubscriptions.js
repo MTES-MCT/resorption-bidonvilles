@@ -2,9 +2,9 @@ module.exports = {
     async up(queryInterface, Sequelize) {
         const transaction = await queryInterface.sequelize.transaction();
         await queryInterface.createTable(
-            'user_email_subscriptions',
+            'user_email_unsubscriptions',
             {
-                user_email_subscription_id: {
+                user_email_unsubscription_id: {
                     type: Sequelize.INTEGER,
                     primaryKey: true,
                     autoIncrement: true,
@@ -13,7 +13,7 @@ module.exports = {
                     type: Sequelize.INTEGER,
                     allowNull: false,
                 },
-                email_subscription: {
+                email: {
                     type: Sequelize.ENUM('weekly_summary', 'comment_notification', 'shantytown_closure', 'shantytown_creation'),
                     allowNull: false,
                 },
@@ -23,20 +23,20 @@ module.exports = {
 
         await Promise.all([
             queryInterface.addConstraint(
-                'user_email_subscriptions',
-                ['fk_user', 'email_subscription'],
+                'user_email_unsubscriptions',
+                ['fk_user', 'email'],
                 {
                     type: 'unique',
-                    name: 'uk_user_email_subscriptions_user_subscription',
+                    name: 'uk_user_email_unsubscriptions_user_email',
                     transaction,
                 },
             ),
             queryInterface.addConstraint(
-                'user_email_subscriptions',
+                'user_email_unsubscriptions',
                 ['fk_user'],
                 {
                     type: 'foreign key',
-                    name: 'fk_user_email_subscriptions_user',
+                    name: 'fk_user_email_unsubscriptions_user',
                     references: {
                         table: 'users',
                         field: 'user_id',
@@ -47,20 +47,20 @@ module.exports = {
                 },
             ),
             queryInterface.addIndex(
-                'user_email_subscriptions',
+                'user_email_unsubscriptions',
                 ['fk_user'],
                 { transaction },
             ),
             queryInterface.addIndex(
-                'user_email_subscriptions',
-                ['email_subscription'],
+                'user_email_unsubscriptions',
+                ['email'],
                 { transaction },
             ),
         ]);
 
         // populate
-        const users = await queryInterface.sequelize.query(
-            'SELECT user_id, subscribed_to_summary FROM users',
+        const usersUnsubscribedToSummary = await queryInterface.sequelize.query(
+            'SELECT user_id FROM users WHERE subscribed_to_summary IS FALSE',
             {
                 type: queryInterface.sequelize.QueryTypes.SELECT,
                 transaction,
@@ -68,18 +68,11 @@ module.exports = {
         );
 
         await queryInterface.bulkInsert(
-            'user_email_subscriptions',
-            users.map(({ user_id, subscribed_to_summary }) => {
-                const subscriptions = ['comment_notification', 'shantytown_closure', 'shantytown_creation'];
-                if (subscribed_to_summary === true) {
-                    subscriptions.push('weekly_summary');
-                }
-
-                return subscriptions.map(sub => ({
-                    fk_user: user_id,
-                    email_subscription: sub,
-                }));
-            }).flat(),
+            'user_email_unsubscriptions',
+            usersUnsubscribedToSummary.map(({ user_id }) => ({
+                fk_user: user_id,
+                email: 'weekly_summary',
+            })),
             { transaction },
         );
 
@@ -90,27 +83,27 @@ module.exports = {
         const transaction = await queryInterface.sequelize.transaction();
         await Promise.all([
             queryInterface.removeIndex(
-                'user_email_subscriptions',
-                ['email_subscription'],
+                'user_email_unsubscriptions',
+                ['email'],
                 { transaction },
             ),
             queryInterface.removeIndex(
-                'user_email_subscriptions',
+                'user_email_unsubscriptions',
                 ['fk_user'],
                 { transaction },
             ),
             queryInterface.removeConstraint(
-                'user_email_subscriptions',
-                'fk_user_email_subscriptions_user',
+                'user_email_unsubscriptions',
+                'fk_user_email_unsubscriptions_user',
                 { transaction },
             ),
             queryInterface.removeConstraint(
-                'user_email_subscriptions',
-                'uk_user_email_subscriptions_user_subscription',
+                'user_email_unsubscriptions',
+                'uk_user_email_unsubscriptions_user_email',
                 { transaction },
             ),
         ]);
-        await queryInterface.dropTable('user_email_subscriptions', { transaction });
+        await queryInterface.dropTable('user_email_unsubscriptions', { transaction });
 
         await transaction.commit();
     },

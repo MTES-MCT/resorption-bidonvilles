@@ -8,9 +8,9 @@ module.exports = {
 
     async down(queryInterface, Sequelize) {
         const transaction = await queryInterface.sequelize.transaction();
-        const [usersSubscribedToSummary] = await Promise.all([
+        const [usersUnsubscribedToSummary] = await Promise.all([
             queryInterface.sequelize.query(
-                'SELECT fk_user FROM user_email_subscriptions WHERE email_subscription = \'weekly_summary\'',
+                'SELECT fk_user FROM user_email_unsubscriptions WHERE email = \'weekly_summary\'',
                 {
                     type: queryInterface.sequelize.QueryTypes.SELECT,
                     transaction,
@@ -29,10 +29,10 @@ module.exports = {
         ]);
 
         await queryInterface.sequelize.query(
-            'UPDATE users SET subscribed_to_summary = FALSE WHERE user_id NOT IN (:userIds)',
+            'UPDATE users SET subscribed_to_summary = FALSE WHERE user_id IN (:userIds)',
             {
                 replacements: {
-                    userIds: usersSubscribedToSummary.map(({ fk_user }) => fk_user),
+                    userIds: usersUnsubscribedToSummary.map(({ fk_user }) => fk_user),
                 },
                 transaction,
             },

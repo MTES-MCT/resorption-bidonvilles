@@ -7,8 +7,8 @@ module.exports = async (shantytownId, canListPrivateComments) => sequelize.query
         LEFT JOIN cities ON shantytowns.fk_city = cities.code
         WHERE shantytowns.shantytown_id = :shantytownId
     ),
-    email_subscriptions AS (
-        SELECT fk_user, ARRAY_AGG(email_subscription) AS subscriptions FROM user_email_subscriptions GROUP BY fk_user
+    email_unsubscriptions AS (
+        SELECT fk_user, ARRAY_AGG(email) AS unsubscriptions FROM user_email_unsubscriptions GROUP BY fk_user
     )
 
     SELECT
@@ -39,9 +39,10 @@ module.exports = async (shantytownId, canListPrivateComments) => sequelize.query
             AND lo.active IS TRUE)
     ) t
     LEFT JOIN users u ON t.fk_user = u.user_id
-    LEFT JOIN email_subscriptions ON email_subscriptions.fk_user = u.user_id
+    LEFT JOIN email_unsubscriptions ON email_unsubscriptions.fk_user = u.user_id
     LEFT JOIN user_actual_permissions up ON t.fk_user = up.user_id AND up.fk_feature = 'listPrivate' AND up.fk_entity = 'shantytown_comment' AND up.allowed IS TRUE
-    WHERE u.fk_status = 'active' AND ('comment_notification' = ANY(email_subscriptions.subscriptions))
+    WHERE u.fk_status = 'active'
+        AND (email_unsubscriptions.unsubscriptions IS NULL OR NOT('comment_notification' = ANY(email_unsubscriptions.unsubscriptions)))
     ${canListPrivateComments === true ? 'AND up.allowed IS TRUE' : ''}
     `,
     {

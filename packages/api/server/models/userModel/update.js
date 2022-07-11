@@ -57,9 +57,9 @@ module.exports = async (userId, values, transaction = undefined) => {
         throw new Error(`The user #${userId} does not exist`);
     }
 
-    if (Array.isArray(values.email_subscriptions)) {
+    if (Array.isArray(values.email_unsubscriptions)) {
         await sequelize.query(
-            'DELETE FROM user_email_subscriptions WHERE fk_user = :userId',
+            'DELETE FROM user_email_unsubscriptions WHERE fk_user = :userId',
             {
                 replacements: {
                     userId,
@@ -68,10 +68,12 @@ module.exports = async (userId, values, transaction = undefined) => {
             },
         );
 
-        await sequelize.getQueryInterface().bulkInsert(
-            'user_email_subscriptions',
-            values.email_subscriptions.map(sub => ({ fk_user: userId, email_subscription: sub })),
-            { transaction },
-        );
+        if (values.email_unsubscriptions.length > 0) {
+            await sequelize.getQueryInterface().bulkInsert(
+                'user_email_unsubscriptions',
+                values.email_unsubscriptions.map(email => ({ fk_user: userId, email })),
+                { transaction },
+            );
+        }
     }
 };
