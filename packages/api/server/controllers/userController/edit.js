@@ -9,7 +9,7 @@ module.exports = async (req, res, next) => {
 
     const {
         first_name: firstName, last_name: lastName, email, phone, position,
-        subscribed_to_summary: subscribedToSummary,
+        email_subscriptions: emailSubscriptions,
     } = req.body;
     const user = await userModel.findOne(userId, { auth: true });
 
@@ -29,7 +29,7 @@ module.exports = async (req, res, next) => {
         email,
         phone,
         position,
-        subscribed_to_summary: subscribedToSummary,
+        email_subscriptions: emailSubscriptions,
     };
 
     if (req.body.password) {
@@ -45,7 +45,7 @@ module.exports = async (req, res, next) => {
             first_name: firstName,
             last_name: lastName,
             departement: user.departement,
-            subscribed_to_summary: subscribedToSummary,
+            email_subscriptions: emailSubscriptions,
         });
     } catch (error) {
         res.status(500).send({

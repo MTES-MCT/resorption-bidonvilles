@@ -21,6 +21,9 @@ module.exports = async (where = [], filters, user = null, feature, transaction) 
     const whereClause = where.map((clauses, index) => {
         const clauseGroup = Object.keys(clauses).map((column) => {
             replacements[`${column}${index}`] = clauses[column].value || clauses[column];
+            if (clauses[column].operator === 'isAny') {
+                return `(:${column}${index}) = ANY(${clauses[column].query || `users.${column}`})`;
+            }
             return `${clauses[column].query || `users.${column}`} ${clauses[column].operator || 'IN'} (:${column}${index})`;
         }).join(' OR ');
 
@@ -36,6 +39,9 @@ module.exports = async (where = [], filters, user = null, feature, transaction) 
     const users = await sequelize.query(
         `WITH user_options AS (
             SELECT fk_user, ARRAY_AGG(fk_option) AS options FROM user_permission_options GROUP BY fk_user
+        ),
+        email_subscriptions AS (
+            SELECT fk_user, ARRAY_AGG(email_subscription) AS subscriptions FROM user_email_subscriptions GROUP BY fk_user
         )
 
         SELECT
@@ -53,7 +59,7 @@ module.exports = async (where = [], filters, user = null, feature, transaction) 
             users.last_version,
             users.last_changelog,
             users.charte_engagement_signee,
-            users.subscribed_to_summary,
+            COALESCE(email_subscriptions.subscriptions, array[]::enum_user_email_subscriptions_email_subscription[]) AS email_subscriptions,
             users.last_access,
             users.admin_comments,
             CASE WHEN users.fk_role IS NULL THEN FALSE
@@ -108,6 +114,8 @@ module.exports = async (where = [], filters, user = null, feature, transaction) 
             roles_regular ON users.fk_role_regular = roles_regular.role_id
         LEFT JOIN
             user_options ON user_options.fk_user = users.user_id
+        LEFT JOIN
+        email_subscriptions ON email_subscriptions.fk_user = users.user_id
         ${where.length > 0 ? `WHERE ${whereClause}` : ''}
         ORDER BY
             CASE

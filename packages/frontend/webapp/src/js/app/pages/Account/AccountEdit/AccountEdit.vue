@@ -85,22 +85,15 @@
                 </div>
 
                 <CheckableGroup
-                    label="Je souhaite recevoir le récapitulatif hebdomadaire par courriel"
+                    label="Je souhaite recevoir par courriel :"
                     direction="vertical"
                     withoutMargin
                 >
-                    <Radio
-                        label="oui"
-                        v-model="edit.subscribed_to_summary"
-                        :checkValue="true"
-                        type="checkbox"
-                    ></Radio>
-                    <Radio
-                        label="non"
-                        v-model="edit.subscribed_to_summary"
-                        :checkValue="false"
-                        type="checkbox"
-                    ></Radio>
+                    <Checkbox
+                        label="Le récapitulatif hebdomadaire des activités sur mon territoire"
+                        v-model="edit.email_subscriptions"
+                        checkValue="weekly_summary"
+                    />
                 </CheckableGroup>
 
                 <div v-if="error" class="text-error">
@@ -138,7 +131,7 @@ export default {
                 position: this.user.position || "",
                 phone: this.user.phone || "",
                 password: "",
-                subscribed_to_summary: this.user.subscribed_to_summary === true
+                email_subscriptions: this.user.email_subscriptions
             }
         };
     },

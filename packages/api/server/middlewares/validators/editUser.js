@@ -1,6 +1,7 @@
 /* eslint-disable newline-per-chained-call */
 const { body } = require('express-validator');
 const checkPassword = require('#server/controllers/userController/helpers/checkPassword');
+const EMAIL_SUBSCRIPTIONS = require('#server/config/email_subscriptions');
 
 module.exports = [
     body('last_name')
@@ -49,7 +50,14 @@ module.exports = [
             return true;
         }),
 
-    body('subscribed_to_summary')
-        .notEmpty().bail().withMessage('Le champ "Abonnement au récapitulatif hebdomadaire" est obligatoire')
-        .isBoolean().bail().withMessage('Le champ "Abonnement au récapitulatif hebdomadaire" est invalide'),
+    body('email_subscriptions')
+        .exists().withMessage('Le champ "Abonnement aux mails plateforme" est obligatoire')
+        .isArray().bail().withMessage('Le champ "Abonnement aux mails plateforme" n\'est pas valide')
+        .custom((value) => {
+            if (value.some(subscription => !EMAIL_SUBSCRIPTIONS.includes(subscription))) {
+                throw new Error('Le champ "Abonnement aux mails plateforme" contient des valeurs invalides');
+            }
+
+            return true;
+        }),
 ];

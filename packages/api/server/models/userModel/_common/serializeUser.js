@@ -64,7 +64,7 @@ module.exports = (user, latestCharte, filters, permissionMap) => {
             },
         },
         charte_engagement_a_jour: latestCharte === null || user.charte_engagement_signee === latestCharte,
-        subscribed_to_summary: user.subscribed_to_summary,
+        email_subscriptions: user.email_subscriptions,
         last_access: user.last_access !== null ? user.last_access.getTime() / 1000 : null,
         admin_comments: user.admin_comments,
         is_admin: user.is_admin,

@@ -7,7 +7,11 @@ module.exports = async () => {
                 fk_status: ['active'],
             },
             {
-                subscribed_to_summary: true,
+                subscription: {
+                    value: 'weekly_summary',
+                    operator: 'isAny',
+                    query: 'email_subscriptions.subscriptions',
+                },
             },
         ],
         {},

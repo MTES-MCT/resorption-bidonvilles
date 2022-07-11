@@ -8,7 +8,7 @@ module.exports = async (userId, values, transaction = undefined) => {
     const allowedProperties = [
         'first_name', 'last_name', 'position', 'phone', 'password', 'fk_status',
         'last_version', 'last_changelog', 'charte_engagement_signee', 'last_access',
-        'subscribed_to_summary', 'admin_comments', 'fk_role_regular',
+        'admin_comments', 'fk_role_regular',
     ];
     const propertiesToColumns = {
         first_name: 'first_name',
@@ -21,7 +21,6 @@ module.exports = async (userId, values, transaction = undefined) => {
         last_changelog: 'last_changelog',
         charte_engagement_signee: 'charte_engagement_signee',
         last_access: 'last_access',
-        subscribed_to_summary: 'subscribed_to_summary',
         admin_comments: 'admin_comments',
         fk_role_regular: 'fk_role_regular',
     };
@@ -56,5 +55,23 @@ module.exports = async (userId, values, transaction = undefined) => {
 
     if (rowCount === 0) {
         throw new Error(`The user #${userId} does not exist`);
+    }
+
+    if (Array.isArray(values.email_subscriptions)) {
+        await sequelize.query(
+            'DELETE FROM user_email_subscriptions WHERE fk_user = :userId',
+            {
+                replacements: {
+                    userId,
+                },
+                transaction,
+            },
+        );
+
+        await sequelize.getQueryInterface().bulkInsert(
+            'user_email_subscriptions',
+            values.email_subscriptions.map(sub => ({ fk_user: userId, email_subscription: sub })),
+            { transaction },
+        );
     }
 };
