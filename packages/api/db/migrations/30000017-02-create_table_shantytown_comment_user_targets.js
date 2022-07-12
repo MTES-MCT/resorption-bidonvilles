@@ -39,7 +39,7 @@ module.exports = {
                         table: 'users',
                         field: 'user_id',
                     },
-                    onDelete: 'cascade',
+                    onDelete: 'restrict',
                     onUpdate: 'cascade',
                     transaction,
                 },

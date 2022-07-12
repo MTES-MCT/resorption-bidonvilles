@@ -39,7 +39,7 @@ module.exports = {
                         table: 'organizations',
                         field: 'organization_id',
                     },
-                    onDelete: 'cascade',
+                    onDelete: 'restrict',
                     onUpdate: 'cascade',
                     transaction,
                 },
