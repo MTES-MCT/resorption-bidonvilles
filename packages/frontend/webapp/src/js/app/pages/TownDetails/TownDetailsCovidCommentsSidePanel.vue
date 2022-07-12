@@ -25,8 +25,8 @@
                 </div>
 
                 <div class="text-G600 italic my-6">
-                    Merci de préciser votre action, ses modalités, et le
-                    nombrede personnes avec des symptômes.Merci de respecter les
+                    Merci de préciser votre action, ses modalités, et le nombre
+                    de personnes avec des symptômes. Merci de respecter les
                     règles de confidentialité. Ne pas citer l’identité des
                     individus (Nom, âge, sexe, origine...)
                 </div>
