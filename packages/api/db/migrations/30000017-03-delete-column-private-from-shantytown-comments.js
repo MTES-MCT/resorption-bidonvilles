@@ -13,7 +13,7 @@ module.exports = {
     async down(queryInterface, Sequelize) {
         const transaction = await queryInterface.sequelize.transaction();
 
-        queryInterface.addColumn(
+        await queryInterface.addColumn(
             'shantytown_comments',
             'private',
             {
@@ -24,96 +24,111 @@ module.exports = {
                 transaction,
             },
         );
-        await queryInterface.sequelize.query(
-            'CREATE EXTENSION intarray',
-            {
-                transaction,
-            },
-        );
 
-        // set comments whose targets are all pref and DDETS in department to private = true
+        // on récupère la liste de tous les commentaires privés, avec l'instruction de s'il faut
+        // les garder ou non
+        // si on le garde pas => suppression
+        // si on le garde => on passe la colonne "private" à true
+        // un commentaire privé est n'importe quel commentaire qui a au moins un target (user ou organization)
+        const privateComments = await queryInterface.sequelize.query(
+            `
+            -- on récupère, par département, la liste des préfs. de département et ddets
+            WITH departement_orgs AS (SELECT departement_code, array_agg(organization_id) AS organizations
+            FROM localized_organizations
+            WHERE fk_type IN (SELECT organization_type_id FROM organization_types WHERE uid IN ('pref_departement', 'ddets'))
+            GROUP BY departement_code),
 
-        const [private_comments] = await queryInterface.sequelize.query(
-            `WITH departements_organizations AS (select departements.code as departement_code, sort(array_agg(lo.organization_id)) AS o1
-            FROM departements
-            LEFT JOIN localized_organizations lo ON (lo.departement_code = departements.code OR (lo.location_type='region' and lo.region_code = departements.fk_region) OR lo.location_type='nation')
-            LEFT JOIN organization_types ot ON ot.organization_type_id = lo.fk_type
-            WHERE ot.fk_role = 'direct_collaborator'
-            GROUP BY departements.code
-            ), 
-            sc_targets AS (
-            SELECT shantytown_comments.shantytown_comment_id, SORT(ARRAY_AGG(lo.organization_id)) AS o2
-            FROM shantytown_comments
-            INNER JOIN shantytown_comment_organization_targets scot ON scot.fk_comment = shantytown_comments.shantytown_comment_id 
-            LEFT JOIN localized_organizations lo ON lo.organization_id = scot.fk_organization
-            GROUP BY shantytown_comments.shantytown_comment_id)
-            SELECT shantytown_comments.shantytown_comment_id
-            FROM shantytown_comments
-            LEFT JOIN shantytowns ON shantytowns.shantytown_id = shantytown_comments.fk_shantytown
-            LEFT JOIN cities ON cities.code = shantytowns.fk_city
-            LEFT JOIN departements_organizations on departements_organizations.departement_code = cities.fk_departement
-            LEFT JOIN sc_targets on sc_targets.shantytown_comment_id = shantytown_comments.shantytown_comment_id
-            WHERE departements_organizations.o1 = sc_targets.o2 
+            -- on récupère, par région, la liste des préfs. de région
+            region_orgs AS (SELECT region_code, array_agg(organization_id) AS organizations
+            FROM localized_organizations
+            WHERE fk_type IN (SELECT organization_type_id FROM organization_types WHERE uid = 'pref_region')
+            GROUP BY region_code),
+
+            -- on récupère, par commentaire, la liste des utilisateurs cibles
+            grouped_user_targets AS (SELECT
+            scut.fk_comment,
+            COALESCE(array_agg(scut.fk_user), ARRAY[]::integer[]) AS targets
+            FROM shantytown_comments sc
+            LEFT JOIN shantytown_comment_user_targets scut ON scut.fk_comment = sc.shantytown_comment_id
+            WHERE scut.fk_comment IS NOT NULL
+            GROUP BY scut.fk_comment),
+
+            -- on récupère, par commentaire, la liste des structures cibles
+            grouped_org_targets AS (SELECT
+            scot.fk_comment,
+            COALESCE(array_agg(scot.fk_organization), ARRAY[]::integer[]) AS targets
+            FROM shantytown_comments sc
+            LEFT JOIN shantytown_comment_organization_targets scot ON scot.fk_comment = sc.shantytown_comment_id
+            WHERE scot.fk_comment IS NOT NULL
+            GROUP BY scot.fk_comment)
+
+            -- pour chaque commentaire privé, on récupère l'id et on décide de si le commentaire doit
+            -- être gardé ou non selon la règle suivante :
+            -- si le commentaire n'a pour cible que des structures, et que ces structures correspond
+            -- exactement à la liste des préfs. de département, région, et ddets de sa localisation
+            -- alors on garde le commentaire
+            SELECT
+            sc.shantytown_comment_id,
+            CASE
+                WHEN gut.targets IS NOT NULL THEN FALSE
+                WHEN (got.targets @> (deo.organizations || reo.organizations)) AND (got.targets <@ (deo.organizations || reo.organizations)) THEN TRUE
+                ELSE FALSE
+            END AS keep_comment
+            FROM shantytown_comments sc
+            LEFT JOIN grouped_user_targets gut ON sc.shantytown_comment_id = gut.fk_comment
+            LEFT JOIN grouped_org_targets got ON sc.shantytown_comment_id = got.fk_comment
+            LEFT JOIN shantytowns s ON sc.fk_shantytown = s.shantytown_id
+            LEFT JOIN cities c ON s.fk_city = c.code
+            LEFT JOIN departements d ON c.fk_departement = d.code
+            LEFT JOIN departement_orgs deo ON d.code = deo.departement_code
+            LEFT JOIN region_orgs reo ON d.fk_region = reo.region_code
+            WHERE gut.targets IS NOT NULL OR got.targets IS NOT NULL
             `,
             {
-                transaction,
-            },
-        );
-        await Promise.all(private_comments.map(({ shantytown_comment_id }) => queryInterface.sequelize.query(`
-        UPDATE shantytown_comments
-        SET private = true
-        WHERE shantytown_comment_id = ${shantytown_comment_id}`, { transaction })));
-
-
-        // delete comments whose targets are not null but do not correspond to pref and DDETS
-
-        const [comments_to_delete] = await queryInterface.sequelize.query(
-            `WITH departements_organizations AS (select departements.code as departement_code, sort(array_agg(lo.organization_id)) AS o1
-            FROM departements
-            LEFT JOIN localized_organizations lo ON (lo.departement_code = departements.code OR (lo.location_type='region' and lo.region_code = departements.fk_region) OR lo.location_type='nation')
-            LEFT JOIN organization_types ot ON ot.organization_type_id = lo.fk_type
-            WHERE ot.fk_role = 'direct_collaborator'
-            GROUP BY departements.code
-            ), 
-            sco_targets AS (
-            SELECT shantytown_comments.shantytown_comment_id, SORT(ARRAY_AGG(lo.organization_id)) AS o2
-            FROM shantytown_comments
-            INNER JOIN shantytown_comment_organization_targets scot ON scot.fk_comment = shantytown_comments.shantytown_comment_id 
-            LEFT JOIN localized_organizations lo ON lo.organization_id = scot.fk_organization
-            GROUP BY shantytown_comments.shantytown_comment_id),
-            scu_targets AS (
-             SELECT shantytown_comments.shantytown_comment_id, ARRAY_AGG(scut.fk_user) AS user_targets
-            FROM shantytown_comments
-            INNER JOIN shantytown_comment_user_targets scut ON scut.fk_comment = shantytown_comments.shantytown_comment_id 
-            GROUP BY shantytown_comments.shantytown_comment_id
-            )
-            SELECT shantytown_comments.shantytown_comment_id
-            FROM shantytown_comments
-            LEFT JOIN shantytowns ON shantytowns.shantytown_id = shantytown_comments.fk_shantytown
-            LEFT JOIN cities ON cities.code = shantytowns.fk_city
-            LEFT JOIN departements_organizations on departements_organizations.departement_code = cities.fk_departement
-            LEFT JOIN sco_targets on sco_targets.shantytown_comment_id = shantytown_comments.shantytown_comment_id
-            LEFT JOIN scu_targets ON scu_targets.shantytown_comment_id = shantytown_comments.shantytown_comment_id
-            WHERE departements_organizations.o1 != sco_targets.o2 
-            OR scu_targets.user_targets is not null
-            
-            `,
-            {
+                type: Sequelize.QueryTypes.SELECT,
                 transaction,
             },
         );
 
-        await Promise.all(comments_to_delete.map(({ shantytown_comment_id }) => queryInterface.sequelize.query(`
-        DELETE FROM shantytown_comments
-        WHERE shantytown_comment_id = ${shantytown_comment_id}`, { transaction })));
+        const { toBeDeleted, toBeKept } = privateComments.reduce((argAcc, { shantytown_comment_id, keep_comment }) => {
+            if (keep_comment) {
+                argAcc.toBeKept.push(shantytown_comment_id);
+            } else {
+                argAcc.toBeDeleted.push(shantytown_comment_id);
+            }
 
-        await queryInterface.sequelize.query(
-            'DROP EXTENSION intarray',
-            {
-                transaction,
-            },
-        );
-        return transaction.commit();
+            return argAcc;
+        }, {
+            toBeDeleted: [],
+            toBeKept: [],
+        });
+
+        const promises = [];
+        if (toBeDeleted.length > 0) {
+            promises.push(
+                queryInterface.sequelize.query(
+                    'DELETE FROM shantytown_comments WHERE shantytown_comment_id IN (:ids)',
+                    {
+                        replacements: { ids: toBeDeleted },
+                        transaction,
+                    },
+                ),
+            );
+        }
+        if (toBeKept.length > 0) {
+            promises.push(
+                queryInterface.sequelize.query(
+                    'UPDATE shantytown_comments SET private = true WHERE shantytown_comment_id IN (:ids)',
+                    {
+                        replacements: { ids: toBeKept },
+                        transaction,
+                    },
+                ),
+            );
+        }
+        await Promise.all(promises);
+
+        await transaction.commit();
     },
 
 };

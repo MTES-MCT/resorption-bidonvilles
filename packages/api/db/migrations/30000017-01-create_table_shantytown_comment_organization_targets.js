@@ -62,35 +62,47 @@ module.exports = {
         ]);
 
         // populate shantytown_comment_organization_targets with existing comments reserved to prefectures and DDETS
-        const comments = await queryInterface.sequelize.query(
-            `SELECT shantytown_comments.shantytown_comment_id AS comment_id, cities.fk_departement AS departement_code, departements.fk_region AS region_code
-            FROM shantytown_comments left join shantytowns ON shantytowns.shantytown_id = shantytown_comments.fk_shantytown
-            LEFT JOIN cities ON cities.code = shantytowns.fk_city
-            LEFT JOIN departements ON departements.code = cities.fk_departement
-            WHERE private = true
-            `,
-            { type: queryInterface.sequelize.QueryTypes.SELECT, transaction },
-        );
+        const targets = await queryInterface.sequelize.query(
+            `
+            -- on récupère la liste des préfectures de département et DDETS, groupée par département
+            WITH departement_orgs AS (SELECT departement_code, array_agg(organization_id) AS organizations
+            FROM localized_organizations
+            WHERE fk_type IN (SELECT organization_type_id FROM organization_types WHERE uid IN ('pref_departement', 'ddets'))
+            GROUP BY departement_code),
 
-        await Promise.all(comments.map(({ comment_id, departement_code, region_code }) => queryInterface.sequelize.query(
-            `SELECT organization_id FROM localized_organizations 
-            LEFT JOIN organization_types ON organization_types.organization_type_id = localized_organizations.fk_type
-            WHERE fk_role = 'direct_collaborator'
-            AND ((location_type = 'region' AND localized_organizations.region_code = '${region_code}')
-            OR localized_organizations.departement_code = '${departement_code}'
-            OR location_type = 'nation')`,
-            { type: queryInterface.sequelize.QueryTypes.SELECT, transaction },
-        ).then(organizations => queryInterface.bulkInsert(
-            'shantytown_comment_organization_targets',
-            organizations.map(({ organization_id }) => ({
-                fk_organization: organization_id,
-                fk_comment: comment_id,
-            })),
+            -- on récupère la liste des préfectures de région, groupée par région
+            region_orgs AS (SELECT region_code, array_agg(organization_id) AS organizations
+            FROM localized_organizations
+            WHERE fk_type IN (SELECT organization_type_id FROM organization_types WHERE uid = 'pref_region')
+            GROUP BY region_code)
+
+            -- pour chaque commentaire "privé" (réservé aux préfs et DDETS), on récupère la liste des préfs et DDETS correspondant à la localisation
+            SELECT
+                sc.shantytown_comment_id,
+                deo.organizations || ro.organizations AS organizations
+            FROM shantytown_comments sc
+            LEFT JOIN shantytowns s ON sc.fk_shantytown = s.shantytown_id
+            LEFT JOIN cities c ON s.fk_city = c.code
+            LEFT JOIN departements d ON c.fk_departement = d.code
+            LEFT JOIN departement_orgs deo ON deo.departement_code = d.code
+            LEFT JOIN region_orgs ro ON ro.region_code = d.fk_region
+            WHERE sc.private IS TRUE`,
             {
+                type: Sequelize.QueryTypes.SELECT,
                 transaction,
             },
-        ))));
-        return transaction.commit();
+        );
+
+        await queryInterface.bulkInsert(
+            'shantytown_comment_organization_targets',
+            targets.map(({ shantytown_comment_id, organizations }) => organizations.map(organization_id => ({
+                fk_organization: organization_id,
+                fk_comment: shantytown_comment_id,
+            }))).flat(),
+            { transaction },
+        );
+
+        await transaction.commit();
     },
 
     async down(queryInterface) {
