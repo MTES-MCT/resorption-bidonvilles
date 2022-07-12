@@ -59,11 +59,20 @@ module.exports = async (user, location) => {
                         FROM "ShantytownHistories" shantytowns
                     )
                 ) shantytowns
-            LEFT JOIN cities ON shantytowns.fk_city = cities.code
-            LEFT JOIN epci ON cities.fk_epci = epci.code
-            LEFT JOIN departements ON cities.fk_departement = departements.code
-            LEFT JOIN regions ON departements.fk_region = regions.code
-            ${shantytownWhere.length > 0 ? `WHERE ${shantytownWhere.join(' OR ')}` : ''}
+            ${shantytownWhere.length > 0 ? `
+            -- -------
+            -- une adresse d'un site peut changer en cours de route, donc on fait un select where uniquement sur shantytowns
+            -- puis on filtre l'ensemble par id
+            -- -------
+            WHERE shantytown_id IN (
+                SELECT s.shantytown_id
+                FROM shantytowns s
+                LEFT JOIN cities ON s.fk_city = cities.code
+                LEFT JOIN epci ON cities.fk_epci = epci.code
+                LEFT JOIN departements ON cities.fk_departement = departements.code
+                LEFT JOIN regions ON departements.fk_region = regions.code
+                WHERE ${shantytownWhere.join(' OR ')}
+            )` : ''}
             ORDER BY shantytowns.updated_at DESC`,
             {
                 type: sequelize.QueryTypes.SELECT,
