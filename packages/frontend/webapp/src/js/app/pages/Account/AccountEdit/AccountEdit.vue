@@ -85,22 +85,17 @@
                 </div>
 
                 <CheckableGroup
-                    label="Je souhaite recevoir le récapitulatif hebdomadaire par courriel"
+                    label="Je souhaite recevoir par courriel :"
                     direction="vertical"
                     withoutMargin
                 >
-                    <Radio
-                        label="oui"
-                        v-model="edit.subscribed_to_summary"
-                        :checkValue="true"
-                        type="checkbox"
-                    ></Radio>
-                    <Radio
-                        label="non"
-                        v-model="edit.subscribed_to_summary"
-                        :checkValue="false"
-                        type="checkbox"
-                    ></Radio>
+                    <Checkbox
+                        v-for="subscription in Object.keys(EMAIL_SUBSCRIPTIONS)"
+                        :key="subscription"
+                        :label="EMAIL_SUBSCRIPTIONS[subscription]"
+                        :checkValue="subscription"
+                        v-model="edit.email_subscriptions"
+                    />
                 </CheckableGroup>
 
                 <div v-if="error" class="text-error">
@@ -117,6 +112,7 @@ import AccountPanel from "../ui/AccountPanel";
 import AccountHeader from "../ui/AccountHeader";
 import AccountReadLabel from "../ui/AccountReadLabel";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
+import EMAIL_SUBSCRIPTIONS from "#app/utils/email_subscriptions";
 
 import { edit } from "#helpers/api/user";
 
@@ -138,8 +134,9 @@ export default {
                 position: this.user.position || "",
                 phone: this.user.phone || "",
                 password: "",
-                subscribed_to_summary: this.user.subscribed_to_summary === true
-            }
+                email_subscriptions: this.user.email_subscriptions
+            },
+            EMAIL_SUBSCRIPTIONS
         };
     },
     props: {
