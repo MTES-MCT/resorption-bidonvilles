@@ -108,9 +108,10 @@ module.exports = async (user, shantytownIds, covid = false) => {
         },
     );
 
-    rows.forEach((comment) => {
+    rows.forEach(async (comment) => {
+        const serializedComment = await serializeComment(comment);
         comments[comment.shantytownId].push(
-            serializeComment(comment),
+            serializedComment,
         );
     }, {});
 
