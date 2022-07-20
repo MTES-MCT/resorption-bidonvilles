@@ -130,8 +130,8 @@ module.exports = async (where = [], order = ['departements.code ASC', 'cities.na
         promises.push(Promise.resolve(undefined));
     }
 
-    promises.push(getComments(user, Object.keys(serializedTowns.hash), false));
-    promises.push(getComments(user, Object.keys(serializedTowns.hash), true));
+    promises.push(await getComments(user, Object.keys(serializedTowns.hash), false));
+    promises.push(await getComments(user, Object.keys(serializedTowns.hash), true));
 
     promises.push(
         sequelize.query(
