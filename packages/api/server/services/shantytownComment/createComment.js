@@ -7,6 +7,7 @@ const mattermostUtils = require('#server/utils/mattermost');
 const userModel = require('#server/models/userModel');
 const mails = require('#server/mails/mails');
 const ServiceError = require('#server/errors/ServiceError');
+const sequelize = require('#db/sequelize');
 
 /**
  * @param {Service_ShantytownComment_Create_CommentData} comment Commentaire
@@ -18,27 +19,31 @@ const ServiceError = require('#server/errors/ServiceError');
 module.exports = async (comment, shantytown, author) => {
     // on insère le commentaire
     let commentId;
+    let transaction;
     try {
+        transaction = await sequelize.transaction();
+        // Insérer le commentaire dans la table shantytown_comments
         commentId = await shantytownCommentModel.create({
             description: comment.description,
             targets: comment.targets,
             fk_shantytown: shantytown.id,
             created_by: author.id,
-        })
-            .then(async (id) => {
-                const { tags } = comment;
-                // Enregistrement des tags dans la table shantytown_comment_tags
-                await Promise.all(tags.map(async (tag) => {
-                    await shantytownCommentTagModel.create(id, tag);
-                }));
-            });
+        }, transaction);
+        // Insérer les tags du commentaire dans la table shantytown_comment_tags
+        const { tags } = comment;
+        if (tags.length > 0) {
+            // Enregistrement des tags dans la table shantytown_comment_tags
+            await shantytownCommentTagModel.create(commentId, tags.map(tag => tag.uid), transaction);
+        }
+        await transaction.commit();
     } catch (error) {
+        transaction.rollback();
         throw new ServiceError('insert_failed', error);
     }
 
     // on tente d'envoyer une notification Mattermost
     try {
-        await mattermostUtils.triggerNewComment(comment.description, comment.tagLabels, shantytown, author);
+        await mattermostUtils.triggerNewComment(comment.description, comment.tags.map(tag => tag.label), shantytown, author);
     } catch (error) {
         // ignore
     }
@@ -65,8 +70,25 @@ module.exports = async (comment, shantytown, author) => {
 
         if (watchers.length > 0) {
             const serializedComment = await shantytownCommentModel.findOne(commentId);
+            // On prépare l'affichage des tags qualifiant le commentaire
+            let tag_text = '';
+            const tags_length = serializedComment.tags.length;
+            if (tags_length > 0) {
+                tag_text = serializedComment.tags.length > 1 ? 'ces étiquettes' : 'cette étiquette';
+            }
             await Promise.all(
-                watchers.map(user => mails.sendUserNewComment(user, { variables: { shantytown, comment: serializedComment } })),
+                watchers.map(user => mails.sendUserNewComment(
+                    user,
+                    {
+                        variables: {
+                            shantytown,
+                            comment: serializedComment,
+                            tags: comment.tags.map(tag => tag.label),
+                            tags_length,
+                            tag_text,
+                        },
+                    },
+                )),
             );
         }
     } catch (error) {
