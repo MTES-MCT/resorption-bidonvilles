@@ -35,7 +35,7 @@ module.exports = {
                     allowNull: false,
                 },
                 fk_comment_tag_type: {
-                    type: Sequelize.STRING(150),
+                    type: Sequelize.STRING(50),
                     allowNull: false,
                     primaryKey: true,
                 },
