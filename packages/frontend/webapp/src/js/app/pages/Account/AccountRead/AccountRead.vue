@@ -42,11 +42,19 @@
                 <AccountReadLabel label="Téléphone">
                     {{ user.phone }}
                 </AccountReadLabel>
-                <AccountReadLabel
-                    label="Abonné(e) au récapitulatif hebdomadaire"
-                >
-                    {{ user.subscribed_to_summary ? "Oui" : "Non" }}
-                </AccountReadLabel>
+                <p>
+                    Mes abonnements aux courriels automatiques :
+                </p>
+                <ul class="ml-4">
+                    <li
+                        v-for="subscription in emailSubscriptions"
+                        :key="subscription.id"
+                    >
+                        <Icon :icon="subscription.icon" />
+                        {{ subscription.label }} :
+                        <span class="font-bold">{{ subscription.status }}</span>
+                    </li>
+                </ul>
 
                 <div class="mt-8" v-if="!$route.params.id">
                     <div class="font-bold">
@@ -88,6 +96,7 @@ import AccountPanel from "../ui/AccountPanel";
 import AccountHeader from "../ui/AccountHeader";
 import AccountReadLabel from "../ui/AccountReadLabel";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
+import EMAIL_SUBSCRIPTIONS from "#app/utils/email_subscriptions";
 
 export default {
     components: {
@@ -101,10 +110,29 @@ export default {
             type: Object
         }
     },
+    data() {
+        return {
+            EMAIL_SUBSCRIPTIONS
+        };
+    },
     computed: {
         charte() {
             return this.$store.state.config.configuration
                 .version_charte_engagement;
+        },
+        emailSubscriptions() {
+            return Object.keys(EMAIL_SUBSCRIPTIONS).map(key => {
+                return {
+                    id: key,
+                    label: EMAIL_SUBSCRIPTIONS[key],
+                    icon: this.user.email_subscriptions.includes(key)
+                        ? "check"
+                        : "times",
+                    status: this.user.email_subscriptions.includes(key)
+                        ? "inscrit(e)"
+                        : "désinscrit(e)"
+                };
+            });
         }
     }
 };

@@ -116,7 +116,7 @@ module.exports = async (townData, user) => {
 
     // Send a notification to all users of the related departement
     try {
-        const watchers = await userModel.getLocationWatchers(townData.city, true);
+        const watchers = await userModel.getLocationWatchers(townData.city, 'shantytown_creation', true);
         watchers
             .filter(({ user_id }) => user_id !== user.id) // do not send an email to the user who created the town
             .forEach((watcher) => {
