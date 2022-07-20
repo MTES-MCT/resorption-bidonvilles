@@ -18,7 +18,7 @@ module.exports = {
                 'comment_tags',
                 [
                     {
-                        uid: 'living_conditions',
+                        uid: 'livingConditions',
                         tag: 'Conditions de vie',
                         fk_comment_tag_type: 'regular',
                     },
