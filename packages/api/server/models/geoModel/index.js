@@ -1,11 +1,11 @@
 const getDepartementsFor = require('./getDepartementsFor');
 const getLocation = require('./getLocation');
 const search = require('./search');
-const getDepartementForCity = require('./getDepartementForCity');
+const getDepartementFromCityId = require('./getDepartementFromCityId');
 
 module.exports = {
     getDepartementsFor,
     getLocation,
     search,
-    getDepartementForCity,
+    getDepartementFromCityId,
 };
