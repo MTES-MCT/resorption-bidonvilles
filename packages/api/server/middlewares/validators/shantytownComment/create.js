@@ -1,3 +1,4 @@
+/* eslint-disable newline-per-chained-call */
 const { body, param } = require('express-validator');
 const shantytownModel = require('#server/models/shantytownModel');
 
@@ -23,13 +24,24 @@ module.exports = [
         .trim()
         .notEmpty().withMessage('La description est obligatoire'),
 
-    body('private')
-        .customSanitizer(value => value !== false),
-
     body('targets.organizations')
-        .customSanitizer(value => (Array.isArray(value) ? value : [])),
+        .customSanitizer((value) => {
+            if (value === null || value === undefined) {
+                return [];
+            }
+
+            return value;
+        })
+        .isArray().bail().withMessage('Le format des structures ciblées n\'est pas valide'),
 
     body('targets.users')
-        .customSanitizer(value => (Array.isArray(value) ? value : [])),
+        .customSanitizer((value) => {
+            if (value === null || value === undefined) {
+                return [];
+            }
+
+            return value;
+        })
+        .isArray().bail().withMessage('Le format des utilisateurs ciblés n\'est pas valide'),
 
 ];

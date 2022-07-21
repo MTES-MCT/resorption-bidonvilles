@@ -475,7 +475,7 @@ export default (app) => {
         middlewares.auth.authenticate,
         (req, res, next, respond = true) => {
             // Only check permissions for private comments
-            if (req.body.private) {
+            if (req.body?.targets?.organizations?.length || req.body?.targets?.users?.length) {
                 return middlewares.auth.checkPermissions(['shantytown_comment.createPrivate'], req, res, next, respond);
             }
 

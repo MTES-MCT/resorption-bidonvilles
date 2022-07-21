@@ -7,7 +7,6 @@ module.exports = async (req, res, next) => {
         comments = await shantytownCommentService.createComment(
             {
                 description: req.body.description,
-                private: req.body.private,
                 targets: req.body.targets,
             },
             req.body.shantytown,
