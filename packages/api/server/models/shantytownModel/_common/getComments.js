@@ -66,13 +66,28 @@ module.exports = async (user, shantytownIds, covid = false) => {
         WHERE
             shantytown_comments.fk_shantytown IN (:ids) 
             AND shantytown_covid_comment_id IS ${covid === true ? 'NOT ' : ''}NULL
-            ${filterPrivateComments === true ? `AND ((${user.id} = ANY(user_comment_access.user_target_id) OR ${user.organization.id} = ANY(organization_comment_access.organization_target_id)) 
-                                                    OR (user_comment_access.user_target_id IS NULL AND organization_comment_access.organization_target_id IS NULL))
-                                                    OR ${user.id} = shantytown_comments.created_by` : ''}
+            ${filterPrivateComments === true ? `AND (
+                (
+                    :userId = ANY(user_comment_access.user_target_id)
+                    OR
+                    :organizationId = ANY(organization_comment_access.organization_target_id)
+                )
+                OR
+                (
+                    user_comment_access.user_target_id IS NULL
+                    AND
+                    organization_comment_access.organization_target_id IS NULL
+                )
+                OR (:userId = shantytown_comments.created_by)
+            )` : ''}
         ORDER BY shantytown_comments.created_at DESC`,
         {
             type: sequelize.QueryTypes.SELECT,
-            replacements: { ids: shantytownIds },
+            replacements: {
+                ids: shantytownIds,
+                userId: user.id,
+                organizationId: user.organization.id,
+            },
         },
     );
 
