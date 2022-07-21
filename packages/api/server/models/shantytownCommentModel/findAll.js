@@ -30,7 +30,7 @@ module.exports = (user, location = null, privateLocation = null) => {
         if (privateLocation.type === 'region') {
             additionalWhere.push('(d.fk_region = :privateLocationCode)');
         } else if (privateLocation.type === 'departement') {
-            additionalWhere.push('(OR d.code = :privateLocationCode)');
+            additionalWhere.push('(d.code = :privateLocationCode)');
         } else if (privateLocation.type !== 'nation') {
             additionalWhere.push('false');
         }
@@ -39,8 +39,13 @@ module.exports = (user, location = null, privateLocation = null) => {
     }
 
     // private comments for targeted users
-    additionalWhere.push(`(${user.id} =  ANY(uca.user_target_id) OR ${user.organization.id} = ANY(oca.organization_target_id))`);
-    additionalWhere.push(`${user.id} = comments.created_by`);
+    replacements.userId = user.id;
+    replacements.organizationId = user.organization.id;
+    additionalWhere.push(
+        '(:userId =  ANY(uca.user_target_id))',
+        '(:organizationId = ANY(oca.organization_target_id))',
+        '(:userId = comments.created_by)',
+    );
 
     return sequelize.query(
         `WITH organization_comment_access AS (

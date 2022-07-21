@@ -47,8 +47,13 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate, o
     }
 
     // private comments for targeted users
-    where.push(`(${user.id} =  ANY(uca.user_target_id) OR ${user.organization.id} = ANY(oca.organization_target_id))`);
-    where.push(`${user.id} = comments.created_by`);
+    replacements.userId = user.id;
+    replacements.organizationId = user.organization.id;
+    where.push(
+        '(:userId =  ANY(uca.user_target_id))',
+        '(:organizationId = ANY(oca.organization_target_id))',
+        '(:userId = comments.created_by)',
+    );
 
     const whereLastDate = `${where.length > 0 ? 'AND' : 'WHERE'} comments.created_at < '${lastDate}'`;
     const activities = await sequelize.query(
