@@ -29,38 +29,39 @@ module.exports = async data => sequelize.transaction(async (transaction) => {
         transaction,
     );
 
+    const promises = [];
     if (data.targets.users.length > 0) {
-        await Promise.all(
-            [
-                sequelize.getQueryInterface().bulkInsert(
-                    'shantytown_comment_user_targets',
-                    data.targets.users.map(user => ({
-                        fk_user: user.id,
-                        fk_comment: shantytown_comment_id,
-                    })),
-                    {
-                        transaction,
-                    },
-                ),
-            ],
+        promises.push(
+            sequelize.getQueryInterface().bulkInsert(
+                'shantytown_comment_user_targets',
+                data.targets.users.map(user => ({
+                    fk_user: user.id,
+                    fk_comment: shantytown_comment_id,
+                })),
+                {
+                    transaction,
+                },
+            ),
         );
     }
 
     if (data.targets.organizations.length > 0) {
-        await Promise.all(
-            [
-                sequelize.getQueryInterface().bulkInsert(
-                    'shantytown_comment_organization_targets',
-                    data.targets.organizations.map(organization => ({
-                        fk_organization: organization.id,
-                        fk_comment: shantytown_comment_id,
-                    })),
-                    {
-                        transaction,
-                    },
-                ),
-            ],
+        promises.push(
+            sequelize.getQueryInterface().bulkInsert(
+                'shantytown_comment_organization_targets',
+                data.targets.organizations.map(organization => ({
+                    fk_organization: organization.id,
+                    fk_comment: shantytown_comment_id,
+                })),
+                {
+                    transaction,
+                },
+            ),
         );
+    }
+
+    if (promises.length > 0) {
+        await Promise.all(promises);
     }
 
     return shantytown_comment_id;
