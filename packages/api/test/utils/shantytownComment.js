@@ -4,7 +4,8 @@ module.exports = {
             id: 1,
             description: 'Un commentaire',
             createdAt: (new Date(2020, 0, 1, 0, 0, 0)).getTime() / 1000,
-            private: false,
+            organization_target_name: [],
+            user_target_name: [],
             createdBy: {
                 id: 2,
                 firstName: 'Jean',
