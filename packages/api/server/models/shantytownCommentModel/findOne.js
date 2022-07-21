@@ -23,7 +23,23 @@ module.exports = async (id) => {
              FROM shantytown_comment_user_targets scut 
              LEFT JOIN users ON users.user_id = scut.fk_user
              GROUP BY scut.fk_comment
-         )
+         ),
+         comment_tags AS (
+            SELECT
+                  sct.fk_shantytown_comment,
+                  ARRAY_AGG(sct.fk_comment_tag) AS tags
+              FROM
+                  shantytown_comments AS sc
+              LEFT JOIN
+                  shantytown_comment_tags AS sct
+              ON
+                  sct.fk_shantytown_comment = sc.shantytown_comment_id
+              WHERE
+                  fk_shantytown_comment = :id
+            GROUP BY
+                  sct.fk_shantytown_comment
+        )
+
         SELECT
             sc.shantytown_comment_id AS "commentId",
             sc.description AS "commentDescription",
@@ -37,9 +53,12 @@ module.exports = async (id) => {
             o.name AS "organizationName",
             o.organization_id AS "organizationId",
             oca.organization_target_name,
-            uca.user_target_name
+            uca.user_target_name,
+            ct.tags AS "tags"
         FROM
             shantytown_comments sc
+        LEFT JOIN
+            comment_tags ct ON ct.fk_shantytown_comment = sc.shantytown_comment_id
         LEFT JOIN
             users u ON sc.created_by = u.user_id
         LEFT JOIN
