@@ -42,7 +42,35 @@ module.exports = (shantytown) => {
                             bold: false,
                             size: 22,
                             font: 'Arial',
-                        })],
+                        }),
+                        ...(comment.tags.length > 0
+                            ? comment.tags.map(tag => new TextRun({
+                                text: `    -    ${tag.label}`,
+                                bullet: {
+                                    level: 0,
+                                },
+                                break: 1,
+                                bold: false,
+                                size: 22,
+                                font: 'Arial',
+                            }))
+                            : [new Paragraph({
+                                spacing: {
+                                    before: 300,
+                                    after: 100,
+                                },
+                                children: [
+                                    new TextRun({
+                                        text: 'Aucun message n\'a été publié dans le journal du site',
+                                        break: 1,
+                                        color: '605F5F',
+                                        size: 22,
+                                        font: 'Arial',
+                                    }),
+                                ],
+                            })]
+                        ),
+                    ],
                 }))
                 : [new Paragraph({
                     spacing: {
