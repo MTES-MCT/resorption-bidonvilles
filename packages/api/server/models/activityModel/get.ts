@@ -99,6 +99,12 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
 
                 -- Retrieve shantytowns with public comments
                 (
+                WITH private_comments AS (SELECT fk_comment
+                    FROM
+                    (SELECT fk_comment, NULL AS fk_organization, fk_user FROM shantytown_comment_user_targets
+                    UNION
+                    SELECT fk_comment, fk_organization, NULL AS fk_user FROM shantytown_comment_organization_targets) t
+                    GROUP BY fk_comment)
                 SELECT
                     'new_comments'           AS "activityType",
                     c.name                   AS "city",
@@ -111,11 +117,12 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
                     NULL::varchar            AS "userLastName",
                     NULL::bigint             AS "userOrganizationId"
                 FROM shantytown_comments sc
+                LEFT JOIN private_comments pc ON sc.shantytown_comment_id = pc.fk_comment
                 LEFT JOIN shantytowns s on sc.fk_shantytown = s.shantytown_id
                 LEFT JOIN cities c ON s.fk_city = c.code
                 WHERE sc.created_at >= :from
                     AND sc.created_at <= :to
-                    AND sc.private is FALSE
+                    AND pc.fk_comment IS NULL
                 )
 
                 UNION
