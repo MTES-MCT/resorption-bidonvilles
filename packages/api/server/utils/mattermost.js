@@ -185,7 +185,7 @@ async function triggerActorInvitedAlert(town, host, invited) {
     await actorInvitedAlert.send(mattermostMessage);
 }
 
-async function triggerNewComment(comment, tagLabels, town, author) {
+async function triggerNewComment(commentDescription, tagLabels, town, author) {
     if (!mattermost) {
         return;
     }
@@ -200,29 +200,20 @@ async function triggerNewComment(comment, tagLabels, town, author) {
 
     fields.push({
         short: false,
-        value: `*Commentaire*: ${comment}`,
+        value: `*Commentaire*: ${commentDescription}`,
     });
 
     if (tagLabels) {
-        let tagsToDisplay = '';
-        let tagIterator = 1;
-        tagsToDisplay += `*Qualification${tagLabels.length > 1 ? 's' : ''} du commentaire*: `;
-        tagLabels.forEach((tag) => {
-            if (tagIterator < tagLabels.length) {
-                tagsToDisplay += `${tag.label}, `;
-            } else {
-                tagsToDisplay += `${tag.label}.`;
-            }
-            tagIterator += 1;
-        });
+        // eslint-disable-next-line array-callback-return
+        const mattermostMessageAttachmentFields = tagLabels.reduce((acc, label, index) => (index < tagLabels.length - 1 ? `${acc + label}, ` : `${acc + label}.`), `*Qualification${tagLabels.length > 1 ? 's' : ''} du commentaire*: `);
+
         fields.push({
             short: false,
-            value: tagsToDisplay,
+            value: mattermostMessageAttachmentFields,
         });
     }
     const mattermostMessage = {
-        // channel: '#notif-nouveau-commentaire',
-        channel: '#notif-dev-test',
+        channel: '#notif-nouveau-commentaire',
         username: 'Alerte Résorption Bidonvilles',
         icon_emoji: ':robot:',
         text: `:rotating_light: Commentaire sur le site: ${townLink} par ${username}`,
