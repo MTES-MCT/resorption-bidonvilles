@@ -1,20 +1,21 @@
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const Sequelize = require('sequelize-mock');
+const SequelizeMock = require('sequelize-mock');
 
 chai.use(sinonChai);
 
 const { expect } = chai;
 const ServiceError = require('#server/errors/ServiceError');
 const shantytownCommentModel = require('#server/models/shantytownCommentModel');
+const shantytownCommentTagModel = require('#server/models/shantytownCommentTagModel');
 const shantytownModel = require('#server/models/shantytownModel');
 const userModel = require('#server/models/userModel');
 const mattermostUtils = require('#server/utils/mattermost');
 const mails = require('#server/mails/mails');
 
 
-const sequelizeStub = new Sequelize();
+const sequelizeStub = new SequelizeMock();
 
 const createComment = require('#server/services/shantytownComment/createComment');
 
@@ -24,6 +25,7 @@ const { serialized: fakeComment } = require('#test/utils/shantytownComment');
 describe.only('services/shantytownComment', () => {
     const dependencies = {
         createComment: undefined,
+        createCommentTag: undefined,
         findOneComment: undefined,
         getComments: undefined,
         triggerNewComment: undefined,
@@ -34,6 +36,7 @@ describe.only('services/shantytownComment', () => {
         dependencies.getComments = sinon.stub(shantytownModel, 'getComments');
         dependencies.getShantytownWatchers = sinon.stub(userModel, 'getShantytownWatchers');
         dependencies.createComment = sinon.stub(shantytownCommentModel, 'create');
+        dependencies.createCommentTag = sinon.stub(shantytownCommentTagModel, 'create');
         dependencies.findOneComment = sinon.stub(shantytownCommentModel, 'findOne');
         dependencies.triggerNewComment = sinon.stub(mattermostUtils, 'triggerNewComment');
         dependencies.sendMail = sinon.stub(mails, 'sendUserNewComment');
@@ -56,6 +59,10 @@ describe.only('services/shantytownComment', () => {
                             users: [{ id: 1 }],
                             organizations: [],
                         },
+                        tags: [
+                            { uid: 'livingConditions', label: 'Conditions de vie', type: 'ordinaire' },
+                            { uid: 'onSiteVisit', label: 'Passage sur Site', type: 'ordinaire' },
+                        ],
                     },
                     shantytown: { id: 1 },
                     user: fakeUser(),
@@ -72,6 +79,10 @@ describe.only('services/shantytownComment', () => {
                 // createComment() retourne un id de commentaire
                 dependencies.createComment
                     .resolves(1);
+
+                // createCommentTag() retourne un tableau d'objet identifiant chaque tag du commentaire
+                dependencies.createCommentTag
+                    .resolves();
 
                 // getComments() retourne une liste de commentaires
                 dependencies.getComments
@@ -108,12 +119,18 @@ describe.only('services/shantytownComment', () => {
                     },
                     fk_shantytown: 1,
                     created_by: 2,
+                    private: true,
                 });
+            });
+
+            it('insère les tags du commentaire en base de données via le modèle shantytownCommentTag/create', () => {
+                expect(dependencies.createCommentTag).to.have.been.calledOnceWith(1, input.comment.tags.map(tag => tag.uid));
             });
 
             it('envoie une notification mattermost', () => {
                 expect(dependencies.triggerNewComment).to.have.been.calledOnceWith(
-                    'description',
+                    input.comment.description,
+                    input.comment.tags.map(tag => tag.label),
                     input.shantytown,
                     input.user,
                 );
@@ -125,18 +142,28 @@ describe.only('services/shantytownComment', () => {
                     variables: {
                         shantytown: input.shantytown,
                         comment: output.comment,
+                        tags: input.comment.tags.map(tag => tag.label),
+                        tags_length: 2,
+                        tag_text: 'ces étiquettes',
                     },
+
                 });
                 expect(dependencies.sendMail).to.have.been.calledWithExactly(output.watchers[1], {
                     variables: {
                         shantytown: input.shantytown,
                         comment: output.comment,
+                        tags: input.comment.tags.map(tag => tag.label),
+                        tags_length: 2,
+                        tag_text: 'ces étiquettes',
                     },
                 });
                 expect(dependencies.sendMail).to.have.been.calledWithExactly(output.watchers[2], {
                     variables: {
                         shantytown: input.shantytown,
                         comment: output.comment,
+                        tags: input.comment.tags.map(tag => tag.label),
+                        tags_length: 2,
+                        tag_text: 'ces étiquettes',
                     },
                 });
             });
@@ -166,6 +193,7 @@ describe.only('services/shantytownComment', () => {
                         targets: comment.targets,
                         fk_shantytown: 1,
                         created_by: user.id,
+                        private: comment.private,
                     })
                     .rejects(nativeError);
 
@@ -193,6 +221,8 @@ describe.only('services/shantytownComment', () => {
                     users: [{ id: 1 }],
                     organizations: [],
                 },
+                tags: ['livingConditions'],
+                tagLabels: ['Conditions de vie'],
             };
             const user = fakeUser();
             const nativeError = new Error('une erreur');
@@ -221,6 +251,8 @@ describe.only('services/shantytownComment', () => {
                     users: [{ id: 1 }],
                     organizations: [],
                 },
+                tags: ['livingConditions'],
+                tagLabels: ['Conditions de vie'],
             };
             const user = fakeUser();
             const nativeError = new Error('une erreur');

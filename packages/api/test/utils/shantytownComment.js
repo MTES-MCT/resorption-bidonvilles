@@ -15,6 +15,10 @@ module.exports = {
                 organizationId: 2,
             },
             shantytown: 1,
+            tags: [
+                { uid: 'livingConditions', label: 'Conditions de vie', type: 'ordinaire' },
+                { uid: 'onSiteVisit', label: 'Passage sur Site', type: 'ordinaire' },
+            ],
         };
 
         return Object.assign(defaultObj, override);
