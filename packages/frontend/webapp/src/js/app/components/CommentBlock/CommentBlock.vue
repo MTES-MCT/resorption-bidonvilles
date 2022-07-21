@@ -67,15 +67,11 @@
             </div>
             <div class="whitespace-pre-line">{{ comment.description }}</div>
             <RegularTag
-                v-for="(tag, index) in regularTags"
+                v-for="(tag, index) in comment.tags"
                 :key="index"
                 :class="['mr-2', 'mb-2']"
                 :tag="tag"
             />
-            <div
-                v-for="regularCommentTag in regularCommentTags"
-                :key="regularCommentTag.uid"
-            ></div>
         </div>
     </div>
 </template>
@@ -101,11 +97,7 @@ export default {
         }
     },
     data() {
-        const {
-            regular_comment_tags: regularCommentTags
-        } = this.$store.state.config.configuration;
         return {
-            regularCommentTags,
             isHover: false
         };
     },
@@ -130,14 +122,6 @@ export default {
             return covidTags.filter(t => {
                 return !!this.comment.covid[t.prop];
             });
-        },
-        regularTags: function() {
-            if (!this.comment || !this.comment.tags) {
-                return [];
-            }
-            return this.regularCommentTags.filter(tag =>
-                this.comment.tags.includes(tag.uid)
-            );
         },
         isOwner() {
             return (

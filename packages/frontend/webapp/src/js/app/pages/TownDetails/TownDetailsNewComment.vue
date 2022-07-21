@@ -290,8 +290,7 @@ export default {
                                 mode: this.mode,
                                 ...this.listOfTargets
                             },
-                            tags: this.tags,
-                            tagLabels: this.tagLabels
+                            tags: this.tags
                         }
                     }
                 );
