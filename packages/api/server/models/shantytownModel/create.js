@@ -3,6 +3,7 @@ const sequelize = require('#db/sequelize');
 module.exports = async (townData) => {
     const result = await sequelize.query(
         `INSERT INTO shantytowns(
+            ${townData.id ? 'shantytown_id,' : ''}
             status,
             latitude,
             longitude,
@@ -70,6 +71,7 @@ module.exports = async (townData) => {
             is_reinstallation,
             reinstallation_comments
         ) VALUES (
+            ${townData.id ? ':id,' : ''}
             'open',
             :latitude,
             :longitude,
@@ -138,6 +140,7 @@ module.exports = async (townData) => {
             :reinstallation_comments
         ) RETURNING shantytown_id AS id`, {
             replacements: {
+                id: townData.id,
                 latitude: townData.latitude,
                 longitude: townData.longitude,
                 address: townData.address,
