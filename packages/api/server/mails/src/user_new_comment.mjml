@@ -16,14 +16,31 @@
             </mj-column>
         </mj-section>
         <mj-section mj-class="pb-4">
-            <mj-column padding="1rem" background-color="#dddddd">
+            <mj-column padding="16px" background-color="#dddddd">
                 <mj-text>{{var:comment}}</mj-text>
             </mj-column>
         </mj-section>
+        <mj-raw> {% if var:tags_length > 0 %} </mj-raw>
         <mj-section>
             <mj-column>
-                <mj-button href="{{var:messageUrl}}" mj-class="button-primary" rel="noopener noreferrer">Voir le message</mj-button><br/>
-                <mj-button href="{{var:annuaireUrl}}" mj-class="button-secondary" padding="0 0 2rem 0" rel="noopener noreferrer">Contacter {{var:createdBy.name}}</mj-button>
+            <mj-text>Le commentaire a été qualifié par {{var:tag_text}}:</mj-text>
+            <mj-text>
+                <ul style="margin-left:40px; padding:0;" align="left" type="disc">
+                <mj-raw> {% for tag in var:tags %} </mj-raw>
+                    <mj-text>
+                        <li>
+                            {{tag}}
+                        </li>
+                    </mj-text>
+                <mj-raw> {% endfor %} </mj-raw>
+            </mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-raw> {% endif %} </mj-raw>
+        <mj-section>
+            <mj-column>
+                <mj-button href="{{var:messageUrl}}" mj-class="button-primary" rel="noopener noreferrer">Voir le message</mj-button><mj-raw><br/></mj-raw>
+                <mj-button href="{{var:annuaireUrl}}" mj-class="button-secondary" padding="0 0 32px 0" rel="noopener noreferrer">Contacter {{var:createdBy.name}}</mj-button>
                 <mj-text mj-class="pb-4">
                     En tant que personne intervenant sur ce site, vous êtes informé(e) en temps réel de tout nouveau message.<br/>
                 </mj-text>
