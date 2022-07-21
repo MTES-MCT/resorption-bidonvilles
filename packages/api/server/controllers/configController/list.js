@@ -15,6 +15,7 @@ const topicModel = require('#server/models/topicModel/index');
 const electricityTypeModel = require('#server/models/electricityTypeModel/index');
 const changelogModel = require('#server/models/changelogModel/index');
 const charteEngagementModel = require('#server/models/charteEngagementModel/index');
+const commentTagModel = require('#server/models/commentTagModel');
 
 module.exports = async (req, res, next) => {
     const queries = {
@@ -34,6 +35,7 @@ module.exports = async (req, res, next) => {
         changelog: changelogModel.getChangelogFor(req.user),
         version_charte_engagement: charteEngagementModel.getLatest(),
         actor_themes: themes,
+        regular_comment_tags: commentTagModel.findByType('regular'),
     };
 
     const promises = Object.values(queries);
