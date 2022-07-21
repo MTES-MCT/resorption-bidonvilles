@@ -2,9 +2,10 @@ const sequelize = require('#db/sequelize');
 
 module.exports = async (code) => {
     const departement = await sequelize.query(
-        `SELECT * FROM departements
-         WHERE code = (SELECT fk_departement FROM cities
-         WHERE code = :code);`,
+        `SELECT departements.code, departements.name 
+         FROM cities 
+         LEFT JOIN departements ON cities.fk_departement = departements.code
+         WHERE cities.code = :code`,
         {
             type: sequelize.QueryTypes.SELECT,
             replacements: {
