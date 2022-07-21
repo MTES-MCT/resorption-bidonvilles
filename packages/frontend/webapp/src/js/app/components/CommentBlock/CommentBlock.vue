@@ -30,7 +30,7 @@
             "
         >
             <Icon icon="lock" class="text-red" />
-            <span class="font-bold"
+            <span class="pl-1 font-bold"
                 >Message réservé aux structures et utilisateurs suivants :</span
             >
             <div v-for="user in comment.user_target_name" :key="user">
