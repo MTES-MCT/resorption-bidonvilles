@@ -595,7 +595,7 @@ export default (app) => {
         '/cities/:code/departement',
         middlewares.auth.authenticate,
         middlewares.appVersion.sync,
-        controllers.geo.getDepartementForCity,
+        controllers.geo.getDepartementFromCityId,
     );
     app.get(
         '/epci/search',
