@@ -1,5 +1,5 @@
-import getDepartementFromCityId from './getDepartementFromCityId';
+const getDepartementFromCityId = require('./getDepartementFromCityId');
 
-export default {
+module.exports = {
     getDepartementFromCityId,
 };
