@@ -254,6 +254,13 @@ export default {
         this.blurTimeout = null;
     },
     methods: {
+        empty() {
+            this.value = null;
+            this.searchInput = "";
+        },
+        focus() {
+            this.$refs.searchInput.focus();
+        },
         setValue(value) {
             this.value = value || null;
             this.searchInput = value ? this.getResultValue(value) : "";

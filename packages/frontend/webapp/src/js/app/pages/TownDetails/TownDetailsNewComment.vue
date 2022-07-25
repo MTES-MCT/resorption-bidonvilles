@@ -72,6 +72,7 @@
                         @submit="submit"
                         rules=""
                         :disabled="false"
+                        ref="targetSearch"
                     ></AutocompleteV2>
                     <div
                         class="border rounded p-4 -mt-4 flex flex-wrap gap-2 mb-6"
@@ -173,6 +174,11 @@ export default {
             ) {
                 this.listOfTargets.organizations.push(result);
             }
+
+            this.input = "";
+            this.results = [];
+            this.$refs.targetSearch.empty();
+            this.$nextTick(() => this.$refs.targetSearch.focus());
         },
         async search(input) {
             this.input = input;
