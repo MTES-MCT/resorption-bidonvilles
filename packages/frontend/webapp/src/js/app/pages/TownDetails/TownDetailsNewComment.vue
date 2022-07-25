@@ -195,11 +195,27 @@ export default {
         },
         async search(input) {
             if (input) {
-                return await autocompleteOrganization(
+                const unfilteredList = await autocompleteOrganization(
                     input,
                     this.departementCode,
                     true
                 );
+
+                // on retirer de la liste d'autocomplétion tous items qui font déjà partie
+                // des targets
+                return unfilteredList.filter(item => {
+                    if (item.type.id === "user") {
+                        return !this.listOfTargets.users.find(
+                            user => user.id === item.id
+                        );
+                    }
+
+                    return (
+                        this.listOfTargets.organizations.find(
+                            organization => organization.id === item.id
+                        ) === undefined
+                    );
+                });
             }
 
             return [];
