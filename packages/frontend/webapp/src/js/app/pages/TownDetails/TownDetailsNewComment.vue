@@ -86,6 +86,11 @@
                                 :key="`${target.type.id}.${target.id}`"
                             >
                                 {{ target.label }}
+                                <Icon
+                                    class="cursor-pointer ml-2"
+                                    icon="times"
+                                    @click.native="removeTarget(target)"
+                                />
                             </Tag>
                         </template>
                     </div>
@@ -201,6 +206,15 @@ export default {
         },
         getResultValue(item) {
             return item.label;
+        },
+        removeTarget(target) {
+            const type = target.type.id === "user" ? "users" : "organizations";
+            const list = this.listOfTargets[type];
+            const index = list.findIndex(item => item.id === target.id);
+
+            if (index !== -1) {
+                list.splice(index, 1);
+            }
         },
         cancelComment() {
             this.newComment = "";
