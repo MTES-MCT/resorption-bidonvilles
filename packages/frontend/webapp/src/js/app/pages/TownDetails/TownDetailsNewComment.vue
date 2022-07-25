@@ -21,63 +21,50 @@
                 placeholder="Partagez votre passage sur le site, le contexte sanitaire, la situation des habitants, difficultés rencontrées lors de votre intervention…"
             />
             <div
-                class="flex flex-col ml-4"
+                class="flex flex-col"
                 v-if="
                     $store.getters['config/hasPermission'](
                         'shantytown_comment.createPrivate'
                     )
                 "
             >
-                <div class="flex ml-4">
-                    <div class="text-sm mr-4">
-                        <Icon icon="lock" class="text-red" />
-                        Je souhaite réserver ce message à mes collègues en
-                        Préfecture et DDETS
-                    </div>
-                    <CheckableGroup
-                        direction="horizontal"
-                        id="private_comments"
-                    >
+                <p class="mt-0 mb-2 font-bold">
+                    <Icon icon="lock" class="text-red mr-1" /> Je souhaite que
+                    ce message soit visible par <sup>(*)</sup> :
+                </p>
+                <div class="ml-5">
+                    <CheckableGroup direction="vertical">
                         <Radio
-                            label="Oui"
-                            v-model="isPrivate"
-                            :checkValue="true"
-                            cypressName="private_comments"
-                        ></Radio>
+                            label="Tous les acteurs du site"
+                            v-model="mode"
+                            checkValue="public"
+                        />
                         <Radio
-                            label="Non"
-                            v-model="isPrivate"
-                            :checkValue="false"
-                            cypressName="private_comments"
-                        ></Radio>
+                            label="Les acteurs en préfecture et DDETS uniquement"
+                            v-model="mode"
+                            checkValue="pref_et_ddets"
+                        />
+                        <Radio
+                            label="Une liste d'acteurs personnalisée"
+                            v-model="mode"
+                            checkValue="custom"
+                        />
                     </CheckableGroup>
                 </div>
-                <div class="flex ml-4">
-                    <div class="text-sm mr-4">
-                        <Icon icon="lock" class="text-red" />
-                        Je souhaite réserver ce message à certaines structures
-                        ou certains utilisateurs (*)
-                    </div>
-                    <CheckableGroup
-                        direction="horizontal"
-                        id="private_comments_choose_target"
-                    >
-                        <Radio
-                            label="Oui"
-                            v-model="isPrivateChooseTarget"
-                            :checkValue="true"
-                        ></Radio>
-                        <Radio
-                            label="Non"
-                            v-model="isPrivateChooseTarget"
-                            :checkValue="false"
-                        ></Radio>
-                    </CheckableGroup>
-                </div>
-                <div class="w-8/12" v-if="isPrivateChooseTarget">
+
+                <div v-if="mode === 'custom'" class="ml-12">
+                    <p class="font-bold">
+                        <Icon icon="users" class="mr-1" />
+                        Liste d'acteurs personnalisée
+                    </p>
+                    <div></div>
+                    <p class="mb-2">
+                        Saisissez ci-dessous le nom d'une structure ou d'un
+                        acteur pour l'ajouter à la liste :
+                    </p>
                     <AutocompleteV2
                         id="target"
-                        :placeholder="'Nom d\'une structure, d\'un utilisateur'"
+                        placeholder="Nom d'une structure, d'un utilisateur"
                         prefixIcon="search"
                         :search="search"
                         :getResultValue="getResultValue"
@@ -86,32 +73,27 @@
                         rules=""
                         :disabled="false"
                     ></AutocompleteV2>
-                    <span
-                        >Liste des utilisateurs autorisés à lire le commentaire
-                        :</span
+                    <div
+                        class="border rounded p-4 -mt-4 flex flex-wrap gap-2 mb-6"
                     >
-                    <div class="flex flex-col border my-4">
-                        <span class="ml-4"> Structures :</span>
-                        <div
-                            class="ml-12"
-                            v-for="organizationTarget in listOfTargets.organizations"
-                            :key="organizationTarget.id"
-                        >
-                            - {{ organizationTarget.label }}
-                        </div>
-                        <span class="ml-4">Utilisateurs : </span>
-                        <div
-                            class="ml-12"
-                            v-for="userTarget in listOfTargets.users"
-                            :key="userTarget.id"
-                        >
-                            - {{ userTarget.label }}
-                        </div>
+                        <p v-if="targets.length === 0" class="text-G600 italic">
+                            La liste est vide pour le moment
+                        </p>
+                        <template v-else>
+                            <Tag
+                                v-for="target in targets"
+                                :key="`${target.type.id}.${target.id}`"
+                            >
+                                {{ target.label }}
+                            </Tag>
+                        </template>
                     </div>
                 </div>
-                <span class="text-sm "
-                    >* Les administrateurs locaux et nationaux auront accès au
-                    message pour des fins de modération</span
+
+                <span class="text-sm text-right mb-2"
+                    >(*) Quelle que soit l'option retenue, les administrateurs
+                    locaux et nationaux auront accès au message pour des fins de
+                    modération</span
                 >
             </div>
 
@@ -136,7 +118,7 @@
 </template>
 
 <script>
-import { autocompleteOrganization as autocompleter } from "#helpers/api/user";
+import { autocompleteOrganization } from "#helpers/api/user";
 
 export default {
     data() {
@@ -144,8 +126,7 @@ export default {
             commentError: null,
             commentErrors: {},
             newComment: "",
-            isPrivate: false,
-            isPrivateChooseTarget: false,
+            mode: "public",
             loading: false,
             input: "",
             results: [],
@@ -164,6 +145,14 @@ export default {
         },
         departementCode: {
             type: String
+        }
+    },
+    computed: {
+        targets() {
+            return [
+                ...this.listOfTargets.organizations,
+                ...this.listOfTargets.users
+            ];
         }
     },
     methods: {
@@ -187,16 +176,17 @@ export default {
         },
         async search(input) {
             this.input = input;
+            this.results = [];
 
             if (input) {
-                this.results = await autocompleter(
+                this.results = await autocompleteOrganization(
                     input,
                     this.departementCode,
                     true
                 );
-                return this.results;
             }
-            return [];
+
+            return this.results;
         },
         getResultValue(input) {
             return input.label;
@@ -221,15 +211,15 @@ export default {
                         townId: parseInt(this.$route.params.id, 10),
                         comment: {
                             description: this.newComment,
-                            private: this.isPrivate,
-                            targets: this.listOfTargets
+                            targets: {
+                                mode: this.mode,
+                                ...this.listOfTargets
+                            }
                         }
                     }
                 );
 
                 this.newComment = "";
-                this.isPrivate = false;
-                this.isPrivateChooseTarget = false;
                 this.listOfTargets = {
                     users: [],
                     organizations: []
