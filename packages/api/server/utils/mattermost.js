@@ -82,7 +82,8 @@ async function triggerShantytownCreationAlert(town, user) {
     const townLink = formatTownLink(town.id, address);
 
     const mattermostMessage = {
-        channel: '#notif-ouverture-sites',
+        // channel: '#notif-ouverture-sites',
+        channel: '#notif-dev-test',
         username: 'Alerte Résorption Bidonvilles',
         icon_emoji: ':robot:',
         text: `:rotating_light: Site ouvert ${townLink} par ${username}`,
@@ -197,7 +198,8 @@ async function triggerNewComment(comment, town, author) {
     const townLink = formatTownLink(town.id, address);
 
     const mattermostMessage = {
-        channel: '#notif-nouveau-commentaire',
+        // channel: '#notif-nouveau-commentaire',
+        channel: '#notif-test-dev',
         username: 'Alerte Résorption Bidonvilles',
         icon_emoji: ':robot:',
         text: `:rotating_light: Commentaire sur le site: ${townLink} par ${username}`,
@@ -355,7 +357,8 @@ async function triggerReinstallation(createdTown, closedSourceTowns) {
     });
 
     const mattermostMessage = {
-        channel: '#notif-reinstallation',
+        // channel: '#notif-reinstallation',
+        channel: '#notif-dev-test',
         username: 'Alerte Résorption Bidonvilles',
         icon_emoji: ':robot:',
         text: `:rotating_light:  Une partie des habitants de ${townLink} vivait précédemment dans ces sites, fermés au cours des 90 derniers jours dans le département:`,
