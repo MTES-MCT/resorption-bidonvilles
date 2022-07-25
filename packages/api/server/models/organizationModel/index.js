@@ -7,6 +7,7 @@ const findByType = require('./findByType');
 const findOneAssociation = require('./findOneAssociation');
 const findOneById = require('./findOneById');
 const findOneByLocation = require('./findOneByLocation');
+const findPrefAndDdets = require('./findPrefAndDdets');
 const getName = require('./getName');
 
 module.exports = {
@@ -19,5 +20,6 @@ module.exports = {
     findOneAssociation,
     findOneById,
     findOneByLocation,
+    findPrefAndDdets,
     getName,
 };
