@@ -48,18 +48,32 @@
             <InputIsReinstallation
                 v-model="input.is_reinstallation"
             ></InputIsReinstallation>
-            <InputLocationClosedShantytowns
-                v-if="isReinstallationInCreationMode"
-                v-model="input.location_shantytowns"
-                :nearbyClosedShantytowns="closedShantytowns"
-            >
-            </InputLocationClosedShantytowns>
+            <transition name="fade">
+                <div
+                    class="italic text-sm"
+                    v-if="isReinstallationButNoAddressProvided"
+                >
+                    Veuillez saisir une adresse pour que nous puissions vous
+                    afficher la liste des sites fermés ces trois derniers mois
+                    dans le département.
+                </div>
+            </transition>
+            <transition name="fade">
+                <InputLocationClosedShantytowns
+                    v-if="isReinstallationInCreationMode"
+                    v-model="input.location_shantytowns"
+                    :nearbyClosedShantytowns="closedShantytowns"
+                >
+                </InputLocationClosedShantytowns>
+            </transition>
         </FormParagraph>
         <div class="mt-6" v-if="input.is_reinstallation === 1">
-            <InputReinstallationComments
-                v-if="input.is_reinstallation === 1"
-                v-model="input.reinstallation_comments"
-            ></InputReinstallationComments>
+            <transition name="fade">
+                <InputReinstallationComments
+                    v-if="input.is_reinstallation === 1"
+                    v-model="input.reinstallation_comments"
+                ></InputReinstallationComments>
+            </transition>
         </div>
     </FormGroup>
 </template>
@@ -100,6 +114,9 @@ export default {
         },
         mode: {
             type: String
+        },
+        noAddressProvided: {
+            type: Boolean
         }
     },
 
@@ -117,8 +134,37 @@ export default {
             return this.nearbyClosedShantytowns;
         },
         isReinstallationInCreationMode() {
-            return this.input.is_reinstallation && this.mode === "create";
+            return (
+                this.input.is_reinstallation === 1 &&
+                this.mode === "create" &&
+                !this.noAddressProvided
+                // Ne pas supprimer: sera utile pour la v2 du ticket
+                // this.input.is_reinstallation === 1 &&
+                // (this.mode === "create" || this.mode === "update")
+            );
+        },
+        isReinstallationButNoAddressProvided() {
+            return this.input.is_reinstallation === 1 && this.noAddressProvided;
+        },
+        displayInputLocationClosedShantytowns() {
+            return (
+                this.input.is_reinstallation === 1 &&
+                !this.noAddressProvided &&
+                this.mode === "create"
+            );
         }
     }
 };
 </script>
+<style>
+.fade-enter {
+    opacity: 0;
+}
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.5s ease-out;
+}
+.fade-leave-to {
+    opacity: 0;
+}
+</style>
