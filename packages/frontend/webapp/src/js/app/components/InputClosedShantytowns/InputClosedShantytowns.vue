@@ -133,11 +133,7 @@ export default {
             return this.displayClosedShantytowns
                 .filter(({ id, status, city, usename }) => {
                     // filter by status
-                    if (this.currentTab === "open") {
-                        if (status !== "open") {
-                            return false;
-                        }
-                    } else if (this.currentTab === "closed") {
+                    if (this.currentTab === "closed") {
                         if (status === "open") {
                             return false;
                         }
