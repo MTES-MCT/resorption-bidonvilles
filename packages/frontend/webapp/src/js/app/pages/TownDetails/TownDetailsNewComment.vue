@@ -98,6 +98,18 @@
                 >
             </div>
 
+            <div
+                v-if="commentError !== null"
+                class="text-red border border-red py-2 px-4 mb-4"
+            >
+                {{ commentError }}
+                <ul v-if="commentErrors.length" class="text-sm">
+                    <li v-for="(error, index) in commentErrors" :key="index">
+                        - {{ error }}
+                    </li>
+                </ul>
+            </div>
+
             <div class="flex items-center justify-between">
                 <p>
                     <Button
@@ -125,7 +137,7 @@ export default {
     data() {
         return {
             commentError: null,
-            commentErrors: {},
+            commentErrors: [],
             newComment: "",
             mode: "public",
             loading: false,
@@ -192,6 +204,8 @@ export default {
         },
         cancelComment() {
             this.newComment = "";
+            this.commentError = null;
+            this.commentErrors = [];
         },
         async addComment() {
             if (this.loading === true) {
@@ -200,7 +214,7 @@ export default {
 
             // clean previous errors
             this.commentError = null;
-            this.commentErrors = {};
+            this.commentErrors = [];
             this.loading = true;
 
             try {
@@ -225,7 +239,9 @@ export default {
                 };
             } catch (response) {
                 this.commentError = response.user_message;
-                this.commentErrors = response.fields || {};
+                this.commentErrors = response.fields
+                    ? Object.values(response.fields).flat()
+                    : [];
             }
 
             this.loading = false;
