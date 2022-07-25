@@ -8,6 +8,7 @@ const geoModel = require('#server/models/geoModel');
 const ownerTypeModel = require('#server/models/ownerTypeModel');
 const socialOriginModel = require('#server/models/socialOriginModel');
 const electricityTypeModel = require('#server/models/electricityTypeModel');
+const shantytownService = require('#server/services/shantytown');
 
 function fromIntToBoolSanitizer(value) {
     if (value === -1) {
@@ -257,7 +258,30 @@ module.exports = mode => ([
 
             return value;
         })
-        .isArray().bail().withMessage('La liste des sites fermés dont sont originaires les habitants du site en cours de création est invalide'),
+        .isArray().bail().withMessage('La liste des sites fermés dont sont originaires les habitants du site en cours de création est invalide')
+        .custom(async (value, { req }) => {
+            let closedShantytowns = [];
+            if (value.length > 0) {
+                try {
+                    // closedShantytowns = value.map(townId => shantytownService.find(req.user, townId));
+                    closedShantytowns = value.map(async (townId) => {
+                        const closedTown = await shantytownService.find(req.user, townId);
+                        // console.log(`closedTown: ${JSON.stringify(closedTown)}`);
+                        if (!closedTown.closedAt) {
+                            throw new Error('Certains sites dont seraient originaires les habitants du site en cours de création ne sont pas fermés');
+                        }
+                        return closedTown;
+                    });
+                } catch (error) {
+                    throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Tags"');
+                }
+
+                if (closedShantytowns.length !== value.length) {
+                    throw new Error('Certains sites fermés n\'existent pas en base de données');
+                }
+            }
+            return true;
+        }),
 
     /* **********************************************************************************************
      * Statut du diagnostic social
