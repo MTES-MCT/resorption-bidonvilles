@@ -92,7 +92,7 @@
 
                 <span class="text-sm text-right mb-2"
                     >(*) Quelle que soit l'option retenue, les administrateurs
-                    locaux et nationaux auront accès au message pour des fins de
+                    locaux et nationaux auront accès au message à des fins de
                     modération</span
                 >
             </div>
