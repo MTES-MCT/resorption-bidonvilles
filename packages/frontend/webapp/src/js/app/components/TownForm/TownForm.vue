@@ -527,10 +527,6 @@ export default {
         },
         swapIsReinstallation() {
             this.town.characteristics.is_reinstallation = null;
-        },
-        getDetailedClosedTown(id) {
-            const town = id;
-            return town;
         }
     }
 };
