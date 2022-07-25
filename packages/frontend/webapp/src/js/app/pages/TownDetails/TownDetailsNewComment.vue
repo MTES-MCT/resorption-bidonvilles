@@ -129,7 +129,6 @@ export default {
             newComment: "",
             mode: "public",
             loading: false,
-            input: "",
             listOfTargets: {
                 users: [],
                 organizations: []
@@ -174,13 +173,10 @@ export default {
                 this.listOfTargets.organizations.push(result);
             }
 
-            this.input = "";
             this.$refs.targetSearch.empty();
             this.$nextTick(() => this.$refs.targetSearch.focus());
         },
         async search(input) {
-            this.input = input;
-
             if (input) {
                 return await autocompleteOrganization(
                     input,
@@ -191,8 +187,8 @@ export default {
 
             return [];
         },
-        getResultValue(input) {
-            return input.label;
+        getResultValue(item) {
+            return item.label;
         },
         cancelComment() {
             this.newComment = "";
