@@ -49,6 +49,7 @@
                         v-model="town.location"
                         :declaredAt="town.characteristics.declared_at"
                         @shareClosedTowns="showClosedTowns"
+                        @noAddressEntered="noAddressEntered"
                     ></TownFormPanelLocation>
 
                     <TownFormPanelCharacteristics
@@ -64,6 +65,7 @@
                             id="people"
                             :nearbyClosedShantytowns="nearbyClosedShantytowns"
                             :mode="mode"
+                            :noAddressProvided="noAddressProvided"
                             v-model="town.people"
                         ></TownFormPanelPeople>
 
@@ -157,7 +159,8 @@ export default {
             loading: false,
             showInfo: true,
             initialTown: this.formatTown(this.data),
-            town: this.formatTown(this.data)
+            town: this.formatTown(this.data),
+            noAddressProvided: true
         };
     },
 
@@ -217,13 +220,16 @@ export default {
                     city: this.town.city
                 }
             );
+        },
+        isAddressFull() {
+            return this.isEmptyObject(this.town.location.address);
         }
     },
 
     watch: {
         // lorsqu'une nouvelle adresse est saisie, on ne dispose pas des informations de
         // localisation précise (région, département, etc.)
-        // hors, ces informations sont nécessaires pour déterminer si les données judiciaires
+        // or, ces informations sont nécessaires pour déterminer si les données judiciaires
         // sont accessibles à l'utilisateur(ice)
         // donc, on fetch ces informations à chaque changement d'adresse
         "town.location.address.citycode": async function() {
@@ -249,6 +255,12 @@ export default {
 
     methods: {
         formatTown,
+        isEmptyObject(value) {
+            return (
+                Object.prototype.toString.call(value) === "[object Object]" &&
+                JSON.stringify(value) === "{}"
+            );
+        },
         back() {
             this.$router.replace(this.backPage);
         },
@@ -459,6 +471,15 @@ export default {
         },
         showClosedTowns(closedTowns) {
             this.nearbyClosedShantytowns = closedTowns;
+        },
+        noAddressEntered(trueOrFalse) {
+            this.noAddressProvided = trueOrFalse;
+            if (trueOrFalse) {
+                // On vide la liste des sites fermés
+                this.nearbyClosedShantytowns = [];
+                // On vide la liste des sites fermés déjà cochés
+                this.town.people.location_shantytowns = [];
+            }
         },
         swapIsReinstallation() {
             this.town.characteristics.is_reinstallation = null;
