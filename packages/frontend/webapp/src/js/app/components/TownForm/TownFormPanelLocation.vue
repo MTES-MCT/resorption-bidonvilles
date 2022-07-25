@@ -87,6 +87,12 @@ export default {
             if (!this.shantytowns.length) {
                 this.$store.dispatch("fetchTowns");
             }
+        },
+        isEmptyObject(value) {
+            return (
+                Object.prototype.toString.call(value) === "[object Object]" &&
+                JSON.stringify(value) === "{}"
+            );
         }
     },
     created() {
@@ -101,6 +107,10 @@ export default {
     watch: {
         "input.address": async function() {
             this.nearbyShantytowns = [];
+            this.$emit(
+                "noAddressEntered",
+                this.isEmptyObject(this.input.address)
+            );
         },
         "input.coordinates": async function() {
             if (this.input.coordinates) {
@@ -109,14 +119,16 @@ export default {
                 const citycode = this.input.citycode;
                 this.$emit("shareClosedTowns", []);
                 try {
+                    // Pour l'affichage des sites enregistrés dans un rayon de 500 mètres autour de cette adresse.
                     const { towns } = await findNearby(latitude, longitude);
+                    this.nearbyShantytowns = towns;
 
+                    // Recherche des sites fermés jusqu'à 90 jours avant la date de déclaration du site en cours de saisie
                     // Recherche du code du département dans lequel se situe le site déclaré
                     const { departement } = await getDepartementForCity(
                         citycode
                     );
 
-                    // Recherche des sites fermés jusqu'à 90 jours avant la date de déclaration du site en cours de saisie
                     const closedTowns = this.shantytowns.filter(
                         town =>
                             // town.statusName === "Fermé" &&
@@ -133,7 +145,6 @@ export default {
                                     (1000 * 3600 * 24)
                             ) > 0
                     );
-                    this.nearbyShantytowns = towns;
                     closedTowns.sort((a, b) => {
                         return b.closedAt - a.closedAt;
                     });
