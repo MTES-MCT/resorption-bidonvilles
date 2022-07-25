@@ -141,14 +141,11 @@ module.exports = async (townData, user) => {
     // Send a Mattermost alert, if it fails, do nothing
     try {
         if (config.mattermost) {
+            const promises = [mattermostUtils.triggerShantytownCreationAlert(town, user)];
             if (closedTownsInDepartement && closedTownsInDepartement.length > 0) {
-                Promise.all(
-                    mattermostUtils.triggerShantytownCreationAlert(town, user),
-                    mattermostUtils.triggerReinstallation(town, closedTownsInDepartement),
-                );
-            } else {
-                await mattermostUtils.triggerShantytownCreationAlert(town, user);
+                promises.push(mattermostUtils.triggerReinstallation(town, closedTownsInDepartement));
             }
+            await Promise.all(promises);
         }
     } catch (err) {
         // eslint-disable-next-line no-console
