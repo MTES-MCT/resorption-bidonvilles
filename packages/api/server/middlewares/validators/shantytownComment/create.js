@@ -1,6 +1,7 @@
 /* eslint-disable newline-per-chained-call */
 const { body, param } = require('express-validator');
 const shantytownModel = require('#server/models/shantytownModel');
+const userModel = require('#server/models/userModel/index');
 const organizationModel = require('#server/models/organizationModel/index');
 
 module.exports = [
@@ -54,7 +55,19 @@ module.exports = [
             return value;
         })
         .if((value, { req }) => req.body.targets && req.body.targets.mode && req.body.targets.mode !== 'public')
-        .isArray().bail().withMessage('Le format des structures ciblées n\'est pas valide'),
+        .isArray().bail().withMessage('Le format des structures ciblées n\'est pas valide')
+        .if(value => value.length > 0)
+        .custom(async (value) => {
+            // on vérifie, à minima, que les structures existent
+            // il faudrait également vérifier que les structures en question ont l'accès en lecture
+            // au site concerné par le commentaire (@todo)
+            const organizations = await organizationModel.findByIds(value.map(({ id }) => id));
+            if (organizations.length !== value.length) {
+                throw new Error('Une ou plusieurs structures ciblées n\'existent pas');
+            }
+
+            return true;
+        }),
 
     body('targets.users')
         .customSanitizer((value, { req }) => {
@@ -65,7 +78,19 @@ module.exports = [
             return value;
         })
         .if((value, { req }) => req.body.targets && req.body.targets.mode && req.body.targets.mode !== 'public')
-        .isArray().bail().withMessage('Le format des utilisateurs ciblés n\'est pas valide'),
+        .isArray().bail().withMessage('Le format des utilisateurs ciblés n\'est pas valide')
+        .if(value => value.length > 0)
+        .custom(async (value) => {
+            // on vérifie, à minima, que les utilisateurs existent
+            // il faudrait également vérifier que les utilisateurs en question ont l'accès en lecture
+            // au site concerné par le commentaire (@todo)
+            const users = await userModel.findByIds(null, value.map(({ id }) => id));
+            if (users.length !== value.length) {
+                throw new Error('Un ou plusieurs utilisateurs ciblés n\'existent pas');
+            }
+
+            return true;
+        }),
 
 
     body('targets.mode')
