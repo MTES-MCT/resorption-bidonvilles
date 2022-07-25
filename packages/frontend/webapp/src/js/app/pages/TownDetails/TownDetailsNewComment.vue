@@ -130,7 +130,6 @@ export default {
             mode: "public",
             loading: false,
             input: "",
-            results: [],
             listOfTargets: {
                 users: [],
                 organizations: []
@@ -176,23 +175,21 @@ export default {
             }
 
             this.input = "";
-            this.results = [];
             this.$refs.targetSearch.empty();
             this.$nextTick(() => this.$refs.targetSearch.focus());
         },
         async search(input) {
             this.input = input;
-            this.results = [];
 
             if (input) {
-                this.results = await autocompleteOrganization(
+                return await autocompleteOrganization(
                     input,
                     this.departementCode,
                     true
                 );
             }
 
-            return this.results;
+            return [];
         },
         getResultValue(input) {
             return input.label;
