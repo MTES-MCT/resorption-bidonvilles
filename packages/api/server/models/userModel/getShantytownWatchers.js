@@ -44,7 +44,6 @@ module.exports = async (shantytownId, commentId, isPrivate) => {
         ) t
         LEFT JOIN users u ON t.fk_user = u.user_id
         LEFT JOIN email_subscriptions ON email_subscriptions.fk_user = u.user_id
-        LEFT JOIN constants ON TRUE
         LEFT JOIN localized_organizations lo ON u.fk_organization = lo.organization_id
         WHERE u.fk_status = 'active'
         AND lo.active IS TRUE AND ('comment_notification' = ANY(email_subscriptions.subscriptions))`, {
