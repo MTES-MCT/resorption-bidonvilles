@@ -7,10 +7,15 @@ module.exports = async () => {
                 fk_status: ['active'],
             },
             {
-                subscription: {
+                zeroUnsubscriptions: {
+                    query: 'email_unsubscriptions.unsubscriptions',
+                    value: null,
+                },
+                notUnsubscribedToWeeklySummary: {
+                    not: true,
                     value: 'weekly_summary',
                     operator: 'isAny',
-                    query: 'email_subscriptions.subscriptions',
+                    query: 'email_unsubscriptions.unsubscriptions',
                 },
             },
         ],
