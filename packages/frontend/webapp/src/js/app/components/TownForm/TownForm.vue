@@ -307,7 +307,7 @@ export default {
             }
             this.loading = true;
             this.mainError = null;
-            this.errors = [];
+            this.errors = {};
             this.$router.replace("#top");
 
             try {
