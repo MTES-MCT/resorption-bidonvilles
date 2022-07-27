@@ -30,7 +30,7 @@ describe.only('controllers/shantytownComment', () => {
                 mockReq({
                     body: {
                         description: 'description',
-                        private: true,
+                        targets: { users: [], organizations: [] },
                         shantytown,
                     },
                     user,
@@ -40,7 +40,10 @@ describe.only('controllers/shantytownComment', () => {
             );
 
             expect(createCommentService).to.have.been.calledOnceWith(
-                { description: 'description', private: true },
+                {
+                    description: 'description',
+                    targets: { users: [], organizations: [] },
+                },
                 shantytown,
                 user,
             );
@@ -59,7 +62,7 @@ describe.only('controllers/shantytownComment', () => {
                 mockReq({
                     body: {
                         description: 'description',
-                        private: true,
+                        targets: { users: [{ id: 1 }], organizations: [] },
                         shantytown: { id: 1 },
                     },
                     user: fakeUser(),
@@ -87,7 +90,11 @@ describe.only('controllers/shantytownComment', () => {
 
                 await ctlCreate(
                     mockReq({
-                        body: { description: '', private: true, shantytown: { id: 1 } },
+                        body: {
+                            description: '',
+                            targets: { users: [], organizations: [] },
+                            shantytown: { id: 1 },
+                        },
                         user: fakeUser(),
                     }),
                     res,
@@ -123,7 +130,11 @@ describe.only('controllers/shantytownComment', () => {
 
                 await ctlCreate(
                     mockReq({
-                        body: { description: '', private: true, shantytown: { id: 1 } },
+                        body: {
+                            description: '',
+                            targets: { users: [], organizations: [] },
+                            shantytown: { id: 1 },
+                        },
                         user: fakeUser(),
                     }),
                     res,
@@ -159,7 +170,11 @@ describe.only('controllers/shantytownComment', () => {
 
                 await ctlCreate(
                     mockReq({
-                        body: { description: '', private: true, shantytown: { id: 1 } },
+                        body: {
+                            description: '',
+                            targets: { users: [], organizations: [] },
+                            shantytown: { id: 1 },
+                        },
                         user: fakeUser(),
                     }),
                     res,
