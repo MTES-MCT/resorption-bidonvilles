@@ -9,7 +9,7 @@ module.exports = async (req, res, next) => {
 
     const {
         first_name: firstName, last_name: lastName, email, phone, position,
-        email_subscriptions: emailSubscriptions,
+        email_subscriptions: emailSubscriptions, email_unsubscriptions: emailUnsubscriptions,
     } = req.body;
     const user = await userModel.findOne(userId, { auth: true });
 
@@ -29,7 +29,7 @@ module.exports = async (req, res, next) => {
         email,
         phone,
         position,
-        email_subscriptions: emailSubscriptions,
+        email_unsubscriptions: emailUnsubscriptions,
     };
 
     if (req.body.password) {

@@ -20,11 +20,21 @@ module.exports = async (where = [], filters, user = null, feature, transaction) 
 
     const whereClause = where.map((clauses, index) => {
         const clauseGroup = Object.keys(clauses).map((column) => {
-            replacements[`${column}${index}`] = clauses[column].value || clauses[column];
+            replacements[`${column}${index}`] = clauses[column].value !== undefined ? clauses[column].value : clauses[column];
             if (clauses[column].operator === 'isAny') {
-                return `(:${column}${index}) = ANY(${clauses[column].query || `users.${column}`})`;
+                const clause = `(:${column}${index}) = ANY(${clauses[column].query || `users.${column}`})`;
+                if (clauses[column].not === true) {
+                    return `NOT(${clause})`;
+                }
+
+                return clause;
             }
-            return `${clauses[column].query || `users.${column}`} ${clauses[column].operator || 'IN'} (:${column}${index})`;
+
+            if (replacements[`${column}${index}`] === null) {
+                return `${clauses[column].query || `users.${column}`} IS ${clauses[column].not === true ? 'NOT ' : ''}NULL`;
+            }
+
+            return `${clauses[column].query || `users.${column}`} ${clauses[column].not === true ? 'NOT ' : ''}${clauses[column].operator || 'IN'} (:${column}${index})`;
         }).join(' OR ');
 
         return `(${clauseGroup})`;
@@ -40,8 +50,8 @@ module.exports = async (where = [], filters, user = null, feature, transaction) 
         `WITH user_options AS (
             SELECT fk_user, ARRAY_AGG(fk_option) AS options FROM user_permission_options GROUP BY fk_user
         ),
-        email_subscriptions AS (
-            SELECT fk_user, ARRAY_AGG(email_subscription) AS subscriptions FROM user_email_subscriptions GROUP BY fk_user
+        email_unsubscriptions AS (
+            SELECT fk_user, ARRAY_AGG(email_subscription) AS unsubscriptions FROM user_email_unsubscriptions GROUP BY fk_user
         )
 
         SELECT
@@ -59,7 +69,7 @@ module.exports = async (where = [], filters, user = null, feature, transaction) 
             users.last_version,
             users.last_changelog,
             users.charte_engagement_signee,
-            COALESCE(email_subscriptions.subscriptions, array[]::enum_user_email_subscriptions_email_subscription[]) AS email_subscriptions,
+            COALESCE(email_unsubscriptions.unsubscriptions, array[]::enum_user_email_subscriptions_email_subscription[]) AS email_unsubscriptions,
             users.last_access,
             users.admin_comments,
             CASE WHEN users.fk_role IS NULL THEN FALSE
@@ -115,7 +125,7 @@ module.exports = async (where = [], filters, user = null, feature, transaction) 
         LEFT JOIN
             user_options ON user_options.fk_user = users.user_id
         LEFT JOIN
-        email_subscriptions ON email_subscriptions.fk_user = users.user_id
+            email_unsubscriptions ON email_unsubscriptions.fk_user = users.user_id
         ${where.length > 0 ? `WHERE ${whereClause}` : ''}
         ORDER BY
             CASE

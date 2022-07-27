@@ -92,6 +92,7 @@
                     id="newComment"
                     :user="user"
                     :nbComments="comments.length"
+                    :departementCode="town.departement.code"
                 />
             </PrivateContainer>
         </div>

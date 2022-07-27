@@ -9,6 +9,28 @@
                 :tag="tag"
             />
         </div>
+        <div
+            class="mb-2"
+            v-if="
+                activity.comment.user_target_name.length > 0 ||
+                    activity.comment.organization_target_name.length > 0
+            "
+        >
+            <Icon icon="lock" class="text-red" />
+            <span class="pl-1 font-bold"
+                >Message réservé aux structures et utilisateurs suivants :</span
+            >
+            <div v-for="user in activity.comment.user_target_name" :key="user">
+                - {{ user }}
+            </div>
+            <div
+                v-for="organization in activity.comment
+                    .organization_target_name"
+                :key="organization"
+            >
+                - {{ organization }}
+            </div>
+        </div>
         <p>
             <span class="font-bold">Message :</span>
             {{ description }}
@@ -36,7 +58,6 @@ export default {
             required: true
         }
     },
-
     computed: {
         description() {
             return this.activity.highCovidComment
