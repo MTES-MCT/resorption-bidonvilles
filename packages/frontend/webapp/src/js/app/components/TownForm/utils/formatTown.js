@@ -87,6 +87,7 @@ export default function formatTown(data) {
             census_conducted_by: data.censusConductedBy
         },
         livingConditions: {
+            original_version: data.livingConditions?.version || 2,
             version: data.livingConditions?.version || 2,
             v1:
                 data.livingConditions?.version === 1

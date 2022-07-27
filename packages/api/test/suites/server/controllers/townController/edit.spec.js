@@ -71,6 +71,8 @@ describe.only('townController.edit()', () => {
                     police_requested_at: new Date(),
                     police_granted_at: new Date(),
                     bailiff: 'Huissier',
+                    living_conditions_version: 2,
+
                     water_access_type: 'autre',
                     water_access_type_details: 'commentaire accès eau',
                     water_access_is_public: false,
@@ -131,12 +133,6 @@ describe.only('townController.edit()', () => {
 
             dependencies.findOne
                 .withArgs(input.user, 1)
-                .onCall(0)
-                .resolves(output.shantytown);
-
-            dependencies.findOne
-                .withArgs(input.user, 1)
-                .onCall(1)
                 .resolves(output.updatedShantytown);
 
             res = mockRes();
@@ -257,68 +253,6 @@ describe.only('townController.edit()', () => {
             expect(res.send).to.have.been.calledOnceWith(output.updatedShantytown);
         });
     });
-
-    describe('En cas d\'erreur dans le checkout du site', () => {
-        let res;
-        let next;
-        let error;
-        beforeEach(async () => {
-            const input = {
-                params: { id: 1 },
-                body: {},
-                user: generateUser(),
-            };
-
-            error = new Error('Une erreur');
-
-            dependencies.findOne.rejects(error);
-
-            res = mockRes();
-            next = sinon.stub();
-            await edit(mockReq(input), res, next);
-        });
-
-        it('répond une 500', () => {
-            expect(res.status).to.have.been.calledOnceWith(500);
-        });
-
-        it('retourne un message d\'erreur générique', () => {
-            expect(res.send).to.have.been.calledOnceWith({
-                user_message: 'Une erreur de lecture en base de données est survenue',
-            });
-        });
-
-        it('appelle next() avec l\'erreur en question', () => {
-            expect(next).to.have.been.calledOnceWith(error);
-        });
-    });
-
-    describe('Si le site n\'existe pas en base de données', () => {
-        let res;
-        beforeEach(async () => {
-            const input = {
-                params: { id: 1 },
-                body: {},
-                user: generateUser(),
-            };
-
-            dependencies.findOne.withArgs(input.user, 1).resolves(null);
-
-            res = mockRes();
-            await edit(mockReq(input), res);
-        });
-
-        it('répond une 404', () => {
-            expect(res.status).to.have.been.calledOnceWith(404);
-        });
-
-        it('retourne un message d\'erreur générique', () => {
-            expect(res.send).to.have.been.calledOnceWith({
-                user_message: 'Le site d\'identifiant 1 n\'existe pas : mise à jour impossible',
-            });
-        });
-    });
-
     describe('Si une erreur survient lors de la mise à jour', () => {
         let res;
         let next;

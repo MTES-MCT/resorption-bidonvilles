@@ -1,45 +1,48 @@
 <template>
-    <FormGroup title="Conditions de vie et environnement (anciennes questions)">
+    <FormGroup title="Conditions de vie et environnement">
         <FormParagraph
             title="Les habitants ont-ils accès à l'eau ?"
             :showMandatoryStar="true"
         >
             <InputAccessToWater
-                v-model="input.water.access"
+                v-model="input.v1.water.access"
             ></InputAccessToWater>
 
-            <div class="ml-12" v-if="input.water.access === 1">
-                <InputWaterPotable v-model="input.water.potable" />
+            <div class="ml-12" v-if="input.v1.water.access === 1">
+                <InputWaterPotable v-model="input.v1.water.potable" />
                 <InputWaterContinuousAccess
-                    v-model="input.water.continuousAccess"
+                    v-model="input.v1.water.continuousAccess"
                 />
-                <InputWaterPublicPoint v-model="input.water.publicPoint" />
-                <InputWaterDistance v-model="input.water.distance" />
-                <InputWaterRoadsToCross v-model="input.water.roadsToCross" />
+                <InputWaterPublicPoint v-model="input.v1.water.publicPoint" />
+                <InputWaterDistance v-model="input.v1.water.distance" />
+                <InputWaterRoadsToCross v-model="input.v1.water.roadsToCross" />
                 <InputWaterEveryoneHasAccess
-                    v-model="input.water.everyoneHasAccess"
+                    v-model="input.v1.water.everyoneHasAccess"
                 />
-                <InputWaterStagnantWater v-model="input.water.stagnantWater" />
+                <InputWaterStagnantWater
+                    v-model="input.v1.water.stagnantWater"
+                />
                 <div class="">
                     <InputWaterHandWashAccess
-                        v-model="input.water.handWashAccess"
+                        v-model="input.v1.water.handWashAccess"
                         withoutBorder
                     />
                     <InputWaterHandWashNumber
-                        v-if="input.water.handWashAccess > 0"
+                        v-if="input.v1.water.handWashAccess > 0"
                         :population="population"
-                        v-model="input.water.handWashAccessNumber"
+                        v-model="input.v1.water.handWashAccessNumber"
                     />
                 </div>
             </div>
             <div class="ml-12 mt-6">
                 <InputWaterComments
                     :rules="
-                        input.water.access === 1 && input.water.publicPoint > 0
+                        input.v1.water.access === 1 &&
+                        input.v1.water.publicPoint > 0
                             ? 'required'
                             : ''
                     "
-                    v-model="input.water.comments"
+                    v-model="input.v1.water.comments"
                 ></InputWaterComments>
             </div>
         </FormParagraph>
@@ -49,24 +52,24 @@
             :showMandatoryStar="true"
         >
             <InputAccessToSanitary
-                v-model="input.sanitary.access"
+                v-model="input.v1.sanitary.access"
             ></InputAccessToSanitary>
-            <div class="ml-12" v-if="input.sanitary.access === 1">
+            <div class="ml-12" v-if="input.v1.sanitary.access === 1">
                 <InputSanitaryOnSite
-                    v-model="input.sanitary.onSite"
+                    v-model="input.v1.sanitary.onSite"
                 ></InputSanitaryOnSite>
                 <InputSanitaryNumber
-                    v-model="input.sanitary.number"
+                    v-model="input.v1.sanitary.number"
                     :population="population"
                 ></InputSanitaryNumber>
                 <InputSanitaryInsalubrious
-                    v-model="input.sanitary.insalubrious"
+                    v-model="input.v1.sanitary.insalubrious"
                     class="mb-6"
                 ></InputSanitaryInsalubrious>
             </div>
             <div class="ml-12 mt-6">
                 <InputSanitaryComments
-                    v-model="input.sanitary.comments"
+                    v-model="input.v1.sanitary.comments"
                 ></InputSanitaryComments>
             </div>
         </FormParagraph>
@@ -76,11 +79,11 @@
             :showMandatoryStar="true"
         >
             <InputElectricityType
-                v-model="input.electricity.type"
+                v-model="input.v1.electricity.type"
             ></InputElectricityType>
             <div class="ml-12">
                 <InputElectricityComments
-                    v-model="input.electricity.comments"
+                    v-model="input.v1.electricity.comments"
                 ></InputElectricityComments>
             </div>
         </FormParagraph>
@@ -90,17 +93,17 @@
             :showMandatoryStar="true"
         >
             <InputTrashEvacuation
-                v-model="input.trash.evacuation"
+                v-model="input.v1.trash.evacuation"
             ></InputTrashEvacuation>
-            <div class="ml-12" v-if="input.trash.evacuation === 1">
+            <div class="ml-12" v-if="input.v1.trash.evacuation === 1">
                 <InputTrashEvacuationRegular
-                    v-model="input.trash.evacuationRegular"
+                    v-model="input.v1.trash.evacuationRegular"
                 ></InputTrashEvacuationRegular>
                 <InputTrashAccumulation
-                    v-model="input.trash.accumulation"
+                    v-model="input.v1.trash.accumulation"
                 ></InputTrashAccumulation>
                 <InputTrashCansOnSite
-                    v-model="input.trash.cansOnSite"
+                    v-model="input.v1.trash.cansOnSite"
                 ></InputTrashCansOnSite>
             </div>
         </FormParagraph>
@@ -109,10 +112,10 @@
             title="Y a-t-il des nuisibles sur le site ou à proximité ?"
             :showMandatoryStar="true"
         >
-            <InputVermin v-model="input.vermin.vermin"></InputVermin>
+            <InputVermin v-model="input.v1.vermin.vermin"></InputVermin>
             <div class="ml-12">
                 <InputVerminComments
-                    v-model="input.vermin.comments"
+                    v-model="input.v1.vermin.comments"
                 ></InputVerminComments>
             </div>
         </FormParagraph>
@@ -122,22 +125,22 @@
             :showMandatoryStar="true"
         >
             <InputFirePreventionMeasures
-                v-model="input.firePrevention.measures"
+                v-model="input.v1.firePrevention.measures"
             ></InputFirePreventionMeasures>
-            <div class="ml-12" v-if="input.firePrevention.measures === 1">
+            <div class="ml-12" v-if="input.v1.firePrevention.measures === 1">
                 <InputFirePreventionDiagnostic
-                    v-model="input.firePrevention.diagnostic"
+                    v-model="input.v1.firePrevention.diagnostic"
                 ></InputFirePreventionDiagnostic>
                 <InputFirePreventionSiteAccessible
-                    v-model="input.firePrevention.siteAccessible"
+                    v-model="input.v1.firePrevention.siteAccessible"
                 ></InputFirePreventionSiteAccessible>
                 <InputFirePreventionDevices
-                    v-model="input.firePrevention.devices"
+                    v-model="input.v1.firePrevention.devices"
                 ></InputFirePreventionDevices>
             </div>
             <div class="ml-12 mt-6">
                 <InputFirePreventionComments
-                    v-model="input.firePrevention.comments"
+                    v-model="input.v1.firePrevention.comments"
                 ></InputFirePreventionComments>
             </div>
         </FormParagraph>

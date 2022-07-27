@@ -63,16 +63,16 @@
                     ></TownFormPanelPeople>
 
                     <TownFormPanelLivingConditions
-                        v-if="town.livingConditions.version === 1"
+                        v-show="$store.state.townForm.showOldLivingConditions"
                         class="mt-10 townPanelShadow"
                         :population="town.people.population"
-                        v-model="town.livingConditions.v1"
+                        v-model="town.livingConditions"
                     ></TownFormPanelLivingConditions>
 
                     <TownFormPanelNewLivingConditions
                         class="mt-10 townPanelShadow"
                         id="living_conditions"
-                        v-model="town.livingConditions.v2"
+                        v-model="town.livingConditions"
                     ></TownFormPanelNewLivingConditions>
 
                     <TownFormPanelJudicial
@@ -314,6 +314,8 @@ export default {
                 const [lat, lon] = this.town.location.coordinates;
 
                 const result = await this.submitFn({
+                    living_conditions_version: this.town.livingConditions
+                        .version,
                     // flatten living conditions into a deep-1 object (electricity.access becomes electricity_access)
                     ...Object.keys(this.town.livingConditions.v2).reduce(
                         (acc, mainKey) => {

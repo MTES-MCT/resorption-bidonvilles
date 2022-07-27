@@ -1,8 +1,9 @@
 /* eslint-disable newline-per-chained-call */
-const { body } = require('express-validator');
+const { body, param } = require('express-validator');
 const { isLatLong, trim } = require('validator');
 const { can } = require('#server/utils/permission');
 // models
+const shantytownModel = require('#server/models/shantytownModel');
 const fieldTypeModel = require('#server/models/fieldTypeModel');
 const geoModel = require('#server/models/geoModel');
 const ownerTypeModel = require('#server/models/ownerTypeModel');
@@ -17,6 +18,23 @@ function fromIntToBoolSanitizer(value) {
 }
 
 module.exports = mode => ([
+    param('id')
+        .if(() => mode === 'update')
+        .custom(async (value, { req }) => {
+            let town;
+            try {
+                town = await shantytownModel.findOne(req.user, value);
+            } catch (error) {
+                throw new Error('Une erreur de lecture en base de données est survenue');
+            }
+
+            if (town === null) {
+                throw new Error('Le site à modifier n\'existe pas ou vous n\'avez pas le droit pour le modifier');
+            }
+
+            req.town = town;
+        }),
+
     /* **********************************************************************************************
      * Localisation géographique
      ********************************************************************************************* */
@@ -668,8 +686,21 @@ module.exports = mode => ([
      * Conditions de vie
      ******************************************************************************************** */
 
+    // version
+    body('living_conditions_version')
+        .custom((value, { req }) => {
+            if (mode === 'create' && value !== 2) {
+                throw new Error('Vous ne pouvez pas déclarer un site sans les nouvelles conditions de vie');
+            } else if (mode === 'update' && value < req.town.livingConditions.version) {
+                throw new Error('Les conditions de vie saisies ne sont pas à la bonne version');
+            }
+
+            return true;
+        }),
+
     // water
     body('water_access_type')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .exists().bail().withMessage('Le champ "Les habitants ont-ils accès à l\'eau ?" est obligatoire')
         .custom((value) => {
             if (![
@@ -688,13 +719,14 @@ module.exports = mode => ([
         }),
 
     body('water_access_type_details')
-        .if((value, { req }) => req.body.water_access_type === 'autre')
+        .if((value, { req }) => req.body.living_conditions_version === 2 && req.body.water_access_type === 'autre')
         .exists({ checkNull: true }).bail().withMessage('Le champ "Veuillez préciser les modalités d\'accès à l\'eau" est obligatoire')
         .isString().bail().withMessage('Le champ "Veuillez préciser les modalités d\'accès à l\'eau" est invalide')
         .trim()
         .notEmpty().withMessage('Le champ "Veuillez préciser les modalités d\'accès à l\'eau" est obligatoire'),
 
     body('water_access_type_details')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .customSanitizer((value, { req }) => {
             if (req.body.water_access_type !== 'autre') {
                 return null;
@@ -704,7 +736,7 @@ module.exports = mode => ([
         }),
 
     body('water_access_is_public')
-        .if((value, { req }) => ['autre', 'robinet_connecte_au_reseau'].includes(req.body.water_access_type))
+        .if((value, { req }) => req.body.living_conditions_version === 2 && ['autre', 'robinet_connecte_au_reseau'].includes(req.body.water_access_type))
         .exists().bail().withMessage('Le champ "Est-ce un point d\'eau sur la voie publique ?" est obligatoire')
         .customSanitizer(value => (value === null ? -1 : value))
         .toInt()
@@ -712,6 +744,7 @@ module.exports = mode => ([
         .customSanitizer(fromIntToBoolSanitizer),
 
     body('water_access_is_public')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .customSanitizer((value, { req }) => {
             if (!['robinet_connecte_au_reseau', 'autre'].includes(req.body.water_access_type)) {
                 return null;
@@ -721,7 +754,7 @@ module.exports = mode => ([
         }),
 
     body('water_access_is_continuous')
-        .if((value, { req }) => req.body.water_access_is_public === false)
+        .if((value, { req }) => req.body.living_conditions_version === 2 && req.body.water_access_is_public === false)
         .exists().bail().withMessage('Le champ "L\'accès est-il continu ?" est obligatoire')
         .customSanitizer(value => (value === null ? -1 : value))
         .toInt()
@@ -729,6 +762,7 @@ module.exports = mode => ([
         .customSanitizer(fromIntToBoolSanitizer),
 
     body('water_access_is_continuous')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .customSanitizer((value, { req }) => {
             if (req.body.water_access_is_public !== false) {
                 return null;
@@ -738,12 +772,13 @@ module.exports = mode => ([
         }),
 
     body('water_access_is_continuous_details')
-        .if((value, { req }) => req.body.water_access_is_continuous === false)
+        .if((value, { req }) => req.body.living_conditions_version === 2 && req.body.water_access_is_continuous === false)
         .isString().bail().withMessage('Le champ "Veuillez préciser la discontinuité de l\'accès à l\'eau" est invalide')
         .trim()
         .notEmpty().withMessage('Le champ "Veuillez préciser la discontinuité de l\'accès à l\'eau" est obligatoire'),
 
     body('water_access_is_continuous_details')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .customSanitizer((value, { req }) => {
             if (req.body.water_access_is_continuous !== false) {
                 return null;
@@ -753,7 +788,7 @@ module.exports = mode => ([
         }),
 
     body('water_access_is_local')
-        .if((value, { req }) => req.body.water_access_is_public === false)
+        .if((value, { req }) => req.body.living_conditions_version === 2 && req.body.water_access_is_public === false)
         .exists().bail().withMessage('Le champ "Où se situe l’accès ?" est obligatoire')
         .customSanitizer(value => (value === null ? -1 : value))
         .toInt()
@@ -761,6 +796,7 @@ module.exports = mode => ([
         .customSanitizer(fromIntToBoolSanitizer),
 
     body('water_access_is_local')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .customSanitizer((value, { req }) => {
             if (req.body.water_access_is_public !== false) {
                 return null;
@@ -770,7 +806,7 @@ module.exports = mode => ([
         }),
 
     body('water_access_is_close')
-        .if((value, { req }) => req.body.water_access_is_local === true)
+        .if((value, { req }) => req.body.living_conditions_version === 2 && req.body.water_access_is_local === true)
         .exists().bail().withMessage('Le champ "Distance point d’eau / habitation la plus éloignée ?" est obligatoire')
         .customSanitizer(value => (value === null ? -1 : value))
         .toInt()
@@ -778,6 +814,7 @@ module.exports = mode => ([
         .customSanitizer(fromIntToBoolSanitizer),
 
     body('water_access_is_close')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .customSanitizer((value, { req }) => {
             if (req.body.water_access_is_local !== true) {
                 return null;
@@ -787,7 +824,7 @@ module.exports = mode => ([
         }),
 
     body('water_access_is_unequal')
-        .if((value, { req }) => req.body.water_access_is_local === true)
+        .if((value, { req }) => req.body.living_conditions_version === 2 && req.body.water_access_is_local === true)
         .exists().bail().withMessage('Le champ "Des inégalités d\'accès ont-elles été constatées ?" est obligatoire')
         .customSanitizer(value => (value === null ? -1 : value))
         .toInt()
@@ -795,6 +832,7 @@ module.exports = mode => ([
         .customSanitizer(fromIntToBoolSanitizer),
 
     body('water_access_is_unequal')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .customSanitizer((value, { req }) => {
             if (req.body.water_access_is_local !== true) {
                 return null;
@@ -804,12 +842,13 @@ module.exports = mode => ([
         }),
 
     body('water_access_is_unequal_details')
-        .if((value, { req }) => req.body.water_access_is_unequal === true)
+        .if((value, { req }) => req.body.living_conditions_version === 2 && req.body.water_access_is_unequal === true)
         .isString().bail().withMessage('Le champ "Veuillez préciser l\'inégalité de l\'accès à l\'eau" est invalide')
         .trim()
         .notEmpty().withMessage('Le champ "Veuillez préciser l\'inégalité de l\'accès à l\'eau" est obligatoire'),
 
     body('water_access_is_unequal_details')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .customSanitizer((value, { req }) => {
             if (req.body.water_access_is_unequal !== true) {
                 return null;
@@ -819,7 +858,7 @@ module.exports = mode => ([
         }),
 
     body('water_access_has_stagnant_water')
-        .if((value, { req }) => req.body.water_access_is_local === true)
+        .if((value, { req }) => req.body.living_conditions_version === 2 && req.body.water_access_is_local === true)
         .exists().bail().withMessage('Le champ "Existe-t-il des eaux stagnantes autour du point de distribution ?" est obligatoire')
         .customSanitizer(value => (value === null ? -1 : value))
         .toInt()
@@ -827,6 +866,7 @@ module.exports = mode => ([
         .customSanitizer(fromIntToBoolSanitizer),
 
     body('water_access_has_stagnant_water')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .customSanitizer((value, { req }) => {
             if (req.body.water_access_is_local !== true) {
                 return null;
@@ -836,29 +876,33 @@ module.exports = mode => ([
         }),
 
     body('water_access_comments')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .optional({ nullable: true })
         .isString().bail().withMessage('Le champ "Informations complémentaires concernant l\'accès à l\'eau" est invalide')
         .trim(),
 
     body('water_access_comments')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .customSanitizer(value => value || null),
 
     // sanitary
     body('sanitary_open_air_defecation')
-        .exists().bail().withMessage('Le champ "Constate-t-on des marques de défécation à l’air libre ?" est obligatoire')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Constate-t-on des marques de défécation à l’air libre ?" est obligatoire')
         .customSanitizer(value => (value === null ? -1 : value))
         .toInt()
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "Constate-t-on des marques de défécation à l’air libre ?" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
 
     body('sanitary_working_toilets')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .exists({ checkNull: true }).bail().withMessage('Le champ "Présence de toilettes fonctionnelles et utilisées ?" est obligatoire')
         .toInt()
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "Présence de toilettes fonctionnelles et utilisées ?" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
 
     body('sanitary_toilet_types')
-        .if((value, { req }) => req.body.sanitary_working_toilets === true)
+        .if((value, { req }) => req.body.living_conditions_version === 2 && req.body.sanitary_working_toilets === true)
         .customSanitizer(value => (value === undefined || value === null ? [] : value))
         .isArray().bail().withMessage('Le champ "Quels sont les types de toilettes installées ?" est invalide')
         .custom((value) => {
@@ -870,6 +914,7 @@ module.exports = mode => ([
         }),
 
     body('sanitary_toilet_types')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .customSanitizer((value, { req }) => {
             if (req.body.sanitary_working_toilets !== true) {
                 return [];
@@ -879,7 +924,7 @@ module.exports = mode => ([
         }),
 
     body('sanitary_toilets_are_inside')
-        .if((value, { req }) => req.body.sanitary_toilet_types.length > 1 || (req.body.sanitary_toilet_types.length === 1 && !req.body.sanitary_toilet_types.includes('latrines')))
+        .if((value, { req }) => req.body.living_conditions_version === 2 && (req.body.sanitary_toilet_types.length > 1 || (req.body.sanitary_toilet_types.length === 1 && !req.body.sanitary_toilet_types.includes('latrines'))))
         .exists().bail().withMessage('Le champ "Les toilettes sont-elles à l’intérieur du site ?" est obligatoire')
         .customSanitizer(value => (value === null ? -1 : value))
         .toInt()
@@ -887,6 +932,7 @@ module.exports = mode => ([
         .customSanitizer(fromIntToBoolSanitizer),
 
     body('sanitary_toilets_are_inside')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .customSanitizer((value, { req }) => {
             if (req.body.sanitary_toilet_types.length === 0 || (req.body.sanitary_toilet_types.length === 1 && req.body.sanitary_toilet_types.includes('latrines'))) {
                 return null;
@@ -896,7 +942,7 @@ module.exports = mode => ([
         }),
 
     body('sanitary_toilets_are_lighted')
-        .if((value, { req }) => req.body.sanitary_toilet_types.length > 1 || (req.body.sanitary_toilet_types.length === 1 && !req.body.sanitary_toilet_types.includes('latrines')))
+        .if((value, { req }) => req.body.living_conditions_version === 2 && (req.body.sanitary_toilet_types.length > 1 || (req.body.sanitary_toilet_types.length === 1 && !req.body.sanitary_toilet_types.includes('latrines'))))
         .exists().bail().withMessage('Le champ "Ces toilettes sont-elles éclairées et verrouillables de l’intérieur ?" est obligatoire')
         .customSanitizer(value => (value === null ? -1 : value))
         .toInt()
@@ -904,6 +950,7 @@ module.exports = mode => ([
         .customSanitizer(fromIntToBoolSanitizer),
 
     body('sanitary_toilets_are_lighted')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .customSanitizer((value, { req }) => {
             if (req.body.sanitary_toilet_types.length === 0 || (req.body.sanitary_toilet_types.length === 1 && req.body.sanitary_toilet_types.includes('latrines'))) {
                 return null;
@@ -913,7 +960,7 @@ module.exports = mode => ([
         }),
 
     body('sanitary_hand_washing')
-        .if((value, { req }) => req.body.sanitary_toilet_types.length > 1 || (req.body.sanitary_toilet_types.length === 1 && !req.body.sanitary_toilet_types.includes('latrines')))
+        .if((value, { req }) => req.body.living_conditions_version === 2 && (req.body.sanitary_toilet_types.length > 1 || (req.body.sanitary_toilet_types.length === 1 && !req.body.sanitary_toilet_types.includes('latrines'))))
         .exists().bail().withMessage('Le champ "Y a-t-il un point de lavage des mains à proximité des toilettes ?" est obligatoire')
         .customSanitizer(value => (value === null ? -1 : value))
         .toInt()
@@ -921,6 +968,7 @@ module.exports = mode => ([
         .customSanitizer(fromIntToBoolSanitizer),
 
     body('sanitary_hand_washing')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .customSanitizer((value, { req }) => {
             if (req.body.sanitary_toilet_types.length === 0 || (req.body.sanitary_toilet_types.length === 1 && req.body.sanitary_toilet_types.includes('latrines'))) {
                 return null;
@@ -931,13 +979,14 @@ module.exports = mode => ([
 
     // electricity
     body('electricity_access')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .exists({ checkNull: true }).bail().withMessage('Le champ "Y a-t-il présence d’une installation électrique ?" est obligatoire')
         .toInt()
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "Y a-t-il présence d’une installation électrique ?" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
 
     body('electricity_access_types')
-        .if((value, { req }) => req.body.electricity_access === true)
+        .if((value, { req }) => req.body.living_conditions_version === 2 && req.body.electricity_access === true)
         .customSanitizer(value => (value === undefined || value === null ? [] : value))
         .isArray().bail().withMessage('Le champ "Quelle est la source de l’accès à l\'électricité ?" est invalide')
         .custom((value) => {
@@ -949,6 +998,7 @@ module.exports = mode => ([
         }),
 
     body('electricity_access_types')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .customSanitizer((value, { req }) => {
             if (req.body.electricity_access !== true) {
                 return [];
@@ -958,7 +1008,7 @@ module.exports = mode => ([
         }),
 
     body('electricity_access_is_unequal')
-        .if((value, { req }) => req.body.electricity_access_types.length > 0)
+        .if((value, { req }) => req.body.living_conditions_version === 2 && req.body.electricity_access_types.length > 0)
         .exists().bail().withMessage('Le champ "Des inégalités d’accès ont-elles été constatées ?" est obligatoire')
         .customSanitizer(value => (value === null ? -1 : value))
         .toInt()
@@ -966,6 +1016,7 @@ module.exports = mode => ([
         .customSanitizer(fromIntToBoolSanitizer),
 
     body('electricity_access_is_unequal')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .customSanitizer((value, { req }) => {
             if (req.body.electricity_access_types.length === 0) {
                 return null;
@@ -976,19 +1027,21 @@ module.exports = mode => ([
 
     // trash
     body('trash_is_piling')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .exists({ checkNull: true }).bail().withMessage('Le champ "Constate-t-on une accumulation de déchets type ordures ménagères ?" est obligatoire')
         .toInt()
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "Constate-t-on une accumulation de déchets type ordures ménagères ?" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
 
     body('trash_evacuation_is_close')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .exists({ checkNull: true }).bail().withMessage('Le champ "Y a-t-il des dispositifs de ramassage des ordures ménagères ?" est obligatoire')
         .toInt()
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "Y a-t-il des dispositifs de ramassage des ordures ménagères ?" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
 
     body('trash_evacuation_is_safe')
-        .if((value, { req }) => req.body.trash_evacuation_is_close === true)
+        .if((value, { req }) => req.body.living_conditions_version === 2 && req.body.trash_evacuation_is_close === true)
         .exists().bail().withMessage('Le champ "Les dispositifs de ramassage des ordures ménagères sont-ils en bon état ?" est obligatoire')
         .customSanitizer(value => (value === null ? -1 : value))
         .toInt()
@@ -996,6 +1049,7 @@ module.exports = mode => ([
         .customSanitizer(fromIntToBoolSanitizer),
 
     body('trash_evacuation_is_safe')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .customSanitizer((value, { req }) => {
             if (req.body.trash_evacuation_is_close !== true) {
                 return null;
@@ -1005,7 +1059,7 @@ module.exports = mode => ([
         }),
 
     body('trash_evacuation_is_regular')
-        .if((value, { req }) => req.body.trash_evacuation_is_close === true)
+        .if((value, { req }) => req.body.living_conditions_version === 2 && req.body.trash_evacuation_is_close === true)
         .exists().bail().withMessage('Le champ "La collecte des poubelles est-elle réalisée de manière régulière ?" est obligatoire')
         .customSanitizer(value => (value === null ? -1 : value))
         .toInt()
@@ -1013,6 +1067,7 @@ module.exports = mode => ([
         .customSanitizer(fromIntToBoolSanitizer),
 
     body('trash_evacuation_is_regular')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .customSanitizer((value, { req }) => {
             if (req.body.trash_evacuation_is_close !== true) {
                 return null;
@@ -1022,7 +1077,7 @@ module.exports = mode => ([
         }),
 
     body('trash_bulky_is_piling')
-        .if((value, { req }) => req.body.trash_evacuation_is_close === true)
+        .if((value, { req }) => req.body.living_conditions_version === 2 && req.body.trash_evacuation_is_close === true)
         .exists().bail().withMessage('Le champ "Constate-t-on une accumulation de déchets type encombrants ?" est obligatoire')
         .customSanitizer(value => (value === null ? -1 : value))
         .toInt()
@@ -1030,6 +1085,7 @@ module.exports = mode => ([
         .customSanitizer(fromIntToBoolSanitizer),
 
     body('trash_bulky_is_piling')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .customSanitizer((value, { req }) => {
             if (req.body.trash_evacuation_is_close !== true) {
                 return null;
@@ -1040,21 +1096,25 @@ module.exports = mode => ([
 
     // pest animals
     body('pest_animals_presence')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .exists({ checkNull: true }).bail().withMessage('Le champ "Y a-t-il des nuisibles sur le site ou à proximité ?" est obligatoire')
         .toInt()
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "Y a-t-il des nuisibles sur le site ou à proximité ?" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
 
     body('pest_animals_details')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .optional({ nullable: true })
         .isString().bail().withMessage('Le champ "Informations complémentaires concernant la présence de nuisibles" est invalide')
         .trim(),
 
     body('pest_animals_details')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .customSanitizer(value => value || null),
 
     // fire prevention
     body('fire_prevention_diagnostic')
+        .if((value, { req }) => req.body.living_conditions_version === 2)
         .exists({ checkNull: true }).bail().withMessage('Le champ "Un diagnostic prévention incendie a-t-il été réalisé ?" est obligatoire')
         .toInt()
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "Un diagnostic prévention incendie a-t-il été réalisé ?" est invalide')

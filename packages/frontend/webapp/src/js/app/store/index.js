@@ -19,6 +19,7 @@ import highCovidComments from "./modules/highCovidComments";
 import navigation from "./modules/navigation/navigation";
 import plans from "./modules/plans";
 import shantytownComments from "./modules/shantytownComments";
+import townForm from "./modules/townForm";
 import userModule from "./modules/user";
 import config from "./modules/config";
 
@@ -34,6 +35,7 @@ export default new Vuex.Store({
         navigation,
         plans,
         shantytownComments,
+        townForm,
         user: userModule,
         config
     },
