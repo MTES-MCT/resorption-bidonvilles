@@ -67,7 +67,7 @@ module.exports = (user, data, properties, closedTowns, closingSolutions) => {
         ],
     });
 
-    if (options.indexOf('life_conditions') !== -1) {
+    if (options.indexOf('living_conditions') !== -1) {
         sections.push({
             title: 'Conditions de vie',
             properties: [

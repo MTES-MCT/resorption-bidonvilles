@@ -1,13 +1,13 @@
 const {
     Table, SectionType, Paragraph, TextRun,
 } = require('docx');
-const accessToWater = require('./2_section_life_conditions/accessToWater');
-const trashEvacuation = require('./2_section_life_conditions/trashEvacuation');
-const accessToElectricity = require('./2_section_life_conditions/accessToElectricity');
-const accessToSanitary = require('./2_section_life_conditions/accessToSanitary');
-const pestAnimals = require('./2_section_life_conditions/pestAnimals');
+const accessToWater = require('./2_section_living_conditions/accessToWater');
+const trashEvacuation = require('./2_section_living_conditions/trashEvacuation');
+const accessToElectricity = require('./2_section_living_conditions/accessToElectricity');
+const accessToSanitary = require('./2_section_living_conditions/accessToSanitary');
+const pestAnimals = require('./2_section_living_conditions/pestAnimals');
 const heading = require('./heading');
-const firePrevention = require('./2_section_life_conditions/firePrevention');
+const firePrevention = require('./2_section_living_conditions/firePrevention');
 
 module.exports = (shantytown) => {
     const section = {

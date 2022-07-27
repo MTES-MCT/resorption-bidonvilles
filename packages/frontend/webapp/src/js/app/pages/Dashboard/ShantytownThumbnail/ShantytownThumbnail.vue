@@ -105,10 +105,10 @@ import getSince from "#app/utils/getSince";
 import formatLastUpdatedAt from "#app/utils/formatLastUpdatedAt";
 import TownPopulation from "#app/components/TownPopulation/TownPopulation";
 import ResorptionTargetTag from "#app/components/ResorptionTargetTag/ResorptionTargetTag.vue";
-import { lifeConditionsMixin } from "#app/mixins/lifeConditionsMixin";
+import { livingConditionsMixin } from "#app/mixins/livingConditionsMixin";
 
 export default {
-    mixins: [lifeConditionsMixin],
+    mixins: [livingConditionsMixin],
 
     components: {
         TownPopulation,
