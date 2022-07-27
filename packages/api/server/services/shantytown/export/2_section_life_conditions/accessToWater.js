@@ -1,18 +1,17 @@
 const createRow = require('../create_row');
 
 module.exports = (shantytown) => {
-    let text;
-    if (shantytown.waterAccessConditions === 'true') {
-        text = 'Accès à l\'eau existant';
-    } else if (shantytown.waterAccessConditions === 'toImprove') {
-        text = 'Accès à l\'eau à améliorer';
-    } else {
-        text = 'Accès à l\'eau inexistant (ou inconnu)';
+    const labels = {
+        good: 'Accès à l\'eau existant',
+        toImprove: 'Accès à l\'eau existant mais à améliorer',
+        bad: 'Accès à l\'eau inexistant',
+    };
+    const { status, access_comments: comments } = shantytown.livingConditions.water;
+
+    let text = labels[status] || 'Aucune information concernant l\'accès à l\'électricité';
+    if (comments) {
+        text = `${text} – ${comments}`;
     }
 
-    if (shantytown.waterComments) {
-        text = `${text} – ${shantytown.waterComments}`;
-    }
-
-    return createRow(['Accès eau', text]);
+    return createRow(['Accès à l\'eau', text]);
 };

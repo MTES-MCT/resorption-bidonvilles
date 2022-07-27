@@ -1,18 +1,15 @@
 const createRow = require('../create_row');
 
 module.exports = (shantytown) => {
-    let text;
-    if (shantytown.firePrevention === true) {
-        text = 'Des mesures de prévention anti-incendie sont en place';
-    } else if (shantytown.firePrevention === false) {
-        text = 'Il n\'y a pas encore de mesures de prévention anti-incendie';
-    } else {
-        text = 'Aucune information concernant la présence de mesures de prévention anti-incendie';
-    }
+    const labels = {
+        good: 'Diagnostic réalisé par le SDIS',
+        toImprove: 'Diagnostic non réalisé',
+        bad: 'Diagnostic non réalisé',
+    };
+    const { status } = shantytown.livingConditions.fire_prevention;
 
-    if (shantytown.firePreventionComments) {
-        text = `${text} – ${shantytown.firePreventionComments}`;
-    }
-
-    return createRow(['Prévention incendie', text]);
+    return createRow([
+        'Diagnostic prévention incendie',
+        labels[status] || 'Aucune information concernant le diagnostic',
+    ]);
 };

@@ -1,18 +1,15 @@
 const createRow = require('../create_row');
 
 module.exports = (shantytown) => {
-    let text;
-    if (shantytown.electricityType.uid === 'oui') {
-        text = 'Accès à l\'électricité existant';
-    } else if (shantytown.electricityType.uid === 'non') {
-        text = 'Accès à l\'électricité inexistant';
-    } else {
-        text = 'Aucune information concernant l\'accès à l\'électricité';
-    }
+    const labels = {
+        good: 'Accès à l\'électricité existant',
+        toImprove: 'Accès à l\'électricité existant mais à améliorer',
+        bad: 'Accès à l\'électricité inexistant',
+    };
+    const { status } = shantytown.livingConditions.electricity;
 
-    if (shantytown.electricityComments) {
-        text = `${text} – ${shantytown.electricityComments}`;
-    }
-
-    return createRow(['Accès électricité', text]);
+    return createRow([
+        'Accès à l\'électricité',
+        labels[status] || 'Aucune information concernant l\'accès à l\'électricité',
+    ]);
 };

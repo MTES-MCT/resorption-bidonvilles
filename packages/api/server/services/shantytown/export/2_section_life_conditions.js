@@ -1,29 +1,57 @@
-const { Table, SectionType } = require('docx');
+const {
+    Table, SectionType, Paragraph, TextRun,
+} = require('docx');
 const accessToWater = require('./2_section_life_conditions/accessToWater');
 const trashEvacuation = require('./2_section_life_conditions/trashEvacuation');
 const accessToElectricity = require('./2_section_life_conditions/accessToElectricity');
 const accessToSanitary = require('./2_section_life_conditions/accessToSanitary');
-const vermin = require('./2_section_life_conditions/vermin');
+const pestAnimals = require('./2_section_life_conditions/pestAnimals');
 const heading = require('./heading');
 const firePrevention = require('./2_section_life_conditions/firePrevention');
 
-module.exports = shantytown => ({
-    properties: {
-        type: SectionType.CONTINUOUS,
-    },
-    children: [
-        heading('Conditions de vie'),
+module.exports = (shantytown) => {
+    const section = {
+        properties: {
+            type: SectionType.CONTINUOUS,
+        },
+        children: [
+            heading('Conditions de vie'),
+        ],
+    };
 
-        new Table({
-            columnWidths: [2410, 7228], // total page width is 9638 DXA for A4 portrait
-            rows: [
-                accessToWater(shantytown),
-                accessToElectricity(shantytown),
-                trashEvacuation(shantytown),
-                accessToSanitary(shantytown),
-                vermin(shantytown),
-                firePrevention(shantytown),
-            ],
-        }),
-    ],
-});
+    if (shantytown.livingConditions.version === 2) {
+        section.children.push(
+            new Table({
+                columnWidths: [2410, 7228], // total page width is 9638 DXA for A4 portrait
+                rows: [
+                    accessToElectricity(shantytown),
+                    accessToWater(shantytown),
+                    trashEvacuation(shantytown),
+                    accessToSanitary(shantytown),
+                    pestAnimals(shantytown),
+                    firePrevention(shantytown),
+                ],
+            }),
+        );
+    } else {
+        section.children.push(
+            new Paragraph({
+                spacing: {
+                    before: 300,
+                    after: 100,
+                },
+                children: [
+                    new TextRun({
+                        text: 'Nouveau : le formulaire des conditions de vie évolue pour être plus précis et plus exhaustif sur l\'accès à l\'eau, l\'électricité et aux toilettes. Mettez le à jour pour partager un état des lieux plus juste et identifier les besoins.',
+                        break: 1,
+                        color: '605F5F',
+                        size: 22,
+                        font: 'Arial',
+                    }),
+                ],
+            }),
+        );
+    }
+
+    return section;
+};

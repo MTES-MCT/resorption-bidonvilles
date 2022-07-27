@@ -1,14 +1,15 @@
 const createRow = require('../create_row');
 
 module.exports = (shantytown) => {
-    let text;
-    if (shantytown.trashEvacuation === true) {
-        text = 'Un ramassage des déchets organisé';
-    } else if (shantytown.trashEvacuation === false) {
-        text = 'Il n\'y a pas de ramassage des déchets organisé';
-    } else {
-        text = 'Aucune information concernant le ramassage des déchets';
-    }
+    const labels = {
+        good: 'Le ramassage des déchets est en place',
+        toImprove: 'Le ramassage des déchets est en place mais à améliorer',
+        bad: 'Le ramassage des déchets n\'est pas en place',
+    };
+    const { status } = shantytown.livingConditions.trash;
 
-    return createRow(['Gestion déchets', text]);
+    return createRow([
+        'Ramassage des déchets',
+        labels[status] || 'Aucune information concernant le ramassage des déchets',
+    ]);
 };

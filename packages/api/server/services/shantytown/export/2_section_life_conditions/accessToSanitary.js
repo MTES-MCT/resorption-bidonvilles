@@ -1,18 +1,15 @@
 const createRow = require('../create_row');
 
 module.exports = (shantytown) => {
-    let text;
-    if (shantytown.accessToSanitary === true) {
-        text = 'Accès aux toilettes existant';
-    } else if (shantytown.accessToSanitary === false) {
-        text = 'Accès aux toilettes inexistant';
-    } else {
-        text = 'Aucune information concernant l\'accès aux toilettes';
-    }
+    const labels = {
+        good: 'Accès à des toilettes existant',
+        toImprove: 'Accès à des toilettes existant mais à améliorer',
+        bad: 'Pas d\'accès à des toilettes',
+    };
+    const { status } = shantytown.livingConditions.sanitary;
 
-    if (shantytown.sanitaryComments) {
-        text = `${text} – ${shantytown.sanitaryComments}`;
-    }
-
-    return createRow(['Accès toilettes', text]);
+    return createRow([
+        'Accès à des toilettes fonctionnelles',
+        labels[status] || 'Aucune information concernant l\'accès aux toilettes',
+    ]);
 };
