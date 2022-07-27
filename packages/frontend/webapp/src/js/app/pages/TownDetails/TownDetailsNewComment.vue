@@ -21,33 +21,100 @@
                 placeholder="Partagez votre passage sur le site, le contexte sanitaire, la situation des habitants, difficultés rencontrées lors de votre intervention…"
             />
             <div
-                class="flex ml-4"
+                class="flex flex-col"
                 v-if="
                     $store.getters['config/hasPermission'](
                         'shantytown_comment.createPrivate'
                     )
                 "
             >
-                <div class="text-sm mr-4">
-                    <Icon icon="lock" class="text-red" />
-                    Je souhaite réserver ce message à mes collègues en
-                    Préfecture et DDETS
+                <p class="mt-0 mb-2 font-bold">
+                    <Icon icon="lock" class="text-red mr-1" /> Je souhaite que
+                    ce message soit visible par <sup>(*)</sup> :
+                </p>
+                <div class="ml-5">
+                    <CheckableGroup direction="vertical">
+                        <Radio
+                            label="Tous les acteurs du site"
+                            v-model="mode"
+                            checkValue="public"
+                        />
+                        <Radio
+                            label="Les acteurs en préfecture et DDETS uniquement"
+                            v-model="mode"
+                            checkValue="pref_et_ddets"
+                        />
+                        <Radio
+                            label="Une liste d'acteurs personnalisée"
+                            v-model="mode"
+                            checkValue="custom"
+                        />
+                    </CheckableGroup>
                 </div>
-                <CheckableGroup direction="horizontal" id="private_comments">
-                    <Radio
-                        label="Oui"
-                        v-model="isPrivate"
-                        :checkValue="true"
-                        cypressName="private_comments"
-                    ></Radio>
-                    <Radio
-                        label="Non"
-                        v-model="isPrivate"
-                        :checkValue="false"
-                        cypressName="private_comments"
-                    ></Radio>
-                </CheckableGroup>
+
+                <div v-if="mode === 'custom'" class="ml-12">
+                    <p class="font-bold">
+                        <Icon icon="users" class="mr-1" />
+                        Liste d'acteurs personnalisée
+                    </p>
+                    <div></div>
+                    <p class="mb-2">
+                        Saisissez ci-dessous le nom d'une structure ou d'un
+                        acteur pour l'ajouter à la liste :
+                    </p>
+                    <AutocompleteV2
+                        id="target"
+                        placeholder="Nom d'une structure, d'un utilisateur"
+                        prefixIcon="search"
+                        :search="search"
+                        :getResultValue="getResultValue"
+                        validationName="Cible"
+                        @submit="submit"
+                        rules=""
+                        :disabled="false"
+                        ref="targetSearch"
+                    ></AutocompleteV2>
+                    <div
+                        class="border rounded p-4 -mt-4 flex flex-wrap gap-2 mb-6"
+                    >
+                        <p v-if="targets.length === 0" class="text-G600 italic">
+                            La liste est vide pour le moment
+                        </p>
+                        <template v-else>
+                            <Tag
+                                v-for="target in targets"
+                                :key="`${target.type.id}.${target.id}`"
+                            >
+                                {{ target.label }}
+                                <Icon
+                                    class="cursor-pointer ml-2"
+                                    icon="times"
+                                    @click.native="removeTarget(target)"
+                                />
+                            </Tag>
+                        </template>
+                    </div>
+                </div>
+
+                <span class="text-sm text-right mb-2"
+                    >(*) Quelle que soit l'option retenue, les administrateurs
+                    locaux et nationaux auront accès au message à des fins de
+                    modération</span
+                >
             </div>
+
+            <div
+                v-if="commentError !== null"
+                class="text-red border border-red py-2 px-4 mb-4"
+            >
+                {{ commentError }}
+                <ul v-if="commentErrors.length" class="text-sm">
+                    <li v-for="(error, index) in commentErrors" :key="index">
+                        - {{ error }}
+                    </li>
+                </ul>
+            </div>
+
             <div class="flex items-center justify-between">
                 <p>
                     <Button
@@ -69,14 +136,20 @@
 </template>
 
 <script>
+import { autocompleteOrganization } from "#helpers/api/user";
+
 export default {
     data() {
         return {
             commentError: null,
-            commentErrors: {},
+            commentErrors: [],
             newComment: "",
-            isPrivate: false,
-            loading: false
+            mode: "public",
+            loading: false,
+            listOfTargets: {
+                users: [],
+                organizations: []
+            }
         };
     },
     props: {
@@ -85,11 +158,84 @@ export default {
         },
         user: {
             type: Object
+        },
+        departementCode: {
+            type: String
+        }
+    },
+    computed: {
+        targets() {
+            return [
+                ...this.listOfTargets.organizations,
+                ...this.listOfTargets.users
+            ];
         }
     },
     methods: {
+        submit(result) {
+            if (
+                result &&
+                result.type.id === "user" &&
+                !this.listOfTargets.users.find(user => user.id === result.id)
+            ) {
+                this.listOfTargets.users.push(result);
+            }
+            if (
+                result &&
+                result.type.id === "organization" &&
+                !this.listOfTargets.organizations.find(
+                    organization => organization.id === result.id
+                )
+            ) {
+                this.listOfTargets.organizations.push(result);
+            }
+
+            this.$refs.targetSearch.empty();
+            this.$nextTick(() => this.$refs.targetSearch.focus());
+        },
+        async search(input) {
+            if (input) {
+                const unfilteredList = await autocompleteOrganization(
+                    input,
+                    this.departementCode,
+                    true
+                );
+
+                // on retirer de la liste d'autocomplétion tous items qui font déjà partie
+                // des targets
+                return unfilteredList.filter(item => {
+                    if (item.type.id === "user") {
+                        return !this.listOfTargets.users.find(
+                            user => user.id === item.id
+                        );
+                    }
+
+                    return (
+                        this.listOfTargets.organizations.find(
+                            organization => organization.id === item.id
+                        ) === undefined
+                    );
+                });
+            }
+
+            return [];
+        },
+        getResultValue(item) {
+            return item.label;
+        },
+        removeTarget(target) {
+            const type = target.type.id === "user" ? "users" : "organizations";
+            const list = this.listOfTargets[type];
+            const index = list.findIndex(item => item.id === target.id);
+
+            if (index !== -1) {
+                list.splice(index, 1);
+            }
+        },
         cancelComment() {
             this.newComment = "";
+            this.commentError = null;
+            this.commentErrors = [];
         },
         async addComment() {
             if (this.loading === true) {
@@ -98,7 +244,7 @@ export default {
 
             // clean previous errors
             this.commentError = null;
-            this.commentErrors = {};
+            this.commentErrors = [];
             this.loading = true;
 
             try {
@@ -108,15 +254,24 @@ export default {
                         townId: parseInt(this.$route.params.id, 10),
                         comment: {
                             description: this.newComment,
-                            private: this.isPrivate
+                            targets: {
+                                mode: this.mode,
+                                ...this.listOfTargets
+                            }
                         }
                     }
                 );
 
                 this.newComment = "";
+                this.listOfTargets = {
+                    users: [],
+                    organizations: []
+                };
             } catch (response) {
                 this.commentError = response.user_message;
-                this.commentErrors = response.fields || {};
+                this.commentErrors = response.fields
+                    ? Object.values(response.fields).flat()
+                    : [];
             }
 
             this.loading = false;

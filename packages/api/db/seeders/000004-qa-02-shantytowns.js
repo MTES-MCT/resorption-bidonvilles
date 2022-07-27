@@ -32,9 +32,7 @@ const comments = [
         fk_shantytown: 999999,
         created_by: 'qa-local-admin@resorption-bidonvilles.beta.gouv.fr',
     },
-
 ];
-
 
 module.exports = {
     up: async (queryInterface) => {
@@ -44,10 +42,29 @@ module.exports = {
 
         for (const comment of comments) {
             // Resolve userId from email
-            const [[{ user_id: userId }]] = await queryInterface.sequelize.query('SELECT user_id from USERS where email = :email', { replacements: { email: comment.created_by } });
+            const [[{ user_id: userId }]] = await queryInterface.sequelize.query('SELECT user_id FROM users where email = :email', { replacements: { email: comment.created_by } });
+
+            // Resolve shantytown comment targets
+            let organizations = [];
+            if (comment.private) {
+                organizations = await queryInterface.sequelize.query(
+                    `SELECT o.organization_id AS id
+                    FROM organizations o
+                    LEFT JOIN organization_types ot ON o.fk_type = ot.organization_type_id
+                    WHERE ot.uid IN ('pref_departement', 'pref_region', 'ddets')
+                        AND (o.fk_departement = '33' OR o.fk_region = '75')`, // gironde et nouvelle-aquitaine
+                    {
+                        type: queryInterface.sequelize.QueryTypes.SELECT,
+                    },
+                );
+            }
 
             await create({
                 ...comment,
+                targets: {
+                    users: [],
+                    organizations,
+                },
                 created_by: userId,
             });
         }
@@ -55,7 +72,6 @@ module.exports = {
 
     down: (queryInterface) => {
         const shantytownIds = shantytowns.map(s => s.id);
-
 
         return queryInterface.sequelize.transaction(
             transaction => queryInterface.sequelize.query(

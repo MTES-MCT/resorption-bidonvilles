@@ -6,10 +6,9 @@ module.exports = async (user, shantytownId, data) => sequelize.transaction(async
                     shantytown_comments(
                         description,
                         fk_shantytown,
-                        created_by,
-                        private
+                        created_by
                     )
-                VALUES (:description, :shantytownId, :createdBy, false)
+                VALUES (:description, :shantytownId, :createdBy)
                 RETURNING shantytown_comment_id AS id`,
         {
             replacements: {

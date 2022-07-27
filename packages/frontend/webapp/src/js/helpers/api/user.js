@@ -171,8 +171,20 @@ export function getDirectory() {
 /**
  * GET /organizations/search
  */
-export function autocompleteOrganization(str) {
-    return getApi(`/organizations/search?query=${encodeURIComponent(str)}`);
+export function autocompleteOrganization(
+    str,
+    departementCode = null,
+    onlyUsersAndOrganizations = false
+) {
+    return getApi(
+        `/organizations/search?query=${encodeURIComponent(
+            str
+        )}&departementCode=${encodeURIComponent(
+            departementCode
+        )}&onlyUsersAndOrganizations=${encodeURIComponent(
+            onlyUsersAndOrganizations
+        )}`
+    );
 }
 
 /**

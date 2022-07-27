@@ -16,7 +16,7 @@ module.exports = async (user) => {
 
     let comments;
     try {
-        comments = await shantytownCommentModel.findAll(locations.export, locations.comments);
+        comments = await shantytownCommentModel.findAll(user, locations.export, locations.comments);
     } catch (error) {
         throw new ServiceError('select_failed', error);
     }

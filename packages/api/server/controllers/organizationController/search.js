@@ -7,6 +7,8 @@ const organizationModel = require('#server/models/organizationModel');
 module.exports = async (req, res, next) => {
     // parse query
     const query = trim(req.query.query).replace(/\s+/g, ' ');
+    const { departementCode, onlyUsersAndOrganizations } = req.query;
+    const departement = await geoModel.getLocation('departement', departementCode);
     if (query === null || query === '') {
         return res.status(400).send({
             error: {
@@ -33,6 +35,7 @@ module.exports = async (req, res, next) => {
             `SELECT
                 users.first_name,
                 users.last_name,
+                users.user_id,
                 localized_organizations.organization_id,
                 localized_organizations.abbreviation,
                 localized_organizations.name,
@@ -58,15 +61,23 @@ module.exports = async (req, res, next) => {
                     OR
                     ${generateWhere('users.last_name', atoms.length)}
                 )
-            LIMIT 10`,
+                AND
+                    (
+                        localized_organizations.location_type = 'nation'
+                        OR (localized_organizations.location_type = 'region' AND localized_organizations.region_code = ?)
+                        OR localized_organizations.departement_code = ?
+                    )`,
             {
-                replacements: [...queryAtoms, ...queryAtoms],
+                replacements: [...queryAtoms, ...queryAtoms, departement.region.code, departementCode],
                 type: sequelize.QueryTypes.SELECT,
             },
         );
 
         // look for locations
-        const locations = await geoModel.search(query);
+        let locations = [];
+        if (!onlyUsersAndOrganizations) {
+            locations = await geoModel.search(query);
+        }
 
         // look for organizations
         const organizations = await sequelize.query(
@@ -95,9 +106,14 @@ module.exports = async (req, res, next) => {
                     OR
                     ${generateWhere('localized_organizations.abbreviation', atoms.length)}
                 )
-            LIMIT 10`,
+                AND
+                    (
+                        localized_organizations.location_type = 'nation'
+                        OR (localized_organizations.location_type = 'region' AND localized_organizations.region_code = ?)
+                        OR localized_organizations.departement_code = ?
+                    )`,
             {
-                replacements: [...queryAtoms, ...queryAtoms],
+                replacements: [...queryAtoms, ...queryAtoms, departement.region.code, departementCode],
                 type: sequelize.QueryTypes.SELECT,
             },
         );
@@ -110,7 +126,7 @@ module.exports = async (req, res, next) => {
                         id: 'user',
                         label: 'Acteurs',
                     },
-                    id: user.id,
+                    id: user.user_id,
                     label: userModel.formatName(user),
                     organization: user.organization_id,
                 })),
