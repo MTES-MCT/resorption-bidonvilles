@@ -61,8 +61,8 @@ module.exports = async (shantytownId, commentId, isPrivate) => {
         LEFT JOIN cities ON shantytowns.fk_city = cities.code
         WHERE shantytowns.shantytown_id = :shantytownId
     ),
-    email_subscriptions AS (
-        SELECT fk_user, ARRAY_AGG(email_subscription) AS subscriptions FROM user_email_subscriptions GROUP BY fk_user
+    email_unsubscriptions AS (
+        SELECT fk_user, ARRAY_AGG(email_subscription) AS unsubscriptions FROM user_email_unsubscriptions GROUP BY fk_user
     )
 
     SELECT
@@ -85,8 +85,10 @@ module.exports = async (shantytownId, commentId, isPrivate) => {
 
     ) t
     LEFT JOIN users u ON t.fk_user = u.user_id
-    LEFT JOIN email_subscriptions ON email_subscriptions.fk_user = u.user_id
-    WHERE u.fk_status = 'active' AND ('comment_notification' = ANY(email_subscriptions.subscriptions))
+    LEFT JOIN email_unsubscriptions ON email_unsubscriptions.fk_user = u.user_id
+    WHERE u.fk_status = 'active'
+        AND (email_unsubscriptions.unsubscriptions IS NULL OR NOT('comment_notification' = ANY(email_unsubscriptions.unsubscriptions)))
+
     `,
         {
             type: sequelize.QueryTypes.SELECT,

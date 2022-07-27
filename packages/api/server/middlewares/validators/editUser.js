@@ -53,11 +53,12 @@ module.exports = [
     body('email_subscriptions')
         .exists().withMessage('Le champ "Abonnement aux mails plateforme" est obligatoire')
         .isArray().bail().withMessage('Le champ "Abonnement aux mails plateforme" n\'est pas valide')
-        .custom((value) => {
+        .custom((value, { req }) => {
             if (value.some(subscription => !EMAIL_SUBSCRIPTIONS.includes(subscription))) {
                 throw new Error('Le champ "Abonnement aux mails plateforme" contient des valeurs invalides');
             }
 
+            req.body.email_unsubscriptions = EMAIL_SUBSCRIPTIONS.filter(subscription => !value.includes(subscription));
             return true;
         }),
 ];
