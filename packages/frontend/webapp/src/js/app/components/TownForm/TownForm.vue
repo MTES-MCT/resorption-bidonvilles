@@ -156,7 +156,7 @@ export default {
         return {
             nearbyClosedShantytowns: [],
             mainError: null,
-            errors: [],
+            errors: {},
             loading: false,
             showInfo: true,
             initialTown: this.formatTown(this.data),
