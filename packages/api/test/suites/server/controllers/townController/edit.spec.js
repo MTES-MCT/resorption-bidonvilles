@@ -53,35 +53,6 @@ describe.only('townController.edit()', () => {
                     minors_in_school: 20,
                     caravans: 2,
                     huts: 2,
-                    fk_electricity_type: 1,
-                    electricity_comments: 'Commentaires',
-                    access_to_sanitary: true,
-                    sanitary_comments: 'Commentaires',
-                    sanitary_number: 2,
-                    sanitary_insalubrious: true,
-                    sanitary_on_site: 1,
-                    access_to_water: true,
-                    water_comments: 'Commentaires',
-                    water_potable: true,
-                    water_continuous_access: true,
-                    water_public_point: true,
-                    water_distance: '0-20',
-                    water_roads_to_cross: true,
-                    water_everyone_has_access: true,
-                    water_stagnant_water: true,
-                    water_hand_wash_access: true,
-                    water_hand_wash_access_number: true,
-                    trash_evacuation: true,
-                    trash_cans_on_site: 2,
-                    trash_accumulation: true,
-                    trash_evacuation_regular: true,
-                    vermin: true,
-                    vermin_comments: 'Commentaires',
-                    fire_prevention_measures: true,
-                    fire_prevention_diagnostic: true,
-                    fire_prevention_site_accessible: true,
-                    fire_prevention_devices: true,
-                    fire_prevention_comments: 'Commentaires',
                     fk_field_type: 1,
                     fk_owner_type: 1,
                     fk_city: '92062',
@@ -100,6 +71,41 @@ describe.only('townController.edit()', () => {
                     police_requested_at: new Date(),
                     police_granted_at: new Date(),
                     bailiff: 'Huissier',
+                    living_conditions_version: 2,
+
+                    water_access_type: 'autre',
+                    water_access_type_details: 'commentaire accès eau',
+                    water_access_is_public: false,
+                    water_access_is_continuous: false,
+                    water_access_is_continuous_details: 'commentaire continuité eau',
+                    water_access_is_local: true,
+                    water_access_is_close: true,
+                    water_access_is_unequal: true,
+                    water_access_is_unequal_details: 'commentaire disparité eau',
+                    water_access_has_stagnant_water: false,
+                    water_access_comments: 'commentaire eau',
+
+                    sanitary_open_air_defecation: false,
+                    sanitary_working_toilets: true,
+                    sanitary_toilet_types: ['latrines', 'toilettes_chimiques'],
+                    sanitary_toilets_are_inside: true,
+                    sanitary_toilets_are_lighted: true,
+                    sanitary_hand_washing: true,
+
+                    electricity_access: true,
+                    electricity_access_types: ['electrogene', 'reseau_urbain'],
+                    electricity_access_is_unequal: false,
+
+                    trash_is_piling: true,
+                    trash_evacuation_is_close: true,
+                    trash_evacuation_is_safe: true,
+                    trash_evacuation_is_regular: true,
+                    trash_bulky_is_piling: false,
+
+                    pest_animals_presence: false,
+                    pest_animals_details: 'commentaire nuisibles',
+
+                    fire_prevention_diagnostic: true,
                 },
 
                 user: generateUser(),
@@ -127,12 +133,6 @@ describe.only('townController.edit()', () => {
 
             dependencies.findOne
                 .withArgs(input.user, 1)
-                .onCall(0)
-                .resolves(output.shantytown);
-
-            dependencies.findOne
-                .withArgs(input.user, 1)
-                .onCall(1)
                 .resolves(output.updatedShantytown);
 
             res = mockRes();
@@ -164,35 +164,6 @@ describe.only('townController.edit()', () => {
                     minors_in_school: input.body.minors_in_school,
                     caravans: input.body.caravans,
                     huts: input.body.huts,
-                    fk_electricity_type: input.body.electricity_type,
-                    electricity_comments: input.body.electricity_comments,
-                    access_to_sanitary: input.body.access_to_sanitary,
-                    sanitary_comments: input.body.sanitary_comments,
-                    sanitary_number: input.body.sanitary_number,
-                    sanitary_insalubrious: input.body.sanitary_insalubrious,
-                    sanitary_on_site: input.body.sanitary_on_site,
-                    access_to_water: input.body.access_to_water,
-                    water_comments: input.body.water_comments,
-                    water_potable: input.body.water_potable,
-                    water_continuous_access: input.body.water_continuous_access,
-                    water_public_point: input.body.water_public_point,
-                    water_distance: input.body.water_distance,
-                    water_roads_to_cross: input.body.water_roads_to_cross,
-                    water_everyone_has_access: input.body.water_everyone_has_access,
-                    water_stagnant_water: input.body.water_stagnant_water,
-                    water_hand_wash_access: input.body.water_hand_wash_access,
-                    water_hand_wash_access_number: input.body.water_hand_wash_access_number,
-                    trash_evacuation: input.body.trash_evacuation,
-                    trash_cans_on_site: input.body.trash_cans_on_site,
-                    trash_accumulation: input.body.trash_accumulation,
-                    trash_evacuation_regular: input.body.trash_evacuation_regular,
-                    vermin: input.body.vermin,
-                    vermin_comments: input.body.vermin_comments,
-                    fire_prevention_measures: input.body.fire_prevention_measures,
-                    fire_prevention_diagnostic: input.body.fire_prevention_diagnostic,
-                    fire_prevention_site_accessible: input.body.fire_prevention_site_accessible,
-                    fire_prevention_devices: input.body.fire_prevention_devices,
-                    fire_prevention_comments: input.body.fire_prevention_comments,
                     fk_field_type: input.body.field_type,
                     fk_owner_type: input.body.owner_type,
                     fk_city: input.body.citycode,
@@ -211,6 +182,64 @@ describe.only('townController.edit()', () => {
                     police_requested_at: input.body.police_requested_at,
                     police_granted_at: input.body.police_granted_at,
                     bailiff: input.body.bailiff,
+                    fk_electricity_type: null,
+                    electricity_comments: null,
+                    access_to_sanitary: null,
+                    sanitary_comments: null,
+                    sanitary_number: null,
+                    sanitary_insalubrious: null,
+                    sanitary_on_site: null,
+                    access_to_water: null,
+                    water_comments: null,
+                    water_potable: null,
+                    water_continuous_access: null,
+                    water_public_point: null,
+                    water_distance: null,
+                    water_roads_to_cross: null,
+                    water_everyone_has_access: null,
+                    water_stagnant_water: null,
+                    water_hand_wash_access: null,
+                    water_hand_wash_access_number: null,
+                    trash_evacuation: null,
+                    trash_cans_on_site: null,
+                    trash_accumulation: null,
+                    trash_evacuation_regular: null,
+                    vermin: null,
+                    vermin_comments: null,
+                    fire_prevention_measures: null,
+                    fire_prevention_diagnostic: null,
+                    fire_prevention_site_accessible: null,
+                    fire_prevention_devices: null,
+                    fire_prevention_comments: null,
+                    living_conditions_version: 2,
+                    water_access_type: 'autre',
+                    water_access_type_details: 'commentaire accès eau',
+                    water_access_is_public: false,
+                    water_access_is_continuous: false,
+                    water_access_is_continuous_details: 'commentaire continuité eau',
+                    water_access_is_local: true,
+                    water_access_is_close: true,
+                    water_access_is_unequal: true,
+                    water_access_is_unequal_details: 'commentaire disparité eau',
+                    water_access_has_stagnant_water: false,
+                    water_access_comments: 'commentaire eau',
+                    sanitary_access_open_air_defecation: false,
+                    sanitary_access_working_toilets: true,
+                    sanitary_toilet_types: ['latrines', 'toilettes_chimiques'],
+                    sanitary_access_toilets_are_inside: true,
+                    sanitary_access_toilets_are_lighted: true,
+                    sanitary_access_hand_washing: true,
+                    electricity_access: true,
+                    electricity_access_types: ['electrogene', 'reseau_urbain'],
+                    electricity_access_is_unequal: false,
+                    trash_is_piling: true,
+                    trash_evacuation_is_close: true,
+                    trash_evacuation_is_safe: true,
+                    trash_evacuation_is_regular: true,
+                    trash_bulky_is_piling: false,
+                    pest_animals: false,
+                    pest_animals_details: 'commentaire nuisibles',
+                    fire_prevention: true,
                 },
             );
         });
@@ -224,68 +253,6 @@ describe.only('townController.edit()', () => {
             expect(res.send).to.have.been.calledOnceWith(output.updatedShantytown);
         });
     });
-
-    describe('En cas d\'erreur dans le checkout du site', () => {
-        let res;
-        let next;
-        let error;
-        beforeEach(async () => {
-            const input = {
-                params: { id: 1 },
-                body: {},
-                user: generateUser(),
-            };
-
-            error = new Error('Une erreur');
-
-            dependencies.findOne.rejects(error);
-
-            res = mockRes();
-            next = sinon.stub();
-            await edit(mockReq(input), res, next);
-        });
-
-        it('répond une 500', () => {
-            expect(res.status).to.have.been.calledOnceWith(500);
-        });
-
-        it('retourne un message d\'erreur générique', () => {
-            expect(res.send).to.have.been.calledOnceWith({
-                user_message: 'Une erreur de lecture en base de données est survenue',
-            });
-        });
-
-        it('appelle next() avec l\'erreur en question', () => {
-            expect(next).to.have.been.calledOnceWith(error);
-        });
-    });
-
-    describe('Si le site n\'existe pas en base de données', () => {
-        let res;
-        beforeEach(async () => {
-            const input = {
-                params: { id: 1 },
-                body: {},
-                user: generateUser(),
-            };
-
-            dependencies.findOne.withArgs(input.user, 1).resolves(null);
-
-            res = mockRes();
-            await edit(mockReq(input), res);
-        });
-
-        it('répond une 404', () => {
-            expect(res.status).to.have.been.calledOnceWith(404);
-        });
-
-        it('retourne un message d\'erreur générique', () => {
-            expect(res.send).to.have.been.calledOnceWith({
-                user_message: 'Le site d\'identifiant 1 n\'existe pas : mise à jour impossible',
-            });
-        });
-    });
-
     describe('Si une erreur survient lors de la mise à jour', () => {
         let res;
         let next;

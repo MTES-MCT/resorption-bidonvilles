@@ -101,38 +101,56 @@
                     </div>
                     <!-- third column - open shantytowns -->
                     <div v-if="showLivingConditionDetails">
-                        <div>
+                        <div v-if="shantytown.livingConditions.version === 2">
                             <TownCardIcon
-                                :value="shantytown.accessToWater"
-                                :details="details.water"
+                                :status="
+                                    shantytown.livingConditions.water.status
+                                        .status
+                                "
                                 >eau</TownCardIcon
                             >
                             <TownCardIcon
-                                :value="shantytown.accessToSanitary"
-                                :details="details.sanitary"
+                                :status="
+                                    shantytown.livingConditions.sanitary.status
+                                        .status
+                                "
                                 >toilettes</TownCardIcon
                             >
                             <TownCardIcon
-                                :value="shantytown.electricityType.value"
+                                :status="
+                                    shantytown.livingConditions.electricity
+                                        .status.status
+                                "
                                 >électricité</TownCardIcon
                             >
 
                             <TownCardIcon
-                                :value="shantytown.trashEvacuation"
-                                :details="details.trash"
+                                :status="
+                                    shantytown.livingConditions.trash.status
+                                        .status
+                                "
                                 >évac. des déchets</TownCardIcon
                             >
 
                             <TownCardIcon
-                                :value="shantytown.vermin"
-                                :details="details.vermin"
-                                inverted
+                                :status="
+                                    shantytown.livingConditions[verminKey]
+                                        .status.status
+                                "
                                 >pres. de nuisibles</TownCardIcon
                             >
                             <TownCardIcon
-                                :value="shantytown.firePreventionMeasures"
-                                :details="details.firePrevention"
+                                :status="
+                                    shantytown.livingConditions[fireKey].status
+                                        .status
+                                "
                                 >prev. incendie</TownCardIcon
+                            >
+                        </div>
+                        <div v-else>
+                            <Tag variant="pin_red"
+                                >Les conditions de vie évoluent : mettez les à
+                                jour !</Tag
                             >
                         </div>
                     </div>
@@ -262,7 +280,6 @@ import flagFR from "./assets/fr.png";
 import flagExtraCommunautaires from "./assets/extra-communautaires.png";
 import getSince from "#app/utils/getSince";
 import formatLastUpdatedAt from "#app/utils/formatLastUpdatedAt";
-import { formatLivingConditions } from "#app/pages/TownDetails/formatLivingConditions";
 import { isSolved, isClosed } from "./common/SolvedOrClosed";
 
 export default {
@@ -279,8 +296,7 @@ export default {
     },
     data() {
         return {
-            isHover: false,
-            details: formatLivingConditions(this.shantytown)
+            isHover: false
         };
     },
     components: {
@@ -329,6 +345,16 @@ export default {
         pinVariant() {
             const { months } = getSince(this.shantytown.updatedAt);
             return months >= 3 ? "pin_red" : "pin";
+        },
+        verminKey() {
+            return this.shantytown.livingConditions.version === 2
+                ? "pest_animals"
+                : "vermin";
+        },
+        fireKey() {
+            return this.shantytown.livingConditions.version === 2
+                ? "fire_prevention"
+                : "firePrevention";
         },
         isOpen() {
             return this.shantytown.status === "open";

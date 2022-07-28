@@ -1,7 +1,7 @@
 const { can } = require('#server/utils/permission');
 const getAddressSimpleOf = require('./getAddressSimpleOf');
 const getUsenameOf = require('./getUsenameOf');
-const getWaterAccessConditions = require('./getWaterAccessConditions');
+const serializeLivingConditions = require('./livingConditions/serializeLivingConditions');
 
 function fromDateToTimestamp(date) {
     return date !== null ? (new Date(`${date}T00:00:00`).getTime() / 1000) : null;
@@ -70,18 +70,7 @@ module.exports = (town, user) => {
         minorsInSchool: town.minorsInSchool,
         caravans: town.caravans,
         huts: town.huts,
-        electricityType: {
-            uid: town.electricityTypeUid,
-            id: town.electricityTypeId,
-            label: town.electricityTypeLabel,
-        },
-        electricityComments: town.electricityComments,
-        accessToSanitary: town.accessToSanitary,
-        sanitaryComments: town.sanitaryComments,
-        accessToWater: town.accessToWater,
-        waterAccessConditions: getWaterAccessConditions(town),
-        waterComments: town.waterComments,
-        trashEvacuation: town.trashEvacuation,
+        livingConditions: serializeLivingConditions(town),
         censusStatus: town.censusStatus,
         censusConductedBy: town.censusConductedBy,
         censusConductedAt: fromDateToTimestamp(town.censusConductedAt),
@@ -129,30 +118,13 @@ module.exports = (town, user) => {
                 id: town.updatedByOrganization,
             },
         },
-        waterPotable: town.waterPotable,
-        waterContinuousAccess: town.waterContinuousAccess,
-        waterPublicPoint: town.waterPublicPoint,
-        waterDistance: town.waterDistance,
-        waterRoadsToCross: town.waterRoadsToCross,
-        waterEveryoneHasAccess: town.waterEveryoneHasAccess,
-        waterStagnantWater: town.waterStagnantWater,
-        waterHandWashAccess: town.waterHandWashAccess,
-        waterHandWashAccessNumber: town.waterHandWashAccessNumber,
-        sanitaryNumber: town.sanitaryNumber,
-        sanitaryInsalubrious: town.sanitaryInsalubrious,
-        sanitaryOnSite: town.sanitaryOnSite,
-        trashCansOnSite: town.trashCansOnSite,
-        trashAccumulation: town.trashAccumulation,
-        trashEvacuationRegular: town.trashEvacuationRegular,
-        vermin: town.vermin,
-        verminComments: town.verminComments,
-        firePreventionMeasures: town.firePreventionMeasures,
-        firePreventionDiagnostic: town.firePreventionDiagnostic,
-        firePreventionSiteAccessible: town.firePreventionSiteAccessible,
-        firePreventionDevices: town.firePreventionDevices,
-        firePreventionComments: town.firePreventionComments,
         resorptionTarget: town.resorptionTarget,
     };
+
+    // generé par findNearby
+    if (town.distance !== undefined) {
+        serializedTown.distance = town.distance;
+    }
 
     let completionTotal = 0;
     if (serializedTown.addressSimple !== 'Pas d\'adresse précise') {
@@ -177,18 +149,6 @@ module.exports = (town, user) => {
         completionTotal += 1;
     }
     if (serializedTown.socialOrigins.length > 0) {
-        completionTotal += 1;
-    }
-    if (town.electricityTypeLabel !== 'Inconnu') {
-        completionTotal += 1;
-    }
-    if (town.accessToWater !== null) {
-        completionTotal += 1;
-    }
-    if (town.accessToSanitary !== null) {
-        completionTotal += 1;
-    }
-    if (town.trashEvacuation !== null) {
         completionTotal += 1;
     }
 

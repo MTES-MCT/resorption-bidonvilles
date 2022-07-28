@@ -110,7 +110,7 @@ export default {
                     }
                 },
                 {
-                    id: "life_conditions",
+                    id: "living_conditions",
                     label: "Conditions de vie"
                 },
                 {

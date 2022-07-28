@@ -2,6 +2,9 @@ const { fromTsToFormat: tsToString } = require('#server/utils/date');
 const userModel = require('#server/models/userModel');
 const shantytownActorThemes = require('#server/config/shantytown_actor_themes');
 const { webappUrl } = require('#server/config');
+const electricityAccessTypes = require('#server/models/electricityAccessTypesModel/_common/electricityAccessTypes');
+const waterAccessTypes = require('#server/models/_common/waterAccessTypes');
+const toiletTypes = require('#server/models/shantytownToiletTypesModel/_common/toiletTypes');
 
 module.exports = (closingSolutions) => {
     const COLUMN_WIDTHS = {
@@ -210,70 +213,400 @@ module.exports = (closingSolutions) => {
             data: ({ socialOrigins }) => (socialOrigins.length > 0 ? socialOrigins.map(({ label }) => label).join(';') : null),
             width: COLUMN_WIDTHS.MEDIUM,
         },
-        electricityType: {
-            title: 'Accès à l\'électricité',
-            data: ({ electricityType }) => electricityType.label,
-            width: COLUMN_WIDTHS.SMALL,
-        },
-        electricityComments: {
-            title: 'Modalités d\'accès à l\'électricité',
-            data: ({ electricityComments }) => electricityComments,
-            width: COLUMN_WIDTHS.LARGE,
-        },
-        accessToSanitary: {
-            title: 'Accès à des toilettes',
-            data: ({ accessToSanitary }) => {
-                if (accessToSanitary === true) {
+        electricityAccess: {
+            title: 'Y a-t-il présence d’une installation électrique ?',
+            data: (shantytown) => {
+                const data = shantytown.livingConditions.electricity.access;
+                if (data === true) {
                     return 'oui';
                 }
 
-                if (accessToSanitary === false) {
+                if (data === false) {
                     return 'non';
                 }
 
                 return null;
             },
-            width: COLUMN_WIDTHS.SMALL,
+            width: COLUMN_WIDTHS.MEDIUM,
         },
-        sanitaryComments: {
-            title: 'Modalités d\'accès aux toilettes',
-            data: ({ sanitaryComments }) => sanitaryComments,
-            width: COLUMN_WIDTHS.LARGE,
+        electricityAccessTypes: {
+            title: "Quelle est la source de l'accès à l'électricité ?",
+            data: (shantytown) => {
+                const data = shantytown.livingConditions.electricity.access_types;
+                if (!data || data.length === 0) {
+                    return null;
+                }
+
+                return data.map(at => electricityAccessTypes[at]).join('\n');
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
         },
-        accessToWater: {
-            title: 'Accès à l\'eau',
-            data: ({ accessToWater }) => {
-                if (accessToWater === true) {
+        electricityAccessIsUnequal: {
+            title: "Des inégalités d’accès à l'électricité ont-elles été constatées ?",
+            data: (shantytown) => {
+                const data = shantytown.livingConditions.electricity.access_is_unequal;
+                if (data === true) {
                     return 'oui';
                 }
 
-                if (accessToWater === false) {
+                if (data === false) {
                     return 'non';
                 }
 
                 return null;
             },
-            width: COLUMN_WIDTHS.SMALL,
+            width: COLUMN_WIDTHS.MEDIUM,
         },
-        waterComments: {
-            title: 'Modalités d\'accès à l\'eau',
-            data: ({ waterComments }) => waterComments,
-            width: COLUMN_WIDTHS.LARGE,
+        waterAccessType: {
+            title: "Comment les habitants ont-ils accès à l'eau ?",
+            data: (shantytown) => {
+                const data = shantytown.livingConditions.water.access_type;
+                if (!data) {
+                    return null;
+                }
+
+                return waterAccessTypes[data];
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
         },
-        trashEvacuation: {
-            title: 'Évacuation des déchets',
-            data: ({ trashEvacuation }) => {
-                if (trashEvacuation === true) {
+        waterAccessTypeDetails: {
+            title: "Précisions concernant les modalités d'accès à l'eau",
+            data: shantytown => shantytown.livingConditions.water.access_type_details,
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        waterAccessIsPublic: {
+            title: 'Est-ce un point d\'eau sur la voie publique ?',
+            data: (shantytown) => {
+                const data = shantytown.livingConditions.water.access_is_public;
+                if (data === true) {
                     return 'oui';
                 }
 
-                if (trashEvacuation === false) {
+                if (data === false) {
                     return 'non';
                 }
 
                 return null;
             },
-            width: COLUMN_WIDTHS.SMALL,
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        waterAccessIsContinuous: {
+            title: "L'accès à l'eau est-il continu ?",
+            data: (shantytown) => {
+                const data = shantytown.livingConditions.water.access_is_continuous;
+                if (data === true) {
+                    return 'oui';
+                }
+
+                if (data === false) {
+                    return 'non';
+                }
+
+                return null;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        waterAccessIsContinuousDetails: {
+            title: "Précisions concernant la discontinuité de l'accès à l'eau",
+            data: shantytown => shantytown.livingConditions.water.access_is_continuous_details,
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        waterAccessIsLocal: {
+            title: "Où se situe l'accès à l'eau ?",
+            data: (shantytown) => {
+                const data = shantytown.livingConditions.water.access_is_local;
+                if (data === true) {
+                    return 'oui';
+                }
+
+                if (data === false) {
+                    return 'non';
+                }
+
+                return null;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        waterAccessIsClose: {
+            title: 'Distance point d’eau / habitation la plus éloignée ?',
+            data: (shantytown) => {
+                const data = shantytown.livingConditions.water.access_is_close;
+                if (data === true) {
+                    return 'oui';
+                }
+
+                if (data === false) {
+                    return 'non';
+                }
+
+                return null;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        waterAccessIsUnequal: {
+            title: 'Des inégalités d\'accès à l\'eau ont-elles été constatées ?',
+            data: (shantytown) => {
+                const data = shantytown.livingConditions.water.access_is_unequal;
+                if (data === true) {
+                    return 'oui';
+                }
+
+                if (data === false) {
+                    return 'non';
+                }
+
+                return null;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        waterAccessIsUnequalDetails: {
+            title: 'Précisions concernant les inégalités d\'accès à l\'eau',
+            data: shantytown => shantytown.livingConditions.water.access_is_unequal_details,
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        waterAccessHasStagnantWater: {
+            title: 'Existe-t-il des eaux stagnantes autour du point de distribution ?',
+            data: (shantytown) => {
+                const data = shantytown.livingConditions.water.access_has_stagnant_water;
+                if (data === true) {
+                    return 'oui';
+                }
+
+                if (data === false) {
+                    return 'non';
+                }
+
+                return null;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        waterAccessComments: {
+            title: 'Informations complémentaires sur l\'accès à l\'eau',
+            data: shantytown => shantytown.livingConditions.water.access_comments,
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        sanitaryOpenAirDefecation: {
+            title: 'Constate-t-on des marques de défécation à l’air libre ?',
+            data: (shantytown) => {
+                const data = shantytown.livingConditions.sanitary.open_air_defecation;
+                if (data === true) {
+                    return 'oui';
+                }
+
+                if (data === false) {
+                    return 'non';
+                }
+
+                return null;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        sanitaryWorkingToilets: {
+            title: 'Présence de toilettes fonctionnelles et utilisées ?',
+            data: (shantytown) => {
+                const data = shantytown.livingConditions.sanitary.working_toilets;
+                if (data === true) {
+                    return 'oui';
+                }
+
+                if (data === false) {
+                    return 'non';
+                }
+
+                return null;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        sanitaryToiletTypes: {
+            title: 'Quels sont les types de toilettes installées ?',
+            data: (shantytown) => {
+                const data = shantytown.livingConditions.sanitary.toilet_types;
+                if (!data || data.length === 0) {
+                    return null;
+                }
+
+                return data.map(tt => toiletTypes[tt]).join('\n');
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        sanitaryToiletsAreInside: {
+            title: 'Les toilettes sont-elles à l’intérieur du site ?',
+            data: (shantytown) => {
+                const data = shantytown.livingConditions.sanitary.toilets_are_inside;
+                if (data === true) {
+                    return 'oui';
+                }
+
+                if (data === false) {
+                    return 'non';
+                }
+
+                return null;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        sanitaryToiletsAreLighted: {
+            title: 'Ces toilettes sont-elles éclairées et verrouillables de l’intérieur ?',
+            data: (shantytown) => {
+                const data = shantytown.livingConditions.sanitary.toilets_are_lighted;
+                if (data === true) {
+                    return 'oui';
+                }
+
+                if (data === false) {
+                    return 'non';
+                }
+
+                return null;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        sanitaryHandWashing: {
+            title: 'Y a-t-il un point de lavage des mains à proximité des toilettes ?',
+            data: (shantytown) => {
+                const data = shantytown.livingConditions.sanitary.hand_washing;
+                if (data === true) {
+                    return 'oui';
+                }
+
+                if (data === false) {
+                    return 'non';
+                }
+
+                return null;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        trashIsPiling: {
+            title: 'Constate-t-on une accumulation de déchets type ordures ménagères sur le site ou aux abords ?',
+            data: (shantytown) => {
+                const data = shantytown.livingConditions.trash.is_piling;
+                if (data === true) {
+                    return 'oui';
+                }
+
+                if (data === false) {
+                    return 'non';
+                }
+
+                return null;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        trashEvacuationIsClose: {
+            title: 'Y a-t-il des dispositifs de ramassage des ordures ménagères à proximité immédiate ?',
+            data: (shantytown) => {
+                const data = shantytown.livingConditions.trash.evacuation_is_close;
+                if (data === true) {
+                    return 'oui';
+                }
+
+                if (data === false) {
+                    return 'non';
+                }
+
+                return null;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        trashEvacuationIsSafe: {
+            title: 'Les dispositifs de ramassages des ordures sont-ils en bon état ?',
+            data: (shantytown) => {
+                const data = shantytown.livingConditions.trash.evacuation_is_safe;
+                if (data === true) {
+                    return 'oui';
+                }
+
+                if (data === false) {
+                    return 'non';
+                }
+
+                return null;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        trashEvacuationIsRegular: {
+            title: 'La collecte des poubelles est-elle réalisée de manière régulière ?',
+            data: (shantytown) => {
+                const data = shantytown.livingConditions.trash.evacuation_is_regular;
+                if (data === true) {
+                    return 'oui';
+                }
+
+                if (data === false) {
+                    return 'non';
+                }
+
+                return null;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        trashBulkyIsPiling: {
+            title: 'Constate-t-on une accumulation de déchets type encombrants ?',
+            data: (shantytown) => {
+                const data = shantytown.livingConditions.trash.bulky_is_piling;
+                if (data === true) {
+                    return 'oui';
+                }
+
+                if (data === false) {
+                    return 'non';
+                }
+
+                return null;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        pestAnimalsPresence: {
+            title: 'Y a-t-il des nuisibles à proximité ?',
+            data: (shantytown) => {
+                if (!shantytown.livingConditions.pest_animals) {
+                    return null;
+                }
+
+                const data = shantytown.livingConditions.pest_animals.presence;
+                if (data === true) {
+                    return 'oui';
+                }
+
+                if (data === false) {
+                    return 'non';
+                }
+
+                return null;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        pestAnimalsDetails: {
+            title: 'Précision concernant les nuisibles',
+            data: (shantytown) => {
+                if (!shantytown.livingConditions.pest_animals) {
+                    return null;
+                }
+
+                return shantytown.livingConditions.pest_animals.details;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        firePreventionDiagnostic: {
+            title: 'Est-ce qu’un diagnostic prévention incendie par le SDIS a été réalisé ?',
+            data: (shantytown) => {
+                if (!shantytown.livingConditions.firePrevention) {
+                    return null;
+                }
+
+                const data = shantytown.livingConditions.firePrevention.diagnostic;
+                if (data === true) {
+                    return 'oui';
+                }
+
+                if (data === false) {
+                    return 'non';
+                }
+
+                return null;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
         },
         censusStatus: {
             title: 'Statut du diagnostic social',
@@ -427,282 +760,6 @@ module.exports = (closingSolutions) => {
                 return `${tsToString(comment.createdAt, 'd/m/Y à h:i')} - ${userModel.formatName(comment.createdBy)}\nDate de l'intervention : ${tsToString(comment.covid.date, 'd/m/Y')}\n${tags}\n${comment.description}`;
             }).join('\n----\n'),
             width: COLUMN_WIDTHS.LARGE,
-        },
-        // New Fields
-        // water
-        waterPotable: {
-            title: 'L’eau est-elle potable ?',
-            data: ({ waterPotable }) => {
-                if (waterPotable === true) {
-                    return 'oui';
-                }
-
-                if (waterPotable === false) {
-                    return 'non';
-                }
-
-                return null;
-            },
-            width: COLUMN_WIDTHS.SMALL,
-        },
-        waterContinuousAccess: {
-            title: 'L\'accès à l\'eau est-il continu?',
-            data: ({ waterContinuousAccess }) => {
-                if (waterContinuousAccess === true) {
-                    return 'oui';
-                }
-
-                if (waterContinuousAccess === false) {
-                    return 'non';
-                }
-
-                return null;
-            },
-            width: COLUMN_WIDTHS.SMALL,
-        },
-        waterPublicPoint: {
-            title: 'Est-ce un point d\'eau public?',
-            data: ({ waterPublicPoint }) => {
-                if (waterPublicPoint === true) {
-                    return 'oui';
-                }
-
-                if (waterPublicPoint === false) {
-                    return 'non';
-                }
-
-                return null;
-            },
-            width: COLUMN_WIDTHS.SMALL,
-        },
-        waterDistance: {
-            title: 'Où se situe l\'accès à l\'eau?',
-            data: ({ waterDistance }) => waterDistance,
-            width: COLUMN_WIDTHS.SMALL,
-        },
-        waterRoadsToCross: {
-            title: 'L\'accès nécessite-t-il un franchissement de rue ou de route ?',
-            data: ({ waterRoadsToCross }) => {
-                if (waterRoadsToCross === true) {
-                    return 'oui';
-                }
-
-                if (waterRoadsToCross === false) {
-                    return 'non';
-                }
-
-                return null;
-            },
-            width: COLUMN_WIDTHS.SMALL,
-        },
-        waterEveryoneHasAccess: {
-            title: 'Tous les habitants ont-ils accès aux points d’eau ?',
-            data: ({ waterEveryoneHasAccess }) => {
-                if (waterEveryoneHasAccess === true) {
-                    return 'oui';
-                }
-
-                if (waterEveryoneHasAccess === false) {
-                    return 'non';
-                }
-
-                return null;
-            },
-            width: COLUMN_WIDTHS.SMALL,
-        },
-        waterStagnantWater: {
-            title: 'Existe-t-il des eaux stagnantes autour du point de distribution ?',
-            data: ({ waterStagnantWater }) => {
-                if (waterStagnantWater === true) {
-                    return 'oui';
-                }
-
-                if (waterStagnantWater === false) {
-                    return 'non';
-                }
-
-                return null;
-            },
-            width: COLUMN_WIDTHS.SMALL,
-        },
-        waterHandWashAccess: {
-            title: 'Est-ce qu’il y a des bacs de lavage des mains ?',
-            data: ({ waterHandWashAccess }) => {
-                if (waterHandWashAccess === true) {
-                    return 'oui';
-                }
-
-                if (waterHandWashAccess === false) {
-                    return 'non';
-                }
-
-                return null;
-            },
-            width: COLUMN_WIDTHS.SMALL,
-        },
-        waterHandWashAccessNumber: {
-            title: 'Quel est le nombre de bacs de lavage des mains ?',
-            data: ({ waterHandWashAccessNumber }) => waterHandWashAccessNumber,
-            width: COLUMN_WIDTHS.SMALL,
-        },
-        // sanitary
-        sanitaryNumber: {
-            title: 'Nombre de toilettes ?',
-            data: ({ sanitaryNumber }) => sanitaryNumber,
-            width: COLUMN_WIDTHS.SMALL,
-        },
-        sanitaryInsalubrious: {
-            title: 'Constate-t-on des marques de défécation à l’air libre ?',
-            data: ({ sanitaryInsalubrious }) => {
-                if (sanitaryInsalubrious === true) {
-                    return 'oui';
-                }
-
-                if (sanitaryInsalubrious === false) {
-                    return 'non';
-                }
-
-                return null;
-            },
-            width: COLUMN_WIDTHS.SMALL,
-        },
-        sanitaryOnSite: {
-            title: 'Nombre de toilettes ?',
-            data: ({ sanitaryOnSite }) => {
-                if (sanitaryOnSite === true) {
-                    return 'oui';
-                }
-
-                if (sanitaryOnSite === false) {
-                    return 'non';
-                }
-
-                return null;
-            },
-            width: COLUMN_WIDTHS.SMALL,
-        },
-        // trash
-        trashCansOnSite: {
-            title: 'Combien de poubelles / bennes sont à proximité immédiate du site ?',
-            data: ({ trashCansOnSite }) => trashCansOnSite,
-            width: COLUMN_WIDTHS.SMALL,
-        },
-        trashAccumulation: {
-            title: 'Constate-t-on une accumulation de déchets sur le site ou aux abords ?',
-            data: ({ trashAccumulation }) => {
-                if (trashAccumulation === true) {
-                    return 'oui';
-                }
-
-                if (trashAccumulation === false) {
-                    return 'non';
-                }
-
-                return null;
-            },
-            width: COLUMN_WIDTHS.SMALL,
-        },
-        trashEvacuationRegular: {
-            title: 'La collecte des poubelles / bennes est-elle réalisée de manière régulière ?',
-            data: ({ trashEvacuationRegular }) => {
-                if (trashEvacuationRegular === true) {
-                    return 'oui';
-                }
-
-                if (trashEvacuationRegular === false) {
-                    return 'non';
-                }
-
-                return null;
-            },
-            width: COLUMN_WIDTHS.SMALL,
-        },
-        // vermin
-        vermin: {
-            title: 'Y a-t-il des nuisibles sur le site ou à proximité ?',
-            data: ({ vermin }) => {
-                if (vermin === true) {
-                    return 'oui';
-                }
-
-                if (vermin === false) {
-                    return 'non';
-                }
-
-                return null;
-            },
-            width: COLUMN_WIDTHS.SMALL,
-        },
-        verminComments: {
-            title: 'Précision concernant les nuisibles ?',
-            data: ({ verminComments }) => verminComments,
-            width: COLUMN_WIDTHS.SMALL,
-        },
-        // Fire prevention
-        firePreventionMeasures: {
-            title: 'Y a-t-il des mesures “prévention incendie” ?',
-            data: ({ firePreventionMeasures }) => {
-                if (firePreventionMeasures === true) {
-                    return 'oui';
-                }
-
-                if (firePreventionMeasures === false) {
-                    return 'non';
-                }
-
-                return null;
-            },
-            width: COLUMN_WIDTHS.SMALL,
-        },
-        firePreventionDiagnostic: {
-            title: 'Est-ce qu’un diagnostic prévention incendie par le SDIS a été réalisé ?',
-            data: ({ firePreventionDiagnostic }) => {
-                if (firePreventionDiagnostic === true) {
-                    return 'oui';
-                }
-
-                if (firePreventionDiagnostic === false) {
-                    return 'non';
-                }
-
-                return null;
-            },
-            width: COLUMN_WIDTHS.SMALL,
-        },
-        firePreventionSiteAccessible: {
-            title: 'Est-ce que le site est accessible aux pompiers ?',
-            data: ({ firePreventionSiteAccessible }) => {
-                if (firePreventionSiteAccessible === true) {
-                    return 'oui';
-                }
-
-                if (firePreventionSiteAccessible === false) {
-                    return 'non';
-                }
-
-                return null;
-            },
-            width: COLUMN_WIDTHS.SMALL,
-        },
-        firePreventionDevices: {
-            title: 'Est-ce que des dispositifs spécifiques ont été mis en place ?',
-            data: ({ firePreventionDevices }) => {
-                if (firePreventionDevices === true) {
-                    return 'oui';
-                }
-
-                if (firePreventionDevices === false) {
-                    return 'non';
-                }
-
-                return null;
-            },
-            width: COLUMN_WIDTHS.SMALL,
-        },
-        firePreventionComments: {
-            title: 'Prévention incendie : Préciser',
-            data: ({ firePreventionComments }) => firePreventionComments,
-            width: COLUMN_WIDTHS.SMALL,
         },
 
         hasPlan: {

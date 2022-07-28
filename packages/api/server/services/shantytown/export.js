@@ -2,7 +2,7 @@ const { Document, Packer } = require('docx');
 const logos = require('./export/section_logos');
 const context = require('./export/1_section_context');
 const people = require('./export/section_people');
-const lifeConditions = require('./export/2_section_life_conditions');
+const livingConditions = require('./export/2_section_living_conditions');
 const actors = require('./export/option_section_actors');
 const plans = require('./export/option_section_plans');
 const justiceProcedure = require('./export/option_justice_procedure');
@@ -14,7 +14,7 @@ module.exports = (user, shantytown, options) => {
         logos(),
         context(user, shantytown),
         people(shantytown),
-        lifeConditions(shantytown),
+        livingConditions(shantytown),
     ];
 
     if (options.includes('actors')) {

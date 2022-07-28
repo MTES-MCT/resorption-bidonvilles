@@ -14,6 +14,7 @@
             v-model="checked"
             :checkValue="value.id"
             cypressName="electricity_type"
+            disabled
         ></Radio>
     </CheckableGroup>
 </template>
