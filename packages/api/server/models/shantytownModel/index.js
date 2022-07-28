@@ -11,7 +11,7 @@ const update = require('./update');
 const serializeComment = require('./_common/serializeComment');
 const deleteShantytown = require('./delete');
 const fixClosedStatus = require('./fixClosedStatus');
-
+const setHeatwaveStatus = require('./setHeatwaveStatus');
 
 module.exports = {
     create,
@@ -27,4 +27,5 @@ module.exports = {
     update,
     deleteShantytown,
     fixClosedStatus,
+    setHeatwaveStatus,
 };

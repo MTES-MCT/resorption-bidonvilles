@@ -462,6 +462,15 @@ export default (app) => {
         middlewares.validation,
         controllers.town.fixClosedStatus,
     );
+    app.put(
+        '/towns/:id/heatwave',
+        middlewares.auth.authenticate,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        validators.setHeatwaveStatus,
+        middlewares.validation,
+        controllers.town.setHeatwaveStatus,
+    );
     app.delete(
         '/towns/:id',
         middlewares.auth.authenticate,
