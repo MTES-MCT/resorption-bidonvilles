@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import toiletTypes from "#app/utils/toilet_types";
+
 export default {
     props: {
         value: {
@@ -29,19 +31,10 @@ export default {
     data() {
         return {
             checked: this.value,
-            values: [
-                {
-                    id: "latrines",
-                    label: "Latrines construites par les habitants"
-                },
-                { id: "toilettes_chimiques", label: "Toilettes chimiques" },
-                {
-                    id: "toilettes_seches",
-                    label:
-                        "Toilettes sèches installées par un prestataire/association"
-                },
-                { id: "toilettes_a_chasse", label: "Toilettes à chasse d'eau" }
-            ]
+            values: Object.keys(toiletTypes).map(id => ({
+                id,
+                label: toiletTypes[id]
+            }))
         };
     },
 

@@ -14,8 +14,11 @@
         </div>
         <div class="ml-4">
             <div v-if="info">{{ info }}</div>
-            <div v-if="comments" :data-cy-data="cypressComments">
-                {{ comments }}
+            <div class="mt-6" v-if="answers.length">
+                <div v-for="answer in answers" :key="answer.label" class="mb-2">
+                    <span class="font-bold">{{ answer.label }}</span>
+                    <p>{{ answer.content }}</p>
+                </div>
             </div>
             <div
                 v-if="
@@ -115,14 +118,14 @@ export default {
         cypressName: {
             type: String
         },
-        cypressComments: {
-            type: String
-        },
         cypressDetailsPrefix: {
             type: String
         },
-        comments: {
-            type: String
+        answers: {
+            type: Array,
+            default() {
+                return [];
+            }
         },
         inverted: {
             type: Boolean,

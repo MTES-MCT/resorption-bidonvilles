@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import electricityAccessTypes from "#app/utils/electricity_access_types";
+
 export default {
     props: {
         value: {
@@ -29,17 +31,10 @@ export default {
     data() {
         return {
             checked: this.value,
-            values: [
-                {
-                    id: "electrogene",
-                    label: "Groupe électrogène"
-                },
-                { id: "reseau_urbain", label: "Raccordement au réseau urbain" },
-                {
-                    id: "installation_du_bati",
-                    label: "Utilisation de l’installation du bâtit si squat"
-                }
-            ]
+            values: Object.keys(electricityAccessTypes).map(id => ({
+                id,
+                label: electricityAccessTypes[id]
+            }))
         };
     },
 

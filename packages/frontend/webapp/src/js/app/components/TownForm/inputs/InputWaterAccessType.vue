@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import waterAccessTypes from "#app/utils/water_access_types";
+
 export default {
     props: {
         value: {
@@ -31,18 +33,10 @@ export default {
     data() {
         return {
             checked: this.value,
-            values: [
-                { id: "fontaine_publique", label: "Fontaine publique" },
-                { id: "borne_incendie", label: "Borne incendie" },
-                { id: "achat_bouteille", label: "Achat bouteille uniquement" },
-                { id: "reservoir", label: "Réservoir / cuve / citerne" },
-                {
-                    id: "robinet_connecte_au_reseau",
-                    label: "Robinet connecté au réseau d'eau"
-                },
-                { id: "autre", label: "Autre" },
-                { id: "inconnu", label: "Inconnu" }
-            ]
+            values: Object.keys(waterAccessTypes).map(id => ({
+                id,
+                label: waterAccessTypes[id]
+            }))
         };
     },
 
