@@ -8,6 +8,7 @@
 
 import policeSiren from "./assets/police_siren.svg";
 import formatDateSince from "./formatDateSince";
+import getLabelForLivingConditionDetail from "./getLabelForLivingConditionDetail";
 
 export default function enrichShantytown(shantytown, fieldTypes) {
     const fieldTypeColors = fieldTypes.reduce(
@@ -17,14 +18,6 @@ export default function enrichShantytown(shantytown, fieldTypes) {
             }),
         {}
     );
-
-    // electricity
-    let electricityValue = true;
-    if (shantytown.electricityType.label === "Inconnu") {
-        electricityValue = null;
-    } else if (shantytown.electricityType.label === "Non") {
-        electricityValue = false;
-    }
 
     // justice statuses
     const justiceStatuses = [];
@@ -125,6 +118,37 @@ export default function enrichShantytown(shantytown, fieldTypes) {
     );
 
     // final object
+    const livingConditions = { ...shantytown.livingConditions };
+    const conditions = [
+        "water",
+        "electricity",
+        "trash",
+        "sanitary",
+        "firePrevention",
+        "fire_prevention",
+        "vermin",
+        "pest_animals"
+    ];
+    conditions.forEach(conditionKey => {
+        if (!livingConditions[conditionKey]) {
+            return;
+        }
+
+        const status = livingConditions[conditionKey].status;
+
+        ["positive", "negative", "unknown"].forEach(
+            statusKey =>
+                (status[statusKey] = (status[statusKey] || []).map(key =>
+                    getLabelForLivingConditionDetail(
+                        conditionKey,
+                        key,
+                        statusKey,
+                        shantytown
+                    )
+                ))
+        );
+    });
+
     return {
         ...shantytown,
         statusName,
@@ -135,10 +159,7 @@ export default function enrichShantytown(shantytown, fieldTypes) {
             ...shantytown.fieldType,
             color: fieldTypeColors[shantytown.fieldType.id]
         },
-        electricityType: {
-            ...shantytown.electricityType,
-            value: electricityValue
-        },
+        livingConditions,
         justiceStatuses,
         totalSolutions
     };

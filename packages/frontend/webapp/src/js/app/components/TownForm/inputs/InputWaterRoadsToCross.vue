@@ -9,6 +9,7 @@
                 v-model="checked"
                 :checkValue="1"
                 cypressName="water_roads_to_cross"
+                disabled
             ></Radio>
             <Radio
                 label="Non"
@@ -16,6 +17,7 @@
                 v-model="checked"
                 :checkValue="0"
                 cypressName="water_roads_to_cross"
+                disabled
             ></Radio>
         </CheckableGroup>
     </SubQuestionWrapper>

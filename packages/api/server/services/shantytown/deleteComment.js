@@ -12,7 +12,7 @@ module.exports = async (user, shantytownId, commentId, deletionMessage) => {
     try {
         town = await shantytownModel.findOne(user, shantytownId);
     } catch (error) {
-        throw new ServiceError('fetch_failed', new Error('Impossible de retrouver le site en base de données'));
+        throw new ServiceError('fetch_failed', error);
     }
     const comment = [
         ...town.comments.regular,
@@ -25,7 +25,7 @@ module.exports = async (user, shantytownId, commentId, deletionMessage) => {
     try {
         author = await userModel.findOne(comment.createdBy.id);
     } catch (error) {
-        throw new ServiceError('fetch_failed', new Error('Une erreur est survenue lors de la lecture en base de données'));
+        throw new ServiceError('fetch_failed', error);
     }
     const location = {
         type: 'city',
@@ -51,7 +51,7 @@ module.exports = async (user, shantytownId, commentId, deletionMessage) => {
     try {
         await shantytownCommentModel.deleteComment(commentId);
     } catch (error) {
-        throw new ServiceError('delete_failed', new Error('Impossible de supprimer le commentaire'));
+        throw new ServiceError('delete_failed', error);
     }
 
     try {

@@ -1,5 +1,5 @@
 <template>
-    <ValidationObserver ref="form" @submit.prevent="submit" v-slot="{ errors }">
+    <ValidationObserver ref="form" @submit.prevent="submit">
         <form>
             <div class="bg-G100 py-8">
                 <PrivateContainer class="flex justify-between items-baseline">
@@ -63,11 +63,17 @@
                     ></TownFormPanelPeople>
 
                     <TownFormPanelLivingConditions
+                        v-show="$store.state.townForm.showOldLivingConditions"
+                        class="mt-10 townPanelShadow"
+                        :population="town.people.population"
+                        v-model="town.livingConditions"
+                    ></TownFormPanelLivingConditions>
+
+                    <TownFormPanelNewLivingConditions
                         class="mt-10 townPanelShadow"
                         id="living_conditions"
-                        :population="town.people.population"
-                        v-model="town.living_conditions"
-                    ></TownFormPanelLivingConditions>
+                        v-model="town.livingConditions"
+                    ></TownFormPanelNewLivingConditions>
 
                     <TownFormPanelJudicial
                         class="mt-10 townPanelShadow"
@@ -110,6 +116,7 @@ import TownFormPanelLocation from "./TownFormPanelLocation";
 import TownFormPanelCharacteristics from "./TownFormPanelCharacteristics";
 import TownFormPanelPeople from "./TownFormPanelPeople";
 import TownFormPanelLivingConditions from "./TownFormPanelLivingConditions";
+import TownFormPanelNewLivingConditions from "./TownFormPanelNewLivingConditions";
 import TownFormPanelJudicial from "./TownFormPanelJudicial";
 import FormLeftColumn from "#app/components/ui/Form/FormLeftColumn";
 import FormErrorLog from "#app/components/ui/Form/FormErrorLog";
@@ -141,6 +148,7 @@ export default {
         TownFormPanelCharacteristics,
         TownFormPanelPeople,
         TownFormPanelLivingConditions,
+        TownFormPanelNewLivingConditions,
         TownFormPanelJudicial
     },
 
@@ -148,6 +156,7 @@ export default {
         return {
             nearbyClosedShantytowns: [],
             mainError: null,
+            errors: {},
             loading: false,
             showInfo: true,
             initialTown: this.formatTown(this.data),
@@ -282,6 +291,7 @@ export default {
         async submit() {
             const isValid = await this.$refs.form.validate();
             if (!isValid) {
+                this.errors = this.$refs.form.errors;
                 this.$router.replace("#top", () =>
                     this.$router.replace("#erreurs")
                 );
@@ -297,25 +307,30 @@ export default {
             }
             this.loading = true;
             this.mainError = null;
+            this.errors = {};
             this.$router.replace("#top");
 
             try {
                 const [lat, lon] = this.town.location.coordinates;
 
                 const result = await this.submitFn({
-                    ...this.town.living_conditions,
-                    water_hand_wash_access_number: this.town.living_conditions
-                        .water_hand_wash_access
-                        ? this.strToInt(
-                              this.town.living_conditions
-                                  .water_hand_wash_access_number
-                          )
-                        : null,
-                    trash_cans_on_site: this.strToInt(
-                        this.town.living_conditions.trash_cans_on_site
-                    ),
-                    sanitary_number: this.strToInt(
-                        this.town.living_conditions.sanitary_number
+                    living_conditions_version: this.town.livingConditions
+                        .version,
+                    // flatten living conditions into a deep-1 object (electricity.access becomes electricity_access)
+                    ...Object.keys(this.town.livingConditions.v2).reduce(
+                        (acc, mainKey) => {
+                            return Object.keys(
+                                this.town.livingConditions.v2[mainKey]
+                            ).reduce(
+                                (subAcc, subKey) => ({
+                                    ...subAcc,
+                                    [`${mainKey}_${subKey}`]: this.town
+                                        .livingConditions.v2[mainKey][subKey]
+                                }),
+                                { ...acc }
+                            );
+                        },
+                        {}
                     ),
                     address: this.town.location.address.label,
                     citycode: this.town.location.address.citycode,
@@ -420,6 +435,7 @@ export default {
 
                 if (err && err.fields) {
                     this.$refs.form.setErrors(err.fields);
+                    this.errors = err.fields;
                 }
 
                 if (err && err.user_message) {

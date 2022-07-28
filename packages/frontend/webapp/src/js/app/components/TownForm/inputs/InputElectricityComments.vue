@@ -6,6 +6,7 @@
         v-model="input"
         cypressName="electricity_comments"
         placeholder="Votre message"
+        disabled
     ></TextArea>
 </template>
 

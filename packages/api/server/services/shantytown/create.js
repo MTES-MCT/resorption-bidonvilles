@@ -1,5 +1,8 @@
+const sequelize = require('#db/sequelize');
 const shantytownModel = require('#server/models/shantytownModel');
 const socialOriginModel = require('#server/models/socialOriginModel');
+const shantytownToiletTypesModel = require('#server/models/shantytownToiletTypesModel');
+const electricityAccessTypesModel = require('#server/models/electricityAccessTypesModel');
 const config = require('#server/config');
 const mattermostUtils = require('#server/utils/mattermost');
 const userModel = require('#server/models/userModel');
@@ -24,13 +27,6 @@ module.exports = async (townData, user) => {
         minorsInSchool: townData.minors_in_school,
         caravans: townData.caravans,
         huts: townData.huts,
-        electricityType: townData.electricity_type,
-        electricityComments: townData.electricity_comments,
-        accessToSanitary: townData.access_to_sanitary,
-        sanitaryComments: townData.sanitary_comments,
-        accessToWater: townData.access_to_water,
-        waterComments: townData.water_comments,
-        trashEvacuation: townData.trash_evacuation,
         fieldType: townData.field_type,
         ownerType: townData.owner_type,
         isReinstallation: townData.is_reinstallation,
@@ -41,36 +37,44 @@ module.exports = async (townData, user) => {
         censusStatus: townData.census_status,
         censusConductedAt: townData.census_conducted_at,
         censusConductedBy: townData.census_conducted_by,
-        // New fields
-        // Water
-        waterPotable: townData.water_potable,
-        waterContinuousAccess: townData.water_continuous_access,
-        waterPublicPoint: townData.water_public_point,
-        waterDistance: townData.water_distance,
-        waterRoadsToCross: townData.water_roads_to_cross,
-        waterEveryoneHasAccess: townData.water_everyone_has_access,
-        waterStagnantWater: townData.water_stagnant_water,
-        waterHandWashAccess: townData.water_hand_wash_access,
-        waterHandWashAccessNumber: townData.water_hand_wash_access_number,
-        // Sanitary
-        sanitaryNumber: townData.sanitary_number,
-        sanitaryInsalubrious: townData.sanitary_insalubrious,
-        sanitaryOnSite: townData.sanitary_on_site,
-        // Trash
-        trashCansOnSite: townData.trash_cans_on_site,
-        trashAccumulation: townData.trash_accumulation,
-        trashEvacuationRegular: townData.trash_evacuation_regular,
-        // Vermin
-        vermin: townData.vermin,
-        verminComments: townData.vermin_comments,
-        // Fire prevention
-        firePreventionMeasures: townData.fire_prevention_measures,
-        firePreventionDiagnostic: townData.fire_prevention_diagnostic,
-        firePreventionSiteAccessible: townData.fire_prevention_site_accessible,
-        firePreventionDevices: townData.fire_prevention_devices,
-        firePreventionComments: townData.fire_prevention_comments,
+
+        // living conditions
+        living_conditions_version: 2,
+
+        water_access_type: townData.water_access_type,
+        water_access_type_details: townData.water_access_type_details,
+        water_access_is_public: townData.water_access_is_public,
+        water_access_is_continuous: townData.water_access_is_continuous,
+        water_access_is_continuous_details: townData.water_access_is_continuous_details,
+        water_access_is_local: townData.water_access_is_local,
+        water_access_is_close: townData.water_access_is_close,
+        water_access_is_unequal: townData.water_access_is_unequal,
+        water_access_is_unequal_details: townData.water_access_is_unequal_details,
+        water_access_has_stagnant_water: townData.water_access_has_stagnant_water,
+        water_access_comments: townData.water_access_comments,
+
+        sanitary_open_air_defecation: townData.sanitary_open_air_defecation,
+        sanitary_access_working_toilets: townData.sanitary_working_toilets,
+        sanitary_access_toilets_are_inside: townData.sanitary_toilets_are_inside,
+        sanitary_access_toilets_are_lighted: townData.sanitary_toilets_are_lighted,
+        sanitary_access_hand_washing: townData.sanitary_hand_washing,
+
+        electricity_access: townData.electricity_access,
+        electricity_access_is_unequal: townData.electricity_access_is_unequal,
+
+        trash_is_piling: townData.trash_is_piling,
+        trash_evacuation_is_close: townData.trash_evacuation_is_close,
+        trash_evacuation_is_safe: townData.trash_evacuation_is_safe,
+        trash_evacuation_is_regular: townData.trash_evacuation_is_regular,
+        trash_bulky_is_piling: townData.trash_bulky_is_piling,
+
+        pest_animals: townData.pest_animals_presence,
+        pest_animals_details: townData.pest_animals_details,
+
+        fire_prevention: townData.fire_prevention_diagnostic,
     };
 
+    const transaction = await sequelize.transaction();
     const shantytown_id = await shantytownModel.create(
         Object.assign(
             {},
@@ -95,12 +99,32 @@ module.exports = async (townData, user) => {
                 }
                 : {},
         ),
+        transaction,
     );
 
+    const promises = [];
     if (townData.social_origins.length > 0) {
-        await socialOriginModel.create(shantytown_id, townData.social_origins);
+        promises.push(socialOriginModel.create(shantytown_id, townData.social_origins, transaction));
     }
 
+    if (townData.sanitary_toilet_types.length > 0) {
+        promises.push(shantytownToiletTypesModel.create(
+            shantytown_id,
+            townData.sanitary_toilet_types,
+            transaction,
+        ));
+    }
+
+    if (townData.electricity_access_types.length > 0) {
+        promises.push(electricityAccessTypesModel.create(
+            shantytown_id,
+            townData.electricity_access_types,
+            transaction,
+        ));
+    }
+
+    await Promise.all(promises);
+    await transaction.commit();
 
     const town = await shantytownModel.findOne(user, shantytown_id);
 

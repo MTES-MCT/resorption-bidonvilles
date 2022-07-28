@@ -6,6 +6,7 @@
         v-model="input"
         cypressName="sanitary_comments"
         placeholder="Votre message"
+        disabled
     ></TextArea>
 </template>
 

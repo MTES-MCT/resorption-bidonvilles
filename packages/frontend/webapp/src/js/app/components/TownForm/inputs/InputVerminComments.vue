@@ -5,6 +5,7 @@
         label="Précisions (rats, punaises de lits...)"
         v-model="input"
         cypressName="vermin_comments"
+        disabled
     ></TextArea>
 </template>
 

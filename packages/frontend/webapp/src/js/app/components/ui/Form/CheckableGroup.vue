@@ -5,7 +5,10 @@
         v-slot="{ errors }"
         :vid="id"
     >
-        <InputWrapper :withoutMargin="withoutMargin">
+        <InputWrapper
+            :withoutMargin="withoutMargin"
+            :hasErrors="!!errors.length"
+        >
             <InputLabel
                 :label="label"
                 :info="info"

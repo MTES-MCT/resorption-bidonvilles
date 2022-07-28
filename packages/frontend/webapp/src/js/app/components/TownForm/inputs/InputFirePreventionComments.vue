@@ -5,6 +5,7 @@
         placeholder="Votre message"
         v-model="input"
         cypressName="fire_prevention_comments"
+        disabled
     ></TextArea>
 </template>
 

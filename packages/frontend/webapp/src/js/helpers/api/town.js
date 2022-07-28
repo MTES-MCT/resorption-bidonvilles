@@ -198,26 +198,3 @@ export function getExports(townId, options) {
         )}`
     );
 }
-
-/**
- * @typedef {Object} Town_Data
- * @property {number} latitude,
- * @property {number} longitude,
- * @property {string} address,
- * @property {string} detailed_address,
- * @property {?Date} built_at,
- * @property {?number} population_total,
- * @property {?number} population_couples,
- * @property {?number} population_minors,
- * @property {Object} electricity_type,
- * @property {?boolean} access_to_water,
- * @property {?boolean} trash_evacuation,
- * @property {Array.<number>} social_origins,
- * @property {number} field_type,
- * @property {number} owner_type,
- */
-
-/**
- * @typedef {Object} ShantytownComment_Data
- * @property {string} description
- */

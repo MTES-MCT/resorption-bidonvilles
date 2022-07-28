@@ -15,49 +15,32 @@
 <script>
 export default {
     props: {
-        value: {
-            validator: prop => typeof prop === "boolean" || prop === null
-        },
-        details: {
-            type: Object
-        },
-        inverted: {
-            type: Boolean
+        status: {
+            type: String,
+            validator: value =>
+                ["unknown", "bad", "toImprove", "good"].includes(value)
         }
     },
     computed: {
         colorClass() {
-            if (
-                this.value &&
-                this.details &&
-                this.details.negative.length > 0
-            ) {
-                return "text-secondary border-secondary";
-            }
+            const colors = {
+                good: "text-green500 border-green500",
+                toImprove: "text-secondary border-secondary",
+                bad: "text-red border-red",
+                unknown: "text-red border-red"
+            };
 
-            if (
-                (this.value === true && !this.inverted) ||
-                (this.value === false && this.inverted)
-            ) {
-                return "text-green500 border-green500";
-            }
-
-            return "text-red border-red";
+            return colors[this.status] || "text-red border-red";
         },
         icon() {
-            if (
-                this.value &&
-                this.details &&
-                this.details.negative.length > 0
-            ) {
-                return "exclamation-triangle";
-            }
+            const icons = {
+                good: "check",
+                toImprove: "exclamation-triangle",
+                bad: "times",
+                unknown: "question"
+            };
 
-            return {
-                null: "question",
-                false: this.inverted ? "check" : "times",
-                true: this.inverted ? "times" : "check"
-            }[this.value];
+            return icons[this.status] || "question";
         }
     }
 };

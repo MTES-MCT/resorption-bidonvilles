@@ -9,6 +9,7 @@
                 v-model="checked"
                 :checkValue="1"
                 cypressName="trash_evacuation_regular"
+                disabled
             ></Radio>
             <Radio
                 label="Non"
@@ -16,6 +17,7 @@
                 v-model="checked"
                 :checkValue="0"
                 cypressName="trash_evacuation_regular"
+                disabled
             ></Radio>
         </CheckableGroup>
     </SubQuestionWrapper>

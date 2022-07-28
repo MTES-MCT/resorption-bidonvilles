@@ -9,6 +9,7 @@
                 v-model="checked"
                 :checkValue="1"
                 cypressName="water_stagnant_water"
+                disabled
             ></Radio>
             <Radio
                 label="Non"
@@ -16,6 +17,7 @@
                 v-model="checked"
                 :checkValue="0"
                 cypressName="water_stagnant_water"
+                disabled
             ></Radio>
         </CheckableGroup>
     </SubQuestionWrapper>
