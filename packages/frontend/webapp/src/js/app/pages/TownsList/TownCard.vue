@@ -21,6 +21,16 @@
                     >
                         {{ lastUpdate }}
                     </Tag>
+                    <Tag
+                        v-if="heatwaveStatus === true"
+                        :variant="'highlight'"
+                        :class="[
+                            'ml-4 text-xs uppercase text-primary',
+                            isHover ? 'shadow-md' : ''
+                        ]"
+                    >
+                        Alerte Canicule
+                    </Tag>
                     <ResorptionTargetTag
                         class="ml-4"
                         v-if="shantytown.resorptionTarget"
@@ -239,6 +249,25 @@
                 </div>
                 <div class="flex justify-end px-4 pt-4 print:hidden">
                     <div class="print:hidden">
+                        <Button
+                            v-if="isHover && heatwaveStatus === false"
+                            variant="secondary"
+                            icon="exclamation-triangle"
+                            iconPosition="left"
+                            class="text-display-sm font-bold hover:underline"
+                            @click.native.prevent="setHeatwaveStatus(true)"
+                        >
+                            Alerte Canicule</Button
+                        >
+                        <Button
+                            v-if="isHover && heatwaveStatus === true"
+                            variant="primary"
+                            iconPosition="left"
+                            class="text-display-sm font-bold hover:underline"
+                            @click.native.prevent="setHeatwaveStatus(false)"
+                        >
+                            Supprimer alerte Canicule</Button
+                        >
                         <transition
                             name="fade"
                             v-if="isOpen && hasUpdateShantytownPermission"
@@ -281,6 +310,7 @@ import flagExtraCommunautaires from "./assets/extra-communautaires.png";
 import getSince from "#app/utils/getSince";
 import formatLastUpdatedAt from "#app/utils/formatLastUpdatedAt";
 import { isSolved, isClosed } from "./common/SolvedOrClosed";
+import { setHeatwaveStatus } from "#helpers/api/town";
 
 export default {
     props: {
@@ -296,7 +326,8 @@ export default {
     },
     data() {
         return {
-            isHover: false
+            isHover: false,
+            heatwaveStatus: this.shantytown.heatwaveStatus
         };
     },
     components: {
@@ -339,7 +370,13 @@ export default {
             return origin;
         },
         isSolved,
-        isClosed
+        isClosed,
+        async setHeatwaveStatus(value) {
+            await setHeatwaveStatus(this.shantytown.id, {
+                heatwave_status: value
+            });
+            this.heatwaveStatus = value;
+        }
     },
     computed: {
         pinVariant() {
