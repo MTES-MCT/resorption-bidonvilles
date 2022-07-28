@@ -71,6 +71,10 @@ export function fixClosedStatus(id, data) {
     return putApi(`/towns/${id}/closedWithSolutions`, data);
 }
 
+export function setHeatwaveStatus(id, data) {
+    return putApi(`/towns/${id}/heatwave`, data);
+}
+
 /**
  * Deletes a town
  *
