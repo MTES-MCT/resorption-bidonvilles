@@ -9,13 +9,16 @@ const {
     paris,
 } = require('#test/utils/location');
 const { serialized: fakeShantytown } = require('#test/utils/shantytown');
+const { serialized: fakeUser } = require('#test/utils/user');
+
 const shantytownModel = require('#server/models/shantytownModel');
 
 const setHeatwaveStatusService = require('./setHeatwaveStatus');
 
 
 describe.only('services/shantytown', () => {
-    describe('fixClosedStatus()', () => {
+    describe('setHeatwaveStatus()', () => {
+        const user = fakeUser();
         const data = {
             shantytown: fakeShantytown(paris.city(), { heatwave_status: false }),
             heatwave_status: true,
@@ -38,9 +41,8 @@ describe.only('services/shantytown', () => {
         it('met à jour le site en changeant le statut de canicule et renvoie le site ainsi modifié', async () => {
             const updatedTown = fakeShantytown(paris.city(), { heatwave_status: true });
             stubs.findOne.resolves(updatedTown);
-
-            const response = await setHeatwaveStatusService(data);
-            expect(stubs.setHeatwaveStatus).to.have.been.calledOnceWith(data.shantytown.id, data.closed_with_solutions);
+            const response = await setHeatwaveStatusService(user, data);
+            expect(stubs.setHeatwaveStatus).to.have.been.calledOnceWith(data.shantytown.id, data.heatwave_status);
             expect(response).to.be.eql(updatedTown);
         });
     });
