@@ -213,6 +213,21 @@ module.exports = (closingSolutions) => {
             data: ({ socialOrigins }) => (socialOrigins.length > 0 ? socialOrigins.map(({ label }) => label).join(';') : null),
             width: COLUMN_WIDTHS.MEDIUM,
         },
+        heatwaveStatus: {
+            title: 'Alerte Canicule',
+            data: ({ heatwaveStatus }) => {
+                if (heatwaveStatus === true) {
+                    return 'oui';
+                }
+
+                if (heatwaveStatus === false) {
+                    return 'non';
+                }
+
+                return null;
+            },
+            width: COLUMN_WIDTHS.SMALL,
+        },
         electricityAccess: {
             title: 'Y a-t-il présence d’une installation électrique ?',
             data: (shantytown) => {

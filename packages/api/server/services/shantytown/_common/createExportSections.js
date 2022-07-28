@@ -71,6 +71,7 @@ module.exports = (user, data, properties, closedTowns, closingSolutions) => {
         sections.push({
             title: 'Conditions de vie',
             properties: [
+                properties.heatwaveStatus,
                 properties.electricityAccess,
                 properties.electricityAccessTypes,
                 properties.electricityAccessIsUnequal,
