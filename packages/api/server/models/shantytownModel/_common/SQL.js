@@ -48,6 +48,7 @@ module.exports = {
         'shantytowns.created_at': 'createdAt',
         'shantytowns.updated_at': 'updatedAt',
         // new fields
+        'shantytowns.heatwave_status': 'heatwaveStatus',
         'shantytowns.water_potable': 'waterPotable',
         'shantytowns.water_continuous_access': 'waterContinuousAccess',
         'shantytowns.water_public_point': 'waterPublicPoint',
