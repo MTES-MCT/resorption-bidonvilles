@@ -67,13 +67,12 @@
                 <span class="text-xl align-middle"
                     ><Icon icon="times" class="mr-1"
                 /></span>
-                Urgence à
-                {{
-                    shantytown.livingConditions.version === 2
-                        ? "sécuriser"
-                        : "renseigner"
-                }}
-                les conditions de vie
+                <span v-if="shantytown.livingConditions.version === 2"
+                    >Urgence à sécuriser les conditions de vie</span
+                >
+                <span v-else
+                    >Les conditions de vie évoluent : mettez les à jour !</span
+                >
             </p>
 
             <!-- journal du site -->

@@ -2,7 +2,7 @@
     <CheckableGroup
         label=" "
         direction="horizontal"
-        validationName="Les habitants ont-ils accès à l'eau ?"
+        validationName="Comment les habitants ont-ils accès à l'eau ?"
         id="water_access_type"
         rules="required"
     >

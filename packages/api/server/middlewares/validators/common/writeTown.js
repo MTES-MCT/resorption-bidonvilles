@@ -701,7 +701,7 @@ module.exports = mode => ([
     // water
     body('water_access_type')
         .if((value, { req }) => req.body.living_conditions_version === 2)
-        .exists().bail().withMessage('Le champ "Les habitants ont-ils accès à l\'eau ?" est obligatoire')
+        .exists().bail().withMessage('Le champ "Comment les habitants ont-ils accès à l\'eau ?" est obligatoire')
         .custom((value) => {
             if (![
                 'fontaine_publique',

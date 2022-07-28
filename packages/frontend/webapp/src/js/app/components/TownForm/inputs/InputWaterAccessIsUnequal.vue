@@ -1,6 +1,7 @@
 <template>
     <SubQuestionWrapper
         label="Des inégalités d'accès ont-elles été constatées ?"
+        info="Il est recommandé 1 robinet pour 50 personnes. Cette recommandation doit être adaptée aux spécificités du site."
     >
         <CheckableGroup
             id="water_access_is_unequal"

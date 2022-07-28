@@ -2,12 +2,27 @@
     <DetailsPanel>
         <template v-slot:title>Conditions de vie et environnement</template>
         <template v-slot:body>
-            <Tag variant="pin_red" v-if="town.livingConditions.version < 2"
-                >LES CONDITIONS DE VIE DOIVENT ÊTRE MISES A JOUR</Tag
+            <Tag
+                variant="pin_red"
+                :uppercase="false"
+                v-if="town.livingConditions.version < 2"
+                ><span class="text-sm"
+                    >Nouveau : le formulaire des conditions de vie évolue pour
+                    être plus précis et plus exhaustif sur l'accès à l'eau,
+                    l'électricité et aux toilettes.
+                    <span
+                        class="underline font-bold cursor-pointer hover:no-underline"
+                        @click="routeToUpdate"
+                        >Mettez le à jour</span
+                    >
+                    pour partager un état des lieux plus juste et identifier les
+                    besoins.</span
+                ></Tag
             >
 
             <TownDetailsPanelLivingConditionsSection
                 title="Accès à l’eau"
+                info="Un accès à l'eau est caractérisé par la mise à disposition d'une eau potable avec un nombre adapté de robinets (minimum recommandé 1 robinet pour 50 personnes, qui doit être adapté aux spécificités du site), à une distance limitant le portage de charges lourdes (à l'intérieur du site, à moins de 200 m de l'habitation la plus éloignée)."
                 :status="town.livingConditions.water.status"
                 cypressName="access_to_water"
                 cypressComments="water_comments"
@@ -92,6 +107,11 @@ export default {
             type: Object
         }
     },
-    components: { TownDetailsPanelLivingConditionsSection, DetailsPanel }
+    components: { TownDetailsPanelLivingConditionsSection, DetailsPanel },
+    methods: {
+        routeToUpdate() {
+            this.$router.push(`/site/${this.town.id}/mise-a-jour`);
+        }
+    }
 };
 </script>

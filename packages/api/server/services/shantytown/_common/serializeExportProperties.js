@@ -258,7 +258,7 @@ module.exports = (closingSolutions) => {
             width: COLUMN_WIDTHS.MEDIUM,
         },
         waterAccessType: {
-            title: "Les habitants ont-ils accès à l'eau ?",
+            title: "Comment les habitants ont-ils accès à l'eau ?",
             data: (shantytown) => {
                 const data = shantytown.livingConditions.water.access_type;
                 if (!data) {

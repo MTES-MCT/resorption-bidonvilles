@@ -238,7 +238,7 @@ module.exports = (oldVersion, newVersion) => {
                 processor: baseProcessors.bool,
             },
             'livingConditions.water.access_type': {
-                label: "Les habitants ont-ils accès à l'eau ?",
+                label: "Comment les habitants ont-ils accès à l'eau ?",
                 processor(accessType) {
                     if (!accessType) {
                         return 'non renseigné';

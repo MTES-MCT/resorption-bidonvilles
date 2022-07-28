@@ -1,7 +1,7 @@
 <template>
     <FormGroup title="Conditions de vie et environnement">
         <FormParagraph
-            title="Les habitants ont-ils accès à l'eau ?"
+            title="Comment les habitants ont-ils accès à l'eau ?"
             :showMandatoryStar="true"
         >
             <InputAccessToWater

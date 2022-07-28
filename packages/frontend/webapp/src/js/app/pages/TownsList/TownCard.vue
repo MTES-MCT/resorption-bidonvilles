@@ -149,7 +149,8 @@
                         </div>
                         <div v-else>
                             <Tag variant="pin_red"
-                                >Conditions de vie à renseigner</Tag
+                                >Les conditions de vie évoluent : mettez les à
+                                jour !</Tag
                             >
                         </div>
                     </div>

@@ -2,11 +2,13 @@
     <FormGroup title="Conditions de vie et environnement">
         <p class="bg-yellow-200 p-4 mb-6" v-if="input.original_version === 1">
             <span class="font-bold"
-                >Le formulaire des conditions de vie a évolué</span
+                >Le formulaire des conditions de vie évolue</span
             ><br />
-            Le formulaire des conditions de vie a évolué pour être plus précis
-            et plus exhaustif sur l'accès à l'eau, l'électricité et aux
-            toilettes.<br />
+            Le formulaire des conditions de vie évolue pour être plus précis et
+            plus exhaustif sur l'accès à l'eau, l'électricité et aux toilettes.
+            Les questions progressives vont permettre d'identifier le niveau
+            d'accès de chaque service de base et d'indiquer les actions à mener
+            sans avoir besoin d'être expert sur ces thématiques !<br />
             Pour vous aider à remplir le nouveau formulaire vous pouvez faire
             apparaître les réponses aux anciennes questions (grisées).
         </p>
@@ -61,7 +63,7 @@
 
         <template v-if="input.original_version === 2 || input.version === 2">
             <FormParagraph
-                title="Les habitants ont-ils accès à l'eau ?"
+                title="Comment les habitants ont-ils accès à l'eau ?"
                 :showMandatoryStar="true"
             >
                 <InputWaterAccessType

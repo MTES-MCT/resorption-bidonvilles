@@ -13,6 +13,7 @@
             </div>
         </div>
         <div class="ml-4">
+            <div v-if="info">{{ info }}</div>
             <div v-if="comments" :data-cy-data="cypressComments">
                 {{ comments }}
             </div>
@@ -103,6 +104,10 @@ export default {
     props: {
         title: {
             type: String
+        },
+        info: {
+            type: String,
+            required: false
         },
         status: {
             type: Object
