@@ -44,7 +44,7 @@ module.exports = (user, location = null, privateLocation = null) => {
     additionalWhere.push(
         '(:userId =  ANY(uca.user_target_id))',
         '(:organizationId = ANY(oca.organization_target_id))',
-        '(:userId = comments.created_by)',
+        '(:userId = sc.created_by)',
     );
 
     return sequelize.query(
