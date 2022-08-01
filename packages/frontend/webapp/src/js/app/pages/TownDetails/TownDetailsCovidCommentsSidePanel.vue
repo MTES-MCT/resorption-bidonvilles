@@ -102,6 +102,21 @@
                             :showMandatoryStar="true"
                             :disabled="loading"
                         />
+
+                        <div
+                            v-if="covidError !== null"
+                            class="text-red border border-red py-2 px-4 mb-4"
+                        >
+                            {{ covidError }}
+                            <ul v-if="covidErrors.length" class="text-sm">
+                                <li
+                                    v-for="(error, index) in covidErrors"
+                                    :key="index"
+                                >
+                                    - {{ error }}
+                                </li>
+                            </ul>
+                        </div>
                         <div class="flex items-center justify-between">
                             <p>
                                 <Button
@@ -161,6 +176,8 @@ export default {
     },
     data() {
         return {
+            covidError: null,
+            covidErrors: [],
             dateLanguage: fr,
             loading: false,
             form: {
@@ -198,6 +215,7 @@ export default {
 
             // clean previous errors
             this.covidErrors = [];
+            this.covidError = null;
             this.loading = true;
 
             try {
@@ -242,11 +260,10 @@ export default {
                     this.$refs.form.reset();
                 });
             } catch (error) {
-                const fields = error.fields || {};
-                this.covidErrors = Object.keys(fields).reduce(
-                    (acc, key) => [...acc, ...fields[key]],
-                    []
-                );
+                this.covidError = error.user_message;
+                this.covidErrors = error.fields
+                    ? Object.values(error.fields).flat()
+                    : [];
             }
 
             this.loading = false;
