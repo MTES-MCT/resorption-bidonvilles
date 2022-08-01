@@ -1,6 +1,6 @@
 <template>
     <TextInput
-        id="accompagnes_people"
+        id="non_accompagnes_people"
         label="Personnes"
         width="w-32"
         v-model="input"

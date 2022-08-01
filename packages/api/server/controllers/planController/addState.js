@@ -353,20 +353,20 @@ module.exports = async (req, res, next) => {
         inputs.forEach(({ name, label }) => {
             let families = null;
             if (stateData[name] !== null && (Number.isNaN(stateData[name]) || stateData[name] < 0)) {
-                addError('housing', `La valeur du champ ${label} (ménages) est invalide : veuillez saisir un nombre supérieur à 0`);
+                addError(`${name}_families`, `La valeur du champ ${label} (ménages) est invalide : veuillez saisir un nombre supérieur à 0`);
             } else {
                 families = stateData[name];
             }
 
             let people = null;
             if (stateData[`${name}_people`] !== null && (Number.isNaN(stateData[`${name}_people`]) || stateData[`${name}_people`] < 0)) {
-                addError('housing', `La valeur du champ ${label} (personnes) est invalide : veuillez saisir un nombre supérieur à 0`);
+                addError(`${name}_personnes`, `La valeur du champ ${label} (personnes) est invalide : veuillez saisir un nombre supérieur à 0`);
             } else {
                 people = stateData[`${name}_people`];
             }
 
             if (families !== null && people !== null && families > people) {
-                addError('housing', `Le nombre de ménages ne peut pas être supérieur au nombre de personnes pour le champ ${label}`);
+                addError(`${name}_families`, `Le nombre de ménages ne peut pas être supérieur au nombre de personnes pour le champ ${label}`);
             }
         });
     }
