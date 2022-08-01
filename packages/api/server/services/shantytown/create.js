@@ -4,24 +4,6 @@ const config = require('#server/config');
 const mattermostUtils = require('#server/utils/mattermost');
 const userModel = require('#server/models/userModel');
 const mails = require('#server/mails/mails');
-const { fromTsToFormat } = require('#server/utils/date');
-
-function getDetailedClosedShantytownsInDepartement(closedTowns, user) {
-    let detailedClosedShantytowns = [];
-    if (closedTowns.length > 0) {
-        detailedClosedShantytowns = Promise.all(closedTowns.map(town => shantytownModel.findOne(user, JSON.stringify(town))))
-            .then(towns => towns.map((
-                {
-                    id, address, city, closedAt,
-                },
-            ) => (
-                {
-                    id, address, city, closedAt: fromTsToFormat(closedAt, 'd/m/Y'),
-                }
-            )));
-    }
-    return detailedClosedShantytowns;
-}
 
 module.exports = async (townData, user) => {
     const baseTown = {
@@ -53,6 +35,7 @@ module.exports = async (townData, user) => {
         ownerType: townData.owner_type,
         isReinstallation: townData.is_reinstallation,
         reinstallationComments: townData.reinstallation_comments,
+        reinstallationShantytowns: townData.reinstallation_shantytowns_full,
         city: townData.citycode,
         createdBy: user.id,
         declaredAt: townData.declared_at,
@@ -89,21 +72,16 @@ module.exports = async (townData, user) => {
         firePreventionComments: townData.fire_prevention_comments,
     };
 
-    let closedTownsInDepartement = null;
-    if (townData.location_shantytowns && townData.location_shantytowns.length > 0) {
-        closedTownsInDepartement = await getDetailedClosedShantytownsInDepartement(townData.location_shantytowns, user);
-
-        if (closedTownsInDepartement && closedTownsInDepartement.length > 0) {
-            baseTown.reinstallationComments = (baseTown.reinstallationComments.length > 0)
-                ? `${baseTown.reinstallationComments}
-    Liste des sites fermés dans le département:`
-                : '';
-            closedTownsInDepartement.forEach((town) => {
-                // eslint-disable-next-line no-unused-expressions
-                baseTown.reinstallationComments = `${baseTown.reinstallationComments}
-    - ${town.name ? town.name : ''} ${town.address} fermé le ${town.closedAt}.`;
-            });
-        }
+    if (townData.reinstallation_shantytowns_full.length > 0) {
+        baseTown.reinstallationComments = (baseTown.reinstallationComments)
+            ? `${baseTown.reinstallationComments}
+Liste des sites fermés dans le département:`
+            : '';
+        townData.reinstallation_shantytowns_full.forEach((town) => {
+            // eslint-disable-next-line no-unused-expressions
+            baseTown.reinstallationComments = `${baseTown.reinstallationComments}
+- ${town.name ? town.name : ''} ${town.address} fermé le ${town.closedAt}.`;
+        });
     }
 
     const shantytown_id = await shantytownModel.create(
@@ -141,9 +119,10 @@ module.exports = async (townData, user) => {
     // Send a Mattermost alert, if it fails, do nothing
     try {
         if (config.mattermost) {
-            const promises = [mattermostUtils.triggerShantytownCreationAlert(town, user)];
-            if (closedTownsInDepartement && closedTownsInDepartement.length > 0) {
-                promises.push(mattermostUtils.triggerReinstallation(town, closedTownsInDepartement));
+            const promises = []; // A supprimer si réactivation de la ligne qui suit
+            // const promises = [mattermostUtils.triggerShantytownCreationAlert(town, user)];
+            if (baseTown.reinstallationComments && baseTown.reinstallationComments.length > 0) {
+                promises.push(mattermostUtils.triggerReinstallation(town, baseTown.reinstallationShantytowns));
             }
             await Promise.all(promises);
         }
