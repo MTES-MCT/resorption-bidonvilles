@@ -180,6 +180,15 @@ export function findNearby(latitude, longitude) {
 }
 
 /**
+ * GET /towns/findClosedTowns
+ */
+export function findClosedTowns(citycode, closed_since) {
+    return getApi(
+        `/towns/findClosedTowns?citycode=${citycode}&closed_since=${closed_since}`
+    );
+}
+
+/**
  * GET /towns/findNearbyClosed
  */
 export function findClosedNearby(latitude, longitude) {
