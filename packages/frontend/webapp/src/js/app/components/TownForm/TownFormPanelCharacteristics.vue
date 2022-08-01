@@ -82,10 +82,9 @@ export default {
             return this.isUnknown(this.input.owner_type);
         }
     },
-
     methods: {
-        isUnknown(value) {
-            const label = this.getLabelFor(value);
+        isUnknown(something) {
+            const label = this.getLabelFor(something);
             return label === undefined || label === "Inconnu";
         },
 
@@ -102,11 +101,6 @@ export default {
             }
 
             return value.label;
-        }
-    },
-    watch: {
-        "input.declaredAt": async function() {
-            this.$emit("declaredAtChanged", this.input.declaredAt);
         }
     }
 };
