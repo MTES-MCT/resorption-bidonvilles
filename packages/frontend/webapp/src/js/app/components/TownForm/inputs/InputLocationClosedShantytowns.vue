@@ -1,7 +1,7 @@
 <template>
     <InputClosedShantytowns
-        id="location_shantytowns"
-        :nearbyClosedShantytowns="nearbyClosedShantytowns"
+        id="reinstallation_shantytowns"
+        :nearbyClosedShantytowns="displayClosedShantytowns"
         validationName="Sites fermés concernés"
         :showMandatoryStar="true"
         rules="required"

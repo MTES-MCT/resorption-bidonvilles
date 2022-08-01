@@ -1,6 +1,6 @@
 <template>
     <InputShantytowns
-        id="location_shantytowns"
+        id="reinstallation_shantytowns"
         label="Sites concernés"
         validationName="Sites concernés"
         :showMandatoryStar="true"
