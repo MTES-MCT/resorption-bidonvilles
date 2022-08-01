@@ -56,7 +56,6 @@
                         class="mt-10 townPanelShadow"
                         id="characteristics"
                         v-model="town.characteristics"
-                        @declaredAtChanged="swapIsReinstallation"
                     ></TownFormPanelCharacteristics>
 
                     <TownFormPanelPeople
@@ -155,7 +154,7 @@ import TownFormPanelNewLivingConditions from "./TownFormPanelNewLivingConditions
 import TownFormPanelJudicial from "./TownFormPanelJudicial";
 import FormLeftColumn from "#app/components/ui/Form/FormLeftColumn";
 import FormErrorLog from "#app/components/ui/Form/FormErrorLog";
-import { add, edit } from "#helpers/api/town";
+import { add, edit, findClosedTowns } from "#helpers/api/town";
 import { notify } from "#helpers/notificationHelper";
 import formatTown from "./utils/formatTown";
 const { isEqual } = require("lodash");
@@ -287,6 +286,53 @@ export default {
             this.town.departement = data.departement;
             this.town.epci = data.epci;
             this.town.city = data.city;
+        },
+        "town.characteristics.declared_at": async function() {
+            const citycode = this.town?.location?.address?.citycode;
+
+            if (!this.town.characteristics.declared_at || !citycode) {
+                // On vide la liste des sites fermés
+                this.nearbyClosedShantytowns = [];
+                // On vide la liste des sites fermés déjà cochés
+                this.town.people.reinstallation_shantytowns = [];
+            } else {
+                console.log(
+                    `this.nearbyClosedShantytowns: ${JSON.stringify(
+                        this.nearbyClosedShantytowns
+                    )}`
+                );
+                // On vide la liste des sites fermés
+                this.nearbyClosedShantytowns = [];
+
+                // Pour la réinstallation: choix des sites fermés dans le département dnas les 90 jours
+                try {
+                    console.log(
+                        "On met à jour this.nearbyClosedShantytowns dans TownForm.watch('town.characteristics.declared_at')"
+                    );
+                    const { closedTowns } = await findClosedTowns(
+                        citycode,
+                        this.formatDate(this.town.characteristics.declared_at)
+                    );
+                    this.nearbyClosedShantytowns = !closedTowns
+                        ? []
+                        : closedTowns;
+                    // eslint-disable-next-line no-empty
+                } catch (error) {}
+
+                console.log(
+                    `this.town.people.reinstallation_shantytowns: ${JSON.stringify(
+                        this.town.people.reinstallation_shantytowns
+                    )}`
+                );
+                /*
+                     TODO: ne supprimer de this.town.people.reinstallation_shantytowns
+                     que les sites dont la date de fermeture ne correcpond pas aux 
+                     critères de recherche des sites fermés dans les 90 dnas le département
+                     de la ville dans laquelle est situé le site en cours de déclaration
+                */
+                // On vide la liste des sites fermés déjà cochés
+                this.town.people.reinstallation_shantytowns = [];
+            }
         }
     },
 
@@ -396,7 +442,8 @@ export default {
                     owner_type: this.town.characteristics.owner_type,
                     owner: this.town.characteristics.owner,
                     is_reinstallation: this.town.people.is_reinstallation,
-                    location_shantytowns: this.town.people.location_shantytowns,
+                    reinstallation_shantytowns: this.town.people
+                        .reinstallation_shantytowns,
                     reinstallation_comments: this.town.people
                         .reinstallation_comments,
                     population_total: this.strToInt(
@@ -522,11 +569,8 @@ export default {
                 // On vide la liste des sites fermés
                 this.nearbyClosedShantytowns = [];
                 // On vide la liste des sites fermés déjà cochés
-                this.town.people.location_shantytowns = [];
+                this.town.people.reinstallation_shantytowns = [];
             }
-        },
-        swapIsReinstallation() {
-            this.town.characteristics.is_reinstallation = null;
         }
     }
 };
