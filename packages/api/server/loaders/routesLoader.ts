@@ -286,6 +286,16 @@ export default (app) => {
     );
 
     app.get(
+        '/towns/findClosedTowns',
+        validators.findNearbyTowns,
+        middlewares.auth.authenticate,
+        (...args) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        controllers.town.findClosedTowns,
+    );
+ 
+    app.get(
         '/towns/findClosedNearby',
         validators.findNearbyTowns,
         middlewares.auth.authenticate,
@@ -590,12 +600,6 @@ export default (app) => {
         middlewares.auth.authenticate,
         middlewares.appVersion.sync,
         controllers.geo.searchCities,
-    );
-    app.get(
-        '/cities/:code/departement',
-        middlewares.auth.authenticate,
-        middlewares.appVersion.sync,
-        controllers.geo.getDepartementFromCityId,
     );
     app.get(
         '/epci/search',

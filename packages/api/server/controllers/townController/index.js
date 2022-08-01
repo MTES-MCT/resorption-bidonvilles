@@ -18,6 +18,7 @@ const removeActor = require('./removeActor');
 const exportActors = require('./exportActors');
 const getRelations = require('./getRelations')();
 const findNearbyTowns = require('./findNearbyTowns')();
+const findClosedTowns = require('./findClosedTowns')();
 const findClosedNearbyTowns = require('./findClosedNearbyTowns')();
 
 
@@ -43,4 +44,5 @@ module.exports = {
     getRelations,
     findNearbyTowns,
     findClosedNearbyTowns,
+    findClosedTowns,
 };
