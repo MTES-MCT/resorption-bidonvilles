@@ -46,8 +46,7 @@
 import InputAddress from "./inputs/InputAddress.vue";
 import InputName from "./inputs/InputName.vue";
 import InputCoordinates from "./inputs/InputCoordinates.vue";
-import { findNearby } from "#helpers/api/town";
-import { getDepartementForCity } from "#helpers/api/geo";
+import { findNearby, findClosedTowns } from "#helpers/api/town";
 import { mapGetters } from "vuex";
 
 export default {
@@ -83,20 +82,23 @@ export default {
             this.input.coordinates = [lat, lng];
             this.input.citycode = citycode;
         },
-        load() {
-            if (!this.shantytowns.length) {
-                this.$store.dispatch("fetchTowns");
-            }
-        },
         isEmptyObject(value) {
             return (
                 Object.prototype.toString.call(value) === "[object Object]" &&
                 JSON.stringify(value) === "{}"
             );
+        },
+        formatDate(d) {
+            if (!d || !(d instanceof Date)) {
+                return d;
+            }
+
+            const year = d.getFullYear();
+            const month = `${d.getMonth() + 1}`.padStart(2, "0");
+            const day = `${d.getDate()}`.padStart(2, "0");
+
+            return `${year}-${month}-${day}`;
         }
-    },
-    created() {
-        this.load();
     },
     computed: {
         ...mapGetters({
@@ -123,31 +125,11 @@ export default {
                     const { towns } = await findNearby(latitude, longitude);
                     this.nearbyShantytowns = towns;
 
-                    // Recherche des sites fermés jusqu'à 90 jours avant la date de déclaration du site en cours de saisie
-                    // Recherche du code du département dans lequel se situe le site déclaré
-                    const { departement } = await getDepartementForCity(
-                        citycode
+                    // Pour la réinstallation: choix des sites fermés dans le département dans les 90 jours
+                    const { closedTowns } = await findClosedTowns(
+                        citycode,
+                        this.formatDate(this.declaredAt)
                     );
-
-                    const closedTowns = this.shantytowns.filter(
-                        town =>
-                            // town.statusName === "Fermé" &&
-                            // town.closedAt &&
-                            town.departement.code === departement.code &&
-                            Math.ceil(
-                                (new Date(this.declaredAt).getTime() -
-                                    town.closedAt * 1000) /
-                                    (1000 * 3600 * 24)
-                            ) < 90 &&
-                            Math.ceil(
-                                (new Date(this.declaredAt).getTime() -
-                                    town.closedAt * 1000) /
-                                    (1000 * 3600 * 24)
-                            ) > 0
-                    );
-                    closedTowns.sort((a, b) => {
-                        return b.closedAt - a.closedAt;
-                    });
                     this.$emit("shareClosedTowns", closedTowns);
                     // eslint-disable-next-line no-empty
                 } catch (err) {}
