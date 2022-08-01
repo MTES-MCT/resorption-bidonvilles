@@ -61,7 +61,7 @@
             <transition name="fade">
                 <InputLocationClosedShantytowns
                     v-if="isReinstallationInCreationMode"
-                    v-model="input.location_shantytowns"
+                    v-model="input.reinstallation_shantytowns"
                     :nearbyClosedShantytowns="closedShantytowns"
                 >
                 </InputLocationClosedShantytowns>
