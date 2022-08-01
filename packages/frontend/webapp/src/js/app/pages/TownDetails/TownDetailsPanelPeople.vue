@@ -181,9 +181,6 @@ export default {
         };
     },
     components: { DetailsPanel, DetailsPanelSection },
-    mounted() {
-        console.log(this.populationHistory);
-    },
     methods: {
         /**
          * @see index.js
