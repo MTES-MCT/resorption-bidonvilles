@@ -8,7 +8,6 @@ const contactFormReferralExport = require('./contactFormReferralController/expor
 const directoryList = require('./directoryController/list');
 // geo
 const geoGet = require('./geoController/get');
-const geoGetDepartementFromCityId = require('./geoController/getDepartementFromCityId');
 const geoGetDepartementsForEpci = require('./geoController/getDepartementsForEpci');
 const geoGetDepartementsForRegion = require('./geoController/getDepartementsForRegion');
 const geoListDepartements = require('./geoController/listDepartements');
@@ -92,7 +91,6 @@ export default {
     },
     geo: {
         get: geoGet,
-        getDepartementFromCityId: geoGetDepartementFromCityId,
         getDepartementsForEpci: geoGetDepartementsForEpci,
         getDepartementsForRegion: geoGetDepartementsForRegion,
         listDepartements: geoListDepartements,
