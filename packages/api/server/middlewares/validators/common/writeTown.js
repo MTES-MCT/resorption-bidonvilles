@@ -8,7 +8,9 @@ const geoModel = require('#server/models/geoModel');
 const ownerTypeModel = require('#server/models/ownerTypeModel');
 const socialOriginModel = require('#server/models/socialOriginModel');
 const electricityTypeModel = require('#server/models/electricityTypeModel');
-const shantytownService = require('#server/services/shantytown');
+const simplifiedShantytownService = require('#server/services/simplifiedShantytown');
+const { fromTsToFormat } = require('#server/utils/date');
+const knex = require('#db/knex/knex');
 
 function fromIntToBoolSanitizer(value) {
     if (value === -1) {
@@ -17,6 +19,24 @@ function fromIntToBoolSanitizer(value) {
 
     return value === 1;
 }
+function getDetailedClosedShantytowns(closedTowns) {
+    let detailedClosedShantytowns = [];
+    if (closedTowns.length > 0) {
+        detailedClosedShantytowns = closedTowns
+            .filter(town => town.closedAt !== null)
+            .map((
+                {
+                    id, name, address, closedAt,
+                },
+            ) => (
+                {
+                    id, name, address, closedAt: fromTsToFormat((closedAt.getTime() / 1000), 'd/m/Y'),
+                }
+            ));
+    }
+    return detailedClosedShantytowns;
+}
+
 
 module.exports = mode => ([
     /* **********************************************************************************************
@@ -250,7 +270,7 @@ module.exports = mode => ([
     /* **********************************************************************************************
      * Sites à l'origine de la réinstallation
      ********************************************************************************************* */
-    body('location_shantytowns')
+    body('reinstallation_shantytowns')
         .customSanitizer((value) => {
             if (value === undefined || value === null) {
                 return [];
@@ -263,23 +283,20 @@ module.exports = mode => ([
             let closedShantytowns = [];
             if (value.length > 0) {
                 try {
-                    // closedShantytowns = value.map(townId => shantytownService.find(req.user, townId));
-                    closedShantytowns = value.map(async (townId) => {
-                        const closedTown = await shantytownService.find(req.user, townId);
-                        // console.log(`closedTown: ${JSON.stringify(closedTown)}`);
-                        if (!closedTown.closedAt) {
-                            throw new Error('Certains sites dont seraient originaires les habitants du site en cours de création ne sont pas fermés');
-                        }
-                        return closedTown;
-                    });
+                    // closedShantytowns = await getDetailedClosedShantytownsInDepartement(value, req.user);
+                    closedShantytowns = await simplifiedShantytownService.get(knex, value);
+                    console.log(`closedShantytowns: ${JSON.stringify(getDetailedClosedShantytowns(closedShantytowns))}`);
                 } catch (error) {
-                    throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Tags"');
+                    // throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Tags"');
+                    throw new Error(`Erreur: ${error.message}`);
                 }
 
                 if (closedShantytowns.length !== value.length) {
                     throw new Error('Certains sites fermés n\'existent pas en base de données');
                 }
             }
+
+            req.body.reinstallation_shantytowns_full = getDetailedClosedShantytowns(closedShantytowns);
             return true;
         }),
 
