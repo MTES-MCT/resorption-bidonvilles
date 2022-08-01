@@ -131,8 +131,7 @@ export default {
 
             const reg = new RegExp(this.search, "i");
             return this.displayClosedShantytowns
-                .filter(({ id, status, city, usename }) => {
-                    // filter by status
+                .filter(({ id, status, city, address }) => {
                     if (this.currentTab === "closed") {
                         if (status === "open") {
                             return false;
@@ -146,20 +145,28 @@ export default {
 
                     // filter by search
                     return (
-                        this.search === "" ||
-                        `${city.name} ${usename}`.match(reg)
+                        this.search === "" || `${city} ${address}`.match(reg)
                     );
                 })
-                .map(({ id, city, usename, closedAt, populationTotal }) => {
-                    return {
+                .map(
+                    ({
                         id,
-                        checkbox: id,
-                        city: city.name,
-                        address: usename,
+                        city,
+                        address_simple,
+                        usename,
                         closedAt,
-                        population: populationTotal
-                    };
-                });
+                        populationTotal
+                    }) => {
+                        return {
+                            id,
+                            checkbox: id,
+                            city,
+                            address: address_simple || usename,
+                            closedAt,
+                            population: populationTotal
+                        };
+                    }
+                );
         }
     },
 
