@@ -8,9 +8,8 @@ const geoModel = require('#server/models/geoModel');
 const ownerTypeModel = require('#server/models/ownerTypeModel');
 const socialOriginModel = require('#server/models/socialOriginModel');
 const electricityTypeModel = require('#server/models/electricityTypeModel');
-const simplifiedShantytownService = require('#server/services/simplifiedShantytown');
+const shantytownModel = require('#server/models/shantytownModel');
 const { fromTsToFormat } = require('#server/utils/date');
-const knex = require('#db/knex/knex');
 
 function fromIntToBoolSanitizer(value) {
     if (value === -1) {
@@ -30,7 +29,7 @@ function getDetailedClosedShantytowns(closedTowns) {
                 },
             ) => (
                 {
-                    id, name, address, closedAt: fromTsToFormat((closedAt.getTime() / 1000), 'd/m/Y'),
+                    id, name, address, closedAt: fromTsToFormat(closedAt, 'd/m/Y'),
                 }
             ));
     }
@@ -275,28 +274,30 @@ module.exports = mode => ([
             if (value === undefined || value === null) {
                 return [];
             }
-
             return value;
         })
         .isArray().bail().withMessage('La liste des sites fermés dont sont originaires les habitants du site en cours de création est invalide')
         .custom(async (value, { req }) => {
-            let closedShantytowns = [];
-            if (value.length > 0) {
-                try {
-                    // closedShantytowns = await getDetailedClosedShantytownsInDepartement(value, req.user);
-                    closedShantytowns = await simplifiedShantytownService.get(knex, value);
-                    console.log(`closedShantytowns: ${JSON.stringify(getDetailedClosedShantytowns(closedShantytowns))}`);
-                } catch (error) {
-                    // throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Tags"');
-                    throw new Error(`Erreur: ${error.message}`);
+            if (mode === 'create') {
+                let closedShantytowns = [];
+                if (value.length > 0) {
+                    try {
+                        closedShantytowns = await shantytownModel.findAll(req.user, [
+                            {
+                                shantytown_id: value,
+                            },
+                        ]);
+                    } catch (error) {
+                        throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Tags"');
+                    }
+
+                    if (closedShantytowns.length !== value.length) {
+                        throw new Error('Certains sites fermés n\'existent pas en base de données');
+                    }
                 }
 
-                if (closedShantytowns.length !== value.length) {
-                    throw new Error('Certains sites fermés n\'existent pas en base de données');
-                }
+                req.body.reinstallation_shantytowns_full = getDetailedClosedShantytowns(closedShantytowns);
             }
-
-            req.body.reinstallation_shantytowns_full = getDetailedClosedShantytowns(closedShantytowns);
             return true;
         }),
 
