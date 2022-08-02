@@ -5,6 +5,19 @@ const mattermostUtils = require('#server/utils/mattermost');
 const userModel = require('#server/models/userModel');
 const mails = require('#server/mails/mails');
 
+function generateReinstallationComment(originalComment, shantytowns) {
+    let finalComment = (originalComment)
+        ? `${originalComment}
+Liste des sites fermés dans le département:`
+        : `
+Liste des sites fermés dans le département:
+`;
+
+    finalComment
+        += shantytowns.map(town => `- ${town.name ? town.name : ''} ${town.address} fermé le ${town.closedAt}.`).join('\n');
+    return finalComment;
+}
+
 module.exports = async (townData, user) => {
     const baseTown = {
         name: townData.name,
@@ -12,7 +25,7 @@ module.exports = async (townData, user) => {
         longitude: townData.longitude,
         address: townData.address,
         addressDetails: townData.detailed_address,
-        builtAt: townData.built_at || null,
+        builtAt: townData.built_at,
         populationTotal: townData.population_total,
         populationCouples: townData.population_couples,
         populationMinors: townData.population_minors,
@@ -73,15 +86,7 @@ module.exports = async (townData, user) => {
     };
 
     if (townData.reinstallation_shantytowns_full.length > 0) {
-        baseTown.reinstallationComments = (baseTown.reinstallationComments)
-            ? `${baseTown.reinstallationComments}
-Liste des sites fermés dans le département:`
-            : '';
-        townData.reinstallation_shantytowns_full.forEach((town) => {
-            // eslint-disable-next-line no-unused-expressions
-            baseTown.reinstallationComments = `${baseTown.reinstallationComments}
-- ${town.name ? town.name : ''} ${town.address} fermé le ${town.closedAt}.`;
-        });
+        baseTown.reinstallationComments = generateReinstallationComment(baseTown.reinstallationComments, townData.reinstallation_shantytowns_full);
     }
 
     const shantytown_id = await shantytownModel.create(
@@ -119,8 +124,7 @@ Liste des sites fermés dans le département:`
     // Send a Mattermost alert, if it fails, do nothing
     try {
         if (config.mattermost) {
-            const promises = []; // A supprimer si réactivation de la ligne qui suit
-            // const promises = [mattermostUtils.triggerShantytownCreationAlert(town, user)];
+            const promises = [mattermostUtils.triggerShantytownCreationAlert(town, user)];
             if (baseTown.reinstallationComments && baseTown.reinstallationComments.length > 0) {
                 promises.push(mattermostUtils.triggerReinstallation(town, baseTown.reinstallationShantytowns));
             }
