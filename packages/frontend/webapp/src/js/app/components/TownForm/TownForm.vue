@@ -58,7 +58,6 @@
                         @declaredAtChanged="swapIsReinstallation"
                     ></TownFormPanelCharacteristics>
 
-                    <<<<<<< HEAD
                     <TownFormPanelPeople
                         class="mt-10 townPanelShadow"
                         id="people"
