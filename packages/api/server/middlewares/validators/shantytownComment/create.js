@@ -3,7 +3,7 @@ const { body, param } = require('express-validator');
 const shantytownModel = require('#server/models/shantytownModel');
 const userModel = require('#server/models/userModel/index');
 const organizationModel = require('#server/models/organizationModel/index');
-const commentTagModel = require('#server/models/commentTagModel')();
+const commentTagModel = require('#server/models/commentTagModel');
 
 module.exports = [
     param('id')

@@ -1,7 +1,7 @@
 const findByType = require('./findByType');
 const find = require('./find');
 
-module.exports = () => ({
+module.exports = {
     findByType,
     find,
-});
+};
