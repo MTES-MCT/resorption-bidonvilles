@@ -8,7 +8,7 @@ module.exports = (shantytown) => {
     };
     const { status, access_comments: comments } = shantytown.livingConditions.water;
 
-    let text = labels[status] || 'Aucune information concernant l\'accès à l\'électricité';
+    let text = labels[status] || 'Aucune information concernant l\'accès à l\'eau';
     if (comments) {
         text = `${text} – ${comments}`;
     }
