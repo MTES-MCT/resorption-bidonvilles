@@ -15,7 +15,7 @@
                     <Tag
                         :variant="pinVariant"
                         :class="[
-                            'text-xs uppercase text-primary',
+                            'text-xs uppercase',
                             isHover ? 'shadow-md' : ''
                         ]"
                     >
