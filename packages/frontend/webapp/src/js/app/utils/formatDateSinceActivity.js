@@ -9,17 +9,17 @@ export default function formatDateSinceActivity(ts) {
         }
 
         if (days > 0 && days < 7) {
-            return `il y a ${days} jour${days > 1 ? "s" : ""}`;
+            return `${days} jour${days > 1 ? "s" : ""}`;
         }
 
         if (weeks > 0 && months === 0) {
-            return `il y a ${weeks} semaine${weeks > 1 ? "s" : ""}`;
+            return `${weeks} semaine${weeks > 1 ? "s" : ""}`;
         }
     }
 
     if (months < 12) {
-        return `il y a ${months} mois`;
+        return `${months} mois`;
     }
 
-    return "il y a plus d'un an";
+    return "plus d'un an";
 }
