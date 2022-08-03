@@ -4,7 +4,7 @@ module.exports = (town) => {
         details: null,
     };
 
-    if (town.toiletTypes.length === 0 || (town.toiletTypes.length === 1 && town.toiletTypes.includes('latrines'))) {
+    if (town.toiletTypes === undefined || town.toiletTypes.length === 0 || (town.toiletTypes.length === 1 && town.toiletTypes.includes('latrines'))) {
         return status;
     }
 

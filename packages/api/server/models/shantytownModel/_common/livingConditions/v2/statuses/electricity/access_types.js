@@ -8,7 +8,7 @@ module.exports = (town) => {
         return status;
     }
 
-    if (town.electricityAccessTypes.length === 0) {
+    if (town.electricityAccessTypes === undefined || town.electricityAccessTypes.length === 0) {
         status.details = 'unknown';
     }
 
