@@ -8,7 +8,7 @@ module.exports = (town) => {
         return status;
     }
 
-    if (town.toiletTypes.length === 0) {
+    if (town.toiletTypes === undefined || town.toiletTypes.length === 0) {
         status.globalImpact = 'unknown';
         status.details = 'unknown';
     } else if (!town.toiletTypes.includes('latrines')) {
