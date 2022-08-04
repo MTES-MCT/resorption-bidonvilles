@@ -10,6 +10,6 @@ module.exports = (shantytown) => {
 
     return createRow([
         'Ramassage des déchets',
-        labels[status] || 'Aucune information concernant le ramassage des déchets',
+        labels[status.status] || 'Aucune information concernant le ramassage des déchets',
     ]);
 };
