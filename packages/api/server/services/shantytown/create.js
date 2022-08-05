@@ -11,7 +11,8 @@ const mails = require('#server/mails/mails');
 function generateReinstallationComment(originalComment, shantytowns) {
     let finalComment = (originalComment)
         ? `${originalComment}
-Liste des sites fermés dans le département:`
+Liste des sites fermés dans le département:
+`
         : `
 Liste des sites fermés dans le département:
 `;
@@ -150,11 +151,11 @@ module.exports = async (townData, user) => {
     // Send a Mattermost alert, if it fails, do nothing
     try {
         if (config.mattermost) {
-            const promises = [mattermostUtils.triggerShantytownCreationAlert(town, user)];
+            const notificationPromises = [mattermostUtils.triggerShantytownCreationAlert(town, user)];
             if (baseTown.reinstallationComments && baseTown.reinstallationComments.length > 0) {
-                promises.push(mattermostUtils.triggerReinstallation(town, baseTown.reinstallationShantytowns));
+                notificationPromises.push(mattermostUtils.triggerReinstallation(town, baseTown.reinstallationShantytowns));
             }
-            await Promise.all(promises);
+            await Promise.all(notificationPromises);
         }
     } catch (err) {
         // eslint-disable-next-line no-console
