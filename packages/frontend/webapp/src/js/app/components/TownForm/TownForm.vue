@@ -58,31 +58,6 @@
                         v-model="town.characteristics"
                     ></TownFormPanelCharacteristics>
 
-                    <TownFormPanelPeople
-                        class="mt-10 townPanelShadow"
-                        id="people"
-                        v-model="town.people"
-                    ></TownFormPanelPeople>
-
-                    <TownFormPanelLivingConditions
-                        v-show="$store.state.townForm.showOldLivingConditions"
-                        class="mt-10 townPanelShadow"
-                        :population="town.people.population"
-                        v-model="town.livingConditions"
-                    ></TownFormPanelLivingConditions>
-
-                    <TownFormPanelNewLivingConditions
-                        class="mt-10 townPanelShadow"
-                        id="living_conditions"
-                        v-model="town.livingConditions"
-                    ></TownFormPanelNewLivingConditions>
-
-                    <TownFormPanelJudicial
-                        class="mt-10 townPanelShadow"
-                        id="judicial"
-                        v-model="town.judicial"
-                        v-if="hasJusticePermission"
-                    ></TownFormPanelJudicial>
                     <template v-if="town.characteristics.declared_at">
                         <TownFormPanelPeople
                             class="mt-10 townPanelShadow"
@@ -565,11 +540,22 @@ export default {
         },
         noAddressEntered(trueOrFalse) {
             this.noAddressProvided = trueOrFalse;
+            console.log(`noAddressProvided: ${this.noAddressProvided}`);
             if (trueOrFalse) {
                 // On vide la liste des sites fermés
                 this.nearbyClosedShantytowns = [];
+                console.log(
+                    `nearbyClosedShantytowns: ${JSON.stringify(
+                        this.nearbyClosedShantytowns
+                    )}`
+                );
                 // On vide la liste des sites fermés déjà cochés
                 this.town.people.reinstallation_shantytowns = [];
+                console.log(
+                    `town.people.reinstallation_shantytowns: ${JSON.stringify(
+                        this.town.people.reinstallation_shantytowns
+                    )}`
+                );
             }
         }
     }
