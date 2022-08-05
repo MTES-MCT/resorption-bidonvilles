@@ -1,4 +1,4 @@
-const moment = require('moment');
+const { fromTsToFormat } = require('#server/utils/date');
 const { formatName } = require('#server/models/userModel');
 const mailService = require('#server/services/mailService');
 const { wwwUrl, webappUrl, backUrl } = require('#server/config');
@@ -565,7 +565,8 @@ module.exports = {
             variables: {
                 recipientName: formatName(recipient),
                 departementName: variables.departement.name,
-                hour: moment(variables.shantytown.createdAt).utcOffset(2).format('HH:mm'),
+                // hour: moment(variables.shantytown.createdAt).utcOffset(2).format('HH:mm'),
+                hour: fromTsToFormat(variables.shantytown.createdAt, 'h:i'),
                 creatorName: formatName(variables.creator),
                 townFullAddress: variables.shantytown.address,
                 webappUrl: `${webappUrl}?${utm.regular}`,
@@ -592,7 +593,8 @@ module.exports = {
             variables: {
                 recipientName: formatName(recipient),
                 departementName: variables.departement.name,
-                hour: moment(variables.shantytown.closedAt).utcOffset(2).format('HH:mm'),
+                // hour: moment(variables.shantytown.closedAt).utcOffset(2).format('HH:mm'),
+                hour: fromTsToFormat(variables.shantytown.closedAt, 'h:i'),
                 editorName: formatName(variables.editor),
                 townFullAddress: variables.shantytown.address,
                 webappUrl: `${webappUrl}?${utm.regular}`,
