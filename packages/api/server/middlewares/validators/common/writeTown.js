@@ -8,6 +8,7 @@ const fieldTypeModel = require('#server/models/fieldTypeModel');
 const geoModel = require('#server/models/geoModel');
 const ownerTypeModel = require('#server/models/ownerTypeModel');
 const socialOriginModel = require('#server/models/socialOriginModel');
+const { fromTsToFormat } = require('#server/utils/date');
 
 function fromIntToBoolSanitizer(value) {
     if (value === -1) {
