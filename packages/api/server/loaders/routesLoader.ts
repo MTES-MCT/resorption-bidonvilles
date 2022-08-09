@@ -344,6 +344,15 @@ export default (app) => {
         middlewares.appVersion.sync,
         controllers.plan.addState,
     );
+    app.post(
+        '/plans/:id/comments',
+        middlewares.auth.authenticate,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        validators.planComment.createPlanComment,
+        middlewares.validation,
+        controllers.planComment.create,
+    );
     app.patch(
         '/plans/:id',
         middlewares.auth.authenticate,
