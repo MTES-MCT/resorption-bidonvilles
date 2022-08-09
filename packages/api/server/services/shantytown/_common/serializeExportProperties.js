@@ -72,9 +72,14 @@ module.exports = (closingSolutions) => {
             data: ({ addressDetails }) => addressDetails,
             width: COLUMN_WIDTHS.LARGE,
         },
-        coordinates: {
-            title: 'Coordonnées GPS',
-            data: ({ latitude, longitude }) => `${latitude},${longitude}`,
+        latitude: {
+            title: 'Latitude',
+            data: ({ latitude }) => `${latitude}`,
+            width: COLUMN_WIDTHS.SMALL,
+        },
+        longitude: {
+            title: 'Longitude',
+            data: ({ longitude }) => `${longitude}`,
             width: COLUMN_WIDTHS.SMALL,
         },
         name: {
