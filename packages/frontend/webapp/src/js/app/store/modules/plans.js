@@ -8,7 +8,9 @@ export default {
         topicFilter: [],
         interventionLocationFilter: [],
         locationFilter: null,
-        items: []
+        items: [],
+        hash: {},
+        detailedPlan: null
     },
 
     mutations: {
@@ -23,6 +25,13 @@ export default {
         },
         setPlansItems(state, items) {
             state.items = items;
+            state.hash = items.reduce(
+                (hash, { id }, index) => ({
+                    ...hash,
+                    [id]: index
+                }),
+                {}
+            );
         },
         setPlansLocationFilter(state, filter) {
             state.currentPage = 1;
@@ -43,10 +52,38 @@ export default {
             } else {
                 state.items.splice(index, 1, plan);
             }
+        },
+
+        setDetailedPlan(state, plan) {
+            state.detailedPlan = plan;
+            const index = state.hash[plan.id];
+            if (index !== undefined) {
+                state.items[index] = plan;
+            }
+        },
+
+        updatePlanComments(state, { planId, comments }) {
+            if (
+                state.detailedPlan !== null &&
+                state.detailedPlan.id === planId
+            ) {
+                state.detailedPlan.comments = comments;
+            }
+
+            const index = state.hash[planId];
+            if (index !== undefined) {
+                state.items.splice(index, 1, {
+                    ...state.items[index],
+                    comments: comments
+                });
+            }
         }
     },
 
     actions: {
+        setDetailedPlan({ commit }, { plan }) {
+            commit("setDetailedPlan", plan);
+        },
         async fetchPlans({ state, commit, rootState }) {
             if (state.state === "loading") {
                 return;
@@ -80,6 +117,9 @@ export default {
     },
 
     getters: {
+        detailedPlan: state => {
+            return state.detailedPlan;
+        },
         plansState(state) {
             return state.state;
         },
