@@ -106,6 +106,46 @@
                     />
                 </div>
             </div>
+
+            <div class="bg-orange200 py-10 mt-8">
+                <PrivateContainer class="flex items-center">
+                    <div class="leftColumnWidth text-sm">
+                        <NewCommentLeftColumn
+                            class="mb-4"
+                            icon="info-circle"
+                            title="À qui sont destinés les messages ?"
+                            description="À tous les acteurs du site. Un mail est automatiquement envoyé aux personnes signalées « intervenant sur ce site», aux acteurs en DDETS, Préfecture et la Dihal."
+                        ></NewCommentLeftColumn>
+                        <NewCommentLeftColumn
+                            icon="exclamation-triangle"
+                            title="Quelles sont les règles de confidentialités ?"
+                            description="Ne pas citer l’identité des individus (Nom, âge, sexe, origine…)"
+                        ></NewCommentLeftColumn>
+                    </div>
+                    <PlanDetailsNewComment
+                        id="comment"
+                        :departementCode="plan.departement.code"
+                        :nbComments="plan.comments.length"
+                        :user="user"
+                    />
+                </PrivateContainer>
+            </div>
+
+            <div
+                :class="[
+                    'bg-orange200',
+                    'pt-10',
+                    plan.comments.length > 0 && 'pb-32'
+                ]"
+                v-if="plan.comments.length"
+            >
+                <PrivateContainer class="flex" id="comments">
+                    <div class="leftColumnWidth" />
+                    <PlanDetailsComments
+                        :comments="plan.comments"
+                    ></PlanDetailsComments>
+                </PrivateContainer>
+            </div>
         </PrivateContainer>
 
         <!--  Close Shantytown Modal -->
@@ -140,6 +180,9 @@ import PlanDetailsPanelMarks from "./PlanDetailsPanelMarks.vue";
 import PlanDetailsInfo from "./PlanDetailsInfo.vue";
 import PlanDetailsCloseModal from "./PlanDetailsCloseModal.vue";
 import { get } from "#helpers/api/plan";
+import PlanDetailsNewComment from "./PlanDetailsNewComment.vue";
+import PlanDetailsComments from "./PlanDetailsComments.vue";
+import NewCommentLeftColumn from "#app/components/NewCommentLeftColumn/NewCommentLeftColumn.vue";
 
 export default {
     components: {
@@ -162,19 +205,27 @@ export default {
         PlanDetailsPanelMarks,
         PlanDetailsInfo,
         PlanDetailsCloseModal,
-        LoadingError
+        LoadingError,
+        PlanDetailsNewComment,
+        PlanDetailsComments,
+        NewCommentLeftColumn
     },
 
     data() {
         return {
             loading: false,
             error: null,
-            plan: null,
             showCloseModal: false
         };
     },
 
     computed: {
+        plan() {
+            return this.$store.state.plans.detailedPlan;
+        },
+        user() {
+            return this.$store.state.config.configuration.user;
+        },
         topics() {
             if (!this.plan) {
                 return [];
@@ -284,7 +335,7 @@ export default {
                             "Cette action n'existe pas, ou son accès vous est interdit"
                     };
                 }
-                this.plan = plan;
+                await this.$store.dispatch("setDetailedPlan", { plan });
                 setTimeout(this.goToAnchor, 50);
             } catch (error) {
                 this.error =

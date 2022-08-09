@@ -154,7 +154,7 @@ import TownDetailsPanelPlans from "./TownDetailsPanelPlans";
 import TownDetailsPanelActors from "./TownDetailsPanelActors";
 import TownDetailsNewComment from "./TownDetailsNewComment";
 import TownDetailsComments from "./TownDetailsComments";
-import TownDetailsNewCommentLeftColumn from "./TownDetailsNewCommentLeftColumn";
+import TownDetailsNewCommentLeftColumn from "#app/components/NewCommentLeftColumn/NewCommentLeftColumn.vue";
 import TownDetailsHistorySidePanel from "./TownDetailsHistorySidePanel";
 import TownDetailsCovidCommentsSidePanel from "./TownDetailsCovidCommentsSidePanel";
 import TownDetailsCloseModal from "./TownDetailsCloseModal";

@@ -64,6 +64,11 @@ export default {
             }
         }
 
+        sections.push({
+            id: "comment",
+            label: "Journal de l'action"
+        });
+
         return {
             sections
         };
