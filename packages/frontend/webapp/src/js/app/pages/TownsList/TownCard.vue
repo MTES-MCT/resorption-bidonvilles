@@ -251,13 +251,12 @@
                     <div class="print:hidden">
                         <Button
                             v-if="isHover && heatwaveStatus === false"
-                            variant="secondary"
-                            icon="exclamation-triangle"
+                            variant="primary"
                             iconPosition="left"
                             class="text-display-sm font-bold hover:underline"
                             @click.native.prevent="setHeatwaveStatus(true)"
                         >
-                            Alerte Canicule</Button
+                            Déclencher Alerte Canicule</Button
                         >
                         <Button
                             v-if="isHover && heatwaveStatus === true"
