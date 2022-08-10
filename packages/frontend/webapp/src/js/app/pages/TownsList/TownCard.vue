@@ -371,10 +371,21 @@ export default {
         isSolved,
         isClosed,
         async setHeatwaveStatus(value) {
-            await setHeatwaveStatus(this.shantytown.id, {
-                heatwave_status: value
-            });
-            this.heatwaveStatus = value;
+            try {
+                await setHeatwaveStatus(this.shantytown.id, {
+                    heatwave_status: value
+                });
+                this.heatwaveStatus = value;
+                this.$trackMatomoEvent(
+                    "Site",
+                    `${
+                        value ? "Déclenchement" : "Suppression"
+                    } alerte canicule`,
+                    `S${this.shantytown.id}`
+                );
+            } catch (e) {
+                // ignore
+            }
         }
     },
     computed: {
