@@ -247,7 +247,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex justify-end px-4 pt-4 print:hidden">
+                <div class="flex justify-end h-16 px-4 pt-4 print:hidden">
                     <div class="print:hidden">
                         <Button
                             v-if="isHover && heatwaveStatus === false"
