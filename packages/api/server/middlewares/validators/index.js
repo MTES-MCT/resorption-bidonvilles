@@ -1,5 +1,6 @@
 const closeTown = require('./closeTown');
 const fixClosedStatus = require('./fixClosedStatus');
+const setHeatwaveStatus = require('./setHeatwaveStatus');
 const createContact = require('./createContact');
 const createTown = require('./createTown');
 const createUser = require('./createUser');
@@ -25,6 +26,7 @@ const mePostNavigationLogs = require('./me/post.navigationLogs');
 module.exports = {
     closeTown,
     fixClosedStatus,
+    setHeatwaveStatus,
     createContact,
     createTown,
     editTown,

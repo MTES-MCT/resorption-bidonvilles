@@ -8,6 +8,7 @@ const exportTown = require('./export');
 const exportOne = require('./exportOne');
 const createCovidComment = require('./createCovidComment');
 const fixClosedStatus = require('./fixClosedStatus');
+const setHeatwaveStatus = require('./setHeatwaveStatus');
 const edit = require('./edit');
 const createHighCovidComment = require('./createHighCovidComment')();
 const addActor = require('./addActor');
@@ -32,6 +33,7 @@ module.exports = {
     exportOne,
     createCovidComment,
     fixClosedStatus,
+    setHeatwaveStatus,
     edit,
     createHighCovidComment,
     addActor,

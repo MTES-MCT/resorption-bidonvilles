@@ -281,6 +281,19 @@
                             ]"
                         />
                         <CustomFilter
+                            title="Alerte Canicule"
+                            class="mr-2 mb-2"
+                            :value="filters.heatwave"
+                            @input="val => updateFilters('heatwave', val)"
+                            @checkedItem="
+                                trackFilter('Alerte canicule', $event)
+                            "
+                            :options="[
+                                { value: 'yes', label: 'Oui' },
+                                { value: 'no', label: 'Non' }
+                            ]"
+                        />
+                        <CustomFilter
                             title="Objectif résorption"
                             class="mr-2 mb-2"
                             :value="filters.target"
