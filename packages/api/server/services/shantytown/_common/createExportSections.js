@@ -19,7 +19,8 @@ module.exports = (user, data, properties, closedTowns, closingSolutions) => {
         localizationSection.properties.push(properties.addressDetails);
     }
 
-    localizationSection.properties.push(properties.coordinates);
+    localizationSection.properties.push(properties.latitude);
+    localizationSection.properties.push(properties.longitude);
 
 
     let section = {
@@ -71,6 +72,7 @@ module.exports = (user, data, properties, closedTowns, closingSolutions) => {
         sections.push({
             title: 'Conditions de vie',
             properties: [
+                properties.heatwaveStatus,
                 properties.electricityAccess,
                 properties.electricityAccessTypes,
                 properties.electricityAccessIsUnequal,

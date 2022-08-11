@@ -118,6 +118,7 @@ module.exports = (town, user) => {
                 id: town.updatedByOrganization,
             },
         },
+        heatwaveStatus: town.heatwaveStatus,
         resorptionTarget: town.resorptionTarget,
     };
 

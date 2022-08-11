@@ -59,6 +59,7 @@ export default new Vuex.Store({
                 location: null,
                 actors: [],
                 target: [],
+                heatwave: [],
                 search: ""
             },
             currentPage: 1

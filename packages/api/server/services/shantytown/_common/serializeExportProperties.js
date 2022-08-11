@@ -72,9 +72,14 @@ module.exports = (closingSolutions) => {
             data: ({ addressDetails }) => addressDetails,
             width: COLUMN_WIDTHS.LARGE,
         },
-        coordinates: {
-            title: 'Coordonnées GPS',
-            data: ({ latitude, longitude }) => `${latitude},${longitude}`,
+        latitude: {
+            title: 'Latitude',
+            data: ({ latitude }) => `${latitude}`,
+            width: COLUMN_WIDTHS.SMALL,
+        },
+        longitude: {
+            title: 'Longitude',
+            data: ({ longitude }) => `${longitude}`,
             width: COLUMN_WIDTHS.SMALL,
         },
         name: {
@@ -212,6 +217,21 @@ module.exports = (closingSolutions) => {
             title: 'Origines',
             data: ({ socialOrigins }) => (socialOrigins.length > 0 ? socialOrigins.map(({ label }) => label).join(';') : null),
             width: COLUMN_WIDTHS.MEDIUM,
+        },
+        heatwaveStatus: {
+            title: 'Alerte Canicule',
+            data: ({ heatwaveStatus }) => {
+                if (heatwaveStatus === true) {
+                    return 'oui';
+                }
+
+                if (heatwaveStatus === false) {
+                    return 'non';
+                }
+
+                return null;
+            },
+            width: COLUMN_WIDTHS.SMALL,
         },
         electricityAccess: {
             title: 'Y a-t-il présence d’une installation électrique ?',
