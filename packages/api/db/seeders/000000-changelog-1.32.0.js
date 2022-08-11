@@ -2,7 +2,7 @@ const { backUrl } = require('../../server/config');
 
 const changelog = {
     app_version: '1.32.0',
-    date: new Date(2022, 8, 11),
+    date: new Date(2022, 7, 11),
     items: [
         {
             title: 'Déclarer un site en “alerte canicule”',
