@@ -1,14 +1,14 @@
 const { backUrl } = require('../../server/config');
 
 const changelog = {
-    app_version: '1.32.0',
+    app_version: '1.32.2',
     date: new Date(2022, 7, 11),
     items: [
         {
             title: 'Déclarer un site en “alerte canicule”',
-            description: `<p>Dorénavant, la plateforme vous permet de déclarer un site en “Alerte Canicule” afin qu’il fasse l’objet d’un suivi particulier en période de fortes chaleurs (en raison bien souvent des conditions de vie, en particulier de l’accès à l’eau). Dans la rubrique “Sites”, en appuyant sur le bouton “Déclencher Alerte Canicule” sur la fiche d’un bidonville ou squat, vous faites apparaître l’étiquette correspondante. Vous pourrez ensuite filtrer les sites exposés, ou les retrouver dans votre export Excel en cochant la case “conditions de vie”
+            description: `<p>Dorénavant, la plateforme vous permet de déclarer un site en “Alerte Canicule”. Dans la rubrique “Sites”, en appuyant sur le <b>bouton “Déclencher Alerte Canicule”</b> sur la fiche d’un bidonville ou squat, <b>vous faites apparaître l’étiquette correspondante</b>. Vous pourrez ensuite <b>filtrer les sites exposés</b>, ou les retrouver dans votre <b>export Excel</b> en cochant la case “conditions de vie”
             </p>`,
-            image: `${backUrl}/assets/changelog/1.32.0/item_1.jpg`,
+            image: `${backUrl}/assets/changelog/1.32.2/item_1.jpg`,
         },
     ],
 };
