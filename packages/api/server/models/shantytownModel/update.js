@@ -385,7 +385,6 @@ module.exports = async (editor, shantytownId, data, argTransaction = undefined) 
         commonData,
         {
             updated_by: editor.id,
-            updated_at: new Date(),
         },
         editor.isAllowedTo('access', 'shantytown_justice')
             ? justiceData

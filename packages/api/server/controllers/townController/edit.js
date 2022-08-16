@@ -11,6 +11,7 @@ module.exports = async (req, res, next) => {
                 longitude: req.body.longitude,
                 address: req.body.address,
                 address_details: req.body.detailed_address,
+                updated_at: req.body.updated_at || new Date(),
                 built_at: req.body.built_at || null,
                 is_reinstallation: req.body.is_reinstallation,
                 reinstallation_comments: req.body.reinstallation_comments,

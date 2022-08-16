@@ -111,6 +111,28 @@ module.exports = mode => ([
             return true;
         }),
 
+
+    /* **********************************************************************************************
+     * Date de mise à jour des données du site
+     ********************************************************************************************* */
+    body('updated_at')
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Date de mise à jour" est obligatoires')
+        .isDate().bail().withMessage('Le champ "Date de mise à jour" est invalides')
+        .toDate()
+        .custom((value, { req }) => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (value > today) {
+                throw new Error('La date de mise à jour du site ne peut pas être future');
+            }
+
+            if (value < new Date(req.town.updatedAt * 1000)) {
+                throw new Error('La date de mise à jour du site ne peut pas être antérieure à la précédente mise à jour');
+            }
+
+            return true;
+        }),
     /* **********************************************************************************************
      * Appellation du site
      ********************************************************************************************* */
