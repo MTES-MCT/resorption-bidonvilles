@@ -78,7 +78,7 @@
 
             <p
                 v-if="displayOptionalFilters === false"
-                class="text-primary cursor-pointer"
+                class="text-primary cursor-pointer h-8"
                 @click="showOptional"
             >
                 Voir plus de filtres
