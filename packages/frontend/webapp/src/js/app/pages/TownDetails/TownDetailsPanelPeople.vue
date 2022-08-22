@@ -43,7 +43,18 @@
                                     <Icon icon="male" class="mr-1"></Icon>
                                     <Icon icon="male"></Icon>
                                 </td>
-                                <td class="text-left pr-4 border-b-1">
+
+                                <td
+                                    class="text-left pr-4 border-b-1"
+                                    v-bind:class="{
+                                        'border-black':
+                                            section.data === 'minorsInSchool'
+                                    }"
+                                >
+                                    <Icon
+                                        v-if="section.type === 'housing'"
+                                        icon="home"
+                                    ></Icon>
                                     {{ section.title }}
                                 </td>
                                 <td
@@ -152,11 +163,13 @@ export default {
                 },
                 {
                     title: "Caravanes",
-                    data: "caravans"
+                    data: "caravans",
+                    type: "housing"
                 },
                 {
                     title: "Cabanes",
-                    data: "huts"
+                    data: "huts",
+                    type: "housing"
                 }
             ]
         };
