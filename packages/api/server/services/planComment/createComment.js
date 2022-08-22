@@ -29,7 +29,7 @@ module.exports = async (comment, plan, author) => {
 
     // on tente d'envoyer une notification Mattermost
     try {
-        await mattermostUtils.triggerNewPlanComment(comment.description, plan, author); // TODO : create triggerNewPlanComment
+        await mattermostUtils.triggerNewPlanComment(comment.description, plan, author);
     } catch (error) {
         // ignore
     }
@@ -46,7 +46,7 @@ module.exports = async (comment, plan, author) => {
 
     // on tente d'envoyer une notification mail à tous les intervenants et correspondants de l'action
     try {
-        const watchers = await userModel.getPlanWatchers( // TODO : modèle à créer
+        const watchers = await userModel.getPlanWatchers(
             plan.id,
             commentId,
         );
@@ -54,7 +54,7 @@ module.exports = async (comment, plan, author) => {
         if (watchers.length > 0) {
             const serializedComment = await planCommentModel.findOne(commentId);
             await Promise.all(
-                watchers.map(user => mails.sendUserNewPlanComment(user, { variables: { plan, comment: serializedComment } })), // TODO mail send à créer
+                watchers.map(user => mails.sendUserNewPlanComment(user, { variables: { plan, comment: serializedComment } })),
             );
         }
     } catch (error) {
