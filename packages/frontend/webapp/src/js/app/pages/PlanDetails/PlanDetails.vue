@@ -114,12 +114,12 @@
                             class="mb-4"
                             icon="info-circle"
                             title="À qui sont destinés les messages ?"
-                            description="À tous les acteurs du site. Un mail est automatiquement envoyé aux personnes signalées « intervenant sur ce site», aux acteurs en DDETS, Préfecture et la Dihal."
+                            description="À tous les acteurs de l'action. Un mail est automatiquement envoyé aux opérateurs qui interviennent sur l'action et aux correspondants."
                         ></NewCommentLeftColumn>
                         <NewCommentLeftColumn
                             icon="exclamation-triangle"
                             title="Quelles sont les règles de confidentialités ?"
-                            description="Ne pas citer l’identité des individus (Nom, âge, sexe, origine…)"
+                            description="Ne pas citer l’identité des individus (nom, âge, sexe, origine…), ni les infos relatives à d'éventuelles condamnations judiciaires. Ne pas tenir de propos à visée insultante, discriminatoire, raciste ..."
                         ></NewCommentLeftColumn>
                     </div>
                     <PlanDetailsNewComment
