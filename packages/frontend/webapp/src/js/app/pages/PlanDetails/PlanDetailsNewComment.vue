@@ -9,7 +9,10 @@
         <div class="text-display-md font-bold pt-6 pb-4">
             Partager une info
         </div>
-        <div class="bg-white p-6 customShadow">
+        <div
+            class="bg-white p-6 customShadow"
+            v-if="$store.getters['config/hasPermission']('plan_comment.create')"
+        >
             <div class="mb-4">
                 <Icon icon="user" /> {{ user.first_name }} {{ user.last_name }}
             </div>
@@ -49,6 +52,10 @@
                     >Valider</Button
                 >
             </div>
+        </div>
+        <div v-else>
+            Vous n'avez pas la permission de publier un commentaire sur cette
+            action
         </div>
     </div>
 </template>

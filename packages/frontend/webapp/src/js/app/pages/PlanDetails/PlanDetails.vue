@@ -137,7 +137,12 @@
                     'pt-10',
                     plan.comments.length > 0 && 'pb-32'
                 ]"
-                v-if="plan.comments.length"
+                v-if="
+                    plan.comments.length > 0 &&
+                        $store.getters['config/hasPermission'](
+                            'plan_comment.list'
+                        )
+                "
             >
                 <PrivateContainer class="flex" id="comments">
                     <div class="leftColumnWidth" />
