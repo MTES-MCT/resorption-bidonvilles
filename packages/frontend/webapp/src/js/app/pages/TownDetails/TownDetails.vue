@@ -84,7 +84,7 @@
                     <TownDetailsNewCommentLeftColumn
                         icon="exclamation-triangle"
                         title="Quelles sont les règles de confidentialités ?"
-                        description="Ne pas citer l’identité des individus (Nom, âge, sexe, origine…)"
+                        description="Ne pas citer l’identité des individus (nom, âge, sexe, origine…), ni les infos relatives à d'éventuelles condamnations judiciaires. Ne pas tenir de propos à visée insultante, discriminatoire, raciste…"
                     ></TownDetailsNewCommentLeftColumn>
                 </div>
                 <TownDetailsNewComment
