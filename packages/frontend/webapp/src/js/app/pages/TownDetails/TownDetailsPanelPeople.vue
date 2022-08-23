@@ -35,15 +35,26 @@
                                 :class="section.css"
                                 v-bind:key="index"
                             >
-                                <td
-                                    v-if="index === 0"
-                                    class="align-top pr-2 text-xl"
-                                    :rowspan="sections.length"
-                                >
-                                    <Icon icon="male" class="mr-1"></Icon>
-                                    <Icon icon="male"></Icon>
+                                <td class="align-top pr-2 text-xl">
+                                    <span v-if="section.icon === 'people'">
+                                        <Icon icon="male" class="mr-1"></Icon>
+                                        <Icon icon="male"></Icon>
+                                    </span>
+                                    <span
+                                        v-else-if="section.icon === 'housing'"
+                                    >
+                                        <Icon icon="home"></Icon>
+                                    </span>
                                 </td>
-                                <td class="text-left pr-4 border-b-1">
+                                <td
+                                    class="text-left pr-4 border-b-1"
+                                    v-bind:class="{
+                                        'border-black':
+                                            sections[index + 1] &&
+                                            sections[index + 1].icon !==
+                                                undefined
+                                    }"
+                                >
                                     {{ section.title }}
                                 </td>
                                 <td
@@ -53,6 +64,10 @@
                                         'border-r-1':
                                             colIndex > 0 ||
                                             populationHistory.length <= 1,
+                                        'border-b-black-custom':
+                                            sections[index + 1] &&
+                                            sections[index + 1].icon !==
+                                                undefined,
                                         'bg-gray-100': colIndex === 0
                                     }"
                                     v-bind:key="colIndex"
@@ -114,6 +129,12 @@
     </DetailsPanel>
 </template>
 
+<style scoped>
+.border-b-black-custom {
+    border-bottom-color: black;
+}
+</style>
+
 <script>
 import DetailsPanel from "#app/components/ui/details/DetailsPanel.vue";
 import DetailsPanelSection from "#app/components/ui/details/DetailsPanelSection.vue";
@@ -133,7 +154,8 @@ export default {
                 {
                     title: "Personnes",
                     css: "font-bold",
-                    data: "populationTotal"
+                    data: "populationTotal",
+                    icon: "people"
                 },
                 {
                     title: "Ménages",
@@ -152,7 +174,8 @@ export default {
                 },
                 {
                     title: "Caravanes",
-                    data: "caravans"
+                    data: "caravans",
+                    icon: "housing"
                 },
                 {
                     title: "Cabanes",
