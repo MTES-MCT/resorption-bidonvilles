@@ -187,7 +187,7 @@ export default {
                     ]
                 },
                 {
-                    label: "AlerteCanicule",
+                    label: "Alerte Canicule",
                     id: "heatwave",
                     display: true,
                     options: [
