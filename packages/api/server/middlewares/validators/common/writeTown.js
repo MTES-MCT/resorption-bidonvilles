@@ -133,7 +133,10 @@ module.exports = mode => ([
 
             // for updates only
             if (req.town) {
-                if (value < new Date(req.town.updatedAt * 1000)) {
+                const lastUpdate = new Date(req.town.updatedAt * 1000);
+                lastUpdate.setHours(0, 0, 0, 0);
+
+                if (value < lastUpdate) {
                     throw new Error('La date de mise à jour du site ne peut pas être antérieure à la précédente mise à jour');
                 }
             }
