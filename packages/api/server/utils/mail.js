@@ -2,10 +2,9 @@ const nodeMailjet = require('node-mailjet');
 const { mail: mailConfig, wwwUrl } = require('#server/config');
 const userModel = require('#server/models/userModel');
 
-const mailjet = nodeMailjet.connect(
-    mailConfig.publicKey || 'unknown',
-    mailConfig.privateKey || 'unknown',
-);
+const mailjet = mailConfig.publicKey
+    ? nodeMailjet.connect(mailConfig.publicKey, mailConfig.privateKey)
+    : null;
 
 module.exports = {
     generateUserSignature(user) {
@@ -22,6 +21,10 @@ module.exports = {
     },
 
     send(user, mailContent, replyTo = null) {
+        if (mailjet === null) {
+            return Promise.resolve(true);
+        }
+
         return mailjet
             .post('send', { version: 'v3.1' })
             .request({
