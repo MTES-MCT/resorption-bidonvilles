@@ -10,6 +10,6 @@ module.exports = (shantytown) => {
 
     return createRow([
         'Accès à des toilettes fonctionnelles',
-        labels[status] || 'Aucune information concernant l\'accès aux toilettes',
+        labels[status.status] || 'Aucune information concernant l\'accès aux toilettes',
     ]);
 };

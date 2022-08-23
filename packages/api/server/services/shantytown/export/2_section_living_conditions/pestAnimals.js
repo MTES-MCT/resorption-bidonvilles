@@ -8,7 +8,7 @@ module.exports = (shantytown) => {
     };
     const { status, details: comments } = shantytown.livingConditions.pest_animals;
 
-    let text = labels[status] || 'Aucune information concernant la présence de nuisibles';
+    let text = labels[status.status] || 'Aucune information concernant la présence de nuisibles';
     if (comments) {
         text = `${text} – ${comments}`;
     }

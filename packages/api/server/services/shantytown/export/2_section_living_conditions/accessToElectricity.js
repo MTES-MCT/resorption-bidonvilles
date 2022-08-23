@@ -10,6 +10,6 @@ module.exports = (shantytown) => {
 
     return createRow([
         'Accès à l\'électricité',
-        labels[status] || 'Aucune information concernant l\'accès à l\'électricité',
+        labels[status.status] || 'Aucune information concernant l\'accès à l\'électricité',
     ]);
 };
