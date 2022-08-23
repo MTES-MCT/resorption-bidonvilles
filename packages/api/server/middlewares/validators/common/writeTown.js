@@ -116,8 +116,8 @@ module.exports = mode => ([
      * Date de mise à jour des données du site
      ********************************************************************************************* */
     body('updated_at')
-        .exists({ checkNull: true }).bail().withMessage('Le champ "Date de mise à jour" est obligatoires')
-        .isDate().bail().withMessage('Le champ "Date de mise à jour" est invalides')
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Date de mise à jour" est obligatoire')
+        .isDate().bail().withMessage('Le champ "Date de mise à jour" est invalide')
         .toDate()
         .customSanitizer((value) => {
             value.setHours(0, 0, 0, 0);
