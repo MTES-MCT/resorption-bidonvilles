@@ -10,6 +10,6 @@ module.exports = (shantytown) => {
 
     return createRow([
         'Diagnostic prévention incendie',
-        labels[status] || 'Aucune information concernant le diagnostic',
+        labels[status.status] || 'Aucune information concernant le diagnostic',
     ]);
 };
