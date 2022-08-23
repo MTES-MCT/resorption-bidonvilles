@@ -43,7 +43,7 @@
                         :errors="errors"
                     ></FormErrorLog>
                     <TownFormPanelUpdatedAt
-                        v-if="mode != 'create'"
+                        v-if="mode !== 'create'"
                         class="mt-10"
                         v-model="updatedAt"
                         :value="updatedAt"

@@ -14,7 +14,10 @@ export default {
     props: {
         value: {
             type: Date,
-            required: false
+            required: false,
+            default() {
+                return new Date();
+            }
         },
 
         disableBefore: {
@@ -25,7 +28,7 @@ export default {
 
     data() {
         return {
-            updatedAt: new Date()
+            updatedAt: this.value
         };
     },
 
