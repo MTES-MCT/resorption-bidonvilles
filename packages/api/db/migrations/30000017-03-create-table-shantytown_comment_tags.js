@@ -7,26 +7,17 @@ module.exports = {
             {
                 fk_shantytown_comment: {
                     type: Sequelize.INTEGER,
-                    allowNull: false,
+                    primaryKey: true,
                 },
                 fk_comment_tag: {
                     type: Sequelize.STRING(50),
-                    allowNull: false,
+                    primaryKey: true,
                 },
             },
             { transaction },
         );
         // on crée les contraintes
         await Promise.all([
-            queryInterface.addConstraint(
-                'shantytown_comment_tags',
-                ['fk_shantytown_comment', 'fk_comment_tag'],
-                {
-                    type: 'unique',
-                    name: 'idx_shantytown_comment_tags_pk',
-                    transaction,
-                },
-            ),
             queryInterface.addConstraint(
                 'shantytown_comment_tags',
                 ['fk_shantytown_comment'],
