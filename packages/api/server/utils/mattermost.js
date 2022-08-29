@@ -204,12 +204,9 @@ async function triggerNewComment(commentDescription, tagLabels, town, author) {
     });
 
     if (tagLabels) {
-        // eslint-disable-next-line array-callback-return
-        const mattermostMessageAttachmentFields = tagLabels.reduce((acc, label, index) => (index < tagLabels.length - 1 ? `${acc + label}, ` : `${acc + label}.`), `*Qualification${tagLabels.length > 1 ? 's' : ''} du commentaire*: `);
-
         fields.push({
             short: false,
-            value: mattermostMessageAttachmentFields,
+            value: `*Qualification${tagLabels.length > 1 ? 's' : ''} du commentaire*: ${tagLabels.join(', ')}.`,
         });
     }
     const mattermostMessage = {
