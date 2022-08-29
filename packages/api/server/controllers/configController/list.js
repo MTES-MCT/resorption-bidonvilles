@@ -35,7 +35,7 @@ module.exports = async (req, res, next) => {
         changelog: changelogModel.getChangelogFor(req.user),
         version_charte_engagement: charteEngagementModel.getLatest(),
         actor_themes: themes,
-        regular_comment_tags: commentTagModel.findByType('regular'),
+        regular_comment_tags: commentTagModel.find({ types: ['regular'] }),
     };
 
     const promises = Object.values(queries);

@@ -122,7 +122,10 @@ module.exports = [
             let fullTags = [];
             if (value.length > 0) {
                 try {
-                    fullTags = await commentTagModel.find(value);
+                    fullTags = await commentTagModel.find({
+                        ids: value,
+                        types: ['regular'],
+                    });
                 } catch (error) {
                     throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Tags"');
                 }
