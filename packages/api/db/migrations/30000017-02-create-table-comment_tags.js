@@ -35,7 +35,7 @@ module.exports = {
                     field: 'uid',
                 },
                 onUpdate: 'cascade',
-                onDelete: 'restrict',
+                onDelete: 'cascade',
                 transaction,
             },
         );
