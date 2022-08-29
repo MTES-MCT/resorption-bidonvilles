@@ -490,6 +490,15 @@ module.exports = {
 
         const utm = generateTrackingUTM(USER_CAMPAIGN, 'nouveau-commentaire');
 
+        // on formatte les tags
+        const tags = variables.comment.tags.map(tag => tag.label);
+        const tags_length = variables.comment.tags.length;
+
+        let tag_text = '';
+        if (tags_length > 0) {
+            tag_text = variables.comment.tags.length > 1 ? 'ces étiquettes' : 'cette étiquette';
+        }
+
         return mailService.send('user_new_comment', {
             recipient,
             variables: {
@@ -502,9 +511,9 @@ module.exports = {
                     organization: variables.comment.createdBy.organization,
                 },
                 comment: variables.comment.description,
-                tags: variables.tags,
-                tags_length: variables.tags_length,
-                tag_text: variables.tag_text,
+                tags,
+                tags_length,
+                tag_text,
                 rootAnnuaireUrl: `${webappUrl}/annuaire?${utm}`,
                 annuaireUrl: `${webappUrl}/annuaire/${variables.comment.createdBy.organization_id}?${utm}`,
                 messageUrl: `${webappUrl}/site/${variables.shantytown.id}#newComment`,

@@ -142,9 +142,6 @@ describe.only('services/shantytownComment', () => {
                     variables: {
                         shantytown: input.shantytown,
                         comment: output.comment,
-                        tags: input.comment.tags.map(tag => tag.label),
-                        tags_length: 2,
-                        tag_text: 'ces étiquettes',
                     },
 
                 });
@@ -152,18 +149,12 @@ describe.only('services/shantytownComment', () => {
                     variables: {
                         shantytown: input.shantytown,
                         comment: output.comment,
-                        tags: input.comment.tags.map(tag => tag.label),
-                        tags_length: 2,
-                        tag_text: 'ces étiquettes',
                     },
                 });
                 expect(dependencies.sendMail).to.have.been.calledWithExactly(output.watchers[2], {
                     variables: {
                         shantytown: input.shantytown,
                         comment: output.comment,
-                        tags: input.comment.tags.map(tag => tag.label),
-                        tags_length: 2,
-                        tag_text: 'ces étiquettes',
                     },
                 });
             });

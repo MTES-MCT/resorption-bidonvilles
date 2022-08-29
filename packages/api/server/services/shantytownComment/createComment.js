@@ -70,12 +70,6 @@ module.exports = async (comment, shantytown, author) => {
 
         if (watchers.length > 0) {
             const serializedComment = await shantytownCommentModel.findOne(commentId);
-            // On prépare l'affichage des tags qualifiant le commentaire
-            let tag_text = '';
-            const tags_length = serializedComment.tags.length;
-            if (tags_length > 0) {
-                tag_text = serializedComment.tags.length > 1 ? 'ces étiquettes' : 'cette étiquette';
-            }
             await Promise.all(
                 watchers.map(user => mails.sendUserNewComment(
                     user,
@@ -83,9 +77,6 @@ module.exports = async (comment, shantytown, author) => {
                         variables: {
                             shantytown,
                             comment: serializedComment,
-                            tags: comment.tags.map(tag => tag.label),
-                            tags_length,
-                            tag_text,
                         },
                     },
                 )),
