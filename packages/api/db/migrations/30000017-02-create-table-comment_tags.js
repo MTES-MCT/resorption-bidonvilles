@@ -1,24 +1,4 @@
 module.exports = {
-    up: (queryInterface, Sequelize) => queryInterface.createTable(
-        'comment_tags',
-        {
-            uid: {
-                type: Sequelize.STRING(50),
-                primaryKey: true,
-                allowNull: false,
-                unique: true,
-            },
-            tag: {
-                type: Sequelize.STRING(150),
-                allowNull: false,
-            },
-        },
-    ),
-
-    down: queryInterface => queryInterface.dropTable('comment_tag_types'),
-};
-
-module.exports = {
     up: (queryInterface, Sequelize) => queryInterface.sequelize.transaction(
         // on crée la table
         transaction => queryInterface.createTable(
