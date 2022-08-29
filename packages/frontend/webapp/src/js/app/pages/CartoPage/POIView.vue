@@ -135,7 +135,7 @@ export default {
 .quickview {
     z-index: 7000;
     position: fixed;
-    top: 71px;
+    top: 186px;
     bottom: 0;
     right: -320px;
     width: 320px;
