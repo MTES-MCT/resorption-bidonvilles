@@ -128,7 +128,7 @@ module.exports = [
                 }
 
                 if (fullTags.length !== value.length) {
-                    throw new Error('Certains tags sélectionnées n\'existent pas en base de données');
+                    throw new Error('Certains tags sélectionnés n\'existent pas en base de données');
                 }
             }
             req.tags = fullTags;
