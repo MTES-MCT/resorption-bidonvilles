@@ -196,14 +196,12 @@ async function triggerNewComment(commentDescription, tagLabels, town, author) {
     const username = formatUsername(author);
     const townLink = formatTownLink(town.id, address);
 
-    const fields = [];
-
-    fields.push({
+    const fields = [{
         short: false,
         value: `*Commentaire*: ${commentDescription}`,
-    });
+    }];
 
-    if (tagLabels) {
+    if (tagLabels.length > 0) {
         fields.push({
             short: false,
             value: `*Qualification${tagLabels.length > 1 ? 's' : ''} du commentaire*: ${tagLabels.join(', ')}.`,
