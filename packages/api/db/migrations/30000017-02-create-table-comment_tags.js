@@ -1,7 +1,9 @@
 module.exports = {
-    up: (queryInterface, Sequelize) => queryInterface.sequelize.transaction(
+    async up(queryInterface, Sequelize) {
+        const transaction = await queryInterface.sequelize.transaction();
+
         // on crée la table
-        transaction => queryInterface.createTable(
+        await queryInterface.createTable(
             'comment_tags',
             {
                 uid: {
@@ -19,35 +21,40 @@ module.exports = {
                 },
             },
             { transaction },
-        )
+        );
 
-            // on crée toutes les contraintes
-            .then(() => queryInterface.addConstraint(
-                'comment_tags',
-                ['fk_comment_tag_type'],
-                {
-                    type: 'foreign key',
-                    name: 'fk_comment_tag_types_uid',
-                    references: {
-                        table: 'comment_tag_types',
-                        field: 'uid',
-                    },
-                    onUpdate: 'cascade',
-                    onDelete: 'restrict',
-                    transaction,
+        // on crée toutes les contraintes
+        await queryInterface.addConstraint(
+            'comment_tags',
+            ['fk_comment_tag_type'],
+            {
+                type: 'foreign key',
+                name: 'fk_comment_tag_types_uid',
+                references: {
+                    table: 'comment_tag_types',
+                    field: 'uid',
                 },
-            )),
-    ),
+                onUpdate: 'cascade',
+                onDelete: 'restrict',
+                transaction,
+            },
+        );
 
-    down: queryInterface => queryInterface.sequelize.transaction(
+        return transaction.commit();
+    },
+
+    async down(queryInterface) {
+        const transaction = await queryInterface.sequelize.transaction();
+
         // on supprime toutes les contraintes
-        transaction => queryInterface.removeConstraint(
+        await queryInterface.removeConstraint(
             'comment_tags',
             'fk_comment_tag_types_uid',
             { transaction },
-        )
+        );
 
-            // on supprime la table
-            .then(() => queryInterface.dropTable('comment_tags', { transaction })),
-    ),
+        // on supprime la table
+        await queryInterface.dropTable('comment_tags', { transaction });
+        return transaction.commit();
+    },
 };
