@@ -7,16 +7,14 @@ module.exports = {
                 uid: {
                     type: Sequelize.STRING(50),
                     primaryKey: true,
-                    allowNull: false,
-                    unique: true,
                 },
                 tag: {
                     type: Sequelize.STRING(150),
                     allowNull: false,
+                    unique: true,
                 },
                 fk_comment_tag_type: {
                     type: Sequelize.STRING(50),
-                    allowNull: false,
                     primaryKey: true,
                 },
             },
