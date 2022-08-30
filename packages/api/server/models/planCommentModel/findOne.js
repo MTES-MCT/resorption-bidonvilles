@@ -15,7 +15,7 @@ module.exports = async (id) => {
             pc.created_by "commentCreatedBy",
             u.user_id AS "userId",
             u.first_name AS "userFirstName",
-            u.last_name AS "userLastName",
+            u.last_name AS "userLastName"
         FROM
             plan_comments pc
         LEFT JOIN
