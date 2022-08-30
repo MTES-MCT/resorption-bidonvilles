@@ -23,7 +23,7 @@ export default {
                 specialTag => specialTag.uid === this.tag.uid
             );
             // S'il s'agit d'un tag particulier, on applique la mise en forme qui correspond
-            if (typeof resultat !== "undefined") {
+            if (resultat !== undefined) {
                 tagClass = resultat.class;
             }
             return tagClass;
