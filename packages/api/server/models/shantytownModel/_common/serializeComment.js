@@ -3,26 +3,24 @@ const { getTagsFromComment } = require('#server/models/shantytownCommentTagModel
 module.exports = (async (comment) => {
     // On récupère les tags du commentaire
     const commentTags = await getTagsFromComment(comment.commentId);
-    let serializedComment = {};
-    serializedComment = Object.assign(
-        {
-            id: comment.commentId,
-            description: comment.commentDescription,
-            createdAt: comment.commentCreatedAt !== null ? (comment.commentCreatedAt.getTime() / 1000) : null,
-            organization_target_name: comment.organization_target_name || [],
-            user_target_name: comment.user_target_name || [],
-            createdBy: {
-                id: comment.commentCreatedBy,
-                first_name: comment.userFirstName,
-                last_name: comment.userLastName,
-                position: comment.userPosition,
-                organization: comment.organizationAbbreviation || comment.organizationName,
-                organization_id: comment.organizationId,
-            },
-            shantytown: comment.shantytownId,
-            tags: commentTags,
+
+    return {
+        id: comment.commentId,
+        description: comment.commentDescription,
+        createdAt: comment.commentCreatedAt !== null ? (comment.commentCreatedAt.getTime() / 1000) : null,
+        organization_target_name: comment.organization_target_name || [],
+        user_target_name: comment.user_target_name || [],
+        createdBy: {
+            id: comment.commentCreatedBy,
+            first_name: comment.userFirstName,
+            last_name: comment.userLastName,
+            position: comment.userPosition,
+            organization: comment.organizationAbbreviation || comment.organizationName,
+            organization_id: comment.organizationId,
         },
-        comment.covidCommentDate
+        shantytown: comment.shantytownId,
+        tags: commentTags,
+        ...(comment.covidCommentDate
             ? {
                 covid: {
                     date: comment.covidCommentDate.getTime() / 1000,
@@ -39,8 +37,6 @@ module.exports = (async (comment) => {
                     besoin_action: comment.covidBesoinAction,
                 },
             }
-            : {},
-    );
-
-    return serializedComment;
+            : {}),
+    };
 });
