@@ -26,18 +26,12 @@ module.exports = async (id) => {
          ),
          comment_tags AS (
             SELECT
-                  sct.fk_shantytown_comment,
-                  ARRAY_AGG(sct.fk_comment_tag) AS tags
-              FROM
-                  shantytown_comments AS sc
-              LEFT JOIN
-                  shantytown_comment_tags AS sct
-              ON
-                  sct.fk_shantytown_comment = sc.shantytown_comment_id
-              WHERE
-                  fk_shantytown_comment = :id
-            GROUP BY
-                  sct.fk_shantytown_comment
+                sct.fk_shantytown_comment,
+                ARRAY_AGG(sct.fk_comment_tag) AS tags
+            FROM shantytown_comments AS sc
+            LEFT JOIN shantytown_comment_tags AS sct ON sct.fk_shantytown_comment = sc.shantytown_comment_id
+            WHERE sct.fk_shantytown_comment = :id
+            GROUP BY sct.fk_shantytown_comment
         )
 
         SELECT
