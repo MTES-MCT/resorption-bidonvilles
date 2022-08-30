@@ -102,12 +102,11 @@ module.exports = async (user, shantytownIds, covid = false) => {
         },
     );
 
-    rows.forEach(async (comment) => {
-        const serializedComment = await serializeComment(comment);
-        comments[comment.shantytownId].push(
-            serializedComment,
-        );
-    }, {});
+    const serializedComments = await Promise.all(rows.map(serializeComment));
 
-    return comments;
+    return serializedComments.reduce((argAcc, comment) => {
+        const acc = { ...argAcc };
+        acc[comment.shantytownId].push(comment);
+        return acc;
+    }, comments);
 };
