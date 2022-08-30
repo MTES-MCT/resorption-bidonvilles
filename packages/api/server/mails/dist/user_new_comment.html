@@ -182,7 +182,7 @@
       <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
         <tbody>
           <tr>
-            <td style="background-color:#dddddd;vertical-align:top;padding:1rem;">
+            <td style="background-color:#dddddd;vertical-align:top;padding:16px;">
               
       <table border="0" cellpadding="0" cellspacing="0" role="presentation" style width="100%">
         <tbody>
@@ -214,7 +214,68 @@
       </div>
     
       
-      <!--[if mso | IE]></td></tr></table><table align="center" border="0" cellpadding="0" cellspacing="0" class="" role="presentation" style="width:600px;" width="600" ><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
+      <!--[if mso | IE]></td></tr></table><![endif]-->
+    
+    {% if var:tags_length > 0 %}
+      
+      <!--[if mso | IE]><table align="center" border="0" cellpadding="0" cellspacing="0" class="" role="presentation" style="width:600px;" width="600" ><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
+    
+      
+      <div style="margin:0px auto;max-width:600px;">
+        
+        <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;">
+          <tbody>
+            <tr>
+              <td style="direction:ltr;font-size:0px;padding:0 0 16px 0;text-align:center;">
+                <!--[if mso | IE]><table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td class="" style="vertical-align:top;width:600px;" ><![endif]-->
+            
+      <div class="mj-column-per-100 mj-outlook-group-fix" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;">
+        
+      <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:top;" width="100%">
+        <tbody>
+          
+              <tr>
+                <td align="left" style="font-size:0px;padding:0;word-break:break-word;">
+                  
+      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:1.5em;text-align:left;color:#000000;">Le commentaire a été qualifié par {{var:tag_text}}:</div>
+    
+                </td>
+              </tr>
+            
+              <tr>
+                <td align="left" style="font-size:0px;padding:0;word-break:break-word;">
+                  
+      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:1.5em;text-align:left;color:#000000;"><ul style="margin-left:40px; padding:0;" align="left" type="disc">
+                <mj-raw> {% for tag in var:tags %} </mj-raw>
+                    <mj-text>
+                        <li>
+                            {{tag}}
+                        </li>
+                    </mj-text>
+                <mj-raw> {% endfor %} </mj-raw></ul></div>
+    
+                </td>
+              </tr>
+            
+        </tbody>
+      </table>
+    
+      </div>
+    
+          <!--[if mso | IE]></td></tr></table><![endif]-->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        
+      </div>
+    
+      
+      <!--[if mso | IE]></td></tr></table><![endif]-->
+    
+    {% endif %}
+      
+      <!--[if mso | IE]><table align="center" border="0" cellpadding="0" cellspacing="0" class="" role="presentation" style="width:600px;" width="600" ><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
     
       
       <div style="margin:0px auto;max-width:600px;">
@@ -247,9 +308,9 @@
     
                 </td>
               </tr>
-            
+            <br>
               <tr>
-                <td align="center" vertical-align="middle" style="font-size:0px;padding:0 0 2rem 0;word-break:break-word;">
+                <td align="center" vertical-align="middle" style="font-size:0px;padding:0 0 32px 0;word-break:break-word;">
                   
       <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:separate;line-height:100%;">
         <tbody>

@@ -8,6 +8,12 @@
                 :class="['mr-2', 'mb-2']"
                 :tag="tag"
             />
+            <RegularTag
+                v-for="(tag, index) in activity.comment.tags"
+                :key="index"
+                :class="['mr-2', 'mb-2']"
+                :tag="tag"
+            />
         </div>
         <div
             class="mb-2"
@@ -41,10 +47,12 @@
 <script>
 import CovidTag from "#app/components/CovidTag/CovidTag.vue";
 import covidTags from "#app/pages/CovidHistory/covidTags";
+import RegularTag from "#app/components/RegularTag/RegularTag.vue";
 
 export default {
     components: {
-        CovidTag
+        CovidTag,
+        RegularTag
     },
 
     props: {

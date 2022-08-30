@@ -5,7 +5,16 @@ Un nouveau message a été publié par {{var:createdBy.name}}
 
 {{var:comment}}
 
+{% if var:tags_length > 0 %}
+Le commentaire a été qualifié par {{var:tag_text}}:
+{% for tag in var:tags %}
+{{tag}}
+{% endfor %}
+
+{% endif %}
+
 Voir le message [{{var:messageUrl}}]
+
 
 Contacter {{var:createdBy.name}} [{{var:annuaireUrl}}]
 

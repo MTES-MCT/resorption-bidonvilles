@@ -10,7 +10,7 @@ const sequelize = require('#db/sequelize');
 /**
  * @param {Model_ShantytownComment_Data} data
  */
-module.exports = async data => sequelize.transaction(async (transaction) => {
+module.exports = async (data, transaction = undefined) => {
     const [[{ shantytown_comment_id }]] = await sequelize.query(
         `INSERT INTO shantytown_comments(
             description,
@@ -25,8 +25,8 @@ module.exports = async data => sequelize.transaction(async (transaction) => {
         RETURNING shantytown_comment_id`,
         {
             replacements: data,
+            transaction,
         },
-        transaction,
     );
 
     const promises = [];
@@ -65,4 +65,4 @@ module.exports = async data => sequelize.transaction(async (transaction) => {
     }
 
     return shantytown_comment_id;
-});
+};

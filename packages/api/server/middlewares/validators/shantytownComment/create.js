@@ -3,6 +3,7 @@ const { body, param } = require('express-validator');
 const shantytownModel = require('#server/models/shantytownModel');
 const userModel = require('#server/models/userModel/index');
 const organizationModel = require('#server/models/organizationModel/index');
+const commentTagModel = require('#server/models/commentTagModel');
 
 module.exports = [
     param('id')
@@ -105,7 +106,35 @@ module.exports = [
             if (total === 0) {
                 throw new Error('Vous devez spécifier au moins une structure ou utilisateur cible(s)');
             }
+            return true;
+        }),
 
+    body('tags')
+        .customSanitizer((value) => {
+            if (value === undefined || value === null) {
+                return [];
+            }
+            return value;
+        })
+        .isArray().bail()
+        .withMessage('Le champ "tags" est invalide')
+        .custom(async (value, { req }) => {
+            let fullTags = [];
+            if (value.length > 0) {
+                try {
+                    fullTags = await commentTagModel.find({
+                        ids: value,
+                        types: ['regular'],
+                    });
+                } catch (error) {
+                    throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Tags"');
+                }
+
+                if (fullTags.length !== value.length) {
+                    throw new Error('Certains tags sélectionnés n\'existent pas en base de données');
+                }
+            }
+            req.tags = fullTags;
             return true;
         }),
 ];

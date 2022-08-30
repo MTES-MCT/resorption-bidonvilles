@@ -39,6 +39,7 @@ module.exports = async (user) => {
             Département: raw.departementName,
             Role: raw.userRole,
             'Objectif de résorption': raw.shantytownResorptionTarget,
+            Tags: raw.tags && raw.tags.length > 0 ? raw.tags.join(', ') : 'Ø',
         };
     });
 };

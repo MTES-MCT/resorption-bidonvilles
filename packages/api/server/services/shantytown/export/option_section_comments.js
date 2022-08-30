@@ -42,7 +42,21 @@ module.exports = (shantytown) => {
                             bold: false,
                             size: 22,
                             font: 'Arial',
-                        })],
+                        }),
+                        ...(comment.tags.length > 0
+                            ? comment.tags.map(tag => new TextRun({
+                                text: `    -    ${tag.label}`,
+                                bullet: {
+                                    level: 0,
+                                },
+                                break: 1,
+                                bold: false,
+                                size: 22,
+                                font: 'Arial',
+                            }))
+                            : []
+                        ),
+                    ],
                 }))
                 : [new Paragraph({
                     spacing: {

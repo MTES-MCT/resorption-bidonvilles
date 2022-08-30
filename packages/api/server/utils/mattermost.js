@@ -185,7 +185,7 @@ async function triggerActorInvitedAlert(town, host, invited) {
     await actorInvitedAlert.send(mattermostMessage);
 }
 
-async function triggerNewComment(comment, town, author) {
+async function triggerNewComment(commentDescription, tagLabels, town, author) {
     if (!mattermost) {
         return;
     }
@@ -196,6 +196,17 @@ async function triggerNewComment(comment, town, author) {
     const username = formatUsername(author);
     const townLink = formatTownLink(town.id, address);
 
+    const fields = [{
+        short: false,
+        value: `*Commentaire*: ${commentDescription}`,
+    }];
+
+    if (tagLabels.length > 0) {
+        fields.push({
+            short: false,
+            value: `*Qualification${tagLabels.length > 1 ? 's' : ''} du commentaire*: ${tagLabels.join(', ')}.`,
+        });
+    }
     const mattermostMessage = {
         channel: '#notif-nouveau-commentaire',
         username: 'Alerte Résorption Bidonvilles',
@@ -204,12 +215,7 @@ async function triggerNewComment(comment, town, author) {
         attachments: [
             {
                 color: '#f2c744',
-                fields: [
-                    {
-                        short: false,
-                        value: `*Commentaire*: ${comment}`,
-                    },
-                ],
+                fields,
             },
         ],
     };

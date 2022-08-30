@@ -2,9 +2,9 @@
     <div>
         <div class="text-display-lg font-bold text-corail">
             <Icon icon="comment" /> LE JOURNAL DU SITE
-            <span
-                >- {{ nbComments }} message{{ nbComments > 1 ? "s" : "" }}</span
-            >
+            <span>
+                - {{ nbComments }} message{{ nbComments > 1 ? "s" : "" }}
+            </span>
         </div>
         <div class="text-display-md font-bold pt-6 pb-4">
             Partager une info
@@ -20,6 +20,20 @@
                 v-model="newComment"
                 placeholder="Partagez votre passage sur le site, le contexte sanitaire, la situation des habitants, difficultés rencontrées lors de votre intervention…"
             />
+            <CheckableGroup
+                direction="horizontal"
+                label="Quels sont les mots clés caractérisant votre commentaire ?"
+                validationName="Thèmes des commentaires"
+            >
+                <Checkbox
+                    v-for="commentTag in regularCommentTags"
+                    v-bind:key="commentTag.uid"
+                    variant="card"
+                    :label="commentTag.label"
+                    :checkValue="commentTag.uid"
+                    v-model="tags"
+                ></Checkbox>
+            </CheckableGroup>
             <div
                 class="flex flex-col"
                 v-if="
@@ -140,7 +154,11 @@ import { autocompleteOrganization } from "#helpers/api/user";
 
 export default {
     data() {
+        const {
+            regular_comment_tags: regularCommentTags
+        } = this.$store.state.config.configuration;
         return {
+            tags: [],
             commentError: null,
             commentErrors: [],
             newComment: "",
@@ -149,7 +167,8 @@ export default {
             listOfTargets: {
                 users: [],
                 organizations: []
-            }
+            },
+            regularCommentTags
         };
     },
     props: {
@@ -169,6 +188,14 @@ export default {
                 ...this.listOfTargets.organizations,
                 ...this.listOfTargets.users
             ];
+        },
+        tagLabels: function() {
+            if (!this.tags) {
+                return [];
+            }
+            return this.regularCommentTags.filter(tag =>
+                this.tags.includes(tag.uid)
+            );
         }
     },
     methods: {
@@ -236,6 +263,11 @@ export default {
             this.newComment = "";
             this.commentError = null;
             this.commentErrors = [];
+            this.listOfTargets = {
+                users: [],
+                organizations: []
+            };
+            this.tags = [];
         },
         async addComment() {
             if (this.loading === true) {
@@ -257,7 +289,8 @@ export default {
                             targets: {
                                 mode: this.mode,
                                 ...this.listOfTargets
-                            }
+                            },
+                            tags: this.tags
                         }
                     }
                 );
@@ -267,6 +300,7 @@ export default {
                     users: [],
                     organizations: []
                 };
+                this.tags = [];
             } catch (response) {
                 this.commentError = response.user_message;
                 this.commentErrors = response.fields

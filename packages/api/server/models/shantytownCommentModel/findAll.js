@@ -50,22 +50,31 @@ module.exports = (user, location = null, privateLocation = null) => {
     return sequelize.query(
         `WITH organization_comment_access AS (
             SELECT 
-                 scot.fk_comment AS shantytown_comment_id,
-                 ARRAY_AGG(lo.name) AS organization_target_name,
-                 ARRAY_AGG(lo.organization_id) AS organization_target_id
-             FROM shantytown_comment_organization_targets scot 
-             LEFT JOIN localized_organizations lo ON lo.organization_id = scot.fk_organization
-             GROUP BY scot.fk_comment
-         ),
-         user_comment_access AS (
-             SELECT 
-                 scut.fk_comment AS shantytown_comment_id,
-                 ARRAY_AGG(CONCAT(users.first_name, ' ', users.last_name)) AS user_target_name,
-                 ARRAY_AGG(users.user_id) AS user_target_id
-             FROM shantytown_comment_user_targets scut 
-             LEFT JOIN users ON users.user_id = scut.fk_user
-             GROUP BY scut.fk_comment
-         )
+                scot.fk_comment AS shantytown_comment_id,
+                ARRAY_AGG(lo.name) AS organization_target_name,
+                ARRAY_AGG(lo.organization_id) AS organization_target_id
+            FROM shantytown_comment_organization_targets scot 
+            LEFT JOIN localized_organizations lo ON lo.organization_id = scot.fk_organization
+            GROUP BY scot.fk_comment
+        ),
+        user_comment_access AS (
+            SELECT 
+                scut.fk_comment AS shantytown_comment_id,
+                ARRAY_AGG(CONCAT(users.first_name, ' ', users.last_name)) AS user_target_name,
+                ARRAY_AGG(users.user_id) AS user_target_id
+            FROM shantytown_comment_user_targets scut 
+            LEFT JOIN users ON users.user_id = scut.fk_user
+            GROUP BY scut.fk_comment
+        ),
+        tags AS (
+            SELECT
+                sct.fk_shantytown_comment,
+                array_agg(ct.tag) AS tags
+            FROM shantytown_comment_tags sct
+            LEFT JOIN comment_tags ct ON sct.fk_comment_tag = ct.uid
+            GROUP BY sct.fk_shantytown_comment
+        )
+
         SELECT
             sc.shantytown_comment_id AS "commentId",
             sc.description AS "commentDescription",
@@ -83,25 +92,18 @@ module.exports = (user, location = null, privateLocation = null) => {
             d.name AS "departementName",
             s.resorption_target AS "shantytownResorptionTarget",
             oca.organization_target_name,
-            uca.user_target_name
-        FROM
-            shantytown_comments sc
-        LEFT JOIN
-            users u ON sc.created_by = u.user_id
-        LEFT JOIN
-            roles_regular rr ON u.fk_role_regular = rr.role_id
-        LEFT JOIN
-            organizations o ON u.fk_organization = o.organization_id
-        LEFT JOIN
-            shantytowns s ON sc.fk_shantytown = s.shantytown_id
-        LEFT JOIN
-            cities c ON s.fk_city = c.code
-        LEFT JOIN
-            departements d ON c.fk_departement = d.code
-        LEFT JOIN 
-            organization_comment_access oca ON sc.shantytown_comment_id = oca.shantytown_comment_id
-        LEFT JOIN 
-            user_comment_access uca ON sc.shantytown_comment_id = uca.shantytown_comment_id
+            uca.user_target_name,
+            tags.tags AS "tags"
+        FROM shantytown_comments sc
+        LEFT JOIN users u ON sc.created_by = u.user_id
+        LEFT JOIN roles_regular rr ON u.fk_role_regular = rr.role_id
+        LEFT JOIN organizations o ON u.fk_organization = o.organization_id
+        LEFT JOIN shantytowns s ON sc.fk_shantytown = s.shantytown_id
+        LEFT JOIN cities c ON s.fk_city = c.code
+        LEFT JOIN departements d ON c.fk_departement = d.code
+        LEFT JOIN organization_comment_access oca ON sc.shantytown_comment_id = oca.shantytown_comment_id
+        LEFT JOIN user_comment_access uca ON sc.shantytown_comment_id = uca.shantytown_comment_id
+        LEFT JOIN tags ON tags.fk_shantytown_comment = sc.shantytown_comment_id
         ${additionalWhere.length > 0
         ? `WHERE ${additionalWhere.join(' OR ')}`
         : ''

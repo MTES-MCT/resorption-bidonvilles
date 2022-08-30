@@ -1,4 +1,5 @@
 const sequelize = require('#db/sequelize');
+const shantytownCommentTagModel = require('#server/models/shantytownCommentTagModel/index');
 const serializeComment = require('./serializeComment');
 
 module.exports = async (user, shantytownIds, covid = false) => {
@@ -31,6 +32,7 @@ module.exports = async (user, shantytownIds, covid = false) => {
             LEFT JOIN users ON users.user_id = scut.fk_user
             GROUP BY scut.fk_comment
         )
+
         SELECT
             shantytown_comments.shantytown_comment_id AS "commentId",
             shantytown_comments.fk_shantytown AS "shantytownId",
@@ -91,11 +93,19 @@ module.exports = async (user, shantytownIds, covid = false) => {
         },
     );
 
-    rows.forEach((comment) => {
-        comments[comment.shantytownId].push(
-            serializeComment(comment),
+    let commentTags = [];
+    if (rows.length > 0) {
+        commentTags = await shantytownCommentTagModel.getTagsForComments(
+            rows.map(({ commentId }) => commentId),
         );
-    }, {});
+    }
 
-    return comments;
+    return rows.reduce((argAcc, row) => {
+        const acc = { ...argAcc };
+        acc[row.shantytownId].push(serializeComment({
+            ...row,
+            tags: commentTags[row.commentId],
+        }));
+        return acc;
+    }, comments);
 };
