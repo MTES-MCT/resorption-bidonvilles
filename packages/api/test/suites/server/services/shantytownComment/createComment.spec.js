@@ -119,7 +119,6 @@ describe.only('services/shantytownComment', () => {
                     },
                     fk_shantytown: 1,
                     created_by: 2,
-                    private: true,
                 });
             });
 
@@ -187,7 +186,6 @@ describe.only('services/shantytownComment', () => {
                         targets: comment.targets,
                         fk_shantytown: 1,
                         created_by: user.id,
-                        private: comment.private,
                     })
                     .rejects(nativeError);
 
