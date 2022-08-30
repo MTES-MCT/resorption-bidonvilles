@@ -1,7 +1,7 @@
 const create = require('./create');
-const getTagsFromComment = require('./getTagsFromComment');
+const getTagsForComments = require('./getTagsForComments');
 
 module.exports = {
     create,
-    getTagsFromComment,
+    getTagsForComments,
 };

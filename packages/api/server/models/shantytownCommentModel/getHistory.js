@@ -3,6 +3,7 @@ const { fromGeoLevelToTableName } = require('#server/utils/geo');
 const { formatName } = require('#server/models/userModel');
 const { getUsenameOf, serializeComment } = require('#server/models/shantytownModel');
 const { restrict } = require('#server/utils/permission');
+const shantytownCommentTagModel = require('#server/models/shantytownCommentTagModel/index');
 
 module.exports = async (user, location, numberOfActivities, lastDate, maxDate, onlyCovid = false) => {
     // apply geographic level restrictions
@@ -135,6 +136,10 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate, o
         },
     );
 
+    const commentTags = await shantytownCommentTagModel.getTagsForComments(
+        activities.map(activities.commentId),
+    );
+
     return activities
         .map(activity => ({
             entity: 'comment',
@@ -172,6 +177,9 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate, o
                 },
             },
 
-            comment: serializeComment(activity),
+            comment: serializeComment({
+                ...activity,
+                tags: commentTags[activity.commentId],
+            }),
         }));
 };
