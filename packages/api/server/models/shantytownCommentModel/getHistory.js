@@ -136,9 +136,12 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate, o
         },
     );
 
-    const commentTags = await shantytownCommentTagModel.getTagsForComments(
-        activities.map(activities.commentId),
-    );
+    let commentTags = [];
+    if (activities.length > 0) {
+        commentTags = await shantytownCommentTagModel.getTagsForComments(
+            activities.map(({ commentId }) => commentId),
+        );
+    }
 
     return activities
         .map(activity => ({

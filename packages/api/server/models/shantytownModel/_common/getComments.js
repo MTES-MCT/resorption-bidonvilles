@@ -93,9 +93,12 @@ module.exports = async (user, shantytownIds, covid = false) => {
         },
     );
 
-    const commentTags = await shantytownCommentTagModel.getTagsForComments(
-        rows.map(({ commentId }) => commentId),
-    );
+    let commentTags = [];
+    if (rows.length > 0) {
+        commentTags = await shantytownCommentTagModel.getTagsForComments(
+            rows.map(({ commentId }) => commentId),
+        );
+    }
 
     return rows.reduce((argAcc, row) => {
         const acc = { ...argAcc };

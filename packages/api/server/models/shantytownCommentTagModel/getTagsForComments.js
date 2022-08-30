@@ -5,7 +5,7 @@ module.exports = async (commentIds) => {
     // fetch all tags
     const rows = await sequelize.query(
         `SELECT
-            sct.fk_shantytown_comment AS commentId,
+            sct.fk_shantytown_comment AS "commentId",
             ct.uid,
             ct.tag
         FROM shantytown_comment_tags AS sct
