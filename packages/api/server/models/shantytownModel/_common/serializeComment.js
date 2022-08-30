@@ -1,7 +1,8 @@
 const { getTagsFromComment } = require('#server/models/shantytownCommentTagModel');
 
 module.exports = (async (comment) => {
-    const commentTags = await getTagsFromComment([comment.commentId]);
+    // On récupère les tags du commentaire
+    const commentTags = await getTagsFromComment(comment.commentId);
     let serializedComment = {};
     serializedComment = Object.assign(
         {
