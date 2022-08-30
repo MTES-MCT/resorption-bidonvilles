@@ -32,20 +32,14 @@ module.exports = async (user, shantytownIds, covid = false) => {
             GROUP BY scut.fk_comment
         ),
         comment_tags AS (
-                        SELECT
-                              sct.fk_shantytown_comment,
-                              ARRAY_AGG(sct.fk_comment_tag) AS tags
-                          FROM
-                              shantytown_comments AS sc
-                          LEFT JOIN
-                              shantytown_comment_tags AS sct
-                          ON
-                              sct.fk_shantytown_comment = sc.shantytown_comment_id
-                          WHERE
-                              fk_shantytown IN (:ids)
-                        GROUP BY
-                              sct.fk_shantytown_comment
-                    )
+            SELECT
+                sct.fk_shantytown_comment,
+                ARRAY_AGG(sct.fk_comment_tag) AS tags
+            FROM shantytown_comments AS sc
+            LEFT JOIN shantytown_comment_tags AS sct ON sct.fk_shantytown_comment = sc.shantytown_comment_id
+            WHERE sc.fk_shantytown IN (:ids)
+            GROUP BY sct.fk_shantytown_comment
+        )
         SELECT
             shantytown_comments.shantytown_comment_id AS "commentId",
             shantytown_comments.fk_shantytown AS "shantytownId",
