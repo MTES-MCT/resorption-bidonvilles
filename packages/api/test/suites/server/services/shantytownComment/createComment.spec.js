@@ -124,13 +124,16 @@ describe.only('services/shantytownComment', () => {
             });
 
             it('insère les tags du commentaire en base de données via le modèle shantytownCommentTag/create', () => {
-                expect(dependencies.createCommentTag).to.have.been.calledOnceWith(1, input.comment.tags.map(tag => tag.uid));
+                expect(dependencies.createCommentTag).to.have.been.calledOnceWith(1, [
+                    'livingConditions',
+                    'onSiteVisit',
+                ]);
             });
 
             it('envoie une notification mattermost', () => {
                 expect(dependencies.triggerNewComment).to.have.been.calledOnceWith(
-                    input.comment.description,
-                    input.comment.tags.map(tag => tag.label),
+                    'description',
+                    ['Conditions de vie', 'Passage sur Site'],
                     input.shantytown,
                     input.user,
                 );

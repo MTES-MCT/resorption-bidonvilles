@@ -33,7 +33,7 @@ describe.only('controllers/shantytownComment', () => {
                         targets: { users: [], organizations: [] },
                         shantytown,
                     },
-                    tags: ['livingConditions', 'onSiteVisit'],
+                    tags: [{ uid: 'livingConditions', label: 'Conditions de vie' }, { uid: 'onSiteVisit', label: 'Passage sur Site' }],
                     user,
                 }),
                 mockRes(),
@@ -44,7 +44,7 @@ describe.only('controllers/shantytownComment', () => {
                 {
                     description: 'description',
                     targets: { users: [], organizations: [] },
-                    tags: ['livingConditions', 'onSiteVisit'],
+                    tags: [{ uid: 'livingConditions', label: 'Conditions de vie' }, { uid: 'onSiteVisit', label: 'Passage sur Site' }],
                 },
                 shantytown,
                 user,
@@ -65,8 +65,7 @@ describe.only('controllers/shantytownComment', () => {
                     body: {
                         description: 'description',
                         targets: { users: [{ id: 1 }], organizations: [] },
-                        tags: ['livingConditions', 'onSiteVisit'],
-                        tagLabels: ['Conditions de vie', 'Passage sur site'],
+                        tags: [{ uid: 'livingConditions', label: 'Conditions de vie' }, { uid: 'onSiteVisit', label: 'Passage sur Site' }],
                         shantytown: { id: 1 },
                     },
                     user: fakeUser(),
@@ -97,8 +96,7 @@ describe.only('controllers/shantytownComment', () => {
                         body: {
                             description: '',
                             targets: { users: [], organizations: [] },
-                            tags: ['livingConditions', 'onSiteVisit'],
-                            tagLabels: ['Conditions de vie', 'Passage sur site'],
+                            tags: [{ uid: 'livingConditions', label: 'Conditions de vie' }, { uid: 'onSiteVisit', label: 'Passage sur Site' }],
                             shantytown: { id: 1 },
                         },
                         user: fakeUser(),
@@ -139,8 +137,7 @@ describe.only('controllers/shantytownComment', () => {
                         body: {
                             description: '',
                             targets: { users: [], organizations: [] },
-                            tags: ['livingConditions', 'onSiteVisit'],
-                            tagLabels: ['Conditions de vie', 'Passage sur site'],
+                            tags: [{ uid: 'livingConditions', label: 'Conditions de vie' }, { uid: 'onSiteVisit', label: 'Passage sur Site' }],
                             shantytown: { id: 1 },
                         },
                         user: fakeUser(),
@@ -181,8 +178,7 @@ describe.only('controllers/shantytownComment', () => {
                         body: {
                             description: '',
                             targets: { users: [], organizations: [] },
-                            tags: ['livingConditions', 'onSiteVisit'],
-                            tagLabels: ['Conditions de vie', 'Passage sur site'],
+                            tags: [{ uid: 'livingConditions', label: 'Conditions de vie' }, { uid: 'onSiteVisit', label: 'Passage sur Site' }],
                             shantytown: { id: 1 },
                         },
                         user: fakeUser(),
