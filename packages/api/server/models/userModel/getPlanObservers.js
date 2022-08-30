@@ -18,12 +18,12 @@ module.exports = async (planId, commentId) => sequelize.query(
     LEFT JOIN constants ON TRUE
     LEFT JOIN localized_organizations lo ON u.fk_organization = lo.organization_id
     LEFT JOIN email_unsubscriptions ON email_unsubscriptions.fk_user = u.user_id
-    LEFT JOIN plan_operators po ON po.fk_user = u.user_id
+    LEFT JOIN plan_operators po ON po.fk_user = u.user_id AND po.fk_plan = :planId
     WHERE u.fk_status = 'active'
         AND (lo.departement_code = constants.departement
             AND lo.active IS TRUE)
         AND (email_unsubscriptions.unsubscriptions IS NULL OR NOT('plan_comment_notification' = ANY(email_unsubscriptions.unsubscriptions)))
-        AND (u.fk_role_regular = 'direct_collaborator' OR po.fk_plan = :planId)
+        AND (u.fk_role_regular = 'direct_collaborator' OR po.fk_plan IS NOT null)
     `,
     {
         type: sequelize.QueryTypes.SELECT,

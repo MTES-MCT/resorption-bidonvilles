@@ -18,7 +18,7 @@ const getHistory = require('./getHistory');
 const getLocationWatchers = require('./getLocationWatchers');
 const getNationalAdmins = require('./_common/getNationalAdmins');
 const getShantytownWatchers = require('./getShantytownWatchers');
-const getPlanWatchers = require('./getPlanWatchers');
+const getPlanObservers = require('./getPlanObservers');
 const listExport = require('./listExport');
 const setPermissionOptions = require('./setPermissionOptions');
 const update = require('./update');
@@ -45,7 +45,7 @@ module.exports = {
     getLocationWatchers,
     getNationalAdmins,
     getShantytownWatchers,
-    getPlanWatchers,
+    getPlanObservers,
     listExport,
     setPermissionOptions,
     update,
