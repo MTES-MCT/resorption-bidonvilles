@@ -6,20 +6,6 @@
                 - {{ nbComments }} message{{ nbComments > 1 ? "s" : "" }}
             </span>
         </div>
-        <CheckableGroup
-            direction="horizontal"
-            label="Quels sont les mots clés caractérisant votre commentaire ?"
-            validationName="Thèmes des commentaires"
-        >
-            <Checkbox
-                v-for="commentTag in regularCommentTags"
-                v-bind:key="commentTag.uid"
-                variant="card"
-                :label="commentTag.label"
-                :checkValue="commentTag.uid"
-                v-model="tags"
-            ></Checkbox>
-        </CheckableGroup>
         <div class="text-display-md font-bold pt-6 pb-4">
             Partager une info
         </div>
@@ -34,6 +20,20 @@
                 v-model="newComment"
                 placeholder="Partagez votre passage sur le site, le contexte sanitaire, la situation des habitants, difficultés rencontrées lors de votre intervention…"
             />
+            <CheckableGroup
+                direction="horizontal"
+                label="Quels sont les mots clés caractérisant votre commentaire ?"
+                validationName="Thèmes des commentaires"
+            >
+                <Checkbox
+                    v-for="commentTag in regularCommentTags"
+                    v-bind:key="commentTag.uid"
+                    variant="card"
+                    :label="commentTag.label"
+                    :checkValue="commentTag.uid"
+                    v-model="tags"
+                ></Checkbox>
+            </CheckableGroup>
             <div
                 class="flex flex-col"
                 v-if="
