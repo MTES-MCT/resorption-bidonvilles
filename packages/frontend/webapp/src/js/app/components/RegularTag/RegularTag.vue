@@ -5,7 +5,8 @@
 </template>
 
 <script>
-import specialTagsColl from "./specialTags";
+import specialTags from "./specialTags";
+
 export default {
     props: {
         tag: {
@@ -14,19 +15,15 @@ export default {
         }
     },
     computed: {
-        tagClass: function() {
-            const { specialTags } = specialTagsColl;
-            // Class par défaut pour un regularTag ordinaire ("regular")
-            let tagClass = "text-black bg-blue300";
-            // On recherche si le tag fait partie des tags particuliers
-            const resultat = specialTags.find(
-                specialTag => specialTag.uid === this.tag.uid
+        tagClass() {
+            const specialTag = specialTags.find(
+                ({ uid }) => uid === this.tag.uid
             );
-            // S'il s'agit d'un tag particulier, on applique la mise en forme qui correspond
-            if (resultat !== undefined) {
-                tagClass = resultat.class;
+            if (specialTag !== undefined) {
+                return specialTag.class;
             }
-            return tagClass;
+
+            return "text-black bg-blue300";
         }
     }
 };
