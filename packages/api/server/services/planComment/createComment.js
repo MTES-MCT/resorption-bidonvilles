@@ -7,13 +7,6 @@ const userModel = require('#server/models/userModel');
 const mails = require('#server/mails/mails');
 const ServiceError = require('#server/errors/ServiceError');
 
-/**
- * @param {Service_PlanComment_Create_CommentData} comment Commentaire
- * @param {Model_Plan} plan action rattaché au commentaire
- * @param {Model_User} author Auteur du commentaire
- *
- * @returns {Array.<Model_PlanComment>}
- */
 module.exports = async (comment, plan, author) => {
     // on insère le commentaire
     let commentId;
@@ -46,7 +39,7 @@ module.exports = async (comment, plan, author) => {
 
     // on tente d'envoyer une notification mail à tous les intervenants et correspondants de l'action
     try {
-        const watchers = await userModel.getPlanWatchers(
+        const watchers = await userModel.getPlanObservers(
             plan.id,
             commentId,
         );
