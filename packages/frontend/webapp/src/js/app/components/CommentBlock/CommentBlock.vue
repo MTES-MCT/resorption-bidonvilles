@@ -64,14 +64,14 @@
                     :class="['mr-2', 'mb-2']"
                     :tag="tag"
                 />
+                <RegularTag
+                    v-for="(tag, index) in comment.tags"
+                    :key="index"
+                    :class="['mr-2', 'mb-2']"
+                    :tag="tag"
+                />
             </div>
             <div class="whitespace-pre-line">{{ comment.description }}</div>
-            <RegularTag
-                v-for="(tag, index) in comment.tags"
-                :key="index"
-                :class="['mr-2', 'mb-2']"
-                :tag="tag"
-            />
         </div>
     </div>
 </template>
