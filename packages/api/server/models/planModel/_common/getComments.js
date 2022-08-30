@@ -34,8 +34,6 @@ module.exports = async (user, planIds) => {
             type: sequelize.QueryTypes.SELECT,
             replacements: {
                 ids: planIds,
-                userId: user.id,
-                organizationId: user.organization.id,
             },
         },
     );
