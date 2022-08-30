@@ -7,7 +7,7 @@ module.exports = {
             },
         )
             .then(() => queryInterface.sequelize.query(
-                'INSERT INTO features(name, fk_entity, is_writing) VALUES(\'create\', \'plan_comment\', false)',
+                'INSERT INTO features(name, fk_entity, is_writing) VALUES(\'create\', \'plan_comment\', true)',
                 {
                     transaction,
                 },
