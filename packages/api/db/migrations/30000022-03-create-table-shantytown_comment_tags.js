@@ -72,8 +72,8 @@ module.exports = {
     async down(queryInterface) {
         const transaction = await queryInterface.sequelize.transaction();
         await Promise.all([
-            queryInterface.removeConstraint('shantytown_comment_tags', 'fk_comment_tag_idx', { transaction }),
-            queryInterface.removeConstraint('shantytown_comment_tags', 'fk_shantytown_comment_idx', { transaction }),
+            queryInterface.removeIndex('shantytown_comment_tags', 'fk_comment_tag_idx', { transaction }),
+            queryInterface.removeIndex('shantytown_comment_tags', 'fk_shantytown_comment_idx', { transaction }),
             queryInterface.removeConstraint('shantytown_comment_tags', 'fk_shantytown_comment_id', { transaction }),
             queryInterface.removeConstraint('shantytown_comment_tags', 'fk_comment_tags_uid', { transaction }),
         ]);
