@@ -1,11 +1,13 @@
 
 const shantytownCommentModel = require('#server/models/shantytownCommentModel');
 const shantytownModel = require('#server/models/shantytownModel');
+const shantytownCommentTagModel = require('#server/models/shantytownCommentTagModel');
 const mattermostUtils = require('#server/utils/mattermost');
 
 const userModel = require('#server/models/userModel');
 const mails = require('#server/mails/mails');
 const ServiceError = require('#server/errors/ServiceError');
+const sequelize = require('#db/sequelize');
 
 /**
  * @param {Service_ShantytownComment_Create_CommentData} comment Commentaire
@@ -17,20 +19,31 @@ const ServiceError = require('#server/errors/ServiceError');
 module.exports = async (comment, shantytown, author) => {
     // on insère le commentaire
     let commentId;
+    let transaction;
     try {
+        transaction = await sequelize.transaction();
+        // Insérer le commentaire dans la table shantytown_comments
         commentId = await shantytownCommentModel.create({
             description: comment.description,
             targets: comment.targets,
             fk_shantytown: shantytown.id,
             created_by: author.id,
-        });
+        }, transaction);
+        // Insérer les tags du commentaire dans la table shantytown_comment_tags
+        const { tags } = comment;
+        if (tags.length > 0) {
+            // Enregistrement des tags dans la table shantytown_comment_tags
+            await shantytownCommentTagModel.create(commentId, tags.map(tag => tag.uid), transaction);
+        }
+        await transaction.commit();
     } catch (error) {
+        transaction.rollback();
         throw new ServiceError('insert_failed', error);
     }
 
     // on tente d'envoyer une notification Mattermost
     try {
-        await mattermostUtils.triggerNewComment(comment.description, shantytown, author);
+        await mattermostUtils.triggerNewComment(comment.description, comment.tags.map(tag => tag.label), shantytown, author);
     } catch (error) {
         // ignore
     }
@@ -58,7 +71,15 @@ module.exports = async (comment, shantytown, author) => {
         if (watchers.length > 0) {
             const serializedComment = await shantytownCommentModel.findOne(commentId);
             await Promise.all(
-                watchers.map(user => mails.sendUserNewComment(user, { variables: { shantytown, comment: serializedComment } })),
+                watchers.map(user => mails.sendUserNewComment(
+                    user,
+                    {
+                        variables: {
+                            shantytown,
+                            comment: serializedComment,
+                        },
+                    },
+                )),
             );
         }
     } catch (error) {

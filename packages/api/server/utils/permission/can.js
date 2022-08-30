@@ -40,19 +40,19 @@ module.exports = user => ({
                 }
 
                 // check locations
-                if (geoLocation.city !== null && (permission.allowed_on.cities.includes(geoLocation.city.code) || permission.allowed_on.cities.includes(geoLocation.city.main))) {
+                if (geoLocation.city && (permission.allowed_on.cities.includes(geoLocation.city.code) || permission.allowed_on.cities.includes(geoLocation.city.main))) {
                     return true;
                 }
 
-                if (geoLocation.epci !== null && permission.allowed_on.epci.includes(geoLocation.epci.code)) {
+                if (geoLocation.epci && permission.allowed_on.epci.includes(geoLocation.epci.code)) {
                     return true;
                 }
 
-                if (geoLocation.departement !== null && permission.allowed_on.departements.includes(geoLocation.departement.code)) {
+                if (geoLocation.departement && permission.allowed_on.departements.includes(geoLocation.departement.code)) {
                     return true;
                 }
 
-                if (geoLocation.region !== null && permission.allowed_on.regions.includes(geoLocation.region.code)) {
+                if (geoLocation.region && permission.allowed_on.regions.includes(geoLocation.region.code)) {
                     return true;
                 }
 

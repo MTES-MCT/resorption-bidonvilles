@@ -1,20 +1,21 @@
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const Sequelize = require('sequelize-mock');
+const SequelizeMock = require('sequelize-mock');
 
 chai.use(sinonChai);
 
 const { expect } = chai;
 const ServiceError = require('#server/errors/ServiceError');
 const shantytownCommentModel = require('#server/models/shantytownCommentModel');
+const shantytownCommentTagModel = require('#server/models/shantytownCommentTagModel');
 const shantytownModel = require('#server/models/shantytownModel');
 const userModel = require('#server/models/userModel');
 const mattermostUtils = require('#server/utils/mattermost');
 const mails = require('#server/mails/mails');
 
 
-const sequelizeStub = new Sequelize();
+const sequelizeStub = new SequelizeMock();
 
 const createComment = require('#server/services/shantytownComment/createComment');
 
@@ -24,6 +25,7 @@ const { serialized: fakeComment } = require('#test/utils/shantytownComment');
 describe.only('services/shantytownComment', () => {
     const dependencies = {
         createComment: undefined,
+        createCommentTag: undefined,
         findOneComment: undefined,
         getComments: undefined,
         triggerNewComment: undefined,
@@ -34,6 +36,7 @@ describe.only('services/shantytownComment', () => {
         dependencies.getComments = sinon.stub(shantytownModel, 'getComments');
         dependencies.getShantytownWatchers = sinon.stub(userModel, 'getShantytownWatchers');
         dependencies.createComment = sinon.stub(shantytownCommentModel, 'create');
+        dependencies.createCommentTag = sinon.stub(shantytownCommentTagModel, 'create');
         dependencies.findOneComment = sinon.stub(shantytownCommentModel, 'findOne');
         dependencies.triggerNewComment = sinon.stub(mattermostUtils, 'triggerNewComment');
         dependencies.sendMail = sinon.stub(mails, 'sendUserNewComment');
@@ -56,6 +59,10 @@ describe.only('services/shantytownComment', () => {
                             users: [{ id: 1 }],
                             organizations: [],
                         },
+                        tags: [
+                            { uid: 'conditions_de_vie', label: 'Conditions de vie', type: 'ordinaire' },
+                            { uid: 'passage_sur_site', label: 'Passage sur site', type: 'ordinaire' },
+                        ],
                     },
                     shantytown: { id: 1 },
                     user: fakeUser(),
@@ -72,6 +79,10 @@ describe.only('services/shantytownComment', () => {
                 // createComment() retourne un id de commentaire
                 dependencies.createComment
                     .resolves(1);
+
+                // createCommentTag() retourne un tableau d'objet identifiant chaque tag du commentaire
+                dependencies.createCommentTag
+                    .resolves();
 
                 // getComments() retourne une liste de commentaires
                 dependencies.getComments
@@ -111,9 +122,17 @@ describe.only('services/shantytownComment', () => {
                 });
             });
 
+            it('insère les tags du commentaire en base de données via le modèle shantytownCommentTag/create', () => {
+                expect(dependencies.createCommentTag).to.have.been.calledOnceWith(1, [
+                    'conditions_de_vie',
+                    'passage_sur_site',
+                ]);
+            });
+
             it('envoie une notification mattermost', () => {
                 expect(dependencies.triggerNewComment).to.have.been.calledOnceWith(
                     'description',
+                    ['Conditions de vie', 'Passage sur site'],
                     input.shantytown,
                     input.user,
                 );
@@ -126,6 +145,7 @@ describe.only('services/shantytownComment', () => {
                         shantytown: input.shantytown,
                         comment: output.comment,
                     },
+
                 });
                 expect(dependencies.sendMail).to.have.been.calledWithExactly(output.watchers[1], {
                     variables: {
@@ -193,6 +213,8 @@ describe.only('services/shantytownComment', () => {
                     users: [{ id: 1 }],
                     organizations: [],
                 },
+                tags: ['conditions_de_vie'],
+                tagLabels: ['Conditions de vie'],
             };
             const user = fakeUser();
             const nativeError = new Error('une erreur');
@@ -221,6 +243,8 @@ describe.only('services/shantytownComment', () => {
                     users: [{ id: 1 }],
                     organizations: [],
                 },
+                tags: ['conditions_de_vie'],
+                tagLabels: ['Conditions de vie'],
             };
             const user = fakeUser();
             const nativeError = new Error('une erreur');
