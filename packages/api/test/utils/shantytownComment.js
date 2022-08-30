@@ -16,8 +16,8 @@ module.exports = {
             },
             shantytown: 1,
             tags: [
-                { uid: 'livingConditions', label: 'Conditions de vie', type: 'ordinaire' },
-                { uid: 'onSiteVisit', label: 'Passage sur Site', type: 'ordinaire' },
+                { uid: 'conditions_de_vie', label: 'Conditions de vie', type: 'ordinaire' },
+                { uid: 'passage_sur_site', label: 'Passage sur site', type: 'ordinaire' },
             ],
         };
 

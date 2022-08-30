@@ -19,27 +19,27 @@ module.exports = {
             'comment_tags',
             [
                 {
-                    uid: 'livingConditions',
+                    uid: 'conditionss_de_vie',
                     tag: 'Conditions de vie',
                     fk_comment_tag_type: 'regular',
                 },
                 {
-                    uid: 'socialAssistance',
+                    uid: 'accommpagnement_social',
                     tag: 'Accompagnement social',
                     fk_comment_tag_type: 'regular',
                 },
                 {
-                    uid: 'populationDisplacement',
+                    uid: 'deplacement_de_populations',
                     tag: 'Déplacement de populations',
                     fk_comment_tag_type: 'regular',
                 },
                 {
-                    uid: 'fire',
+                    uid: 'incendie',
                     tag: 'Incendie',
                     fk_comment_tag_type: 'regular',
                 },
                 {
-                    uid: 'onSiteVisit',
+                    uid: 'passage_sur_site',
                     tag: 'Passage sur site',
                     fk_comment_tag_type: 'regular',
                 },

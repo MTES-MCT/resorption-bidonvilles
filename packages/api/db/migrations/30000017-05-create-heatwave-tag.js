@@ -3,7 +3,7 @@ module.exports = {
         'comment_tags',
         [
             {
-                uid: 'heatwave',
+                uid: 'canicule',
                 tag: 'Canicule',
                 fk_comment_tag_type: 'regular',
             },
@@ -11,6 +11,6 @@ module.exports = {
     ),
 
     down: queryInterface => queryInterface.sequelize.query(
-        'DELETE FROM comment_tags WHERE uid = \'heatwave\'',
+        'DELETE FROM comment_tags WHERE uid = \'canicule\'',
     ),
 };

@@ -1,6 +1,6 @@
 export default [
     {
-        uid: "heatwave",
+        uid: "canicule",
         class: "inline-block text-white bg-red600"
     },
     {

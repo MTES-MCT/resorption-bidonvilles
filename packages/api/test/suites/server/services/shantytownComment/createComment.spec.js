@@ -60,8 +60,8 @@ describe.only('services/shantytownComment', () => {
                             organizations: [],
                         },
                         tags: [
-                            { uid: 'livingConditions', label: 'Conditions de vie', type: 'ordinaire' },
-                            { uid: 'onSiteVisit', label: 'Passage sur Site', type: 'ordinaire' },
+                            { uid: 'conditions_de_vie', label: 'Conditions de vie', type: 'ordinaire' },
+                            { uid: 'passage_sur_site', label: 'Passage sur site', type: 'ordinaire' },
                         ],
                     },
                     shantytown: { id: 1 },
@@ -125,15 +125,15 @@ describe.only('services/shantytownComment', () => {
 
             it('insère les tags du commentaire en base de données via le modèle shantytownCommentTag/create', () => {
                 expect(dependencies.createCommentTag).to.have.been.calledOnceWith(1, [
-                    'livingConditions',
-                    'onSiteVisit',
+                    'conditions_de_vie',
+                    'passage_sur_site',
                 ]);
             });
 
             it('envoie une notification mattermost', () => {
                 expect(dependencies.triggerNewComment).to.have.been.calledOnceWith(
                     'description',
-                    ['Conditions de vie', 'Passage sur Site'],
+                    ['Conditions de vie', 'Passage sur site'],
                     input.shantytown,
                     input.user,
                 );
@@ -215,7 +215,7 @@ describe.only('services/shantytownComment', () => {
                     users: [{ id: 1 }],
                     organizations: [],
                 },
-                tags: ['livingConditions'],
+                tags: ['conditions_de_vie'],
                 tagLabels: ['Conditions de vie'],
             };
             const user = fakeUser();
@@ -245,7 +245,7 @@ describe.only('services/shantytownComment', () => {
                     users: [{ id: 1 }],
                     organizations: [],
                 },
-                tags: ['livingConditions'],
+                tags: ['conditions_de_vie'],
                 tagLabels: ['Conditions de vie'],
             };
             const user = fakeUser();
