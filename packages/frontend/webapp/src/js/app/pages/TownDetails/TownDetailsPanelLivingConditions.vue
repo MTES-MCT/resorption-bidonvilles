@@ -2,6 +2,7 @@
     <DetailsPanel>
         <template v-slot:title>Conditions de vie et environnement</template>
         <template v-slot:body>
+            <span>{{ town.livingConditions.pest_animals.status.status }}</span>
             <Tag
                 variant="pin_red"
                 :uppercase="false"
@@ -74,7 +75,7 @@
 
             <div v-if="town.livingConditions.version === 2">
                 <TownDetailsPanelLivingConditionsSection
-                    title="Présence de nuisibles"
+                    :title="pestAnimalsWording"
                     :status="town.livingConditions.pest_animals.status"
                     :inverted="true"
                     :answers="answers.pest_animals"
@@ -226,6 +227,13 @@ export default {
             }
 
             return response;
+        },
+        pestAnimalsWording() {
+            return ["good"].includes(
+                this.town.livingConditions.pest_animals.status.status
+            )
+                ? "Absence de nuisibles"
+                : "Présence de nuisibles";
         }
     }
 };
