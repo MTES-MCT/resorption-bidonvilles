@@ -62,22 +62,19 @@ export default {
             }
         },
 
-        updatePlanComments(state, { planId, comment }) {
-            if (
-                state.detailedPlan !== null &&
-                state.detailedPlan.id === planId
-            ) {
+        updatePlanComments(state, { id, response }) {
+            if (state.detailedPlan !== null && state.detailedPlan.id === id) {
                 state.detailedPlan.comments = [
-                    comment,
+                    response.comment,
                     ...state.detailedPlan.comments
                 ];
             }
 
-            const index = state.hash[planId];
+            const index = state.hash[id];
             if (index !== undefined) {
                 state.items.splice(index, 1, {
                     ...state.items[index],
-                    comments: [comment, ...state.items[index].comments]
+                    comments: [response.comment, ...state.items[index].comments]
                 });
             }
         }
