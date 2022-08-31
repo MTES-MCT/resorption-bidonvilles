@@ -147,8 +147,15 @@
                                     shantytown.livingConditions[verminKey]
                                         .status.status
                                 "
-                                >pres. de nuisibles</TownCardIcon
-                            >
+                                >{{
+                                    ["good"].includes(
+                                        shantytown.livingConditions[verminKey]
+                                            .status.status
+                                    )
+                                        ? "abs. de nuisibles"
+                                        : "pres. de nuisibles"
+                                }}
+                            </TownCardIcon>
                             <TownCardIcon
                                 :status="
                                     shantytown.livingConditions[fireKey].status
