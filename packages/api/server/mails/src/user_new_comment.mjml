@@ -11,7 +11,7 @@
             <mj-column>
                 <mj-text mj-class="pb-4">Bonjour,</mj-text>
                 <mj-text>
-                    Un nouveau message a été publié par {{var:createdBy.name}} ({{var:createdBy.organization}}) sur le site situé {{var:shantytown.addressSimple}} ({{var:shantytown.departement.name}}).
+                    Un nouveau message a été publié par {{var:createdBy.name}} ({{var:createdBy.organization}}) sur le site situé {{var:shantytown.addressSimple}} ({{var:shantytown.city.name}} - {{var:shantytown.departement.name}}).
                 </mj-text>
             </mj-column>
         </mj-section>
