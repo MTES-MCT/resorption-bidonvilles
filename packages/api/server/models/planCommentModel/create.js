@@ -1,7 +1,7 @@
 const sequelize = require('#db/sequelize');
 
 
-module.exports = async data => sequelize.transaction(async (transaction) => {
+module.exports = async (data) => {
     const [[{ plan_comment_id }]] = await sequelize.query(
         `INSERT INTO plan_comments(
             description,
@@ -17,8 +17,7 @@ module.exports = async data => sequelize.transaction(async (transaction) => {
         {
             replacements: data,
         },
-        transaction,
     );
 
     return plan_comment_id;
-});
+};
