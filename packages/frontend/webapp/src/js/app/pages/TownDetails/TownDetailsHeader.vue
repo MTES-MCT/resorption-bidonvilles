@@ -77,7 +77,7 @@
                 >Corriger la fermeture du site</Button
             >
             <Button
-                icon="file-excel"
+                icon="file-word"
                 iconPosition="left"
                 variant="primary"
                 class="mr-8"

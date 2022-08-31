@@ -26,6 +26,7 @@ import {
     faEnvelope,
     faPlayCircle,
     faFileExcel,
+    faFileWord,
     faSortDown,
     faCaretSquareLeft,
     faCaretSquareRight,
@@ -112,6 +113,7 @@ library.add(faEnvelope);
 library.add(faPhone);
 library.add(faPlayCircle);
 library.add(faFileExcel);
+library.add(faFileWord);
 library.add(faSortDown);
 library.add(faCaretSquareLeft);
 library.add(faCaretSquareRight);
