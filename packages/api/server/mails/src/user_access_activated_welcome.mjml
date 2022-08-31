@@ -19,7 +19,7 @@
                 <mj-text>
                     Pour prendre en main rapidement la plateforme, téléchargez le court guide de l’utilisateur et participez à une session de formation personnalisée, nous répondrons à toutes vos questions.
                 </mj-text>
-                <mj-button mj-class="button-secondary" padding="1rem 0 0 0" href="{{var:userGuideUrl}}" rel="noopener noreferrer">
+                <mj-button mj-class="button-secondary" padding="16px 0 16px 0" href="{{var:userGuideUrl}}" rel="noopener noreferrer">
                     Télécharger mon guide utilisateur
                 </mj-button>
                 <mj-include path='common/formation_cta_me.mjml' />
