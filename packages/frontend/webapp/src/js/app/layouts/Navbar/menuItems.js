@@ -1,3 +1,5 @@
+import { VUE_APP_WWW_URL } from "#src/js/env.js";
+
 export default {
     anonymous: [
         {
@@ -12,14 +14,14 @@ export default {
         },
         {
             label: "Aide",
-            target: "/mentions-legales",
+            target: `${VUE_APP_WWW_URL}/mentions-legales`,
             menu: "upper"
         }
     ],
     loading: [
         {
             label: "Aide",
-            target: "/mentions-legales",
+            target: `${VUE_APP_WWW_URL}/mentions-legales`,
             menu: "upper"
         },
         {
@@ -102,7 +104,7 @@ export default {
         },
         {
             label: "Aide",
-            target: "/mentions-legales",
+            target: `${VUE_APP_WWW_URL}/mentions-legales`,
             menu: "upper"
         },
         {
