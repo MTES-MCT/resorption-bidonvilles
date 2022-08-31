@@ -81,9 +81,6 @@ export default {
     },
 
     actions: {
-        setDetailedPlan({ commit }, { plan }) {
-            commit("setDetailedPlan", plan);
-        },
         async fetchPlans({ state, commit, rootState }) {
             if (state.state === "loading") {
                 return;

@@ -340,7 +340,7 @@ export default {
                             "Cette action n'existe pas, ou son accès vous est interdit"
                     };
                 }
-                await this.$store.dispatch("setDetailedPlan", { plan });
+                await this.$store.commit("setDetailedPlan", plan);
                 setTimeout(this.goToAnchor, 50);
             } catch (error) {
                 this.error =
