@@ -127,7 +127,6 @@
                     id="comment"
                     :departementCode="plan.departement.code"
                     :nbComments="plan.comments.length"
-                    :user="user"
                 />
             </PrivateContainer>
         </div>
@@ -225,9 +224,6 @@ export default {
     computed: {
         plan() {
             return this.$store.state.plans.detailedPlan;
-        },
-        user() {
-            return this.$store.state.config.configuration.user;
         },
         topics() {
             if (!this.plan) {

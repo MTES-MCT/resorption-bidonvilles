@@ -74,11 +74,13 @@ export default {
         nbComments: {
             type: Number
         },
-        user: {
-            type: Object
-        },
         departementCode: {
             type: String
+        }
+    },
+    computed: {
+        user() {
+            return this.$store.state.config.configuration.user;
         }
     },
     methods: {
