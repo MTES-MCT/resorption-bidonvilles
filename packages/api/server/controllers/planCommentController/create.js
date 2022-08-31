@@ -1,10 +1,10 @@
 const planCommentService = require('#server/services/planComment');
 
 module.exports = async (req, res, next) => {
-    let comments;
+    let comment;
 
     try {
-        comments = await planCommentService.createComment(
+        comment = await planCommentService.createComment(
             {
                 description: req.body.description,
             },
@@ -33,6 +33,6 @@ module.exports = async (req, res, next) => {
     }
 
     return res.status(201).send({
-        comments,
+        comment,
     });
 };

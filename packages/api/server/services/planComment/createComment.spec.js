@@ -7,7 +7,6 @@ chai.use(sinonChai);
 
 const planCommentModel = require('#server/models/planCommentModel');
 const userModel = require('#server/models/userModel');
-const planModel = require('#server/models/planModel');
 
 
 const mails = require('#server/mails/mails');
@@ -24,16 +23,13 @@ describe.only('services/planComment', () => {
         const user = fakeUser();
         const plan = fakePlan({ departement: 1, region: 84 });
         const newComment = { description: 'ceci est un commentaire de test', id: 2, plan: plan.id };
-        const planComments = {};
-        planComments[plan.id] = [{ description: 'autre commentaire', id: 1, plan: plan.id }, newComment];
         let stubs;
 
         beforeEach(() => {
             stubs = {
                 createComment: sinon.stub(planCommentModel, 'create'),
                 findOne: sinon.stub(planCommentModel, 'findOne'),
-                getComments: sinon.stub(planModel, 'getComments'),
-                getPlanWatchers: sinon.stub(userModel, 'getPlanWatchers'),
+                getPlanObservers: sinon.stub(userModel, 'getPlanObservers'),
                 triggerNewPlanComment: sinon.stub(mattermostUtils, 'triggerNewPlanComment'),
                 sendUserNewPlanComment: sinon.stub(mails, 'sendUserNewPlanComment'),
             };
@@ -45,7 +41,7 @@ describe.only('services/planComment', () => {
 
         it('crée le commentaire en base de données et le renvoie', async () => {
             stubs.createComment.resolves(newComment.id);
-            stubs.getComments.resolves(planComments);
+            stubs.findOne.resolves(newComment);
 
             const response = await createCommentService(newComment, plan, user);
             expect(stubs.createComment).to.have.been.calledOnceWith({
@@ -53,20 +49,20 @@ describe.only('services/planComment', () => {
                 fk_plan: plan.id,
                 created_by: user.id,
             });
-            expect(response).to.be.eql(planComments[plan.id]);
+            expect(response).to.be.eql(newComment);
         });
         it('envoie une notification mattermost', async () => {
             stubs.createComment.resolves(newComment.id);
-            stubs.getComments.resolves(planComments);
+            stubs.findOne.resolves(newComment);
             await createCommentService(newComment, plan, user);
             // eslint-disable-next-line no-unused-expressions
             expect(stubs.triggerNewPlanComment).to.have.been.calledOnce;
         });
         it('envoie une notification mail aux personnes concernées', async () => {
-            const watchers = [fakeUser(), fakeUser(), fakeUser()];
+            const observers = [fakeUser(), fakeUser(), fakeUser()];
             stubs.createComment.resolves(newComment.id);
-            stubs.getComments.resolves(planComments);
-            stubs.getPlanWatchers.resolves(watchers);
+            stubs.findOne.resolves(newComment);
+            stubs.getPlanObservers.resolves(observers);
             stubs.findOne.resolves(newComment);
             await createCommentService(newComment, plan, user);
             // eslint-disable-next-line no-unused-expressions

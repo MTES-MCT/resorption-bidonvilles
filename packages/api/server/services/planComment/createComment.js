@@ -1,6 +1,5 @@
 
 const planCommentModel = require('#server/models/planCommentModel');
-const planModel = require('#server/models/planModel');
 const mattermostUtils = require('#server/utils/mattermost');
 
 const userModel = require('#server/models/userModel');
@@ -27,27 +26,24 @@ module.exports = async (comment, plan, author) => {
         // ignore
     }
 
-    // on retourne la liste mise à jour des commentaires de l'action
-    let planComments;
+    // on retourne le commentaire
+    let serializedComment;
     try {
-        [planComments] = await Promise.all([
-            planModel.getComments(author, [plan.id]),
-        ]);
+        serializedComment = await planCommentModel.findOne(commentId);
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }
 
     // on tente d'envoyer une notification mail à tous les intervenants et correspondants de l'action
     try {
-        const watchers = await userModel.getPlanObservers(
+        const observers = await userModel.getPlanObservers(
             plan.id,
             commentId,
         );
 
-        if (watchers.length > 0) {
-            const serializedComment = await planCommentModel.findOne(commentId);
+        if (observers.length > 0) {
             await Promise.all(
-                watchers.map(user => mails.sendUserNewPlanComment(user, { variables: { plan, comment: serializedComment } })),
+                observers.map(user => mails.sendUserNewPlanComment(user, { variables: { plan, comment: serializedComment } })),
             );
         }
     } catch (error) {
@@ -55,5 +51,5 @@ module.exports = async (comment, plan, author) => {
     }
 
 
-    return planComments[plan.id];
+    return serializedComment;
 };

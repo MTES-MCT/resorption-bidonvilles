@@ -62,19 +62,22 @@ export default {
             }
         },
 
-        updatePlanComments(state, { planId, comments }) {
+        updatePlanComments(state, { planId, comment }) {
             if (
                 state.detailedPlan !== null &&
                 state.detailedPlan.id === planId
             ) {
-                state.detailedPlan.comments = comments;
+                state.detailedPlan.comments = [
+                    comment,
+                    ...state.detailedPlan.comments
+                ];
             }
 
             const index = state.hash[planId];
             if (index !== undefined) {
                 state.items.splice(index, 1, {
                     ...state.items[index],
-                    comments: comments
+                    comments: [comment, ...state.items[index].comments]
                 });
             }
         }

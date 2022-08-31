@@ -18,9 +18,9 @@ export default {
     }
 };
 
-async function publish(apiMethod, planId, comment, matomoAction, commit) {
-    const { comments } = await apiMethod(planId, comment);
-    commit("updatePlanComments", { planId, comments }, { root: true });
+async function publish(apiMethod, planId, newComment, matomoAction, commit) {
+    const { comment } = await apiMethod(planId, newComment);
+    commit("updatePlanComments", { planId, comment }, { root: true });
 
     notify({
         group: "notifications",
