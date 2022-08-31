@@ -177,6 +177,15 @@ export default {
                 }
             }
 
+            // Le libellé (text) ce ce critère est "Présence de nuisible" si le statut est "bad" et "Absence de nuisible" si le statut est good
+            // Dans ces 2 cas, il faut donc que la valeur affichée soit "oui", e qui correspond à la propriété "good" de l'objet' "texts"
+            if (
+                this.title.includes("nuisible") &&
+                ["good", "bad"].includes(this.status.status)
+            ) {
+                status = "good";
+            }
+
             return this.texts[status] || "inconnu";
         }
     }
