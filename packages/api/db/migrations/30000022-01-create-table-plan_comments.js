@@ -7,7 +7,6 @@ module.exports = {
             {
                 plan_comment_id: {
                     type: Sequelize.INTEGER,
-                    allowNull: false,
                     primaryKey: true,
                     autoIncrement: true,
                 },
