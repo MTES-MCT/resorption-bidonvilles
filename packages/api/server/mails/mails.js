@@ -545,7 +545,8 @@ module.exports = {
                 comment: variables.comment.description,
                 rootAnnuaireUrl: `${webappUrl}/annuaire?${utm}`,
                 annuaireUrl: `${webappUrl}/annuaire/${variables.comment.createdBy.organization_id}?${utm}`,
-                messageUrl: `${webappUrl}/site/${variables.plan.id}#comment`,
+                planUrl: `${webappUrl}/action/${variables.plan.id}`,
+                messageUrl: `${webappUrl}/action/${variables.plan.id}#comment`,
             },
             preserveRecipient,
         });
