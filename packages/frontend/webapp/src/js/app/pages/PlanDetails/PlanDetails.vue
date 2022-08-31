@@ -106,52 +106,50 @@
                     />
                 </div>
             </div>
-
-            <div class="bg-orange200 py-10 mt-8">
-                <PrivateContainer class="flex items-center">
-                    <div class="leftColumnWidth text-sm">
-                        <NewCommentLeftColumn
-                            class="mb-4"
-                            icon="info-circle"
-                            title="À qui sont destinés les messages ?"
-                            description="À tous les acteurs de l'action. Un mail est automatiquement envoyé aux opérateurs qui interviennent sur l'action et aux correspondants."
-                        ></NewCommentLeftColumn>
-                        <NewCommentLeftColumn
-                            icon="exclamation-triangle"
-                            title="Quelles sont les règles de confidentialités ?"
-                            description="Ne pas citer l’identité des individus (nom, âge, sexe, origine…), ni les infos relatives à d'éventuelles condamnations judiciaires. Ne pas tenir de propos à visée insultante, discriminatoire, raciste ..."
-                        ></NewCommentLeftColumn>
-                    </div>
-                    <PlanDetailsNewComment
-                        id="comment"
-                        :departementCode="plan.departement.code"
-                        :nbComments="plan.comments.length"
-                        :user="user"
-                    />
-                </PrivateContainer>
-            </div>
-
-            <div
-                :class="[
-                    'bg-orange200',
-                    'pt-10',
-                    plan.comments.length > 0 && 'pb-32'
-                ]"
-                v-if="
-                    plan.comments.length > 0 &&
-                        $store.getters['config/hasPermission'](
-                            'plan_comment.list'
-                        )
-                "
-            >
-                <PrivateContainer class="flex" id="comments">
-                    <div class="leftColumnWidth" />
-                    <PlanDetailsComments
-                        :comments="plan.comments"
-                    ></PlanDetailsComments>
-                </PrivateContainer>
-            </div>
         </PrivateContainer>
+
+        <div class="bg-orange200 py-10 mt-8">
+            <PrivateContainer class="flex items-center">
+                <div class="leftColumnWidth text-sm">
+                    <NewCommentLeftColumn
+                        class="mb-4"
+                        icon="info-circle"
+                        title="À qui sont destinés les messages ?"
+                        description="À tous les acteurs concernés pas l'action. Un mail est automatiquement envoyé aux opérateurs ou services en charge de l'action et aux acteurs en DDETS et Préfecture."
+                    ></NewCommentLeftColumn>
+                    <NewCommentLeftColumn
+                        icon="exclamation-triangle"
+                        title="Quelles sont les règles de confidentialités ?"
+                        description="Ne pas citer l’identité des individus (nom, âge, sexe, origine…), ni les infos relatives à d'éventuelles condamnations judiciaires. Ne pas tenir de propos à visée insultante, discriminatoire, raciste…"
+                    ></NewCommentLeftColumn>
+                </div>
+                <PlanDetailsNewComment
+                    id="comment"
+                    :departementCode="plan.departement.code"
+                    :nbComments="plan.comments.length"
+                    :user="user"
+                />
+            </PrivateContainer>
+        </div>
+
+        <div
+            :class="[
+                'bg-orange200',
+                'pt-10',
+                plan.comments.length > 0 && 'pb-32'
+            ]"
+            v-if="
+                plan.comments.length > 0 &&
+                    $store.getters['config/hasPermission']('plan_comment.list')
+            "
+        >
+            <PrivateContainer class="flex" id="comments">
+                <div class="leftColumnWidth" />
+                <PlanDetailsComments
+                    :comments="plan.comments"
+                ></PlanDetailsComments>
+            </PrivateContainer>
+        </div>
 
         <!--  Close Shantytown Modal -->
         <PlanDetailsCloseModal
