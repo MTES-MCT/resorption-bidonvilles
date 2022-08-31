@@ -1,60 +1,67 @@
 module.exports = {
-    up: (queryInterface, Sequelize) => queryInterface.createTable(
-        'plan_comments',
-        {
-            plan_comment_id: {
-                type: Sequelize.INTEGER,
-                allowNull: false,
-                primaryKey: true,
-                autoIncrement: true,
-            },
-            description: {
-                type: Sequelize.TEXT,
-                allowNull: false,
-            },
-            fk_plan: {
-                type: Sequelize.INTEGER,
-                allowNull: false,
-            },
-            created_at: {
-                type: Sequelize.DATE,
-                allowNull: false,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-            },
-            created_by: {
-                type: Sequelize.INTEGER,
-                allowNull: false,
-            },
-            updated_at: {
-                type: Sequelize.DATE,
-                allowNull: false,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-                onUpdate: Sequelize.literal('CURRENT_TIMESTAMP'),
-            },
-        },
-    ).then(() => Promise.all([
-        queryInterface.addConstraint('plan_comments', ['fk_plan'], {
-            type: 'foreign key',
-            name: 'fk_plan_comments_plan',
-            references: {
-                table: 'plans2',
-                field: 'plan_id',
-            },
-            onUpdate: 'cascade',
-            onDelete: 'cascade',
-        }),
+    async up(queryInterface, Sequelize) {
+        const transaction = await queryInterface.sequelize.transaction();
 
-        queryInterface.addConstraint('plan_comments', ['created_by'], {
-            type: 'foreign key',
-            name: 'fk_plan_comment_creator',
-            references: {
-                table: 'users',
-                field: 'user_id',
+        await queryInterface.createTable(
+            'plan_comments',
+            {
+                plan_comment_id: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false,
+                    primaryKey: true,
+                    autoIncrement: true,
+                },
+                description: {
+                    type: Sequelize.TEXT,
+                    allowNull: false,
+                },
+                fk_plan: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false,
+                },
+                created_at: {
+                    type: Sequelize.DATE,
+                    allowNull: false,
+                    defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+                },
+                created_by: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false,
+                },
+                updated_at: {
+                    type: Sequelize.DATE,
+                    allowNull: false,
+                    defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+                    onUpdate: Sequelize.literal('CURRENT_TIMESTAMP'),
+                },
             },
-            onUpdate: 'cascade',
-            onDelete: 'restrict',
-        }),
-    ])),
+        );
+        await Promise.all([
+            queryInterface.addConstraint('plan_comments', ['fk_plan'], {
+                type: 'foreign key',
+                name: 'fk_plan_comments_plan',
+                references: {
+                    table: 'plans2',
+                    field: 'plan_id',
+                },
+                onUpdate: 'cascade',
+                onDelete: 'cascade',
+            }),
+
+            queryInterface.addConstraint('plan_comments', ['created_by'], {
+                type: 'foreign key',
+                name: 'fk_plan_comment_creator',
+                references: {
+                    table: 'users',
+                    field: 'user_id',
+                },
+                onUpdate: 'cascade',
+                onDelete: 'restrict',
+            }),
+        ]);
+
+        await transaction.commit();
+    },
 
     down: queryInterface => queryInterface.dropTable('plan_comments'),
 };
