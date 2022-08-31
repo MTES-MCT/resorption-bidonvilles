@@ -1,14 +1,8 @@
 module.exports = {
     async up(queryInterface) {
-        const transaction = await queryInterface.sequelize.transaction();
         await queryInterface.sequelize.query(
             "ALTER TYPE enum_user_email_subscriptions_email_subscription ADD VALUE 'plan_comment_notification'",
-            {
-                transaction,
-            },
         );
-
-        await transaction.commit();
     },
 
     async down(queryInterface) {
