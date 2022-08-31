@@ -54,8 +54,7 @@
             </div>
         </div>
         <div v-else>
-            Vous n'avez pas la permission de publier un commentaire sur cette
-            action
+            Vous n'avez pas la permission de publier un message sur cette action
         </div>
     </div>
 </template>
