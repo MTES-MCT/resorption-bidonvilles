@@ -2,7 +2,6 @@
     <DetailsPanel>
         <template v-slot:title>Conditions de vie et environnement</template>
         <template v-slot:body>
-            <span>{{ town.livingConditions.pest_animals.status.status }}</span>
             <Tag
                 variant="pin_red"
                 :uppercase="false"
@@ -232,7 +231,7 @@ export default {
             return ["good"].includes(
                 this.town.livingConditions.pest_animals.status.status
             )
-                ? "Absence de nuisibles"
+                ? "Absence de nuisible"
                 : "Présence de nuisibles";
         }
     }
