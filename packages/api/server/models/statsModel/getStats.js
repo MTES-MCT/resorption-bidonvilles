@@ -85,12 +85,12 @@ module.exports = async (user, location) => {
             SELECT
                 COUNT(DISTINCT fk_user),
                 week,
-                TO_CHAR((now()::date - INTERVAL '1 day' * ((week * 7) + 6)), 'DD/MM') AS date_debut,
-                TO_CHAR((now()::date - INTERVAL '1 day' * (week * 7)), 'DD/MM') AS date_fin
+                TO_CHAR((now()::date - INTERVAL '1 day' * ((week * 7) + 6)) - INTERVAL '1 day', 'DD/MM') AS date_debut,
+                TO_CHAR((now()::date - INTERVAL '1 day' * (week * 7)) - INTERVAL '1 day', 'DD/MM') AS date_fin
             FROM (
                 SELECT
                     fk_user,
-                    (floor((now()::date - datetime::date) / 7)) AS week
+                    (floor(((now() - INTERVAL '1 day')::date - datetime::date) / 7)) AS week
                 FROM user_navigation_logs
             ) t
             ${where !== null ? `
