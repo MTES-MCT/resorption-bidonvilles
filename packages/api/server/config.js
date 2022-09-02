@@ -9,6 +9,7 @@ const config = {
     webappUrl: `https://app.${process.env.RB_API_FRONT_DOMAIN}`,
     backUrl: process.env.RB_API_BACK_URL,
     port: process.env.RB_API_PORT,
+    blogUrl: process.env.RB_BLOG_URL,
     auth: {
         secret: process.env.RB_API_AUTH_SECRET,
         expiresIn: process.env.RB_API_AUTH_EXPIRES_IN,
