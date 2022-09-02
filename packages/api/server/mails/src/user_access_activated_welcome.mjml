@@ -28,6 +28,7 @@
                 </mj-text>
                 <mj-include path="common/connect_cta.mjml" />
                 <mj-include path="common/contact_interlocutor_user.mjml" />
+                <mj-include path='common/blog_cta.mjml' />
             </mj-column>
         </mj-section>
 
