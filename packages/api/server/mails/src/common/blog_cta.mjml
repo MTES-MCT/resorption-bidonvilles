@@ -1,0 +1,10 @@
+<mj-text>
+    Le blog est un lieu d'échanges, de ressources, de partage proposant des témoignages directs,
+    des ressources éditées par la Dihal ou par d'autres acteurs, des articles de presse, 
+    des nouveautés et des astuces pour l'utilisation de la plateforme Résorption-bidonvilles
+    aux acteurs de la résorption des bidonvilles et des utilisateurs de la plateforme 
+    Résorption-Bidonvilles.
+</mj-text>
+<mj-button mj-class="button-primary" padding="16px 0 16px 0" href="{{var:blogUrl}}" rel="noopener noreferrer">
+    Accéder au blog
+</mj-button> 
