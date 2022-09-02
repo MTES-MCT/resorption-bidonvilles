@@ -1,7 +1,9 @@
 const moment = require('moment');
 const { formatName } = require('#server/models/userModel');
 const mailService = require('#server/services/mailService');
-const { wwwUrl, webappUrl, backUrl } = require('#server/config');
+const {
+    wwwUrl, webappUrl, backUrl, blogUrl,
+} = require('#server/config');
 
 const generateTrackingUTM = require('./generateTrackingUTM');
 
@@ -297,6 +299,7 @@ module.exports = {
                 backUrl,
                 formationUrl,
                 connexionUrl: `${connexionUrl}?${utm}`,
+                blogUrl,
             },
             preserveRecipient,
         });
