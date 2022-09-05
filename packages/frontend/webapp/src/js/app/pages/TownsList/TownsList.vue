@@ -201,12 +201,21 @@ export default {
         return {
             closingReasons: [
                 {
-                    id: "closed_by_justice",
-                    label: "Exécution d'une décision de justice"
+                    id: "resorbed",
+                    label: "Résorption progressive du site"
                 },
                 {
-                    id: "closed_by_admin",
-                    label: "Exécution d'une décision administrative"
+                    id: "closed_by_justice",
+                    label:
+                        "Décision de justice suite à une plainte du propriétaire"
+                },
+                {
+                    id: "closed_by_pref_admin",
+                    label: "Décision administrative de la Préfecture"
+                },
+                {
+                    id: "closed_by_city_admin",
+                    label: "Décision administrative de la Commune"
                 },
                 { id: "other", label: "Autre" },
                 { id: "unknown", label: "Raison inconnue" }

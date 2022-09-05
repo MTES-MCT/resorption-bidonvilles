@@ -166,8 +166,11 @@ export default function enrichShantytown(shantytown, fieldTypes) {
 }
 
 const statusDetails = {
-    closed_by_justice: "Exécution d'une décision de justice",
-    closed_by_admin: "Exécution d'une décision administrative",
+    resorbed: "Résorption progressive du site",
+    closed_by_justice:
+        "Décision de justice suite à une plainte du propriétaire",
+    closed_by_pref_admin: "Décision administrative de la Préfecture",
+    closed_by_city_admin: "Décision administrative de la Commune",
     other: "Autre",
     unknown: "Raison inconnue"
 };

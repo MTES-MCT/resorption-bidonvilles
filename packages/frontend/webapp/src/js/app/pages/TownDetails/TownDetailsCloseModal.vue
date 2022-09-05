@@ -38,29 +38,6 @@
                         </div>
 
                         <CheckableGroup
-                            direction="row"
-                            id="closed_with_solutions"
-                            rules="required"
-                            label="Est-ce que ce site a été résorbé définitivement ?"
-                            info="Un site est considéré comme résorbé si une solution pérenne en logement ou hébergement est mise en place pour 66 % des habitants du site."
-                            validationName="Est-ce que ce site a été résorbé définitivement ?"
-                        >
-                            <Radio
-                                :checkValue="true"
-                                label="Oui"
-                                v-model="form.closed_with_solutions"
-                                variant="card"
-                                class="mr-1"
-                            />
-                            <Radio
-                                :checkValue="false"
-                                label="Non"
-                                variant="card"
-                                v-model="form.closed_with_solutions"
-                            />
-                        </CheckableGroup>
-
-                        <CheckableGroup
                             v-if="!isAlreadyClosed"
                             label="Cause de la disparition"
                             id="status"
@@ -76,6 +53,13 @@
                                 v-model="form.status"
                             />
                         </CheckableGroup>
+
+                        <TextInput
+                            label="Préciser le contexte de la fermeture et les
+                                faits à signaler (incendie, violences, départ
+                                spontané des habitants...)"
+                            v-model="form.closing_context"
+                        ></TextInput>
 
                         <CheckableGroup
                             v-if="!isAlreadyClosed"
@@ -111,7 +95,39 @@
                                         "
                                     />
                                 </div>
+                                <TextInput
+                                    v-model="form.solutions[item.id].message"
+                                    placeholder="commentaires, précisions..."
+                                ></TextInput>
                             </div>
+                        </CheckableGroup>
+
+                        <CheckableGroup
+                            direction="row"
+                            id="closed_with_solutions"
+                            rules="required"
+                            label="Est-ce que ce site a été résorbé définitivement ?"
+                            :info="resorbed"
+                            validationName="Est-ce que ce site a été résorbé définitivement ?"
+                        >
+                            <span class="mb-4"
+                                >Un site est considéré comme résorbé si une
+                                solution pérenne en logement ou hébergement est
+                                mise en place pour 66% des habitants du site.
+                            </span>
+                            <Radio
+                                :checkValue="true"
+                                label="Oui"
+                                v-model="form.closed_with_solutions"
+                                variant="card"
+                                class="mr-1"
+                            />
+                            <Radio
+                                :checkValue="false"
+                                label="Non"
+                                variant="card"
+                                v-model="form.closed_with_solutions"
+                            />
                         </CheckableGroup>
                     </div>
 
@@ -200,7 +216,8 @@ export default {
                                               .householdsAffected,
                                           10
                                       )
-                                    : null
+                                    : null,
+                                message: this.form.solutions[key].message
                             }))
                     });
 
@@ -242,6 +259,39 @@ export default {
             this.$emit("cancelCloseTown");
         }
     },
+    computed: {
+        resorbed() {
+            let populationResorbed = 0;
+            this.closingSolutions.forEach(solution => {
+                if (
+                    [
+                        "Hébergement ou logement adapté longue durée avec accompagnement, dont espace terrain d’insertion",
+                        "Logement"
+                    ].includes(solution.label)
+                ) {
+                    populationResorbed =
+                        populationResorbed +
+                        parseInt(
+                            this.form.solutions[solution.id].peopleAffected ||
+                                0,
+                            10
+                        );
+                }
+            });
+            return this.town.populationTotal
+                ? `D'après les informations renseignées, environ 
+                    ${(
+                        (populationResorbed * 100) /
+                        this.town.populationTotal
+                    ).toFixed(0)}%
+                    des habitants du site ont été
+                    orientées vers une solution d’hébergement, de
+                    logement adapté longue durée avec accompagnement,
+                    dont espace terrain d’insertion, ou logement`
+                : "";
+        }
+    },
+
     data() {
         const {
             closing_solutions: closingSolutions
@@ -259,6 +309,7 @@ export default {
                     ? this.town.closedWithSolutions === "yes"
                     : null,
                 status: null,
+                closing_context: "",
                 solutions: this.town.closingSolutions
                     ? closingSolutions.reduce((solutions, solution) => {
                           const newSolutions = Object.assign(solutions, {});
@@ -268,7 +319,8 @@ export default {
                           newSolutions[solution.id] = {
                               checked: s !== undefined,
                               peopleAffected: s && s.peopleAffected,
-                              householdsAffected: s && s.householdsAffected
+                              householdsAffected: s && s.householdsAffected,
+                              message: s && s.message
                           };
 
                           return newSolutions;
@@ -280,12 +332,21 @@ export default {
             checkedSolutions: [],
             statusValues: [
                 {
-                    value: "closed_by_justice",
-                    label: "Exécution d'une décision de justice"
+                    value: "resorbed",
+                    label: "Résorption progressive du site"
                 },
                 {
-                    value: "closed_by_admin",
-                    label: "Exécution d'une décision administrative"
+                    value: "closed_by_justice",
+                    label:
+                        "Décision de justice suite à une plainte du propriétaire"
+                },
+                {
+                    value: "closed_by_pref_admin",
+                    label: "Décision administrative de la Préfecture"
+                },
+                {
+                    value: "closed_by_city_admin",
+                    label: "Décision administrative de la Commune"
                 },
                 { value: "other", label: "Autre" },
                 { value: "unknown", label: "Raison inconnue" }
