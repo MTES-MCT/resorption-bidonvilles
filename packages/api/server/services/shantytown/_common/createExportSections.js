@@ -156,6 +156,7 @@ module.exports = (user, data, properties, closedTowns, closingSolutions) => {
                 properties: [
                     properties[`closingSolution${solutionId}_population`],
                     properties[`closingSolution${solutionId}_households`],
+                    properties[`closingSolution${solutionId}_message`],
                 ],
             });
         });
