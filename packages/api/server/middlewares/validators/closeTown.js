@@ -58,7 +58,7 @@ module.exports = [
     body('status')
         .exists({ checkNull: true }).bail().withMessage('Le champ "Cause de la disparition" est obligatoire')
         .isString().bail().withMessage('Le champ "Cause de la disparition" est invalide')
-        .isIn(['closed_by_justice', 'closed_by_admin', 'other', 'unknown']).bail().withMessage('La valeur du champ "Cause de la disparition" est invalide'),
+        .isIn(['resorbed', 'closed_by_justice', 'closed_by_city_admin', 'closed_by_pref_admin', 'other', 'unknown']).bail().withMessage('La valeur du champ "Cause de la disparition" est invalide'),
 
     body('solutions')
         .customSanitizer((value) => {
@@ -69,12 +69,15 @@ module.exports = [
             return value;
         })
         .isArray().bail().withMessage('La liste des orientations n\'est pas valide')
-        .customSanitizer(value => value.map(({ id, peopleAffected, householdsAffected }) => ({
+        .customSanitizer(value => value.map(({
+            id, peopleAffected, householdsAffected, message,
+        }) => ({
             id: parseInt(id, 10),
             people_affected: peopleAffected !== undefined && peopleAffected !== null
                 ? parseInt(peopleAffected, 10) : null,
             households_affected: householdsAffected !== undefined && householdsAffected !== null
                 ? parseInt(householdsAffected, 10) : null,
+            message: message !== undefined && message !== null ? message : null,
         })))
         .custom(async (values) => {
             let closingSolutions;
