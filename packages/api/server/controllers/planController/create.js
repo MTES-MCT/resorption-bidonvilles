@@ -3,6 +3,7 @@ const planModel = require('#server/models/planModel');
 const shantytownModel = require('#server/models/shantytownModel');
 const departementModel = require('#server/models/departementModel');
 const financeTypeModel = require('#server/models/financeTypeModel');
+const planManagerModel = require('#server/models/planManagerModel');
 const topicModel = require('#server/models/topicModel');
 const userModel = require('#server/models/userModel');
 const { addAttachments } = require('#server/models/permissionModel');
@@ -140,15 +141,16 @@ module.exports = async (req, res, next) => {
         default:
     }
 
-    if (!planData.government) {
-        addError('government', 'Vous devez désigner la personne en charge du pilotage de l\'action');
+    if (!planData.government || planData.government.length === 0) {
+        addError('government', 'Vous devez désigner au moins une personne en charge du pilotage de l\'action');
     } else {
         try {
-            const user = await userModel.findOne(planData.government.id);
-            if (user === null) {
-                addError('government', 'La personne désignée comme pilote de l\'action n\'a pas été retrouvée en base de données');
-            } else if (user.organization.category.uid !== 'public_establishment') {
-                addError('government', 'Le pilote de l\'action doit faire partie d\'un service de l\'état');
+            const users = await userModel.findByIds(req.user, planData.government);
+            if (users.length !== planData.government) {
+                addError('government', 'Une des personnes désignées comme pilote de l\'action n\'a pas été retrouvée en base de données');
+            } else if (
+                users.filter(user => user.organization.category.uid !== 'public_establishment').length > 0) {
+                addError('government', 'Au moins un des pilotes de l\'action ne fait partie d\'un service de l\'état');
             }
         } catch (error) {
             addError('government', 'Une erreur est survenue lors de la validation du pilote de l\'action');
@@ -352,18 +354,7 @@ module.exports = async (req, res, next) => {
             return Promise.all([
                 Promise.resolve(planId),
 
-                sequelize.query(
-                    `INSERT INTO plan_managers(fk_plan, fk_user, created_by)
-                    VALUES (:planId, :userId, :createdBy)`,
-                    {
-                        replacements: {
-                            planId,
-                            userId: planData.government.id,
-                            createdBy: req.user.id,
-                        },
-                        transaction: t,
-                    },
-                ),
+                planManagerModel.create(planId, planData.government, req.user.id, t),
 
                 sequelize.query(
                     `INSERT INTO plan_operators(fk_plan, fk_user, created_by)
@@ -381,9 +372,9 @@ module.exports = async (req, res, next) => {
                 // pour le manager (utilisateur), on octroie les droits suivants sur l'action :
                 // list, read, update, et close
                 ...['list', 'read', 'update', 'close'].map(
-                    feature => addAttachments([{ type: 'plan', id: planId }])
-                        .toUser(planData.government.id)
-                        .onFeature(feature, 'plan', t),
+                    feature => planData.government.map(managerId => addAttachments([{ type: 'plan', id: planId }])
+                        .toUser(managerId)
+                        .onFeature(feature, 'plan', t)),
                 ),
 
                 // pour l'opérateur (structure), on octroie les droits suivants sur l'action :

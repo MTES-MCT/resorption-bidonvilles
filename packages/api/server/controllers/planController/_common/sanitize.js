@@ -89,11 +89,7 @@ module.exports = (data) => {
 
     // government contact
     if (Array.isArray(data.government)) {
-        if (data.government.length === 0) {
-            sanitizedData.government = null;
-        } else {
-            [sanitizedData.government] = data.government;
-        }
+        sanitizedData.government = data.government;
     }
 
     // association contact
