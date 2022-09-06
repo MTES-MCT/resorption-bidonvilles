@@ -4,7 +4,7 @@
         <span v-if="figure.dateFrom"
             >du {{ figure.dateFrom }} au {{ figure.date }}</span
         >
-        <span v-else>{{ figure.date }}</span>
+        <span v-else>au {{ figure.date }}</span>
     </div>
 </template>
 
