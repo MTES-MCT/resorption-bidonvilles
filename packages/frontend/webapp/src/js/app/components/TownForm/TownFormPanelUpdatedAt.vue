@@ -1,20 +1,35 @@
 <template>
-    <FormGroup title="Date de mise à jour">
-        <FormParagraph
-            title="Les données correspondent-elles à une date antérieure à aujourd'hui ?"
-        >
-            <div>
-                <p class="mb-4">
-                    Il est impossible de spécifier une date antérieure à la
-                    dernière modification
-                </p>
-                <InputUpdatedAt
-                    v-model="updatedAt"
-                    :disableBefore="disableBefore"
-                ></InputUpdatedAt>
+    <div>
+        <div class="flex">
+            <div class="text-center align-middle mb-4 mr-2">
+                <Icon class="align-middle rounded-full " icon="calendar"></Icon>
             </div>
-        </FormParagraph>
-    </FormGroup>
+            <p>
+                Les informations que je mets à jour correspondent à la situation
+                du site aujourd'hui
+            </p>
+        </div>
+        <CheckableGroup direction="horizontal" rules="required">
+            <Radio
+                variant="card"
+                label="Oui"
+                v-model="checked"
+                :checkValue="1"
+            ></Radio>
+            <Radio
+                variant="card"
+                label="Non"
+                v-model="checked"
+                :checkValue="0"
+            ></Radio>
+        </CheckableGroup>
+
+        <InputUpdatedAt
+            v-if="checked !== 1"
+            v-model="updatedAt"
+            :disableBefore="disableBefore"
+        ></InputUpdatedAt>
+    </div>
 </template>
 
 <script>
@@ -39,6 +54,7 @@ export default {
 
     data() {
         return {
+            checked: 1,
             updatedAt: this.value
         };
     },
