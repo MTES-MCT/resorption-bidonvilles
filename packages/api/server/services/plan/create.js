@@ -9,6 +9,7 @@ const topicModel = require('#server/models/topicModel');
 const userModel = require('#server/models/userModel');
 const { addAttachments } = require('#server/models/permissionModel');
 const sanitize = require('#server/controllers/planController/_common/sanitize');
+const locationModel = require('#server/models/locationModel');
 
 module.exports = async (data, user) => {
     // sanitize data
@@ -190,27 +191,9 @@ module.exports = async (data, user) => {
         [finalPlanId] = await sequelize.transaction(async (t) => {
             let locationId = null;
             if (planData.locationType === 'location') {
-                const response = await sequelize.query(
-                    `INSERT INTO locations(
-                        address,
-                        latitude,
-                        longitude,
-                        created_by
-                    ) VALUES(
-                        :address,
-                        :latitude,
-                        :longitude,
-                        :createdBy
-                    ) RETURNING location_id AS id`,
-                    {
-                        replacements: Object.assign({}, planData.locationAddress, {
-                            createdBy: user.id,
-                        }),
-                        transaction: t,
-                    },
-                );
-
-                locationId = response[0][0].id;
+                locationId = locationModel.create(Object.assign({}, planData.locationAddress, {
+                    createdBy: user.id,
+                }));
             }
 
             const response = await sequelize.query(
