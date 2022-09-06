@@ -108,7 +108,7 @@
             </div>
         </PrivateContainer>
         <div v-if="$store.getters['config/hasPermission']('plan_comment.list')">
-            <div class="bg-orange200 py-10 mt-8">
+            <div class="bg-orange200 py-10 mt-8 border">
                 <PrivateContainer class="flex items-center">
                     <div class="leftColumnWidth text-sm">
                         <NewCommentLeftColumn
@@ -124,6 +124,10 @@
                         ></NewCommentLeftColumn>
                     </div>
                     <PlanDetailsNewComment
+                        :class="[
+                            'flex-1',
+                            plan.comments.length === 0 && 'pb-32'
+                        ]"
                         id="comment"
                         :departementCode="plan.departement.code"
                         :nbComments="plan.comments.length"
