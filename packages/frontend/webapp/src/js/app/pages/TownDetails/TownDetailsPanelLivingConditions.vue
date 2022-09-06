@@ -228,9 +228,8 @@ export default {
             return response;
         },
         pestAnimalsWording() {
-            return ["good"].includes(
-                this.town.livingConditions.pest_animals.status.status
-            )
+            return this.town.livingConditions.pest_animals.status.status ===
+                "good"
                 ? "Absence de nuisible"
                 : "Présence de nuisibles";
         }

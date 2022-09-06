@@ -148,10 +148,8 @@
                                         .status.status
                                 "
                                 >{{
-                                    ["good"].includes(
-                                        shantytown.livingConditions[verminKey]
-                                            .status.status
-                                    )
+                                    shantytown.livingConditions[verminKey]
+                                        .status.status === "good"
                                         ? "abs. de nuisibles"
                                         : "pres. de nuisibles"
                                 }}
