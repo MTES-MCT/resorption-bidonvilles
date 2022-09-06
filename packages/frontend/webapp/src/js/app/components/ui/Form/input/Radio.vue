@@ -11,7 +11,7 @@
         >
             <input
                 :type="type"
-                class="appearance-none absolute invisible"
+                class="w-0 invisible"
                 v-bind="filteredProps"
                 :checked="isChecked"
                 @change="onChange"
@@ -111,7 +111,7 @@ export default {
         radioClasses() {
             const base = {
                 classic: "form-checkbox h-5 w-5",
-                invisible: "appearance-none absolute invisible",
+                invisible: "w-0 invisible",
                 default: "radio-town-input"
             }[this.variant];
 
