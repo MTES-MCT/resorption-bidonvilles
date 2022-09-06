@@ -1,3 +1,4 @@
+const create = require('./create');
 const deletePlan = require('./delete');
 const findAll = require('./findAll');
 const findOne = require('./findOne');
@@ -7,6 +8,7 @@ const getComments = require('./_common/getComments');
 
 
 module.exports = {
+    create,
     delete: deletePlan, // renamed to avoid conflict with reserved keyword 'delete'
     findAll,
     findOne,

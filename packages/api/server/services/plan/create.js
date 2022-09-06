@@ -196,38 +196,9 @@ module.exports = async (data, user) => {
                 }));
             }
 
-            const response = await sequelize.query(
-                `INSERT INTO plans2(
-                    name,
-                    started_at,
-                    expected_to_end_at,
-                    in_and_out,
-                    goals,
-                    fk_category,
-                    location_type,
-                    location_details,
-                    fk_location,
-                    created_by
-                ) VALUES(
-                    :name,
-                    :startedAt,
-                    :expectedToEndAt,
-                    :inAndOut,
-                    :goals,
-                    'autre',
-                    :locationType,
-                    :locationDetails,
-                    :fk_location,
-                    :createdBy
-                ) RETURNING plan_id AS id`,
-                {
-                    replacements: Object.assign({}, planData, {
-                        fk_location: locationId,
-                    }),
-                    transaction: t,
-                },
-            );
-            const planId = response[0][0].id;
+            const planId = planModel.create(Object.assign({}, planData, {
+                fk_location: locationId,
+            }));
 
             await sequelize.query(
                 `INSERT INTO plan_departements(fk_plan, fk_departement, created_by)
