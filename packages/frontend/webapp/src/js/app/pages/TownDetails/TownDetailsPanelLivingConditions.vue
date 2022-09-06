@@ -55,7 +55,7 @@
 
             <div v-if="town.livingConditions.version === 1">
                 <TownDetailsPanelLivingConditionsSection
-                    title="Présence de nuisibles"
+                    :title="pestAnimalsWording"
                     :status="town.livingConditions.vermin.status"
                     cypressName="vermin"
                     cypressDetailsPrefix="vermin"
