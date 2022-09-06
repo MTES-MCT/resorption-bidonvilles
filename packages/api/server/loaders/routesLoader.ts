@@ -566,6 +566,7 @@ export default (app) => {
 
     app.get(
         '/organization-categories/:categoryId/users',
+        middlewares.auth.authenticate,
         controllers.organization.getMembersByCategory,
     );
 
