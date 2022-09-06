@@ -65,19 +65,8 @@ export function getMembers(organizationId) {
  *
  * @returns {Promise}
  */
-export function getMembersOfCategory(
-    categoryId,
-    regionId,
-    departementId,
-    search = null
-) {
+export function getMembersOfCategory(categoryId, search = null) {
     let query = [];
-    if (departementId !== undefined) {
-        query.push(`departementId=${encodeURIComponent(departementId)}`);
-    } else if (regionId !== undefined) {
-        query.push(`regionId=${encodeURIComponent(regionId)}`);
-    }
-
     if (search !== null) {
         query.push(`q=${encodeURIComponent(search)}`);
     }

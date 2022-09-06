@@ -42,8 +42,6 @@ export default {
             this.searching = true;
             const results = await getMembersOfCategory(
                 "public_establishment",
-                undefined,
-                undefined,
                 query
             );
             this.searching = false;
