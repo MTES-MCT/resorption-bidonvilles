@@ -55,8 +55,9 @@
 
             <div v-if="town.livingConditions.version === 1">
                 <TownDetailsPanelLivingConditionsSection
-                    title="Présence de nuisibles"
+                    :title="pestAnimalsWording"
                     :status="town.livingConditions.vermin.status"
+                    :showStatus="false"
                     cypressName="vermin"
                     cypressDetailsPrefix="vermin"
                     :answers="answers.pest_animals"
@@ -74,8 +75,9 @@
 
             <div v-if="town.livingConditions.version === 2">
                 <TownDetailsPanelLivingConditionsSection
-                    title="Présence de nuisibles"
+                    :title="pestAnimalsWording"
                     :status="town.livingConditions.pest_animals.status"
+                    :showStatus="false"
                     :inverted="true"
                     :answers="answers.pest_animals"
                 />
@@ -226,6 +228,12 @@ export default {
             }
 
             return response;
+        },
+        pestAnimalsWording() {
+            return this.town.livingConditions.pest_animals.status.status ===
+                "good"
+                ? "Absence de nuisible"
+                : "Présence de nuisibles";
         }
     }
 };

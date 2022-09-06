@@ -11,7 +11,7 @@
         >
             <input
                 type="checkbox"
-                class="appearance-none absolute invisible"
+                class="w-0 invisible"
                 v-bind="filteredProps"
                 :checked="isChecked"
                 @change="onChange"
@@ -108,7 +108,7 @@ export default {
         checkboxClasses() {
             return {
                 classic: "form-checkbox h-5 w-5",
-                invisible: "appearance-none absolute invisible",
+                invisible: "w-0 invisible",
                 default: `checkbox-town-input ${
                     this.disabled ? "bg-G300" : "bg-white"
                 }`

@@ -5,9 +5,11 @@
             <div>
                 <div class="flex items-center">
                     <div :class="[colorClass, 'font-bold', 'mr-1']">
-                        {{ title }} :
+                        {{ title }}<span v-if="showStatus"> :</span>
                     </div>
-                    <div :data-cy-data="cypressName">{{ text }}</div>
+                    <div :data-cy-data="cypressName" v-if="showStatus">
+                        {{ text }}
+                    </div>
                 </div>
                 <slot />
             </div>
@@ -114,6 +116,11 @@ export default {
         },
         status: {
             type: Object
+        },
+        showStatus: {
+            type: Boolean,
+            default: true,
+            required: false
         },
         cypressName: {
             type: String
