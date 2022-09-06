@@ -21,7 +21,6 @@ const organizationCategories = require('./organizationController/categories');
 const organizationGetByCategory = require('./organizationController/getByCategory');
 const organizationGetByType = require('./organizationController/getByType');
 const organizationGetMembers = require('./organizationController/getMembers');
-const organizationGetMembersByCategory = require('./organizationController/getMembersByCategory');
 const organizationSearch = require('./organizationController/search');
 const organizationTypes = require('./organizationController/types');
 const organizationUpdateBeingFunded = require('./organizationController/updateBeingFunded');
@@ -109,7 +108,6 @@ export default {
         getByCategory: organizationGetByCategory,
         getByType: organizationGetByType,
         getMembers: organizationGetMembers,
-        getMembersByCategory: organizationGetMembersByCategory,
         search: organizationSearch,
         types: organizationTypes,
         updateBeingFunded: organizationUpdateBeingFunded,
