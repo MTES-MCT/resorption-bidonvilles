@@ -57,6 +57,7 @@
                 <TownDetailsPanelLivingConditionsSection
                     :title="pestAnimalsWording"
                     :status="town.livingConditions.vermin.status"
+                    :showStatus="false"
                     cypressName="vermin"
                     cypressDetailsPrefix="vermin"
                     :answers="answers.pest_animals"
@@ -76,6 +77,7 @@
                 <TownDetailsPanelLivingConditionsSection
                     :title="pestAnimalsWording"
                     :status="town.livingConditions.pest_animals.status"
+                    :showStatus="false"
                     :inverted="true"
                     :answers="answers.pest_animals"
                 />

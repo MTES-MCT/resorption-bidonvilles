@@ -5,27 +5,9 @@
             <div>
                 <div class="flex items-center">
                     <div :class="[colorClass, 'font-bold', 'mr-1']">
-                        {{ title
-                        }}<span
-                            v-if="
-                                ![
-                                    'Absence de nuisible',
-                                    'Présence de nuisibles'
-                                ].includes(title) || text === 'inconnu'
-                            "
-                        >
-                            :</span
-                        >
+                        {{ title }}<span v-if="showStatus"> :</span>
                     </div>
-                    <div
-                        :data-cy-data="cypressName"
-                        v-if="
-                            ![
-                                'Absence de nuisible',
-                                'Présence de nuisibles'
-                            ].includes(title) || text === 'inconnu'
-                        "
-                    >
+                    <div :data-cy-data="cypressName" v-if="showStatus">
                         {{ text }}
                     </div>
                 </div>
@@ -134,6 +116,11 @@ export default {
         },
         status: {
             type: Object
+        },
+        showStatus: {
+            type: Boolean,
+            default: true,
+            required: false
         },
         cypressName: {
             type: String
