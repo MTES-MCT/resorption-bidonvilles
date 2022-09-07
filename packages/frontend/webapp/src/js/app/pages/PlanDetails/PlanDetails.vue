@@ -115,7 +115,7 @@
                             class="mb-4"
                             icon="info-circle"
                             title="À qui sont destinés les messages ?"
-                            description="À tous les acteurs concernés pas l'action. Un mail est automatiquement envoyé aux opérateurs ou services en charge de l'action et aux acteurs en DDETS et Préfecture."
+                            description="À tous les acteurs concernés par l'action. Un mail est automatiquement envoyé aux opérateurs ou services en charge de l'action et aux acteurs en DDETS et Préfecture."
                         ></NewCommentLeftColumn>
                         <NewCommentLeftColumn
                             icon="exclamation-triangle"
