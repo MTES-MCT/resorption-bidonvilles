@@ -108,7 +108,7 @@
             </div>
         </PrivateContainer>
         <div v-if="$store.getters['config/hasPermission']('plan_comment.list')">
-            <div class="bg-green100 py-10 mt-8 border">
+            <div class="bg-green100 py-10 mt-8">
                 <PrivateContainer class="flex items-center">
                     <div class="leftColumnWidth text-sm">
                         <NewCommentLeftColumn
