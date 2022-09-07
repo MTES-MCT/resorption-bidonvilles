@@ -59,24 +59,6 @@ export function getMembers(organizationId) {
 }
 
 /**
- * Lists all users of a specific organization
- *
- * @param {Number} organizationId
- *
- * @returns {Promise}
- */
-export function getMembersOfCategory(categoryId, search = null) {
-    let query = [];
-    if (search !== null) {
-        query.push(`q=${encodeURIComponent(search)}`);
-    }
-
-    return getApi(
-        `/organization-categories/${categoryId}/users?${query.join("&")}`
-    );
-}
-
-/**
  * PATCH /organizations/:id
  */
 export async function updateBeingFunded(organizationId, data) {

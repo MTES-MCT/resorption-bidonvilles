@@ -1,22 +1,34 @@
 <template>
-    <AutocompleteV2
-        id="government"
-        label="Pilote de l'action"
-        info="Tapez les premières lettres du nom ou du prénom de la personne"
-        prefixIcon="user"
-        :search="autocomplete"
-        :loading="searching"
-        :getResultValue="getResultValue"
-        :showMandatoryStar="true"
-        placeholder="Tapez les premières lettres du nom ou du prénom"
-        :defaultValue="input"
-        v-model="input"
-        @submit="$emit('input', $event)"
-    ></AutocompleteV2>
+    <div class="mb-4">
+        <AutocompleteV2
+            id="government"
+            label="Pilote de l'action"
+            info="Tapez les premières lettres du nom ou du prénom de la personne"
+            prefixIcon="user"
+            :search="autocomplete"
+            :loading="searching"
+            :getResultValue="getResultValue"
+            :showMandatoryStar="true"
+            placeholder="Tapez les premières lettres du nom ou du prénom"
+            :defaultValue="input"
+            ref="autocomplete"
+            @submit="addManager($event)"
+        ></AutocompleteV2>
+        <ul v-if="managers.length > 0">
+            <li v-for="manager in managers" :key="manager.id">
+                {{ manager.first_name }} {{ manager.last_name }} -
+                {{
+                    manager.organization.abbreviation ||
+                        manager.organization.name
+                }}
+            </li>
+        </ul>
+        <div v-else>Aucun manager sélectionné</div>
+    </div>
 </template>
 
 <script>
-import { getMembersOfCategory } from "#helpers/api/organization";
+import { searchUsers } from "#helpers/api/user";
 
 export default {
     props: {
@@ -29,7 +41,8 @@ export default {
     data() {
         return {
             searching: false,
-            input: this.value
+            input: this.value,
+            managers: []
         };
     },
 
@@ -40,13 +53,16 @@ export default {
             }
 
             this.searching = true;
-            const results = await getMembersOfCategory(
-                "public_establishment",
-                query
-            );
+            const users = await searchUsers(query);
+            users.sort((userA, userB) => {
+                return userA.last_name.toUpperCase() >
+                    userB.last_name.toUpperCase()
+                    ? 1
+                    : -1;
+            });
             this.searching = false;
 
-            return results.users.slice(0, 10);
+            return users.slice(0, 10);
         },
 
         getResultValue(user) {
@@ -54,8 +70,15 @@ export default {
                 return "";
             }
 
-            return `${user.first_name} ${user.last_name.toUpperCase()} - ${user
+            return `${user.last_name.toUpperCase()} ${user.first_name} - ${user
                 .organization.abbreviation || user.organization.name}`;
+        },
+
+        addManager(user) {
+            if (user) {
+                this.managers.push(user);
+            }
+            this.$refs.autocomplete.empty();
         }
     }
 };
