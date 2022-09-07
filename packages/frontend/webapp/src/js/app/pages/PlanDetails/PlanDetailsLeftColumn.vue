@@ -1,9 +1,37 @@
 <template>
-    <FormLeftColumn :sections="sections" defaultSection="characteristics" />
+    <div>
+        <div class="sticky stickyColumn">
+            <div class="font-bold">Rubriques</div>
+            <LeftColumnNavLink
+                v-for="section in sections"
+                :key="section.id"
+                :to="`#${section.id}`"
+                :activeSection="activeSection === section.id"
+                >{{ section.label }}</LeftColumnNavLink
+            >
+            <router-link
+                to="#comment"
+                @click.native="scrollFix('#comment')"
+                class="text-secondary"
+            >
+                <div class="flex text-green font-bold mt-4 cursor-pointer">
+                    <Icon icon="comment" />
+                    <div class="ml-2">
+                        <div>Le journal de l'action</div>
+                        <div>
+                            {{ plan.comments.length }} message{{
+                                plan.comments.length > 1 ? "s" : ""
+                            }}
+                        </div>
+                    </div>
+                </div>
+            </router-link>
+        </div>
+    </div>
 </template>
 
 <script>
-import FormLeftColumn from "#app/components/ui/Form/FormLeftColumn.vue";
+import LeftColumnNavLink from "#app/pages/TownDetails/ui/LeftColumnNavLink";
 
 export default {
     props: {
@@ -14,7 +42,7 @@ export default {
     },
 
     components: {
-        FormLeftColumn
+        LeftColumnNavLink
     },
 
     data() {
@@ -64,14 +92,15 @@ export default {
             }
         }
 
-        sections.push({
-            id: "comment",
-            label: "Journal de l'action"
-        });
-
         return {
             sections
         };
     }
 };
 </script>
+
+<style scoped>
+.stickyColumn {
+    top: 32px;
+}
+</style>
