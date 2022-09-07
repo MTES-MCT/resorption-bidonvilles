@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="text-display-lg font-bold text-corail">
+        <div class="text-green text-display-lg font-bold">
             <Icon icon="comment" /> LE JOURNAL DE L'ACTION
             <span
                 >- {{ nbComments }} message{{ nbComments > 1 ? "s" : "" }}</span
