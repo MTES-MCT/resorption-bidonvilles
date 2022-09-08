@@ -62,9 +62,12 @@ module.exports = async (shantytownId, commentId, isPrivate) => {
         );
     }
     return sequelize.query(
-        `WITH constants(departement) AS
+        `WITH constants(departement, epci, city) AS
         (
-            SELECT cities.fk_departement AS departement
+            SELECT 
+                cities.fk_departement AS departement,
+                cities.fk_epci AS epci,
+                cities.code AS city
             FROM shantytowns
             LEFT JOIN cities ON shantytowns.fk_city = cities.code
             WHERE shantytowns.shantytown_id = :shantytownId
@@ -86,7 +89,10 @@ module.exports = async (shantytownId, commentId, isPrivate) => {
                 FROM users u
                 LEFT JOIN constants ON TRUE
                 LEFT JOIN localized_organizations lo ON u.fk_organization = lo.organization_id
+                LEFT JOIN organization_types ot ON ot.organization_type_id = lo.fk_type
                 WHERE lo.departement_code = constants.departement
+                AND (ot.name_singular != 'Commune' OR lo.city_code = constants.city )
+                AND (ot.name_singular != 'Intercommunalité' OR lo.epci_code = constants.epci )
                 AND lo.active IS TRUE
             )
         ) t
