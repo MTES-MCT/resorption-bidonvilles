@@ -27,7 +27,7 @@
             <DetailsPanelSection>
                 <div class="grid grid-cols-2">
                     <div class="font-bold">
-                        Cause de la disparition
+                        Cause de la fermeture
                     </div>
 
                     <div class="-ml-5">

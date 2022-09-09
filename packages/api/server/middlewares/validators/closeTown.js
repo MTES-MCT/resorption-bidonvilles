@@ -56,9 +56,9 @@ module.exports = [
         }),
 
     body('status')
-        .exists({ checkNull: true }).bail().withMessage('Le champ "Cause de la disparition" est obligatoire')
-        .isString().bail().withMessage('Le champ "Cause de la disparition" est invalide')
-        .isIn(['resorbed', 'closed_by_justice', 'closed_by_city_admin', 'closed_by_pref_admin', 'other', 'unknown']).bail().withMessage('La valeur du champ "Cause de la disparition" est invalide'),
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Cause de la fermeture" est obligatoire')
+        .isString().bail().withMessage('Le champ "Cause de la fermeture" est invalide')
+        .isIn(['resorbed', 'closed_by_justice', 'closed_by_city_admin', 'closed_by_pref_admin', 'other', 'unknown']).bail().withMessage('La valeur du champ "Cause de la fermeture" est invalide'),
 
     body('closing_context')
         .isString().bail().withMessage('Le champ "Préciser le contexte de la fermeture et les faits à signaler" est invalide'),

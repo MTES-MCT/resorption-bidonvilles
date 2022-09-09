@@ -39,11 +39,11 @@
 
                         <CheckableGroup
                             v-if="!isAlreadyClosed"
-                            label="Cause de la disparition"
+                            label="Cause de la fermeture"
                             id="status"
                             direction="vertical"
                             rules="required"
-                            validationName="Cause de la disparition"
+                            validationName="Cause de la fermeture"
                         >
                             <Radio
                                 :label="item.label"
