@@ -12,6 +12,7 @@ module.exports = async (editor, shantytownId, data, argTransaction = undefined) 
                 "ShantytownHistories"(
                     shantytown_id,
                     status,
+                    closing_context,
                     name,
                     latitude,
                     longitude,
@@ -117,6 +118,7 @@ module.exports = async (editor, shantytownId, data, argTransaction = undefined) 
             SELECT
                 shantytown_id,
                 status,
+                closing_context,
                 name,
                 latitude,
                 longitude,
