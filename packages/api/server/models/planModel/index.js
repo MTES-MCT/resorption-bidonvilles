@@ -5,7 +5,7 @@ const findOne = require('./findOne');
 const listExport = require('./listExport');
 const serializeComment = require('./_common/serializeComment');
 const getComments = require('./_common/getComments');
-
+const update = require('./update');
 
 module.exports = {
     create,
@@ -15,4 +15,5 @@ module.exports = {
     listExport,
     serializeComment,
     getComments,
+    update,
 };
