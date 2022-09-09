@@ -12,7 +12,10 @@ module.exports = async (user, shantytownIds) => {
     }
 
     const replacements = {};
-    const whereClause = stringifyWhereClause('shantytowns', [clauseGroup], replacements);
+    const whereClauses = ['incoming.fk_shantytown IN (:ids)'];
+    if (Object.keys(clauseGroup).length > 0) {
+        whereClauses.push(stringifyWhereClause('shantytowns', [clauseGroup], replacements));
+    }
 
     const raw = await sequelize.query(
         `SELECT
@@ -26,7 +29,7 @@ module.exports = async (user, shantytownIds) => {
         LEFT JOIN departements ON cities.fk_departement = departements.code
         LEFT JOIN epci ON cities.fk_epci = epci.code
         LEFT JOIN regions ON departements.fk_region = regions.code
-        WHERE ${whereClause} AND incoming.fk_shantytown IN (:ids)`,
+        WHERE ${whereClauses.join(' AND ')}`,
         {
             type: sequelize.QueryTypes.SELECT,
             replacements: {

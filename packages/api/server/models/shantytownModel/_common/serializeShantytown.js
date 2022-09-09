@@ -54,6 +54,7 @@ module.exports = (town, user) => {
         builtAt: fromDateToTimestamp(town.builtAt),
         isReinstallation: town.isReinstallation,
         reinstallationComments: town.reinstallationComments,
+        reinstallationIncomingTowns: [],
         closedAt: town.closedAt !== null ? (town.closedAt.getTime() / 1000) : null,
         address: town.address,
         addressDetails: town.addressDetails,
