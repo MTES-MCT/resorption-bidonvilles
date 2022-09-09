@@ -10,6 +10,10 @@ const userModel = require('#server/models/userModel');
 const { addAttachments } = require('#server/models/permissionModel');
 const sanitize = require('#server/controllers/planController/_common/sanitize');
 const locationModel = require('#server/models/locationModel');
+const planDepartementModel = require('#server/models/planDepartementModel');
+const planTopicsModel = require('#server/models/planTopicsModel');
+const planShantytownModel = require('#server/models/planShantytownModel');
+const planOperatorModel = require('#server/models/planOperatorModel');
 
 module.exports = async (data, user) => {
     // sanitize data
@@ -129,12 +133,9 @@ module.exports = async (data, user) => {
         addError('government', 'Vous devez désigner au moins une personne en charge du pilotage de l\'action');
     } else {
         try {
-            const users = await userModel.findByIds(user, planData.government);
-            if (users.length !== planData.government) {
+            const users = await userModel.findByIds(user, planData.government.map(manager => manager.id));
+            if (users.length !== planData.government.length) {
                 addError('government', 'Une des personnes désignées comme pilote de l\'action n\'a pas été retrouvée en base de données');
-            } else if (
-                users.filter(manager => manager.organization.category.uid !== 'public_establishment').length > 0) {
-                addError('government', 'Au moins un des pilotes de l\'action ne fait partie d\'un service de l\'état');
             }
         } catch (error) {
             addError('government', 'Une erreur est survenue lors de la validation du pilote de l\'action');
@@ -193,69 +194,33 @@ module.exports = async (data, user) => {
             if (planData.locationType === 'location') {
                 locationId = locationModel.create(Object.assign({}, planData.locationAddress, {
                     createdBy: user.id,
-                }));
+                }), t);
             }
 
-            const planId = planModel.create(Object.assign({}, planData, {
+            // insert into plan
+            const planId = await planModel.create(Object.assign({}, planData, {
                 fk_location: locationId,
-            }));
+            }), t);
 
-            await sequelize.query(
-                `INSERT INTO plan_departements(fk_plan, fk_departement, created_by)
-                VALUES (:planId, :departement, :createdBy)`,
-                {
-                    replacements: {
-                        planId,
-                        departement: planData.departement,
-                        createdBy: user.id,
-                    },
-                    transaction: t,
-                },
+            // insert into plan_departement
+            await planDepartementModel.create(
+                planId,
+                planData.departement,
+                user.id,
+                t,
             );
 
-            await sequelize.query(
-                `INSERT INTO plan_topics(fk_plan, fk_topic, created_by)
-                VALUES ${planData.topics.map(() => '(?, ?, ?)').join(', ')}`,
-                {
-                    replacements: planData.topics.reduce((acc, uid) => [
-                        ...acc,
-                        planId,
-                        uid,
-                        user.id,
-                    ], []),
-                    transaction: t,
-                },
-            );
+            // insert into plan_topics
+            await planTopicsModel.create(planId, planData.topics, user.id, t);
 
+            // insert into plan_shantytowns
             if (planData.locationType === 'shantytowns') {
-                await sequelize.query(
-                    `INSERT INTO plan_shantytowns(fk_plan, fk_shantytown, created_by)
-                    VALUES ${planData.locationShantytowns.map(() => '(?, ?, ?)').join(', ')}`,
-                    {
-                        replacements: planData.locationShantytowns.reduce((acc, id) => [
-                            ...acc,
-                            planId,
-                            id,
-                            user.id,
-                        ], []),
-                        transaction: t,
-                    },
-                );
+                await planShantytownModel.create(planId, planData.locationShantytowns, user.id, t);
             }
 
             // insert into finances
             const financeIds = await Promise.all(
-                planData.finances.map(({ year }) => sequelize.query(
-                    'INSERT INTO finances(fk_plan, year, created_by) VALUES (:planId, :year, :createdBy) RETURNING finance_id AS id',
-                    {
-                        replacements: {
-                            planId,
-                            year,
-                            createdBy: user.id,
-                        },
-                        transaction: t,
-                    },
-                )),
+                planData.finances.map(({ year }) => financeTypeModel.create(planId, year, user.id, t)),
             );
 
             // insert into finance_rows
@@ -285,26 +250,14 @@ module.exports = async (data, user) => {
             return Promise.all([
                 Promise.resolve(planId),
 
-                planManagerModel.create(planId, planData.government, user.id, t),
-
-                sequelize.query(
-                    `INSERT INTO plan_operators(fk_plan, fk_user, created_by)
-                    VALUES (:planId, :userId, :createdBy)`,
-                    {
-                        replacements: {
-                            planId,
-                            userId: planData.associationContact,
-                            createdBy: user.id,
-                        },
-                        transaction: t,
-                    },
-                ),
+                planManagerModel.create(planId, planData.government.map(manager => manager.id), user.id, t),
+                planOperatorModel.create(planId, planData.associationContact, user.id, t),
 
                 // pour le manager (utilisateur), on octroie les droits suivants sur l'action :
                 // list, read, update, et close
                 ...['list', 'read', 'update', 'close'].map(
-                    feature => planData.government.map(managerId => addAttachments([{ type: 'plan', id: planId }])
-                        .toUser(managerId)
+                    feature => planData.government.map(manager => addAttachments([{ type: 'plan', id: planId }])
+                        .toUser(manager.id)
                         .onFeature(feature, 'plan', t)),
                 ),
 
