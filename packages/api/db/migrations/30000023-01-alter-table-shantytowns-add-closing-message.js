@@ -3,29 +3,32 @@
 module.exports = {
     async up(queryInterface, Sequelize) {
         const transaction = await queryInterface.sequelize.transaction();
+        await Promise.all(
+            [
+                queryInterface.addColumn(
+                    'shantytowns',
+                    'closing_context',
+                    {
+                        type: Sequelize.STRING,
+                        allowNull: true,
 
-        await queryInterface.addColumn(
-            'shantytowns',
-            'closing_context',
-            {
-                type: Sequelize.STRING,
-                allowNull: true,
-
-            },
-            {
-                transaction,
-            },
-        );
-        await queryInterface.addColumn(
-            'ShantytownHistories',
-            'closing_context',
-            {
-                type: Sequelize.STRING,
-                allowNull: true,
-            },
-            {
-                transaction,
-            },
+                    },
+                    {
+                        transaction,
+                    },
+                ),
+                queryInterface.addColumn(
+                    'ShantytownHistories',
+                    'closing_context',
+                    {
+                        type: Sequelize.STRING,
+                        allowNull: true,
+                    },
+                    {
+                        transaction,
+                    },
+                ),
+            ],
         );
 
         // on s'assure que closing_context n'est pas renseigné si le site n'est pas fermé (i.e closed_at est null)
@@ -34,7 +37,7 @@ module.exports = {
             ['closed_at', 'closing_context'],
             {
                 type: 'check',
-                name: 'check_closed_at-not-null-if-context',
+                name: 'check_context-is-null-if-closed_at-is-null',
                 where: {
                     [Sequelize.Op.not]:
                         {
@@ -48,61 +51,74 @@ module.exports = {
                 transaction,
             },
         );
-        await queryInterface.sequelize.query(
-            `UPDATE shantytowns 
-            SET 
-                closing_context = 'Décision administrative (sans précision de l''émetteur)',
-                status = 'Unknown'
-            WHERE status = 'closed_by_admin'
-            `,
-            { transaction },
-        );
-        await queryInterface.sequelize.query(
-            `UPDATE "ShantytownHistories"
-            SET
-                closing_context = 'Décision administrative (sans précision de l''émetteur)',
-                status = 'Unknown'
-            WHERE status = 'closed_by_admin'
-            `,
-            { transaction },
+        await Promise.all(
+            [
+                queryInterface.sequelize.query(
+                    `UPDATE shantytowns
+                SET
+                    closing_context = 'Décision administrative (sans précision de l''émetteur)',
+                    status = 'unknown'
+                WHERE status = 'closed_by_admin'
+                `,
+                    { transaction },
+                ),
+                queryInterface.sequelize.query(
+                    `UPDATE "ShantytownHistories"
+                SET
+                    closing_context = 'Décision administrative (sans précision de l''émetteur)',
+                    status = 'unknown'
+                WHERE status = 'closed_by_admin'
+                `,
+                    { transaction },
+                ),
+            ],
         );
         await transaction.commit();
     },
 
-    down: queryInterface => queryInterface.sequelize.transaction(
-        transaction => Promise.all([
-            queryInterface.sequelize.query(
-                `UPDATE shantytowns 
-                SET 
-                    status = 'closed_by_admin'
-                WHERE 
-                    status = 'Unknown'
-                    AND closing_context = 'Décision administrative (sans précision de l''émetteur)'
-                `,
-                { transaction },
-            ),
-            queryInterface.sequelize.query(
-                `UPDATE "ShantytownHistories"
-                SET 
-                    status = 'closed_by_admin'
-                WHERE 
-                    status = 'Unknown'
-                    AND closing_context = 'Décision administrative (sans précision de l''émetteur)'
-                `,
-                { transaction },
-            ),
-            queryInterface.removeConstraint('shantytowns', 'check_closed_at-not-null-if-context', { transaction }),
-            queryInterface.removeColumn(
-                'shantytowns',
-                'closing_context',
-                { transaction },
-            ),
-            queryInterface.removeColumn(
-                'ShantytownHistories',
-                'closing_context',
-                { transaction },
-            ),
-        ]),
+    async down(queryInterface) {
+        const transaction = await queryInterface.sequelize.transaction();
 
-    ),
+        await Promise.all(
+            [
+                queryInterface.sequelize.query(
+                    `UPDATE shantytowns
+                SET 
+                    status = 'closed_by_admin'
+                WHERE 
+                    status = 'unknown'
+                    AND closing_context = 'Décision administrative (sans précision de l''émetteur)'
+                `,
+                    { transaction },
+                ),
+                queryInterface.sequelize.query(
+                    `UPDATE "ShantytownHistories"
+                SET 
+                    status = 'closed_by_admin'
+                WHERE 
+                    status = 'unknown'
+                    AND closing_context = 'Décision administrative (sans précision de l''émetteur)'
+                `,
+                    { transaction },
+                ),
+            ],
+        );
+
+        await Promise.all(
+            [
+                queryInterface.removeConstraint('shantytowns', 'check_context-is-null-if-closed_at-is-null', { transaction }),
+                queryInterface.removeColumn(
+                    'shantytowns',
+                    'closing_context',
+                    { transaction },
+                ),
+                queryInterface.removeColumn(
+                    'ShantytownHistories',
+                    'closing_context',
+                    { transaction },
+                ),
+            ],
+        );
+        await transaction.commit();
+    },
 };
