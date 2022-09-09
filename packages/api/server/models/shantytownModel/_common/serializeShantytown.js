@@ -13,6 +13,7 @@ module.exports = (town, user) => {
         id: town.id,
         name: town.name,
         status: town.status,
+        closingContext: town.closingContext,
         latitude: town.latitude,
         longitude: town.longitude,
         city: {

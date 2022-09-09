@@ -35,9 +35,20 @@
                     </div>
                 </div>
             </DetailsPanelSection>
+            <DetailsPanelSection>
+                <div class="grid grid-cols-2">
+                    <div class="font-bold">
+                        Contexte de la fermeture
+                    </div>
+
+                    <div class="-ml-5">
+                        {{ town.closingContext }}
+                    </div>
+                </div>
+            </DetailsPanelSection>
             <div class="border-t-1 border-G200 py-4">
                 <table
-                    class="table-fixed text-center mx-12"
+                    class="table-fixed text-center"
                     v-if="town.closingSolutions.length > 0"
                 >
                     <thead>
@@ -45,11 +56,14 @@
                             <td class="border-b-1 font-bold">
                                 Orientations des ménages
                             </td>
-                            <td class="w-24 py-2 border-b-1 font-bold">
+                            <td class="w-32 py-2 border-b-1 font-bold">
                                 Ménages
                             </td>
-                            <td class="w-24 py-2 border-b-1 font-bold">
+                            <td class="w-32 py-2 border-b-1 font-bold">
                                 Personnes
+                            </td>
+                            <td class="w-48 py-2 border-b-1 font-bold">
+                                Message
                             </td>
                         </tr>
                     </thead>
@@ -65,8 +79,11 @@
                             <td class="py-1 border-b-1 border-r-1">
                                 {{ `${item.householdsAffected || "-"}` }}
                             </td>
-                            <td class="py-1 border-b-1">
+                            <td class="py-1 border-b-1 border-r-1">
                                 {{ `${item.peopleAffected || "-"}` }}
+                            </td>
+                            <td class="py-1 border-b-1">
+                                {{ `${item.message || "-"}` }}
                             </td>
                         </tr>
                     </tbody>
@@ -85,6 +102,12 @@ import DetailsPanel from "#app/components/ui/details/DetailsPanel.vue";
 import DetailsPanelSection from "#app/components/ui/details/DetailsPanelSection.vue";
 
 export default {
+    components: { DetailsPanel, DetailsPanelSection },
+    props: {
+        town: {
+            type: Object
+        }
+    },
     data() {
         const {
             closing_solutions: closingSolutions
@@ -96,23 +119,9 @@ export default {
             }, {})
         };
     },
-    props: {
-        town: {
-            type: Object
-        }
-    },
-    methods: {
-        /**
-         * @see index.js
-         */
-        formatDate(...args) {
-            return window.App.formatDate.apply(window, args);
-        }
-    },
-    components: { DetailsPanel, DetailsPanelSection },
     computed: {
         closedAt() {
-            return this.formatDate(this.town.closedAt);
+            return window.App.formatDate.apply(window, [this.town.closedAt]);
         },
         closedWithSolutions() {
             return this.town.closedWithSolutions === "yes" ? "Oui" : "Non";

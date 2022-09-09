@@ -41,10 +41,9 @@
                         id="characteristics"
                     />
                     <TownDetailsClosedData
-                        v-if="town.closedAt != null"
+                        v-if="town.closedAt !== null"
                         :town="town"
                         class="mb-10"
-                        id="characteristics"
                     />
                     <TownDetailsPanelPlans
                         v-if="town.plans.length"
