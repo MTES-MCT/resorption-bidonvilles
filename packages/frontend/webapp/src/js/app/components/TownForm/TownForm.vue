@@ -53,12 +53,12 @@
                         class="mt-10 townPanelShadow"
                         id="characteristics"
                         v-model="town.characteristics"
-                        :nearbyClosedShantytowns="nearbyClosedShantytowns"
                     ></TownFormPanelCharacteristics>
 
                     <TownFormPanelPeople
                         class="mt-10 townPanelShadow"
                         id="people"
+                        :nearbyClosedShantytowns="nearbyClosedShantytowns"
                         v-model="town.people"
                     ></TownFormPanelPeople>
 
@@ -349,10 +349,6 @@ export default {
                         .detailed_address,
                     owner_type: this.town.characteristics.owner_type,
                     owner: this.town.characteristics.owner,
-                    is_reinstallation: this.town.characteristics
-                        .is_reinstallation,
-                    reinstallation_comments: this.town.characteristics
-                        .reinstallation_comments,
                     population_total: this.strToInt(
                         this.town.people.population.populationTotal
                     ),
@@ -392,6 +388,9 @@ export default {
                         this.town.people.census_conducted_at
                     ),
                     census_conducted_by: this.town.people.census_conducted_by,
+                    is_reinstallation: this.town.population.is_reinstallation,
+                    reinstallation_comments: this.town.population
+                        .reinstallation_comments,
                     owner_complaint: this.town.judicial.owner_complaint,
                     justice_procedure: this.town.judicial.justice_procedure,
                     justice_rendered: this.town.judicial.justice_rendered,

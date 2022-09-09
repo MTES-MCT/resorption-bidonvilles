@@ -38,6 +38,24 @@
                 v-model="input.census_conducted_by"
             ></InputCensusConductedBy>
         </FormParagraph>
+
+        <FormParagraph
+            title="Tout ou partie des habitants viennent-ils d'un ou plusieurs sites récemment fermés ?"
+            :showMandatoryStar="true"
+        >
+            La majorité des habitants était déjà sur le territoire.
+            <TownFormClosedShantytowns
+                :nearbyClosedShantytowns="nearbyClosedShantytowns"
+            ></TownFormClosedShantytowns>
+            <InputIsReinstallation
+                v-model="input.is_reinstallation"
+            ></InputIsReinstallation>
+        </FormParagraph>
+        <div class="ml-12 mt-6" v-if="input.is_reinstallation === 1">
+            <InputReinstallationComments
+                v-model="input.reinstallation_comments"
+            ></InputReinstallationComments>
+        </div>
     </FormGroup>
 </template>
 
@@ -49,6 +67,9 @@ import InputCaravansAndHuts from "./inputs/InputCaravansAndHuts.vue";
 import InputCensusStatus from "./inputs/InputCensusStatus.vue";
 import InputCensusConductedAt from "./inputs/InputCensusConductedAt.vue";
 import InputCensusConductedBy from "./inputs/InputCensusConductedBy.vue";
+import InputIsReinstallation from "./inputs/InputIsReinstallation.vue";
+import InputReinstallationComments from "./inputs/InputReinstallationComments.vue";
+import TownFormClosedShantytowns from "./TownFormClosedShantytowns.vue";
 
 export default {
     components: {
@@ -58,13 +79,19 @@ export default {
         InputCaravansAndHuts,
         InputCensusStatus,
         InputCensusConductedAt,
-        InputCensusConductedBy
+        InputCensusConductedBy,
+        InputIsReinstallation,
+        InputReinstallationComments,
+        TownFormClosedShantytowns
     },
 
     props: {
         value: {
             type: Object,
             required: true
+        },
+        nearbyClosedShantytowns: {
+            type: Array
         }
     },
 
