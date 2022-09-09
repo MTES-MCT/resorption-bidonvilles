@@ -1,11 +1,11 @@
 <template>
     <DetailsPanel>
-        <template v-slot:title>Evacuation du site</template>
+        <template v-slot:title>Fermeture du site</template>
         <template v-slot:body>
             <DetailsPanelSection>
                 <div class="grid grid-cols-2">
                     <div class="font-bold">
-                        Date de l'évacuation
+                        Date de la fermeture
                     </div>
 
                     <div class="-ml-5">
