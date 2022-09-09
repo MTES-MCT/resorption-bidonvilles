@@ -146,6 +146,7 @@
                 <PrivateContainer class="flex" id="comments">
                     <div class="leftColumnWidth" />
                     <PlanDetailsComments
+                        class="flex-1"
                         :comments="plan.comments"
                     ></PlanDetailsComments>
                 </PrivateContainer>
