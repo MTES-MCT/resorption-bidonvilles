@@ -1,3 +1,5 @@
+const addressSimpleRegex = require('./addressSimpleRegex');
+
 module.exports = {
     selection: {
         'shantytowns.shantytown_id': 'id',
@@ -12,7 +14,7 @@ module.exports = {
         'shantytowns.is_reinstallation': 'isReinstallation',
         'shantytowns.reinstallation_comments': 'reinstallationComments',
         'shantytowns.address_details': 'addressDetails',
-        '(SELECT regexp_matches(shantytowns.address, \'^(.+) [0-9]+ [^,]+,? [0-9]+,? [^, ]+(,.+)?$\'))[1]': 'addressSimple',
+        [addressSimpleRegex]: 'addressSimple',
         'shantytowns.population_total': 'populationTotal',
         'shantytowns.population_couples': 'populationCouples',
         'shantytowns.population_minors': 'populationMinors',
