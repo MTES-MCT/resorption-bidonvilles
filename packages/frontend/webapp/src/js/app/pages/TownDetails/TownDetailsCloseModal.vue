@@ -136,6 +136,15 @@
                         </CheckableGroup>
                     </div>
 
+                    <div v-if="error !== null" class="text-red py-2 px-4 mb-4">
+                        {{ error.user_message }}
+                        <ul v-if="errors && errors.length > 0" class="text-sm">
+                            <li v-for="(err, index) in errors" :key="index">
+                                - {{ err }}
+                            </li>
+                        </ul>
+                    </div>
+
                     <div class="flex justify-end mt-8">
                         <Button
                             variant="primaryText"
@@ -243,6 +252,7 @@ export default {
             } catch (err) {
                 this.loading = false;
                 this.error = err;
+                this.errors = Object.values(err.fields).flat();
                 this.$refs.form.setErrors(err.fields);
                 return;
             }
@@ -307,6 +317,7 @@ export default {
             isAlreadyClosed: this.town.closedAt !== null,
             loading: false,
             error: null,
+            errors: null,
             form: {
                 closed_at: this.town.closedAt
                     ? new Date(this.town.closedAt * 1000)
