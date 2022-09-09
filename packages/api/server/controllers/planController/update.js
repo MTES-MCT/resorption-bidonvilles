@@ -95,12 +95,9 @@ module.exports = async (req, res, next) => {
         addError('government', 'Vous devez désigner au moins une personne en charge du pilotage de l\'action');
     } else {
         try {
-            const users = await userModel.findByIds(req.user, planData.government);
-            if (users.length !== planData.government) {
+            const users = await userModel.findByIds(req.user, planData.government.map(a => a.id));
+            if (users.length !== planData.government.length) {
                 addError('government', 'Une des personnes désignées comme pilote de l\'action n\'a pas été retrouvée en base de données');
-            } else if (
-                users.filter(user => user.organization.category.uid !== 'public_establishment').length > 0) {
-                addError('government', 'Au moins un des pilotes de l\'action ne fait partie d\'un service de l\'état');
             }
         } catch (error) {
             addError('government', 'Une erreur est survenue lors de la validation du pilote de l\'action');
@@ -166,7 +163,7 @@ module.exports = async (req, res, next) => {
                 sequelize.query('DELETE FROM finances WHERE fk_plan = :planId', { replacements: { planId: plan.id }, transaction: t }),
                 sequelize.query('DELETE FROM plan_managers WHERE fk_plan = :planId', { replacements: { planId: plan.id }, transaction: t }),
                 ...['list', 'read', 'update', 'close'].map(
-                    feature => plan.government_contacts.map(manager => removeAttachments([{ type: 'plan', id: plan.id }])
+                    feature => planData.government.map(manager => removeAttachments([{ type: 'plan', id: plan.id }])
                         .fromUser(manager.id)
                         .onFeature(feature, 'plan', t)),
                 ),
@@ -230,11 +227,11 @@ module.exports = async (req, res, next) => {
 
             // managers
             return Promise.all([
-                planManagerModel.create(plan.id, planData.government, req.user.id, t),
+                planManagerModel.create(plan.id, planData.government.map(manager => manager.id), req.user.id, t),
 
                 ...['list', 'read', 'update', 'close'].map(
-                    feature => planData.government.map(managerId => addAttachments([{ type: 'plan', id: plan.id }])
-                        .toUser(managerId)
+                    feature => planData.government.map(manager => addAttachments([{ type: 'plan', id: plan.id }])
+                        .toUser(manager.id)
                         .onFeature(feature, 'plan', t)),
                 ),
             ]);
