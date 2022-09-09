@@ -61,7 +61,13 @@ module.exports = [
         .isIn(['resorbed', 'closed_by_justice', 'closed_by_city_admin', 'closed_by_pref_admin', 'other', 'unknown']).bail().withMessage('La valeur du champ "Cause de la fermeture" est invalide'),
 
     body('closing_context')
-        .isString().bail().withMessage('Le champ "Préciser le contexte de la fermeture et les faits à signaler" est invalide'),
+        .isString().bail().withMessage('Le champ "Préciser le contexte de la fermeture et les faits à signaler" est invalide')
+        .custom((value, { req }) => {
+            if (req.body.status === 'other' && (value === null || value === undefined || value === '')) {
+                throw new Error('Le champ "Préciser le contexte de la fermeture" doit être rempli si le champ "Cause de la fermeture" est renseigné à "Autre"');
+            }
+            return true;
+        }),
 
     body('solutions')
         .customSanitizer((value) => {

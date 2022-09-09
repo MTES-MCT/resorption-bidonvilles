@@ -365,7 +365,7 @@ export default {
                     value: "closed_by_city_admin",
                     label: "Décision administrative de la Commune"
                 },
-                { value: "other", label: "Autre" },
+                { value: "other", label: "Autre (préciser le contexte)" },
                 { value: "unknown", label: "Raison inconnue" }
             ]
         };
