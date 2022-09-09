@@ -3,8 +3,13 @@
         <template v-slot:title>Contacts</template>
         <template v-slot:body>
             <DetailsPanelSection>
-                <span class="font-bold">Pilote</span>
+                <span class="font-bold"
+                    >Pilote{{
+                        plan.government_contacts.length > 1 ? "s" : ""
+                    }}</span
+                >
                 <OrganizationDetailsUser
+                    class="my-2"
                     v-for="user in plan.government_contacts"
                     :key="user.id"
                     :user="user"
