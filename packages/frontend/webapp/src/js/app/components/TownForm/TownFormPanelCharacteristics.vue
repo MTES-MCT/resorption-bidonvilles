@@ -36,9 +36,8 @@
             ></InputOwner>
         </FormParagraph>
         <FormParagraph
-            title="S'agit-il d'une réinstallation ?"
+            title="Tout ou partie des habitants viennent-ils d'un ou plusieurs sites récemment fermés ?"
             :showMandatoryStar="true"
-            class="w-128"
         >
             La majorité des habitants était déjà sur le territoire.
             <TownFormClosedShantytowns
