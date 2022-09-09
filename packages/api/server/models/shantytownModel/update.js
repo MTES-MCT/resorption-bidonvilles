@@ -1,4 +1,5 @@
 const sequelize = require('#db/sequelize');
+const incomingTownsModel = require('#server/models/incomingTownsModel');
 
 module.exports = async (editor, shantytownId, data, argTransaction = undefined) => {
     let transaction = argTransaction;
@@ -343,7 +344,13 @@ module.exports = async (editor, shantytownId, data, argTransaction = undefined) 
     ];
     const { commonData, justiceData, ownerData } = Object.keys(data).reduce(
         (acc, key) => {
-            if (['social_origins', 'closing_solutions', 'sanitary_toilet_types', 'electricity_access_types'].includes(key)) { // ignore social_origins, they are a special case
+            if ([
+                'social_origins',
+                'closing_solutions',
+                'sanitary_toilet_types',
+                'electricity_access_types',
+                'reinstallation_incoming_towns',
+            ].includes(key)) {
                 return acc;
             }
 
@@ -407,6 +414,24 @@ module.exports = async (editor, shantytownId, data, argTransaction = undefined) 
             transaction,
         },
     );
+
+    if (Array.isArray(data.reinstallation_incoming_towns)) {
+        await sequelize.query(
+            'DELETE FROM shantytown_incoming_towns WHERE fk_shantytown = :id',
+            {
+                replacements: { id: shantytownId },
+                transaction,
+            },
+        );
+
+        if (data.reinstallation_incoming_towns.length > 0) {
+            await incomingTownsModel.create(
+                shantytownId,
+                data.reinstallation_incoming_towns,
+                transaction,
+            );
+        }
+    }
 
     if (Array.isArray(data.social_origins)) {
         await sequelize.query(

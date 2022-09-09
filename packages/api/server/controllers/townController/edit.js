@@ -14,6 +14,7 @@ module.exports = async (req, res, next) => {
                 built_at: req.body.built_at || null,
                 is_reinstallation: req.body.is_reinstallation,
                 reinstallation_comments: req.body.reinstallation_comments,
+                reinstallation_incoming_towns: req.body.reinstallation_incoming_towns_full.map(({ id }) => id),
                 social_origins: req.body.social_origins,
                 population_total: req.body.population_total,
                 population_couples: req.body.population_couples,
