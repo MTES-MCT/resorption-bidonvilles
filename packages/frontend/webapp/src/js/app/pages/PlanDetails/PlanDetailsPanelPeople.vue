@@ -19,6 +19,7 @@
             <DetailsPanelSection>
                 <span class="font-bold">Opérateur ou service en charge</span>
                 <OrganizationDetailsUser
+                    class="my-2"
                     v-for="user in plan.operator_contacts"
                     :key="user.id"
                     :user="user"
