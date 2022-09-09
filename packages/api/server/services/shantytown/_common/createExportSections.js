@@ -40,6 +40,7 @@ module.exports = (user, data, properties, closedTowns, closingSolutions) => {
         section.properties.push(properties.closedAt);
         section.properties.push(properties.closedWithSolutions);
         section.properties.push(properties.status);
+        section.properties.push(properties.closingContext);
     }
 
     if (options.indexOf('owner') !== -1 && user.isAllowedTo('access', 'shantytown_owner')) {

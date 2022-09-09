@@ -119,6 +119,11 @@ module.exports = (closingSolutions) => {
             data: ({ status }) => STATUS_DETAILS[status],
             width: COLUMN_WIDTHS.SMALL,
         },
+        closingContext: {
+            title: 'Contexte de la fermeture',
+            data: ({ closingContext }) => closingContext,
+            width: COLUMN_WIDTHS.SMALL,
+        },
         ownerType: {
             title: 'Type de propriétaire',
             data: ({ ownerType }) => ownerType.label,
