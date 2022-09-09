@@ -42,7 +42,7 @@
                     </div>
 
                     <div class="-ml-5">
-                        {{ town.closingContext }}
+                        {{ town.closingContext ? town.closingContext : "NC" }}
                     </div>
                 </div>
             </DetailsPanelSection>
