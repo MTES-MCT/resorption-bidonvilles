@@ -55,6 +55,7 @@
                         </CheckableGroup>
 
                         <TextInput
+                            v-if="!isAlreadyClosed"
                             label="Préciser le contexte de la fermeture et les
                                 faits à signaler (incendie, violences, départ
                                 spontané des habitants...)"
@@ -76,29 +77,33 @@
                                     v-model="checkedSolutions"
                                     id="solutions"
                                 />
-                                <div class="flex items-center ml-10">
-                                    <InlineTextInput
-                                        label="Ménages : "
-                                        type="number"
+                                <div v-if="checkedSolutions.includes(item.id)">
+                                    <div class="flex items-center mb-4">
+                                        <InlineTextInput
+                                            label="Ménages"
+                                            type="number"
+                                            v-model="
+                                                form.solutions[item.id]
+                                                    .householdsAffected
+                                            "
+                                            class="mr-4"
+                                        />
+                                        <InlineTextInput
+                                            label="Personnes"
+                                            type="number"
+                                            v-model="
+                                                form.solutions[item.id]
+                                                    .peopleAffected
+                                            "
+                                        />
+                                    </div>
+                                    <TextInput
                                         v-model="
-                                            form.solutions[item.id]
-                                                .householdsAffected
+                                            form.solutions[item.id].message
                                         "
-                                        class="mr-4"
-                                    />
-                                    <InlineTextInput
-                                        label="Personnes : "
-                                        type="number"
-                                        v-model="
-                                            form.solutions[item.id]
-                                                .peopleAffected
-                                        "
-                                    />
+                                        placeholder="commentaires, précisions..."
+                                    ></TextInput>
                                 </div>
-                                <TextInput
-                                    v-model="form.solutions[item.id].message"
-                                    placeholder="commentaires, précisions..."
-                                ></TextInput>
                             </div>
                         </CheckableGroup>
 
@@ -267,7 +272,8 @@ export default {
                     [
                         "Hébergement ou logement adapté longue durée avec accompagnement, dont espace terrain d’insertion",
                         "Logement"
-                    ].includes(solution.label)
+                    ].includes(solution.label) &&
+                    this.checkedSolutions.includes(solution.id)
                 ) {
                     populationResorbed =
                         populationResorbed +
