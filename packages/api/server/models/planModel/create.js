@@ -1,9 +1,7 @@
 const sequelize = require('#db/sequelize');
 
-module.exports = async ({
-    data,
-}, transaction = undefined) => {
-    const result = await sequelize.query(
+module.exports = async (data, transaction = undefined) => {
+    const [[{ id }]] = await sequelize.query(
         `INSERT INTO plans2(
             name,
             started_at,
@@ -20,6 +18,7 @@ module.exports = async ({
             :startedAt,
             :expectedToEndAt,
             :inAndOut,
+            :goals,
             'autre',
             :locationType,
             :locationDetails,
@@ -42,5 +41,5 @@ module.exports = async ({
             transaction,
         },
     );
-    return result;
+    return id;
 };
