@@ -55,6 +55,18 @@ export async function addState(planId, data) {
 }
 
 /**
+ * Adds a comment to a plan
+ *
+ * @param {string}                 id   Plan id
+ * @param {PlanComment_Data} data Comment data
+ *
+ * @returns {Promise}
+ */
+export function addComment(id, data) {
+    return postApi(`/plans/${id}/comments`, data);
+}
+
+/**
  *
  */
 export async function close(planId, data) {

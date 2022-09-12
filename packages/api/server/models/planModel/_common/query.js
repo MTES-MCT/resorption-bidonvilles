@@ -3,6 +3,7 @@ const userModel = require('#server/models/userModel');
 const shantytownModel = require('#server/models/shantytownModel');
 const { where } = require('#server/utils/permission');
 const stringifyWhereClause = require('#server/models/_common/stringifyWhereClause');
+const getComments = require('./getComments');
 const serializePlan = require('./serializePlan');
 
 module.exports = async (user, feature, filters = {}) => {
@@ -76,7 +77,8 @@ module.exports = async (user, feature, filters = {}) => {
     }), {});
 
     const planIds = rows.map(({ id }) => id);
-    const [planManagers, planOperators, planTopics, planStates, planShantytowns, planFinances] = await Promise.all([
+    const [planComments, planManagers, planOperators, planTopics, planStates, planShantytowns, planFinances] = await Promise.all([
+        getComments(user, Object.keys(hashedPlans)),
         sequelize.query(
             `SELECT
                 fk_plan,
@@ -236,6 +238,7 @@ module.exports = async (user, feature, filters = {}) => {
             },
         ),
     ]);
+
 
     // users
     const serializedUsers = await userModel.findByIds(
@@ -474,5 +477,11 @@ module.exports = async (user, feature, filters = {}) => {
         });
     });
 
-    return rows.map(serializePlan.bind(this, user));
+    const serializedPlans = rows.map(serializePlan.bind(this, user))
+        .map(plan => ({
+            ...plan,
+            comments: planComments[plan.id],
+        }));
+
+    return serializedPlans;
 };

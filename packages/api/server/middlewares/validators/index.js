@@ -14,6 +14,7 @@ const removeShantytownActorTheme = require('./shantytownActors/removeShantytownA
 const inviteShantytownActor = require('./shantytownActors/inviteShantytownActor');
 const invite = require('./invite');
 const createShantytownComment = require('./shantytownComment/create');
+const createPlanComment = require('./planComment/create');
 const activityList = require('./activity/list');
 const dashboardLocation = require('./dashboard/location');
 const findNearbyTowns = require('./findNearbyTowns');
@@ -44,6 +45,9 @@ module.exports = {
     },
     shantytownComment: {
         createShantytownComment,
+    },
+    planComment: {
+        createPlanComment,
     },
     invite,
     activity: {

@@ -19,6 +19,7 @@ import highCovidComments from "./modules/highCovidComments";
 import navigation from "./modules/navigation/navigation";
 import plans from "./modules/plans";
 import shantytownComments from "./modules/shantytownComments";
+import planComments from "./modules/planComments";
 import townForm from "./modules/townForm";
 import userModule from "./modules/user";
 import config from "./modules/config";
@@ -34,6 +35,7 @@ export default new Vuex.Store({
         highCovidComments,
         navigation,
         plans,
+        planComments,
         shantytownComments,
         townForm,
         user: userModule,
@@ -106,19 +108,16 @@ export default new Vuex.Store({
                 state.towns.data[index] = town;
             }
         },
-        updateShantytownComments(state, { townId, comments }) {
-            if (
-                state.detailedTown !== null &&
-                state.detailedTown.id === townId
-            ) {
-                state.detailedTown.comments = comments;
+        updateShantytownComments(state, { id, response }) {
+            if (state.detailedTown !== null && state.detailedTown.id === id) {
+                state.detailedTown.comments = response.comments;
             }
 
-            const index = state.towns.hash[townId];
+            const index = state.towns.hash[id];
             if (index !== undefined) {
                 state.towns.data.splice(index, 1, {
                     ...state.towns.data[index],
-                    comments: comments
+                    comments: response.comments
                 });
             }
         },

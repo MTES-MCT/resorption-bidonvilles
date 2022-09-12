@@ -5,6 +5,7 @@ const { webappUrl } = require('#server/config');
 const formatAddress = town => `${town.address} ${town.name ? `« ${town.name} » ` : ''}`;
 const formatUsername = user => `[${user.first_name} ${user.last_name}](${webappUrl}/nouvel-utilisateur/${user.id}) `;
 const formatTownLink = (townID, text) => `[${text}](${webappUrl}/site/${townID})`;
+const formatPlanLink = (planID, text) => `[${text}](${webappUrl}/plan/${planID})`;
 
 const formatDate = ((dateToFormat) => {
     const day = dateToFormat.getDate();
@@ -223,6 +224,37 @@ async function triggerNewComment(commentDescription, tagLabels, town, author) {
     await newCommentAlert.send(mattermostMessage);
 }
 
+async function triggerNewPlanComment(comment, plan, author) {
+    if (!mattermost) {
+        return;
+    }
+
+    const newCommentAlert = new IncomingWebhook(mattermost);
+
+    const username = formatUsername(author);
+    const planLink = formatPlanLink(plan.id, plan.name);
+
+    const mattermostMessage = {
+        channel: '#notif-action-nouveau-commentaire',
+        username: 'Alerte Résorption Bidonvilles',
+        icon_emoji: ':robot:',
+        text: `:rotating_light: Commentaire sur l'action: ${planLink} par ${username}`,
+        attachments: [
+            {
+                color: '#f2c744',
+                fields: [
+                    {
+                        short: false,
+                        value: `*Commentaire*: ${comment}`,
+                    },
+                ],
+            },
+        ],
+    };
+
+    await newCommentAlert.send(mattermostMessage);
+}
+
 async function triggerPeopleInvitedAlert(guest, greeter, msg) {
     if (!mattermost) {
         return;
@@ -347,6 +379,7 @@ module.exports = {
     triggerActorInvitedAlert,
     triggerPeopleInvitedAlert,
     triggerNewComment,
+    triggerNewPlanComment,
     triggerDeclaredActor,
     triggerInvitedActor,
     triggerRemoveDeclaredActor,

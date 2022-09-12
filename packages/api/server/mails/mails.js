@@ -526,6 +526,36 @@ module.exports = {
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
      */
+    sendUserNewPlanComment: (recipient, options = {}) => {
+        const { variables, preserveRecipient = false } = options;
+
+        const utm = generateTrackingUTM(USER_CAMPAIGN, 'nouveau-commentaire-action');
+
+        return mailService.send('user_new_plan_comment', {
+            recipient,
+            variables: {
+                recipientName: formatName(recipient),
+                backUrl,
+                wwwUrl: `${wwwUrl}?${utm}`,
+                plan: variables.plan,
+                createdBy: {
+                    name: formatName(variables.comment.createdBy),
+                    organization: variables.comment.createdBy.organization,
+                },
+                comment: variables.comment.description,
+                rootAnnuaireUrl: `${webappUrl}/annuaire?${utm}`,
+                annuaireUrl: `${webappUrl}/annuaire/${variables.comment.createdBy.organization_id}?${utm}`,
+                planUrl: `${webappUrl}/action/${variables.plan.id}`,
+                messageUrl: `${webappUrl}/action/${variables.plan.id}#comment`,
+            },
+            preserveRecipient,
+        });
+    },
+
+    /**
+     * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
+     * @param {Object} options
+     */
     sendUserNewPassword: (recipient, options = {}) => {
         const { variables, preserveRecipient } = options;
 
