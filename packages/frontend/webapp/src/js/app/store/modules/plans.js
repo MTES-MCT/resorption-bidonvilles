@@ -8,7 +8,9 @@ export default {
         topicFilter: [],
         interventionLocationFilter: [],
         locationFilter: null,
-        items: []
+        items: [],
+        hash: {},
+        detailedPlan: null
     },
 
     mutations: {
@@ -23,6 +25,13 @@ export default {
         },
         setPlansItems(state, items) {
             state.items = items;
+            state.hash = items.reduce(
+                (hash, { id }, index) => ({
+                    ...hash,
+                    [id]: index
+                }),
+                {}
+            );
         },
         setPlansLocationFilter(state, filter) {
             state.currentPage = 1;
@@ -42,6 +51,31 @@ export default {
                 state.items.push(plan);
             } else {
                 state.items.splice(index, 1, plan);
+            }
+        },
+
+        setDetailedPlan(state, plan) {
+            state.detailedPlan = plan;
+            const index = state.hash[plan.id];
+            if (index !== undefined) {
+                state.items[index] = plan;
+            }
+        },
+
+        updatePlanComments(state, { id, response }) {
+            if (state.detailedPlan !== null && state.detailedPlan.id === id) {
+                state.detailedPlan.comments = [
+                    response.comment,
+                    ...state.detailedPlan.comments
+                ];
+            }
+
+            const index = state.hash[id];
+            if (index !== undefined) {
+                state.items.splice(index, 1, {
+                    ...state.items[index],
+                    comments: [response.comment, ...state.items[index].comments]
+                });
             }
         }
     },
@@ -80,6 +114,9 @@ export default {
     },
 
     getters: {
+        detailedPlan: state => {
+            return state.detailedPlan;
+        },
         plansState(state) {
             return state.state;
         },

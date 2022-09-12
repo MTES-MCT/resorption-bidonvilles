@@ -1,0 +1,31 @@
+Bonjour,
+Un nouveau message a été publié par {{var:createdBy.name}}
+({{var:createdBy.organization}}) sur l'action {{var:planUrl}}.
+
+{{var:comment}}
+
+Voir le message [{{var:messageUrl}}]
+
+Contacter {{var:createdBy.name}} [{{var:annuaireUrl}}]
+
+En tant que personne concernée par l'action, vous êtes informé(e) en temps réel
+de tout nouveau message.
+
+
+Ce mail a été envoyé aux opérateurs ou services en charge de l'action et aux
+acteurs en DDETS et Préfecture..
+
+Cordialement,
+L'équipe Résorption-bidonvilles
+
+
+
+Résorption-bidonvilles
+Agir pour résorber les bidonvilles
+contact@resorption-bidonvilles.beta.gouv.fr
+[contact@resorption-bidonvilles.beta.gouv.fr]
+Suivez toute l'actualité de la résorption des bidonvilles et retrouvez tous vos
+outils méthodologiques sur votre blog [{{var:blogUrl}}]
+Abonnez-vous à la lettre d'info
+[https://email.developpement-durable.gouv.fr/users/subscribe/js_id/5n4i/id/3]
+Développé par la Dihal [https://www.gouvernement.fr/resorption-des-bidonvilles]

@@ -14,8 +14,14 @@
         <mj-text mj-class="font-italic">
             Agir pour résorber les bidonvilles
         </mj-text>
-        <mj-text mj-class="pb-4">
+        <mj-text>
             <a class="link" href="mailto:contact@resorption-bidonvilles.beta.gouv.fr">contact@resorption-bidonvilles.beta.gouv.fr</a>
+        </mj-text>
+        <mj-text>
+            Suivez toute l'actualité de la résorption des bidonvilles et retrouvez tous vos outils méthodologiques sur votre <a class="link" href="{{var:blogUrl}}">blog</a>
+        </mj-text>
+        <mj-text mj-class="pb-4">
+            <a class="link" href="https://email.developpement-durable.gouv.fr/users/subscribe/js_id/5n4i/id/3">Abonnez-vous à la lettre d'info</a>
         </mj-text>
         <mj-text>
             Développé par la <a href="https://www.gouvernement.fr/resorption-des-bidonvilles" class="link" target="_blank" rel="noopener noreferrer">Dihal</a>

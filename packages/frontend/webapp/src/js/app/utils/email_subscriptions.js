@@ -3,6 +3,8 @@ export default {
         "Le récapitulatif hebdomadaire des activités sur mon territoire",
     comment_notification:
         "Les notifications de nouveaux messages dans le journal des sites",
+    plan_comment_notification:
+        "Les notifications de nouveaux messages dans le journal des actions",
     shantytown_closure: "Les notifications de fermeture de sites",
     shantytown_creation: "Les notifications de déclaration de nouveaux sites"
 };

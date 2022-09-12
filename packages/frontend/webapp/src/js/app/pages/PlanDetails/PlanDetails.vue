@@ -107,6 +107,51 @@
                 </div>
             </div>
         </PrivateContainer>
+        <div v-if="$store.getters['config/hasPermission']('plan_comment.list')">
+            <div class="bg-green100 py-10 mt-8">
+                <PrivateContainer class="flex items-center">
+                    <div class="leftColumnWidth text-sm">
+                        <NewCommentLeftColumn
+                            class="mb-4"
+                            icon="info-circle"
+                            title="À qui sont destinés les messages ?"
+                            description="À tous les acteurs concernés par l'action. Un mail est automatiquement envoyé aux opérateurs ou services en charge de l'action et aux acteurs en DDETS et Préfecture."
+                        ></NewCommentLeftColumn>
+                        <NewCommentLeftColumn
+                            icon="exclamation-triangle"
+                            title="Quelles sont les règles de confidentialités ?"
+                            description="Ne pas citer l’identité des individus (nom, âge, sexe, origine…), ni les infos relatives à d'éventuelles condamnations judiciaires. Ne pas tenir de propos à visée insultante, discriminatoire, raciste…"
+                        ></NewCommentLeftColumn>
+                    </div>
+                    <PlanDetailsNewComment
+                        :class="[
+                            'flex-1',
+                            plan.comments.length === 0 && 'pb-32'
+                        ]"
+                        id="comment"
+                        :departementCode="plan.departement.code"
+                        :nbComments="plan.comments.length"
+                    />
+                </PrivateContainer>
+            </div>
+
+            <div
+                :class="[
+                    'bg-green100',
+                    'pt-10',
+                    plan.comments.length > 0 && 'pb-32'
+                ]"
+                v-if="plan.comments.length > 0"
+            >
+                <PrivateContainer class="flex" id="comments">
+                    <div class="leftColumnWidth" />
+                    <PlanDetailsComments
+                        class="flex-1"
+                        :comments="plan.comments"
+                    ></PlanDetailsComments>
+                </PrivateContainer>
+            </div>
+        </div>
 
         <!--  Close Shantytown Modal -->
         <PlanDetailsCloseModal
@@ -140,6 +185,9 @@ import PlanDetailsPanelMarks from "./PlanDetailsPanelMarks.vue";
 import PlanDetailsInfo from "./PlanDetailsInfo.vue";
 import PlanDetailsCloseModal from "./PlanDetailsCloseModal.vue";
 import { get } from "#helpers/api/plan";
+import PlanDetailsNewComment from "./PlanDetailsNewComment.vue";
+import PlanDetailsComments from "./PlanDetailsComments.vue";
+import NewCommentLeftColumn from "#app/components/NewCommentLeftColumn/NewCommentLeftColumn.vue";
 
 export default {
     components: {
@@ -162,19 +210,24 @@ export default {
         PlanDetailsPanelMarks,
         PlanDetailsInfo,
         PlanDetailsCloseModal,
-        LoadingError
+        LoadingError,
+        PlanDetailsNewComment,
+        PlanDetailsComments,
+        NewCommentLeftColumn
     },
 
     data() {
         return {
             loading: false,
             error: null,
-            plan: null,
             showCloseModal: false
         };
     },
 
     computed: {
+        plan() {
+            return this.$store.state.plans.detailedPlan;
+        },
         topics() {
             if (!this.plan) {
                 return [];
@@ -284,7 +337,7 @@ export default {
                             "Cette action n'existe pas, ou son accès vous est interdit"
                     };
                 }
-                this.plan = plan;
+                await this.$store.commit("setDetailedPlan", plan);
                 setTimeout(this.goToAnchor, 50);
             } catch (error) {
                 this.error =

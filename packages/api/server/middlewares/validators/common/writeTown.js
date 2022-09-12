@@ -111,6 +111,38 @@ module.exports = mode => ([
             return true;
         }),
 
+
+    /* **********************************************************************************************
+     * Date de mise à jour des données du site
+     ********************************************************************************************* */
+    body('updated_at')
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Date de mise à jour" est obligatoire')
+        .isDate().bail().withMessage('Le champ "Date de mise à jour" est invalide')
+        .toDate()
+        .customSanitizer((value) => {
+            value.setHours(0, 0, 0, 0);
+            return value;
+        })
+        .custom((value, { req }) => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (value > today) {
+                throw new Error('La date de mise à jour du site ne peut pas être future');
+            }
+
+            // for updates only
+            if (req.town) {
+                const lastUpdate = new Date(req.town.updatedAt * 1000);
+                lastUpdate.setHours(0, 0, 0, 0);
+
+                if (value < lastUpdate) {
+                    throw new Error('La date de mise à jour du site ne peut pas être antérieure à la précédente mise à jour');
+                }
+            }
+
+            return true;
+        }),
     /* **********************************************************************************************
      * Appellation du site
      ********************************************************************************************* */

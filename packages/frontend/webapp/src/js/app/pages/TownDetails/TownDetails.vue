@@ -40,6 +40,11 @@
                         class="mb-10"
                         id="characteristics"
                     />
+                    <TownDetailsClosedData
+                        v-if="town.closedAt !== null"
+                        :town="town"
+                        class="mb-10"
+                    />
                     <TownDetailsPanelPlans
                         v-if="town.plans.length"
                         :town="town"
@@ -146,6 +151,7 @@ import PrivateLayout from "#app/components/PrivateLayout";
 import { destroy as deleteTown } from "#helpers/api/town";
 import TownDetailsHeader from "./TownDetailsHeader";
 import TownDetailsLeftColumn from "./TownDetailsLeftColumn";
+import TownDetailsClosedData from "./TownDetailsClosedData";
 import TownDetailsPanelCharacteristics from "./TownDetailsPanelCharacteristics";
 import TownDetailsPanelPeople from "./TownDetailsPanelPeople";
 import TownDetailsPanelLivingConditions from "./TownDetailsPanelLivingConditions";
@@ -154,7 +160,7 @@ import TownDetailsPanelPlans from "./TownDetailsPanelPlans";
 import TownDetailsPanelActors from "./TownDetailsPanelActors";
 import TownDetailsNewComment from "./TownDetailsNewComment";
 import TownDetailsComments from "./TownDetailsComments";
-import TownDetailsNewCommentLeftColumn from "./TownDetailsNewCommentLeftColumn";
+import TownDetailsNewCommentLeftColumn from "#app/components/NewCommentLeftColumn/NewCommentLeftColumn.vue";
 import TownDetailsHistorySidePanel from "./TownDetailsHistorySidePanel";
 import TownDetailsCovidCommentsSidePanel from "./TownDetailsCovidCommentsSidePanel";
 import TownDetailsCloseModal from "./TownDetailsCloseModal";
@@ -176,6 +182,7 @@ export default {
         PrivateContainer,
         TownDetailsHeader,
         TownDetailsLeftColumn,
+        TownDetailsClosedData,
         TownDetailsPanelCharacteristics,
         TownDetailsPanelPeople,
         TownDetailsPanelLivingConditions,

@@ -3,6 +3,7 @@ module.exports = {
         'shantytowns.shantytown_id': 'id',
         'shantytowns.name': 'name',
         'shantytowns.status': 'status',
+        'shantytowns.closing_context': 'closingContext',
         'shantytowns.declared_at': 'declaredAt',
         'shantytowns.built_at': 'builtAt',
         'shantytowns.closed_at': 'closedAt',

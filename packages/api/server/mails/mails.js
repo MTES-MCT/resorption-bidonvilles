@@ -1,7 +1,9 @@
 const moment = require('moment');
 const { formatName } = require('#server/models/userModel');
 const mailService = require('#server/services/mailService');
-const { wwwUrl, webappUrl, backUrl } = require('#server/config');
+const {
+    wwwUrl, webappUrl, backUrl, blogUrl,
+} = require('#server/config');
 
 const generateTrackingUTM = require('./generateTrackingUTM');
 
@@ -38,6 +40,7 @@ module.exports = {
                 webappUrl: `${webappUrl}?${utm}`,
                 formationUrl,
                 backUrl,
+                blogUrl,
             },
             preserveRecipient,
         });
@@ -62,6 +65,7 @@ module.exports = {
                 adminUrl: `${variables.adminUrl}?${utm}`,
                 connexionUrl: `${variables.adminUrl}?${utm}`,
                 backUrl,
+                blogUrl,
             },
             preserveRecipient,
         });
@@ -78,6 +82,7 @@ module.exports = {
             recipient,
             variables: {
                 backUrl,
+                blogUrl,
                 message: variables.message,
             },
             preserveRecipient,
@@ -106,6 +111,7 @@ module.exports = {
                 connexionUrl: `${variables.adminUrl}?${utm}`,
                 formationUrl,
                 backUrl,
+                blogUrl,
             },
             preserveRecipient,
         });
@@ -132,6 +138,7 @@ module.exports = {
                 adminUrl: `${variables.adminUrl}?${utm}`,
                 connexionUrl: `${variables.adminUrl}?${utm}`,
                 backUrl,
+                blogUrl,
             },
             preserveRecipient,
         });
@@ -158,6 +165,7 @@ module.exports = {
                 adminUrl: `${variables.adminUrl}?${utm}`,
                 connexionUrl: `${variables.adminUrl}?${utm}`,
                 backUrl,
+                blogUrl,
             },
             preserveRecipient,
         });
@@ -180,6 +188,7 @@ module.exports = {
                 connexionUrl: `${connexionUrl}?${utm}`,
                 adminGuideUrl,
                 backUrl,
+                blogUrl,
                 webappUrl: `${webappUrl}?${utm}`,
             },
             preserveRecipient,
@@ -201,6 +210,7 @@ module.exports = {
                 recipientName: formatName(recipient),
                 formationUrl,
                 backUrl,
+                blogUrl,
                 webappUrl: `${webappUrl}?${utm}`,
             },
             preserveRecipient,
@@ -223,6 +233,7 @@ module.exports = {
                 inviterName: variables.inviterName,
                 wwwUrl: `${wwwUrl}?${utm}`,
                 backUrl,
+                blogUrl,
                 contactUrl: `${contactUrl}?${utm}`,
                 formationUrl,
             },
@@ -248,6 +259,7 @@ module.exports = {
                 connexionUrl: `${connexionUrl}?${utm}`,
                 contactUrl: `${contactUrl}?${utm}`,
                 backUrl,
+                blogUrl,
                 webappUrl: `${webappUrl}?${utm}`,
             },
             preserveRecipient,
@@ -273,6 +285,7 @@ module.exports = {
                 siteAddress: `${variables.shantytown.addressSimple}${variables.shantytown.name ? ` « ${variables.shantytown.name} »` : ''}`,
                 contactUrl,
                 backUrl,
+                blogUrl,
                 webappUrl: `${webappUrl}?${utm}`,
             },
             preserveRecipient,
@@ -295,8 +308,10 @@ module.exports = {
                 userGuideUrl,
                 webappUrl: `${webappUrl}?${utm}`,
                 backUrl,
+                blogUrl,
                 formationUrl,
                 connexionUrl: `${connexionUrl}?${utm}`,
+                blogUrl,
             },
             preserveRecipient,
         });
@@ -318,6 +333,7 @@ module.exports = {
                 adminName: variables.adminName,
                 wwwUrl: `${wwwUrl}?${utm}`,
                 backUrl,
+                blogUrl,
             },
             preserveRecipient,
             replyTo,
@@ -340,6 +356,7 @@ module.exports = {
                 recipientName: formatName(recipient),
                 wwwUrl: `${wwwUrl}?${utm}`,
                 backUrl,
+                blogUrl,
                 formationUrl,
             },
             preserveRecipient,
@@ -362,6 +379,7 @@ module.exports = {
                 adminName: variables.adminName,
                 wwwUrl: `${wwwUrl}?${utm}`,
                 backUrl,
+                blogUrl,
                 formationUrl,
                 activationUrl: `${variables.activationUrl}?${utm}`,
                 activationUrlExpDate: variables.activationUrlExpDate,
@@ -391,6 +409,7 @@ module.exports = {
                 formationUrl,
                 wwwUrl: `${wwwUrl}?${utm}`,
                 backUrl,
+                blogUrl,
             },
             preserveRecipient,
         });
@@ -415,6 +434,7 @@ module.exports = {
                 recipientName: formatName(recipient),
                 wwwUrl: `${wwwUrl}?${utm}`,
                 backUrl,
+                blogUrl,
             },
             preserveRecipient,
         });
@@ -434,6 +454,7 @@ module.exports = {
                 comment: variables.comment,
                 message: variables.message,
                 backUrl,
+                blogUrl,
             },
             preserveRecipient,
         });
@@ -454,6 +475,7 @@ module.exports = {
                 recipientName: formatName(recipient),
                 connexionUrl: `${connexionUrl}?${utm}`,
                 backUrl,
+                blogUrl,
                 webappUrl: `${webappUrl}?${utm}`,
             },
             preserveRecipient,
@@ -475,6 +497,7 @@ module.exports = {
                 recipientName: formatName(recipient),
                 idealcoUrl,
                 backUrl,
+                blogUrl,
                 webappUrl: `${webappUrl}?${utm}`,
             },
             preserveRecipient,
@@ -504,6 +527,7 @@ module.exports = {
             variables: {
                 recipientName: formatName(recipient),
                 backUrl,
+                blogUrl,
                 wwwUrl: `${wwwUrl}?${utm}`,
                 shantytown: variables.shantytown,
                 createdBy: {
@@ -526,6 +550,36 @@ module.exports = {
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
      */
+    sendUserNewPlanComment: (recipient, options = {}) => {
+        const { variables, preserveRecipient = false } = options;
+
+        const utm = generateTrackingUTM(USER_CAMPAIGN, 'nouveau-commentaire-action');
+
+        return mailService.send('user_new_plan_comment', {
+            recipient,
+            variables: {
+                recipientName: formatName(recipient),
+                backUrl,
+                wwwUrl: `${wwwUrl}?${utm}`,
+                plan: variables.plan,
+                createdBy: {
+                    name: formatName(variables.comment.createdBy),
+                    organization: variables.comment.createdBy.organization,
+                },
+                comment: variables.comment.description,
+                rootAnnuaireUrl: `${webappUrl}/annuaire?${utm}`,
+                annuaireUrl: `${webappUrl}/annuaire/${variables.comment.createdBy.organization_id}?${utm}`,
+                planUrl: `${webappUrl}/action/${variables.plan.id}`,
+                messageUrl: `${webappUrl}/action/${variables.plan.id}#comment`,
+            },
+            preserveRecipient,
+        });
+    },
+
+    /**
+     * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
+     * @param {Object} options
+     */
     sendUserNewPassword: (recipient, options = {}) => {
         const { variables, preserveRecipient } = options;
 
@@ -534,6 +588,7 @@ module.exports = {
             variables: {
                 recipientName: formatName(recipient),
                 backUrl,
+                blogUrl,
                 link: variables.link,
             },
             preserveRecipient,
@@ -553,6 +608,7 @@ module.exports = {
             variables: {
                 surveyUrl,
                 backUrl,
+                blogUrl,
                 webappUrl: `${webappUrl}?${utm}`,
                 connexionUrl: `${connexionUrl}?${utm}`,
                 recipientName: formatName(recipient),
@@ -583,6 +639,7 @@ module.exports = {
                 webappUrl: `${webappUrl}?${utm.regular}`,
                 connexionUrl: `${connexionUrl}?${utm.connexion}`,
                 townUrl: `${webappUrl}/site/${variables.shantytown.id}?${utm.regular}`,
+                blogUrl,
             },
             preserveRecipient,
         });
@@ -610,6 +667,7 @@ module.exports = {
                 webappUrl: `${webappUrl}?${utm.regular}`,
                 connexionUrl: `${connexionUrl}?${utm.connexion}`,
                 townUrl: `${webappUrl}/site/${variables.shantytown.id}?${utm.regular}`,
+                blogUrl,
             },
             preserveRecipient,
         });
@@ -630,6 +688,7 @@ module.exports = {
                 recipientName: formatName(recipient),
                 invitationUrl: `${invitationUrl}?email=${encodeURIComponent(recipient.email)}&first_name=${encodeURIComponent(recipient.first_name)}&last_name=${encodeURIComponent(recipient.last_name)}&from=push_mail&${utm}`,
                 backUrl,
+                blogUrl,
                 webappUrl: `${webappUrl}?${utm}`,
             },
             preserveRecipient,
@@ -648,6 +707,7 @@ module.exports = {
             variables: {
                 email: variables.email,
                 backUrl,
+                blogUrl,
             },
             preserveRecipient,
             replyTo,
@@ -671,6 +731,7 @@ module.exports = {
                 wwwUrl,
                 webappUrl,
                 utm,
+                blogUrl,
             },
             preserveRecipient,
         });

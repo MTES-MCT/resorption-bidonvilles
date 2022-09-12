@@ -11,6 +11,7 @@ module.exports = async (user, data) => {
             closed_at: data.closed_at,
             closed_with_solutions: data.closed_with_solutions,
             status: data.status,
+            closing_context: data.closing_context,
             closing_solutions: data.solutions,
         },
     );
