@@ -42,6 +42,14 @@
                         :mainError="mainError"
                         :errors="errors"
                     ></FormErrorLog>
+                    <TownFormPanelUpdatedAt
+                        v-if="mode !== 'create'"
+                        class="mt-10"
+                        v-model="updatedAt"
+                        :value="updatedAt"
+                        :disableBefore="new Date(data.updatedAt * 1000)"
+                    >
+                    </TownFormPanelUpdatedAt>
 
                     <TownFormPanelLocation
                         class="mt-10"
@@ -112,6 +120,7 @@
 <script>
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
 import TownFormPanelInfo from "./TownFormPanelInfo";
+import TownFormPanelUpdatedAt from "./TownFormPanelUpdatedAt";
 import TownFormPanelLocation from "./TownFormPanelLocation";
 import TownFormPanelCharacteristics from "./TownFormPanelCharacteristics";
 import TownFormPanelPeople from "./TownFormPanelPeople";
@@ -144,6 +153,7 @@ export default {
         FormLeftColumn,
         FormErrorLog,
         TownFormPanelInfo,
+        TownFormPanelUpdatedAt,
         TownFormPanelLocation,
         TownFormPanelCharacteristics,
         TownFormPanelPeople,
@@ -160,7 +170,8 @@ export default {
             loading: false,
             showInfo: true,
             initialTown: this.formatTown(this.data),
-            town: this.formatTown(this.data)
+            town: this.formatTown(this.data),
+            updatedAt: new Date()
         };
     },
 
@@ -344,6 +355,7 @@ export default {
                     declared_at: this.formatDate(
                         this.town.characteristics.declared_at
                     ),
+                    updated_at: this.formatDate(this.updatedAt),
                     field_type: this.town.characteristics.field_type,
                     detailed_address: this.town.characteristics
                         .detailed_address,
