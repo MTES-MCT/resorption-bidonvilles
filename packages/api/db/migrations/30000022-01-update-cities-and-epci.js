@@ -2,7 +2,6 @@ const parser = require('neat-csv');
 const fs = require('fs');
 const path = require('path');
 
-
 module.exports = {
 
     async up(queryInterface, Sequelize) {
@@ -29,17 +28,6 @@ module.exports = {
                         type: Sequelize.STRING,
                         allowNull: false,
                     },
-                    created_at: {
-                        type: Sequelize.DATE,
-                        allowNull: false,
-                        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-                    },
-                    updated_at: {
-                        type: Sequelize.DATE,
-                        allowNull: false,
-                        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-                        onUpdate: Sequelize.literal('CURRENT_TIMESTAMP'),
-                    },
                 },
                 { transaction },
             ),
@@ -51,31 +39,6 @@ module.exports = {
                         allowNull: false,
                     },
                     name: {
-                        type: Sequelize.STRING,
-                        allowNull: false,
-                    },
-                    created_at: {
-                        type: Sequelize.DATE,
-                        allowNull: false,
-                        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-                    },
-                    updated_at: {
-                        type: Sequelize.DATE,
-                        allowNull: false,
-                        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-                        onUpdate: Sequelize.literal('CURRENT_TIMESTAMP'),
-                    },
-                },
-                { transaction },
-            ),
-            queryInterface.createTable(
-                'mov_epci_2022',
-                {
-                    old_code: {
-                        type: Sequelize.STRING(9),
-                        allowNull: false,
-                    },
-                    new_code: {
                         type: Sequelize.STRING,
                         allowNull: false,
                     },
@@ -92,7 +55,6 @@ module.exports = {
                     separator: ';',
                 },
             ))
-            .then(cities => cities.filter(city => city.COMPARENT === '' || city.COMPARENT !== city.code))
             .then(cities => queryInterface.bulkInsert(
                 'cities_2022',
                 cities.map(city => ({
@@ -119,54 +81,25 @@ module.exports = {
                     name: epci.label,
                 })),
                 { transaction },
-            ))
-        // fill mov_epci_2022
-            .then(() => parser(
-                fs.readFileSync(path.join(__dirname, '..', 'data', 'mov_epci_2022.csv'), { encoding: 'utf8' }),
-                {
-                    headers: ['oldCode', 'newCode',
-                    ],
-                    separator: ';',
-                },
-            ))
-            .then(epcis => queryInterface.bulkInsert(
-                'mov_epci_2022',
-                epcis.map(mov_epci => ({
-                    old_code: mov_epci.oldCode,
-                    new_code: mov_epci.newCode,
-                })),
-                { transaction },
             ));
+
 
         await Promise.all([
             // updates on cities
             queryInterface.sequelize.query(
-                'UPDATE cities SET fk_main = null WHERE fk_main IN (SELECT code FROM cities WHERE code NOT IN (SELECT code FROM cities_2022))',
+                'UPDATE cities SET fk_main = null WHERE fk_main NOT IN (SELECT code FROM cities_2022)',
                 {
                     type: queryInterface.sequelize.QueryTypes.UPDATE,
                     transaction,
                 },
             ),
-            queryInterface.sequelize.query(
-                'DELETE FROM organizations WHERE fk_city IN (SELECT code FROM cities WHERE code NOT IN (SELECT code FROM cities_2022))',
-                {
-                    type: queryInterface.sequelize.QueryTypes.DELETE,
-                    transaction,
-                },
-            ),
-            queryInterface.sequelize.query(
-                'DELETE FROM cities WHERE code IN (SELECT code FROM cities WHERE code NOT IN (SELECT code FROM cities_2022))',
-                {
-                    type: queryInterface.sequelize.QueryTypes.DELETE,
-                    transaction,
-                },
-            ),
+
             queryInterface.sequelize.query(
                 `INSERT INTO cities (code, name, fk_epci, fk_departement)
                 SELECT code, name, fk_epci, fk_departement
                 FROM cities_2022
-                WHERE code IN (SELECT code FROM cities_2022 WHERE cities_2022.code NOT IN (SELECT code FROM cities)
-                )`,
+                WHERE code NOT IN (SELECT code FROM cities)
+                `,
                 {
                     type: queryInterface.sequelize.QueryTypes.INSERT,
                     transaction,
@@ -186,10 +119,6 @@ module.exports = {
                 },
             ),
             queryInterface.sequelize.query(
-                'REFRESH MATERIALIZED VIEW localized_organizations',
-                { transaction },
-            ),
-            queryInterface.sequelize.query(
                 'UPDATE cities SET name = cities_2022.name FROM cities_2022 WHERE cities_2022.code = cities.code AND cities_2022.name != cities.name',
                 {
                     type: queryInterface.sequelize.QueryTypes.UPDATE,
@@ -201,8 +130,8 @@ module.exports = {
                 `INSERT INTO epci (code, name)
                 SELECT code, name
                 FROM epci_2022
-                WHERE code IN (SELECT code FROM epci_2022 WHERE epci_2022.code NOT IN (SELECT code FROM epci)
-                )`,
+                WHERE code NOT IN (SELECT code FROM epci)
+                `,
                 {
                     type: queryInterface.sequelize.QueryTypes.INSERT,
                     transaction,
@@ -232,52 +161,7 @@ module.exports = {
                     transaction,
                 },
             ),
-            queryInterface.sequelize.query(
-                `UPDATE users
-               SET fk_organization = new_org.organization_id
-               FROM organizations old_org
-               INNER JOIN mov_epci_2022 ON mov_epci_2022.old_code = old_org.fk_epci
-               LEFT JOIN organizations new_org ON mov_epci_2022.new_code = new_org.fk_epci
-               WHERE users.fk_organization = old_org.organization_id
-               
-                `,
-                {
-                    type: queryInterface.sequelize.QueryTypes.UPDATE,
-                    transaction,
-                },
-            ),
-            queryInterface.sequelize.query(
-                `UPDATE stats_directory_views
-                SET organization = new_org.organization_id
-                FROM organizations old_org
-                INNER JOIN mov_epci_2022 ON mov_epci_2022.old_code = old_org.fk_epci
-                LEFT JOIN organizations new_org ON mov_epci_2022.new_code = new_org.fk_epci
-                WHERE stats_directory_views.organization = old_org.organization_id
-               
-                `,
-                {
-                    type: queryInterface.sequelize.QueryTypes.UPDATE,
-                    transaction,
-                },
-            ),
-            queryInterface.sequelize.query(
-                `UPDATE stats_exports
-                SET fk_epci = mov_epci_2022.new_code
-                FROM mov_epci_2022 
-                WHERE fk_epci = mov_epci_2022.old_code
-                `,
-                {
-                    type: queryInterface.sequelize.QueryTypes.UPDATE,
-                    transaction,
-                },
-            ),
-            queryInterface.sequelize.query(
-                'DELETE FROM organizations WHERE fk_epci IN (SELECT code FROM epci WHERE code NOT IN (SELECT code FROM epci_2022))',
-                {
-                    type: queryInterface.sequelize.QueryTypes.DELETE,
-                    transaction,
-                },
-            ),
+
             queryInterface.sequelize.query(
                 'REFRESH MATERIALIZED VIEW localized_organizations',
                 { transaction },
@@ -289,19 +173,7 @@ module.exports = {
                     transaction,
                 },
             ),
-            queryInterface.sequelize.query(
-                'DELETE FROM epci WHERE code IN (SELECT code FROM epci WHERE code NOT IN (SELECT code FROM epci_2022))',
-                {
-                    type: queryInterface.sequelize.QueryTypes.DELETE,
-                    transaction,
-                },
-            ),
-            // delete temporary tables
-            queryInterface.dropTable('cities_2022'),
-            queryInterface.dropTable('epci_2022'),
-            queryInterface.dropTable('mov_epci_2022'),
         ]);
-
 
         await transaction.commit();
     },
