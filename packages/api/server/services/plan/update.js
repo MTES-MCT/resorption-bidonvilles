@@ -2,6 +2,7 @@ const ServiceError = require('#server/errors/ServiceError');
 const sequelize = require('#db/sequelize');
 const planModel = require('#server/models/planModel');
 const financeModel = require('#server/models/financeModel');
+const financeRowModel = require('#server/models/financeRowModel');
 const financeTypeModel = require('#server/models/financeTypeModel');
 const topicModel = require('#server/models/topicModel');
 const userModel = require('#server/models/userModel');
@@ -91,7 +92,7 @@ module.exports = async (data, planId, user) => {
     }
 
     if (planData.finances) {
-        planData.finances.forEach(({ year, financeData }) => {
+        planData.finances.forEach(({ year, data: financeData }) => {
             if (year > (new Date()).getFullYear()) {
                 addError('finances', `Il est impossible de saisir les financements pour l'année ${year}`);
             } else {
@@ -132,50 +133,41 @@ module.exports = async (data, planId, user) => {
             }, user.id, t);
 
             // reset shantytowns, finances and managers
-            await Promise.all([
-                planShantytownModel.delete(plan.id, t),
-                financeModel.delete(plan.id, t),
-                planManagerModel.delete(plan.id, t),
-                ...['list', 'read', 'update', 'close'].map(
-                    feature => planData.government.map(manager => removeAttachments([{ type: 'plan', id: plan.id }])
+            const promises = [];
+            promises.push(planShantytownModel.delete(plan.id, t));
+            promises.push(financeModel.delete(plan.id, t));
+            if (plan.government_contacts && plan.government_contacts.length > 0) {
+                promises.push(planManagerModel.delete(plan.id, t));
+                promises.push(...['list', 'read', 'update', 'close'].map(
+                    feature => plan.government_contacts.map(manager => removeAttachments([{ type: 'plan', id: plan.id }])
                         .fromUser(manager.id)
                         .onFeature(feature, 'plan', t)),
-                ),
-            ]);
+                ));
+            }
+            await Promise.all(promises);
 
             // insert into plan_shantytowns
             if (plan.location_type.id === 'shantytowns') {
                 await planShantytownModel.create(plan.id, planData.locationShantytowns, user.id, t);
             }
 
-            // insert into finances
-            const financeIds = await Promise.all(
-                planData.finances.map(({ year }) => financeTypeModel.create(plan.id, year, user.id, t)),
-            );
 
-            // insert into finance_rows
-            await Promise.all(
-                planData.finances.reduce((acc, { data: financeData }, index) => [
-                    ...acc,
-                    ...financeData.map(({
-                        amount, realAmount, type, details,
-                    }) => sequelize.query(
-                        `INSERT INTO finance_rows(fk_finance, fk_finance_type, amount, real_amount, comments, created_by)
-                        VALUES (:financeId, :type, :amount, :realAmount, :comments, :createdBy)`,
-                        {
-                            replacements: {
-                                financeId: financeIds[index][0][0].id,
-                                type,
-                                amount,
-                                realAmount,
-                                comments: details,
-                                createdBy: user.id,
-                            },
-                            transaction: t,
-                        },
-                    )),
-                ], []),
-            );
+            if ((planData.finances && planData.finances.length > 0)) {
+                // insert into finances
+                const financeIds = await Promise.all(
+                    planData.finances.map(({ year }) => financeModel.create(plan.id, year, user.id, t)),
+                );
+
+                // insert into finance_rows
+                await Promise.all(
+                    planData.finances.reduce((acc, { data: financeData }, index) => [
+                        ...acc,
+                        ...financeData.map(({
+                            amount, realAmount, type, details,
+                        }) => financeRowModel.create(financeIds, index, type, amount, realAmount, details, user.id, t)),
+                    ], []),
+                );
+            }
 
             // managers
             return Promise.all([
@@ -185,7 +177,7 @@ module.exports = async (data, planId, user) => {
                     feature => planData.government.map(manager => addAttachments([{ type: 'plan', id: plan.id }])
                         .toUser(manager.id)
                         .onFeature(feature, 'plan', t)),
-                ),
+                ).flat(),
             ]);
         });
     } catch (error) {

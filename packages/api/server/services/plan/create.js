@@ -4,6 +4,7 @@ const planModel = require('#server/models/planModel');
 const shantytownModel = require('#server/models/shantytownModel');
 const departementModel = require('#server/models/departementModel');
 const financeTypeModel = require('#server/models/financeTypeModel');
+const financeRowModel = require('#server/models/financeRowModel');
 const planManagerModel = require('#server/models/planManagerModel');
 const topicModel = require('#server/models/topicModel');
 const userModel = require('#server/models/userModel');
@@ -20,6 +21,7 @@ module.exports = async (data, user) => {
     const planData = Object.assign({}, sanitize(data), {
         createdBy: user.id,
     });
+    console.log(`sanitizedData: ${JSON.stringify(planData)}`);
 
     // validate data
     const errors = {};
@@ -159,7 +161,7 @@ module.exports = async (data, user) => {
     }
 
     if (planData.finances) {
-        planData.finances.forEach(({ year, financeData }) => {
+        planData.finances.forEach(({ year, data: financeData }) => {
             if (year > (new Date()).getFullYear()) {
                 addError('finances', `Il est impossible de saisir les financements pour l'année ${year}`);
             } else {
@@ -229,21 +231,7 @@ module.exports = async (data, user) => {
                     ...acc,
                     ...financeData.map(({
                         amount, realAmount, type, details,
-                    }) => sequelize.query(
-                        `INSERT INTO finance_rows(fk_finance, fk_finance_type, amount, real_amount, comments, created_by)
-                        VALUES (:financeId, :type, :amount, :realAmount, :comments, :createdBy)`,
-                        {
-                            replacements: {
-                                financeId: financeIds[index][0][0].id,
-                                type,
-                                amount,
-                                realAmount,
-                                comments: details,
-                                createdBy: user.id,
-                            },
-                            transaction: t,
-                        },
-                    )),
+                    }) => financeRowModel.create(financeIds, index, type, amount, realAmount, details, user.id, t)),
                 ], []),
             );
 
