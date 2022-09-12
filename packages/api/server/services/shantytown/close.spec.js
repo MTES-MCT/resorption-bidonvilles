@@ -21,6 +21,7 @@ describe.only('services/shantytown', () => {
             },
             closed_at: '01-01-2019',
             closed_with_solutions: 'no',
+            closing_context: 'contexte',
             status: 'unknown',
             solutions: [],
 
@@ -52,6 +53,7 @@ describe.only('services/shantytown', () => {
                 closed_at: '01-01-2019',
                 closed_with_solutions: 'no',
                 status: 'unknown',
+                closing_context: 'contexte',
                 closing_solutions: [],
             });
             expect(response).to.be.eql({});

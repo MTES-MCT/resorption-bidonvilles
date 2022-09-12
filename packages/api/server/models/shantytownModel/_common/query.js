@@ -139,7 +139,8 @@ module.exports = async (where = [], order = ['departements.code ASC', 'cities.na
                 shantytown_closing_solutions.fk_shantytown AS "shantytownId",
                 closing_solutions.closing_solution_id AS "closingSolutionId",
                 shantytown_closing_solutions.number_of_people_affected AS "peopleAffected",
-                shantytown_closing_solutions.number_of_households_affected AS "householdsAffected"
+                shantytown_closing_solutions.number_of_households_affected AS "householdsAffected",
+                shantytown_closing_solutions.message AS "message"
             FROM shantytown_closing_solutions
             LEFT JOIN closing_solutions ON shantytown_closing_solutions.fk_closing_solution = closing_solutions.closing_solution_id
             WHERE shantytown_closing_solutions.fk_shantytown IN (:ids)`,
@@ -213,6 +214,7 @@ module.exports = async (where = [], order = ['departements.code ASC', 'cities.na
                 id: closingSolution.closingSolutionId,
                 peopleAffected: closingSolution.peopleAffected,
                 householdsAffected: closingSolution.householdsAffected,
+                message: closingSolution.message,
             });
         });
     }

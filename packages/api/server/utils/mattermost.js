@@ -45,7 +45,7 @@ async function triggerShantytownCloseAlert(town, user) {
                     },
                     {
                         short: false,
-                        value: `*Cause de la disparition* : ${town.status}`,
+                        value: `*Cause de la fermeture* : ${town.status}`,
                     },
                     {
                         short: false,

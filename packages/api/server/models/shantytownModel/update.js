@@ -12,6 +12,7 @@ module.exports = async (editor, shantytownId, data, argTransaction = undefined) 
                 "ShantytownHistories"(
                     shantytown_id,
                     status,
+                    closing_context,
                     name,
                     latitude,
                     longitude,
@@ -117,6 +118,7 @@ module.exports = async (editor, shantytownId, data, argTransaction = undefined) 
             SELECT
                 shantytown_id,
                 status,
+                closing_context,
                 name,
                 latitude,
                 longitude,
@@ -245,34 +247,6 @@ module.exports = async (editor, shantytownId, data, argTransaction = undefined) 
                     updated_at,
                     NOW()
                 FROM shantytown_origins WHERE fk_shantytown = :id`,
-            {
-                replacements: {
-                    hid,
-                    id: shantytownId,
-                },
-                transaction,
-            },
-        ),
-        sequelize.query(
-            `INSERT INTO
-                    "ShantytownClosingSolutionHistories"(
-                        fk_shantytown,
-                        fk_closing_solution,
-                        number_of_people_affected,
-                        number_of_households_affected,
-                        created_at,
-                        updated_at,
-                        "archivedAt"
-                    )
-                SELECT
-                    :hid,
-                    fk_closing_solution,
-                    number_of_people_affected,
-                    number_of_households_affected,
-                    created_at,
-                    updated_at,
-                    NOW()
-                FROM shantytown_closing_solutions WHERE fk_shantytown = :id`,
             {
                 replacements: {
                     hid,
@@ -508,9 +482,9 @@ module.exports = async (editor, shantytownId, data, argTransaction = undefined) 
         if (data.closing_solutions.length > 0) {
             await sequelize.query(
                 `INSERT INTO
-                        shantytown_closing_solutions(fk_shantytown, fk_closing_solution, number_of_people_affected, number_of_households_affected)
+                        shantytown_closing_solutions(fk_shantytown, fk_closing_solution, number_of_people_affected, number_of_households_affected, message)
                     VALUES
-                        ${data.closing_solutions.map(() => '(?, ?, ?, ?)').join(', ')}`,
+                        ${data.closing_solutions.map(() => '(?, ?, ?, ?, ?)').join(', ')}`,
                 {
                     replacements: data.closing_solutions.reduce((arr, solution) => [
                         ...arr,
@@ -518,6 +492,7 @@ module.exports = async (editor, shantytownId, data, argTransaction = undefined) 
                         solution.id,
                         solution.people_affected,
                         solution.households_affected,
+                        solution.message,
                     ], []),
                     transaction,
                 },

@@ -15,8 +15,10 @@ module.exports = (closingSolutions) => {
     };
 
     const STATUS_DETAILS = {
-        closed_by_justice: 'Exécution d\'une décision de justice',
-        closed_by_admin: 'Exécution d\'une décision administrative',
+        resorbed: 'Résorption progressive du site',
+        closed_by_justice: 'Décision de justice suite à une plainte du propriétaire',
+        closed_by_pref_admin: 'Décision administrative de la Préfecture',
+        closed_by_city_admin: 'Décision administrative de la Commune',
         other: 'Autre',
         unknown: 'Raison inconnue',
     };
@@ -115,6 +117,11 @@ module.exports = (closingSolutions) => {
         status: {
             title: 'Cause de la fermeture',
             data: ({ status }) => STATUS_DETAILS[status],
+            width: COLUMN_WIDTHS.SMALL,
+        },
+        closingContext: {
+            title: 'Contexte de la fermeture',
+            data: ({ closingContext }) => closingContext,
             width: COLUMN_WIDTHS.SMALL,
         },
         ownerType: {
@@ -825,6 +832,19 @@ module.exports = (closingSolutions) => {
                 }
 
                 return solution.householdsAffected;
+            },
+            width: COLUMN_WIDTHS.SMALL,
+            sum: true,
+        };
+        properties[`closingSolution${solutionId}_message`] = {
+            title: 'Message',
+            data: ({ closingSolutions: solutions }) => {
+                const solution = solutions.find(({ id }) => id === solutionId);
+                if (solution === undefined) {
+                    return '';
+                }
+
+                return solution.message;
             },
             width: COLUMN_WIDTHS.SMALL,
             sum: true,

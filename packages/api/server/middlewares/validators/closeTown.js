@@ -56,9 +56,18 @@ module.exports = [
         }),
 
     body('status')
-        .exists({ checkNull: true }).bail().withMessage('Le champ "Cause de la disparition" est obligatoire')
-        .isString().bail().withMessage('Le champ "Cause de la disparition" est invalide')
-        .isIn(['closed_by_justice', 'closed_by_admin', 'other', 'unknown']).bail().withMessage('La valeur du champ "Cause de la disparition" est invalide'),
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Cause de la fermeture" est obligatoire')
+        .isString().bail().withMessage('Le champ "Cause de la fermeture" est invalide')
+        .isIn(['resorbed', 'closed_by_justice', 'closed_by_city_admin', 'closed_by_pref_admin', 'other', 'unknown']).bail().withMessage('La valeur du champ "Cause de la fermeture" est invalide'),
+
+    body('closing_context')
+        .isString().bail().withMessage('Le champ "Préciser le contexte de la fermeture et les faits à signaler" est invalide')
+        .custom((value, { req }) => {
+            if (req.body.status === 'other' && (value === null || value === undefined || value === '')) {
+                throw new Error('Le champ "Préciser le contexte de la fermeture" doit être rempli si le champ "Cause de la fermeture" est renseigné à "Autre"');
+            }
+            return true;
+        }),
 
     body('solutions')
         .customSanitizer((value) => {
@@ -69,12 +78,15 @@ module.exports = [
             return value;
         })
         .isArray().bail().withMessage('La liste des orientations n\'est pas valide')
-        .customSanitizer(value => value.map(({ id, peopleAffected, householdsAffected }) => ({
+        .customSanitizer(value => value.map(({
+            id, peopleAffected, householdsAffected, message,
+        }) => ({
             id: parseInt(id, 10),
             people_affected: peopleAffected !== undefined && peopleAffected !== null
                 ? parseInt(peopleAffected, 10) : null,
             households_affected: householdsAffected !== undefined && householdsAffected !== null
                 ? parseInt(householdsAffected, 10) : null,
+            message: message !== undefined && message !== null ? message : null,
         })))
         .custom(async (values) => {
             let closingSolutions;
@@ -85,7 +97,9 @@ module.exports = [
             }
 
             // on vérifie chaque orientation séparément pour s'assurer qu'elles sont toutes valides
-            values.forEach(({ id, people_affected, households_affected }, index) => {
+            values.forEach(({
+                id, people_affected, households_affected, message,
+            }, index) => {
                 const closingSolution = closingSolutions.find(({ id: cId }) => cId === id);
                 if (!closingSolution) {
                     throw new Error(`L'orientation n°${index + 1} est de type inconnu`);
@@ -107,6 +121,10 @@ module.exports = [
                     } else if (Number.isInteger(people_affected) && households_affected > people_affected) {
                         throw new Error(`Le nombre de ménages concernés par l'orientation "${closingSolution.label}" ne peut pas être supérieur au nombre de personnes`);
                     }
+                }
+
+                if (message !== null && typeof message !== 'string') {
+                    throw new Error('Le message doit être un texte');
                 }
             });
 
