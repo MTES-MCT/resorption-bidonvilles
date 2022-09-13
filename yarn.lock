@@ -3280,6 +3280,7 @@ __metadata:
     eslint-plugin-prettier: ^3.4.0
     eslint-plugin-vue: ^7.10.0
     lint-staged: ^11.0.0
+    prettier: ^1.19.1
     register-service-worker: ^1.7.2
     tailwindcss: ^1.8.10
     vee-validate: ^3.4.0
