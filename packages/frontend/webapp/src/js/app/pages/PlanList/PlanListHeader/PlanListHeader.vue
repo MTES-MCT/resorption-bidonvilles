@@ -72,7 +72,6 @@ export default {
                 hiddenElement.download = "messages.csv";
                 hiddenElement.click();
             } catch (error) {
-                console.log(error);
                 let message = "Une erreur inconnue est survenue";
                 if (error && error.user_message) {
                     message = error.user_message;
