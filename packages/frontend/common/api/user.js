@@ -92,6 +92,13 @@ export function sendActivationLink(user, data) {
 }
 
 /**
+ * GET /users/:id/activationLink
+ */
+export function getLatestActivationLink(user) {
+    return getApi(`/users/${user}/activationLink`);
+}
+
+/**
  * POST /users/:id/denyAccess
  */
 export function denyAccess(user) {
@@ -210,6 +217,10 @@ export function setAdminComments(userId, comment) {
     return putApi(`/users/${userId}/admin_comments`, {
         comment
     });
+}
+
+export function searchUsers(search) {
+    return getApi(`/users?q=${encodeURIComponent(search)}`);
 }
 
 /**
