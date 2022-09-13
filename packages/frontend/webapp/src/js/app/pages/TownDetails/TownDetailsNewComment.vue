@@ -131,7 +131,7 @@
 </template>
 
 <script>
-import { autocompleteOrganization } from "#helpers/api/user";
+import { autocompleteOrganization } from "#frontend/common/api/user";
 import { TagList } from "@resorptionbidonvilles/ui";
 
 export default {
