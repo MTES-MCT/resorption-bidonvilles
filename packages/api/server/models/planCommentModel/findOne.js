@@ -17,6 +17,7 @@ module.exports = async (id) => {
             u.first_name AS "userFirstName",
             u.last_name AS "userLastName",
             u.position AS "userPosition",
+            rr.name AS "userRole",
             o.organization_id AS "organizationId",
             o.name AS "organizationName",
             o.abbreviation AS "organizationAbbreviation"
@@ -26,6 +27,8 @@ module.exports = async (id) => {
             users u ON pc.created_by = u.user_id
         LEFT JOIN
             organizations o ON u.fk_organization = o.organization_id
+        LEFT JOIN
+            roles_regular rr ON u.fk_role_regular = rr.role_id
         WHERE
             pc.plan_comment_id = :id`,
         {
