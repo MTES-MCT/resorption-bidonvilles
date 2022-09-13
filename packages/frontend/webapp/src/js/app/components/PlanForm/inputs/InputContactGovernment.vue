@@ -19,7 +19,7 @@
 
 <script>
 import { TagList } from "@resorptionbidonvilles/ui";
-import { searchUsers } from "#helpers/api/user";
+import { searchUsers } from "#frontend/common/api/user";
 
 export default {
     components: {
