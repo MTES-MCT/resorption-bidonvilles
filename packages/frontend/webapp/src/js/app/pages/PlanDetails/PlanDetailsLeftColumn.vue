@@ -93,8 +93,52 @@ export default {
         }
 
         return {
+            activeSection: "characteristics",
             sections
         };
+    },
+
+    methods: {
+        // Force scroll even if hash is already present in url
+        scrollFix(to) {
+            if (to === this.$route.hash) {
+                const el = document.getElementById(to.slice(1));
+                if (el) {
+                    window.scrollTo(0, el.offsetTop);
+                }
+            }
+        },
+        observe(nbTries = 1) {
+            // On mount, dom isn't always ready
+            // Loop until expected divs are present
+            if (!document.querySelector("#characteristics") && nbTries < 10) {
+                setTimeout(() => {
+                    this.observe(nbTries + 1);
+                }, 50);
+                return;
+            }
+
+            const callback = entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        this.activeSection = entry.target.id;
+                    }
+                });
+            };
+
+            let observer = new IntersectionObserver(callback, {
+                rootMargin: "0px",
+                threshold: 0.5
+            });
+
+            this.sections.forEach(({ id }) =>
+                observer.observe(document.querySelector(`#${id}`))
+            );
+        }
+    },
+
+    mounted() {
+        this.observe();
     }
 };
 </script>

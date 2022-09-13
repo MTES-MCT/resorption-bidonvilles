@@ -2,9 +2,7 @@
     <div
         :class="[
             'pl-2 border-l-4 my-2',
-            activeSection
-                ? 'text-primary  border-primary'
-                : 'border-transparent'
+            activeSection ? 'text-primary border-primary' : 'border-transparent'
         ]"
     >
         <router-link :to="to">
