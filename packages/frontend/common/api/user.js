@@ -4,7 +4,7 @@ import {
     getApi,
     deleteApi,
     patchApi
-} from "#helpers/api/main";
+} from "#src/js/api";
 
 /**
  * Sends a login request for the given user
