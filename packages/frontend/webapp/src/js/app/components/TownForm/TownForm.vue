@@ -60,6 +60,7 @@
                         id="people"
                         :nearbyClosedShantytowns="nearbyClosedShantytowns"
                         v-model="town.people"
+                        :reinstallationConfig="reinstallationConfig"
                     ></TownFormPanelPeople>
 
                     <TownFormPanelLivingConditions
@@ -220,6 +221,16 @@ export default {
                     city: this.town.city
                 }
             );
+        },
+
+        reinstallationConfig() {
+            return {
+                id: this.data.id || null,
+                departement: this.town.departement,
+                builtAt:
+                    this.town.characteristics.built_at ||
+                    this.town.characteristics.declared_at
+            };
         }
     },
 
@@ -388,9 +399,11 @@ export default {
                         this.town.people.census_conducted_at
                     ),
                     census_conducted_by: this.town.people.census_conducted_by,
-                    is_reinstallation: this.town.population.is_reinstallation,
-                    reinstallation_comments: this.town.population
+                    is_reinstallation: this.town.people.is_reinstallation,
+                    reinstallation_comments: this.town.people
                         .reinstallation_comments,
+                    reinstallation_incoming_towns: this.town.people
+                        .reinstallation_incoming_towns,
                     owner_complaint: this.town.judicial.owner_complaint,
                     justice_procedure: this.town.judicial.justice_procedure,
                     justice_rendered: this.town.judicial.justice_rendered,

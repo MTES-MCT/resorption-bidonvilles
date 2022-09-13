@@ -55,11 +55,41 @@
             <InputReinstallationComments
                 v-model="input.reinstallation_comments"
             ></InputReinstallationComments>
+            <InputShantytowns
+                v-if="!!this.reinstallationConfig.departement"
+                label="Site(s) d'origine des habitant(e)s"
+                v-model="input.reinstallation_incoming_towns"
+                :customFilter="filterIncomingTowns"
+                :columns="[
+                    'city',
+                    'address',
+                    'fieldType',
+                    'population',
+                    'closedAt'
+                ]"
+            >
+                <template slot="info">
+                    Vous trouverez dans le tableau ci-dessous la liste des sites
+                    du département existants à ce jour ainsi que ceux fermés 90
+                    jours avant la déclaration de celui en cours de
+                    déclaration.<br />
+                    Si des habitants du site en cours de déclaration vivaient
+                    précédemment dans un de ces sites, merci de les
+                    sélectionner.</template
+                >
+            </InputShantytowns>
+            <p v-else>
+                <InputLabel
+                    label="Site(s) d'origine des habitant(e)s"
+                    info="Vous pourrez sélectionner ici le ou les sites d'origine des habitant(e)s, une fois le champ Adresse rempli"
+                />
+            </p>
         </div>
     </FormGroup>
 </template>
 
 <script>
+import InputLabel from "#app/components/ui/Form/utils/InputLabel.vue";
 import InputPopulation from "./inputs/InputPopulation.vue";
 import InputPopulationMinors from "./inputs/InputPopulationMinors.vue";
 import InputSocialOrigins from "./inputs/InputSocialOrigins.vue";
@@ -69,10 +99,12 @@ import InputCensusConductedAt from "./inputs/InputCensusConductedAt.vue";
 import InputCensusConductedBy from "./inputs/InputCensusConductedBy.vue";
 import InputIsReinstallation from "./inputs/InputIsReinstallation.vue";
 import InputReinstallationComments from "./inputs/InputReinstallationComments.vue";
+import InputShantytowns from "#app/components/InputShantytowns/InputShantytowns.vue";
 import TownFormClosedShantytowns from "./TownFormClosedShantytowns.vue";
 
 export default {
     components: {
+        InputLabel,
         InputPopulation,
         InputPopulationMinors,
         InputSocialOrigins,
@@ -82,6 +114,7 @@ export default {
         InputCensusConductedBy,
         InputIsReinstallation,
         InputReinstallationComments,
+        InputShantytowns,
         TownFormClosedShantytowns
     },
 
@@ -92,6 +125,17 @@ export default {
         },
         nearbyClosedShantytowns: {
             type: Array
+        },
+        reinstallationConfig: {
+            type: Object,
+            required: false,
+            default() {
+                return {
+                    id: null,
+                    departement: null,
+                    builtAt: null
+                };
+            }
         }
     },
 
@@ -105,6 +149,47 @@ export default {
         censusStatusIsUnknown() {
             const value = this.input.census_status;
             return value !== "scheduled" && value !== "done";
+        }
+    },
+
+    methods: {
+        filterIncomingTowns(town) {
+            // on ne conserve que les sites du même département
+            if (!this.reinstallationConfig.departement) {
+                return false;
+            }
+
+            if (
+                this.reinstallationConfig.departement.code !==
+                town.departement.code
+            ) {
+                return false;
+            }
+
+            // on interdit de s'auto-référencer
+            if (
+                this.reinstallationConfig.id &&
+                town.id === this.reinstallationConfig.id
+            ) {
+                return false;
+            }
+
+            // on ne conserve que les sites ouverts ou les sites fermés 90 jours avant la date
+            // d'installation du site courant
+            if (town.closedAt === null) {
+                return true;
+            }
+
+            const max = this.reinstallationConfig.builtAt || new Date();
+            max.setHours(0, 0, 0, 0);
+
+            const min = new Date(max);
+            min.setDate(min.getDate() - 89);
+
+            return (
+                town.closedAt <= max.getTime() / 1000 &&
+                town.closedAt >= min.getTime() / 1000
+            );
         }
     }
 };

@@ -84,7 +84,10 @@ export default function formatTown(data) {
                 : undefined,
             census_conducted_by: data.censusConductedBy,
             is_reinstallation: boolToInt(data.isReinstallation),
-            reinstallation_comments: data.reinstallationComments || undefined
+            reinstallation_comments: data.reinstallationComments || undefined,
+            reinstallation_incoming_towns: data.reinstallationIncomingTowns
+                ? data.reinstallationIncomingTowns.map(({ id }) => id)
+                : []
         },
         livingConditions: {
             original_version: data.livingConditions?.version || 2,
