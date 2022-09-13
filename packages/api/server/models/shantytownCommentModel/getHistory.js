@@ -22,52 +22,54 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate, o
     }
 
     // public comments
+    const geoWhere = [];
     if (restrictedLocations.public === null) {
-        where.push('(uca.user_target_id IS NULL AND oca.organization_target_id IS NULL) AND false');
+        geoWhere.push('(uca.user_target_id IS NULL AND oca.organization_target_id IS NULL) AND false');
     } else if (restrictedLocations.public.type !== 'nation') {
-        where.push(`(uca.user_target_id IS NULL AND oca.organization_target_id IS NULL) AND ${fromGeoLevelToTableName(restrictedLocations.public.type)}.code = :shantytownCommentLocationCode`);
+        geoWhere.push(`(uca.user_target_id IS NULL AND oca.organization_target_id IS NULL) AND ${fromGeoLevelToTableName(restrictedLocations.public.type)}.code = :shantytownCommentLocationCode`);
         if (restrictedLocations.public.type === 'city') {
-            where.push(`(uca.user_target_id IS NULL AND oca.organization_target_id IS NULL) AND ${fromGeoLevelToTableName(restrictedLocations.public.type)}.fk_main = :shantytownCommentLocationCode`);
+            geoWhere.push(`(uca.user_target_id IS NULL AND oca.organization_target_id IS NULL) AND ${fromGeoLevelToTableName(restrictedLocations.public.type)}.fk_main = :shantytownCommentLocationCode`);
         }
         replacements.shantytownCommentLocationCode = restrictedLocations.public[restrictedLocations.public.type].code;
     } else {
-        where.push('(uca.user_target_id IS NULL AND oca.organization_target_id IS NULL)');
+        geoWhere.push('(uca.user_target_id IS NULL AND oca.organization_target_id IS NULL)');
     }
 
     // private comments for user with listPrivate.shantytown_comment permission
     if (restrictedLocations.private === null) {
-        where.push('false');
+        geoWhere.push('false');
     } else if (restrictedLocations.private.type !== 'nation') {
-        where.push(`${fromGeoLevelToTableName(restrictedLocations.private.type)}.code = :privateShantytownCommentLocationCode`);
+        geoWhere.push(`${fromGeoLevelToTableName(restrictedLocations.private.type)}.code = :privateShantytownCommentLocationCode`);
         if (restrictedLocations.public.type === 'city') {
-            where.push(`${fromGeoLevelToTableName(restrictedLocations.private.type)}.fk_main = :privateShantytownCommentLocationCode`);
+            geoWhere.push(`${fromGeoLevelToTableName(restrictedLocations.private.type)}.fk_main = :privateShantytownCommentLocationCode`);
         }
         replacements.privateShantytownCommentLocationCode = restrictedLocations.private[restrictedLocations.private.type].code;
     } else {
-        where.push('true');
+        geoWhere.push('true');
+    }
+
+    if (geoWhere.length > 0) {
+        where.push(`${geoWhere.join(' OR ')}`);
     }
 
     // private comments for targeted users
     replacements.userId = user.id;
     replacements.organizationId = user.organization.id;
+    where.push(
+        `  :userId =  ANY(uca.user_target_id)
+        OR :organizationId = ANY(oca.organization_target_id)
+        OR :userId = comments.created_by`,
+    );
 
-    if (location.type !== 'nation') {
-        where.push(
-            `(:userId =  ANY(uca.user_target_id) OR :organizationId = ANY(oca.organization_target_id) OR :userId = comments.created_by) AND ${fromGeoLevelToTableName(location.type)}.code = '${location[location.type].code}'`,
-        );
-        if (location.type === 'city') {
-            where.push(
-                `(:userId =  ANY(uca.user_target_id) OR :organizationId = ANY(oca.organization_target_id) OR :userId = comments.created_by) AND ${fromGeoLevelToTableName(location.type)}.fk_main = '${location[location.type].code}'`,
-            );
-        }
-    } else {
-        where.push(
-            '(:userId =  ANY(uca.user_target_id) OR :organizationId = ANY(oca.organization_target_id) OR :userId = comments.created_by)',
-        );
+    // additional filters
+    where.push(`comments.created_at < '${lastDate}'`);
+    if (maxDate) {
+        where.push('comments.created_at >= :maxDate');
+    }
+    if (onlyCovid) {
+        where.push('covid_comments.shantytown_covid_comment_id IS NOT NULL');
     }
 
-
-    const whereLastDate = `${where.length > 0 ? 'AND' : 'WHERE'} comments.created_at < '${lastDate}'`;
     const activities = await sequelize.query(
         `WITH organization_comment_access AS (
            SELECT 
@@ -134,10 +136,7 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate, o
             LEFT JOIN epci ON cities.fk_epci = epci.code
             LEFT JOIN departements ON cities.fk_departement = departements.code
             LEFT JOIN regions ON departements.fk_region = regions.code
-            ${where.length > 0 ? `WHERE ((${where.join(') OR (')}))` : ''}
-            ${whereLastDate}
-            ${maxDate ? ' AND comments.created_at >= :maxDate' : ''}
-            ${onlyCovid ? 'AND covid_comments.shantytown_covid_comment_id IS NOT NULL' : ''}
+            ${where.length > 0 ? `WHERE (${where.join(') AND (')})` : ''}
             ORDER BY comments.created_at DESC
             ${limit}
             `,
