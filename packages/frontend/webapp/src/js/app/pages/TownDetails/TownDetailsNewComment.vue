@@ -150,7 +150,7 @@
 </template>
 
 <script>
-import { autocompleteOrganization } from "#helpers/api/user";
+import { autocompleteOrganization } from "#frontend/common/api/user";
 
 export default {
     data() {
