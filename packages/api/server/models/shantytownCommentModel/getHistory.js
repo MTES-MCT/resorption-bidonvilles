@@ -50,11 +50,22 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate, o
     // private comments for targeted users
     replacements.userId = user.id;
     replacements.organizationId = user.organization.id;
-    where.push(
-        '(:userId =  ANY(uca.user_target_id))',
-        '(:organizationId = ANY(oca.organization_target_id))',
-        '(:userId = comments.created_by)',
-    );
+
+    if (location.type !== 'nation') {
+        where.push(
+            `(:userId =  ANY(uca.user_target_id) OR :organizationId = ANY(oca.organization_target_id) OR :userId = comments.created_by) AND ${fromGeoLevelToTableName(location.type)}.code = '${location[location.type].code}'`,
+        );
+        if (location.type === 'city') {
+            where.push(
+                `(:userId =  ANY(uca.user_target_id) OR :organizationId = ANY(oca.organization_target_id) OR :userId = comments.created_by) AND ${fromGeoLevelToTableName(location.type)}.fk_main = '${location[location.type].code}'`,
+            );
+        }
+    } else {
+        where.push(
+            '(:userId =  ANY(uca.user_target_id) OR :organizationId = ANY(oca.organization_target_id) OR :userId = comments.created_by)',
+        );
+    }
+
 
     const whereLastDate = `${where.length > 0 ? 'AND' : 'WHERE'} comments.created_at < '${lastDate}'`;
     const activities = await sequelize.query(
