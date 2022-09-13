@@ -25,6 +25,7 @@
     "@vue/cli-plugin-pwa": "~4.5.15",
     "eslint": "^6.7.2",
     "lint-staged": "^11.0.0",
+    "prettier": "^1.19.1",
     "vue": "^2.6.10"
   },
   "installConfig": {
