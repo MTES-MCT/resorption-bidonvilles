@@ -441,10 +441,14 @@ export default {
                     title: "Succès",
                     text: this.successNotificationWording
                 });
-                this.$store.state.towns.data.push(result.town);
+
+                if (this.mode === "create") {
+                    this.$store.state.towns.data.push(result.town);
+                } else {
+                    this.$store.commit("setDetailedTown", result);
+                }
             } catch (err) {
                 this.loading = false;
-
                 if (err && err.fields) {
                     this.$refs.form.setErrors(err.fields);
                     this.errors = err.fields;
