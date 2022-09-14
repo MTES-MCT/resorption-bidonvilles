@@ -47,11 +47,8 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate, o
     }
 
     // private comments
-    if (restrictedLocations.private === null) {
-        permissionWhere.privateComments.push('false');
-    } else {
-        // geo permission
-        const geo = [];
+    const geo = [];
+    if (restrictedLocations.private !== null) {
         if (restrictedLocations.private.type !== 'nation') {
             geo.push(`${fromGeoLevelToTableName(restrictedLocations.private.type)}.code = :privateShantytownCommentLocationCode`);
             if (restrictedLocations.public.type === 'city') {
@@ -59,28 +56,30 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate, o
             }
 
             replacements.privateShantytownCommentLocationCode = restrictedLocations.private[restrictedLocations.private.type].code;
+        } else {
+            geo.push('true');
         }
-
-        // access permission
-        // soit l'utilisateur est un auteur/destinataire du message
-        // soit il a accès aux commentaires privés sur le territoire considéré (geo.length > 0)
-        permissionWhere.privateComments.push(
-            `(
-                   :userId = ANY(uca.user_target_id)
-                OR :organizationId = ANY(oca.organization_target_id)
-                OR :userId = comments.created_by
-                ${geo.length > 0 ? `OR (${geo.join(' OR ')})` : ''}
-            )`,
-        );
-        replacements.userId = user.id;
-        replacements.organizationId = user.organization.id;
     }
+
+    // access permission
+    // soit l'utilisateur est un auteur/destinataire du message
+    // soit il a accès aux commentaires privés sur le territoire considéré (geo.length > 0)
+    permissionWhere.privateComments.push(
+        `(
+                :userId = ANY(uca.user_target_id)
+            OR :organizationId = ANY(oca.organization_target_id)
+            OR :userId = comments.created_by
+            ${geo.length > 0 ? `OR (${geo.join(' OR ')})` : ''}
+        )`,
+    );
+    replacements.userId = user.id;
+    replacements.organizationId = user.organization.id;
 
     where.push(
         `(
             (${permissionWhere.publicComments.join(' AND ')})
             OR
-            (${permissionWhere.publicComments.join(' AND ')})
+            (${permissionWhere.privateComments.join(' AND ')})
         )`,
     );
 
