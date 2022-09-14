@@ -1,10 +1,8 @@
 const sequelize = require('#db/sequelize');
 const { serializeComment } = require('#server/models/planModel');
 
-/**
- * @param {Number} id A plan_comment_id
- */
-module.exports = async (id) => {
+
+module.exports = async () => {
     const rows = await sequelize.query(
         `
         SELECT
@@ -26,22 +24,13 @@ module.exports = async (id) => {
         LEFT JOIN
             users u ON pc.created_by = u.user_id
         LEFT JOIN
-            organizations o ON u.fk_organization = o.organization_id
-        LEFT JOIN
             roles_regular rr ON u.fk_role_regular = rr.role_id
-        WHERE
-            pc.plan_comment_id = :id`,
+        LEFT JOIN
+            organizations o ON u.fk_organization = o.organization_id
+        `,
         {
             type: sequelize.QueryTypes.SELECT,
-            replacements: {
-                id,
-            },
         },
     );
-
-    if (rows.length !== 1) {
-        return null;
-    }
-
-    return serializeComment(rows[0]);
+    return rows.map(serializeComment);
 };

@@ -397,6 +397,14 @@ export default (app) => {
             return controller(req, res, next);
         },
     );
+    app.get(
+        '/plans/comments/export',
+        middlewares.auth.authenticate,
+        (...args) => middlewares.auth.checkPermissions(['plan_comment.export'], ...args),
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        controllers.planComment.export,
+    );
 
     // towns
     app.get(
