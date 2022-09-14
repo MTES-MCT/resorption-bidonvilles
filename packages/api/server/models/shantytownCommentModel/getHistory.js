@@ -21,44 +21,67 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate, o
         return [];
     }
 
+    const permissionWhere = {
+        // ces tableaux listent des conditions cumulatives (AND)
+        publicComments: [
+            'uca.user_target_id IS NULL',
+            'oca.organization_target_id IS NULL',
+        ],
+        privateComments: [
+            '(uca.user_target_id IS NOT NULL OR oca.organization_target_id IS NOT NULL)',
+        ],
+    };
+
     // public comments
-    const geoWhere = [];
     if (restrictedLocations.public === null) {
-        geoWhere.push('(uca.user_target_id IS NULL AND oca.organization_target_id IS NULL) AND false');
+        permissionWhere.publicComments.push('false');
     } else if (restrictedLocations.public.type !== 'nation') {
-        geoWhere.push(`(uca.user_target_id IS NULL AND oca.organization_target_id IS NULL) AND ${fromGeoLevelToTableName(restrictedLocations.public.type)}.code = :shantytownCommentLocationCode`);
+        // geo permission
+        const geo = [`${fromGeoLevelToTableName(restrictedLocations.public.type)}.code = :shantytownCommentLocationCode`];
         if (restrictedLocations.public.type === 'city') {
-            geoWhere.push(`(uca.user_target_id IS NULL AND oca.organization_target_id IS NULL) AND ${fromGeoLevelToTableName(restrictedLocations.public.type)}.fk_main = :shantytownCommentLocationCode`);
+            geo.push(`${fromGeoLevelToTableName(restrictedLocations.public.type)}.fk_main = :shantytownCommentLocationCode`);
         }
+
+        permissionWhere.publicComments.push(`(${geo.join(' OR ')})`);
         replacements.shantytownCommentLocationCode = restrictedLocations.public[restrictedLocations.public.type].code;
-    } else {
-        geoWhere.push('(uca.user_target_id IS NULL AND oca.organization_target_id IS NULL)');
     }
 
-    // private comments for user with listPrivate.shantytown_comment permission
+    // private comments
     if (restrictedLocations.private === null) {
-        geoWhere.push('false');
-    } else if (restrictedLocations.private.type !== 'nation') {
-        geoWhere.push(`${fromGeoLevelToTableName(restrictedLocations.private.type)}.code = :privateShantytownCommentLocationCode`);
-        if (restrictedLocations.public.type === 'city') {
-            geoWhere.push(`${fromGeoLevelToTableName(restrictedLocations.private.type)}.fk_main = :privateShantytownCommentLocationCode`);
-        }
-        replacements.privateShantytownCommentLocationCode = restrictedLocations.private[restrictedLocations.private.type].code;
+        permissionWhere.privateComments.push('false');
     } else {
-        geoWhere.push('true');
+        // geo permission
+        const geo = [];
+        if (restrictedLocations.private.type !== 'nation') {
+            geo.push(`${fromGeoLevelToTableName(restrictedLocations.private.type)}.code = :privateShantytownCommentLocationCode`);
+            if (restrictedLocations.public.type === 'city') {
+                geo.push(`${fromGeoLevelToTableName(restrictedLocations.private.type)}.fk_main = :privateShantytownCommentLocationCode`);
+            }
+
+            replacements.privateShantytownCommentLocationCode = restrictedLocations.private[restrictedLocations.private.type].code;
+        }
+
+        // access permission
+        // soit l'utilisateur est un auteur/destinataire du message
+        // soit il a accès aux commentaires privés sur le territoire considéré (geo.length > 0)
+        permissionWhere.privateComments.push(
+            `(
+                   :userId = ANY(uca.user_target_id)
+                OR :organizationId = ANY(oca.organization_target_id)
+                OR :userId = comments.created_by
+                ${geo.length > 0 ? `OR (${geo.join(' OR ')})` : ''}
+            )`,
+        );
+        replacements.userId = user.id;
+        replacements.organizationId = user.organization.id;
     }
 
-    if (geoWhere.length > 0) {
-        where.push(`${geoWhere.join(' OR ')}`);
-    }
-
-    // private comments for targeted users
-    replacements.userId = user.id;
-    replacements.organizationId = user.organization.id;
     where.push(
-        `  :userId =  ANY(uca.user_target_id)
-        OR :organizationId = ANY(oca.organization_target_id)
-        OR :userId = comments.created_by`,
+        `(
+            (${permissionWhere.publicComments.join(' AND ')})
+            OR
+            (${permissionWhere.publicComments.join(' AND ')})
+        )`,
     );
 
     // additional filters
@@ -136,7 +159,7 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate, o
             LEFT JOIN epci ON cities.fk_epci = epci.code
             LEFT JOIN departements ON cities.fk_departement = departements.code
             LEFT JOIN regions ON departements.fk_region = regions.code
-            ${where.length > 0 ? `WHERE (${where.join(') AND (')})` : ''}
+            ${where.length > 0 ? `WHERE ${where.join(' AND ')}` : ''}
             ORDER BY comments.created_at DESC
             ${limit}
             `,
