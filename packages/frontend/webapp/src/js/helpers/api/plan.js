@@ -69,6 +69,13 @@ export function addComment(id, data) {
 /**
  *
  */
+export function exportComments() {
+    return getApi("/plans/comments/export");
+}
+
+/**
+ *
+ */
 export async function close(planId, data) {
     return patchApi(`/plans/${planId}`, {
         operation: "close",

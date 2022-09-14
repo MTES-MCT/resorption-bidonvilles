@@ -8,6 +8,19 @@
             </h1>
 
             <div class="flex items-end space-x-6">
+                <Button
+                    v-if="
+                        $store.getters['config/hasPermission'](
+                            'plan_comment.export'
+                        )
+                    "
+                    icon="file-excel"
+                    iconPosition="left"
+                    :loading="exportCommentIsPending"
+                    variant="primary"
+                    @click="exportComments"
+                    >Exporter tous les commentaires</Button
+                >
                 <div v-if="hasPermission('plan.create')">
                     <router-link to="/nouvelle-action">
                         <Button
@@ -36,7 +49,7 @@
 
 <script>
 import TabList from "#app/components/TabList/TabList.vue";
-import { exportPlans } from "#helpers/api/plan";
+import { exportPlans, exportComments } from "#helpers/api/plan";
 import { mapGetters } from "vuex";
 import { notify } from "#helpers/notificationHelper";
 
@@ -45,6 +58,34 @@ export default {
         TabList
     },
     methods: {
+        async exportComments() {
+            if (this.exportCommentIsPending === true) {
+                return;
+            }
+            this.exportCommentIsPending = true;
+            try {
+                const { csv } = await exportComments();
+                const hiddenElement = document.createElement("a");
+                hiddenElement.href =
+                    "data:text/csv;charset=utf-8," + encodeURI(csv);
+                hiddenElement.target = "_blank";
+                hiddenElement.download = "messages.csv";
+                hiddenElement.click();
+            } catch (error) {
+                let message = "Une erreur inconnue est survenue";
+                if (error && error.user_message) {
+                    message = error.user_message;
+                }
+                notify({
+                    group: "notifications",
+                    type: "error",
+                    title: "Une erreur est survenue",
+                    text: message
+                });
+            }
+
+            this.exportCommentIsPending = false;
+        },
         async exportPlans() {
             if (this.exportIsPending === true) {
                 return;
@@ -75,10 +116,10 @@ export default {
 
     data() {
         return {
-            exportIsPending: false
+            exportIsPending: false,
+            exportCommentIsPending: false
         };
     },
-
     computed: {
         ...mapGetters({
             hasPermission: "config/hasPermission",

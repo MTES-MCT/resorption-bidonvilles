@@ -36,6 +36,7 @@ const planListExport = require('./planController/listExport');
 const planUpdate = require('./planController/update');
 // plan comments
 const createPlanComment = require('./planCommentController/create');
+const exportComments = require('./planCommentController/export');
 // poi
 const poiFindAll = require('./poiController/findAll');
 // shantytown
@@ -125,6 +126,7 @@ export default {
     },
     planComment: {
         create: createPlanComment,
+        export: exportComments,
     },
     poi: {
         findAll: poiFindAll,
