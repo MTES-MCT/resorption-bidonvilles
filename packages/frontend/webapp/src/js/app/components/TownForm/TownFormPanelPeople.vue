@@ -44,9 +44,6 @@
             :showMandatoryStar="true"
         >
             La majorité des habitants était déjà sur le territoire.
-            <TownFormClosedShantytowns
-                :nearbyClosedShantytowns="nearbyClosedShantytowns"
-            ></TownFormClosedShantytowns>
             <InputIsReinstallation
                 v-model="input.is_reinstallation"
             ></InputIsReinstallation>
@@ -100,7 +97,6 @@ import InputCensusConductedBy from "./inputs/InputCensusConductedBy.vue";
 import InputIsReinstallation from "./inputs/InputIsReinstallation.vue";
 import InputReinstallationComments from "./inputs/InputReinstallationComments.vue";
 import InputShantytowns from "#app/components/InputShantytowns/InputShantytowns.vue";
-import TownFormClosedShantytowns from "./TownFormClosedShantytowns.vue";
 
 export default {
     components: {
@@ -114,17 +110,13 @@ export default {
         InputCensusConductedBy,
         InputIsReinstallation,
         InputReinstallationComments,
-        InputShantytowns,
-        TownFormClosedShantytowns
+        InputShantytowns
     },
 
     props: {
         value: {
             type: Object,
             required: true
-        },
-        nearbyClosedShantytowns: {
-            type: Array
         },
         reinstallationConfig: {
             type: Object,

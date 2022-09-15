@@ -46,7 +46,6 @@
                     <TownFormPanelLocation
                         class="mt-10"
                         v-model="town.location"
-                        @shareClosedTowns="showClosedTowns"
                     ></TownFormPanelLocation>
 
                     <TownFormPanelCharacteristics
@@ -58,7 +57,6 @@
                     <TownFormPanelPeople
                         class="mt-10 townPanelShadow"
                         id="people"
-                        :nearbyClosedShantytowns="nearbyClosedShantytowns"
                         v-model="town.people"
                         :reinstallationConfig="reinstallationConfig"
                     ></TownFormPanelPeople>
@@ -155,7 +153,6 @@ export default {
 
     data() {
         return {
-            nearbyClosedShantytowns: [],
             mainError: null,
             errors: {},
             loading: false,
@@ -478,9 +475,6 @@ export default {
                 `S${this.data.id}`
             );
             return edit(this.data.id, data);
-        },
-        showClosedTowns(closedTowns) {
-            this.nearbyClosedShantytowns = closedTowns;
         }
     }
 };
