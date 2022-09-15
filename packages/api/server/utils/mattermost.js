@@ -85,8 +85,8 @@ async function triggerShantytownCreationAlert(town, user) {
     if (town.reinstallationIncomingTowns.length > 0) {
         incomingTownsMessage = [
             'Le(s) site(s) suivant(s) ont été désigné(s) comme origine de la réinstallation :',
-            '\n\n',
-            ...town.reinstallationIncomingTowns.map(({ id, usename }) => formatTownLink(id, usename)).join('\n- '),
+            '\n\n- ',
+            town.reinstallationIncomingTowns.map(({ id, usename }) => formatTownLink(id, usename)).join('\n- '),
         ].join('');
     }
 
@@ -112,7 +112,8 @@ async function triggerShantytownCreationAlert(town, user) {
                         value: `*Date de signalement du site* : ${formatDate(new Date(town.declaredAt * 1000))}`,
                     },
                     {
-                        text: incomingTownsMessage,
+                        short: false,
+                        value: incomingTownsMessage,
                     },
                 ],
             }],

@@ -21,8 +21,8 @@ module.exports = async (user, shantytownIds) => {
         `SELECT
             incoming.fk_shantytown AS "shantytownId",
             incoming.fk_incoming_town AS "incomingTownId",
-            shantytowns.name AS "incomingTownName",
-            ${addressSimpleRegex} AS "incomingTownAddressSimple"
+            shantytowns.name AS "name",
+            ${addressSimpleRegex} AS "addressSimple"
         FROM shantytown_incoming_towns AS incoming
         LEFT JOIN shantytowns ON incoming.fk_incoming_town = shantytowns.shantytown_id
         LEFT JOIN cities ON shantytowns.fk_city = cities.code
@@ -42,7 +42,7 @@ module.exports = async (user, shantytownIds) => {
     return raw.map(row => ({
         shantytownId: row.shantytownId,
         id: row.incomingTownId,
-        name: row.incomingTownName,
+        name: row.name,
         addressSimple: getAddressSimpleOf(row),
         usename: getUsenameOf(row),
     }));
