@@ -10,10 +10,14 @@ module.exports = async () => sequelize.query(
         u.phone as "Téléphone",
         CASE
             WHEN fk_status = 'active' THEN 'Compte activé'
+            WHEN fk_status = 'new' THEN 'Compte en attente d''un lien d''activation'
             WHEN lua.expires_at < NOW() THEN 'Lien d''activation expiré'
             ELSE 'Lien d''activation toujours valide'
         END AS "Statut",
-        TO_CHAR(lua.used_at :: DATE, 'dd/mm/yyyy') AS "Date d'activation du compte",
+        CASE
+            WHEN lua.used_at IS NULL THEN 'N/A'
+            ELSE TO_CHAR(lua.used_at :: DATE, 'dd/mm/yyyy')
+        END AS "Date d'activation du compte",
         u.fk_role AS "Rôle administrateur de l'acteur",
         TO_CHAR(u.last_access :: DATE, 'dd/mm/yyyy') AS "Date de dernière connexion",
         o.name AS "Organisation",
@@ -31,10 +35,7 @@ module.exports = async () => sequelize.query(
         localized_organizations o ON o.organization_id = u.fk_organization
     LEFT JOIN
        roles_regular rr ON rr.role_id = u.fk_role_regular
-    WHERE
-        lua.user_access_id IS NOT NULL 
-    AND
-       u.fk_status <> 'inactive'
+    WHERE u.fk_status <> 'inactive'
     ORDER BY
         "Code région",
         "Code département",

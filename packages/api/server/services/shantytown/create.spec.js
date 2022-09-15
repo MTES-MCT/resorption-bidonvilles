@@ -9,11 +9,11 @@ const shantytownModel = require('#server/models/shantytownModel');
 const socialOriginModel = require('#server/models/socialOriginModel');
 const shantytownToiletTypesModel = require('#server/models/shantytownToiletTypesModel');
 const electricityAccessTypesModel = require('#server/models/electricityAccessTypesModel');
+const incomingTownsModel = require('#server/models/incomingTownsModel');
 const mattermostUtils = require('#server/utils/mattermost');
 const userModel = require('#server/models/userModel');
 const mails = require('#server/mails/mails');
 const config = require('#server/config');
-
 
 const createService = require('./create');
 
@@ -48,6 +48,7 @@ describe.only('services/shantytown', () => {
             owner_type: global.generate('string'),
             is_reinstallation: global.generate('string'),
             reinstallation_comments: global.generate('string'),
+            reinstallation_incoming_towns_full: [{ id: 1 }, { id: 2 }, { id: 3 }],
             citycode: global.generate('string'),
             createdBy: user.id,
             declared_at: global.generate('string'),
@@ -116,6 +117,7 @@ describe.only('services/shantytown', () => {
                 getLocationWatchers: sinon.stub(userModel, 'getLocationWatchers'),
                 sendUserShantytownDeclared: sinon.stub(mails, 'sendUserShantytownDeclared'),
                 socialOriginCreate: sinon.stub(socialOriginModel, 'create'),
+                incomingTownsCreate: sinon.stub(incomingTownsModel, 'create'),
             };
         });
 
@@ -290,6 +292,7 @@ describe.only('services/shantytown', () => {
                         fire_prevention: townData.fire_prevention_diagnostic,
                     },
                 );
+                expect(stubs.incomingTownsCreate).to.have.been.calledOnceWith(shantytownId, [1, 2, 3]);
             });
         });
 

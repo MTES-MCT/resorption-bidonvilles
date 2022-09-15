@@ -3,6 +3,7 @@ const shantytownModel = require('#server/models/shantytownModel');
 const socialOriginModel = require('#server/models/socialOriginModel');
 const shantytownToiletTypesModel = require('#server/models/shantytownToiletTypesModel');
 const electricityAccessTypesModel = require('#server/models/electricityAccessTypesModel');
+const incomingTownsModel = require('#server/models/incomingTownsModel');
 const config = require('#server/config');
 const mattermostUtils = require('#server/utils/mattermost');
 const userModel = require('#server/models/userModel');
@@ -119,6 +120,14 @@ module.exports = async (townData, user) => {
         promises.push(electricityAccessTypesModel.create(
             shantytown_id,
             townData.electricity_access_types,
+            transaction,
+        ));
+    }
+
+    if (townData.reinstallation_incoming_towns_full.length > 0) {
+        promises.push(incomingTownsModel.create(
+            shantytown_id,
+            townData.reinstallation_incoming_towns_full.map(({ id }) => id),
             transaction,
         ));
     }

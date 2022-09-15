@@ -2,7 +2,7 @@
     <ValidationProvider :name="validationName" v-slot="{ errors }" :vid="id">
         <InputWrapper :hasErrors="!!errors.length">
             <InputLabel :label="label" :showMandatoryStar="showMandatoryStar" />
-            <div class="mb-3 text-G600"><slot name="info"></slot></div>
+            <div class="mb-6 text-G600"><slot name="info"></slot></div>
 
             <Spinner v-if="townsLoading"></Spinner>
             <div v-else>
@@ -13,7 +13,11 @@
                     v-model="search"
                 />
                 <InputError>{{ errors[0] }}</InputError>
-                <RbTable :columns="columns" :data="data">
+                <RbTable
+                    :columns="columnsWithDefinition"
+                    :data="currentTabData"
+                    @datachange="resyncInput"
+                >
                     <template v-slot:cell="{ content, column }">
                         <Checkbox
                             :checkValue="content"
@@ -35,6 +39,12 @@
                                 :population="content"
                             />
                             <span v-else class="text-G600 italic">NC</span>
+                        </span>
+                        <span
+                            v-else-if="column === 'closedAt'"
+                            class="inline-block italic text-center w-full"
+                        >
+                            {{ content }}
                         </span>
                         <RbTableCell v-else :content="content" />
                     </template>
@@ -89,6 +99,18 @@ export default {
             type: Boolean,
             required: false,
             default: false
+        },
+        customFilter: {
+            type: Function,
+            required: false,
+            default: null
+        },
+        columns: {
+            type: Array,
+            required: false,
+            default() {
+                return ["city", "address", "fieldType", "population"];
+            }
         }
     },
 
@@ -106,12 +128,12 @@ export default {
     data() {
         return {
             input: this.value,
-            columns: [
-                { id: "checkbox", label: "" },
+            columnsDefinition: [
                 { id: "city", label: "Commune" },
                 { id: "address", label: "Adresse" },
                 { id: "fieldType", label: "Type de site" },
-                { id: "population", label: "Nombre de personnes" }
+                { id: "population", label: "Nombre de personnes" },
+                { id: "closedAt", label: "Statut du site" }
             ],
             currentTab: this.defaultTab,
             search: ""
@@ -123,6 +145,14 @@ export default {
             shantytowns: "towns",
             townsLoading: "townsLoading"
         }),
+        columnsWithDefinition() {
+            return [
+                { id: "checkbox", label: "" },
+                ...this.columnsDefinition.filter(({ id }) =>
+                    this.columns.includes(id)
+                )
+            ];
+        },
         tabs() {
             return [
                 {
@@ -133,15 +163,19 @@ export default {
                 { id: "closed", label: "Sites fermés" }
             ];
         },
-        data() {
-            if (!this.shantytowns) {
+        allTabsData() {
+            if (!this.shantytowns || this.shantytowns.length === 0) {
                 return [];
             }
 
+            return this.shantytowns.filter(
+                town => !this.customFilter || this.customFilter(town)
+            );
+        },
+        currentTabData() {
             const reg = new RegExp(this.search, "i");
-            return this.shantytowns
+            return this.allTabsData
                 .filter(({ id, status, city, usename }) => {
-                    // filter by status
                     if (this.currentTab === "open") {
                         if (status !== "open") {
                             return false;
@@ -163,16 +197,31 @@ export default {
                         `${city.name} ${usename}`.match(reg)
                     );
                 })
-                .map(({ id, city, usename, fieldType, populationTotal }) => {
-                    return {
+                .map(
+                    ({
                         id,
-                        checkbox: id,
-                        city: city.name,
-                        address: usename,
+                        city,
+                        usename,
                         fieldType,
-                        population: populationTotal
-                    };
-                });
+                        populationTotal,
+                        closedAt
+                    }) => {
+                        return {
+                            id,
+                            checkbox: id,
+                            city: city.name,
+                            address: usename,
+                            fieldType,
+                            population: populationTotal,
+                            closedAt: closedAt
+                                ? `Fermé le ${App.formatDate(
+                                      closedAt,
+                                      "d/m/y"
+                                  )}`
+                                : "Ouvert"
+                        };
+                    }
+                );
         }
     },
 
@@ -195,7 +244,19 @@ export default {
             if (!this.shantytowns.length) {
                 this.$store.dispatch("fetchTowns");
             }
+        },
+
+        resyncInput() {
+            const newInput = this.input.filter(selectedId => {
+                return this.allTabsData.some(({ id }) => id === selectedId);
+            });
+
+            // actually update the input ONLY in case of change, to avoid cyclic calls
+            if (newInput.length !== this.input.length) {
+                this.input = newInput;
+            }
         }
     }
 };
 </script>
+$

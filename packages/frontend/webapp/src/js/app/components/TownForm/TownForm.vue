@@ -54,20 +54,19 @@
                     <TownFormPanelLocation
                         class="mt-10"
                         v-model="town.location"
-                        @shareClosedTowns="showClosedTowns"
                     ></TownFormPanelLocation>
 
                     <TownFormPanelCharacteristics
                         class="mt-10 townPanelShadow"
                         id="characteristics"
                         v-model="town.characteristics"
-                        :nearbyClosedShantytowns="nearbyClosedShantytowns"
                     ></TownFormPanelCharacteristics>
 
                     <TownFormPanelPeople
                         class="mt-10 townPanelShadow"
                         id="people"
                         v-model="town.people"
+                        :reinstallationConfig="reinstallationConfig"
                     ></TownFormPanelPeople>
 
                     <TownFormPanelLivingConditions
@@ -164,7 +163,6 @@ export default {
 
     data() {
         return {
-            nearbyClosedShantytowns: [],
             mainError: null,
             errors: {},
             loading: false,
@@ -231,6 +229,16 @@ export default {
                     city: this.town.city
                 }
             );
+        },
+
+        reinstallationConfig() {
+            return {
+                id: this.data.id || null,
+                departement: this.town.departement,
+                builtAt:
+                    this.town.characteristics.built_at ||
+                    this.town.characteristics.declared_at
+            };
         }
     },
 
@@ -361,10 +369,6 @@ export default {
                         .detailed_address,
                     owner_type: this.town.characteristics.owner_type,
                     owner: this.town.characteristics.owner,
-                    is_reinstallation: this.town.characteristics
-                        .is_reinstallation,
-                    reinstallation_comments: this.town.characteristics
-                        .reinstallation_comments,
                     population_total: this.strToInt(
                         this.town.people.population.populationTotal
                     ),
@@ -404,6 +408,11 @@ export default {
                         this.town.people.census_conducted_at
                     ),
                     census_conducted_by: this.town.people.census_conducted_by,
+                    is_reinstallation: this.town.people.is_reinstallation,
+                    reinstallation_comments: this.town.people
+                        .reinstallation_comments,
+                    reinstallation_incoming_towns: this.town.people
+                        .reinstallation_incoming_towns,
                     owner_complaint: this.town.judicial.owner_complaint,
                     justice_procedure: this.town.judicial.justice_procedure,
                     justice_rendered: this.town.judicial.justice_rendered,
@@ -482,9 +491,6 @@ export default {
                 `S${this.data.id}`
             );
             return edit(this.data.id, data);
-        },
-        showClosedTowns(closedTowns) {
-            this.nearbyClosedShantytowns = closedTowns;
         }
     }
 };

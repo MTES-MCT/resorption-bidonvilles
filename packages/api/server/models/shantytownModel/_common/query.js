@@ -1,6 +1,7 @@
 const sequelize = require('#db/sequelize');
 const shantytownActorModel = require('#server/models/shantytownActorModel');
 const planShantytownModel = require('#server/models/planShantytownModel');
+const incomingTownsModel = require('#server/models/incomingTownsModel');
 const stringifyWhereClause = require('#server/models/_common/stringifyWhereClause');
 const { where: pWhere } = require('#server/utils/permission');
 const getComments = require('./getComments');
@@ -163,7 +164,11 @@ module.exports = async (where = [], order = ['departements.code ASC', 'cities.na
         ),
     );
 
-    const [history, comments, covidComments, closingSolutions, actors, plans] = await Promise.all(promises);
+    promises.push(
+        incomingTownsModel.findAll(user, Object.keys(serializedTowns.hash)),
+    );
+
+    const [history, comments, covidComments, closingSolutions, actors, plans, incomingTowns] = await Promise.all(promises);
 
     if (history !== undefined && history.length > 0) {
         const serializedHistory = history.map(h => serializeShantytown(h, user));
@@ -229,6 +234,10 @@ module.exports = async (where = [], order = ['departements.code ASC', 'cities.na
         serializedTowns.hash[plan.shantytown_id].plans.push(
             planShantytownModel.serializePlan(plan),
         );
+    });
+
+    incomingTowns.forEach((incomingTown) => {
+        serializedTowns.hash[incomingTown.shantytownId].reinstallationIncomingTowns.push(incomingTown);
     });
 
     return serializedTowns.ordered;

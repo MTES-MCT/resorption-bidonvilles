@@ -149,28 +149,6 @@
                             </div>
                         </div>
                     </DetailsPanelSection>
-                    <DetailsPanelSection>
-                        <div class="grid grid-cols-2">
-                            <div class="font-bold">
-                                S'agit-t-il d'une réinstallation ?
-                            </div>
-                            <div data-cy-data="is_reinstallation">
-                                {{ boolToStr(town.isReinstallation) }}
-                            </div>
-                        </div>
-                    </DetailsPanelSection>
-                    <DetailsPanelSection
-                        v-if="town.reinstallationComments !== null"
-                    >
-                        <div class="grid grid-cols-2">
-                            <div class="font-bold">
-                                Précisions sur la réinstallation
-                            </div>
-                            <!-- eslint-disable -->
-                            <div data-cy-data="reinstallation_comments">{{ town.reinstallationComments }}</div>
-                            <!-- eslint-enable -->
-                        </div>
-                    </DetailsPanelSection>
                 </div>
                 <div class="w-1/2">
                     <Map
@@ -249,12 +227,6 @@ export default {
             }
 
             this.cadastrePromise = null;
-        },
-        boolToStr(bool) {
-            if (bool === null) {
-                return "non communiqué";
-            }
-            return bool ? "Oui" : "Non";
         },
         goTo(town) {
             if (town.id && town.id !== this.town.id) {
