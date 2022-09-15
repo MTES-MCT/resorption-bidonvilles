@@ -40,7 +40,7 @@
         </FormParagraph>
 
         <FormParagraph
-            title="Tout ou partie des habitants viennent-ils d'un ou plusieurs sites récemment fermés ?"
+            title="Tout ou partie des habitants viennent-ils d'un ou plusieurs sites du territoire ?"
             :showMandatoryStar="true"
         >
             La majorité des habitants était déjà sur le territoire.
@@ -54,7 +54,7 @@
             ></InputReinstallationComments>
             <InputShantytowns
                 v-if="!!this.reinstallationConfig.departement"
-                label="Site(s) d'origine des habitant(e)s"
+                label="Sélectionnez les sites d'origine des habitants"
                 v-model="input.reinstallation_incoming_towns"
                 :customFilter="filterIncomingTowns"
                 :columns="[
@@ -66,13 +66,10 @@
                 ]"
             >
                 <template slot="info">
-                    Vous trouverez dans le tableau ci-dessous la liste des sites
-                    du département existants à ce jour ainsi que ceux fermés 90
-                    jours avant la déclaration de celui en cours de
-                    déclaration.<br />
-                    Si des habitants du site en cours de déclaration vivaient
-                    précédemment dans un de ces sites, merci de les
-                    sélectionner.</template
+                    À l'aide du tableau ci-dessous sélectionnez les sites où
+                    vivaient précédemment les habitants du site en cours de
+                    saisie. La tableau liste les sites ouverts à date et les
+                    sites fermés avant l'installation de celui-ci.</template
                 >
             </InputShantytowns>
             <p v-else>

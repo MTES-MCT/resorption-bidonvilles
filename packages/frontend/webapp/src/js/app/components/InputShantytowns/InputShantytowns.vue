@@ -40,6 +40,12 @@
                             />
                             <span v-else class="text-G600 italic">NC</span>
                         </span>
+                        <span
+                            v-else-if="column === 'closedAt'"
+                            class="inline-block italic text-center w-full"
+                        >
+                            {{ content }}
+                        </span>
                         <RbTableCell v-else :content="content" />
                     </template>
                 </RbTable>
@@ -127,7 +133,7 @@ export default {
                 { id: "address", label: "Adresse" },
                 { id: "fieldType", label: "Type de site" },
                 { id: "population", label: "Nombre de personnes" },
-                { id: "closedAt", label: "Fermé le" }
+                { id: "closedAt", label: "Statut du site" }
             ],
             currentTab: this.defaultTab,
             search: ""
@@ -140,16 +146,11 @@ export default {
             townsLoading: "townsLoading"
         }),
         columnsWithDefinition() {
-            const isOpen = this.currentTab === "open";
             return [
                 { id: "checkbox", label: "" },
-                ...this.columnsDefinition.filter(({ id }) => {
-                    if (isOpen && id === "closedAt") {
-                        return false;
-                    }
-
-                    return this.columns.includes(id);
-                })
+                ...this.columnsDefinition.filter(({ id }) =>
+                    this.columns.includes(id)
+                )
             ];
         },
         tabs() {
@@ -213,8 +214,11 @@ export default {
                             fieldType,
                             population: populationTotal,
                             closedAt: closedAt
-                                ? App.formatDate(closedAt, "d/m/y")
-                                : "N/A"
+                                ? `Fermé le ${App.formatDate(
+                                      closedAt,
+                                      "d/m/y"
+                                  )}`
+                                : "Ouvert"
                         };
                     }
                 );
