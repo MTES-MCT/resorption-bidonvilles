@@ -41,6 +41,7 @@ describe.only('townController.edit()', () => {
                     built_at: new Date(),
                     is_reinstallation: true,
                     reinstallation_comments: 'Commentaires',
+                    reinstallation_incoming_towns_full: [{ id: 1 }, { id: 2 }, { id: 3 }],
                     social_origins: [1, 2],
                     population_total: 100,
                     population_couples: 50,
@@ -152,6 +153,7 @@ describe.only('townController.edit()', () => {
                     built_at: input.body.built_at,
                     is_reinstallation: input.body.is_reinstallation,
                     reinstallation_comments: input.body.reinstallation_comments,
+                    reinstallation_incoming_towns: [1, 2, 3],
                     social_origins: input.body.social_origins,
                     population_total: input.body.population_total,
                     population_couples: input.body.population_couples,
@@ -260,7 +262,9 @@ describe.only('townController.edit()', () => {
         beforeEach(async () => {
             const input = {
                 params: { id: 1 },
-                body: {},
+                body: {
+                    reinstallation_incoming_towns_full: [{ id: 1 }, { id: 2 }, { id: 3 }],
+                },
                 user: generateUser(),
             };
 
