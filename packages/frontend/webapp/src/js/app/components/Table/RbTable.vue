@@ -135,9 +135,12 @@ export default {
             return this.columns.map(({ label }) => label);
         },
         isEmpty() {
+            this.$emit("datachange");
             return this.data.length < 1;
         },
         pageContent() {
+            this.$emit("datachange");
+
             if (this.usePagination === false) {
                 return this.data;
             }

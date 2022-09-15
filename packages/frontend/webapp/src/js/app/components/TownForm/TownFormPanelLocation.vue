@@ -46,7 +46,7 @@
 import InputAddress from "./inputs/InputAddress.vue";
 import InputName from "./inputs/InputName.vue";
 import InputCoordinates from "./inputs/InputCoordinates.vue";
-import { findNearby, findClosedNearby } from "#helpers/api/town";
+import { findNearby } from "#helpers/api/town";
 
 export default {
     components: {
@@ -79,19 +79,12 @@ export default {
             this.nearbyShantytowns = [];
         },
         "input.coordinates": async function() {
-            this.$emit("shareClosedTowns", []);
-
             try {
                 const latitude = this.input.coordinates[0];
                 const longitude = this.input.coordinates[1];
 
                 const { towns } = await findNearby(latitude, longitude);
-                const { closedTowns } = await findClosedNearby(
-                    latitude,
-                    longitude
-                );
                 this.nearbyShantytowns = towns;
-                this.$emit("shareClosedTowns", closedTowns);
                 // eslint-disable-next-line no-empty
             } catch (err) {}
         }

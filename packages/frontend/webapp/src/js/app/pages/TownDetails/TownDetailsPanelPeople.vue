@@ -125,6 +125,22 @@
                     </div>
                 </div>
             </DetailsPanelSection>
+            <DetailsPanelSection>
+                <p class="font-bold">
+                    S'agit-t-il d'une réinstallation ?
+                </p>
+                <p>
+                    {{ boolToStr(town.isReinstallation) }}
+                </p>
+            </DetailsPanelSection>
+            <DetailsPanelSection v-if="town.reinstallationComments !== null">
+                <p class="font-bold">
+                    Précisions sur la réinstallation
+                </p>
+                <p data-cy-data="reinstallation_comments">
+                    {{ town.reinstallationComments }}
+                </p>
+            </DetailsPanelSection>
         </template>
     </DetailsPanel>
 </template>
@@ -191,6 +207,12 @@ export default {
          */
         formatDate(...args) {
             return window.App.formatDate.apply(window, args);
+        },
+        boolToStr(bool) {
+            if (bool === null) {
+                return "non communiqué";
+            }
+            return bool ? "Oui" : "Non";
         },
         socialOrigin(origin) {
             if (origin.id === 1) {

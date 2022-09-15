@@ -296,6 +296,39 @@ module.exports = mode => ([
         .customSanitizer(value => value || null),
 
     /* **********************************************************************************************
+     * Sites d'origines de la réinstallation
+     * ********************************************************************************************* */
+    body('reinstallation_incoming_towns')
+        .optional({ nullable: true })
+        .isArray().bail().withMessage('Le champ "Sites dont sont originaires les habitant(e)s" est invalide')
+        .if(value => value.length > 0)
+        .customSanitizer(value => value.map(id => parseInt(id, 10)))
+        .custom(async (value, { req }) => {
+            try {
+                req.body.reinstallation_incoming_towns_full = await shantytownModel.findAll(req.user, [
+                    { shantytown_id: value },
+                ]);
+            } catch (error) {
+                throw new Error('Une erreur est survenue lors de la validation des sites dont sont originaires les habitant(e)s');
+            }
+
+            if (req.body.reinstallation_incoming_towns_full.length !== value.length) {
+                throw new Error('Certains des sites sélectionnés comme sites d\'origine des habitants n\'existent pas en base de données');
+            }
+
+            return true;
+        }),
+
+    body('reinstallation_incoming_towns')
+        .custom((value, { req }) => {
+            if (!req.body.reinstallation_incoming_towns_full) {
+                req.body.reinstallation_incoming_towns_full = [];
+            }
+
+            return true;
+        }),
+
+    /* **********************************************************************************************
      * Statut du diagnostic social
      ********************************************************************************************* */
     body('census_status')

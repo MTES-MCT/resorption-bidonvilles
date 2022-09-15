@@ -82,6 +82,15 @@ async function triggerShantytownCreationAlert(town, user) {
     const username = formatUsername(user);
     const townLink = formatTownLink(town.id, address);
 
+    let incomingTownsMessage = 'Aucun site n\'a été désigné comme origine de la réinstallation';
+    if (town.reinstallationIncomingTowns.length > 0) {
+        incomingTownsMessage = [
+            'Le(s) site(s) suivant(s) ont été désigné(s) comme origine de la réinstallation :',
+            '\n\n- ',
+            town.reinstallationIncomingTowns.map(({ id, usename }) => formatTownLink(id, usename)).join('\n- '),
+        ].join('');
+    }
+
     const mattermostMessage = {
         channel: '#notif-ouverture-sites',
         username: 'Alerte Résorption Bidonvilles',
@@ -103,7 +112,10 @@ async function triggerShantytownCreationAlert(town, user) {
                         short: false,
                         value: `*Date de signalement du site* : ${formatDate(new Date(town.declaredAt * 1000))}`,
                     },
-
+                    {
+                        short: false,
+                        value: incomingTownsMessage,
+                    },
                 ],
             }],
     };
