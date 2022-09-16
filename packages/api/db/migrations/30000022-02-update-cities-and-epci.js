@@ -4,7 +4,6 @@ module.exports = {
     async up(queryInterface) {
         const transaction = await queryInterface.sequelize.transaction();
 
-
         await Promise.all([
             // updates on cities
             queryInterface.sequelize.query(
@@ -44,12 +43,8 @@ module.exports = {
             queryInterface.dropTable('epci_2022', { transaction }),
         ]);
 
-
-        await transaction.commit();
+        return transaction.commit();
     },
 
-
-    async down() {
-        await Promise.resolve();
-    },
+    down: () => Promise.resolve(),
 };

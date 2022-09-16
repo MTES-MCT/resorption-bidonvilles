@@ -45,17 +45,31 @@ module.exports = {
                 },
                 { transaction },
             ),
-        ])
-        // fill cities_2022
-            .then(() => parser(
+        ]);
+
+        // parse new cities and epci data
+        const [cities, epcis] = await Promise.all([
+            parser(
                 fs.readFileSync(path.join(__dirname, '..', 'data', 'cities_2022.csv'), { encoding: 'utf8' }),
                 {
                     headers: ['code', 'name', 'departementCode', 'regionCode', 'epciCode', 'arr', 'canton',
                     ],
                     separator: ';',
                 },
-            ))
-            .then(cities => queryInterface.bulkInsert(
+            ),
+            parser(
+                fs.readFileSync(path.join(__dirname, '..', 'data', 'epci_2022.csv'), { encoding: 'utf8' }),
+                {
+                    headers: ['code', 'label',
+                    ],
+                    separator: ';',
+                },
+            ),
+        ]);
+
+        // fill cities_2022 and epci_2022
+        await Promise.all([
+            queryInterface.bulkInsert(
                 'cities_2022',
                 cities.map(city => ({
                     code: city.code.length === 5 ? city.code : `0${city.code}`,
@@ -64,24 +78,16 @@ module.exports = {
                     fk_departement: city.departementCode,
                 })),
                 { transaction },
-            ))
-        // fill epci_2022
-            .then(() => parser(
-                fs.readFileSync(path.join(__dirname, '..', 'data', 'epci_2022.csv'), { encoding: 'utf8' }),
-                {
-                    headers: ['code', 'label',
-                    ],
-                    separator: ';',
-                },
-            ))
-            .then(epcis => queryInterface.bulkInsert(
+            ),
+            queryInterface.bulkInsert(
                 'epci_2022',
                 epcis.map(epci => ({
                     code: epci.code,
                     name: epci.label,
                 })),
                 { transaction },
-            ));
+            ),
+        ]);
 
 
         await Promise.all([
@@ -175,11 +181,8 @@ module.exports = {
             ),
         ]);
 
-        await transaction.commit();
+        return transaction.commit();
     },
 
-
-    async down() {
-        await Promise.resolve();
-    },
+    down: () => Promise.resolve(),
 };
