@@ -89,49 +89,9 @@ module.exports = {
             ),
         ]);
 
-
+        // epci updates
         await Promise.all([
-            // updates on cities
-            queryInterface.sequelize.query(
-                'UPDATE cities SET fk_main = null WHERE fk_main NOT IN (SELECT code FROM cities_2022)',
-                {
-                    type: queryInterface.sequelize.QueryTypes.UPDATE,
-                    transaction,
-                },
-            ),
-
-            queryInterface.sequelize.query(
-                `INSERT INTO cities (code, name, fk_epci, fk_departement)
-                SELECT code, name, fk_epci, fk_departement
-                FROM cities_2022
-                WHERE code NOT IN (SELECT code FROM cities)
-                `,
-                {
-                    type: queryInterface.sequelize.QueryTypes.INSERT,
-                    transaction,
-                },
-            ),
-            queryInterface.sequelize.query(
-                `WITH constant(type) AS (SELECT organization_type_id FROM organization_types WHERE name_singular = 'Commune')
-                INSERT INTO organizations (name, active, fk_type, fk_city, being_funded)
-                SELECT cities.name, false, constant.type, cities.code, false
-                FROM  cities
-                LEFT JOIN organizations ON organizations.fk_city = cities.code
-                LEFT JOIN constant on true
-                WHERE organizations.fk_city IS null`,
-                {
-                    type: queryInterface.sequelize.QueryTypes.INSERT,
-                    transaction,
-                },
-            ),
-            queryInterface.sequelize.query(
-                'UPDATE cities SET name = cities_2022.name FROM cities_2022 WHERE cities_2022.code = cities.code AND cities_2022.name != cities.name',
-                {
-                    type: queryInterface.sequelize.QueryTypes.UPDATE,
-                    transaction,
-                },
-            ),
-            // updates on EPCI
+            // insert new epci
             queryInterface.sequelize.query(
                 `INSERT INTO epci (code, name)
                 SELECT code, name
@@ -143,6 +103,39 @@ module.exports = {
                     transaction,
                 },
             ),
+            // update existing epci that changed name
+            queryInterface.sequelize.query(
+                'UPDATE epci SET name = epci_2022.name FROM epci_2022 WHERE epci_2022.code = epci.code AND epci_2022.name != epci.name',
+                {
+                    type: queryInterface.sequelize.QueryTypes.UPDATE,
+                    transaction,
+                },
+            ),
+        ]);
+
+        // city updates
+        await Promise.all([
+            // insert new cities
+            queryInterface.sequelize.query(
+                `INSERT INTO cities (code, name, fk_epci, fk_departement)
+                SELECT code, name, fk_epci, fk_departement
+                FROM cities_2022
+                WHERE code NOT IN (SELECT code FROM cities)
+                `,
+                {
+                    type: queryInterface.sequelize.QueryTypes.INSERT,
+                    transaction,
+                },
+            ),
+            // update existing cities that changed name
+            queryInterface.sequelize.query(
+                'UPDATE cities SET name = cities_2022.name FROM cities_2022 WHERE cities_2022.code = cities.code AND cities_2022.name != cities.name',
+                {
+                    type: queryInterface.sequelize.QueryTypes.UPDATE,
+                    transaction,
+                },
+            ),
+            // update existing cities that changed of epci
             queryInterface.sequelize.query(
                 `UPDATE cities
                 SET fk_epci = epci.code
@@ -154,11 +147,28 @@ module.exports = {
                     transaction,
                 },
             ),
+        ]);
+
+        // create organizations for the new EPCI and cities
+        await Promise.all([
+            queryInterface.sequelize.query(
+                `WITH constant(type) AS (SELECT organization_type_id FROM organization_types WHERE name_singular = 'Commune')
+                INSERT INTO organizations (name, active, fk_type, fk_city, being_funded)
+                SELECT cities.name, false, constant.type, cities.code, false
+                FROM cities
+                LEFT JOIN organizations ON organizations.fk_city = cities.code
+                LEFT JOIN constant on true
+                WHERE organizations.fk_city IS null`,
+                {
+                    type: queryInterface.sequelize.QueryTypes.INSERT,
+                    transaction,
+                },
+            ),
             queryInterface.sequelize.query(
                 `WITH constant(type) AS (SELECT organization_type_id FROM organization_types WHERE name_singular = 'Intercommunalité')
                 INSERT INTO organizations (name, active, fk_type, fk_epci, being_funded)
                 SELECT epci.name, false, constant.type, epci.code, false
-                FROM  epci
+                FROM epci
                 LEFT JOIN organizations ON organizations.fk_epci = epci.code
                 LEFT JOIN constant on true
                 WHERE organizations.fk_epci IS null`,
@@ -167,19 +177,12 @@ module.exports = {
                     transaction,
                 },
             ),
-
-            queryInterface.sequelize.query(
-                'REFRESH MATERIALIZED VIEW localized_organizations',
-                { transaction },
-            ),
-            queryInterface.sequelize.query(
-                'UPDATE epci SET name = epci_2022.name FROM epci_2022 WHERE epci_2022.code = epci.code AND epci_2022.name != epci.name',
-                {
-                    type: queryInterface.sequelize.QueryTypes.UPDATE,
-                    transaction,
-                },
-            ),
         ]);
+
+        await queryInterface.sequelize.query(
+            'REFRESH MATERIALIZED VIEW localized_organizations',
+            { transaction },
+        );
 
         return transaction.commit();
     },
