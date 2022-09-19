@@ -10,9 +10,9 @@ module.exports = {
       postcss: {
         theme: {},
         variants: {},
-        plugins: [require("tailwindcss"), require("autoprefixer")()],
-      },
-    },
+        plugins: [require("tailwindcss"), require("autoprefixer")()]
+      }
+    }
   },
 
   configureWebpack: {
@@ -20,19 +20,20 @@ module.exports = {
       host: "0.0.0.0",
       port: "8093",
       public: VUE_APP_MOBILE_HOST,
-      disableHostCheck: true,
+      disableHostCheck: true
     },
     plugins: [
       new DefinePlugin({
-        "process.env.APP_VERSION": JSON.stringify(version),
-      }),
-    ],
+        "process.env.APP_VERSION": JSON.stringify(version)
+      })
+    ]
   },
 
-  chainWebpack: (config) => {
+  chainWebpack: config => {
     config.resolve.alias
       .set("#src", path.resolve(__dirname, "./src/"))
-      .set("#frontend", path.resolve(__dirname, ".."));;
+      .set("#helpers", path.resolve(__dirname, "./src/js/helpers"))
+      .set("#frontend", path.resolve(__dirname, ".."));
   },
 
   pwa: {
@@ -45,8 +46,8 @@ module.exports = {
     workboxPluginMode: "InjectManifest",
     workboxOptions: {
       // swSrc is required in InjectManifest mode.
-      swSrc: "dev/sw.js",
+      swSrc: "dev/sw.js"
       // ...other Workbox options...
-    },
-  },
+    }
+  }
 };
