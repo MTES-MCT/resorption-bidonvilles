@@ -7,6 +7,7 @@ const SQL = require('./_common/SQL');
 module.exports = async (user, location, lastDate, closedTowns) => {
     const where = [];
     const replacements = {
+        userId: user.id,
     };
 
     const restrictedLocation = restrict(location).for(user).askingTo('list', 'shantytown');
