@@ -9,16 +9,21 @@
     :bullets="false"
     :gap="3"
     :slide-ratio="1 / 4"
-    :dragging-distance="50"
     transition-speed="250"
   >
     <vueper-slide
-      class="border text-sm"
-      v-for="(slide, i) in itemsToDisplay"
+      class="border rounded text-sm "
+      v-for="(item, i) in items"
       :key="i"
-      :title="slide.title"
-      :content="slide.content"
     >
+      <template #content>
+        <p class="font-bold">
+          {{ item.addressSimple }}
+        </p>
+        <p>
+          {{ item.city.name }}
+        </p>
+      </template>
     </vueper-slide>
   </vueper-slides>
 </template>
