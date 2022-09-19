@@ -158,5 +158,6 @@ module.exports = {
         { table: 'organizations AS creators_organizations', on: 'creators.fk_organization = creators_organizations.organization_id' },
         { table: 'users AS updators', on: 'shantytowns.updated_by = updators.user_id' },
         { table: 'organizations AS updators_organizations ', on: 'updators.fk_organization = updators_organizations.organization_id' },
+        { table: 'shantytown_actors ', on: 'shantytown_actors.fk_shantytown = shantytowns.shantytown_id AND shantytown_actors.fk_user = :userId' },
     ],
 };

@@ -78,7 +78,7 @@ module.exports = async (where = [], order = ['departements.code ASC', 'cities.na
         where.push(permissionsClauseGroup);
     }
 
-    const replacements = { ...argReplacements };
+    const replacements = { ...argReplacements, userId: user.id };
     const whereClause = stringifyWhereClause('shantytowns', where, replacements);
 
     const towns = await sequelize.query(
