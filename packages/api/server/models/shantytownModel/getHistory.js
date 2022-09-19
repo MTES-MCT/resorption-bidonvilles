@@ -12,6 +12,7 @@ module.exports = async (user, location, shantytownFilter, numberOfActivities, la
     const where = [];
     const replacements = {
         maxDate,
+        userId: user.id,
     };
     const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
 
