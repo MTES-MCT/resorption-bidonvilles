@@ -32,6 +32,7 @@ module.exports = {
     chainWebpack: config => {
         config.resolve.alias
             .set("#src", path.resolve(__dirname, "./src/"))
+            .set("#helpers", path.resolve(__dirname, "./src/js/helpers"))
             .set("#frontend", path.resolve(__dirname, ".."));
     },
 
