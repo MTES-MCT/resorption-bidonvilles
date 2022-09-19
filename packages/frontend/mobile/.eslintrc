@@ -28,6 +28,10 @@
                     [
                         "#frontend",
                         ".."
+                    ],
+                    [
+                        "#helpers",
+                        "./src/js/helpers"
                     ]
                 ],
                 "extensions": [
