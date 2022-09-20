@@ -18,6 +18,23 @@
                 ></TownCard>
             </Container>
         </div>
+        <Container>
+            <span class="font-bold">
+                Sites récemment consultés ({{ consultedTowns.length }})
+            </span>
+        </Container>
+        <div
+            id="section-carousel"
+            class="whitespace-no-wrap overflow-y-auto mb-8 mt-2"
+        >
+            <Container>
+                <TownCard
+                    v-for="town in consultedTowns"
+                    :key="town.id"
+                    :town="town"
+                ></TownCard>
+            </Container>
+        </div>
     </Layout>
 </template>
 
@@ -28,68 +45,6 @@ import { mapGetters } from "vuex";
 import Layout from "#src/js/components/Layout.vue";
 
 export default {
-    data() {
-        return {
-            consultedTowns: [
-                {
-                    id: 5,
-                    addressSimple: "Avenue Gay Lussac",
-                    name: null,
-                    city: {
-                        name: "Ambarès-et-Lagrave"
-                    }
-                },
-                {
-                    id: 6,
-                    addressSimple: "Rue des Noyers",
-                    name: null,
-                    city: {
-                        name: "Ambarès-et-Lagrave"
-                    }
-                },
-                {
-                    id: 7,
-                    addressSimple: "57 Boulevard Feydeau",
-                    name: null,
-                    city: {
-                        name: "Ambarès-et-Lagrave"
-                    }
-                },
-                {
-                    id: 1,
-                    addressSimple: "37 Rue de Bassens",
-                    name: null,
-                    city: {
-                        name: "Ambarès-et-Lagrave"
-                    }
-                },
-                {
-                    id: 2,
-                    addressSimple: "32 Avenue du Chemin de la Vie",
-                    name: null,
-                    city: {
-                        name: "Ambarès-et-Lagrave"
-                    }
-                },
-                {
-                    id: 3,
-                    addressSimple: "74 Avenue de la Liberté",
-                    name: null,
-                    city: {
-                        name: "Ambarès-et-Lagrave"
-                    }
-                },
-                {
-                    id: 4,
-                    addressSimple: "9 Rue du Broustey",
-                    name: null,
-                    city: {
-                        name: "Ambarès-et-Lagrave"
-                    }
-                }
-            ]
-        };
-    },
     components: {
         TownCard,
         Container,
@@ -100,7 +55,8 @@ export default {
     },
     computed: {
         ...mapGetters({
-            myTowns: "townsItems",
+            myTowns: "myTowns",
+            consultedTowns: "consultedTowns",
             error: "townsError",
             state: "townsState"
         }),
