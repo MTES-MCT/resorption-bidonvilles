@@ -1,14 +1,5 @@
-const fs = require('fs');
-const path = require('path');
-
-const newFunction = fs.readFileSync(
-    path.resolve(__dirname, 'common/validate_user_permission_attachments/02_support_plan_comment.sql'),
-    'utf8',
-);
-const oldFunction = fs.readFileSync(
-    path.resolve(__dirname, 'common/validate_user_permission_attachments/01_initial_function.sql'),
-    'utf8',
-);
+const oldFunction = require('./common/validate_user_permission_attachments/01_initial_function');
+const newFunction = require('./common/validate_user_permission_attachments/02_support_plan_comment');
 
 module.exports = {
     async up(queryInterface) {

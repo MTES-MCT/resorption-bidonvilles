@@ -1,3 +1,4 @@
+module.exports = `
 CREATE OR REPLACE FUNCTION validate_user_permission_attachments() RETURNS trigger AS $validate_user_permission_attachments$
     DECLARE
         entity varchar;
@@ -28,7 +29,7 @@ CREATE OR REPLACE FUNCTION validate_user_permission_attachments() RETURNS trigge
                     RAISE EXCEPTION 'on ne peut pas rattacher un dispositif à une permission de type %', entity;
                 END IF;
 
-            WHEN entity IN ('plan', 'plan_finances', 'plan_comment')
+            WHEN entity IN ('plan', 'plan_finances')
             THEN
                 IF NEW.fk_shantytown IS NOT NULL OR NEW.fk_city IS NOT NULL OR NEW.fk_epci IS NOT NULL THEN
                     RAISE EXCEPTION 'on ne peut pas rattacher un site, une commune, ou un EPCI à une permission de type %', entity;
@@ -58,4 +59,4 @@ CREATE OR REPLACE FUNCTION validate_user_permission_attachments() RETURNS trigge
 
         RETURN NEW;
     END;
-$validate_user_permission_attachments$ LANGUAGE plpgsql;
+$validate_user_permission_attachments$ LANGUAGE plpgsql;`;
