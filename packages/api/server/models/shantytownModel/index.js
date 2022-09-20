@@ -2,6 +2,7 @@ const create = require('./create');
 const createCovidComment = require('./createCovidComment');
 const findAll = require('./findAll');
 const findAllByActor = require('./findAllByActor');
+const findByNavigationLog = require('./findByNavigationLog');
 const findNearby = require('./findNearby');
 const findOne = require('./findOne');
 const getComments = require('./_common/getComments');
@@ -19,6 +20,7 @@ module.exports = {
     createCovidComment,
     findAll,
     findAllByActor,
+    findByNavigationLog,
     findNearby,
     findOne,
     getComments,
