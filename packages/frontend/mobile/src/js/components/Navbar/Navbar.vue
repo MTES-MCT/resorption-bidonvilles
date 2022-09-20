@@ -1,10 +1,18 @@
 <template>
-    <div
-        class="fixed bottom-0 bg-primary text-white w-full py-4 px-6 flex justify-between"
-    >
-        <NavbarItem icon="home" label="Sites" @click.native="showTownsTab" />
-        <NavbarItem icon="pen" label="Notes" />
-        <NavbarItem icon="unlink" label="Déconnexion" @click.native="signout" />
+    <div class="fixed bottom-0 bg-primary text-white w-full py-4 px-6 ">
+        <div class="flex justify-between max-w-lg mx-auto">
+            <NavbarItem
+                icon="home"
+                label="Sites"
+                @click.native="showTownsTab"
+            />
+            <NavbarItem icon="pen" label="Notes" />
+            <NavbarItem
+                icon="unlink"
+                label="Déconnexion"
+                @click.native="signout"
+            />
+        </div>
     </div>
 </template>
 
