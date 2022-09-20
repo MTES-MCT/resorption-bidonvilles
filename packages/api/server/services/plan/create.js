@@ -3,12 +3,13 @@ const sequelize = require('#db/sequelize');
 const planModel = require('#server/models/planModel');
 const shantytownModel = require('#server/models/shantytownModel');
 const departementModel = require('#server/models/departementModel');
+const financeModel = require('#server/models/financeModel');
 const financeTypeModel = require('#server/models/financeTypeModel');
 const financeRowModel = require('#server/models/financeRowModel');
 const planManagerModel = require('#server/models/planManagerModel');
 const topicModel = require('#server/models/topicModel');
 const userModel = require('#server/models/userModel');
-const { addAttachments } = require('#server/models/permissionModel');
+const permissionModel = require('#server/models/permissionModel');
 const sanitize = require('#server/controllers/planController/_common/sanitize');
 const locationModel = require('#server/models/locationModel');
 const planDepartementModel = require('#server/models/planDepartementModel');
@@ -21,7 +22,6 @@ module.exports = async (data, user) => {
     const planData = Object.assign({}, sanitize(data), {
         createdBy: user.id,
     });
-    console.log(`sanitizedData: ${JSON.stringify(planData)}`);
 
     // validate data
     const errors = {};
@@ -222,7 +222,7 @@ module.exports = async (data, user) => {
 
             // insert into finances
             const financeIds = await Promise.all(
-                planData.finances.map(({ year }) => financeTypeModel.create(planId, year, user.id, t)),
+                planData.finances.map(({ year }) => financeModel.create(planId, year, user.id, t)),
             );
 
             // insert into finance_rows
@@ -241,10 +241,10 @@ module.exports = async (data, user) => {
                 planManagerModel.create(planId, planData.government.map(manager => manager.id), user.id, t),
                 planOperatorModel.create(planId, planData.associationContact, user.id, t),
 
-                // pour le manager (utilisateur), on octroie les droits suivants sur l'action :
+                // pour le(s) pilote(s) (utilisateur), on octroie les droits suivants sur l'action :
                 // list, read, update, et close
                 ...['list', 'read', 'update', 'close'].map(
-                    feature => planData.government.map(manager => addAttachments([{ type: 'plan', id: planId }])
+                    feature => planData.government.map(manager => permissionModel.applyAttachments([{ type: 'plan', id: planId }])
                         .toUser(manager.id)
                         .onFeature(feature, 'plan', t)),
                 ),
@@ -252,7 +252,7 @@ module.exports = async (data, user) => {
                 // pour l'opérateur (structure), on octroie les droits suivants sur l'action :
                 // list, read, updateMarks
                 ...['list', 'read', 'updateMarks'].map(
-                    feature => addAttachments([{ type: 'plan', id: planId }])
+                    feature => permissionModel.applyAttachments([{ type: 'plan', id: planId }])
                         .toOrganization(associationContact.organization.id)
                         .onFeature(feature, 'plan', t),
                 ),

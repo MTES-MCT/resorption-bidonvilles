@@ -6,6 +6,9 @@ require('../module_alias');
  * @type {Object.<string, Function>}
  */
 const generators = {
+    date() {
+        return new Date();
+    },
     string() {
         return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     },
