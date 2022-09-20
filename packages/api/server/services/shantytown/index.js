@@ -2,6 +2,7 @@ const create = require('./create');
 const list = require('./list');
 const find = require('./find');
 const findAllByActor = require('./findAllByActor');
+const findByNavigationLog = require('./findByNavigationLog');
 const close = require('./close');
 const deleteTown = require('./deleteTown');
 const deleteComment = require('./deleteComment');
@@ -15,6 +16,7 @@ module.exports = {
     list,
     find,
     findAllByActor,
+    findByNavigationLog,
     close,
     deleteTown,
     deleteComment,
