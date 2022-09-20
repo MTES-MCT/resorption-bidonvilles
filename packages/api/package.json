@@ -1,6 +1,6 @@
 {
   "name": "@resorptionbidonvilles/api",
-  "version": "1.34.3",
+  "version": "1.34.4",
   "description": "API d'Action Bidonvilles",
   "main": "server/index.ts",
   "repository": "git+https://github.com/MTES-MCT/action-bidonvilles.git",
@@ -90,11 +90,11 @@
   "scripts": {
     "db:create": "sequelize db:migrate && sequelize db:seed:all",
     "dev": "ts-node-dev ./server/index.ts",
-    "build": "tsc && tsc-alias && cp -r server/mails/dist dist/server/mails && cp -r assets dist && cp .sequelizerc dist",
+    "build": "tsc && tsc-alias && cp -r server/mails/dist dist/server/mails && cp -r assets dist && cp .sequelizerc dist && cp -r db/data dist/db/data",
     "start": "nodemon dist/server/index.js",
     "test": "mocha --recursive --require ./test/bootstrap.js --bail",
     "test:unit": "yarn test:unit:js && yarn test:unit:ts",
-    "test:unit:js": "yarn test './**/*.spec.js'",
+    "test:unit:js": "yarn test './server/**/*.spec.js' './test/**/*.spec.js'",
     "test:unit:ts": "yarn mocha --require ./test/bootstrap.js -r ts-node/register 'server/**/*.spec.ts' 'test/**/*.spec.ts'",
     "test:integration": "yarn test --grep '.*server/models.*'",
     "lint": "eslint  --max-warnings=0",

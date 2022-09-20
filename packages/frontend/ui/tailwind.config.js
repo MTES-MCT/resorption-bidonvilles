@@ -87,6 +87,9 @@ module.exports = {
             ]
         },
         extend: {
+            width: {
+                200: "50rem"
+            },
             screens: {
                 print: { raw: "print" }
             },
