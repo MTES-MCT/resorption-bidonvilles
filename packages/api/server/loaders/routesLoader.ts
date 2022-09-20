@@ -285,6 +285,15 @@ export default (app) => {
     );
 
     app.get(
+        '/towns/navigation_logs/:user_id',
+        middlewares.auth.authenticate,
+        (...args) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        controllers.town.findByNavigationLog,
+    );
+
+    app.get(
         '/towns/findNearby',
         validators.findNearbyTowns,
         middlewares.auth.authenticate,
