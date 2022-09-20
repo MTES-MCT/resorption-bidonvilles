@@ -6,3 +6,10 @@ import { getApi } from "#src/js/api";
 export function findAllByActor(userId) {
   return getApi(`/towns/actors/${userId}`);
 }
+
+/**
+ * GET /towns/navigation_logs/user_id
+ */
+export function findByNavigationLog(userId) {
+  return getApi(`/towns/navigation_logs/${userId}`);
+}
