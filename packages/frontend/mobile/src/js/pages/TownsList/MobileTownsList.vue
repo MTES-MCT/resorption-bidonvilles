@@ -1,44 +1,39 @@
 <template>
   <div>
-    <div class="mx-4 my-8 font-bold text-xl">
-      Bienvenue {{ user.first_name }} {{ user.last_name }}
+    <Container>
+      <div class="my-8 font-bold text-xl">
+        Bienvenue {{ user.first_name }} {{ user.last_name }}
+      </div>
+      <span class="font-bold"> Mes sites ({{ myTowns.length }}) </span>
+    </Container>
+    <div
+      id="section-carousel"
+      class="whitespace-no-wrap overflow-y-auto mb-8 mt-2"
+    >
+      <Container>
+        <TownCard
+          v-for="town in myTowns"
+          :key="town.id"
+          :town="town"
+        ></TownCard>
+      </Container>
     </div>
 
-    <div class="mx-4 my-4">
-      <span class="font-bold text-primary">
-        Mes sites ({{ myTowns.length }})
-      </span>
-
-      <br />
-      <span>Sites sur lesquels vous intervenez</span>
-      <div class="mt-4"><Carousel :items="myTowns" /></div>
-    </div>
-
-    <div class="mx-4 my-4">
-      <span class="font-bold text-primary">
-        Sites récemment consultés ({{ consultedTowns.length }})</span
-      >
-      <br />
-      <span
-        >Les {{ consultedTowns.length }} derniers sites que vous avez
-        consultés</span
-      >
-      <div><Carousel :items="consultedTowns" /></div>
-    </div>
-
-    <Button @click="disconnect" class="mb-8"> Me déconnecter </Button>
+    <Container>
+      <Button @click="disconnect" class="mb-8"> Me déconnecter </Button>
+    </Container>
   </div>
 </template>
 
 <script>
 import { Button } from "@resorptionbidonvilles/ui";
-import Carousel from "../../components/Carousel.vue";
+import TownCard from "./TownCard.vue";
+import Container from "../../components/Container.vue";
 import { mapGetters } from "vuex";
 
 export default {
   data() {
     return {
-      // myTowns: [],
       consultedTowns: [
         {
           id: 5,
@@ -101,7 +96,8 @@ export default {
   },
   components: {
     Button,
-    Carousel
+    TownCard,
+    Container
   },
   mounted() {
     this.load();
