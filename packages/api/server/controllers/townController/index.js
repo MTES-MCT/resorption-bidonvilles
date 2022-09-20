@@ -20,6 +20,7 @@ const exportActors = require('./exportActors');
 const getRelations = require('./getRelations')();
 const findNearbyTowns = require('./findNearbyTowns')();
 const findAllByActor = require('./findAllByActor');
+const findByNavigationLog = require('./findByNavigationLog');
 
 module.exports = {
     list,
@@ -44,4 +45,5 @@ module.exports = {
     getRelations,
     findNearbyTowns,
     findAllByActor,
+    findByNavigationLog,
 };
