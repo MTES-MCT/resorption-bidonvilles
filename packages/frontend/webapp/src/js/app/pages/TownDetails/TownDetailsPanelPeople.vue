@@ -137,7 +137,10 @@
                 <p class="font-bold">
                     Précisions sur la réinstallation
                 </p>
-                <p data-cy-data="reinstallation_comments">
+                <p
+                    data-cy-data="reinstallation_comments"
+                    class="w-200 break-words whitespace-pre-wrap"
+                >
                     {{ town.reinstallationComments }}
                 </p>
             </DetailsPanelSection>
