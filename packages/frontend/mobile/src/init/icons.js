@@ -6,6 +6,6 @@ config.autoAddCss = false;
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import "../js/icons";
 
-export default function (vueInstance) {
-  vueInstance.component("font-awesome-icon", FontAwesomeIcon);
+export default function(vueInstance) {
+    vueInstance.component("font-awesome-icon", FontAwesomeIcon);
 }

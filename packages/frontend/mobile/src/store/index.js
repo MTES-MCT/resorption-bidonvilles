@@ -7,10 +7,10 @@ import moduleUser from "#frontend/common/store/modules/user";
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
-  modules: {
-    user: moduleUser,
-    config: moduleConfig,
-  },
+    modules: {
+        user: moduleUser,
+        config: moduleConfig
+    }
 });
 api.setStore(store);
 

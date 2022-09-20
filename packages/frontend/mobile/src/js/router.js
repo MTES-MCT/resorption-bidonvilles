@@ -6,15 +6,15 @@ import Logout from "#src/js/pages/Logout/Logout.vue";
 import store from "../store/index";
 
 function isLoggedIn() {
-  return store.getters["user/loggedIn"];
+    return store.getters["user/loggedIn"];
 }
 
 function getConfig() {
-  return store.state.config.configuration;
+    return store.state.config.configuration;
 }
 
 function isConfigLoaded() {
-  return store.getters["config/loaded"] === true;
+    return store.getters["config/loaded"] === true;
 }
 
 /**
@@ -31,23 +31,23 @@ let entryPoint = null;
  */
 
 function home(to, from, next) {
-  if (isLoggedIn() !== true) {
-    return next("/connexion");
-  }
+    if (isLoggedIn() !== true) {
+        return next("/connexion");
+    }
 
-  if (isConfigLoaded() !== true) {
-    return next("/launcher");
-  }
+    if (isConfigLoaded() !== true) {
+        return next("/launcher");
+    }
 
-  return next("/liste-des-sites");
+    return next("/liste-des-sites");
 }
 
 function hasPermission(...args) {
-  return store.getters["config/hasPermission"](...args);
+    return store.getters["config/hasPermission"](...args);
 }
 
 function hasAcceptedCharte() {
-  return store.getters["config/hasAcceptedCharte"] === true;
+    return store.getters["config/hasAcceptedCharte"] === true;
 }
 
 /**
@@ -68,20 +68,20 @@ function hasAcceptedCharte() {
  * @param {Function}        next
  */
 function guard(checkers, to, from, next) {
-  for (let i = 0; i < checkers.length; i += 1) {
-    const { checker, target, saveEntryPoint } = checkers[i];
+    for (let i = 0; i < checkers.length; i += 1) {
+        const { checker, target, saveEntryPoint } = checkers[i];
 
-    if (checker(to, from) !== true) {
-      if (saveEntryPoint !== false) {
-        entryPoint = to;
-      }
+        if (checker(to, from) !== true) {
+            if (saveEntryPoint !== false) {
+                entryPoint = to;
+            }
 
-      next(target);
-      return;
+            next(target);
+            return;
+        }
     }
-  }
 
-  next();
+    next();
 }
 
 /**
@@ -92,15 +92,15 @@ function guard(checkers, to, from, next) {
  * @returns {boolean}
  */
 function isPermitted(to) {
-  const { permissions } = to.meta;
+    const { permissions } = to.meta;
 
-  // if there is no permission needed, access is obviously granted
-  if (!permissions) {
-    return true;
-  }
+    // if there is no permission needed, access is obviously granted
+    if (!permissions) {
+        return true;
+    }
 
-  // ensure all permissions are given
-  return permissions.every(permission => hasPermission(permission));
+    // ensure all permissions are given
+    return permissions.every(permission => hasPermission(permission));
 }
 
 /**
@@ -109,10 +109,10 @@ function isPermitted(to) {
  * @returns {boolean}
  */
 function isUpgraded() {
-  const {
-    user: { position }
-  } = getConfig();
-  return position !== "";
+    const {
+        user: { position }
+    } = getConfig();
+    return position !== "";
 }
 
 /**
@@ -121,8 +121,8 @@ function isUpgraded() {
  * @returns {boolean}
  */
 function hasNoPendingChangelog() {
-  const { changelog } = getConfig();
-  return !changelog || changelog.length === 0;
+    const { changelog } = getConfig();
+    return !changelog || changelog.length === 0;
 }
 
 /**
@@ -131,71 +131,71 @@ function hasNoPendingChangelog() {
  * @type {Object.<string,Function>}
  */
 const guardians = {
-  anonymous: guard.bind(this, [
-    { checker: () => !isLoggedIn(), target: "/", saveEntryPoint: false }
-  ]),
-  loggedIn: guard.bind(this, [{ checker: isLoggedIn, target: "/connexion" }]),
-  loaded: guard.bind(this, [
-    { checker: isLoggedIn, target: "/connexion" },
-    { checker: isConfigLoaded, target: "/launcher" },
-    { checker: isPermitted, target: "/", saveEntrypoint: false }
-  ]),
-  loadedAndUpgraded: guard.bind(this, [
-    { checker: isLoggedIn, target: "/connexion" },
-    { checker: isConfigLoaded, target: "/launcher" },
-    { checker: isPermitted, target: "/", saveEntrypoint: false },
-    { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
-    { checker: isUpgraded, target: "/mise-a-niveau" }
-  ]),
-  loadedAndUpToDate: guard.bind(this, [
-    { checker: isLoggedIn, target: "/connexion" },
-    { checker: isConfigLoaded, target: "/launcher" },
-    { checker: isPermitted, target: "/", saveEntrypoint: false },
-    { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
-    { checker: isUpgraded, target: "/mise-a-niveau" },
-    { checker: hasNoPendingChangelog, target: "/nouvelle-version" }
-  ])
+    anonymous: guard.bind(this, [
+        { checker: () => !isLoggedIn(), target: "/", saveEntryPoint: false }
+    ]),
+    loggedIn: guard.bind(this, [{ checker: isLoggedIn, target: "/connexion" }]),
+    loaded: guard.bind(this, [
+        { checker: isLoggedIn, target: "/connexion" },
+        { checker: isConfigLoaded, target: "/launcher" },
+        { checker: isPermitted, target: "/", saveEntrypoint: false }
+    ]),
+    loadedAndUpgraded: guard.bind(this, [
+        { checker: isLoggedIn, target: "/connexion" },
+        { checker: isConfigLoaded, target: "/launcher" },
+        { checker: isPermitted, target: "/", saveEntrypoint: false },
+        { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
+        { checker: isUpgraded, target: "/mise-a-niveau" }
+    ]),
+    loadedAndUpToDate: guard.bind(this, [
+        { checker: isLoggedIn, target: "/connexion" },
+        { checker: isConfigLoaded, target: "/launcher" },
+        { checker: isPermitted, target: "/", saveEntrypoint: false },
+        { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
+        { checker: isUpgraded, target: "/mise-a-niveau" },
+        { checker: hasNoPendingChangelog, target: "/nouvelle-version" }
+    ])
 };
 
 export default new VueRouter({
-  mode: "history",
-  routes: [
-    {
-      path: "/",
-      beforeEnter: home,
-      meta: {
-        analyticsIgnore: true
-      }
-    },
-    {
-      path: "/connexion",
-      component: Signin,
-      // beforeEnter: guardians.anonymous,
-      meta: {
-        title: "Résorption-bidonvilles — Connexion"
-      }
-    },
-    {
-      path: "/launcher",
-      component: Launcher,
-      // beforeEnter: guardians.loggedIn,
-      meta: {
-        title: "Résorption-bidonvilles — Chargement"
-      }
-    },
-    {
-      path: "/liste-des-sites",
-      component: TownsList,
-      beforeEnter: guardians.loadedAndUpToDate
-    },
-    {
-      path: "/deconnexion",
-      component: Logout,
-      meta: {
-        analyticsIgnore: true
-      }
-    }
-  ]
+    mode: "history",
+    routes: [
+        {
+            path: "/",
+            beforeEnter: home,
+            meta: {
+                analyticsIgnore: true
+            }
+        },
+        {
+            path: "/connexion",
+            component: Signin,
+            // beforeEnter: guardians.anonymous,
+            meta: {
+                title: "Résorption-bidonvilles — Connexion"
+            }
+        },
+        {
+            path: "/launcher",
+            component: Launcher,
+            // beforeEnter: guardians.loggedIn,
+            meta: {
+                title: "Résorption-bidonvilles — Chargement"
+            }
+        },
+        {
+            path: "/liste-des-sites",
+            component: TownsList,
+            beforeEnter: guardians.loadedAndUpToDate
+        },
+        {
+            path: "/deconnexion",
+            component: Logout,
+            meta: {
+                analyticsIgnore: true
+            }
+        }
+    ]
 });
 
 /**
@@ -207,12 +207,12 @@ export default new VueRouter({
  * @returns {string}
  */
 export function getEntryPoint() {
-  if (entryPoint === null) {
-    return "/";
-  }
+    if (entryPoint === null) {
+        return "/";
+    }
 
-  // the entryPoint is consumed once only
-  const response = entryPoint;
-  entryPoint = null;
-  return response;
+    // the entryPoint is consumed once only
+    const response = entryPoint;
+    entryPoint = null;
+    return response;
 }
