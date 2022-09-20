@@ -90,7 +90,7 @@
   "scripts": {
     "db:create": "sequelize db:migrate && sequelize db:seed:all",
     "dev": "ts-node-dev ./server/index.ts",
-    "build": "tsc && tsc-alias && cp -r server/mails/dist dist/server/mails && cp -r assets dist && cp .sequelizerc dist",
+    "build": "tsc && tsc-alias && cp -r server/mails/dist dist/server/mails && cp -r assets dist && cp .sequelizerc dist && cp -r db/data dist/db/data",
     "start": "nodemon dist/server/index.js",
     "test": "mocha --recursive --require ./test/bootstrap.js --bail",
     "test:unit": "yarn test:unit:js && yarn test:unit:ts",
