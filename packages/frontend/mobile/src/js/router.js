@@ -31,10 +31,6 @@ let entryPoint = null;
  */
 
 function home(to, from, next) {
-  if (to.fullPath.substr(0, 2) === "/#") {
-    return next(to.fullPath.substr(2));
-  }
-
   if (isLoggedIn() !== true) {
     return next("/connexion");
   }
