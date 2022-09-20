@@ -1,10 +1,11 @@
-import { findAllByActor } from "#helpers/town";
+import { findAllByActor, findByNavigationLog } from "#helpers/town";
 
 export default {
   state: {
     state: null,
     error: null,
-    myTowns: []
+    myTowns: [],
+    consultedTowns: []
   },
 
   mutations: {
@@ -16,6 +17,9 @@ export default {
     },
     setMyTownsItems(state, towns) {
       state.myTowns = towns;
+    },
+    setConsultedTownsItems(state, towns) {
+      state.consultedTowns = towns;
     }
   },
 
@@ -29,10 +33,13 @@ export default {
       commit("setTownsState", "loading");
       commit("setTownsError", null);
       commit("setMyTownsItems", []);
+      commit("setConsultedTownsItems", []);
 
       try {
-        const towns = await findAllByActor(user.id);
-        commit("setMyTownsItems", towns);
+        const myTowns = await findAllByActor(user.id);
+        const consultedTowns = await findByNavigationLog(user.id);
+        commit("setMyTownsItems", myTowns);
+        commit("setConsultedTownsItems", consultedTowns);
         commit("setTownsState", "loaded");
       } catch (error) {
         commit(
@@ -52,8 +59,11 @@ export default {
       return state.error;
     },
 
-    townsItems(state) {
+    myTowns(state) {
       return state.myTowns;
+    },
+    consultedTowns(state) {
+      return state.consultedTowns;
     }
   }
 };
