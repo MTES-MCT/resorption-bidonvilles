@@ -1,32 +1,57 @@
 <template>
-    <ValidationObserver ref="form" v-slot="{ handleSubmit }">
-        <form @submit.prevent="handleSubmit(onLogin)">
-            <TextInput
-                placeholder="marcel.dupont@example.com"
-                label="Votre courriel"
-                v-model="email"
-            />
+    <Container class="h-full flex flex-col justify-center">
+        <header>
+            <RbLogo class="mx-auto" />
+            <h1 class="font-bold text-display-md text-center my-12">
+                Connectez-vous à<br />Résorption-bidonvilles
+            </h1>
+        </header>
 
-            <PasswordInput label="Votre mot de passe" v-model="password" />
+        <ValidationObserver ref="form" v-slot="{ handleSubmit }">
+            <form
+                @submit.prevent="handleSubmit(onLogin)"
+                class="mx-auto max-w-sm"
+            >
+                <TextInput
+                    placeholder="marcel.dupont@example.com"
+                    label="Votre courriel"
+                    v-model="email"
+                />
 
-            <div class="text-center">
-                <Button type="submit" class="mb-8" :loading="loading">
-                    Me connecter
-                </Button>
+                <PasswordInput label="Votre mot de passe" v-model="password" />
 
-                <div v-if="error" class="bg-red200 p-3 mb-8">
-                    {{ error }}
+                <div class="text-center mt-12">
+                    <Button type="submit" class="mb-8" :loading="loading">
+                        Me connecter
+                    </Button>
+
+                    <div v-if="error" class="bg-red200 p-3 mb-8">
+                        {{ error }}
+                    </div>
                 </div>
-            </div>
-        </form>
-    </ValidationObserver>
+            </form>
+        </ValidationObserver>
+    </Container>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-import { Button, TextInput, PasswordInput } from "@resorptionbidonvilles/ui";
+import Container from "#src/js/components/Container.vue";
+import {
+    Button,
+    TextInput,
+    PasswordInput,
+    RbLogo
+} from "@resorptionbidonvilles/ui";
 
 export default {
+    components: {
+        Container,
+        Button,
+        TextInput,
+        PasswordInput,
+        RbLogo
+    },
     data() {
         return {
             loading: null,
@@ -34,11 +59,6 @@ export default {
             email: "",
             password: ""
         };
-    },
-    components: {
-        Button,
-        TextInput,
-        PasswordInput
     },
     computed: {
         ...mapGetters({
