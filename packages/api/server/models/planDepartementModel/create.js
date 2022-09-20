@@ -1,9 +1,9 @@
 const sequelize = require('#db/sequelize');
 
 module.exports = (planId, departementId, createdBy, transaction = undefined) => sequelize.query(
-    `INSERT INTO plan_departement(fk_plan, fk_departement, created_by)
-        VALUES(plan_id, :departement_id, :user_id)
-        RETURNING plan_id AS id`,
+    `INSERT INTO plan_departements(fk_plan, fk_departement, created_by)
+        VALUES(:plan_id, :departement_id, :user_id)
+        RETURNING fk_plan AS id`,
     {
         replacements:
             {
