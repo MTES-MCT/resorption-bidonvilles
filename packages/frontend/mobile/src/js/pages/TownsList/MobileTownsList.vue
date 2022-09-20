@@ -1,19 +1,21 @@
 <template>
-    <div>
+    <Layout>
         <div class="mx-4 my-4 font-bold text-xl">
             Bienvenue {{ user.first_name }} {{ user.last_name }}
         </div>
 
         <Button @click="disconnect" class="mb-8"> Me déconnecter </Button>
-    </div>
+    </Layout>
 </template>
 
 <script>
+import Layout from "#src/js/components/Layout.vue";
 import { Button } from "@resorptionbidonvilles/ui";
 
 export default {
     components: {
-        Button
+        Button,
+        Layout
     },
     computed: {
         user() {
