@@ -6,7 +6,7 @@
                 label="Sites"
                 @click.native="showTownsTab"
             />
-            <NavbarItem icon="pen" label="Notes" />
+            <NavbarItem icon="pen" label="Notes" @click.native="showNotesTab" />
             <NavbarItem
                 icon="unlink"
                 label="Déconnexion"
@@ -30,6 +30,13 @@ export default {
             }
 
             this.$router.push("/liste-des-sites");
+        },
+        showNotesTab() {
+            if (this.$router.currentRoute.path === "/liste-des-notes") {
+                return;
+            }
+
+            this.$router.push("/liste-des-notes");
         },
         signout() {
             this.$router.push("/deconnexion");
