@@ -4,9 +4,13 @@
             <NavbarItem
                 icon="home"
                 label="Sites"
-                @click.native="showTownsTab"
+                @click.native="routeToPath('/liste-des-sites')"
             />
-            <NavbarItem icon="pen" label="Notes" />
+            <NavbarItem
+                icon="pen"
+                label="Notes"
+                @click.native="routeToPath('/creer-note')"
+            />
             <NavbarItem
                 icon="unlink"
                 label="Déconnexion"
@@ -24,15 +28,11 @@ export default {
         NavbarItem
     },
     methods: {
-        showTownsTab() {
-            if (this.$router.currentRoute.path === "/liste-des-sites") {
-                return;
-            }
-
-            this.$router.push("/liste-des-sites");
-        },
         signout() {
             this.$router.push("/deconnexion");
+        },
+        routeToPath(path) {
+            if (this.$route.path !== path) this.$router.push(path);
         }
     }
 };

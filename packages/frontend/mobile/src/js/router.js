@@ -3,6 +3,7 @@ import Signin from "#src/js/pages/Signin.vue";
 import TownsList from "#src/js/pages/TownsList/MobileTownsList.vue";
 import Launcher from "#src/js/pages/Launcher/Launcher.vue";
 import Logout from "#src/js/pages/Logout/Logout.vue";
+import CreateNote from "#src/js/pages/Notepad/CreateNote";
 import store from "../store/index";
 
 function isLoggedIn() {
@@ -186,6 +187,11 @@ export default new VueRouter({
         {
             path: "/liste-des-sites",
             component: TownsList,
+            beforeEnter: guardians.loadedAndUpToDate
+        },
+        {
+            path: "/creer-note",
+            component: CreateNote,
             beforeEnter: guardians.loadedAndUpToDate
         },
         {
