@@ -4,10 +4,13 @@
             <div class="my-8 font-bold text-xl">
                 Bienvenue {{ user.first_name }} {{ user.last_name }}
             </div>
-            <span class="font-bold"> Mes sites ({{ myTowns.length }}) </span>
+            <div class="font-bold">Mes sites ({{ myTowns.length }})</div>
+            <div class="italic" v-if="myTowns.length === 0">
+                vous n'intervenez sur aucun site
+            </div>
         </Container>
         <div
-            id="section-carousel"
+            v-if="myTowns.length > 0"
             class="whitespace-no-wrap overflow-y-auto mb-8 mt-2"
         >
             <Container>
@@ -19,12 +22,15 @@
             </Container>
         </div>
         <Container>
-            <span class="font-bold">
+            <div class="font-bold">
                 Sites récemment consultés ({{ consultedTowns.length }})
-            </span>
+            </div>
+            <div class="italic" v-if="consultedTowns.length === 0">
+                vous n'avez consulté aucun site récemment
+            </div>
         </Container>
         <div
-            id="section-carousel"
+            v-if="consultedTowns.length > 0"
             class="whitespace-no-wrap overflow-y-auto mb-8 mt-2"
         >
             <Container>
