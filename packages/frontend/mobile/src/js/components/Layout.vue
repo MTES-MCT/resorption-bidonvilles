@@ -8,7 +8,7 @@
             />
             <h1 class="font-bold text-xl">Résorption-bidonvilles</h1>
         </header>
-        <slot />
+        <section><slot /></section>
         <Navbar />
     </div>
 </template>
