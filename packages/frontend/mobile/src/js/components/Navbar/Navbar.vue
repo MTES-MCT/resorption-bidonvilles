@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed bottom-0 bg-primary text-white w-full py-4 px-6 ">
+    <nav class="fixed bottom-0 bg-primary text-white w-full py-4 px-6 ">
         <div class="flex justify-between max-w-lg mx-auto">
             <NavbarItem
                 icon="home"
@@ -13,7 +13,7 @@
                 @click.native="signout"
             />
         </div>
-    </div>
+    </nav>
 </template>
 
 <script>
