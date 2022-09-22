@@ -15,18 +15,8 @@
                 vous n'intervenez sur aucun site
             </div>
         </Container>
-        <div
-            v-if="myTowns.length > 0"
-            class="whitespace-no-wrap overflow-y-auto mb-8 mt-2"
-        >
-            <Container>
-                <TownCard
-                    v-for="town in myTowns"
-                    :key="town.id"
-                    :town="town"
-                ></TownCard>
-            </Container>
-        </div>
+        <TownCarousel :towns="myTowns" />
+
         <Container>
             <div class="font-bold text-lg">
                 Sites récemment consultés ({{ consultedTowns.length }})
@@ -35,32 +25,21 @@
                 vous n'avez consulté aucun site récemment
             </div>
         </Container>
-        <div
-            v-if="consultedTowns.length > 0"
-            class="whitespace-no-wrap overflow-y-auto mb-8 mt-2"
-        >
-            <Container>
-                <TownCard
-                    v-for="town in consultedTowns"
-                    :key="town.id"
-                    :town="town"
-                ></TownCard>
-            </Container>
-        </div>
+        <TownCarousel :towns="consultedTowns" />
     </Layout>
 </template>
 
 <script>
-import TownCard from "./TownCard.vue";
 import Container from "../../components/Container.vue";
+import TownCarousel from "./TownCarousel.vue";
 import { mapGetters } from "vuex";
 import Layout from "#src/js/components/Layout.vue";
 
 export default {
     components: {
-        TownCard,
         Container,
-        Layout
+        Layout,
+        TownCarousel
     },
     mounted() {
         this.load();
