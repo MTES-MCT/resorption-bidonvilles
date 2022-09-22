@@ -1,6 +1,6 @@
 <template>
     <Layout>
-        <div class="px-8">
+        <Container>
             <header>
                 <div class="flex justify-between">
                     <h1 class="font-bold text-lg">Liste de vos notes</h1>
@@ -35,18 +35,20 @@
                     :note="note"
                 />
             </section>
-        </div>
+        </Container>
     </Layout>
 </template>
 
 <script>
 import Layout from "#src/js/components/Layout.vue";
+import Container from "#src/js/components/Container.vue";
 import { Button } from "@resorptionbidonvilles/ui";
 import NotesListItem from "./NotesListItem.vue";
 
 export default {
     components: {
         Layout,
+        Container,
         Button,
         NotesListItem
     },
