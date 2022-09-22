@@ -1,14 +1,8 @@
 <template>
     <article>
         <section>
-            <p class="font-bold truncate text-G500 text-lg">
-                <span v-if="note.title">{{ note.title }}</span>
-                <span v-else>Note sans titre</span>
-            </p>
-            <p class="truncate">
-                <span v-if="note.description">{{ note.description }}</span>
-                <span v-else>Cette note est vide</span>
-            </p>
+            <p class="font-bold truncate text-G500 text-lg">{{ title }}</p>
+            <p class="truncate">{{ description }}</p>
         </section>
         <footer class="text-sm mt-1 flex space-x-3">
             <p><Icon icon="pen" class="mr-1" />Créée le {{ createdAt }}</p>
@@ -33,6 +27,27 @@ export default {
         }
     },
     computed: {
+        rawDescription() {
+            return this.note.description.replace(/^\s+|\s+$/g, "");
+        },
+        title() {
+            if (!this.rawDescription) {
+                return "Note sans titre";
+            }
+
+            return this.rawDescription.split("\n")[0];
+        },
+        description() {
+            if (!this.rawDescription) {
+                return "Note sans description";
+            }
+
+            return this.rawDescription
+                .split("\n")
+                .slice(1)
+                .join("\n")
+                .replace(/^\s+|\s+$/g, "");
+        },
         publishedColor() {
             return this.note.published ? "text-green" : "text-red";
         },
