@@ -81,7 +81,10 @@
             <section class="mt-4" v-else>
                 <SlidingBlock class="mb-4" v-for="note in notes" :key="note.id">
                     <template slot="body">
-                        <Container><NotesListItem :note="note"/></Container>
+                        <Container
+                            @click.native="$router.push(`/notes/${note.id}`)"
+                            ><NotesListItem :note="note"
+                        /></Container>
                     </template>
                     <template slot="slider">
                         <div
@@ -139,8 +142,9 @@ export default {
         }
     },
     methods: {
-        create() {
-            this.$store.dispatch("notes/createNote");
+        async create() {
+            const { id } = await this.$store.dispatch("notes/createNote");
+            this.$router.push(`/notes/${id}`);
         },
         deleteNote(noteId) {
             if (

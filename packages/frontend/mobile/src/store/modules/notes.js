@@ -19,6 +19,9 @@ export default {
         UPDATE_NOTE(state, { index, note }) {
             state.notes[index] = note;
         },
+        UPDATE_DESCRIPTION(state, { index, description }) {
+            state.notes[index].description = description;
+        },
         REMOVE_NOTE(state, index) {
             state.notes.splice(index, 1);
         },
@@ -45,6 +48,16 @@ export default {
             await set("notes", state.notes);
 
             return note;
+        },
+
+        async setDescription({ commit, state }, { id: noteId, description }) {
+            const index = state.notes.findIndex(({ id }) => id === noteId);
+            if (index === undefined) {
+                return;
+            }
+
+            commit("UPDATE_DESCRIPTION", { index, description });
+            await set("notes", state.notes);
         },
 
         async updateNote({ commit, state }, note) {
