@@ -8,7 +8,11 @@ const ERROR_RESPONSES = {
 module.exports = async (req, res, next) => {
     let towns;
     try {
-        towns = await shantytownService.findByNavigationLog(req.user);
+        if (req.query.t === 'navigation_logs') {
+            towns = await shantytownService.findByNavigationLog(req.user);
+        } else if (req.query.t === 'actors') {
+            towns = await shantytownService.findAllByActor(req.user);
+        }
     } catch (error) {
         const { code, message } = ERROR_RESPONSES[error && error.code];
         res.status(code).send({

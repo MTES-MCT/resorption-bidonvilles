@@ -1,4 +1,4 @@
-import { findAllByActor, findByNavigationLog } from "#helpers/town";
+import { findUserTowns } from "#helpers/town";
 
 export default {
     state: {
@@ -36,8 +36,11 @@ export default {
             commit("setConsultedTownsItems", []);
 
             try {
-                const myTowns = await findAllByActor(user.id);
-                const consultedTowns = await findByNavigationLog(user.id);
+                const myTowns = await findUserTowns(user.id, "actors");
+                const consultedTowns = await findUserTowns(
+                    user.id,
+                    "navigation_logs"
+                );
                 commit("setMyTownsItems", myTowns);
                 commit("setConsultedTownsItems", consultedTowns);
                 commit("setTownsState", "loaded");
