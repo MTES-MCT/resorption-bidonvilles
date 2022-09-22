@@ -7,7 +7,7 @@
             </p>
             <p class="truncate">
                 <span v-if="note.description">{{ note.description }}</span>
-                <span v-else>Cette note ne contient aucun contenu</span>
+                <span v-else>Cette note est vide</span>
             </p>
         </section>
         <footer class="text-sm mt-1 flex space-x-3">
