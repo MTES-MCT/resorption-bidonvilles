@@ -23,6 +23,7 @@ const setUserAdminComments = require('./setUserAdminComments');
 const editOrganization = require('./editOrganization');
 const userSetRoleRegular = require('./users/setRoleRegular');
 const mePostNavigationLogs = require('./me/post.navigationLogs');
+const findUserTowns = require('./findUserTowns');
 
 module.exports = {
     closeTown,
@@ -64,4 +65,5 @@ module.exports = {
     },
     setUserAdminComments,
     editOrganization,
+    findUserTowns,
 };
