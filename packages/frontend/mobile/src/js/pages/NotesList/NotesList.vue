@@ -54,21 +54,31 @@
                     partagez les facilement dans les journaux des sites ou par
                     mail à vos collaborateur(ice).
                 </p>
-
-                <section class="mt-12 text-center" v-if="notes.length === 0">
-                    <img
-                        src="/img/illustrations/notes_empty.svg"
-                        class="w-1/2 mx-auto max-w-lg"
-                    />
-                    <Button @click.native="create"
-                        >Cliquez ici pour rédiger votre première note</Button
-                    >
-                </section>
             </Container>
         </template>
 
         <template slot="scroll">
-            <section class="mt-4">
+            <Container v-if="notes.length === 0">
+                <section class="mt-12 text-center">
+                    <template v-if="currentFilter !== 'published'">
+                        <img
+                            src="/img/illustrations/notes_empty.svg"
+                            class="w-1/2 mx-auto max-w-lg"
+                        />
+                        <Button @click.native="create"
+                            >Cliquez ici pour rédiger votre première
+                            note</Button
+                        >
+                    </template>
+                    <template v-else>
+                        <p class="text-G700 italic">
+                            Vous n'avez publié aucune de vos notes dans un
+                            journal de site pour le moment.
+                        </p>
+                    </template>
+                </section>
+            </Container>
+            <section class="mt-4" v-else>
                 <SlidingBlock class="mb-4" v-for="note in notes" :key="note.id">
                     <template slot="body">
                         <Container><NotesListItem :note="note"/></Container>
