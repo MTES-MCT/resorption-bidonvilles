@@ -31,7 +31,6 @@ export default {
         async createNote({ commit, state }) {
             const note = {
                 id: getRandomString(30),
-                title: "",
                 description: "",
                 shantytown: null,
                 published: false,
