@@ -5,7 +5,8 @@ export default {
     namespaced: true,
 
     state: {
-        notes: []
+        notes: [],
+        filter: "unpublished"
     },
 
     mutations: {
@@ -20,6 +21,9 @@ export default {
         },
         REMOVE_NOTE(state, index) {
             state.notes.splice(index, 1);
+        },
+        SET_FILTER(state, filter) {
+            state.filter = filter;
         }
     },
 
@@ -61,6 +65,19 @@ export default {
 
             commit("REMOVE_NOTE", index);
             await set("notes", state.notes);
+        }
+    },
+
+    getters: {
+        filteredNotes(state) {
+            if (state.filter === "all") {
+                return state.notes;
+            }
+
+            return state.notes.filter(
+                note =>
+                    note.published === true || state.filter === "unpublished"
+            );
         }
     }
 };
