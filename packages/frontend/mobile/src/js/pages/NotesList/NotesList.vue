@@ -26,30 +26,40 @@
                     >Cliquez ici pour rédiger votre première note</Button
                 >
             </section>
-
-            <section class="mt-4">
-                <NotesListItem
-                    class="mb-5"
-                    v-for="note in notes"
-                    :key="note.id"
-                    :note="note"
-                />
-            </section>
         </Container>
+
+        <section class="mt-4">
+            <SlidingBlock class="mb-4" v-for="note in notes" :key="note.id">
+                <template slot="body">
+                    <Container><NotesListItem :note="note"/></Container>
+                </template>
+                <template slot="slider">
+                    <div
+                        class="bg-red h-full flex justify-center items-center text-white text-xl"
+                        @click="deleteNote(note.id)"
+                    >
+                        <Icon icon="trash-alt" />
+                    </div>
+                </template>
+            </SlidingBlock>
+        </section>
     </Layout>
 </template>
 
 <script>
 import Layout from "#src/js/components/Layout.vue";
 import Container from "#src/js/components/Container.vue";
-import { Button } from "@resorptionbidonvilles/ui";
+import SlidingBlock from "#src/js/components/SlidingBlock.vue";
+import { Button, Icon } from "@resorptionbidonvilles/ui";
 import NotesListItem from "./NotesListItem.vue";
 
 export default {
     components: {
         Layout,
         Container,
+        SlidingBlock,
         Button,
+        Icon,
         NotesListItem
     },
     computed: {
@@ -60,6 +70,17 @@ export default {
     methods: {
         create() {
             this.$store.dispatch("notes/createNote");
+        },
+        deleteNote(noteId) {
+            if (
+                !confirm(
+                    "Cette suppression est irréversible, voulez-vous continuer ?"
+                )
+            ) {
+                return;
+            }
+
+            this.$store.dispatch("notes/deleteNote", noteId);
         }
     }
 };
