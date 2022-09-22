@@ -277,21 +277,14 @@ export default (app) => {
     );
 
     app.get(
-        '/towns/actors/:user_id',
+        '/users/:id/towns',
         middlewares.auth.authenticate,
         (...args) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
-        controllers.town.findAllByActor,
-    );
+        validators.findUserTowns,
 
-    app.get(
-        '/towns/navigation_logs/:user_id',
-        middlewares.auth.authenticate,
-        (...args) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
-        middlewares.charte.check,
-        middlewares.appVersion.sync,
-        controllers.town.findByNavigationLog,
+        controllers.town.findUserTowns,
     );
 
     app.get(
