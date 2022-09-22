@@ -4,6 +4,7 @@ import TownsList from "#src/js/pages/TownsList/MobileTownsList.vue";
 import Launcher from "#src/js/pages/Launcher/Launcher.vue";
 import Logout from "#src/js/pages/Logout/Logout.vue";
 import NotesList from "#src/js/pages/NotesList/NotesList.vue";
+import NotesForm from "#src/js/pages/NotesForm/NotesForm.vue";
 import store from "../store/index";
 
 function isLoggedIn() {
@@ -192,6 +193,11 @@ export default new VueRouter({
         {
             path: "/liste-des-notes",
             component: NotesList,
+            beforeEnter: guardians.loadedAndUpToDate
+        },
+        {
+            path: "/notes/:id",
+            component: NotesForm,
             beforeEnter: guardians.loadedAndUpToDate
         },
         {
