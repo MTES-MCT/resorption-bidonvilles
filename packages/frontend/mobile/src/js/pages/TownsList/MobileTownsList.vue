@@ -1,10 +1,16 @@
 <template>
     <Layout>
         <Container>
-            <div class="my-8 font-bold text-xl">
-                Bienvenue {{ user.first_name }} {{ user.last_name }}
+            <header>
+                <h1 class="my-8 font-bold text-display-md text-center">
+                    Bienvenue {{ user.first_name }} {{ user.last_name }}
+                </h1>
+            </header>
+        </Container>
+        <Container>
+            <div class="font-bold text-lg">
+                Mes sites ({{ myTowns.length }})
             </div>
-            <div class="font-bold">Mes sites ({{ myTowns.length }})</div>
             <div class="italic" v-if="myTowns.length === 0">
                 vous n'intervenez sur aucun site
             </div>
@@ -22,7 +28,7 @@
             </Container>
         </div>
         <Container>
-            <div class="font-bold">
+            <div class="font-bold text-lg">
                 Sites récemment consultés ({{ consultedTowns.length }})
             </div>
             <div class="italic" v-if="consultedTowns.length === 0">
