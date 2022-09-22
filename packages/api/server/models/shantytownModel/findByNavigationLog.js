@@ -8,11 +8,11 @@ module.exports = async (user) => {
             SUBSTR(page,7) AS shantytown_id
         FROM user_navigation_logs
         WHERE 
-            page ilike '/site/%'
-            AND page NOT ilike '/site/%/%'
+            page SIMILAR TO '/site/[0-9]+'
             AND fk_user = :userId
-            AND datetime > current_date - interval '1 day'
-        GROUP BY shantytown_id`,
+        GROUP BY shantytown_id
+        ORDER BY max(datetime) DESC
+        LIMIT 10`,
         {
             replacements: {
                 userId: user.id,
