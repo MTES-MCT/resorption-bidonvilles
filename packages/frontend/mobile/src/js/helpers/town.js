@@ -1,15 +1,8 @@
 import { getApi } from "#src/js/api";
 
 /**
- * GET /towns/actors/user_id
+ * GET /users/:id/towns
  */
-export function findAllByActor(userId) {
-    return getApi(`/towns/actors/${userId}`);
-}
-
-/**
- * GET /towns/navigation_logs/user_id
- */
-export function findByNavigationLog(userId) {
-    return getApi(`/towns/navigation_logs/${userId}`);
+export function findUserTowns(userId, type) {
+    return getApi(`/users/${userId}/towns/?t=${encodeURIComponent(type)}`);
 }

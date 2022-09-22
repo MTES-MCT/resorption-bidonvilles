@@ -24,6 +24,7 @@ const editOrganization = require('./editOrganization');
 const userGetLatestActivationLink = require('./users/getLatestActivationLink');
 const userSetRoleRegular = require('./users/setRoleRegular');
 const mePostNavigationLogs = require('./me/post.navigationLogs');
+const findUserTowns = require('./findUserTowns');
 
 module.exports = {
     closeTown,
@@ -66,4 +67,5 @@ module.exports = {
     },
     setUserAdminComments,
     editOrganization,
+    findUserTowns,
 };
