@@ -51,21 +51,21 @@ export default {
         this.textLoaderTimeout = null;
     },
     methods: {
-        loadConfig() {
+        async loadConfig() {
             if (this.$store.getters["config/loaded"] === true) {
                 this.redirect();
                 return;
             }
 
             this.error = null;
-            this.$store
-                .dispatch("config/load")
-                .catch(response => {
-                    this.error = response.user_message;
-                })
-                .then(() => {
-                    this.redirect();
-                });
+            try {
+                await this.$store.dispatch("config/load");
+                await this.$store.dispatch("notes/load");
+                this.redirect();
+            } catch (response) {
+                this.error =
+                    response.user_message || "Une erreur inconnue est survenue";
+            }
         },
         redirect() {
             this.$router.push(getEntryPoint()).catch(() => {});

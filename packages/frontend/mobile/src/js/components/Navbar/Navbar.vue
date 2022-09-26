@@ -1,19 +1,19 @@
 <template>
-    <div class="fixed bottom-0 bg-primary text-white w-full py-4 px-6 ">
+    <nav class="bg-primary text-white w-full py-4 px-6 ">
         <div class="flex justify-between max-w-lg mx-auto">
             <NavbarItem
                 icon="home"
                 label="Sites"
                 @click.native="showTownsTab"
             />
-            <NavbarItem icon="pen" label="Notes" />
+            <NavbarItem icon="pen" label="Notes" @click.native="showNotesTab" />
             <NavbarItem
                 icon="unlink"
                 label="Déconnexion"
                 @click.native="signout"
             />
         </div>
-    </div>
+    </nav>
 </template>
 
 <script>
@@ -30,6 +30,13 @@ export default {
             }
 
             this.$router.push("/liste-des-sites");
+        },
+        showNotesTab() {
+            if (this.$router.currentRoute.path === "/liste-des-notes") {
+                return;
+            }
+
+            this.$router.push("/liste-des-notes");
         },
         signout() {
             this.$router.push("/deconnexion");
