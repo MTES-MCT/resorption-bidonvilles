@@ -375,9 +375,6 @@ export default {
     },
 
     computed: {
-        getPathResource() {
-            return this.$route.path.split("/")[1];
-        },
         fieldTypes() {
             return this.$store.state.config.configuration.field_types;
         },
@@ -985,6 +982,14 @@ export default {
         },
 
         getTownWaterImage(town) {
+            if (
+                !town ||
+                !town.livingConditions ||
+                !town.livingConditions.water
+            ) {
+                return genericMarkerImage;
+            }
+
             const { status } = town.livingConditions.water.status;
             const hash = {
                 unknown: waterNull,
@@ -1028,11 +1033,7 @@ export default {
             const address = this.getTownAddress(town);
             const coordinates = this.getTownCoordinates(town);
             const color = this.getTownColor(town);
-            const waterImage = ["site", "cartographie"].includes(
-                this.getPathResource
-            )
-                ? this.getTownWaterImage(town)
-                : genericMarkerImage;
+            const waterImage = this.getTownWaterImage(town);
             const style = town.style ? `style="${town.style}"` : "";
 
             const marker = L.marker(coordinates, {
