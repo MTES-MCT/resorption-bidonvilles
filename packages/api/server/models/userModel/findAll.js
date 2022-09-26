@@ -1,3 +1,3 @@
 const query = require('./_common/query');
 
-module.exports = user => query([], { auth: false, extended: false }, user, 'list');
+module.exports = (user, where = []) => query(where, { auth: false, extended: false }, user, 'list');

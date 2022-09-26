@@ -212,6 +212,10 @@ export function setAdminComments(userId, comment) {
     });
 }
 
+export function searchUsers(search) {
+    return getApi(`/users?q=${encodeURIComponent(search)}`);
+}
+
 /**
  * @typedef {Object} User_Data
  * @property {string} first_name

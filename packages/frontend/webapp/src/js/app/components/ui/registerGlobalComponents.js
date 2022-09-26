@@ -2,7 +2,7 @@
 import notifications from "vue-notification/dist/ssr";
 import NotificationsGroup from "./NotificationsGroup.vue";
 import registerVeeValidate from "./registerVeeValidate";
-import { Link } from "@resorptionbidonvilles/ui";
+import { Link, Tag } from "@resorptionbidonvilles/ui";
 
 // Lazyloaded modules
 const Accordion = () => import("./Accordion");
@@ -34,7 +34,6 @@ const Autocomplete = () => import("./Autocomplete.vue");
 const Spinner = () => import("./Spinner.vue");
 const CheckableGroup = () => import("./Form/CheckableGroup.vue");
 const Datepicker = () => import("./Datepicker.vue");
-const Tag = () => import("./Tag.vue");
 const Pagination = () => import("./Pagination.vue");
 const PanelInfo = () => import("./PanelInfo.vue");
 const MapV2 = () => import("./Map.vue");

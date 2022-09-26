@@ -88,26 +88,7 @@
                         :disabled="false"
                         ref="targetSearch"
                     ></AutocompleteV2>
-                    <div
-                        class="border rounded p-4 -mt-4 flex flex-wrap gap-2 mb-6"
-                    >
-                        <p v-if="targets.length === 0" class="text-G600 italic">
-                            La liste est vide pour le moment
-                        </p>
-                        <template v-else>
-                            <Tag
-                                v-for="target in targets"
-                                :key="`${target.type.id}.${target.id}`"
-                            >
-                                {{ target.label }}
-                                <Icon
-                                    class="cursor-pointer ml-2"
-                                    icon="times"
-                                    @click.native="removeTarget(target)"
-                                />
-                            </Tag>
-                        </template>
-                    </div>
+                    <TagList :tags="targets" :onDelete="removeTarget" />
                 </div>
 
                 <span class="text-sm text-right mb-2"
@@ -151,8 +132,12 @@
 
 <script>
 import { autocompleteOrganization } from "#helpers/api/user";
+import { TagList } from "@resorptionbidonvilles/ui";
 
 export default {
+    components: {
+        TagList
+    },
     data() {
         const {
             regular_comment_tags: regularCommentTags
@@ -187,7 +172,10 @@ export default {
             return [
                 ...this.listOfTargets.organizations,
                 ...this.listOfTargets.users
-            ];
+            ].map(target => ({
+                id: `${target.type.id}.${target.id}`,
+                label: target.label
+            }));
         },
         tagLabels: function() {
             if (!this.tags) {
@@ -248,12 +236,13 @@ export default {
             return [];
         },
         getResultValue(item) {
-            return item.label;
+            return item ? item.label : null;
         },
-        removeTarget(target) {
-            const type = target.type.id === "user" ? "users" : "organizations";
+        removeTarget(targetId) {
+            const [typeId, id] = targetId.split(".");
+            const type = typeId === "user" ? "users" : "organizations";
             const list = this.listOfTargets[type];
-            const index = list.findIndex(item => item.id === target.id);
+            const index = list.findIndex(item => item.id === parseInt(id, 10));
 
             if (index !== -1) {
                 list.splice(index, 1);

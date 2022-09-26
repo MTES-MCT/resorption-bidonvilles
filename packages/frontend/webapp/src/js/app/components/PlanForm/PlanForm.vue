@@ -185,7 +185,7 @@ export default {
                 },
                 people: {
                     government: this.data.government_contacts
-                        ? this.data.government_contacts[0]
+                        ? this.data.government_contacts
                         : undefined,
                     association: this.data.operator_contacts
                         ? this.data.operator_contacts[0].organization
@@ -317,7 +317,7 @@ export default {
                             ? this.plan.location.location_details
                             : undefined,
                     government: this.plan.people.government
-                        ? [{ id: this.plan.people.government.id }]
+                        ? this.plan.people.government
                         : undefined,
                     contact: this.plan.people.contact
                         ? this.plan.people.contact
