@@ -13,33 +13,18 @@
             ref="autocomplete"
             @submit="addManager($event)"
         ></AutocompleteV2>
-        <div class="m-4">
-            <ul v-if="managers.length > 0" class="item-list">
-                <li
-                    v-for="(manager, index) in managers"
-                    v-bind:key="manager.id"
-                    class="item mt-2"
-                >
-                    <Button
-                        v-if="managers.length > 0"
-                        @click="removeManager(index)"
-                        class="mr-2"
-                        size="sm"
-                    >
-                        Supprimer
-                    </Button>
-                    <span class="value">{{ getResultValue(manager) }}</span>
-                </li>
-            </ul>
-            <div v-else>Aucun pilote sélectionné</div>
-        </div>
+        <TagList :tags="labeledManagers" :onDelete="removeManager" />
     </div>
 </template>
 
 <script>
+import { TagList } from "@resorptionbidonvilles/ui";
 import { searchUsers } from "#helpers/api/user";
 
 export default {
+    components: {
+        TagList
+    },
     props: {
         value: {
             type: Array,
@@ -87,12 +72,13 @@ export default {
             this.$refs.autocomplete.empty();
         },
 
-        removeManager(idx) {
-            if (this.managers.length < 1) {
+        removeManager(managerId) {
+            const idx = this.managers.findIndex(({ id }) => id === managerId);
+            if (idx === undefined) {
                 return;
-            } else {
-                this.managers.splice(idx, 1);
             }
+
+            this.managers.splice(idx, 1);
         },
 
         getUserInfo(user) {
@@ -119,6 +105,12 @@ export default {
             set(newValue) {
                 this.managers = newValue.length > 0 ? newValue : new Array();
             }
+        },
+        labeledManagers() {
+            return this.managers.map(manager => ({
+                ...manager,
+                label: this.getResultValue(manager)
+            }));
         }
     },
     watch: {
@@ -128,24 +120,3 @@ export default {
     }
 };
 </script>
-<style>
-.item-list {
-    display: flex;
-    flex-direction: column;
-    width: 45em;
-    list-style-type: none;
-    padding-left: 1em;
-}
-
-.item {
-    display: flex;
-    flex-direction: row;
-    flex: 1;
-    margin-bottom: 0.25em;
-}
-
-.item .value {
-    display: flex;
-    flex: 1;
-}
-</style>
