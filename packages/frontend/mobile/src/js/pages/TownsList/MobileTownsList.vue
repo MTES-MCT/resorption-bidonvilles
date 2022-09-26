@@ -1,31 +1,35 @@
 <template>
     <Layout>
-        <Container>
-            <header>
-                <h1 class="my-8 font-bold text-display-md text-center">
-                    Bienvenue {{ user.first_name }} {{ user.last_name }}
-                </h1>
-            </header>
-        </Container>
-        <Container>
-            <div class="font-bold text-lg">
-                Mes sites ({{ myTowns.length }})
-            </div>
-            <div class="italic" v-if="myTowns.length === 0">
-                vous n'intervenez sur aucun site
-            </div>
-        </Container>
-        <TownCarousel :towns="myTowns" />
+        <template slot="header">
+            <Container>
+                <header>
+                    <h1 class="my-8 font-bold text-display-md text-center">
+                        Bienvenue {{ user.first_name }} {{ user.last_name }}
+                    </h1>
+                </header>
+            </Container>
+        </template>
+        <template slot="scroll">
+            <Container>
+                <div class="font-bold text-lg">
+                    Mes sites ({{ myTowns.length }})
+                </div>
+                <div class="italic" v-if="myTowns.length === 0">
+                    vous n'intervenez sur aucun site
+                </div>
+            </Container>
+            <TownCarousel :towns="myTowns" />
 
-        <Container>
-            <div class="font-bold text-lg">
-                Sites récemment consultés ({{ consultedTowns.length }})
-            </div>
-            <div class="italic" v-if="consultedTowns.length === 0">
-                vous n'avez consulté aucun site récemment
-            </div>
-        </Container>
-        <TownCarousel :towns="consultedTowns" />
+            <Container>
+                <div class="font-bold text-lg">
+                    Sites récemment consultés ({{ consultedTowns.length }})
+                </div>
+                <div class="italic" v-if="consultedTowns.length === 0">
+                    vous n'avez consulté aucun site récemment
+                </div>
+            </Container>
+            <TownCarousel :towns="consultedTowns" />
+        </template>
     </Layout>
 </template>
 
