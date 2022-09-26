@@ -1,3 +1,5 @@
+const child_process = require('child_process');
+const config = require('#db/config/config');
 require('../module_alias');
 
 /**
@@ -90,4 +92,27 @@ global.generate = (types) => {
     }
 
     return getRandomValue(arrTypes);
+};
+
+function runCommandAsync(command) {
+    return new Promise((resolve, reject) => {
+        child_process.exec(
+            command,
+            error => (!error ? resolve() : reject(error)),
+        );
+    });
+}
+
+let dbIsInitialized = false;
+
+exports.mochaHooks = {
+    async beforeAll() {
+        if (!dbIsInitialized) {
+            const DB_NAME = `resorption_bidonvilles_tests_${process.pid}`;
+            process.env.DB_NAME = DB_NAME;
+
+            await runCommandAsync(`docker exec -t rb_database_data createdb -U ${config.username} --template resorption_bidonvilles_tests_template ${DB_NAME}`);
+            dbIsInitialized = true;
+        }
+    },
 };

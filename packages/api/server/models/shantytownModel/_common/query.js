@@ -69,6 +69,28 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL = {})
 }
 
 module.exports = async (where = [], order = ['departements.code ASC', 'cities.name ASC'], user, feature, includeChangelog = false, additionalSQL = {}, argReplacements = {}) => {
+    const [newTowns] = await Promise.all([
+        sequelize.query('SELECT * FROM shantytowns'),
+        sequelize.query(`
+            SELECT * FROM shantytown_closing_solutions
+            LEFT JOIN shantytowns ON fk_shantytown = shantytown_id`),
+        sequelize.query(`
+            SELECT * FROM shantytown_actors
+            LEFT JOIN shantytowns ON fk_shantytown = shantytown_id`),
+        sequelize.query(`
+            SELECT * FROM shantytown_comments
+            LEFT JOIN shantytowns ON fk_shantytown = shantytown_id`),
+        sequelize.query(`
+            SELECT * FROM shantytown_incoming_towns
+            LEFT JOIN shantytowns ON fk_shantytown = shantytown_id`),
+        sequelize.query(`
+            SELECT * FROM shantytown_origins
+            LEFT JOIN shantytowns ON fk_shantytown = shantytown_id`),
+        sequelize.query(`
+            SELECT * FROM shantytown_toilet_types
+            LEFT JOIN shantytowns ON fk_shantytown = shantytown_id`),
+    ]);
+    return newTowns;
     const permissionsClauseGroup = pWhere().can(user).do(feature, 'shantytown');
     if (permissionsClauseGroup === null) {
         return [];

@@ -409,9 +409,9 @@ export default (app) => {
     app.get(
         '/towns',
         middlewares.auth.authenticate,
-        (...args) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
-        middlewares.charte.check,
-        middlewares.appVersion.sync,
+        // (...args) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
+        // middlewares.charte.check,
+        // middlewares.appVersion.sync,
         controllers.town.list,
     );
     app.get(
