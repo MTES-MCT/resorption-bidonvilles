@@ -1,27 +1,27 @@
 <template>
     <Layout>
-        <Container>
-            <div
-                class="text-red600 text-display-lg text-center pt-8"
-                v-if="error"
-            >
-                {{ error }}
-            </div>
-            <div v-else>
+        <template slot="header">
+            <Container>
                 <header class="my-8">
-                    <div class="text-primary py-4" @click="toTownsList">
+                    <div
+                        class="text-primary py-4 text-center"
+                        @click="toTownsList"
+                    >
                         <Icon :icon="'chevron-left'"></Icon>
                         <span> Retour à la liste des sites</span>
                     </div>
-                    <div class="text-display-lg font-bold text-center">
+                    <div class="text-lg font-bold text-center">
                         {{ town.addressSimple }}
                         <span v-if="town.name" class="text-display-xs"
                             >« {{ town.name }} »</span
                         >
                     </div>
                 </header>
-
-                <div class="text-primary font-bold text-display-lg mt-8 mb-4">
+            </Container>
+        </template>
+        <template slot="scroll">
+            <Container>
+                <div class="text-primary font-bold text-display-lg mb-4">
                     Caractéristiques
                 </div>
                 <TownPagePanelCharacteristics :town="town" />
@@ -29,8 +29,8 @@
                     Habitants
                 </div>
                 <TownPagePanelPeople :town="town" />
-            </div>
-        </Container>
+            </Container>
+        </template>
     </Layout>
 </template>
 <script>
