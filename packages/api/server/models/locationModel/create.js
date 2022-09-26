@@ -1,7 +1,7 @@
 const sequelize = require('#db/sequelize');
 
 module.exports = async (data, transaction = undefined) => {
-    const result = await sequelize.query(
+    const [[{ id }]] = await sequelize.query(
         `INSERT INTO locations(
             address,
             latitude,
@@ -24,5 +24,6 @@ module.exports = async (data, transaction = undefined) => {
             transaction,
         },
     );
-    return result;
+
+    return id;
 };
