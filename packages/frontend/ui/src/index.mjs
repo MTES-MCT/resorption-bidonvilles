@@ -8,3 +8,4 @@ export { default as Link } from './components/Link.vue';
 export { default as Menu } from './components/Menu/Menu.vue';
 export { default as MenuItem } from './components/Menu/MenuItem.vue';
 export { default as Spinner } from './components/Spinner.vue';
+export { default as Tag } from './components/Tag.vue';

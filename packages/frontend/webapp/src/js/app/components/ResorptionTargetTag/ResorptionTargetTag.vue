@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import Tag from "#app/components/ui/Tag.vue";
+import { Tag } from "@resorptionbidonvilles/ui";
 
 export default {
     props: {
