@@ -311,7 +311,6 @@ module.exports = {
                 blogUrl,
                 formationUrl,
                 connexionUrl: `${connexionUrl}?${utm}`,
-                blogUrl,
             },
             preserveRecipient,
         });

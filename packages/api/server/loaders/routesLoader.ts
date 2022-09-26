@@ -54,6 +54,7 @@ export default (app) => {
         middlewares.appVersion.sync,
         controllers.user.list,
     );
+
     app.get(
         '/users/export',
         middlewares.auth.authenticate,
@@ -562,11 +563,6 @@ export default (app) => {
     app.get(
         '/organization-categories/:categoryId/organization-types',
         controllers.organization.types,
-    );
-
-    app.get(
-        '/organization-categories/:categoryId/users',
-        controllers.organization.getMembersByCategory,
     );
 
     app.get(
