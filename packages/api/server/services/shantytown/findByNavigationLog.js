@@ -6,7 +6,7 @@ module.exports = async (user) => {
     try {
         towns = await shantytownModel.findByNavigationLog(user);
     } catch (error) {
-        throw new ServiceError('fetch_failed', new Error('Impossible de trouver les sites en base de données'));
+        throw new ServiceError('fetch_failed', error);
     }
 
     return towns;

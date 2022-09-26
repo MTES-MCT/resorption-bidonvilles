@@ -282,7 +282,7 @@ export default (app) => {
         middlewares.charte.check,
         middlewares.appVersion.sync,
         validators.findUserTowns,
-
+        middlewares.validation,
         controllers.town.findUserTowns,
     );
 
