@@ -79,7 +79,11 @@
                 </section>
             </Container>
             <section class="mt-4" v-else>
-                <SlidingBlock class="mb-4" v-for="note in notes" :key="note.id">
+                <LeftSlidingBlock
+                    class="mb-4"
+                    v-for="note in notes"
+                    :key="note.id"
+                >
                     <template slot="body">
                         <Container
                             @click.native="$router.push(`/notes/${note.id}`)"
@@ -94,7 +98,7 @@
                             <Icon icon="trash-alt" />
                         </div>
                     </template>
-                </SlidingBlock>
+                </LeftSlidingBlock>
             </section>
         </template>
     </Layout>
@@ -109,7 +113,7 @@
 <script>
 import Layout from "#src/js/components/Layout.vue";
 import Container from "#src/js/components/Container.vue";
-import SlidingBlock from "#src/js/components/SlidingBlock.vue";
+import LeftSlidingBlock from "#src/js/components/LeftSlidingBlock.vue";
 import { Button, Icon } from "@resorptionbidonvilles/ui";
 import NotesListItem from "./NotesListItem.vue";
 import { mapGetters } from "vuex";
@@ -118,7 +122,7 @@ export default {
     components: {
         Layout,
         Container,
-        SlidingBlock,
+        LeftSlidingBlock,
         Button,
         Icon,
         NotesListItem
