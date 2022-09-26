@@ -153,7 +153,7 @@ describe.only('services/plan', () => {
                 stubs.planCreate.resolves(planId);
                 stubs.planTopicsCreate.resolves([]);
                 stubs.planShantytownCreate.resolves([]);
-                stubs.financeCreate.resolves([financeId]);
+                stubs.financeCreate.resolves([[[financeId]]]);
                 stubs.financeRowCreate.resolves([]);
                 stubs.planManagerCreate.resolves([]);
                 stubs.planOperatorCreate.resolves([]);
