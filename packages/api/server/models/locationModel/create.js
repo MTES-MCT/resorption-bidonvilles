@@ -1,8 +1,6 @@
 const sequelize = require('#db/sequelize');
 
-module.exports = async ({
-    data,
-}, transaction = undefined) => {
+module.exports = async (data, transaction = undefined) => {
     const result = await sequelize.query(
         `INSERT INTO locations(
             address,

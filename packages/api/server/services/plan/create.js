@@ -194,9 +194,10 @@ module.exports = async (data, user) => {
         [finalPlanId] = await sequelize.transaction(async (t) => {
             let locationId = null;
             if (planData.locationType === 'location') {
-                locationId = locationModel.create(Object.assign({}, planData.locationAddress, {
+                locationId = locationModel.create({
+                    ...planData.locationAddress,
                     createdBy: user.id,
-                }), t);
+                }, t);
             }
 
             // insert into plan
