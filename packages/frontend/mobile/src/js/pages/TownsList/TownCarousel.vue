@@ -8,6 +8,7 @@
                 v-for="town in towns"
                 :key="town.id"
                 :town="town"
+                @click.native="showTownPage(town)"
             ></TownCard>
         </Container>
     </div>
@@ -23,6 +24,12 @@ export default {
             required: true
         }
     },
-    components: { Container, TownCard }
+
+    components: { Container, TownCard },
+    methods: {
+        showTownPage(town) {
+            this.$router.push(`/site/${town.id}`);
+        }
+    }
 };
 </script>
