@@ -35,14 +35,14 @@ export default {
             if (this.currentTab === "towns") {
                 return;
             }
-            await this.$store.commit("currentTab", "towns");
+            await this.$store.commit("setCurrentTab", "towns");
             this.$router.push(`/${this.townNavigationState}`);
         },
-        showNotesTab() {
-            if (this.$router.currentRoute.path === "/liste-des-notes") {
+        async showNotesTab() {
+            if (this.currentTab === "notes") {
                 return;
             }
-
+            await this.$store.commit("setCurrentTab", "notes");
             this.$router.push("/liste-des-notes");
         },
         signout() {
