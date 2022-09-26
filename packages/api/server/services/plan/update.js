@@ -164,7 +164,7 @@ module.exports = async (data, planId, user) => {
                         ...acc,
                         ...financeData.map(({
                             amount, realAmount, type, details,
-                        }) => financeRowModel.create(financeIds, index, type, amount, realAmount, details, user.id, t)),
+                        }) => financeRowModel.create(financeIds[index][0][0].id, type, amount, realAmount, details, user.id, t)),
                     ], []),
                 );
             }
