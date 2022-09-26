@@ -68,6 +68,7 @@ import waterYes from "../../../../img/water-yes.png";
 import waterNo from "../../../../img/water-no.png";
 import waterToImprove from "../../../../img/water-to-improve.png";
 import waterNull from "../../../../img/water-null.png";
+import genericMarkerImage from "./assets/map-marker.svg";
 
 // données tirées de https://github.com/gregoiredavid/france-geojson
 import departements from "#src/geojson/departements.json";
@@ -981,6 +982,14 @@ export default {
         },
 
         getTownWaterImage(town) {
+            if (
+                !town ||
+                !town.livingConditions ||
+                !town.livingConditions.water
+            ) {
+                return genericMarkerImage;
+            }
+
             const { status } = town.livingConditions.water.status;
             const hash = {
                 unknown: waterNull,
