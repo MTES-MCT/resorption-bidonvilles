@@ -2,7 +2,7 @@
     <Layout>
         <template slot="header">
             <Container>
-                <header class="my-8">
+                <header>
                     <div
                         class="text-primary py-4 text-center"
                         @click="toTownsList"
@@ -21,7 +21,7 @@
         </template>
         <template slot="scroll">
             <Container>
-                <div class="text-primary font-bold text-display-lg mb-4">
+                <div class="text-primary font-bold text-display-lg mt-8 mb-4">
                     Caractéristiques
                 </div>
                 <TownPagePanelCharacteristics :town="town" />
@@ -29,6 +29,10 @@
                     Habitants
                 </div>
                 <TownPagePanelPeople :town="town" />
+                <div class="text-primary font-bold text-display-lg mt-8 mb-4">
+                    Procédures judiciaires
+                </div>
+                <TownPagePanelJudicial :town="town" />
             </Container>
         </template>
     </Layout>
@@ -38,6 +42,7 @@ import Layout from "#src/js/components/Layout.vue";
 import Container from "#src/js/components/Container.vue";
 import TownPagePanelCharacteristics from "#src/js/pages/TownPage/TownPagePanelCharacteristics.vue";
 import TownPagePanelPeople from "#src/js/pages/TownPage/TownPagePanelPeople.vue";
+import TownPagePanelJudicial from "./TownPagePanelJudicial.vue";
 import { Icon } from "@resorptionbidonvilles/ui";
 
 import { mapGetters } from "vuex";
@@ -48,6 +53,7 @@ export default {
         Container,
         TownPagePanelCharacteristics,
         TownPagePanelPeople,
+        TownPagePanelJudicial,
         Icon
     },
     data() {
