@@ -21,7 +21,7 @@
                 </div>
             </div>
         </section>
-        <Navbar />
+        <Navbar v-if="navbar" />
     </div>
 </template>
 
@@ -31,6 +31,11 @@ import Navbar from "./Navbar/Navbar.vue";
 export default {
     props: {
         logo: {
+            type: Boolean,
+            required: false,
+            default: true
+        },
+        navbar: {
             type: Boolean,
             required: false,
             default: true
