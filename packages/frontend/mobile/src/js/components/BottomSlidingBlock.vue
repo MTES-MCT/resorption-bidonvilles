@@ -16,7 +16,7 @@
                 class="pt-2 pb-4 text-center flex justify-between items-center"
             >
                 <div class="w-12"></div>
-                <span class="flex-1 text-lg text-primary"
+                <span class="flex-1 text-lg font-bold"
                     ><slot name="header"></slot
                 ></span>
                 <div class="w-12 text-primary">
