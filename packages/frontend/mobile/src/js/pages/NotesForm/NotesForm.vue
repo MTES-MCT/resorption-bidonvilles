@@ -31,7 +31,7 @@
                 ></textarea>
             </template>
         </Layout>
-        <BottomSlidingBlock ref="publishBlock">
+        <BottomSlidingBlock ref="publishBlock" @cancel="$refs.textarea.focus()">
             <template slot="header">Publier ma note</template>
             <template slot="body">
                 <Container>test</Container>
