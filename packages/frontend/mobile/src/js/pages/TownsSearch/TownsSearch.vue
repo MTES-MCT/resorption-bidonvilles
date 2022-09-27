@@ -1,5 +1,5 @@
 <template>
-    <Layout :logo="false">
+    <Layout :logo="false" :navbar="false">
         <template slot="header">
             <TownsSearchHeader />
         </template>
