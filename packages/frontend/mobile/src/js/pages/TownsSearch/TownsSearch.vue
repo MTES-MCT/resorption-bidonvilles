@@ -1,38 +1,63 @@
 <template>
-    <div>
-        <header class="bg-G300 py-3 text-primary">
-            <Container class="flex justify-between items-center space-x-4">
-                <TextInput
-                    prefixIcon="search"
-                    class="flex-1"
-                    placeholder="Saisissez le nom ou l'adresse d'un site"
-                    :withoutMargin="true"
-                    ref="input"
-                />
-                <Button variant="textPrimary" :padding="false" @click="cancel"
-                    >Annuler</Button
-                >
-            </Container>
-        </header>
-    </div>
+    <Layout :logo="false">
+        <template slot="header">
+            <TownsSearchHeader />
+        </template>
+
+        <template slot="scroll">
+            <main class="pt-6">
+                <Container>
+                    <template v-if="!loading">
+                        <SearchSection
+                            v-for="section in sections"
+                            :key="section.title"
+                            :title="section.title"
+                            :items="section.items"
+                        />
+                    </template>
+                    <Spinner v-else />
+                </Container>
+            </main>
+        </template>
+    </Layout>
 </template>
 
 <script>
 import Container from "#src/js/components/Container.vue";
-import { TextInput, Button } from "@resorptionbidonvilles/ui";
+import Layout from "#src/js/components/Layout.vue";
+import SearchSection from "./SearchSection.vue";
+import TownsSearchHeader from "./TownsSearchHeader.vue";
+import { Spinner } from "@resorptionbidonvilles/ui";
 
 export default {
     components: {
         Container,
-        TextInput,
-        Button
+        Layout,
+        SearchSection,
+        Spinner,
+        TownsSearchHeader
     },
     mounted() {
-        this.$refs.input.focus();
+        if (this.$store.state.towns.state !== "loaded") {
+            this.$store.dispatch("fetchTowns");
+        }
     },
-    methods: {
-        cancel() {
-            this.$router.back();
+    computed: {
+        loading() {
+            return this.$store.state.towns.state === "loading";
+        },
+        sections() {
+            if (this.loading) {
+                return;
+            }
+
+            return [
+                { title: "Mes sites", items: this.$store.state.towns.myTowns },
+                {
+                    title: "Sites récemment consultés",
+                    items: this.$store.state.towns.consultedTowns
+                }
+            ];
         }
     }
 };
