@@ -106,6 +106,7 @@ export default {
             if (this.$refs.slider.style.top !== `${TOP_MARGIN}px`) {
                 // when closing is done, hide the whole container
                 this.$refs.container.style.display = "none";
+                this.$emit("cancel");
             }
 
             this.sliding = false;
