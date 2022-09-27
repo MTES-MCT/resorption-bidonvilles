@@ -87,7 +87,11 @@ export default {
         Layout
     },
     mounted() {
-        this.$refs.textarea.focus();
+        this.$nextTick(() => {
+            if (!this.isPublishOpenByDefault) {
+                this.$refs.textarea.focus();
+            }
+        });
     },
     data() {
         const note = this.$store.state.notes.notes.find(
