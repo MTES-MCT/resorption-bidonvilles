@@ -19,6 +19,7 @@
                         variant="textPrimary"
                         class="text-primary"
                         @click="showPublish"
+                        :disabled="isEmpty"
                         >Publier</Button
                     >
                 </Container>
@@ -108,6 +109,9 @@ export default {
                     description: text
                 });
             }
+        },
+        isEmpty() {
+            return this.note.description.replace(/^\s+|\s+$/g, "") === "";
         }
     },
     methods: {
