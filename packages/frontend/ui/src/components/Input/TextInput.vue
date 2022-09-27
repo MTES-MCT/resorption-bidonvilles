@@ -29,6 +29,7 @@
                     :data-cy-field="cypressName"
                     :step="step"
                     :disabled="disabled"
+                    ref="input"
                 />
                 <InputIcon
                     position="after"
@@ -36,7 +37,7 @@
                     v-if="suffixIcon"
                 />
             </div>
-            <InputError>{{ errors[0] }}</InputError>
+            <InputError v-if="errors.length">{{ errors[0] }}</InputError>
         </InputWrapper>
     </ValidationProvider>
 </template>
@@ -131,6 +132,11 @@ export default {
         InputWrapper,
         InputError,
         InputIcon
+    },
+    methods: {
+        focus() {
+            this.$refs.input.focus();
+        }
     }
 };
 </script>
