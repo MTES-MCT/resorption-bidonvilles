@@ -4,7 +4,7 @@
             <TextInput
                 prefixIcon="search"
                 class="flex-1 text-G700"
-                placeholder="Saisissez le nom ou l'adresse d'un site"
+                placeholder="Saisissez le nom d'un site"
                 :withoutMargin="true"
                 ref="input"
             />
