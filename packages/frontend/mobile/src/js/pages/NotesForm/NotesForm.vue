@@ -2,24 +2,24 @@
     <div>
         <Layout>
             <template slot="header">
-                <Container class="flex justify-between mb-4">
-                    <Button
-                        icon="paper-plane"
-                        iconPosition="left"
-                        size="sm"
-                        variant="text-primary"
-                        class="font-bold"
-                        @click="showPublish"
-                        >Publier</Button
-                    >
+                <Container class="flex justify-end mb-4">
                     <Button
                         icon="arrow-left"
                         iconPosition="left"
                         size="sm"
-                        variant="text-primary"
-                        class="font-bold"
+                        variant="textPrimary"
+                        class="text-primary"
                         @click="$router.push('/liste-des-notes')"
                         >Retour aux notes</Button
+                    >
+                    <Button
+                        icon="paper-plane"
+                        iconPosition="left"
+                        size="sm"
+                        variant="textPrimary"
+                        class="text-primary"
+                        @click="showPublish"
+                        >Publier</Button
                     >
                 </Container>
             </template>
