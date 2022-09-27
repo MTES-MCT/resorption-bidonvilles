@@ -6,3 +6,7 @@ import { getApi } from "#src/js/api";
 export function findUserTowns(userId, type) {
     return getApi(`/users/${userId}/towns/?t=${encodeURIComponent(type)}`);
 }
+
+export function findTown(townId) {
+    return getApi(`/towns/${townId}`);
+}

@@ -49,24 +49,45 @@
                         publier cette note.<br />Elle sera visible dans le
                         journal du site.
                     </p>
-                    <p class="mt-4 text-center">
-                        <Button
-                            variant="textPrimary"
-                            class="text-G400 border border-G500 rounded-lg"
-                            icon="search"
-                            iconPosition="left"
-                            @click="$router.push('/recherche-de-site')"
-                            >Saisissez le nom d'un site</Button
+                    <div
+                        v-if="loadingLinkedShantytown"
+                        class="mt-8 text-center bg-G100 py-4"
+                    >
+                        <Spinner /><br />
+                        <span class="text-sm text-G600"
+                            >Chargement des données liées aux sites</span
                         >
-                    </p>
-                    <p class="text-center mt-12">
-                        <Button
-                            icon="paper-plane"
-                            iconPosition="left"
-                            :disabled="shantytown === null"
-                            >Publier la note</Button
-                        >
-                    </p>
+                    </div>
+                    <template v-else>
+                        <p class="mt-4 text-center">
+                            <Button
+                                variant="textPrimary"
+                                :truncate="true"
+                                class="text-primary border border-G500 rounded-lg w-full"
+                                v-bind:class="{
+                                    'text-G400': linkedShantytown === null
+                                }"
+                                icon="search"
+                                iconPosition="left"
+                                @click="openSearch"
+                            >
+                                <template v-if="linkedShantytown === null"
+                                    >Saisissez le nom d'un site</template
+                                >
+                                <template v-else>{{
+                                    linkedShantytown.usename
+                                }}</template>
+                            </Button>
+                        </p>
+                        <p class="text-center mt-12">
+                            <Button
+                                icon="paper-plane"
+                                iconPosition="left"
+                                :disabled="linkedShantytown === null"
+                                >Publier la note</Button
+                            >
+                        </p>
+                    </template>
                 </Container>
             </template>
         </BottomSlidingBlock>
@@ -74,7 +95,7 @@
 </template>
 
 <script>
-import { Button } from "@resorptionbidonvilles/ui";
+import { Button, Spinner } from "@resorptionbidonvilles/ui";
 import BottomSlidingBlock from "#src/js/components/BottomSlidingBlock.vue";
 import Container from "#src/js/components/Container.vue";
 import Layout from "#src/js/components/Layout.vue";
@@ -84,22 +105,50 @@ export default {
         BottomSlidingBlock,
         Button,
         Container,
-        Layout
+        Layout,
+        Spinner
     },
-    mounted() {
+    async mounted() {
         this.$nextTick(() => {
             if (!this.isPublishOpenByDefault) {
                 this.$refs.textarea.focus();
             }
         });
+
+        // si un site est déjà lié à la note, on doit récupérer les infos détaillées (nom, etc.)
+        if (this.shantytown !== null) {
+            // si le site est détaillé est déjà dans le store, on s'arrête là
+            const { linkedShantytown } = this.$store.state.notes;
+            if (
+                linkedShantytown !== null &&
+                linkedShantytown.id === this.shantytown
+            ) {
+                return;
+            }
+
+            // sinon on fetch les données
+            // (localement si elles existent, et sinon via l'API)
+            this.$store.commit("notes/SET_LINKED_SHANTYTOWN", null);
+
+            this.loadingLinkedShantytown = true;
+            try {
+                const shantytown = await this.$store.dispatch(
+                    "fetchShantytown",
+                    this.shantytown
+                );
+                this.$store.commit("notes/SET_LINKED_SHANTYTOWN", shantytown);
+            } catch (error) {
+                console.log(error);
+            }
+
+            this.loadingLinkedShantytown = false;
+        } else {
+            this.$store.commit("notes/SET_LINKED_SHANTYTOWN", null);
+        }
     },
     data() {
-        const note = this.$store.state.notes.notes.find(
-            ({ id }) => id === this.$route.params.id
-        );
-
         return {
-            shantytown: note.shantytown
+            loadingLinkedShantytown: false
         };
     },
     computed: {
@@ -124,6 +173,12 @@ export default {
         },
         isPublishOpenByDefault() {
             return this.$store.state.notes.publishFormIsOpen;
+        },
+        shantytown() {
+            return this.note.shantytown;
+        },
+        linkedShantytown() {
+            return this.$store.state.notes.linkedShantytown;
         }
     },
     methods: {
@@ -134,6 +189,20 @@ export default {
         onPublishClose() {
             this.$refs.textarea.focus();
             this.$store.commit("notes/SET_PUBLISH_FORM_IS_OPEN", false);
+        },
+        openSearch() {
+            this.$store.commit(
+                "search/SET_LISTENER",
+                this.onSearch.bind(this, this.$route.params.id)
+            );
+            this.$router.push("/recherche-de-site");
+        },
+        onSearch(noteId, result) {
+            this.$store.commit("notes/SET_LINKED_SHANTYTOWN", result);
+            this.$store.dispatch("notes/setShantytown", {
+                id: noteId,
+                shantytownId: result.id
+            });
         }
     }
 };

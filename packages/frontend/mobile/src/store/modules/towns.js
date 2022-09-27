@@ -1,4 +1,4 @@
-import { findUserTowns } from "#helpers/town";
+import { findUserTowns, findTown } from "#helpers/town";
 
 export default {
     state: {
@@ -85,6 +85,24 @@ export default {
                 );
                 commit("setTownsState", "error");
             }
+        },
+
+        async fetchShantytown({ state }, shantytownId) {
+            // fetch locally first
+            const town = [...state.myTowns, ...state.consultedTowns].find(
+                ({ id }) => id === shantytownId
+            );
+            if (town !== undefined) {
+                return town;
+            }
+
+            try {
+                return await findTown(shantytownId);
+            } catch (error) {
+                console.log(error);
+            }
+
+            return null;
         }
     },
 
