@@ -34,7 +34,34 @@
         <BottomSlidingBlock ref="publishBlock" @cancel="$refs.textarea.focus()">
             <template slot="header">Publier ma note</template>
             <template slot="body">
-                <Container>test</Container>
+                <img
+                    src="/img/illustrations/notes_publish.svg"
+                    class="mt-4 w-1/2 m-auto"
+                />
+                <Container>
+                    <p class="mt-12 text-center">
+                        Veuillez sélectionner le site sur lequel vous souhaitez
+                        publier cette note.<br />Elle sera visible dans le
+                        journal du site.
+                    </p>
+                    <p class="mt-4 text-center">
+                        <Button
+                            variant="textPrimary"
+                            class="text-G400 border border-G500 rounded-lg"
+                            icon="search"
+                            iconPosition="left"
+                            >Saisissez le nom ou l'adresse d'un site</Button
+                        >
+                    </p>
+                    <p class="text-center mt-12">
+                        <Button
+                            icon="paper-plane"
+                            iconPosition="left"
+                            :disabled="shantytown === null"
+                            >Publier la note</Button
+                        >
+                    </p>
+                </Container>
             </template>
         </BottomSlidingBlock>
     </div>
@@ -55,6 +82,15 @@ export default {
     },
     mounted() {
         this.$refs.textarea.focus();
+    },
+    data() {
+        const note = this.$store.state.notes.notes.find(
+            ({ id }) => id === this.$route.params.id
+        );
+
+        return {
+            shantytown: note.shantytown
+        };
     },
     computed: {
         note() {
