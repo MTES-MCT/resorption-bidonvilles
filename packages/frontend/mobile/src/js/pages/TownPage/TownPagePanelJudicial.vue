@@ -3,7 +3,6 @@
         <TownPageInfo :title="'Dépôt de plainte du propriétaire'">
             {{ boolToStr(town.ownerComplaint) }}
         </TownPageInfo>
-        <!-- <Icon icon="balance-scale" class="mr-4 mt-5" /> -->
         <TownPageInfo
             :title="'Existence d’une procédure judiciaire'"
             :icon="'balance-scale'"
