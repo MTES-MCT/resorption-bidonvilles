@@ -56,7 +56,7 @@
                             icon="search"
                             iconPosition="left"
                             @click="$router.push('/recherche-de-site')"
-                            >Saisissez le nom ou l'adresse d'un site</Button
+                            >Saisissez le nom d'un site</Button
                         >
                     </p>
                     <p class="text-center mt-12">
