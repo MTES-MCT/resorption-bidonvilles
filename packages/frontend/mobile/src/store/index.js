@@ -14,19 +14,6 @@ const store = new Vuex.Store({
         notes: moduleNotes,
         towns: moduleTowns,
         user: moduleUser
-    },
-    state: {
-        currentTab: "towns"
-    },
-    mutations: {
-        setCurrentTab(state, value) {
-            state.currentTab = value;
-        }
-    },
-    getters: {
-        currentTab(state) {
-            return state.currentTab;
-        }
     }
 });
 api.setStore(store);

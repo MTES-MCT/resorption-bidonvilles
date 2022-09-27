@@ -32,17 +32,15 @@ export default {
     },
     methods: {
         async showTownsTab() {
-            if (this.currentTab === "towns") {
+            if (this.$router.currentRoute.meta.group === "sites") {
                 return;
             }
-            await this.$store.commit("setCurrentTab", "towns");
             this.$router.push(`/${this.townNavigationState}`);
         },
         async showNotesTab() {
-            if (this.currentTab === "notes") {
+            if (this.$router.currentRoute.path === "/liste-des-notes") {
                 return;
             }
-            await this.$store.commit("setCurrentTab", "notes");
             this.$router.push("/liste-des-notes");
         },
         signout() {
