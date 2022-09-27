@@ -1,5 +1,8 @@
 <template>
-    <li class="flex justify-between space-x-4 text-sm items-center">
+    <li
+        class="flex justify-between space-x-4 text-sm items-center"
+        @click="select"
+    >
         <span class="flex-1 leading-4"
             >{{ item.usename }}<br /><span class="text-G400">{{
                 item.city.name
@@ -22,6 +25,17 @@ export default {
         item: {
             type: Object,
             required: true
+        }
+    },
+    methods: {
+        select() {
+            const listener = this.$store.state.search.listener;
+            if (listener) {
+                listener(this.item);
+                this.$store.commit("search/SET_LISTENER", null);
+            }
+
+            this.$router.back();
         }
     }
 };

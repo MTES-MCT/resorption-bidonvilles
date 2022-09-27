@@ -7,7 +7,8 @@ export default {
     state: {
         notes: [],
         filter: "unpublished",
-        publishFormIsOpen: false
+        publishFormIsOpen: false,
+        linkedShantytown: null
     },
 
     mutations: {
@@ -23,6 +24,9 @@ export default {
         UPDATE_DESCRIPTION(state, { index, description }) {
             state.notes[index].description = description;
         },
+        UPDATE_SHANTYTOWN(state, { index, shantytownId }) {
+            state.notes[index].shantytown = shantytownId;
+        },
         REMOVE_NOTE(state, index) {
             state.notes.splice(index, 1);
         },
@@ -31,6 +35,9 @@ export default {
         },
         SET_PUBLISH_FORM_IS_OPEN(state, isOpen) {
             state.publishFormIsOpen = !!isOpen;
+        },
+        SET_LINKED_SHANTYTOWN(state, shantytown) {
+            state.linkedShantytown = shantytown;
         }
     },
 
@@ -56,7 +63,7 @@ export default {
 
         async setDescription({ commit, state }, { id: noteId, description }) {
             const index = state.notes.findIndex(({ id }) => id === noteId);
-            if (index === undefined) {
+            if (index === -1) {
                 return;
             }
 
@@ -64,9 +71,19 @@ export default {
             await set("notes", state.notes);
         },
 
+        async setShantytown({ commit, state }, { id: noteId, shantytownId }) {
+            const index = state.notes.findIndex(({ id }) => id === noteId);
+            if (index === -1) {
+                return;
+            }
+
+            commit("UPDATE_SHANTYTOWN", { index, shantytownId });
+            await set("notes", state.notes);
+        },
+
         async updateNote({ commit, state }, note) {
             const index = state.notes.findIndex(({ id }) => id === note.id);
-            if (index === undefined) {
+            if (index === -1) {
                 return;
             }
 
@@ -76,7 +93,7 @@ export default {
 
         async deleteNote({ commit, state }, noteId) {
             const index = state.notes.findIndex(({ id }) => id === noteId);
-            if (index === undefined) {
+            if (index === -1) {
                 return;
             }
 
