@@ -1,6 +1,6 @@
 <template>
     <Layout>
-        <template slot="header">
+        <template v-slot:header>
             <Container>
                 <header>
                     <div
@@ -19,7 +19,7 @@
                 </header>
             </Container>
         </template>
-        <template slot="scroll">
+        <template v-slot:scroll>
             <Container>
                 <div class="text-primary font-bold text-display-lg mt-8 mb-4">
                     Caractéristiques
