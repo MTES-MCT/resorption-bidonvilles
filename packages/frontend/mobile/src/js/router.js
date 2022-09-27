@@ -187,6 +187,10 @@ export default new VueRouter({
             }
         },
         {
+            meta: {
+                group: "sites",
+                title: "Résorption-bidonvilles — Liste des sites"
+            },
             path: "/liste-des-sites",
             component: TownsList,
             beforeEnter: guardians.loadedAndUpToDate
