@@ -1,6 +1,9 @@
 <template>
     <div class="h-full flex flex-col">
-        <header class="pt-8 mb-6 flex items-center justify-center space-x-2">
+        <header
+            class="pt-8 mb-6 flex items-center justify-center space-x-2"
+            v-if="logo"
+        >
             <img
                 class="h-10"
                 src="/img/logo-marianne.svg"
@@ -26,6 +29,13 @@
 import Navbar from "./Navbar/Navbar.vue";
 
 export default {
+    props: {
+        logo: {
+            type: Boolean,
+            required: false,
+            default: true
+        }
+    },
     components: {
         Navbar
     }
