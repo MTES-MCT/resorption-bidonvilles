@@ -32,7 +32,11 @@
                 ></textarea>
             </template>
         </Layout>
-        <BottomSlidingBlock ref="publishBlock" @cancel="$refs.textarea.focus()">
+        <BottomSlidingBlock
+            ref="publishBlock"
+            @cancel="onPublishClose"
+            :openByDefault="isPublishOpenByDefault"
+        >
             <template slot="header">Publier ma note</template>
             <template slot="body">
                 <img
@@ -51,6 +55,7 @@
                             class="text-G400 border border-G500 rounded-lg"
                             icon="search"
                             iconPosition="left"
+                            @click="$router.push('/recherche-de-site')"
                             >Saisissez le nom ou l'adresse d'un site</Button
                         >
                     </p>
@@ -112,11 +117,19 @@ export default {
         },
         isEmpty() {
             return this.note.description.replace(/^\s+|\s+$/g, "") === "";
+        },
+        isPublishOpenByDefault() {
+            return this.$store.state.notes.publishFormIsOpen;
         }
     },
     methods: {
         showPublish() {
             this.$refs.publishBlock.show();
+            this.$store.commit("notes/SET_PUBLISH_FORM_IS_OPEN", true);
+        },
+        onPublishClose() {
+            this.$refs.textarea.focus();
+            this.$store.commit("notes/SET_PUBLISH_FORM_IS_OPEN", false);
         }
     }
 };
