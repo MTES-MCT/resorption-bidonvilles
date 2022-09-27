@@ -51,10 +51,18 @@
 <script>
 import { Button } from "@resorptionbidonvilles/ui";
 const TOP_MARGIN = 50;
+const BACKGROUND_OPACITY = 0.75;
 
 export default {
     components: {
         Button
+    },
+    props: {
+        openByDefault: {
+            type: Boolean,
+            required: false,
+            default: false
+        }
     },
     data() {
         return {
@@ -62,9 +70,16 @@ export default {
         };
     },
     mounted() {
-        this.$refs.container.style.display = "none";
-        this.$refs.background.style.opacity = 0;
-        this.$refs.slider.style.top = `${document.body.offsetHeight}px`;
+        if (this.openByDefault === false) {
+            this.$refs.container.style.display = "none";
+            this.$refs.background.style.opacity = 0;
+            this.$refs.slider.style.top = `${document.body.offsetHeight}px`;
+        } else {
+            this.$refs.container.style.display = "block";
+            this.$refs.background.style.opacity = BACKGROUND_OPACITY;
+            this.$refs.slider.style.top = `${TOP_MARGIN}px`;
+        }
+
         this.$refs.slider.addEventListener("transitionend", this.onSlideEnd);
     },
     beforeDestroy() {
@@ -79,7 +94,7 @@ export default {
             this.sliding = true;
             this.$refs.container.style.display = "block";
             setTimeout(() => {
-                this.$refs.background.style.opacity = 0.75;
+                this.$refs.background.style.opacity = BACKGROUND_OPACITY;
                 this.$refs.slider.style.top = `${TOP_MARGIN}px`;
             }, 100);
         },
@@ -94,6 +109,7 @@ export default {
         },
         onClick(event) {
             if (
+                !this.$refs.slider ||
                 this.$refs.slider === event.target ||
                 this.$refs.slider.contains(event.target)
             ) {

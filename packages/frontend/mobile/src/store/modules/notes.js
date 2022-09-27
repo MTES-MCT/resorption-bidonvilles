@@ -6,7 +6,8 @@ export default {
 
     state: {
         notes: [],
-        filter: "unpublished"
+        filter: "unpublished",
+        publishFormIsOpen: false
     },
 
     mutations: {
@@ -27,6 +28,9 @@ export default {
         },
         SET_FILTER(state, filter) {
             state.filter = filter;
+        },
+        SET_PUBLISH_FORM_IS_OPEN(state, isOpen) {
+            state.publishFormIsOpen = !!isOpen;
         }
     },
 

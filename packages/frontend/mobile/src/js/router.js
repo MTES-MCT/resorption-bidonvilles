@@ -2,6 +2,7 @@ import VueRouter from "vue-router";
 import Signin from "#src/js/pages/Signin.vue";
 import TownsList from "#src/js/pages/TownsList/MobileTownsList.vue";
 import TownPage from "#src/js/pages/TownPage/TownPage.vue";
+import TownsSearch from "#src/js/pages/TownsSearch/TownsSearch.vue";
 import Launcher from "#src/js/pages/Launcher/Launcher.vue";
 import Logout from "#src/js/pages/Logout/Logout.vue";
 import NotesList from "#src/js/pages/NotesList/NotesList.vue";
@@ -193,6 +194,11 @@ export default new VueRouter({
             },
             path: "/liste-des-sites",
             component: TownsList,
+            beforeEnter: guardians.loadedAndUpToDate
+        },
+        {
+            path: "/recherche-de-site",
+            component: TownsSearch,
             beforeEnter: guardians.loadedAndUpToDate
         },
         {
