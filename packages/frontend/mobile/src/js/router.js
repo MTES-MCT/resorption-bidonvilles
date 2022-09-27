@@ -1,6 +1,7 @@
 import VueRouter from "vue-router";
 import Signin from "#src/js/pages/Signin.vue";
 import TownsList from "#src/js/pages/TownsList/MobileTownsList.vue";
+import TownPage from "#src/js/pages/TownPage/TownPage.vue";
 import Launcher from "#src/js/pages/Launcher/Launcher.vue";
 import Logout from "#src/js/pages/Logout/Logout.vue";
 import NotesList from "#src/js/pages/NotesList/NotesList.vue";
@@ -172,7 +173,7 @@ export default new VueRouter({
         {
             path: "/connexion",
             component: Signin,
-            // beforeEnter: guardians.anonymous,
+            beforeEnter: guardians.anonymous,
             meta: {
                 title: "Résorption-bidonvilles — Connexion"
             }
@@ -180,12 +181,16 @@ export default new VueRouter({
         {
             path: "/launcher",
             component: Launcher,
-            // beforeEnter: guardians.loggedIn,
+            beforeEnter: guardians.loggedIn,
             meta: {
                 title: "Résorption-bidonvilles — Chargement"
             }
         },
         {
+            meta: {
+                group: "sites",
+                title: "Résorption-bidonvilles — Liste des sites"
+            },
             path: "/liste-des-sites",
             component: TownsList,
             beforeEnter: guardians.loadedAndUpToDate
@@ -206,6 +211,15 @@ export default new VueRouter({
             meta: {
                 analyticsIgnore: true
             }
+        },
+        {
+            meta: {
+                group: "sites",
+                title: "Résorption-bidonvilles — Fiche de site"
+            },
+            path: "/site/:id",
+            component: TownPage,
+            beforeEnter: guardians.loadedAndUpToDate
         }
     ]
 });

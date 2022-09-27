@@ -1,6 +1,6 @@
 <template>
     <Layout>
-        <template slot="header">
+        <template v-slot:header>
             <Container>
                 <header>
                     <div class="flex justify-between items-center">
@@ -57,7 +57,7 @@
             </Container>
         </template>
 
-        <template slot="scroll">
+        <template v-slot:scroll>
             <Container v-if="notes.length === 0">
                 <section class="mt-12 text-center">
                     <template v-if="currentFilter !== 'published'">

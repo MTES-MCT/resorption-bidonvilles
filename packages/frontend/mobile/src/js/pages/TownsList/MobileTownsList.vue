@@ -3,7 +3,7 @@
         <template slot="header">
             <Container>
                 <header>
-                    <h1 class="my-8 font-bold text-display-md text-center">
+                    <h1 class="font-bold text-display-md text-center">
                         Bienvenue {{ user.first_name }} {{ user.last_name }}
                     </h1>
                 </header>

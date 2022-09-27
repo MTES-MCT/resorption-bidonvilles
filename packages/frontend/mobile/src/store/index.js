@@ -13,7 +13,7 @@ const store = new Vuex.Store({
         config: moduleConfig,
         notes: moduleNotes,
         towns: moduleTowns,
-        user: moduleUser,
+        user: moduleUser
     }
 });
 api.setStore(store);
