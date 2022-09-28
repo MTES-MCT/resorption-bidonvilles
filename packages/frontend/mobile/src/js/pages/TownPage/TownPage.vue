@@ -1,35 +1,42 @@
 <template>
     <Layout>
         <template v-slot:header>
-            <Container>
-                <header>
-                    <div
-                        class="text-primary py-4 text-center"
+            <header>
+                <Container class="flex justify-end">
+                    <Button
+                        variant="textPrimary"
+                        class="text-primary self-end"
+                        icon="chevron-left"
+                        iconPosition="left"
+                        :padding="false"
                         @click="toTownsList"
                     >
-                        <Icon :icon="'chevron-left'"></Icon>
-                        <span> Retour à la liste des sites</span>
-                    </div>
-                    <div class="text-lg font-bold text-center">
-                        {{ town.addressSimple }}
-                        <span v-if="town.name" class="text-display-xs"
-                            >« {{ town.name }} »</span
-                        >
-                    </div>
-                </header>
-            </Container>
+                        Retour à la liste des sites
+                    </Button>
+                </Container>
+
+                <div
+                    class="bg-G200 text-display-lg font-bold text-center py-3 mt-2"
+                >
+                    {{ town.addressSimple }}
+                    <span v-if="town.name" class="text-display-sm"
+                        ><br />
+                        « {{ town.name }} »</span
+                    >
+                </div>
+            </header>
         </template>
         <template v-slot:scroll>
             <Container>
-                <div class="text-primary font-bold text-display-lg mt-8 mb-4">
+                <div class="text-primary font-bold text-display-md mt-4 mb-4">
                     Caractéristiques
                 </div>
                 <TownPagePanelCharacteristics :town="town" />
-                <div class="text-primary font-bold text-display-lg mt-8 mb-4">
+                <div class="text-primary font-bold text-display-md mt-8 mb-4">
                     Habitants
                 </div>
                 <TownPagePanelPeople :town="town" />
-                <div class="text-primary font-bold text-display-lg mt-8 mb-4">
+                <div class="text-primary font-bold text-display-md mt-8 mb-4">
                     Procédures judiciaires
                 </div>
                 <TownPagePanelJudicial :town="town" />
@@ -43,7 +50,7 @@ import Container from "#src/js/components/Container.vue";
 import TownPagePanelCharacteristics from "#src/js/pages/TownPage/TownPagePanelCharacteristics.vue";
 import TownPagePanelPeople from "#src/js/pages/TownPage/TownPagePanelPeople.vue";
 import TownPagePanelJudicial from "./TownPagePanelJudicial.vue";
-import { Icon } from "@resorptionbidonvilles/ui";
+import { Button } from "@resorptionbidonvilles/ui";
 
 import { mapGetters } from "vuex";
 
@@ -54,7 +61,7 @@ export default {
         TownPagePanelCharacteristics,
         TownPagePanelPeople,
         TownPagePanelJudicial,
-        Icon
+        Button
     },
     data() {
         return {
