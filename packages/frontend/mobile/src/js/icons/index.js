@@ -28,6 +28,7 @@ import {
     faFileExcel,
     faFilter,
     faSortDown,
+    faShareSquare,
     faCaretSquareLeft,
     faCaretSquareRight,
     faCaretUp,
@@ -115,6 +116,7 @@ library.add(faPlayCircle);
 library.add(faFileExcel);
 library.add(faFilter);
 library.add(faSortDown);
+library.add(faShareSquare);
 library.add(faCaretSquareLeft);
 library.add(faCaretSquareRight);
 library.add(faCaretUp);

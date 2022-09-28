@@ -1,12 +1,16 @@
 import { get, set } from "idb-keyval";
 import getRandomString from "#src/js/utils/getRandomString";
+import { createComment } from "#src/js/helpers/townComment";
 
 export default {
     namespaced: true,
 
     state: {
         notes: [],
-        filter: "unpublished"
+        filter: "unpublished",
+        filterBarIsOpen: false,
+        publishFormIsOpen: false,
+        linkedShantytown: null
     },
 
     mutations: {
@@ -22,11 +26,26 @@ export default {
         UPDATE_DESCRIPTION(state, { index, description }) {
             state.notes[index].description = description;
         },
+        UPDATE_SHANTYTOWN(state, { index, shantytownId }) {
+            state.notes[index].shantytown = shantytownId;
+        },
         REMOVE_NOTE(state, index) {
             state.notes.splice(index, 1);
         },
         SET_FILTER(state, filter) {
             state.filter = filter;
+        },
+        SET_FILTER_BAR_IS_OPEN(state, isOpen) {
+            state.filterBarIsOpen = isOpen === true;
+        },
+        SET_PUBLISH_FORM_IS_OPEN(state, isOpen) {
+            state.publishFormIsOpen = !!isOpen;
+        },
+        SET_LINKED_SHANTYTOWN(state, shantytown) {
+            state.linkedShantytown = shantytown;
+        },
+        ADD_NOTE_PUBLICATION(state, { index, publication }) {
+            state.notes[index].publications.push(publication);
         }
     },
 
@@ -40,7 +59,7 @@ export default {
                 id: getRandomString(30),
                 description: "",
                 shantytown: null,
-                published: false,
+                publications: [],
                 created_at: new Date()
             };
 
@@ -52,7 +71,7 @@ export default {
 
         async setDescription({ commit, state }, { id: noteId, description }) {
             const index = state.notes.findIndex(({ id }) => id === noteId);
-            if (index === undefined) {
+            if (index === -1) {
                 return;
             }
 
@@ -60,9 +79,19 @@ export default {
             await set("notes", state.notes);
         },
 
+        async setShantytown({ commit, state }, { id: noteId, shantytownId }) {
+            const index = state.notes.findIndex(({ id }) => id === noteId);
+            if (index === -1) {
+                return;
+            }
+
+            commit("UPDATE_SHANTYTOWN", { index, shantytownId });
+            await set("notes", state.notes);
+        },
+
         async updateNote({ commit, state }, note) {
             const index = state.notes.findIndex(({ id }) => id === note.id);
-            if (index === undefined) {
+            if (index === -1) {
                 return;
             }
 
@@ -72,25 +101,76 @@ export default {
 
         async deleteNote({ commit, state }, noteId) {
             const index = state.notes.findIndex(({ id }) => id === noteId);
-            if (index === undefined) {
+            if (index === -1) {
                 return;
             }
 
             commit("REMOVE_NOTE", index);
             await set("notes", state.notes);
+        },
+
+        async publishNote(
+            { commit, state },
+            { id: noteId, shantytown: shantytownId }
+        ) {
+            const index = state.notes.findIndex(({ id }) => id === noteId);
+            if (index === -1) {
+                throw new Error("La note à publier n'a pas été retrouvée");
+            }
+
+            try {
+                await createComment(shantytownId, {
+                    description: state.notes[index].description
+                });
+
+                commit("ADD_NOTE_PUBLICATION", {
+                    index,
+                    publication: {
+                        shantytown: shantytownId,
+                        published_at: new Date()
+                    }
+                });
+                await set("notes", state.notes);
+            } catch (error) {
+                throw new Error(
+                    (error && error.user_message) ||
+                        "Une erreur inconnue est survenue"
+                );
+            }
         }
     },
 
     getters: {
         filteredNotes(state) {
             if (state.filter === "all") {
-                return state.notes;
+                return sortBy([...state.notes], "creation");
             }
 
-            return state.notes.filter(
-                note =>
-                    note.published === true || state.filter === "unpublished"
+            return sortBy(
+                state.notes.filter(note => {
+                    if (state.filter === "unpublished") {
+                        return note.publications.length === 0;
+                    }
+
+                    return note.publications.length > 0;
+                }),
+                state.filter === "published" ? "publication" : "creation"
             );
         }
     }
 };
+
+function sortBy(notes, sortType) {
+    notes.sort((a, b) => {
+        if (sortType === "creation") {
+            return a.created_at > b.created_at ? -1 : 1;
+        }
+
+        // sortType === 'publication'
+        return a.publications[0].published_at > b.publications[0].published_at
+            ? -1
+            : 1;
+    });
+
+    return notes;
+}

@@ -2,6 +2,7 @@ import VueRouter from "vue-router";
 import Signin from "#src/js/pages/Signin.vue";
 import TownsList from "#src/js/pages/TownsList/MobileTownsList.vue";
 import TownPage from "#src/js/pages/TownPage/TownPage.vue";
+import TownsSearch from "#src/js/pages/TownsSearch/TownsSearch.vue";
 import Launcher from "#src/js/pages/Launcher/Launcher.vue";
 import Logout from "#src/js/pages/Logout/Logout.vue";
 import NotesList from "#src/js/pages/NotesList/NotesList.vue";
@@ -51,6 +52,17 @@ function hasPermission(...args) {
 
 function hasAcceptedCharte() {
     return store.getters["config/hasAcceptedCharte"] === true;
+}
+
+function saveTabNavigation(to) {
+    if (to.meta.tab) {
+        store.commit("navigation/SET_TAB", {
+            tab: to.meta.tab,
+            page: to.path
+        });
+    }
+
+    return true;
 }
 
 /**
@@ -137,18 +149,23 @@ const guardians = {
     anonymous: guard.bind(this, [
         { checker: () => !isLoggedIn(), target: "/", saveEntryPoint: false }
     ]),
-    loggedIn: guard.bind(this, [{ checker: isLoggedIn, target: "/connexion" }]),
+    loggedIn: guard.bind(this, [
+        { checker: isLoggedIn, target: "/connexion" },
+        { checker: saveTabNavigation }
+    ]),
     loaded: guard.bind(this, [
         { checker: isLoggedIn, target: "/connexion" },
         { checker: isConfigLoaded, target: "/launcher" },
-        { checker: isPermitted, target: "/", saveEntrypoint: false }
+        { checker: isPermitted, target: "/", saveEntrypoint: false },
+        { checker: saveTabNavigation }
     ]),
     loadedAndUpgraded: guard.bind(this, [
         { checker: isLoggedIn, target: "/connexion" },
         { checker: isConfigLoaded, target: "/launcher" },
         { checker: isPermitted, target: "/", saveEntrypoint: false },
         { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
-        { checker: isUpgraded, target: "/mise-a-niveau" }
+        { checker: isUpgraded, target: "/mise-a-niveau" },
+        { checker: saveTabNavigation }
     ]),
     loadedAndUpToDate: guard.bind(this, [
         { checker: isLoggedIn, target: "/connexion" },
@@ -156,7 +173,8 @@ const guardians = {
         { checker: isPermitted, target: "/", saveEntrypoint: false },
         { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
         { checker: isUpgraded, target: "/mise-a-niveau" },
-        { checker: hasNoPendingChangelog, target: "/nouvelle-version" }
+        { checker: hasNoPendingChangelog, target: "/nouvelle-version" },
+        { checker: saveTabNavigation }
     ])
 };
 
@@ -188,7 +206,7 @@ export default new VueRouter({
         },
         {
             meta: {
-                group: "sites",
+                tab: "sites",
                 title: "Résorption-bidonvilles — Liste des sites"
             },
             path: "/liste-des-sites",
@@ -196,11 +214,22 @@ export default new VueRouter({
             beforeEnter: guardians.loadedAndUpToDate
         },
         {
+            path: "/recherche-de-site",
+            component: TownsSearch,
+            beforeEnter: guardians.loadedAndUpToDate
+        },
+        {
+            meta: {
+                tab: "notes"
+            },
             path: "/liste-des-notes",
             component: NotesList,
             beforeEnter: guardians.loadedAndUpToDate
         },
         {
+            meta: {
+                tab: "notes"
+            },
             path: "/notes/:id",
             component: NotesForm,
             beforeEnter: guardians.loadedAndUpToDate
@@ -214,7 +243,7 @@ export default new VueRouter({
         },
         {
             meta: {
-                group: "sites",
+                tab: "sites",
                 title: "Résorption-bidonvilles — Fiche de site"
             },
             path: "/site/:id",

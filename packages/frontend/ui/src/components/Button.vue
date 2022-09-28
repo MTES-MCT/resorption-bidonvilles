@@ -27,7 +27,7 @@
                 </slot>
             </div>
 
-            <div v-if="$slots.default" :class="iconPositionClasses">
+            <div v-if="$slots.default" :class="`${iconPositionClasses} ${truncate ? 'truncate' : ''}`">
                 <slot></slot>
             </div>
         </div>
@@ -72,6 +72,10 @@ export default {
         padding: {
             type: Boolean,
             default: true
+        },
+        truncate: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {

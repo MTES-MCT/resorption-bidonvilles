@@ -1,50 +1,48 @@
 <template>
-    <Layout>
-        <template slot="header">
-            <Container class="flex justify-between mb-4">
-                <Button
-                    icon="paper-plane"
-                    iconPosition="left"
-                    size="sm"
-                    variant="text-primary"
-                    class="font-bold"
-                    @click="$router.push('/liste-des-notes')"
-                    >Publier</Button
-                >
-                <Button
-                    icon="arrow-left"
-                    iconPosition="left"
-                    size="sm"
-                    variant="text-primary"
-                    class="font-bold"
-                    @click="$router.push('/liste-des-notes')"
-                    >Retour aux notes</Button
-                >
-            </Container>
-        </template>
-        <template slot="scroll">
-            <textarea
-                class="px-6 w-full h-full outline-none"
-                ref="textarea"
-                v-model="description"
-            ></textarea>
-        </template>
-    </Layout>
+    <div>
+        <Layout>
+            <template slot="header">
+                <NotesFormHeader
+                    @publish="showPublish"
+                    @copy="copy"
+                    :disablePublish="isEmpty"
+                />
+            </template>
+            <template slot="scroll">
+                <textarea
+                    class="px-6 w-full h-full outline-none"
+                    ref="textarea"
+                    v-model="description"
+                ></textarea>
+            </template>
+        </Layout>
+
+        <NotesPublicationForm
+            ref="publicationForm"
+            @close="onPublishClose"
+            :note="note"
+            :openByDefault="isPublishOpenByDefault"
+        />
+    </div>
 </template>
 
 <script>
-import { Button } from "@resorptionbidonvilles/ui";
-import Container from "#src/js/components/Container.vue";
 import Layout from "#src/js/components/Layout.vue";
+import NotesFormHeader from "./NotesFormHeader.vue";
+import NotesPublicationForm from "./publication/NotesPublicationForm.vue";
 
 export default {
     components: {
-        Button,
-        Container,
-        Layout
+        Layout,
+        NotesFormHeader,
+        NotesPublicationForm
     },
-    mounted() {
-        this.$refs.textarea.focus();
+    async mounted() {
+        this.$nextTick(() => {
+            if (!this.isPublishOpenByDefault) {
+                this.$refs.textarea.focus();
+            }
+        });
     },
     computed: {
         note() {
@@ -62,6 +60,30 @@ export default {
                     description: text
                 });
             }
+        },
+        isEmpty() {
+            return this.note.description.replace(/^\s+|\s+$/g, "") === "";
+        },
+        isPublishOpenByDefault() {
+            return this.$store.state.notes.publishFormIsOpen;
+        }
+    },
+    methods: {
+        copy() {
+            this.$refs.textarea.select();
+            document.execCommand("copy");
+            this.$store.dispatch("notifications/add", {
+                text: "Note copiée dans le presse-papier",
+                icon: "copy"
+            });
+        },
+        showPublish() {
+            this.$refs.publicationForm.show();
+            this.$store.commit("notes/SET_PUBLISH_FORM_IS_OPEN", true);
+        },
+        onPublishClose() {
+            this.$refs.textarea.focus();
+            this.$store.commit("notes/SET_PUBLISH_FORM_IS_OPEN", false);
         }
     }
 };

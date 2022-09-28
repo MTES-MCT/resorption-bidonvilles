@@ -1,8 +1,7 @@
-import { findUserTowns } from "#helpers/town";
+import { findUserTowns, findTown } from "#helpers/town";
 
 export default {
     state: {
-        navigationState: "liste-des-sites",
         state: null,
         error: null,
         hash: {},
@@ -14,9 +13,6 @@ export default {
     mutations: {
         setTownsState(state, s) {
             state.state = s;
-        },
-        setNavigationState(state, s) {
-            state.navigationState = s;
         },
         setTownsError(state, error) {
             state.error = error;
@@ -41,7 +37,6 @@ export default {
             if (!state.hash[townId]) {
                 throw new Error("Impossible de trouver le site");
             }
-            state.navigationState = `site/${townId}`;
             switch (state.hash[townId].type) {
                 case "actor":
                     state.detailedTown =
@@ -85,13 +80,26 @@ export default {
                 );
                 commit("setTownsState", "error");
             }
+        },
+
+        async fetchShantytown({ state }, shantytownId) {
+            // fetch locally first
+            const town = state.hash[shantytownId];
+            if (town !== undefined) {
+                return town;
+            }
+
+            try {
+                return await findTown(shantytownId);
+            } catch (error) {
+                console.log(error);
+            }
+
+            return null;
         }
     },
 
     getters: {
-        navigationState(state) {
-            return state.navigationState;
-        },
         townsState(state) {
             return state.state;
         },
