@@ -8,6 +8,7 @@ export default {
     state: {
         notes: [],
         filter: "unpublished",
+        filterBarIsOpen: false,
         publishFormIsOpen: false,
         linkedShantytown: null
     },
@@ -33,6 +34,9 @@ export default {
         },
         SET_FILTER(state, filter) {
             state.filter = filter;
+        },
+        SET_FILTER_BAR_IS_OPEN(state, isOpen) {
+            state.filterBarIsOpen = isOpen === true;
         },
         SET_PUBLISH_FORM_IS_OPEN(state, isOpen) {
             state.publishFormIsOpen = !!isOpen;

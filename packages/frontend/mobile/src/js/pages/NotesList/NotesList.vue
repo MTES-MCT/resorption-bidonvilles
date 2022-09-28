@@ -28,7 +28,7 @@
             </Container>
 
             <div
-                class="bg-G300 mt-3 h-0 overflow-hidden"
+                class="bg-G300 mt-3 overflow-hidden"
                 id="filters"
                 ref="filters"
             >
@@ -133,16 +133,30 @@ export default {
                 { key: "all", label: "Toutes" },
                 { key: "unpublished", label: "Non publiées" },
                 { key: "published", label: "Publiées" }
-            ],
-            filterIsVisible: false
+            ]
         };
     },
     computed: {
         ...mapGetters({
             notes: "notes/filteredNotes"
         }),
+        filterBarIsOpen: {
+            get() {
+                return this.$store.state.notes.filterBarIsOpen;
+            },
+            set(value) {
+                this.$store.commit("notes/SET_FILTER_BAR_IS_OPEN", value);
+            }
+        },
         currentFilter() {
             return this.$store.state.notes.filter;
+        }
+    },
+    mounted() {
+        if (!this.filterBarIsOpen) {
+            this.hideFilterBar();
+        } else {
+            this.showFilterBar();
         }
     },
     methods: {
@@ -162,12 +176,19 @@ export default {
             this.$store.dispatch("notes/deleteNote", noteId);
         },
         toggleFilters() {
-            this.filterIsVisible = !this.filterIsVisible;
-            if (this.filterIsVisible) {
-                this.$refs.filters.style.height = `${this.$refs.filters.firstChild.offsetHeight}px`;
+            this.filterBarIsOpen = !this.filterBarIsOpen;
+
+            if (this.filterBarIsOpen) {
+                this.showFilterBar();
             } else {
-                this.$refs.filters.style.height = "0";
+                this.hideFilterBar();
             }
+        },
+        showFilterBar() {
+            this.$refs.filters.style.height = `${this.$refs.filters.firstChild.offsetHeight}px`;
+        },
+        hideFilterBar() {
+            this.$refs.filters.style.height = "0";
         },
         setFilter(filter) {
             this.$store.commit("notes/SET_FILTER", filter);

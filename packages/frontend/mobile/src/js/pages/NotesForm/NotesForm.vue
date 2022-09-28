@@ -216,6 +216,8 @@ export default {
                     icon: "paper-plane"
                 });
 
+                this.$store.commit("notes/SET_FILTER", "published");
+                this.$store.commit("notes/SET_FILTER_BAR_IS_OPEN", true);
                 this.$store.commit("notes/SET_PUBLISH_FORM_IS_OPEN", false);
                 this.$router.back();
             } catch (error) {
