@@ -89,9 +89,7 @@ export default {
 
         async fetchShantytown({ state }, shantytownId) {
             // fetch locally first
-            const town = [...state.myTowns, ...state.consultedTowns].find(
-                ({ id }) => id === shantytownId
-            );
+            const town = state.hash[shantytownId];
             if (town !== undefined) {
                 return town;
             }
