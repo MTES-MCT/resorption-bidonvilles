@@ -63,6 +63,7 @@
                             <Button
                                 variant="textPrimary"
                                 :truncate="true"
+                                :disabled="publicationIsPending"
                                 class="text-primary border border-G500 rounded-lg w-full"
                                 v-bind:class="{
                                     'text-G400': linkedShantytown === null
@@ -83,7 +84,11 @@
                             <Button
                                 icon="paper-plane"
                                 iconPosition="left"
-                                :disabled="linkedShantytown === null"
+                                :disabled="
+                                    linkedShantytown === null ||
+                                        publicationIsPending
+                                "
+                                :loading="publicationIsPending"
                                 @click="publish"
                                 >Publier la note</Button
                             >
@@ -149,6 +154,7 @@ export default {
     },
     data() {
         return {
+            publicationIsPending: false,
             loadingLinkedShantytown: false
         };
     },
@@ -192,6 +198,10 @@ export default {
             this.$store.commit("notes/SET_PUBLISH_FORM_IS_OPEN", false);
         },
         openSearch() {
+            if (this.publicationIsPending === true) {
+                return;
+            }
+
             this.$store.commit(
                 "search/SET_LISTENER",
                 this.onSearch.bind(this, this.$route.params.id)
@@ -206,6 +216,12 @@ export default {
             });
         },
         async publish() {
+            if (this.publicationIsPending === true) {
+                return;
+            }
+
+            this.publicationIsPending = true;
+
             try {
                 await this.$store.dispatch("notes/publishNote", {
                     id: this.note.id,
@@ -215,13 +231,14 @@ export default {
                     text: "Note publiée dans le journal du site",
                     icon: "paper-plane"
                 });
-
                 this.$store.commit("notes/SET_FILTER", "published");
                 this.$store.commit("notes/SET_FILTER_BAR_IS_OPEN", true);
                 this.$store.commit("notes/SET_PUBLISH_FORM_IS_OPEN", false);
+                this.publicationIsPending = false;
                 this.$router.back();
             } catch (error) {
                 console.log(error);
+                this.publicationIsPending = false;
             }
         }
     }
