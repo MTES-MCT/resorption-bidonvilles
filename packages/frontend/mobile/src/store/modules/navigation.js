@@ -2,7 +2,7 @@ export default {
     namespaced: true,
 
     state: {
-        notesTab: "/notes"
+        notesTab: "/liste-des-notes"
     },
 
     mutations: {
