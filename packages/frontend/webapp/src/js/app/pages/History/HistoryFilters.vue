@@ -29,8 +29,12 @@ export default {
                         value: "shantytownUpdate"
                     },
                     {
-                        label: "Nouveaux messages",
+                        label: "Nouveaux messages site",
                         value: "shantytownComment_highCovidComment"
+                    },
+                    {
+                        label: "Nouveaux messages action",
+                        value: "planComment"
                     },
                     {
                         label: "Nouveaux utilisateurs",

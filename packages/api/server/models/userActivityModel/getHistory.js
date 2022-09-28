@@ -2,6 +2,7 @@ const shantytownModel = require('#server/models/shantytownModel');
 const shantytownCommentModel = require('#server/models/shantytownCommentModel');
 const highCovidCommentModel = require('#server/models/highCovidCommentModel');
 const userModel = require('#server/models/userModel');
+const planCommentModel = require('#server/models/planCommentModel');
 
 /**
  * @param {Object} userLocation Location to be used for 'local' permissions
@@ -32,6 +33,9 @@ module.exports = async (user, location, entities, numberOfActivities, lastDate, 
     }
     if (entities.includes('user')) {
         promises.push(userModel.getHistory(location, numberOfActivities, lastDate, maxDate));
+    }
+    if (entities.includes('planComment')) {
+        promises.push(planCommentModel.getHistory(user, location, numberOfActivities, lastDate, maxDate));
     }
     const activities = await Promise.all(promises);
     const sortedActivities = activities.flat().sort((a, b) => (a.date > b.date ? -1 : 1));
