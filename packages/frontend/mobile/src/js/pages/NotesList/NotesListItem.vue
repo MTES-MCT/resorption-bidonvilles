@@ -8,7 +8,9 @@
             <p><Icon icon="pen" class="mr-1" />Créée le {{ createdAt }}</p>
             <p :class="publishedColor">
                 <Icon icon="paper-plane" class="mr-1" />
-                <span v-if="note.publications.length > 0">Publiée</span>
+                <span v-if="note.publications.length > 0"
+                    >Publiée le {{ publishedAt }}</span
+                >
                 <span v-else>Non publiée</span>
             </p>
         </footer>
@@ -54,8 +56,23 @@ export default {
                 : "text-red";
         },
         createdAt() {
-            return `${this.note.created_at.getDate()}/${this.note.created_at.getMonth() +
-                1}/${this.note.created_at.getFullYear()}`;
+            return this.formatDate(this.note.created_at);
+        },
+        publishedAt() {
+            if (this.note.publications.length === 0) {
+                return null;
+            }
+
+            return this.formatDate(
+                this.note.publications.slice(-1)[0].published_at
+            );
+        }
+    },
+
+    methods: {
+        formatDate(date) {
+            return `${date.getDate()}/${date.getMonth() +
+                1}/${date.getFullYear()}`;
         }
     }
 };
