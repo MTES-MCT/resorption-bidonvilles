@@ -211,6 +211,10 @@ export default {
                     id: this.note.id,
                     shantytown: this.note.shantytown
                 });
+                this.$store.dispatch("notifications/add", {
+                    text: "Note publiée dans le journal du site",
+                    icon: "paper-plane"
+                });
 
                 this.$store.commit("notes/SET_PUBLISH_FORM_IS_OPEN", false);
                 this.$router.back();
