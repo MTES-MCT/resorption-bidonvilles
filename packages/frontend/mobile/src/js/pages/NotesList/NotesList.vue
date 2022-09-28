@@ -1,60 +1,7 @@
 <template>
     <Layout>
         <template v-slot:header>
-            <Container>
-                <header>
-                    <div class="flex justify-between items-center">
-                        <h1 class="font-bold text-lg">Liste de vos notes</h1>
-                        <div>
-                            <Button
-                                size="sm"
-                                icon="filter"
-                                iconPosition="left"
-                                variant="primaryText"
-                                @click.native="toggleFilters"
-                                >Filtrer</Button
-                            >
-                            <Button
-                                size="sm"
-                                icon="plus"
-                                iconPosition="left"
-                                variant="primaryText"
-                                @click.native="create"
-                                >Créer</Button
-                            >
-                        </div>
-                    </div>
-                </header>
-            </Container>
-
-            <div
-                class="bg-G300 mt-3 overflow-hidden"
-                id="filters"
-                ref="filters"
-            >
-                <div class="flex justify-between text-center text-sm">
-                    <div
-                        class="flex-1 py-2"
-                        v-for="filter in filters"
-                        v-bind:class="{
-                            'bg-primary text-white':
-                                filter.key === currentFilter
-                        }"
-                        :key="filter.key"
-                        @click="setFilter(filter.key)"
-                    >
-                        {{ filter.label }}
-                    </div>
-                </div>
-            </div>
-
-            <Container>
-                <p class="hidden md:block">
-                    Prenez des notes de vos passages sur le terrain puis
-                    partagez les facilement dans les journaux des sites ou par
-                    mail à vos collaborateur(ice).
-                </p>
-            </Container>
+            <NotesListHeader @create="create" />
         </template>
 
         <template v-slot:scroll>
@@ -110,18 +57,13 @@
     </Layout>
 </template>
 
-<style scoped>
-#filters {
-    transition: height 0.5s 0s ease-in-out;
-}
-</style>
-
 <script>
 import Layout from "#src/js/components/Layout.vue";
 import Container from "#src/js/components/Container.vue";
 import LeftSlidingBlock from "#src/js/components/LeftSlidingBlock.vue";
 import { Button, Icon } from "@resorptionbidonvilles/ui";
 import NotesListItem from "./NotesListItem.vue";
+import NotesListHeader from "./header/NotesListHeader.vue";
 import { mapGetters } from "vuex";
 
 export default {
@@ -131,38 +73,15 @@ export default {
         LeftSlidingBlock,
         Button,
         Icon,
-        NotesListItem
-    },
-    data() {
-        return {
-            filters: [
-                { key: "all", label: "Toutes" },
-                { key: "unpublished", label: "Non publiées" },
-                { key: "published", label: "Publiées" }
-            ]
-        };
+        NotesListItem,
+        NotesListHeader
     },
     computed: {
         ...mapGetters({
             notes: "notes/filteredNotes"
         }),
-        filterBarIsOpen: {
-            get() {
-                return this.$store.state.notes.filterBarIsOpen;
-            },
-            set(value) {
-                this.$store.commit("notes/SET_FILTER_BAR_IS_OPEN", value);
-            }
-        },
         currentFilter() {
             return this.$store.state.notes.filter;
-        }
-    },
-    mounted() {
-        if (!this.filterBarIsOpen) {
-            this.hideFilterBar();
-        } else {
-            this.showFilterBar();
         }
     },
     methods: {
@@ -180,24 +99,6 @@ export default {
             }
 
             this.$store.dispatch("notes/deleteNote", noteId);
-        },
-        toggleFilters() {
-            this.filterBarIsOpen = !this.filterBarIsOpen;
-
-            if (this.filterBarIsOpen) {
-                this.showFilterBar();
-            } else {
-                this.hideFilterBar();
-            }
-        },
-        showFilterBar() {
-            this.$refs.filters.style.height = `${this.$refs.filters.firstChild.offsetHeight}px`;
-        },
-        hideFilterBar() {
-            this.$refs.filters.style.height = "0";
-        },
-        setFilter(filter) {
-            this.$store.commit("notes/SET_FILTER", filter);
         }
     }
 };
