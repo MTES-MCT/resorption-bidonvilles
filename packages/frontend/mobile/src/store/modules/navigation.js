@@ -2,6 +2,7 @@ export default {
     namespaced: true,
 
     state: {
+        sitesTab: "/liste-des-sites",
         notesTab: "/liste-des-notes"
     },
 

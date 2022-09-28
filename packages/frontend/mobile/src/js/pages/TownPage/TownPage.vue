@@ -86,7 +86,6 @@ export default {
     },
     methods: {
         async toTownsList() {
-            await this.$store.commit("setNavigationState", "liste-des-sites");
             this.$router.push(`/liste-des-sites`);
         }
     }
