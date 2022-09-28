@@ -1,5 +1,6 @@
 import { get, set } from "idb-keyval";
 import getRandomString from "#src/js/utils/getRandomString";
+import { createComment } from "#src/js/helpers/townComment";
 
 export default {
     namespaced: true,
@@ -38,6 +39,9 @@ export default {
         },
         SET_LINKED_SHANTYTOWN(state, shantytown) {
             state.linkedShantytown = shantytown;
+        },
+        SET_NOTE_PUBLISHED(state, index) {
+            state.notes[index].published = true;
         }
     },
 
@@ -99,6 +103,30 @@ export default {
 
             commit("REMOVE_NOTE", index);
             await set("notes", state.notes);
+        },
+
+        async publishNote(
+            { commit, state },
+            { id: noteId, shantytown: shantytownId }
+        ) {
+            const index = state.notes.findIndex(({ id }) => id === noteId);
+            if (index === -1) {
+                throw new Error("La note à publier n'a pas été retrouvée");
+            }
+
+            try {
+                await createComment(shantytownId, {
+                    description: state.notes[index].description
+                });
+
+                commit("SET_NOTE_PUBLISHED", index);
+                await set("notes", state.notes);
+            } catch (error) {
+                throw new Error(
+                    (error && error.user_message) ||
+                        "Une erreur inconnue est survenue"
+                );
+            }
         }
     },
 
