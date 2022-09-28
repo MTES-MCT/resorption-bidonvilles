@@ -60,21 +60,27 @@
         <template v-slot:scroll>
             <Container v-if="notes.length === 0">
                 <section class="mt-12 text-center">
-                    <template v-if="currentFilter !== 'published'">
+                    <template v-if="currentFilter === 'published'">
+                        <p class="text-G700 italic">
+                            Vous n'avez publié aucune de vos notes dans un
+                            journal de site pour le moment.
+                        </p>
+                    </template>
+                    <template v-else>
                         <img
                             src="/img/illustrations/notes_empty.svg"
                             class="w-1/2 mx-auto max-w-lg"
                         />
                         <Button @click.native="create"
-                            >Cliquez ici pour rédiger votre première
-                            note</Button
+                            ><template
+                                v-if="$store.state.notes.notes.length === 0"
+                                >Cliquez ici pour rédiger votre première
+                                note</template
+                            ><template v-else
+                                >Cliquez ici pour rédiger une nouvelle
+                                note</template
+                            ></Button
                         >
-                    </template>
-                    <template v-else>
-                        <p class="text-G700 italic">
-                            Vous n'avez publié aucune de vos notes dans un
-                            journal de site pour le moment.
-                        </p>
                     </template>
                 </section>
             </Container>
