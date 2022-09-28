@@ -54,6 +54,17 @@ function hasAcceptedCharte() {
     return store.getters["config/hasAcceptedCharte"] === true;
 }
 
+function saveTabNavigation(to) {
+    if (to.meta.tab) {
+        store.commit("navigation/SET_TAB", {
+            tab: to.meta.tab,
+            page: to.path
+        });
+    }
+
+    return true;
+}
+
 /**
  * @typedef {Object} Checker
  * @property {Function} checker The actual checker, that should return a boolean when called
@@ -138,18 +149,23 @@ const guardians = {
     anonymous: guard.bind(this, [
         { checker: () => !isLoggedIn(), target: "/", saveEntryPoint: false }
     ]),
-    loggedIn: guard.bind(this, [{ checker: isLoggedIn, target: "/connexion" }]),
+    loggedIn: guard.bind(this, [
+        { checker: isLoggedIn, target: "/connexion" },
+        { checker: saveTabNavigation }
+    ]),
     loaded: guard.bind(this, [
         { checker: isLoggedIn, target: "/connexion" },
         { checker: isConfigLoaded, target: "/launcher" },
-        { checker: isPermitted, target: "/", saveEntrypoint: false }
+        { checker: isPermitted, target: "/", saveEntrypoint: false },
+        { checker: saveTabNavigation }
     ]),
     loadedAndUpgraded: guard.bind(this, [
         { checker: isLoggedIn, target: "/connexion" },
         { checker: isConfigLoaded, target: "/launcher" },
         { checker: isPermitted, target: "/", saveEntrypoint: false },
         { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
-        { checker: isUpgraded, target: "/mise-a-niveau" }
+        { checker: isUpgraded, target: "/mise-a-niveau" },
+        { checker: saveTabNavigation }
     ]),
     loadedAndUpToDate: guard.bind(this, [
         { checker: isLoggedIn, target: "/connexion" },
@@ -157,7 +173,8 @@ const guardians = {
         { checker: isPermitted, target: "/", saveEntrypoint: false },
         { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
         { checker: isUpgraded, target: "/mise-a-niveau" },
-        { checker: hasNoPendingChangelog, target: "/nouvelle-version" }
+        { checker: hasNoPendingChangelog, target: "/nouvelle-version" },
+        { checker: saveTabNavigation }
     ])
 };
 
@@ -202,11 +219,17 @@ export default new VueRouter({
             beforeEnter: guardians.loadedAndUpToDate
         },
         {
+            meta: {
+                tab: "notes"
+            },
             path: "/liste-des-notes",
             component: NotesList,
             beforeEnter: guardians.loadedAndUpToDate
         },
         {
+            meta: {
+                tab: "notes"
+            },
             path: "/notes/:id",
             component: NotesForm,
             beforeEnter: guardians.loadedAndUpToDate

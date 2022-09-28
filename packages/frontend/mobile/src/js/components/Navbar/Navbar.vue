@@ -38,10 +38,14 @@ export default {
             this.$router.push(`/${this.townNavigationState}`);
         },
         async showNotesTab() {
-            if (this.$router.currentRoute.path === "/liste-des-notes") {
+            if (
+                this.$router.currentRoute.path ===
+                this.$store.state.navigation.notesTab
+            ) {
                 return;
             }
-            this.$router.push("/liste-des-notes");
+
+            this.$router.push(this.$store.state.navigation.notesTab);
         },
         signout() {
             this.$router.push("/deconnexion");
