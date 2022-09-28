@@ -18,30 +18,29 @@
 
 <script>
 import NavbarItem from "./NavbarItem";
-import { mapGetters } from "vuex";
 
 export default {
     components: {
         NavbarItem
     },
-    computed: {
-        ...mapGetters({
-            currentTab: "currentTab",
-            townNavigationState: "navigationState"
-        })
-    },
     methods: {
         async showTownsTab() {
-            if (this.$router.currentRoute.meta.group === "sites") {
+            if (this.$router.currentRoute.meta.tab === "sites") {
+                if (this.$router.currentRoute.path !== "/liste-des-sites") {
+                    this.$router.push("/liste-des-sites");
+                }
+
                 return;
             }
-            this.$router.push(`/${this.townNavigationState}`);
+
+            this.$router.push(this.$store.state.navigation.sitesTab);
         },
         async showNotesTab() {
-            if (
-                this.$router.currentRoute.path ===
-                this.$store.state.navigation.notesTab
-            ) {
+            if (this.$router.currentRoute.meta.tab === "notes") {
+                if (this.$router.currentRoute.path !== "/liste-des-notes") {
+                    this.$router.push("/liste-des-notes");
+                }
+
                 return;
             }
 

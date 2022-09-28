@@ -206,7 +206,7 @@ export default new VueRouter({
         },
         {
             meta: {
-                group: "sites",
+                tab: "sites",
                 title: "Résorption-bidonvilles — Liste des sites"
             },
             path: "/liste-des-sites",
@@ -243,7 +243,7 @@ export default new VueRouter({
         },
         {
             meta: {
-                group: "sites",
+                tab: "sites",
                 title: "Résorption-bidonvilles — Fiche de site"
             },
             path: "/site/:id",
