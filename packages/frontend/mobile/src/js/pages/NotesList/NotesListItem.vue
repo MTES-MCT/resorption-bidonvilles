@@ -8,7 +8,7 @@
             <p><Icon icon="pen" class="mr-1" />Créée le {{ createdAt }}</p>
             <p :class="publishedColor">
                 <Icon icon="paper-plane" class="mr-1" />
-                <span v-if="note.published">Publiée</span>
+                <span v-if="note.publications.length > 0">Publiée</span>
                 <span v-else>Non publiée</span>
             </p>
         </footer>
@@ -49,7 +49,9 @@ export default {
                 .replace(/^\s+|\s+$/g, "");
         },
         publishedColor() {
-            return this.note.published ? "text-green" : "text-red";
+            return this.note.publications.length > 0
+                ? "text-green"
+                : "text-red";
         },
         createdAt() {
             return `${this.note.created_at.getDate()}/${this.note.created_at.getMonth() +

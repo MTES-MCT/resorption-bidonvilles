@@ -44,8 +44,8 @@ export default {
         SET_LINKED_SHANTYTOWN(state, shantytown) {
             state.linkedShantytown = shantytown;
         },
-        SET_NOTE_PUBLISHED(state, index) {
-            state.notes[index].published = true;
+        ADD_NOTE_PUBLICATION(state, { index, publication }) {
+            state.notes[index].publications.push(publication);
         }
     },
 
@@ -59,7 +59,7 @@ export default {
                 id: getRandomString(30),
                 description: "",
                 shantytown: null,
-                published: false,
+                publications: [],
                 created_at: new Date()
             };
 
@@ -123,7 +123,13 @@ export default {
                     description: state.notes[index].description
                 });
 
-                commit("SET_NOTE_PUBLISHED", index);
+                commit("ADD_NOTE_PUBLICATION", {
+                    index,
+                    publication: {
+                        shantytown: shantytownId,
+                        published_at: new Date()
+                    }
+                });
                 await set("notes", state.notes);
             } catch (error) {
                 throw new Error(
@@ -142,10 +148,10 @@ export default {
 
             return state.notes.filter(note => {
                 if (state.filter === "unpublished") {
-                    return note.published === false;
+                    return note.publications.length === 0;
                 }
 
-                return note.published === true;
+                return note.publications.length > 0;
             });
         }
     }
