@@ -10,6 +10,15 @@
             >Retour aux notes</Button
         >
         <Button
+            icon="copy"
+            iconPosition="left"
+            size="sm"
+            variant="textPrimary"
+            class="text-primary"
+            @click="$emit('copy')"
+            >Copier</Button
+        >
+        <Button
             icon="paper-plane"
             iconPosition="left"
             size="sm"

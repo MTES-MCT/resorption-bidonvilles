@@ -4,6 +4,7 @@
             <template slot="header">
                 <NotesFormHeader
                     @publish="showPublish"
+                    @copy="copy"
                     :disablePublish="isEmpty"
                 />
             </template>
@@ -68,6 +69,14 @@ export default {
         }
     },
     methods: {
+        copy() {
+            this.$refs.textarea.select();
+            document.execCommand("copy");
+            this.$store.dispatch("notifications/add", {
+                text: "Note copiée dans le presse-papier",
+                icon: "copy"
+            });
+        },
         showPublish() {
             this.$refs.publicationForm.show();
             this.$store.commit("notes/SET_PUBLISH_FORM_IS_OPEN", true);
