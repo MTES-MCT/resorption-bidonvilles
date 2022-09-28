@@ -44,11 +44,24 @@ export default {
     },
     computed: {
         loading() {
+            if (this.$store.state.search.search) {
+                return !this.$store.state.search.results;
+            }
+
             return this.$store.state.towns.state === "loading";
         },
         sections() {
             if (this.loading) {
                 return;
+            }
+
+            if (this.$store.state.search.results) {
+                return [
+                    {
+                        title: "Résultats de recherche",
+                        items: this.$store.state.search.results
+                    }
+                ];
             }
 
             return [
