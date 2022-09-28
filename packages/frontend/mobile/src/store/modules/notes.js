@@ -136,10 +136,13 @@ export default {
                 return state.notes;
             }
 
-            return state.notes.filter(
-                note =>
-                    note.published === true || state.filter === "unpublished"
-            );
+            return state.notes.filter(note => {
+                if (state.filter === "unpublished") {
+                    return note.published === false;
+                }
+
+                return note.published === true;
+            });
         }
     }
 };
