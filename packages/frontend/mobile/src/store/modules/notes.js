@@ -143,16 +143,34 @@ export default {
     getters: {
         filteredNotes(state) {
             if (state.filter === "all") {
-                return state.notes;
+                return sortBy([...state.notes], "creation");
             }
 
-            return state.notes.filter(note => {
-                if (state.filter === "unpublished") {
-                    return note.publications.length === 0;
-                }
+            return sortBy(
+                state.notes.filter(note => {
+                    if (state.filter === "unpublished") {
+                        return note.publications.length === 0;
+                    }
 
-                return note.publications.length > 0;
-            });
+                    return note.publications.length > 0;
+                }),
+                state.filter === "published" ? "publication" : "creation"
+            );
         }
     }
 };
+
+function sortBy(notes, sortType) {
+    notes.sort((a, b) => {
+        if (sortType === "creation") {
+            return a.created_at > b.created_at ? -1 : 1;
+        }
+
+        // sortType === 'publication'
+        return a.publications[0].published_at > b.publications[0].published_at
+            ? -1
+            : 1;
+    });
+
+    return notes;
+}
