@@ -230,8 +230,11 @@ export default {
             return response;
         },
         pestAnimalsWording() {
-            return this.town.livingConditions.pest_animals.status.status ===
-                "good"
+            return this.town.livingConditions[
+                this.town.livingConditions.version === 1
+                    ? "vermin"
+                    : "pest_animals"
+            ].status.status === "good"
                 ? "Absence de nuisible"
                 : "Présence de nuisibles";
         }
