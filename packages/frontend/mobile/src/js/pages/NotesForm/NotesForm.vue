@@ -84,6 +84,7 @@
                                 icon="paper-plane"
                                 iconPosition="left"
                                 :disabled="linkedShantytown === null"
+                                @click="publish"
                                 >Publier la note</Button
                             >
                         </p>
@@ -203,6 +204,19 @@ export default {
                 id: noteId,
                 shantytownId: result.id
             });
+        },
+        async publish() {
+            try {
+                await this.$store.dispatch("notes/publishNote", {
+                    id: this.note.id,
+                    shantytown: this.note.shantytown
+                });
+
+                this.$store.commit("notes/SET_PUBLISH_FORM_IS_OPEN", false);
+                this.$router.back();
+            } catch (error) {
+                console.log(error);
+            }
         }
     }
 };
