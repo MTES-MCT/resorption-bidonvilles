@@ -38,14 +38,6 @@ export default {
             menu: "lower"
         },
         {
-            label: "Covid-19",
-            target: "/covid-19",
-            id: "covid",
-            classes: "covid",
-            color: "text-red600",
-            menu: "lower"
-        },
-        {
             label: "Sites",
             target: "/liste-des-sites",
             id: "sites",
