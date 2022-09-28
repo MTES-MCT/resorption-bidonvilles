@@ -3,14 +3,14 @@
         <template slot="header">
             <Container>
                 <header>
-                    <h1 class="font-bold text-display-md text-center">
+                    <h1 class="font-bold text-display-md">
                         Bienvenue {{ user.first_name }} {{ user.last_name }}
                     </h1>
                 </header>
             </Container>
         </template>
         <template slot="scroll">
-            <Container>
+            <Container class="mt-6">
                 <div class="font-bold text-lg">
                     Mes sites ({{ myTowns.length }})
                 </div>
@@ -20,7 +20,7 @@
             </Container>
             <TownCarousel :towns="myTowns" />
 
-            <Container>
+            <Container class="mt-6">
                 <div class="font-bold text-lg">
                     Sites récemment consultés ({{ consultedTowns.length }})
                 </div>
