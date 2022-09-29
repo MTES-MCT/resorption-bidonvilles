@@ -9,7 +9,7 @@
             ref="background"
         ></div>
         <div
-            class="absolute bottom-0 w-full left-0 bg-white z-50 bottom-sliding-block overflow-scroll"
+            class="absolute bottom-0 w-full left-0 bg-white z-50 bottom-sliding-block flex flex-col"
             ref="slider"
         >
             <header
@@ -29,7 +29,7 @@
                 </div>
             </header>
 
-            <main>
+            <main class="overflow-scroll">
                 <slot name="body" />
             </main>
         </div>
