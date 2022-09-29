@@ -1,5 +1,11 @@
 <template>
-    <BottomSlidingBlock ref="comments">
+    <BottomSlidingBlock
+        ref="comments"
+        :openByDefault="openByDefault"
+        :defaultScroll="defaultScroll"
+        @cancel="onClose"
+        @scroll="onScroll"
+    >
         <template v-slot:header-left>
             <span class="text-primary">
                 <Button
@@ -47,6 +53,16 @@ export default {
         town: {
             type: Object,
             required: true
+        },
+        openByDefault: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
+        defaultScroll: {
+            type: Number,
+            required: false,
+            default: 0
         }
     },
 
@@ -64,6 +80,7 @@ export default {
 
     methods: {
         show() {
+            this.$store.commit("SET_COMMENTS_ARE_OPEN", true);
             this.$refs.comments.show();
         },
         async createNote() {
@@ -73,6 +90,12 @@ export default {
             );
             this.$router.push(`/notes/${id}`);
             this.$store.dispatch("notes/setupFilterBarAfterCreation");
+        },
+        onClose() {
+            this.$store.commit("SET_COMMENTS_ARE_OPEN", false);
+        },
+        onScroll(scroll) {
+            this.$store.commit("SET_COMMENTS_SCROLL", scroll);
         }
     }
 };
