@@ -54,11 +54,11 @@ export default {
             commit("SET_NOTES", (await get("notes")) || []);
         },
 
-        async createNote({ commit, state }) {
+        async create({ commit, state }, shantytown = null) {
             const note = {
                 id: getRandomString(30),
                 description: "",
-                shantytown: null,
+                shantytown,
                 publications: [],
                 created_at: new Date()
             };
@@ -67,6 +67,14 @@ export default {
             await set("notes", state.notes);
 
             return note;
+        },
+        setupFilterBarAfterCreation({ commit, state }) {
+            if (state.filter === "unpublished") {
+                return;
+            }
+
+            commit("SET_FILTER", "unpublished");
+            commit("SET_FILTER_BAR_IS_OPEN", true);
         },
 
         async setDescription({ commit, state }, { id: noteId, description }) {
