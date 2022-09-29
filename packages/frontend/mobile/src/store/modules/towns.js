@@ -19,17 +19,17 @@ export default {
         },
         setMyTownsItems(state, towns) {
             state.myTowns = towns;
-            towns.forEach(({ id }, index) => {
-                if (!state.hash[id]) {
-                    state.hash[id] = { type: "actor", index: index };
+            towns.forEach(town => {
+                if (!state.hash[town.id]) {
+                    state.hash[town.id] = town;
                 }
             });
         },
         setConsultedTownsItems(state, towns) {
             state.consultedTowns = towns;
-            towns.forEach(({ id }, index) => {
-                if (!state.hash[id]) {
-                    state.hash[id] = { type: "navigation_log", index: index };
+            towns.forEach(town => {
+                if (!state.hash[town.id]) {
+                    state.hash[town.id] = town;
                 }
             });
         },
@@ -37,17 +37,16 @@ export default {
             if (!state.hash[townId]) {
                 throw new Error("Impossible de trouver le site");
             }
-            switch (state.hash[townId].type) {
-                case "actor":
-                    state.detailedTown =
-                        state.myTowns[state.hash[townId].index];
-                    break;
-                case "navigation_log":
-                    state.detailedTown =
-                        state.consultedTowns[state.hash[townId].index];
-                    break;
-                default:
+
+            state.detailedTown = state.hash[townId];
+        },
+
+        SET_COMMENTS(state, { shantytown: shantytownId, comments }) {
+            if (!state.hash[shantytownId]) {
+                return;
             }
+
+            state.hash[shantytownId].comments = comments;
         }
     },
 

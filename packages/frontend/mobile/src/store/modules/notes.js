@@ -119,10 +119,18 @@ export default {
             }
 
             try {
-                await createComment(shantytownId, {
+                const { comments } = await createComment(shantytownId, {
                     description: state.notes[index].description
                 });
 
+                commit(
+                    "SET_COMMENTS",
+                    {
+                        shantytown: shantytownId,
+                        comments
+                    },
+                    { root: true }
+                );
                 commit("ADD_NOTE_PUBLICATION", {
                     index,
                     publication: {
