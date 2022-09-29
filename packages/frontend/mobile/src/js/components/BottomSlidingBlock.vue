@@ -9,27 +9,31 @@
             ref="background"
         ></div>
         <div
-            class="absolute h-full w-full left-0 bg-white z-50 bottom-sliding-block overflow-scroll"
+            class="absolute bottom-0 w-full left-0 bg-white z-50 bottom-sliding-block flex flex-col"
             ref="slider"
         >
             <header
-                class="pt-2 pb-4 text-center flex justify-between items-center"
+                class="pt-3 pb-4 text-center flex justify-between items-center px-4"
             >
-                <div class="w-12"></div>
+                <div class="w-12">
+                    <slot name="header-left" />
+                </div>
                 <span class="flex-1 text-lg font-bold"
                     ><slot name="header"></slot
                 ></span>
-                <div class="w-12 text-primary">
+                <div class="w-12 text-primary flex items-center justify-end">
+                    <slot name="header-right" />
                     <Button
                         icon="times"
                         variant="textPrimary"
                         size="lg"
+                        :padding="false"
                         @click="hide"
                     />
                 </div>
             </header>
 
-            <main>
+            <main class="overflow-scroll" @scroll="onScroll" ref="main">
                 <slot name="body" />
             </main>
         </div>
@@ -62,6 +66,11 @@ export default {
             type: Boolean,
             required: false,
             default: false
+        },
+        defaultScroll: {
+            type: Number,
+            required: false,
+            default: 0
         }
     },
     data() {
@@ -81,6 +90,9 @@ export default {
         }
 
         this.$refs.slider.addEventListener("transitionend", this.onSlideEnd);
+        this.$nextTick(() => {
+            this.$refs.main.scrollTop = this.defaultScroll;
+        });
     },
     beforeDestroy() {
         this.$refs.slider.removeEventListener("transitionend", this.onSlideEnd);
@@ -126,6 +138,9 @@ export default {
             }
 
             this.sliding = false;
+        },
+        onScroll() {
+            this.$emit("scroll", this.$refs.main.scrollTop);
         }
     }
 };
