@@ -1,52 +1,75 @@
 <template>
-    <Layout>
-        <template v-slot:header>
-            <header>
-                <Container class="flex justify-end">
-                    <Button
-                        variant="textPrimary"
-                        class="text-primary self-end"
-                        icon="chevron-left"
-                        iconPosition="left"
-                        :padding="false"
-                        @click="toTownsList"
-                    >
-                        Retour à la liste des sites
-                    </Button>
-                </Container>
+    <div>
+        <Layout>
+            <template v-slot:header>
+                <header>
+                    <Container class="flex justify-end">
+                        <Button
+                            variant="textPrimary"
+                            class="text-primary self-end"
+                            icon="chevron-left"
+                            iconPosition="left"
+                            :padding="false"
+                            @click="toTownsList"
+                        >
+                            Retour à la liste des sites
+                        </Button>
+                    </Container>
 
-                <div
-                    class="bg-G200 text-display-lg font-bold text-center py-3 mt-2"
-                >
-                    {{ town.addressSimple }}
-                    <span v-if="town.name" class="text-display-sm"
-                        ><br />
-                        « {{ town.name }} »</span
+                    <div
+                        class="bg-G200 text-display-lg font-bold text-center py-3 mt-2"
                     >
+                        {{ town.addressSimple }}
+                        <span v-if="town.name" class="text-display-sm"
+                            ><br />
+                            « {{ town.name }} »</span
+                        >
+                    </div>
+                </header>
+            </template>
+            <template v-slot:scroll>
+                <Container>
+                    <div
+                        class="text-primary font-bold text-display-md mt-4 mb-4"
+                    >
+                        Caractéristiques
+                    </div>
+                    <TownPagePanelCharacteristics :town="town" />
+                    <div
+                        class="text-primary font-bold text-display-md mt-8 mb-4"
+                    >
+                        Habitants
+                    </div>
+                    <TownPagePanelPeople :town="town" />
+                    <div
+                        class="text-primary font-bold text-display-md mt-8 mb-4"
+                    >
+                        Procédures judiciaires
+                    </div>
+                    <TownPagePanelJudicial :town="town" />
+                </Container>
+            </template>
+            <template v-slot:footer>
+                <div
+                    class="py-3 bg-orange400 text-center"
+                    @click="$refs.comments.show()"
+                >
+                    Voir le journal du site
                 </div>
-            </header>
-        </template>
-        <template v-slot:scroll>
-            <Container>
-                <div class="text-primary font-bold text-display-md mt-4 mb-4">
-                    Caractéristiques
-                </div>
-                <TownPagePanelCharacteristics :town="town" />
-                <div class="text-primary font-bold text-display-md mt-8 mb-4">
-                    Habitants
-                </div>
-                <TownPagePanelPeople :town="town" />
-                <div class="text-primary font-bold text-display-md mt-8 mb-4">
-                    Procédures judiciaires
-                </div>
-                <TownPagePanelJudicial :town="town" />
-            </Container>
-        </template>
-    </Layout>
+            </template>
+        </Layout>
+
+        <BottomSlidingBlock ref="comments">
+            <template v-slot:header>Journal du site</template>
+            <template v-slot:body>Exemple</template>
+        </BottomSlidingBlock>
+    </div>
 </template>
+
 <script>
 import Layout from "#src/js/components/Layout.vue";
 import Container from "#src/js/components/Container.vue";
+import BottomSlidingBlock from "#src/js/components/BottomSlidingBlock.vue";
 import TownPagePanelCharacteristics from "#src/js/pages/TownPage/TownPagePanelCharacteristics.vue";
 import TownPagePanelPeople from "#src/js/pages/TownPage/TownPagePanelPeople.vue";
 import TownPagePanelJudicial from "./TownPagePanelJudicial.vue";
@@ -58,6 +81,7 @@ export default {
     components: {
         Layout,
         Container,
+        BottomSlidingBlock,
         TownPagePanelCharacteristics,
         TownPagePanelPeople,
         TownPagePanelJudicial,
