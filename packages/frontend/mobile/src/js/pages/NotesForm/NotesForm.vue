@@ -38,11 +38,11 @@ export default {
         NotesPublicationForm
     },
     async mounted() {
-        this.$nextTick(() => {
+        setTimeout(() => {
             if (!this.isPublishOpenByDefault) {
                 this.$refs.textarea.focus();
             }
-        });
+        }, 100);
     },
     computed: {
         note() {
@@ -82,7 +82,9 @@ export default {
             this.$store.commit("notes/SET_PUBLISH_FORM_IS_OPEN", true);
         },
         onPublishClose() {
-            this.$refs.textarea.focus();
+            this.$nextTick(() => {
+                this.$refs.textarea.focus();
+            });
             this.$store.commit("notes/SET_PUBLISH_FORM_IS_OPEN", false);
         }
     }
