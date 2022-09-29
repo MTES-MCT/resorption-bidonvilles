@@ -21,7 +21,10 @@
                 </div>
             </div>
         </section>
-        <Navbar v-if="navbar" />
+        <footer>
+            <slot name="footer" />
+            <Navbar v-if="navbar" />
+        </footer>
     </div>
 </template>
 
