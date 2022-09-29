@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import Tag from "#frontend/webapp/src/js/app/components/ui/Tag.vue";
+import Tag from "./Tag.vue";
 import formatDate from "#frontend/common/helpers/formatDate";
 
 export default {
