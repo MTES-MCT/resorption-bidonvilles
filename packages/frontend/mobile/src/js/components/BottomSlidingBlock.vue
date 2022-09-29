@@ -9,7 +9,7 @@
             ref="background"
         ></div>
         <div
-            class="absolute h-full w-full left-0 bg-white z-50 bottom-sliding-block overflow-scroll"
+            class="absolute bottom-0 w-full left-0 bg-white z-50 bottom-sliding-block overflow-scroll"
             ref="slider"
         >
             <header
