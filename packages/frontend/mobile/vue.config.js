@@ -1,6 +1,7 @@
 const path = require("path");
 const { DefinePlugin } = require("webpack");
 const { version } = require("./package.json");
+const { icons } = require("./public/img/icons/icons.json");
 
 const { VUE_APP_MOBILE_HOST } = require("./src/env.js");
 
@@ -39,7 +40,13 @@ module.exports = {
     pwa: {
         name: "Résorption-bidonvilles",
         themeColor: "#00006D",
-        msTileColor: "#000000",
+        msTileColor: "#ffffff",
+        manifestOptions: {
+            icons: icons.map(icon => {
+                icon.src = `./img/icons/${icon.src}`;
+                return icon;
+            })
+        },
         appleMobileWebAppCapable: "yes"
     }
 };
