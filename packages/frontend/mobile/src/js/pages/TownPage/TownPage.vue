@@ -59,20 +59,17 @@
             </template>
         </Layout>
 
-        <BottomSlidingBlock ref="comments">
-            <template v-slot:header>Journal du site</template>
-            <template v-slot:body>Exemple</template>
-        </BottomSlidingBlock>
+        <TownComments ref="comments" :town="town" v-if="town" />
     </div>
 </template>
 
 <script>
 import Layout from "#src/js/components/Layout.vue";
 import Container from "#src/js/components/Container.vue";
-import BottomSlidingBlock from "#src/js/components/BottomSlidingBlock.vue";
 import TownPagePanelCharacteristics from "#src/js/pages/TownPage/TownPagePanelCharacteristics.vue";
 import TownPagePanelPeople from "#src/js/pages/TownPage/TownPagePanelPeople.vue";
 import TownPagePanelJudicial from "./TownPagePanelJudicial.vue";
+import TownComments from "./comments/TownComments.vue";
 import { Button } from "@resorptionbidonvilles/ui";
 
 import { mapGetters } from "vuex";
@@ -81,7 +78,7 @@ export default {
     components: {
         Layout,
         Container,
-        BottomSlidingBlock,
+        TownComments,
         TownPagePanelCharacteristics,
         TownPagePanelPeople,
         TownPagePanelJudicial,
