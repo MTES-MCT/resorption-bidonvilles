@@ -1,17 +1,21 @@
 <template>
     <article>
         <header>
-            <span class="text-G500">{{ createdAt }}</span>
             <h1 class="font-bold text-primary">
                 {{ comment.createdBy.first_name }}
                 {{ comment.createdBy.last_name }}
             </h1>
         </header>
-        {{ comment.description }}
+        <p class="whitespace-pre-wrap break-words">{{ comment.description }}</p>
+        <footer class="text-sm">
+            <span class="text-G500">le {{ createdAt }}</span>
+        </footer>
     </article>
 </template>
 
 <script>
+import formatDate from "#frontend/common/helpers/formatDate";
+
 export default {
     props: {
         comment: {
@@ -22,7 +26,7 @@ export default {
 
     computed: {
         createdAt() {
-            return new Date(this.comment.createdAt * 1000).toLocaleDateString();
+            return formatDate(this.comment.createdAt, "d M y à h:i");
         }
     }
 };
