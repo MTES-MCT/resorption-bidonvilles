@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import formatDate from "#frontend/common/helpers/formatDate";
 import { Icon } from "@resorptionbidonvilles/ui";
 
 export default {
@@ -56,23 +57,16 @@ export default {
                 : "text-red";
         },
         createdAt() {
-            return this.formatDate(this.note.created_at);
+            return formatDate(this.note.created_at / 1000);
         },
         publishedAt() {
             if (this.note.publications.length === 0) {
                 return null;
             }
 
-            return this.formatDate(
-                this.note.publications.slice(-1)[0].published_at
+            return formatDate(
+                this.note.publications.slice(-1)[0].published_at / 1000
             );
-        }
-    },
-
-    methods: {
-        formatDate(date) {
-            return `${date.getDate()}/${date.getMonth() +
-                1}/${date.getFullYear()}`;
         }
     }
 };
