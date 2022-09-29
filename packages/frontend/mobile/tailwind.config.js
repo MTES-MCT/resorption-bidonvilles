@@ -5,6 +5,6 @@ module.exports = {
     purge: {
         mode: "layers",
         layers: ["base", "components", "utilities"],
-        content: ["./src/**/*.{vue,js}"]
+        content: ["./src/**/*.{vue,js}", "../ui/src/**/*.{vue,js}"]
     }
 };
