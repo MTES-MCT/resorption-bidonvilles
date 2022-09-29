@@ -6,7 +6,7 @@ const ERROR_RESPONSES = {
 };
 module.exports = async (req, res, next) => {
     try {
-        const shantytowns = await shantytownService.list(req.user);
+        const shantytowns = await shantytownService.list(req.user, req.query.q);
         return res.status(200).send(
             shantytowns,
         );

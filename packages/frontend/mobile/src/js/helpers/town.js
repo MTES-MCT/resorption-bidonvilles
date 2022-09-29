@@ -10,3 +10,7 @@ export function findUserTowns(userId, type) {
 export function findTown(townId) {
     return getApi(`/towns/${townId}`);
 }
+
+export function searchTowns(search) {
+    return getApi(`/towns?q=${encodeURIComponent(search)}`);
+}
