@@ -44,8 +44,9 @@ export default {
     },
     methods: {
         async create() {
-            const { id } = await this.$store.dispatch("notes/createNote");
+            const { id } = await this.$store.dispatch("notes/create");
             this.$router.push(`/notes/${id}`);
+            this.$store.dispatch("notes/setupFilterBarAfterCreation");
         },
         deleteNote(noteId) {
             if (
