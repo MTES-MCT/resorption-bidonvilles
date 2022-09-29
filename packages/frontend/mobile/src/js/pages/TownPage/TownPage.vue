@@ -59,7 +59,13 @@
             </template>
         </Layout>
 
-        <TownComments ref="comments" :town="town" v-if="town" />
+        <TownComments
+            ref="comments"
+            :town="town"
+            v-if="town"
+            :openByDefault="$store.state.towns.commentsAreOpen"
+            :defaultScroll="$store.state.towns.commentsScroll"
+        />
     </div>
 </template>
 
@@ -99,7 +105,18 @@ export default {
         if (this.state !== "loaded") {
             await this.$store.dispatch("fetchTowns");
         }
+
+        if (
+            this.$store.state.towns.detailedTown &&
+            this.$store.state.towns.detailedTown.id ===
+                parseInt(this.$route.params.id, 10)
+        ) {
+            return;
+        }
+
         try {
+            this.$store.commit("SET_COMMENTS_ARE_OPEN", false);
+            this.$store.commit("SET_COMMENTS_SCROLL", 0);
             await this.$store.commit("setDetailedTown", this.$route.params.id);
         } catch (error) {
             this.error = "Erreur: " + error.message;

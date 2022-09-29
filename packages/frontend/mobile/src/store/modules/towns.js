@@ -7,7 +7,9 @@ export default {
         hash: {},
         myTowns: [],
         consultedTowns: [],
-        detailedTown: null
+        detailedTown: null,
+        commentsAreOpen: false,
+        commentsScroll: 0
     },
 
     mutations: {
@@ -39,6 +41,14 @@ export default {
             }
 
             state.detailedTown = state.hash[townId];
+        },
+
+        SET_COMMENTS_SCROLL(state, scroll) {
+            state.commentsScroll = scroll;
+        },
+
+        SET_COMMENTS_ARE_OPEN(state, areOpen) {
+            state.commentsAreOpen = areOpen;
         },
 
         SET_COMMENTS(state, { shantytown: shantytownId, comments }) {
