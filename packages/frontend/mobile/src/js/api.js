@@ -1,6 +1,7 @@
 import { createApi } from "#frontend/common/api/main";
+import { APP_VERSION, VUE_APP_MOBILE_API_HOST } from "#src/env";
 
-const api = createApi("https://api.resorption-bidonvilles.localhost", "1.0.0");
+const api = createApi(`https://${VUE_APP_MOBILE_API_HOST}`, APP_VERSION);
 export default api;
 
 const { getApi, postApi, patchApi, putApi, deleteApi, open } = api;
