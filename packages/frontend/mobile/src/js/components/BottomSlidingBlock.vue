@@ -33,7 +33,7 @@
                 </div>
             </header>
 
-            <main class="overflow-scroll">
+            <main class="overflow-scroll" @scroll="onScroll" ref="main">
                 <slot name="body" />
             </main>
         </div>
@@ -66,6 +66,11 @@ export default {
             type: Boolean,
             required: false,
             default: false
+        },
+        defaultScroll: {
+            type: Number,
+            required: false,
+            default: 0
         }
     },
     data() {
@@ -85,6 +90,9 @@ export default {
         }
 
         this.$refs.slider.addEventListener("transitionend", this.onSlideEnd);
+        this.$nextTick(() => {
+            this.$refs.main.scrollTop = this.defaultScroll;
+        });
     },
     beforeDestroy() {
         this.$refs.slider.removeEventListener("transitionend", this.onSlideEnd);
@@ -130,6 +138,9 @@ export default {
             }
 
             this.sliding = false;
+        },
+        onScroll() {
+            this.$emit("scroll", this.$refs.main.scrollTop);
         }
     }
 };
