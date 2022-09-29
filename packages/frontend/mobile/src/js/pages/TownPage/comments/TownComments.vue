@@ -20,7 +20,7 @@
             <Container>
                 <TownComment
                     class="mb-4"
-                    v-for="comment in town.comments.regular"
+                    v-for="comment in sortedComments"
                     :key="comment.id"
                     :comment="comment"
                 />
@@ -47,6 +47,18 @@ export default {
         town: {
             type: Object,
             required: true
+        }
+    },
+
+    computed: {
+        sortedComments() {
+            const sortedComments = [
+                ...this.town.comments.regular,
+                ...this.town.comments.covid
+            ];
+            return sortedComments.sort((a, b) => {
+                return b.createdAt - a.createdAt;
+            });
         }
     },
 
