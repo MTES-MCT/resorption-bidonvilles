@@ -47,9 +47,8 @@ module.exports = {
         // on crée les clés étrangères
         await Promise.all([
             queryInterface.addConstraint(
-                'user_permissions',
-                ['fk_user'],
-                {
+                'user_permissions', {
+                    fields: ['fk_user'],
                     type: 'foreign key',
                     name: 'fk_user_permissions_user',
                     references: {
@@ -62,9 +61,8 @@ module.exports = {
                 },
             ),
             queryInterface.addConstraint(
-                'user_permissions',
-                ['fk_organization'],
-                {
+                'user_permissions', {
+                    fields: ['fk_organization'],
                     type: 'foreign key',
                     name: 'fk_user_permissions_organization',
                     references: {
@@ -92,9 +90,8 @@ module.exports = {
 
         // on s'assure que fk_user OU fk_organization est toujours renseigné (et jamais les deux en même temps)
         await queryInterface.addConstraint(
-            'user_permissions',
-            ['fk_user', 'fk_organization'],
-            {
+            'user_permissions', {
+                fields: ['fk_user', 'fk_organization'],
                 type: 'check',
                 name: 'check_user_xor_organization_is_given',
                 where: {
@@ -121,9 +118,8 @@ module.exports = {
 
         // on s'assure que allow_all est vide (null) quand elle est inutile
         await queryInterface.addConstraint(
-            'user_permissions',
-            ['allow_all'],
-            {
+            'user_permissions', {
+                fields: ['allow_all'],
                 type: 'check',
                 name: 'check_allow_all_is_null',
                 where: {
@@ -150,9 +146,8 @@ module.exports = {
 
         // on s'assure que is_cumulative est vide (null) quand elle est inutile
         await queryInterface.addConstraint(
-            'user_permissions',
-            ['is_cumulative'],
-            {
+            'user_permissions', {
+                fields: ['is_cumulative'],
                 type: 'check',
                 name: 'check_is_cumulative_is_null',
                 where: {
@@ -180,18 +175,16 @@ module.exports = {
         // on s'assure qu'un même user/org ne peut pas avoir deux lignes de permission pour la même feature
         await Promise.all([
             queryInterface.addConstraint(
-                'user_permissions',
-                ['fk_user', 'fk_feature', 'fk_entity'],
-                {
+                'user_permissions', {
+                    fields: ['fk_user', 'fk_feature', 'fk_entity'],
                     type: 'unique',
                     name: 'uk_role_permissions_user_feature_unicity',
                     transaction,
                 },
             ),
             queryInterface.addConstraint(
-                'user_permissions',
-                ['fk_organization', 'fk_feature', 'fk_entity'],
-                {
+                'user_permissions', {
+                    fields: ['fk_organization', 'fk_feature', 'fk_entity'],
                     type: 'unique',
                     name: 'uk_role_permissions_organization_feature_unicity',
                     transaction,

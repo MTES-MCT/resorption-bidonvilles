@@ -40,9 +40,8 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-                'high_covid_comments',
-                ['created_by'],
-                {
+                'high_covid_comments', {
+                    fields: ['created_by'],
                     type: 'foreign key',
                     name: 'fk_high_covid_comments_creator',
                     references: {
@@ -55,9 +54,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'high_covid_comments',
-                ['updated_by'],
-                {
+                'high_covid_comments', {
+                    fields: ['updated_by'],
                     type: 'foreign key',
                     name: 'fk_high_covid_comments_editor',
                     references: {

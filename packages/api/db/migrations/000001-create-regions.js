@@ -28,7 +28,8 @@ module.exports = {
             },
         },
     )
-        .then(() => queryInterface.addConstraint('regions', ['name'], {
+        .then(() => queryInterface.addConstraint('regions', {
+            fields: ['name'],
             type: 'unique',
             name: 'uk_regions_name',
         }))

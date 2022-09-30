@@ -43,9 +43,8 @@ module.exports = {
         // on crée les clés étrangères
         await Promise.all([
             queryInterface.addConstraint(
-                'role_permissions',
-                ['fk_role_regular'],
-                {
+                'role_permissions', {
+                    fields: ['fk_role_regular'],
                     type: 'foreign key',
                     name: 'fk_role_permissions_role_regular',
                     references: {
@@ -58,9 +57,8 @@ module.exports = {
                 },
             ),
             queryInterface.addConstraint(
-                'role_permissions',
-                ['fk_role_admin'],
-                {
+                'role_permissions', {
+                    fields: ['fk_role_admin'],
                     type: 'foreign key',
                     name: 'fk_role_permissions_role_admin',
                     references: {
@@ -88,9 +86,8 @@ module.exports = {
 
         // on s'assure qu'un et un seul role est défini
         await queryInterface.addConstraint(
-            'role_permissions',
-            ['fk_role_regular', 'fk_role_admin'],
-            {
+            'role_permissions', {
+                fields: ['fk_role_regular', 'fk_role_admin'],
                 type: 'check',
                 name: 'check_role_regular_xor_role_admin',
                 where: {
@@ -115,9 +112,8 @@ module.exports = {
 
         // on s'assure que allow_all est vide (null) quand elle est inutile
         await queryInterface.addConstraint(
-            'role_permissions',
-            ['allow_all'],
-            {
+            'role_permissions', {
+                fields: ['allow_all'],
                 type: 'check',
                 name: 'check_allow_all_is_null',
                 where: {
@@ -145,18 +141,16 @@ module.exports = {
         // on s'assure qu'un même rôle ne peut pas avoir deux lignes de permission pour la même feature
         await Promise.all([
             queryInterface.addConstraint(
-                'role_permissions',
-                ['fk_role_regular', 'fk_feature', 'fk_entity'],
-                {
+                'role_permissions', {
+                    fields: ['fk_role_regular', 'fk_feature', 'fk_entity'],
                     type: 'unique',
                     name: 'uk_role_permissions_regular_feature_unicity',
                     transaction,
                 },
             ),
             queryInterface.addConstraint(
-                'role_permissions',
-                ['fk_role_admin', 'fk_feature', 'fk_entity'],
-                {
+                'role_permissions', {
+                    fields: ['fk_role_admin', 'fk_feature', 'fk_entity'],
                     type: 'unique',
                     name: 'uk_role_permissions_admin_feature_unicity',
                     transaction,

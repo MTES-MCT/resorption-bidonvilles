@@ -1,8 +1,8 @@
 module.exports = {
 
     up: queryInterface => queryInterface.addConstraint(
-        'ngos',
-        ['name'], {
+            'ngos', {
+            fields: ['name'],
             type: 'unique',
             name: 'uk_ngos_name',
         },

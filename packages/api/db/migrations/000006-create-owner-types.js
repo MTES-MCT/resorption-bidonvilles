@@ -25,7 +25,8 @@ module.exports = {
             },
         },
     )
-        .then(() => queryInterface.addConstraint('owner_types', ['label'], {
+        .then(() => queryInterface.addConstraint('owner_types', {
+            fields: ['label'],
             type: 'unique',
             name: 'uk_owner_types_label',
         }))

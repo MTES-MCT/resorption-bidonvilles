@@ -46,9 +46,8 @@ module.exports = {
             ))
             // we don't need to populate fk_organization here because the previous migration removes all rows where fk_organization is not null
             .then(() => queryInterface.addConstraint(
-                'permissions',
-                ['fk_organization'],
-                {
+            'permissions', {
+            fields: ['fk_organization'],
                     type: 'foreign key',
                     name: 'fk_permisions_organization',
                     references: {

@@ -19,9 +19,8 @@ module.exports = {
 
     down: queryInterface => queryInterface.sequelize.transaction(
         transaction => queryInterface.addConstraint(
-            'finance_rows',
-            ['fk_finance_type', 'fk_finance'],
-            {
+            'finance_rows', {
+            fields: ['fk_finance_type', 'fk_finance'],
                 type: 'primary key',
                 name: 'finance_rows_pkey',
             },
@@ -30,9 +29,8 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-                'finance_rows_history',
-                ['fk_finance_type', 'fk_finance'],
-                {
+            'finance_rows_history', {
+            fields: ['fk_finance_type', 'fk_finance'],
                     type: 'primary key',
                     name: 'finance_rows_history_pkey',
                 },

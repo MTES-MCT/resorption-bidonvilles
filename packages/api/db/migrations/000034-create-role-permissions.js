@@ -24,11 +24,13 @@ module.exports = {
             },
         },
     ).then(() => Promise.all([
-        queryInterface.addConstraint('role_permissions', ['fk_role', 'fk_permission'], {
+        queryInterface.addConstraint('role_permissions', {
+    fields: ['fk_role', 'fk_permission'],
             type: 'primary key',
             name: 'pk_role_permissions',
         }),
-        queryInterface.addConstraint('role_permissions', ['fk_role'], {
+        queryInterface.addConstraint('role_permissions', {
+    fields: ['fk_role'],
             type: 'foreign key',
             name: 'fk_role_permissions_role',
             references: {
@@ -38,7 +40,8 @@ module.exports = {
             onUpdate: 'cascade',
             onDelete: 'cascade',
         }),
-        queryInterface.addConstraint('role_permissions', ['fk_permission'], {
+        queryInterface.addConstraint('role_permissions', {
+    fields: ['fk_permission'],
             type: 'foreign key',
             name: 'fk_role_permissions_permission',
             references: {

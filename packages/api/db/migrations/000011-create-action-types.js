@@ -24,7 +24,8 @@ module.exports = {
                 onUpdate: Sequelize.literal('CURRENT_TIMESTAMP'),
             },
         },
-    ).then(() => queryInterface.addConstraint('action_types', ['label'], {
+    ).then(() => queryInterface.addConstraint('action_types', {
+    fields: ['label'],
         type: 'unique',
         name: 'uk_action_types_label',
     })),

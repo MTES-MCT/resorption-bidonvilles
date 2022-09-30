@@ -33,7 +33,8 @@ module.exports = {
             },
         },
     ).then(() => Promise.all([
-        queryInterface.addConstraint('shantytown_comments', ['fk_shantytown'], {
+        queryInterface.addConstraint('shantytown_comments', {
+            fields: ['fk_shantytown'],
             type: 'foreign key',
             name: 'fk_shantytown_comments_town',
             references: {
@@ -44,7 +45,8 @@ module.exports = {
             onDelete: 'cascade',
         }),
 
-        queryInterface.addConstraint('shantytown_comments', ['created_by'], {
+        queryInterface.addConstraint('shantytown_comments', {
+            fields: ['created_by'],
             type: 'foreign key',
             name: 'fk_shantytown_comment_creator',
             references: {

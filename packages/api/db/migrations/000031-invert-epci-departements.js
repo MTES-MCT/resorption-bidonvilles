@@ -21,7 +21,8 @@ function addDepartementColumnToCities(queryInterface, Sequelize) {
  * Adds a foreign key to cities.fk_departement
  */
 function addDepartementConstraintToCities(queryInterface) {
-    return queryInterface.addConstraint('cities', ['fk_departement'], {
+    return queryInterface.addConstraint('cities', {
+        fields: ['fk_departement'],
         type: 'foreign key',
         name: 'fk_cities_departement',
         references: {
@@ -118,7 +119,8 @@ function addDepartementColumnToEpci(queryInterface, Sequelize) {
  * Adds a foreign key to epci.fk_departement
  */
 function addDepartementConstraintToEpci(queryInterface) {
-    return queryInterface.addConstraint('epci', ['fk_departement'], {
+    return queryInterface.addConstraint('epci', {
+        fields: ['fk_departement'],
         type: 'foreign key',
         name: 'fk_epci_departement',
         references: {

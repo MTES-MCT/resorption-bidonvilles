@@ -26,7 +26,8 @@ module.exports = {
                     },
                 )),
             ))
-            .then(() => queryInterface.addConstraint('ShantytownOriginHistories', ['fk_shantytown'], {
+            .then(() => queryInterface.addConstraint('ShantytownOriginHistories', {
+                fields: ['fk_shantytown'],
                 type: 'foreign key',
                 name: 'fk_shantytown_origins_shantytown',
                 references: {
@@ -65,7 +66,8 @@ module.exports = {
                     },
                 )),
             ))
-            .then(() => queryInterface.addConstraint('ShantytownOriginHistories', ['fk_shantytown'], {
+            .then(() => queryInterface.addConstraint('ShantytownOriginHistories', {
+                fields: ['fk_shantytown'],
                 type: 'foreign key',
                 name: 'fk_shantytown_origins_shantytown',
                 references: {

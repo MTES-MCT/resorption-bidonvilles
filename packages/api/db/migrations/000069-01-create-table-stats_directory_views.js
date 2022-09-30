@@ -29,9 +29,8 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-                'stats_directory_views',
-                ['organization'],
-                {
+            'stats_directory_views', {
+            fields: ['organization'],
                     type: 'foreign key',
                     name: 'fk_statsDirectoryViews_organization',
                     references: {
@@ -44,9 +43,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'stats_directory_views',
-                ['viewed_by'],
-                {
+            'stats_directory_views', {
+            fields: ['viewed_by'],
                     type: 'foreign key',
                     name: 'fk_statsDirectoryViews_viewedBy',
                     references: {

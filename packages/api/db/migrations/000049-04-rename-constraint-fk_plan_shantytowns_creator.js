@@ -6,9 +6,8 @@ module.exports = {
             'fk_plan_shantytowns_creator',
         ),
         queryInterface.addConstraint(
-            'plan_details',
-            ['created_by'],
-            {
+            'plan_details', {
+            fields: ['created_by'],
                 type: 'foreign key',
                 name: 'fk_plan_details_creator',
                 references: {
@@ -27,9 +26,8 @@ module.exports = {
             'fk_plan_details_creator',
         ),
         queryInterface.addConstraint(
-            'plan_details',
-            ['created_by'],
-            {
+            'plan_details', {
+            fields: ['created_by'],
                 type: 'foreign key',
                 name: 'fk_plan_shantytowns_creator',
                 references: {

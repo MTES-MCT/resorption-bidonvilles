@@ -45,9 +45,8 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-                'stats_exports',
-                ['exported_by'],
-                {
+                'stats_exports', {
+                    fields: ['exported_by'],
                     type: 'foreign key',
                     name: 'fk_statsExports_exportedBy',
                     references: {
@@ -60,9 +59,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'stats_exports',
-                ['fk_region'],
-                {
+                'stats_exports', {
+                    fields: ['fk_region'],
                     type: 'foreign key',
                     name: 'fk_statsExports_region',
                     references: {
@@ -75,9 +73,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'stats_exports',
-                ['fk_departement'],
-                {
+                'stats_exports', {
+                    fields: ['fk_departement'],
                     type: 'foreign key',
                     name: 'fk_statsExports_departement',
                     references: {
@@ -90,9 +87,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'stats_exports',
-                ['fk_epci'],
-                {
+                'stats_exports', {
+                    fields: ['fk_epci'],
                     type: 'foreign key',
                     name: 'fk_statsExports_epci',
                     references: {
@@ -105,9 +101,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'stats_exports',
-                ['fk_city'],
-                {
+                'stats_exports', {
+                    fields: ['fk_city'],
                     type: 'foreign key',
                     name: 'fk_statsExports_city',
                     references: {
@@ -120,9 +115,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'stats_exports',
-                ['fk_region', 'fk_departement', 'fk_epci', 'fk_city'],
-                {
+                'stats_exports', {
+                    fields: ['fk_region', 'fk_departement', 'fk_epci', 'fk_city'],
                     type: 'check',
                     name: 'check_location',
                     where: {

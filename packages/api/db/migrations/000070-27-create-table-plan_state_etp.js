@@ -43,9 +43,8 @@ module.exports = {
                 transaction,
             },
         ).then(() => queryInterface.addConstraint(
-            'plan_state_etp',
-            ['fk_plan_state'],
-            {
+            'plan_state_etp', {
+                fields: ['fk_plan_state'],
                 type: 'foreign key',
                 name: 'fk_plan_state_etp_state',
                 references: {
@@ -57,9 +56,8 @@ module.exports = {
                 transaction,
             },
         )).then(() => queryInterface.addConstraint(
-            'plan_state_etp',
-            ['fk_etp_type'],
-            {
+            'plan_state_etp', {
+                fields: ['fk_etp_type'],
                 type: 'foreign key',
                 name: 'fk_plan_state_etp_type',
                 references: {
@@ -72,9 +70,8 @@ module.exports = {
             },
         ))
             .then(() => queryInterface.addConstraint(
-                'plan_state_etp',
-                ['created_by'],
-                {
+                'plan_state_etp', {
+                    fields: ['created_by'],
                     type: 'foreign key',
                     name: 'fk_plan_state_etp_creator',
                     references: {
@@ -87,9 +84,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'plan_state_etp',
-                ['updated_by'],
-                {
+                'plan_state_etp', {
+                    fields: ['updated_by'],
                     type: 'foreign key',
                     name: 'fk_plan_state_etp_editor',
                     references: {

@@ -39,9 +39,8 @@ module.exports = {
                 transaction,
             },
         ).then(() => queryInterface.addConstraint(
-            'plan_operators',
-            ['fk_plan'],
-            {
+            'plan_operators', {
+                fields: ['fk_plan'],
                 type: 'foreign key',
                 name: 'fk_plan_operators_plan',
                 references: {
@@ -53,9 +52,8 @@ module.exports = {
                 transaction,
             },
         )).then(() => queryInterface.addConstraint(
-            'plan_operators',
-            ['fk_user'],
-            {
+            'plan_operators', {
+                fields: ['fk_user'],
                 type: 'foreign key',
                 name: 'fk_plan_operators_operator',
                 references: {
@@ -68,9 +66,8 @@ module.exports = {
             },
         ))
             .then(() => queryInterface.addConstraint(
-                'plan_operators',
-                ['created_by'],
-                {
+                'plan_operators', {
+                    fields: ['created_by'],
                     type: 'foreign key',
                     name: 'fk_plan_operators_creator',
                     references: {
@@ -83,9 +80,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'plan_operators',
-                ['updated_by'],
-                {
+                'plan_operators', {
+                    fields: ['updated_by'],
                     type: 'foreign key',
                     name: 'fk_plan_operators_editor',
                     references: {

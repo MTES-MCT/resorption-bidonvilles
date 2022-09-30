@@ -44,9 +44,8 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-                'high_covid_comment_territories',
-                ['fk_comment'],
-                {
+                'high_covid_comment_territories', {
+                    fields: ['fk_comment'],
                     type: 'foreign key',
                     name: 'fk_high_covid_comment_territories_comment',
                     references: {
@@ -59,9 +58,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'high_covid_comment_territories',
-                ['fk_departement'],
-                {
+                'high_covid_comment_territories', {
+                    fields: ['fk_departement'],
                     type: 'foreign key',
                     name: 'fk_high_covid_comment_territories_departement',
                     references: {
@@ -74,9 +72,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'high_covid_comment_territories',
-                ['created_by'],
-                {
+                'high_covid_comment_territories', {
+                    fields: ['created_by'],
                     type: 'foreign key',
                     name: 'fk_high_covid_comment_territories_creator',
                     references: {
@@ -89,9 +86,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'high_covid_comment_territories',
-                ['updated_by'],
-                {
+                'high_covid_comment_territories', {
+                    fields: ['updated_by'],
                     type: 'foreign key',
                     name: 'fk_high_covid_comment_territories_editor',
                     references: {

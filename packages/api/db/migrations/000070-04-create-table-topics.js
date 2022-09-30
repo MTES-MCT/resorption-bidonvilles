@@ -29,9 +29,8 @@ module.exports = {
                 transaction,
             },
         ).then(() => queryInterface.addConstraint(
-            'topics',
-            ['name'],
-            {
+            'topics', {
+            fields: ['name'],
                 type: 'unique',
                 name: 'uk_topics_name',
                 transaction,

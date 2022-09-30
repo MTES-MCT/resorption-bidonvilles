@@ -48,9 +48,8 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-                'indicateurs_droit_commun',
-                ['created_by'],
-                {
+                'indicateurs_droit_commun', {
+                    fields: ['created_by'],
                     type: 'foreign key',
                     name: 'fk_indicateurs_droit_commun_creator',
                     references: {
@@ -63,9 +62,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'indicateurs_droit_commun',
-                ['updated_by'],
-                {
+                'indicateurs_droit_commun', {
+                    fields: ['updated_by'],
                     type: 'foreign key',
                     name: 'fk_indicateurs_droit_commun_editor',
                     references: {

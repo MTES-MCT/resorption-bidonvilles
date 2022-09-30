@@ -42,7 +42,8 @@ module.exports = {
                 },
             ),
         ]),
-    ).then(() => queryInterface.addConstraint('shantytowns', ['priority'], {
+    ).then(() => queryInterface.addConstraint('shantytowns', {
+        fields: ['priority'],
         type: 'check',
         name: 'check_priority_value',
         where: {

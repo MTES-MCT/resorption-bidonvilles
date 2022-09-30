@@ -25,9 +25,8 @@ module.exports = {
 
         // on crée toutes les contraintes
         await queryInterface.addConstraint(
-            'comment_tags',
-            ['fk_comment_tag_type'],
-            {
+            'comment_tags', {
+            fields: ['fk_comment_tag_type'],
                 type: 'foreign key',
                 name: 'fk_comment_tag_types_uid',
                 references: {

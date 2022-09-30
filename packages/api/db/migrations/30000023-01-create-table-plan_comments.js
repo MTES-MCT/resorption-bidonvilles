@@ -36,7 +36,8 @@ module.exports = {
             },
         );
         await Promise.all([
-            queryInterface.addConstraint('plan_comments', ['fk_plan'], {
+            queryInterface.addConstraint('plan_comments', {
+    fields: ['fk_plan'],
                 type: 'foreign key',
                 name: 'fk_plan_comments_plan',
                 references: {
@@ -47,7 +48,8 @@ module.exports = {
                 onDelete: 'cascade',
             }),
 
-            queryInterface.addConstraint('plan_comments', ['created_by'], {
+            queryInterface.addConstraint('plan_comments', {
+    fields: ['created_by'],
                 type: 'foreign key',
                 name: 'fk_plan_comment_creator',
                 references: {

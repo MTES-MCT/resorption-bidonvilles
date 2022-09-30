@@ -25,7 +25,8 @@ module.exports = {
             },
         },
     )
-        .then(() => queryInterface.addConstraint('closing_solutions', ['label'], {
+        .then(() => queryInterface.addConstraint('closing_solutions', {
+    fields: ['label'],
             type: 'unique',
             name: 'uk_closing_solutions_label',
         }))

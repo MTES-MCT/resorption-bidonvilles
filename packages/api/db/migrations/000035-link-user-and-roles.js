@@ -9,7 +9,8 @@ module.exports = {
             defaultValue: 3,
         },
     ).then(() => Promise.all([
-        queryInterface.addConstraint('users', ['fk_role'], {
+        queryInterface.addConstraint('users', {
+            fields: ['fk_role'],
             type: 'foreign key',
             name: 'fk_users_role',
             references: {

@@ -39,9 +39,8 @@ module.exports = {
                 transaction,
             },
         ).then(() => queryInterface.addConstraint(
-            'plan_shantytowns',
-            ['fk_plan'],
-            {
+            'plan_shantytowns', {
+                fields: ['fk_plan'],
                 type: 'foreign key',
                 name: 'fk_plan_shantytowns_plan',
                 references: {
@@ -53,9 +52,8 @@ module.exports = {
                 transaction,
             },
         )).then(() => queryInterface.addConstraint(
-            'plan_shantytowns',
-            ['fk_shantytown'],
-            {
+            'plan_shantytowns', {
+                fields: ['fk_shantytown'],
                 type: 'foreign key',
                 name: 'fk_plan_shantytowns_shantytown',
                 references: {
@@ -68,9 +66,8 @@ module.exports = {
             },
         ))
             .then(() => queryInterface.addConstraint(
-                'plan_shantytowns',
-                ['created_by'],
-                {
+                'plan_shantytowns', {
+                    fields: ['created_by'],
                     type: 'foreign key',
                     name: 'fk_plan_shantytowns_creator',
                     references: {
@@ -83,9 +80,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'plan_shantytowns',
-                ['updated_by'],
-                {
+                'plan_shantytowns', {
+                    fields: ['updated_by'],
                     type: 'foreign key',
                     name: 'fk_plan_shantytowns_editor',
                     references: {

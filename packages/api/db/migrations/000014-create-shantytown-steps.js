@@ -33,7 +33,8 @@ module.exports = {
             },
         },
     ).then(() => Promise.all([
-        queryInterface.addConstraint('shantytown_steps', ['fk_action'], {
+        queryInterface.addConstraint('shantytown_steps', {
+    fields: ['fk_action'],
             type: 'foreign key',
             name: 'fk_shantytown_steps_action',
             references: {
@@ -43,7 +44,8 @@ module.exports = {
             onUpdate: 'cascade',
             onDelete: 'cascade',
         }),
-        queryInterface.addConstraint('shantytown_steps', ['fk_shantytown'], {
+        queryInterface.addConstraint('shantytown_steps', {
+    fields: ['fk_shantytown'],
             type: 'foreign key',
             name: 'fk_shantytown_steps_shantytown',
             references: {

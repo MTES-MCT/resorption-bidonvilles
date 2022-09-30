@@ -95,9 +95,8 @@ const getFields = Sequelize => ({
 });
 
 const addWaterAndWashAccessNumberConstraint = ({ queryInterface, Sequelize, transaction }) => queryInterface.addConstraint(
-    'shantytowns',
-    ['water_hand_wash_access_number'],
-    {
+    'shantytowns', {
+        fields: ['water_hand_wash_access_number'],
         type: 'check',
         name: 'water_hand_wash_access_number_only_defined_if_access_true',
         where: {

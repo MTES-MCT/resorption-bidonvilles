@@ -68,9 +68,8 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-                'indicateurs_education',
-                ['created_by'],
-                {
+            'indicateurs_education', {
+            fields: ['created_by'],
                     type: 'foreign key',
                     name: 'fk_indicateurs_education_creator',
                     references: {
@@ -83,9 +82,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'indicateurs_education',
-                ['updated_by'],
-                {
+            'indicateurs_education', {
+            fields: ['updated_by'],
                     type: 'foreign key',
                     name: 'fk_indicateurs_education_editor',
                     references: {

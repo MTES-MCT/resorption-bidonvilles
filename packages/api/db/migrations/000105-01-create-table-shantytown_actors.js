@@ -44,18 +44,16 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-                'shantytown_actors',
-                ['fk_shantytown', 'fk_user'],
-                {
+                'shantytown_actors', {
+                    fields: ['fk_shantytown', 'fk_user'],
                     type: 'primary key',
                     name: 'shantytown_actors_pkey',
                     transaction,
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'shantytown_actors',
-                ['fk_shantytown'],
-                {
+                'shantytown_actors', {
+                    fields: ['fk_shantytown'],
                     type: 'foreign key',
                     name: 'fk_shantytown_actors_shantytown',
                     references: {
@@ -68,9 +66,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'shantytown_actors',
-                ['fk_user'],
-                {
+                'shantytown_actors', {
+                    fields: ['fk_user'],
                     type: 'foreign key',
                     name: 'fk_shantytown_actors_user',
                     references: {
@@ -83,9 +80,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'shantytown_actors',
-                ['created_by'],
-                {
+                'shantytown_actors', {
+                    fields: ['created_by'],
                     type: 'foreign key',
                     name: 'fk_shantytown_actors_creator',
                     references: {
@@ -98,9 +94,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'shantytown_actors',
-                ['updated_by'],
-                {
+                'shantytown_actors', {
+                    fields: ['updated_by'],
                     type: 'foreign key',
                     name: 'fk_shantytown_actors_editor',
                     references: {

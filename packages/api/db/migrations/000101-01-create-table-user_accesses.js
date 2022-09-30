@@ -37,9 +37,8 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-                'user_accesses',
-                ['fk_user'],
-                {
+                'user_accesses', {
+                    fields: ['fk_user'],
                     type: 'foreign key',
                     name: 'fk_user_accesses_user',
                     references: {
@@ -52,9 +51,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'user_accesses',
-                ['sent_by'],
-                {
+                'user_accesses', {
+                    fields: ['sent_by'],
                     type: 'foreign key',
                     name: 'fk_user_accesses_admin',
                     references: {
@@ -92,13 +90,13 @@ module.exports = {
                     transaction,
                 },
             ))
-            .then(data => data.length > 0 ? queryInterface.bulkInsert(
+            .then(data => (data.length > 0 ? queryInterface.bulkInsert(
                 'user_accesses',
                 data,
                 {
                     transaction,
                 },
-            ) : true),
+            ) : true)),
     ),
 
     down: queryInterface => queryInterface.sequelize.transaction(

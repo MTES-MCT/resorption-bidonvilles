@@ -57,7 +57,8 @@ module.exports = {
             },
         },
     ).then(() => Promise.all([
-        queryInterface.addConstraint('actions', ['fk_city', 'fk_epci', 'fk_departement', 'fk_region'], {
+        queryInterface.addConstraint('actions', {
+    fields: ['fk_city', 'fk_epci', 'fk_departement', 'fk_region'],
             type: 'check',
             name: 'check_only_one_target',
             where: {
@@ -90,7 +91,8 @@ module.exports = {
             },
         }),
 
-        queryInterface.addConstraint('actions', ['fk_action_type'], {
+        queryInterface.addConstraint('actions', {
+    fields: ['fk_action_type'],
             type: 'foreign key',
             name: 'fk_actions_action_type',
             references: {
@@ -101,7 +103,8 @@ module.exports = {
             onDelete: 'restrict',
         }),
 
-        queryInterface.addConstraint('actions', ['fk_city'], {
+        queryInterface.addConstraint('actions', {
+    fields: ['fk_city'],
             type: 'foreign key',
             name: 'fk_actions_city',
             references: {
@@ -112,7 +115,8 @@ module.exports = {
             onDelete: 'restrict',
         }),
 
-        queryInterface.addConstraint('actions', ['fk_epci'], {
+        queryInterface.addConstraint('actions', {
+    fields: ['fk_epci'],
             type: 'foreign key',
             name: 'fk_actions_epci',
             references: {
@@ -123,7 +127,8 @@ module.exports = {
             onDelete: 'restrict',
         }),
 
-        queryInterface.addConstraint('actions', ['fk_departement'], {
+        queryInterface.addConstraint('actions', {
+    fields: ['fk_departement'],
             type: 'foreign key',
             name: 'fk_actions_departement',
             references: {
@@ -134,7 +139,8 @@ module.exports = {
             onDelete: 'restrict',
         }),
 
-        queryInterface.addConstraint('actions', ['fk_region'], {
+        queryInterface.addConstraint('actions', {
+    fields: ['fk_region'],
             type: 'foreign key',
             name: 'fk_actions_region',
             references: {
@@ -145,7 +151,8 @@ module.exports = {
             onDelete: 'restrict',
         }),
 
-        queryInterface.addConstraint('actions', ['created_by'], {
+        queryInterface.addConstraint('actions', {
+    fields: ['created_by'],
             type: 'foreign key',
             name: 'fk_actions_creator',
             references: {
@@ -156,7 +163,8 @@ module.exports = {
             onDelete: 'restrict',
         }),
 
-        queryInterface.addConstraint('actions', ['updated_by'], {
+        queryInterface.addConstraint('actions', {
+    fields: ['updated_by'],
             type: 'foreign key',
             name: 'fk_actions_lastEditor',
             references: {

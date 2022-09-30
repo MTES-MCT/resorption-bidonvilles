@@ -55,18 +55,16 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-                'permissions',
-                ['permission_id'],
-                {
+                'permissions', {
+                    fields: ['permission_id'],
                     type: 'unique',
                     name: 'uk_feature',
                     transaction,
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'permissions',
-                ['fk_organization'],
-                {
+                'permissions', {
+                    fields: ['fk_organization'],
                     type: 'foreign key',
                     name: 'fk_permisions_organization',
                     references: {
@@ -79,9 +77,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'permissions',
-                ['fk_role_regular'],
-                {
+                'permissions', {
+                    fields: ['fk_role_regular'],
                     type: 'foreign key',
                     name: 'fk_permisions_role_regular',
                     references: {
@@ -94,9 +91,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'permissions',
-                ['fk_role_admin'],
-                {
+                'permissions', {
+                    fields: ['fk_role_admin'],
                     type: 'foreign key',
                     name: 'fk_permisions_role_admin',
                     references: {
@@ -121,9 +117,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'permissions',
-                ['fk_geographic_level'],
-                {
+                'permissions', {
+                    fields: ['fk_geographic_level'],
                     type: 'foreign key',
                     name: 'fk_permissions_geographic_level',
                     references: {
@@ -136,9 +131,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'permissions',
-                ['fk_organization', 'fk_role_admin', 'fk_role_regular'],
-                {
+                'permissions', {
+                    fields: ['fk_organization', 'fk_role_admin', 'fk_role_regular'],
                     type: 'check',
                     name: 'check_featurable',
                     where: {
@@ -170,9 +164,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'permissions',
-                ['allowed', 'fk_geographic_level'],
-                {
+                'permissions', {
+                    fields: ['allowed', 'fk_geographic_level'],
                     type: 'check',
                     name: 'check_geographic_level',
                     where: {

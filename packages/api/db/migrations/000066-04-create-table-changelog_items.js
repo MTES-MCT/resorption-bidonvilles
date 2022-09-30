@@ -47,18 +47,16 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-                'changelog_items',
-                ['fk_changelog', 'position'],
-                {
+            'changelog_items', {
+            fields: ['fk_changelog', 'position'],
                     type: 'unique',
                     name: 'uk_position',
                     transaction,
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'changelog_items',
-                ['fk_changelog'],
-                {
+            'changelog_items', {
+            fields: ['fk_changelog'],
                     type: 'foreign key',
                     name: 'fk_changelog_items_changelog',
                     references: {

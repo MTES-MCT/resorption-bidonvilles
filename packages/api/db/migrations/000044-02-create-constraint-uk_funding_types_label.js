@@ -1,9 +1,8 @@
 module.exports = {
 
     up: queryInterface => queryInterface.addConstraint(
-        'funding_types',
-        ['label'],
-        {
+        'funding_types', {
+            fields: ['label'],
             type: 'unique',
             name: 'uk_funding_types_label',
         },

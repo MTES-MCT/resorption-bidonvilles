@@ -11,7 +11,8 @@ function addColumnTo(queryInterface, Sequelize, table) {
 }
 
 function addConstraintTo(queryInterface, Sequelize, table) {
-    queryInterface.addConstraint(table, ['priority'], {
+    queryInterface.addConstraint(table, {
+    fields: ['priority'],
         type: 'check',
         name: 'check_priority_value',
         where: {

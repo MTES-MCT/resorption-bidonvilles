@@ -48,18 +48,16 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-                'role_permissions',
-                ['fk_role', 'fk_permission'],
-                {
+            'role_permissions', {
+            fields: ['fk_role', 'fk_permission'],
                     type: 'primary key',
                     name: 'pk_role_permissions',
                     transaction,
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'role_permissions',
-                ['fk_role'],
-                {
+            'role_permissions', {
+            fields: ['fk_role'],
                     type: 'foreign key',
                     name: 'fk_role_permissions_role',
                     references: {
@@ -72,9 +70,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'role_permissions',
-                ['fk_permission'],
-                {
+            'role_permissions', {
+            fields: ['fk_permission'],
                     type: 'foreign key',
                     name: 'fk_role_permissions_permission',
                     references: {

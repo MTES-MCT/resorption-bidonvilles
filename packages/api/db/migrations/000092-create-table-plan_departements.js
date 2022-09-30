@@ -44,18 +44,16 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-                'plan_departements',
-                ['fk_plan'],
-                {
+            'plan_departements', {
+            fields: ['fk_plan'],
                     type: 'unique',
                     name: 'uk_plan_departements',
                     transaction,
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'plan_departements',
-                ['fk_plan'],
-                {
+            'plan_departements', {
+            fields: ['fk_plan'],
                     type: 'foreign key',
                     name: 'fk_plan_departements_plan',
                     references: {
@@ -68,9 +66,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'plan_departements',
-                ['fk_departement'],
-                {
+            'plan_departements', {
+            fields: ['fk_departement'],
                     type: 'foreign key',
                     name: 'fk_plan_departements_departement',
                     references: {
@@ -83,9 +80,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'plan_departements',
-                ['created_by'],
-                {
+            'plan_departements', {
+            fields: ['created_by'],
                     type: 'foreign key',
                     name: 'fk_plan_departements_creator',
                     references: {
@@ -98,9 +94,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'plan_departements',
-                ['updated_by'],
-                {
+            'plan_departements', {
+            fields: ['updated_by'],
                     type: 'foreign key',
                     name: 'fk_plan_departements_editor',
                     references: {
