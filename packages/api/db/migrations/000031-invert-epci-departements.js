@@ -1,7 +1,7 @@
 const parser = require('neat-csv');
 const fs = require('fs');
 const path = require('path');
-const { sequelize } = require('../models');
+const sequelize = require('#db/sequelize');
 
 /**
  * Adds a column fk_departement to cities

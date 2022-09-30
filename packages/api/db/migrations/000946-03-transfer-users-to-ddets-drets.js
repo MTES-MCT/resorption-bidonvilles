@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-const { sequelize } = require('../models');
+const sequelize = require('#db/sequelize');
 
 function getRegions() {
     return sequelize.query('SELECT code, name FROM regions ORDER BY code',

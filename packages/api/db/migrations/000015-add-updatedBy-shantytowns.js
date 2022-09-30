@@ -1,4 +1,4 @@
-const { sequelize } = require('../models');
+const sequelize = require('#db/sequelize');
 
 function addColumn(queryInterface, Sequelize, tableName) {
     return queryInterface.addColumn(
