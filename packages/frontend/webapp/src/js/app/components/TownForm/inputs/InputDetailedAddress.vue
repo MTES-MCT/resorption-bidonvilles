@@ -5,6 +5,7 @@
         info="Saisissez ici toutes les informations qui, en plus de l'adresse, peuvent être utiles pour l'accès au site."
         v-model="input"
         cypressName="detailed_address"
+        rows="4"
     ></TextArea>
 </template>
 
