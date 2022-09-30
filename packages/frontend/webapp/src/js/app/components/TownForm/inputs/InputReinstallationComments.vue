@@ -6,6 +6,7 @@
         placeholder="Votre message"
         v-model="input"
         cypressName="reinstallation_comments"
+        rows="5"
     ></TextArea>
 </template>
 
