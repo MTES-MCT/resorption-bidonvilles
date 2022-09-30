@@ -16,10 +16,10 @@
             </div>
 
             <InputFieldType v-model="input.field_type"></InputFieldType>
-            <InputDetailedAddress
-                v-model="input.detailed_address"
-            ></InputDetailedAddress>
         </FormParagraph>
+        <InputDetailedAddress
+            v-model="input.detailed_address"
+        ></InputDetailedAddress>
 
         <FormParagraph
             title="Quel est le propriétaire ?"
