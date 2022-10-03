@@ -61,10 +61,6 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate) =
 
     return activities
         .map((activity) => {
-            if (planComments[activity.commentId] !== undefined) {
-                return null;
-            }
-
             const o = {
                 entity: 'comment',
                 action: 'creation',
@@ -90,6 +86,5 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate) =
 
             planComments[activity.commentId] = o;
             return o;
-        })
-        .filter(activity => activity !== null);
+        });
 };
