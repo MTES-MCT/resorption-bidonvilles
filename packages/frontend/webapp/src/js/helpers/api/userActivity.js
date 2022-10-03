@@ -22,7 +22,8 @@ export function listRegular(
                   "shantytownUpdate",
                   "shantytownComment",
                   "highCovidComment",
-                  "user"
+                  "user",
+                  "planComment"
               ]
             : activityFilter;
 

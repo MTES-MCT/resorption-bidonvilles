@@ -7,7 +7,7 @@
         "
         @click="routeToDetails"
     >
-        <aside class="mr-6">
+        <aside class="mr-6 self-start">
             <span
                 :class="
                     `${iconColor.background} ${iconColor.text} text-xl rounded-full inline-flex items-center justify-center w-12 h-12`
@@ -31,6 +31,9 @@
                         >({{ activity.shantytown.departement.code }})</span
                     >
                 </span>
+            </p>
+            <p class="mt-1" v-if="activity.plan">
+                <span class="font-bold">{{ activity.plan.name }}</span>
             </p>
             <ResorptionTargetTag
                 v-if="resorptionTarget"
@@ -170,6 +173,10 @@ export default {
                         return "";
                     }
 
+                    if (this.activity.plan) {
+                        return "dans le journal de l'action";
+                    }
+
                     return "dans le journal du site";
 
                 case "shantytown-creation":
@@ -249,6 +256,10 @@ export default {
                         return this.colors.red;
                     }
 
+                    if (this.activity.plan) {
+                        return this.colors.green;
+                    }
+
                     return this.colors.blue;
 
                 case "shantytown-creation":
@@ -279,6 +290,10 @@ export default {
             if (this.activity.entity === "comment") {
                 if (this.activity.highCovidComment) {
                     return this.$router.push("/covid-19");
+                } else if (this.activity.plan) {
+                    return this.$router.push(
+                        `/action/${this.activity.plan.id}/#comment`
+                    );
                 } else {
                     return this.$router.push(
                         `/site/${this.activity.shantytown.id}#message${this.activity.comment.id}`

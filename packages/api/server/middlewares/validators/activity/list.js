@@ -52,6 +52,7 @@ module.exports = [
                 'highCovidComment',
                 'user',
                 'onlyCovid',
+                'planComment',
             ];
             const unknownFilters = value.filter(s => !knownFilters.includes(s));
 
@@ -70,6 +71,7 @@ module.exports = [
             'shantytownComment',
             'highCovidComment',
             'user',
+            'planComment',
         ]),
 
     // location (type and code)
