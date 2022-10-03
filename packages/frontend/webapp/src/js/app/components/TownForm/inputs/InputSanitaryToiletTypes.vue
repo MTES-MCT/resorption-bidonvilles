@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import toiletTypes from "#app/utils/toilet_types";
+import toiletTypes from "#frontend/common/helpers/town/living_conditions/toilet_types";
 
 export default {
     props: {
