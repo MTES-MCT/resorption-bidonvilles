@@ -5,7 +5,7 @@
         @mouseleave="isHover = false"
     >
         <CommentModerationModal
-            v-if="activity.comment"
+            v-if="activity.comment && !activity.plan"
             ref="moderationModal"
             :comment="activity.comment"
         />
@@ -43,6 +43,12 @@
                             >({{ activity.shantytown.departement.code }})</span
                         ></Link
                     >
+                </p>
+                <p v-if="activity.plan">
+                    action :
+                    <Link :to="`/action/${activity.plan.id}`">{{
+                        activity.plan.name
+                    }}</Link>
                 </p>
                 <p v-if="activity.highCovidComment">
                     territoire(s) :
@@ -172,6 +178,13 @@ export default {
                 };
             }
 
+            if (this.activity.plan) {
+                return {
+                    text: "text-green600",
+                    bg: "bg-green500"
+                };
+            }
+
             return {
                 text: "text-orange600",
                 bg: "bg-orange600"
@@ -201,7 +214,11 @@ export default {
                         return "Nouveau message Covid-19";
                     }
 
-                    return "Nouveau message";
+                    if (this.activity.plan) {
+                        return "Nouveau message action";
+                    }
+
+                    return "Nouveau message site";
             }
         },
         bodyComponent() {
@@ -238,6 +255,10 @@ export default {
                     return "/covid-19";
                 }
 
+                if (this.activity.plan) {
+                    return `/action/${this.activity.plan.id}#comment`;
+                }
+
                 return `/site/${this.activity.shantytown.id}#message${this.activity.comment.id}`;
             }
 
@@ -266,6 +287,7 @@ export default {
             if (
                 this.activity.entity !== "comment" ||
                 this.activity.highCovidComment ||
+                this.activity.plan ||
                 this.variant === "small"
             ) {
                 return false;
