@@ -1,4 +1,5 @@
 import { findUserTowns, findTown } from "#helpers/town";
+import enrichShantytown from "#frontend/common/helpers/town/enrichShantytown";
 
 export default {
     state: {
@@ -62,7 +63,10 @@ export default {
 
     actions: {
         async fetchTowns({ state, commit, rootState }) {
-            const { user } = rootState.config.configuration;
+            const {
+                user,
+                field_types: fieldTypes
+            } = rootState.config.configuration;
             if (state.state === "loading") {
                 return;
             }
@@ -78,8 +82,14 @@ export default {
                     user.id,
                     "navigation_logs"
                 );
-                commit("setMyTownsItems", myTowns);
-                commit("setConsultedTownsItems", consultedTowns);
+                commit(
+                    "setMyTownsItems",
+                    myTowns.map(s => enrichShantytown(s, fieldTypes))
+                );
+                commit(
+                    "setConsultedTownsItems",
+                    consultedTowns.map(s => enrichShantytown(s, fieldTypes))
+                );
                 commit("setTownsState", "loaded");
             } catch (error) {
                 commit(
