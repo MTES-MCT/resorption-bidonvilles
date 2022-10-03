@@ -9,7 +9,7 @@ import {
     removeActorTheme,
     inviteNewActor
 } from "#helpers/api/town";
-import enrichShantytown from "#app/pages/TownsList/enrichShantytown";
+import enrichShantytown from "#frontend/common/helpers/town/enrichShantytown";
 import api from "#src/js/api";
 
 import activities from "./modules/activities";
@@ -210,6 +210,7 @@ const store = new Vuex.Store({
                 }
 
                 const originalTowns = await fetchAll();
+                console.log(originalTowns);
                 const towns = originalTowns.map(s =>
                     enrichShantytown(s, fieldTypes)
                 );
