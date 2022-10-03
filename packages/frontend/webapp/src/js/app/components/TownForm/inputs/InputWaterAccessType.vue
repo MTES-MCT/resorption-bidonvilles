@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import waterAccessTypes from "#app/utils/water_access_types";
+import waterAccessTypes from "#frontend/common/helpers/town/living_conditions/water_access_types";
 
 export default {
     props: {

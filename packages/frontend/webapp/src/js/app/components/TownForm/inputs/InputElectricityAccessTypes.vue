@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import electricityAccessTypes from "#app/utils/electricity_access_types";
+import electricityAccessTypes from "#frontend/common/helpers/town/living_conditions/electricity_access_types";
 
 export default {
     props: {
