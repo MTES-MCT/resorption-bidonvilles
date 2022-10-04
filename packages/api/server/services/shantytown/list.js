@@ -2,7 +2,7 @@ const shantytownModel = require('#server/models/shantytownModel');
 const ServiceError = require('#server/errors/ServiceError');
 
 
-module.exports = async (user, search = undefined) => {
+module.exports = async (user, search = '') => {
     let shantytowns;
     try {
         shantytowns = await shantytownModel.findAll(
