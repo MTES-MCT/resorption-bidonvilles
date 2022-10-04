@@ -94,7 +94,7 @@
 <script>
 import DetailsPanel from "#app/components/ui/details/DetailsPanel.vue";
 import TownDetailsPanelLivingConditionsSection from "./ui/TownDetailsPanelLivingConditionsSection";
-import { serializeLivingConditions } from "#frontend/common/helpers/town/living_conditions/serializeLivingConditions";
+import serializeLivingConditions from "#frontend/common/helpers/town/living_conditions/serializeLivingConditions";
 
 export default {
     props: {
