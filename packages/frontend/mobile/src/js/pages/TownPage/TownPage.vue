@@ -1,8 +1,26 @@
 <template>
     <div class="h-full">
-        <Layout>
+        <Layout v-if="this.state === 'loading'">
             <template v-slot:header>
                 <header>
+                    <div
+                        class="text-center text-primary text-display-lg font-bold mt-16"
+                    >
+                        <Spinner />
+                    </div>
+                </header>
+            </template>
+        </Layout>
+
+        <Layout v-else-if="this.state === 'loaded'">
+            <template v-slot:header>
+                <header>
+                    <p
+                        v-if="error !== null"
+                        class="text-center text-red text-display-lg mb-4"
+                    >
+                        {{ error }}
+                    </p>
                     <Container class="flex justify-end">
                         <Button
                             variant="textPrimary"
@@ -84,8 +102,7 @@ import TownPagePanelLivingConditions from "#src/js/pages/TownPage/TownPagePanelL
 
 import TownPagePanelJudicial from "./TownPagePanelJudicial.vue";
 import TownComments from "./comments/TownComments.vue";
-import { Button } from "@resorptionbidonvilles/ui";
-
+import { Button, Spinner } from "@resorptionbidonvilles/ui";
 import { mapGetters } from "vuex";
 
 export default {
@@ -97,7 +114,8 @@ export default {
         TownPagePanelPeople,
         TownPagePanelLivingConditions,
         TownPagePanelJudicial,
-        Button
+        Button,
+        Spinner
     },
     data() {
         return {
@@ -110,14 +128,10 @@ export default {
             state: "townsState"
         })
     },
-    async created() {
-        // changer en mounted + v-show
+    async mounted() {
         if (this.$store.state.towns.state !== "loaded") {
             await this.$store.dispatch("fetchTowns");
         }
-        this.$store.commit("setDetailedTown", this.$route.params.id);
-    },
-    async mounted() {
         if (
             this.$store.state.towns.detailedTown &&
             this.$store.state.towns.detailedTown.id ===
@@ -129,6 +143,7 @@ export default {
         try {
             this.$store.commit("SET_COMMENTS_ARE_OPEN", false);
             this.$store.commit("SET_COMMENTS_SCROLL", 0);
+            this.$store.commit("setDetailedTown", this.$route.params.id);
         } catch (error) {
             this.error = "Erreur: " + error.message;
         }
