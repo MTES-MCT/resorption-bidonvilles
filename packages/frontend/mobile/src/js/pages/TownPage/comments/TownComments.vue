@@ -24,12 +24,24 @@
         </template>
         <template v-slot:body>
             <Container>
-                <TownComment
-                    class="mb-4"
-                    v-for="comment in sortedComments"
-                    :key="comment.id"
-                    :comment="comment"
-                />
+                <template v-if="sortedComments.length > 0">
+                    <TownComment
+                        class="mb-4"
+                        v-for="comment in sortedComments"
+                        :key="comment.id"
+                        :comment="comment"
+                    />
+                </template>
+                <p class="text-center text-G600" v-else>
+                    Le journal du site est vide pour le moment
+                    <Button
+                        class="mt-6"
+                        icon="pencil-alt"
+                        iconPosition="left"
+                        @click="createNote"
+                        >Rédiger un message</Button
+                    >
+                </p>
             </Container>
         </template>
     </BottomSlidingBlock>
