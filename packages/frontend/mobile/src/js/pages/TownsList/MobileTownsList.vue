@@ -1,6 +1,6 @@
 <template>
     <Layout>
-        <template slot="header">
+        <template v-slot:header>
             <Container>
                 <header>
                     <h1 class="font-bold text-display-md">
@@ -9,7 +9,7 @@
                 </header>
             </Container>
         </template>
-        <template slot="scroll">
+        <template v-slot:scroll>
             <Container class="mt-6">
                 <div class="font-bold text-lg">
                     Mes sites ({{ myTowns.length }})
