@@ -44,6 +44,12 @@
                     <div
                         class="text-primary font-bold text-display-md mt-8 mb-4"
                     >
+                        Conditions de vie
+                    </div>
+                    <TownPagePanelLivingConditions :town="town" />
+                    <div
+                        class="text-primary font-bold text-display-md mt-8 mb-4"
+                    >
                         Procédures judiciaires
                     </div>
                     <TownPagePanelJudicial :town="town" />
@@ -74,6 +80,8 @@ import Layout from "#src/js/components/Layout.vue";
 import Container from "#src/js/components/Container.vue";
 import TownPagePanelCharacteristics from "#src/js/pages/TownPage/TownPagePanelCharacteristics.vue";
 import TownPagePanelPeople from "#src/js/pages/TownPage/TownPagePanelPeople.vue";
+import TownPagePanelLivingConditions from "#src/js/pages/TownPage/TownPagePanelLivingConditions.vue";
+
 import TownPagePanelJudicial from "./TownPagePanelJudicial.vue";
 import TownComments from "./comments/TownComments.vue";
 import { Button } from "@resorptionbidonvilles/ui";
@@ -87,6 +95,7 @@ export default {
         TownComments,
         TownPagePanelCharacteristics,
         TownPagePanelPeople,
+        TownPagePanelLivingConditions,
         TownPagePanelJudicial,
         Button
     },
@@ -101,11 +110,13 @@ export default {
             state: "townsState"
         })
     },
-    async mounted() {
-        if (this.state !== "loaded") {
+    async created() {
+        if (this.$store.state.towns.state !== "loaded") {
             await this.$store.dispatch("fetchTowns");
         }
-
+        this.$store.commit("setDetailedTown", this.$route.params.id);
+    },
+    async mounted() {
         if (
             this.$store.state.towns.detailedTown &&
             this.$store.state.towns.detailedTown.id ===
@@ -117,7 +128,6 @@ export default {
         try {
             this.$store.commit("SET_COMMENTS_ARE_OPEN", false);
             this.$store.commit("SET_COMMENTS_SCROLL", 0);
-            await this.$store.commit("setDetailedTown", this.$route.params.id);
         } catch (error) {
             this.error = "Erreur: " + error.message;
         }
