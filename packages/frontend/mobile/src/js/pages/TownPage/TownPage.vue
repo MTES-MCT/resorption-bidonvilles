@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="h-full">
         <Layout>
             <template v-slot:header>
                 <header>
@@ -111,6 +111,7 @@ export default {
         })
     },
     async created() {
+        // changer en mounted + v-show
         if (this.$store.state.towns.state !== "loaded") {
             await this.$store.dispatch("fetchTowns");
         }
