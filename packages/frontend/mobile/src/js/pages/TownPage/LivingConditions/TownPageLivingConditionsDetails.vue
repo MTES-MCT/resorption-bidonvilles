@@ -7,7 +7,7 @@
                 @click="changeFilter(item.id)"
                 :class="[
                     'flex-1 py-2 my-2',
-                    status[item.id].length === 0 ? 'bg-G400' : '',
+                    status[item.id].length === 0 ? 'bg-G200 text-G500' : '',
                     select === item.id
                         ? 'text-primary border-b border-b-blue'
                         : ''
