@@ -210,7 +210,6 @@ const store = new Vuex.Store({
                 }
 
                 const originalTowns = await fetchAll();
-                console.log(originalTowns);
                 const towns = originalTowns.map(s =>
                     enrichShantytown(s, fieldTypes)
                 );
