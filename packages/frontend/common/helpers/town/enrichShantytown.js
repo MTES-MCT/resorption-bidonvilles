@@ -6,7 +6,7 @@
  * @returns {EnrichedShantytown}
  */
 
-import policeSiren from "../assets/police_siren.svg";
+import policeSiren from "./assets/police_siren.svg";
 import formatDateSince from "../formatDateSince";
 import getLabelForLivingConditionDetail from "./getLabelForLivingConditionDetail";
 
