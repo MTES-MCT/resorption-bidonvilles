@@ -62,6 +62,9 @@ export default {
     components: {
         Icon
     },
+    mounted() {
+        this.initTab();
+    },
     methods: {
         changeFilter(value) {
             if (this.status[value].length !== 0) {
@@ -74,6 +77,13 @@ export default {
                 negative: "exclamation-triangle",
                 unknown: "question"
             }[value];
+        },
+        initTab() {
+            this.items.forEach(item => {
+                if (this.select === null && this.status[item.id].length !== 0) {
+                    this.select = item.id;
+                }
+            });
         }
     }
 };
