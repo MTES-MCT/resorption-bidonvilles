@@ -13,7 +13,7 @@
                         : ''
                 ]"
             >
-                <Icon :class="'mr-1'" :icon="icon[item.id]" />
+                <Icon :class="'mr-1'" :icon="icon(item.id)" />
                 {{ item.label }}
             </div>
         </div>
