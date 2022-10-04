@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { serializeLivingConditions } from "#frontend/common/helpers/town/living_conditions/serializeLivingConditions";
+import serializeLivingConditions from "#frontend/common/helpers/town/living_conditions/serializeLivingConditions";
 import TownPagePanelLivingConditionsSection from "./LivingConditions/TownPagePanelLivingConditionsSection.vue";
 
 export default {

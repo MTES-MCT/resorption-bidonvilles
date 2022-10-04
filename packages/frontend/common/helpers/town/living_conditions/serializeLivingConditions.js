@@ -2,7 +2,7 @@ import waterAccessTypes from "./water_access_types";
 import toiletTypes from "./toilet_types";
 import electricityAccessTypes from "./electricity_access_types";
 
-export function serializeLivingConditions(town) {
+export default (town) => {
     const response = {
         water: [],
         sanitary: [],
@@ -119,4 +119,4 @@ export function serializeLivingConditions(town) {
     }
 
     return response;
-}
+};
