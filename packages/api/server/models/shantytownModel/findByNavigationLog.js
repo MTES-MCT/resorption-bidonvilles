@@ -22,5 +22,12 @@ module.exports = async (user) => {
     if (ids.length === 0) {
         return [];
     }
-    return findAll(user, [{ shantytown_id: ids.map(({ shantytown_id: id }) => id) }]);
+    return findAll(user, [
+        { shantytown_id: ids.map(({ shantytown_id: id }) => id) },
+        {
+            is_closed: {
+                query: 'shantytowns.closed_at', not: false, value: null,
+            },
+        },
+    ]);
 };
