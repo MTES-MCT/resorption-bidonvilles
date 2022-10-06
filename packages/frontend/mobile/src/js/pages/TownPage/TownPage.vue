@@ -71,6 +71,12 @@
                         Procédures judiciaires
                     </div>
                     <TownPagePanelJudicial :town="town" />
+                    <div
+                        class="text-primary font-bold text-display-md mt-8 mb-4"
+                    >
+                        Intervenants
+                    </div>
+                    <TownPagePanelActors :town="town" />
                 </Container>
             </template>
             <template v-slot:footer>
@@ -96,10 +102,10 @@
 <script>
 import Layout from "#src/js/components/Layout.vue";
 import Container from "#src/js/components/Container.vue";
-import TownPagePanelCharacteristics from "#src/js/pages/TownPage/TownPagePanelCharacteristics.vue";
-import TownPagePanelPeople from "#src/js/pages/TownPage/TownPagePanelPeople.vue";
-import TownPagePanelLivingConditions from "#src/js/pages/TownPage/TownPagePanelLivingConditions.vue";
-
+import TownPagePanelCharacteristics from "./TownPagePanelCharacteristics.vue";
+import TownPagePanelPeople from "./TownPagePanelPeople.vue";
+import TownPagePanelLivingConditions from "./TownPagePanelLivingConditions.vue";
+import TownPagePanelActors from "./TownPagePanelActors.vue";
 import TownPagePanelJudicial from "./TownPagePanelJudicial.vue";
 import TownComments from "./comments/TownComments.vue";
 import { Button, Spinner } from "@resorptionbidonvilles/ui";
@@ -113,6 +119,7 @@ export default {
         TownPagePanelCharacteristics,
         TownPagePanelPeople,
         TownPagePanelLivingConditions,
+        TownPagePanelActors,
         TownPagePanelJudicial,
         Button,
         Spinner
