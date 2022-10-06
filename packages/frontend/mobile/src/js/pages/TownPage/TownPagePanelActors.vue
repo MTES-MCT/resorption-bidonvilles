@@ -1,5 +1,8 @@
 <template>
     <div>
+        <div v-if="town.actors.length === 0">
+            <p class="italic">Aucun intervenant connu sur ce site</p>
+        </div>
         <div v-for="actor in town.actors" :key="actor.id">
             <TownPageInfo
                 :icon="'user'"
