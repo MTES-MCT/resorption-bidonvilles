@@ -7,6 +7,11 @@ module.exports = user => query(
                 query: 'shantytown_actors.fk_user', operator: '=', value: user.id,
             },
         },
+        {
+            is_closed: {
+                query: 'shantytowns.closed_at', not: false, value: null,
+            },
+        },
     ],
     undefined, // order
     user,
