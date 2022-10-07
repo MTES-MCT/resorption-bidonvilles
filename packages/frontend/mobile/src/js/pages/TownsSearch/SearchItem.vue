@@ -6,8 +6,13 @@
         <span class="flex-1 leading-4"
             >{{ item.usename }}<br /><span class="text-G400">{{
                 item.city.name
-            }}</span></span
+            }}</span
+            ><br />
+            <span class="italic" v-if="item.closedAt">
+                Fermé depuis {{ formatDateSince(item.closedAt) }}
+            </span></span
         >
+
         <span class="text-primary text-sm"
             ><Icon icon="share-square" class="text-primary" /> Choisir</span
         >
@@ -15,6 +20,8 @@
 </template>
 
 <script>
+import formatDateSince from "../TownPage/utils/formatDateSince";
+
 import { Icon } from "@resorptionbidonvilles/ui";
 
 export default {
@@ -28,6 +35,7 @@ export default {
         }
     },
     methods: {
+        formatDateSince,
         select() {
             const listener = this.$store.state.search.listener;
             if (listener) {
