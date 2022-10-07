@@ -12,7 +12,7 @@
             </template>
         </Layout>
 
-        <Layout v-else-if="this.state === 'loaded'">
+        <Layout v-else-if="this.town !== null">
             <template v-slot:header>
                 <header>
                     <p
