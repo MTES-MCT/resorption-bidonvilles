@@ -131,16 +131,6 @@ function isUpgraded() {
 }
 
 /**
- * Checks whether the user has an unread changelog pending
- *
- * @returns {boolean}
- */
-function hasNoPendingChangelog() {
-    const { changelog } = getConfig();
-    return !changelog || changelog.length === 0;
-}
-
-/**
  * List of actual guards used by the routes below
  *
  * @type {Object.<string,Function>}
@@ -173,7 +163,6 @@ const guardians = {
         { checker: isPermitted, target: "/", saveEntrypoint: false },
         { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
         { checker: isUpgraded, target: "/mise-a-niveau" },
-        { checker: hasNoPendingChangelog, target: "/nouvelle-version" },
         { checker: saveTabNavigation }
     ])
 };
