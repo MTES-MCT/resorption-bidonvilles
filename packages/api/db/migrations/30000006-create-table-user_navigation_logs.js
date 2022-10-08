@@ -30,9 +30,8 @@ module.exports = {
 
             // on crée toutes les contraintes
             .then(() => queryInterface.addConstraint(
-                'user_navigation_logs',
-                ['fk_user'],
-                {
+                'user_navigation_logs', {
+                    fields: ['fk_user'],
                     type: 'foreign key',
                     name: 'fk_user_navigation_logs_user_id',
                     references: {

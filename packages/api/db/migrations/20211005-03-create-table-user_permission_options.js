@@ -18,18 +18,16 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-                'user_permission_options',
-                ['fk_user', 'fk_option'],
-                {
+                'user_permission_options', {
+                    fields: ['fk_user', 'fk_option'],
                     type: 'primary key',
                     name: 'pk_user_permission_options',
                     transaction,
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'user_permission_options',
-                ['fk_user'],
-                {
+                'user_permission_options', {
+                    fields: ['fk_user'],
                     type: 'foreign key',
                     name: 'fk_user_permission_options_user',
                     references: {
@@ -42,9 +40,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'user_permission_options',
-                ['fk_option'],
-                {
+                'user_permission_options', {
+                    fields: ['fk_option'],
                     type: 'foreign key',
                     name: 'fk_user_permission_options_option',
                     references: {

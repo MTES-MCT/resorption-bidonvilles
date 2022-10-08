@@ -71,9 +71,8 @@ module.exports = {
                 transaction,
             },
         ).then(() => queryInterface.addConstraint(
-            'shantytown_covid_comments',
-            ['fk_comment'],
-            {
+            'shantytown_covid_comments', {
+                fields: ['fk_comment'],
                 type: 'foreign key',
                 name: 'fk_shantytown_covid_comments_comment',
                 references: {
@@ -86,9 +85,8 @@ module.exports = {
             },
         ))
             .then(() => queryInterface.addConstraint(
-                'shantytown_covid_comments',
-                ['created_by'],
-                {
+                'shantytown_covid_comments', {
+                    fields: ['created_by'],
                     type: 'foreign key',
                     name: 'fk_shantytown_covid_comments_creator',
                     references: {
@@ -101,9 +99,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'shantytown_covid_comments',
-                ['updated_by'],
-                {
+                'shantytown_covid_comments', {
+                    fields: ['updated_by'],
                     type: 'foreign key',
                     name: 'fk_shantytown_covid_comments_editor',
                     references: {

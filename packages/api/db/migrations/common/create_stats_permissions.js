@@ -23,9 +23,8 @@ module.exports = (queryInterface, Sequelize, transaction) => queryInterface.crea
     },
 )
     .then(() => queryInterface.addConstraint(
-        'stats_permissions',
-        ['fk_permission'],
-        {
+        'stats_permissions', {
+            fields: ['fk_permission'],
             type: 'foreign key',
             name: 'fk_stats_permissions_permission',
             references: {

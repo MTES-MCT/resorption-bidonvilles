@@ -84,18 +84,16 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-                'plan_states',
-                ['date', 'fk_plan'],
-                {
+                'plan_states', {
+                    fields: ['date', 'fk_plan'],
                     type: 'unique',
                     name: 'uk_plan_states_date_unicity',
                     transaction,
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'plan_states',
-                ['fk_plan'],
-                {
+                'plan_states', {
+                    fields: ['fk_plan'],
                     type: 'foreign key',
                     name: 'fk_plan_states_plan',
                     references: {
@@ -108,9 +106,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'plan_states',
-                ['fk_audience_in'],
-                {
+                'plan_states', {
+                    fields: ['fk_audience_in'],
                     type: 'foreign key',
                     name: 'fk_plan_states_audience_in',
                     references: {
@@ -123,9 +120,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'plan_states',
-                ['fk_audience_out_positive'],
-                {
+                'plan_states', {
+                    fields: ['fk_audience_out_positive'],
                     type: 'foreign key',
                     name: 'fk_plan_states_audience_out_positive',
                     references: {
@@ -138,9 +134,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'plan_states',
-                ['fk_audience_out_abandoned'],
-                {
+                'plan_states', {
+                    fields: ['fk_audience_out_abandoned'],
                     type: 'foreign key',
                     name: 'fk_plan_states_audience_out_abandoned',
                     references: {
@@ -153,9 +148,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'plan_states',
-                ['fk_audience_out_excluded'],
-                {
+                'plan_states', {
+                    fields: ['fk_audience_out_excluded'],
                     type: 'foreign key',
                     name: 'fk_plan_states_audience_out_excluded',
                     references: {
@@ -168,9 +162,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'plan_states',
-                ['fk_indicateurs_commun'],
-                {
+                'plan_states', {
+                    fields: ['fk_indicateurs_commun'],
                     type: 'foreign key',
                     name: 'fk_plan_states_indicateurs_commun',
                     references: {
@@ -183,9 +176,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'plan_states',
-                ['fk_indicateurs_sante'],
-                {
+                'plan_states', {
+                    fields: ['fk_indicateurs_sante'],
                     type: 'foreign key',
                     name: 'fk_plan_states_indicateurs_sante',
                     references: {
@@ -198,9 +190,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'plan_states',
-                ['fk_indicateurs_logement'],
-                {
+                'plan_states', {
+                    fields: ['fk_indicateurs_logement'],
                     type: 'foreign key',
                     name: 'fk_plan_states_indicateurs_logement',
                     references: {
@@ -213,9 +204,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'plan_states',
-                ['fk_indicateurs_formation'],
-                {
+                'plan_states', {
+                    fields: ['fk_indicateurs_formation'],
                     type: 'foreign key',
                     name: 'fk_plan_states_indicateurs_formation',
                     references: {
@@ -228,9 +218,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'plan_states',
-                ['fk_indicateurs_education'],
-                {
+                'plan_states', {
+                    fields: ['fk_indicateurs_education'],
                     type: 'foreign key',
                     name: 'fk_plan_states_indicateurs_education',
                     references: {
@@ -243,9 +232,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'plan_states',
-                ['fk_indicateurs_securisation'],
-                {
+                'plan_states', {
+                    fields: ['fk_indicateurs_securisation'],
                     type: 'foreign key',
                     name: 'fk_plan_states_indicateurs_securisation',
                     references: {
@@ -258,9 +246,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'plan_states',
-                ['created_by'],
-                {
+                'plan_states', {
+                    fields: ['created_by'],
                     type: 'foreign key',
                     name: 'fk_plan_states_creator',
                     references: {
@@ -273,9 +260,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'plan_states',
-                ['updated_by'],
-                {
+                'plan_states', {
+                    fields: ['updated_by'],
                     type: 'foreign key',
                     name: 'fk_plan_states_editor',
                     references: {

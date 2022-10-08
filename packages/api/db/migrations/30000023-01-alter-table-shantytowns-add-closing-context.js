@@ -33,9 +33,8 @@ module.exports = {
 
         // on s'assure que closing_context n'est pas renseigné si le site n'est pas fermé (i.e closed_at est null)
         await queryInterface.addConstraint(
-            'shantytowns',
-            ['closed_at', 'closing_context'],
-            {
+            'shantytowns', {
+                fields: ['closed_at', 'closing_context'],
                 type: 'check',
                 name: 'check_context-is-null-if-closed_at-is-null',
                 where: {

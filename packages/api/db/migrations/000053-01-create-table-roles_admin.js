@@ -29,9 +29,8 @@ module.exports = {
                 transaction,
             },
         ).then(() => queryInterface.addConstraint(
-            'roles_admin',
-            ['name'],
-            {
+            'roles_admin', {
+                fields: ['name'],
                 type: 'unique',
                 name: 'uk_roles_admin_name',
                 transaction,

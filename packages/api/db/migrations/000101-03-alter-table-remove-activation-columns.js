@@ -45,9 +45,8 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-                'users',
-                ['activated_by'],
-                {
+                'users', {
+                    fields: ['activated_by'],
                     type: 'foreign key',
                     name: 'fk_users_activated_by',
                     references: {

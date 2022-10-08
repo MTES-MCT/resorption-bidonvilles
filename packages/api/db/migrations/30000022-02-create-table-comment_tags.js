@@ -8,16 +8,16 @@ module.exports = {
             {
                 uid: {
                     type: Sequelize.STRING(50),
-                    primaryKey: true
+                    primaryKey: true,
                 },
                 tag: {
                     type: Sequelize.STRING(150),
                     allowNull: false,
-                    unique: true
+                    unique: true,
                 },
                 fk_comment_tag_type: {
                     type: Sequelize.STRING(50),
-                    allowNull: false
+                    allowNull: false,
                 },
             },
             { transaction },
@@ -25,9 +25,8 @@ module.exports = {
 
         // on crée toutes les contraintes
         await queryInterface.addConstraint(
-            'comment_tags',
-            ['fk_comment_tag_type'],
-            {
+            'comment_tags', {
+                fields: ['fk_comment_tag_type'],
                 type: 'foreign key',
                 name: 'fk_comment_tag_types_uid',
                 references: {

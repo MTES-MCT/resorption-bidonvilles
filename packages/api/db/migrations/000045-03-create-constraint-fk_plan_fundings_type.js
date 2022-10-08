@@ -1,9 +1,8 @@
 module.exports = {
 
     up: queryInterface => queryInterface.addConstraint(
-        'plan_fundings',
-        ['fk_type'],
-        {
+        'plan_fundings', {
+            fields: ['fk_type'],
             type: 'foreign key',
             name: 'fk_plan_fundings_type',
             references: {

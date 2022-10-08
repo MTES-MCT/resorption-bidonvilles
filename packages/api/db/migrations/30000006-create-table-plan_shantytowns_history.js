@@ -42,9 +42,8 @@ module.exports = {
 
         await Promise.all([
             queryInterface.addConstraint(
-                'plan_shantytowns_history',
-                ['fk_plan'],
-                {
+                'plan_shantytowns_history', {
+                    fields: ['fk_plan'],
                     type: 'foreign key',
                     name: 'fk_plan_shantytowns_history_plan',
                     references: {
@@ -57,9 +56,8 @@ module.exports = {
                 },
             ),
             queryInterface.addConstraint(
-                'plan_shantytowns_history',
-                ['fk_shantytown'],
-                {
+                'plan_shantytowns_history', {
+                    fields: ['fk_shantytown'],
                     type: 'foreign key',
                     name: 'fk_plan_shantytowns_history_shantytown',
                     references: {
@@ -72,9 +70,8 @@ module.exports = {
                 },
             ),
             queryInterface.addConstraint(
-                'plan_shantytowns_history',
-                ['created_by'],
-                {
+                'plan_shantytowns_history', {
+                    fields: ['created_by'],
                     type: 'foreign key',
                     name: 'fk_plan_shantytowns_history_creator',
                     references: {
@@ -87,9 +84,8 @@ module.exports = {
                 },
             ),
             queryInterface.addConstraint(
-                'plan_shantytowns_history',
-                ['updated_by'],
-                {
+                'plan_shantytowns_history', {
+                    fields: ['updated_by'],
                     type: 'foreign key',
                     name: 'fk_plan_shantytowns_history_editor',
                     references: {

@@ -29,9 +29,8 @@ module.exports = {
             { transaction },
         )
             .then(() => queryInterface.addConstraint(
-                'users',
-                ['fk_ngo'],
-                {
+                'users', {
+                    fields: ['fk_ngo'],
                     type: 'foreign key',
                     name: 'fk_users_ngo',
                     references: {

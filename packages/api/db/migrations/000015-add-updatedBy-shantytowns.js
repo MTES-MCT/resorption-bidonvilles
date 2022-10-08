@@ -1,4 +1,4 @@
-const { sequelize } = require('../models');
+const sequelize = require('#db/sequelize');
 
 function addColumn(queryInterface, Sequelize, tableName) {
     return queryInterface.addColumn(
@@ -12,7 +12,8 @@ function addColumn(queryInterface, Sequelize, tableName) {
 }
 
 function addConstraint(queryInterface, tableName) {
-    queryInterface.addConstraint(tableName, ['updated_by'], {
+    queryInterface.addConstraint(tableName, {
+        fields: ['updated_by'],
         type: 'foreign key',
         name: 'fk_shantytowns_editor',
         references: {

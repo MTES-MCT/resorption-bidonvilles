@@ -48,9 +48,8 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-                'plan_departements_history',
-                ['fk_plan'],
-                {
+                'plan_departements_history', {
+                    fields: ['fk_plan'],
                     type: 'foreign key',
                     name: 'fk_plan_departements_history_plan',
                     references: {
@@ -63,9 +62,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'plan_departements_history',
-                ['fk_departement'],
-                {
+                'plan_departements_history', {
+                    fields: ['fk_departement'],
                     type: 'foreign key',
                     name: 'fk_plan_departements_history_departement',
                     references: {
@@ -78,9 +76,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'plan_departements_history',
-                ['created_by'],
-                {
+                'plan_departements_history', {
+                    fields: ['created_by'],
                     type: 'foreign key',
                     name: 'fk_plan_departements_history_creator',
                     references: {
@@ -93,9 +90,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'plan_departements_history',
-                ['updated_by'],
-                {
+                'plan_departements_history', {
+                    fields: ['updated_by'],
                     type: 'foreign key',
                     name: 'fk_plan_departements_history_editor',
                     references: {

@@ -25,9 +25,8 @@ module.exports = {
 
         await Promise.all([
             queryInterface.addConstraint(
-                'shantytown_incoming_towns',
-                ['fk_shantytown'],
-                {
+                'shantytown_incoming_towns', {
+                    fields: ['fk_shantytown'],
                     type: 'foreign key',
                     name: 'fk_shantytown_incoming_towns__original_town',
                     references: {
@@ -40,9 +39,8 @@ module.exports = {
                 },
             ),
             queryInterface.addConstraint(
-                'shantytown_incoming_towns',
-                ['fk_incoming_town'],
-                {
+                'shantytown_incoming_towns', {
+                    fields: ['fk_incoming_town'],
                     type: 'foreign key',
                     name: 'fk_shantytown_incoming_towns__incoming_town',
                     references: {
@@ -55,9 +53,8 @@ module.exports = {
                 },
             ),
             queryInterface.addConstraint(
-                'shantytown_incoming_towns',
-                ['fk_shantytown', 'fk_incoming_town'],
-                {
+                'shantytown_incoming_towns', {
+                    fields: ['fk_shantytown', 'fk_incoming_town'],
                     type: 'check',
                     name: 'check_town_does_not_reference_self',
                     where: {

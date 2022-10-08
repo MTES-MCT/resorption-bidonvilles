@@ -25,7 +25,8 @@ module.exports = {
             },
         },
     )
-        .then(() => queryInterface.addConstraint('social_origins', ['label'], {
+        .then(() => queryInterface.addConstraint('social_origins', {
+            fields: ['label'],
             type: 'unique',
             name: 'uk_social_origins_label',
         }))

@@ -189,7 +189,8 @@ module.exports = {
 
         await Promise.all([
             // create constraints
-            queryInterface.addConstraint('ShantytownClosingSolutionHistories', ['fk_shantytown'], {
+            queryInterface.addConstraint('ShantytownClosingSolutionHistories', {
+                fields: ['fk_shantytown'],
                 type: 'foreign key',
                 name: 'fk_shantytown_closing_solutions_shantytown',
                 references: {
@@ -201,7 +202,8 @@ module.exports = {
                 transaction,
             }),
 
-            queryInterface.addConstraint('ShantytownClosingSolutionHistories', ['fk_closing_solution'], {
+            queryInterface.addConstraint('ShantytownClosingSolutionHistories', {
+                fields: ['fk_closing_solution'],
                 type: 'foreign key',
                 name: 'fk_shantytown_closing_solutions_solution',
                 references: {

@@ -90,7 +90,8 @@ function createTable(queryInterface, Sequelize, name, additionalColumns = {}) {
         }, additionalColumns),
     )
         .then(() => Promise.all([
-            queryInterface.addConstraint(name, ['fk_city'], {
+            queryInterface.addConstraint(name, {
+                fields: ['fk_city'],
                 type: 'foreign key',
                 name: 'fk_shantytowns_city',
                 references: {
@@ -101,7 +102,8 @@ function createTable(queryInterface, Sequelize, name, additionalColumns = {}) {
                 onDelete: 'restrict',
             }),
 
-            queryInterface.addConstraint(name, ['fk_field_type'], {
+            queryInterface.addConstraint(name, {
+                fields: ['fk_field_type'],
                 type: 'foreign key',
                 name: 'fk_shantytowns_field_type',
                 references: {
@@ -112,7 +114,8 @@ function createTable(queryInterface, Sequelize, name, additionalColumns = {}) {
                 onDelete: 'restrict',
             }),
 
-            queryInterface.addConstraint(name, ['fk_owner_type'], {
+            queryInterface.addConstraint(name, {
+                fields: ['fk_owner_type'],
                 type: 'foreign key',
                 name: 'fk_shantytowns_owner_type',
                 references: {
@@ -123,7 +126,8 @@ function createTable(queryInterface, Sequelize, name, additionalColumns = {}) {
                 onDelete: 'restrict',
             }),
 
-            queryInterface.addConstraint(name, ['created_by'], {
+            queryInterface.addConstraint(name, {
+                fields: ['created_by'],
                 type: 'foreign key',
                 name: 'fk_shantytowns_creator',
                 references: {
@@ -134,7 +138,8 @@ function createTable(queryInterface, Sequelize, name, additionalColumns = {}) {
                 onDelete: 'restrict',
             }),
 
-            queryInterface.addConstraint(name, ['closed_at'], {
+            queryInterface.addConstraint(name, {
+                fields: ['closed_at'],
                 type: 'check',
                 name: 'check_closed_after_built',
                 where: {
@@ -158,7 +163,8 @@ function createTable(queryInterface, Sequelize, name, additionalColumns = {}) {
                 },
             }),
 
-            queryInterface.addConstraint(name, ['closed_at'], {
+            queryInterface.addConstraint(name, {
+                fields: ['closed_at'],
                 type: 'check',
                 name: 'check_closed_at_notNull',
                 where: {

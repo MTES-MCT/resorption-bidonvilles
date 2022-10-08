@@ -1,8 +1,8 @@
 module.exports = {
 
     up: queryInterface => queryInterface.addConstraint(
-        'ngos',
-        ['created_by'], {
+        'ngos', {
+            fields: ['created_by'],
             type: 'foreign key',
             name: 'fk_ngos_creator',
             references: {

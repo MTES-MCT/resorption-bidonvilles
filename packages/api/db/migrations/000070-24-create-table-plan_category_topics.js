@@ -39,9 +39,8 @@ module.exports = {
                 transaction,
             },
         ).then(() => queryInterface.addConstraint(
-            'plan_category_topics',
-            ['fk_plan_category'],
-            {
+            'plan_category_topics', {
+                fields: ['fk_plan_category'],
                 type: 'foreign key',
                 name: 'fk_plan_category_topics_category',
                 references: {
@@ -53,9 +52,8 @@ module.exports = {
                 transaction,
             },
         )).then(() => queryInterface.addConstraint(
-            'plan_category_topics',
-            ['fk_topic'],
-            {
+            'plan_category_topics', {
+                fields: ['fk_topic'],
                 type: 'foreign key',
                 name: 'fk_plan_category_topics_topic',
                 references: {
@@ -68,9 +66,8 @@ module.exports = {
             },
         ))
             .then(() => queryInterface.addConstraint(
-                'plan_category_topics',
-                ['created_by'],
-                {
+                'plan_category_topics', {
+                    fields: ['created_by'],
                     type: 'foreign key',
                     name: 'fk_plan_category_topics_creator',
                     references: {
@@ -83,9 +80,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'plan_category_topics',
-                ['updated_by'],
-                {
+                'plan_category_topics', {
+                    fields: ['updated_by'],
                     type: 'foreign key',
                     name: 'fk_plan_category_topics_editor',
                     references: {

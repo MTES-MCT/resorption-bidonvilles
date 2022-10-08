@@ -49,18 +49,16 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-                'finances',
-                ['year', 'fk_plan'],
-                {
+                'finances', {
+                    fields: ['year', 'fk_plan'],
                     type: 'unique',
                     name: 'uk_finances_year_unicity',
                     transaction,
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'finances',
-                ['fk_plan'],
-                {
+                'finances', {
+                    fields: ['fk_plan'],
                     type: 'foreign key',
                     name: 'fk_finances_plan',
                     references: {
@@ -73,9 +71,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'finances',
-                ['created_by'],
-                {
+                'finances', {
+                    fields: ['created_by'],
                     type: 'foreign key',
                     name: 'fk_finances_creator',
                     references: {
@@ -88,9 +85,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'finances',
-                ['updated_by'],
-                {
+                'finances', {
+                    fields: ['updated_by'],
                     type: 'foreign key',
                     name: 'fk_finances_editor',
                     references: {

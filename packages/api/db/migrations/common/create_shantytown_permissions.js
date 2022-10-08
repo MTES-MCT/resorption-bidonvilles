@@ -27,9 +27,8 @@ module.exports = (queryInterface, Sequelize, transaction) => queryInterface.crea
     },
 )
     .then(() => queryInterface.addConstraint(
-        'shantytown_permissions',
-        ['fk_permission'],
-        {
+        'shantytown_permissions', {
+            fields: ['fk_permission'],
             type: 'foreign key',
             name: 'fk_shantytown_permissions_permission',
             references: {
