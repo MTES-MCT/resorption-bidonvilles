@@ -8,7 +8,7 @@
                 item.city.name
             }}</span
             ><br />
-            <span class="italic" v-if="item.closedAt">
+            <span class="text-red font-bold" v-if="item.closedAt">
                 Fermé depuis {{ formatDateSince(item.closedAt) }}
             </span></span
         >
