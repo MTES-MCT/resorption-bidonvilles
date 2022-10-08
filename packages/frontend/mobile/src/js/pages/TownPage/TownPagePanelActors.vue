@@ -5,7 +5,7 @@
         </div>
         <div v-for="actor in town.actors" :key="actor.id">
             <TownPageInfo
-                :icon="'user'"
+                icon="user"
                 :title="
                     `${actor.first_name} ${actor.last_name} ${actor.organization.name}`
                 "
