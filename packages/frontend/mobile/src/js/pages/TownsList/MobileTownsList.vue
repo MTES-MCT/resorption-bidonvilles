@@ -14,8 +14,13 @@
                 <div class="font-bold text-lg">
                     Mes sites ({{ myTowns.length }})
                 </div>
-                <div class="italic" v-if="myTowns.length === 0">
-                    vous n'intervenez sur aucun site
+                <div class="italic">
+                    <span v-if="state !== 'loaded'"
+                        >chargement en cours...</span
+                    >
+                    <span v-else-if="myTowns.length === 0"
+                        >vous n'intervenez sur aucun site</span
+                    >
                 </div>
             </Container>
             <TownCarousel :towns="myTowns" />
@@ -24,8 +29,13 @@
                 <div class="font-bold text-lg">
                     Sites récemment consultés ({{ consultedTowns.length }})
                 </div>
-                <div class="italic" v-if="consultedTowns.length === 0">
-                    vous n'avez consulté aucun site récemment
+                <div class="italic">
+                    <span v-if="state !== 'loaded'"
+                        >chargement en cours...</span
+                    >
+                    <span v-else-if="consultedTowns.length === 0"
+                        >vous n'avez consulté aucun site récemment</span
+                    >
                 </div>
             </Container>
             <TownCarousel :towns="consultedTowns" />
