@@ -25,8 +25,8 @@ module.exports = async (user) => {
     return findAll(user, [
         { shantytown_id: ids.map(({ shantytown_id: id }) => id) },
         {
-            is_closed: {
-                query: 'shantytowns.closed_at', not: false, value: null,
+            closed_at: {
+                value: null,
             },
         },
     ]);

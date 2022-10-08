@@ -8,9 +8,7 @@ module.exports = user => query(
             },
         },
         {
-            is_closed: {
-                query: 'shantytowns.closed_at', not: false, value: null,
-            },
+            closed_at: { value: null },
         },
     ],
     undefined, // order
