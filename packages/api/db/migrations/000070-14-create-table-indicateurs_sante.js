@@ -60,8 +60,8 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-            'indicateurs_sante', {
-            fields: ['created_by'],
+                'indicateurs_sante', {
+                    fields: ['created_by'],
                     type: 'foreign key',
                     name: 'fk_indicateurs_sante_creator',
                     references: {
@@ -74,8 +74,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-            'indicateurs_sante', {
-            fields: ['updated_by'],
+                'indicateurs_sante', {
+                    fields: ['updated_by'],
                     type: 'foreign key',
                     name: 'fk_indicateurs_sante_editor',
                     references: {

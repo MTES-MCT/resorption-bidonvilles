@@ -13,8 +13,8 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-            'users', {
-            fields: ['charte_engagement_signee'],
+                'users', {
+                    fields: ['charte_engagement_signee'],
                     type: 'foreign key',
                     name: 'fk_users_charte_engagement_signee',
                     references: {

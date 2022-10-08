@@ -102,8 +102,8 @@ module.exports = {
             },
         ))
             .then(() => queryInterface.addConstraint(
-            'plans_history', {
-            fields: ['created_by'],
+                'plans_history', {
+                    fields: ['created_by'],
                     type: 'foreign key',
                     name: 'fk_plans_history_creator',
                     references: {
@@ -116,8 +116,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-            'plans_history', {
-            fields: ['updated_by'],
+                'plans_history', {
+                    fields: ['updated_by'],
                     type: 'foreign key',
                     name: 'fk_plans_history_editor',
                     references: {

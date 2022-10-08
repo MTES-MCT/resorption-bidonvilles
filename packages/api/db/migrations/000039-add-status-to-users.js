@@ -27,7 +27,7 @@ module.exports = {
             defaultValue: false,
         },
     )).then(() => queryInterface.addConstraint('users', {
-    fields: ['active', 'password'],
+        fields: ['active', 'password'],
         type: 'check',
         name: 'check_active_user_has_password',
         where: {

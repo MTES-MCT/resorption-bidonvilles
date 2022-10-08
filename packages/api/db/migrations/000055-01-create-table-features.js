@@ -31,7 +31,7 @@ module.exports = {
             },
         ).then(() => queryInterface.addConstraint(
             'features', {
-            fields: ['fk_entity'],
+                fields: ['fk_entity'],
                 type: 'foreign key',
                 name: 'fk_features_entity',
                 references: {

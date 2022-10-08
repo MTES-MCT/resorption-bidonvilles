@@ -1,7 +1,7 @@
 module.exports = {
 
     up: queryInterface => queryInterface.addConstraint(
-            'plan_shantytowns', {
+        'plan_shantytowns', {
             fields: ['updated_by'],
             type: 'foreign key',
             name: 'fk_plan_shantytowns_editor',

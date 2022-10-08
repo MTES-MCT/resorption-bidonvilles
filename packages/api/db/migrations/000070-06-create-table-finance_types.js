@@ -30,7 +30,7 @@ module.exports = {
             },
         ).then(() => queryInterface.addConstraint(
             'finance_types', {
-            fields: ['name'],
+                fields: ['name'],
                 type: 'unique',
                 name: 'uk_finance_types_name',
                 transaction,

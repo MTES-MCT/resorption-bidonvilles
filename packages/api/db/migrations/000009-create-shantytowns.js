@@ -91,7 +91,7 @@ function createTable(queryInterface, Sequelize, name, additionalColumns = {}) {
     )
         .then(() => Promise.all([
             queryInterface.addConstraint(name, {
-    fields: ['fk_city'],
+                fields: ['fk_city'],
                 type: 'foreign key',
                 name: 'fk_shantytowns_city',
                 references: {
@@ -103,7 +103,7 @@ function createTable(queryInterface, Sequelize, name, additionalColumns = {}) {
             }),
 
             queryInterface.addConstraint(name, {
-    fields: ['fk_field_type'],
+                fields: ['fk_field_type'],
                 type: 'foreign key',
                 name: 'fk_shantytowns_field_type',
                 references: {
@@ -115,7 +115,7 @@ function createTable(queryInterface, Sequelize, name, additionalColumns = {}) {
             }),
 
             queryInterface.addConstraint(name, {
-    fields: ['fk_owner_type'],
+                fields: ['fk_owner_type'],
                 type: 'foreign key',
                 name: 'fk_shantytowns_owner_type',
                 references: {
@@ -127,7 +127,7 @@ function createTable(queryInterface, Sequelize, name, additionalColumns = {}) {
             }),
 
             queryInterface.addConstraint(name, {
-    fields: ['created_by'],
+                fields: ['created_by'],
                 type: 'foreign key',
                 name: 'fk_shantytowns_creator',
                 references: {
@@ -139,7 +139,7 @@ function createTable(queryInterface, Sequelize, name, additionalColumns = {}) {
             }),
 
             queryInterface.addConstraint(name, {
-    fields: ['closed_at'],
+                fields: ['closed_at'],
                 type: 'check',
                 name: 'check_closed_after_built',
                 where: {
@@ -164,7 +164,7 @@ function createTable(queryInterface, Sequelize, name, additionalColumns = {}) {
             }),
 
             queryInterface.addConstraint(name, {
-    fields: ['closed_at'],
+                fields: ['closed_at'],
                 type: 'check',
                 name: 'check_closed_at_notNull',
                 where: {

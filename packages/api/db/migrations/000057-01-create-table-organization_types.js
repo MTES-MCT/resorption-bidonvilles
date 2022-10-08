@@ -47,7 +47,7 @@ module.exports = {
             },
         ).then(() => queryInterface.addConstraint(
             'organization_types', {
-            fields: ['fk_category'],
+                fields: ['fk_category'],
                 type: 'foreign key',
                 name: 'fk_organization_types_category',
                 references: {
@@ -60,7 +60,7 @@ module.exports = {
             },
         )).then(() => queryInterface.addConstraint(
             'organization_types', {
-            fields: ['fk_role'],
+                fields: ['fk_role'],
                 type: 'foreign key',
                 name: 'fk_organization_types_role',
                 references: {

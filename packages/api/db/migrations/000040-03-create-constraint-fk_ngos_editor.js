@@ -1,7 +1,7 @@
 module.exports = {
 
     up: queryInterface => queryInterface.addConstraint(
-            'ngos', {
+        'ngos', {
             fields: ['updated_by'],
             type: 'foreign key',
             name: 'fk_ngos_editor',

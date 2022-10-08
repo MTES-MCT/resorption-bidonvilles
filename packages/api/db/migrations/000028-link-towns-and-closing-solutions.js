@@ -37,7 +37,7 @@ function createTable(queryInterface, Sequelize, name, additionalColumns = {}, ad
     ).then(() => Promise.all(
         [
             queryInterface.addConstraint(name, {
-    fields: ['fk_shantytown'],
+                fields: ['fk_shantytown'],
                 type: 'foreign key',
                 name: 'fk_shantytown_closing_solutions_shantytown',
                 references: {
@@ -49,7 +49,7 @@ function createTable(queryInterface, Sequelize, name, additionalColumns = {}, ad
             }),
 
             queryInterface.addConstraint(name, {
-    fields: ['fk_closing_solution'],
+                fields: ['fk_closing_solution'],
                 type: 'foreign key',
                 name: 'fk_shantytown_closing_solutions_solution',
                 references: {

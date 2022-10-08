@@ -42,7 +42,7 @@ module.exports = {
         },
     )
         .then(() => queryInterface.addConstraint('ActionStepHistories', {
-    fields: ['fk_action'],
+            fields: ['fk_action'],
             type: 'foreign key',
             name: 'fk_action_steps_action',
             references: {

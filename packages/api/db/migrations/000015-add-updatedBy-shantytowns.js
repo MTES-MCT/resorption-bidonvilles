@@ -13,7 +13,7 @@ function addColumn(queryInterface, Sequelize, tableName) {
 
 function addConstraint(queryInterface, tableName) {
     queryInterface.addConstraint(tableName, {
-    fields: ['updated_by'],
+        fields: ['updated_by'],
         type: 'foreign key',
         name: 'fk_shantytowns_editor',
         references: {

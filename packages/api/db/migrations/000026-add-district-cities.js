@@ -10,7 +10,7 @@ module.exports = {
         ),
     ])
         .then(() => queryInterface.addConstraint('cities', {
-    fields: ['fk_main'],
+            fields: ['fk_main'],
             type: 'foreign key',
             name: 'fk_cities_main',
             references: {

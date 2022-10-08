@@ -30,7 +30,7 @@ module.exports = {
             },
         ).then(() => queryInterface.addConstraint(
             'plan_categories', {
-            fields: ['name'],
+                fields: ['name'],
                 type: 'unique',
                 name: 'uk_plan_categories_name',
                 transaction,

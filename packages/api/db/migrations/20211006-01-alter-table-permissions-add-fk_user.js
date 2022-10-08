@@ -17,8 +17,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-            'permissions', {
-            fields: ['fk_user'],
+                'permissions', {
+                    fields: ['fk_user'],
                     type: 'foreign key',
                     name: 'fk_permissions_user',
                     references: {
@@ -48,8 +48,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-            'permissions', {
-            fields: ['fk_user', 'fk_role_admin', 'fk_role_regular'],
+                'permissions', {
+                    fields: ['fk_user', 'fk_role_admin', 'fk_role_regular'],
                     type: 'check',
                     name: 'check_featurable',
                     where: {
@@ -136,8 +136,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-            'permissions', {
-            fields: ['fk_organization', 'fk_role_admin', 'fk_role_regular'],
+                'permissions', {
+                    fields: ['fk_organization', 'fk_role_admin', 'fk_role_regular'],
                     type: 'check',
                     name: 'check_featurable',
                     where: {

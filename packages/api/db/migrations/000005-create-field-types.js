@@ -26,7 +26,7 @@ module.exports = {
         },
     )
         .then(() => queryInterface.addConstraint('field_types', {
-    fields: ['label'],
+            fields: ['label'],
             type: 'unique',
             name: 'uk_field_types_label',
         }))

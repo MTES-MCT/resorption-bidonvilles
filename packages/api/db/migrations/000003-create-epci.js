@@ -29,7 +29,7 @@ module.exports = {
         },
     )
         .then(() => queryInterface.addConstraint('epci', {
-    fields: ['fk_departement'],
+            fields: ['fk_departement'],
             type: 'foreign key',
             name: 'fk_epci_departement',
             references: {

@@ -7,7 +7,7 @@ module.exports = {
         ),
         queryInterface.addConstraint(
             'plan_details', {
-            fields: ['updated_by'],
+                fields: ['updated_by'],
                 type: 'foreign key',
                 name: 'fk_plan_details_editor',
                 references: {
@@ -27,7 +27,7 @@ module.exports = {
         ),
         queryInterface.addConstraint(
             'plan_details', {
-            fields: ['updated_by'],
+                fields: ['updated_by'],
                 type: 'foreign key',
                 name: 'fk_plan_shantytowns_editor',
                 references: {

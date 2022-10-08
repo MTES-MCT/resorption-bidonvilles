@@ -25,7 +25,7 @@ module.exports = {
             },
         },
     ).then(() => queryInterface.addConstraint('action_types', {
-    fields: ['label'],
+        fields: ['label'],
         type: 'unique',
         name: 'uk_action_types_label',
     })),
