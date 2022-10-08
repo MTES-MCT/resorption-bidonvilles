@@ -7,6 +7,7 @@ import Launcher from "#src/js/pages/Launcher/Launcher.vue";
 import Logout from "#src/js/pages/Logout/Logout.vue";
 import NotesList from "#src/js/pages/NotesList/NotesList.vue";
 import NotesForm from "#src/js/pages/NotesForm/NotesForm.vue";
+import SignatureCharteEngagement from "#src/js/pages/SignatureCharteEngagement/SignatureCharteEngagement.vue";
 import store from "../store/index";
 
 function isLoggedIn() {
@@ -240,6 +241,14 @@ export default new VueRouter({
             path: "/site/:id",
             component: TownPage,
             beforeEnter: guardians.loadedAndUpToDate
+        },
+        {
+            meta: {
+                title: "Résorption-bidonvilles — Charte d'engagement"
+            },
+            path: "/signature-charte-engagement",
+            component: SignatureCharteEngagement,
+            beforeEnter: guardians.loaded
         }
     ]
 });
