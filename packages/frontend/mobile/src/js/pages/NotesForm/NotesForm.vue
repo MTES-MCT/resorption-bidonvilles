@@ -13,6 +13,7 @@
                     class="px-6 w-full h-full outline-none"
                     ref="textarea"
                     v-model="description"
+                    placeholder="Cliquez ici pour commencer la saisie..."
                 ></textarea>
             </template>
         </Layout>
