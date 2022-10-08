@@ -76,7 +76,7 @@
                     >
                         Intervenants
                     </div>
-                    <TownPagePanelActors :town="town" />
+                    <TownPagePanelActors :town="town" class="mb-3" />
                 </Container>
             </template>
             <template v-slot:footer>

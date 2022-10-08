@@ -7,7 +7,7 @@
             <TownPageInfo
                 icon="user"
                 :title="
-                    `${actor.first_name} ${actor.last_name} ${actor.organization.name}`
+                    `${actor.first_name} ${actor.last_name}\n(${actor.organization.name})`
                 "
             >
                 <div v-if="actor.themes.length > 0" class="mt-4 text-center">
