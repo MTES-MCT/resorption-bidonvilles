@@ -1,13 +1,13 @@
 <template>
     <Layout :logo="false" :navbar="false">
         <template slot="header">
-            <TownsSearchHeader />
+            <TownsSearchHeader ref="searchbar" />
         </template>
 
         <template slot="scroll">
             <main class="pt-6">
                 <Container>
-                    <template v-if="!loading">
+                    <template v-if="!loading && !error">
                         <SearchSection
                             v-for="section in sections"
                             :key="section.title"
@@ -15,6 +15,20 @@
                             :items="section.items"
                         />
                     </template>
+                    <p v-else-if="error">
+                        <span class="font-bold text-primary"
+                            >La recherche a échoué</span
+                        ><br />
+                        <span>{{ error }}</span
+                        ><br />
+                        <Button
+                            class="mt-3"
+                            @click="$refs.searchbar.startSearch"
+                            icon="arrow-alt-circle-right"
+                        >
+                            Réessayer
+                        </Button>
+                    </p>
                     <Spinner v-else />
                 </Container>
             </main>
@@ -27,10 +41,11 @@ import Container from "#src/js/components/Container.vue";
 import Layout from "#src/js/components/Layout.vue";
 import SearchSection from "./SearchSection.vue";
 import TownsSearchHeader from "./TownsSearchHeader.vue";
-import { Spinner } from "@resorptionbidonvilles/ui";
+import { Button, Spinner } from "@resorptionbidonvilles/ui";
 
 export default {
     components: {
+        Button,
         Container,
         Layout,
         SearchSection,
@@ -49,6 +64,9 @@ export default {
             }
 
             return this.$store.state.towns.state === "loading";
+        },
+        error() {
+            return this.$store.state.search.error;
         },
         sections() {
             if (this.loading) {

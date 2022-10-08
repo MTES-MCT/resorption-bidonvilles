@@ -34,6 +34,7 @@ export default {
         }
         this.search = "";
         this.results = null;
+        this.error = null;
     },
     computed: {
         request: {
@@ -59,26 +60,19 @@ export default {
             set(value) {
                 this.$store.commit("search/SET_RESULTS", value);
             }
+        },
+        error: {
+            get() {
+                return this.$store.state.search.error;
+            },
+            set(value) {
+                this.$store.commit("search/SET_ERROR", value);
+            }
         }
     },
     watch: {
-        async search() {
-            if (this.request !== null) {
-                this.request.abort();
-            }
-
-            this.results = null;
-            this.request = null;
-            if (this.search.length >= 3) {
-                this.request = searchTowns(this.search);
-
-                try {
-                    this.results = await this.request;
-                    this.request = null;
-                } catch (error) {
-                    // ignore
-                }
-            }
+        search() {
+            this.startSearch();
         }
     },
     mounted() {
@@ -87,6 +81,27 @@ export default {
     methods: {
         cancel() {
             this.$router.back();
+        },
+        async startSearch() {
+            if (this.request !== null) {
+                this.request.abort();
+            }
+
+            this.results = null;
+            this.request = null;
+            this.error = null;
+            if (this.search.length >= 3) {
+                this.request = searchTowns(this.search);
+
+                try {
+                    this.results = await this.request;
+                    this.request = null;
+                } catch (error) {
+                    this.error =
+                        (error && error.user_message) ||
+                        "Une erreur inconnue est survenue";
+                }
+            }
         }
     }
 };

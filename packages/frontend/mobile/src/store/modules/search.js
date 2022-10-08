@@ -5,7 +5,8 @@ export default {
         listener: null,
         search: "",
         request: null,
-        results: null
+        results: null,
+        error: null
     },
 
     mutations: {
@@ -20,6 +21,9 @@ export default {
         },
         SET_RESULTS(state, results) {
             state.results = results;
+        },
+        SET_ERROR(state, error) {
+            state.error = error;
         }
     }
 };
