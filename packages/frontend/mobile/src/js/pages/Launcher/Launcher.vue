@@ -1,29 +1,43 @@
 <template>
-    <div>
-        <div v-if="error" class="notification error full-width">
-            <span
-                >{{ error }}.
-                <a href="#" @click="loadConfig">Réessayer ?</a></span
-            >
-        </div>
-
-        <FullBottomSection
-            v-else-if="showLoadingBlock"
-            :centered="true"
-            class="text-primary flex flex-col"
-        >
-            <p class="text-display-xl"><Spinner /></p>
-            <p :class="showLoadingText ? '' : 'text-white'">
-                Initialisation de l'appli en cours...
+    <Layout :navbar="false">
+        <template slot="scroll">
+            <p v-if="error" class="mt-24 text-center">
+                <span class="font-bold text-primary"
+                    >Le chargement de l'application a échoué :</span
+                ><br />
+                <span>{{ error }}.</span><br />
+                <Button
+                    class="mt-6"
+                    @click="loadConfig"
+                    icon="arrow-alt-circle-right"
+                    >Réessayer</Button
+                >
             </p>
-        </FullBottomSection>
-    </div>
+            <div
+                v-else-if="showLoadingBlock"
+                class="mt-24 text-primary text-center"
+            >
+                <p class="text-display-xl"><Spinner /></p>
+                <p :class="showLoadingText ? 'font-bold' : 'text-white'">
+                    Initialisation de l'application en cours...
+                </p>
+            </div>
+        </template>
+    </Layout>
 </template>
 
 <script>
+import Layout from "#src/js/components/Layout.vue";
 import { getEntryPoint } from "../../router";
+import { Button, Spinner } from "@resorptionbidonvilles/ui";
 
 export default {
+    components: {
+        Button,
+        Layout,
+        Spinner
+    },
+
     data() {
         return {
             error: null,
@@ -64,7 +78,8 @@ export default {
                 this.redirect();
             } catch (response) {
                 this.error =
-                    response.user_message || "Une erreur inconnue est survenue";
+                    (response && response.user_message) ||
+                    "Une erreur inconnue est survenue";
             }
         },
         redirect() {
