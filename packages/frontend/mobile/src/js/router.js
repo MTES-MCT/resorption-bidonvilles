@@ -220,7 +220,8 @@ export default new VueRouter({
         },
         {
             meta: {
-                tab: "notes"
+                tab: "notes",
+                title: "Résorption-bidonvilles — Liste des notes"
             },
             path: "/liste-des-notes",
             component: NotesList,
@@ -228,7 +229,8 @@ export default new VueRouter({
         },
         {
             meta: {
-                tab: "notes"
+                tab: "notes",
+                title: "Résorption-bidonvilles — Rédaction d'une note"
             },
             path: "/notes/:id",
             component: NotesForm,
