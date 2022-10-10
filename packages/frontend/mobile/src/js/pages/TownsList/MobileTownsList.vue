@@ -1,12 +1,18 @@
 <template>
     <Layout>
         <template v-slot:header>
-            <Container>
-                <header>
-                    <h1 class="font-bold text-display-md">
-                        Bienvenue {{ user.first_name }} {{ user.last_name }}
-                    </h1>
+            <Container class="mt-4">
+                <header class="flex items-center space-x-2 mb-3">
+                    <img
+                        class="h-6"
+                        src="/img/marianne.svg"
+                        alt="République Française"
+                    />
+                    <h1 class="font-bold text-lg">Résorption-bidonvilles</h1>
                 </header>
+                <h2 class="font-bold text-display-md">
+                    Bienvenue {{ user.first_name }} {{ user.last_name }}
+                </h2>
             </Container>
         </template>
         <template v-slot:scroll>

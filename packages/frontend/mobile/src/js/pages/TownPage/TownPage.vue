@@ -4,7 +4,7 @@
             <template v-slot:header>
                 <header>
                     <div
-                        class="text-center text-primary text-display-lg font-bold mt-16"
+                        class="text-center text-primary text-display-md font-bold mt-16"
                     >
                         <Spinner />
                     </div>
@@ -21,25 +21,13 @@
                     >
                         {{ error }}
                     </p>
-                    <Container class="flex justify-end">
-                        <Button
-                            variant="textPrimary"
-                            class="text-primary self-end"
-                            icon="chevron-left"
-                            iconPosition="left"
-                            :padding="false"
-                            @click="toTownsList"
-                        >
-                            Retour à la liste des sites
-                        </Button>
-                    </Container>
 
                     <div
-                        class="bg-G200 text-display-lg font-bold text-center py-3 mt-2"
+                        class="bg-G200 text-display-sm font-bold text-center pt-3 pb-2"
+                        style="line-height: 1em"
                     >
-                        {{ town.addressSimple }}
-                        <span v-if="town.name" class="text-display-sm"
-                            ><br />
+                        {{ town.addressSimple }}<br />
+                        <span v-if="town.name" class="text-sm font-normal">
                             « {{ town.name }} »</span
                         >
                     </div>
@@ -48,31 +36,31 @@
             <template v-slot:scroll>
                 <Container>
                     <div
-                        class="text-primary font-bold text-display-md mt-4 mb-4"
+                        class="text-primary font-bold text-display-sm mt-4 mb-2"
                     >
                         Caractéristiques
                     </div>
                     <TownPagePanelCharacteristics :town="town" />
                     <div
-                        class="text-primary font-bold text-display-md mt-8 mb-4"
+                        class="text-primary font-bold text-display-sm mt-8 mb-2"
                     >
                         Habitants
                     </div>
                     <TownPagePanelPeople :town="town" />
                     <div
-                        class="text-primary font-bold text-display-md mt-8 mb-4"
+                        class="text-primary font-bold text-display-sm mt-8 mb-2"
                     >
                         Conditions de vie
                     </div>
                     <TownPagePanelLivingConditions :town="town" />
                     <div
-                        class="text-primary font-bold text-display-md mt-8 mb-4"
+                        class="text-primary font-bold text-display-sm mt-8 mb-2"
                     >
                         Procédures judiciaires
                     </div>
                     <TownPagePanelJudicial :town="town" />
                     <div
-                        class="text-primary font-bold text-display-md mt-8 mb-4"
+                        class="text-primary font-bold text-display-sm mt-8 mb-2"
                     >
                         Intervenants
                     </div>
@@ -81,10 +69,12 @@
             </template>
             <template v-slot:footer>
                 <div
-                    class="py-3 bg-orange400 text-center"
+                    class="py-3 bg-orange500 text-white text-center"
                     @click="$refs.comments.show()"
                 >
-                    Voir le journal du site
+                    <Icon icon="comment" />
+                    Journal du site ({{ town.comments.regular.length }}
+                    messages)
                 </div>
             </template>
         </Layout>
@@ -108,7 +98,7 @@ import TownPagePanelLivingConditions from "./TownPagePanelLivingConditions.vue";
 import TownPagePanelActors from "./TownPagePanelActors.vue";
 import TownPagePanelJudicial from "./TownPagePanelJudicial.vue";
 import TownComments from "./comments/TownComments.vue";
-import { Button, Spinner } from "@resorptionbidonvilles/ui";
+import { Icon, Spinner } from "@resorptionbidonvilles/ui";
 import { mapGetters } from "vuex";
 
 export default {
@@ -121,7 +111,7 @@ export default {
         TownPagePanelLivingConditions,
         TownPagePanelActors,
         TownPagePanelJudicial,
-        Button,
+        Icon,
         Spinner
     },
     data() {

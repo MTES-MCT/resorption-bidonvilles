@@ -1,6 +1,6 @@
 <template>
     <div class="h-full">
-        <Layout>
+        <Layout class="pt-4">
             <template slot="header">
                 <NotesFormHeader
                     @publish="showPublish"

@@ -3,10 +3,7 @@
         <TownPageInfo :title="'Dépôt de plainte du propriétaire'">
             {{ boolToStr(town.ownerComplaint) }}
         </TownPageInfo>
-        <TownPageInfo
-            :title="'Existence d’une procédure judiciaire'"
-            :icon="'balance-scale'"
-        >
+        <TownPageInfo :title="'Existence d’une procédure judiciaire'">
             {{ boolToStr(town.justiceProcedure) }}
         </TownPageInfo>
         <TownPageInfo :title="'Décision de justice rendue'">
@@ -18,7 +15,7 @@
         <TownPageInfo :title="'Concours de la force publique'">
             {{ policeStatusLabel }}
         </TownPageInfo>
-        <TownPageInfo :title="'Nom de l\'étude d\'huissier'" :icon="'file'">
+        <TownPageInfo :title="'Nom de l\'étude d\'huissier'">
             {{ town.bailiff || "Non Communiqué" }}
         </TownPageInfo>
     </div>

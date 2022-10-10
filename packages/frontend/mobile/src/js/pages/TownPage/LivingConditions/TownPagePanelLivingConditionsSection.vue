@@ -1,5 +1,5 @@
 <template>
-    <div class="py-2">
+    <div class="mt-6">
         <div :class="[colorClass, 'flex items-center']">
             <Icon :class="['mr-1', 'font-bold']" :icon="icon" />
             <div>
@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="mt-6" v-if="answers.length">
-            <div v-for="answer in answers" :key="answer.label" class="mb-2">
+            <div v-for="answer in answers" :key="answer.label">
                 <TownPageInfo :title="answer.label">
                     <p>{{ answer.content }}</p>
                 </TownPageInfo>

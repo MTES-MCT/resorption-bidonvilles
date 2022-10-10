@@ -1,18 +1,7 @@
 <template>
     <div class="h-full flex flex-col">
-        <header
-            class="pt-8 mb-6 flex items-center justify-center space-x-2"
-            v-if="logo"
-        >
-            <img
-                class="h-10"
-                src="/img/logo-marianne.svg"
-                alt="République Française"
-            />
-            <h1 class="font-bold text-xl">Résorption-bidonvilles</h1>
-        </header>
         <section class="flex-1 flex flex-col">
-            <slot name="header"></slot>
+            <header><slot name="header"></slot></header>
             <div class="relative flex-1 py-6">
                 <div
                     class="overflow-y-scroll absolute top-0 bottom-0 left-0 right-0"

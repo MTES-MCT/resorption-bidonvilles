@@ -1,5 +1,5 @@
 <template>
-    <Layout>
+    <Layout class="pt-4">
         <template v-slot:header>
             <NotesListHeader @create="create" />
         </template>

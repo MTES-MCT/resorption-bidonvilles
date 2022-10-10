@@ -6,7 +6,7 @@
                 :key="item.id"
                 @click="changeFilter(item.id)"
                 :class="[
-                    'flex-1 py-2 my-2',
+                    'flex-1 py-2 mt-2',
                     status[item.id].length === 0 ? 'bg-G200 text-G500' : '',
                     select === item.id
                         ? 'text-primary border-b border-b-blue'
@@ -18,8 +18,8 @@
             </div>
         </div>
 
-        <div class="border-G200 py-2" v-if="select !== null">
-            <ul class="list-disc ml-10">
+        <div class="border-G200" v-if="select !== null">
+            <ul class="list-disc ml-4">
                 <li v-for="(item, index) in status[select]" :key="index">
                     {{ item.text }}
                     <span class="italic">{{
