@@ -239,8 +239,8 @@ module.exports = async (where = [], order = ['departements.code ASC', 'cities.na
 
     // @todo: move the serialization of these entities to their own model component
     Object.keys(serializedTowns.hash).forEach((shantytownId) => {
-        serializedTowns.hash[shantytownId].comments.regular = comments[shantytownId];
-        serializedTowns.hash[shantytownId].comments.covid = covidComments[shantytownId];
+        serializedTowns.hash[shantytownId].comments.regular = comments[shantytownId] || [];
+        serializedTowns.hash[shantytownId].comments.covid = covidComments[shantytownId] || [];
     });
 
     if (closingSolutions !== undefined) {
