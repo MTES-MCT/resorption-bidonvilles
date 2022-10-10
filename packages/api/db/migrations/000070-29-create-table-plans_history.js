@@ -75,9 +75,8 @@ module.exports = {
                 transaction,
             },
         ).then(() => queryInterface.addConstraint(
-            'plans_history',
-            ['fk_category'],
-            {
+            'plans_history', {
+                fields: ['fk_category'],
                 type: 'foreign key',
                 name: 'fk_plans_history_category',
                 references: {
@@ -89,9 +88,8 @@ module.exports = {
                 transaction,
             },
         )).then(() => queryInterface.addConstraint(
-            'plans_history',
-            ['fk_location'],
-            {
+            'plans_history', {
+                fields: ['fk_location'],
                 type: 'foreign key',
                 name: 'fk_plans_history_location',
                 references: {
@@ -104,9 +102,8 @@ module.exports = {
             },
         ))
             .then(() => queryInterface.addConstraint(
-                'plans_history',
-                ['created_by'],
-                {
+                'plans_history', {
+                    fields: ['created_by'],
                     type: 'foreign key',
                     name: 'fk_plans_history_creator',
                     references: {
@@ -119,9 +116,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'plans_history',
-                ['updated_by'],
-                {
+                'plans_history', {
+                    fields: ['updated_by'],
                     type: 'foreign key',
                     name: 'fk_plans_history_editor',
                     references: {

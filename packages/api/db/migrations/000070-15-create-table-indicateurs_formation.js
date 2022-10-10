@@ -84,9 +84,8 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-                'indicateurs_formation',
-                ['created_by'],
-                {
+                'indicateurs_formation', {
+                    fields: ['created_by'],
                     type: 'foreign key',
                     name: 'fk_indicateurs_formation_creator',
                     references: {
@@ -99,9 +98,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'indicateurs_formation',
-                ['updated_by'],
-                {
+                'indicateurs_formation', {
+                    fields: ['updated_by'],
                     type: 'foreign key',
                     name: 'fk_indicateurs_formation_editor',
                     references: {

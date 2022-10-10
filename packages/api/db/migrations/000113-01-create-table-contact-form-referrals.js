@@ -35,9 +35,8 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-                'contact_form_referrals',
-                ['fk_user'],
-                {
+                'contact_form_referrals', {
+                    fields: ['fk_user'],
                     type: 'foreign key',
                     name: 'fk_contact_form_referral_user',
                     references: {

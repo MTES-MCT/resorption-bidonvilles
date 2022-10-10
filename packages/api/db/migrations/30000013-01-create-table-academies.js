@@ -69,18 +69,16 @@ module.exports = {
         // add constraints
         await Promise.all([
             queryInterface.addConstraint(
-                'academies',
-                ['name'],
-                {
+                'academies', {
+                    fields: ['name'],
                     type: 'unique',
                     name: 'uk_academies_name',
                     transaction,
                 },
             ),
             queryInterface.addConstraint(
-                'departements',
-                ['fk_academie'],
-                {
+                'departements', {
+                    fields: ['fk_academie'],
                     type: 'foreign key',
                     name: 'fk_departements_academie',
                     references: {

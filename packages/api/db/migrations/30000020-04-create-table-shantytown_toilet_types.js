@@ -35,6 +35,7 @@ module.exports = {
 
         // create foreign keys
         const constraint = (table, field) => ({
+            fields: ['fk_shantytown'],
             type: 'foreign key',
             name: 'fk_shantytown_toilet_types_shantytown',
             references: {
@@ -48,12 +49,10 @@ module.exports = {
         await Promise.all([
             queryInterface.addConstraint(
                 'shantytown_toilet_types',
-                ['fk_shantytown'],
                 constraint('shantytowns', 'shantytown_id'),
             ),
             queryInterface.addConstraint(
                 'shantytown_toilet_types_history',
-                ['fk_shantytown'],
                 constraint('ShantytownHistories', 'hid'),
             ),
         ]);

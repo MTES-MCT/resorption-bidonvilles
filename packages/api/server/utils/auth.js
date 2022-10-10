@@ -59,7 +59,12 @@ module.exports = {
      *
      * @returns {string}
      */
-    getAccountActivationLink(userAccessId) {
+    getAccountActivationLink(userAccessId, expiresAt = null) {
+        let expiresIn = activationTokenExpiresIn;
+        if (expiresAt !== null) {
+            expiresIn = Math.round((expiresAt.getTime() - Date.now()) / 1000);
+        }
+
         const token = jwt.sign(
             {
                 type: 'account_validation',
@@ -67,7 +72,7 @@ module.exports = {
             },
             authConfig.secret,
             {
-                expiresIn: activationTokenExpiresIn,
+                expiresIn,
             },
         );
 

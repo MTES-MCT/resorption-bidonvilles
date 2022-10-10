@@ -30,9 +30,8 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-                'chartes_engagement',
-                ['fichier'],
-                {
+                'chartes_engagement', {
+                    fields: ['fichier'],
                     type: 'unique',
                     name: 'uk_chartes_engagement_fichier',
                     transaction,

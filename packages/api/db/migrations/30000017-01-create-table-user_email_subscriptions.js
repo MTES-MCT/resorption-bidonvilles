@@ -23,18 +23,16 @@ module.exports = {
 
         await Promise.all([
             queryInterface.addConstraint(
-                'user_email_subscriptions',
-                ['fk_user', 'email_subscription'],
-                {
+                'user_email_subscriptions', {
+                    fields: ['fk_user', 'email_subscription'],
                     type: 'unique',
                     name: 'uk_user_email_subscriptions_user_subscription',
                     transaction,
                 },
             ),
             queryInterface.addConstraint(
-                'user_email_subscriptions',
-                ['fk_user'],
-                {
+                'user_email_subscriptions', {
+                    fields: ['fk_user'],
                     type: 'foreign key',
                     name: 'fk_user_email_subscriptions_user',
                     references: {

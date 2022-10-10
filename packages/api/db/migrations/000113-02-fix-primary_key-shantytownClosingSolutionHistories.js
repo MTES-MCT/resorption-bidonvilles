@@ -26,7 +26,8 @@ module.exports = {
                     },
                 )),
             ))
-            .then(() => queryInterface.addConstraint('ShantytownClosingSolutionHistories', ['fk_shantytown'], {
+            .then(() => queryInterface.addConstraint('ShantytownClosingSolutionHistories', {
+                fields: ['fk_shantytown'],
                 type: 'foreign key',
                 name: 'fk_shantytown_closing_solutions_shantytown',
                 references: {
@@ -65,7 +66,8 @@ module.exports = {
                     },
                 )),
             ))
-            .then(() => queryInterface.addConstraint('ShantytownClosingSolutionHistories', ['fk_shantytown'], {
+            .then(() => queryInterface.addConstraint('ShantytownClosingSolutionHistories', {
+                fields: ['fk_shantytown'],
                 type: 'foreign key',
                 name: 'fk_shantytown_closing_solutions_shantytown',
                 references: {

@@ -41,11 +41,13 @@ module.exports = {
         },
     )
         .then(() => Promise.all([
-            queryInterface.addConstraint('departements', ['name'], {
+            queryInterface.addConstraint('departements', {
+                fields: ['name'],
                 type: 'unique',
                 name: 'uk_departements_name',
             }),
-            queryInterface.addConstraint('departements', ['fk_region'], {
+            queryInterface.addConstraint('departements', {
+                fields: ['fk_region'],
                 type: 'foreign key',
                 name: 'fk_departements_region',
                 references: {

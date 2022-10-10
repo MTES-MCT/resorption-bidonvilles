@@ -48,9 +48,8 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-                'finance_rows',
-                ['fk_finance'],
-                {
+                'finance_rows', {
+                    fields: ['fk_finance'],
                     type: 'foreign key',
                     name: 'fk_finance_rows_finance',
                     references: {
@@ -63,9 +62,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'finance_rows',
-                ['fk_finance_type'],
-                {
+                'finance_rows', {
+                    fields: ['fk_finance_type'],
                     type: 'foreign key',
                     name: 'fk_finance_rows_type',
                     references: {
@@ -78,9 +76,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'finance_rows',
-                ['created_by'],
-                {
+                'finance_rows', {
+                    fields: ['created_by'],
                     type: 'foreign key',
                     name: 'fk_finance_rows_creator',
                     references: {
@@ -93,9 +90,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'finance_rows',
-                ['updated_by'],
-                {
+                'finance_rows', {
+                    fields: ['updated_by'],
                     type: 'foreign key',
                     name: 'fk_finance_rows_editor',
                     references: {

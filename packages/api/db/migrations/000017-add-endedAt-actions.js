@@ -6,7 +6,8 @@ module.exports = {
             type: Sequelize.DATE,
             allowNull: true,
         },
-    ).then(() => queryInterface.addConstraint('actions', ['ended_at'], {
+    ).then(() => queryInterface.addConstraint('actions', {
+        fields: ['ended_at'],
         type: 'check',
         name: 'check_ended_after_start',
         where: {

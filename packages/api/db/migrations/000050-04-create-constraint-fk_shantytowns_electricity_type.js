@@ -1,8 +1,8 @@
 function createConstraint(queryInterface, table) {
     return queryInterface.addConstraint(
         table,
-        ['fk_electricity_type'],
         {
+            fields: ['fk_electricity_type'],
             type: 'foreign key',
             name: 'fk_shantytowns_electricity_type',
             references: {

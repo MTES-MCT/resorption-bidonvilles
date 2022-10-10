@@ -32,7 +32,8 @@ module.exports = {
                 onUpdate: Sequelize.literal('CURRENT_TIMESTAMP'),
             },
         },
-    ).then(() => queryInterface.addConstraint('action_steps', ['fk_action'], {
+    ).then(() => queryInterface.addConstraint('action_steps', {
+        fields: ['fk_action'],
         type: 'foreign key',
         name: 'fk_action_steps_action',
         references: {

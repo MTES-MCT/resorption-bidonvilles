@@ -43,54 +43,48 @@ module.exports = {
             // les clés d'unicité (car il n'y a pas de clé primaire auto-générée)
             // en bref : pour une même permission, il ne peut pas y avoir deux fois le même attachment
             queryInterface.addConstraint(
-                'user_permission_attachments',
-                ['fk_user_permission', 'fk_region'],
-                {
+                'user_permission_attachments', {
+                    fields: ['fk_user_permission', 'fk_region'],
                     type: 'unique',
                     name: 'uk_user_permission_attachments_region',
                     transaction,
                 },
             ),
             queryInterface.addConstraint(
-                'user_permission_attachments',
-                ['fk_user_permission', 'fk_departement'],
-                {
+                'user_permission_attachments', {
+                    fields: ['fk_user_permission', 'fk_departement'],
                     type: 'unique',
                     name: 'uk_user_permission_attachments_departement',
                     transaction,
                 },
             ),
             queryInterface.addConstraint(
-                'user_permission_attachments',
-                ['fk_user_permission', 'fk_epci'],
-                {
+                'user_permission_attachments', {
+                    fields: ['fk_user_permission', 'fk_epci'],
                     type: 'unique',
                     name: 'uk_user_permission_attachments_epci',
                     transaction,
                 },
             ),
             queryInterface.addConstraint(
-                'user_permission_attachments',
-                ['fk_user_permission', 'fk_city'],
-                {
+                'user_permission_attachments', {
+                    fields: ['fk_user_permission', 'fk_city'],
                     type: 'unique',
                     name: 'uk_user_permission_attachments_city',
                     transaction,
                 },
             ),
             queryInterface.addConstraint(
-                'user_permission_attachments',
-                ['fk_user_permission', 'fk_shantytown'],
-                {
+                'user_permission_attachments', {
+                    fields: ['fk_user_permission', 'fk_shantytown'],
                     type: 'unique',
                     name: 'uk_user_permission_attachments_shantytown',
                     transaction,
                 },
             ),
             queryInterface.addConstraint(
-                'user_permission_attachments',
-                ['fk_user_permission', 'fk_plan'],
-                {
+                'user_permission_attachments', {
+                    fields: ['fk_user_permission', 'fk_plan'],
                     type: 'unique',
                     name: 'uk_user_permission_attachments_plan',
                     transaction,
@@ -99,9 +93,8 @@ module.exports = {
 
             // les clés étrangères
             queryInterface.addConstraint(
-                'user_permission_attachments',
-                ['fk_user_permission'],
-                {
+                'user_permission_attachments', {
+                    fields: ['fk_user_permission'],
                     type: 'foreign key',
                     name: 'fk_user_permission_attachment_permission',
                     references: {
@@ -114,9 +107,8 @@ module.exports = {
                 },
             ),
             queryInterface.addConstraint(
-                'user_permission_attachments',
-                ['fk_region'],
-                {
+                'user_permission_attachments', {
+                    fields: ['fk_region'],
                     type: 'foreign key',
                     name: 'fk_user_permission_attachment_region',
                     references: {
@@ -129,9 +121,8 @@ module.exports = {
                 },
             ),
             queryInterface.addConstraint(
-                'user_permission_attachments',
-                ['fk_departement'],
-                {
+                'user_permission_attachments', {
+                    fields: ['fk_departement'],
                     type: 'foreign key',
                     name: 'fk_user_permission_attachment_departement',
                     references: {
@@ -144,9 +135,8 @@ module.exports = {
                 },
             ),
             queryInterface.addConstraint(
-                'user_permission_attachments',
-                ['fk_epci'],
-                {
+                'user_permission_attachments', {
+                    fields: ['fk_epci'],
                     type: 'foreign key',
                     name: 'fk_user_permission_attachment_epci',
                     references: {
@@ -159,9 +149,8 @@ module.exports = {
                 },
             ),
             queryInterface.addConstraint(
-                'user_permission_attachments',
-                ['fk_city'],
-                {
+                'user_permission_attachments', {
+                    fields: ['fk_city'],
                     type: 'foreign key',
                     name: 'fk_user_permission_attachment_city',
                     references: {
@@ -174,9 +163,8 @@ module.exports = {
                 },
             ),
             queryInterface.addConstraint(
-                'user_permission_attachments',
-                ['fk_shantytown'],
-                {
+                'user_permission_attachments', {
+                    fields: ['fk_shantytown'],
                     type: 'foreign key',
                     name: 'fk_user_permission_attachment_shantytown',
                     references: {
@@ -189,9 +177,8 @@ module.exports = {
                 },
             ),
             queryInterface.addConstraint(
-                'user_permission_attachments',
-                ['fk_plan'],
-                {
+                'user_permission_attachments', {
+                    fields: ['fk_plan'],
                     type: 'foreign key',
                     name: 'fk_user_permission_attachment_plan',
                     references: {
@@ -206,9 +193,8 @@ module.exports = {
 
             // on s'assure qu'un (et un seul) attachment a été défini
             queryInterface.addConstraint(
-                'user_permission_attachments',
-                ['fk_region', 'fk_departement', 'fk_epci', 'fk_city', 'fk_shantytown', 'fk_plan'],
-                {
+                'user_permission_attachments', {
+                    fields: ['fk_region', 'fk_departement', 'fk_epci', 'fk_city', 'fk_shantytown', 'fk_plan'],
                     type: 'check',
                     name: 'must_have_one_and_only_one_attachment',
                     where: {

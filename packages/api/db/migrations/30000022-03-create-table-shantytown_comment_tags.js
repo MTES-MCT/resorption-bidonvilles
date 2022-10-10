@@ -19,9 +19,8 @@ module.exports = {
         // on crée les contraintes
         await Promise.all([
             queryInterface.addConstraint(
-                'shantytown_comment_tags',
-                ['fk_shantytown_comment'],
-                {
+                'shantytown_comment_tags', {
+                    fields: ['fk_shantytown_comment'],
                     type: 'foreign key',
                     name: 'fk_shantytown_comment_id',
                     references: {
@@ -34,9 +33,8 @@ module.exports = {
                 },
             ),
             queryInterface.addConstraint(
-                'shantytown_comment_tags',
-                ['fk_comment_tag'],
-                {
+                'shantytown_comment_tags', {
+                    fields: ['fk_comment_tag'],
                     type: 'foreign key',
                     name: 'fk_comment_tags_uid',
                     references: {

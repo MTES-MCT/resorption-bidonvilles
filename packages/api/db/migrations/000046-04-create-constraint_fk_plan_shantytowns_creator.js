@@ -1,8 +1,8 @@
 module.exports = {
 
     up: queryInterface => queryInterface.addConstraint(
-        'plan_shantytowns',
-        ['created_by'], {
+        'plan_shantytowns', {
+            fields: ['created_by'],
             type: 'foreign key',
             name: 'fk_plan_shantytowns_creator',
             references: {

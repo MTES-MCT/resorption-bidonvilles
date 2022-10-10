@@ -40,9 +40,8 @@ const NEW_FIELDS = [
 
 module.exports = {
     up: (queryInterface, Sequelize) => queryInterface.addConstraint(
-        'shantytowns',
-        ['living_conditions_version', ...OLD_FIELDS, ...NEW_FIELDS],
-        {
+        'shantytowns', {
+            fields: ['living_conditions_version', ...OLD_FIELDS, ...NEW_FIELDS],
             type: 'check',
             name: 'check_living_conditions_versioning',
             where: {

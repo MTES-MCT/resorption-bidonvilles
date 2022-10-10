@@ -19,9 +19,8 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-                'permission_options',
-                ['name'],
-                {
+                'permission_options', {
+                    fields: ['name'],
                     type: 'unique',
                     name: 'uk_permission_options_name',
                     transaction,

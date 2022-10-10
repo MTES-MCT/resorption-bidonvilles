@@ -47,9 +47,8 @@ module.exports = {
                 transaction,
             },
         ).then(() => queryInterface.addConstraint(
-            'locations',
-            ['created_by'],
-            {
+            'locations', {
+                fields: ['created_by'],
                 type: 'foreign key',
                 name: 'fk_locations_creator',
                 references: {
@@ -62,9 +61,8 @@ module.exports = {
             },
         ))
             .then(() => queryInterface.addConstraint(
-                'locations',
-                ['updated_by'],
-                {
+                'locations', {
+                    fields: ['updated_by'],
                     type: 'foreign key',
                     name: 'fk_locations_editor',
                     references: {

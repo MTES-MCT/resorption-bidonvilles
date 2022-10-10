@@ -29,9 +29,8 @@ module.exports = {
                 transaction,
             },
         ).then(() => queryInterface.addConstraint(
-            'etp_types',
-            ['name'],
-            {
+            'etp_types', {
+                fields: ['name'],
                 type: 'unique',
                 name: 'uk_etp_types_name',
                 transaction,

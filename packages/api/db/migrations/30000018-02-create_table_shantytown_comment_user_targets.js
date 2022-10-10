@@ -30,9 +30,8 @@ module.exports = {
         // add constraints
         await Promise.all([
             queryInterface.addConstraint(
-                'shantytown_comment_user_targets',
-                ['fk_user'],
-                {
+                'shantytown_comment_user_targets', {
+                    fields: ['fk_user'],
                     type: 'foreign key',
                     name: 'fk_user_comment_access',
                     references: {
@@ -45,9 +44,8 @@ module.exports = {
                 },
             ),
             queryInterface.addConstraint(
-                'shantytown_comment_user_targets',
-                ['fk_comment'],
-                {
+                'shantytown_comment_user_targets', {
+                    fields: ['fk_comment'],
                     type: 'foreign key',
                     name: 'fk_comment_user',
                     references: {

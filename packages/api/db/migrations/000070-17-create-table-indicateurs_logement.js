@@ -60,9 +60,8 @@ module.exports = {
             },
         )
             .then(() => queryInterface.addConstraint(
-                'indicateurs_logement',
-                ['created_by'],
-                {
+                'indicateurs_logement', {
+                    fields: ['created_by'],
                     type: 'foreign key',
                     name: 'fk_indicateurs_logement_creator',
                     references: {
@@ -75,9 +74,8 @@ module.exports = {
                 },
             ))
             .then(() => queryInterface.addConstraint(
-                'indicateurs_logement',
-                ['updated_by'],
-                {
+                'indicateurs_logement', {
+                    fields: ['updated_by'],
                     type: 'foreign key',
                     name: 'fk_indicateurs_logement_editor',
                     references: {
