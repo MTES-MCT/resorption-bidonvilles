@@ -3,12 +3,8 @@ const shantytownCommentTagModel = require('#server/models/shantytownCommentTagMo
 const serializeComment = require('./serializeComment');
 
 module.exports = async (user, shantytownIds, covid = false) => {
-    const comments = shantytownIds.reduce((acc, id) => Object.assign({}, acc, {
-        [id]: [],
-    }), {});
-
     if (covid === false && !user.isAllowedTo('list', 'shantytown_comment')) {
-        return comments;
+        return {};
     }
 
     const filterPrivateComments = !user.isAllowedTo('listPrivate', 'shantytown_comment');
@@ -100,12 +96,14 @@ module.exports = async (user, shantytownIds, covid = false) => {
         );
     }
 
-    return rows.reduce((argAcc, row) => {
-        const acc = { ...argAcc };
+    return rows.reduce((acc, row) => {
+        if (!acc[row.shantytownId]) {
+            acc[row.shantytownId] = [];
+        }
         acc[row.shantytownId].push(serializeComment({
             ...row,
             tags: commentTags[row.commentId],
         }));
         return acc;
-    }, comments);
+    }, {});
 };
