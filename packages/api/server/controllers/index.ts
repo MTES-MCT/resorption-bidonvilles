@@ -58,6 +58,7 @@ const userCreate = require('./userController/create');
 const userDenyAccess = require('./userController/denyAccess');
 const userEdit = require('./userController/edit');
 const userGet = require('./userController/get');
+const userGetLatestActivationLink = require('./userController/getLatestActivationLink');
 const userList = require('./userController/list');
 const userListExport = require('./userController/listExport');
 const userMe = require('./userController/me');
@@ -150,6 +151,7 @@ export default {
         denyAccess: userDenyAccess,
         edit: userEdit,
         get: userGet,
+        getLatestActivationLink: userGetLatestActivationLink,
         list: userList,
         listExport: userListExport,
         me: userMe,

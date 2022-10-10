@@ -139,6 +139,16 @@ export default (app) => {
         middlewares.appVersion.sync,
         controllers.user.sendActivationLink,
     );
+    app.get(
+        '/users/:id/activationLink',
+        middlewares.auth.authenticate,
+        (...args) => middlewares.auth.checkPermissions(['user.activate'], ...args),
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        validators.user.getLatestActivationLink,
+        middlewares.validation,
+        controllers.user.getLatestActivationLink,
+    );
     app.post(
         '/users/:id/denyAccess',
         middlewares.auth.authenticate,

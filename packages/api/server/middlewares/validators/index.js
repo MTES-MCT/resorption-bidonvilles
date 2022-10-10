@@ -21,6 +21,7 @@ const findNearbyTowns = require('./findNearbyTowns');
 const exportTown = require('./exportTown');
 const setUserAdminComments = require('./setUserAdminComments');
 const editOrganization = require('./editOrganization');
+const userGetLatestActivationLink = require('./users/getLatestActivationLink');
 const userSetRoleRegular = require('./users/setRoleRegular');
 const mePostNavigationLogs = require('./me/post.navigationLogs');
 
@@ -57,6 +58,7 @@ module.exports = {
         location: dashboardLocation,
     },
     user: {
+        getLatestActivationLink: userGetLatestActivationLink,
         setRoleRegular: userSetRoleRegular,
     },
     me: {
