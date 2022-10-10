@@ -2,10 +2,26 @@ const shantytownModel = require('#server/models/shantytownModel');
 const ServiceError = require('#server/errors/ServiceError');
 
 
-module.exports = async (user) => {
+module.exports = async (user, search = undefined) => {
+    const filters = search !== undefined ? [
+        {
+            name: {
+                operator: 'ILIKE',
+                value: `%${search}%`,
+            },
+            address: {
+                operator: 'ILIKE',
+                value: `%${search}%`,
+            },
+        },
+    ] : [];
     let shantytowns;
     try {
-        shantytowns = await shantytownModel.findAll(user, [], 'list');
+        shantytowns = await shantytownModel.findAll(
+            user,
+            filters,
+            'list',
+        );
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }

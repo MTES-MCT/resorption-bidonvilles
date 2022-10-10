@@ -92,7 +92,7 @@
 <script>
 import DetailsPanel from "#app/components/ui/details/DetailsPanel.vue";
 import DetailsPanelSection from "#app/components/ui/details/DetailsPanelSection.vue";
-import policeSiren from "../TownsList/assets/police_siren.svg";
+import policeSiren from "#frontend/common/helpers/town/assets/police_siren.svg";
 
 export default {
     props: {

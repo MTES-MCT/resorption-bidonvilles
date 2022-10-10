@@ -287,6 +287,17 @@ export default (app) => {
     );
 
     app.get(
+        '/users/:id/towns',
+        middlewares.auth.authenticate,
+        (...args) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        validators.findUserTowns,
+        middlewares.validation,
+        controllers.town.findUserTowns,
+    );
+
+    app.get(
         '/towns/findNearby',
         validators.findNearbyTowns,
         middlewares.auth.authenticate,

@@ -114,7 +114,7 @@ import AccountReadLabel from "../ui/AccountReadLabel";
 import PrivateContainer from "#app/components/PrivateLayout/PrivateContainer";
 import EMAIL_SUBSCRIPTIONS from "#app/utils/email_subscriptions";
 
-import { edit } from "#helpers/api/user";
+import { edit } from "#frontend/common/api/user";
 
 export default {
     components: {

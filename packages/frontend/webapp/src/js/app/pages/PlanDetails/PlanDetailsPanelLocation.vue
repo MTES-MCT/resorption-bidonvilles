@@ -54,7 +54,7 @@ import DetailsPanel from "#app/components/ui/details/DetailsPanel.vue";
 import DetailsPanelSection from "#app/components/ui/details/DetailsPanelSection.vue";
 import Map from "#app/components/map/map.vue";
 import TownField from "#app/components/TownField/TownField.vue";
-import enrichShantytown from "#app/pages/TownsList/enrichShantytown";
+import enrichShantytown from "#frontend/common/helpers/town/enrichShantytown";
 
 export default {
     props: {

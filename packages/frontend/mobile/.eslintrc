@@ -1,0 +1,45 @@
+{
+    "extends": [
+        "plugin:vue/essential",
+        "eslint:recommended",
+        "@vue/prettier",
+        "plugin:import/recommended"
+    ],
+    "env": {
+        "browser": true,
+        "node": true
+    },
+    "root": true,
+    "parserOptions": {
+        "ecmaVersion": 2020
+    },
+    "ignorePatterns": [
+        "node_modules/",
+        "dist/"
+    ],
+    "settings": {
+        "import/resolver": {
+            "alias": {
+                "map": [
+                    [
+                        "#src",
+                        "./src"
+                    ],
+                    [
+                        "#frontend",
+                        ".."
+                    ],
+                    [
+                        "#helpers",
+                        "./src/js/helpers"
+                    ]
+                ],
+                "extensions": [
+                    ".js",
+                    ".json",
+                    ".vue"
+                ]
+            }
+        }
+    }
+}

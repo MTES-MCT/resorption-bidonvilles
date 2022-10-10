@@ -29,17 +29,17 @@ module.exports = {
         plugins: [
             ...(process.env.VUE_APP_SENTRY_SOURCEMAP_AUTHKEY
                 ? [
-                      new SentryPlugin({
-                          authToken:
-                              process.env.VUE_APP_SENTRY_SOURCEMAP_AUTHKEY,
-                          release: VUE_APP_SENTRY_RELEASE,
-                          org: "resorption-bidonvilles",
-                          project: "resorption-bidonvilles",
+                    new SentryPlugin({
+                        authToken:
+                            process.env.VUE_APP_SENTRY_SOURCEMAP_AUTHKEY,
+                        release: VUE_APP_SENTRY_RELEASE,
+                        org: "resorption-bidonvilles",
+                        project: "resorption-bidonvilles",
 
-                          // webpack specific configuration
-                          include: "./dist"
-                      })
-                  ]
+                        // webpack specific configuration
+                        include: "./dist"
+                    })
+                ]
                 : []),
             new DefinePlugin({
                 "process.env.APP_VERSION": JSON.stringify(version)
@@ -52,7 +52,8 @@ module.exports = {
             .set("#app", path.resolve(__dirname, "./src/js/app/"))
             .set("#src", path.resolve(__dirname, "./src/"))
             .set("#helpers", path.resolve(__dirname, "./src/js/helpers"))
-            .set("#matomo", path.resolve(__dirname, "./src/js/matomo"));
+            .set("#matomo", path.resolve(__dirname, "./src/js/matomo"))
+            .set("#frontend", path.resolve(__dirname, ".."));
         config.plugins.delete("progress");
     },
 
