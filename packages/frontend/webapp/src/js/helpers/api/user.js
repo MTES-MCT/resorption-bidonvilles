@@ -92,6 +92,13 @@ export function sendActivationLink(user, data) {
 }
 
 /**
+ * GET /users/:id/activationLink
+ */
+export function getLatestActivationLink(user) {
+    return getApi(`/users/${user}/activationLink`);
+}
+
+/**
  * POST /users/:id/denyAccess
  */
 export function denyAccess(user) {

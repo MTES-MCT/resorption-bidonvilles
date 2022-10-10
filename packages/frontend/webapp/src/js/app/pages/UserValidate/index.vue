@@ -139,6 +139,20 @@
                             >Envoyer un accès</Button
                         >
                     </div>
+                    <div
+                        class="ml-4"
+                        v-if="loggedUser.role_id === 'national_admin'"
+                    >
+                        <Button
+                            v-if="hasPendingAccess"
+                            variant="tertiary"
+                            icon="copy"
+                            iconPosition="left"
+                            :loading="activationLinkIsLoading"
+                            @click="copyActivationLink"
+                            >Copier le lien d'activation</Button
+                        >
+                    </div>
                 </div>
                 <div class="italic mt-4 flex justify-end h-8">
                     <div v-if="isHoverDenyAccess">
@@ -186,7 +200,8 @@ import {
     remove,
     sendActivationLink,
     updateLocalAdmin,
-    setRoleRegular
+    setRoleRegular,
+    getLatestActivationLink
 } from "#helpers/api/user";
 
 import { notify } from "#helpers/notificationHelper";
@@ -247,7 +262,9 @@ export default {
 
             isHoverSendAccess: false,
             isHoverDisableAccess: false,
-            isHoverDenyAccess: false
+            isHoverDenyAccess: false,
+
+            activationLinkIsLoading: false
         };
     },
 
@@ -300,6 +317,17 @@ export default {
                 this.user.status !== "active" &&
                 this.user.user_accesses.length > 0 &&
                 now - this.user.user_accesses[0].expires_at * 1000 > 0
+            );
+        },
+
+        hasPendingAccess() {
+            const now = Date.now();
+
+            return (
+                this.user !== null &&
+                this.user.status === "new" &&
+                this.user.user_accesses.length > 0 &&
+                this.user.user_accesses[0].expires_at * 1000 - now > 0
             );
         }
     },
@@ -537,6 +565,41 @@ export default {
             }
 
             this.validation.loading = null;
+        },
+
+        async copyActivationLink() {
+            if (this.activationLinkIsLoading) {
+                return;
+            }
+
+            this.activationLinkIsLoading = true;
+            try {
+                const { link: activationLink } = await getLatestActivationLink(
+                    this.user.id
+                );
+
+                const input = document.createElement("input");
+                input.value = activationLink;
+                document.body.appendChild(input);
+                input.select();
+                document.execCommand("copy");
+                document.body.removeChild(input);
+
+                notify({
+                    group: "notifications",
+                    type: "success",
+                    title: "Succès",
+                    text:
+                        "Le lien d'activation a été copié dans le presse-papier"
+                });
+            } catch (error) {
+                alert(
+                    `Une erreur est survenue: ${(error && error.user_message) ||
+                        "erreur inconnue"}`
+                );
+            }
+
+            this.activationLinkIsLoading = false;
         }
     }
 };
