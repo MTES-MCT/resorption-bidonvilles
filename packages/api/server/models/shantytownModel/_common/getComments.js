@@ -102,7 +102,7 @@ module.exports = async (user, shantytownIds, covid = false) => {
         }
         acc[row.shantytownId].push(serializeComment({
             ...row,
-            tags: commentTags[row.commentId],
+            tags: commentTags[row.commentId] || [],
         }));
         return acc;
     }, {});
