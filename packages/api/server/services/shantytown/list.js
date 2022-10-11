@@ -17,11 +17,13 @@ module.exports = async (user, search = undefined) => {
     ] : [];
     let shantytowns;
     try {
+        console.time('====================analyse shantytownModel.findAll====================');
         shantytowns = await shantytownModel.findAll(
             user,
             filters,
             'list',
         );
+        console.timeEnd('====================analyse shantytownModel.findAll====================');
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }

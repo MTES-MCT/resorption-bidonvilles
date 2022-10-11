@@ -81,6 +81,7 @@ module.exports = async (where = [], order = ['departements.code ASC', 'cities.na
     const replacements = { ...argReplacements, userId: user.id };
     const whereClause = stringifyWhereClause('shantytowns', where, replacements);
 
+    console.time('SQL-TOWNS');
     const towns = await sequelize.query(
         getBaseSql(
             'regular',
@@ -93,6 +94,9 @@ module.exports = async (where = [], order = ['departements.code ASC', 'cities.na
             replacements,
         },
     );
+    console.timeEnd('SQL-TOWNS');
+
+    console.time('SERIALIZE-TOWNS');
 
     if (towns.length === 0) {
         return [];
@@ -110,6 +114,9 @@ module.exports = async (where = [], order = ['departements.code ASC', 'cities.na
             ordered: [],
         },
     );
+    console.timeEnd('SERIALIZE-TOWNS');
+
+    console.time('SQL-CHANGELOG');
 
     const promises = [];
     if (includeChangelog === true) {
@@ -130,10 +137,17 @@ module.exports = async (where = [], order = ['departements.code ASC', 'cities.na
     } else {
         promises.push(Promise.resolve(undefined));
     }
+    console.timeEnd('SQL-CHANGELOG');
 
-    promises.push(getComments(user, Object.keys(serializedTowns.hash), false));
-    promises.push(getComments(user, Object.keys(serializedTowns.hash), true));
+    console.time('SQL-COMMENTS');
+    const comments = await getComments(user, Object.keys(serializedTowns.hash), false);
+    console.timeEnd('SQL-COMMENTS');
 
+    console.time('SQL-COVID-COMMENTS');
+    const covidComments = await getComments(user, Object.keys(serializedTowns.hash), true);
+    console.timeEnd('SQL-COVID-COMMENTS');
+
+    console.time('SQL-CLOSING-SOLUTIONS');
     promises.push(
         sequelize.query(
             `SELECT
@@ -151,24 +165,39 @@ module.exports = async (where = [], order = ['departements.code ASC', 'cities.na
             },
         ),
     );
+    console.timeEnd('SQL-CLOSING-SOLUTIONS');
+
+    console.time('SQL-ACTORS');
 
     promises.push(
         shantytownActorModel.findAll(
             Object.keys(serializedTowns.hash),
         ),
     );
+    console.timeEnd('SQL-ACTORS');
 
+    console.time('SQL-PLANS');
     promises.push(
         planShantytownModel.findAll(
             Object.keys(serializedTowns.hash),
         ),
     );
+    console.timeEnd('SQL-PLANS');
+
+
+    console.time('SQL-INCOMING-TOWNS');
 
     promises.push(
         incomingTownsModel.findAll(user, Object.keys(serializedTowns.hash)),
     );
+    console.timeEnd('SQL-INCOMING-TOWNS');
 
-    const [history, comments, covidComments, closingSolutions, actors, plans, incomingTowns] = await Promise.all(promises);
+
+    console.time('attente de la Promise');
+    const [history, closingSolutions, actors, plans, incomingTowns] = await Promise.all(promises);
+    console.timeEnd('attente de la Promise');
+
+    console.time('SERIALIZE');
 
     if (history !== undefined && history.length > 0) {
         const serializedHistory = history.map(h => serializeShantytown(h, user));
@@ -207,6 +236,7 @@ module.exports = async (where = [], order = ['departements.code ASC', 'cities.na
         }
     }
 
+
     // @todo: move the serialization of these entities to their own model component
     Object.keys(serializedTowns.hash).forEach((shantytownId) => {
         serializedTowns.hash[shantytownId].comments.regular = comments[shantytownId];
@@ -239,6 +269,7 @@ module.exports = async (where = [], order = ['departements.code ASC', 'cities.na
     incomingTowns.forEach((incomingTown) => {
         serializedTowns.hash[incomingTown.shantytownId].reinstallationIncomingTowns.push(incomingTown);
     });
+    console.timeEnd('SERIALIZE');
 
     return serializedTowns.ordered;
 };
