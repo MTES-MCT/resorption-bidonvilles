@@ -47,22 +47,22 @@ export default {
         });
 
         // agenda
-        const agenda = loaders.agenda.getAgenda();
-        loaders.agendaJobs(agenda);
+        // const agenda = loaders.agenda.getAgenda();
+        // loaders.agendaJobs(agenda);
 
-        try {
-            await agenda.start();
+        // try {
+        //     await agenda.start();
 
-            if (sendActivitySummary) {
-                await agenda.every("00 00 07 * * 1", "send_activity_summary"); // every monday at 7AM
-            }
+        //     if (sendActivitySummary) {
+        //         await agenda.every("00 00 07 * * 1", "send_activity_summary"); // every monday at 7AM
+        //     }
 
-            // eslint-disable-next-line no-console
-            console.log('Set scheduled jobs up');
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.log('Failed settings up scheduled jobs');
-        }
+        //     // eslint-disable-next-line no-console
+        //     console.log('Set scheduled jobs up');
+        // } catch (error) {
+        //     // eslint-disable-next-line no-console
+        //     console.log('Failed settings up scheduled jobs');
+        // }
 
         return app;
     },

@@ -1,5 +1,5 @@
-const dotenv = require('dotenv');
-const pg = require('pg');
+import * as dotenv from "dotenv";
+import * as pg from 'pg';
 
 dotenv.config();
 
