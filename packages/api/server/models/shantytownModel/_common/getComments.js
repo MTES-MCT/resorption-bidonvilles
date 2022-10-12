@@ -13,10 +13,10 @@ module.exports = async (user, shantytownIds, covid = false) => {
         `WITH organization_comment_access AS (
             SELECT 
                 scot.fk_comment AS shantytown_comment_id,
-                ARRAY_AGG(lo.name) AS organization_target_name,
-                ARRAY_AGG(lo.organization_id) AS organization_target_id
+                ARRAY_AGG(ou.name) AS organization_target_name,
+                ARRAY_AGG(ou.organization_id) AS organization_target_id
             FROM shantytown_comment_organization_targets scot 
-            LEFT JOIN organizations lo ON lo.organization_id = scot.fk_organization
+            LEFT JOIN organizations_users ou ON ou.organization_id = scot.fk_organization
             GROUP BY scot.fk_comment
         ),
         user_comment_access AS (
@@ -57,7 +57,7 @@ module.exports = async (user, shantytownIds, covid = false) => {
             user_comment_access.user_target_name
         FROM shantytown_comments
         LEFT JOIN users ON shantytown_comments.created_by = users.user_id
-        LEFT JOIN organizations ON users.fk_organization = organizations.organization_id
+        LEFT JOIN organizations_users organizations ON users.fk_organization = organizations.organization_id
         LEFT JOIN shantytown_covid_comments ON shantytown_covid_comments.fk_comment = shantytown_comments.shantytown_comment_id
         LEFT JOIN organization_comment_access ON organization_comment_access.shantytown_comment_id = shantytown_comments.shantytown_comment_id
         LEFT JOIN user_comment_access ON user_comment_access.shantytown_comment_id = shantytown_comments.shantytown_comment_id
