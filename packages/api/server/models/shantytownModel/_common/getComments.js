@@ -16,7 +16,7 @@ module.exports = async (user, shantytownIds, covid = false) => {
                 ARRAY_AGG(ou.name) AS organization_target_name,
                 ARRAY_AGG(ou.organization_id) AS organization_target_id
             FROM shantytown_comment_organization_targets scot 
-            LEFT JOIN organizations_users ou ON ou.organization_id = scot.fk_organization
+            LEFT JOIN organizations ou ON ou.organization_id = scot.fk_organization
             GROUP BY scot.fk_comment
         ),
         user_comment_access AS (
