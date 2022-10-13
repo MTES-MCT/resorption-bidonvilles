@@ -1,4 +1,4 @@
-const addressSimpleRegex = require('./addressSimpleRegex');
+// const addressSimpleRegex = require('./addressSimpleRegex');
 
 module.exports = {
     selection: {
@@ -15,7 +15,7 @@ module.exports = {
         'shantytowns.is_reinstallation': 'isReinstallation',
         'shantytowns.reinstallation_comments': 'reinstallationComments',
         'shantytowns.address_details': 'addressDetails',
-        [addressSimpleRegex]: 'addressSimple',
+        // [addressSimpleRegex]: 'addressSimple',
         'shantytowns.population_total': 'populationTotal',
         'shantytowns.population_couples': 'populationCouples',
         'shantytowns.population_minors': 'populationMinors',
