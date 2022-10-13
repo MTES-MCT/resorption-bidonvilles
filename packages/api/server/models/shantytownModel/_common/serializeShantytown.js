@@ -59,7 +59,7 @@ module.exports = (town, user) => {
         closedAt: town.closedAt !== null ? (town.closedAt.getTime() / 1000) : null,
         address: town.address,
         addressDetails: town.addressDetails,
-        addressSimple: getAddressSimpleOf(town),
+        addressSimple: getAddressSimpleOf(town.address),
         usename: getUsenameOf(town),
         populationTotal: town.populationTotal,
         populationCouples: town.populationCouples,

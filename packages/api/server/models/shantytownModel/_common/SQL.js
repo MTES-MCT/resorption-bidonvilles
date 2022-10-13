@@ -1,4 +1,3 @@
-// const addressSimpleRegex = require('./addressSimpleRegex');
 
 module.exports = {
     selection: {
@@ -15,7 +14,6 @@ module.exports = {
         'shantytowns.is_reinstallation': 'isReinstallation',
         'shantytowns.reinstallation_comments': 'reinstallationComments',
         'shantytowns.address_details': 'addressDetails',
-        // [addressSimpleRegex]: 'addressSimple',
         'shantytowns.population_total': 'populationTotal',
         'shantytowns.population_couples': 'populationCouples',
         'shantytowns.population_minors': 'populationMinors',
@@ -148,16 +146,16 @@ module.exports = {
         { table: 'owner_types', on: 'shantytowns.fk_owner_type = owner_types.owner_type_id' },
         { table: 'field_types', on: 'shantytowns.fk_field_type = field_types.field_type_id' },
         { table: 'electricity_types', on: 'shantytowns.fk_electricity_type = electricity_types.electricity_type_id' },
-        { table: 'cities_users cities', on: 'shantytowns.fk_city = cities.code' },
+        { table: 'cities', on: 'shantytowns.fk_city = cities.code' },
         { table: 'epci', on: 'cities.fk_epci = epci.code' },
         { table: 'departements', on: 'cities.fk_departement = departements.code' },
-        { table: 'cities_users AS departementChiefTown', on: 'departementChiefTown.code = departements.fk_city' },
+        { table: 'cities AS departementChiefTown', on: 'departementChiefTown.code = departements.fk_city' },
         { table: 'regions', on: 'departements.fk_region = regions.code' },
-        { table: 'cities_users AS regionChiefTown', on: 'regionChiefTown.code = regions.fk_city' },
+        { table: 'cities AS regionChiefTown', on: 'regionChiefTown.code = regions.fk_city' },
         { table: 'users AS creators', on: 'shantytowns.created_by = creators.user_id' },
-        { table: 'organizations_users AS creators_organizations', on: 'creators.fk_organization = creators_organizations.organization_id' },
+        { table: 'organizations AS creators_organizations', on: 'creators.fk_organization = creators_organizations.organization_id' },
         { table: 'users AS updators', on: 'shantytowns.updated_by = updators.user_id' },
-        { table: 'organizations_users AS updators_organizations ', on: 'updators.fk_organization = updators_organizations.organization_id' },
+        { table: 'organizations AS updators_organizations ', on: 'updators.fk_organization = updators_organizations.organization_id' },
         { table: 'shantytown_actors ', on: 'shantytown_actors.fk_shantytown = shantytowns.shantytown_id AND shantytown_actors.fk_user = :userId' },
     ],
 };
