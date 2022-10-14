@@ -30,7 +30,7 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate) =
 
     const activities = await sequelize.query(
         `
-            SELECT DISTINCT
+            SELECT
                 comments.high_covid_comment_id AS "highCommentId",
                 comments.created_at AS "date",
                 author.first_name AS author_first_name,
@@ -44,8 +44,6 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate) =
             LEFT JOIN high_covid_comment_territories territories ON territories.fk_comment = comments.high_covid_comment_id
             LEFT JOIN departements ON territories.fk_departement = departements.code
             LEFT JOIN regions ON departements.fk_region = regions.code
-            LEFT JOIN cities ON cities.fk_departement = departements.code
-            LEFT JOIN epci ON cities.fk_epci = epci.code
             ${where.length > 0 ? `WHERE (${where.join(') AND (')})` : ''}
             ORDER BY comments.created_at DESC
             ${limit}
