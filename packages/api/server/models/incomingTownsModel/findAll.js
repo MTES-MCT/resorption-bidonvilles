@@ -1,6 +1,5 @@
 const sequelize = require('#db/sequelize');
 const { where } = require('#server/utils/permission');
-const addressSimpleRegex = require('#server/models/shantytownModel/_common/addressSimpleRegex');
 const getAddressSimpleOf = require('#server/models/shantytownModel/_common/getAddressSimpleOf');
 const getUsenameOf = require('#server/models/shantytownModel/_common/getUsenameOf');
 const stringifyWhereClause = require('#server/models/_common/stringifyWhereClause');
@@ -22,7 +21,7 @@ module.exports = async (user, shantytownIds) => {
             incoming.fk_shantytown AS "shantytownId",
             incoming.fk_incoming_town AS "incomingTownId",
             shantytowns.name AS "name",
-            ${addressSimpleRegex} AS "addressSimple"
+            address
         FROM shantytown_incoming_towns AS incoming
         LEFT JOIN shantytowns ON incoming.fk_incoming_town = shantytowns.shantytown_id
         LEFT JOIN cities ON shantytowns.fk_city = cities.code
@@ -43,7 +42,7 @@ module.exports = async (user, shantytownIds) => {
         shantytownId: row.shantytownId,
         id: row.incomingTownId,
         name: row.name,
-        addressSimple: getAddressSimpleOf(row),
+        addressSimple: getAddressSimpleOf(row.address),
         usename: getUsenameOf(row),
     }));
 };

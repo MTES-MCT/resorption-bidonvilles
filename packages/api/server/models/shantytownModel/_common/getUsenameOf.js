@@ -1,8 +1,7 @@
 const getAddressSimpleOf = require('./getAddressSimpleOf');
 
 module.exports = (shantytown) => {
-    const addressSimple = getAddressSimpleOf(shantytown);
-
+    const addressSimple = shantytown.addressSimple || getAddressSimpleOf(shantytown.address);
     // process usename
     if (shantytown.name) {
         let aka;
