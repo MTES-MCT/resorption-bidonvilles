@@ -4,6 +4,8 @@ const { formatName } = require('#server/models/userModel');
 const { getUsenameOf, serializeComment } = require('#server/models/shantytownModel');
 const { restrict } = require('#server/utils/permission');
 const shantytownCommentTagModel = require('#server/models/shantytownCommentTagModel/index');
+const getAddressSimpleOf = require('../shantytownModel/_common/getAddressSimpleOf');
+
 
 module.exports = async (user, location, numberOfActivities, lastDate, maxDate, onlyCovid = false) => {
     // apply geographic level restrictions
@@ -126,7 +128,7 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate, o
                 organizations.organization_id AS "organizationId",
                 shantytowns.shantytown_id AS "shantytownId",
                 shantytowns.name AS "shantytownName",
-                (SELECT regexp_matches(shantytowns.address, '^(.+) [0-9]+ [^,]+,? [0-9]+,? [^, ]+(,.+)?$'))[1] AS "shantytownAddressSimple",
+                shantytowns.address,
                 covid_comments.date AS "covidCommentDate",
                 covid_comments.equipe_maraude AS "covidEquipeMaraude",
                 covid_comments.equipe_sanitaire AS "covidEquipeSanitaire",
@@ -191,7 +193,7 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate, o
             shantytown: {
                 id: activity.shantytownId,
                 usename: getUsenameOf({
-                    addressSimple: activity.shantytownAddressSimple,
+                    addressSimple: getAddressSimpleOf(activity.address),
                     name: activity.shantytownName,
                 }),
                 city: {
