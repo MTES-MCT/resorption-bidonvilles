@@ -5,6 +5,7 @@ const decomposeForDiagramm = require('./_common/decomposeForDiagramm');
 const getArrayOfDates = require('./_common/getArrayOfDates');
 
 module.exports = async (user, location) => {
+    console.time('====getStats=======');
     const restrictedLocation = restrict(location).for(user).askingTo('list', 'shantytown');
     if (restrictedLocation === null) {
         return null;
@@ -83,16 +84,20 @@ module.exports = async (user, location) => {
         sequelize.query(
             `
             SELECT
-                COUNT(DISTINCT fk_user),
+                COUNT(fk_user),
                 week,
                 TO_CHAR((now()::date - INTERVAL '1 day' * ((week * 7) + 6)) - INTERVAL '1 day', 'DD/MM') AS date_debut,
                 TO_CHAR((now()::date - INTERVAL '1 day' * (week * 7)) - INTERVAL '1 day', 'DD/MM') AS date_fin
             FROM (
-                SELECT
-                    fk_user,
-                    (floor(((now() - INTERVAL '1 day')::date - datetime::date) / 7)) AS week
-                FROM user_navigation_logs
-                WHERE datetime::date < now()::date
+                SELECT fk_user, week 
+                    FROM (
+                        SELECT
+                            fk_user,
+                            (floor(((now() - INTERVAL '1 day')::date - datetime::date) / 7)) AS week
+                            FROM user_navigation_logs
+                        WHERE datetime::date < now()::date
+                    )AS unl
+                    GROUP BY fk_user, week
             ) t
             ${where !== null ? `
             LEFT JOIN users ON users.user_id = t.fk_user
@@ -108,5 +113,8 @@ module.exports = async (user, location) => {
     ]);
 
     const listOfDates = getArrayOfDates(otherDate, date);
-    return decomposeForDiagramm(shantytownStats, connectedUsers, listOfDates);
+
+    const res = decomposeForDiagramm(shantytownStats, connectedUsers, listOfDates);
+    console.timeEnd('====getStats=======');
+    return res;
 };
