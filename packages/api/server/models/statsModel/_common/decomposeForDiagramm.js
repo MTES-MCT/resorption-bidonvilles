@@ -1,7 +1,7 @@
 const moment = require('moment');
 
 module.exports = (towns, connectedUsers, listOfDates) => {
-    const date2019 = moment(new Date('2019-01-01T00:00:00')).format('YYYY-MM-DD HH:mm:ss ZZ');
+    const date2019 = new Date('2019-01-01T00:00:00');
 
     const connectedUserStats = {
         evolution: 0,
@@ -38,7 +38,7 @@ module.exports = (towns, connectedUsers, listOfDates) => {
 
     listOfDates.forEach(
         (date) => {
-            const listOfId = [];
+            const listOfId = {};
             let populationTotal = 0;
             let minorsTotal = 0;
             let minorsInSchoolTotal = 0;
@@ -48,17 +48,16 @@ module.exports = (towns, connectedUsers, listOfDates) => {
 
             towns.forEach(
                 (town) => {
-                    if (!listOfId.includes(town.id) && moment(town.updated_at).format('YYYY-MM-DD HH:mm:ss ZZ') <= date) {
-                        listOfId.push(town.id);
-
+                    if (!listOfId[town.id] && town.updated_at <= date) {
+                        listOfId[town.id] = null;
                         if (town.closed_at === null) {
                             populationTotal += town.population;
                             minorsTotal += town.minors;
                             minorsInSchoolTotal += town.minors_in_school;
                             openShantytownsTotal += 1;
-                        } else if (town.resorbed === 'yes' && moment(town.closed_at).format('YYYY-MM-DD HH:mm:ss ZZ') >= date2019) {
+                        } else if (town.resorbed === 'yes' && town.closed_at >= date2019) {
                             resorbedShantytownsTotal += 1;
-                        } else if (moment(town.closed_at).format('YYYY-MM-DD HH:mm:ss ZZ') > date2019) {
+                        } else if (town.closed_at > date2019) {
                             closedShantytownsTotal += 1;
                         }
                     }
