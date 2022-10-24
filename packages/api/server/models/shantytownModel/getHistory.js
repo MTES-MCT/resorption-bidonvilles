@@ -12,6 +12,7 @@ module.exports = async (user, location, shantytownFilter, numberOfActivities, la
     const where = [];
     const replacements = {
         maxDate,
+        userId: user.id,
     };
     const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
 
@@ -77,7 +78,10 @@ module.exports = async (user, location, shantytownFilter, numberOfActivities, la
                     LEFT JOIN shantytown_toilet_types stt ON stt.fk_shantytown = shantytowns.hid
                     ${SQL.joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
                     ${where.length > 0 ? `WHERE ((${where.join(') OR (')}))` : ''}
-                )
+                    ${where.length > 0 ? 'AND' : 'WHERE'} shantytowns.updated_at < '${lastDate}'
+                    ORDER BY shantytowns.updated_at DESC
+                    ${limit}
+                    )
                 UNION
                 (
                     WITH
@@ -119,6 +123,9 @@ module.exports = async (user, location, shantytownFilter, numberOfActivities, la
                     LEFT JOIN shantytown_toilet_types stt ON stt.fk_shantytown = shantytowns.shantytown_id
                     ${SQL.joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
                     ${where.length > 0 ? `WHERE (${where.join(') OR (')})` : ''}
+                    ${where.length > 0 ? 'AND' : 'WHERE'} shantytowns.updated_at < '${lastDate}'
+                    ORDER BY shantytowns.updated_at DESC
+                    ${limit}
                 )) activities
             LEFT JOIN users author ON activities.author_id = author.user_id
             WHERE activities.date < '${lastDate}'

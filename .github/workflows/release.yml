@@ -169,3 +169,38 @@ jobs:
           cache-to: type=gha,mode=max
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
+
+  build-mobile:
+    needs: upgrade-version
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@master
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-api-buildx-qa-${{ github.event.inputs.tag }}
+          restore-keys: |
+            ${{ runner.os }}-api-buildx
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        id: mobile_build
+        with:
+          context: .
+          file: Dockerfile.mobile
+          push: true
+          tags: resorptionbidonvilles/mobile:v${{ needs['upgrade-version'].outputs.new_tag }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Image digest
+        run: echo ${{ steps.mobile_build.outputs.digest }}

@@ -19,15 +19,14 @@ module.exports = async (commentIds) => {
     );
 
     // group tags by comment (empty array is the default for each comment)
-    const tags = commentIds.reduce((acc, commentId) => ({
-        ...acc,
-        [parseInt(commentId, 10)]: [],
-    }), {});
 
     return rows.reduce((argAcc, tag) => {
         const acc = { ...argAcc };
+        if (!acc[tag.commentId]) {
+            acc[tag.commentId] = [];
+        }
         acc[tag.commentId].push(serializeCommentTag(tag));
 
         return acc;
-    }, tags);
+    }, {});
 };

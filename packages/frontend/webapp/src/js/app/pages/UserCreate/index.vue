@@ -1,9 +1,7 @@
 <template>
     <PrivateLayout>
         <div class="max-w-xl mx-auto py-16">
-            <h2 class="text-display-lg font-bold mb-4">
-                Créer un utilisateur
-            </h2>
+            <h2 class="text-display-lg font-bold mb-4">Créer un utilisateur</h2>
             <ValidationObserver ref="form" v-slot="{ handleSubmit, errors }">
                 <form
                     class="max-w-xl mt-12"
@@ -154,7 +152,7 @@
 </template>
 
 <script>
-import { create } from "#helpers/api/user";
+import { create } from "#frontend/common/api/user";
 import PublicEstablishmentForm from "#app/components/UserForm/PublicEstablishmentForm.vue";
 import TerritorialCollectivityForm from "#app/components/UserForm/TerritorialCollectivityForm.vue";
 import AssociationForm from "#app/components/UserForm/AssociationForm.vue";

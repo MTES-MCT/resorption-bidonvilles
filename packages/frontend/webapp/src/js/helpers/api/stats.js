@@ -1,4 +1,4 @@
-import { getApi } from "#helpers/api/main";
+import { getApi } from "#src/js/api";
 
 /**
  * Lists all statistics

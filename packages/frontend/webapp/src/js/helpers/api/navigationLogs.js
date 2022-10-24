@@ -1,4 +1,4 @@
-import { postApi } from "#helpers/api/main";
+import { postApi } from "#src/js/api";
 
 /**
  * POST /me/navigationLogs
