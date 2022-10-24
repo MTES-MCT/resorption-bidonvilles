@@ -7,30 +7,27 @@
             </h1>
         </header>
 
-        <ValidationObserver ref="form" v-slot="{ handleSubmit }">
-            <form
-                @submit.prevent="handleSubmit(onLogin)"
-                class="mx-auto max-w-sm"
-            >
-                <TextInput
-                    placeholder="marcel.dupont@example.com"
-                    label="Votre courriel"
-                    v-model="email"
-                />
+        <form
+            @submit.prevent="onLogin"
+        >
+            <TextInput
+                placeholder="marcel.dupont@example.com"
+                label="Votre courriel"
+                v-model="email"
+            />
 
-                <PasswordInput label="Votre mot de passe" v-model="password" />
+            <PasswordInput label="Votre mot de passe" v-model="password" />
 
-                <div class="text-center mt-12">
-                    <Button type="submit" class="mb-8" :loading="loading">
-                        Me connecter
-                    </Button>
+            <div class="text-center mt-12">
+                <Button type="submit" class="mb-8" :loading="loading">
+                    Me connecter
+                </Button>
 
-                    <div v-if="error" class="bg-red200 p-3 mb-8">
-                        {{ error }}
-                    </div>
+                <div v-if="error" class="bg-red200 p-3 mb-8">
+                    {{ error }}
                 </div>
-            </form>
-        </ValidationObserver>
+            </div>
+        </form>
     </Container>
 </template>
 

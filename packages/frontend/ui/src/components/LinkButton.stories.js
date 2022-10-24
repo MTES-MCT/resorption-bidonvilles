@@ -1,0 +1,66 @@
+import LinkButton from './LinkButton.vue';
+
+export default {
+    title: 'LinkButton',
+    component: LinkButton,
+    argTypes: {
+        to: {
+            control: 'text'
+        },
+        icon: {
+            control: 'select',
+            options: [null, 'house-circle-check']
+        }
+    }
+};
+
+const Template = (args) => ({
+    components: { LinkButton },
+    template: `<div>
+        <LinkButton
+            to="${args.to}"
+            ${args.icon ? `icon="${args.icon}"` : ''}>
+            Accueil
+        </LinkButton>
+    </div>`
+});
+
+export const InternalLinkWithoutIcon = Template.bind({});
+InternalLinkWithoutIcon.args = {
+    to: '/'
+};
+
+export const InternalLinkWithIcon = Template.bind({});
+InternalLinkWithIcon.args = {
+    to: '/',
+    icon: 'house-circle-check'
+};
+
+export const ExternalLinkWithIcon = Template.bind({});
+ExternalLinkWithIcon.args = {
+    to: 'https://google.fr',
+    icon: 'house-circle-check'
+};
+
+export const RealLifeExample = function () {
+    return {
+        components: { LinkButton },
+        template: `<div class="flex space-x-4">
+            <LinkButton
+                to="/"
+                icon="house-circle-check">
+                Accueil
+            </LinkButton>
+            <LinkButton
+                to="https://blog-resorption-bidonvilles.beta.gouv.fr"
+                icon="house-circle-check">
+                Blog
+            </LinkButton>
+            <LinkButton
+                to="mailto:contact@resorption-bidonvilles.beta.gouv.fr"
+                icon="house-circle-check">
+                Aide
+            </LinkButton>
+        </div>`
+    };
+};

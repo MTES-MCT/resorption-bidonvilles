@@ -1,7 +1,7 @@
 import { createApi } from "#frontend/common/api/main";
-import { APP_VERSION, VUE_APP_MOBILE_API_HOST } from "#src/env";
+import ENV from "#src/env.js";
 
-const api = createApi(`https://${VUE_APP_MOBILE_API_HOST}`, APP_VERSION);
+const api = createApi(`https://${ENV.VITE_MOBILE_API_HOST}`, __APP_VERSION__);
 export default api;
 
 const { getApi, postApi, patchApi, putApi, deleteApi, open } = api;

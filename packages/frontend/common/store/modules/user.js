@@ -1,10 +1,10 @@
-import { login, refreshToken } from "#frontend/common/api/user";
+import { login, refreshToken } from "#frontend/common/api/user.js";
 
 export default {
     namespaced: true,
 
     state: {
-        accessToken: process.isServer ? null : localStorage.getItem("token")
+        accessToken: import.meta.env.SSR ? null : localStorage.getItem("token")
     },
 
     mutations: {

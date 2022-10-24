@@ -2,6 +2,10 @@ import { get, set } from "idb-keyval";
 import getRandomString from "#src/js/utils/getRandomString";
 import { createComment } from "#src/js/helpers/townComment";
 
+function setNotes(value) {
+    set("notes", JSON.parse(JSON.stringify(value)));
+}
+
 export default {
     namespaced: true,
 
@@ -60,11 +64,11 @@ export default {
                 description: "",
                 shantytown,
                 publications: [],
-                created_at: new Date()
+                created_at: (new Date()).toString()
             };
 
             commit("ADD_NOTE", note);
-            await set("notes", state.notes);
+            await setNotes(state.notes);
 
             return note;
         },
@@ -84,7 +88,7 @@ export default {
             }
 
             commit("UPDATE_DESCRIPTION", { index, description });
-            await set("notes", state.notes);
+            await setNotes(state.notes);
         },
 
         async setShantytown({ commit, state }, { id: noteId, shantytownId }) {
@@ -94,7 +98,7 @@ export default {
             }
 
             commit("UPDATE_SHANTYTOWN", { index, shantytownId });
-            await set("notes", state.notes);
+            await setNotes(state.notes);
         },
 
         async updateNote({ commit, state }, note) {
@@ -104,7 +108,7 @@ export default {
             }
 
             commit("UPDATE_NOTE", { index, note });
-            await set("notes", state.notes);
+            await setNotes(state.notes);
         },
 
         async deleteNote({ commit, state }, noteId) {
@@ -114,7 +118,7 @@ export default {
             }
 
             commit("REMOVE_NOTE", index);
-            await set("notes", state.notes);
+            await setNotes(state.notes);
         },
 
         async publishNote(
@@ -143,10 +147,10 @@ export default {
                     index,
                     publication: {
                         shantytown: shantytownId,
-                        published_at: new Date()
+                        published_at: (new Date()).toString()
                     }
                 });
-                await set("notes", state.notes);
+                await setNotes(state.notes);
             } catch (error) {
                 throw new Error(
                     (error && error.user_message) ||

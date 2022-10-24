@@ -1,4 +1,4 @@
-import VueRouter from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import Signin from "#src/js/pages/Signin.vue";
 import TownsList from "#src/js/pages/TownsList/MobileTownsList.vue";
 import TownPage from "#src/js/pages/TownPage/TownPage.vue";
@@ -9,7 +9,7 @@ import MiseANiveau from "#src/js/pages/MiseANiveau/MiseANiveau.vue";
 import NotesList from "#src/js/pages/NotesList/NotesList.vue";
 import NotesForm from "#src/js/pages/NotesForm/NotesForm.vue";
 import SignatureCharteEngagement from "#src/js/pages/SignatureCharteEngagement/SignatureCharteEngagement.vue";
-import store from "../store/index";
+import store from "#src/store/index.js";
 
 function isLoggedIn() {
     return store.getters["user/loggedIn"];
@@ -169,8 +169,9 @@ const guardians = {
     ])
 };
 
-export default new VueRouter({
-    mode: "history",
+const router = createRouter({
+    history: createWebHistory(import.meta.env.BASE_URL),
+
     routes: [
         {
             path: "/",
@@ -261,6 +262,8 @@ export default new VueRouter({
         }
     ]
 });
+
+export default router;
 
 /**
  * Returns the entrypoint

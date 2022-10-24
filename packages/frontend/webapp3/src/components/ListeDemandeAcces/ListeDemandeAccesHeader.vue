@@ -1,0 +1,61 @@
+<template>
+    <ViewHeader icon="key">
+        <template v-slot:title>Gestion des accès</template>
+        <template v-slot:description
+            >Traitez les demandes d'accès sur votre territoire</template
+        >
+        <template v-slot:actions>
+            <p class="flex space-x-2">
+                <Button
+                    icon="file-pdf"
+                    iconPosition="left"
+                    variant="primaryOutline"
+                    size="sm"
+                    @click="downloadGuide"
+                >
+                    Guide des accès</Button
+                >
+                <Button
+                    v-if="exportList.length > 0"
+                    @click="openModalExport"
+                    icon="file-excel"
+                    iconPosition="left"
+                    variant="primaryOutline"
+                    size="sm"
+                >
+                    Exporter</Button
+                >
+                <Button
+                    href="/nouvel-utilisateur"
+                    icon="user-plus"
+                    iconPosition="left"
+                    variant="secondary"
+                    size="sm"
+                >
+                    Ajouter un utilisateur</Button
+                >
+            </p>
+        </template>
+    </ViewHeader>
+
+    <ListeDemandeAccesModalExport ref="modalExport" />
+</template>
+
+<script setup>
+import { ref } from "vue";
+import exportList from "./ListeDemandeAcces.exports";
+
+import { Button } from "@resorptionbidonvilles/ui";
+import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
+import ListeDemandeAccesModalExport from "./ListeDemandeAccesModalExport.vue";
+
+const modalExport = ref(null);
+
+function downloadGuide() {
+    window.location = "/doc/guide_de_l_administrateur.pdf";
+}
+
+function openModalExport() {
+    modalExport.value.open();
+}
+</script>

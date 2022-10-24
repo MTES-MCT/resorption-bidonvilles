@@ -1,4 +1,3 @@
-import { defineNuxtConfig } from 'nuxt3';
 import messages from "./assets/i18n/index.js";
 
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config

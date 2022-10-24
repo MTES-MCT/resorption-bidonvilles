@@ -4,21 +4,22 @@
             :type="this.hidden ? 'password' : 'text'"
             v-bind="$attrs"
             @input="$emit('input', $event)"
-        />
-        <div class="eyeButton">
-            <Button
-                :icon="hidden ? 'eye-slash' : 'eye'"
-                type="button"
-                variant="primaryText"
-                @click="toggleHidden"
-            />
-        </div>
+        >
+            <template v-slot:suffix>
+                <Icon
+                    class="absolute right-8 cursor-pointer"
+                    :icon="hidden ? 'fa-eye-slash fa-regular' : 'fa-eye fa-regular'"
+                    @click="toggleHidden"
+                />
+            </template>
+        </TextInput>
     </div>
 </template>
 
 <script>
 import TextInput from "./TextInput.vue";
-import Button from "../Button.vue"
+import Icon from "../Icon.vue";
+
 export default {
     data() {
         return {
@@ -27,7 +28,7 @@ export default {
     },
     components: {
         TextInput,
-        Button
+        Icon
     },
     methods: {
         toggleHidden() {

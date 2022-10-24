@@ -16,8 +16,13 @@ export default function getInputClasses(variant, inputOptions = {}) {
             suffixIcon && "pr-10"
         ],
         default: [
-            "border-2 border-blue200 py-1 px-4 w-full outline-none focus:border-primary hover:border-inputHover",
+            "border-2 border-blue200 py-1 px-2 w-full outline-none focus:border-primary hover:border-inputHover",
             size === "sm" ? "text-xs" : "",
+            prefixIcon && "pl-10",
+            suffixIcon && "pr-10"
+        ],
+        filter: [
+            "border border-primary px-2 w-full rounded outline-none leading-7 hover",
             prefixIcon && "pl-10",
             suffixIcon && "pr-10"
         ]

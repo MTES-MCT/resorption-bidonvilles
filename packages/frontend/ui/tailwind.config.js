@@ -2,91 +2,87 @@ module.exports = {
     content: [
         "./src/**/*.{vue,js}"
     ],
-    future: {
-        removeDeprecatedGapUtilities: true,
-        purgeLayersByDefault: true
-    },
     theme: {
-        borderWidth: {
-            default: "1px",
-            "0": "0",
-            "1": "1px",
-            "2": "2px",
-            "3": "3px",
-            "4": "4px",
-            "6": "6px",
-            "8": "8px",
-            "10": "10px",
-            "12": "12px",
-            "14": "14px",
-            "16": "16px"
-        },
-        fontFamily: {
-            body: ["Marianne", "arial", "sans-serif"]
-        },
-        fontSize: {
-            "size-display-xl": [
-                "3rem",
-                {
-                    lineHeight: "1.25em"
-                }
-            ],
-            "size-display-lg": [
-                "2rem",
-                {
-                    lineHeight: "1.25em"
-                }
-            ],
-            "size-display-md": [
-                "1.5rem",
-                {
-                    lineHeight: "1.25em"
-                }
-            ],
-            "size-display-sm": [
-                "1.25rem",
-                {
-                    lineHeight: "1.375em"
-                }
-            ],
-            "size-display-xs": [
-                "1rem",
-                {
-                    lineHeight: "1.375em"
-                }
-            ],
-            "size-xl": [
-                "1.5rem",
-                {
-                    lineHeight: "1.5em"
-                }
-            ],
-            "size-lg": [
-                "1.25rem",
-                {
-                    lineHeight: "1.5em"
-                }
-            ],
-            "size-md": [
-                "1rem",
-                {
-                    lineHeight: "1.5em"
-                }
-            ],
-            "size-sm": [
-                "0.865rem",
-                {
-                    lineHeight: "1.5em"
-                }
-            ],
-            "size-xs": [
-                "0.75rem",
-                {
-                    lineHeight: "1em"
-                }
-            ]
-        },
         extend: {
+            borderWidth: {
+                default: "1px",
+                "0": "0",
+                "1": "1px",
+                "2": "2px",
+                "3": "3px",
+                "4": "4px",
+                "6": "6px",
+                "8": "8px",
+                "10": "10px",
+                "12": "12px",
+                "14": "14px",
+                "16": "16px"
+            },
+            fontFamily: {
+                body: ["Marianne", "arial", "sans-serif"]
+            },
+            fontSize: {
+                "size-display-xl": [
+                    "3rem",
+                    {
+                        lineHeight: "1.25em"
+                    }
+                ],
+                "size-display-lg": [
+                    "2rem",
+                    {
+                        lineHeight: "1.25em"
+                    }
+                ],
+                "size-display-md": [
+                    "1.5rem",
+                    {
+                        lineHeight: "1.25em"
+                    }
+                ],
+                "size-display-sm": [
+                    "1.25rem",
+                    {
+                        lineHeight: "1.375em"
+                    }
+                ],
+                "size-display-xs": [
+                    "1rem",
+                    {
+                        lineHeight: "1.375em"
+                    }
+                ],
+                "size-xl": [
+                    "1.5rem",
+                    {
+                        lineHeight: "1.5em"
+                    }
+                ],
+                "size-lg": [
+                    "1.25rem",
+                    {
+                        lineHeight: "1.5em"
+                    }
+                ],
+                "size-md": [
+                    "1rem",
+                    {
+                        lineHeight: "1.5em"
+                    }
+                ],
+                "size-sm": [
+                    "0.865rem",
+                    {
+                        lineHeight: "1.5em"
+                    }
+                ],
+                "size-xs": [
+                    "0.75rem",
+                    {
+                        lineHeight: "1em"
+                    }
+                ]
+            },
             width: {
                 200: "50rem"
             },

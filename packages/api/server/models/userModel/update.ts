@@ -34,27 +34,25 @@ export default async (userId, values, transaction = undefined) => {
         }
     });
 
-    if (setClauses.length === 0) {
-        throw new Error('The updated values are missing');
-    }
+    if (setClauses.length > 0) {
+        const [, { rowCount }]: any = await sequelize.query(
+            `UPDATE
+                users
+            SET
+                ${setClauses.join(',')}
+            WHERE
+                users.user_id = :userId`,
+            {
+                replacements: Object.assign(replacements, {
+                    userId,
+                }),
+                transaction,
+            },
+        );
 
-    const [, { rowCount }]: any = await sequelize.query(
-        `UPDATE
-            users
-        SET
-            ${setClauses.join(',')}
-        WHERE
-            users.user_id = :userId`,
-        {
-            replacements: Object.assign(replacements, {
-                userId,
-            }),
-            transaction,
-        },
-    );
-
-    if (rowCount === 0) {
-        throw new Error(`The user #${userId} does not exist`);
+        if (rowCount === 0) {
+            throw new Error(`The user #${userId} does not exist`);
+        }
     }
 
     if (Array.isArray(values.email_unsubscriptions)) {

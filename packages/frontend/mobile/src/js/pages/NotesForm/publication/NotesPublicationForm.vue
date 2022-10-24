@@ -1,15 +1,8 @@
 <template>
-    <BottomSlidingBlock
-        ref="slidingBlock"
-        @cancel="$emit('close')"
-        :openByDefault="openByDefault"
-    >
-        <template slot="header">Publier ma note</template>
-        <template slot="body">
-            <img
-                src="/img/illustrations/notes_publish.svg"
-                class="mt-4 w-1/2 m-auto"
-            />
+    <BottomSlidingBlock ref="slidingBlock" @cancel="$emit('close')" :openByDefault="openByDefault">
+        <template v-slot:header>Publier ma note</template>
+        <template v-slot:body>
+            <img src="/img/illustrations/notes_publish.svg" class="mt-4 w-1/2 m-auto" />
             <Container>
                 <p class="mt-12 text-center">
                     Veuillez sélectionner le site sur lequel vous souhaitez
@@ -19,22 +12,13 @@
 
                 <NotesPublicationFormLoading v-if="loadingLinkedShantytown" />
                 <template v-else>
-                    <NotesPublicationFormInput
-                        class="mt-4"
-                        @click="openSearch"
-                        :disabled="publicationIsPending"
-                        :value="
-                            linkedShantytown ? linkedShantytown.usename : null
-                        "
-                    />
-                    <NotesPublicationFormSubmitButton
-                        class="mt-12"
-                        @click="publish"
-                        :loading="publicationIsPending"
+                    <NotesPublicationFormInput class="mt-4" @click="openSearch" :disabled="publicationIsPending" :value="
+                        linkedShantytown ? linkedShantytown.usename : null
+                    " />
+                    <NotesPublicationFormSubmitButton class="mt-12" @click="publish" :loading="publicationIsPending"
                         :disabled="
-                            publicationIsPending || linkedShantytown === null
-                        "
-                    />
+    publicationIsPending || linkedShantytown === null
+                        " />
                 </template>
             </Container>
         </template>
@@ -121,7 +105,7 @@ export default {
                 );
                 this.$store.commit("notes/SET_LINKED_SHANTYTOWN", shantytown);
             } catch (error) {
-                console.log(error);
+                // ignore
             }
 
             this.loadingLinkedShantytown = false;

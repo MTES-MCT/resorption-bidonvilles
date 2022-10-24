@@ -11,7 +11,7 @@
                     <div>{{ permission.description }}</div>
                 </div>
 
-                <div class="ml-8">
+                <div class="ml-8" v-if=>
                     <UserValidatePermissions
                         class="mb-4"
                         v-if="hasPermissionsFor('national')"

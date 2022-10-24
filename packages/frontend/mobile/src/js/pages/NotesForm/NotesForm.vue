@@ -1,14 +1,14 @@
 <template>
     <div class="h-full">
         <Layout class="pt-4">
-            <template slot="header">
+            <template v-slot:header>
                 <NotesFormHeader
                     @publish="showPublish"
                     @copy="copy"
                     :disablePublish="isEmpty"
                 />
             </template>
-            <template slot="scroll">
+            <template v-slot:scroll>
                 <textarea
                     class="px-6 w-full h-full outline-none"
                     ref="textarea"
