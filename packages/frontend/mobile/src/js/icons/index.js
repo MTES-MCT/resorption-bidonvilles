@@ -5,6 +5,10 @@ import {
     faGithub
 } from "@fortawesome/free-brands-svg-icons";
 import {
+    faEye,
+    faEyeSlash
+} from "@fortawesome/free-regular-svg-icons";
+import {
     faChalkboardTeacher,
     faFlag,
     faLock,
@@ -15,8 +19,6 @@ import {
     faUserCheck,
     faUserShield,
     faArrowRight,
-    faEye,
-    faEyeSlash,
     faPencilAlt,
     faTimes,
     faTimesCircle,

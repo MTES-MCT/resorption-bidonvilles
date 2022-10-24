@@ -5,7 +5,6 @@
             iconPosition="left"
             :disabled="disabled"
             :loading="loading"
-            @click="$emit('click')"
             >Publier la note</Button
         >
     </p>

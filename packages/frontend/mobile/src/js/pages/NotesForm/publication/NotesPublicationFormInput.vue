@@ -7,7 +7,6 @@
             :class="`border border-G500 rounded-lg w-full ${textColor}`"
             icon="search"
             iconPosition="left"
-            @click="$emit('click')"
         >
             {{ wording }}
         </Button>

@@ -1,0 +1,139 @@
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import {
+    faAddressBook,
+    faArrowAltCircleRight,
+    faArrowLeft,
+    faArrowRight,
+    faArrowRightToBracket,
+    faArrowUpRightFromSquare,
+    faBan,
+    faBars,
+    faBolt,
+    faBuilding,
+    faChalkboardTeacher,
+    faChartSimple,
+    faCheck,
+    faChevronDown,
+    faChevronLeft,
+    faChevronRight,
+    faChevronUp,
+    faChild,
+    faCircleCheck,
+    faCircleInfo,
+    faCircleXmark,
+    faComment,
+    faCopy,
+    faEnvelope,
+    faEuroSign,
+    faExclamation,
+    faFileExcel,
+    faFilePdf,
+    faFlag,
+    faKey,
+    faMagnifyingGlass,
+    faMale,
+    faMapMarkerAlt,
+    faPaperPlane,
+    faPencilAlt,
+    faPhone,
+    faPlus,
+    faPrint,
+    faQuestion,
+    faRotateLeft,
+    faRotateRight,
+    faSpinner,
+    faTent,
+    faTimes,
+    faTint,
+    faTriangleExclamation,
+    faUnlink,
+    faUser as faUserSolid,
+    faUserCheck,
+    faUserCircle,
+    faUserPen,
+    faUserPlus,
+    faUserShield,
+    faUserSlash,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+    faCircleQuestion,
+    faCircleUser,
+    faEye,
+    faEyeSlash,
+    faNewspaper,
+    faTrashAlt,
+    faUser,
+} from "@fortawesome/free-regular-svg-icons";
+import {
+    faFacebook,
+    faLinkedin,
+    faTwitter,
+} from "@fortawesome/free-brands-svg-icons";
+
+library.add(faAddressBook);
+library.add(faArrowAltCircleRight);
+library.add(faArrowLeft);
+library.add(faArrowRight);
+library.add(faArrowRightToBracket);
+library.add(faArrowUpRightFromSquare);
+library.add(faBan);
+library.add(faBars);
+library.add(faBolt);
+library.add(faBuilding);
+library.add(faChalkboardTeacher);
+library.add(faChartSimple);
+library.add(faCheck);
+library.add(faChevronDown);
+library.add(faChevronLeft);
+library.add(faChevronRight);
+library.add(faChevronUp);
+library.add(faChild);
+library.add(faCircleCheck);
+library.add(faCircleInfo);
+library.add(faCircleQuestion);
+library.add(faCircleUser);
+library.add(faCircleXmark);
+library.add(faComment);
+library.add(faCopy);
+library.add(faMagnifyingGlass);
+library.add(faMale);
+library.add(faMapMarkerAlt);
+library.add(faEnvelope);
+library.add(faEuroSign);
+library.add(faExclamation);
+library.add(faEye);
+library.add(faEyeSlash);
+library.add(faFacebook);
+library.add(faFileExcel);
+library.add(faFilePdf);
+library.add(faFlag);
+library.add(faKey);
+library.add(faLinkedin);
+library.add(faNewspaper);
+library.add(faPaperPlane);
+library.add(faPencilAlt);
+library.add(faPhone);
+library.add(faPrint);
+library.add(faPlus);
+library.add(faQuestion);
+library.add(faRotateLeft);
+library.add(faRotateRight);
+library.add(faSpinner);
+library.add(faTent);
+library.add(faTimes);
+library.add(faTint);
+library.add(faTrashAlt);
+library.add(faTriangleExclamation);
+library.add(faTwitter);
+library.add(faUnlink);
+library.add(faUser);
+library.add(faUserCheck);
+library.add(faUserCircle);
+library.add(faUserPen);
+library.add(faUserPlus);
+library.add(faUserShield);
+library.add(faUserSlash);
+library.add(faUserSolid);
+
+export default FontAwesomeIcon;

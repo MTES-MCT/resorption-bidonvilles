@@ -15,6 +15,8 @@ export default async (req, res, next) => {
         } else if (user) {
             await userModel.downgradeLocalAdmin(req.params.id);
         }
+
+        return res.status(200).send(await userModel.findOne(req.params.id));
     } catch (error) {
         res.status(500).send({
             error: {
@@ -23,6 +25,4 @@ export default async (req, res, next) => {
         });
         return next(error);
     }
-
-    return res.status(200).send({});
 };

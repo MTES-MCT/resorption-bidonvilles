@@ -1,4 +1,4 @@
-import VueRouter from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import Signin from "#src/js/pages/Signin.vue";
 import TownsList from "#src/js/pages/TownsList/MobileTownsList.vue";
 import TownPage from "#src/js/pages/TownPage/TownPage.vue";
@@ -177,8 +177,9 @@ const guardians = {
     ])
 };
 
-export default new VueRouter({
-    mode: "history",
+const router = createRouter({
+    history: createWebHistory(import.meta.env.BASE_URL),
+
     routes: [
         {
             path: "/",
@@ -269,6 +270,8 @@ export default new VueRouter({
         }
     ]
 });
+
+export default router;
 
 /**
  * Returns the entrypoint

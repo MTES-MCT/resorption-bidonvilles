@@ -21,7 +21,7 @@ export default async () => {
             organizations.being_funded,
             organizations.being_funded_at,
             users.user_id AS "user_id",
-            users.fk_role AS "user_role_admin",
+            user_roles_admin.name AS "user_role_admin",
             users.first_name AS "user_firstName",
             users.last_name AS "user_lastName",
             users.email AS "user_email",
@@ -36,6 +36,7 @@ export default async () => {
         LEFT JOIN users ON users.fk_organization = organizations.organization_id
         LEFT JOIN organization_types ON organizations.fk_type = organization_types.organization_type_id
         LEFT JOIN roles_regular AS user_roles_regular ON users.fk_role_regular = user_roles_regular.role_id
+        LEFT JOIN roles_admin AS user_roles_admin ON users.fk_role = user_roles_admin.role_id
         WHERE
             organizations.active = TRUE
             AND
@@ -91,6 +92,7 @@ export default async () => {
         if (user.user_id !== null) {
             hash[user.organization_id].users.push({
                 id: user.user_id,
+                is_admin: user.user_role_admin !== null,
                 role: user.user_role_admin || user.user_role_regular,
                 first_name: user.user_firstName,
                 last_name: user.user_lastName,

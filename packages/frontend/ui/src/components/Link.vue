@@ -1,10 +1,12 @@
 <template>
-    <span>
-        <Icon icon="external-link-alt" v-if="!internalLink && !toRB && !isMailto" :class="`mr-1 ${linkClasses}`" />
-        <router-link v-if="internalLink" :to="to" :class="linkClasses"
-            ><slot></slot
-        ></router-link>
-        <a v-else :href="to" :class="linkClasses"><slot></slot></a>
+    <span class="border-b border-b-G400 hover:border-b-2 hover:border-b-primary">
+        <span class="cursor-pointer" v-if="!to"><slot /></span>
+        <template v-else>
+            <Icon icon="external-link-alt" v-if="!internalLink && !toRB && !isMailto" :class="`mr-1 ${linkClasses}`" />
+            <router-link v-if="internalLink" :to="to" :class="linkClasses"
+                ><slot /></router-link>
+            <a v-else :href="to" :class="linkClasses"><slot /></a>
+        </template>
     </span>
 </template>
 
@@ -21,7 +23,7 @@ export default {
     props: {
         to: {
             type: String,
-            required: true
+            required: false
         },
         classes: {
             type: String,
@@ -48,13 +50,13 @@ export default {
 
     computed: {
         toRB() {
-            return /(\/\/|\.)resorption-bidonvilles\./.test(this.to) === true;
+            return this.to && /(\/\/|\.)resorption-bidonvilles\./.test(this.to) === true;
         },
         internalLink() {
-            return this.to && this.to[0] === "/" ;
+            return this.to && ["/", "#"].includes(this.to[0]);
         },
         isMailto() {
-            return this.to.startsWith("mailto:");
+            return this.to && this.to.startsWith("mailto:");
         }
     }
 };

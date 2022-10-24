@@ -1,7 +1,7 @@
 <template>
   <footer class="bg-black text-white py-8" role="contentinfo">
     <Container>
-      <div class="max-w-screen-lg mx-auto border-red border">
+      <div class="max-w-screen-lg mx-auto">
         <div class="md:flex flex-row justify-between">
           <FooterLeftColumn />
           <FooterRightColumn />

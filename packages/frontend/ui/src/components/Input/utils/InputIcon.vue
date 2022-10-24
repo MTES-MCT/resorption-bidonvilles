@@ -8,7 +8,7 @@
         @click="onClick"
     >
         <slot>
-            <Icon v-if="icon" :icon="icon" />
+            <Icon v-if="icon" :icon="icon" :spin="spin" />
         </slot>
     </div>
 </template>
@@ -26,6 +26,9 @@ export default {
         },
         position: {
             type: String
+        },
+        spin: {
+            type: Boolean
         },
         disabled: {
             type: Boolean,

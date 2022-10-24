@@ -12,6 +12,7 @@ export default async (req, res, next) => {
     const {
         first_name: firstName, last_name: lastName, email, phone, position,
         email_subscriptions: emailSubscriptions, email_unsubscriptions: emailUnsubscriptions,
+        password,
     } = req.body;
     const user = await userModel.findOne(userId, { auth: true });
 
@@ -32,23 +33,29 @@ export default async (req, res, next) => {
         phone,
         position,
         email_unsubscriptions: emailUnsubscriptions,
+        password: password ? hashPassword(password, user.salt) : undefined,
     };
 
-    if (req.body.password) {
-        data.password = hashPassword(req.body.password, user.salt);
+    const filteredData = Object.keys(data).reduce((acc, key) => {
+        if (data[key] === undefined) {
+            return acc;
+        }
+
+        acc[key] = data[key];
+        return acc;
+    }, {});
+    if (Object.keys(filteredData).length === 0) {
+        return res.status(200).send({});
     }
 
     try {
-        await userModel.update(userId, data);
-        return res.status(200).send({
-            id: user.userId,
-            email: user.email,
-            position,
-            first_name: firstName,
-            last_name: lastName,
-            departement: user.departement,
-            email_subscriptions: emailSubscriptions,
-        });
+        await userModel.update(userId, filteredData);
+        delete filteredData.password;
+        if (filteredData.email_unsubscriptions) {
+            filteredData.email_subscriptions = emailSubscriptions;
+            delete filteredData.email_unsubscriptions;
+        }
+        return res.status(200).send(filteredData);
     } catch (error) {
         res.status(500).send({
             error: {

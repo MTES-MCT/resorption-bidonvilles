@@ -1,5 +1,5 @@
-import Vue from "vue";
-import { open as openTab } from "#frontend/common/helpers/tabHelper";
+// import Vue from "vue";
+import openTab from "#frontend/common/helpers/tabHelper";
 
 /**
  * Generic error codes
@@ -98,7 +98,8 @@ export function createApi(apiUrl, appVersion) {
                     {
                         store.commit("user/SET_ACCESS_TOKEN", null);
                         {
-                            const piwik = Vue.prototype.$piwik;
+                            // const piwik = Vue.prototype.$piwik;
+                            const piwik = false;
                             if (piwik) {
                                 piwik.resetUserId();
                                 piwik.setCustomVariable(1, "user", null);

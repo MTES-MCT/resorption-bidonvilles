@@ -1,11 +1,11 @@
 <template>
     <LeftSlidingBlock>
-        <template slot="body">
+        <template v-slot:body>
             <Container @click.native="$router.push(`/notes/${note.id}`)">
                 <NotesListItem :note="note" />
             </Container>
         </template>
-        <template slot="slider">
+        <template v-slot:slider>
             <div
                 class="bg-red h-full flex justify-center items-center text-white text-xl"
                 @click="$emit('delete', note.id)"

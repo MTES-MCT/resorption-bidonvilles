@@ -1,16 +1,11 @@
 <template>
     <div class="h-full">
         <NotificationGroup />
-        <router-view />
+        <RouterView />
     </div>
 </template>
 
-<script>
+<script setup>
 import NotificationGroup from "#src/js/components/Notification/NotificationGroup.vue";
-
-export default {
-    components: {
-        NotificationGroup
-    }
-};
+import { RouterView } from "vue-router";
 </script>

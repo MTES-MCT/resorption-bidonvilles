@@ -5,6 +5,7 @@ export default async (req, res, next) => {
         await userModel.update(req.body.user.id, {
             fk_role_regular: req.body.role.id,
         });
+        return res.status(200).send(await userModel.findOne(req.body.user.id));
     } catch (error) {
         res.status(500).send({
             error: {
@@ -13,6 +14,4 @@ export default async (req, res, next) => {
         });
         return next(error);
     }
-
-    return res.status(200).send({});
 };
