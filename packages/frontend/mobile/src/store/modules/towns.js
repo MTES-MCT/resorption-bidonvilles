@@ -111,7 +111,7 @@ export default {
             try {
                 return await findTown(shantytownId);
             } catch (error) {
-                console.log(error);
+                // ignore
             }
 
             return null;

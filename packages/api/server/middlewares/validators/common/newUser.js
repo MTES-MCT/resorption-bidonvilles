@@ -152,9 +152,9 @@ module.exports = (additionalValidators = [], isAUserCreationCallback = (() => tr
             let organization;
             try {
                 organization = await organizationModel.findOneByLocation(
-                    value.category,
-                    value.data.type,
-                    value.data.code,
+                    value.typeName,
+                    value.typeUid,
+                    value.code,
                 );
             } catch (error) {
                 throw new Error('Une erreur est survenue lors de la vérification du nom de la structure');
@@ -205,7 +205,7 @@ module.exports = (additionalValidators = [], isAUserCreationCallback = (() => tr
                 throw new Error('Vous devez préciser le nom de la structure');
             }
 
-            if (value === 'Autre') {
+            if (value === 'autre') {
                 return true;
             }
 
@@ -227,7 +227,7 @@ module.exports = (additionalValidators = [], isAUserCreationCallback = (() => tr
         }),
 
     body('new_association_name')
-        .if((value, { req }) => req.body.organization_category_full.uid === 'association' && req.body.association === 'Autre')
+        .if((value, { req }) => req.body.organization_category_full.uid === 'association' && req.body.association === 'autre')
         .trim()
         .custom(async (value) => {
             if (!value) {
@@ -249,7 +249,7 @@ module.exports = (additionalValidators = [], isAUserCreationCallback = (() => tr
         }),
 
     body('new_association_abbreviation')
-        .if((value, { req }) => req.body.organization_category_full.uid === 'association' && req.body.association === 'Autre')
+        .if((value, { req }) => req.body.organization_category_full.uid === 'association' && req.body.association === 'autre')
         .trim(),
 
     body('departement')
@@ -272,7 +272,7 @@ module.exports = (additionalValidators = [], isAUserCreationCallback = (() => tr
             }
 
             // case of an existing association
-            if (req.body.association !== 'Autre') {
+            if (req.body.association !== 'autre') {
                 let association = null;
                 try {
                     association = await organizationModel.findOneAssociation(

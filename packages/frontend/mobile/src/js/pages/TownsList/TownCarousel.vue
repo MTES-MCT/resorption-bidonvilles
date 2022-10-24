@@ -1,7 +1,7 @@
 <template>
     <div
         v-if="towns.length > 0"
-        class="whitespace-no-wrap overflow-y-auto mb-8 mt-2"
+        class="whitespace-nowrap overflow-y-auto mb-8 mt-2"
     >
         <Container>
             <TownCard

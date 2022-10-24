@@ -10,20 +10,20 @@ async function sendEmailNewContactMessageToAdmins(message) {
     const admins = await userModel.getNationalAdmins();
 
     for (let i = 0; i < admins.length; i += 1) {
-        sendAdminContactMessage(admins[i], {
-            variables: {
-                message: {
-                    created_at: dateToString(new Date()),
-                    ...message,
-                },
-            },
-            preserveRecipient: false,
-            replyTo: {
-                email: message.email,
-                last_name: message.last_name,
-                first_name: message.first_name,
-            },
-        });
+        // sendAdminContactMessage(admins[i], {
+        //     variables: {
+        //         message: {
+        //             created_at: dateToString(new Date()),
+        //             ...message,
+        //         },
+        //     },
+        //     preserveRecipient: false,
+        //     replyTo: {
+        //         email: message.email,
+        //         last_name: message.last_name,
+        //         first_name: message.first_name,
+        //     },
+        // });
     }
 }
 
@@ -50,20 +50,20 @@ module.exports = async (req, res, next) => {
     // send mail to sales@ if a newsletter registration was asked
     if (request_type.includes('register-newsletter')) {
         try {
-            await sendContactNewsletterRegistration(
-                { email: 'sales@resorption-bidonvilles.beta.gouv.fr', first_name: 'Équipe Sales', last_name: 'Résorption Bidonvilles' },
-                {
-                    variables: {
-                        email,
-                    },
-                    preserveRecipient: true,
-                    replyTo: {
-                        email,
-                        last_name,
-                        first_name,
-                    },
-                },
-            );
+            // await sendContactNewsletterRegistration(
+            //     { email: 'sales@resorption-bidonvilles.beta.gouv.fr', first_name: 'Équipe Sales', last_name: 'Résorption Bidonvilles' },
+            //     {
+            //         variables: {
+            //             email,
+            //         },
+            //         preserveRecipient: true,
+            //         replyTo: {
+            //             email,
+            //             last_name,
+            //             first_name,
+            //         },
+            //     },
+            // );
         } catch (error) {
             // @todo: call sentry to register this error
         }
@@ -114,14 +114,14 @@ module.exports = async (req, res, next) => {
 
     // contact request
     try {
-        await sendEmailNewContactMessageToAdmins({
-            email,
-            phone,
-            last_name,
-            first_name,
-            access_request_message,
-            objet: getObjetForContactMessage(request_type),
-        });
+        // await sendEmailNewContactMessageToAdmins({
+        //     email,
+        //     phone,
+        //     last_name,
+        //     first_name,
+        //     access_request_message,
+        //     objet: getObjetForContactMessage(request_type),
+        // });
 
         if (referral !== null) {
             await contactFormReferralModel.create({

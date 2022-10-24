@@ -23,14 +23,13 @@ module.exports = async (req, res, next) => {
 
     try {
         await userModel.deactivate(req.params.id);
+        return res.status(200).send(await userModel.findOne(req.params.id));
     } catch (error) {
         res.status(500).send({
             error: {
                 user_message: 'Une erreur est survenue lors de la mise à jour du compte',
             },
         });
-        next(error);
+        return next(error);
     }
-
-    return res.status(200).send({});
 };

@@ -1,0 +1,13 @@
+@import '@resorptionbidonvilles/ui/src/css/styles.css';
+
+html,
+body {
+    height: 100%;
+    @apply antialiased;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+}
+
+#app {
+    height: 100%;
+}

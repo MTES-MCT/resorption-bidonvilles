@@ -5,7 +5,7 @@ const newUser = require('./common/newUser');
 
 module.exports = newUser(
     [
-        body('verifEmail')
+        body('verif_email')
             .custom((value, { req }) => {
                 if (value !== req.body.email) {
                     throw new Error('Les deux adresses email ne se correspondent pas');
@@ -28,6 +28,7 @@ module.exports = newUser(
             }),
 
         body('is_actor')
+            .customSanitizer(value => (value === undefined ? false : value))
             .isBoolean().withMessage('Vous devez préciser si vous êtes un acteur de la résorption des bidonvilles'),
 
         body('access_request_message')

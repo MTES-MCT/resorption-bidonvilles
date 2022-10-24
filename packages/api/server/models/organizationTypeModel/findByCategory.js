@@ -1,6 +1,6 @@
 const sequelize = require('#db/sequelize');
 
-module.exports = (categoryUid, withTotalOfOrganizations = false) => {
+module.exports = async (categoryUid, withTotalOfOrganizations = false) => {
     const columns = {
         'organization_types.organization_type_id': 'id',
         'organization_types.name_singular': 'name_singular',
@@ -13,14 +13,14 @@ module.exports = (categoryUid, withTotalOfOrganizations = false) => {
         columns['COUNT(organizations.organization_id)'] = 'numberOfOrganizations';
     }
 
-    return sequelize.query(
+    const rows = await sequelize.query(
         `SELECT
             ${Object.keys(columns).map(column => `${column} AS "${columns[column]}"`).join(', ')}
         FROM organization_types
         ${withTotalOfOrganizations ? 'LEFT JOIN organizations ON organizations.fk_type = organization_types.organization_type_id' : ''}
         WHERE organization_types.fk_category = :categoryUid
         ${withTotalOfOrganizations ? 'GROUP BY organization_types.organization_type_id' : ''}
-        ORDER BY organization_types.name_singular`,
+        ORDER BY UNACCENT(organization_types.name_singular)`,
         {
             type: sequelize.QueryTypes.SELECT,
             replacements: {
@@ -28,4 +28,8 @@ module.exports = (categoryUid, withTotalOfOrganizations = false) => {
             },
         },
     );
+
+    // eslint-disable-next-line no-param-reassign
+    rows.forEach((row) => { row.numberOfOrganizations = parseInt(row.numberOfOrganizations, 10); });
+    return rows;
 };

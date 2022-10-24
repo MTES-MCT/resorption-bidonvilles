@@ -22,10 +22,10 @@ module.exports = async (categoryUid, search = null) => {
                 ${search !== null ? ' AND (UNACCENT(organizations.name) ILIKE UNACCENT(:search) OR UNACCENT(organizations.abbreviation) ILIKE UNACCENT(:search))' : ''}
             ORDER BY
                 CASE organization_types.fk_category
-                    WHEN 'association' THEN organizations.name
+                    WHEN 'association' THEN LOWER(UNACCENT(organizations.name))
                     ELSE '' END
                 ASC,
-                departement_code ASC, REPLACE(region_name, 'Î', 'I') ASC, epci_name ASC, city_name ASC`,
+                departement_code ASC, UNACCENT(region_name) ASC, UNACCENT(epci_name) ASC, UNACCENT(city_name) ASC`,
         {
             type: sequelize.QueryTypes.SELECT,
             replacements: {

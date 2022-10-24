@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import NavbarItem from "./NavbarItem";
+import NavbarItem from "./NavbarItem.vue";
 
 export default {
     components: {
@@ -25,8 +25,8 @@ export default {
     },
     methods: {
         async showTownsTab() {
-            if (this.$router.currentRoute.meta.tab === "sites") {
-                if (this.$router.currentRoute.path !== "/liste-des-sites") {
+            if (this.$router.currentRoute.value.meta.tab === "sites") {
+                if (this.$router.currentRoute.value.path !== "/liste-des-sites") {
                     this.$router.push("/liste-des-sites");
                 }
 
@@ -36,8 +36,8 @@ export default {
             this.$router.push(this.$store.state.navigation.sitesTab);
         },
         async showNotesTab() {
-            if (this.$router.currentRoute.meta.tab === "notes") {
-                if (this.$router.currentRoute.path !== "/liste-des-notes") {
+            if (this.$router.currentRoute.value.meta.tab === "notes") {
+                if (this.$router.currentRoute.value.path !== "/liste-des-notes") {
                     this.$router.push("/liste-des-notes");
                 }
 

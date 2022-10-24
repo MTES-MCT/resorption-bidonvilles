@@ -44,10 +44,10 @@ module.exports = {
         const admins = await userModel.getAdminsFor(user);
 
         // notify user and admin
-        await Promise.all([
-            sendEmail.toUser.newRequestConfirmation(user),
-            sendEmail.toAdmin.newRequestNotification(admins, user),
-        ]);
+        // await Promise.all([
+        //     sendEmail.toUser.newRequestConfirmation(user),
+        //     sendEmail.toAdmin.newRequestNotification(admins, user),
+        // ]);
 
         // schedule events
         await scheduleEvent.accessRequestIsPending(user.id);

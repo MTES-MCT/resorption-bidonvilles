@@ -5,16 +5,25 @@ const EMAIL_SUBSCRIPTIONS = require('#server/config/email_subscriptions');
 
 module.exports = [
     body('last_name')
+        .optional()
         .isString()
         .trim()
         .notEmpty().withMessage('Le nom de famille est obligatoire'),
 
     body('first_name')
+        .optional()
         .isString()
         .trim()
         .notEmpty().withMessage('Le prénom est obligatoire'),
 
+    body('position')
+        .optional()
+        .isString()
+        .trim()
+        .notEmpty().withMessage('La fonction est obligatoire'),
+
     body('password')
+        .optional()
         .isString()
         .trim()
         .custom((value) => {
@@ -51,6 +60,7 @@ module.exports = [
         }),
 
     body('email_subscriptions')
+        .optional()
         .exists().withMessage('Le champ "Abonnement aux mails plateforme" est obligatoire')
         .isArray().bail().withMessage('Le champ "Abonnement aux mails plateforme" n\'est pas valide')
         .custom((value, { req }) => {

@@ -6,7 +6,7 @@
             variantClasses,
             disabled && 'opacity-50 cursor-not-allowed'
         ]"
-        :disabled="disabled || loading"
+        :disabled="disabled || isLoading"
         :to="isLink && isInternalLink ? (disabled ? null : href) : null"
         :href="href"
         :is="isLink ? (isInternalLink ? 'router-link' : 'a') : 'button'"
@@ -18,7 +18,7 @@
                 'flex',
                 'items-center',
                 iconPosition === 'right' ? 'flex-row-reverse' : 'flex-row',
-                loading && 'invisible'
+                isLoading && 'invisible'
             ]"
         >
             <div v-if="icon || $slots.icon">
@@ -32,7 +32,7 @@
             </div>
         </div>
         <div
-            v-if="loading"
+            v-if="isLoading"
             class="absolute inset-0 flex justify-center items-center"
         >
             <Icon icon="spinner" spin />
@@ -41,10 +41,17 @@
 </template>
 
 <script>
+import { useIsSubmitting } from "vee-validate";
 import Icon from "./Icon.vue";
 
 export default {
     name: "MyButton",
+    setup() {
+        const isSubmitting = useIsSubmitting();
+        return {
+            isSubmitting,
+        }
+    },
     props: {
         variant: {
             type: String,
@@ -113,7 +120,7 @@ export default {
                 primaryOutlineAlt:
                     "bg-white rounded-sm border-1 border-primary text-primary hover:bg-primary hover:text-white focus:outline-none",
                 primaryText:
-                    "text-primary hover:text-primaryDark focus:outline-none",
+                    "text-primary hover:text-primaryDark focus:outline-none hover:bg-G200",
                 secondaryText:
                     "text-secondary hover:text-secondaryDark focus:outline-none",
                 text: "focus:outline-none",
@@ -126,11 +133,14 @@ export default {
         },
         isInternalLink() {
             return this.isLink && this.href.slice(0, 1)[0] === "/";
+        },
+        isLoading() {
+            return this.loading || this.isSubmitting;
         }
     },
     methods: {
         onClick(e) {
-            this.$emit("click", e);
+            this.$emit("clicked", e);
         }
     },
     components: {

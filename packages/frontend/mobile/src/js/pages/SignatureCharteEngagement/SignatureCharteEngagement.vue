@@ -1,6 +1,6 @@
 <template>
     <Layout :navbar="false">
-        <template slot="scroll">
+        <template v-slot:scroll>
             <Container class="text-center mt-12">
                 <h1 class="font-bold text-lg mb-4">Accès interdit</h1>
                 <p class="mb-2">

@@ -7,6 +7,7 @@ module.exports = async (req, res) => {
         return res.status(400).send({
             error: {
                 user_message: 'Le jeton d\'identification est manquant',
+                code: 'Jeton manquant',
             },
         });
     }
@@ -18,6 +19,7 @@ module.exports = async (req, res) => {
         return res.status(400).send({
             error: {
                 user_message: 'Le jeton d\'identification est invalide ou expiré.\nNous vous invitons à reprendre le formulaire de demande de renouvelement de mot de passe.',
+                code: 'Jeton invalide ou expiré',
             },
         });
     }
@@ -26,6 +28,7 @@ module.exports = async (req, res) => {
         return res.status(400).send({
             error: {
                 user_message: 'Le jeton d\'identification est invalide',
+                code: 'Jeton invalide',
             },
         });
     }
@@ -35,6 +38,7 @@ module.exports = async (req, res) => {
         return res.status(400).send({
             error: {
                 user_message: 'Le jeton d\'identification ne correspond à aucun utilisateur',
+                code: 'Utilisateur inexistant ou désactivé',
             },
         });
     }

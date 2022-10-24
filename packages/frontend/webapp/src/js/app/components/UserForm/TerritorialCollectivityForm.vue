@@ -1,56 +1,69 @@
 <template>
-    <div>
-        <InputWrapper>
-            <InputLabel label="Nom de la structure" />
-            <ValidationProvider
-                rules="required"
-                name="Nom de la structure"
-                v-slot="{ errors }"
-                vid="territorial_collectivity"
-            >
-                <div class="v1">
-                    <Collectivity
-                        :value="collectivityName"
-                        @input="val => $emit('update:collectivityName', val)"
-                    />
-                </div>
-                <InputError>{{ errors[0] }}</InputError>
-            </ValidationProvider>
-        </InputWrapper>
-        <TextInput
-            :label="functionLabel"
-            :value="collectivityFunction"
-            @input="val => $emit('update:collectivityFunction', val)"
-            rules="required"
-            id="position"
-        />
+  <div class="relative">
+    <TextInput prefixIcon="magnifying-glass" v-bind="$attrs" @input="onInput" />
+
+    <div
+      class="absolute w-full z-10 border-1 border-G300 bg-white mt-1"
+      v-if="results.length > 0"
+    >
+      <div class="flex" v-for="section in results" :key="section.title">
+        <div
+          class="w-32 px-3 py-2 text-right text-sm text-G600 border-r border-G200 border-b"
+        >
+          {{ section.title }}
+        </div>
+        <div class="border-b border-G200 flex-1">
+          <div
+            class="hover:bg-blue100 cursor-pointer px-3 py-2"
+            v-for="item in section.items"
+            :key="item.id"
+          >
+            {{ item.label }}
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
-<script>
-import Collectivity from "#app/components/form/input/collectivity/collectivity.vue";
-import InputLabel from "#app/components/ui/Form/utils/InputLabel.vue";
-import InputWrapper from "#app/components/ui/Form/utils/InputWrapper.vue";
-import InputError from "#app/components/ui/Form/utils/InputError.vue";
+<script setup>
+import { defineProps, toRefs, ref, computed } from "vue";
+import TextInput from "./TextInput.vue";
 
-export default {
-    components: {
-        InputLabel,
-        Collectivity,
-        InputWrapper,
-        InputError
-    },
-    props: {
-        collectivityName: {
-            required: true
-        },
-        collectivityFunction: {
-            required: true
-        },
-        functionLabel: {
-            type: String,
-            default: "Votre fonction"
-        }
+const props = defineProps({
+  fn: Function
+});
+const { fn } = toRefs(props);
+
+const rawResults = ref([]);
+async function onInput({ target }) {
+  const { value } = target;
+  if (value.length < 2) {
+    return;
+  }
+
+  try {
+    rawResults.value = await fn.value(value);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+const results = computed(() => {
+  const categories = {};
+  return rawResults.reduce((acc, item) => {
+    const { category } = item;
+
+    if (!categories[category]) {
+      categories[category] = {
+        title: category,
+        items: []
+      };
+      acc.push(categories[category]);
     }
-};
+
+    categories[category].items.push(item);
+    return acc;
+  }, []);
+});
 </script>

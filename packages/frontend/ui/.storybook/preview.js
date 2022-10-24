@@ -6,12 +6,13 @@ import {
 import { app } from '@storybook/vue3';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faHouseCircleCheck, faSpinner, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faHouseCircleCheck, faSpinner, faTimes, faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import '../src/css/styles.css';
 
 library.add(faHouseCircleCheck);
 library.add(faSpinner);
 library.add(faTimes);
+library.add(faArrowUpRightFromSquare);
 
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.component('ValidationProvider', {

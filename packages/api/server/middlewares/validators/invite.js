@@ -9,7 +9,7 @@ module.exports = [
         .trim()
         .notEmpty().bail().withMessage('L\'origine de l\'invitation est obligatoire')
         .custom((value) => {
-            if (!['access_request', 'contact_others', 'push_mail'].includes(value)) {
+            if (!['access_request', 'contact_others', 'push_mail', 'unknown'].includes(value)) {
                 throw new Error('L\'origine de l\'invitation est invalide');
             }
             return true;

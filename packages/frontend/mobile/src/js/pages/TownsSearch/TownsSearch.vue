@@ -1,10 +1,10 @@
 <template>
     <Layout :logo="false" :navbar="false">
-        <template slot="header">
+        <template v-slot:header>
             <TownsSearchHeader ref="searchbar" />
         </template>
 
-        <template slot="scroll">
+        <template v-slot:scroll>
             <main class="pt-6">
                 <Container>
                     <template v-if="!loading && !error">
