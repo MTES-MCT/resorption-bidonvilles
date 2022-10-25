@@ -330,7 +330,6 @@ describe.only('services/shantytown', () => {
             }, user);
             // eslint-disable-next-line no-unused-expressions
             expect(stubs.getLocationWatchers).to.have.been.calledOnce;
-            // expect(stubs.getLocationWatchers).to.have.been.calledOnceWith(townData.citycode, true);
             expect(stubs.sendUserShantytownDeclared).to.have.callCount(watchers.length);
         });
     });
