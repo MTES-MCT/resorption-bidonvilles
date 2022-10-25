@@ -49,7 +49,7 @@ module.exports = (towns, connectedUsers, listOfDates) => {
             towns.forEach(
                 (town) => {
                     if (!listOfId[town.id] && town.updated_at <= date) {
-                        listOfId[town.id] = null;
+                        listOfId[town.id] = true;
                         if (town.closed_at === null) {
                             populationTotal += town.population;
                             minorsTotal += town.minors;
