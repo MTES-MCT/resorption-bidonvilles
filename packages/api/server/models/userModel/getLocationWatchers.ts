@@ -1,10 +1,7 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
-import config from '#server/config';
 
-const { mailBlacklist } = config;
-
-export default async (location, watcherType = 'shantytown_creation', applyBlacklist = false) => {
+export default async (location, watcherType = 'shantytown_creation') => {
     const users = await sequelize.query(
         `WITH email_unsubscriptions AS (
             SELECT fk_user, ARRAY_AGG(email_subscription) AS unsubscriptions FROM user_email_unsubscriptions GROUP BY fk_user
@@ -37,9 +34,6 @@ export default async (location, watcherType = 'shantytown_creation', applyBlackl
         },
     );
 
-    if (applyBlacklist === true) {
-        return users.filter(({ user_id }: any) => !mailBlacklist.includes(user_id));
-    }
 
     return users;
 };

@@ -28,9 +28,6 @@ export default {
         dsn: process.env.RB_API_SENTRY_DSN || '',
     },
     testEmail: process.env.RB_API_TEST_EMAIL || null,
-    mailBlacklist: process.env.RB_API_EMAIL_BLACKLIST
-        ? process.env.RB_API_EMAIL_BLACKLIST.split(',').map(id => parseInt(id, 10))
-        : [],
     sendActivitySummary: process.env.RB_API_SEND_ACTIVITY_SUMMARY === '1',
     matomo: {
         token: process.env.RB_API_MATOMO_AUTH_TOKEN,
