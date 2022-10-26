@@ -1,9 +1,9 @@
 import { sequelize } from "#db/sequelize";
 
-export default async (fk_user: Number, page: String): Promise<number> => {
+export default async (fk_user: Number, page: String, domain: String): Promise<number> => {
     const response: any = await sequelize.query(
         `INSERT INTO
-            user_navigation_logs(
+            user_${domain}_navigation_logs(
                 fk_user,
                 page
             )
