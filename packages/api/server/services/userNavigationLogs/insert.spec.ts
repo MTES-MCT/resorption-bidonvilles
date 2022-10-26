@@ -20,7 +20,7 @@ describe('services/userNavigationLogs/insert()', () => {
 
     it('demande l\'insertion du log en base de données', async () => {
         await insert(1, 'page', 'webapp');
-        expect(stub).to.have.been.calledOnceWithExactly(1, 'page');
+        expect(stub).to.have.been.calledOnceWithExactly(1, 'page', 'webapp');
     });
 
     it('retourne l\'identifiant du log nouvellement inséré', async () => {
