@@ -91,7 +91,7 @@ module.exports = async (user, location) => {
                 SELECT
                     fk_user,
                     (floor(((now() - INTERVAL '1 day')::date - datetime::date) / 7)) AS week
-                FROM user_navigation_logs
+                FROM user_webapp_navigation_logs
                 WHERE datetime::date < now()::date
             ) t
             ${where !== null ? `

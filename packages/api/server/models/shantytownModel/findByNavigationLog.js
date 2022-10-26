@@ -6,7 +6,7 @@ module.exports = async (user) => {
     const [ids] = await sequelize.query(
         `SELECT
             SUBSTR(page,7) AS shantytown_id
-        FROM user_navigation_logs
+        FROM user_webapp_navigation_logs
         WHERE 
             page SIMILAR TO '/site/[0-9]+'
             AND fk_user = :userId
