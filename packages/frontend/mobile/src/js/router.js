@@ -10,6 +10,7 @@ import NotesList from "#src/js/pages/NotesList/NotesList.vue";
 import NotesForm from "#src/js/pages/NotesForm/NotesForm.vue";
 import SignatureCharteEngagement from "#src/js/pages/SignatureCharteEngagement/SignatureCharteEngagement.vue";
 import store from "#src/store/index.js";
+import { insert as insertNavigationLog } from "./helpers/navigationLogs";
 
 function isLoggedIn() {
     return store.getters["user/loggedIn"];
@@ -21,6 +22,11 @@ function getConfig() {
 
 function isConfigLoaded() {
     return store.getters["config/loaded"] === true;
+}
+
+function logNavigation(to) {
+    insertNavigationLog(to.path);
+    return true;
 }
 
 /**
@@ -60,7 +66,7 @@ function saveTabNavigation(to) {
     if (to.meta.tab) {
         store.commit("navigation/SET_TAB", {
             tab: to.meta.tab,
-            page: to.path
+            page: to.path,
         });
     }
 
@@ -117,7 +123,7 @@ function isPermitted(to) {
     }
 
     // ensure all permissions are given
-    return permissions.every(permission => hasPermission(permission));
+    return permissions.every((permission) => hasPermission(permission));
 }
 
 /**
@@ -127,7 +133,7 @@ function isPermitted(to) {
  */
 function isUpgraded() {
     const {
-        user: { position }
+        user: { position },
     } = getConfig();
     return position !== "";
 }
@@ -139,17 +145,17 @@ function isUpgraded() {
  */
 const guardians = {
     anonymous: guard.bind(this, [
-        { checker: () => !isLoggedIn(), target: "/", saveEntryPoint: false }
+        { checker: () => !isLoggedIn(), target: "/", saveEntryPoint: false },
     ]),
     loggedIn: guard.bind(this, [
         { checker: isLoggedIn, target: "/connexion" },
-        { checker: saveTabNavigation }
+        { checker: saveTabNavigation },
     ]),
     loaded: guard.bind(this, [
         { checker: isLoggedIn, target: "/connexion" },
         { checker: isConfigLoaded, target: "/launcher" },
         { checker: isPermitted, target: "/", saveEntrypoint: false },
-        { checker: saveTabNavigation }
+        { checker: saveTabNavigation },
     ]),
     loadedAndUpgraded: guard.bind(this, [
         { checker: isLoggedIn, target: "/connexion" },
@@ -157,7 +163,8 @@ const guardians = {
         { checker: isPermitted, target: "/", saveEntrypoint: false },
         { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
         { checker: isUpgraded, target: "/mise-a-niveau" },
-        { checker: saveTabNavigation }
+        { checker: saveTabNavigation },
+        { checker: logNavigation },
     ]),
     loadedAndUpToDate: guard.bind(this, [
         { checker: isLoggedIn, target: "/connexion" },
@@ -165,8 +172,9 @@ const guardians = {
         { checker: isPermitted, target: "/", saveEntrypoint: false },
         { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
         { checker: isUpgraded, target: "/mise-a-niveau" },
-        { checker: saveTabNavigation }
-    ])
+        { checker: saveTabNavigation },
+        { checker: logNavigation },
+    ]),
 };
 
 const router = createRouter({
@@ -177,90 +185,90 @@ const router = createRouter({
             path: "/",
             beforeEnter: home,
             meta: {
-                analyticsIgnore: true
-            }
+                analyticsIgnore: true,
+            },
         },
         {
             path: "/connexion",
             component: Signin,
             beforeEnter: guardians.anonymous,
             meta: {
-                title: "Résorption-bidonvilles — Connexion"
-            }
+                title: "Résorption-bidonvilles — Connexion",
+            },
         },
         {
             path: "/launcher",
             component: Launcher,
             beforeEnter: guardians.loggedIn,
             meta: {
-                title: "Résorption-bidonvilles — Chargement"
-            }
+                title: "Résorption-bidonvilles — Chargement",
+            },
         },
         {
             meta: {
                 tab: "sites",
-                title: "Résorption-bidonvilles — Liste des sites"
+                title: "Résorption-bidonvilles — Liste des sites",
             },
             path: "/liste-des-sites",
             component: TownsList,
-            beforeEnter: guardians.loadedAndUpToDate
+            beforeEnter: guardians.loadedAndUpToDate,
         },
         {
             path: "/recherche-de-site",
             component: TownsSearch,
-            beforeEnter: guardians.loadedAndUpToDate
+            beforeEnter: guardians.loadedAndUpToDate,
         },
         {
             meta: {
                 tab: "notes",
-                title: "Résorption-bidonvilles — Liste des notes"
+                title: "Résorption-bidonvilles — Liste des notes",
             },
             path: "/liste-des-notes",
             component: NotesList,
-            beforeEnter: guardians.loadedAndUpToDate
+            beforeEnter: guardians.loadedAndUpToDate,
         },
         {
             meta: {
                 tab: "notes",
-                title: "Résorption-bidonvilles — Rédaction d'une note"
+                title: "Résorption-bidonvilles — Rédaction d'une note",
             },
             path: "/notes/:id",
             component: NotesForm,
-            beforeEnter: guardians.loadedAndUpToDate
+            beforeEnter: guardians.loadedAndUpToDate,
         },
         {
             path: "/deconnexion",
             component: Logout,
             meta: {
-                analyticsIgnore: true
-            }
+                analyticsIgnore: true,
+            },
         },
         {
             meta: {
                 tab: "sites",
-                title: "Résorption-bidonvilles — Fiche de site"
+                title: "Résorption-bidonvilles — Fiche de site",
             },
             path: "/site/:id",
             component: TownPage,
-            beforeEnter: guardians.loadedAndUpToDate
+            beforeEnter: guardians.loadedAndUpToDate,
         },
         {
             meta: {
-                title: "Résorption-bidonvilles — Charte d'engagement"
+                title: "Résorption-bidonvilles — Charte d'engagement",
             },
             path: "/signature-charte-engagement",
             component: SignatureCharteEngagement,
-            beforeEnter: guardians.loaded
+            beforeEnter: guardians.loaded,
         },
         {
             meta: {
-                title: "Résorption-bidonvilles — Mise à niveau"
+                title: "Résorption-bidonvilles — Mise à niveau",
             },
             path: "/mise-a-niveau",
             component: MiseANiveau,
-            beforeEnter: guardians.loaded
-        }
-    ]
+            beforeEnter: guardians.loaded,
+        },
+    ],
 });
 
 export default router;
