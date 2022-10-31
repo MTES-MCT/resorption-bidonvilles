@@ -1,6 +1,8 @@
-const geoModel = require('#server/models/geoModel');
+import geoModelFactory from '#server/models/geoModel';
 
-module.exports = async (req, res, next) => {
+const geoModel = geoModelFactory();
+
+export default async (req, res, next) => {
     try {
         const location = await geoModel.getLocation(req.params.type, req.params.code);
         if (location === null) {

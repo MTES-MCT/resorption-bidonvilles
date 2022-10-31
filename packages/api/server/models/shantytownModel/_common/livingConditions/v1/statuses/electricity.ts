@@ -1,6 +1,6 @@
-const computeStatus = require('./computeStatus');
+import computeStatus from './computeStatus';
 
-module.exports = (town) => {
+export default (town) => {
     const details = {
         positive: [],
         negative: [],

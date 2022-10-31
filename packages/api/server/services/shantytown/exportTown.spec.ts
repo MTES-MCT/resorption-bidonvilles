@@ -1,21 +1,25 @@
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
+import chai from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
 
 const { expect } = chai;
 chai.use(sinonChai);
 
-const proxyquire = require('proxyquire');
-const ServiceError = require('#server/errors/ServiceError');
+import proxyquire from 'proxyquire';
+import ServiceError from '#server/errors/ServiceError';
 
-const permissionUtils = require('#server/utils/permission');
-const geoModel = require('#server/models/geoModel');
-const geoUtils = require('#server/utils/geo');
-const shantytownModel = require('#server/models/shantytownModel');
-const closingSolutionModel = require('#server/models/closingSolutionModel');
-const excelUtils = require('#server/utils/excel');
-const statsExportsModel = require('#server/models/statsExports');
+import permissionUtils from '#server/utils/permission';
+import geoModelFactory from '#server/models/geoModel';
+import geoUtils from '#server/utils/geo';
+import shantytownModelFactory from '#server/models/shantytownModel';
+import closingSolutionModelFactory from '#server/models/closingSolutionModel';
+import excelUtils from '#server/utils/excel';
+import statsExportsModelFactory from '#server/models/statsExports';
 
+const geoModel = geoModelFactory();
+const shantytownModel = shantytownModelFactory();
+const closingSolutionModel = closingSolutionModelFactory();
+const statsExportsModel = statsExportsModelFactory();
 let exportTownService;
 
 

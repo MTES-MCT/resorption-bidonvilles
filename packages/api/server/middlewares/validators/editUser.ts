@@ -1,9 +1,9 @@
 /* eslint-disable newline-per-chained-call */
-const { body } = require('express-validator');
-const checkPassword = require('#server/controllers/userController/helpers/checkPassword');
-const EMAIL_SUBSCRIPTIONS = require('#server/config/email_subscriptions');
+import { body } from 'express-validator';
+import checkPassword from '#server/controllers/userController/helpers/checkPassword';
+import EMAIL_SUBSCRIPTIONS from '#server/config/email_subscriptions';
 
-module.exports = [
+export default [
     body('last_name')
         .isString()
         .trim()

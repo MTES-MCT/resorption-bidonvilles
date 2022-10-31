@@ -1,6 +1,6 @@
-const { Paragraph, TextRun } = require('docx');
+import { Paragraph, TextRun } from 'docx';
 
-module.exports = origins => new Paragraph({
+export default origins => new Paragraph({
     children: [
         new TextRun({
             text: 'Origine',

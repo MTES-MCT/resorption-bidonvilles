@@ -1,11 +1,16 @@
 /* eslint-disable newline-per-chained-call */
-const { body, param } = require('express-validator');
-const shantytownModel = require('#server/models/shantytownModel');
-const userModel = require('#server/models/userModel/index');
-const organizationModel = require('#server/models/organizationModel/index');
-const commentTagModel = require('#server/models/commentTagModel');
+import { body, param } from 'express-validator';
+import shantytownModelFactory from '#server/models/shantytownModel';
+import userModelFactory from '#server/models/userModel/index';
+import organizationModelFactory from '#server/models/organizationModel/index';
+import commentTagModelFactory from '#server/models/commentTagModel';
 
-module.exports = [
+const shantytownModel = shantytownModelFactory();
+const userModel = userModelFactory();
+const organizationModel = organizationModelFactory();
+const commentTagModel = commentTagModelFactory();
+
+export default [
     param('id')
         .custom(async (value, { req }) => {
             let shantytown;

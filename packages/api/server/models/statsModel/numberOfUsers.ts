@@ -1,7 +1,8 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async (departement) => {
-    const rows = await sequelize.query(
+export default async (departement) => {
+    const rows: any = await sequelize.query(
         `
         SELECT COUNT(*) from users
         LEFT JOIN localized_organizations on users.fk_organization = localized_organizations.organization_id
@@ -9,7 +10,7 @@ module.exports = async (departement) => {
         ${departement ? `AND departement_code = '${departement}'` : ''}
         `,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 

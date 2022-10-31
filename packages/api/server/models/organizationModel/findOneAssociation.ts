@@ -1,6 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async (name, code) => {
+export default async (name, code) => {
     const result = await sequelize.query(
         `SELECT
             organizations.organization_id AS id,
@@ -17,7 +18,7 @@ module.exports = async (name, code) => {
             AND
             organizations.departement_code = :code`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 name,
                 code,

@@ -1,9 +1,11 @@
 /* eslint-disable newline-per-chained-call */
 
-const { query } = require('express-validator');
-const geoModel = require('#server/models/geoModel');
+import { query } from 'express-validator';
+import geoModelFactory from '#server/models/geoModel';
 
-module.exports = [
+const geoModel = geoModelFactory();
+
+export default [
     // location (type and code)
     query('locationType')
         .optional()

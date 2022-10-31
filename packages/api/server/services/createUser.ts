@@ -1,16 +1,22 @@
-const sequelize = require('#db/sequelize');
-const userModel = require('#server/models/userModel');
-const organizationModel = require('#server/models/organizationModel');
-const organizationTypeModel = require('#server/models/organizationTypeModel');
-const { generateSalt } = require('#server/utils/auth');
-const mattermostUtils = require('#server/utils/mattermost');
+import { sequelize } from '#db/sequelize';
+import userModelFactory from '#server/models/userModel';
+import organizationModelFactory from '#server/models/organizationModel';
+import organizationTypeModelFactory from '#server/models/organizationTypeModel';
+import authUtils from '#server/utils/auth';
+import mattermostUtils from '#server/utils/mattermost';
+
+const userModel = userModelFactory();
+const organizationModel = organizationModelFactory();
+const organizationTypeModel = organizationTypeModelFactory();
+const { generateSalt } = authUtils;
 
 async function createUser(data) {
     const userId = await sequelize.transaction(async (t) => {
         // create association if necessary
         if (data.new_association === true) {
-            const type = (await organizationTypeModel.findByCategory('association'))[0].id;
-            const [[association]] = (await organizationModel.create(
+            const types: any = (await organizationTypeModel.findByCategory('association'));
+            const type = types[0].id;
+            const [[association]]: any = (await organizationModel.create(
                 data.new_association_name,
                 data.new_association_abbreviation,
                 type,
@@ -47,4 +53,4 @@ async function createUser(data) {
     return user;
 }
 
-module.exports = createUser;
+export default createUser;

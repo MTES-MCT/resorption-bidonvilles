@@ -1,7 +1,7 @@
-const accumulation = require('./trash/accumulation');
-const cansOnSite = require('./trash/cansOnSite');
-const evacuationRegular = require('./trash/evacuationRegular');
-const computeStatus = require('./computeStatus');
+import accumulation from './trash/accumulation';
+import cansOnSite from './trash/cansOnSite';
+import evacuationRegular from './trash/evacuationRegular';
+import computeStatus from './computeStatus';
 
 const criterias = {
     accumulation,
@@ -9,7 +9,7 @@ const criterias = {
     evacuationRegular,
 };
 
-module.exports = (town) => {
+export default (town) => {
     const details = Object.keys(criterias).reduce((argAcc, key) => {
         const acc = { ...argAcc };
         const status = criterias[key](town);

@@ -1,9 +1,12 @@
 /* eslint-disable newline-per-chained-call */
-const { body, param } = require('express-validator');
-const roleModel = require('#server/models/roleModel');
-const userModel = require('#server/models/userModel');
+import { body, param } from 'express-validator';
+import roleModelFactory from '#server/models/roleModel';
+import userModelFactory from '#server/models/userModel';
 
-module.exports = [
+const roleModel = roleModelFactory();
+const userModel = userModelFactory();
+
+export default [
     param('id')
         .toInt()
         .isInt().bail().withMessage('L\'identifiant de l\'utilisateur est invalide')

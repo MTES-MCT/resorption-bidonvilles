@@ -1,7 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-module.exports = async (data, transaction = undefined) => {
-    const [[{ user_permission_id }]] = await sequelize.query(
+export default async (data, transaction = undefined) => {
+    const [[{ user_permission_id }]]: any = await sequelize.query(
         `INSERT INTO user_permissions(fk_feature, fk_entity, fk_user, fk_organization, allowed, allow_all, is_cumulative)
         VALUES (:feature, :entity, :fk_user, :fk_organization, :allowed, :allow_all, :is_cumulative)
         RETURNING user_permission_id`,

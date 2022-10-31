@@ -1,11 +1,11 @@
-const create = require('./create');
-const findOne = require('./findOne');
-const findAll = require('./findAll');
-const getHistory = require('./getHistory');
+import create from './create';
+import findOne from './findOne';
+import findAll from './findAll';
+import getHistory from './getHistory';
 
-module.exports = {
+export default () => ({
     create,
     findOne,
     findAll,
     getHistory,
-};
+});

@@ -1,6 +1,6 @@
-const { query } = require('express-validator');
+import { query } from 'express-validator';
 
-module.exports = [
+export default [
     query('date')
         .toInt()
         .isInt()

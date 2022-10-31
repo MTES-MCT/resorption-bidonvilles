@@ -1,14 +1,17 @@
-const accessRequestService = require('#server/services/accessRequest/accessRequestService');
+import accessRequestService from '#server/services/accessRequest/accessRequestService';
+import mailUtils from '#server/mails/mails';
+import moment from 'moment';
+import activitySummary from '#server/services/activitySummary';
+import config from '#server/config';
+
 const {
     sendUserDemoInvitation,
     sendUserIdealcoInvitation,
     sendUserFeatures,
     sendUserShare,
     sendUserReview,
-} = require('#server/mails/mails');
-import * as moment from 'moment';
-import activitySummary from '#server/services/activitySummary';
-import { sendActivitySummary } from '#server/config';
+} = mailUtils;
+const { sendActivitySummary } = config;
 
 export default (agenda) => {
     agenda.define(

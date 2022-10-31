@@ -1,11 +1,11 @@
-const getElectricityStatus = require('./electricity');
-const getWaterStatus = require('./water');
-const getTrashStatus = require('./trash');
-const getSanitaryStatus = require('./sanitary');
-const getVerminStatus = require('./vermin');
-const getFirePreventionStatus = require('./firePrevention');
+import getElectricityStatus from './electricity';
+import getWaterStatus from './water';
+import getTrashStatus from './trash';
+import getSanitaryStatus from './sanitary';
+import getVerminStatus from './vermin';
+import getFirePreventionStatus from './firePrevention';
 
-module.exports = town => ({
+export default town => ({
     electricity: getElectricityStatus(town),
     water: getWaterStatus(town),
     trash: getTrashStatus(town),

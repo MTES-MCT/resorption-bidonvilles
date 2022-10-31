@@ -1,13 +1,24 @@
 /* eslint-disable newline-per-chained-call */
-const { body } = require('express-validator');
+import * as expressValidator from 'express-validator';
 // models
-const organizationCategoryModel = require('#server/models/organizationCategoryModel');
-const organizationTypeModel = require('#server/models/organizationTypeModel');
-const organizationModel = require('#server/models/organizationModel');
-const departementModel = require('#server/models/departementModel');
-const userModel = require('#server/models/userModel');
+import organizationCategoryModelFactory from '#server/models/organizationCategoryModel';
+import organizationTypeModelFactory from '#server/models/organizationTypeModel';
+import organizationModelFactory from '#server/models/organizationModel';
+import departementModelFactory from '#server/models/departementModel';
+import userModelFactory from '#server/models/userModel';
+import { ValidationChain, CustomValidator } from 'express-validator';
 
-module.exports = (additionalValidators = [], isAUserCreationCallback = (() => true)) => ([
+const { body } = expressValidator;
+const organizationCategoryModel = organizationCategoryModelFactory();
+const organizationTypeModel = organizationTypeModelFactory();
+const organizationModel = organizationModelFactory();
+const departementModel = departementModelFactory();
+const userModel = userModelFactory();
+
+export default (
+    additionalValidators: ValidationChain[] = [],
+    isAUserCreationCallback: CustomValidator = (() => true),
+) => ([
     ...additionalValidators,
 
     body('last_name')

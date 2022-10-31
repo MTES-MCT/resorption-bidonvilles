@@ -1,6 +1,6 @@
-const getSince = require('./getSince');
+import getSince from './getSince';
 
-module.exports = (date) => {
+export default (date) => {
     const { days, years, months } = getSince(date);
     if (years > 0) {
         const yearsText = `${years} an${years > 1 ? 's' : ''}`;

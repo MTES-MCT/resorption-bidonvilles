@@ -1,6 +1,6 @@
-const createRow = require('../create_row');
+import createRow from '../create_row';
 
-module.exports = (shantytown) => {
+export default (shantytown) => {
     const labels = {
         good: 'Accès à l\'eau existant',
         toImprove: 'Accès à l\'eau existant mais à améliorer',

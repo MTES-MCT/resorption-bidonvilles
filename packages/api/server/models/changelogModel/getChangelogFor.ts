@@ -1,5 +1,8 @@
-const sequelize = require('#db/sequelize');
-const { toFormat } = require('#server/utils/date');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
+import dateUtils from '#server/utils/date';
+
+const { toFormat } = dateUtils;
 
 function serializeChangelog(changelogItem) {
     const [year, month, date] = changelogItem.date.split('-');
@@ -13,7 +16,7 @@ function serializeChangelog(changelogItem) {
     };
 }
 
-module.exports = async (user) => {
+export default async (user) => {
     if (user.last_changelog === null || user.last_version === null) {
         return [];
     }
@@ -33,7 +36,7 @@ module.exports = async (user) => {
             regexp_split_to_array(changelogs.app_version, '\\.')::int[] <= regexp_split_to_array(:maxVersion, '\\.')::int[]
         ORDER BY regexp_split_to_array(changelogs.app_version, '\\.')::int[] ASC, items.position ASC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 minVersion: user.last_changelog,
                 maxVersion: user.last_version,

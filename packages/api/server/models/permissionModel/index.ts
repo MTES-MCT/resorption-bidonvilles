@@ -1,11 +1,11 @@
-const find = require('./find');
-const addAttachments = require('./applyAttachments');
-const applyAttachments = require('./applyAttachments');
-const removeAttachments = require('./removeAttachments');
+import find from './find';
+import addAttachments from './applyAttachments';
+import applyAttachments from './applyAttachments';
+import removeAttachments from './removeAttachments';
 
-module.exports = {
+export default () => ({
     find,
     addAttachments,
     applyAttachments,
     removeAttachments,
-};
+});

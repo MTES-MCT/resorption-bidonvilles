@@ -1,6 +1,8 @@
-const planModel = require('#server/models/planModel');
+import planModelFactory from '#server/models/planModel';
 
-module.exports = async (req, res) => {
+const planModel = planModelFactory();
+
+export default async (req, res) => {
     try {
         await planModel.delete(req.params.id);
     } catch (error) {

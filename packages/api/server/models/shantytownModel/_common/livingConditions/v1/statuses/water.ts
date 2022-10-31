@@ -1,12 +1,12 @@
-const continuousAccess = require('./water/continuousAccess');
-const distance = require('./water/distance');
-const everyoneHasAccess = require('./water/everyoneHasAccess');
-const handWashAccess = require('./water/handWashAccess');
-const potable = require('./water/potable');
-const publicPoint = require('./water/publicPoint');
-const roadsToCross = require('./water/roadsToCross');
-const stagnantWater = require('./water/stagnantWater');
-const computeStatus = require('./computeStatus');
+import continuousAccess from './water/continuousAccess';
+import distance from './water/distance';
+import everyoneHasAccess from './water/everyoneHasAccess';
+import handWashAccess from './water/handWashAccess';
+import potable from './water/potable';
+import publicPoint from './water/publicPoint';
+import roadsToCross from './water/roadsToCross';
+import stagnantWater from './water/stagnantWater';
+import computeStatus from './computeStatus';
 
 const criterias = {
     continuousAccess,
@@ -19,7 +19,7 @@ const criterias = {
     stagnantWater,
 };
 
-module.exports = (town) => {
+export default (town) => {
     const details = Object.keys(criterias).reduce((argAcc, key) => {
         const acc = { ...argAcc };
         const status = criterias[key](town);

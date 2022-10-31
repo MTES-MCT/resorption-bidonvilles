@@ -1,6 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async (planId, commentId) => sequelize.query(
+export default async (planId, commentId) => sequelize.query(
     `WITH constants(departement) AS (
         SELECT fk_departement as departement
         FROM plan_departements
@@ -32,7 +33,7 @@ module.exports = async (planId, commentId) => sequelize.query(
         AND (u.fk_role_regular = 'direct_collaborator' OR op.fk_plan IS NOT null)
     `,
     {
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
         replacements: {
             planId,
             commentId,

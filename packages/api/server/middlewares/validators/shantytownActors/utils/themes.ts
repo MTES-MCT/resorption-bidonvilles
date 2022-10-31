@@ -1,10 +1,11 @@
-const { body } = require('express-validator');
-const { trim } = require('validator');
-const ACTOR_THEMES = require('#server/config/shantytown_actor_themes');
+import { body } from 'express-validator';
+import validator from 'validator';
+import ACTOR_THEMES from '#server/config/shantytown_actor_themes';
 
+const { trim } = validator;
 const ACTOR_THEME_IDS = Object.keys(ACTOR_THEMES);
 
-module.exports = body('themes')
+export default body('themes')
     .customSanitizer((value) => {
         if (value === undefined || value === null) {
             return [];
@@ -23,7 +24,7 @@ module.exports = body('themes')
         return { ...o, value: trim(o.value) };
     }))
     .custom((value) => {
-    // check the structure of each item
+        // check the structure of each item
         const duplicates = [];
         for (let i = 0; i < value.length; i += 1) {
             const item = value[i];

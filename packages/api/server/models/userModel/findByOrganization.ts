@@ -1,6 +1,6 @@
-const query = require('./_common/query');
+import query from './_common/query';
 
-module.exports = (organizationId, filters = {}) => query(
+export default (organizationId, filters = {}) => query(
     [
         {
             organization: {

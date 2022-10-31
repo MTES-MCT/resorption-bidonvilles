@@ -1,14 +1,18 @@
 
-const shantytownCommentModel = require('#server/models/shantytownCommentModel');
-const shantytownModel = require('#server/models/shantytownModel');
-const shantytownCommentTagModel = require('#server/models/shantytownCommentTagModel');
-const mattermostUtils = require('#server/utils/mattermost');
+import shantytownCommentModelFactory from '#server/models/shantytownCommentModel';
+import shantytownModelFactory from '#server/models/shantytownModel';
+import shantytownCommentTagModelFactory from '#server/models/shantytownCommentTagModel';
+import mattermostUtils from '#server/utils/mattermost';
 
-const userModel = require('#server/models/userModel');
-const mails = require('#server/mails/mails');
-const ServiceError = require('#server/errors/ServiceError');
-const sequelize = require('#db/sequelize');
+import userModelFactory from '#server/models/userModel';
+import mails from '#server/mails/mails';
+import ServiceError from '#server/errors/ServiceError';
+import { sequelize } from '#db/sequelize';
 
+const shantytownCommentModel = shantytownCommentModelFactory();
+const shantytownModel = shantytownModelFactory();
+const shantytownCommentTagModel = shantytownCommentTagModelFactory();
+const userModel = userModelFactory();
 /**
  * @param {Service_ShantytownComment_Create_CommentData} comment Commentaire
  * @param {Model_Shantytown} shantytown site rattaché au commentaire
@@ -16,7 +20,7 @@ const sequelize = require('#db/sequelize');
  *
  * @returns {Array.<Model_ShantytownComment>}
  */
-module.exports = async (comment, shantytown, author) => {
+export default async (comment, shantytown, author) => {
     // on insère le commentaire
     let commentId;
     let transaction;

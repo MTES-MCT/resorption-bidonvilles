@@ -1,6 +1,8 @@
-const planModel = require('#server/models/planModel');
+import planModelFactory from '#server/models/planModel';
 
-module.exports = async (req, res) => {
+const planModel = planModelFactory();
+
+export default async (req, res) => {
     try {
         const plans = await planModel.findAll(req.user);
         res.status(200).send(plans);

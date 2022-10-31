@@ -1,13 +1,13 @@
-const create = require('./create');
-const findAll = require('./findAll');
-const findOne = require('./findOne');
-const getHistory = require('./getHistory');
-const deleteComment = require('./deleteComment');
+import create from './create';
+import findAll from './findAll';
+import findOne from './findOne';
+import getHistory from './getHistory';
+import deleteComment from './deleteComment';
 
-module.exports = {
+export default () => ({
     create,
     findAll,
     findOne,
     getHistory,
     deleteComment,
-};
+});

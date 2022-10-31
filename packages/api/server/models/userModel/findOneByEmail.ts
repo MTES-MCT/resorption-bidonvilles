@@ -1,6 +1,6 @@
-const query = require('./_common/query');
+import query from './_common/query';
 
-module.exports = async (email, filters = {}) => {
+export default async (email, filters = {}) => {
     const users = await query(
         [{ email: { value: [email.toUpperCase()], query: 'upper(users.email)' } }],
         filters,

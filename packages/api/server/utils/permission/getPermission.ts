@@ -1,4 +1,4 @@
-module.exports = (user, feature, entity) => {
+export default (user, feature, entity) => {
     if (!user.permissions[entity]) {
         return null;
     }

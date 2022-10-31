@@ -1,6 +1,8 @@
-const userModel = require('#server/models/userModel/index');
+import userModelFactory from '#server/models/userModel/index';
 
-module.exports = async (req, res, next) => {
+const userModel = userModelFactory();
+
+export default async (req, res, next) => {
     let organizations;
     try {
         organizations = await userModel.getDirectory();

@@ -1,30 +1,30 @@
-const create = require('./create');
-const deactivate = require('./deactivate');
-const deleteUser = require('./delete');
-const downgradeLocalAdmin = require('./downgradeLocalAdmin');
-const findAll = require('./findAll');
-const findByIds = require('./findByIds');
-const findByOrganization = require('./findByOrganization');
-const findByOrganizationCategory = require('./findByOrganizationCategory');
-const findDepartementSummarySubscribers = require('./findDepartementSummarySubscribers');
-const findForRegion = require('./findForRegion');
-const findOne = require('./findOne');
-const findOneByAccessId = require('./findOneByAccessId');
-const findOneByEmail = require('./findOneByEmail');
-const formatName = require('./_common/formatName');
-const getAdminsFor = require('./getAdminsFor');
-const getDirectory = require('./getDirectory');
-const getHistory = require('./getHistory');
-const getLocationWatchers = require('./getLocationWatchers');
-const getNationalAdmins = require('./_common/getNationalAdmins');
-const getShantytownWatchers = require('./getShantytownWatchers');
-const getPlanObservers = require('./getPlanObservers');
-const listExport = require('./listExport');
-const setPermissionOptions = require('./setPermissionOptions');
-const update = require('./update');
-const upgradeLocalAdmin = require('./upgradeLocalAdmin');
+import create from './create';
+import deactivate from './deactivate';
+import deleteUser from './delete';
+import downgradeLocalAdmin from './downgradeLocalAdmin';
+import findAll from './findAll';
+import findByIds from './findByIds';
+import findByOrganization from './findByOrganization';
+import findByOrganizationCategory from './findByOrganizationCategory';
+import findDepartementSummarySubscribers from './findDepartementSummarySubscribers';
+import findForRegion from './findForRegion';
+import findOne from './findOne';
+import findOneByAccessId from './findOneByAccessId';
+import findOneByEmail from './findOneByEmail';
+import formatName from './_common/formatName';
+import getAdminsFor from './getAdminsFor';
+import getDirectory from './getDirectory';
+import getHistory from './getHistory';
+import getLocationWatchers from './getLocationWatchers';
+import getNationalAdmins from './_common/getNationalAdmins';
+import getShantytownWatchers from './getShantytownWatchers';
+import getPlanObservers from './getPlanObservers';
+import listExport from './listExport';
+import setPermissionOptions from './setPermissionOptions';
+import update from './update';
+import upgradeLocalAdmin from './upgradeLocalAdmin';
 
-module.exports = {
+export default () => ({
     create,
     deactivate,
     delete: deleteUser,
@@ -50,4 +50,4 @@ module.exports = {
     setPermissionOptions,
     update,
     upgradeLocalAdmin,
-};
+});

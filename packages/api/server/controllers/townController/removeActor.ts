@@ -1,9 +1,12 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-const shantytownActorModel = require('#server/models/shantytownActorModel');
-const { triggerRemoveDeclaredActor } = require('#server/utils/mattermost');
+import shantytownActorModelFactory from '#server/models/shantytownActorModel';
+import mattermostUtils from '#server/utils/mattermost';
 
-module.exports = async (req, res, next) => {
+const shantytownActorModel = shantytownActorModelFactory();
+const { triggerRemoveDeclaredActor } = mattermostUtils;
+
+export default async (req, res, next) => {
     let actors;
     try {
         actors = await sequelize.transaction(async (transaction) => {

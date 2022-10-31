@@ -1,9 +1,9 @@
-const attachmentsObject = require('./addAttachments');
+import addAttachments from './addAttachments';
 
-module.exports = attachments => ({
+export default attachments => ({
     toUser: userId => ({
         onFeature(feature, entity, transaction = undefined) {
-            return attachmentsObject.addAttachments(
+            return addAttachments(
                 attachments,
                 { type: 'User', id: userId },
                 feature,
@@ -15,7 +15,7 @@ module.exports = attachments => ({
 
     toOrganization: organizationId => ({
         onFeature(feature, entity, transaction = undefined) {
-            return attachmentsObject.addAttachments(
+            return addAttachments(
                 attachments,
                 { type: 'Organization', id: organizationId },
                 feature,

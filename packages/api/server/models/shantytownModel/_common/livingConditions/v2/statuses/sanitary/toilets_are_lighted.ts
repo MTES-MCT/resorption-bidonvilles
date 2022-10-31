@@ -1,4 +1,4 @@
-module.exports = (town) => {
+export default (town) => {
     const status = {
         globalImpact: null,
         details: null,

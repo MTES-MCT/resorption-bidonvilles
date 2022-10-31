@@ -1,6 +1,6 @@
 
 // Used by averageCompletionPercentage and averageCompletionPercentageByDepartement
-module.exports = departement => `
+export default (departement?: string) => `
     (SELECT
       c.fk_departement,
       ((CASE WHEN (SELECT regexp_matches(s.address, '^(.+) [0-9]+ [^,]+,? [0-9]+,? [^, ]+(,.+)?$'))[1] IS NOT NULL THEN 1 ELSE 0 END)

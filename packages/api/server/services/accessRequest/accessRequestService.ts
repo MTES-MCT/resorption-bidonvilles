@@ -1,7 +1,11 @@
-const userModel = require('#server/models/userModel/index');
-const { getAccountActivationLink } = require('#server/utils/auth');
-const sendEmail = require('./mailer');
-const { scheduleEvent, cancelEvent } = require('./scheduler');
+import userModelFactory from '#server/models/userModel/index';
+import authUtils from '#server/utils/auth';
+import sendEmail from './mailer';
+import scheduler from './scheduler';
+
+const userModel = userModelFactory();
+const { getAccountActivationLink } = authUtils;
+const { scheduleEvent, cancelEvent } = scheduler;
 
 function isAccessRequestPending(user) {
     return user.status === 'new' && user.user_accesses.length === 0;
@@ -16,7 +20,7 @@ function isAccessExpired(user) {
     return user.status === 'new' && user.user_accesses.length > 0 && user.user_accesses[0].expires_at < now;
 }
 
-module.exports = {
+export default {
     /**
      * Resets all scheduled events for a given user
      *
@@ -151,9 +155,7 @@ module.exports = {
         // notify the user and the admin
         await Promise.all([
             sendEmail.toUser.accessExpired(
-                user,
-                user.user_accesses[0].sent_by,
-                new Date(user.user_accesses[0].expires_at * 1000),
+                user
             ),
             sendEmail.toAdmin.accessExpired(
                 user.user_accesses[0].sent_by,

@@ -1,5 +1,9 @@
-const { toString: dateToString } = require('#server/utils/date');
-const { webappUrl } = require('#server/config');
+import dateUtils from '#server/utils/date';
+import config from '#server/config';
+
+import mails from '#server/mails/mails';
+
+import userModelFactory from '#server/models/userModel';
 
 const {
     sendAdminNewRequestNotification,
@@ -13,11 +17,14 @@ const {
     sendUserAccessPending,
     sendUserAccessExpired,
     sendUserAccessActivatedWelcome,
-} = require('#server/mails/mails');
+} = mails;
 
-const { formatName } = require('#server/models/userModel');
 
-module.exports = {
+const { toString: dateToString } = dateUtils;
+const { formatName } = userModelFactory();
+const { webappUrl } = config;
+
+export default {
     toAdmin: {
         newRequestNotification(admins, user) {
             return Promise.all(

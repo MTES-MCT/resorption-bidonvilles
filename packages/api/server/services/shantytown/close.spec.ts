@@ -1,14 +1,15 @@
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
+import chai from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
 
 const { expect } = chai;
 chai.use(sinonChai);
 
-const proxyquire = require('proxyquire');
-const shantytownModel = require('#server/models/shantytownModel');
-const mattermostUtils = require('#server/utils/mattermost');
+import proxyquire from 'proxyquire';
+import shantytownModelFactory from '#server/models/shantytownModel';
+import mattermostUtils from '#server/utils/mattermost';
 
+const shantytownModel = shantytownModelFactory();
 let closeService;
 
 

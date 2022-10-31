@@ -1,12 +1,16 @@
-const query = require('./query');
+import query from './query';
 
-module.exports = async (departementCode) => {
+export default async (departementCode) => {
     const baseQuery = [
         {
-            fk_role: ['local_admin'],
+            fk_role: {
+                value: ['local_admin'],
+            }
         },
         {
-            fk_status: ['active'],
+            fk_status: {
+                value: ['active'],
+            }
         },
         {
             organization_active: {

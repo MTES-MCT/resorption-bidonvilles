@@ -1,9 +1,11 @@
-const JSONToCSV = require('json2csv');
-const { listExport } = require('#server/models/planModel');
+import JSONToCSV from 'json2csv';
+import planModelFactory from '#server/models/planModel';
 
-module.exports = async (req, res) => {
+const planModel = planModelFactory();
+
+export default async (req, res) => {
     try {
-        const actions = await listExport();
+        const actions = await planModel.listExport();
         const csv = JSONToCSV.parse(actions);
 
         // The frontend expects a JSON for every API calls, so we wrap the CSV in a json entry

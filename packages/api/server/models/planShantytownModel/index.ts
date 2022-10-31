@@ -1,11 +1,11 @@
-const create = require('./create');
-const deletePlanShantytown = require('./delete');
-const findAll = require('./findAll');
-const serializePlan = require('./serializePlan');
+import create from './create';
+import deletePlanShantytown from './delete';
+import findAll from './findAll';
+import serializePlan from './serializePlan';
 
-module.exports = {
+export default () => ({
     create,
     delete: deletePlanShantytown,
     serializePlan,
     findAll,
-};
+});

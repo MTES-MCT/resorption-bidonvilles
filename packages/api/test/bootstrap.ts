@@ -1,4 +1,4 @@
-require('../module_alias');
+import '../module_alias';
 
 /**
  * A set of functions that can generate random values of a certain type

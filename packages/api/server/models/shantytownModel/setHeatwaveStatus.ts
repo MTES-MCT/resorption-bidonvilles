@@ -1,6 +1,6 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-module.exports = (shantytownId, heatwaveStatus) => {
+export default (shantytownId, heatwaveStatus) => {
     sequelize.query(
         `UPDATE shantytowns
         SET 

@@ -1,10 +1,17 @@
-const sequelize = require('#db/sequelize');
-const charteEngagementModel = require('#server/models/charteEngagementModel');
-const permissionModel = require('#server/models/permissionModel');
-const { where: fWhere } = require('#server/utils/permission');
-const serializeUser = require('./serializeUser');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes, Transaction } from 'sequelize';
+import charteEngagementModelFactory from '#server/models/charteEngagementModel';
+import permissionModelFactory from '#server/models/permissionModel';
+import permissionUtils from '#server/utils/permission';
+import { Where } from '#server/models/_common/types/Where';
+import serializeUser from './serializeUser';
 
-module.exports = async (where = [], filters, user = null, feature, transaction) => {
+const charteEngagementModel = charteEngagementModelFactory();
+const permissionModel = permissionModelFactory();
+
+const { where: fWhere } = permissionUtils;
+
+export default async (where: Where = [], filters, user: string = null, feature: string = undefined, transaction: Transaction = undefined) => {
     const replacements = {};
 
     if (user !== null) {
@@ -46,7 +53,7 @@ module.exports = async (where = [], filters, user = null, feature, transaction) 
         latestCharte = charte.version;
     }
 
-    const users = await sequelize.query(
+    const users: any = await sequelize.query(
         `WITH user_options AS (
             SELECT fk_user, ARRAY_AGG(fk_option) AS options FROM user_permission_options GROUP BY fk_user
         ),
@@ -142,7 +149,7 @@ module.exports = async (where = [], filters, user = null, feature, transaction) 
             upper(users.last_name) ASC,
             upper(users.first_name) ASC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements,
             transaction,
         },
@@ -174,14 +181,14 @@ module.exports = async (where = [], filters, user = null, feature, transaction) 
         WHERE user_accesses.fk_user IN (:userIds)
         ORDER BY user_accesses.fk_user ASC, user_accesses.created_at DESC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 userIds: users.map(({ id }) => id),
             },
             transaction,
         },
     );
-    const hashedUserAccesses = userAccesses.reduce((argAcc, row) => {
+    const hashedUserAccesses = userAccesses.reduce((argAcc, row: any) => {
         const acc = { ...argAcc };
         if (acc[row.fk_user] === undefined) {
             acc[row.fk_user] = [];

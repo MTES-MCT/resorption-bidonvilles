@@ -1,17 +1,17 @@
-const activate = require('./activate');
-const updateBeingFunded = require('./updateBeingFunded');
-const create = require('./create');
-const findAssociationName = require('./findAssociationName');
-const findByCategory = require('./findByCategory');
-const findByIds = require('./findByIds');
-const findByType = require('./findByType');
-const findOneAssociation = require('./findOneAssociation');
-const findOneById = require('./findOneById');
-const findOneByLocation = require('./findOneByLocation');
-const findPrefAndDdets = require('./findPrefAndDdets');
-const getName = require('./getName');
+import activate from './activate';
+import updateBeingFunded from './updateBeingFunded';
+import create from './create';
+import findAssociationName from './findAssociationName';
+import findByCategory from './findByCategory';
+import findByIds from './findByIds';
+import findByType from './findByType';
+import findOneAssociation from './findOneAssociation';
+import findOneById from './findOneById';
+import findOneByLocation from './findOneByLocation';
+import findPrefAndDdets from './findPrefAndDdets';
+import getName from './getName';
 
-module.exports = {
+export default () => ({
     activate,
     updateBeingFunded,
     create,
@@ -24,4 +24,4 @@ module.exports = {
     findOneByLocation,
     findPrefAndDdets,
     getName,
-};
+});

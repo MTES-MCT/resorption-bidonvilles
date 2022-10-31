@@ -1,10 +1,10 @@
-const { param } = require('express-validator');
-const ACTOR_THEMES = require('#server/config/shantytown_actor_themes');
-const selfUserIdValidator = require('./utils/selfUserId');
+import { param } from 'express-validator';
+import ACTOR_THEMES from '#server/config/shantytown_actor_themes';
+import selfUserIdValidator from './utils/selfUserId';
 
 const ACTOR_THEME_IDS = Object.keys(ACTOR_THEMES);
 
-module.exports = [
+export default [
     selfUserIdValidator('Vous ne pouvez pas modifier les champs d\'intervention d\'un autre intervenant'),
 
     param('theme_id')

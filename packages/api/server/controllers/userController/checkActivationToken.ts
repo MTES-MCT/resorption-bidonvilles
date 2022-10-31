@@ -1,8 +1,10 @@
-const jwt = require('jsonwebtoken');
-const CONFIG = require('#server/config');
-const userModel = require('#server/models/userModel');
+import jwt from 'jsonwebtoken';
+import CONFIG from '#server/config';
+import userModelFactory from '#server/models/userModel';
 
-module.exports = async (req, res) => {
+const userModel = userModelFactory();
+
+export default async (req, res) => {
     if (!req.params.token) {
         return res.status(400).send({
             error: {

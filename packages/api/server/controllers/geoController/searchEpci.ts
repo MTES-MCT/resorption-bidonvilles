@@ -1,11 +1,14 @@
-const url = require('url');
-const { trim } = require('validator');
-const epciModel = require('#server/models/epciModel/index');
+import url from 'url';
+import validator from 'validator';
+import epciModelFactory from '#server/models/epciModel/index';
 
-module.exports = async (req, res, next) => {
+const { trim } = validator;
+const epciModel = epciModelFactory();
+
+export default async (req, res, next) => {
     const { query: { q } } = url.parse(req.url, true);
 
-    const query = trim(q);
+    const query = trim(q.toString());
     if (query === null || query === '') {
         return res.status(400).send({
             error: {

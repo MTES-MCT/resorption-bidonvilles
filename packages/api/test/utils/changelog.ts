@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     raw(override = {}) {
         const defaultObj = {
             app_version: '0.0.0',

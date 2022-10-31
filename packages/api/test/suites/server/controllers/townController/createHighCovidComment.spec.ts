@@ -4,21 +4,23 @@
  * TOOLS
  * *********************************************************************************************** */
 
-const sinon = require('sinon');
-const { expect } = require('chai');
-const { mockReq, mockRes } = require('sinon-express-mock');
+import sinon from 'sinon';
+import { expect } from 'chai';
+import { mockReq, mockRes } from 'sinon-express-mock';
 
 
 /* **************************************************************************************************
  * FIXTURES
  * *********************************************************************************************** */
 
-const geoModel = require('#server/models/geoModel');
-const highCovidCommentModel = require('#server/models/highCovidCommentModel');
+import geoModelFactory from '#server/models/geoModel';
+import highCovidCommentModelFactory from '#server/models/highCovidCommentModel';
 
 const stubs = {};
-const { createHighCovidComment } = require('#server/controllers/townController');
+import { createHighCovidComment } from '#server/controllers/townController';
 
+const geoModel = geoModelFactory();
+const highCovidCommentModel = highCovidCommentModelFactory();
 
 /* **************************************************************************************************
  * TESTS

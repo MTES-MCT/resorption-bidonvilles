@@ -1,3 +1,3 @@
-const query = require('./_common/query');
+import query from './_common/query';
 
-module.exports = user => query(user, 'list');
+export default user => query(user, 'list');

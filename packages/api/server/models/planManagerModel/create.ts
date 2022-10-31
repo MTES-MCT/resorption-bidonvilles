@@ -1,6 +1,6 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-module.exports = (planId, managerIds, creatorId, transaction = undefined) => sequelize.getQueryInterface().bulkInsert(
+export default (planId, managerIds, creatorId, transaction = undefined) => sequelize.getQueryInterface().bulkInsert(
     'plan_managers',
     managerIds.map(id => ({
         fk_plan: planId,

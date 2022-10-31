@@ -1,20 +1,25 @@
-const ServiceError = require('#server/errors/ServiceError');
+import ServiceError from '#server/errors/ServiceError';
 
-const permissionUtils = require('#server/utils/permission');
-const geoModel = require('#server/models/geoModel');
-const geoUtils = require('#server/utils/geo');
-const shantytownModel = require('#server/models/shantytownModel');
-const closingSolutionModel = require('#server/models/closingSolutionModel');
-const excelUtils = require('#server/utils/excel');
-const statsExportsModel = require('#server/models/statsExports');
-const moment = require('moment');
+import permissionUtils from '#server/utils/permission';
+import geoUtils from '#server/utils/geo';
+import excelUtils from '#server/utils/excel';
+import moment from 'moment';
 
-
-const serializeExportProperties = require('./_common/serializeExportProperties');
-const createExportSections = require('./_common/createExportSections');
+import geoModelFactory from '#server/models/geoModel';
+import shantytownModelFactory from '#server/models/shantytownModel';
+import closingSolutionModelFactory from '#server/models/closingSolutionModel';
+import statsExportsModelFactory from '#server/models/statsExports';
 
 
-module.exports = async (user, data) => {
+import serializeExportProperties from './_common/serializeExportProperties';
+import createExportSections from './_common/createExportSections';
+
+const geoModel = geoModelFactory();
+const shantytownModel = shantytownModelFactory();
+const closingSolutionModel = closingSolutionModelFactory();
+const statsExportsModel = statsExportsModelFactory();
+
+export default async (user, data) => {
     if (!Object.prototype.hasOwnProperty.call(data, 'locationType')
         || !Object.prototype.hasOwnProperty.call(data, 'locationCode')) {
         throw new ServiceError('data_incomplete', new Error('Le périmètre géographique à exporter est obligatoire'));
@@ -47,7 +52,7 @@ module.exports = async (user, data) => {
     ];
 
     if (location.type !== 'nation') {
-        const locationFilters = {
+        const locationFilters: any = {
             location: {
                 query: `${geoUtils.fromGeoLevelToTableName(location.type)}.code`,
                 value: location[location.type].code,

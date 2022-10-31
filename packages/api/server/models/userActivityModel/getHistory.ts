@@ -1,8 +1,14 @@
-const shantytownModel = require('#server/models/shantytownModel');
-const shantytownCommentModel = require('#server/models/shantytownCommentModel');
-const highCovidCommentModel = require('#server/models/highCovidCommentModel');
-const userModel = require('#server/models/userModel');
-const planCommentModel = require('#server/models/planCommentModel');
+import shantytownModelFactory from '#server/models/shantytownModel';
+import shantytownCommentModelFactory from '#server/models/shantytownCommentModel';
+import highCovidCommentModelFactory from '#server/models/highCovidCommentModel';
+import userModelFactory from '#server/models/userModel';
+import planCommentModelFactory from '#server/models/planCommentModel';
+
+const shantytownModel = shantytownModelFactory();
+const shantytownCommentModel = shantytownCommentModelFactory();
+const highCovidCommentModel = highCovidCommentModelFactory();
+const userModel = userModelFactory();
+const planCommentModel = planCommentModelFactory();
 
 /**
  * @param {Object} userLocation Location to be used for 'local' permissions
@@ -10,7 +16,7 @@ const planCommentModel = require('#server/models/planCommentModel');
  * @param {Object} location Location to be queried
  * @param {Array.<String>} entities List of entities to be included
  */
-module.exports = async (user, location, entities, numberOfActivities, lastDate, maxDate) => {
+export default async (user, location, entities, numberOfActivities, lastDate, maxDate) => {
     const promises = [];
     const shantytownFilter = [];
     if (entities.includes('shantytownCreation')) {
@@ -45,4 +51,6 @@ module.exports = async (user, location, entities, numberOfActivities, lastDate, 
     }
 
     return sortedActivities;
+
+
 };

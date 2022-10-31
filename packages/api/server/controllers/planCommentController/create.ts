@@ -1,6 +1,6 @@
-const planCommentService = require('#server/services/planComment');
+import planCommentService from '#server/services/planComment';
 
-module.exports = async (req, res, next) => {
+export default async (req, res, next) => {
     let comment;
 
     try {

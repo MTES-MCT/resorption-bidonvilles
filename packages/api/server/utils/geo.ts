@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     fromGeoLevelToTableName(geoLevel) {
         switch (geoLevel) {
             case 'region':

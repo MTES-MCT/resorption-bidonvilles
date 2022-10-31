@@ -1,9 +1,9 @@
-const create = require('./create');
-const findLatestUserAccess = require('./findLatestUserAccess');
-const update = require('./update');
+import create from './create';
+import findLatestUserAccess from './findLatestUserAccess';
+import update from './update';
 
-module.exports = {
+export default () => ({
     create,
     findLatestUserAccess,
     update,
-};
+});

@@ -4,23 +4,23 @@
  * TOOLS
  * *********************************************************************************************** */
 
-const sinon = require('sinon');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from 'sinon';
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
 
 const { expect } = chai;
 chai.use(sinonChai);
 
 
-const { mockReq, mockRes } = require('sinon-express-mock');
+import { mockReq, mockRes } from 'sinon-express-mock';
 
 
-const shantytownService = require('#server/services/shantytown');
+import shantytownService from '#server/services/shantytown';
 
 
-const createCovidCommentController = require('#server/controllers/townController/createCovidComment');
+import createCovidCommentController from '#server/controllers/townController/createCovidComment';
 
-const ServiceError = require('#server/errors/ServiceError');
+import ServiceError from '#server/errors/ServiceError';
 
 
 /* **************************************************************************************************

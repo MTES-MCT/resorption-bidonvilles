@@ -1,4 +1,5 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 const methods = {
     nation: () => ({
@@ -9,10 +10,10 @@ const methods = {
         city: null,
     }),
     region: async (code) => {
-        const [region] = await sequelize.query(
+        const [region]: any = await sequelize.query(
             'SELECT name, code FROM regions WHERE code = :code',
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: { code },
             },
         );
@@ -33,7 +34,7 @@ const methods = {
         };
     },
     departement: async (code) => {
-        const [departement] = await sequelize.query(
+        const [departement]: any = await sequelize.query(
             `SELECT
                 departements.name AS name,
                 departements.code AS code,
@@ -43,7 +44,7 @@ const methods = {
             LEFT JOIN regions ON departements.fk_region = regions.code
             WHERE departements.code = :code`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: { code },
             },
         );
@@ -67,7 +68,7 @@ const methods = {
         };
     },
     epci: async (code) => {
-        const [epci] = await sequelize.query(
+        const [epci]: any = await sequelize.query(
             `SELECT
                 epci.name AS name,
                 epci.code AS code,
@@ -81,7 +82,7 @@ const methods = {
             LEFT JOIN regions ON departements.fk_region = regions.code
             WHERE epci.code = :code`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: { code },
             },
         );
@@ -108,7 +109,7 @@ const methods = {
         };
     },
     city: async (code) => {
-        const [city] = await sequelize.query(
+        const [city]: any = await sequelize.query(
             `SELECT
                 cities.name AS name,
                 cities.code AS code,
@@ -124,7 +125,7 @@ const methods = {
             LEFT JOIN regions ON departements.fk_region = regions.code
             WHERE cities.code = :code`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: { code },
             },
         );
@@ -155,4 +156,4 @@ const methods = {
     },
 };
 
-module.exports = (type, code) => methods[type](code);
+export default (type, code) => methods[type](code);

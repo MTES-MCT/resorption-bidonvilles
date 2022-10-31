@@ -1,8 +1,11 @@
-const exportShantytown = require('#server/services/shantytown/export');
-const { normalizeTownName } = require('#server/utils/string');
-const { toFormat: dateToString } = require('#server/utils/date');
+import exportShantytown from '#server/services/shantytown/export';
+import stringUtils from '#server/utils/string';
+import dateUtils from '#server/utils/date';
 
-module.exports = async (req, res, next) => {
+const { normalizeTownName } = stringUtils;
+const { toFormat: dateToString } = dateUtils;
+
+export default async (req, res, next) => {
     let buffer;
     try {
         buffer = await exportShantytown(req.user, req.shantytown, req.query.options);

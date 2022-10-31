@@ -1,7 +1,7 @@
-const getChangelogFor = require('./getChangelogFor');
-const getLastChangelogVersion = require('./getLastChangelogVersion');
+import getChangelogFor from './getChangelogFor';
+import getLastChangelogVersion from './getLastChangelogVersion';
 
-module.exports = {
+export default () => ({
     getChangelogFor,
     getLastChangelogVersion,
-};
+});

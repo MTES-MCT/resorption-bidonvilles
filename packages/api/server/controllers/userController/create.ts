@@ -1,6 +1,6 @@
-const userService = require('#server/services/userService');
+import userService from '#server/services/userService';
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
     // create the user
     const result = await userService.create(
         {

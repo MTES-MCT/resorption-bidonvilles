@@ -1,7 +1,7 @@
-const create = require('./create');
-const count = require('./count');
+import create from './create';
+import count from './count';
 
-module.exports = {
+export default () => ({
     create,
     count,
-};
+});

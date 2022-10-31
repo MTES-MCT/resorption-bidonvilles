@@ -1,4 +1,4 @@
-module.exports = (organization) => {
+export default (organization) => {
     let { name } = organization;
 
     if (organization.type_abbreviation !== null) {

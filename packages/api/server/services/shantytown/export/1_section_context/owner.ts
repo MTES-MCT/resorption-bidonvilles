@@ -1,6 +1,6 @@
-const { Paragraph, TextRun } = require('docx');
+import { Paragraph, TextRun } from 'docx';
 
-module.exports = (ownerType, owner) => new Paragraph({
+export default (ownerType, owner) => new Paragraph({
     spacing: {
         before: 150,
     },

@@ -1,6 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async () => {
+export default async () => {
     const rows = await sequelize.query(
         `SELECT
             AVG(diff) AS average,
@@ -27,7 +28,7 @@ module.exports = async () => {
             d >= '2019-09-01'::date /* date of official opening to actual users */
         `,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 

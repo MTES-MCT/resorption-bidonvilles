@@ -1,8 +1,11 @@
 /* eslint-disable newline-per-chained-call */
-const { body, param } = require('express-validator');
-const planModel = require('#server/models/planModel');
+import { body, param } from 'express-validator';
+import planModelFactory from '#server/models/planModel';
+import { copyFileSync } from 'fs';
 
-module.exports = [
+const planModel = planModelFactory();
+
+export default [
     param('id')
         .custom(async (value, { req }) => {
             let plan;

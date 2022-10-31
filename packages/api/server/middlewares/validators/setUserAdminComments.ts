@@ -1,7 +1,9 @@
-const { body, param } = require('express-validator');
-const userModel = require('#server/models/userModel');
+import { body, param } from 'express-validator';
+import userModelFactory from '#server/models/userModel';
 
-module.exports = [
+const userModel = userModelFactory();
+
+export default [
 
     body('comment')
         .optional({ nullable: true })

@@ -1,6 +1,7 @@
-const organizationModel = require('#server/models/organizationModel');
+import organizationModelFactory from '#server/models/organizationModel';
+const organizationModel = organizationModelFactory();
 
-module.exports = async (req, res) => res.status(200).send({
+export default async (req, res) => res.status(200).send({
     success: true,
     response: {
         organizations: await organizationModel.findByType(req.params.typeId),

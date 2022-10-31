@@ -1,6 +1,6 @@
-const sequelize = require('#db/sequelize');
-
-module.exports = async () => {
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
+export default async () => {
     const promises = [
         sequelize.query(
             `SELECT
@@ -19,7 +19,7 @@ module.exports = async () => {
             GROUP BY departements.code, departements.name
             ORDER BY departements.code ASC`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
             },
         ),
         sequelize.query(
@@ -46,7 +46,7 @@ module.exports = async () => {
             GROUP BY departements.code, departements.name
             ORDER BY departements.code ASC`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
             },
         ),
         sequelize.query(
@@ -83,7 +83,7 @@ module.exports = async () => {
             GROUP BY departements.code, departements.name
             ORDER BY departements.code ASC`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
             },
         ),
     ];

@@ -1,9 +1,9 @@
-const { expect } = require('chai');
-const { where } = require('#server/utils/permission/index');
-const { serialized: fakeUser } = require('#test/utils/user');
-const { serialized: fakeShantytown } = require('#test/utils/shantytown');
-const { serialized: fakePlan } = require('#test/utils/plan');
-const { paris, marseille } = require('#test/utils/location');
+import { expect } from 'chai';
+import { where } from '#server/utils/permission/index';
+import { serialized: fakeUser } from '#test/utils/user';
+import { serialized: fakeShantytown } from '#test/utils/shantytown';
+import { serialized: fakePlan } from '#test/utils/plan';
+import { paris, marseille } from '#test/utils/location';
 
 describe.only('utils/permission.where()', () => {
     let user;

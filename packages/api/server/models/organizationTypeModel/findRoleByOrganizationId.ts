@@ -1,7 +1,8 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async (organization_id, transaction = undefined) => {
-    const result = await sequelize.query(
+export default async (organization_id, transaction = undefined) => {
+    const result: any = await sequelize.query(
         `SELECT
             fk_role
         FROM
@@ -12,7 +13,7 @@ module.exports = async (organization_id, transaction = undefined) => {
         WHERE
             o.organization_id = :organization_id`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 organization_id,
             },

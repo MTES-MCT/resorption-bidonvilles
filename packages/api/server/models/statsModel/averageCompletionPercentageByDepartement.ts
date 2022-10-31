@@ -1,7 +1,9 @@
-const sequelize = require('#db/sequelize');
-const averageCompletionQuery = require('./_common/averageCompletion');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async () => sequelize.query(
+import averageCompletionQuery from './_common/averageCompletion';
+
+export default async () => sequelize.query(
     `SELECT
             fk_departement, AVG(pourcentage_completion)
             FROM
@@ -9,6 +11,6 @@ module.exports = async () => sequelize.query(
             GROUP BY fk_departement
             ORDER BY fk_departement`,
     {
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
     },
 );

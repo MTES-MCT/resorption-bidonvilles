@@ -1,7 +1,7 @@
-const getUserRelatedPermission = require('./getUserRelatedPermission');
-const getOrganizationRelatedPermission = require('./getOrganizationRelatedPermission');
+import getUserRelatedPermission from './getUserRelatedPermission';
+import getOrganizationRelatedPermission from './getOrganizationRelatedPermission';
 
-module.exports = (feature, entity) => ({
+export default (feature, entity) => ({
     ofUser(userId, transaction = undefined) {
         return getUserRelatedPermission(
             feature,

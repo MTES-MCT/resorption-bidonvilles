@@ -1,9 +1,12 @@
-const sequelize = require('#db/sequelize');
-const planModel = require('#server/models/planModel');
-const etpTypeModel = require('#server/models/etpTypeModel/index');
+import { sequelize } from '#db/sequelize';
 
+import planModelFactory from '#server/models/planModel';
+import etpTypeModelFactory from '#server/models/etpTypeModel/index';
+
+const planModel = planModelFactory();
+const etpTypeModel = etpTypeModelFactory();
 function sanitizeState(plan, data) {
-    const sanitizedData = {};
+    const sanitizedData: any = {};
 
     // date
     const date = new Date(data.date);
@@ -146,7 +149,7 @@ function sanitizeState(plan, data) {
     return sanitizedData;
 }
 
-module.exports = async (req, res, next) => {
+export default async (req, res, next) => {
     let plan;
     try {
         plan = await planModel.findOne(req.user, req.params.id);
@@ -176,7 +179,7 @@ module.exports = async (req, res, next) => {
 
     let etpTypes;
     try {
-        etpTypes = (await etpTypeModel.findAll()).reduce((acc, type) => Object.assign({}, acc, {
+        etpTypes = (await etpTypeModel.findAll()).reduce((acc, type: any) => Object.assign({}, acc, {
             [type.uid]: type,
         }), {});
     } catch (error) {
@@ -689,7 +692,8 @@ module.exports = async (req, res, next) => {
                 },
             );
             // stateData.etp
-            const planStateId = response[0][0].id;
+            const result: any = response[0][0];
+            const planStateId = result.id;
             return sequelize.query(
                 `INSERT INTO plan_state_etp(
                     fk_plan_state,

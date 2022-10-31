@@ -1,6 +1,6 @@
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
 
 /**
  * @param {Function} fn An express callback (hence it's supposed to receive req, res, and next)
@@ -44,7 +44,7 @@ function asyncExpress() {
     return app;
 }
 
-module.exports = () => {
+export default () => {
     const app = asyncExpress();
     app.use(cors());
     app.use(bodyParser.json());

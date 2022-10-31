@@ -1,6 +1,6 @@
-const query = require('./_common/query');
+import query from './_common/query';
 
-module.exports = (user, userIds) => query(
+export default (user, userIds) => query(
     [
         {
             user_id: userIds,

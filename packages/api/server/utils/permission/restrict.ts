@@ -1,7 +1,7 @@
-const getPermission = require('./getPermission');
-const can = require('./can');
+import getPermission from './getPermission';
+import can from './can';
 
-module.exports = requestedLocation => ({
+export default requestedLocation => ({
     for(user) {
         return {
             askingTo(feature, entity) {

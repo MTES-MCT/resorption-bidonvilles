@@ -1,7 +1,9 @@
-const fs = require('fs');
-const path = require('path');
-const Excel = require('exceljs');
-const { assetsSrc } = require('#server/config');
+import fs from 'fs';
+import path from 'path';
+import Excel from 'exceljs';
+import config from '#server/config';
+
+const { assetsSrc } = config;
 
 /**
  * @typedef {Object} CellContent
@@ -422,7 +424,7 @@ function writeSection(sheet, lastFrozenColumn, { title, properties }, columnInde
     });
 }
 
-module.exports = {
+export default {
     /**
      * Generates an excel document for the given shantytowns and configuration
      *

@@ -1,16 +1,23 @@
-const sequelize = require('#db/sequelize');
-const { fromGeoLevelToTableName } = require('#server/utils/geo');
-const { formatName } = require('#server/models/userModel');
-const { getUsenameOf, serializeComment } = require('#server/models/shantytownModel');
-const { restrict } = require('#server/utils/permission');
-const shantytownCommentTagModel = require('#server/models/shantytownCommentTagModel/index');
-const getAddressSimpleOf = require('../shantytownModel/_common/getAddressSimpleOf');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
+import geoUtils from '#server/utils/geo';
+import userModelFactory from '#server/models/userModel';
+import shantytownModelFactory from '#server/models/shantytownModel';
+import permsissionUtils from '#server/utils/permission';
+import shantytownCommentTagModelFactory from '#server/models/shantytownCommentTagModel/index';
+import getAddressSimpleOf from '#server/models//shantytownModel/_common/getAddressSimpleOf';
 
-module.exports = async (user, location, numberOfActivities, lastDate, maxDate, onlyCovid = false) => {
+const { fromGeoLevelToTableName } = geoUtils;
+const { formatName } = userModelFactory();
+const { getUsenameOf, serializeComment } = shantytownModelFactory();
+const { restrict } = permsissionUtils;
+const shantytownCommentTagModel = shantytownCommentTagModelFactory();
+
+export default async (user, location, numberOfActivities, lastDate, maxDate, onlyCovid = false) => {
     // apply geographic level restrictions
     const where = [];
-    const replacements = {
+    const replacements: any = {
         maxDate,
     };
     const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
@@ -165,20 +172,20 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate, o
             ${limit}
             `,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements,
         },
     );
 
-    let commentTags = [];
+    let commentTags = {};
     if (activities.length > 0) {
         commentTags = await shantytownCommentTagModel.getTagsForComments(
-            activities.map(({ commentId }) => commentId),
+            activities.map(({ commentId }: any) => commentId),
         );
     }
 
     return activities
-        .map(activity => ({
+        .map((activity: any) => ({
             entity: 'comment',
             action: 'creation',
             date: activity.commentCreatedAt.getTime() / 1000,

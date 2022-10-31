@@ -1,4 +1,4 @@
-module.exports = (table, where, replacements) => where.map((clauses, index) => {
+export default (table, where, replacements) => where.map((clauses, index) => {
     const clauseGroup = Object.keys(clauses).map((column) => {
         const rawValue = clauses[column].value === undefined ? clauses[column] : clauses[column].value;
 

@@ -1,12 +1,12 @@
 const {
     Table, SectionType, Paragraph, TextRun,
 } = require('docx');
-const heading = require('./heading');
-const populationHistory = require('./section_people/populationHistory');
-const socialDiagnostic = require('./section_people/socialDiagnostic');
-const createRow = require('./create_row');
+import heading from './heading';
+import populationHistory from './section_people/populationHistory';
+import socialDiagnostic from './section_people/socialDiagnostic';
+import createRow from './create_row';
 
-module.exports = (shantytown) => {
+export default (shantytown) => {
     const population = populationHistory(shantytown);
     const origins = shantytown.socialOrigins;
     return ({

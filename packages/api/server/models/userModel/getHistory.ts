@@ -1,7 +1,8 @@
-const sequelize = require('#db/sequelize');
-const formatName = require('./_common/formatName');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
+import formatName from './_common/formatName';
 
-module.exports = async (location, numberOfActivities, lastDate, maxDate) => {
+export default async (location, numberOfActivities, lastDate, maxDate) => {
     const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
     const activities = await sequelize.query(
         `
@@ -35,7 +36,7 @@ module.exports = async (location, numberOfActivities, lastDate, maxDate) => {
             ${limit}
             `,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 maxDate,
             },
@@ -43,7 +44,7 @@ module.exports = async (location, numberOfActivities, lastDate, maxDate) => {
     );
 
     return activities
-        .map(activity => ({
+        .map((activity: any) => ({
             entity: 'user',
             action: 'creation',
             date: activity.date.getTime() / 1000,

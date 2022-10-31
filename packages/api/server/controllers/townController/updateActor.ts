@@ -1,9 +1,10 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-const shantytownActorModel = require('#server/models/shantytownActorModel');
+import shantytownActorModelFactory from '#server/models/shantytownActorModel';
 
+const shantytownActorModel = shantytownActorModelFactory();
 
-module.exports = async (req, res, next) => {
+export default async (req, res, next) => {
     let actors;
     try {
         actors = await sequelize.transaction(async (transaction) => {

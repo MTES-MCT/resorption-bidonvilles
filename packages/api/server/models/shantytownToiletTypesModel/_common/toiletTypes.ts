@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     latrines: 'Latrines construites par les habitants',
     toilettes_chimiques: 'Toilettes chimiques',
     toilettes_seches: 'Toilettes sèches installées par un prestataire/association',

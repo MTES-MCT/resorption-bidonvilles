@@ -1,7 +1,10 @@
-const userModel = require('#server/models/userModel');
-const { hashPassword } = require('#server/utils/auth');
+import userModelFactory from '#server/models/userModel';
+import authUtils from '#server/utils/auth';
 
-module.exports = async (req, res, next) => {
+const userModel = userModelFactory();
+const { hashPassword } = authUtils;
+
+export default async (req, res, next) => {
     const { id: paramId } = req.params;
     const { id: connectedUserId } = req.user;
 
@@ -23,7 +26,7 @@ module.exports = async (req, res, next) => {
     }
 
     // actually update the user
-    const data = {
+    const data: any = {
         first_name: firstName,
         last_name: lastName,
         email,

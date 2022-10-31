@@ -1,7 +1,9 @@
-const semver = require('semver');
-const userModel = require('#server/models/userModel');
+import semver from 'semver';
+import userModelFactory from '#server/models/userModel';
 
-module.exports = {
+const userModel = userModelFactory();
+
+export default {
     async sync(req, res, next, respond = true) {
         const version = req.headers && req.headers['x-app-version'];
         const lastUsedVersion = req.user.last_version;

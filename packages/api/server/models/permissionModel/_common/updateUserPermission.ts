@@ -1,6 +1,6 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-module.exports = async (userPermissionId, data, transaction = undefined) => {
+export default async (userPermissionId, data, transaction = undefined) => {
     const { sql, replacements } = Object.keys(data)
         .filter(key => ['allowed', 'allow_all', 'is_cumulative'].includes(key))
         .reduce((acc, key) => ({

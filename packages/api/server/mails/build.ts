@@ -1,9 +1,9 @@
-const fs = require('fs');
-const mjml2html = require('mjml');
-const path = require('path');
-const rimraf = require('rimraf');
-const { JSDOM } = require('jsdom');
-const { htmlToText } = require('html-to-text');
+import fs from 'fs';
+import mjml2html from 'mjml';
+import path from 'path';
+import rimraf from 'rimraf';
+import { JSDOM } from 'jsdom';
+import { htmlToText } from 'html-to-text';
 
 // __dirname when the script is executed is /dist
 const dirname = path.join(__dirname, './src');

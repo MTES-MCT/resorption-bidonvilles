@@ -1,11 +1,15 @@
-const sequelize = require('#db/sequelize');
-const userModel = require('#server/models/userModel');
-const userAccessModel = require('#server/models/userAccessModel');
-const accessRequestService = require('#server/services/accessRequest/accessRequestService');
-const permissionsDescription = require('#server/permissions_description');
-const { getExpiracyDateForActivationTokenCreatedAt } = require('#server/utils/auth');
+import { sequelize } from '#db/sequelize';
+import userModelFactory from '#server/models/userModel';
+import userAccessModelFactory from '#server/models/userAccessModel';
+import accessRequestService from '#server/services/accessRequest/accessRequestService';
+import permissionsDescription from '#server/permissions_description';
+import authUtils from '#server/utils/auth';
 
-module.exports = async (req, res, next) => {
+const userModel = userModelFactory();
+const userAccessModel = userAccessModelFactory();
+const { getExpiracyDateForActivationTokenCreatedAt } = authUtils;
+
+export default async (req, res, next) => {
     let user;
     try {
         user = await userModel.findOne(req.params.id, { extended: true }, req.user, 'activate');

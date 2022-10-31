@@ -1,15 +1,21 @@
-const jwt = require('jsonwebtoken');
-const CONFIG = require('#server/config');
-const sequelize = require('#db/sequelize');
-const userModel = require('#server/models/userModel');
-const userAccessModel = require('#server/models/userAccessModel');
-const organizationModel = require('#server/models/organizationModel');
-const accessRequestService = require('#server/services/accessRequest/accessRequestService');
-const checkPassword = require('#server/controllers/userController/helpers/checkPassword');
-const { triggerNewUserAlert } = require('#server/utils/mattermost');
-const { hashPassword } = require('#server/utils/auth');
+import jwt from 'jsonwebtoken';
+import CONFIG from '#server/config';
+import { sequelize } from '#db/sequelize';
+import userModelFactory from '#server/models/userModel';
+import userAccessModelFactory from '#server/models/userAccessModel';
+import organizationModelFactory from '#server/models/organizationModel';
+import accessRequestService from '#server/services/accessRequest/accessRequestService';
+import checkPassword from '#server/controllers/userController/helpers/checkPassword';
+import mattermostUtils from '#server/utils/mattermost';
+import authUtils from '#server/utils/auth';
 
-module.exports = async (req, res, next) => {
+const userModel = userModelFactory();
+const userAccessModel = userAccessModelFactory();
+const organizationModel = organizationModelFactory();
+const { triggerNewUserAlert } = mattermostUtils;
+const { hashPassword } = authUtils;
+
+export default async (req, res, next) => {
     if (!req.body.token) {
         return res.status(400).send({
             error: {

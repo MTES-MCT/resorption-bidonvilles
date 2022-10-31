@@ -1,11 +1,15 @@
-const sequelize = require('#db/sequelize');
-const userModel = require('#server/models/userModel');
-const { restrict } = require('#server/utils/permission');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
+import userModelFactory from '#server/models/userModel';
+import permsissionUtils from '#server/utils/permission';
 
-module.exports = async (user, location, numberOfActivities, lastDate, maxDate) => {
+const userModel = userModelFactory();
+const { restrict } = permsissionUtils;
+
+export default async (user, location, numberOfActivities, lastDate, maxDate) => {
     // apply geographic level restrictions
     const where = [];
-    const replacements = {
+    const replacements: any = {
         maxDate,
     };
     const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
@@ -49,7 +53,7 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate) =
             ${limit}
             `,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements,
         },
     );
@@ -57,7 +61,7 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate) =
     const highCovidComments = {};
 
     return activities
-        .map((activity) => {
+        .map((activity: any) => {
             if (highCovidComments[activity.highCommentId] !== undefined) {
                 highCovidComments[activity.highCommentId].highCovidComment.departements.push({
                     code: activity.highCommentDptCode,

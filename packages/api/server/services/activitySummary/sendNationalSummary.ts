@@ -1,10 +1,12 @@
 import { ActivityNationalSummary } from "#server/models/activityModel/types/ActivityNationalSummary";
-import { User } from '#server/models/userModel/types/User';
-const { sendActivitySummary } = require('#server/mails/mails');
-import * as moment from 'moment';
-const PromisePool = require('@supercharge/promise-pool');
+import { User } from '#server/models/userModel/_common/types/User';
+import mailsUtils from '#server/mails/mails';
+import moment from 'moment';
+import PromisePool from '@supercharge/promise-pool';
 
-export default async (argFrom: Date, argTo: Date, argSummaries: ActivityNationalSummary, subscribers: Array<User>): Promise<Array<void>> => {
+const { sendActivitySummary } = mailsUtils;
+
+export default async (argFrom: Date, argTo: Date, argSummaries: ActivityNationalSummary, subscribers: Array<User>): Promise<any> => {
     const from = moment(argFrom);
     const to = moment(argTo);
 

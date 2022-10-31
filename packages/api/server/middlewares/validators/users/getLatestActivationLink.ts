@@ -1,8 +1,10 @@
 /* eslint-disable newline-per-chained-call */
-const { param } = require('express-validator');
-const userAccessModel = require('#server/models/userAccessModel');
+import { param } from 'express-validator';
+import userAccessModelFactory from '#server/models/userAccessModel';
 
-module.exports = [
+const userAccessModel = userAccessModelFactory();
+
+export default [
     param('id')
         .toInt()
         .isInt().bail().withMessage('L\'identifiant de l\'utilisateur est invalide')

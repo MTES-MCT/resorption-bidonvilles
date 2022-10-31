@@ -1,9 +1,9 @@
-const path = require('path');
-const dotenv = require('dotenv');
+import path from 'path';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
-const config = {
+export default {
     assetsSrc: path.resolve(__dirname, '../assets'),
     wwwUrl: `https://${process.env.RB_API_FRONT_DOMAIN}`,
     webappUrl: `https://app.${process.env.RB_API_FRONT_DOMAIN}`,
@@ -23,7 +23,7 @@ const config = {
     agenda: {
         mongo_address: `mongodb://${process.env.RB_API_MONGO_USERNAME}:${process.env.RB_API_MONGO_PASSWORD}@${process.env.RB_API_MONGO_HOST}`,
     },
-    mattermost: {},
+    mattermost: process.env.RB_API_MATTERMOST_WEBHOOK || {},
     sentry: {
         dsn: process.env.RB_API_SENTRY_DSN || '',
     },
@@ -32,8 +32,10 @@ const config = {
         ? process.env.RB_API_EMAIL_BLACKLIST.split(',').map(id => parseInt(id, 10))
         : [],
     sendActivitySummary: process.env.RB_API_SEND_ACTIVITY_SUMMARY === '1',
+    matomo: {
+        token: process.env.RB_API_MATOMO_AUTH_TOKEN,
+    },
 };
 
-config.mattermost = process.env.RB_API_MATTERMOST_WEBHOOK;
 
-module.exports = config;
+

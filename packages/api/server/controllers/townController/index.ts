@@ -1,27 +1,27 @@
-const list = require('./list');
-const find = require('./find');
-const create = require('./create');
-const close = require('./close');
-const deleteTown = require('./deleteTown');
-const deleteComment = require('./deleteComment');
-const exportTown = require('./export');
-const exportOne = require('./exportOne');
-const createCovidComment = require('./createCovidComment');
-const fixClosedStatus = require('./fixClosedStatus');
-const setHeatwaveStatus = require('./setHeatwaveStatus');
-const edit = require('./edit');
-const createHighCovidComment = require('./createHighCovidComment')();
-const addActor = require('./addActor');
-const updateActor = require('./updateActor');
-const removeActorTheme = require('./removeActorTheme');
-const inviteNewActor = require('./inviteNewActor')();
-const removeActor = require('./removeActor');
-const exportActors = require('./exportActors');
-const getRelations = require('./getRelations')();
-const findNearbyTowns = require('./findNearbyTowns')();
-const findUserTowns = require('./findUserTowns');
+import list from './list';
+import find from './find';
+import create from './create';
+import close from './close';
+import deleteTown from './deleteTown';
+import deleteComment from './deleteComment';
+import exportTown from './export';
+import exportOne from './exportOne';
+import createCovidComment from './createCovidComment';
+import fixClosedStatus from './fixClosedStatus';
+import setHeatwaveStatus from './setHeatwaveStatus';
+import edit from './edit';
+import createHighCovidComment from './createHighCovidComment';
+import addActor from './addActor';
+import updateActor from './updateActor';
+import removeActorTheme from './removeActorTheme';
+import inviteNewActor from './inviteNewActor';
+import removeActor from './removeActor';
+import exportActors from './exportActors';
+import getRelations from './getRelations';
+import findNearbyTowns from './findNearbyTowns';
+import findUserTowns from './findUserTowns';
 
-module.exports = {
+export default {
     list,
     find,
     create,

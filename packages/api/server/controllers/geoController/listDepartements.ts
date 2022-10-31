@@ -1,5 +1,7 @@
-const departementModel = require('#server/models/departementModel/index');
+import departementModelFactory from '#server/models/departementModel/index';
 
-module.exports = async (req, res) => res.status(200).send({
+const departementModel = departementModelFactory();
+
+export default async (req, res) => res.status(200).send({
     departements: await departementModel.findAll(),
 });

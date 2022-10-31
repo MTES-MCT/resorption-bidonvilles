@@ -1,11 +1,11 @@
 const {
     Paragraph, TextRun, Table, SectionType,
 } = require('docx');
-const formatDate = require('../_common/formatDate');
-const heading = require('./heading');
-const createRow = require('./create_row');
+import formatDate from '../_common/formatDate';
+import heading from './heading';
+import createRow from './create_row';
 
-module.exports = shantytown => ({
+export default shantytown => ({
     properties: {
         type: SectionType.CONTINUOUS,
     },

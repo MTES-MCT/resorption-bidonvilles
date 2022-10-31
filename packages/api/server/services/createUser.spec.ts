@@ -1,9 +1,9 @@
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
-const chaiAsPromised = require('chai-as-promised');
-const rewiremock = require('rewiremock/node');
-const { serialized: fakeUser } = require('#test/utils/user');
+import chai from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
+import chaiAsPromised from 'chai-as-promised';
+import rewiremock from 'rewiremock/node';
+import { serialized: fakeUser } from '#test/utils/user';
 
 const { expect } = chai;
 chai.use(sinonChai);

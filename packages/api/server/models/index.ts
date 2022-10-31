@@ -1,7 +1,7 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
-module.exports = (database) => {
+export default (database) => {
     const basename = path.basename(module.filename);
 
     return fs.readdirSync(__dirname)

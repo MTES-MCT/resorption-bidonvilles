@@ -1,6 +1,6 @@
-const shantytownCommentService = require('#server/services/shantytownComment');
+import shantytownCommentService from '#server/services/shantytownComment';
 
-module.exports = async (req, res, next) => {
+export default async (req, res, next) => {
     let comments;
 
     try {

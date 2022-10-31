@@ -1,6 +1,8 @@
-const userModel = require('#server/models/userModel');
+import userModelFactory from '#server/models/userModel';
 
-module.exports = async (req, res, next) => {
+const userModel = userModelFactory();
+
+export default async (req, res, next) => {
     try {
         await userModel.update(req.params.id, {
             admin_comments: req.body.comment,

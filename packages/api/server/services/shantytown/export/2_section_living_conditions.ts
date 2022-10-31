@@ -1,15 +1,17 @@
+import * as docx from 'docx';
+import accessToWater from './2_section_living_conditions/accessToWater';
+import trashEvacuation from './2_section_living_conditions/trashEvacuation';
+import accessToElectricity from './2_section_living_conditions/accessToElectricity';
+import accessToSanitary from './2_section_living_conditions/accessToSanitary';
+import pestAnimals from './2_section_living_conditions/pestAnimals';
+import heading from './heading';
+import firePrevention from './2_section_living_conditions/firePrevention';
+
 const {
     Table, SectionType, Paragraph, TextRun,
-} = require('docx');
-const accessToWater = require('./2_section_living_conditions/accessToWater');
-const trashEvacuation = require('./2_section_living_conditions/trashEvacuation');
-const accessToElectricity = require('./2_section_living_conditions/accessToElectricity');
-const accessToSanitary = require('./2_section_living_conditions/accessToSanitary');
-const pestAnimals = require('./2_section_living_conditions/pestAnimals');
-const heading = require('./heading');
-const firePrevention = require('./2_section_living_conditions/firePrevention');
+} = docx;
 
-module.exports = (shantytown) => {
+export default (shantytown) => {
     const section = {
         properties: {
             type: SectionType.CONTINUOUS,

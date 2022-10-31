@@ -1,18 +1,29 @@
-const ServiceError = require('#server/errors/ServiceError');
-const sequelize = require('#db/sequelize');
-const planModel = require('#server/models/planModel');
-const financeModel = require('#server/models/financeModel');
-const financeRowModel = require('#server/models/financeRowModel');
-const financeTypeModel = require('#server/models/financeTypeModel');
-const topicModel = require('#server/models/topicModel');
-const userModel = require('#server/models/userModel');
-const planManagerModel = require('#server/models/planManagerModel');
-const { addAttachments, removeAttachments } = require('#server/models/permissionModel');
-const planShantytownModel = require('#server/models/planShantytownModel');
-const sanitize = require('#server/controllers/planController/_common/sanitize');
-const historize = require('#server/controllers/planController/_common/historize');
+import ServiceError from '#server/errors/ServiceError';
+import { sequelize } from '#db/sequelize';
 
-module.exports = async (data, planId, user) => {
+import planModelFactory from '#server/models/planModel';
+import financeModelFactory from '#server/models/financeModel';
+import financeRowModelFactory from '#server/models/financeRowModel';
+import financeTypeModelFactory from '#server/models/financeTypeModel';
+import topicModelFactory from '#server/models/topicModel';
+import userModelFactory from '#server/models/userModel';
+import planManagerModelFactory from '#server/models/planManagerModel';
+import permissionModelFactory from '#server/models/permissionModel';
+import planShantytownModelFactory from '#server/models/planShantytownModel';
+import sanitize from '#server/controllers/planController/_common/sanitize';
+import historize from '#server/controllers/planController/_common/historize';
+
+const planModel = planModelFactory();
+const financeModel = financeModelFactory();
+const financeRowModel = financeRowModelFactory();
+const financeTypeModel = financeTypeModelFactory();
+const topicModel = topicModelFactory();
+const userModel = userModelFactory();
+const planManagerModel = planManagerModelFactory();
+const permissionModel = permissionModelFactory();
+const planShantytownModel = planShantytownModelFactory();
+
+export default async (data, planId, user) => {
     let plan;
     try {
         plan = await planModel.findOne(user, planId);
@@ -35,9 +46,9 @@ module.exports = async (data, planId, user) => {
         errors[field].push(error);
     }
 
-    let financeTypes;
+    let financeTypes: any;
     try {
-        financeTypes = (await financeTypeModel.findAll()).reduce((acc, type) => Object.assign({}, acc, {
+        financeTypes = (await financeTypeModel.findAll()).reduce((acc, type: any) => Object.assign({}, acc, {
             [type.uid]: type,
         }), {});
     } catch (error) {
@@ -46,7 +57,7 @@ module.exports = async (data, planId, user) => {
 
     let topics;
     try {
-        topics = (await topicModel.findAll()).reduce((acc, topic) => Object.assign({}, acc, {
+        topics = (await topicModel.findAll()).reduce((acc, topic: any) => Object.assign({}, acc, {
             [topic.uid]: topic,
         }), {});
     } catch (error) {
@@ -139,7 +150,7 @@ module.exports = async (data, planId, user) => {
             if (plan.government_contacts && plan.government_contacts.length > 0) {
                 promises.push(planManagerModel.delete(plan.id, t));
                 promises.push(...['list', 'read', 'update', 'close'].map(
-                    feature => plan.government_contacts.map(manager => removeAttachments([{ type: 'plan', id: plan.id }])
+                    feature => plan.government_contacts.map(manager => permissionModel.removeAttachments([{ type: 'plan', id: plan.id }])
                         .fromUser(manager.id)
                         .onFeature(feature, 'plan', t)),
                 ));
@@ -174,7 +185,7 @@ module.exports = async (data, planId, user) => {
                 planManagerModel.create(plan.id, planData.government.map(manager => manager.id), user.id, t),
 
                 ...['list', 'read', 'update', 'close'].map(
-                    feature => planData.government.map(manager => addAttachments([{ type: 'plan', id: plan.id }])
+                    feature => planData.government.map(manager => permissionModel.addAttachments([{ type: 'plan', id: plan.id }])
                         .toUser(manager.id)
                         .onFeature(feature, 'plan', t)),
                 ).flat(),

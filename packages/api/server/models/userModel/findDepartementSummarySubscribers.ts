@@ -1,10 +1,12 @@
-const query = require('./_common/query');
+import query from './_common/query';
 
-module.exports = async () => {
-    const users = await query(
+export default async () => {
+    const users: any = await query(
         [
             {
-                fk_status: ['active'],
+                fk_status: {
+                    value: ['active'],
+                }
             },
             {
                 zeroUnsubscriptions: {

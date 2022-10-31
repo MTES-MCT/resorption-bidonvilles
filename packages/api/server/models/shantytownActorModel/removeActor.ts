@@ -1,6 +1,6 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-module.exports = (shantytownId, userId, transaction = undefined) => sequelize.query(
+export default (shantytownId, userId, transaction = undefined) => sequelize.query(
     `DELETE
             FROM shantytown_actors
             WHERE fk_shantytown = :fk_shantytown AND fk_user = :fk_user`,

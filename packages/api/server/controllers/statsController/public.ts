@@ -1,8 +1,12 @@
-const statsModel = require('#server/models/statsModel');
-const statsExportsModel = require('#server/models/statsExports');
-const statsDirectoryViewsModel = require('#server/models/statsDirectoryViews');
+import statsModelFactory from '#server/models/statsModel';
+import statsExportsModelFactory from '#server/models/statsExports';
+import statsDirectoryViewsModelFactory from '#server/models/statsDirectoryViews';
 
-module.exports = async (req, res) => {
+const statsModel = statsModelFactory();
+const statsExportsModel = statsExportsModelFactory();
+const statsDirectoryViewsModel = statsDirectoryViewsModelFactory();
+
+export default async (req, res) => {
     // date used for numberOfUsersPerMonth & numberOfUsersAtMonth
     const startDate = '2020-06-01';
 
@@ -49,7 +53,7 @@ module.exports = async (req, res) => {
                 numberOfCollaboratorAndAssociationUsers,
                 numberOfCollaboratorAndAssociationOrganizations,
                 numberOfShantytownOperations: Object.values(numberOfShantytownOperations)
-                    .reduce((sum, rows) => sum + Object.values(rows).reduce((subtotal, { total }) => subtotal + parseInt(total, 10), 0), 0),
+                    .reduce((sum, rows) => sum + Object.values(rows).reduce((subtotal, { total }: any) => subtotal + parseInt(total, 10), 0), 0),
                 numberOfExports,
                 numberOfComments,
                 numberOfDirectoryViews,

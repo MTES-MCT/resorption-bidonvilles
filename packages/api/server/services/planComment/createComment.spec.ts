@@ -1,21 +1,26 @@
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
+import chai from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
 
 const { expect } = chai;
 chai.use(sinonChai);
 
-const planCommentModel = require('#server/models/planCommentModel');
-const userModel = require('#server/models/userModel');
+import planCommentModelFactory from '#server/models/planCommentModel';
+import userModelFactory from '#server/models/userModel';
 
 
-const mails = require('#server/mails/mails');
+import mails from '#server/mails/mails';
 
-const mattermostUtils = require('#server/utils/mattermost');
-const { serialized: fakeUser } = require('#test/utils/user');
-const { serialized: fakePlan } = require('#test/utils/plan');
+import mattermostUtils from '#server/utils/mattermost';
+import userUtils from '#test/utils/user';
+import planUtils from '#test/utils/plan';
 
-const createCommentService = require('./createComment');
+import createCommentService from './createComment';
+
+const { serialized: fakeUser } = userUtils;
+const { serialized: fakePlan } = planUtils;
+const userModel = userModelFactory();
+const planCommentModel = planCommentModelFactory();
 
 
 describe.only('services/planComment', () => {

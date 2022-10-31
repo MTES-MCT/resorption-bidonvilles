@@ -1,6 +1,6 @@
 const STATUS_PRIORITY = ['bad', 'unknown', 'toImprove'];
 
-module.exports = (town, items) => {
+export default (town, items) => {
     const {
         status, positive, negative, unknown,
     } = Object.keys(items).reduce((argAcc, itemKey) => {

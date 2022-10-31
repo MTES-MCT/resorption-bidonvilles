@@ -1,9 +1,11 @@
 /* eslint-disable newline-per-chained-call */
-const { body } = require('express-validator');
-const ALLOWED_TYPES = require('#server/config/contact_request_types');
-const newUser = require('./common/newUser');
+import * as expressValidator from 'express-validator';
+import ALLOWED_TYPES from '#server/config/contact_request_types';
+import newUser from './common/newUser';
 
-module.exports = newUser(
+const { body } = expressValidator;
+
+export default newUser(
     [
         body('verifEmail')
             .custom((value, { req }) => {

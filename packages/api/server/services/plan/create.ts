@@ -1,25 +1,44 @@
-const ServiceError = require('#server/errors/ServiceError');
-const sequelize = require('#db/sequelize');
-const planModel = require('#server/models/planModel');
-const shantytownModel = require('#server/models/shantytownModel');
-const departementModel = require('#server/models/departementModel');
-const financeModel = require('#server/models/financeModel');
-const financeTypeModel = require('#server/models/financeTypeModel');
-const financeRowModel = require('#server/models/financeRowModel');
-const planManagerModel = require('#server/models/planManagerModel');
-const topicModel = require('#server/models/topicModel');
-const userModel = require('#server/models/userModel');
-const permissionModel = require('#server/models/permissionModel');
-const sanitize = require('#server/controllers/planController/_common/sanitize');
-const locationModel = require('#server/models/locationModel');
-const planDepartementModel = require('#server/models/planDepartementModel');
-const planTopicsModel = require('#server/models/planTopicsModel');
-const planShantytownModel = require('#server/models/planShantytownModel');
-const planOperatorModel = require('#server/models/planOperatorModel');
+import ServiceError from '#server/errors/ServiceError';
+import { sequelize } from '#db/sequelize';
 
-module.exports = async (data, user) => {
+import userModelFactory from '#server/models/userModel';
+import permissionModelFactory from '#server/models/permissionModel';
+import planModelFactory from '#server/models/planModel';
+import shantytownModelFactory from '#server/models/shantytownModel';
+import departementModelFactory from '#server/models/departementModel';
+
+import financeModelFactory from '#server/models/financeModel';
+import financeTypeModelFactory from '#server/models/financeTypeModel';
+import financeRowModelFactory from '#server/models/financeRowModel';
+import planManagerModelFactory from '#server/models/planManagerModel';
+import topicModelFactory from '#server/models/topicModel';
+import locationModelFactory from '#server/models/locationModel';
+import planDepartementModelFactory from '#server/models/planDepartementModel';
+import planTopicsModelFactory from '#server/models/planTopicsModel';
+import planShantytownModelFactory from '#server/models/planShantytownModel';
+import planOperatorModelFactory from '#server/models/planOperatorModel';
+
+import sanitize from '#server/controllers/planController/_common/sanitize';
+
+const departementModel = departementModelFactory();
+const financeModel = financeModelFactory();
+const financeTypeModel = financeTypeModelFactory();
+const financeRowModel = financeRowModelFactory();
+const planManagerModel = planManagerModelFactory();
+const topicModel = topicModelFactory();
+const locationModel = locationModelFactory();
+const planDepartementModel = planDepartementModelFactory();
+const userModel = userModelFactory();
+const permissionModel = permissionModelFactory();
+const planModel = planModelFactory();
+const shantytownModel = shantytownModelFactory();
+const planTopicsModel = planTopicsModelFactory();
+const planShantytownModel = planShantytownModelFactory();
+const planOperatorModel = planOperatorModelFactory();
+
+export default async (data, user) => {
     // sanitize data
-    const planData = Object.assign({}, sanitize(data), {
+    const planData: any = Object.assign({}, sanitize(data), {
         createdBy: user.id,
     });
 
@@ -44,7 +63,7 @@ module.exports = async (data, user) => {
 
     let financeTypes;
     try {
-        financeTypes = (await financeTypeModel.findAll()).reduce((acc, type) => Object.assign({}, acc, {
+        financeTypes = (await financeTypeModel.findAll()).reduce((acc, type: any) => Object.assign({}, acc, {
             [type.uid]: type,
         }), {});
     } catch (error) {
@@ -53,7 +72,7 @@ module.exports = async (data, user) => {
 
     let topics;
     try {
-        topics = (await topicModel.findAll()).reduce((acc, topic) => Object.assign({}, acc, {
+        topics = (await topicModel.findAll()).reduce((acc, topic: any) => Object.assign({}, acc, {
             [topic.uid]: topic,
         }), {});
     } catch (error) {

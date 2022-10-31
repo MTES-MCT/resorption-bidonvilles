@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     normalizeTownName(name) {
         return name.toLowerCase()
             .normalize('NFD')

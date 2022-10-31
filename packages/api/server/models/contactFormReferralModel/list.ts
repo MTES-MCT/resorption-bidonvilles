@@ -1,6 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = (where = []) => {
+export default (where = []) => {
     const replacements = {};
 
     const whereClause = where.map((clauses, index) => {
@@ -32,7 +33,7 @@ module.exports = (where = []) => {
             LEFT JOIN cities ON localized_organizations.city_code = cities.code
             ${whereClause ? `WHERE ${whereClause}` : ''}`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements,
         },
     );

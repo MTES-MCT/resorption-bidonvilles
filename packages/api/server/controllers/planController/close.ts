@@ -1,10 +1,12 @@
-const { trim } = require('validator');
-const sequelize = require('#db/sequelize');
-const planModel = require('#server/models/planModel');
-const historize = require('./_common/historize');
+import validator from 'validator';
+import { sequelize } from '#db/sequelize';
+import planModelFactory from '#server/models/planModel';
+import historize from './_common/historize';
 
+const { trim } = validator;
+const planModel = planModelFactory();
 function sanitizeClose(data) {
-    const sanitizedData = {};
+    const sanitizedData: any = {};
 
     // closed at
     const closedAt = new Date(data.closedAt);
@@ -37,7 +39,7 @@ function sanitizeClose(data) {
     return sanitizedData;
 }
 
-module.exports = async (req, res, next) => {
+export default async (req, res, next) => {
     // check existence of the plan (otherwise, 404)
     let plan;
     try {

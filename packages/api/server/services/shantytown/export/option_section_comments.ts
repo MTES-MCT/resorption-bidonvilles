@@ -2,10 +2,10 @@ const {
     Paragraph, TextRun, SectionType,
 } = require('docx');
 
-const moment = require('moment');
-const heading = require('./heading');
+import moment from 'moment';
+import heading from './heading';
 
-module.exports = (shantytown) => {
+export default (shantytown) => {
     const comments = [...shantytown.comments.regular, ...shantytown.comments.covid].sort((a, b) => (moment(a.createdAt).isBefore(b.createdAt) ? 1 : -1));
 
     return {

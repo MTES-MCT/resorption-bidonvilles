@@ -1,6 +1,6 @@
-const query = require('./_common/query');
+import query from './_common/query';
 
-module.exports = (organizationCategoryId, geographicFilter = undefined, filters = {}, customWhere = []) => {
+export default (organizationCategoryId, geographicFilter = undefined, filters = {}, customWhere = []) => {
     const where = [
         {
             organizationCategory: {

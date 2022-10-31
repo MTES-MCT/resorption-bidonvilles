@@ -1,6 +1,6 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-module.exports = (planId, shantytowns, createdBy, transaction = undefined) => sequelize.query(
+export default (planId, shantytowns, createdBy, transaction = undefined) => sequelize.query(
     `INSERT INTO plan_shantytowns(fk_plan, fk_shantytown, created_by)
     VALUES ${shantytowns.map(() => '(?, ?, ?)').join(', ')}`,
     {

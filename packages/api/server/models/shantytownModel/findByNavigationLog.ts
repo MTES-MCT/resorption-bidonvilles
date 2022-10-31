@@ -1,8 +1,8 @@
-const sequelize = require('#db/sequelize');
-const findAll = require('./findAll');
+import { sequelize } from '#db/sequelize';
+import findAll from './findAll';
 
 
-module.exports = async (user) => {
+export default async (user) => {
     const [ids] = await sequelize.query(
         `SELECT
             SUBSTR(page,7) AS shantytown_id

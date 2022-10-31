@@ -1,5 +1,5 @@
 
-module.exports = (ts) => {
+export default (ts) => {
     const now = new Date();
     const then = new Date(ts * 1000);
 

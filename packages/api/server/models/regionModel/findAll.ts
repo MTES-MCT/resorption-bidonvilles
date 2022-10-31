@@ -1,11 +1,12 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = () => sequelize.query(
+export default () => sequelize.query(
     `SELECT
         regions.code AS code,
         regions.name AS name
     FROM regions`,
     {
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
     },
 );

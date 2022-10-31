@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     fontaine_publique: 'Fontaine publique',
     borne_incendie: 'Borne incendie',
     achat_bouteille: 'Achat bouteille uniquement',

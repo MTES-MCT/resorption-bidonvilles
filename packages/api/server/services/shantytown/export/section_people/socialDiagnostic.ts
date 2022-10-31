@@ -1,6 +1,6 @@
-const formatDate = require('../../_common/formatDate');
+import formatDate from '../../_common/formatDate';
 
-module.exports = (town) => {
+export default (town) => {
     if (town.censusStatus === 'done') {
         return `Réalisé le ${formatDate(
             town.censusConductedAt,

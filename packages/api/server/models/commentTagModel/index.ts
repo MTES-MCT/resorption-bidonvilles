@@ -1,5 +1,5 @@
-const find = require('./find');
+import find from './find';
 
-module.exports = {
+export default () => ({
     find,
-};
+});

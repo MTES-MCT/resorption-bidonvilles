@@ -1,7 +1,7 @@
 /* eslint-disable newline-per-chained-call */
-const { body } = require('express-validator');
+import { body } from 'express-validator';
 
-module.exports = [
+export default [
     body('page')
         .isString().bail().withMessage('Le nom de la page est invalide')
         .trim()

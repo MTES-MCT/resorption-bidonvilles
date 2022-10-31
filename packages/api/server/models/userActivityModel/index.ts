@@ -1,5 +1,5 @@
-const getHistory = require('./getHistory');
+import getHistory from './getHistory';
 
-module.exports = {
+export default () => ({
     getHistory,
-};
+});

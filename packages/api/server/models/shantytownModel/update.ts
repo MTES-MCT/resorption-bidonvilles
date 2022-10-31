@@ -1,14 +1,16 @@
-const sequelize = require('#db/sequelize');
-const incomingTownsModel = require('#server/models/incomingTownsModel');
+import { sequelize } from '#db/sequelize';
+import incomingTownsModelFactory from '#server/models/incomingTownsModel';
 
-module.exports = async (editor, shantytownId, data, argTransaction = undefined) => {
+const incomingTownsModel = incomingTownsModelFactory();
+
+export default async (editor, shantytownId, data, argTransaction = undefined) => {
     let transaction = argTransaction;
     if (transaction === undefined) {
         transaction = await sequelize.transaction();
     }
 
     // save the current state of the shantytown
-    const [[{ hid }]] = await sequelize.query(
+    const [[{ hid }]]: any = await sequelize.query(
         `INSERT INTO
                 "ShantytownHistories"(
                     shantytown_id,

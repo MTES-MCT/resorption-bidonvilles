@@ -1,12 +1,17 @@
-const sequelize = require('#db/sequelize');
-const userModel = require('#server/models/userModel');
-const shantytownModel = require('#server/models/shantytownModel');
-const { where } = require('#server/utils/permission');
-const stringifyWhereClause = require('#server/models/_common/stringifyWhereClause');
-const getComments = require('./getComments');
-const serializePlan = require('./serializePlan');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async (user, feature, filters = {}) => {
+import userModelFactory from '#server/models/userModel';
+import shantytownModelFactory from '#server/models/shantytownModel';
+import permissionUtils from '#server/utils/permission';
+import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
+import getComments from './getComments';
+import serializePlan from './serializePlan';
+
+const shantytownModel = shantytownModelFactory();
+const { where } = permissionUtils;
+const userModel = userModelFactory();
+export default async (user, feature, filters = {}) => {
     const replacements = Object.assign({}, filters);
 
     const locationClauseGroup = where().can(user).do(feature, 'plan');
@@ -63,7 +68,7 @@ module.exports = async (user, feature, filters = {}) => {
         ${whereClause !== null ? `WHERE ${whereClause}` : ''}
         ORDER BY plans.plan_id ASC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements,
         },
     );
@@ -72,11 +77,11 @@ module.exports = async (user, feature, filters = {}) => {
         return [];
     }
 
-    const hashedPlans = rows.reduce((acc, plan) => Object.assign(acc, {
+    const hashedPlans = rows.reduce((acc, plan: any) => Object.assign(acc, {
         [plan.id]: plan,
     }), {});
 
-    const planIds = rows.map(({ id }) => id);
+    const planIds = rows.map(({ id }: any) => id);
     const [planComments, planManagers, planOperators, planTopics, planStates, planShantytowns, planFinances] = await Promise.all([
         getComments(user, Object.keys(hashedPlans)),
         sequelize.query(
@@ -87,7 +92,7 @@ module.exports = async (user, feature, filters = {}) => {
             WHERE fk_plan IN (:planIds)
             ORDER BY fk_plan ASC`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: Object.assign({}, replacements, {
                     planIds,
                 }),
@@ -96,7 +101,7 @@ module.exports = async (user, feature, filters = {}) => {
         sequelize.query(
             'SELECT fk_plan, fk_user FROM plan_operators WHERE fk_plan IN (:planIds) ORDER BY fk_plan ASC',
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: {
                     planIds,
                 },
@@ -111,7 +116,7 @@ module.exports = async (user, feature, filters = {}) => {
             LEFT JOIN topics ON plan_topics.fk_topic = topics.uid
             WHERE plan_topics.fk_plan IN (:planIds) ORDER BY plan_topics.fk_plan ASC`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: {
                     planIds,
                 },
@@ -198,7 +203,7 @@ module.exports = async (user, feature, filters = {}) => {
             WHERE fk_plan IN (:planIds)
             ORDER BY fk_plan, date ASC`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: {
                     planIds,
                 },
@@ -207,7 +212,7 @@ module.exports = async (user, feature, filters = {}) => {
         sequelize.query(
             'SELECT fk_plan, fk_shantytown FROM plan_shantytowns WHERE fk_plan IN (:planIds) ORDER BY fk_plan ASC',
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: {
                     planIds,
                 },
@@ -231,7 +236,7 @@ module.exports = async (user, feature, filters = {}) => {
             WHERE finances.fk_plan IN (:planIds)
             ORDER BY fk_plan ASC, finances.year DESC`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: {
                     planIds,
                 },
@@ -243,20 +248,20 @@ module.exports = async (user, feature, filters = {}) => {
     // users
     const serializedUsers = await userModel.findByIds(
         null,
-        [...planManagers, ...planOperators].map(({ fk_user: id }) => id),
+        [...planManagers, ...planOperators].map(({ fk_user: id }: any) => id),
     );
     const hashedUsers = serializedUsers.reduce((acc, u) => Object.assign(acc, {
         [u.id]: u,
     }), {});
 
-    planManagers.forEach(({ fk_plan: planId, fk_user: userId }) => {
+    planManagers.forEach(({ fk_plan: planId, fk_user: userId }: any) => {
         if (hashedPlans[planId].managers === undefined) {
             hashedPlans[planId].managers = [];
         }
 
         hashedPlans[planId].managers.push(hashedUsers[userId]);
     });
-    planOperators.forEach(({ fk_plan: planId, fk_user: userId }) => {
+    planOperators.forEach(({ fk_plan: planId, fk_user: userId }: any) => {
         if (hashedPlans[planId].operators === undefined) {
             hashedPlans[planId].operators = [];
         }
@@ -265,7 +270,7 @@ module.exports = async (user, feature, filters = {}) => {
     });
 
     // topics
-    planTopics.forEach(({ fk_plan: planId, topic_uid: uid, topic_name: name }) => {
+    planTopics.forEach(({ fk_plan: planId, topic_uid: uid, topic_name: name }: any) => {
         if (hashedPlans[planId].topics === undefined) {
             hashedPlans[planId].topics = [];
         }
@@ -277,7 +282,7 @@ module.exports = async (user, feature, filters = {}) => {
     });
 
     // plan states
-    const planStateIds = planStates.map(({ plan_state_id: id }) => id);
+    const planStateIds = planStates.map(({ plan_state_id: id }: any) => id);
     let serializedEtp = {};
     if (planStateIds.length > 0) {
         const etp = await sequelize.query(
@@ -290,7 +295,7 @@ module.exports = async (user, feature, filters = {}) => {
             LEFT JOIN etp_types ON plan_state_etp.fk_etp_type = etp_types.uid
             WHERE plan_state_etp.fk_plan_state IN (:planStateIds)`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: {
                     planStateIds,
                 },
@@ -299,7 +304,7 @@ module.exports = async (user, feature, filters = {}) => {
 
         serializedEtp = etp.reduce((acc, {
             fk_plan_state, total, etp_type_uid, etp_type_name,
-        }) => {
+        }: any) => {
             if (!acc[fk_plan_state]) {
                 acc[fk_plan_state] = [];
             }
@@ -315,7 +320,7 @@ module.exports = async (user, feature, filters = {}) => {
         }, {});
     }
 
-    const parsedPlanStates = planStates.reduce((acc, state) => {
+    const parsedPlanStates = planStates.reduce((acc, state: any) => {
         if (acc[state.fk_plan] === undefined) {
             acc[state.fk_plan] = [];
         }
@@ -434,7 +439,7 @@ module.exports = async (user, feature, filters = {}) => {
     if (planShantytowns.length > 0) {
         const serializedShantytowns = await shantytownModel.findAll(
             user,
-            [{ shantytown_id: planShantytowns.map(({ fk_shantytown: id }) => id) }],
+            [{ shantytown_id: planShantytowns.map(({ fk_shantytown: id }: any) => id) }],
         );
         hashedShantytowns = serializedShantytowns.reduce((acc, shantytown) => Object.assign(acc, {
             [shantytown.id]: shantytown,
@@ -442,8 +447,8 @@ module.exports = async (user, feature, filters = {}) => {
     }
 
     planShantytowns
-        .filter(({ fk_shantytown: shantytownId }) => hashedShantytowns[shantytownId] !== undefined)
-        .forEach(({ fk_plan: planId, fk_shantytown: shantytownId }) => {
+        .filter(({ fk_shantytown: shantytownId }: any) => hashedShantytowns[shantytownId] !== undefined)
+        .forEach(({ fk_plan: planId, fk_shantytown: shantytownId }: any) => {
             if (hashedPlans[planId].shantytowns === undefined) {
                 hashedPlans[planId].shantytowns = [];
             }
@@ -452,7 +457,7 @@ module.exports = async (user, feature, filters = {}) => {
         });
 
     // finances
-    planFinances.forEach((finance) => {
+    planFinances.forEach((finance: any) => {
         if (hashedPlans[finance.fk_plan].finances === undefined) {
             hashedPlans[finance.fk_plan].finances = [];
         }
@@ -478,7 +483,7 @@ module.exports = async (user, feature, filters = {}) => {
     });
 
     const serializedPlans = rows.map(serializePlan.bind(this, user))
-        .map(plan => ({
+        .map((plan: any) => ({
             ...plan,
             comments: planComments[plan.id],
         }));

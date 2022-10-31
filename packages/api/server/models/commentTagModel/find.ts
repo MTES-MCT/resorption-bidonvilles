@@ -1,8 +1,8 @@
-const sequelize = require('#db/sequelize');
-
-module.exports = (filters = {}) => {
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
+export default (filters: any = {}) => {
     const where = [];
-    const replacements = {};
+    const replacements: any = {};
 
     if (filters.ids) {
         where.push('comment_tags.uid IN (:ids)');
@@ -21,7 +21,7 @@ module.exports = (filters = {}) => {
         FROM comment_tags
         ${where.length > 0 ? `WHERE ${where.join(' AND ')}` : ''}`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements,
         },
     );

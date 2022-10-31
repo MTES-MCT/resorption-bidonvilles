@@ -1,6 +1,6 @@
-const computeStatus = require('./computeStatus');
-const presence = require('./pest_animals/presence');
+import computeStatus from './computeStatus';
+import presence from './pest_animals/presence';
 
-module.exports = town => computeStatus(town, {
+export default town => computeStatus(town, {
     presence,
 });

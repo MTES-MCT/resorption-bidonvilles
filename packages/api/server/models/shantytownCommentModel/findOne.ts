@@ -1,11 +1,15 @@
-const sequelize = require('#db/sequelize');
-const { serializeComment } = require('#server/models/shantytownModel');
-const shantytownCommentTagModel = require('#server/models/shantytownCommentTagModel/index');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
+import shantytownModelFactory from '#server/models/shantytownModel';
+import shantytownCommentTagModelFactory from '#server/models/shantytownCommentTagModel/index';
+
+const { serializeComment } = shantytownModelFactory();
+const shantytownCommentTagModel = shantytownCommentTagModelFactory();
 /**
  * @param {Number} id A shantytown_comment_id
  */
-module.exports = async (id) => {
+export default async (id) => {
     const [comments, commentTags] = await Promise.all([
         sequelize.query(
             `WITH organization_comment_access AS (
@@ -48,7 +52,7 @@ module.exports = async (id) => {
             LEFT JOIN user_comment_access uca ON sc.shantytown_comment_id = uca.shantytown_comment_id
             WHERE sc.shantytown_comment_id = :id`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: {
                     id,
                 },

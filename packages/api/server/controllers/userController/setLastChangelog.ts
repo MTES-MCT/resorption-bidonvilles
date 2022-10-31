@@ -1,7 +1,9 @@
-const semver = require('semver');
-const userModel = require('#server/models/userModel');
+import semver from 'semver';
+import userModelFactory from '#server/models/userModel';
 
-module.exports = async (req, res, next) => {
+const userModel = userModelFactory();
+
+export default async (req, res, next) => {
     const changelog = semver.valid(req.body.version);
     if (changelog === null) {
         return res.status(400).send({

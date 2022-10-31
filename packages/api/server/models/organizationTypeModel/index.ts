@@ -1,9 +1,9 @@
-const findByCategory = require('./findByCategory');
-const findOneById = require('./findOneById');
-const findRoleByOrganizationId = require('./findRoleByOrganizationId');
+import findByCategory from './findByCategory';
+import findOneById from './findOneById';
+import findRoleByOrganizationId from './findRoleByOrganizationId';
 
-module.exports = {
+export default () => ({
     findByCategory,
     findOneById,
     findRoleByOrganizationId,
-};
+});

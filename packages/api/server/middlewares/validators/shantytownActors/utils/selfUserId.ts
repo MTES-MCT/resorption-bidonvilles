@@ -1,6 +1,6 @@
-const { param } = require('express-validator');
+import { param } from 'express-validator';
 
-module.exports = error => param('user_id')
+export default error => param('user_id')
     .toInt()
     .isInt().bail()
     .withMessage('L\'identifiant de l\'intervenant est invalide')

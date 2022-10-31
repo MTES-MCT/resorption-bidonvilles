@@ -1,7 +1,7 @@
-const create = require('./create');
-const deletePlanManager = require('./delete');
+import create from './create';
+import deletePlanManager from './delete';
 
-module.exports = {
+export default () => ({
     create,
     delete: deletePlanManager,
-};
+});

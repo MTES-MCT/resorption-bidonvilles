@@ -1,7 +1,7 @@
-const moment = require('moment');
-const { Paragraph, TextRun, AlignmentType } = require('docx');
+import moment from 'moment';
+import { Paragraph, TextRun, AlignmentType } from 'docx';
 
-module.exports = (shantytown) => {
+export default (shantytown) => {
     const currentDate = moment().utcOffset(2).locale('fr');
     const lastUpdate = moment(new Date(shantytown.updatedAt * 1000)).format('DD/MM/YYYY');
 

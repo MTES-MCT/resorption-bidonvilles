@@ -1,9 +1,9 @@
 const {
     Paragraph, TextRun, SectionType,
 } = require('docx');
-const formatDate = require('../_common/formatDate');
+import formatDate from '../_common/formatDate';
 
-const heading = require('./heading');
+import heading from './heading';
 
 const boolToStr = (bool) => {
     if (bool === null) {
@@ -44,7 +44,7 @@ const policeStatusLabel = (town) => {
     return 'NC';
 };
 
-module.exports = town => ({
+export default town => ({
     properties: {
         type: SectionType.CONTINUOUS,
     },

@@ -1,3 +1,3 @@
-const query = require('./_common/query');
+import query from './_common/query';
 
-module.exports = (user, where = []) => query(where, { auth: false, extended: false }, user, 'list');
+export default (user, where = []) => query(where, { auth: false, extended: false }, user, 'list');

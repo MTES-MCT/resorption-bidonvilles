@@ -1,6 +1,6 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-module.exports = (user_access_id, data, transaction = undefined) => {
+export default (user_access_id, data, transaction = undefined) => {
     const params = ['used_at', 'sent_by'];
 
     const query = params

@@ -4,23 +4,25 @@
  * TOOLS
  * *********************************************************************************************** */
 
-const chai = require('chai');
-const sinon = require('sinon');
+import chai from 'chai';
+import sinon from 'sinon';
 chai.use(require('sinon-chai'));
-const rewiremock = require('rewiremock/node');
+import rewiremock from 'rewiremock/node';
 
-const { expect } = require('chai');
-const { mockRes } = require('sinon-express-mock');
+import { expect } from 'chai';
+import { mockRes } from 'sinon-express-mock';
 
-const userModel = require('#server/models/userModel');
-const userService = require('#server/services/userService');
+import userModelFactory from '#server/models/userModel';
+import userService from '#server/services/userService';
 
-const mailService = require('#server/services/mailService');
-const agenda = require('#server/loaders/agendaLoader');
+import mailService from '#server/services/mailService';
+import agenda from '#server/loaders/agendaLoader';
 
 // eslint-disable-next-line no-unused-vars
 const agendaStub = sinon.stub(agenda, 'getAgenda');
-const accessRequestService = require('#server/services/accessRequest/accessRequestService');
+import accessRequestService from '#server/services/accessRequest/accessRequestService';
+
+const userModel = userModelFactory();
 
 function generateFakeUser() {
     return {
@@ -62,7 +64,7 @@ const mockModels = {
  * *********************************************************************************************** */
 
 describe.only('contactController.contact()', () => {
-    const req = {};
+    const req: any = {};
     let res;
     let stubs;
     let emailStub;
@@ -102,7 +104,7 @@ describe.only('contactController.contact()', () => {
 
     describe('Success cases', () => {
         it('Should a simple message', async () => {
-            const contact = rewiremock.proxy('#server/controllers/contactController/contact', mockModels);
+            const contact: any = rewiremock.proxy('#server/controllers/contactController/contact', mockModels);
 
             req.body = {
                 access_request_message: 'ceci est un message',
@@ -122,7 +124,7 @@ describe.only('contactController.contact()', () => {
         });
 
         it('Should handle an access request for a non actor', async () => {
-            const contact = rewiremock.proxy('#server/controllers/contactController/contact', mockModels);
+            const contact: any = rewiremock.proxy('#server/controllers/contactController/contact', mockModels);
 
             req.body = {
                 access_request_message: 'ceci est un message',
@@ -150,21 +152,21 @@ describe.only('contactController.contact()', () => {
             stubs.findOneByEmail.resolves(null);
 
             const accessRequestStub = sinon.stub({
-                handleNewAccessRequest: () => {},
+                handleNewAccessRequest: () => { },
             });
             const contact = rewiremock.proxy('#server/controllers/contactController/contact', {
                 // Fake userService db models calls
-                '#server/models/organizationCategoryModel': module.exports = {
+                '#server/models/organizationCategoryModel': export default {
                     findOneById: () => 'something',
                 },
-                '#server/models/organizationTypeModel': module.exports = {
+                '#server/models/organizationTypeModel': export default {
                     findOneById: () => ({ organization_category: 'public_establishment' }),
                 },
-                '#server/models/organizationModel': module.exports = {
+                '#server/models/organizationModel': export default {
                     findOneById: () => ({ fk_type: 12 }),
                 },
-                '#server/services/createUser': module.exports = createUserStub,
-                '#server/services/accessRequest/accessRequestService': module.exports = accessRequestStub,
+                '#server/services/createUser': export default createUserStub,
+                '#server/services/accessRequest/accessRequestService': export default accessRequestStub,
             });
 
             req.body = {
@@ -217,14 +219,14 @@ describe.only('contactController.contact()', () => {
             stubs.handleNewAccessRequest.resolves({});
             const contact = rewiremock.proxy('#server/controllers/contactController/contact', {
                 // Fake userService db models calls
-                '#server/models/organizationCategoryModel': module.exports = {
+                '#server/models/organizationCategoryModel': export default {
                     findOneById: () => 'something',
                 },
-                '#server/models/organizationModel': module.exports = {
+                '#server/models/organizationModel': export default {
                     findOneById: () => ({ organization_category: 'territorial_collectivity' }),
                     findOneByLocation: () => ({ fk_category: 'territorial_collectivity' }),
                 },
-                '#server/services/createUser': module.exports = createUserStub,
+                '#server/services/createUser': export default createUserStub,
             });
 
             req.body = {
@@ -281,13 +283,13 @@ describe.only('contactController.contact()', () => {
             stubs.handleNewAccessRequest.resolves({});
             const contact = rewiremock.proxy('#server/controllers/contactController/contact', {
                 // Fake userService db models calls
-                '#server/models/organizationCategoryModel': module.exports = {
+                '#server/models/organizationCategoryModel': export default {
                     findOneById: () => 'something',
                 },
-                '#server/models/organizationModel': module.exports = {
+                '#server/models/organizationModel': export default {
                     findOneById: () => ({ fk_category: 'administration' }),
                 },
-                '#server/services/createUser': module.exports = createUserStub,
+                '#server/services/createUser': export default createUserStub,
             });
 
             req.body = {
@@ -338,16 +340,16 @@ describe.only('contactController.contact()', () => {
 
             const contact = rewiremock.proxy('#server/controllers/contactController/contact', {
                 // Fake userService db models calls
-                '#server/models/organizationCategoryModel': module.exports = {
+                '#server/models/organizationCategoryModel': export default {
                     findOneById: () => 'something',
                 },
-                '#server/models/organizationModel': module.exports = {
+                '#server/models/organizationModel': export default {
                     findAssociationName: () => 'something',
                 },
-                '#server/models/departementModel': module.exports = {
+                '#server/models/departementModel': export default {
                     findOne: () => 'something',
                 },
-                '#server/services/createUser': module.exports = createUserStub,
+                '#server/services/createUser': export default createUserStub,
             });
 
             req.body = {
@@ -403,16 +405,16 @@ describe.only('contactController.contact()', () => {
 
             const contact = rewiremock.proxy('#server/controllers/contactController/contact', {
                 // Fake userService db models calls
-                '#server/models/organizationCategoryModel': module.exports = {
+                '#server/models/organizationCategoryModel': export default {
                     findOneById: () => 'something',
                 },
-                '#server/models/organizationModel': module.exports = {
+                '#server/models/organizationModel': export default {
                     findAssociationName: () => null,
                 },
-                '#server/models/departementModel': module.exports = {
+                '#server/models/departementModel': export default {
                     findOne: () => 'something',
                 },
-                '#server/services/createUser': module.exports = createUserStub,
+                '#server/services/createUser': export default createUserStub,
             });
 
             req.body = {

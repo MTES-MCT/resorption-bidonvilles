@@ -1,6 +1,6 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-module.exports = id => sequelize.query(
+export default id => sequelize.query(
     'DELETE FROM users WHERE users.user_id = :id',
     {
         replacements: {

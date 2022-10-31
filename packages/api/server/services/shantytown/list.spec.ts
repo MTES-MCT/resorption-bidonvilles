@@ -1,14 +1,15 @@
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
+import chai from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
 
 const { expect } = chai;
 chai.use(sinonChai);
 
-const shantytownModel = require('#server/models/shantytownModel');
-const ServiceError = require('#server/errors/ServiceError');
-const listService = require('./list');
+import shantytownModelFactory from '#server/models/shantytownModel';
+import ServiceError from '#server/errors/ServiceError';
+import listService from './list';
 
+const shantytownModel = shantytownModelFactory();
 
 describe.only('services/shantytown', () => {
     describe('list()', () => {

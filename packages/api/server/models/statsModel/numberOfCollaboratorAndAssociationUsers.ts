@@ -1,6 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async () => {
+export default async () => {
     const rows = await sequelize.query(
         `SELECT
             organization_types.fk_category,
@@ -17,11 +18,11 @@ module.exports = async () => {
         GROUP BY organization_types.fk_category    
         `,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 
-    return rows.reduce((hash, row) => Object.assign({}, hash, {
+    return rows.reduce((hash, row: any) => Object.assign({}, hash, {
         [row.fk_category]: row.total,
     }), {});
 };

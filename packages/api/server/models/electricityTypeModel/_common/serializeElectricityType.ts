@@ -1,4 +1,4 @@
-module.exports = electricityType => ({
+export default electricityType => ({
     id: electricityType.id,
     label: electricityType.label,
     position: electricityType.position,

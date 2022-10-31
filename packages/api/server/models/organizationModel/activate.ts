@@ -1,6 +1,6 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-module.exports = async (organizationId, argTransaction = undefined) => {
+export default async (organizationId, argTransaction = undefined) => {
     let transaction = argTransaction;
     if (transaction === undefined) {
         transaction = await sequelize.transaction();

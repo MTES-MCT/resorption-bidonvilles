@@ -1,6 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = typeId => sequelize.query(
+export default typeId => sequelize.query(
     `SELECT
         organizations.organization_id AS id,
         organizations.name,
@@ -30,7 +31,7 @@ module.exports = typeId => sequelize.query(
         ASC,
         departement_code ASC, REPLACE(region_name, 'Î', 'I') ASC, epci_name ASC, city_name ASC`,
     {
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
         replacements: [
             typeId,
         ],

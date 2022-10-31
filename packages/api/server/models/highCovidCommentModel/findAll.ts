@@ -1,5 +1,8 @@
-const sequelize = require('#db/sequelize');
-const geoModel = require('#server/models/geoModel');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
+import geoModelFactory from '#server/models/geoModel';
+
+const geoModel = geoModelFactory();
 
 function serialize(comment) {
     return {
@@ -20,7 +23,7 @@ function serialize(comment) {
     };
 }
 
-module.exports = async (user) => {
+export default async (user) => {
     const where = {
         prop: null,
         value: null,
@@ -40,7 +43,7 @@ module.exports = async (user) => {
             where.prop = 'departements.code';
             where.value = (
                 await geoModel.getDepartementsFor('epci', user.organization.location.epci.code)
-            ).map(({ code }) => code);
+            ).map(({ code }: any) => code);
             break;
 
         case 'city':
@@ -73,7 +76,7 @@ module.exports = async (user) => {
         LEFT JOIN organizations ON users.fk_organization = organizations.organization_id
         ${where.prop !== null ? `WHERE ${where.prop} IN :territory` : ''}`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 territory: where.value,
             },
@@ -81,7 +84,7 @@ module.exports = async (user) => {
     );
 
     const comments = [];
-    rows.reduce((acc, row) => {
+    rows.reduce((acc, row: any) => {
         if (acc[row.id] === undefined) {
             acc[row.id] = serialize(row);
             comments.push(acc[row.id]);

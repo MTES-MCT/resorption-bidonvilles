@@ -1,7 +1,8 @@
-const shantytownModel = require('#server/models/shantytownModel');
-const ServiceError = require('#server/errors/ServiceError');
+import shantytownModelFactory from '#server/models/shantytownModel';
+import ServiceError from '#server/errors/ServiceError';
 
-module.exports = async (user, townId) => {
+const shantytownModel = shantytownModelFactory();
+export default async (user, townId) => {
     const town = await shantytownModel.findOne(user, townId);
     if (town === null) {
         throw new ServiceError('fetch_failed', new Error('Impossible de retrouver le site en base de données'));

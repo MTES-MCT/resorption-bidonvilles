@@ -1,11 +1,14 @@
-const url = require('url');
-const { trim } = require('validator');
-const geoModel = require('#server/models/geoModel');
+import url from 'url';
+import validator from 'validator';
+import geoModelFactory from '#server/models/geoModel';
 
-module.exports = async (req, res, next) => {
+const geoModel = geoModelFactory();
+const { trim } = validator;
+
+export default async (req, res, next) => {
     const { query: { q } } = url.parse(req.url, true);
+    const query = trim(q.toString());
 
-    const query = trim(q);
     if (query === null || query === '') {
         return res.status(400).send({
             error: {

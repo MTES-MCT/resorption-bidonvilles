@@ -1,6 +1,6 @@
-const { Paragraph, TextRun } = require('docx');
+import { Paragraph, TextRun } from 'docx';
 
-module.exports = fieldType => new Paragraph({
+export default fieldType => new Paragraph({
     children: [
         new TextRun({
             text: '    -    Type de site : ',

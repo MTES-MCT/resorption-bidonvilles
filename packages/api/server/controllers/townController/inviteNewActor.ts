@@ -1,15 +1,17 @@
 
-const { triggerActorInvitedAlert } = require('#server/utils/mattermost');
-const {
-    sendUserShantytownActorInvitation,
-} = require('#server/mails/mails');
-const { formatName } = require('#server/models/userModel');
+import mattermostUtils from '#server/utils/mattermost';
+import mailsUtils from '#server/mails/mails';
+import userModelFactory from '#server/models/userModel';
 
-module.exports = () => async (req, res, next) => {
+const { triggerActorInvitedAlert } = mattermostUtils;
+const { sendUserShantytownActorInvitation } = mailsUtils;
+const userModel = userModelFactory();
+
+export default () => async (req, res, next) => {
     try {
         await sendUserShantytownActorInvitation({ email: req.body.email }, {
             variables: {
-                inviterName: formatName(req.user),
+                inviterName: userModel.formatName(req.user),
                 shantytown: req.shantytown,
             },
         });

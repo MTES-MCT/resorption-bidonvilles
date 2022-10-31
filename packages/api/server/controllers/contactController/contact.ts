@@ -1,10 +1,17 @@
-const { toString: dateToString } = require('#server/utils/date');
+import dateUtils from '#server/utils/date';
 
-const userModel = require('#server/models/userModel');
-const contactFormReferralModel = require('#server/models/contactFormReferralModel/index');
-const userService = require('#server/services/userService');
-const accessRequestService = require('#server/services/accessRequest/accessRequestService');
-const { sendAdminContactMessage, sendContactNewsletterRegistration } = require('#server/mails/mails');
+import userService from '#server/services/userService';
+import accessRequestService from '#server/services/accessRequest/accessRequestService';
+
+import mailsUtils from '#server/mails/mails';
+
+import userModelFactory from '#server/models/userModel';
+import contactFormReferralModelFactory from '#server/models/contactFormReferralModel';
+
+const userModel = userModelFactory();
+const contactFormReferralModel = contactFormReferralModelFactory();
+const { toString: dateToString } = dateUtils;
+const { sendAdminContactMessage, sendContactNewsletterRegistration } = mailsUtils;
 
 async function sendEmailNewContactMessageToAdmins(message) {
     const admins = await userModel.getNationalAdmins();
@@ -41,7 +48,7 @@ function getObjetForContactMessage(requestType) {
     return requestType.map(type => types[type]).join(' - ');
 }
 
-module.exports = async (req, res, next) => {
+export default async (req, res, next) => {
     const {
         request_type, is_actor, referral, referral_other, referral_word_of_mouth,
         last_name, first_name, email, phone, access_request_message,

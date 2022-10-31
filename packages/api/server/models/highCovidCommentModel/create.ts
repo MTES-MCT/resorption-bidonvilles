@@ -1,8 +1,8 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-module.exports = async (user, data) => sequelize.transaction(async (transaction) => {
+export default async (user, data) => sequelize.transaction(async (transaction) => {
     // comment
-    const [[{ id }]] = await sequelize.query(
+    const [[{ id }]]: any = await sequelize.query(
         `INSERT INTO
                 high_covid_comments(
                     description,

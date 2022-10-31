@@ -1,14 +1,16 @@
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
+import chai from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
 
 const { expect } = chai;
 chai.use(sinonChai);
 
-const ServiceError = require('#server/errors/ServiceError');
-const permissionUtils = require('#server/utils/permission');
-const shantytownActorModel = require('#server/models/shantytownActorModel');
-const exportService = require('#server/services/shantytownActor/export');
+import ServiceError from '#server/errors/ServiceError';
+import permissionUtils from '#server/utils/permission';
+import shantytownActorModelFactory from '#server/models/shantytownActorModel';
+import exportService from '#server/services/shantytownActor/export';
+
+const shantytownActorModel = shantytownActorModelFactory();
 
 describe.only('services/shantytownActor', () => {
     describe('export()', () => {

@@ -1,14 +1,16 @@
-const { can } = require('#server/utils/permission');
-const getAddressSimpleOf = require('./getAddressSimpleOf');
-const getUsenameOf = require('./getUsenameOf');
-const serializeLivingConditions = require('./livingConditions/serializeLivingConditions');
+import permissionUtils from '#server/utils/permission';
+import getAddressSimpleOf from './getAddressSimpleOf';
+import getUsenameOf from './getUsenameOf';
+import serializeLivingConditions from './livingConditions/serializeLivingConditions';
+
+const { can } = permissionUtils;
 
 function fromDateToTimestamp(date) {
     return date !== null ? (new Date(`${date}T00:00:00`).getTime() / 1000) : null;
 }
 
-module.exports = (town, user) => {
-    const serializedTown = {
+export default (town, user) => {
+    const serializedTown: any = {
         type: 'shantytown',
         id: town.id,
         name: town.name,

@@ -1,9 +1,11 @@
-const moment = require('moment');
-const planCommentModel = require('#server/models/planCommentModel');
-const ServiceError = require('#server/errors/ServiceError');
-const permissionUtils = require('#server/utils/permission');
+import moment from 'moment';
+import planCommentModelFactory from '#server/models/planCommentModel';
+import ServiceError from '#server/errors/ServiceError';
+import permissionUtils from '#server/utils/permission';
 
-module.exports = async (user) => {
+const planCommentModel = planCommentModelFactory();
+
+export default async (user) => {
     const nationalLevel = { type: 'nation' };
 
     if (!permissionUtils.can(user).do('export', 'plan_comment').on(nationalLevel)) {

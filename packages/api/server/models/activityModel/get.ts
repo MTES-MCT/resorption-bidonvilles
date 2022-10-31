@@ -1,11 +1,16 @@
-import * as sequelize from '#db/sequelize';
-import * as moment from 'moment';
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
+import moment from 'moment';
+
+import userModelFactory from '#server/models/userModel';
+import shantytownModelFactory from '#server/models/shantytownModel';
 import { ActivityNationalSummary } from './types/ActivityNationalSummary';
 
-const { formatName } = require('#server/models/userModel');
-const { getUsenameOf } = require('#server/models/shantytownModel');
+const { formatName } = userModelFactory();
 
-export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSummary> => {
+const { getUsenameOf } = shantytownModelFactory();
+
+export default async (argFrom: Date, argTo: Date): Promise<any> => {
     const from = moment(argFrom);
     const to = moment(argTo);
 
@@ -174,7 +179,7 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
         ORDER BY d.code ASC
         `,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 from: from.format('YYYY-MM-DD'),
                 to: to.format('YYYY-MM-DD'),
@@ -182,7 +187,7 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
         },
     );
 
-    return raw.reduce((argAcc, row) => {
+    return raw.reduce((argAcc, row: any) => {
         const acc = { ...argAcc };
         if (acc[row.regionCode] === undefined) {
             acc[row.regionCode] = {};

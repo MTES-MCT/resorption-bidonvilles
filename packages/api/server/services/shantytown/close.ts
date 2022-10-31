@@ -1,8 +1,10 @@
-const shantytownModel = require('#server/models/shantytownModel');
-const mattermostUtils = require('#server/utils/mattermost');
-const sendMailForClosedTown = require('./_common/sendMailForClosedTown');
+import shantytownModelFactory from '#server/models/shantytownModel';
+import mattermostUtils from '#server/utils/mattermost';
+import sendMailForClosedTown from './_common/sendMailForClosedTown';
 
-module.exports = async (user, data) => {
+const shantytownModel = shantytownModelFactory();
+
+export default async (user, data) => {
     // close the town
     await shantytownModel.update(
         user,

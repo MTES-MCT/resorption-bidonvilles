@@ -1,3 +1,3 @@
-const query = require('./_common/query');
+import query from './_common/query';
 
-module.exports = (user, filters = [], feature = 'list', order = ['shantytowns.updated_at DESC']) => query(filters, order, user, feature);
+export default (user, filters = [], feature = 'list', order = ['shantytowns.updated_at DESC']) => query(filters, order, user, feature);

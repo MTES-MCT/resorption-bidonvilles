@@ -1,9 +1,9 @@
-const moment = require('moment');
-const { Paragraph, TextRun } = require('docx');
-const formatDateSince = require('../../_common/formatDateSince');
+import moment from 'moment';
+import { Paragraph, TextRun } from 'docx';
+import formatDateSince from '../../_common/formatDateSince';
 
 
-module.exports = (builtAt) => {
+export default (builtAt) => {
     const builtDate = builtAt ? moment(builtAt * 1000).utcOffset(2).locale('fr') : null;
     return new Paragraph({
         children: [

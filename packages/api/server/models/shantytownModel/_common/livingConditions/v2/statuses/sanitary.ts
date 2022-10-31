@@ -1,12 +1,12 @@
-const computeStatus = require('./computeStatus');
-const openAirDefecation = require('./sanitary/open_air_defecation');
-const workingToilets = require('./sanitary/working_toilets');
-const toiletTypes = require('./sanitary/toilet_types');
-const toiletsAreInside = require('./sanitary/toilets_are_inside');
-const toiletsAreLighted = require('./sanitary/toilets_are_lighted');
-const handWashing = require('./sanitary/hand_washing');
+import computeStatus from './computeStatus';
+import openAirDefecation from './sanitary/open_air_defecation';
+import workingToilets from './sanitary/working_toilets';
+import toiletTypes from './sanitary/toilet_types';
+import toiletsAreInside from './sanitary/toilets_are_inside';
+import toiletsAreLighted from './sanitary/toilets_are_lighted';
+import handWashing from './sanitary/hand_washing';
 
-module.exports = town => computeStatus(town, {
+export default town => computeStatus(town, {
     openAirDefecation,
     workingToilets,
     toiletTypes,

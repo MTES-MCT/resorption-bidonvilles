@@ -1,12 +1,16 @@
-const sequelize = require('#db/sequelize');
-const { fromGeoLevelToTableName } = require('#server/utils/geo');
-const { restrict } = require('#server/utils/permission');
-const serializeShantytown = require('#server/models/shantytownModel/_common/serializeShantytown');
-const SQL = require('./_common/SQL');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
+import geoUtils from '#server/utils/geo';
+import permissionUtils from '#server/utils/permission';
+import serializeShantytown from '#server/models/shantytownModel/_common/serializeShantytown';
+import SQL from './_common/SQL';
 
-module.exports = async (user, location, lastDate, closedTowns) => {
+const { fromGeoLevelToTableName } = geoUtils;
+const { restrict } = permissionUtils;
+
+export default async (user, location, lastDate, closedTowns) => {
     const where = [];
-    const replacements = {
+    const replacements: any = {
         userId: user.id,
     };
 
@@ -118,7 +122,7 @@ module.exports = async (user, location, lastDate, closedTowns) => {
             ${closedTowns === true ? 'AND closed_at is NOT NULL' : 'AND closed_at is NULL'}
             `,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements,
         },
     );

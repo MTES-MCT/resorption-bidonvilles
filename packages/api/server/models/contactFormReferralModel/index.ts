@@ -1,7 +1,7 @@
-const create = require('./create');
-const list = require('./list');
+import create from './create';
+import list from './list';
 
-module.exports = {
+export default () => ({
     create,
     list,
-};
+});

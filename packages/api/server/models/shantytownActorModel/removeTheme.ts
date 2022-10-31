@@ -1,6 +1,6 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-module.exports = (shantytownId, userId, themeId, updatedBy, transaction = undefined) => {
+export default (shantytownId, userId, themeId, updatedBy, transaction = undefined) => {
     let query;
     if (themeId === 'autre') {
         query = 'autre = null';

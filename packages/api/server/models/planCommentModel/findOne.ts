@@ -1,10 +1,12 @@
-const sequelize = require('#db/sequelize');
-const { serializeComment } = require('#server/models/planModel');
+import { sequelize } from '#db/sequelize';
+import planModelFactory from '#server/models/planModel';
+import { QueryTypes } from 'sequelize';
 
+const planModel = planModelFactory();
 /**
  * @param {Number} id A plan_comment_id
  */
-module.exports = async (id) => {
+export default async (id) => {
     const rows = await sequelize.query(
         `
         SELECT
@@ -32,7 +34,7 @@ module.exports = async (id) => {
         WHERE
             pc.plan_comment_id = :id`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 id,
             },
@@ -43,5 +45,5 @@ module.exports = async (id) => {
         return null;
     }
 
-    return serializeComment(rows[0]);
+    return planModel.serializeComment(rows[0]);
 };

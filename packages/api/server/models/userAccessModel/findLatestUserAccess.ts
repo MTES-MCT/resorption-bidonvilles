@@ -1,6 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async (userId) => {
+export default async (userId) => {
     const rows = await sequelize.query(
         `
         SELECT user_accesses.user_access_id,
@@ -15,7 +16,7 @@ module.exports = async (userId) => {
         ORDER BY user_accesses.created_at DESC
             LIMIT 1`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 userId,
             },

@@ -1,9 +1,9 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-module.exports = async ({
+export default async ({
     fk_user, sent_by, expires_at, created_at,
 }, transaction = undefined) => {
-    const result = await sequelize.query(
+    const result: any = await sequelize.query(
         `INSERT INTO user_accesses(
             fk_user,
             sent_by,
@@ -15,14 +15,14 @@ module.exports = async ({
             :expires_at,
             :created_at
         ) RETURNING user_access_id AS id`, {
-            replacements: {
-                fk_user,
-                sent_by,
-                expires_at,
-                created_at,
-            },
-            transaction,
+        replacements: {
+            fk_user,
+            sent_by,
+            expires_at,
+            created_at,
         },
+        transaction,
+    },
     );
 
     return result[0][0].id;

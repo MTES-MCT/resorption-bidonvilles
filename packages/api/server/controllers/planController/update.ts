@@ -1,4 +1,4 @@
-const updatePlan = require('#server/services/plan/update');
+import updatePlan from '#server/services/plan/update';
 
 const ERROR_RESPONSES = {
     plan_read_error: {
@@ -19,7 +19,7 @@ const ERROR_RESPONSES = {
     },
 };
 
-module.exports = async (req, res, next) => {
+export default async (req, res, next) => {
     let updatedPlan;
     try {
         updatedPlan = await updatePlan(req.body, req.params.id, req.user);

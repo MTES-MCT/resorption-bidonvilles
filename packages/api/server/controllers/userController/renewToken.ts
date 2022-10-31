@@ -1,6 +1,8 @@
-const { generateAccessTokenFor } = require('#server/utils/auth');
+import authUtils from '#server/utils/auth';
 
-module.exports = (req, res) => {
+const { generateAccessTokenFor } = authUtils;
+
+export default (req, res) => {
     const { id: userId, email } = req.user;
 
     return res.status(200).send({

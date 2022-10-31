@@ -1,14 +1,16 @@
-const sequelize = require('#db/sequelize');
-const serializeRole = require('./_common/serializeRole');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async () => {
+import serializeRole from './_common/serializeRole';
+
+export default async () => {
     const roles = await sequelize.query(
         `SELECT
             roles.role_id AS id,
             roles.name AS name
         FROM roles`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 

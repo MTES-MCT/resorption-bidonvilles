@@ -1,8 +1,8 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
 
-module.exports = async (data) => {
-    const [[{ plan_comment_id }]] = await sequelize.query(
+export default async (data) => {
+    const [[{ plan_comment_id }]]: any = await sequelize.query(
         `INSERT INTO plan_comments(
             description,
             fk_plan,

@@ -1,9 +1,9 @@
-const computeStatus = require('./computeStatus');
-const access = require('./electricity/access');
-const accessTypes = require('./electricity/access_types');
-const accessIsUnequal = require('./electricity/access_is_unequal');
+import computeStatus from './computeStatus';
+import access from './electricity/access';
+import accessTypes from './electricity/access_types';
+import accessIsUnequal from './electricity/access_is_unequal';
 
-module.exports = town => computeStatus(town, {
+export default town => computeStatus(town, {
     access,
     accessTypes,
     accessIsUnequal,

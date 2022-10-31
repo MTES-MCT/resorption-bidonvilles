@@ -1,11 +1,14 @@
-const url = require('url');
-const { trim } = require('validator');
-const cityModel = require('#server/models/cityModel/index');
+import url from 'url';
+import validator from 'validator';
+import cityModelFactory from '#server/models/cityModel/index';
 
-module.exports = async (req, res, next) => {
+const cityModel = cityModelFactory();
+
+const { trim } = validator;
+export default async (req, res, next) => {
     const { query: { q } } = url.parse(req.url, true);
 
-    const query = trim(q);
+    const query = trim(q.toString());
     if (query === null || query === '') {
         return res.status(400).send({
             error: {

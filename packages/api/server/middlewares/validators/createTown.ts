@@ -1,4 +1,4 @@
 /* eslint-disable newline-per-chained-call */
-const writeTown = require('./common/writeTown');
+import writeTown from './common/writeTown';
 
-module.exports = writeTown('create');
+export default writeTown('create');

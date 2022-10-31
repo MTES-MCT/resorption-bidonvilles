@@ -1,6 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async (planId, transaction) => {
+export default async (planId, transaction) => {
     // save current state into history
     const response = await sequelize.query(
         `INSERT INTO plans_history(
@@ -47,7 +48,8 @@ module.exports = async (planId, transaction) => {
             transaction,
         },
     );
-    const hid = response[0][0].id;
+    const result: any = response[0][0];
+    const hid = result.id;
 
     await sequelize.query(
         `INSERT INTO plan_managers_history(
@@ -136,7 +138,7 @@ module.exports = async (planId, transaction) => {
         LEFT JOIN finances ON (finances.fk_plan = :planId AND finances.year = finances_history.year)
         WHERE finances_history.fk_plan = :hid`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 hid,
                 planId,
@@ -146,7 +148,7 @@ module.exports = async (planId, transaction) => {
     );
 
     await Promise.all(
-        financeHids.map(({ hid: financeHid, finance_id: financeId }) => sequelize.query(
+        financeHids.map(({ hid: financeHid, finance_id: financeId }: any) => sequelize.query(
             `INSERT INTO finance_rows_history(
                 fk_finance,
                 fk_finance_type,

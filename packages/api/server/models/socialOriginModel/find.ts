@@ -1,13 +1,14 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = ids => sequelize.query(
+export default ids => sequelize.query(
     `SELECT
         social_origins.social_origin_id AS id,
         social_origins.label AS label
     FROM social_origins
     WHERE social_origins.social_origin_id IN (:ids)`,
     {
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
         replacements: {
             ids,
         },

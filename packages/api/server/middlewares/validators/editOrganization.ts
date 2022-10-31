@@ -1,8 +1,10 @@
 /* eslint-disable newline-per-chained-call */
-const { body, param } = require('express-validator');
-const organizationModel = require('#server/models/organizationModel');
+import { body, param } from 'express-validator';
+import organizationModelFactory from '#server/models/organizationModel';
 
-module.exports = [
+const organizationModel = organizationModelFactory();
+
+export default [
     param('id')
         .toInt()
         .isInt().bail().withMessage('L\'identifiant de la structure est invalide')

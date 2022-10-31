@@ -1,6 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async () => sequelize.query(
+export default async () => sequelize.query(
     `SELECT
         TO_CHAR(u.created_at :: DATE, 'dd/mm/yyyy') AS "Date de la demande d'accès",
         email AS "Courriel",
@@ -42,6 +43,6 @@ module.exports = async () => sequelize.query(
         used_at ASC,
         expires_at DESC;`,
     {
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
     },
 );

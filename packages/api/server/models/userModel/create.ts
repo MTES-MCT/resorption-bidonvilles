@@ -1,6 +1,6 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-module.exports = async (user, transaction = undefined) => {
+export default async (user, transaction = undefined) => {
     const response = await sequelize.query(
         `INSERT INTO
             users(
@@ -38,5 +38,6 @@ module.exports = async (user, transaction = undefined) => {
         },
     );
 
-    return response[0][0].user_id;
+    const createdUser: any = response[0][0];
+    return createdUser.user_id;
 };

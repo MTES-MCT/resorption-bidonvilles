@@ -1,8 +1,10 @@
 /* eslint-disable newline-per-chained-call */
-const { body } = require('express-validator');
-const userModel = require('#server/models/userModel');
+import { body } from 'express-validator';
+import userModelFactory from '#server/models/userModel';
 
-module.exports = [
+const userModel = userModelFactory();
+
+export default [
 
     body('invite_from')
         .isString().bail().withMessage('L\'origine de l\'invitation est invalide')

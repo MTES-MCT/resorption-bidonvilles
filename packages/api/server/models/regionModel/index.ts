@@ -1,5 +1,5 @@
-const findAll = require('./findAll');
+import findAll from './findAll';
 
-module.exports = {
+export default () => ({
     findAll,
-};
+});

@@ -1,8 +1,8 @@
-module.exports = (town) => {
+export default (town) => {
     const waterHandWashAccessPopulationRatio = town.populationTotal && town.waterHandWashAccessNumber
         ? Math.floor(
             Number(town.populationTotal)
-                      / Number(town.waterHandWashAccessNumber),
+            / Number(town.waterHandWashAccessNumber),
         )
         : null;
 

@@ -1,6 +1,8 @@
-const shantytownModel = require('#server/models/shantytownModel');
+import shantytownModelFactory from '#server/models/shantytownModel';
 
-module.exports = {
+const shantytownModel = shantytownModelFactory();
+
+export default {
     async checkReadPermission(req, res, next) {
         if (!req.user || !req.user.isAllowedTo('read', 'shantytown')) {
             res.status(400).send({

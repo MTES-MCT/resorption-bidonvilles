@@ -1,7 +1,8 @@
-const sequelize = require('#db/sequelize');
-const serializeCommentTag = require('./serializeCommentTag');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
+import serializeCommentTag from './serializeCommentTag';
 
-module.exports = async (commentIds) => {
+export default async (commentIds) => {
     // fetch all tags
     const rows = await sequelize.query(
         `SELECT
@@ -13,14 +14,14 @@ module.exports = async (commentIds) => {
         WHERE sct.fk_shantytown_comment IN (:ids)
         ORDER BY CONCAT(sct.fk_shantytown_comment, '-', sct.fk_comment_tag) ASC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: { ids: commentIds },
         },
     );
 
     // group tags by comment (empty array is the default for each comment)
 
-    return rows.reduce((argAcc, tag) => {
+    return rows.reduce((argAcc, tag: any) => {
         const acc = { ...argAcc };
         if (!acc[tag.commentId]) {
             acc[tag.commentId] = [];

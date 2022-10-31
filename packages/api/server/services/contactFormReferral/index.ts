@@ -1,5 +1,5 @@
-const exportAll = require('./exportAll');
+import exportAll from './exportAll';
 
-module.exports = {
+export default {
     exportAll,
 };

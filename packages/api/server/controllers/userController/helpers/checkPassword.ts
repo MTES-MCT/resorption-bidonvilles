@@ -1,4 +1,4 @@
-module.exports = function checkPassword(str) {
+export default function checkPassword(str) {
     if (!str) {
         return ['Le mot de passe est obligatoire'];
     }

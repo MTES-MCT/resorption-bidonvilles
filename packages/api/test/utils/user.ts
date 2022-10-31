@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     serialized(override = {}) {
         const defaultUser = {
             id: 2,

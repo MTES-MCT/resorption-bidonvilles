@@ -1,9 +1,9 @@
-const serializeV1 = require('./v1/serialize');
-const serializeV2 = require('./v2/serialize');
+import serializeV1 from './v1/serialize';
+import serializeV2 from './v2/serialize';
 
 const STRATEGIES = {
     1: serializeV1,
     2: serializeV2,
 };
 
-module.exports = town => STRATEGIES[town.livingConditionsVersion](town);
+export default town => STRATEGIES[town.livingConditionsVersion](town);

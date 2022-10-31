@@ -1,9 +1,12 @@
-const userModel = require('#server/models/userModel');
-const { hashPassword } = require('#server/utils/auth');
-const sanitize = require('./helpers/sanitize');
-const validate = require('./helpers/validate');
+import userModelFactory from '#server/models/userModel';
+import authUtils from '#server/utils/auth';
+import sanitize from './helpers/sanitize';
+import validate from './helpers/validate';
 
-module.exports = async (req, res, next) => {
+const userModel = userModelFactory();
+const { hashPassword } = authUtils;
+
+export default async (req, res, next) => {
     // ensure the user exists and actually needs an upgrade
     let user;
     try {

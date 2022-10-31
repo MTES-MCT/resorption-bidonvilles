@@ -1,6 +1,8 @@
-const userModel = require('#server/models/userModel');
+import userModelFactory from '#server/models/userModel';
 
-module.exports = async (req, res) => {
+const userModel = userModelFactory();
+
+export default async (req, res) => {
     try {
         const user = await userModel.findOne(req.params.id, { extended: true }, req.user);
         res.status(200).send(user);

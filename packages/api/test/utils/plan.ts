@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     serialized(location, override = {}) {
         const { departement, region } = location;
 

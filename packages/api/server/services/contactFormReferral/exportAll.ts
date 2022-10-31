@@ -1,8 +1,11 @@
-const ServiceError = require('#server/errors/ServiceError');
-const { list } = require('#server/models/contactFormReferralModel');
-const { where: fWhere } = require('#server/utils/permission');
+import ServiceError from '#server/errors/ServiceError';
+import contactFormReferralModelFactory from '#server/models/contactFormReferralModel';
+import permissionUtils from '#server/utils/permission';
 
-module.exports = async (user) => {
+const { list } = contactFormReferralModelFactory();
+const { where: fWhere } = permissionUtils;
+
+export default async (user) => {
     const permissionClauseGroup = fWhere().can(user).do('access', 'contact_form_referral');
     if (permissionClauseGroup === null) {
         return [];

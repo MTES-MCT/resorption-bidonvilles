@@ -1,6 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = (where = []) => {
+export default (where = []) => {
     const replacements = {};
     const whereClause = where.map((clauses, index) => {
         const clauseGroup = Object.keys(clauses).map((column) => {
@@ -38,7 +39,7 @@ module.exports = (where = []) => {
         WHERE u.fk_status = 'active'${whereClause !== '' ? `AND ${whereClause}` : ''}
         ORDER BY sa.created_at DESC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements,
         },
     );

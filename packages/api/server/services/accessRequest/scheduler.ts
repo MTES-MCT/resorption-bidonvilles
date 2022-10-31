@@ -1,6 +1,8 @@
-const agenda = require('#server/loaders/agendaLoader').getAgenda();
+import agendaFactory from '#server/loaders/agendaLoader';
 
-module.exports = {
+const agenda = agendaFactory();
+
+export default {
     scheduleEvent: {
         async accessRequestIsPending(userId) {
             await Promise.all([

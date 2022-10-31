@@ -1,6 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async (name) => {
+export default async (name) => {
     const result = await sequelize.query(
         `SELECT
             organizations.name,
@@ -13,7 +14,7 @@ module.exports = async (name) => {
             AND
             UNACCENT(organizations.name) ILIKE UNACCENT(:name)`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 name,
             },

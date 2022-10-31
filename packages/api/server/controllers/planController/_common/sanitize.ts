@@ -1,7 +1,8 @@
-const { trim } = require('validator');
+import validator from 'validator';
 
-module.exports = (data) => {
-    const sanitizedData = {};
+const { trim } = validator;
+export default (data) => {
+    const sanitizedData: any = {};
 
     // name
     if (typeof data.name === 'string') {

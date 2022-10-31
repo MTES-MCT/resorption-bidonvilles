@@ -1,6 +1,6 @@
-const auth = require('#server/utils/auth');
+import auth from '#server/utils/auth';
 
-module.exports = async (req, res) => res
+export default async (req, res) => res
     .status(200)
     .send({
         link: auth.getAccountActivationLink(

@@ -1,11 +1,17 @@
-const sequelize = require('#db/sequelize');
-const userModel = require('#server/models/userModel');
-const { restrict } = require('#server/utils/permission');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async (user, location, numberOfActivities, lastDate, maxDate) => {
+import userModelFactory from '#server/models/userModel';
+import permissionUtils from '#server/utils/permission';
+
+const userModel = userModelFactory();
+const { restrict } = permissionUtils;
+
+
+export default async (user, location, numberOfActivities, lastDate, maxDate) => {
     // apply geographic level restrictions
     const where = [];
-    const replacements = {
+    const replacements: any = {
         maxDate,
     };
     const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
@@ -52,7 +58,7 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate) =
             ${limit}
             `,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements,
         },
     );
@@ -60,7 +66,7 @@ module.exports = async (user, location, numberOfActivities, lastDate, maxDate) =
     const planComments = {};
 
     return activities
-        .map((activity) => {
+        .map((activity: any) => {
             const o = {
                 entity: 'comment',
                 action: 'creation',

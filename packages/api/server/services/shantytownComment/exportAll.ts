@@ -1,9 +1,12 @@
-const moment = require('moment');
-const shantytownCommentModel = require('#server/models/shantytownCommentModel');
-const ServiceError = require('#server/errors/ServiceError');
-const { restrict } = require('#server/utils/permission');
+import moment from 'moment';
+import shantytownCommentModelFactory from '#server/models/shantytownCommentModel';
+import ServiceError from '#server/errors/ServiceError';
+import permissionUtils from '#server/utils/permission';
 
-module.exports = async (user) => {
+const shantytownCommentModel = shantytownCommentModelFactory();
+const { restrict } = permissionUtils;
+
+export default async (user) => {
     const nationalLevel = { type: 'nation' };
     const locations = {
         export: restrict(nationalLevel).for(user).askingTo('export', 'shantytown_comment'),

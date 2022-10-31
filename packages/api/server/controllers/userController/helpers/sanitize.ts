@@ -1,4 +1,6 @@
-const { trim } = require('validator');
+import validator from 'validator';
+
+const { trim } = validator;
 
 const sanitizers = {
     string(str) {
@@ -19,7 +21,7 @@ const sanitizers = {
     },
 };
 
-module.exports = function sanitize(data, fields) {
+export default function sanitize(data, fields) {
     return fields.reduce((acc, { key, sanitizer }) => Object.assign(acc, {
         [key]: sanitizers[sanitizer](data[key]),
     }), {});

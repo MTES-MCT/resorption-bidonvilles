@@ -1,7 +1,7 @@
-const sequelize = require('#db/sequelize');
-const processThemes = require('./_common/processThemes');
+import { sequelize } from '#db/sequelize';
+import processThemes from './_common/processThemes';
 
-module.exports = (shantytownId, userId, themes, createdBy, transaction = undefined) => {
+export default (shantytownId, userId, themes, createdBy, transaction = undefined) => {
     const replacements = {
         ...processThemes(themes),
         fk_shantytown: shantytownId,
@@ -25,8 +25,8 @@ module.exports = (shantytownId, userId, themes, createdBy, transaction = undefin
             :autre,
             :created_by
         )`, {
-            replacements,
-            transaction,
-        },
+        replacements,
+        transaction,
+    },
     );
 };

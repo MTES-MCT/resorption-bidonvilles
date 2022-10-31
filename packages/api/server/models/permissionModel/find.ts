@@ -1,11 +1,12 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 /**
  * @param {Array.<Number>} owners User ids
  *
  * @returns {Object}
  */
-module.exports = async (owners) => {
+export default async (owners) => {
     const permissions = await sequelize.query(`
         SELECT
             uap.user_id,
@@ -24,13 +25,13 @@ module.exports = async (owners) => {
         WHERE uap.user_id IN (:owners)
         ORDER BY user_id ASC, entity ASC, feature ASC
     `, {
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
         replacements: {
             owners,
         },
     });
 
-    return permissions.reduce((argAcc, row) => {
+    return permissions.reduce((argAcc, row: any) => {
         const acc = { ...argAcc };
         if (!acc[row.user_id]) {
             acc[row.user_id] = {};

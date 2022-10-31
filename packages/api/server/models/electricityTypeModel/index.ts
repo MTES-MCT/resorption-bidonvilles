@@ -1,9 +1,9 @@
-const findAll = require('./findAll');
-const findOne = require('./findOne');
-const findOneByUid = require('./findOneByUid');
+import findAll from './findAll';
+import findOne from './findOne';
+import findOneByUid from './findOneByUid';
 
-module.exports = {
+export default () => ({
     findAll,
     findOne,
     findOneByUid,
-};
+});

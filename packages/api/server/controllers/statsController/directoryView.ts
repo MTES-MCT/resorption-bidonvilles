@@ -1,7 +1,10 @@
-const organizationModel = require('#server/models/organizationModel/index');
-const statsDirectoryViewsModel = require('#server/models/statsDirectoryViews');
+import organizationModelFactory from '#server/models/organizationModel/index';
+import statsDirectoryViewsModelFactory from '#server/models/statsDirectoryViews';
 
-module.exports = async (req, res, next) => {
+const organizationModel = organizationModelFactory();
+const statsDirectoryViewsModel = statsDirectoryViewsModelFactory();
+
+export default async (req, res, next) => {
     const organizationId = parseInt(req.body.organization, 10);
 
     try {

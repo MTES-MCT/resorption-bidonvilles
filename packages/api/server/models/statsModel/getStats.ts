@@ -1,10 +1,14 @@
-const sequelize = require('#db/sequelize');
-const { restrict } = require('#server/utils/permission');
-const { fromGeoLevelToTableName } = require('#server/utils/geo');
-const decomposeForDiagramm = require('./_common/decomposeForDiagramm');
-const getArrayOfDates = require('./_common/getArrayOfDates');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
+import permissionUtils from '#server/utils/permission';
+import geoUtils from '#server/utils/geo';
+import decomposeForDiagramm from './_common/decomposeForDiagramm';
+import getArrayOfDates from './_common/getArrayOfDates';
 
-module.exports = async (user, location) => {
+const { restrict } = permissionUtils;
+const { fromGeoLevelToTableName } = geoUtils;
+
+export default async (user, location) => {
     const restrictedLocation = restrict(location).for(user).askingTo('list', 'shantytown');
     if (restrictedLocation === null) {
         return null;
@@ -25,7 +29,7 @@ module.exports = async (user, location) => {
     const date = new Date();
     const otherDate = new Date();
     const shantytownWhere = [];
-    const shantytownReplacements = {};
+    const shantytownReplacements: any = {};
     if (restrictedLocation.type !== 'nation') {
         shantytownReplacements.locationCode = restrictedLocation[restrictedLocation.type].code;
         shantytownWhere.push(`${fromGeoLevelToTableName(restrictedLocation.type)}.code = :locationCode`);
@@ -75,7 +79,7 @@ module.exports = async (user, location) => {
             )` : ''}
             ORDER BY shantytowns.updated_at DESC`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: shantytownReplacements,
             },
         ),
@@ -106,7 +110,7 @@ module.exports = async (user, location) => {
             ORDER BY week ASC
             LIMIT 13`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
             },
         ),
     ]);

@@ -1,7 +1,7 @@
-const insalubrious = require('./sanitary/insalubrious');
-const number = require('./sanitary/number');
-const onSite = require('./sanitary/onSite');
-const computeStatus = require('./computeStatus');
+import insalubrious from './sanitary/insalubrious';
+import number from './sanitary/number';
+import onSite from './sanitary/onSite';
+import computeStatus from './computeStatus';
 
 const criterias = {
     insalubrious,
@@ -9,7 +9,7 @@ const criterias = {
     onSite,
 };
 
-module.exports = (town) => {
+export default (town) => {
     const details = Object.keys(criterias).reduce((argAcc, key) => {
         const acc = { ...argAcc };
         const status = criterias[key](town);

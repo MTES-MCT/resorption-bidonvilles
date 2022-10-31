@@ -1,6 +1,6 @@
-const { Paragraph, TextRun } = require('docx');
+import { Paragraph, TextRun } from 'docx';
 
-module.exports = (latitude, longitude) => new Paragraph({
+export default (latitude, longitude) => new Paragraph({
     children: [
         new TextRun({
             text: '    -    Coordonnées GPS : ',

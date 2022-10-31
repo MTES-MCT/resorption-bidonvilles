@@ -1,4 +1,4 @@
-module.exports = userAccess => ({
+export default userAccess => ({
     id: userAccess.user_access_id,
     sent_by: userAccess.activator_id !== null ? {
         id: userAccess.activator_id,

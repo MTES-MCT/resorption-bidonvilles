@@ -1,12 +1,16 @@
-const { fromTsToFormat: tsToString } = require('#server/utils/date');
-const userModel = require('#server/models/userModel');
-const shantytownActorThemes = require('#server/config/shantytown_actor_themes');
-const { webappUrl } = require('#server/config');
-const electricityAccessTypes = require('#server/models/electricityAccessTypesModel/_common/electricityAccessTypes');
-const waterAccessTypes = require('#server/models/_common/waterAccessTypes');
-const toiletTypes = require('#server/models/shantytownToiletTypesModel/_common/toiletTypes');
+import dateUtils from '#server/utils/date';
+import userModelFactory from '#server/models/userModel';
+import shantytownActorThemes from '#server/config/shantytown_actor_themes';
+import config from '#server/config';
+import electricityAccessTypes from '#server/models/electricityAccessTypesModel/_common/electricityAccessTypes';
+import waterAccessTypes from '#server/models/_common/waterAccessTypes';
+import toiletTypes from '#server/models/shantytownToiletTypesModel/_common/toiletTypes';
 
-module.exports = (closingSolutions) => {
+const userModel = userModelFactory();
+const { fromTsToFormat: tsToString } = dateUtils;
+const { webappUrl } = config;
+
+export default (closingSolutions) => {
     const COLUMN_WIDTHS = {
         XSMALL: 15,
         SMALL: 20,

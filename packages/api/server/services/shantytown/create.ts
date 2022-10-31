@@ -1,15 +1,22 @@
-const sequelize = require('#db/sequelize');
-const shantytownModel = require('#server/models/shantytownModel');
-const socialOriginModel = require('#server/models/socialOriginModel');
-const shantytownToiletTypesModel = require('#server/models/shantytownToiletTypesModel');
-const electricityAccessTypesModel = require('#server/models/electricityAccessTypesModel');
-const incomingTownsModel = require('#server/models/incomingTownsModel');
-const config = require('#server/config');
-const mattermostUtils = require('#server/utils/mattermost');
-const userModel = require('#server/models/userModel');
-const mails = require('#server/mails/mails');
+import { sequelize } from '#db/sequelize';
+import shantytownModelFactory from '#server/models/shantytownModel';
+import socialOriginModelFactory from '#server/models/socialOriginModel';
+import shantytownToiletTypesModelFactory from '#server/models/shantytownToiletTypesModel';
+import electricityAccessTypesModelFactory from '#server/models/electricityAccessTypesModel';
+import incomingTownsModelFactory from '#server/models/incomingTownsModel';
+import config from '#server/config';
+import mattermostUtils from '#server/utils/mattermost';
+import userModelFactory from '#server/models/userModel';
+import mails from '#server/mails/mails';
 
-module.exports = async (townData, user) => {
+const shantytownModel = shantytownModelFactory();
+const socialOriginModel = socialOriginModelFactory();
+const shantytownToiletTypesModel = shantytownToiletTypesModelFactory();
+const electricityAccessTypesModel = electricityAccessTypesModelFactory();
+const incomingTownsModel = incomingTownsModelFactory();
+const userModel = userModelFactory();
+
+export default async (townData, user) => {
     const baseTown = {
         name: townData.name,
         latitude: townData.latitude,
@@ -151,7 +158,7 @@ module.exports = async (townData, user) => {
     try {
         const watchers = await userModel.getLocationWatchers(townData.city, 'shantytown_creation', true);
         watchers
-            .filter(({ user_id }) => user_id !== user.id) // do not send an email to the user who created the town
+            .filter(({ user_id }: any) => user_id !== user.id) // do not send an email to the user who created the town
             .forEach((watcher) => {
                 mails.sendUserShantytownDeclared(watcher, {
                     variables: {

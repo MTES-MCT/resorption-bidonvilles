@@ -1,8 +1,11 @@
-const sequelize = require('#db/sequelize');
-const shantytownCommentTagModel = require('#server/models/shantytownCommentTagModel/index');
-const serializeComment = require('./serializeComment');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
+import shantytownCommentTagModelFactory from '#server/models/shantytownCommentTagModel/index';
+import serializeComment from './serializeComment';
 
-module.exports = async (user, shantytownIds, covid = false) => {
+const shantytownCommentTagModel = shantytownCommentTagModelFactory();
+
+export default async (user, shantytownIds, covid = false) => {
     if (covid === false && !user.isAllowedTo('list', 'shantytown_comment')) {
         return {};
     }
@@ -48,7 +51,7 @@ module.exports = async (user, shantytownIds, covid = false) => {
                 shantytown_covid_comments.personnes_orientees AS "covidPersonnesOrientees",
                 shantytown_covid_comments.personnes_avec_symptomes AS "covidPersonnesAvecSymptomes",
                 shantytown_covid_comments.besoin_action AS "covidBesoinAction",`
-        : ''}
+            : ''}
             users.first_name AS "userFirstName",
             users.last_name AS "userLastName",
             users.position AS "userPosition",
@@ -82,7 +85,7 @@ module.exports = async (user, shantytownIds, covid = false) => {
             )` : ''}
         ORDER BY shantytown_comments.created_at DESC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 ids: shantytownIds,
                 userId: user.id,
@@ -91,17 +94,18 @@ module.exports = async (user, shantytownIds, covid = false) => {
         },
     );
 
-    let commentTags = [];
+    let commentTags = {};
     if (rows.length > 0) {
         commentTags = await shantytownCommentTagModel.getTagsForComments(
-            rows.map(({ commentId }) => commentId),
+            rows.map(({ commentId }: any) => commentId),
         );
     }
 
-    return rows.reduce((acc, row) => {
+    return rows.reduce((acc, row: any) => {
         if (!acc[row.shantytownId]) {
             acc[row.shantytownId] = [];
         }
+
         acc[row.shantytownId].push(serializeComment({
             ...row,
             tags: commentTags[row.commentId] || [],

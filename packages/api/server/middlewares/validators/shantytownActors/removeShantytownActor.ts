@@ -1,6 +1,6 @@
 /* eslint-disable newline-per-chained-call */
-const selfUserIdValidator = require('./utils/selfUserId');
+import selfUserIdValidator from './utils/selfUserId';
 
-module.exports = [
+export default [
     selfUserIdValidator('Vous ne pouvez pas retirer un autre intervenant'),
 ];

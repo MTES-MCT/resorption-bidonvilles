@@ -1,7 +1,8 @@
-const validator = require('validator');
-const shantytownModel = require('#server/models/shantytownModel');
-const ServiceError = require('#server/errors/ServiceError');
+import validator from 'validator';
+import shantytownModelFactory from '#server/models/shantytownModel';
+import ServiceError from '#server/errors/ServiceError';
 
+const shantytownModel = shantytownModelFactory();
 
 function addError(errors, field, error) {
     if (!Object.prototype.hasOwnProperty.call(errors, field)) {
@@ -12,7 +13,7 @@ function addError(errors, field, error) {
     errors[field].push(error);
 }
 
-module.exports = async (user, shantytownId, data) => {
+export default async (user, shantytownId, data) => {
     // ensure town's existence
     let shantytown;
     try {

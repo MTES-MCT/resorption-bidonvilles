@@ -1,10 +1,10 @@
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
-const { serialized: generateUser } = require('#test/utils/user');
+import chai from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
+import { serialized: generateUser } from '#test/utils/user';
 
-const sequelize = require('#db/sequelize');
-const { update } = require('#server/models/shantytownModel');
+import { sequelize } from '#db/sequelize';
+import { update } from '#server/models/shantytownModel';
 
 const { expect } = chai;
 chai.use(sinonChai);

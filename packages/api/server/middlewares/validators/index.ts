@@ -1,32 +1,32 @@
-const closeTown = require('./closeTown');
-const fixClosedStatus = require('./fixClosedStatus');
-const setHeatwaveStatus = require('./setHeatwaveStatus');
-const createContact = require('./createContact');
-const createTown = require('./createTown');
-const createUser = require('./createUser');
-const editUser = require('./editUser');
-const editTown = require('./editTown');
-const exportTowns = require('./exportTowns');
-const addShantytownActor = require('./shantytownActors/addShantytownActor');
-const updateShantytownActor = require('./shantytownActors/updateShantytownActor');
-const removeShantytownActor = require('./shantytownActors/removeShantytownActor');
-const removeShantytownActorTheme = require('./shantytownActors/removeShantytownActorTheme');
-const inviteShantytownActor = require('./shantytownActors/inviteShantytownActor');
-const invite = require('./invite');
-const createShantytownComment = require('./shantytownComment/create');
-const createPlanComment = require('./planComment/create');
-const activityList = require('./activity/list');
-const dashboardLocation = require('./dashboard/location');
-const findNearbyTowns = require('./findNearbyTowns');
-const exportTown = require('./exportTown');
-const setUserAdminComments = require('./setUserAdminComments');
-const editOrganization = require('./editOrganization');
-const userGetLatestActivationLink = require('./users/getLatestActivationLink');
-const userSetRoleRegular = require('./users/setRoleRegular');
-const mePostNavigationLogs = require('./me/post.navigationLogs');
-const findUserTowns = require('./findUserTowns');
+import closeTown from './closeTown';
+import fixClosedStatus from './fixClosedStatus';
+import setHeatwaveStatus from './setHeatwaveStatus';
+import createContact from './createContact';
+import createTown from './createTown';
+import createUser from './createUser';
+import editUser from './editUser';
+import editTown from './editTown';
+import exportTowns from './exportTowns';
+import addShantytownActor from './shantytownActors/addShantytownActor';
+import updateShantytownActor from './shantytownActors/updateShantytownActor';
+import removeShantytownActor from './shantytownActors/removeShantytownActor';
+import removeShantytownActorTheme from './shantytownActors/removeShantytownActorTheme';
+import inviteShantytownActor from './shantytownActors/inviteShantytownActor';
+import invite from './invite';
+import createShantytownComment from './shantytownComment/create';
+import createPlanComment from './planComment/create';
+import activityList from './activity/list';
+import dashboardLocation from './dashboard/location';
+import findNearbyTowns from './findNearbyTowns';
+import exportTown from './exportTown';
+import setUserAdminComments from './setUserAdminComments';
+import editOrganization from './editOrganization';
+import userGetLatestActivationLink from './users/getLatestActivationLink';
+import userSetRoleRegular from './users/setRoleRegular';
+import mePostNavigationLogs from './me/post.navigationLogs';
+import findUserTowns from './findUserTowns';
 
-module.exports = {
+export default {
     closeTown,
     fixClosedStatus,
     setHeatwaveStatus,

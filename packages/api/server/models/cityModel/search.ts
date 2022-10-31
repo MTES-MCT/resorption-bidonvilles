@@ -1,6 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = search => sequelize.query(
+export default search => sequelize.query(
     `SELECT
         cities.code,
         cities.name,
@@ -23,6 +24,6 @@ module.exports = search => sequelize.query(
             `%${search}%`,
             `${search}%`,
         ],
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
     },
 );

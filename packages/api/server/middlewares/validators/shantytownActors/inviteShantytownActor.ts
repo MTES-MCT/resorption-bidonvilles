@@ -1,8 +1,10 @@
-const { body } = require('express-validator');
+import { body } from 'express-validator';
 // models
-const userModel = require('#server/models/userModel');
+import userModelFactory from '#server/models/userModel';
 
-module.exports = [
+const userModel = userModelFactory();
+
+export default [
     body('email')
         .trim()
         .notEmpty().withMessage('Vous devez préciser le courriel')

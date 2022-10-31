@@ -1,8 +1,10 @@
-const { toFormat, getMonthDiffBetween } = require('#server/utils/date');
+import dateUtils from '#server/utils/date';
+
+const { toFormat, getMonthDiffBetween } = dateUtils;
 
 // Convert rows which contains month/year to a mapping
 // 2020-01-01 => x, 2020-01-02 => y
-module.exports = (rows, startDate) => {
+export default (rows, startDate) => {
     const now = new Date();
     const result = [];
     const monthsDiff = getMonthDiffBetween(startDate, now);

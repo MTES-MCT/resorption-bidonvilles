@@ -1,6 +1,8 @@
-const organizationModel = require('#server/models/organizationModel');
+import organizationModelFactory from '#server/models/organizationModel';
 
-module.exports = async (req, res, next) => {
+const organizationModel = organizationModelFactory();
+
+export default async (req, res, next) => {
     try {
         const data = {
             being_funded: req.body.being_funded,

@@ -1,9 +1,9 @@
-const can = require('./can');
-const getPermission = require('./getPermission');
-const restrict = require('./restrict');
-const where = require('./where');
+import can from './can';
+import getPermission from './getPermission';
+import restrict from './restrict';
+import where from './where';
 
-module.exports = {
+export default {
     can,
     getPermission,
     where,

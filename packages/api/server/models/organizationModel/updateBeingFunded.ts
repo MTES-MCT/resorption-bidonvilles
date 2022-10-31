@@ -1,6 +1,6 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-module.exports = async (organizationId, data) => {
+export default async (organizationId, data) => {
     const transaction = await sequelize.transaction();
     await sequelize.query(
         `UPDATE

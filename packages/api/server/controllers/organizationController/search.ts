@@ -1,10 +1,16 @@
-const { trim } = require('validator');
-const sequelize = require('#db/sequelize');
-const userModel = require('#server/models/userModel');
-const geoModel = require('#server/models/geoModel');
-const organizationModel = require('#server/models/organizationModel');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
+import validator from 'validator';
+import organizationModelFactory from '#server/models/organizationModel';
+import userModelFactory from '#server/models/userModel';
+import geoModelFactory from '#server/models/geoModel';
 
-module.exports = async (req, res, next) => {
+const { trim } = validator;
+const geoModel = geoModelFactory();
+const organizationModel = organizationModelFactory();
+const userModel = userModelFactory();
+
+export default async (req, res, next) => {
     // parse query
     const query = trim(req.query.query).replace(/\s+/g, ' ');
     const { departementCode, onlyUsersAndOrganizations } = req.query;
@@ -69,7 +75,7 @@ module.exports = async (req, res, next) => {
                     )`,
             {
                 replacements: [...queryAtoms, ...queryAtoms, departement.region.code, departementCode],
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
             },
         );
 
@@ -114,14 +120,14 @@ module.exports = async (req, res, next) => {
                     )`,
             {
                 replacements: [...queryAtoms, ...queryAtoms, departement.region.code, departementCode],
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
             },
         );
 
         const result = [];
         if (users.length > 0) {
             result.push(
-                ...users.map(user => ({
+                ...users.map((user: any) => ({
                     type: {
                         id: 'user',
                         label: 'Acteurs',
@@ -151,7 +157,7 @@ module.exports = async (req, res, next) => {
 
         if (organizations.length > 0) {
             result.push(
-                ...organizations.map(organization => ({
+                ...organizations.map((organization: any) => ({
                     type: {
                         id: 'organization',
                         label: 'Structures',

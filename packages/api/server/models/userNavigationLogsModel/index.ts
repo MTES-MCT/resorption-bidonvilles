@@ -1,5 +1,5 @@
 import insert from './insert';
 
-export default {
+export default () => ({
     insert,
-};
+});

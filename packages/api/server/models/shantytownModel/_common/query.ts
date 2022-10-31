@@ -1,15 +1,21 @@
-const sequelize = require('#db/sequelize');
-const shantytownActorModel = require('#server/models/shantytownActorModel');
-const planShantytownModel = require('#server/models/planShantytownModel');
-const incomingTownsModel = require('#server/models/incomingTownsModel');
-const stringifyWhereClause = require('#server/models/_common/stringifyWhereClause');
-const { where: pWhere } = require('#server/utils/permission');
-const getComments = require('./getComments');
-const serializeShantytown = require('./serializeShantytown');
-const getDiff = require('./getDiff');
-const SQL = require('./SQL');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
+import shantytownActorModelFactory from '#server/models/shantytownActorModel';
+import planShantytownModelFactory from '#server/models/planShantytownModel';
+import incomingTownsModelFactory from '#server/models/incomingTownsModel';
+import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
+import permissionUtils from '#server/utils/permission';
+import getComments from './getComments';
+import serializeShantytown from './serializeShantytown';
+import getDiff from './getDiff';
+import SQL from './SQL';
 
-function getBaseSql(table, whereClause = null, order = null, additionalSQL = {}) {
+const shantytownActorModel = shantytownActorModelFactory();
+const planShantytownModel = planShantytownModelFactory();
+const incomingTownsModel = incomingTownsModelFactory();
+const { where: pWhere } = permissionUtils;
+
+function getBaseSql(table, whereClause = null, order = null, additionalSQL: any = {}) {
     const tables = {
         shantytowns: table === 'regular' ? 'shantytowns' : 'ShantytownHistories',
         shantytown_origins: table === 'regular' ? 'shantytown_origins' : 'ShantytownOriginHistories',
@@ -68,7 +74,7 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL = {})
     `;
 }
 
-module.exports = async (where = [], order = ['departements.code ASC', 'cities.name ASC'], user, feature, includeChangelog = false, additionalSQL = {}, argReplacements = {}) => {
+export default async (where = [], order = ['departements.code ASC', 'cities.name ASC'], user, feature, includeChangelog = false, additionalSQL = {}, argReplacements = {}) => {
     const permissionsClauseGroup = pWhere().can(user).do(feature, 'shantytown');
     if (permissionsClauseGroup === null) {
         return [];
@@ -89,7 +95,7 @@ module.exports = async (where = [], order = ['departements.code ASC', 'cities.na
             additionalSQL,
         ),
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements,
         },
     );
@@ -98,7 +104,7 @@ module.exports = async (where = [], order = ['departements.code ASC', 'cities.na
         return [];
     }
     const serializedTowns = towns.reduce(
-        (object, town) => {
+        (object: any, town: any) => {
             /* eslint-disable no-param-reassign */
             object.hash[town.id] = serializeShantytown(town, user);
             object.ordered.push(object.hash[town.id]);
@@ -122,7 +128,7 @@ module.exports = async (where = [], order = ['departements.code ASC', 'cities.na
                     additionalSQL,
                 ),
                 {
-                    type: sequelize.QueryTypes.SELECT,
+                    type: QueryTypes.SELECT,
                     replacements,
                 },
             ),
@@ -146,7 +152,7 @@ module.exports = async (where = [], order = ['departements.code ASC', 'cities.na
             LEFT JOIN closing_solutions ON shantytown_closing_solutions.fk_closing_solution = closing_solutions.closing_solution_id
             WHERE shantytown_closing_solutions.fk_shantytown IN (:ids)`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: { ids: Object.keys(serializedTowns.hash) },
             },
         ),

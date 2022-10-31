@@ -1,6 +1,6 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-module.exports = ({
+export default ({
     fk_region, fk_departement, fk_epci, fk_city, closed_shantytowns, exported_by,
 }) => sequelize.query(
     `INSERT INTO stats_exports(
@@ -18,13 +18,13 @@ module.exports = ({
         :closed_shantytowns,
         :exported_by
     )`, {
-        replacements: {
-            fk_region,
-            fk_departement,
-            fk_epci,
-            fk_city,
-            closed_shantytowns,
-            exported_by,
-        },
+    replacements: {
+        fk_region,
+        fk_departement,
+        fk_epci,
+        fk_city,
+        closed_shantytowns,
+        exported_by,
     },
+},
 );

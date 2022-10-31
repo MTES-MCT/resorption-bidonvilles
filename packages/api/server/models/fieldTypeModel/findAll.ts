@@ -1,7 +1,9 @@
-const sequelize = require('#db/sequelize');
-const serializeFieldType = require('./_common/serializeFieldType');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async () => {
+import serializeFieldType from './_common/serializeFieldType';
+
+export default async () => {
     const fieldTypes = await sequelize.query(
         `SELECT
             field_types.field_type_id AS id,
@@ -11,7 +13,7 @@ module.exports = async () => {
         FROM field_types
         ORDER BY position ASC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 

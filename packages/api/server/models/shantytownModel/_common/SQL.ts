@@ -1,5 +1,4 @@
-
-module.exports = {
+export default {
     selection: {
         'shantytowns.shantytown_id': 'id',
         'shantytowns.name': 'name',

@@ -1,9 +1,11 @@
-const moment = require('moment');
-const ServiceError = require('#server/errors/ServiceError');
-const shantytownActorModel = require('#server/models/shantytownActorModel');
-const permissionUtils = require('#server/utils/permission');
+import moment from 'moment';
+import ServiceError from '#server/errors/ServiceError';
+import shantytownActorModelFactory from '#server/models/shantytownActorModel';
+import permissionUtils from '#server/utils/permission';
 
-module.exports = async (user) => {
+const shantytownActorModel = shantytownActorModelFactory();
+
+export default async (user) => {
     const permissionClauseGroup = permissionUtils.where().can(user).do('export', 'shantytown_actor');
     if (permissionClauseGroup === null) {
         return [];

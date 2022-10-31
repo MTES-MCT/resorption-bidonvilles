@@ -1,25 +1,27 @@
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
+import chai from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
 
 const { expect } = chai;
 chai.use(sinonChai);
 
-const planCommentModel = require('#server/models/planCommentModel');
+import planCommentModelFactory from '#server/models/planCommentModel';
 
-const { serialized: fakePlanComment } = require('#test/utils/planComment');
-const { serialized: fakeUser } = require('#test/utils/user');
-const permissionUtils = require('#server/utils/permission');
-const moment = require('moment');
+import planCommentUtils from '#test/utils/planComment';
+import userUtils from '#test/utils/user';
+import permissionUtils from '#server/utils/permission';
+import moment from 'moment';
 
+import exportAllService from './exportAll';
 
-const exportAllService = require('./exportAll');
-
+const planCommentModel = planCommentModelFactory();
+const { serialized: fakePlanComment } = planCommentUtils;
+const { serialized: fakeUser } = userUtils;
 
 describe.only('services/exportAll', () => {
     describe('exportAll()', () => {
         const user = fakeUser();
-        const planComment = fakePlanComment();
+        const planComment: any = fakePlanComment();
         let stubs;
 
         beforeEach(() => {

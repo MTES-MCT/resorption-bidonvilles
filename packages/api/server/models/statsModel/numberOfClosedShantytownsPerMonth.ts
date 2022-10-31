@@ -1,7 +1,9 @@
-const sequelize = require('#db/sequelize');
-const convertToDateMapping = require('./_common/convertToDateMapping');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async (departement = null, startDateStr = '2019-06-01') => {
+import convertToDateMapping from './_common/convertToDateMapping';
+
+export default async (departement = null, startDateStr = '2019-06-01') => {
     const rows = await sequelize.query(
         `SELECT 
             EXTRACT(YEAR FROM shantytowns.closed_at) AS year,
@@ -15,7 +17,7 @@ module.exports = async (departement = null, startDateStr = '2019-06-01') => {
         GROUP BY year, month
         ORDER BY year ASC ,month ASC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 

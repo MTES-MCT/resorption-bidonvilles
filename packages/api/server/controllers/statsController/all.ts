@@ -1,6 +1,8 @@
-const statsModel = require('#server/models/statsModel');
+import statsModelFactory from '#server/models/statsModel';
 
-module.exports = async (req, res) => {
+const statsModel = statsModelFactory();
+
+export default async (req, res) => {
     const { departement } = req.params;
 
     const [

@@ -1,6 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async () => {
+export default async () => {
     const users = await sequelize.query(
         `
         SELECT
@@ -42,13 +43,13 @@ module.exports = async () => {
         ORDER BY organizations.name, users.last_name, users.first_name
         `,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 
     const hash = {};
     const organizations = [];
-    users.forEach((user) => {
+    users.forEach((user: any) => {
         if (!Object.prototype.hasOwnProperty.call(hash, user.organization_id)) {
             hash[user.organization_id] = {
                 id: user.organization_id,

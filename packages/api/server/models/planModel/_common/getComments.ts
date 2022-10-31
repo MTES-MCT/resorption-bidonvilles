@@ -1,7 +1,9 @@
-const sequelize = require('#db/sequelize');
-const serializeComment = require('./serializeComment');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async (user, planIds) => {
+import serializeComment from './serializeComment';
+
+export default async (user, planIds) => {
     const comments = planIds.reduce((acc, id) => Object.assign({}, acc, {
         [id]: [],
     }), {});
@@ -31,14 +33,14 @@ module.exports = async (user, planIds) => {
             plan_comments.fk_plan IN (:ids) 
         ORDER BY plan_comments.created_at DESC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 ids: planIds,
             },
         },
     );
 
-    rows.forEach((comment) => {
+    rows.forEach((comment: any) => {
         comments[comment.planId].push(
             serializeComment(comment),
         );

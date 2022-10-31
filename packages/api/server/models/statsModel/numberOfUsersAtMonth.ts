@@ -1,7 +1,8 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async (date = '2020-06-01') => {
-    const rows = await sequelize.query(
+export default async (date = '2020-06-01') => {
+    const rows: any = await sequelize.query(
         `SELECT
             COUNT(*) AS total
             FROM user_accesses ua
@@ -10,7 +11,7 @@ module.exports = async (date = '2020-06-01') => {
             AND
             ua.used_at < '${date}'`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 

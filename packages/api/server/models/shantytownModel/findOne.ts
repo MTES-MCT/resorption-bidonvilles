@@ -1,6 +1,6 @@
-const query = require('./_common/query');
+import query from './_common/query';
 
-module.exports = async (user, shantytownId) => {
+export default async (user, shantytownId) => {
     const towns = await query(
         [{ shantytown_id: shantytownId }],
         undefined,

@@ -1,4 +1,4 @@
-module.exports = (actor) => {
+export default (actor) => {
     const themes = [
         ...actor.themes.map(id => ({
             id,

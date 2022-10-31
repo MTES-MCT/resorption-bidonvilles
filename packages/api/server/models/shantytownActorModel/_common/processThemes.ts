@@ -5,7 +5,7 @@
  *
  * @returns {Object} A key-value object with a key "themes" (array of theme ids) and a key "autre" (string or null)
  */
-module.exports = themes => themes.reduce((acc, theme) => {
+export default themes => themes.reduce((acc, theme) => {
     if (theme.id === 'autre') {
         return {
             ...acc,

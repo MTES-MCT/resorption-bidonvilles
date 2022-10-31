@@ -1,6 +1,6 @@
-const query = require('./_common/query');
+import query from './_common/query';
 
-module.exports = async (userAccessId, filters = {}) => {
+export default async (userAccessId, filters = {}) => {
     const users = await query(
         [
             {

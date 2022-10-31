@@ -1,4 +1,4 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
 /**
  * @typedef {Object} Model_ShantytownComment_Data
@@ -10,8 +10,8 @@ const sequelize = require('#db/sequelize');
 /**
  * @param {Model_ShantytownComment_Data} data
  */
-module.exports = async (data, transaction = undefined) => {
-    const [[{ shantytown_comment_id }]] = await sequelize.query(
+export default async (data, transaction = undefined) => {
+    const [[{ shantytown_comment_id }]]: any = await sequelize.query(
         `INSERT INTO shantytown_comments(
             description,
             fk_shantytown,

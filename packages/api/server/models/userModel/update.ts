@@ -1,6 +1,6 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-module.exports = async (userId, values, transaction = undefined) => {
+export default async (userId, values, transaction = undefined) => {
     if (userId === undefined) {
         throw new Error('The user id is missing');
     }
@@ -38,7 +38,7 @@ module.exports = async (userId, values, transaction = undefined) => {
         throw new Error('The updated values are missing');
     }
 
-    const [, { rowCount }] = await sequelize.query(
+    const [, { rowCount }]: any = await sequelize.query(
         `UPDATE
             users
         SET

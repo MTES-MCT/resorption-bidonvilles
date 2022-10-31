@@ -1,6 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = (locationType, locationCode) => sequelize.query(
+export default (locationType, locationCode) => sequelize.query(
     `SELECT
             departements.code,
             departements.name
@@ -10,7 +11,7 @@ module.exports = (locationType, locationCode) => sequelize.query(
         GROUP BY departements.code, departements.name
         ORDER BY departements.code ASC`,
     {
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
         replacements: {
             locationCode,
         },

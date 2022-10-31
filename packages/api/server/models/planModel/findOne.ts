@@ -1,6 +1,6 @@
-const query = require('./_common/query');
+import query from './_common/query';
 
-module.exports = async (user, id) => {
+export default async (user, id) => {
     const rows = await query(user, 'read', {
         plan_id: id,
     });

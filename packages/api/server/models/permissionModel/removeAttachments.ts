@@ -1,5 +1,5 @@
-const sequelize = require('#db/sequelize');
-const getUserPermission = require('./_common/getUserPermission');
+import { sequelize } from '#db/sequelize';
+import getUserPermission from './_common/getUserPermission';
 
 async function removeAttachments(attachments, feature, entity, userId = null, organizationId = null, transaction = undefined) {
     let permission;
@@ -26,7 +26,7 @@ async function removeAttachments(attachments, feature, entity, userId = null, or
     );
 }
 
-module.exports = attachments => ({
+export default attachments => ({
     fromUser: userId => ({
         onFeature(feature, entity, transaction = undefined) {
             return removeAttachments(attachments, feature, entity, userId, null, transaction);

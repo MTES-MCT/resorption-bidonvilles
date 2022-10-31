@@ -1,36 +1,36 @@
-const averageCompletionPercentage = require('./averageCompletionPercentage');
-const averageCompletionPercentageByDepartement = require('./averageCompletionPercentageByDepartement');
-const getStats = require('./getStats');
-const meanTimeBeforeClosingDeclaration = require('./meanTimeBeforeClosingDeclaration');
-const meanTimeBeforeCreationDeclaration = require('./meanTimeBeforeCreationDeclaration');
-const numberOfActiveUsers = require('./numberOfActiveUsers');
-const numberOfClosedShantytownsPerMonth = require('./numberOfClosedShantytownsPerMonth');
-const numberOfCollaboratorAndAssociationOrganizations = require('./numberOfCollaboratorAndAssociationOrganizations');
-const numberOfCollaboratorAndAssociationUsers = require('./numberOfCollaboratorAndAssociationUsers');
-const numberOfComments = require('./numberOfComments');
-const numberOfCreditsPerYear = require('./numberOfCreditsPerYear');
-const numberOfDepartements = require('./numberOfDepartements');
-const numberOfNewShantytownsPerMonth = require('./numberOfNewShantytownsPerMonth');
-const numberOfNewUsersPerMonth = require('./numberOfNewUsersPerMonth');
-const numberOfOpenShantytownsAtMonth = require('./numberOfOpenShantytownsAtMonth');
-const numberOfPeople = require('./numberOfPeople');
-const numberOfPeopleByDepartement = require('./numberOfPeopleByDepartement');
-const numberOfPlans = require('./numberOfPlans');
-const numberOfPlansByDepartement = require('./numberOfPlansByDepartement');
-const numberOfResorbedShantytown = require('./numberOfResorbedShantytown');
-const numberOfResorbedShantytownByDepartement = require('./numberOfResorbedShantytownByDepartement');
-const numberOfResorbedShantytownsPerMonth = require('./numberOfResorbedShantytownsPerMonth');
-const numberOfReviewedComments = require('./numberOfReviewedComments');
-const numberOfShantytown = require('./numberOfShantytown');
-const numberOfShantytownByDepartement = require('./numberOfShantytownByDepartement');
-const numberOfShantytownOperations = require('./numberOfShantytownOperations');
-const numberOfUsers = require('./numberOfUsers');
-const numberOfUsersByDepartement = require('./numberOfUsersByDepartement');
-const numberOfUsersAtMonth = require('./numberOfUsersAtMonth');
-const populationTotal = require('./populationTotal');
-const wau = require('./wau');
+import averageCompletionPercentage from './averageCompletionPercentage';
+import averageCompletionPercentageByDepartement from './averageCompletionPercentageByDepartement';
+import getStats from './getStats';
+import meanTimeBeforeClosingDeclaration from './meanTimeBeforeClosingDeclaration';
+import meanTimeBeforeCreationDeclaration from './meanTimeBeforeCreationDeclaration';
+import numberOfActiveUsers from './numberOfActiveUsers';
+import numberOfClosedShantytownsPerMonth from './numberOfClosedShantytownsPerMonth';
+import numberOfCollaboratorAndAssociationOrganizations from './numberOfCollaboratorAndAssociationOrganizations';
+import numberOfCollaboratorAndAssociationUsers from './numberOfCollaboratorAndAssociationUsers';
+import numberOfComments from './numberOfComments';
+import numberOfCreditsPerYear from './numberOfCreditsPerYear';
+import numberOfDepartements from './numberOfDepartements';
+import numberOfNewShantytownsPerMonth from './numberOfNewShantytownsPerMonth';
+import numberOfNewUsersPerMonth from './numberOfNewUsersPerMonth';
+import numberOfOpenShantytownsAtMonth from './numberOfOpenShantytownsAtMonth';
+import numberOfPeople from './numberOfPeople';
+import numberOfPeopleByDepartement from './numberOfPeopleByDepartement';
+import numberOfPlans from './numberOfPlans';
+import numberOfPlansByDepartement from './numberOfPlansByDepartement';
+import numberOfResorbedShantytown from './numberOfResorbedShantytown';
+import numberOfResorbedShantytownByDepartement from './numberOfResorbedShantytownByDepartement';
+import numberOfResorbedShantytownsPerMonth from './numberOfResorbedShantytownsPerMonth';
+import numberOfReviewedComments from './numberOfReviewedComments';
+import numberOfShantytown from './numberOfShantytown';
+import numberOfShantytownByDepartement from './numberOfShantytownByDepartement';
+import numberOfShantytownOperations from './numberOfShantytownOperations';
+import numberOfUsers from './numberOfUsers';
+import numberOfUsersByDepartement from './numberOfUsersByDepartement';
+import numberOfUsersAtMonth from './numberOfUsersAtMonth';
+import populationTotal from './populationTotal';
+import wau from './wau';
 
-module.exports = {
+export default () => ({
     averageCompletionPercentage,
     averageCompletionPercentageByDepartement,
     getStats,
@@ -62,4 +62,4 @@ module.exports = {
     numberOfUsersAtMonth,
     populationTotal,
     wau,
-};
+});

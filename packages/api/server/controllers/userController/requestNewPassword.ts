@@ -1,11 +1,16 @@
-const userModel = require('#server/models/userModel');
-const { toString: dateToString } = require('#server/utils/date');
-const { getPasswordResetLink } = require('#server/utils/auth');
-const { sendUserNewPassword } = require('#server/mails/mails');
-const sanitize = require('./helpers/sanitize');
-const validate = require('./helpers/validate');
+import userModelFactory from '#server/models/userModel';
+import dateUtils from '#server/utils/date';
+import authUtils from '#server/utils/auth';
+import mailsUtils from '#server/mails/mails';
+import sanitize from './helpers/sanitize';
+import validate from './helpers/validate';
 
-module.exports = async (req, res, next) => {
+const userModel = userModelFactory();
+const { toString: dateToString } = dateUtils;
+const { getPasswordResetLink } = authUtils;
+const { sendUserNewPassword } = mailsUtils;
+
+export default async (req, res, next) => {
     const data = { email: req.body.email };
     const fields = [
         { key: 'email', sanitizer: 'string', validatorOptions: [false] },

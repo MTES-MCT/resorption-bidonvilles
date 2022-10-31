@@ -1,26 +1,34 @@
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
-const SequelizeMock = require('sequelize-mock');
+import chai from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
+import SequelizeMock from 'sequelize-mock';
 
 chai.use(sinonChai);
 
 const { expect } = chai;
-const ServiceError = require('#server/errors/ServiceError');
-const shantytownCommentModel = require('#server/models/shantytownCommentModel');
-const shantytownCommentTagModel = require('#server/models/shantytownCommentTagModel');
-const shantytownModel = require('#server/models/shantytownModel');
-const userModel = require('#server/models/userModel');
-const mattermostUtils = require('#server/utils/mattermost');
-const mails = require('#server/mails/mails');
+import ServiceError from '#server/errors/ServiceError';
+import shantytownCommentModelFactory from '#server/models/shantytownCommentModel';
+import shantytownCommentTagModelFactory from '#server/models/shantytownCommentTagModel';
+import shantytownModelFactory from '#server/models/shantytownModel';
+import userModelFactory from '#server/models/userModel';
+import mattermostUtils from '#server/utils/mattermost';
+import mails from '#server/mails/mails';
 
 
 const sequelizeStub = new SequelizeMock();
 
-const createComment = require('#server/services/shantytownComment/createComment');
+import createComment from '#server/services/shantytownComment/createComment';
 
-const { serialized: fakeUser } = require('#test/utils/user');
-const { serialized: fakeComment } = require('#test/utils/shantytownComment');
+import userUtils from '#test/utils/user';
+import shantytownCommentUtils from '#test/utils/shantytownComment';
+
+const shantytownCommentModel = shantytownCommentModelFactory();
+const shantytownCommentTagModel = shantytownCommentTagModelFactory();
+const shantytownModel = shantytownModelFactory();
+const userModel = userModelFactory();
+
+const { serialized: fakeUser } = userUtils;
+const { serialized: fakeComment } = shantytownCommentUtils;
 
 describe.only('services/shantytownComment', () => {
     const dependencies = {

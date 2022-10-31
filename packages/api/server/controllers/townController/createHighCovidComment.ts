@@ -1,10 +1,13 @@
 /* eslint-disable no-throw-literal */
-const { trim } = require('validator');
-const geoModel = require('#server/models/geoModel');
-const highCovidCommentModel = require('#server/models/highCovidCommentModel');
+import validator from 'validator';
+import geoModelFactory from '#server/models/geoModel';
+import highCovidCommentModelFactory from '#server/models/highCovidCommentModel';
 
+const { trim } = validator;
+const geoModel = geoModelFactory();
+const highCovidCommentModel = highCovidCommentModelFactory();
 
-module.exports = () => {
+export default () => {
     /**
      * Parses the request input and returns it sanitized and ready for database
      *
@@ -58,7 +61,7 @@ module.exports = () => {
             const allowedDepartements = (await geoModel.getDepartementsFor(
                 locationType,
                 user.organization.location[locationType].code,
-            )).map(({ code }) => code);
+            )).map(({ code }: any) => code);
 
             const badDepartements = body.departements.filter(code => allowedDepartements.indexOf(code) === -1);
             if (badDepartements.length > 0) {

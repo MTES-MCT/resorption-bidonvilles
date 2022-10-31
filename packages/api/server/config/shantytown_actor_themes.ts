@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     sante: 'Santé',
     education: 'Éducation et scolarisation',
     emploi: 'Formation et emploi',

@@ -1,13 +1,14 @@
-const fs = require('fs');
-const path = require('path');
-const { assetsSrc } = require('#server/config');
+import fs from 'fs';
+import path from 'path';
+import config from '#server/config';
 
+const { assetsSrc } = config;
 
 const {
     SectionType, Paragraph, ImageRun, HorizontalPositionRelativeFrom,
 } = require('docx');
 
-module.exports = () => {
+export default () => {
     const marianne = new ImageRun({
         data: fs.readFileSync(path.join(assetsSrc, 'logo_gouvernement.jpg')),
         transformation: {

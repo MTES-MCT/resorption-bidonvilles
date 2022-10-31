@@ -1,4 +1,4 @@
-const { can } = require('#server/utils/permission');
+import permissionUtils from '#server/utils/permission';
 
 const locationTypes = {
     shantytowns: 'sur site(s) : bidonville ou squat',
@@ -7,8 +7,10 @@ const locationTypes = {
     other: 'dans plusieurs lieux (hébergement, permanence, rue...)',
 };
 
-module.exports = (user, plan) => {
-    const base = {
+const { can } = permissionUtils;
+
+export default (user, plan) => {
+    const base: any = {
         type: 'plan',
         id: plan.id,
         name: plan.name,

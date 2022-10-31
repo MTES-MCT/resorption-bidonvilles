@@ -1,7 +1,9 @@
-const sequelize = require('#db/sequelize');
-const convertToDateMapping = require('./_common/convertToDateMapping');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async (startDateStr = '2020-06-01') => {
+import convertToDateMapping from './_common/convertToDateMapping';
+
+export default async (startDateStr = '2020-06-01') => {
     const startDate = new Date(startDateStr);
     const now = new Date();
     const limit = new Date(now.getFullYear(), now.getMonth() - 7, 1);
@@ -19,7 +21,7 @@ module.exports = async (startDateStr = '2020-06-01') => {
         GROUP BY year, month
         ORDER BY year ASC,month ASC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 limit: limit.getTime() / 1000,
             },

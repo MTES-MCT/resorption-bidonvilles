@@ -1,17 +1,18 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-module.exports = async (id) => {
+export default async (id) => {
     const transaction = await sequelize.transaction();
-    await sequelize.query(
-        'DELETE FROM shantytowns WHERE shantytown_id = :id',
-        {
-            transaction,
-            replacements: {
-                id,
+    try {
+        await sequelize.query(
+            'DELETE FROM shantytowns WHERE shantytown_id = :id',
+            {
+                transaction,
+                replacements: {
+                    id,
+                },
             },
-        },
-    )
-        .then(sequelize.query(
+        );
+        sequelize.query(
             'DELETE FROM "ShantytownHistories" WHERE shantytown_id = :id',
             {
                 transaction,
@@ -19,6 +20,10 @@ module.exports = async (id) => {
                     id,
                 },
             },
-        ));
+        );
+    } catch (error) {
+        await transaction.rollback();
+    }
+
     await transaction.commit();
 };

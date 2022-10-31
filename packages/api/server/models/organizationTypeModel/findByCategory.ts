@@ -1,6 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = (categoryUid, withTotalOfOrganizations = false) => {
+export default (categoryUid, withTotalOfOrganizations = false) => {
     const columns = {
         'organization_types.organization_type_id': 'id',
         'organization_types.name_singular': 'name_singular',
@@ -22,7 +23,7 @@ module.exports = (categoryUid, withTotalOfOrganizations = false) => {
         ${withTotalOfOrganizations ? 'GROUP BY organization_types.organization_type_id' : ''}
         ORDER BY organization_types.name_singular`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 categoryUid,
             },

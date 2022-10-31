@@ -1,4 +1,4 @@
-module.exports = fieldType => ({
+export default fieldType => ({
     id: fieldType.id,
     label: fieldType.label,
     color: `#${fieldType.color}`,

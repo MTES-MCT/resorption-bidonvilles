@@ -1,4 +1,5 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 /**
  * @param {Location} [location] Location filter. If set to null, no filter is applied and all
@@ -8,9 +9,9 @@ const sequelize = require('#db/sequelize');
  *                                     a subset of "location" (for instance, you are not expected to
  *                                     give a departement as location, and a region as privateLocation)
  */
-module.exports = (user, location = null, privateLocation = null) => {
+export default (user, location = null, privateLocation = null) => {
     const additionalWhere = [];
-    const replacements = {};
+    const replacements: any = {};
     if (location && location.type && location.code) {
         replacements.publicLocationCode = location.code;
 
@@ -105,12 +106,12 @@ module.exports = (user, location = null, privateLocation = null) => {
         LEFT JOIN user_comment_access uca ON sc.shantytown_comment_id = uca.shantytown_comment_id
         LEFT JOIN tags ON tags.fk_shantytown_comment = sc.shantytown_comment_id
         ${additionalWhere.length > 0
-        ? `WHERE ${additionalWhere.join(' OR ')}`
-        : ''
-}
+            ? `WHERE ${additionalWhere.join(' OR ')}`
+            : ''
+        }
         ORDER BY sc.created_at DESC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements,
         },
     );

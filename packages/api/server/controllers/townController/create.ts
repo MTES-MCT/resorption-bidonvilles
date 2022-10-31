@@ -1,6 +1,8 @@
-const { create } = require('#server/services/shantytown');
+import shantytownService from '#server/services/shantytown';
 
-module.exports = async (req, res, next) => {
+const { create } = shantytownService;
+
+export default async (req, res, next) => {
     try {
         return res.status(200).send({
             town: await create(req.body, req.user),

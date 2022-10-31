@@ -1,7 +1,7 @@
-const create = require('./create');
-const deleteFinance = require('./delete');
+import create from './create';
+import deleteFinance from './delete';
 
-module.exports = {
+export default () => ({
     create,
     delete: deleteFinance,
-};
+});

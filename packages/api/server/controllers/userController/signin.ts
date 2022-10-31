@@ -1,8 +1,13 @@
-const userModel = require('#server/models/userModel');
-const { generateAccessTokenFor, hashPassword } = require('#server/utils/auth');
+import userModelFactory from '#server/models/userModel';
+import authUtils from '#server/utils/auth';
 
-module.exports = async (req, res) => {
+const userModel = userModelFactory();
+const { generateAccessTokenFor, hashPassword } = authUtils;
+
+export default async (req, res) => {
     const { email, password } = req.body;
+
+    let typeOfEmail: string = typeof email;
 
     if (typeof email !== 'string') {
         return res.status(400).send({

@@ -1,4 +1,4 @@
-module.exports = planShantytown => ({
+export default planShantytown => ({
     plan_id: planShantytown.plan_id,
     shantytown_id: planShantytown.shantytown_id,
     name: planShantytown.plan_name,

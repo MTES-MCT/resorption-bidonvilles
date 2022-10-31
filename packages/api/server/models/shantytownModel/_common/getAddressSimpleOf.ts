@@ -1,4 +1,4 @@
-module.exports = (address) => {
+export default (address) => {
     if (!address) {
         return 'Pas d\'adresse précise';
     }

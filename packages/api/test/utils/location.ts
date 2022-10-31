@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     nation() {
         return {
             type: 'nation',

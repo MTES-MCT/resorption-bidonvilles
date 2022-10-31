@@ -1,8 +1,8 @@
 /* eslint-disable newline-per-chained-call */
-const selfUserIdValidator = require('./utils/selfUserId');
-const themesValidator = require('./utils/themes');
+import selfUserIdValidator from './utils/selfUserId';
+import themesValidator from './utils/themes';
 
-module.exports = [
+export default [
     selfUserIdValidator('Vous ne pouvez pas modifier les champs d\'intervention d\'un autre intervenant'),
     themesValidator,
 ];

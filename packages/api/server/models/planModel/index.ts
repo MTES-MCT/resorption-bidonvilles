@@ -1,13 +1,13 @@
-const create = require('./create');
-const deletePlan = require('./delete');
-const findAll = require('./findAll');
-const findOne = require('./findOne');
-const listExport = require('./listExport');
-const serializeComment = require('./_common/serializeComment');
-const getComments = require('./_common/getComments');
-const update = require('./update');
+import create from './create';
+import deletePlan from './delete';
+import findAll from './findAll';
+import findOne from './findOne';
+import listExport from './listExport';
+import serializeComment from './_common/serializeComment';
+import getComments from './_common/getComments';
+import update from './update';
 
-module.exports = {
+export default () => ({
     create,
     delete: deletePlan, // renamed to avoid conflict with reserved keyword 'delete'
     findAll,
@@ -16,4 +16,4 @@ module.exports = {
     serializeComment,
     getComments,
     update,
-};
+});

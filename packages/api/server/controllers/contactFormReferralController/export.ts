@@ -1,7 +1,7 @@
-const JSONToCSV = require('json2csv');
-const contactFormReferralService = require('#server/services/contactFormReferral');
+import JSONToCSV from 'json2csv';
+import contactFormReferralService from '#server/services/contactFormReferral';
 
-module.exports = async (req, res, next) => {
+export default async (req, res, next) => {
     let referrals;
 
     try {

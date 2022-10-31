@@ -1,16 +1,18 @@
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
-const { mockReq, mockRes } = require('sinon-express-mock');
-const { serialized: fakeUser } = require('#test/utils/user');
+import chai from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
+import { mockReq, mockRes } from 'sinon-express-mock';
+import userUtils from '#test/utils/user';
 
 const { expect } = chai;
 chai.use(sinonChai);
 
-const shantytownCommentService = require('#server/services/shantytownComment');
-const ctlCreate = require('#server/controllers/shantytownCommentController/create');
+const { serialized: fakeUser } = userUtils;
 
-const ServiceError = require('#server/errors/ServiceError');
+import shantytownCommentService from '#server/services/shantytownComment';
+import ctlCreate from '#server/controllers/shantytownCommentController/create';
+
+import ServiceError from '#server/errors/ServiceError';
 
 describe.only('controllers/shantytownComment', () => {
     let createCommentService;

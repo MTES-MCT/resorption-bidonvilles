@@ -1,6 +1,8 @@
-const statsModel = require('#server/models/statsModel/index');
+import statsModelFactory from '#server/models/statsModel/index';
 
-module.exports = async (req, res, next) => {
+const statsModel = statsModelFactory();
+
+export default async (req, res, next) => {
     const { location } = req.body;
     try {
         const townStats = await statsModel.getStats(req.user, location);

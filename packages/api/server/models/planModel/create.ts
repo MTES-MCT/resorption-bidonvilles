@@ -1,7 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-module.exports = async (data, transaction = undefined) => {
-    const [[{ id }]] = await sequelize.query(
+export default async (data, transaction = undefined) => {
+    const [[{ id }]]: any = await sequelize.query(
         `INSERT INTO plans2(
             name,
             started_at,

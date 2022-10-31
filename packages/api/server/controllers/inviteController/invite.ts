@@ -1,7 +1,12 @@
-const { sendUserPlatformInvitation } = require('#server/mails/mails');
-const { triggerPeopleInvitedAlert } = require('#server/utils/mattermost');
-const { formatName } = require('#server/models/userModel');
-const { mattermost } = require('#server/config');
+import mailsUtils from '#server/mails/mails';
+import mattermostUtils from '#server/utils/mattermost';
+import config from '#server/config';
+import userModelFactory from '#server/models/userModel';
+
+const { sendUserPlatformInvitation } = mailsUtils;
+const { triggerPeopleInvitedAlert } = mattermostUtils;
+const { mattermost } = config;
+const { formatName } = userModelFactory();
 
 async function sendEmailsInvitations(guests, greeter) {
     for (let i = 0; i < guests.length; i += 1) {
@@ -50,7 +55,7 @@ async function sendMattermostNotifications(guests, greeter, invite_from) {
     }
 }
 
-module.exports = async (req, res, next) => {
+export default async (req, res, next) => {
     const { greeter, guests, invite_from } = req.body;
 
     // Send an email to each guest

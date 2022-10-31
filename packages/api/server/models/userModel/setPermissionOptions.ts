@@ -1,6 +1,6 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-module.exports = async (userId, options, argTransaction) => {
+export default async (userId, options, argTransaction) => {
     let transaction = argTransaction;
     let commitTransaction = false;
     if (!transaction) {

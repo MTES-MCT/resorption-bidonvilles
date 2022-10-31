@@ -1,4 +1,4 @@
-module.exports = comment => ({
+export default comment => ({
     id: comment.commentId,
     description: comment.commentDescription,
     createdAt: comment.commentCreatedAt !== null ? (comment.commentCreatedAt.getTime() / 1000) : null,

@@ -1,6 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async (id) => {
+export default async (id) => {
     const rows = await sequelize.query(
         `SELECT
             owner_types.owner_type_id AS id,
@@ -10,7 +11,7 @@ module.exports = async (id) => {
         WHERE owner_types.owner_type_id = :id
         ORDER BY position ASC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 id,
             },

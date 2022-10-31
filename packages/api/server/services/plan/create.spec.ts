@@ -1,29 +1,43 @@
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
-const chaiSubset = require('chai-subset');
+import chai from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
+import chaiSubset from 'chai-subset';
 
 const { expect } = chai;
 chai.use(sinonChai);
 chai.use(chaiSubset);
 
-const departementModel = require('#server/models/departementModel');
-const financeTypeModel = require('#server/models/financeTypeModel');
-const topicModel = require('#server/models/topicModel');
-const userModel = require('#server/models/userModel');
-const planModel = require('#server/models/planModel');
-const financeModel = require('#server/models/financeModel');
-const financeRowModel = require('#server/models/financeRowModel');
-const planManagerModel = require('#server/models/planManagerModel');
-const locationModel = require('#server/models/locationModel');
-const planDepartementModel = require('#server/models/planDepartementModel');
-const planTopicsModel = require('#server/models/planTopicsModel');
-const planShantytownModel = require('#server/models/planShantytownModel');
-const planOperatorModel = require('#server/models/planOperatorModel');
-const permissionModel = require('#server/models/permissionModel');
-const attachmentsObject = require('#server/models/permissionModel/addAttachments');
+import departementModelFactory from '#server/models/departementModel';
+import financeTypeModelFactory from '#server/models/financeTypeModel';
+import topicModelFactory from '#server/models/topicModel';
+import userModelFactory from '#server/models/userModel';
+import planModelFactory from '#server/models/planModel';
+import financeModelFactory from '#server/models/financeModel';
+import financeRowModelFactory from '#server/models/financeRowModel';
+import planManagerModelFactory from '#server/models/planManagerModel';
+import locationModelFactory from '#server/models/locationModel';
+import planDepartementModelFactory from '#server/models/planDepartementModel';
+import planTopicsModelFactory from '#server/models/planTopicsModel';
+import planShantytownModelFactory from '#server/models/planShantytownModel';
+import planOperatorModelFactory from '#server/models/planOperatorModel';
+import permissionModelFactory from '#server/models/permissionModel';
+import attachmentsObject from '#server/models/permissionModel/addAttachments';
+import createService from './create';
 
-const createService = require('./create');
+const departementModel = departementModelFactory();
+const financeTypeModel = financeTypeModelFactory();
+const topicModel = topicModelFactory();
+const userModel = userModelFactory();
+const planModel = planModelFactory();
+const financeModel = financeModelFactory();
+const financeRowModel = financeRowModelFactory();
+const planManagerModel = planManagerModelFactory();
+const locationModel = locationModelFactory();
+const planDepartementModel = planDepartementModelFactory();
+const planTopicsModel = planTopicsModelFactory();
+const planShantytownModel = planShantytownModelFactory();
+const planOperatorModel = planOperatorModelFactory();
+const permissionModel = permissionModelFactory();
 
 function randomIndex(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -32,24 +46,24 @@ function randomIndex(min, max) {
 describe.only('services/plan', () => {
     describe('create()', () => {
         let stubs;
-        const departement = global.generate('string');
-        const financeTypes = [
+        const departement: string = global.generate('string');
+        const financeTypes: { uid: number; name: string }[] = [
             { uid: global.generate('number'), name: global.generate('string') },
             { uid: global.generate('number'), name: global.generate('string') },
             { uid: global.generate('number'), name: global.generate('string') },
         ];
 
-        const topics = [
+        const topics: { uid: number; name: string }[] = [
             { uid: global.generate('number'), name: global.generate('string') },
             { uid: global.generate('number'), name: global.generate('string') },
             { uid: global.generate('number'), name: global.generate('string') },
         ];
 
-        const locationTypes = ['shantytowns', 'location', 'housing', 'other'];
+        const locationTypes: string[] = ['shantytowns', 'location', 'housing', 'other'];
 
-        const years = ['2017', '2018', '2019', '2020', '2021', '2022'];
+        const years: string[] = ['2017', '2018', '2019', '2020', '2021', '2022'];
 
-        const financeId = global.generate('number');
+        const financeId: number = global.generate('number');
         const finances = [
             {
                 year: years[randomIndex(0, 6)],
@@ -62,12 +76,12 @@ describe.only('services/plan', () => {
             },
         ];
 
-        const planId = global.generate('number');
-        const user = {
+        const planId: number = global.generate('number');
+        const user: { id: any, isAllowedTo: any } = {
             id: global.generate('number'),
             isAllowedTo: sinon.stub(),
         };
-        const manager = {
+        const manager: any = {
             id: global.generate('number'),
         };
 

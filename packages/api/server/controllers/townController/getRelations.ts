@@ -1,6 +1,8 @@
-const userModel = require('#server/models/userModel');
+import userModelFactory from '#server/models/userModel';
 
-module.exports = () => async (req, res, next) => {
+const userModel = userModelFactory();
+
+export default () => async (req, res, next) => {
     let users;
     try {
         users = await userModel.findForRegion(req.shantytown.region.code, req.query.q || undefined);

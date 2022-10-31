@@ -1,6 +1,7 @@
-const organizationCategoryModel = require('#server/models/organizationCategoryModel');
+import organizationCategoryModelFactory from '#server/models/organizationCategoryModel';
+const organizationCategoryModel = organizationCategoryModelFactory();
 
-module.exports = async (req, res) => res.status(200).send({
+export default async (req, res) => res.status(200).send({
     success: true,
     response: {
         categories: await organizationCategoryModel.findAll(),

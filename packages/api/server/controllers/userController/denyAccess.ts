@@ -1,7 +1,9 @@
-const userModel = require('#server/models/userModel');
-const accessRequestService = require('#server/services/accessRequest/accessRequestService');
+import userModelFactory from '#server/models/userModel';
+import accessRequestService from '#server/services/accessRequest/accessRequestService';
 
-module.exports = async (req, res, next) => {
+const userModel = userModelFactory();
+
+export default async (req, res, next) => {
     let user;
     try {
         user = await userModel.findOne(req.params.id, undefined, req.user, 'activate');

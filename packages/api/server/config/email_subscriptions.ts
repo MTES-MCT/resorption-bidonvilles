@@ -1,4 +1,4 @@
-module.exports = [
+export default [
     'weekly_summary',
     'comment_notification',
     'plan_comment_notification',

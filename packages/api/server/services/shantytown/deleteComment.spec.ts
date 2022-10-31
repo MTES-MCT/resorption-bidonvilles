@@ -1,20 +1,22 @@
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
+import chai from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
 
 const { expect } = chai;
 chai.use(sinonChai);
 
+import validator from 'validator';
+import shantytownModelFactory from '#server/models/shantytownModel';
+import shantytownCommentModelFactory from '#server/models/shantytownCommentModel';
+import userModelFactory from '#server/models/userModel';
+import mails from '#server/mails/mails';
+import permissionUtils from '#server/utils/permission';
+import ServiceError from '#server/errors/ServiceError';
+import deleteCommentService from './deleteComment';
 
-const validator = require('validator');
-const shantytownModel = require('#server/models/shantytownModel');
-const shantytownCommentModel = require('#server/models/shantytownCommentModel');
-const userModel = require('#server/models/userModel');
-const mails = require('#server/mails/mails');
-const permissionUtils = require('#server/utils/permission');
-const ServiceError = require('#server/errors/ServiceError');
-const deleteCommentService = require('./deleteComment');
-
+const shantytownModel = shantytownModelFactory();
+const shantytownCommentModel = shantytownCommentModelFactory();
+const userModel = userModelFactory();
 
 describe.only('services/shantytown', () => {
     describe('deleteComment()', () => {

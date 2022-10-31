@@ -1,16 +1,28 @@
-const jwt = require('jsonwebtoken');
-const Sentry = require('@sentry/node');
-const { auth: authConfig } = require('#server/config');
-const userModel = require('#server/models/userModel');
+import jwt from 'jsonwebtoken';
+import * as Sentry from '@sentry/node';
+import config from '#server/config';
+import userModelUpdate from '#server/models/userModel/update';
+import userModelFindOne from '#server/models/userModel/findOne';
+
+const { auth: authConfig } = config;
+
+type AuthenticateErrorDetails = {
+    code: number,
+    user_message: string,
+};
 
 class AuthenticateError extends Error {
-    constructor(details, ...args) {
-        super(details.user_message, ...args);
+    details: AuthenticateErrorDetails;
+
+    constructor(details: AuthenticateErrorDetails) {
+        super(details.user_message);
+        Object.setPrototypeOf(this, AuthenticateError.prototype);
+
         this.details = details;
     }
 }
 
-async function authenticate(req) {
+async function authenticateUser(req) {
     const token = (req.headers && req.headers['x-access-token']) || req.query.accessToken;
 
     if (!token) {
@@ -30,7 +42,7 @@ async function authenticate(req) {
         });
     }
 
-    const user = await userModel.findOne(decoded.userId, {
+    const user = await userModelFindOne(decoded.userId, {
         extended: true,
         app: true,
     });
@@ -51,7 +63,7 @@ async function authenticate(req) {
     Sentry.setUser({ id: user.id });
 
     const now = new Date();
-    await userModel.update(user.id, {
+    await userModelUpdate(user.id, {
         last_access: now,
     });
 
@@ -66,7 +78,7 @@ function hasPermission(permissions, permission) {
         && permissions[entity][feature].allowed === true;
 }
 
-function checkPermissions(mode, permissions, req, res, next, respond) {
+function myCheckPermissions(mode, permissions, req, res, next, respond) {
     if (!req.user || !req.user.permissions || !permissions) {
         res.status(500).send({
             error: {
@@ -102,43 +114,48 @@ function checkPermissions(mode, permissions, req, res, next, respond) {
     }
 }
 
-module.exports = {
-    isSuperAdmin(req, res, next) {
-        if (req.user.role_id !== 'national_admin') {
-            return res.status(400).send({
-                user_message: 'Vous n\'avez pas les permissions pour accéder à cette route',
-            });
+export function isSuperAdmin(req, res, next) {
+    if (req.user.role_id !== 'national_admin') {
+        return res.status(400).send({
+            user_message: 'Vous n\'avez pas les permissions pour accéder à cette route',
+        });
+    }
+
+    return next();
+}
+
+export async function authenticate(req, res, next, respond = true) {
+    try {
+        const user = await authenticateUser(req);
+        req.user = user;
+        req.user.isAllowedTo = (feature, entity) => hasPermission(user.permissions, `${entity}.${feature}`);
+    } catch (error) {
+        if (respond !== true) {
+            throw error;
         }
 
-        return next();
-    },
+        res.status(400).send({
+            error: error.details,
+        });
+        return;
+    }
 
-    async authenticate(req, res, next, respond = true) {
-        try {
-            const user = await authenticate(req);
-            req.user = user;
-            req.user.isAllowedTo = (feature, entity) => hasPermission(user.permissions, `${entity}.${feature}`);
-        } catch (error) {
-            if (respond !== true) {
-                throw error;
-            }
+    if (respond === true) {
+        next();
+    }
+}
 
-            res.status(400).send({
-                error: error.details,
-            });
-            return;
-        }
+export function checkPermissions(permissions, req, res, next, respond = true) {
+    return myCheckPermissions('every', permissions, req, res, next, respond);
+}
 
-        if (respond === true) {
-            next();
-        }
-    },
+export function checkOneOrMorePermissions(permissions, req, res, next, respond = true) {
+    return myCheckPermissions('some', permissions, req, res, next, respond);
+}
 
-    checkPermissions(permissions, req, res, next, respond = true) {
-        return checkPermissions('every', permissions, req, res, next, respond);
-    },
-
-    checkOneOrMorePermissions(permissions, req, res, next, respond = true) {
-        return checkPermissions('some', permissions, req, res, next, respond);
-    },
+export default {
+    isSuperAdmin,
+    authenticate,
+    checkPermissions,
+    checkOneOrMorePermissions,
 };

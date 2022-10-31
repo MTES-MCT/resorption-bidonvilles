@@ -1,11 +1,12 @@
-const moment = require('moment');
-const { formatName } = require('#server/models/userModel');
-const mailService = require('#server/services/mailService');
-const {
-    wwwUrl, webappUrl, backUrl, blogUrl,
-} = require('#server/config');
+import moment from 'moment';
+import userModelFactory from '#server/models/userModel';
+import mailService from '#server/services/mailService';
+import config from '#server/config';
 
-const generateTrackingUTM = require('./generateTrackingUTM');
+import generateTrackingUTM from './generateTrackingUTM';
+
+const { formatName } = userModelFactory();
+const { wwwUrl, webappUrl, backUrl, blogUrl } = config;
 
 const formationUrl = 'https://app.evalandgo.com/s/index.php?id=JTk5aSU5M2slOTklQUI%3D&a=JTk2cCU5N2slOUElQjA%3D';
 const connexionUrl = `${webappUrl}/connexion`;
@@ -22,12 +23,22 @@ const USER_CAMPAIGN = 'utilisateur-email';
 const INVITE_CAMPAIGN = 'invite-email';
 const SUMMARY_CAMPAIGN = 'recap-activite-email';
 
-module.exports = {
+type MailOptions = {
+    preserveRecipient?: boolean,
+    variables?: { [key: string]: any },
+    replyTo?: {
+        email: string,
+        first_name: string,
+        last_name: string
+    }
+};
+
+export default {
     /**
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
      */
-    sendAdminAccessActivated: (recipient, options = {}) => {
+    sendAdminAccessActivated: (recipient, options: MailOptions = {}) => {
         const { preserveRecipient = false, variables } = options;
 
         const utm = generateTrackingUTM(ADMIN_CAMPAIGN, 'compte-active');
@@ -50,7 +61,7 @@ module.exports = {
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
      */
-    sendAdminAccessExpired: (recipient, options = {}) => {
+    sendAdminAccessExpired: (recipient, options: MailOptions = {}) => {
         const { variables, preserveRecipient = false } = options;
 
         const utm = generateTrackingUTM(ADMIN_CAMPAIGN, 'compte-non-active');
@@ -75,7 +86,7 @@ module.exports = {
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
      */
-    sendAdminContactMessage: (recipient, options = {}) => {
+    sendAdminContactMessage: (recipient, options: MailOptions = {}) => {
         const { variables, preserveRecipient = false, replyTo } = options;
 
         return mailService.send('admin_contact_message', {
@@ -95,7 +106,7 @@ module.exports = {
    * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
    * @param {Object} options
    */
-    sendAdminNewRequestNotification: (recipient, options = {}) => {
+    sendAdminNewRequestNotification: (recipient, options: MailOptions = {}) => {
         const { preserveRecipient = false, variables } = options;
 
         const utm = generateTrackingUTM(ADMIN_CAMPAIGN, 'nouvelle-demande-acces');
@@ -120,7 +131,7 @@ module.exports = {
    * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
    * @param {Object} options
    */
-    sendAdminRequestPendingReminder1: (recipient, options = {}) => {
+    sendAdminRequestPendingReminder1: (recipient, options: MailOptions = {}) => {
         const { preserveRecipient = false, variables } = options;
 
         const utm = generateTrackingUTM(
@@ -147,7 +158,7 @@ module.exports = {
    * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
    * @param {Object} options
    */
-    sendAdminRequestPendingReminder2: (recipient, options = {}) => {
+    sendAdminRequestPendingReminder2: (recipient, options: MailOptions = {}) => {
         const { preserveRecipient = false, variables } = options;
 
         const utm = generateTrackingUTM(
@@ -176,7 +187,7 @@ module.exports = {
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
      */
-    sendAdminWelcome: (recipient, options = {}) => {
+    sendAdminWelcome: (recipient, options: MailOptions = {}) => {
         const { preserveRecipient } = options;
 
         const utm = generateTrackingUTM(ADMIN_CAMPAIGN, 'bienvenue');
@@ -199,7 +210,7 @@ module.exports = {
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
      */
-    sendUserDemoInvitation: (recipient, options = {}) => {
+    sendUserDemoInvitation: (recipient, options: MailOptions = {}) => {
         const { preserveRecipient } = options;
 
         const utm = generateTrackingUTM(USER_CAMPAIGN, 'formation-invitation');
@@ -221,7 +232,7 @@ module.exports = {
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
      */
-    sendUserPlatformInvitation: (recipient, options = {}) => {
+    sendUserPlatformInvitation: (recipient, options: MailOptions = {}) => {
         const { variables, preserveRecipient } = options;
 
         const utm = generateTrackingUTM(INVITE_CAMPAIGN, 'decouvre-demande-acces');
@@ -245,7 +256,7 @@ module.exports = {
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
      */
-    sendUserShantytownActorInvitation: (recipient, options = {}) => {
+    sendUserShantytownActorInvitation: (recipient, options: MailOptions = {}) => {
         const { variables, preserveRecipient } = options;
 
         const utm = generateTrackingUTM(INVITE_CAMPAIGN, 'partage-demande-acces');
@@ -270,7 +281,7 @@ module.exports = {
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
      */
-    sendUserShantytownActorNotification: (recipient, options = {}) => {
+    sendUserShantytownActorNotification: (recipient, options: MailOptions = {}) => {
         const { variables, preserveRecipient } = options;
 
         const utm = generateTrackingUTM(USER_CAMPAIGN, 'invitation-intervenant');
@@ -296,7 +307,7 @@ module.exports = {
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
      */
-    sendUserAccessActivatedWelcome: (recipient, options = {}) => {
+    sendUserAccessActivatedWelcome: (recipient, options: MailOptions = {}) => {
         const { preserveRecipient } = options;
 
         const utm = generateTrackingUTM(USER_CAMPAIGN, 'bienvenue-connexion');
@@ -320,7 +331,7 @@ module.exports = {
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
      */
-    sendUserAccessDenied: (recipient, options = {}) => {
+    sendUserAccessDenied: (recipient, options: MailOptions = {}) => {
         const { variables, preserveRecipient, replyTo } = options;
 
         const utm = generateTrackingUTM(REQUESTER_CAMPAIGN, 'demande-refusee');
@@ -344,7 +355,7 @@ module.exports = {
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
      */
-    sendUserAccessExpired: (recipient, options = {}) => {
+    sendUserAccessExpired: (recipient, options: MailOptions = {}) => {
         const { preserveRecipient } = options;
 
         const utm = generateTrackingUTM(REQUESTER_CAMPAIGN, 'demande-expiree');
@@ -366,7 +377,7 @@ module.exports = {
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
      */
-    sendUserAccessGranted: (recipient, options = {}) => {
+    sendUserAccessGranted: (recipient, options: MailOptions = {}) => {
         const { variables, preserveRecipient } = options;
 
         const utm = generateTrackingUTM(REQUESTER_CAMPAIGN, 'activer-mon-compte');
@@ -391,7 +402,7 @@ module.exports = {
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
      */
-    sendUserAccessPending: (recipient, options = {}) => {
+    sendUserAccessPending: (recipient, options: MailOptions = {}) => {
         const { variables, preserveRecipient } = options;
 
         const utm = generateTrackingUTM(
@@ -419,7 +430,7 @@ module.exports = {
    * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
    * @param {Object} options
    */
-    sendUserAccessRequestConfirmation: (recipient, options = {}) => {
+    sendUserAccessRequestConfirmation: (recipient, options: MailOptions = {}) => {
         const { preserveRecipient } = options;
 
         const utm = generateTrackingUTM(
@@ -443,7 +454,7 @@ module.exports = {
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
      */
-    sendUserCommentDeletion: (recipient, options = {}) => {
+    sendUserCommentDeletion: (recipient, options: MailOptions = {}) => {
         const { variables, preserveRecipient } = options;
 
         return mailService.send('user_comment_deletion', {
@@ -463,7 +474,7 @@ module.exports = {
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
      */
-    sendUserFeatures: (recipient, options = {}) => {
+    sendUserFeatures: (recipient, options: MailOptions = {}) => {
         const { preserveRecipient } = options;
 
         const utm = generateTrackingUTM(USER_CAMPAIGN, '4S-connexion');
@@ -485,7 +496,7 @@ module.exports = {
    * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
    * @param {Object} options
    */
-    sendUserIdealcoInvitation: (recipient, options = {}) => {
+    sendUserIdealcoInvitation: (recipient, options: MailOptions = {}) => {
         const { preserveRecipient } = options;
 
         const utm = generateTrackingUTM(USER_CAMPAIGN, '3S-idealco');
@@ -507,7 +518,7 @@ module.exports = {
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
      */
-    sendUserNewComment: (recipient, options = {}) => {
+    sendUserNewComment: (recipient, options: MailOptions = {}) => {
         const { variables, preserveRecipient = false } = options;
 
         const utm = generateTrackingUTM(USER_CAMPAIGN, 'nouveau-commentaire');
@@ -549,7 +560,7 @@ module.exports = {
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
      */
-    sendUserNewPlanComment: (recipient, options = {}) => {
+    sendUserNewPlanComment: (recipient, options: MailOptions = {}) => {
         const { variables, preserveRecipient = false } = options;
 
         const utm = generateTrackingUTM(USER_CAMPAIGN, 'nouveau-commentaire-action');
@@ -579,7 +590,7 @@ module.exports = {
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
      */
-    sendUserNewPassword: (recipient, options = {}) => {
+    sendUserNewPassword: (recipient, options: MailOptions = {}) => {
         const { variables, preserveRecipient } = options;
 
         return mailService.send('user_new_password', {
@@ -598,7 +609,7 @@ module.exports = {
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
      */
-    sendUserReview: (recipient, options = {}) => {
+    sendUserReview: (recipient, options: MailOptions = {}) => {
         const { preserveRecipient } = options;
         const utm = generateTrackingUTM(USER_CAMPAIGN, '12S-votre-avis');
 
@@ -620,7 +631,7 @@ module.exports = {
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
      */
-    sendUserShantytownDeclared: (recipient, options = {}) => {
+    sendUserShantytownDeclared: (recipient, options: MailOptions = {}) => {
         const { variables, preserveRecipient } = options;
         const utm = {
             regular: generateTrackingUTM(USER_CAMPAIGN, `dep${variables.departement.code}-nouveau-site`),
@@ -648,7 +659,7 @@ module.exports = {
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
      */
-    sendUserShantytownClosed: (recipient, options = {}) => {
+    sendUserShantytownClosed: (recipient, options: MailOptions = {}) => {
         const { variables, preserveRecipient } = options;
         const utm = {
             regular: generateTrackingUTM(USER_CAMPAIGN, `dep${variables.departement.code}-site-ferme`),
@@ -676,7 +687,7 @@ module.exports = {
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
      */
-    sendUserShare: (recipient, options = {}) => {
+    sendUserShare: (recipient, options: MailOptions = {}) => {
         const { preserveRecipient } = options;
 
         const utm = generateTrackingUTM(USER_CAMPAIGN, '8S-partage-plateforme');
@@ -698,7 +709,7 @@ module.exports = {
      * @param {User} recipient
      * @param {Object} options
      */
-    sendContactNewsletterRegistration(recipient, options = {}) {
+    sendContactNewsletterRegistration(recipient, options: MailOptions = {}) {
         const { variables, preserveRecipient, replyTo } = options;
 
         return mailService.send('contact_newsletter_registration', {
@@ -713,7 +724,7 @@ module.exports = {
         });
     },
 
-    sendActivitySummary(recipient, options = {}) {
+    sendActivitySummary(recipient, options: MailOptions = {}) {
         const { variables, preserveRecipient = false } = options;
 
         const utm = generateTrackingUTM(SUMMARY_CAMPAIGN, variables.campaign);

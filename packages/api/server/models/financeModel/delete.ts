@@ -1,6 +1,6 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-module.exports = (planId, transaction = undefined) => {
+export default (planId, transaction = undefined) => {
     sequelize.query(
         'DELETE FROM finances WHERE fk_plan = :planId',
         {

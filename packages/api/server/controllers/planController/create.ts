@@ -1,4 +1,4 @@
-const createPlan = require('#server/services/plan/create');
+import createPlan from '#server/services/plan/create';
 
 const ERROR_RESPONSES = {
     departement_read_error: {
@@ -19,7 +19,7 @@ const ERROR_RESPONSES = {
     },
 };
 
-module.exports = async (req, res, next) => {
+export default async (req, res, next) => {
     let plan;
 
     try {

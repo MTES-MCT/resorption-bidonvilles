@@ -1,15 +1,15 @@
-const { Document, Packer } = require('docx');
-const logos = require('./export/section_logos');
-const context = require('./export/1_section_context');
-const people = require('./export/section_people');
-const livingConditions = require('./export/2_section_living_conditions');
-const actors = require('./export/option_section_actors');
-const plans = require('./export/option_section_plans');
-const justiceProcedure = require('./export/option_justice_procedure');
-const comments = require('./export/option_section_comments');
-const changelog = require('./export/option_section_changelog');
+import { Document, Packer } from 'docx';
+import logos from './export/section_logos';
+import context from './export/1_section_context';
+import people from './export/section_people';
+import livingConditions from './export/2_section_living_conditions';
+import actors from './export/option_section_actors';
+import plans from './export/option_section_plans';
+import justiceProcedure from './export/option_justice_procedure';
+import comments from './export/option_section_comments';
+import changelog from './export/option_section_changelog';
 
-module.exports = (user, shantytown, options) => {
+export default (user, shantytown, options) => {
     const sections = [
         logos(),
         context(user, shantytown),

@@ -1,5 +1,5 @@
-const getLatest = require('./getLatest');
+import getLatest from './getLatest';
 
-module.exports = {
+export default () => ({
     getLatest,
-};
+});

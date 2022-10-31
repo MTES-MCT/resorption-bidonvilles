@@ -1,4 +1,4 @@
 /* eslint-disable newline-per-chained-call */
-const newUser = require('./common/newUser');
+import newUser from './common/newUser';
 
-module.exports = newUser();
+export default newUser();

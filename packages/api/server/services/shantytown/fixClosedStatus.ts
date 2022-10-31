@@ -1,9 +1,11 @@
-const shantytownModel = require('#server/models/shantytownModel');
-const ServiceError = require('#server/errors/ServiceError');
-const permissionUtils = require('#server/utils/permission');
+import shantytownModelFactory from '#server/models/shantytownModel';
+import ServiceError from '#server/errors/ServiceError';
+import permissionUtils from '#server/utils/permission';
+
+const shantytownModel = shantytownModelFactory();
 
 
-module.exports = async (user, data) => {
+export default async (user, data) => {
     if (!permissionUtils.can(user).do('fix_status', 'shantytown').on(data.shantytown)) {
         throw new ServiceError('permission_denied', new Error('Vous n\'avez pas la permission de modifier le statut d\'un site fermé'));
     }

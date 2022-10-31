@@ -1,6 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = shantytown => sequelize.query(
+export default shantytown => sequelize.query(
     `
        SELECT organizations.organization_id AS id
          FROM organizations
@@ -8,7 +9,7 @@ module.exports = shantytown => sequelize.query(
         WHERE     organization_types.uid IN (:types)
               AND (organizations.fk_region = :region OR organizations.fk_departement = :departement)`,
     {
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
         replacements: {
             types: ['pref_departement', 'pref_region', 'ddets'],
             region: shantytown.region.code,

@@ -1,6 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async (shantytownId, commentId, isPrivate) => {
+export default async (shantytownId, commentId, isPrivate) => {
     if (isPrivate) {
         return sequelize.query(
             `WITH constants(departement) AS
@@ -53,7 +54,7 @@ module.exports = async (shantytownId, commentId, isPrivate) => {
                     WHERE email_subscription = 'comment_notification'
                 )`,
             {
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 replacements: {
                     shantytownId,
                     commentId,
@@ -104,7 +105,7 @@ module.exports = async (shantytownId, commentId, isPrivate) => {
             WHERE email_subscription = 'comment_notification'
         )`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 shantytownId,
                 commentId,

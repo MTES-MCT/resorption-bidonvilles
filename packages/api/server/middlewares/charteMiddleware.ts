@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     async check(req, res, next, respond = true) {
         if (req.user.charte_engagement_a_jour === false) {
             if (respond === true) {

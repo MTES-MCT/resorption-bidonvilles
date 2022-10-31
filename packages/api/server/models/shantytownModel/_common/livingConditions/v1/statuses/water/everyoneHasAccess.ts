@@ -1,4 +1,4 @@
-module.exports = (town) => {
+export default (town) => {
     if (town.waterEveryoneHasAccess === null) {
         return null;
     }

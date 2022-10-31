@@ -1,5 +1,5 @@
-const EMAIL_SUBSCRIPTIONS = require('#server/config/email_subscriptions');
-const serializeUserAccess = require('./serializeUserAccess');
+import EMAIL_SUBSCRIPTIONS from '#server/config/email_subscriptions';
+import serializeUserAccess from './serializeUserAccess';
 
 /**
  * @typedef {Object} UserFilters
@@ -13,7 +13,7 @@ const serializeUserAccess = require('./serializeUserAccess');
  * - auth data is any private authentication material: password, salt...
  */
 
-module.exports = (user, latestCharte, filters, permissionMap) => {
+export default (user, latestCharte, filters, permissionMap) => {
     const serialized = {
         id: user.id,
         first_name: user.first_name,

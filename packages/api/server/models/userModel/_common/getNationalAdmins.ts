@@ -1,11 +1,15 @@
-const query = require('./query');
+import query from './query';
 
-module.exports = () => query([
+export default () => query([
     {
-        fk_role: ['national_admin'],
+        fk_role: {
+            value: ['national_admin'],
+        }
     },
     {
-        fk_status: ['active'],
+        fk_status: {
+            value: ['active'],
+        }
     },
     {
         organization_active: {

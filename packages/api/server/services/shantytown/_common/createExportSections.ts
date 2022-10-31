@@ -1,4 +1,4 @@
-module.exports = (user, data, properties, closedTowns, closingSolutions) => {
+export default (user, data, properties, closedTowns, closingSolutions) => {
     const options = data.options ? data.options.split(',') : [];
     const sections = [];
 

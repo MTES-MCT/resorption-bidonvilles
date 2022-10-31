@@ -1,6 +1,6 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-module.exports = (attachments, userPermissionId, transaction) => Promise.all(
+export default (attachments, userPermissionId, transaction) => Promise.all(
     attachments.map(attachment => sequelize.query(
         `INSERT INTO user_permission_attachments(fk_user_permission, fk_region, fk_departement, fk_epci, fk_city, fk_shantytown, fk_plan)
             VALUES (:permission_id, :region, :departement, :epci, :city, :shantytown, :plan)`,

@@ -1,7 +1,9 @@
-const JSONToCSV = require('json2csv');
-const userModel = require('#server/models/userModel');
+import JSONToCSV from 'json2csv';
+import userModelFactory from '#server/models/userModel';
 
-module.exports = async (req, res) => {
+const userModel = userModelFactory();
+
+export default async (req, res) => {
     try {
         const users = await userModel.listExport();
         const csv = JSONToCSV.parse(users);

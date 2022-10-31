@@ -1,11 +1,11 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
 /**
  * @param {Number} commentId
  * @param {String} commentTagId
  * @returns
  */
-module.exports = (commentId, commentTagIds, transaction = undefined) => sequelize.getQueryInterface().bulkInsert(
+export default (commentId, commentTagIds, transaction = undefined) => sequelize.getQueryInterface().bulkInsert(
     'shantytown_comment_tags',
     commentTagIds.map(comment_tag_id => ({
         fk_shantytown_comment: commentId,

@@ -1,7 +1,7 @@
-const create = require('./create');
-const getTagsForComments = require('./getTagsForComments');
+import create from './create';
+import getTagsForComments from './getTagsForComments';
 
-module.exports = {
+export default () => ({
     create,
     getTagsForComments,
-};
+});

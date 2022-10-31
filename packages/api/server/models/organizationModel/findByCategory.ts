@@ -1,6 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async (categoryUid, search = null) => {
+export default async (categoryUid, search = null) => {
     const rows = await sequelize.query(
         `SELECT
                 organizations.organization_id AS id,
@@ -27,7 +28,7 @@ module.exports = async (categoryUid, search = null) => {
                 ASC,
                 departement_code ASC, REPLACE(region_name, 'Î', 'I') ASC, epci_name ASC, city_name ASC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 categoryUid,
                 search: `%${search}%`,
@@ -35,7 +36,7 @@ module.exports = async (categoryUid, search = null) => {
         },
     );
 
-    return rows.map(row => ({
+    return rows.map((row: any) => ({
         id: row.id,
         name: row.name,
         abbreviation: row.abbreviation,

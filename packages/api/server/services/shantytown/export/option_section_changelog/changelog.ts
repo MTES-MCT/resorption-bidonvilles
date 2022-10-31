@@ -2,7 +2,7 @@ const {
     TableRow, TableCell, Paragraph, TextRun,
 } = require('docx');
 
-module.exports = (date, author, field, oldValue, newValue) => new TableRow({
+export default (date, author, field, oldValue, newValue) => new TableRow({
     children: [
         new TableCell({
             children: [

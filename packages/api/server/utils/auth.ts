@@ -1,8 +1,8 @@
-const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
-const {
-    webappUrl, auth: authConfig, activationTokenExpiresIn, passwordResetDuration,
-} = require('#server/config');
+import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
+import config from '#server/config';
+
+const { webappUrl, auth: authConfig, activationTokenExpiresIn, passwordResetDuration } = config;
 
 /**
  * Generates an access token for the given user
@@ -28,7 +28,7 @@ function generateAccessTokenFor(user, type = 'default', expiresIn = null) {
     );
 }
 
-module.exports = {
+export default {
     generateAccessTokenFor,
 
     /**
@@ -62,7 +62,7 @@ module.exports = {
     getAccountActivationLink(userAccessId, expiresAt = null) {
         let expiresIn = activationTokenExpiresIn;
         if (expiresAt !== null) {
-            expiresIn = Math.round((expiresAt.getTime() - Date.now()) / 1000);
+            expiresIn = Math.round((expiresAt.getTime() - Date.now()) / 1000).toString();
         }
 
         const token = jwt.sign(

@@ -1,14 +1,25 @@
-const { isEmail } = require('validator');
-const checkPassword = require('#server/controllers/userController/helpers/checkPassword');
-const userModel = require('#server/models/userModel');
-const organizationCategoryModel = require('#server/models/organizationCategoryModel');
-const organizationTypeModel = require('#server/models/organizationTypeModel');
-const organizationModel = require('#server/models/organizationModel');
-const departementModel = require('#server/models/departementModel');
+import validator from 'validator';
+import checkPassword from '#server/controllers/userController/helpers/checkPassword';
+import userModelFactory from '#server/models/userModel';
+import organizationCategoryModelFactory from '#server/models/organizationCategoryModel';
+import organizationTypeModelFactory from '#server/models/organizationTypeModel';
+import organizationModelFactory from '#server/models/organizationModel';
+import departementModelFactory from '#server/models/departementModel';
+
+const { isEmail } = validator;
+const userModel = userModelFactory();
+const organizationTypeModel = organizationTypeModelFactory();
+const organizationCategoryModel = organizationCategoryModelFactory();
+const organizationModel = organizationModelFactory();
+const departementModel = departementModelFactory();
 
 class MultipleError extends Error {
-    constructor(messages, ...args) {
-        super('Plusieurs erreurs sont survenues', ...args);
+    messages: string[];
+
+    constructor(messages: string[]) {
+        super('Plusieurs erreurs sont survenues');
+        Object.setPrototypeOf(this, MultipleError.prototype);
+
         this.messages = messages;
     }
 }
@@ -261,7 +272,7 @@ const validators = {
     },
 };
 
-module.exports = async function validate(data, fields) {
+export default async function validate(data, fields) {
     const errors = {};
 
     for (let i = 0; i < fields.length; i += 1) {

@@ -2,9 +2,9 @@ const {
     Paragraph, TextRun, SectionType,
 } = require('docx');
 
-const heading = require('./heading');
+import heading from './heading';
 
-module.exports = shantytown => ({
+export default shantytown => ({
     properties: {
         type: SectionType.CONTINUOUS,
     },

@@ -1,7 +1,8 @@
-const getAddressSimpleOf = require('./getAddressSimpleOf');
+import getAddressSimpleOf from './getAddressSimpleOf';
 
-module.exports = (shantytown) => {
+export default (shantytown) => {
     const addressSimple = shantytown.addressSimple || getAddressSimpleOf(shantytown.address);
+
     // process usename
     if (shantytown.name) {
         let aka;

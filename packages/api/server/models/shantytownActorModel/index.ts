@@ -1,12 +1,12 @@
-const serializeActor = require('./serializeActor');
-const findAll = require('./findAll');
-const findAllByLocation = require('./findAllByLocation');
-const addActor = require('./addActor');
-const removeActor = require('./removeActor');
-const updateThemes = require('./updateThemes');
-const removeTheme = require('./removeTheme');
+import serializeActor from './serializeActor';
+import findAll from './findAll';
+import findAllByLocation from './findAllByLocation';
+import addActor from './addActor';
+import removeActor from './removeActor';
+import updateThemes from './updateThemes';
+import removeTheme from './removeTheme';
 
-module.exports = {
+export default () => ({
     serializeActor,
     findAll,
     findAllByLocation,
@@ -14,4 +14,4 @@ module.exports = {
     removeActor,
     updateThemes,
     removeTheme,
-};
+});

@@ -1,24 +1,26 @@
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
-const { serialized: fakeUser } = require('#test/utils/user');
+import chai from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
 
 const { expect } = chai;
 chai.use(sinonChai);
 
-const {
-    paris,
-} = require('#test/utils/location');
-const { serialized: fakeShantytown } = require('#test/utils/shantytown');
-const shantytownModel = require('#server/models/shantytownModel');
-const ServiceError = require('#server/errors/ServiceError');
+import userUtils from '#test/utils/user';
+import locationUtils from '#test/utils/location';
+import shantytownUtils from '#test/utils/shantytown';
+import shantytownModelFactory from '#server/models/shantytownModel';
+import ServiceError from '#server/errors/ServiceError';
 
-const fixClosedStatusService = require('./fixClosedStatus');
+import fixClosedStatusService from './fixClosedStatus';
 
+const { serialized: fakeUser } = userUtils;
+const { paris } = locationUtils;
+const { serialized: fakeShantytown } = shantytownUtils;
+const shantytownModel = shantytownModelFactory();
 
 describe.only('services/shantytown', () => {
     describe('fixClosedStatus()', () => {
-        const user = fakeUser();
+        const user: any = fakeUser();
         user.permissions.shantytown.fix_status = {
             allowed: true,
             allow_all: true,

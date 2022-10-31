@@ -1,13 +1,18 @@
-const validator = require('validator');
-const shantytownModel = require('#server/models/shantytownModel');
-const shantytownCommentModel = require('#server/models/shantytownCommentModel');
-const userModel = require('#server/models/userModel');
-const mails = require('#server/mails/mails');
-const permissionUtils = require('#server/utils/permission');
-const { fromTsToFormat: tsToString } = require('#server/utils/date');
-const ServiceError = require('#server/errors/ServiceError');
+import validator from 'validator';
+import shantytownModelFactory from '#server/models/shantytownModel';
+import shantytownCommentModelFactory from '#server/models/shantytownCommentModel';
+import userModelFactory from '#server/models/userModel';
+import mails from '#server/mails/mails';
+import permissionUtils from '#server/utils/permission';
+import dateUtils from '#server/utils/date';
+import ServiceError from '#server/errors/ServiceError';
 
-module.exports = async (user, shantytownId, commentId, deletionMessage) => {
+const shantytownModel = shantytownModelFactory();
+const shantytownCommentModel = shantytownCommentModelFactory();
+const userModel = userModelFactory();
+const { fromTsToFormat: tsToString } = dateUtils;
+
+export default async (user, shantytownId, commentId, deletionMessage) => {
     let town;
     try {
         town = await shantytownModel.findOne(user, shantytownId);

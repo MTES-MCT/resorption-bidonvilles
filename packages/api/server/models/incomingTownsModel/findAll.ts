@@ -1,10 +1,13 @@
-const sequelize = require('#db/sequelize');
-const { where } = require('#server/utils/permission');
-const getAddressSimpleOf = require('#server/models/shantytownModel/_common/getAddressSimpleOf');
-const getUsenameOf = require('#server/models/shantytownModel/_common/getUsenameOf');
-const stringifyWhereClause = require('#server/models/_common/stringifyWhereClause');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
+import permissionUtils from '#server/utils/permission';
+import getAddressSimpleOf from '#server/models/shantytownModel/_common/getAddressSimpleOf';
+import getUsenameOf from '#server/models/shantytownModel/_common/getUsenameOf';
+import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
 
-module.exports = async (user, shantytownIds) => {
+const { where } = permissionUtils;
+
+export default async (user, shantytownIds) => {
     const clauseGroup = where().can(user).do('list', 'shantytown');
     if (clauseGroup === null) {
         return [];
@@ -30,7 +33,7 @@ module.exports = async (user, shantytownIds) => {
         LEFT JOIN regions ON departements.fk_region = regions.code
         WHERE ${whereClauses.join(' AND ')}`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 ...replacements,
                 ids: shantytownIds,
@@ -38,7 +41,7 @@ module.exports = async (user, shantytownIds) => {
         },
     );
 
-    return raw.map(row => ({
+    return raw.map((row: any) => ({
         shantytownId: row.shantytownId,
         id: row.incomingTownId,
         name: row.name,

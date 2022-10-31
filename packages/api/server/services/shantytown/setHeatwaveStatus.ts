@@ -1,8 +1,9 @@
-const shantytownModel = require('#server/models/shantytownModel');
-const ServiceError = require('#server/errors/ServiceError');
+import shantytownModelFactory from '#server/models/shantytownModel';
+import ServiceError from '#server/errors/ServiceError';
 
+const shantytownModel = shantytownModelFactory();
 
-module.exports = async (user, data) => {
+export default async (user, data) => {
     try {
         await shantytownModel.setHeatwaveStatus(
             data.shantytown.id,

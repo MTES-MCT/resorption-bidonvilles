@@ -1,18 +1,21 @@
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
+import chai from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
+
+import { mockReq, mockRes } from 'sinon-express-mock';
+import userUtils from '#test/utils/user';
+
+import shantytownModelFactory from '#server/models/shantytownModel';
+
+import edit from '#server/controllers/townController/edit';
 
 const { expect } = chai;
 chai.use(sinonChai);
-const { mockReq, mockRes } = require('sinon-express-mock');
-const { serialized: generateUser } = require('#test/utils/user');
-
-const shantytownModel = require('#server/models/shantytownModel');
-
-const edit = require('#server/controllers/townController/edit');
+const { serialized: generateUser } = userUtils;
+const shantytownModel = shantytownModelFactory();
 
 describe.only('townController.edit()', () => {
-    const dependencies = {
+    const dependencies: any = {
         update: undefined,
         findOne: undefined,
     };
@@ -21,7 +24,7 @@ describe.only('townController.edit()', () => {
         dependencies.findOne = sinon.stub(shantytownModel, 'findOne');
     });
     afterEach(() => {
-        Object.values(dependencies).forEach(stub => stub && stub.restore());
+        Object.values(dependencies).forEach((stub: any) => stub && stub.restore());
     });
 
     describe('Si les requêtes en base de données fonctionnent correctement', () => {

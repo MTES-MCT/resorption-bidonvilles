@@ -1,6 +1,6 @@
-const computeStatus = require('./computeStatus');
-const diagnostic = require('./fire_prevention/diagnostic');
+import computeStatus from './computeStatus';
+import diagnostic from './fire_prevention/diagnostic';
 
-module.exports = town => computeStatus(town, {
+export default town => computeStatus(town, {
     diagnostic,
 });

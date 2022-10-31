@@ -1,3 +1,3 @@
-const moment = require('moment');
+import moment from 'moment';
 
-module.exports = (date, format) => moment(date * 1000).utcOffset(2).locale('fr').format(format);
+export default (date, format) => moment(date * 1000).utcOffset(2).locale('fr').format(format);

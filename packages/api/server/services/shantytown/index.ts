@@ -1,17 +1,17 @@
-const create = require('./create');
-const list = require('./list');
-const find = require('./find');
-const findAllByActor = require('./findAllByActor');
-const findByNavigationLog = require('./findByNavigationLog');
-const close = require('./close');
-const deleteTown = require('./deleteTown');
-const deleteComment = require('./deleteComment');
-const exportTown = require('./exportTown');
-const createCovidComment = require('./createCovidComment');
-const fixClosedStatus = require('./fixClosedStatus');
-const setHeatwaveStatus = require('./setHeatwaveStatus');
+import create from './create';
+import list from './list';
+import find from './find';
+import findAllByActor from './findAllByActor';
+import findByNavigationLog from './findByNavigationLog';
+import close from './close';
+import deleteTown from './deleteTown';
+import deleteComment from './deleteComment';
+import exportTown from './exportTown';
+import createCovidComment from './createCovidComment';
+import fixClosedStatus from './fixClosedStatus';
+import setHeatwaveStatus from './setHeatwaveStatus';
 
-module.exports = {
+export default {
     create,
     list,
     find,

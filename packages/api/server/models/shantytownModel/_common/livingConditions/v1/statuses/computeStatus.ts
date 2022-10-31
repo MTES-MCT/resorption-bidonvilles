@@ -1,4 +1,4 @@
-module.exports = (mainValue, details, inverted = false) => {
+export default (mainValue, details, inverted = false) => {
     if (mainValue === null) {
         return 'unknown';
     }

@@ -1,9 +1,12 @@
 /* eslint-disable newline-per-chained-call */
-const { body, param } = require('express-validator');
-const shantytownModel = require('#server/models/shantytownModel');
-const closingSolutionModel = require('#server/models/closingSolutionModel');
+import { body, param } from 'express-validator';
+import shantytownModeFactory from '#server/models/shantytownModel';
+import closingSolutionModelFactory from '#server/models/closingSolutionModel';
 
-module.exports = [
+const shantytownModel = shantytownModeFactory();
+const closingSolutionModel = closingSolutionModelFactory();
+
+export default [
     param('id')
         .toInt()
         .isInt().bail().withMessage('L\'identifiant du site est invalide')

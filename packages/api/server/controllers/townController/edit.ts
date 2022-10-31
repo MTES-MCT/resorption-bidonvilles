@@ -1,6 +1,8 @@
-const shantytownModel = require('#server/models/shantytownModel');
+import shantytownModelFactory from '#server/models/shantytownModel';
 
-module.exports = async (req, res, next) => {
+const shantytownModel = shantytownModelFactory();
+
+export default async (req, res, next) => {
     try {
         await shantytownModel.update(
             req.user,

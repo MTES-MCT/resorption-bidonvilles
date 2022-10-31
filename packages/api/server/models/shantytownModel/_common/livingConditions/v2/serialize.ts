@@ -1,6 +1,6 @@
-const getLivingConditionsStatuses = require('./statuses/main');
+import getLivingConditionsStatuses from './statuses/main';
 
-module.exports = (town) => {
+export default (town) => {
     const livingConditions = {
         version: town.livingConditionsVersion,
         electricity: {

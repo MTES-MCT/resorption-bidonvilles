@@ -1,6 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = () => sequelize.query(
+export default () => sequelize.query(
     `SELECT
         owner_types.owner_type_id AS id,
         owner_types.label AS label,
@@ -8,6 +9,6 @@ module.exports = () => sequelize.query(
     FROM owner_types
     ORDER BY position ASC`,
     {
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
     },
 );

@@ -1,8 +1,9 @@
-const shantytownModel = require('#server/models/shantytownModel');
-const ServiceError = require('#server/errors/ServiceError');
+import shantytownModelFactory from '#server/models/shantytownModel';
+import ServiceError from '#server/errors/ServiceError';
 
+const shantytownModel = shantytownModelFactory();
 
-module.exports = async (user, shantytown_id) => {
+export default async (user, shantytown_id) => {
     // check if the town exists
     let town;
     try {

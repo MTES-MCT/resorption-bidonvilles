@@ -1,7 +1,9 @@
-const sequelize = require('#db/sequelize');
-const serializeElectricityType = require('./_common/serializeElectricityType');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async () => {
+import serializeElectricityType from './_common/serializeElectricityType';
+
+export default async () => {
     const electricityTypes = await sequelize.query(
         `SELECT
             electricity_types.electricity_type_id AS id,
@@ -11,7 +13,7 @@ module.exports = async () => {
         FROM electricity_types
         ORDER BY position ASC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 

@@ -1,5 +1,5 @@
-const create = require('./create');
+import create from './create';
 
-module.exports = {
+export default () => ({
     create,
-};
+});

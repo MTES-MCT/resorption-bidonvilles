@@ -1,8 +1,10 @@
-const sequelize = require('#db/sequelize');
-const { backUrl } = require('#server/config');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
+import config from '#server/config';
 
-module.exports = async () => {
-    const rows = await sequelize.query(
+const { backUrl } = config;
+export default async () => {
+    const rows: any = await sequelize.query(
         `SELECT
             version,
             fichier
@@ -10,7 +12,7 @@ module.exports = async () => {
         ORDER BY version DESC
         LIMIT 1`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 

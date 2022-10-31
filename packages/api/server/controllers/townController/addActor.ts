@@ -1,13 +1,15 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-const shantytownActorModel = require('#server/models/shantytownActorModel');
-const { triggerDeclaredActor, triggerInvitedActor } = require('#server/utils/mattermost');
-const {
-    sendUserShantytownActorNotification,
-} = require('#server/mails/mails');
-const { formatName } = require('#server/models/userModel');
+import shantytownActorModelFactory from '#server/models/shantytownActorModel';
+import mattermostUtils from '#server/utils/mattermost';
+import mailsUtils from '#server/mails/mails';
+import userModelFactory from '#server/models/userModel';
 
-module.exports = async (req, res, next) => {
+const shantytownActorModel = shantytownActorModelFactory();
+const { triggerDeclaredActor, triggerInvitedActor } = mattermostUtils;
+const { sendUserShantytownActorNotification } = mailsUtils;
+const userModel = userModelFactory();
+export default async (req, res, next) => {
     // if the actor to be added is the current user, proceed
     if (req.body.user.id === req.user.id) {
         let actors;
@@ -48,7 +50,7 @@ module.exports = async (req, res, next) => {
     try {
         await sendUserShantytownActorNotification(req.body.user, {
             variables: {
-                inviterName: formatName(req.user),
+                inviterName: userModel.formatName(req.user),
                 shantytown: req.shantytown,
             },
         });

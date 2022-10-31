@@ -1,6 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async (departement) => {
+export default async (departement) => {
     const rows = await sequelize.query(
         `
             SELECT 
@@ -15,12 +16,12 @@ module.exports = async (departement) => {
             GROUP BY year, type
         `,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 
     // transforms rows in a mapping { 2020: {[type]: total}}
-    return rows.reduce((acc, obj) => ({
+    return rows.reduce((acc, obj: any) => ({
         ...acc,
         [obj.year]: {
             ...(acc[obj.year] || {}),

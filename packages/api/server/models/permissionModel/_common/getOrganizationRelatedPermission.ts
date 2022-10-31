@@ -1,6 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async (feature, entity, organizationId, transaction = undefined) => {
+export default async (feature, entity, organizationId, transaction = undefined) => {
     const rows = await sequelize.query(
         `SELECT
             upo.user_permission_id,
@@ -14,7 +15,7 @@ module.exports = async (feature, entity, organizationId, transaction = undefined
         LEFT JOIN role_permissions rp ON (rp.fk_role_regular = ot.fk_role AND rp.fk_feature = :feature AND rp.fk_entity = :entity)
         WHERE o.organization_id = :organizationId`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 feature,
                 entity,
@@ -30,7 +31,7 @@ module.exports = async (feature, entity, organizationId, transaction = undefined
 
     const {
         user_permission_id, allow_all, allowed, role_allow_all, role_allowed,
-    } = rows[0];
+    }: any = rows[0];
 
     let userPermission = null;
     if (user_permission_id !== null) {

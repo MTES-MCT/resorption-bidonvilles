@@ -2,7 +2,7 @@ const {
     AlignmentType, Paragraph, ShadingType, TextRun,
 } = require('docx');
 
-module.exports = text => new Paragraph({
+export default text => new Paragraph({
     alignment: AlignmentType.CENTER,
     shading: {
         type: ShadingType.SOLID,

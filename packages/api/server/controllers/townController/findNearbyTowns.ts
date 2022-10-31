@@ -1,6 +1,8 @@
-const { findNearby } = require('#server/models/shantytownModel');
+import shantytownModelFactory from '#server/models/shantytownModel';
 
-module.exports = () => async (req, res, next) => {
+const { findNearby } = shantytownModelFactory();
+
+export default () => async (req, res, next) => {
     try {
         const { latitude, longitude } = req.query;
         const distance = 0.5;

@@ -1,16 +1,21 @@
-const sequelize = require('#db/sequelize');
-const { fromGeoLevelToTableName } = require('#server/utils/geo');
-const userModel = require('#server/models/userModel');
-const { restrict } = require('#server/utils/permission');
-const getUsenameOf = require('./_common/getUsenameOf');
-const serializeShantytown = require('./_common/serializeShantytown');
-const getDiff = require('./_common/getDiff');
-const SQL = require('./_common/SQL');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize'
+import geoUtils from '#server/utils/geo';
+import userModelFactory from '#server/models/userModel';
+import permissionUtils from '#server/utils/permission';
+import getUsenameOf from './_common/getUsenameOf';
+import serializeShantytown from './_common/serializeShantytown';
+import getDiff from './_common/getDiff';
+import SQL from './_common/SQL';
 
-module.exports = async (user, location, shantytownFilter, numberOfActivities, lastDate, maxDate) => {
+const { fromGeoLevelToTableName } = geoUtils;
+const { restrict } = permissionUtils;
+const userModel = userModelFactory();
+
+export default async (user, location, shantytownFilter, numberOfActivities, lastDate, maxDate) => {
     // apply geographic level restrictions
     const where = [];
-    const replacements = {
+    const replacements: any = {
         maxDate,
         userId: user.id,
     };
@@ -137,14 +142,14 @@ module.exports = async (user, location, shantytownFilter, numberOfActivities, la
             ${limit}
             `,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements,
         },
     );
     const listOldestVersions = [];
     const listIdOldestVersions = [];
     // on récupère pour chaque bidonville la plus vieille version existante qui n'est pas une création
-    activities.reverse().forEach((activity) => {
+    activities.reverse().forEach((activity: any) => {
         if (!(listIdOldestVersions.includes(activity.id)) && (activity.date - activity.created_at > 10)) {
             listIdOldestVersions.push(activity.id);
         }
@@ -174,7 +179,7 @@ module.exports = async (user, location, shantytownFilter, numberOfActivities, la
                )
             `,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements,
         },
     );
@@ -182,14 +187,14 @@ module.exports = async (user, location, shantytownFilter, numberOfActivities, la
     const previousVersions = {};
 
     // eslint-disable-next-line array-callback-return
-    queryPreviousVersions.map((activity) => {
+    queryPreviousVersions.map((activity: any) => {
         const serializedShantytown = serializeShantytown(activity, user);
         previousVersions[activity.id] = serializedShantytown;
     });
 
     return activities
-        .map((activity) => {
-            const o = {
+        .map((activity: any) => {
+            const o: any = {
                 entity: 'shantytown',
                 action: null,
                 date: activity.date.getTime() / 1000,

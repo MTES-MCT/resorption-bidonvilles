@@ -1,14 +1,14 @@
-const sequelize = require('#db/sequelize');
-
-module.exports = async () => {
-    const changelogs = await sequelize.query(
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
+export default async () => {
+    const changelogs: any = await sequelize.query(
         `SELECT
             changelogs.app_version
         FROM changelogs
         ORDER BY regexp_split_to_array(changelogs.app_version, '\\.')::int[] DESC
         LIMIT 1`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 

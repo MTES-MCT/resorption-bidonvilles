@@ -1,6 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async () => sequelize.query(
+export default async () => sequelize.query(
     `
         SELECT COUNT(*) AS total, fk_departement
         FROM shantytowns 
@@ -10,6 +11,6 @@ module.exports = async () => sequelize.query(
         ORDER BY fk_departement
         `,
     {
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
     },
 );

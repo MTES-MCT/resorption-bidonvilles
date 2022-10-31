@@ -1,9 +1,9 @@
-const getDepartementsFor = require('./getDepartementsFor');
-const getLocation = require('./getLocation');
-const search = require('./search');
+import getDepartementsFor from './getDepartementsFor';
+import getLocation from './getLocation';
+import search from './search';
 
-module.exports = {
+export default () => ({
     getDepartementsFor,
     getLocation,
     search,
-};
+});

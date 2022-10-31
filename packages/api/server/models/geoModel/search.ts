@@ -1,4 +1,5 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
 function generateSearch(table) {
     const map = {
@@ -50,7 +51,7 @@ function generateSearch(table) {
     LIMIT 4`;
 }
 
-module.exports = query => sequelize.query(
+export default query => sequelize.query(
     `(${generateSearch('cities')}) UNION (${generateSearch('epci')}) UNION (${generateSearch('departements')}) UNION (${generateSearch('regions')}) ORDER BY "type" DESC`,
     {
         replacements: [
@@ -63,6 +64,6 @@ module.exports = query => sequelize.query(
             `%${query}%`,
             `${query}%`,
         ],
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
     },
 );

@@ -1,6 +1,8 @@
-const { close } = require('#server/services/shantytown');
+import shantytownService from '#server/services/shantytown';
 
-module.exports = async (req, res, next) => {
+const { close } = shantytownService;
+
+export default async (req, res, next) => {
     // close the town
     try {
         const updatedTown = await close(req.user, req.body);

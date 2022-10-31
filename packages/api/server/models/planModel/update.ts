@@ -1,6 +1,6 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-module.exports = (data, userId, transaction = undefined) => {
+export default (data, userId, transaction = undefined) => {
     sequelize.query(
         `UPDATE plans2 SET
         name = :name,

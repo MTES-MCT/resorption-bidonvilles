@@ -1,6 +1,6 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-module.exports = (organization, viewed_by) => sequelize.query(
+export default (organization, viewed_by) => sequelize.query(
     `INSERT INTO stats_directory_views(
         organization,
         viewed_by
@@ -8,9 +8,9 @@ module.exports = (organization, viewed_by) => sequelize.query(
         :organization,
         :viewed_by
     )`, {
-        replacements: {
-            organization,
-            viewed_by,
-        },
+    replacements: {
+        organization,
+        viewed_by,
     },
+},
 );

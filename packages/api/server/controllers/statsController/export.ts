@@ -1,9 +1,11 @@
-const JSONToCSV = require('json2csv');
-const statsModel = require('#server/models/statsModel');
+import JSONToCSV from 'json2csv';
+import statsModelFactory from '#server/models/statsModel';
+
+const statsModel = statsModelFactory();
 
 const groupByKey = (list, key) => list.reduce((hash, obj) => ({ ...hash, [obj[key]]: { ...hash[obj[key]], ...obj } }), {});
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
     try {
         const [
             averageCompletion,
@@ -22,13 +24,13 @@ module.exports = async (req, res) => {
         ]);
 
         const result = Object.values(groupByKey([
-            ...averageCompletion.map(r => ({ Département: r.fk_departement, 'Taux de completion': `${(r.avg * 100).toFixed(2)}%` })),
-            ...people.map(r => ({ Département: r.fk_departement, 'Nombre habitants': r.total })),
-            ...plans.map(r => ({ Département: r.fk_departement, 'Nombre d\'actions': r.total })),
-            ...resorbedShantytowns.map(r => ({ Département: r.fk_departement, 'Nombre de résorptions': r.total })),
-            ...shantytowns.map(r => ({ Département: r.fk_departement, 'Nombre de sites': r.total })),
-            ...users.filter(r => r.fk_departement !== null).map(r => ({ Département: r.fk_departement, "Nombre d'utilisateurs": r.count })),
-        ], 'Département')).sort((a, b) => a.Département - b.Département);
+            ...averageCompletion.map((r: any) => ({ Département: r.fk_departement, 'Taux de completion': `${(r.avg * 100).toFixed(2)}%` })),
+            ...people.map((r: any) => ({ Département: r.fk_departement, 'Nombre habitants': r.total })),
+            ...plans.map((r: any) => ({ Département: r.fk_departement, 'Nombre d\'actions': r.total })),
+            ...resorbedShantytowns.map((r: any) => ({ Département: r.fk_departement, 'Nombre de résorptions': r.total })),
+            ...shantytowns.map((r: any) => ({ Département: r.fk_departement, 'Nombre de sites': r.total })),
+            ...users.filter((r: any) => r.fk_departement !== null).map((r: any) => ({ Département: r.fk_departement, "Nombre d'utilisateurs": r.count })),
+        ], 'Département')).sort((a: any, b: any) => a.Département - b.Département);
 
         const csv = JSONToCSV.parse(result);
 

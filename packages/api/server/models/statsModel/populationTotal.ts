@@ -1,7 +1,11 @@
-const sequelize = require('#db/sequelize');
-const { toFormat } = require('#server/utils/date');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async (departement) => {
+import dateUtils from '#server/utils/date';
+
+const { toFormat } = dateUtils;
+
+export default async (departement) => {
     /**
      * Retourne un objet Date formatté pour toujours correspondre au premier du mois et à 0h 0mn 0s 0ms
      *
@@ -132,7 +136,7 @@ module.exports = async (departement) => {
     WHERE t2.opened_at IS NOT NULL AND t2.month_rank = '1'
     ORDER BY t2.shantytown_id ASC, t2.input_date ASC`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 departement,
             },
@@ -143,8 +147,8 @@ module.exports = async (departement) => {
     for (let i = 0; i < rows.length; i += 1) {
         const {
             shantytown_id, population_total, origins, closed_at, ref_date,
-        } = rows[i];
-        const next = rows[i + 1];
+        }: any = rows[i];
+        const next: any = rows[i + 1];
 
         // si la population totale est inconnue (ou à 0), on ignore cette saisie
         if (!population_total) {

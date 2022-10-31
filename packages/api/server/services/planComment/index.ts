@@ -1,8 +1,8 @@
-const createComment = require('./createComment');
-const exportAll = require('./exportAll');
+import createComment from './createComment';
+import exportAll from './exportAll';
 
 
-module.exports = {
+export default {
     createComment,
     exportAll,
 };

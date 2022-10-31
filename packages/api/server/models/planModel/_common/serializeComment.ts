@@ -1,4 +1,4 @@
-module.exports = comment => Object.assign(
+export default comment => Object.assign(
     {
         id: comment.commentId,
         description: comment.commentDescription,

@@ -1,7 +1,7 @@
-const getLocalAdminsForDepartement = require('./_common/getLocalAdminsForDepartement');
-const getNationalAdmins = require('./_common/getNationalAdmins');
+import getLocalAdminsForDepartement from './_common/getLocalAdminsForDepartement';
+import getNationalAdmins from './_common/getNationalAdmins';
 
-module.exports = async (user) => {
+export default async (user) => {
     let localAdmins = null;
     if (user.organization.location.departement !== null) {
         // if the user is related to a specific departement, get the admins for that departement only

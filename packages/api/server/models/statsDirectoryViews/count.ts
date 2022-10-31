@@ -1,12 +1,13 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = async () => {
-    const rows = await sequelize.query(
+export default async () => {
+    const rows: any = await sequelize.query(
         `SELECT
             count(*) as total
         FROM stats_directory_views`,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
 

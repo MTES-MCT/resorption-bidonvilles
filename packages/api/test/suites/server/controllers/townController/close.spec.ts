@@ -1,14 +1,14 @@
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
-const { mockReq, mockRes } = require('sinon-express-mock');
-const { serialized: generateUser } = require('#test/utils/user');
+import chai from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
+import { mockReq, mockRes } from 'sinon-express-mock';
+import { serialized: generateUser } from '#test/utils/user';
 
-const shantytownService = require('#server/services/shantytown');
+import shantytownService from '#server/services/shantytown';
 
 const closeStub = sinon.stub(shantytownService, 'close');
 
-const closeController = require('#server/controllers/townController/close');
+import closeController from '#server/controllers/townController/close';
 
 const { expect } = chai;
 chai.use(sinonChai);

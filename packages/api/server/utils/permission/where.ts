@@ -1,6 +1,6 @@
-const getPermission = require('./getPermission');
+import getPermission from './getPermission';
 
-module.exports = () => ({
+export default () => ({
     can(user) {
         return {
             do(feature, entity) {

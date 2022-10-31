@@ -2,7 +2,7 @@ const {
     TableRow, TableCell, Paragraph, TextRun, VerticalAlign, convertInchesToTwip,
 } = require('docx');
 
-module.exports = cells => new TableRow({
+export default cells => new TableRow({
     children:
         cells.map(cell => new TableCell({
             verticalAlign: VerticalAlign.CENTER,

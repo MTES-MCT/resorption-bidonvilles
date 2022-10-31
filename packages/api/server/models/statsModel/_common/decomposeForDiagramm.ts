@@ -1,6 +1,6 @@
-const moment = require('moment');
+import moment from 'moment';
 
-module.exports = (towns, connectedUsers, listOfDates) => {
+export default (towns, connectedUsers, listOfDates) => {
     const date2019 = new Date('2019-01-01T00:00:00');
 
     const connectedUserStats = {
@@ -11,15 +11,15 @@ module.exports = (towns, connectedUsers, listOfDates) => {
             formatedDate: connectedUser.date_fin,
         })),
     };
-    const population = {
+    const population: any = {
         evolution: 0,
         data: [],
     };
-    const minors = {
+    const minors: any = {
         evolution: 0,
         data: [],
     };
-    const minorsInSchool = {
+    const minorsInSchool: any = {
         evolution: 0,
         data: [],
     };
@@ -73,11 +73,11 @@ module.exports = (towns, connectedUsers, listOfDates) => {
         },
     );
 
-    population.evolution = Math.round((((population.data.slice(-1)[0].figure - population.data[0].figure) * 100) / population.data[0].figure).toFixed(2));
-    minors.evolution = Math.round((((minors.data.slice(-1)[0].figure - minors.data[0].figure) * 100) / minors.data[0].figure).toFixed(2));
-    closedShantytowns.evolution = Math.round((((closedShantytowns.data.slice(-1)[0].figure - closedShantytowns.data[0].figure) * 100) / closedShantytowns.data[0].figure).toFixed(2));
-    resorbedShantytowns.evolution = Math.round((((resorbedShantytowns.data.slice(-1)[0].figure - resorbedShantytowns.data[0].figure) * 100) / resorbedShantytowns.data[0].figure).toFixed(2));
-    connectedUserStats.evolution = Math.round((((connectedUserStats.data.slice(-1)[0].figure - connectedUserStats.data[0].figure) * 100) / connectedUserStats.data[0].figure).toFixed(2));
+    population.evolution = Math.round(parseFloat((((population.data.slice(-1)[0].figure - population.data[0].figure) * 100) / population.data[0].figure).toFixed(2)));
+    minors.evolution = Math.round(parseFloat((((minors.data.slice(-1)[0].figure - minors.data[0].figure) * 100) / minors.data[0].figure).toFixed(2)));
+    closedShantytowns.evolution = Math.round(parseFloat((((closedShantytowns.data.slice(-1)[0].figure - closedShantytowns.data[0].figure) * 100) / closedShantytowns.data[0].figure).toFixed(2)));
+    resorbedShantytowns.evolution = Math.round(parseFloat((((resorbedShantytowns.data.slice(-1)[0].figure - resorbedShantytowns.data[0].figure) * 100) / resorbedShantytowns.data[0].figure).toFixed(2)));
+    connectedUserStats.evolution = Math.round(parseFloat((((connectedUserStats.data.slice(-1)[0].figure - connectedUserStats.data[0].figure) * 100) / connectedUserStats.data[0].figure).toFixed(2)));
 
     return {
         population, minors, closedShantytowns, resorbedShantytowns, connectedUserStats, openShantytowns, minorsInSchool,

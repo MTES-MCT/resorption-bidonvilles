@@ -1,7 +1,8 @@
-const query = require('./_common/query');
+import { Where } from '#server/models/_common/types/Where';
+import query from './_common/query';
 
-module.exports = async (regionCode, name = undefined) => {
-    const where = [
+export default async (regionCode, name = undefined) => {
+    const where: Where = [
         {
             nationalUser: {
                 query: 'organizations.location_type',
@@ -14,7 +15,9 @@ module.exports = async (regionCode, name = undefined) => {
             },
         },
         {
-            fk_status: ['active'],
+            fk_status: {
+                value: ['active'],
+            }
         },
     ];
     if (name !== undefined) {

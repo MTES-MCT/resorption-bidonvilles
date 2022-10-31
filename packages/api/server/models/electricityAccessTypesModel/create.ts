@@ -1,6 +1,6 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
 
-module.exports = (shantytown_id, electricityAccessTypes, transaction = undefined) => sequelize.getQueryInterface().bulkInsert(
+export default (shantytown_id, electricityAccessTypes, transaction = undefined) => sequelize.getQueryInterface().bulkInsert(
     'electricity_access_types',
     electricityAccessTypes.map(type => ({
         fk_shantytown: shantytown_id,

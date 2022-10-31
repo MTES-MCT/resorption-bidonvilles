@@ -1,6 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = ids => sequelize.query(
+export default ids => sequelize.query(
     `SELECT
         organizations.organization_id AS id,
         organizations.name,
@@ -12,7 +13,7 @@ module.exports = ids => sequelize.query(
     LEFT JOIN organization_types ON organizations.fk_type = organization_types.organization_type_id
     WHERE organizations.organization_id IN (:ids)`,
     {
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
         replacements: {
             ids,
         },

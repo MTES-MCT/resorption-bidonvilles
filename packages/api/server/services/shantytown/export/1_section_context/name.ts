@@ -1,6 +1,6 @@
-const { Paragraph, TextRun } = require('docx');
+import { Paragraph, TextRun } from 'docx';
 
-module.exports = usename => new Paragraph({
+export default usename => new Paragraph({
     spacing: {
         before: 300,
     },

@@ -1,5 +1,5 @@
-const search = require('./search');
+import search from './search';
 
-module.exports = {
+export default () => ({
     search,
-};
+});

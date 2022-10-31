@@ -1,7 +1,10 @@
-const charteEngagementModel = require('#server/models/charteEngagementModel');
-const userModel = require('#server/models/userModel');
+import charteEngagementModelFactory from '#server/models/charteEngagementModel';
+import userModelFactory from '#server/models/userModel';
 
-module.exports = async (req, res, next) => {
+const charteEngagementModel = charteEngagementModelFactory();
+const userModel = userModelFactory();
+
+export default async (req, res, next) => {
     if (parseInt(req.params.id, 10) !== req.user.id) {
         return res.status(400).send({
             user_message: 'Vous ne pouvez pas accepter la charte pour un autre utilisateur que vous-même',

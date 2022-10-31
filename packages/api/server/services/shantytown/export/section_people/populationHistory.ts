@@ -1,4 +1,4 @@
-const formatDate = require('../../_common/formatDate');
+import formatDate from '../../_common/formatDate';
 
 const intToStr = (int, nullValue = 'NC') => {
     if (int === undefined || int === null) {
@@ -7,7 +7,7 @@ const intToStr = (int, nullValue = 'NC') => {
 
     return int;
 };
-module.exports = (town) => {
+export default (town) => {
     // valeurs présentes
     const ref = {
         populationTotal: intToStr(town.populationTotal, '-'),
@@ -50,9 +50,9 @@ module.exports = (town) => {
             ...entry,
             diff: entry.diff.filter(
                 ({ fieldKey }) => fieldKey.startsWith('population')
-                        || fieldKey === 'minorsInSchool'
-                        || fieldKey === 'caravans'
-                        || fieldKey === 'huts',
+                    || fieldKey === 'minorsInSchool'
+                    || fieldKey === 'caravans'
+                    || fieldKey === 'huts',
             ),
         }))
         .filter(({ diff }) => diff.length > 0);

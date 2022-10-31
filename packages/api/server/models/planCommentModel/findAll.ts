@@ -1,8 +1,11 @@
-const sequelize = require('#db/sequelize');
-const { serializeComment } = require('#server/models/planModel');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
+import planModelFactory from '#server/models/planModel';
 
-module.exports = async () => {
+const planModel = planModelFactory();
+
+export default async () => {
     const rows = await sequelize.query(
         `
         SELECT
@@ -29,8 +32,8 @@ module.exports = async () => {
             organizations o ON u.fk_organization = o.organization_id
         `,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
         },
     );
-    return rows.map(serializeComment);
+    return rows.map(planModel.serializeComment);
 };

@@ -1,6 +1,6 @@
-const findByIds = require('./findByIds');
+import findByIds from './findByIds';
 
-module.exports = async (id) => {
+export default async (id) => {
     const result = await findByIds([id]);
     return result.length === 1 ? result[0] : null;
 };

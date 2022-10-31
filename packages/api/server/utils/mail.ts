@@ -1,12 +1,14 @@
-const nodeMailjet = require('node-mailjet');
-const { mail: mailConfig, wwwUrl } = require('#server/config');
-const userModel = require('#server/models/userModel');
+import nodeMailjet from 'node-mailjet';
+import config from '#server/config';
+import userModelFactory from '#server/models/userModel';
 
+const { mail: mailConfig, wwwUrl } = config;
 const mailjet = mailConfig.publicKey
     ? nodeMailjet.connect(mailConfig.publicKey, mailConfig.privateKey)
     : null;
+const userModel = userModelFactory();
 
-module.exports = {
+export default {
     generateUserSignature(user) {
         const signature = [
             `${userModel.formatName(user)}`,

@@ -1,7 +1,7 @@
 /* eslint-disable newline-per-chained-call */
-const { query } = require('express-validator');
+import { query } from 'express-validator';
 
-module.exports = [
+export default [
     query('longitude')
         .isFloat()
         .notEmpty().withMessage('Le paramètre longitude est obligatoire'),

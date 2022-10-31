@@ -1,7 +1,10 @@
-const userModel = require('#server/models/userModel');
-const { sendAdminWelcome } = require('#server/mails/mails');
+import userModelFactory from '#server/models/userModel';
+import mailsUtils from '#server/mails/mails';
 
-module.exports = async (req, res, next) => {
+const userModel = userModelFactory();
+const { sendAdminWelcome } = mailsUtils;
+
+export default async (req, res, next) => {
     const { admin } = req.body;
 
     try {

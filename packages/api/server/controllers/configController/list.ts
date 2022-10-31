@@ -1,23 +1,41 @@
-const permissionsDescription = require('#server/permissions_description');
-const { activationTokenExpiresIn } = require('#server/config');
-const themes = require('#server/config/shantytown_actor_themes');
-const userModel = require('#server/models/userModel');
-const closingSolutionModel = require('#server/models/closingSolutionModel');
-const socialOriginModel = require('#server/models/socialOriginModel');
-const fieldTypeModel = require('#server/models/fieldTypeModel/index');
-const ownerTypeModel = require('#server/models/ownerTypeModel/index');
-const departementModel = require('#server/models/departementModel/index');
-const regionModel = require('#server/models/regionModel/index');
-const etpTypeModel = require('#server/models/etpTypeModel/index');
-const financeTypeModel = require('#server/models/financeTypeModel/index');
-const planCategoryModel = require('#server/models/planCategoryModel/index');
-const topicModel = require('#server/models/topicModel/index');
-const electricityTypeModel = require('#server/models/electricityTypeModel/index');
-const changelogModel = require('#server/models/changelogModel/index');
-const charteEngagementModel = require('#server/models/charteEngagementModel/index');
-const commentTagModel = require('#server/models/commentTagModel');
+import permissionsDescription from '#server/permissions_description';
+import config from '#server/config';
+import themes from '#server/config/shantytown_actor_themes';
 
-module.exports = async (req, res, next) => {
+import userModelFactory from '#server/models/userModel';
+import closingSolutionModelFactory from '#server/models/closingSolutionModel';
+import socialOriginModelFactory from '#server/models/socialOriginModel';
+import fieldTypeModelFactory from '#server/models/fieldTypeModel';
+import ownerTypeModelFactory from '#server/models/ownerTypeModel';
+import departementModelFactory from '#server/models/departementModel';
+import regionModelFactory from '#server/models/regionModel';
+import etpTypeModelFactory from '#server/models/etpTypeModel';
+import financeTypeModelFactory from '#server/models/financeTypeModel';
+import planCategoryModelFactory from '#server/models/planCategoryModel';
+import topicModelFactory from '#server/models/topicModel';
+import electricityTypeModelFactory from '#server/models/electricityTypeModel';
+import changelogModelFactory from '#server/models/changelogModel';
+import charteEngagementModelFactory from '#server/models/charteEngagementModel';
+import commentTagModelFactory from '#server/models/commentTagModel';
+
+const { activationTokenExpiresIn } = config;
+const userModel = userModelFactory();
+const closingSolutionModel = closingSolutionModelFactory();
+const socialOriginModel = socialOriginModelFactory();
+const fieldTypeModel = fieldTypeModelFactory();
+const ownerTypeModel = ownerTypeModelFactory();
+const departementModel = departementModelFactory();
+const regionModel = regionModelFactory();
+const topicModel = topicModelFactory();
+const electricityTypeModel = electricityTypeModelFactory();
+const etpTypeModel = etpTypeModelFactory();
+const financeTypeModel = financeTypeModelFactory();
+const planCategoryModel = planCategoryModelFactory();
+const changelogModel = changelogModelFactory();
+const charteEngagementModel = charteEngagementModelFactory();
+const commentTagModel = commentTagModelFactory();
+
+export default async (req, res, next) => {
     const queries = {
         field_types: fieldTypeModel.findAll(),
         owner_types: ownerTypeModel.findAll(),

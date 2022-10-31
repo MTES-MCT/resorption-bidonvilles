@@ -1,10 +1,12 @@
-module.exports = class ServiceError extends Error {
+export default class ServiceError extends Error {
+    code: string;
+    nativeError: Error;
     /**
      * @param {String} code Un code interne d'identification de l'erreur
      * @param {Error} nativeError Erreur originelle
      */
-    constructor(code, nativeError) {
-        super(nativeError.message, nativeError.fileName, nativeError.lineNumber);
+    constructor(code: string, nativeError: Error) {
+        super(nativeError.message);
         Object.setPrototypeOf(this, ServiceError.prototype);
 
         this.code = code;

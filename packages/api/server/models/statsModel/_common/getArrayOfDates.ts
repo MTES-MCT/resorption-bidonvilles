@@ -1,7 +1,7 @@
-const { substractWeek } = require('#server/utils/date');
+import dateUtils from '#server/utils/date';
+const { substractWeek } = dateUtils;
 
-
-module.exports = (startDate, endDate) => {
+export default (startDate, endDate) => {
     let currentDate = endDate;
     const listOfDates = [];
     while (currentDate > startDate) {

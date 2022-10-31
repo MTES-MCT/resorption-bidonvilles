@@ -1,22 +1,28 @@
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
+import chai from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
 
 const { expect } = chai;
 chai.use(sinonChai);
 
-const shantytownModel = require('#server/models/shantytownModel');
-const socialOriginModel = require('#server/models/socialOriginModel');
-const shantytownToiletTypesModel = require('#server/models/shantytownToiletTypesModel');
-const electricityAccessTypesModel = require('#server/models/electricityAccessTypesModel');
-const incomingTownsModel = require('#server/models/incomingTownsModel');
-const mattermostUtils = require('#server/utils/mattermost');
-const userModel = require('#server/models/userModel');
-const mails = require('#server/mails/mails');
-const config = require('#server/config');
+import shantytownModelFactory from '#server/models/shantytownModel';
+import socialOriginModelFactory from '#server/models/socialOriginModel';
+import shantytownToiletTypesModelFactory from '#server/models/shantytownToiletTypesModel';
+import electricityAccessTypesModelFactory from '#server/models/electricityAccessTypesModel';
+import incomingTownsModelFactory from '#server/models/incomingTownsModel';
+import mattermostUtils from '#server/utils/mattermost';
+import userModelFactory from '#server/models/userModel';
+import mails from '#server/mails/mails';
+import config from '#server/config';
 
-const createService = require('./create');
+import createService from './create';
 
+const shantytownModel = shantytownModelFactory();
+const socialOriginModel = socialOriginModelFactory();
+const shantytownToiletTypesModel = shantytownToiletTypesModelFactory();
+const incomingTownsModel = incomingTownsModelFactory();
+const electricityAccessTypesModel = electricityAccessTypesModelFactory();
+const userModel = userModelFactory();
 
 describe.only('services/shantytown', () => {
     describe('create()', () => {
@@ -26,7 +32,7 @@ describe.only('services/shantytown', () => {
             id: global.generate('string'),
             isAllowedTo: sinon.stub(),
         };
-        const townData = {
+        const townData: any = {
             name: global.generate('string'),
             latitude: global.generate('string'),
             longitude: global.generate('string'),

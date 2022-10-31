@@ -1,12 +1,14 @@
 
-const planCommentModel = require('#server/models/planCommentModel');
-const mattermostUtils = require('#server/utils/mattermost');
+import planCommentModelFactory from '#server/models/planCommentModel';
+import mattermostUtils from '#server/utils/mattermost';
+import userModelFactory from '#server/models/userModel';
+import mails from '#server/mails/mails';
+import ServiceError from '#server/errors/ServiceError';
 
-const userModel = require('#server/models/userModel');
-const mails = require('#server/mails/mails');
-const ServiceError = require('#server/errors/ServiceError');
+const planCommentModel = planCommentModelFactory();
+const userModel = userModelFactory();
 
-module.exports = async (comment, plan, author) => {
+export default async (comment, plan, author) => {
     // on insère le commentaire
     let commentId;
     try {

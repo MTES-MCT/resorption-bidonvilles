@@ -1,13 +1,14 @@
 /* eslint-disable import/no-dynamic-require */
 /* eslint-disable global-require */
-const fs = require('fs');
-const path = require('path');
-const { wwwUrl, webappUrl, backUrl } = require('#server/config');
+import fs from 'fs';
+import path from 'path';
+import config from '#server/config';
+import mailsUtils from '#server/utils/mail';
 
-const { send: sendMail } = require('#server/utils/mail');
-const { testEmail } = require('#server/config');
+const { send: sendMail } = mailsUtils;
+const { wwwUrl, webappUrl, backUrl, testEmail } = config;
 
-module.exports = {
+export default {
     PRESERVE_RECIPIENT: true,
 
     /**

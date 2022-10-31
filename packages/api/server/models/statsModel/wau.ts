@@ -1,6 +1,7 @@
-const sequelize = require('#db/sequelize');
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
 
-module.exports = () => sequelize.query(
+export default () => sequelize.query(
     `SELECT
         COUNT(DISTINCT fk_user) AS wau,
         to_char(t.monday, 'DD/MM/YYYY') AS monday
@@ -12,6 +13,6 @@ module.exports = () => sequelize.query(
     ) t
     GROUP BY t.monday ORDER BY t.monday ASC`,
     {
-        type: sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
     },
 );
