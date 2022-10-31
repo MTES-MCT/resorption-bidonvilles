@@ -25,7 +25,8 @@
                 <mj-text mj-class="text-primary text-lg pb-4">
                     Vous souhaitez promouvoir l’outil auprès de vos partenaires ?
                 </mj-text>
-                <mj-text>Contactez vos interlocutrices Charlotte Piana et Wendy Boukobza, chargées de déploiement : <a href="mailto:contact@resorption-bidonvilles.beta.gouv.fr" class="link">contact@resorption-bidonvilles.beta.gouv.fr</a></mj-text>
+                <mj-text>Contactez l'équipe Résorption-bidonvilles <a href="mailto:contact@resorption-bidonvilles.beta.gouv.fr" class="link">contact@resorption-bidonvilles.beta.gouv.fr</a></mj-text>
+                <mj-text>N° de téléphone de Laure Dubuc (cheffe de projet): +33 1 40 81 31 54  </mj-text>
             </mj-column>
         </mj-section>
 
