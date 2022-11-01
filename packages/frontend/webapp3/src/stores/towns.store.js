@@ -26,7 +26,7 @@ export const useTownsStore = defineStore("towns", () => {
             status: filters.status.value,
             search: filters.search.value,
             location: filters.location.value,
-            ...filters.properties.value
+            ...filters.properties.value,
         }).sort(sortFn.value);
     });
     const configStore = useConfigStore();
@@ -123,6 +123,13 @@ export const useTownsStore = defineStore("towns", () => {
         towns,
         sort,
         currentPage,
+        numberOfPages: computed(() => {
+            if (filteredTowns.value.length === 0) {
+                return 0;
+            }
+
+            return Math.ceil(filteredTowns.value.length / ITEMS_PER_PAGE);
+        }),
         filteredTowns,
         async fetchTowns() {
             if (isLoading.value === true) {

@@ -1,15 +1,25 @@
 <template>
     <section class="flex flex-col space-y-4">
-        <CarteSiteDetaillee v-for="shantytown in (printMode
-        ? townsStore.filteredTowns
-        : townsStore.currentPage.content)" :key="shantytown.id" :shantytown="shantytown" />
+        <CarteSiteDetaillee
+            v-for="shantytown in printMode
+                ? townsStore.filteredTowns
+                : townsStore.currentPage.content"
+            :key="shantytown.id"
+            :shantytown="shantytown"
+        />
     </section>
+    <ListeDesSitesPagination
+        v-if="townsStore.filteredTowns.length > 0"
+        class="mt-4 justify-end"
+        autoScrollFix
+    />
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useTownsStore } from '@/stores/towns.store';
+import { useTownsStore } from "@/stores/towns.store";
 import CarteSiteDetaillee from "@/components/CarteSiteDetaillee/CarteSiteDetaillee.vue";
+import ListeDesSitesPagination from "./ListeDesSitesPagination.vue";
 
 const townsStore = useTownsStore();
 const printMode = ref(false);
