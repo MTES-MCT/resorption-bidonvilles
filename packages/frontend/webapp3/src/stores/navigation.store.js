@@ -32,12 +32,6 @@ const topItems = [
         configRequired: true,
     },
     {
-        icon: "fa-circle-question fa-regular",
-        label: "Aide",
-        route: `mailto:${CONTACT_EMAIL}`,
-        authRequirement: "none",
-    },
-    {
         icon: "arrow-right-to-bracket",
         label: "Me déconnecter",
         route: "/deconnexion",
