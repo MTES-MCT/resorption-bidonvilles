@@ -12,16 +12,19 @@
             </template>
         </Layout>
 
+        <Layout v-else-if="error !== null">
+            <template v-slot:header>
+                <header>
+                    <p class="text-center text-red text-display-lg mb-4">
+                        {{ error }}
+                    </p>
+                </header>
+            </template>
+        </Layout>
+
         <Layout v-else-if="this.town !== null">
             <template v-slot:header>
                 <header>
-                    <p
-                        v-if="error !== null"
-                        class="text-center text-red text-display-lg mb-4"
-                    >
-                        {{ error }}
-                    </p>
-
                     <div
                         class="bg-G200 text-display-sm font-bold text-center pt-3 pb-2"
                         style="line-height: 1em"
@@ -144,6 +147,9 @@ export default {
         } catch (error) {
             this.error = "Erreur: " + error.message;
         }
+    },
+    beforeUnmount() {
+        this.$store.commit("setDetailedTown", null);
     },
     methods: {
         async toTownsList() {
