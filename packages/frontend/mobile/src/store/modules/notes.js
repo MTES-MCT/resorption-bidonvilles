@@ -14,7 +14,7 @@ export default {
         filter: "unpublished",
         filterBarIsOpen: false,
         publishFormIsOpen: false,
-        linkedShantytown: null
+        linkedShantytown: null,
     },
 
     mutations: {
@@ -30,8 +30,8 @@ export default {
         UPDATE_DESCRIPTION(state, { index, description }) {
             state.notes[index].description = description;
         },
-        UPDATE_SHANTYTOWN(state, { index, shantytownId }) {
-            state.notes[index].shantytown = shantytownId;
+        UPDATE_SHANTYTOWN(state, { index, shantytownId, addressSimple }) {
+            state.notes[index].shantytown = { shantytownId, addressSimple };
         },
         REMOVE_NOTE(state, index) {
             state.notes.splice(index, 1);
@@ -50,7 +50,7 @@ export default {
         },
         ADD_NOTE_PUBLICATION(state, { index, publication }) {
             state.notes[index].publications.push(publication);
-        }
+        },
     },
 
     actions: {
@@ -58,13 +58,16 @@ export default {
             commit("SET_NOTES", (await get("notes")) || []);
         },
 
-        async create({ commit, state }, shantytown = null) {
+        async create(
+            { commit, state },
+            shantytown = { shantytownId: null, addressSimple: null }
+        ) {
             const note = {
                 id: getRandomString(30),
                 description: "",
                 shantytown,
                 publications: [],
-                created_at: (new Date()).toString()
+                created_at: new Date().toString(),
             };
 
             commit("ADD_NOTE", note);
@@ -91,13 +94,16 @@ export default {
             await setNotes(state.notes);
         },
 
-        async setShantytown({ commit, state }, { id: noteId, shantytownId }) {
+        async setShantytown(
+            { commit, state },
+            { id: noteId, shantytownId, addressSimple }
+        ) {
             const index = state.notes.findIndex(({ id }) => id === noteId);
             if (index === -1) {
                 return;
             }
 
-            commit("UPDATE_SHANTYTOWN", { index, shantytownId });
+            commit("UPDATE_SHANTYTOWN", { index, shantytownId, addressSimple });
             await setNotes(state.notes);
         },
 
@@ -121,34 +127,44 @@ export default {
             await setNotes(state.notes);
         },
 
-        async publishNote(
-            { commit, state },
-            { id: noteId, shantytown: shantytownId }
-        ) {
+        async publishNote({ commit, state }, { id: noteId, shantytown }) {
             const index = state.notes.findIndex(({ id }) => id === noteId);
             if (index === -1) {
                 throw new Error("La note à publier n'a pas été retrouvée");
             }
 
+            if (
+                state.notes[index].publications.filter(
+                    (publication) =>
+                        publication.shantytown.shantytownId === shantytown.id
+                ).length > 0
+            ) {
+                throw new Error(
+                    "La note a déjà été publiée sur le site sélectionné"
+                );
+            }
             try {
-                const { comments } = await createComment(shantytownId, {
-                    description: state.notes[index].description
+                const { comments } = await createComment(shantytown.id, {
+                    description: state.notes[index].description,
                 });
 
                 commit(
                     "SET_COMMENTS",
                     {
-                        shantytown: shantytownId,
-                        comments
+                        shantytown: shantytown.id,
+                        comments,
                     },
                     { root: true }
                 );
                 commit("ADD_NOTE_PUBLICATION", {
                     index,
                     publication: {
-                        shantytown: shantytownId,
-                        published_at: (new Date()).toString()
-                    }
+                        shantytown: {
+                            addressSimple: shantytown.addressSimple,
+                            shantytownId: shantytown.id,
+                        },
+                        published_at: new Date().toString(),
+                    },
                 });
                 await setNotes(state.notes);
             } catch (error) {
@@ -157,7 +173,7 @@ export default {
                         "Une erreur inconnue est survenue"
                 );
             }
-        }
+        },
     },
 
     getters: {
@@ -167,7 +183,7 @@ export default {
             }
 
             return sortBy(
-                state.notes.filter(note => {
+                state.notes.filter((note) => {
                     if (state.filter === "unpublished") {
                         return note.publications.length === 0;
                     }
@@ -176,8 +192,8 @@ export default {
                 }),
                 state.filter === "published" ? "publication" : "creation"
             );
-        }
-    }
+        },
+    },
 };
 
 function sortBy(notes, sortType) {

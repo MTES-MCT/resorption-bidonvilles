@@ -10,7 +10,7 @@ export default {
         consultedTowns: [],
         detailedTown: null,
         commentsAreOpen: false,
-        commentsScroll: 0
+        commentsScroll: 0,
     },
 
     mutations: {
@@ -22,7 +22,7 @@ export default {
         },
         setMyTownsItems(state, towns) {
             state.myTowns = towns;
-            towns.forEach(town => {
+            towns.forEach((town) => {
                 if (!state.hash[town.id]) {
                     state.hash[town.id] = town;
                 }
@@ -30,18 +30,24 @@ export default {
         },
         setConsultedTownsItems(state, towns) {
             state.consultedTowns = towns;
-            towns.forEach(town => {
+            towns.forEach((town) => {
                 if (!state.hash[town.id]) {
                     state.hash[town.id] = town;
                 }
             });
         },
-        setDetailedTown(state, townId) {
-            if (!state.hash[townId]) {
-                throw new Error("Impossible de trouver le site");
+        async setDetailedTown(state, townId) {
+            if (townId === null) {
+                state.detailedTown = null;
+            } else if (!state.hash[townId]) {
+                try {
+                    state.detailedTown = await findTown(townId);
+                } catch (error) {
+                    throw new Error("Impossible de trouver le site");
+                }
+            } else {
+                state.detailedTown = state.hash[townId];
             }
-
-            state.detailedTown = state.hash[townId];
         },
 
         SET_COMMENTS_SCROLL(state, scroll) {
@@ -58,15 +64,13 @@ export default {
             }
 
             state.hash[shantytownId].comments = comments;
-        }
+        },
     },
 
     actions: {
         async fetchTowns({ state, commit, rootState }) {
-            const {
-                user,
-                field_types: fieldTypes
-            } = rootState.config.configuration;
+            const { user, field_types: fieldTypes } =
+                rootState.config.configuration;
             if (state.state === "loading") {
                 return;
             }
@@ -84,11 +88,11 @@ export default {
                 );
                 commit(
                     "setMyTownsItems",
-                    myTowns.map(s => enrichShantytown(s, fieldTypes))
+                    myTowns.map((s) => enrichShantytown(s, fieldTypes))
                 );
                 commit(
                     "setConsultedTownsItems",
-                    consultedTowns.map(s => enrichShantytown(s, fieldTypes))
+                    consultedTowns.map((s) => enrichShantytown(s, fieldTypes))
                 );
                 commit("setTownsState", "loaded");
             } catch (error) {
@@ -115,7 +119,7 @@ export default {
             }
 
             return null;
-        }
+        },
     },
 
     getters: {
@@ -133,6 +137,6 @@ export default {
         },
         detailedTown(state) {
             return state.detailedTown;
-        }
-    }
+        },
+    },
 };
