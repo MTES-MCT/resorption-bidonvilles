@@ -1,9 +1,20 @@
 import * as sequelize from "#db/sequelize";
 
-export default async (fk_user: Number, page: String, domain: String): Promise<number> => {
+type Domain = 'webapp' | 'mobile';
+
+export default async (fk_user: Number, page: String, domain: Domain): Promise<number> => {
+    const tables = {
+        webapp: 'user_webapp_navigation_logs',
+        mobile: 'user_mobile_navigation_logs',
+    };
+
+    if (!tables[domain]) {
+        throw new Error('Invalid table name');
+    }
+
     const response = await sequelize.query(
         `INSERT INTO
-            user_${domain}_navigation_logs(
+            ${tables[domain]}(
                 fk_user,
                 page
             )
