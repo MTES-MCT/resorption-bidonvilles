@@ -27,6 +27,13 @@
                             linkedShantytown ? linkedShantytown.usename : null
                         "
                     />
+                    <p
+                        class="text-secondary text-center mt-4"
+                        v-if="isNotePublishedOnLinkedShantytown"
+                    >
+                        La note a déjà été publiée sur ce site: veuillez choisir
+                        un autre site
+                    </p>
                     <NotesPublicationFormSubmitButton
                         class="mt-12"
                         @click="publish"
@@ -35,6 +42,12 @@
                             publicationIsPending || linkedShantytown === null
                         "
                     />
+                    <p
+                        class="text-error text-center mt-4"
+                        v-if="errorOfPublication"
+                    >
+                        Erreur : {{ errorOfPublication }}
+                    </p>
                 </template>
             </Container>
         </template>
@@ -73,15 +86,28 @@ export default {
         return {
             loadingLinkedShantytown: false,
             publicationIsPending: false,
+            errorOfPublication: null,
         };
     },
 
     computed: {
         linkedShantytownId() {
-            return this.note.shantytown;
+            return this.note.shantytown.shantytownId;
         },
         linkedShantytown() {
             return this.$store.state.notes.linkedShantytown;
+        },
+        isNotePublishedOnLinkedShantytown() {
+            if (this.linkedShantytown === null) {
+                return false;
+            }
+            return (
+                this.note.publications.filter(
+                    (publication) =>
+                        publication.shantytown.shantytownId ===
+                        this.linkedShantytown.id
+                ).length > 0
+            );
         },
     },
 
@@ -144,6 +170,7 @@ export default {
             this.$store.dispatch("notes/setShantytown", {
                 id: noteId,
                 shantytownId: result.id,
+                addressSimple: result.addressSimple,
             });
         },
 
@@ -157,7 +184,7 @@ export default {
             try {
                 await this.$store.dispatch("notes/publishNote", {
                     id: this.note.id,
-                    shantytown: this.note.shantytown,
+                    shantytown: this.linkedShantytown,
                 });
                 this.$store.dispatch("notifications/add", {
                     text: "Note publiée dans le journal du site",
@@ -169,6 +196,7 @@ export default {
                 this.publicationIsPending = false;
                 this.$router.back();
             } catch (error) {
+                this.errorOfPublication = error.message;
                 this.publicationIsPending = false;
             }
         },

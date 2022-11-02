@@ -36,12 +36,18 @@ export default {
                 }
             });
         },
-        setDetailedTown(state, townId) {
-            if (!state.hash[townId]) {
-                throw new Error("Impossible de trouver le site");
+        async setDetailedTown(state, townId) {
+            if (townId === null) {
+                state.detailedTown = null;
+            } else if (!state.hash[townId]) {
+                try {
+                    state.detailedTown = await findTown(townId);
+                } catch (error) {
+                    throw new Error("Impossible de trouver le site");
+                }
+            } else {
+                state.detailedTown = state.hash[townId];
             }
-
-            state.detailedTown = state.hash[townId];
         },
 
         SET_COMMENTS_SCROLL(state, scroll) {
