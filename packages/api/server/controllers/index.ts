@@ -1,85 +1,85 @@
 // config
-const configList = require('./configController/list');
+import configList from './configController/list';
 // contact
-const contactContact = require('./contactController/contact');
+import contactContact from './contactController/contact';
 // contact form
-const contactFormReferralExport = require('./contactFormReferralController/export');
+import contactFormReferralExport from './contactFormReferralController/export';
 // directory
-const directoryList = require('./directoryController/list');
+import directoryList from './directoryController/list';
 // geo
-const geoGet = require('./geoController/get');
-const geoGetDepartementsForEpci = require('./geoController/getDepartementsForEpci');
-const geoGetDepartementsForRegion = require('./geoController/getDepartementsForRegion');
-const geoListDepartements = require('./geoController/listDepartements');
-const geoSearch = require('./geoController/search');
-const geoSearchCities = require('./geoController/searchCities');
-const geoSearchEpci = require('./geoController/searchEpci');
+import geoGet from './geoController/get';
+import geoGetDepartementsForEpci from './geoController/getDepartementsForEpci';
+import geoGetDepartementsForRegion from './geoController/getDepartementsForRegion';
+import geoListDepartements from './geoController/listDepartements';
+import geoSearch from './geoController/search';
+import geoSearchCities from './geoController/searchCities';
+import geoSearchEpci from './geoController/searchEpci';
 // invite
-const inviteInvite = require('./inviteController/invite');
+import inviteInvite from './inviteController/invite';
 // organization
-const organizationCategories = require('./organizationController/categories');
-const organizationGetByCategory = require('./organizationController/getByCategory');
-const organizationGetByType = require('./organizationController/getByType');
-const organizationGetMembers = require('./organizationController/getMembers');
-const organizationSearch = require('./organizationController/search');
-const organizationTypes = require('./organizationController/types');
-const organizationUpdateBeingFunded = require('./organizationController/updateBeingFunded');
+import organizationCategories from './organizationController/categories';
+import organizationGetByCategory from './organizationController/getByCategory';
+import organizationGetByType from './organizationController/getByType';
+import organizationGetMembers from './organizationController/getMembers';
+import organizationSearch from './organizationController/search';
+import organizationTypes from './organizationController/types';
+import organizationUpdateBeingFunded from './organizationController/updateBeingFunded';
 // plan
-const planAddState = require('./planController/addState');
-const planClose = require('./planController/close');
-const planCreate = require('./planController/create');
-const planDelete = require('./planController/delete');
-const planFind = require('./planController/find');
-const planList = require('./planController/list');
-const planListExport = require('./planController/listExport');
-const planUpdate = require('./planController/update');
+import planAddState from './planController/addState';
+import planClose from './planController/close';
+import planCreate from './planController/create';
+import planDelete from './planController/delete';
+import planFind from './planController/find';
+import planList from './planController/list';
+import planListExport from './planController/listExport';
+import planUpdate from './planController/update';
 // plan comments
-const createPlanComment = require('./planCommentController/create');
-const exportComments = require('./planCommentController/export');
+import createPlanComment from './planCommentController/create';
+import exportComments from './planCommentController/export';
 // poi
-const poiFindAll = require('./poiController/findAll');
+import poiFindAll from './poiController/findAll';
 // shantytown
-const townController = require('./townController');
+import townController from './townController';
 // shantytown comments
-const createShantytownComment = require('./shantytownCommentController/create');
-const exportShantytownComment = require('./shantytownCommentController/export');
+import createShantytownComment from './shantytownCommentController/create';
+import exportShantytownComment from './shantytownCommentController/export';
 // stats
-const statsAll = require('./statsController/all');
-const statsDirectoryView = require('./statsController/directoryView');
-const statsExport = require('./statsController/export');
-const statsGetDashboardStats = require('./statsController/getDashboardStats');
-const statsPublic = require('./statsController/public');
+import statsAll from './statsController/all';
+import statsDirectoryView from './statsController/directoryView';
+import statsExport from './statsController/export';
+import statsGetDashboardStats from './statsController/getDashboardStats';
+import statsPublic from './statsController/public';
 // user
-const userAcceptCharte = require('./userController/acceptCharte');
-const userActivate = require('./userController/activate');
-const userCheckActivationToken = require('./userController/checkActivationToken');
-const userCheckPasswordToken = require('./userController/checkPasswordToken');
-const userCreate = require('./userController/create');
-const userDenyAccess = require('./userController/denyAccess');
-const userEdit = require('./userController/edit');
-const userGet = require('./userController/get');
-const userGetLatestActivationLink = require('./userController/getLatestActivationLink');
-const userList = require('./userController/list');
-const userListExport = require('./userController/listExport');
-const userMe = require('./userController/me');
-const userRemove = require('./userController/remove');
-const userRenewToken = require('./userController/renewToken');
-const userRequestNewPassword = require('./userController/requestNewPassword');
-const userSendActivationLink = require('./userController/sendActivationLink');
-const userSetAdminComments = require('./userController/setAdminComments');
-const userSetDefaultExport = require('./userController/setDefaultExport');
-const userSetLastChangelog = require('./userController/setLastChangelog');
-const userSetNewPassword = require('./userController/setNewPassword');
-const userSetRoleRegular = require('./userController/setRoleRegular');
-const userSignin = require('./userController/signin');
-const userUpdateLocalAdmin = require('./userController/updateLocalAdmin');
-const userUpgrade = require('./userController/upgrade');
+import userAcceptCharte from './userController/acceptCharte';
+import userActivate from './userController/activate';
+import userCheckActivationToken from './userController/checkActivationToken';
+import userCheckPasswordToken from './userController/checkPasswordToken';
+import userCreate from './userController/create';
+import userDenyAccess from './userController/denyAccess';
+import userEdit from './userController/edit';
+import userGet from './userController/get';
+import userGetLatestActivationLink from './userController/getLatestActivationLink';
+import userList from './userController/list';
+import userListExport from './userController/listExport';
+import userMe from './userController/me';
+import userRemove from './userController/remove';
+import userRenewToken from './userController/renewToken';
+import userRequestNewPassword from './userController/requestNewPassword';
+import userSendActivationLink from './userController/sendActivationLink';
+import userSetAdminComments from './userController/setAdminComments';
+import userSetDefaultExport from './userController/setDefaultExport';
+import userSetLastChangelog from './userController/setLastChangelog';
+import userSetNewPassword from './userController/setNewPassword';
+import userSetRoleRegular from './userController/setRoleRegular';
+import userSignin from './userController/signin';
+import userUpdateLocalAdmin from './userController/updateLocalAdmin';
+import userUpgrade from './userController/upgrade';
 // user activity
-const userActivityRegular = require('./userActivityController/regular');
+import userActivityRegular from './userActivityController/regular';
 // user navigation logs
 import insertUserNavigationLogs from './userNavigationLogsController/insert';
 
-export default {
+export default () => ({
     config: {
         list: configList,
     },
@@ -174,4 +174,4 @@ export default {
     userNavigationLogs: {
         insert: insertUserNavigationLogs,
     },
-};
+});

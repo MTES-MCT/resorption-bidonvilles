@@ -1,10 +1,10 @@
 import insert from '#server/services/userNavigationLogs/insert';
 import userNavigationLogsModel from '#server/models/userNavigationLogsModel';
-const ServiceError = require('#server/errors/ServiceError');
+import ServiceError from '#server/errors/ServiceError';
 
-import * as chai from 'chai';
-import * as sinon from 'sinon';
-import * as sinonChai from 'sinon-chai';
+import chai from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
 
 const { expect } = chai;
 chai.use(sinonChai);

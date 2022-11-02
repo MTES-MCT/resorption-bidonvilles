@@ -1,11 +1,15 @@
-import * as sequelize from '#db/sequelize';
-import * as moment from 'moment';
-import { ActivityNationalSummary } from './types/ActivityNationalSummary';
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
+import moment from 'moment';
 
-const { formatName } = require('#server/models/userModel');
-const { getUsenameOf } = require('#server/models/shantytownModel');
+import userModel from '#server/models/userModel';
+import shantytownModel from '#server/models/shantytownModel';
 
-export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSummary> => {
+const { formatName } = userModel;
+
+const { getUsenameOf } = shantytownModel;
+
+export default async (argFrom: Date, argTo: Date): Promise<any> => {
     const from = moment(argFrom);
     const to = moment(argTo);
 
@@ -174,7 +178,7 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
         ORDER BY d.code ASC
         `,
         {
-            type: sequelize.QueryTypes.SELECT,
+            type: QueryTypes.SELECT,
             replacements: {
                 from: from.format('YYYY-MM-DD'),
                 to: to.format('YYYY-MM-DD'),
@@ -182,7 +186,7 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
         },
     );
 
-    return raw.reduce((argAcc, row) => {
+    return raw.reduce((argAcc, row: any) => {
         const acc = { ...argAcc };
         if (acc[row.regionCode] === undefined) {
             acc[row.regionCode] = {};
