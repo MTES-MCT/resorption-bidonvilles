@@ -1,7 +1,7 @@
 import userNavigationLogsModel from '#server/models/userNavigationLogsModel';
 import ServiceError from '#server/errors/ServiceError';
 
-export default async (fk_user: number, page: String, domain: String): Promise<number> => {
+export default async (fk_user: number, page: String, domain: 'webapp' | 'mobile'): Promise<number> => {
     // on insère le log
     let logId: number;
     try {
