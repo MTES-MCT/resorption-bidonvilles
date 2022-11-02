@@ -135,11 +135,5 @@ export default {
         LandingPageUserFeedback
     },
 
-    data() {
-        return {
-            ctaDecouvrir,
-            ctaPrendreEnMain
-        };
-    }
 };
 </script>
