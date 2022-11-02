@@ -36,7 +36,7 @@ export default async (req, res, next) => {
         password: password ? hashPassword(password, user.salt) : undefined,
     };
 
-    const filteredData = Object.keys(data).reduce((acc, key) => {
+    const filteredData: any = Object.keys(data).reduce((acc, key) => {
         if (data[key] === undefined) {
             return acc;
         }

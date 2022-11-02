@@ -51,7 +51,7 @@ export default (app) => {
     app.get(
         '/users',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['user.list'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['user.list'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.user.list,
@@ -90,7 +90,7 @@ export default (app) => {
     app.get(
         '/users/:id',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['user.read'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['user.read'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.user.get,
@@ -114,7 +114,7 @@ export default (app) => {
     app.post(
         '/users',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['user.create'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['user.create'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         validators.createUser,
@@ -136,7 +136,7 @@ export default (app) => {
     app.post(
         '/users/:id/sendActivationLink',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['user.activate'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['user.activate'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.user.sendActivationLink,
@@ -144,7 +144,7 @@ export default (app) => {
     app.get(
         '/users/:id/activationLink',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['user.activate'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['user.activate'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         validators.user.getLatestActivationLink,
@@ -154,7 +154,7 @@ export default (app) => {
     app.post(
         '/users/:id/denyAccess',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['user.activate'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['user.activate'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.user.denyAccess,
@@ -186,7 +186,7 @@ export default (app) => {
     app.delete(
         '/users/:id',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['user.deactivate'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['user.deactivate'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.user.remove,
@@ -282,7 +282,7 @@ export default (app) => {
     app.get(
         '/actors',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['shantytown_actor.export'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown_actor.export'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.town.exportActors,
@@ -291,7 +291,7 @@ export default (app) => {
     app.get(
         '/users/:id/towns',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         validators.findUserTowns,
@@ -303,7 +303,7 @@ export default (app) => {
         '/towns/findNearby',
         validators.findNearbyTowns,
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.town.findNearbyTowns,
@@ -313,7 +313,7 @@ export default (app) => {
     app.get(
         '/plans',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['plan.list'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['plan.list'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.plan.list,
@@ -321,7 +321,7 @@ export default (app) => {
     app.get(
         '/plans/export',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['plan.export'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['plan.export'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.plan.listExport,
@@ -329,7 +329,7 @@ export default (app) => {
     app.get(
         '/plans/:id',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['plan.read'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['plan.read'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.plan.find,
@@ -337,7 +337,7 @@ export default (app) => {
     app.post(
         '/plans',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['plan.create'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['plan.create'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.plan.create,
@@ -345,7 +345,7 @@ export default (app) => {
     app.post(
         '/plans/:id',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['plan.update'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['plan.update'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.plan.update,
@@ -353,7 +353,7 @@ export default (app) => {
     app.post(
         '/plans/:id/states',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['plan.updateMarks'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['plan.updateMarks'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.plan.addState,
@@ -361,7 +361,7 @@ export default (app) => {
     app.post(
         '/plans/:id/comments',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['plan_comment.create'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['plan_comment.create'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         validators.planComment.createPlanComment,
@@ -414,7 +414,7 @@ export default (app) => {
     app.get(
         '/plans/comments/export',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['plan_comment.export'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['plan_comment.export'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.planComment.export,
@@ -424,7 +424,7 @@ export default (app) => {
     app.get(
         '/towns/export',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['shantytown.export'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown.export'], ...args),
         middlewares.charte.check,
         validators.exportTowns,
         middlewares.validation,
@@ -433,7 +433,7 @@ export default (app) => {
     app.get(
         '/towns',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.town.list,
@@ -441,7 +441,7 @@ export default (app) => {
     app.get(
         '/towns/:id',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['shantytown.read'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown.read'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.town.find,
@@ -457,7 +457,7 @@ export default (app) => {
     app.post(
         '/towns',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['shantytown.create'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown.create'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         validators.createTown,
@@ -467,7 +467,7 @@ export default (app) => {
     app.post(
         '/towns/:id',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['shantytown.update'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown.update'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         validators.editTown,
@@ -477,7 +477,7 @@ export default (app) => {
     app.post(
         '/towns/:id/close',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['shantytown.close'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown.close'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         validators.closeTown,
@@ -487,7 +487,7 @@ export default (app) => {
     app.put(
         '/towns/:id/closedWithSolutions',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['shantytown.fix_status'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown.fix_status'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         validators.fixClosedStatus,
@@ -506,7 +506,7 @@ export default (app) => {
     app.delete(
         '/towns/:id',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['shantytown.delete'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown.delete'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.town.deleteTown,
@@ -546,7 +546,7 @@ export default (app) => {
     app.get(
         '/comments',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['shantytown_comment.export'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown_comment.export'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.shantytownComment.export,
@@ -653,7 +653,7 @@ export default (app) => {
     app.get(
         '/stats/getStats',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         validators.dashboard.location,
@@ -705,7 +705,7 @@ export default (app) => {
     app.get(
         '/activities',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkOneOrMorePermissions(['shantytown.list', 'shantytown_comment.list', 'shantytown_comment.listPrivate'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkOneOrMorePermissions(['shantytown.list', 'shantytown_comment.list', 'shantytown_comment.listPrivate'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         validators.activity.list,
@@ -716,7 +716,7 @@ export default (app) => {
     app.get(
         '/contact-form-referrals',
         middlewares.auth.authenticate,
-        (...args: [Request, Response, Function]) => middlewares.auth.checkPermissions(['contact_form_referral.access'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['contact_form_referral.access'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.contactFormReferral.export,
